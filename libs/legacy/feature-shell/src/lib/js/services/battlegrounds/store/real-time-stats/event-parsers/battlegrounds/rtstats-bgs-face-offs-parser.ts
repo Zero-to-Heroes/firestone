@@ -1,5 +1,5 @@
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';

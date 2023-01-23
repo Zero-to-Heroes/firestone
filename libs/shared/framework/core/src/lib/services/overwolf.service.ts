@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
-import { RedditUserInfo } from '../models/mainwindow/reddit-user-info';
-import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
-import { Preferences } from '../models/preferences';
 
 const HEARTHSTONE_GAME_ID = 9898;
 const NO_AD_PLAN = 13;
+
+// TODO: move types
+type Preferences = any;
+type TwitterUserInfo = any;
+type RedditUserInfo = any;
 
 @Injectable()
 export class OverwolfService {
@@ -20,6 +23,17 @@ export class OverwolfService {
 	public static FULL_SCREEN_OVERLAYS_WINDOW = 'FullScreenOverlaysWindow';
 	public static FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW = 'FullScreenOverlaysClickthroughWindow';
 
+	private twitterUserInfo: TwitterUserInfo;
+	private redditUserInfo: RedditUserInfo = null;
+
+	public static getAppFolder(): string {
+		return `${overwolf.io.paths.localAppData}/overwolf/Log/Apps/Firestone`;
+	}
+
+	public static getLocalAppDataFolder(): string {
+		return `${overwolf.io.paths.localAppData}`;
+	}
+
 	public isOwEnabled(): boolean {
 		try {
 			return typeof overwolf !== 'undefined' && !!overwolf?.windows;
@@ -32,6 +46,7 @@ export class OverwolfService {
 		return this.isOwEnabled() ? overwolf.windows.getMainWindow() : null;
 	}
 
+	// TODO: move preferences to a common module
 	public getCollectionWindow(prefs: Preferences) {
 		const windowName = this.getCollectionWindowName(prefs);
 		return this.obtainDeclaredWindow(windowName);
@@ -347,6 +362,7 @@ export class OverwolfService {
 	public async hideCollectionWindow(prefs: Preferences): Promise<void> {
 		const collectionWindow = await this.getCollectionWindow(prefs);
 		const settingsWindow = await this.getSettingsWindow(prefs);
+		// eslint-disable-next-line no-async-promise-executor
 		return new Promise<void>(async (resolve) => {
 			await Promise.all([this.hideWindow(collectionWindow.id), this.hideWindow(settingsWindow.id)]);
 			resolve();
@@ -379,7 +395,7 @@ export class OverwolfService {
 
 	public async dragResize(windowId: string, edge: overwolf.windows.enums.WindowDragEdge) {
 		return new Promise<overwolf.windows.DragResizeResult>((resolve) => {
-			overwolf.windows.dragResize(windowId, edge, null, (result) => {
+			overwolf.windows.dragResize(windowId, edge, null as any, (result) => {
 				resolve(result);
 			});
 		});
@@ -423,7 +439,7 @@ export class OverwolfService {
 			} catch (e) {
 				// This doesn't seem to prevent the window from being restored, so let's ignore it
 				console.warn('Exception while getting running game info', e);
-				resolve(null);
+				resolve(null as any);
 			}
 		});
 	}
@@ -526,7 +542,7 @@ export class OverwolfService {
 				});
 			} catch (e) {
 				console.warn('Exception while getting current window window');
-				resolve(null);
+				resolve(null as any);
 			}
 		});
 	}
@@ -582,7 +598,7 @@ export class OverwolfService {
 	}
 
 	public setZoom(zoomFactor: number) {
-		overwolf.windows.setZoom(zoomFactor, null);
+		overwolf.windows.setZoom(zoomFactor, null as any);
 	}
 
 	public async getActiveSubscriptionPlans(): Promise<overwolf.profile.subscriptions.GetActivePlansResult> {
@@ -613,8 +629,6 @@ export class OverwolfService {
 			);
 		});
 	}
-
-	private twitterUserInfo: TwitterUserInfo = null;
 
 	public addTwitterLoginStateChangedListener(callback) {
 		overwolf.social.twitter.onLoginStateChanged.addListener(async (result) => {
@@ -680,8 +694,6 @@ export class OverwolfService {
 		});
 	}
 
-	private redditUserInfo: RedditUserInfo = null;
-
 	public addRedditLoginStateChangedListener(callback) {
 		overwolf.social.reddit.onLoginStateChanged.addListener(async (result) => {
 			callback(result);
@@ -743,7 +755,7 @@ export class OverwolfService {
 					id: flair,
 				} as Flair,
 				useOverwolfNotifications: false,
-				description: null,
+				description: '',
 			};
 			overwolf.social.reddit.share(shareParam, (res) => {
 				resolve(res?.success);
@@ -779,7 +791,7 @@ export class OverwolfService {
 	public async fileExists(filePathOnDisk: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.io.fileExists(filePathOnDisk, (res) => {
-				resolve(res.found);
+				resolve(res.found as boolean);
 			});
 		});
 	}
@@ -796,9 +808,9 @@ export class OverwolfService {
 		return new Promise<string>((resolve) => {
 			overwolf.io.readTextFile(
 				filePathOnDisk,
-				{ encoding: overwolf.io.enums.eEncoding.UTF8, maxBytesToRead: null, offset: null },
+				{ encoding: overwolf.io.enums.eEncoding.UTF8, maxBytesToRead: null as any, offset: null as any },
 				(res) => {
-					resolve(res.success ? res.content : null);
+					resolve((res.success ? res.content : null) as string);
 				},
 			);
 		});
@@ -842,7 +854,7 @@ export class OverwolfService {
 	}
 
 	public listenOnFile(id: string, path: string, options: any, callback: (lineInfo: ListenObject) => any) {
-		overwolf.io.listenOnFile(id, path, !!options ? { ...options, encoding: 'UTF8' } : null, callback);
+		overwolf.io.listenOnFile(id, path, !!options ? { ...options, encoding: 'UTF8' } : null, callback as any);
 	}
 
 	public stopFileListener(id: string) {
@@ -852,7 +864,7 @@ export class OverwolfService {
 
 	public checkForExtensionUpdate(): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-			overwolf.extensions.checkForExtensionUpdate((res: CheckForUpdateResult) => {
+			overwolf.extensions.checkForExtensionUpdate((res: any) => {
 				resolve(res.updateVersion != null);
 			});
 		});
@@ -860,7 +872,7 @@ export class OverwolfService {
 
 	public updateExtension(): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-			overwolf.extensions.updateExtension((res: UpdateExtensionResult) => {
+			overwolf.extensions.updateExtension((res: any) => {
 				resolve(!res.error);
 			});
 		});
@@ -912,14 +924,6 @@ export class OverwolfService {
 
 	public onTrayMenuClicked(callback: (event: overwolf.os.tray.onMenuItemClickedEvent) => void): void {
 		overwolf.os.tray.onMenuItemClicked.addListener(callback);
-	}
-
-	public static getAppFolder(): string {
-		return `${overwolf.io.paths.localAppData}/overwolf/Log/Apps/Firestone`;
-	}
-
-	public static getLocalAppDataFolder(): string {
-		return `${overwolf.io.paths.localAppData}`;
 	}
 }
 

@@ -1,10 +1,10 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { CardsFacadeService } from '../../cards-facade.service';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { SecretConfigService } from '../secret-config.service';
 import { rememberCardsInHand } from './card-played-from-hand-parser';

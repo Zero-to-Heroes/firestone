@@ -1,5 +1,5 @@
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';

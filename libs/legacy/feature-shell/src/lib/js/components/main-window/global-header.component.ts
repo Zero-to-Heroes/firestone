@@ -6,13 +6,13 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

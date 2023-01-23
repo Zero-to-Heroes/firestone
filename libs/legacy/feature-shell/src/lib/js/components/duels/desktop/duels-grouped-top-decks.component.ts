@@ -1,8 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'duels-grouped-top-decks',

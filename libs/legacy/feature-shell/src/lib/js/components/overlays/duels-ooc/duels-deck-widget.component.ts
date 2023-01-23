@@ -3,10 +3,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
 import { decode, encode } from '@firestone-hs/deckstrings';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { SetCard } from '@models/set';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { OverwolfService } from '@services/overwolf.service';
 
 declare let amplitude;
 

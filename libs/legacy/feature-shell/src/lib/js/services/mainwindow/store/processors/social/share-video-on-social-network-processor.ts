@@ -1,7 +1,7 @@
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { OverwolfService } from '../../../../overwolf.service';
 import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
 import { Processor } from '../processor';
 
@@ -17,7 +17,7 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		amplitude.getInstance().logEvent('share-video', {
-			'network': event.network,
+			network: event.network,
 		});
 		switch (event.network) {
 			case 'twitter':

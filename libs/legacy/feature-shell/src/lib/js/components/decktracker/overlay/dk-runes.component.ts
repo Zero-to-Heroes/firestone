@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { CardClass, DkruneTypes } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, share } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

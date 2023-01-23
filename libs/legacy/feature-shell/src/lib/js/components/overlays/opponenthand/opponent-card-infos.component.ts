@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'opponent-card-infos',

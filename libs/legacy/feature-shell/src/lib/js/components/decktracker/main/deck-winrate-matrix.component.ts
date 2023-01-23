@@ -7,6 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
@@ -15,7 +16,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({

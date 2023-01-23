@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';

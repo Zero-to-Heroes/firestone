@@ -468,6 +468,7 @@ import { SettingsGeneralModsComponent } from '@components/settings/general/setti
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
@@ -641,7 +642,6 @@ import { BattlegroundsQuestsService } from './js/services/battlegrounds/bgs-ques
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
-import { CardsFacadeService } from './js/services/cards-facade.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardHistoryStorageService } from './js/services/collection/card-history-storage.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
@@ -714,7 +714,6 @@ import { MercenariesStateBuilderService } from './js/services/mercenaries/mercen
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { OwNotificationsService } from './js/services/notifications.service';
-import { OverwolfService } from './js/services/overwolf.service';
 import { PatchesConfigService } from './js/services/patches-config.service';
 import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from './js/services/plugins/memory-inspection.service';
@@ -1625,7 +1624,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		GenericStorageService,
 		LogsUploaderService,
 		MemoryInspectionService,
-		OverwolfService,
+		// OverwolfService,
 		OwNotificationsService,
 		PreferencesService,
 		S3FileUploadService,
@@ -1679,7 +1678,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LocalizationService,
 		LocalizationFacadeService,
 		CardsInitService,
-		CardsFacadeService,
+		// CardsFacadeService,
 		RefCards,
 		// For coliseum-components
 		{ provide: AllCardsService, useExisting: CardsFacadeService },

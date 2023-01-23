@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { TagRole, Zone } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { isPassiveMercsTreasure } from '../../../../services/mercenaries/mercenaries-utils';
 import { Ability } from './mercenaries-team-ability.component';
 

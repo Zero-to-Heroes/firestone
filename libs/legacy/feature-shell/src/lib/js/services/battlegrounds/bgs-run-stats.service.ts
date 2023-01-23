@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat, buildNewStats, Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
@@ -10,7 +11,6 @@ import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battl
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
 import { GameForUpload } from '../manastorm-bridge/game-for-upload';
-import { OverwolfService } from '../overwolf.service';
 import { UserService } from '../user.service';
 import { sleep } from '../utils';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';

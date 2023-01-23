@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { ApiRunner } from '../api-runner';
 import { LocalStorageService } from '../local-storage';
 import { BgsBestStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-best-stats-loaded-event';
-import { OverwolfService } from '../overwolf.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const BGS_BEST_USER_STATS_ENDPOINT = 'https://0u2t28wmwe.execute-api.us-west-2.amazonaws.com/Prod';

@@ -1,6 +1,6 @@
 import { CardIds, GameType, SpellSchool } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '../../services/cards-facade.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { MatchInfo } from '../match-info';
 import { DeckState } from './deck-state';

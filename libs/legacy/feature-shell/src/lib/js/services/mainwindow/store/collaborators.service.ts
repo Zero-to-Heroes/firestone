@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import {
 	BgsBattlePositioningExecutorService,
 	PermutationResult,
 	ProcessingStatus,
 } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-positioning-executor.service';
-import { CardsFacadeService } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/cards-facade.service';
-import { OverwolfService } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/overwolf.service';
 import { chunk } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Chunk, InternalPermutationResult, Permutation } from './bgs-battle-positioning-worker.worker';
 
 @Injectable()

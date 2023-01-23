@@ -8,10 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, Race, SceneMode } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import {} from 'jszip';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';

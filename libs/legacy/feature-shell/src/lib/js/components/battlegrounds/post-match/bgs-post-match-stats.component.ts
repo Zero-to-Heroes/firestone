@@ -8,7 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { QuestReward } from '../../../models/battlegrounds/bgs-player';
@@ -20,7 +21,6 @@ import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battle
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
 

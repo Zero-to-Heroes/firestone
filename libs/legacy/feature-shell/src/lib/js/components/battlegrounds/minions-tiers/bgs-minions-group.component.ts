@@ -9,13 +9,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsToggleHighlightMechanicsOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-mechanics-on-board-event';
 import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
 @Component({

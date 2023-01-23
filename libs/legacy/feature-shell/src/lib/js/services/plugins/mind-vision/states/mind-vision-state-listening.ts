@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DEACTIVATE_MIND_VISION } from '@legacy-import/src/lib/js/services/plugins/mind-vision/mind-vision-state-machine.service';
-import { OverwolfService } from '@services/overwolf.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';

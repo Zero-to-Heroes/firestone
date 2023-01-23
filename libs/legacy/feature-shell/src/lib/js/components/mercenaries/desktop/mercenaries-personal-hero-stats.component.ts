@@ -3,6 +3,7 @@ import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@fire
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenary } from '../../../models/memory/memory-mercenaries-info';
 import {
@@ -13,7 +14,6 @@ import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenaries/mercenaries-utils';

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'buff-info',

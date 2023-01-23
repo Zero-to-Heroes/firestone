@@ -8,8 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { RedditUserInfo } from '../../../models/mainwindow/reddit-user-info';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { RedditShareInfoComponent } from './reddit-share-info.component';
 
 @Component({

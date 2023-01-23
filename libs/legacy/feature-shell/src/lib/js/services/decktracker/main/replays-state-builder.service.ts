@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PreferencesService } from '../../preferences.service';

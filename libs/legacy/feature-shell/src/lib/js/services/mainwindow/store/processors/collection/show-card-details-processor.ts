@@ -1,4 +1,4 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';

@@ -8,10 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -34,7 +34,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 250;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) =>

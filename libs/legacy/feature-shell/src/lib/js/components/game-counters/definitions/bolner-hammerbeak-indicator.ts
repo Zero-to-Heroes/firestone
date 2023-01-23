@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 

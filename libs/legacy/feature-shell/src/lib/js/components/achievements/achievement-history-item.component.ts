@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
 
 declare let amplitude;
 
@@ -47,7 +47,7 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 	@HostListener('mousedown')
 	onClick() {
 		amplitude.getInstance().logEvent('history', {
-			'page': 'achievements',
+			page: 'achievements',
 		});
 		this.stateUpdater.next(new ChangeVisibleAchievementEvent(this.achievementId));
 	}

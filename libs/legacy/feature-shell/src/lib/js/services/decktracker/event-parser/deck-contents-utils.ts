@@ -1,5 +1,5 @@
 import { CardIds, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { LocalizationFacadeService } from '../../localization-facade.service';

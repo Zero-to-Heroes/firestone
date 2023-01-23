@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { getStandardDeviation } from '@services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';

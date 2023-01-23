@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OwNotificationsService } from '@services/notifications.service';
-import { OverwolfService } from '@services/overwolf.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionStateActive } from '@services/plugins/mind-vision/states/mind-vision-state-active';

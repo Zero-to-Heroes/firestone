@@ -1,7 +1,7 @@
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MemoryUpdate } from '../../../../models/memory/memory-update';
 import { MercenariesOutOfCombatState } from '../../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import { CardsFacadeService } from '../../../cards-facade.service';
 import { BroadcastEvent, Events } from '../../../events.service';
 import { MercenariesOutOfCombatParser } from './_mercenaries-out-of-combat-parser';
 

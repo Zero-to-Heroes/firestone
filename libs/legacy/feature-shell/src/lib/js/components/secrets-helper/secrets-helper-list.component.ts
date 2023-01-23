@@ -7,7 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckCard } from '../../models/decktracker/deck-card';

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Injectable, Optional, Pipe, PipeTransform } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { OverwolfService } from '../services/overwolf.service';
 
 @Injectable()
 @Pipe({

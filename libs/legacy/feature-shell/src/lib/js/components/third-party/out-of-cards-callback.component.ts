@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { OutOfCardsService, OutOfCardsToken } from '../../services/mainwindow/out-of-cards.service';
-import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'out-of-cards-callback',

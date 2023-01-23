@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { toFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { toGameType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 declare let amplitude;
 

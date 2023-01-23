@@ -7,7 +7,7 @@ import {
 	GameType,
 } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { isBattlegrounds } from './battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from './localization-facade.service';
 

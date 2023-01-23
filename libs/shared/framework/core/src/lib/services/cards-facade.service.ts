@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
+import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from './overwolf.service';
-import { sleep } from './utils';
 
 @Injectable()
 export class CardsFacadeService {
@@ -12,6 +12,7 @@ export class CardsFacadeService {
 	}
 
 	private async init() {
+		// eslint-disable-next-line no-async-promise-executor
 		return new Promise<void>(async (resolve, reject) => {
 			let retriesLeft = 50;
 			this.service = this.ow?.getMainWindow()?.cards;

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, ViewRef } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BgsToggleOverlayWindowEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-overlay-window-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { DebugService } from '../../../services/debug.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare let amplitude;

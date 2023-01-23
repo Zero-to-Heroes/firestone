@@ -12,10 +12,10 @@ import {
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { share, startWith } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';

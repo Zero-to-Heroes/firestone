@@ -1,5 +1,5 @@
 import { NumericTurnInfo } from '@models/battlegrounds/post-match/numeric-turn-info';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';

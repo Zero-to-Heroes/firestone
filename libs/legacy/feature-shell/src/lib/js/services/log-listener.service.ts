@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
 import { Subject } from 'rxjs';
 import { Events } from './events.service';
-import { ListenObject, OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class LogListenerService {

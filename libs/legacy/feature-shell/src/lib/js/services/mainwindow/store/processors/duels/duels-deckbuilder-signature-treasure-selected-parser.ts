@@ -1,9 +1,9 @@
 import { CardClass, CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 const NEUTRAL_HEROES = [CardIds.VanndarStormpikeTavernBrawl, CardIds.DrektharTavernBrawl];
 

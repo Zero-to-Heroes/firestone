@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { isWindowClosed } from '../../services/utils';
 

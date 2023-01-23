@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { ApiRunner } from '../../api-runner';
-import { CardsFacadeService } from '../../cards-facade.service';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
 import { decode } from '../../utils';
 

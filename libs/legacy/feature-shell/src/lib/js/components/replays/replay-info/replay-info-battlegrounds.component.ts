@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';

@@ -9,11 +9,11 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { Observable } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

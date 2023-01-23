@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 
 @Component({
 	selector: 'mercenaries-team-ability',

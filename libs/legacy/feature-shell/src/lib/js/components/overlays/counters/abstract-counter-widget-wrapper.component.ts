@@ -7,11 +7,11 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { CounterType } from '../../game-counters/definitions/_counter-definition';

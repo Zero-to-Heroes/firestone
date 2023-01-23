@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../models/card';
 import { ReferenceSet } from '../../models/collection/reference-set';
 import { Set, SetCard } from '../../models/set';

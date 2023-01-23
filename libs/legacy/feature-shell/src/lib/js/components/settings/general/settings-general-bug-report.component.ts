@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LogsUploaderService } from '../../../services/logs-uploader.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
 const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazonaws.com/Prod/feedback';

@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 declare let amplitude: any;
 

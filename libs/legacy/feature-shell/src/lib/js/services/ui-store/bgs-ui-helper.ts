@@ -1,4 +1,5 @@
 import { BgsGlobalHeroStat2, BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsHeroStat, BgsQuestStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
@@ -7,7 +8,6 @@ import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-ran
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
 import { getHeroPower, isBattlegrounds, normalizeHeroCardId } from '../battlegrounds/bgs-utils';
-import { CardsFacadeService } from '../cards-facade.service';
 import { cutNumber, groupByFunction, sumOnArray } from '../utils';
 
 export const buildHeroStats = (

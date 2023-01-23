@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../../models/arena/arena-state';
@@ -26,7 +27,6 @@ import { DuelsStateBuilderService } from '../../duels/duels-state-builder.servic
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
-import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';

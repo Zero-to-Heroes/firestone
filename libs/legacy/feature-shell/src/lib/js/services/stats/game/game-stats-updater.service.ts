@@ -8,13 +8,14 @@ import {
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
-import { CardsFacadeService } from '../../cards-facade.service';
 import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
@@ -22,7 +23,6 @@ import { GameForUpload } from '../../manastorm-bridge/game-for-upload';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { MercenariesReferenceData } from '../../mercenaries/mercenaries-state-builder.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../overwolf.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { extractPlayerInfoFromDeckstring } from './game-stats-loader.service';
 

@@ -10,6 +10,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
 import { Observable, Subscription } from 'rxjs';
 import { concatMap, filter, map, tap } from 'rxjs/operators';
@@ -18,7 +19,6 @@ import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { Message } from '../services/notifications.service';
-import { OverwolfService } from '../services/overwolf.service';
 import { PreferencesService } from '../services/preferences.service';
 import { ProcessingQueue } from '../services/processing-queue.service';
 

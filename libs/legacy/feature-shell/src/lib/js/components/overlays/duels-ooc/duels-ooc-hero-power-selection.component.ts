@@ -4,7 +4,6 @@ import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/d
 import { allDuelsHeroes, CardIds, duelsHeroConfigs, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import {
 	buildDuelsHeroPlayerStats,
@@ -14,6 +13,7 @@ import {
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, uuid } from '@services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

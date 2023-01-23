@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class HotkeyService {

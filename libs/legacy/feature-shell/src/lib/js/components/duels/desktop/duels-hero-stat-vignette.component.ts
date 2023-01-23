@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
 @Component({

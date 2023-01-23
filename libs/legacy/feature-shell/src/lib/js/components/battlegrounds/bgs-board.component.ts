@@ -1,9 +1,9 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnDestroy } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
-import { OverwolfService } from '../../services/overwolf.service';
 import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 import { normalizeCardId } from './post-match/card-utils';
 

@@ -1,6 +1,6 @@
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { PackInfo } from '@models/collection/pack-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
-import { OverwolfService } from '@services/overwolf.service';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
 

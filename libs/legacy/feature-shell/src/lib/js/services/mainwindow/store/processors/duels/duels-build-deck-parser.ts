@@ -1,9 +1,9 @@
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { extractDuelsClasses } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-signature-treasure-selected-parser';
 import { Processor } from '@services/mainwindow/store/processors/processor';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export class DuelsBuildDeckParser implements Processor {
 	constructor(private readonly allCards: CardsFacadeService) {}

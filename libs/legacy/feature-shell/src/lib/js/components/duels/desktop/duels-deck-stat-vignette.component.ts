@@ -1,11 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { isPassive } from '../../../services/duels/duels-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'duels-deck-stat-vignette',

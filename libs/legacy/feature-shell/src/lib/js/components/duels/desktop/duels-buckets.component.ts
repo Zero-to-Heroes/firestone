@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { CardClass } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

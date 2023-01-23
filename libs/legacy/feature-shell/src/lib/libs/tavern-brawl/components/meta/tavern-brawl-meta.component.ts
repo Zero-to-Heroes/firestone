@@ -6,8 +6,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../../../js/models/card';
-import { CardsFacadeService } from '../../../../js/services/cards-facade.service';
 
 @Component({
 	selector: 'tavern-brawl-meta',

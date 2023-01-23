@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { OverwolfService } from '../../services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'share-info',

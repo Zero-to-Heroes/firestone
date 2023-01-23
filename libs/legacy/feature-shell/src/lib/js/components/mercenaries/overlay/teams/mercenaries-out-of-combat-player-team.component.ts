@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import {
 	BattleAbility,
@@ -10,7 +11,6 @@ import {
 	MercenariesBattleTeam,
 } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';

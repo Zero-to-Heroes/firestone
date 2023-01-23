@@ -10,7 +10,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
 import { sleep } from '../services/utils';

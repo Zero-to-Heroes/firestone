@@ -8,8 +8,8 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { uuid } from '../../services/utils';

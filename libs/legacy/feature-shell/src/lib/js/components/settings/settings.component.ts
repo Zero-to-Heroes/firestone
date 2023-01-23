@@ -8,9 +8,9 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
-import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'settings',

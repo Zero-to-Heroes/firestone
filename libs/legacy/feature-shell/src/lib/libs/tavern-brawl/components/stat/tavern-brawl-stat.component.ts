@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { formatClass } from '../../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../../js/services/localization-facade.service';
-import { OverwolfService } from '../../../../js/services/overwolf.service';
 import { TavernStatWithCollection } from '../meta/tavern-brawl-meta.component';
 
 @Component({

@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { getHeroPower } from '@services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { from, Observable } from 'rxjs';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';

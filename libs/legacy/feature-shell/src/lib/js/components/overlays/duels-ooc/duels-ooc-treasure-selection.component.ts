@@ -1,8 +1,8 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { OverwolfService } from '@services/overwolf.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 

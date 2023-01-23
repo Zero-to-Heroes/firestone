@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../../js/models/preferences';
 import { AchievementsLoaderService } from '../../js/services/achievement/data/achievements-loader.service';
@@ -11,7 +12,6 @@ import { ShowMainWindowEvent } from '../../js/services/mainwindow/store/events/s
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.service';
 import { OwNotificationsService } from '../../js/services/notifications.service';
-import { OverwolfService } from '../../js/services/overwolf.service';
 import { PreferencesService } from '../../js/services/preferences.service';
 
 declare let amplitude: any;

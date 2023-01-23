@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { MailState } from '@mails/mail-state';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
@@ -10,7 +11,6 @@ import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../overwolf.service';
 import {
 	AppUiStoreService,
 	BattlegroundsStateSelector,

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -8,7 +9,6 @@ import { ApiRunner } from '../api-runner';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { Events } from '../events.service';
 import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ReviewIdService } from '../review-id.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

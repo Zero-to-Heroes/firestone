@@ -7,6 +7,7 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
@@ -14,7 +15,6 @@ import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/b
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds } from '@firestone-hs/reference-data';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { getDefaultBoosterIdForSetId } from '@legacy-import/src/lib/js/services/hs-utils';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { ApiRunner } from '../../../js/services/api-runner';
@@ -8,7 +9,6 @@ import { SetsService } from '../../../js/services/collection/sets-service.servic
 import { Events } from '../../../js/services/events.service';
 import { LocalStorageService } from '../../../js/services/local-storage';
 import { CollectionPacksUpdatedEvent } from '../../../js/services/mainwindow/store/events/collection/colection-packs-updated-event';
-import { OverwolfService } from '../../../js/services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 const PACKS_UPDATE_URL = 'https://api.firestoneapp.com/packs/save/packs/{proxy+}';

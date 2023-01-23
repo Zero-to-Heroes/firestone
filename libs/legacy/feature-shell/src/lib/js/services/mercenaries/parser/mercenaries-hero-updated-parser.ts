@@ -1,3 +1,4 @@
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import {
@@ -6,7 +7,6 @@ import {
 	BattleMercenary,
 	MercenariesBattleState,
 } from '../../../models/mercenaries/mercenaries-battle-state';
-import { CardsFacadeService } from '../../cards-facade.service';
 import {
 	getHeroRole,
 	getMercCardLevel,

@@ -1,5 +1,5 @@
 import { CardIds, GameTag, GameType, Race, TagRole } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '../cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesReferenceData } from './mercenaries-state-builder.service';
 
 export const normalizeMercenariesCardId = (

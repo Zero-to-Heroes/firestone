@@ -11,10 +11,10 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
-import { OverwolfService } from '../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 

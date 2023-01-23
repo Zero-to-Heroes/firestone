@@ -14,11 +14,11 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { Preferences } from '@models/preferences';
 import { isBattlegrounds, isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, from, Observable } from 'rxjs';
 
 @Component({

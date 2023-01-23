@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -14,7 +15,6 @@ import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { LocalStorageService } from '../local-storage';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
-import { OverwolfService } from '../overwolf.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';

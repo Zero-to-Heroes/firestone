@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { OverwolfService } from '../services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'version',

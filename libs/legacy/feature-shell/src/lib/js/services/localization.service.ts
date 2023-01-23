@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
-import { CardsFacadeService } from './cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { formatClass } from './hs-utils';
 import { LocalizationFacadeService } from './localization-facade.service';
-import { OverwolfService } from './overwolf.service';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 import { sleep } from './utils';
 

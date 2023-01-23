@@ -1,8 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { groupByFunction } from '../../../services/utils';
 import { CardsByCost } from './cards-by-cost';
 

@@ -14,6 +14,7 @@ import { GameConfService } from '../services/game-conf.service';
 					<div class="aspect-ratio-wrapper ar-16x9">
 						<div class="aspect-ratio-inner">
 							<game
+								*ngIf="game"
 								[gameMode]="gameMode"
 								[playerId]="game.players[0].playerId"
 								[opponentId]="game.players[1].playerId"
@@ -40,15 +41,15 @@ import { GameConfService } from '../services/game-conf.service';
 				class="ignored-wrapper"
 				[totalTime]="totalTime"
 				[currentTime]="currentTime"
-				[active]="game && !showPreloader"
+				[active]="!!game && !showPreloader"
 				(seek)="onSeek($event)"
 			>
 			</seeker>
-			<turn-narrator class="ignored-wrapper" [text]="text" [active]="game && !showPreloader"></turn-narrator>
+			<turn-narrator class="ignored-wrapper" [text]="text" [active]="!!game && !showPreloader"></turn-narrator>
 			<controls
 				class="ignored-wrapper"
 				[reviewId]="reviewId"
-				[active]="game && !showPreloader"
+				[active]="!!game && !showPreloader"
 				(nextAction)="onNextAction()"
 				(nextTurn)="onNextTurn()"
 				(previousAction)="onPreviousAction()"

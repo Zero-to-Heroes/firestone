@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 export const buildCardChoiceValue = (
@@ -36,12 +36,14 @@ const guessTheWeight = (
 
 	switch (option.cardId) {
 		case CardIds.GuessTheWeight_Less:
-			const cardsCostingLess = state.playerDeck.deck.filter((c) => c.getEffectiveManaCost() < costOfLastDrawnCard)
-				.length;
+			const cardsCostingLess = state.playerDeck.deck.filter(
+				(c) => c.getEffectiveManaCost() < costOfLastDrawnCard,
+			).length;
 			return buildPercents((100 * cardsCostingLess) / state.playerDeck.deck.length);
 		case CardIds.GuessTheWeight_More:
-			const cardsCostingMore = state.playerDeck.deck.filter((c) => c.getEffectiveManaCost() > costOfLastDrawnCard)
-				.length;
+			const cardsCostingMore = state.playerDeck.deck.filter(
+				(c) => c.getEffectiveManaCost() > costOfLastDrawnCard,
+			).length;
 			return buildPercents((100 * cardsCostingMore) / state.playerDeck.deck.length);
 	}
 	return null;

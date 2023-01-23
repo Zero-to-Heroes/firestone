@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';

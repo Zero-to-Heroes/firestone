@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DeckStat } from '@firestone-hs/deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { dustToCraftFor } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { sortByProperties } from '../../../services/utils';

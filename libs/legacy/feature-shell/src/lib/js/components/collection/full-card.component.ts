@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';

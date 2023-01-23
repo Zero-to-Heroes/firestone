@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { Option } from './option';

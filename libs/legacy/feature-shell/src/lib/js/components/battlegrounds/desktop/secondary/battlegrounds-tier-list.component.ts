@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -17,7 +18,6 @@ import { BgsFilterLiveMmrEvent } from '../../../../services/battlegrounds/store/
 import { BgsFilterLiveTribesEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-tribes-event';
 import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';

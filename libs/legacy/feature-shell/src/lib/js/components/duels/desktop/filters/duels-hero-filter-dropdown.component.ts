@@ -8,13 +8,13 @@ import {
 } from '@angular/core';
 import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { allDuelsHeroes, CardIds } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

@@ -8,7 +8,7 @@ import {
 	HostListener,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 import { TwitterShareModalComponent } from './twitter-share-modal.component';
 

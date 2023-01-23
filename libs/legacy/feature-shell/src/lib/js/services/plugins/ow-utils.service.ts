@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '../overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 
 declare let OverwolfPlugin: any;
 

@@ -8,6 +8,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -17,7 +18,6 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

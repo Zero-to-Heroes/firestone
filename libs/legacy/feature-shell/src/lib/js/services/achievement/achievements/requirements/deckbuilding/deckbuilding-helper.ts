@@ -1,5 +1,5 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export function buildCardArraysFromDeck(deck: any, cards: CardsFacadeService): readonly ReferenceCard[] {
 	return deck.cards

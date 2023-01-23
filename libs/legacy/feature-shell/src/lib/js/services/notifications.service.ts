@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()

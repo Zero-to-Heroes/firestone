@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { OverwolfService } from '../../../../services/overwolf.service';
 
 @Component({
 	selector: 'battlegrounds-stats-quest-vignette',

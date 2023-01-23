@@ -1,7 +1,7 @@
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { SocialShareUserInfo } from '../../../../../models/mainwindow/social-share-user-info';
-import { OverwolfService } from '../../../../overwolf.service';
 import { UpdateTwitterSocialInfoEvent } from '../../events/social/update-twitter-social-info-event';
 import { Processor } from '../processor';
 

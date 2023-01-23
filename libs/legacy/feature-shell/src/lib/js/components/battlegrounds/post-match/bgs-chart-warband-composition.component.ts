@@ -12,7 +12,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
 import { Entity as ParserEntity } from '@firestone-hs/replay-parser';
 import { Color, ScaleType } from '@sebastientromp/ngx-charts';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

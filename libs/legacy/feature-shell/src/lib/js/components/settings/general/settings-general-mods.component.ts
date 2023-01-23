@@ -6,8 +6,8 @@ import {
 	Component,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
-import { OverwolfService } from '@legacy-import/src/lib/js/services/overwolf.service';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';

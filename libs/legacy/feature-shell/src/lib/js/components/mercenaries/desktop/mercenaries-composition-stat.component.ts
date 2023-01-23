@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './mercenary-info';

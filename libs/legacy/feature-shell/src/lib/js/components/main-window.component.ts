@@ -9,11 +9,11 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
-import { OverwolfService } from '../services/overwolf.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';

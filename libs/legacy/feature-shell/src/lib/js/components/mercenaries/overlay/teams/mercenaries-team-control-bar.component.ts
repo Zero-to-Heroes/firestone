@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../../../models/game-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 
 @Component({
 	selector: 'mercenaries-team-control-bar',

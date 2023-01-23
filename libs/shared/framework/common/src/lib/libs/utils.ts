@@ -21,6 +21,10 @@ export const arraysEqual = (a: readonly any[] | any, b: readonly any[] | any): b
 	);
 };
 
+export const sleep = (ms) => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 export const uuid = () => {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		const r = (Math.random() * 16) | 0,

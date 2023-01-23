@@ -9,13 +9,13 @@ import { DuelsRun } from '@models/duels/duels-run';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { DuelsDeck } from '@models/memory/memory-duels';
 import { SetCard } from '@models/set';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { isPassive } from '@services/duels/duels-utils';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

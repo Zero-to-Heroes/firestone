@@ -7,8 +7,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -28,7 +28,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class MercsTreasureSelectionWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.15;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0.25 * gameHeight;
 	protected positionUpdater = null;

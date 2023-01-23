@@ -6,12 +6,12 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
 import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-category.type';
 import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';
-import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()

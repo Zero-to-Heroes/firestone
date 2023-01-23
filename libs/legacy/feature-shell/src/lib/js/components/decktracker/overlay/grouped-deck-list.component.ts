@@ -10,13 +10,13 @@ import {
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

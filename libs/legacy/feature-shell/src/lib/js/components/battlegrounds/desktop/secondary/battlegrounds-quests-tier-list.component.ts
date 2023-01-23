@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsHeroStat, BgsHeroTier, BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { buildQuestStats } from '../../../../services/ui-store/bgs-ui-helper';

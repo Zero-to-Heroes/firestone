@@ -6,6 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -15,7 +16,6 @@ import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battleground
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';

@@ -1,5 +1,5 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationService } from '@services/localization.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';

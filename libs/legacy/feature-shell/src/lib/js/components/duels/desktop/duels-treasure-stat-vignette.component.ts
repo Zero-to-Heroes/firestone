@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, EventEmitter, Input, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 // @Component({
 // 	selector: 'duels-treasure-stat-vignette',

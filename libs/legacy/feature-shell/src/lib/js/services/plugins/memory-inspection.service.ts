@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Board, SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
 import { GetAdventuresInfoOperation } from '@services/plugins/mind-vision/operations/get-adventures-info-operation';
@@ -24,7 +25,6 @@ import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfos } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
 import { SetsService } from '../collection/sets-service.service';
-import { OverwolfService } from '../overwolf.service';
 import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';

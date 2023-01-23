@@ -6,12 +6,12 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

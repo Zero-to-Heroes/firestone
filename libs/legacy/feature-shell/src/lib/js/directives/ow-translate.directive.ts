@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Directive, ElementRef, Input, Optional } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateDirective, TranslateService } from '@ngx-translate/core';
-import { OverwolfService } from '../services/overwolf.service';
 
 @Directive({
 	selector: '[owTranslate]',

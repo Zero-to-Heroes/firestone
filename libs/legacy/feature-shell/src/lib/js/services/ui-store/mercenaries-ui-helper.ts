@@ -5,6 +5,7 @@ import {
 	VillageVisitorType,
 } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -17,7 +18,6 @@ import {
 	MercenariesRoleFilterType,
 	MercenariesStarterFilterType,
 } from '../../models/mercenaries/mercenaries-filter-types';
-import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesHeroStat,

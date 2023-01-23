@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { ApiRunner } from './api-runner';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
-import { OverwolfService } from './overwolf.service';
 
 // const USER_MAPPING_URL = 'https://08fe814cde.execute-api.us-west-2.amazonaws.com/Prod/userMapping';
 const USER_MAPPING_UPDATE_URL = 'https://api.firestoneapp.com/usermapping/save/usermapping/{proxy+}';

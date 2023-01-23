@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';

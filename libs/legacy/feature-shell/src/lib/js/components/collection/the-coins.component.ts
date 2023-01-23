@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Coin } from '../../models/coin';
-import { CardsFacadeService } from '../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CollectionReferenceCard } from './collection-reference-card';

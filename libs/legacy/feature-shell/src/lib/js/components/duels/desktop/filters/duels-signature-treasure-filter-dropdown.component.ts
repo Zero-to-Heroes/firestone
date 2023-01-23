@@ -7,16 +7,16 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsSignatureTreasureFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-signature-treasure-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

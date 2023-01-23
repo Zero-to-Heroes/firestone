@@ -9,9 +9,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';

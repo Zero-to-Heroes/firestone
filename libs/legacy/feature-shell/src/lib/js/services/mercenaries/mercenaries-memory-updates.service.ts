@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { MercenariesCollectionInformationFromMemoryEvent } from '../mainwindow/store/events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { MercenariesMapInformationFromMemoryEvent } from '../mainwindow/store/events/mercenaries/mercenaries-map-information-from-memory-event';
-import { OverwolfService } from '../overwolf.service';
 import { MercenariesMemoryCacheService } from './mercenaries-memory-cache.service';
 
 @Injectable()

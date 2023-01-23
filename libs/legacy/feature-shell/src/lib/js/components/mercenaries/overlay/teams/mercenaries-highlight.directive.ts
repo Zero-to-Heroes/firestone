@@ -9,15 +9,15 @@ import {
 	OnDestroy,
 	Renderer2,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Preferences } from '../../../../models/preferences';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import {
 	HighlightSelector,
 	MercenariesSynergiesHighlightService,
 } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

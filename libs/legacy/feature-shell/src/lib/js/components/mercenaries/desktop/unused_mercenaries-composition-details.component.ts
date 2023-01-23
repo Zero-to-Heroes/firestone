@@ -1,6 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import {
 	MercenariesHeroLevelFilterType,
@@ -8,14 +10,12 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 } from '../../../models/mercenaries/mercenaries-filter-types';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesCompositionBench,
 	MercenariesGlobalStats,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';

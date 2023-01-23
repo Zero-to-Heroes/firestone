@@ -1,7 +1,7 @@
 import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
 import { ShortCard } from '@models/decktracker/game-state';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ChoosingOptionsGameEvent } from '../mainwindow/game-events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';

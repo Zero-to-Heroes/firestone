@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'minion-icon',
 	styleUrls: [`../../../css/component/battlegrounds/minion-icon.component.scss`],
 	template: `
-		<div class="minion-icon" [ngClass]="{ 'premium': premium }">
+		<div class="minion-icon" [ngClass]="{ premium: premium }">
 			<img [src]="icon" class="icon" />
 			<div class="frame" [inlineSVG]="frameSvg"></div>
 			<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>

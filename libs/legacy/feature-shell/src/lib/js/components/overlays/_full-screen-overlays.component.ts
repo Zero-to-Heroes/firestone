@@ -12,12 +12,12 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

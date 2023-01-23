@@ -3,8 +3,8 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { OutcomeSamples, SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { Preferences } from '../../../../../libs/legacy/feature-shell/src/lib/js/models/preferences';
 import { BgsBattleSimulationExecutorService } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-simulation-executor.service';
-import { CardsFacadeService } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/cards-facade.service';
 import { sumOnArray } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Injectable()
 export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecutorService {

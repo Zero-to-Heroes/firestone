@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationService } from '@services/localization.service';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
@@ -32,6 +32,7 @@ import { DuelsIsOnDeckBuildingLobbyScreenProcessor } from '@services/mainwindow/
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
 import { DuelsStateUpdatedProcessor } from '@services/mainwindow/store/processors/duels/duels-state-updated-processor';
 import { Map } from 'immutable';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
 import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services/mailbox-mark-message-read-processor';
@@ -57,7 +58,6 @@ import { DuelsStateBuilderService } from '../../duels/duels-state-builder.servic
 import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
-import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -38,7 +38,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 			</div>
 			<div class="right-info">
-				<div class="group show-more" [ngClass]="{ 'expanded': _isExpanded }" (click)="toggleShowMore()">
+				<div class="group show-more" [ngClass]="{ expanded: _isExpanded }" (click)="toggleShowMore()">
 					<div class="text" *ngIf="_isExpanded" [owTranslate]="'app.arena.runs.minimize-run-button'"></div>
 					<div class="text" *ngIf="!_isExpanded" [owTranslate]="'app.arena.runs.view-run-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>

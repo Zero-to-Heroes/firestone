@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ApiRunner } from '../api-runner';
 import { LocalStorageService } from '../local-storage';
 import { GlobalStatsLoadedEvent } from '../mainwindow/store/events/stats/global/global-stats-loaded-event';
-import { OverwolfService } from '../overwolf.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const GLOBAL_STATS_ENDPOINT = 'https://dozgz6y7pf.execute-api.us-west-2.amazonaws.com/Prod/globalStats';

@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { getAllCardsInGame, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';

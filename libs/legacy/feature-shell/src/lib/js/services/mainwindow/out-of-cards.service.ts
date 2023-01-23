@@ -1,14 +1,14 @@
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../models/card';
 import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 

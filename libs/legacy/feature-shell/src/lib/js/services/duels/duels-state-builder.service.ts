@@ -7,10 +7,10 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsConfig } from '@models/duels/duels-config';
 import { AdventuresInfo, DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
@@ -19,6 +19,7 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckStatInfo } from '../../models/duels/duels-personal-deck';
@@ -35,7 +36,6 @@ import { HsGameMetaData, runLoop } from '../game-mode-data.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
 

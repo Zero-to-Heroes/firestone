@@ -9,11 +9,11 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AdService } from '../services/ad.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ShowAdsEvent } from '../services/mainwindow/store/events/show-ads-event';
-import { OverwolfService } from '../services/overwolf.service';
 import { TipService } from '../services/tip.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';

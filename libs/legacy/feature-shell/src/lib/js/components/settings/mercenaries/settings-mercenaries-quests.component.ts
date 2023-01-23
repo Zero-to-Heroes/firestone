@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesAddMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesRemoveMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';

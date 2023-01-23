@@ -8,9 +8,9 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { OverwolfService } from '../../services/overwolf.service';
 
 declare let amplitude: any;
 

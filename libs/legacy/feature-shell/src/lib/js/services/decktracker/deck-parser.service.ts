@@ -11,8 +11,9 @@ import {
 	SceneMode,
 	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
@@ -21,7 +22,6 @@ import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
 import { DeckHandlerService } from './deck-handler.service';

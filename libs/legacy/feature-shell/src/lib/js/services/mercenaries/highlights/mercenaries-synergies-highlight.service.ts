@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { BehaviorSubject } from 'rxjs';
-import { CardsFacadeService } from '../../cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { buildSelector } from './mercenaries-synergies-highlight-processor';
 
 @Injectable()

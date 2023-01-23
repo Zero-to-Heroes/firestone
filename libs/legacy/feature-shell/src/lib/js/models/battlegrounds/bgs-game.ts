@@ -1,7 +1,7 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@legacy-import/src/lib/js/services/utils';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
 import { BgsFaceOffWithSimulation } from './bgs-face-off-with-simulation';

@@ -1,7 +1,7 @@
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
-import { CardsFacadeService } from '../../cards-facade.service';
 import { EventParser } from './event-parser';
 
 export class HeroRevealedParser implements EventParser {

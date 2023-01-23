@@ -8,7 +8,7 @@ import {
 	OnInit,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { preloader } from '../assets/preloader';
 
 @Component({
@@ -52,10 +52,13 @@ export class PreloaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	private cardsWithQuotes: any[];
 	private interval;
 
-	constructor(private domSanitizer: DomSanitizer, private cards: AllCardsService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private domSanitizer: DomSanitizer,
+		private cards: CardsFacadeService,
+		private cdr: ChangeDetectorRef,
+	) {}
 
 	async ngOnInit() {
-		await this.cards.initializeCardsDb();
 		this.cardsWithQuotes = this.cards.getCards().filter((card) => card.flavor);
 		this.startQuoteCarousel();
 	}

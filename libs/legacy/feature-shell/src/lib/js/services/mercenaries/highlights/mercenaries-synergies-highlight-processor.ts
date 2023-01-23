@@ -1,5 +1,5 @@
 import { CardIds, GameTag, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '../../cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { normalizeMercenariesCardId } from '../mercenaries-utils';
 import { HighlightSelector } from './mercenaries-synergies-highlight.service';
 

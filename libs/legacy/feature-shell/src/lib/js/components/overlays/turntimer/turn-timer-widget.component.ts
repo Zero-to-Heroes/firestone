@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { GameType } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, interval, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TurnTiming } from '../../../models/decktracker/deck-state';

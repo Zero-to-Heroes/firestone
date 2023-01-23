@@ -8,8 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { TwitterUserInfo } from '../../../models/mainwindow/twitter-user-info';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { ShareInfoComponent } from '../share-info.component';
 
 @Component({

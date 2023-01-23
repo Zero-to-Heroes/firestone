@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { Board, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';

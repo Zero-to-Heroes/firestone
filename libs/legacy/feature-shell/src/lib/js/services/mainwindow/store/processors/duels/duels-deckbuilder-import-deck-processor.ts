@@ -3,7 +3,7 @@ import { duelsHeroConfigs, normalizeDuelsHeroCardIdForDeckCode } from '@fireston
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { CardsFacadeService } from '../../../../cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsDeckbuilderImportDeckEvent } from '../../events/duels/duels-deckbuilder-import-deck-event';
 
 export class DuelsDeckbuilderImportDeckProcessor implements Processor {

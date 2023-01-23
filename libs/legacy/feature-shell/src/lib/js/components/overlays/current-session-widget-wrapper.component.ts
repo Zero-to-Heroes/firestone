@@ -6,10 +6,9 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -21,7 +20,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 		<current-session-widget
 			*ngIf="showWidget$ | async"
 			class="widget"
-			[ngClass]="{ 'hidden': hidden$ | async }"
+			[ngClass]="{ hidden: hidden$ | async }"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"

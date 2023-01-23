@@ -15,10 +15,10 @@ import {
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
-import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
 import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';

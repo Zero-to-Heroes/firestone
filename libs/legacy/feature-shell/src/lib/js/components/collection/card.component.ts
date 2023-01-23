@@ -10,13 +10,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({

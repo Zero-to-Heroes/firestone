@@ -9,8 +9,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'hotkey',

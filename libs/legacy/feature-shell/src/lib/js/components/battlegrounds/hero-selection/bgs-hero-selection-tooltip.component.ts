@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 

@@ -6,10 +6,10 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store/events/collection/collection-select-current-tab-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'collection-menu-selection',
@@ -20,19 +20,19 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	template: `
 		<ul class="menu-selection">
-			<li [ngClass]="{ 'selected': selectedTab === 'sets' }" (mousedown)="selectTab('sets')">
+			<li [ngClass]="{ selected: selectedTab === 'sets' }" (mousedown)="selectTab('sets')">
 				<span [owTranslate]="'app.collection.menu.sets'"></span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedTab === 'card-backs' }" (mousedown)="selectTab('card-backs')">
+			<li [ngClass]="{ selected: selectedTab === 'card-backs' }" (mousedown)="selectTab('card-backs')">
 				<span [owTranslate]="'app.collection.menu.card-backs'"></span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedTab === 'hero-portraits' }" (mousedown)="selectTab('hero-portraits')">
+			<li [ngClass]="{ selected: selectedTab === 'hero-portraits' }" (mousedown)="selectTab('hero-portraits')">
 				<span [owTranslate]="'app.collection.menu.portraits'"></span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedTab === 'coins' }" (mousedown)="selectTab('coins')">
+			<li [ngClass]="{ selected: selectedTab === 'coins' }" (mousedown)="selectTab('coins')">
 				<span [owTranslate]="'app.collection.menu.coins'"></span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedTab === 'packs' }" (mousedown)="selectTab('packs')">
+			<li [ngClass]="{ selected: selectedTab === 'packs' }" (mousedown)="selectTab('packs')">
 				<span [owTranslate]="'app.collection.menu.packs'"></span>
 			</li>
 		</ul>

@@ -1,11 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { CurrentAppType } from '../../../models/mainwindow/current-app.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { NextFtueEvent } from '../../../services/mainwindow/store/events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from '../../../services/mainwindow/store/events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from '../../../services/mainwindow/store/events/ftue/skip-ftue-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'ftue',

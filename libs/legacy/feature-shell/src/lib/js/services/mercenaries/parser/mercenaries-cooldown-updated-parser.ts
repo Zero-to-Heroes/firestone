@@ -1,7 +1,7 @@
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { BattleAbility, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
-import { CardsFacadeService } from '../../cards-facade.service';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesCooldownUpdatedParser implements MercenariesParser {

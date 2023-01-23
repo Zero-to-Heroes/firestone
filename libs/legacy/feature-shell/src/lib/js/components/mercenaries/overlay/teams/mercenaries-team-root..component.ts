@@ -15,16 +15,16 @@ import {
 import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@firestone-hs/deckstrings';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { getShortMercHeroName, isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { ReviewMessage } from '@firestone-hs/build-global-stats/dist/review-message';
 import { extractStatsForGame, mergeStats } from '@firestone-hs/build-global-stats/dist/stats-builder';
-import { CardsFacadeService } from '../cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Events } from '../events.service';
 import { GlobalStatsUpdatedEvent } from '../mainwindow/store/events/stats/global/global-stats-updated-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { GameForUpload } from '../manastorm-bridge/game-for-upload';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
-import { OverwolfService } from '../overwolf.service';
 import { GlobalStatsService } from './global-stats.service';
 
 @Injectable()

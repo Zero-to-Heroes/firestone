@@ -8,11 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { from, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
-import { OverwolfService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/overwolf.service';
 
 @Component({
 	selector: 'app-bootstrap',

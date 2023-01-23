@@ -8,11 +8,11 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FilterShownAchievementsEvent } from '../../services/mainwindow/store/events/achievements/filter-shown-achievements-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-filter',

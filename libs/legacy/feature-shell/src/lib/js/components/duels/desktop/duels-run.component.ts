@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -16,7 +17,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { DuelsToggleExpandedRunEvent } from '../../../services/mainwindow/store/events/duels/duels-toggle-expanded-run-event';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'duels-run',

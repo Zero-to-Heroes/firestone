@@ -6,6 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -13,7 +14,6 @@ import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ArenaTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';

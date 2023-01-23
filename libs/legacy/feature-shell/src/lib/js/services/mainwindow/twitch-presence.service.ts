@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
@@ -16,7 +17,6 @@ import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels } from '../duels/duels-utils';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
-import { OverwolfService } from '../overwolf.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../utils';
 

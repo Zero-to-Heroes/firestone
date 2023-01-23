@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';

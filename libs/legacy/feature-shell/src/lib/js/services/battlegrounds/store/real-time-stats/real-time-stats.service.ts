@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';

@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { OverwolfService } from '../../services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../services/preferences.service';
 
 @Component({

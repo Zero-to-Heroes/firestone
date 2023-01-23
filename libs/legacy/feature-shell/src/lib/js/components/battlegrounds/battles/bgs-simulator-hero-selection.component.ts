@@ -11,8 +11,8 @@ import {
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';

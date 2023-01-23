@@ -10,9 +10,9 @@ import { GreySageParrotCounterDefinition } from '@components/game-counters/defin
 import { ShockspitterCounterDefinition } from '@components/game-counters/definitions/shockspitter-counter';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
-import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

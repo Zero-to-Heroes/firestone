@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards/dist/retrieve-arena-rewards';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../models/arena/arena-state';
 import { ArenaCategory } from '../../models/mainwindow/arena/arena-category';
 import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
 const REWARDS_RETRIEVE_URL = 'https://api.firestoneapp.com/userArenaRewards/get/arenaRewards/{proxy+}';

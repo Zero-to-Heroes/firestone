@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';

@@ -1,5 +1,5 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';

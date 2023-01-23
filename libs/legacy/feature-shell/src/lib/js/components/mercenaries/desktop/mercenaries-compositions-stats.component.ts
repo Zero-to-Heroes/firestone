@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesComposition } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { groupByFunction, sumOnArray } from '../../../services/utils';

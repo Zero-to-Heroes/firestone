@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
-import { BootstrapEssentialServicesService } from './bootstrap-essential-services.service';
-import { AppBootstrapService } from './app-bootstrap.service';
-import { CardsInitService } from '../../js/services/cards-init.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../js/services/debug.service';
-import { OverwolfService } from '../../js/services/overwolf.service';
 import { PreferencesService } from '../../js/services/preferences.service';
+import { AppBootstrapService } from './app-bootstrap.service';
 
 @Component({
 	selector: 'app-root',
@@ -22,7 +20,7 @@ export class DaemonComponent {
 		this.init();
 	}
 
-	// This is just like a sleeping daemon. It listens to pref changes or user action to really start the app, 
+	// This is just like a sleeping daemon. It listens to pref changes or user action to really start the app,
 	// otherwise it just stays there with very minimal process and data loaded
 	private async init() {
 		const launchAppOnGameStart: boolean = (await this.prefs.getPreferences()).launchAppOnGameStart;

@@ -11,10 +11,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'reddit-share-info',

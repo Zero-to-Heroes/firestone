@@ -7,10 +7,10 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
-import { OverwolfService } from '@services/overwolf.service';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';

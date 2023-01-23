@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesHeroStat } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

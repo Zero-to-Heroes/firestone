@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { defaultStartingHp } from '../../../../services/hs-utils';
-import { OverwolfService } from '../../../../services/overwolf.service';
 
 @Component({
 	selector: 'battlegrounds-stats-hero-vignette',

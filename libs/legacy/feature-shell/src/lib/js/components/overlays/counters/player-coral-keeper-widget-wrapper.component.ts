@@ -7,8 +7,8 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
@@ -21,7 +21,8 @@ import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-
 })
 export class PlayerCoralKeeperWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		protected readonly ow: OverwolfService,

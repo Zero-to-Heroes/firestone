@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../models/duels/duels-run';

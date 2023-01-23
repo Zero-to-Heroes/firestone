@@ -7,7 +7,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
@@ -19,7 +20,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';

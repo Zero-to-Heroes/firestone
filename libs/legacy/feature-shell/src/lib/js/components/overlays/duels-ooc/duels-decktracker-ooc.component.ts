@@ -7,9 +7,9 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

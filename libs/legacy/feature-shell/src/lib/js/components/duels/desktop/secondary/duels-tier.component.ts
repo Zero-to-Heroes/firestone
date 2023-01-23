@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { OverwolfService } from '../../../../services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({

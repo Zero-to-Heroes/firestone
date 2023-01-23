@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScenarioId } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';

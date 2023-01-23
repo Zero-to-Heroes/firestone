@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { ConstructedDeckbuilderGoBackEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-go-back-event';
 import { ConstructedDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-import-deck-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { parseClipboardContent } from '../../import-deckstring.component';

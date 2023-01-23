@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { OverwolfService } from './overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Injectable()
 export class AdService {

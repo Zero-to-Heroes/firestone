@@ -79,6 +79,7 @@ import { CardElementResizeDirective } from './directives/card-element-resize.dir
 import { CardResizeDirective } from './directives/card-resize.directive';
 import { CardTooltipDirective } from './directives/card-tooltip.directive';
 import { TransitionGroupItemDirective } from './directives/transition-group-item.directive';
+import { Events } from './services/events.service';
 
 @NgModule({
 	imports: [CommonModule, FormsModule, BrowserAnimationsModule, Ng2FittextModule, ReplayParserModule.forRoot()],
@@ -175,5 +176,6 @@ import { TransitionGroupItemDirective } from './directives/transition-group-item
 		TransitionGroupItemDirective,
 	],
 	exports: [ColiseumComponent],
+	providers: [Events],
 })
 export class ReplayColiseumModule {}

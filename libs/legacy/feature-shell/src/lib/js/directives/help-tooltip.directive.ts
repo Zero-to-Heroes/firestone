@@ -14,8 +14,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
-import { OverwolfService } from '../services/overwolf.service';
 
 @Directive({
 	selector: '[helpTooltip]',

@@ -8,9 +8,9 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'filter',

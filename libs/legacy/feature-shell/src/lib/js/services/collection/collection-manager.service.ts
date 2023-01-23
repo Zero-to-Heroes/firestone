@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';

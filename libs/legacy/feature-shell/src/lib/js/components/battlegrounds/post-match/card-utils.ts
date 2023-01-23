@@ -1,4 +1,4 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 // Used to make the mapping between premium / normal minions
 export const normalizeCardId = (cardId: string, allCards: CardsFacadeService) => {
 	const refCard = allCards.getCard(cardId);

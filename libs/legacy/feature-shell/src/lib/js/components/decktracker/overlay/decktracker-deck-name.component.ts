@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'decktracker-deck-name',

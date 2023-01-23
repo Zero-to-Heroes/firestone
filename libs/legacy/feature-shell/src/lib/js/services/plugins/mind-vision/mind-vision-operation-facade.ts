@@ -1,4 +1,4 @@
-import { OverwolfService } from '../../overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {

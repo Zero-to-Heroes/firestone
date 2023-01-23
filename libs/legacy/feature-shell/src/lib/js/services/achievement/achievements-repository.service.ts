@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@services/preferences.service';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../models/achievement';
@@ -9,7 +10,6 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 import { ApiRunner } from '../api-runner';
 import { AchievementsInitEvent } from '../mainwindow/store/events/achievements/achievements-init-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../overwolf.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
 
@@ -34,7 +34,8 @@ export class AchievementsRepository {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
 				const allAchievements: readonly Achievement[] = await this.achievementsLoader.getAchievements();
 				console.log('[achievements-repository] reloading achievements');
-				const completedAchievements: readonly CompletedAchievement[] = await this.remoteAchievements.reloadFromMemory();
+				const completedAchievements: readonly CompletedAchievement[] =
+					await this.remoteAchievements.reloadFromMemory();
 				const mergedAchievements = this.mergeAchievements(allAchievements, completedAchievements);
 				this.categories = await this.buildCategories(mergedAchievements);
 				this.storeUpdater.next(new AchievementsInitEvent(this.categories));

@@ -1,5 +1,5 @@
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { GameEvents } from '../../../game-events.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../models/preferences';
-import { CardsFacadeService } from '../cards-facade.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';

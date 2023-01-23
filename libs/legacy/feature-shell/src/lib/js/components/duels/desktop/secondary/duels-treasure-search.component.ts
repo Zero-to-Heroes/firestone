@@ -9,11 +9,11 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DuelsTreasureSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

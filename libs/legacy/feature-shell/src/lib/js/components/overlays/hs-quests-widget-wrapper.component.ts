@@ -4,12 +4,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2
+	Renderer2,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.component';
@@ -21,7 +21,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	template: `
 		<hs-quests-widget
 			class="widget"
-			[activeTheme]="'decktracker'" 
+			[activeTheme]="'decktracker'"
 			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
@@ -106,7 +106,7 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 					const isInBgMatch =
 						currentScene === SceneMode.GAMEPLAY &&
 						BG_HEARTHSTONE_SCENES_FOR_QUESTS.includes(lastNonGamePlayScene);
-					if (showQuestsInGame && hsShowQuestsWidgetOnBg&& isInBgMatch) {
+					if (showQuestsInGame && hsShowQuestsWidgetOnBg && isInBgMatch) {
 						return true;
 					}
 

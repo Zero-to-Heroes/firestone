@@ -13,7 +13,7 @@ import {
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { getAllCardsInGame, getEffectiveTribes } from '@services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { Tier } from '../../../battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';

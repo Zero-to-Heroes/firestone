@@ -1,4 +1,5 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { EntityGameState, GameEvent } from '../../../models/game-event';
 import {
 	BattleMercenary,
@@ -6,7 +7,6 @@ import {
 	MercenariesBattleState,
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
-import { CardsFacadeService } from '../../cards-facade.service';
 import { sumOnArray } from '../../utils';
 import {
 	BUFF_SPEED_MODIFIER_ENCHANTMENTS,

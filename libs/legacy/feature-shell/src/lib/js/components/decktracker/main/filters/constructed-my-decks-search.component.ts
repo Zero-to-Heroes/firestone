@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { OverwolfService } from '@services/overwolf.service';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { Preferences } from '../../../../models/preferences';

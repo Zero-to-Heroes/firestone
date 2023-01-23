@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -66,7 +66,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			putIntoPlay: true,
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
-		// In the case of cards played by effect, the card is first revealed, then played. So we need to replace the 
+		// In the case of cards played by effect, the card is first revealed, then played. So we need to replace the
 		// existing card to take the new info into account
 		const newBoard: readonly DeckCard[] = isOnBoard
 			? this.helper.empiricReplaceCardInZone(deck.board, cardWithZone, false)

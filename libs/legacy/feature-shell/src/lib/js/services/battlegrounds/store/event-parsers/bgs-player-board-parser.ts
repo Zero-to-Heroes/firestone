@@ -5,8 +5,8 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';

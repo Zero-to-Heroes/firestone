@@ -8,11 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { multiGroupByFunction } from '../../../services/utils';
 import { Tier } from './battlegrounds-minions-tiers-view.component';
 import { BgsMinionsGroup } from './bgs-minions-group';

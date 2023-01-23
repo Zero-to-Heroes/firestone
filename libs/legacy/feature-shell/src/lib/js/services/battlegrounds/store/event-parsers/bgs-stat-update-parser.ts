@@ -1,4 +1,4 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { PatchesConfigService } from '../../../patches-config.service';
 import { BgsStatUpdateEvent } from '../events/bgs-stat-update-event';

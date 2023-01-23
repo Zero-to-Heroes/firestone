@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import {
 	CardsHighlightService,
 	Handler,
 	SelectorOptions,
 } from '@services/decktracker/card-highlight/cards-highlight.service';
-import { OverwolfService } from '@services/overwolf.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Injectable()

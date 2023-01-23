@@ -8,11 +8,11 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';

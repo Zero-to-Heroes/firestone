@@ -1,7 +1,7 @@
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationMercenaries } from '../../../../../models/mainwindow/navigation/navigation-mercenaries';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { CardsFacadeService } from '../../../../cards-facade.service';
 import { MercenariesHeroSelectedEvent } from '../../events/mercenaries/mercenaries-hero-selected-event';
 import { Processor } from '../processor';
 

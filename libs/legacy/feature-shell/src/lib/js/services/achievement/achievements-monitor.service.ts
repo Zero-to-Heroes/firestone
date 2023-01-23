@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Achievement } from '../../models/achievement';
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
@@ -9,7 +10,6 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { AchievementsUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-updated-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';

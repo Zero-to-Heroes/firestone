@@ -10,8 +10,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
-import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../services/utils';

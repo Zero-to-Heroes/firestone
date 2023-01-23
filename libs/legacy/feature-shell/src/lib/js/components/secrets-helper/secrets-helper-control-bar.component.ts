@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../models/game-event';
-import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'secrets-helper-control-bar',

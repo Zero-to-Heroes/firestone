@@ -8,8 +8,8 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { capitalizeFirstLetter, isVersionBefore } from '../../services/utils';
 import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './updates';

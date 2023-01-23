@@ -6,8 +6,8 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';

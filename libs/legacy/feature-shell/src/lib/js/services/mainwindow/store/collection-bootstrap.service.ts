@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Card } from '../../../models/card';
 import { PackInfo } from '../../../models/collection/pack-info';
 import { BinderState } from '../../../models/mainwindow/binder-state';
@@ -6,7 +7,6 @@ import { CardHistoryStorageService } from '../../collection/card-history-storage
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { Events } from '../../events.service';
-import { OverwolfService } from '../../overwolf.service';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
-import { OverwolfService } from './overwolf.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 

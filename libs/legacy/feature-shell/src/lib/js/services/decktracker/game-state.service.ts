@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { AttackParser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/attack-parser';
 import { CustomEffects2Parser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/custom-effects-2-parser';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { EntityChosenParser } from '@services/decktracker/event-parser/entity-chosen-parser';
 import { HeroRevealedParser } from '@services/decktracker/event-parser/hero-revealed-parser';
@@ -10,6 +10,7 @@ import { ReconnectStartParser } from '@services/decktracker/event-parser/reconne
 import { ShuffleDeckParser } from '@services/decktracker/event-parser/shuffle-deck-parser';
 import { SpecialCardPowerTriggeredParser } from '@services/decktracker/event-parser/special-card-power-triggered-parser';
 import { SphereOfSapienceParser } from '@services/decktracker/event-parser/special-cases/sphere-of-sapience-parser';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
@@ -24,7 +25,6 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { MercenariesStateBuilderService } from '../mercenaries/mercenaries-state-builder.service';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { OwUtilsService } from '../plugins/ow-utils.service';
 import { PreferencesService } from '../preferences.service';

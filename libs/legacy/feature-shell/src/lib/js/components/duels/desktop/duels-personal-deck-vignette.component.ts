@@ -7,6 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeletePersonalDeckSummaryEvent } from '@services/mainwindow/store/events/duels/duels-delete-personal-deck-summary-event';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
@@ -15,7 +16,6 @@ import { DuelsPersonalDeckRenameEvent } from '../../../services/mainwindow/store
 import { DuelsRestorePersonalDeckSummaryEvent } from '../../../services/mainwindow/store/events/duels/duels-restore-personal-deck-summary-event';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'duels-personal-deck-vignette',

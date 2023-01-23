@@ -1,5 +1,5 @@
 import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../models/game-event';
 import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
