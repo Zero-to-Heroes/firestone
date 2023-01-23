@@ -1,0 +1,36 @@
+:host {
+	margin: auto;
+	width: 100%;
+}
+
+.hero-selection {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 70%;
+	justify-content: center;
+
+	li {
+		height: 100%;
+		width: 15%;
+		position: relative;
+		margin: 6%;
+		width: 15%;
+
+		::ng-deep hero-card {
+			&:not(.picked) {
+				filter: grayscale(1);
+			}
+			hero-art {
+				width: 105%;
+				bottom: 5%;
+				left: 0%;
+			}
+			hero-stats {
+				display: none;
+			}
+		}
+	}
+}

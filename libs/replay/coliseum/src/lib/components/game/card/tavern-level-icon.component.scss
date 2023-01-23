@@ -1,0 +1,51 @@
+.banner {
+	width: 100%;
+}
+
+.level {
+	position: absolute;
+	top: 9%;
+	left: 13%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 60%;
+	width: 72%;
+	flex-wrap: wrap;
+
+	img {
+		width: 40%;
+
+		// https://stackoverflow.com/questions/8720931/can-css-detect-the-number-of-children-an-element-has
+		&:first-child:nth-last-child(1),
+		&:first-child:nth-last-child(1) ~ img,
+		&:first-child:nth-last-child(2),
+		&:first-child:nth-last-child(2) ~ img {
+			margin-bottom: -20%;
+		}
+
+		&:first-child:nth-last-child(3),
+		&:first-child:nth-last-child(3) ~ img {
+			margin-bottom: -20%;
+		}
+
+		&:first-child:nth-last-child(4),
+		&:first-child:nth-last-child(4) ~ img {
+			margin-bottom: -15%;
+		}
+
+		&:first-child:nth-last-child(5),
+		&:first-child:nth-last-child(5) ~ img {
+			margin-bottom: -17%;
+			&:nth-of-type(3) {
+				page-break-after: always;
+				break-after: always;
+			}
+		}
+
+		&:first-child:nth-last-child(6),
+		&:first-child:nth-last-child(6) ~ img {
+			margin-bottom: -17%;
+		}
+	}
+}

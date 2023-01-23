@@ -1,0 +1,56 @@
+.hero {
+	position: relative;
+	display: flex;
+	width: 100%;
+
+	hero-card {
+		position: absolute;
+		top: 0;
+		left: 45.5%;
+		width: 9%;
+		height: 100%;
+	}
+
+	hero-power {
+		position: absolute;
+		height: 100%;
+		top: 10%;
+		left: 55%;
+		width: 7%;
+	}
+
+	weapon {
+		position: absolute;
+		height: 100%;
+		top: 10%;
+		left: 36%;
+		width: 8%;
+	}
+
+	tavern-level-icon {
+		width: 5%;
+		position: absolute;
+		left: 43.3%;
+		top: 41%;
+	}
+
+	tavern-button {
+		position: absolute;
+		width: 5%;
+	}
+
+	.tavern-upgrade {
+		left: 38%;
+		top: 20%;
+	}
+
+	.tavern-reroll {
+		left: 56%;
+		top: 20%;
+	}
+
+	.tavern-freeze {
+		left: 62%;
+		top: 6%;
+	}
+}

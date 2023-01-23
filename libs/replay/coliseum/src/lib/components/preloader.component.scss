@@ -1,0 +1,126 @@
+$red01: rgb(194, 25, 19); //red
+$red02: rgb(255, 0, 0); //red
+
+$gray019: rgb(19, 19, 19);
+$gray023: rgb(23, 23, 23);
+$gray025: rgb(25, 25, 25);
+$gray026: rgb(26, 26, 26);
+$gray033: rgb(33, 33, 33);
+$gray039: rgb(39, 39, 39);
+$gray051: rgb(51, 51, 51);
+$gray075: rgb(75, 75, 75);
+$gray079: rgb(79, 79, 79);
+$gray089: rgb(89, 89, 89);
+$gray099: rgb(99, 99, 99);
+$gray108: rgb(108, 108, 108);
+$gray130: rgb(130, 130, 130);
+$gray153: rgb(153, 153, 153);
+$gray168: rgb(168, 168, 168);
+$gray182: rgb(182, 182, 182);
+$gray211: rgb(211, 211, 211);
+$gray222: rgb(222, 222, 222);
+$gray230: rgb(230, 230, 230);
+$gray236: rgb(236, 236, 236);
+$gray240: rgb(240, 240, 240);
+$gray246: rgb(246, 246, 246);
+$gray255: rgb(255, 255, 255);
+
+$dark-background-main: $gray019;
+$dark-background-secondary: $gray039;
+$dark-background-third: $gray051;
+$dark-background-forth: $gray079;
+
+$dark-foreground-main: $gray222;
+$dark-foreground-secondary: $gray182;
+$dark-foreground-third: $gray168;
+$dark-foreground-forth: $gray130;
+
+@keyframes rotate {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+:host {
+	--main-color: black;
+	--background-main: #{$dark-background-main};
+	--background-secondary: #{$dark-background-secondary};
+	--background-third: #{$dark-background-third};
+	--background-forth: #{$dark-background-forth};
+
+	--foreground-main: #{$dark-foreground-main};
+	--foreground-secondary: #{$dark-foreground-secondary};
+	--foreground-third: #{$dark-foreground-third};
+	--foreground-forth: #{$dark-foreground-forth};
+
+	position: absolute;
+	top: var(--top, 0);
+	left: 0;
+	bottom: 0;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: var(--foreground-third);
+	background-color: var(--background-main);
+	pointer-events: none;
+	opacity: 0;
+	transition: 0.15s;
+	z-index: 98;
+
+	&.active {
+		pointer-events: auto;
+		opacity: 1;
+
+		::ng-deep .preloader svg {
+			animation: rotate 1s linear infinite;
+		}
+	}
+}
+
+.preloader {
+	--size: 80px;
+	width: var(--size);
+	height: var(--size);
+	max-height: 100%;
+	flex: 0 1 var(--size);
+	color: var(--background-secondary);
+	will-change: transform; // https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way
+
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.preloader-quote {
+	margin: 0;
+	font-size: 15px;
+	max-width: 300px;
+}
+
+.preloader-quote-text {
+	font-style: italic;
+	line-height: 1.3;
+}
+
+.preloader-quote-author {
+	margin-top: 10px;
+	text-align: end;
+}
+
+.status {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	font-size: 10px;
+
+	&::after {
+		content: '...';
+	}
+}
+
+::ng-deep a {
+	color: inherit;
+}

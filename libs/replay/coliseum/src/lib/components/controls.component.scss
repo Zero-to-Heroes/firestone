@@ -1,0 +1,492 @@
+// TODO: clean this stylesheet, as it's a direct imlport from manastorm
+
+// colors -------------------------------
+$red01: rgb(194, 25, 19); //red
+$red02: rgb(255, 0, 0); //red
+
+$gray019: rgb(19, 19, 19);
+$gray023: rgb(23, 23, 23);
+$gray025: rgb(25, 25, 25);
+$gray026: rgb(26, 26, 26);
+$gray033: rgb(33, 33, 33);
+$gray039: rgb(39, 39, 39);
+$gray051: rgb(51, 51, 51);
+$gray075: rgb(75, 75, 75);
+$gray079: rgb(79, 79, 79);
+$gray089: rgb(89, 89, 89);
+$gray099: rgb(99, 99, 99);
+$gray108: rgb(108, 108, 108);
+$gray130: rgb(130, 130, 130);
+$gray153: rgb(153, 153, 153);
+$gray168: rgb(168, 168, 168);
+$gray182: rgb(182, 182, 182);
+$gray211: rgb(211, 211, 211);
+$gray222: rgb(222, 222, 222);
+$gray230: rgb(230, 230, 230);
+$gray236: rgb(236, 236, 236);
+$gray240: rgb(240, 240, 240);
+$gray246: rgb(246, 246, 246);
+$gray255: rgb(255, 255, 255);
+
+// light theme
+$light-background-main: $gray246;
+$light-background-secondary: $gray222;
+$light-background-third: $gray182;
+$light-background-forth: $gray168;
+
+$light-foreground-main: $gray019;
+$light-foreground-secondary: $gray079;
+$light-foreground-third: $gray130;
+$light-foreground-forth: $gray168;
+
+// dark theme
+$dark-background-main: $gray019;
+$dark-background-secondary: $gray039;
+$dark-background-third: $gray051;
+$dark-background-forth: $gray079;
+
+$dark-foreground-main: $gray222;
+$dark-foreground-secondary: $gray182;
+$dark-foreground-third: $gray168;
+$dark-foreground-forth: $gray130;
+
+// borders
+$transparent-border: rgba(white, 0.1);
+
+// gaps
+$grid-gap: 20px;
+
+// transparent buttons
+$transparent-btn-background-hover: rgba(white, 0.1);
+$transparent-btn-background-selected: rgba(white, 0.2);
+
+$transparent-btn-foreground: rgba(white, 0.4);
+$transparent-btn-foreground-selected: rgba(white, 0.9);
+
+.light-theme {
+	--main-color: white;
+	--background-main: #{$light-background-main};
+	--background-secondary: #{$light-background-secondary};
+	--background-third: #{$light-background-third};
+	--background-forth: #{$light-background-forth};
+
+	--foreground-main: #{$light-foreground-main};
+	--foreground-secondary: #{$light-foreground-secondary};
+	--foreground-third: #{$light-foreground-third};
+	--foreground-forth: #{$light-foreground-forth};
+}
+
+// dark theme
+.dark-theme {
+	--main-color: black;
+	--background-main: #{$dark-background-main};
+	--background-secondary: #{$dark-background-secondary};
+	--background-third: #{$dark-background-third};
+	--background-forth: #{$dark-background-forth};
+
+	--foreground-main: #{$dark-foreground-main};
+	--foreground-secondary: #{$dark-foreground-secondary};
+	--foreground-third: #{$dark-foreground-third};
+	--foreground-forth: #{$dark-foreground-forth};
+}
+
+// transparent theme
+.transparent-theme {
+	--main-color: transparent;
+	--background-main: transparent;
+	--background-main-hover: #{$dark-background-secondary};
+	--background-third: #{$dark-background-third};
+	--background-forth: #{$dark-background-forth};
+
+	--text-main: #{rgba(white, 0.6)};
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-weight: normal;
+}
+
+body {
+	margin: 0;
+	height: 100vh;
+	overflow: hidden;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:focus,
+a:active {
+	text-decoration: none;
+}
+
+a {
+	color: inherit;
+}
+
+strong {
+	font-family: 'KlavikaWebBasicMedium', sans-serif;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+}
+
+button {
+	border: none;
+	font-family: inherit;
+	background-color: transparent;
+	transition: 0.15s;
+}
+
+:focus {
+	outline: none;
+}
+
+.hide {
+	display: none !important;
+}
+
+.ignored-wrapper {
+	display: contents;
+}
+
+// icons
+.gs-icon {
+	--size: 30px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--size);
+	height: var(--size);
+	flex-shrink: 0;
+
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.btn-gs-icon {
+	color: var(--foreground-third);
+
+	&:hover,
+	&.toggled {
+		color: var(--foreground-secondary);
+		background-color: var(--background-secondary);
+	}
+}
+
+.gs-icon-divider {
+	width: 1px;
+	height: 20px;
+	background-color: var(--background-secondary);
+	margin: 0 var(--divider-gap, 10px);
+}
+
+.icon-40 {
+	--size: 40px;
+}
+
+.btn-round {
+	color: var(--foreground-third);
+	border-radius: 50%;
+
+	&:hover,
+	&.active {
+		color: var(--foreground-secondary);
+		background-color: var(--background-secondary);
+	}
+}
+
+.toggle-icons {
+	svg {
+		position: absolute;
+		opacity: 0;
+	}
+
+	svg:nth-of-type(1) {
+		opacity: 1;
+	}
+	svg:nth-of-type(2) {
+		opacity: 0;
+	}
+}
+
+.toggle-icons.toggled {
+	svg:nth-of-type(1) {
+		opacity: 0;
+	}
+	svg:nth-of-type(2) {
+		opacity: 1;
+	}
+}
+
+kbd {
+	font-family: inherit;
+	padding: 3px 0;
+	display: inline-flex;
+	align-items: center;
+
+	&:before {
+		content: '[';
+		padding-right: 3px;
+	}
+
+	&:after {
+		content: ']';
+		padding-left: 3px;
+	}
+}
+
+.player-controls {
+	display: flex;
+	flex-direction: column;
+	--focus-visible-color: var(--background-third);
+	font-family: 'nice ampersand', 'KlavikaWebBasicRegular', sans-serif;
+	transition: 0.15s;
+}
+
+.player-controls-disabled {
+	opacity: 0.3;
+	pointer-events: none;
+}
+
+.player-controls-buttons-wrapper {
+	flex-shrink: 0;
+	display: grid;
+	grid-template-columns: [left] 1fr [middle] auto [right] 1fr;
+	user-select: none;
+	margin-top: 10px;
+	height: 40px;
+}
+
+.player-controls-content {
+	color: var(--foreground-third);
+	display: flex;
+	align-items: center;
+
+	.player-controls-content-note {
+		font-size: 13px;
+	}
+
+	a {
+		padding: 0 3px;
+	}
+	a:hover {
+		color: var(--foreground-main);
+	}
+}
+
+.player-controls-content-left {
+	> * + * {
+		margin-left: 3px;
+	}
+}
+
+.player-controls-content-middle {
+	align-items: center;
+	justify-content: center;
+}
+
+.player-control-main {
+	color: var(--foreground-secondary);
+	border-radius: 50%;
+
+	&:hover {
+		background-color: var(--background-secondary);
+	}
+}
+
+.player-control-play {
+	--size: 40px;
+}
+
+.player-controls-content-right {
+	justify-content: flex-end;
+}
+
+.player-control {
+	border-radius: 3px;
+}
+
+.player-control-text {
+	font-size: 17px;
+	letter-spacing: 2px;
+
+	sub {
+		transform: scaleX(1.3);
+		margin-right: -2px;
+		vertical-align: baseline;
+	}
+}
+
+.player-control-group {
+	display: flex;
+	justify-content: center;
+}
+
+// visibility
+.hint-tooltip-container {
+	position: relative;
+
+	.hint-tooltip {
+		opacity: 0;
+		z-index: 1;
+		transition: 0.15s;
+	}
+}
+
+.hint-tooltip-container:hover {
+	.hint-tooltip {
+		opacity: 1;
+		transition-delay: 0.5s;
+	}
+}
+
+.hint-tooltip {
+	font-size: 13px;
+	text-align: center;
+	padding: 7px 10px;
+	white-space: nowrap;
+	pointer-events: none;
+	color: var(--hntt-color, $light-foreground-main); // default light theme
+	background-color: var(--hntt-bg-color, $light-background-main); // default light theme
+	filter: drop-shadow(0 0 3px rgba(black, 0.6));
+
+	kbd {
+		font-family: inherit;
+		padding: 3px 0;
+		display: inline-flex;
+		align-items: center;
+
+		color: var(--foreground-third);
+	}
+}
+
+// arrow
+.hint-tooltip:after {
+	content: '';
+	position: absolute;
+	margin: auto;
+	background-color: inherit;
+}
+
+// position
+.hint-tooltip {
+	position: absolute;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.hint-tooltip-right,
+.hint-tooltip-left {
+	&:after {
+		width: 6px;
+		height: 18px;
+	}
+}
+
+.hint-tooltip-right {
+	right: 0;
+	transform: translateX(100%);
+
+	&:after {
+		left: -4px;
+		clip-path: polygon(0 50%, 100% 0, 100% 100%);
+	}
+}
+
+.hint-tooltip-left {
+	left: 0;
+	transform: translateX(-100%);
+
+	&:after {
+		right: -4px;
+		clip-path: polygon(0 0, 100% 50%, 0 100%);
+	}
+}
+
+.hint-tooltip-top,
+.hint-tooltip-bottom {
+	&:after {
+		width: 18px;
+		height: 6px;
+	}
+}
+
+.hint-tooltip-top {
+	top: 0;
+	transform: translateY(-100%);
+
+	&:after {
+		bottom: -4px;
+		clip-path: polygon(0 0, 100% 0, 50% 100%);
+	}
+}
+
+.hint-tooltip-bottom {
+	bottom: 0;
+	transform: translateY(100%);
+
+	&:after {
+		top: -4px;
+		clip-path: polygon(50% 0, 0 100%, 100% 100%);
+	}
+}
+
+// special alignment
+.hint-tooltip-aligned-right,
+.hint-tooltip-aligned-left {
+	--hhtt-arrow-indent: calc(var(--size) / 2);
+}
+
+.hint-tooltip-aligned-right {
+	right: 0;
+
+	&:after {
+		right: var(--hhtt-arrow-indent);
+		transform: translateX(50%);
+	}
+}
+
+.hint-tooltip-aligned-left {
+	left: 0;
+
+	&:after {
+		left: var(--hhtt-arrow-indent);
+		transform: translateX(-50%);
+	}
+}
+
+// light theme
+.light-theme {
+	--hntt-color: #{$light-foreground-main};
+	--hntt-bg-color: #{$light-background-main};
+}
+
+// dark theme
+.dark-theme {
+	--hntt-color: #{$dark-foreground-main};
+	--hntt-bg-color: #{$dark-background-main};
+}
+
+.hint-tooltip.dark-theme {
+	filter: none;
+}
+
+.show,
+.show:hover {
+	background-color: var(--background-secondary);
+	color: var(--foreground-secondary);
+}
+
+.replay-location-text {
+	display: none;
+}

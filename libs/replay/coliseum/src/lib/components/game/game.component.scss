@@ -1,0 +1,130 @@
+.game {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 0;
+	flex-shrink: 0;
+	height: 100%;
+
+	.play-areas {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 0;
+		flex-shrink: 0;
+		width: 100%;
+		height: 100%;
+		background-image: url(https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/boards/hall_of_explorers.jpg);
+		background-position: 50% 50%;
+		background-size: 100%;
+		background-repeat: no-repeat, no-repeat;
+	}
+
+	overlays {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 0;
+		flex-shrink: 0;
+		pointer-events: none;
+	}
+
+	&.blur {
+		.play-areas,
+		player-name {
+			filter: blur(3px);
+		}
+	}
+
+	&.quest {
+		.play-areas,
+		player-name {
+			filter: grayscale(1);
+		}
+	}
+
+	&.dark-blur {
+		::ng-deep hand {
+			opacity: 0;
+		}
+		overlays {
+			background-color: rgba(0, 0, 0, 0.8);
+		}
+	}
+
+	play-area {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+
+		&.top {
+			height: 47%;
+			flex-basis: 47%;
+			max-height: 47%;
+		}
+		&.bottom {
+			height: 53%;
+			flex-basis: 53%;
+			max-height: 53%;
+		}
+	}
+
+	active-spell {
+		position: absolute;
+		// width: 17%;
+		height: 42%;
+		max-height: 45%;
+		top: 24%;
+		left: 3%;
+		flex-grow: 1;
+		flex-shrink: 0;
+		display: flex;
+		overflow: hidden;
+	}
+
+	secret-revealed {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	target-zone {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	player-name {
+		position: absolute;
+		left: 0;
+		pointer-events: none;
+		top: 28%;
+		width: 15%;
+		height: 10%;
+
+		&.top {
+			top: 3%;
+		}
+
+		&.bottom {
+			top: 87%;
+		}
+	}
+
+	leaderboard {
+		position: absolute;
+		height: 75%;
+		width: 10%;
+		left: 12%;
+		top: 12%;
+	}
+}

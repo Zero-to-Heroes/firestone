@@ -1,0 +1,31 @@
+.hand {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+
+	li {
+		height: 100%;
+		position: relative;
+		z-index: 0;
+
+		card {
+			height: 100%;
+			display: flex;
+		}
+
+		.unknown-card {
+			position: relative;
+			top: -3%;
+			left: 10%;
+			height: 100%;
+		}
+	}
+}
+
+.flip-list-move {
+	transition: transform 0.3s;
+}

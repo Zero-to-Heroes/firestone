@@ -1,0 +1,54 @@
+@import '../card/highlights.scss';
+
+:host {
+	// So that when we animate it it stays in the center
+	margin: auto;
+}
+
+.card-on-board {
+	position: relative;
+	height: 100%;
+	width: 100%;
+
+	&::before {
+		content: '';
+		padding-top: 148%;
+		position: relative;
+		display: block;
+	}
+
+	.main-card {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		left: 0;
+
+		&.highlight {
+			filter: $highlight;
+		}
+
+		&.highlight.in-recruit {
+			filter: $highlightLight;
+		}
+
+		// &.highlight.in-recruit.main-player {
+		// 	filter: none;
+		// }
+	}
+
+	tavern-level-icon {
+		width: 55%;
+		position: absolute;
+		left: 25%;
+		top: -8%;
+	}
+
+	::ng-deep .card-art.card-art {
+		width: 123%;
+		// clip-path: ellipse(36% 41% at 50% 50%);
+		clip-path: ellipse(37% 39% at 50% 50%);
+		top: 0;
+		left: 0;
+	}
+}

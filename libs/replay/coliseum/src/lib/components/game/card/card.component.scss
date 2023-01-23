@@ -1,0 +1,33 @@
+@import './highlights.scss';
+
+.card {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	&::before {
+		content: '';
+		padding-top: 148%;
+		position: relative;
+		display: block;
+	}
+
+	&.highlight {
+		filter: $highlight;
+	}
+
+	& > * {
+		z-index: 1;
+	}
+
+	card-enchantments {
+		z-index: 0;
+	}
+
+	tavern-level-icon {
+		width: 32%;
+		position: absolute;
+		left: 0%;
+		top: 5%;
+	}
+}

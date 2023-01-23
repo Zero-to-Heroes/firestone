@@ -1,0 +1,40 @@
+:host {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+}
+
+.board-card-frame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+}
+
+.card-frame {
+    position: absolute;
+    width: 150%;
+    height: 119%;
+    top: -5%;
+}
+
+.taunt {
+    width: 168%;
+    height: 132%;
+    top: -11%;
+}
+
+// .premium .taunt {
+//     width: 195%;
+//     top: -17%;
+//     height: 140%;
+// }

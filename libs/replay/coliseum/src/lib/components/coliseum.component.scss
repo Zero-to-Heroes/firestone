@@ -1,0 +1,84 @@
+.coliseum {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	user-select: none;
+	-moz-user-select: none;
+
+	game {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
+	tooltips {
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		pointer-events: none;
+	}
+
+	turn-narrator {
+		height: auto;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+	}
+
+	&.wide {
+		&::before {
+			padding-top: 56%;
+		}
+		::ng-deep tooltips tooltip {
+			width: 15%;
+		}
+	}
+
+	::ng-deep * {
+		user-select: none;
+		-moz-user-select: none;
+	}
+}
+
+.aspect-ratio-wrapper {
+	position: relative;
+}
+
+.aspect-ratio-wrapper.ar-16x9 {
+	padding-bottom: 56.25%;
+}
+
+.aspect-ratio-inner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.manastorm-player-wrapper {
+	background-color: black;
+}
+
+.manastorm-player {
+	margin: 0 auto;
+	width: 100%;
+	max-width: calc((100vh - 150px) * 16 / 9);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.status {
+	position: absolute;
+	bottom: 2%;
+	right: 2%;
+	background: rgba(19, 19, 19, 1);
+	color: rgb(168, 168, 168);
+	padding: 5px;
+	font-size: 10px;
+}

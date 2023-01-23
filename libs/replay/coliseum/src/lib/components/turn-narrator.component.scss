@@ -1,0 +1,25 @@
+.turn-narrator {
+	display: flex;
+	text-align: center;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 0 5px;
+	padding-top: 2px;
+	box-sizing: border-box;
+	height: 40px;
+	font-family: 'nice ampersand', 'KlavikaWebBasicRegular', sans-serif;
+	transition: opacity 0.15s;
+
+	& > span {
+		// Not actually webkit specific, see https://webplatform.news/issues/2019-05-17
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+	}
+}
+
+.turn-narrator-disabled {
+	opacity: 0;
+}

@@ -1,0 +1,20 @@
+.target-zone {
+    ::ng-deep line {
+        stroke: #4786FF;
+        stroke-width: 4px;
+        fill: none;
+    }
+
+    ::ng-deep path {
+        fill: #4786FF;
+    }
+
+    &.inactive {
+        ::ng-deep line {
+            stroke: #FF4747;
+        }
+        ::ng-deep path {
+            fill: #FF4747;
+        }
+    }
+}

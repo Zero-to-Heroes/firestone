@@ -1,0 +1,41 @@
+@import '../../../variables';
+
+.card-enchantment {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 5%;
+}
+
+.name {
+	color: white;
+	font-weight: bold;
+	text-shadow: $text-shadow;
+	margin-bottom: 2%;
+}
+
+.body {
+	display: flex;
+	align-items: center;
+}
+
+.image {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 35%;
+	min-width: 35%;
+
+	.art {
+		clip-path: ellipse(35% 35% at 50% 50%);
+		width: 100%;
+	}
+	.ring {
+		position: absolute;
+		width: 25%;
+	}
+}
+
+.description {
+	color: white;
+	padding-left: 5%;
+}

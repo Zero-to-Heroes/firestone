@@ -1,0 +1,73 @@
+:host {
+	margin: auto;
+	width: 100%;
+}
+
+.opponents-reveal {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+
+	.opponents {
+		display: flex;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 50%;
+		justify-content: center;
+	}
+
+	li {
+		height: 100%;
+		position: relative;
+		width: 13%;
+		margin-top: -9%;
+
+		::ng-deep hero-card {
+			hero-art {
+				width: 105%;
+				bottom: 3%;
+				left: 0%;
+				.hero-art {
+					clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 0%, 80% 20%, 90% 56%, 90% 100%);
+				}
+			}
+			hero-stats {
+				display: none;
+			}
+		}
+	}
+}
+
+.vs {
+	position: absolute;
+	width: 10%;
+}
+
+.player {
+	width: 13%;
+	height: 50%;
+	position: relative;
+	top: -8%;
+
+	::ng-deep {
+		hero-art {
+			width: 105%;
+			bottom: 3%;
+			left: 0%;
+			.hero-art {
+				clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 0%, 80% 20%, 90% 56%, 90% 100%);
+			}
+		}
+		hero-stats {
+			display: none;
+		}
+	}
+}

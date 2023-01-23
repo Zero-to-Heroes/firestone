@@ -1,0 +1,44 @@
+.game.battlegrounds {
+	.play-areas {
+		background-image: url(https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/boards/combat_board_tmp.png);
+		background-position-x: -4px;
+		background-position-y: 5px;
+	}
+
+	&.recruit .play-areas {
+		background-image: url(https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/boards/recruit_board_tmp.png);
+		background-position-x: -4px;
+		background-position-y: 5px;
+	}
+
+	::ng-deep {
+		hero-power-cost .hero-power-cost {
+			background-image: url('https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/coin_mana.png');
+			background-size: 129%;
+			background-repeat: no-repeat;
+			background-position-x: 52%;
+			background-position-y: 14%;
+			overflow: visible;
+			width: 40%;
+		}
+		mana-tray {
+			.mana-tray {
+				left: 62.5%;
+			}
+			.mana {
+				background-image: url('https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/coin_mana.png');
+				background-size: 125%;
+			}
+			.mana.spent {
+				background-image: url('https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/coin_mana_spent.png');
+				background-size: 125%;
+			}
+		}
+		.top mana-tray {
+			display: none;
+		}
+		deck {
+			display: none;
+		}
+	}
+}

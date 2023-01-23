@@ -1,0 +1,45 @@
+:host {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+}
+
+.card-art {
+	position: relative;
+	width: 79%;
+	top: -17%;
+	left: 2%;
+	object-fit: contain;
+	flex-shrink: 0;
+
+	&.minion {
+		clip-path: ellipse(37% 27% at 50% 50%);
+		// top: -19%;
+	}
+
+	&.spell {
+		clip-path: inset(31% 4% 30% 0%);
+	}
+
+	&.location {
+		clip-path: polygon(0% 100%, 0% 37%, 50% 24%, 100% 37%, 100% 100%);
+	}
+
+	&.weapon {
+		clip-path: ellipse(37% 21% at 50% 50%);
+	}
+
+	&.hero_power {
+		clip-path: ellipse(37% 21% at 50% 50%);
+	}
+
+	&.unknown {
+		width: 100%;
+		top: -3%;
+	}
+}

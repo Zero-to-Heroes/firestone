@@ -1,0 +1,72 @@
+@import '../../../variables';
+
+.mana-tray {
+	position: absolute;
+	width: 22%;
+	top: inherit;
+	bottom: 10%;
+	left: 62.2%;
+	display: flex;
+	height: 6%;
+
+	.summary {
+		display: flex;
+		color: white;
+		font-weight: bold;
+		text-align: center;
+		cursor: default;
+		text-shadow: $text-shadow;
+		width: 25%;
+		align-items: center;
+		justify-content: center;
+
+		span {
+			font-family: 'Passion One';
+		}
+	}
+
+	.crystals {
+		flex-grow: 1;
+
+		.present {
+			display: flex;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+
+		.future {
+			display: flex;
+			justify-content: flex-start;
+		}
+	}
+
+	.mana {
+		background: url(https://static.zerotoheroes.com/hearthstone/asset/manastorm/mana.png) center center no-repeat;
+		background-size: contain;
+		width: 10%;
+		overflow: hidden;
+
+		&::before {
+			content: '';
+			padding-top: 100%;
+			position: relative;
+			display: block;
+		}
+
+		&.spent {
+			background-image: url(https://static.zerotoheroes.com/hearthstone/asset/manastorm/mana_spent.png);
+		}
+
+		&.locked {
+			background-image: url(https://static.zerotoheroes.com/hearthstone/asset/manastorm/mana_locked.png);
+			margin-top: -1%;
+			padding: 0;
+		}
+
+		&.empty {
+			background: transparent;
+			margin-top: -1%;
+		}
+	}
+}

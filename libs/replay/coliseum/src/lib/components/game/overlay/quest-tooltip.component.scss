@@ -1,0 +1,45 @@
+@import '../../../variables';
+
+:host {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.quest-tooltip {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 50%;
+}
+
+card {
+	height: 100%;
+	display: flex;
+}
+
+.progress {
+	position: relative;
+}
+
+.number {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-family: 'Passion One';
+	font-weight: bold;
+	text-shadow: $text-shadow;
+}

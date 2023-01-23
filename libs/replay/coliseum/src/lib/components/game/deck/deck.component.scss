@@ -1,0 +1,32 @@
+@import '../../../variables';
+
+.deck {
+	position: absolute;
+	right: 8%;
+	width: 4.5%;
+	pointer-events: none;
+	top: 13%;
+
+	img {
+		width: 100%;
+	}
+
+	.count {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.text {
+			color: white;
+			font-family: 'Passion One';
+			font-style: normal;
+			font-weight: normal;
+			text-shadow: $text-shadow-fat;
+		}
+	}
+}

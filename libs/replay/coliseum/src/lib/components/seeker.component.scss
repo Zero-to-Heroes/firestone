@@ -1,0 +1,187 @@
+// TODO: clean this stylesheet, as it's a direct imlport from manastorm
+
+// colors -------------------------------
+$red01: rgb(194, 25, 19); //red
+$red02: rgb(255, 0, 0); //red
+
+$gray019: rgb(19, 19, 19);
+$gray023: rgb(23, 23, 23);
+$gray025: rgb(25, 25, 25);
+$gray026: rgb(26, 26, 26);
+$gray033: rgb(33, 33, 33);
+$gray039: rgb(39, 39, 39);
+$gray051: rgb(51, 51, 51);
+$gray075: rgb(75, 75, 75);
+$gray079: rgb(79, 79, 79);
+$gray089: rgb(89, 89, 89);
+$gray099: rgb(99, 99, 99);
+$gray108: rgb(108, 108, 108);
+$gray130: rgb(130, 130, 130);
+$gray153: rgb(153, 153, 153);
+$gray168: rgb(168, 168, 168);
+$gray182: rgb(182, 182, 182);
+$gray211: rgb(211, 211, 211);
+$gray222: rgb(222, 222, 222);
+$gray230: rgb(230, 230, 230);
+$gray236: rgb(236, 236, 236);
+$gray240: rgb(240, 240, 240);
+$gray246: rgb(246, 246, 246);
+$gray255: rgb(255, 255, 255);
+
+// light theme
+$light-background-main: $gray246;
+$light-background-secondary: $gray222;
+$light-background-third: $gray182;
+$light-background-forth: $gray168;
+
+$light-foreground-main: $gray019;
+$light-foreground-secondary: $gray079;
+$light-foreground-third: $gray130;
+$light-foreground-forth: $gray168;
+
+// dark theme
+$dark-background-main: $gray019;
+$dark-background-secondary: $gray039;
+$dark-background-third: $gray051;
+$dark-background-forth: $gray079;
+
+$dark-foreground-main: $gray222;
+$dark-foreground-secondary: $gray182;
+$dark-foreground-third: $gray168;
+$dark-foreground-forth: $gray130;
+
+// borders
+$transparent-border: rgba(white, 0.1);
+
+// gaps
+$grid-gap: 20px;
+
+// transparent buttons
+$transparent-btn-background-hover: rgba(white, 0.1);
+$transparent-btn-background-selected: rgba(white, 0.2);
+
+$transparent-btn-foreground: rgba(white, 0.4);
+$transparent-btn-foreground-selected: rgba(white, 0.9);
+
+.light-theme {
+	--main-color: white;
+	--background-main: #{$light-background-main};
+	--background-secondary: #{$light-background-secondary};
+	--background-third: #{$light-background-third};
+	--background-forth: #{$light-background-forth};
+
+	--foreground-main: #{$light-foreground-main};
+	--foreground-secondary: #{$light-foreground-secondary};
+	--foreground-third: #{$light-foreground-third};
+	--foreground-forth: #{$light-foreground-forth};
+}
+
+// dark theme
+.dark-theme {
+	--main-color: black;
+	--background-main: #{$dark-background-main};
+	--background-secondary: #{$dark-background-secondary};
+	--background-third: #{$dark-background-third};
+	--background-forth: #{$dark-background-forth};
+
+	--foreground-main: #{$dark-foreground-main};
+	--foreground-secondary: #{$dark-foreground-secondary};
+	--foreground-third: #{$dark-foreground-third};
+	--foreground-forth: #{$dark-foreground-forth};
+}
+
+// transparent theme
+.transparent-theme {
+	--main-color: transparent;
+	--background-main: transparent;
+	--background-main-hover: #{$dark-background-secondary};
+	--background-third: #{$dark-background-third};
+	--background-forth: #{$dark-background-forth};
+
+	--text-main: #{rgba(white, 0.6)};
+}
+
+[type='range'] {
+	background-color: transparent;
+	opacity: 0;
+
+	&,
+	&::-webkit-slider-thumb,
+	&::-moz-range-thumb {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		opacity: 0;
+	}
+}
+
+.player-seeker-container {
+	position: relative;
+	height: 20px;
+	color: $red01;
+	margin-top: -10px;
+}
+
+.player-seeker {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	margin: 0;
+
+	&::-webkit-slider-runnable-track,
+	&::-moz-range-track {
+		display: flex;
+	}
+}
+
+.seeker-disabled {
+	opacity: 0.8;
+	pointer-events: none;
+}
+
+.player-seeker-track {
+	position: absolute;
+	top: 50%;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 3px;
+	pointer-events: none;
+	transition: inherit;
+}
+
+.player-seeker-thumb {
+	position: absolute;
+	background-color: currentcolor;
+	pointer-events: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	width: 0;
+	height: 0;
+
+	&:before {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-radius: 50%;
+		transition: 0.15s;
+		background-color: currentcolor;
+	}
+}
+
+.player-seeker-container:hover {
+	.player-seeker-track {
+	}
+
+	.player-seeker-thumb:before {
+		width: 9px;
+		height: 9px;
+	}
+}

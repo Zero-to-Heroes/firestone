@@ -1,0 +1,36 @@
+:host {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+}
+
+.end-game {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40%;
+	position: relative;
+
+	&.lost .hero-image {
+		top: 22%;
+	}
+}
+
+.hero-image {
+	position: absolute;
+	width: 39%;
+	object-fit: contain;
+	clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+	top: 25%;
+	left: 32%;
+}
+
+.status-frame {
+	z-index: 1;
+	width: 100%;
+}

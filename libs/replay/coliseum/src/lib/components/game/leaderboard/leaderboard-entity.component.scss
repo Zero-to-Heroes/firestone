@@ -1,0 +1,55 @@
+:host {
+	position: relative;
+}
+
+.portrait {
+	width: 100%;
+	clip-path: polygon(5% 5%, 95% 5%, 95% 95%, 5% 95%);
+}
+
+.frame {
+	position: absolute;
+	top: 0%;
+	left: -2%;
+	width: 105%;
+}
+
+.skull {
+	position: absolute;
+	width: 90%;
+	bottom: -25%;
+	left: 3%;
+}
+
+.death-overlay {
+	background: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	top: 5%;
+	left: 5%;
+	right: 5%;
+	bottom: 5%;
+}
+
+.health-bar {
+	position: absolute;
+	height: 20%;
+	bottom: 13%;
+	left: 10%;
+	right: 10%;
+	background: linear-gradient(white, rgba(33, 33, 33, 1) 25%);
+	border-radius: 16px;
+}
+
+.health {
+	height: 100%;
+	background: linear-gradient(white, rgba(188, 25, 62, 1) 25%);
+	border-radius: 16px;
+	min-width: 7%;
+}
+
+tavern-level-icon {
+	position: absolute;
+	left: -15%;
+	width: 50%;
+	top: -17%;
+}

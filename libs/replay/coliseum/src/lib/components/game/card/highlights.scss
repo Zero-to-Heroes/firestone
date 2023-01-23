@@ -1,0 +1,12 @@
+@import '../../../variables';
+
+$highlight: drop-shadow(-#{$glowSize} -#{$glowSize} 1px $innerGlow) drop-shadow($glowSize $glowSize 1px $innerGlow)
+	drop-shadow(-#{$glowSize} $glowSize 1px $innerGlow) drop-shadow($glowSize -#{$glowSize} 1px $innerGlow)
+	drop-shadow(0px 0px 0.2em $outerGlow) drop-shadow(0px 0px 0.2em $outerGlow);
+$highlightFat: drop-shadow(-#{$glowSizeFat} -#{$glowSizeFat} 1px $innerGlow)
+	drop-shadow($glowSizeFat $glowSizeFat 1px $innerGlow) drop-shadow(-#{$glowSizeFat} $glowSizeFat 1px $innerGlow)
+	drop-shadow($glowSizeFat -#{$glowSizeFat} 1px $innerGlow) drop-shadow(0px 0px 0.2em $outerGlow)
+	drop-shadow(0px 0px 0.2em $outerGlow);
+
+$highlightLight: drop-shadow(-#{$glowSizeLight} -#{$glowSizeLight} 1px $innerGlowLight)
+	drop-shadow($glowSizeLight -#{$glowSizeLight} 1px $innerGlowLight);

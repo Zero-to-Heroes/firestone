@@ -1,0 +1,109 @@
+.play-area {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    
+    hand {
+        height: 20%;
+        max-height: 80%; // just any big number will do
+        flex-grow: 1;
+        flex-shrink: 0;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+    }
+
+    hero {
+        height: 40%;
+        max-height: 40%;
+        flex-basis: 40%;
+        flex-grow: 0;
+        flex-shrink: 0;
+        display: flex;
+        // overflow: hidden;
+    }
+
+    board {
+        height: 40%;
+        max-height: 40%;
+        flex-basis: 40%;
+        flex-grow: 0;
+        flex-shrink: 0;
+        display: flex;
+        // overflow: hidden;
+    }
+}
+
+:host.bottom {
+    board {
+        order: 1;
+        height: 34%;
+        max-height: 34%;
+        flex-basis: 34%;
+    }
+    hero {
+        order: 2;
+        height: 39%;
+        max-height: 39%;
+        flex-basis: 39%;
+        ::ng-deep hero-frame {
+            top: 0;
+            bottom: auto;
+        }
+        ::ng-deep hero-card {
+            top: 11%;
+            bottom: auto;
+        }
+        ::ng-deep hero-art {
+            top: 2%;
+            bottom: auto;
+        }
+        ::ng-deep hero-stats {    
+            top: auto;
+            bottom: 12%;
+            .health {
+                top: -15%;
+            }
+        }
+    }
+    hand {
+        order: 3;
+        height: 27%;
+        max-height: 27%;
+        flex-basis: 27%;
+    }
+}
+
+:host.top {
+    ::ng-deep {
+        .mana-tray {
+            bottom: 83.5%;
+            left: 60.5%;
+
+            .crystals {
+                display: none;
+            }
+        }
+        .hand {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%; // So that the margins don't keep all the cards together
+        }
+        .deck {
+            top: 53%;
+        }
+        .hero-power .hero-power-cost .cost {
+            top: 13%;
+        }
+        .hero-stats .attack .stat-value {
+            top: 45%;
+        }
+        .play-area .hero .hero-stats .armor .stat-value {
+            top: 10%;
+        }
+    }
+}

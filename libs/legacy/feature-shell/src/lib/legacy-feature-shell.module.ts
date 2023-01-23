@@ -466,6 +466,7 @@ import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/ov
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
@@ -822,6 +823,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReactiveFormsModule,
 
 		SharedCommonViewModule,
+		ReplayColiseumModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

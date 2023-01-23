@@ -1,0 +1,31 @@
+@import '../../../variables';
+
+:host {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+.coin-cost {
+	width: 65%;
+	height: 100%;
+	position: relative;
+	top: -14%;
+	left: 12%;
+
+	img {
+		width: 100%;
+	}
+
+	.cost {
+		font-family: 'Passion One';
+		color: white;
+		font-weight: bold;
+		text-shadow: $text-shadow;
+		position: absolute;
+		top: 8%;
+		left: 37%;
+	}
+}

@@ -1,0 +1,49 @@
+@import '../../../variables';
+
+:host {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-content: center;
+	justify-content: flex-start;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+
+.hero-overlays {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	.overlay {
+		position: absolute;
+		pointer-events: none;
+		width: 195%;
+		left: -47%;
+		top: -19%;
+
+		&.hero_stealth {
+			width: 127%;
+			left: -14%;
+			top: 8%;
+			height: 91%;
+		}
+		&.hero_frozen {
+			width: 134%;
+			left: -18%;
+			top: -5%;
+		}
+		&.hero_immune {
+			width: 132%;
+			left: -18%;
+			top: -10%;
+		}
+		&.hero_heavily_armored {
+		}
+	}
+}

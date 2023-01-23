@@ -1,0 +1,66 @@
+@import '../../../variables';
+
+:host {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-content: center;
+	justify-content: flex-start;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+
+.card-on-board-overlays {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	.overlay {
+		position: absolute;
+		pointer-events: none;
+		width: 195%;
+		left: -47%;
+		top: -19%;
+
+		&.minion_divine_shield {
+			width: 195%;
+			left: -47%;
+			top: -19%;
+		}
+		&.minion_stealth {
+			width: 127%;
+			left: -14%;
+			top: 8%;
+			height: 91%;
+		}
+		&.minion_frozen {
+			width: 157%;
+			left: -30%;
+			top: -5%;
+		}
+		&.minion_temporary_effect {
+			width: 150%;
+			left: -29%;
+			top: -5%;
+		}
+		&.minion_elusive {
+			width: 165%;
+			left: -31%;
+			top: -9%;
+		}
+		&.minion_immune {
+		}
+		&.minion_silenced {
+			width: 150%;
+			left: -22%;
+			top: 0%;
+		}
+		&.minion_windfury {
+		}
+	}
+}

@@ -1,0 +1,9 @@
+@import '../../../variables';
+
+.higher-cost .cost {
+	color: $damage;
+}
+
+.lower-cost .cost {
+	color: $buff;
+}

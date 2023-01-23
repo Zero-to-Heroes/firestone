@@ -1,0 +1,42 @@
+.overlays {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 0;
+	flex-shrink: 0;
+	pointer-events: none;
+}
+
+mulligan,
+hero-selection {
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	overflow: hidden;
+
+	&.top {
+		height: 47%;
+		flex-basis: 47%;
+		max-height: 47%;
+	}
+	&.bottom {
+		height: 53%;
+		flex-basis: 53%;
+		max-height: 53%;
+	}
+}
+
+opponents-reveal,
+visual-board-state-change {
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	overflow: hidden;
+	height: 100%;
+	flex-basis: 100%;
+	max-height: 100%;
+}

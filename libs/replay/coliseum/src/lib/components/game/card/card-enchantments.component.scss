@@ -1,0 +1,25 @@
+:host {
+	position: absolute;
+	width: 100%;
+	height: auto;
+	display: flex;
+	align-content: center;
+	justify-content: flex-start;
+	top: 96%;
+	left: 0;
+}
+
+.card-enchantments {
+	background-image: url('https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/enchantments/enchantment-banner.png');
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	position: relative;
+	width: 51%;
+	left: 18%;
+	top: 94%;
+	padding-top: 4%;
+	padding-bottom: 10%;
+	padding-left: 9%;
+	padding-right: 9%;
+}

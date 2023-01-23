@@ -1,0 +1,59 @@
+@import '../../../variables';
+
+:host {
+	// So that when we animate it it stays in the center
+	margin: auto;
+}
+
+.visual-board-state-change {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.state {
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.splash {
+	width: 65%;
+}
+
+.text {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	svg {
+		font-family: Passion One;
+		font-style: normal;
+		font-weight: normal;
+		text-align: center;
+		color: white;
+		fill: white;
+		text-shadow: $text-shadow-fat;
+		position: relative;
+		width: 15%;
+	}
+}
+
+.recruit .text svg {
+	top: -6%;
+	left: 0%;
+}
+
+.combat .text svg {
+	top: 7%;
+	left: -2%;
+}

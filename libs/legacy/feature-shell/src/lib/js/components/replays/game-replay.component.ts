@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { loadAsync } from 'jszip';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
@@ -12,13 +12,14 @@ const REPLAY_API = 'https://xml.firestoneapp.com/';
 	styleUrls: [`../../../css/component/replays/game-replay.component.scss`],
 	template: `
 		<div>
-			<div id="externalPlayer" class="external-player"></div>
+			<fs-coliseum [replayXml]="_replayXml" [reviewId]="reviewId"></fs-coliseum>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameReplayComponent implements OnInit {
-	private initDone = false;
+export class GameReplayComponent {
+	_replayXml: string;
+	reviewId: string;
 
 	constructor(private http: HttpClient) {}
 
@@ -31,7 +32,6 @@ export class GameReplayComponent implements OnInit {
 			return;
 		}
 
-		await this.resetGame(value.replayInfo.reviewId);
 		console.log('[game-replay] setting game', value.replayInfo.reviewId);
 		this.loadReview(value.replayInfo.reviewId);
 	}
@@ -42,45 +42,8 @@ export class GameReplayComponent implements OnInit {
 			console.error('[game-replay] could not load replay xml', reviewId);
 			return;
 		}
-		this.reload(replayXml, reviewId);
-	}
-
-	async ngOnInit() {
-		try {
-			const coliseum = (window as any).coliseum;
-			await coliseum.init();
-			coliseum.zone.run(() => coliseum.component.reset());
-			console.log('coliseum init done');
-			this.initDone = true;
-		} catch (e) {
-			console.error('[game-replay] error wile initializing coliseum', e.message, e);
-		}
-	}
-
-	async reload(replay: string, reviewId: string) {
-		try {
-			amplitude.getInstance().logEvent('load-replay');
-			await this.waitForViewerInit();
-			const coliseum = (window as any).coliseum;
-			coliseum.zone.run(() => {
-				coliseum.component.loadReplay(replay, {
-					reviewId: reviewId,
-				});
-			});
-		} catch (e) {
-			console.error('[game-replay] error wile reloading replay', reviewId, e.message, e);
-		}
-	}
-
-	async resetGame(reviewId: string) {
-		try {
-			// Resetting the game
-			await this.waitForViewerInit();
-			const coliseum = (window as any).coliseum;
-			coliseum.zone.run(() => coliseum.component.reset(reviewId));
-		} catch (e) {
-			console.error('[game-replay] error wile resetting game', e.message, e);
-		}
+		this._replayXml = replayXml;
+		this.reviewId = reviewId;
 	}
 
 	private async getReplayXml(reviewId: string): Promise<string> {
@@ -116,18 +79,5 @@ export class GameReplayComponent implements OnInit {
 				.toPromise();
 			return replay;
 		}
-	}
-
-	private waitForViewerInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
-			const viewerWait = () => {
-				if (this.initDone) {
-					resolve();
-				} else {
-					setTimeout(() => viewerWait(), 50);
-				}
-			};
-			viewerWait();
-		});
 	}
 }

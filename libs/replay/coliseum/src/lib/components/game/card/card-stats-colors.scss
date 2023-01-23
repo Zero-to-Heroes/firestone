@@ -1,0 +1,31 @@
+@import '../../../variables';
+
+.attack {
+	&.buff {
+		color: $buff;
+		text {
+			fill: $buff;
+		}
+	}
+	&.debuff {
+		color: $damage;
+		text {
+			fill: $damage;
+		}
+	}
+}
+
+.health {
+	&.buff {
+		color: $buff;
+		text {
+			fill: $buff;
+		}
+	}
+	&.damaged {
+		color: $damage;
+		text {
+			fill: $damage;
+		}
+	}
+}
