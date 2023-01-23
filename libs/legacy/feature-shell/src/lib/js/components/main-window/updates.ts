@@ -32,85 +32,84 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.1.3',
+		version: '10.1.6',
 		sections: [
 			// {
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `Thank you all for using Firestone. It means a lot to me that so many of you use something that I made. I wish you a very happy new year.`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `App has been fully updated for patch 25.2. I'm still looking for a way to properly support Professor Putricide creations in the simulator, so stay tuned. Enjoy the new patch :)`,
-							},
-						],
-					},
-				],
-			},
 			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
+			// 	type: 'main',
+			// 	header: 'Main updates',
 			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Improve detection of copied cards in the opponent's hands. Spells copied by Lady Deathwhisper will now be properly identified after the original has been played (and similar improvement for Elementary Reaction).`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Flag the card transformed in the opponent's hand by Plaguespreader's effect.`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `The "show gifts separately" option now puts gifts at the very bottom of the deck when using the Legacy display mode .`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where Patchwerk would not delete the card in the deck.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an incorrect highlight for Bonecaller.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an info leak when playing From De Other Side.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Games that end before any hero is selected will not count towards stats anymore. When you concede a game this early, HS chooses a hero for you to get 8th place with, which distorts statistics. If this change bothers you (and you'd like an option to revert it), please ping me on Discord.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a sim issue where Fish of N"Zoth would not remember other Fish deathrattles.`,
-			// 				},
-			// 			],
-			// 		},
 			// 		{
 			// 			category: 'general',
 			// 			details: [
 			// 				{
-			// 					type: 'feature',
-			// 					text: `The "Flash HS window when it's your turn" will now also flash the window when the game is over.`,
+			// 					type: 'content',
+			// 					text: `App has been fully updated for patch 25.2. I'm still looking for a way to properly support Professor Putricide creations in the simulator, so stay tuned. Enjoy the new patch :)`,
 			// 				},
 			// 			],
 			// 		},
 			// 	],
 			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a "Reborn" minion tier in the minions list.`,
+							},
+							{
+								type: 'feature',
+								text: `You can now input the Eternal Legion (total number of Eternal Knights dead this game) and Undead Army (total undead attack bonus) buffs in the simulator.`,
+							},
+							{
+								type: 'feature',
+								text: `Putricide creations are now supported in the simulator.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Sinrunner Blanchy would not come back at full health.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Lady Deathwhisper / Jelly Belly would proc on every minion spawn, and not just on reborns.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some minions would be shown in the list even if the tribe they were attached to was banned (e.g. Nomi).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where you couldn't hide specific players in the HP chart anymore.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the warband composition chart would only show Beasts, even when no beasts where available.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where hero health and tavern tiers would not be displayed when viewing the battles recap of past games.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the app would sometimes freeze up for a short while.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
