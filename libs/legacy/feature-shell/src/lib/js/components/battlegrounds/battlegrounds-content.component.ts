@@ -7,8 +7,7 @@ import {
 	HostListener,
 	OnDestroy,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -133,19 +132,19 @@ export class BattlegroundsContentComponent
 			),
 		);
 		this.reviewId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(this.mapData(([currentGame]) => currentGame?.reviewId));
+			.listenBattlegrounds$(([state]) => state.currentGame?.reviewId)
+			.pipe(this.mapData(([reviewId]) => reviewId));
 		this.mainPlayerCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
 				this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.getNormalizedHeroCardId(this.allCards)),
 			);
 		this.mmr$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(this.mapData(([currentGame]) => currentGame?.mmrAtStart));
+			.listenBattlegrounds$(([state]) => state.currentGame?.mmrAtStart)
+			.pipe(this.mapData(([mmrAtStart]) => mmrAtStart));
 		this.gameEnded$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(this.mapData(([currentGame]) => currentGame?.gameEnded));
+			.listenBattlegrounds$(([state]) => state.currentGame?.gameEnded)
+			.pipe(this.mapData(([gameEnded]) => gameEnded));
 		this.faceOffs$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(

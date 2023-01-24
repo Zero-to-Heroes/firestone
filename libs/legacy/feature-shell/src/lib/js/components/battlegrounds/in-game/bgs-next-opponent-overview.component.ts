@@ -132,13 +132,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 				this.mapData(([game]) => game.lastFaceOff()),
 			);
 		this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
+			.listenBattlegrounds$(([state]) => state.currentGame?.players)
 			.pipe(
 				debounceTime(1000),
-				filter(([game]) => !!game),
+				filter(([players]) => !!players?.length),
 				this.mapData(
-					([game]) =>
-						[...game.players].sort((a, b) => {
+					([players]) =>
+						[...players].sort((a, b) => {
 							if (a.leaderboardPlace < b.leaderboardPlace) {
 								return -1;
 							}

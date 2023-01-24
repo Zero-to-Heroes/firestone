@@ -95,28 +95,20 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.handleReposition(),
 		);
 		this.bgsPlayers$ = this.store
-			.listenBattlegrounds$(([state]) => state)
+			.listenBattlegrounds$(([state]) => state?.currentGame?.players)
 			.pipe(
 				debounceTime(1000),
-				filter(([state]) => !!state.currentGame),
-				this.mapData(([state]) =>
-					[...state.currentGame.players].sort(
-						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
-					),
+				filter(([players]) => !!players?.length),
+				this.mapData(([players]) =>
+					[...players].sort((a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace),
 				),
 			);
 		this.lastOpponentCardId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				filter(([currentGame]) => !!currentGame),
-				this.mapData(([currentGame]) => currentGame.lastOpponentCardId),
-			);
+			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
+			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));
 		this.currentTurn$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				filter(([currentGame]) => !!currentGame),
-				this.mapData(([currentGame]) => currentGame.currentTurn),
-			);
+			.listenBattlegrounds$(([state]) => state.currentGame?.currentTurn)
+			.pipe(this.mapData(([currentTurn]) => currentTurn));
 		this.showLastOpponentIcon$ = this.store
 			.listen$(([state, nav, prefs]) => prefs.bgsShowLastOpponentIconInOverlay)
 			.pipe(this.mapData(([bgsShowLastOpponentIconInOverlay]) => bgsShowLastOpponentIconInOverlay));

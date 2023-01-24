@@ -33,7 +33,7 @@ export class CardStolenParser implements EventParser {
 		// console.debug('[card-stolen] cardInBoard', cardInBoard);
 		const cardInDeck =
 			zone === Zone.DECK ? this.helper.findCardInZone(stolenFromDeck.deck, cardId, entityId) : null;
-		console.debug('[card-stolen] cardInDeck', cardInDeck);
+		// console.debug('[card-stolen] cardInDeck', cardInDeck);
 
 		const secret = stolenFromDeck.secrets.find((entity) => entity.entityId === entityId);
 
@@ -50,7 +50,7 @@ export class CardStolenParser implements EventParser {
 		const [stolenDeck] = cardInDeck
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
 			: [stolenFromDeck.deck, undefined];
-		console.debug('[card-stolen] stolenDeck', stolenDeck, stolenFromDeck.deck);
+		// console.debug('[card-stolen] stolenDeck', stolenDeck, stolenFromDeck.deck);
 
 		const stolenSecrets = stolenFromDeck.secrets.filter((entity) => entity.entityId !== entityId);
 
