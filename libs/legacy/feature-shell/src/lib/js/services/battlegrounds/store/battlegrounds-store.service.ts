@@ -1,10 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -353,9 +352,7 @@ export class BattlegroundsStoreService {
 					clearInterval(this.memoryInterval);
 					this.memoryInterval = null;
 				}
-				this.battlegroundsUpdater.next(
-					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
-				);
+				this.battlegroundsUpdater.next(new BgsStartComputingPostMatchStatsEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(

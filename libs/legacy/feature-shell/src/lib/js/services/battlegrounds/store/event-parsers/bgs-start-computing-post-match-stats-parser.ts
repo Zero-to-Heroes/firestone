@@ -17,7 +17,7 @@ export class BgsStartComputingPostMatchStatsParser implements EventParser {
 			forceOpen: false, // prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
-				replayXml: event.replayXml,
+				// replayXml: event.replayXml,
 			} as BgsGame),
 		} as BattlegroundsState);
 	}
