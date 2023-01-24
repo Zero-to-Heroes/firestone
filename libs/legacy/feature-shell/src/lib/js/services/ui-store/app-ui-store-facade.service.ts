@@ -155,7 +155,7 @@ export class AppUiStoreFacadeService {
 		if (process.env.NODE_ENV === 'production') {
 			return obs;
 		}
-		obs.subscribe = this.overrideSubscribe(obs, obs.subscribe, this);
+		obs.subscribe = this.overrideSubscribe(obs, obs.subscribe, new Error(), this);
 		return obs;
 	}
 
