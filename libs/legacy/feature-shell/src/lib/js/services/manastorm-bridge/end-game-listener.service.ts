@@ -227,12 +227,13 @@ export class EndGameListenerService {
 		]);
 		console.log('[manastorm-bridge] read memory info');
 
-		const augmentedInfo = {
+		const augmentedInfo: UploadInfo = {
 			...info,
 			battlegroundsInfoAfterGameOver: battlegroundsInfoAfterGameOver,
 			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
 		};
+		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 		await this.endGameUploader.upload2(augmentedInfo);
 	}
 

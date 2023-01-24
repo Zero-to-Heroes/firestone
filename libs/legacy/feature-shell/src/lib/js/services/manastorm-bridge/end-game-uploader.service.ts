@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { toFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
@@ -120,8 +120,12 @@ export class EndGameUploaderService {
 			playerRank = info.bgInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
 			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating;
-			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
-				info.bgInfo?.Game?.AvailableRaces,
+			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
+				!!info.bgInfo?.Game?.AvailableRaces?.length
+					? info.bgInfo?.Game?.AvailableRaces
+					: !!info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces?.length
+					? info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces
+					: this.bgsStore?.state?.currentGame?.availableRaces,
 			);
 			console.log(
 				'[manastorm-bridge]',
@@ -131,8 +135,6 @@ export class EndGameUploaderService {
 				availableRaces?.map((r) => Race[r] ?? r),
 				this.bgsStore?.state?.currentGame?.availableRaces?.map((r) => Race[r] ?? r),
 			);
-			availableRaces = availableRaces ?? this.bgsStore?.state?.currentGame?.availableRaces;
-			bannedRaces = bannedRaces ?? this.bgsStore?.state?.currentGame?.bannedRaces;
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;
