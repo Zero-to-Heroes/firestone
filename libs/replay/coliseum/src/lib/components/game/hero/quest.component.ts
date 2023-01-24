@@ -28,7 +28,7 @@ export class QuestComponent {
 	constructor(private events: Events) {}
 
 	@Input() set entity(value: Entity) {
-		console.debug('[quest] setting new entity', value, value.tags.toJS());
+		// console.debug('[quest] setting new entity', value, value.tags.toJS());
 		this._entity = value;
 		this.image = undefined;
 		if (!value) {

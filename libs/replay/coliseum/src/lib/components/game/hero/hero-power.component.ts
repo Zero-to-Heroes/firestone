@@ -74,7 +74,7 @@ export class HeroPowerComponent {
 	_option: boolean;
 
 	@Input() set heroPower(heroPower: Entity | undefined) {
-		console.debug('[hero-power] setting new heroPower', heroPower, heroPower && heroPower.tags.toJS());
+		// console.debug('[hero-power] setting new heroPower', heroPower, heroPower && heroPower.tags.toJS());
 		this.entity = heroPower;
 		if (!heroPower) {
 			// console.log('no hero power, returning');

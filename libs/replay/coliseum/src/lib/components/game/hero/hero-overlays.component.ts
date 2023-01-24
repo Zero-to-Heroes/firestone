@@ -16,7 +16,7 @@ export class HeroOverlaysComponent {
 	overlays: string[][];
 
 	@Input() set entity(value: Entity | undefined) {
-		console.debug('[hero-overlays] setting entity', value);
+		// console.debug('[hero-overlays] setting entity', value);
 		this.overlays = [];
 		if (!value) {
 			return;

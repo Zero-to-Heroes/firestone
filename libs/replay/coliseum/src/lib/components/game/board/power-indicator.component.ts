@@ -17,7 +17,7 @@ export class PowerIndicatorComponent {
 	effectImage: string;
 
 	@Input() set entity(value: Entity) {
-		console.debug('[power-indicator] setting entity', value);
+		// console.debug('[power-indicator] setting entity', value);
 		let image = '';
 		this.effect = undefined;
 		if (value.getTag(GameTag.POISONOUS) === 1) {

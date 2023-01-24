@@ -30,7 +30,7 @@ export class SecretsComponent {
 	_secrets: readonly Entity[];
 
 	@Input() set secrets(value: readonly Entity[]) {
-		console.debug('[secrets] setting secrets', value);
+		// console.debug('[secrets] setting secrets', value);
 		this._secrets = value.filter((entity) => entity.getTag(GameTag.QUEST) !== 1) || [];
 		this._quests = value.filter((entity) => entity.getTag(GameTag.QUEST) === 1) || [];
 	}

@@ -22,7 +22,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinCostComponent implements AfterViewInit {
-	_cost: number;
+	_cost: number | undefined;
 	costClass: string | undefined;
 
 	private _cardId: string | undefined;
@@ -34,7 +34,7 @@ export class CoinCostComponent implements AfterViewInit {
 		this.updateCost();
 	}
 
-	@Input() set cost(cost: number) {
+	@Input() set cost(cost: number | undefined) {
 		this._cost = cost;
 		this.updateCost();
 	}
@@ -54,15 +54,15 @@ export class CoinCostComponent implements AfterViewInit {
 		}
 		this.costClass = undefined;
 		const originalCard = this.cards.getCard(this._cardId);
-		const originalCost: number = originalCard.cost ?? 0;
+		const originalCost: number | undefined = originalCard.cost;
 
 		if (this._cost == null) {
 			this._cost = originalCost;
 		}
 
-		if (this._cost < originalCost) {
+		if ((this._cost ?? 0) < (originalCost ?? 0)) {
 			this.costClass = 'lower-cost';
-		} else if (this._cost > originalCost) {
+		} else if ((this._cost ?? 0) > (originalCost ?? 0)) {
 			this.costClass = 'higher-cost';
 		}
 		if (!(this.cdr as ViewRef).destroyed) {

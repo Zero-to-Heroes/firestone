@@ -22,8 +22,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class TavernLevelIconComponent {
 	stars: readonly number[];
 
-	@Input() set level(value: number) {
-		this.stars = Array(value)
+	@Input() set level(value: number | undefined) {
+		this.stars = Array(value ?? 0)
 			.fill(0)
 			.map((x, i) => i);
 	}

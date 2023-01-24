@@ -11,7 +11,7 @@ export class HeroFrameComponent {
 	_premium = false;
 
 	@Input() set premium(premium: boolean) {
-		console.debug('[hero-frame] setting premium', premium);
+		// console.debug('[hero-frame] setting premium', premium);
 		this._premium = premium;
 		const premiumSuffix = premium ? '_premium' : '';
 		this.image = `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/hero/hero_frame${premiumSuffix}.png`;

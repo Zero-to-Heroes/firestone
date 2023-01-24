@@ -13,13 +13,13 @@ export class HeroPowerFrameComponent {
 	private _exhausted = false;
 
 	@Input() set exhausted(value: boolean) {
-		console.debug('[hero-power-frame] setting exhausted', value);
+		// console.debug('[hero-power-frame] setting exhausted', value);
 		this._exhausted = value;
 		this.updateImage();
 	}
 
 	@Input() set premium(premium: boolean) {
-		console.debug('[hero-power-frame] setting premium', premium);
+		// console.debug('[hero-power-frame] setting premium', premium);
 		this._premium = premium;
 		this.updateImage();
 	}

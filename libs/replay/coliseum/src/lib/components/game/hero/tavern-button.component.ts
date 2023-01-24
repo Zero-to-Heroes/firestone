@@ -21,7 +21,7 @@ export class TavernButtonComponent {
 	_entity: Entity;
 	entityId: number | undefined;
 	cardId: string | undefined;
-	cost: number;
+	cost: number | undefined;
 	exhausted: boolean;
 	_option: boolean;
 	actionSrc: string;
@@ -37,7 +37,7 @@ export class TavernButtonComponent {
 		this.entityId = value ? value.id : undefined;
 		this.cardId = value ? value.cardID : undefined;
 		this.actionSrc = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`;
-		this.cost = value ? value.getTag(GameTag.COST) : 0;
+		this.cost = value ? value.getTag(GameTag.COST) : undefined;
 		if (value && this._entity && value.id !== this._entity.id) {
 			this._forceAnimation = true;
 			this.entityChanged.next(value);

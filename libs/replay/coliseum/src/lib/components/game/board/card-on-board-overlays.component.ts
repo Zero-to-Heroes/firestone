@@ -16,7 +16,7 @@ export class CardOnBoardOverlaysComponent {
 	overlays: string[][];
 
 	@Input() set entity(value: Entity) {
-		console.debug('[card-on-board-overlays] setting entity', value);
+		// console.debug('[card-on-board-overlays] setting entity', value);
 		this.overlays = [];
 		if (!value) {
 			return;

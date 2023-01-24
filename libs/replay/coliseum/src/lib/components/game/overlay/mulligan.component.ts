@@ -13,7 +13,7 @@ import { Map } from 'immutable';
 					[entity]="entity"
 					[showCard]="_showCards"
 					[hasTooltip]="false"
-					[crossed]="_crossed.indexOf(entity.id) !== -1"
+					[crossed]="_crossed?.indexOf(entity.id) !== -1"
 				>
 				</card>
 			</li>
@@ -24,29 +24,29 @@ import { Map } from 'immutable';
 export class MulliganComponent {
 	_entities: Map<number, Entity>;
 	_playerId: number;
-	_crossed: readonly number[];
+	_crossed: readonly number[] | undefined;
 	_showCards = true;
 
 	mulliganCards: readonly Entity[];
 
 	@Input() set entities(entities: Map<number, Entity>) {
-		console.debug('[mulligan] setting new entities', entities && entities.toJS());
+		// console.debug('[mulligan] setting new entities', entities && entities.toJS());
 		this._entities = entities;
 		this.updateEntityGroups();
 	}
 
-	@Input() set crossed(value: readonly number[]) {
+	@Input() set crossed(value: readonly number[] | undefined) {
 		this._crossed = value;
 	}
 
 	@Input() set playerId(playerId: number) {
-		console.debug('[mulligan] setting playerId', playerId);
+		// console.debug('[mulligan] setting playerId', playerId);
 		this._playerId = playerId;
 		this.updateEntityGroups();
 	}
 
 	@Input() set showCards(value: boolean) {
-		console.debug('[mulligan] setting showCards', value);
+		// console.debug('[mulligan] setting showCards', value);
 		this._showCards = value;
 	}
 
@@ -56,7 +56,7 @@ export class MulliganComponent {
 
 	private updateEntityGroups() {
 		if (!this._entities || !this._playerId) {
-			console.debug('[mulligan] entities not initialized yet');
+			// console.debug('[mulligan] entities not initialized yet');
 			return;
 		}
 

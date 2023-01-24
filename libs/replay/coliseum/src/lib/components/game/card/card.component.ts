@@ -24,7 +24,7 @@ import { GameConfService } from '../../../services/game-conf.service';
 			<card-text *ngIf="cardId" [entity]="_entity" [controller]="_controller" [cardType]="cardType"> </card-text>
 			<card-race *ngIf="race" [race]="race"> </card-race>
 			<card-cost *ngIf="cardId && !tavernTier" [cardType]="cardType" [cardId]="cardId" [cost]="cost"> </card-cost>
-			<tavern-level-icon *ngIf="tavernTier > 0" [level]="tavernTier"></tavern-level-icon>
+			<tavern-level-icon *ngIf="tavernTier ?? 0 > 0" [level]="tavernTier"></tavern-level-icon>
 			<card-stats
 				*ngIf="cardId"
 				[cardId]="cardId"
@@ -59,14 +59,14 @@ export class CardComponent {
 	cardClass: CardClass | undefined;
 	originalCard: any | undefined;
 	premium: boolean | undefined;
-	attack: number;
-	health: number;
-	damage: number;
-	durability: number;
-	armor: number;
-	cost: number;
+	attack: number | undefined;
+	health: number | undefined;
+	damage: number | undefined;
+	durability: number | undefined;
+	armor: number | undefined;
+	cost: number | undefined;
 	race: string | undefined;
-	tavernTier: number;
+	tavernTier: number | undefined;
 
 	_forbiddenTargetSource = false;
 	_hasTooltip = true;
@@ -74,7 +74,7 @@ export class CardComponent {
 	constructor(private cards: AllCardsService, private conf: GameConfService) {}
 
 	@Input() set entity(entity: Entity) {
-		console.debug('[card] setting entity', entity);
+		// console.debug('[card] setting entity', entity);
 		this._entity = entity;
 		this.updateEntityGroups();
 	}
@@ -85,7 +85,7 @@ export class CardComponent {
 	}
 
 	@Input() set controller(value: Entity | undefined) {
-		console.debug('[card] setting controller', value);
+		// console.debug('[card] setting controller', value);
 		this._controller = value;
 	}
 
@@ -104,21 +104,21 @@ export class CardComponent {
 	@Input() set crossed(value: boolean) {
 		this._crossed = value;
 		if (value) {
-			console.debug('[card] marking card as crossed', this._entity);
+			// console.debug('[card] marking card as crossed', this._entity);
 		}
 	}
 
 	@Input() set burned(value: boolean) {
 		this._burned = value;
 		if (value) {
-			console.debug('[card] marking card as burned', this._entity);
+			// console.debug('[card] marking card as burned', this._entity);
 		}
 	}
 
 	@Input() set ticked(value: boolean) {
 		this._ticked = value;
 		if (value) {
-			console.debug('[card] marking card as ticked', this._entity);
+			// console.debug('[card] marking card as ticked', this._entity);
 		}
 	}
 
@@ -130,12 +130,12 @@ export class CardComponent {
 		if (!this._showCard) {
 			this.cardId = undefined;
 			this.premium = undefined;
-			this.attack = 0;
-			this.health = 0;
-			this.damage = 0;
-			this.durability = 0;
-			this.armor = 0;
-			this.cost = 0;
+			this.attack = undefined;
+			this.health = undefined;
+			this.damage = undefined;
+			this.durability = undefined;
+			this.armor = undefined;
+			this.cost = undefined;
 			this.originalCard = undefined;
 			this.race = undefined;
 			this.cardType = undefined;

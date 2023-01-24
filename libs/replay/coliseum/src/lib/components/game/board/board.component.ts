@@ -31,17 +31,17 @@ export class BoardComponent {
 	@Input() isRecruitPhase: boolean;
 
 	@Input() set entities(entities: readonly Entity[]) {
-		console.debug('[board] setting new entities', entities);
+		// console.debug('[board] setting new entities', entities);
 		this._entities = entities;
 	}
 
 	@Input() set enchantmentCandidates(value: readonly Entity[]) {
-		console.debug('[board] setting enchantmentCandidates', value);
+		// console.debug('[board] setting enchantmentCandidates', value);
 		this._enchantmentCandidates = value;
 	}
 
 	@Input() set options(value: readonly number[]) {
-		console.debug('[board] setting options', value);
+		// console.debug('[board] setting options', value);
 		this._options = value;
 	}
 

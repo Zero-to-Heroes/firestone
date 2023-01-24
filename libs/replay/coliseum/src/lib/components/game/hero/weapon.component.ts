@@ -28,7 +28,7 @@ export class WeaponComponent {
 		if (!value) {
 			return;
 		}
-		console.debug('[weapon] setting new weapon', value, value.tags.toJS());
+		// console.debug('[weapon] setting new weapon', value, value.tags.toJS());
 		this._weapon = value;
 		this.entityId = value.id;
 		this.cardId = value.cardID;

@@ -12,14 +12,14 @@ export class CardArtComponent {
 	_cardType: string;
 
 	@Input() set cardId(cardId: string | undefined) {
-		console.debug('[card-art] setting cardId', cardId);
+		// console.debug('[card-art] setting cardId', cardId);
 		this.image = cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`
 			: `https://static.zerotoheroes.com/hearthstone/asset/manastorm/card_unknown.png`;
 	}
 
 	@Input() set cardType(cardType: CardType | undefined) {
-		console.debug('[card-art] setting cardType', cardType);
+		// console.debug('[card-art] setting cardType', cardType);
 		this._cardType = cardType ? CardType[cardType]?.toLowerCase() : 'unknown';
 	}
 }

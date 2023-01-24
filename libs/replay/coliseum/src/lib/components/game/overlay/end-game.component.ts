@@ -23,26 +23,26 @@ export class EndGameComponent {
 	statusClass: string;
 
 	@Input() set entities(entities: Map<number, Entity>) {
-		console.debug('[end-game] setting new entities', entities && entities.toJS());
+		// console.debug('[end-game] setting new entities', entities && entities.toJS());
 		this._entities = entities;
 		this.updateHeroImage();
 	}
 
 	@Input() set playerId(playerId: number) {
-		console.debug('[end-game] setting playerId', playerId);
+		// console.debug('[end-game] setting playerId', playerId);
 		this._playerId = playerId;
 		this.updateHeroImage();
 	}
 
 	@Input() set status(value: number | null) {
-		console.debug('[end-game] setting status', value);
+		// console.debug('[end-game] setting status', value);
 		this._status = value;
 		this.updateFrame();
 	}
 
 	private updateFrame() {
 		if (!this._status) {
-			console.debug('[end-game] entities not initialized yet');
+			// console.debug('[end-game] entities not initialized yet');
 			return;
 		}
 		this.statusClass = this._status === PlayState.WON ? 'won' : 'lost';
@@ -52,7 +52,7 @@ export class EndGameComponent {
 
 	private updateHeroImage() {
 		if (!this._entities || !this._playerId) {
-			console.debug('[end-game] entities not initialized yet');
+			// console.debug('[end-game] entities not initialized yet');
 			return;
 		}
 		const player = this._entities

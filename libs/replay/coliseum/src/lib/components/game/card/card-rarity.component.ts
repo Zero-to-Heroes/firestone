@@ -14,7 +14,7 @@ export class CardRarityComponent {
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[card-rarity] setting cardId', cardId);
+		// console.debug('[card-rarity] setting cardId', cardId);
 		this.image = undefined;
 		const originalCard = this.cards.getCard(cardId);
 		const cardRarity: CardRarity | undefined = this.buildRarity(originalCard);

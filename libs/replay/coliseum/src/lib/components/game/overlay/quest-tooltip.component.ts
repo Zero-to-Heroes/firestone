@@ -27,7 +27,7 @@ export class QuestTooltipComponent {
 	progress: string;
 
 	@Input() set quest(value: Entity) {
-		console.debug('[quest-tooltip] setting quest', value);
+		// console.debug('[quest-tooltip] setting quest', value);
 		this._quest = value;
 		if (!value) {
 			return;

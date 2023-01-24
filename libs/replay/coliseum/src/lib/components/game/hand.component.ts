@@ -26,7 +26,7 @@ export class HandComponent {
 	_showCards = true;
 
 	@Input() set entities(entities: readonly Entity[]) {
-		console.debug('[hand] setting new entities', entities);
+		// console.debug('[hand] setting new entities', entities);
 		this._entities = entities;
 		if (!entities) {
 			return;
@@ -50,17 +50,17 @@ export class HandComponent {
 	}
 
 	@Input() set showCards(value: boolean) {
-		console.debug('[mulligan] setting showCards', value);
+		// console.debug('[mulligan] setting showCards', value);
 		this._showCards = value;
 	}
 
 	@Input() set options(value: readonly number[]) {
-		console.debug('[hand] setting options', value);
+		// console.debug('[hand] setting options', value);
 		this._options = value;
 	}
 
 	@Input() set controller(value: Entity) {
-		console.debug('[hand] setting controller', value);
+		// console.debug('[hand] setting controller', value);
 		this._controller = value;
 	}
 

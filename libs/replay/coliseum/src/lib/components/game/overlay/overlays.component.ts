@@ -67,33 +67,33 @@ export class OverlaysComponent {
 	isOverlay: boolean;
 	action: Action | undefined;
 	_entities: Map<number, Entity>;
-	_crossed: readonly number[] = [];
+	_crossed: readonly number[] | undefined;
 	_playerId: number;
 	_opponentId: number;
 	_showHiddenCards: boolean;
-	_fatigue: number;
-	_discovers: readonly number[];
-	_burned: readonly number[];
-	_chosen: readonly number[];
+	_fatigue: number | undefined;
+	_discovers: readonly number[] | undefined;
+	_burned: readonly number[] | undefined;
+	_chosen: readonly number[] | undefined;
 	_isMulligan: boolean;
 	_isHeroSelection: boolean;
-	_opponentsRevealed: readonly number[];
+	_opponentsRevealed: readonly number[] | undefined;
 	_isEndGame: boolean;
 	_endGameStatus: PlayState | null;
 	_baconBoardStateChange: number;
 
 	@Input() set playerId(playerId: number) {
-		console.debug('[overlays] setting playerId', playerId);
+		// console.debug('[overlays] setting playerId', playerId);
 		this._playerId = playerId;
 	}
 
 	@Input() set opponentId(opponentId: number) {
-		console.debug('[overlays] setting opponentId', opponentId);
+		// console.debug('[overlays] setting opponentId', opponentId);
 		this._opponentId = opponentId;
 	}
 
 	@Input() set showHiddenCards(value: boolean) {
-		console.debug('[overlays] setting showHiddenCards', value);
+		// console.debug('[overlays] setting showHiddenCards', value);
 		this._showHiddenCards = value;
 	}
 
@@ -101,19 +101,19 @@ export class OverlaysComponent {
 		if (value === this.action) {
 			return;
 		}
-		console.debug('[overlays] setting new action', value);
+		// console.debug('[overlays] setting new action', value);
 		this.action = value;
 		this._entities = value ? value.entities : Map();
-		this._crossed = value ? value.crossedEntities : [];
-		this._burned = value instanceof CardBurnAction ? value.burnedCardIds : [];
-		this._fatigue = value instanceof FatigueDamageAction ? value.amount : 0;
-		this._discovers = value instanceof DiscoverAction ? value.choices : [];
-		this._chosen = value instanceof DiscoverAction ? value.chosen : [];
+		this._crossed = value ? value.crossedEntities : undefined;
+		this._burned = value instanceof CardBurnAction ? value.burnedCardIds : undefined;
+		this._fatigue = value instanceof FatigueDamageAction ? value.amount : undefined;
+		this._discovers = value instanceof DiscoverAction ? value.choices : undefined;
+		this._chosen = value instanceof DiscoverAction ? value.chosen : undefined;
 		this._isMulligan = value ? value.isMulligan : false;
 		this._isHeroSelection = value ? value.isHeroSelection : false;
 		this._isEndGame = value ? value.isEndGame : false;
 		this._endGameStatus = value ? value.endGameStatus : null;
-		this._opponentsRevealed = value instanceof BaconOpponentRevealedAction ? value.opponentIds : [];
+		this._opponentsRevealed = value instanceof BaconOpponentRevealedAction ? value.opponentIds : undefined;
 		this._baconBoardStateChange = value instanceof BaconBoardVisualStateAction ? value.newState : 0;
 		// console.log('_baconBoardStateChange', this._baconBoardStateChange);
 		this.updateOverlay();
@@ -128,11 +128,11 @@ export class OverlaysComponent {
 			(this._discovers && this._discovers.length > 0) ||
 			(this._burned && this._burned.length > 0) ||
 			this._baconBoardStateChange > 0 ||
-			this._fatigue > 0;
+			(this._fatigue ?? 0) > 0;
 		const isDarkOverlay =
 			this._isMulligan ||
 			this._isHeroSelection ||
 			(this._opponentsRevealed && this._opponentsRevealed.length > 0);
-		this.overlayUpdated.next({ isOverlay: this.isOverlay, isDarkOverlay: isDarkOverlay });
+		this.overlayUpdated.next({ isOverlay: this.isOverlay, isDarkOverlay: !!isDarkOverlay });
 	}
 }

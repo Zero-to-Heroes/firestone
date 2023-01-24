@@ -10,7 +10,7 @@ export class WeaponFrameComponent {
 	image: string;
 
 	@Input() set exhausted(value: boolean) {
-		console.debug('[weapon-frame] setting exhausted', value);
+		// console.debug('[weapon-frame] setting exhausted', value);
 		this.image = value
 			? `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/weapon_sheathed.png`
 			: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/weapon_unsheathed.png`;

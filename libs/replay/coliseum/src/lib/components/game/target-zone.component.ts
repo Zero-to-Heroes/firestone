@@ -36,7 +36,7 @@ export class TargetZoneComponent implements AfterViewInit {
 	}
 
 	@Input() set targets(value: readonly [number, number][]) {
-		console.log('[target-zone] setting targets', value);
+		// console.log('[target-zone] setting targets', value);
 		this._targets = value || [];
 		this.svg = undefined;
 
@@ -127,7 +127,7 @@ export class TargetZoneComponent implements AfterViewInit {
 			this.gameEl.querySelector(`[data-entity-id="${targetId}"]`) ||
 			this.gameEl.querySelector(`[data-player-entity-id="${targetId}"]`);
 		if (!originElement || !targetElement) {
-			console.log('[targets] missing some elements', originElement, originId, targetElement, targetId);
+			// console.log('[targets] missing some elements', originElement, originId, targetElement, targetId);
 			return null;
 		}
 		const orX =

@@ -61,12 +61,12 @@ export class CardOnBoardComponent {
 	cardClass: CardClass;
 	originalCard: any;
 	premium: boolean;
-	attack: number;
-	health: number;
-	damage: number;
-	durability: number;
-	armor: number;
-	cost: number;
+	attack: number | undefined;
+	health: number | undefined;
+	damage: number | undefined;
+	durability: number | undefined;
+	armor: number | undefined;
+	cost: number | undefined;
 	taunt: boolean;
 	shownDamage: number;
 	hideStats: boolean;
@@ -79,7 +79,7 @@ export class CardOnBoardComponent {
 	@Input() isRecruitPhase: boolean;
 
 	@Input() set entity(entity: Entity) {
-		console.debug('[card-on-board] setting entity', entity.id, entity, entity.tags.toJS());
+		// console.debug('[card-on-board] setting entity', entity.id, entity, entity.tags.toJS());
 
 		this._entity = entity;
 
@@ -120,7 +120,7 @@ export class CardOnBoardComponent {
 	}
 
 	@Input() set enchantments(value: readonly Entity[]) {
-		console.debug('[card-on-board] setting enchantments', value);
+		// console.debug('[card-on-board] setting enchantments', value);
 		this._enchantments = value;
 	}
 }

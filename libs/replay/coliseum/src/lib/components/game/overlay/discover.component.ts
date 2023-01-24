@@ -21,24 +21,24 @@ import { Map } from 'immutable';
 export class DiscoverComponent {
 	_entities: Map<number, Entity>;
 	_choices: readonly number[];
-	_chosen: readonly number[];
+	_chosen: readonly number[] | undefined;
 
 	discoverCards: readonly Entity[];
 
 	@Input() set entities(entities: Map<number, Entity>) {
-		console.debug('[discover] setting new entities', entities && entities.toJS());
+		// console.debug('[discover] setting new entities', entities && entities.toJS());
 		this._entities = entities;
 		this.updateEntityGroups();
 	}
 
 	@Input() set choices(value: readonly number[]) {
-		console.debug('[discover] setting choices', value);
+		// console.debug('[discover] setting choices', value);
 		this._choices = value;
 		this.updateEntityGroups();
 	}
 
-	@Input() set chosen(value: readonly number[]) {
-		console.debug('[discover] setting chosen', value);
+	@Input() set chosen(value: readonly number[] | undefined) {
+		// console.debug('[discover] setting chosen', value);
 		this._chosen = value;
 	}
 
@@ -48,7 +48,7 @@ export class DiscoverComponent {
 
 	private updateEntityGroups() {
 		if (!this._entities || !this._choices) {
-			console.debug('[discover] entities not initialized yet');
+			// console.debug('[discover] entities not initialized yet');
 			return;
 		}
 		this.discoverCards = this._entities

@@ -22,7 +22,7 @@ export class SecretComponent {
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set entity(value: Entity) {
-		console.debug('[secret] setting new entity', value, value.tags.toJS());
+		// console.debug('[secret] setting new entity', value, value.tags.toJS());
 		this._entity = value;
 		this.image = undefined;
 		if (value) {

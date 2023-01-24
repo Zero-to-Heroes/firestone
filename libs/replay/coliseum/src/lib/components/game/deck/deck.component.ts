@@ -33,7 +33,7 @@ export class DeckComponent implements AfterViewInit {
 	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	@Input() set deck(value: readonly Entity[]) {
-		console.debug('[deck] setting deck', value);
+		// console.debug('[deck] setting deck', value);
 		this._deck = value;
 		this.numberOfCards = this._deck ? this._deck.length : 0;
 	}

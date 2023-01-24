@@ -10,7 +10,7 @@ export class WeaponArtComponent {
 	image: string;
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[weapon-art] setting cardId', cardId);
+		// console.debug('[weapon-art] setting cardId', cardId);
 		this.image = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
 	}
 }

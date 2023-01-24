@@ -34,25 +34,25 @@ export class WeaponStatsComponent {
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[weapon-stats] setting cardId', cardId);
+		// console.debug('[weapon-stats] setting cardId', cardId);
 		this._cardId = cardId;
 		this.updateStats();
 	}
 
 	@Input() set attack(attack: number) {
-		console.debug('[weapon-stats] setting attack', attack);
+		// console.debug('[weapon-stats] setting attack', attack);
 		this._attack = attack;
 		this.updateStats();
 	}
 
 	@Input() set durability(value: number) {
-		console.debug('[weapon-stats] setting health', value);
+		// console.debug('[weapon-stats] setting health', value);
 		this._durability = value;
 		this.updateStats();
 	}
 
 	@Input() set damage(damage: number) {
-		console.debug('[weapon-stats] setting damage', damage);
+		// console.debug('[weapon-stats] setting damage', damage);
 		this._damage = damage;
 		this.updateStats();
 	}

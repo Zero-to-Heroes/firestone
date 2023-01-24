@@ -123,7 +123,7 @@ export class PlayAreaComponent {
 		this.lockedCrystals = this.playerEntity.getTag(GameTag.OVERLOAD_LOCKED) || 0;
 		this.emptyCrystals = this.totalCrystals - this.availableCrystals - this.lockedCrystals;
 		this.futureLockedCrystals = this.playerEntity.getTag(GameTag.OVERLOAD_OWED) || 0;
-		console.debug('[play-area] play-area entities updated', this.hand);
+		// console.debug('[play-area] play-area entities updated', this.hand);
 	}
 
 	private getHandEntities(playerId: number): readonly Entity[] {

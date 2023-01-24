@@ -17,7 +17,7 @@ export class FatigueComponent {
 	_fatigue: number;
 
 	@Input() set fatigue(value: number) {
-		console.debug('[fatigue] setting fatigue', value);
+		// console.debug('[fatigue] setting fatigue', value);
 		this._fatigue = value;
 	}
 }

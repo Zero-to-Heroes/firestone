@@ -36,19 +36,19 @@ export class OpponentRevealedComponent {
 	opponents: readonly Entity[];
 
 	@Input() set entities(entities: Map<number, Entity>) {
-		console.debug('[opponents-revealed] setting new entities', entities && entities.toJS());
+		// console.debug('[opponents-revealed] setting new entities', entities && entities.toJS());
 		this._entities = entities;
 		this.updateEntityGroups();
 	}
 
 	@Input() set playerId(playerId: number) {
-		console.debug('[opponents-revealed] setting playerId', playerId);
+		// console.debug('[opponents-revealed] setting playerId', playerId);
 		this._playerId = playerId;
 		this.updateEntityGroups();
 	}
 
 	@Input() set opponentIds(value: readonly number[]) {
-		console.debug('[opponents-revealed] setting opponentIds', value);
+		// console.debug('[opponents-revealed] setting opponentIds', value);
 		this._opponentIds = value;
 		this.updateEntityGroups();
 	}
@@ -103,7 +103,7 @@ export class OpponentRevealedComponent {
 
 	private updateEntityGroups() {
 		if (!this._entities || !this._playerId || !this._opponentIds) {
-			console.debug('[opponents-revealed] entities not initialized yet');
+			// console.debug('[opponents-revealed] entities not initialized yet');
 			return;
 		}
 

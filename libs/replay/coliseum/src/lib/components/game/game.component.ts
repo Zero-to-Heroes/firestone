@@ -130,32 +130,32 @@ export class GameComponent implements AfterViewInit {
 	}
 
 	@Input() set playerId(playerId: number) {
-		console.debug('[game] setting playerId', playerId);
+		// console.debug('[game] setting playerId', playerId);
 		this._playerId = playerId;
 	}
 
 	@Input() set opponentId(opponentId: number) {
-		console.debug('[game] setting opponentId', opponentId);
+		// console.debug('[game] setting opponentId', opponentId);
 		this._opponentId = opponentId;
 	}
 
 	@Input() set playerName(value: string) {
-		console.debug('[game] setting playerName', value);
+		// console.debug('[game] setting playerName', value);
 		this._playerName = value;
 	}
 
 	@Input() set opponentName(value: string) {
-		console.debug('[game] setting opponentName', value);
+		// console.debug('[game] setting opponentName', value);
 		this._opponentName = value;
 	}
 
 	@Input() set showHiddenCards(value: boolean) {
-		console.debug('[game] setting showHiddenCards', value);
+		// console.debug('[game] setting showHiddenCards', value);
 		this._showHiddenCards = value;
 	}
 
 	@Input() set currentAction(value: Action | undefined) {
-		console.debug('[game] setting new action', value);
+		// console.debug('[game] setting new action', value);
 		this._currentAction = value;
 		this._entities = value ? value.entities : Map();
 		this._activePlayer = value ? value.activePlayer : undefined;

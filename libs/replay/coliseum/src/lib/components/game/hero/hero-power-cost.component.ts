@@ -21,7 +21,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroPowerCostComponent implements AfterViewInit {
-	_cost: number;
+	_cost: number | undefined;
 	costClass: string | undefined;
 	_premium: boolean;
 
@@ -30,19 +30,19 @@ export class HeroPowerCostComponent implements AfterViewInit {
 	constructor(private cards: AllCardsService, private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[hero-power-cost] setting cardId', cardId);
+		// console.debug('[hero-power-cost] setting cardId', cardId);
 		this._cardId = cardId;
 		this.updateCost();
 	}
 
 	@Input() set cost(cost: number) {
-		console.debug('[hero-power-cost] setting cost', cost);
+		// console.debug('[hero-power-cost] setting cost', cost);
 		this._cost = cost;
 		this.updateCost();
 	}
 
 	@Input() set premium(premium: boolean) {
-		console.debug('[hero-power-cost] setting premium', premium);
+		// console.debug('[hero-power-cost] setting premium', premium);
 		this._premium = premium;
 	}
 
@@ -61,15 +61,15 @@ export class HeroPowerCostComponent implements AfterViewInit {
 		}
 		this.costClass = undefined;
 		const originalCard = this.cards.getCard(this._cardId);
-		const originalCost: number = originalCard.cost ?? 0;
+		const originalCost: number | undefined = originalCard.cost;
 
 		if (this._cost == null) {
 			this._cost = originalCost;
 		}
 
-		if (this._cost < originalCost) {
+		if ((this._cost ?? 0) < (originalCost ?? 0)) {
 			this.costClass = 'lower-cost';
-		} else if (this._cost > originalCost) {
+		} else if ((this._cost ?? 0) > (originalCost ?? 0)) {
 			this.costClass = 'higher-cost';
 		}
 		if (!(this.cdr as ViewRef).destroyed) {

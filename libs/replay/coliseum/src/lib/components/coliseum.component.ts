@@ -65,6 +65,9 @@ import { GameConfService } from '../services/game-conf.service';
 export class ColiseumComponent implements OnDestroy {
 	@Input() reviewId: string;
 	@Input() set replayXml(value: string) {
+		if (!value?.length) {
+			return;
+		}
 		this.setReplay(value);
 	}
 
@@ -167,7 +170,7 @@ export class ColiseumComponent implements OnDestroy {
 	}
 
 	public updateStatus(newStatus: string) {
-		console.log('updating status', newStatus);
+		// console.debug('updating status', newStatus);
 		this.status = newStatus;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -206,7 +209,7 @@ export class ColiseumComponent implements OnDestroy {
 			console.warn('[app] game not present, not performing operation', 'onSeek');
 			return;
 		}
-		console.debug('[app] seeking target timestamp', targetTimestamp);
+		// console.debug('[app] seeking target timestamp', targetTimestamp);
 		let lastActionIndex = 0;
 		let lastTurnIndex = 0;
 		for (let turnIndex = 0; turnIndex < this.game.turns.size; turnIndex++) {
@@ -225,13 +228,13 @@ export class ColiseumComponent implements OnDestroy {
 		}
 		this.currentTurn = lastTurnIndex;
 		this.currentActionInTurn = lastActionIndex;
-		console.debug(
-			'[app] finished seeking',
-			this.currentTurn,
-			this.currentActionInTurn,
-			this.game.turns.toJS(),
-			this.game.turns.get(this.currentTurn)?.actions,
-		);
+		// console.debug(
+		// 	'[app] finished seeking',
+		// 	this.currentTurn,
+		// 	this.currentActionInTurn,
+		// 	this.game.turns.toJS(),
+		// 	this.game.turns.get(this.currentTurn)?.actions,
+		// );
 		this.populateInfo();
 		// So that the value is always what the user actually selected, and there are no weird jumps
 		this.currentTime = targetTimestamp;

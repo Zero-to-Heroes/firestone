@@ -16,7 +16,7 @@ export class CardEnchantmentsComponent {
 	_enchantments: readonly Entity[];
 
 	@Input() set enchantments(value: readonly Entity[]) {
-		console.debug('[card-enchantments] setting enchantments', value);
+		// console.debug('[card-enchantments] setting enchantments', value);
 		this._enchantments = value;
 	}
 

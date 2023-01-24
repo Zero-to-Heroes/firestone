@@ -16,7 +16,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardCostComponent {
-	_cost: number;
+	_cost: number | undefined;
 	costClass: string | undefined;
 	_cardType: string | null;
 	fontSizeRatio: number;
@@ -26,20 +26,20 @@ export class CardCostComponent {
 	constructor(private cards: AllCardsService, private cdr: ChangeDetectorRef) {}
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[card-cost] setting cardId', cardId);
+		// console.debug('[card-cost] setting cardId', cardId);
 		this._cardId = cardId;
 		this.updateCost();
 	}
 
-	@Input() set cost(cost: number) {
-		console.debug('[card-cost] setting cost', cost);
+	@Input() set cost(cost: number | undefined) {
+		// console.debug('[card-cost] setting cost', cost);
 		this._cost = cost;
 		this.costClass = undefined;
 		this.updateCost();
 	}
 
 	@Input() set cardType(cardType: CardType | undefined) {
-		console.debug('[card-text] setting cardType', cardType);
+		// console.debug('[card-text] setting cardType', cardType);
 		this._cardType = !cardType ? null : CardType[cardType]?.toLowerCase();
 		this.fontSizeRatio = this._cardType === CardType[CardType.HERO_POWER]?.toLowerCase() ? 0.6 : 0.8;
 		this.updateCost();
@@ -50,15 +50,15 @@ export class CardCostComponent {
 			return;
 		}
 		const originalCard = this.cards.getCard(this._cardId);
-		const originalCost: number = originalCard.cost ?? 0;
+		const originalCost: number | undefined = originalCard.cost;
 
 		if (this._cost == null) {
 			this._cost = originalCost;
 		}
 
-		if (this._cost < originalCost) {
+		if ((this._cost ?? 0) < (originalCost ?? 0)) {
 			this.costClass = 'lower-cost';
-		} else if (this._cost > originalCost) {
+		} else if ((this._cost ?? 0) > (originalCost ?? 0)) {
 			this.costClass = 'higher-cost';
 		}
 		if (!(this.cdr as ViewRef).destroyed) {

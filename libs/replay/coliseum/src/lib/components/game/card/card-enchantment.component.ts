@@ -28,7 +28,7 @@ export class CardEnchantmentComponent {
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set enchantment(value: Entity) {
-		console.debug('[card-enchantment] setting enchantment', value);
+		// console.debug('[card-enchantment] setting enchantment', value);
 		this._enchantment = value;
 		const cardId = value.cardID;
 		const card = this.cards.getCard(cardId);

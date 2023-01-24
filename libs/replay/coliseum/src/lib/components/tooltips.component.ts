@@ -73,7 +73,7 @@ export class TooltipsComponent implements AfterViewInit {
 	) {
 		this.events.on(Events.SHOW_TOOLTIP).subscribe(async (data) => {
 			this.destroy();
-			console.debug('[tooltips] showing tooltip', data, this.rect);
+			// console.debug('[tooltips] showing tooltip', data, this.rect);
 			if (!this.rect) {
 				return;
 			}
@@ -93,28 +93,28 @@ export class TooltipsComponent implements AfterViewInit {
 			if (left + this.tooltipWidth > this.rect.right) {
 				// Put it on the left then
 				left = elementLeft - this.tooltipWidth - this.horizontalOffset;
-				console.debug(
-					'[tooltips] doesnt fit on the right, putting it left',
-					left,
-					this.tooltipWidth,
-					elementLeft,
-					elementWidth,
-					this.horizontalOffset,
-				);
+				// console.debug(
+				// 	'[tooltips] doesnt fit on the right, putting it left',
+				// 	left,
+				// 	this.tooltipWidth,
+				// 	elementLeft,
+				// 	elementWidth,
+				// 	this.horizontalOffset,
+				// );
 			}
 
 			// First try to center the tooltip vs the element
 			const elementCenter = elementTop + elementHeight / 2;
 			let top = elementCenter - this.tooltipHeight / 2;
-			console.debug('[tooltips] first top computation', top, elementCenter, this.tooltipHeight, this.rect.height);
+			// console.debug('[tooltips] first top computation', top, elementCenter, this.tooltipHeight, this.rect.height);
 			if (top < 0) {
 				top = 0;
 			} else if (top + this.tooltipHeight > this.rect.height) {
 				top = this.rect.height - this.tooltipHeight;
-				console.debug('[tooltips] would go over zone', top, this.tooltipHeight, this.rect.height);
+				// console.debug('[tooltips] would go over zone', top, this.tooltipHeight, this.rect.height);
 			}
 
-			console.debug('[tooltips] will show tooltip', left, top);
+			// console.debug('[tooltips] will show tooltip', left, top);
 			this.tooltip.instance.entity = entity;
 			this.tooltip.instance.controller = controller;
 			this.tooltip.instance.enchantments = enchantments;
@@ -174,7 +174,7 @@ export class TooltipsComponent implements AfterViewInit {
 		try {
 			this.rect = this.elRef.nativeElement.getBoundingClientRect();
 			const tooltipElement = this.elRef.nativeElement.querySelector('tooltip');
-			console.debug('[tooltips] caching tooltip info');
+			// console.debug('[tooltips] caching tooltip info');
 			if (!tooltipElement) {
 				setTimeout(() => this.cacheTooltipSize(), 20);
 				return;
@@ -193,7 +193,7 @@ export class TooltipsComponent implements AfterViewInit {
 
 	@HostListener('window:resize', ['$event'])
 	onResize(event) {
-		console.debug('[tooltips] starting resize');
+		// console.debug('[tooltips] starting resize');
 		this.cacheTooltipSize();
 	}
 

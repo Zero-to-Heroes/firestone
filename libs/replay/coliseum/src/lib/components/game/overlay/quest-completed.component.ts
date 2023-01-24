@@ -15,7 +15,7 @@ export class QuestCompletedComponent {
 	_quest: Entity;
 
 	@Input() set quest(value: Entity) {
-		console.debug('[quest-completed] setting quest', value);
+		// console.debug('[quest-completed] setting quest', value);
 		this._quest = value;
 	}
 }

@@ -23,12 +23,12 @@ export class ActiveSpellComponent {
 	_controller: Entity | undefined;
 
 	@Input() set entity(value: Entity | undefined) {
-		console.debug('[active-spell] setting new entity', value);
+		// console.debug('[active-spell] setting new entity', value);
 		this._entity = value;
 	}
 
 	@Input() set controller(value: Entity | undefined) {
-		console.debug('[active-spell] setting controller', value);
+		// console.debug('[active-spell] setting controller', value);
 		this._controller = value;
 	}
 }

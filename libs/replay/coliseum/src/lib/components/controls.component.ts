@@ -306,7 +306,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
 		this.currentSpeed = 1;
 		this.showingHiddenCards = true;
 		this._reviewId = value;
-		console.log('set review id', this._reviewId);
+		// console.log('set review id', this._reviewId);
 	}
 
 	@Input() set active(value: boolean) {
@@ -325,7 +325,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
 			case Key.Space:
 				// eslint-disable-next-line no-case-declarations
 				const focusedElement = document.activeElement;
-				console.debug('[controls] pressed space while focused on', focusedElement);
+				// console.debug('[controls] pressed space while focused on', focusedElement);
 				// If the focus is on a player control, we don't trigger the play action,
 				// so that the control's action can trigger instead
 				if (focusedElement && !focusedElement.classList.contains('player-control-element')) {

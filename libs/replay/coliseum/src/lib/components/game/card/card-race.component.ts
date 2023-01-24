@@ -18,7 +18,7 @@ export class CardRaceComponent {
 	_race: string;
 
 	@Input() set race(value: string) {
-		console.debug('[card-race] setting race', value);
+		// console.debug('[card-race] setting race', value);
 		this._race = value;
 	}
 }

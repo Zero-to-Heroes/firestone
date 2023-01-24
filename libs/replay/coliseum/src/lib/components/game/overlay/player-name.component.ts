@@ -39,12 +39,12 @@ export class PlayerNameComponent {
 	}
 
 	@Input() set name(value: string) {
-		console.debug('[player-name] setting player name', value);
+		// console.debug('[player-name] setting player name', value);
 		this._name = value;
 	}
 
 	@Input() set active(value: boolean) {
-		console.debug('[player-name] setting player active', value);
+		// console.debug('[player-name] setting player active', value);
 		this._active = value;
 	}
 

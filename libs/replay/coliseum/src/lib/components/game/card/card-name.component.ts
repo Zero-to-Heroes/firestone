@@ -21,7 +21,7 @@ export class CardNameComponent {
 	constructor(private cards: AllCardsService, private domSanitizer: DomSanitizer) {}
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[card-name] setting cardId', cardId);
+		// console.debug('[card-name] setting cardId', cardId);
 		const originalCard = this.cards.getCard(cardId);
 		const cardType: CardType =
 			originalCard && originalCard.type ? CardType[originalCard.type.toUpperCase() as string] : undefined;

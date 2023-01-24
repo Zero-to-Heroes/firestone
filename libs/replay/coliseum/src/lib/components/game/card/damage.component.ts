@@ -19,7 +19,7 @@ export class DamageComponent {
 	_amount: number;
 
 	@Input() set amount(value: number) {
-		console.debug('[damage] setting amount', value);
+		// console.debug('[damage] setting amount', value);
 		this._amount = Math.abs(value);
 		if (value >= 0) {
 			this.prefix = '-';

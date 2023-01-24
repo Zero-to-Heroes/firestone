@@ -54,24 +54,22 @@ export class SeekerComponent implements OnDestroy {
 		this.progressSubscription = this.progressChanged
 			.pipe(distinctUntilChanged(), debounceTime(100))
 			.subscribe((newProgress) => {
-				console.debug(
-					'[seeker] emitting progress',
-					newProgress,
-					newProgress * 0.01 * this._totalTime,
-					this._totalTime,
-				);
+				// console.debug(
+				// 	'[seeker] emitting progress',
+				// 	newProgress,
+				// 	newProgress * 0.01 * this._totalTime,
+				// 	this._totalTime,
+				// );
 				this.seek.next(newProgress * 0.01 * this._totalTime);
 			});
 	}
 
 	@Input() set totalTime(value: number) {
-		console.debug('[seeker] setting totalTime', value);
 		this._totalTime = value;
 		this.updateProgress();
 	}
 
 	@Input() set currentTime(value: number) {
-		console.debug('[seeker] setting currentTime', value);
 		this._currentTime = value;
 		this.updateProgress();
 	}
@@ -81,7 +79,7 @@ export class SeekerComponent implements OnDestroy {
 	}
 
 	onInput(newProgress: number) {
-		console.debug('[seeker] clicked on', newProgress, this._totalTime * newProgress * 0.01);
+		// console.debug('[seeker] clicked on', newProgress, this._totalTime * newProgress * 0.01);
 		this.progressChanged.next(newProgress);
 		this.progress = newProgress; // Avoid the seeker going back and forth
 	}
@@ -93,7 +91,7 @@ export class SeekerComponent implements OnDestroy {
 	@HostListener('click', ['$event'])
 	@HostListener('mousedown', ['$event'])
 	onClick(event: MouseEvent) {
-		console.debug('click', event);
+		// console.debug('click', event);
 		// event.preventDefault();
 		event.stopPropagation();
 	}
@@ -103,7 +101,7 @@ export class SeekerComponent implements OnDestroy {
 			this.progress = undefined;
 		}
 		this.progress = this._totalTime ? 100 * (this._currentTime / this._totalTime) : 0;
-		console.debug('[seeker] progress', this.progress, this._totalTime, this._currentTime);
+		// console.debug('[seeker] progress', this.progress, this._totalTime, this._currentTime);
 		this.updateBackground();
 	}
 

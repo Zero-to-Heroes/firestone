@@ -23,7 +23,7 @@ export class SecretRevealedComponent {
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set entity(value: Entity) {
-		console.debug('[secret-revealed] setting new entity', value);
+		// console.debug('[secret-revealed] setting new entity', value);
 		if (value) {
 			const playerClass: number = value.getTag(GameTag.CLASS);
 			let classString: string | null = null;

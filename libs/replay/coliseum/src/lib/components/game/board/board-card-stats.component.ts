@@ -32,11 +32,11 @@ export class BoardCardStatsComponent {
 	healthClass: string | undefined;
 	healthLeft: number;
 
-	_attack: number;
+	_attack: number | undefined;
 	_cardType: string;
 
 	private _cardId: string;
-	private _health: number;
+	private _health: number | undefined;
 	private _damage: number;
 
 	constructor(private cards: AllCardsService, private cdr: ChangeDetectorRef, private elRef: ElementRef) {}
@@ -46,18 +46,18 @@ export class BoardCardStatsComponent {
 		this.updateStats();
 	}
 
-	@Input() set attack(attack: number) {
+	@Input() set attack(attack: number | undefined) {
 		this._attack = attack;
 		this.updateStats();
 	}
 
-	@Input() set health(health: number) {
+	@Input() set health(health: number | undefined) {
 		this._health = health;
 		this.updateStats();
 	}
 
-	@Input() set damage(damage: number) {
-		this._damage = damage;
+	@Input() set damage(damage: number | undefined) {
+		this._damage = damage ?? 0;
 		this.updateStats();
 	}
 
@@ -76,10 +76,10 @@ export class BoardCardStatsComponent {
 		const originalCard = this.cards.getCard(this._cardId);
 
 		if (this._attack == null) {
-			this._attack = originalCard.attack ?? 0;
+			this._attack = originalCard.attack;
 		}
 		if (this._health == null) {
-			this._health = originalCard.health ?? 0;
+			this._health = originalCard.health;
 		}
 		if (this._damage == null) {
 			this._damage = 0;
@@ -90,7 +90,7 @@ export class BoardCardStatsComponent {
 			(originalCard.durability ?? 0) > 0 ||
 			(originalCard.armor ?? 0) > 0;
 
-		this.healthLeft = this._health - this._damage;
+		this.healthLeft = (this._health ?? 0) - this._damage;
 		this.updateAttackClass(originalCard);
 		this.updateHealthClass(originalCard);
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -100,9 +100,9 @@ export class BoardCardStatsComponent {
 
 	private updateAttackClass(originalCard) {
 		this.attackClass = 'attack';
-		if (this._attack > originalCard.attack) {
+		if ((this._attack ?? 0) > originalCard.attack) {
 			this.attackClass += ' buff';
-		} else if (this._attack < originalCard.attack) {
+		} else if ((this._attack ?? 0) < originalCard.attack) {
 			this.attackClass += ' debuff';
 		}
 	}

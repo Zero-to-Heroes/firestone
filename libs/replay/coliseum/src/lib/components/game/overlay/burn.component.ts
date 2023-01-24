@@ -21,13 +21,13 @@ export class BurnComponent {
 	burnedCards: readonly Entity[];
 
 	@Input() set entities(entities: Map<number, Entity>) {
-		console.debug('[burn] setting new entities', entities && entities.toJS());
+		// console.debug('[burn] setting new entities', entities && entities.toJS());
 		this._entities = entities;
 		this.updateEntityGroups();
 	}
 
 	@Input() set burned(value: readonly number[]) {
-		console.debug('[burn] setting burned', value);
+		// console.debug('[burn] setting burned', value);
 		this._burned = value;
 		this.updateEntityGroups();
 	}
@@ -38,7 +38,7 @@ export class BurnComponent {
 
 	private updateEntityGroups() {
 		if (!this._entities || !this._burned) {
-			console.debug('[burn] entities not initialized yet');
+			// console.debug('[burn] entities not initialized yet');
 			return;
 		}
 		this.burnedCards = this._entities

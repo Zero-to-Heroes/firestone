@@ -10,7 +10,7 @@ export class HeroPowerArtComponent {
 	image: string;
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[hero-power-art] setting cardId', cardId);
+		// console.debug('[hero-power-art] setting cardId', cardId);
 		this.image = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
 	}
 }

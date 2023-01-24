@@ -17,13 +17,13 @@ export class CardFrameComponent {
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set cardId(cardId: string) {
-		console.debug('[card-frame] setting cardId', cardId);
+		// console.debug('[card-frame] setting cardId', cardId);
 		this._cardId = cardId;
 		this.updateImage();
 	}
 
 	@Input() set premium(premium: boolean | undefined) {
-		console.debug('[card-frame] setting premium', premium);
+		// console.debug('[card-frame] setting premium', premium);
 		this._premium = premium ?? false;
 		this.updateImage();
 	}
