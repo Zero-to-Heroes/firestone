@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
@@ -16,7 +16,6 @@ import {
 } from '@services/ui-store/duels-ui-helper';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -89,8 +88,8 @@ export class AppUiStoreService {
 
 	constructor(private readonly ow: OverwolfService, private readonly allCards: CardsFacadeService) {
 		window['appStore'] = this;
-		window['debugAppStore'] = () =>
-			console.debug({
+		window['snapshotAppStore'] = (showLog = true) => {
+			const snapshot = {
 				mainStore: this.mainStore.observers,
 				gameNativeState: this.gameNativeState.observers,
 				prefs: this.prefs.observers,
@@ -108,7 +107,44 @@ export class AppUiStoreService {
 				duelsDecks: this.duelsDecks.observers,
 				mails: this.mails.observers,
 				tavernBrawl: this.tavernBrawl.observers,
+			};
+			showLog && console.debug(snapshot);
+			return snapshot;
+		};
+		let previousSnapshot = {};
+		window['debugAppStore'] = () => {
+			const result = {};
+			const newSnapshot = window['snapshotAppStore'](false);
+			for (const key of Object.keys(newSnapshot)) {
+				const oldObservers = previousSnapshot[key] ?? [];
+				const newObservers = newSnapshot[key];
+				const changedObservers = [];
+				// Because sometimes between two snapshot, the same observers have been deleted then recreated.
+				// In that case, we don't want to list the newly created obs (which simply replace the old ones
+				// that were removed, but which won't have the same IDs)
+				if (newObservers.length > oldObservers.length) {
+					for (const obs of newObservers) {
+						if (!oldObservers.find((o) => o.subscriberId === obs.subscriberId)) {
+							// console.debug('could not find old obs', obs.subscriberId, oldObservers, obs);
+							changedObservers.push(obs);
+						}
+					}
+				}
+				// console.debug('updated for', key, newObservers.length, oldObservers.length, changedObservers);
+				result[key] = changedObservers;
+				if (!changedObservers.length && newObservers.length > oldObservers.length) {
+					console.warn('didnt detect changes', newObservers, oldObservers);
+				}
+			}
+			const snapshotToMap = {};
+			Object.keys(newSnapshot).forEach((key) => {
+				snapshotToMap[key] = newSnapshot[key].map((o) => ({
+					subscriberId: o.subscriberId,
+				}));
 			});
+			previousSnapshot = snapshotToMap;
+			return result;
+		};
 	}
 
 	// WARNING: All services used here should be called in BootstrapStoreServicesService to make sure they are booted up
@@ -162,7 +198,8 @@ export class AppUiStoreService {
 	public listen$<S extends Selector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
-		return combineLatest(this.mainStore.asObservable(), this.prefs.asObservable()).pipe(
+		this.debugCall('listen$');
+		return combineLatest(this.mainStore, this.prefs).pipe(
 			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs?.preferences),
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -172,7 +209,8 @@ export class AppUiStoreService {
 	public listenPrefs$<S extends PrefsSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }> {
-		return this.prefs.asObservable().pipe(
+		this.debugCall('listenPrefs$');
+		return this.prefs.pipe(
 			filter((prefs) => !!prefs?.preferences),
 			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -182,7 +220,8 @@ export class AppUiStoreService {
 	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }> {
-		return this.gameNativeState.asObservable().pipe(
+		this.debugCall('listenNativeGameState$');
+		return this.gameNativeState.pipe(
 			filter((state) => !!state),
 			map((state) => selectors.map((selector) => selector(state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -192,7 +231,8 @@ export class AppUiStoreService {
 	public listenDeckState$<S extends GameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
-		return this.deckStore.asObservable().pipe(
+		this.debugCall('listenDeckState$');
+		return this.deckStore.pipe(
 			filter((gameState) => !!gameState),
 			map((gameState) => selectors.map((selector) => selector(gameState.state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -202,17 +242,20 @@ export class AppUiStoreService {
 	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
-		return combineLatest(this.battlegroundsStore.asObservable(), this.prefs.asObservable()).pipe(
+		this.debugCall('listenBattlegrounds$');
+		const result = combineLatest(this.battlegroundsStore, this.prefs).pipe(
 			filter(([state, prefs]) => !!state && !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
+		return result;
 	}
 
 	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
-		return combineLatest(this.mercenariesStore.asObservable(), this.prefs.asObservable()).pipe(
+		this.debugCall('listenMercenaries$');
+		return combineLatest(this.mercenariesStore, this.prefs).pipe(
 			filter(([state, prefs]) => !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -222,7 +265,8 @@ export class AppUiStoreService {
 	public listenMercenariesOutOfCombat$<S extends MercenariesOutOfCombatStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }> {
-		return combineLatest(this.mercenariesOutOfCombatStore.asObservable(), this.prefs.asObservable()).pipe(
+		this.debugCall('listenMercenariesOutOfCombat$');
+		return combineLatest(this.mercenariesOutOfCombatStore, this.prefs).pipe(
 			filter(([state, prefs]) => !!state && !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -232,7 +276,8 @@ export class AppUiStoreService {
 	public listenMercenariesHighlights$<S extends MercenariesHighlightsSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
-		return combineLatest(this.mercenariesSynergiesStore.asObservable(), this.prefs.asObservable()).pipe(
+		this.debugCall('listenMercenariesHighlights$');
+		return combineLatest(this.mercenariesSynergiesStore, this.prefs).pipe(
 			filter(([highlights, prefs]) => !!prefs?.preferences),
 			map(([highlights, prefs]) => selectors.map((selector) => selector([highlights, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -240,39 +285,49 @@ export class AppUiStoreService {
 	}
 
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
-		return this.bgsHeroStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('bgHeroStats$');
+		return this.bgsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		return this.duelsHeroStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('duelsHeroStats$');
+		return this.duelsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-		return this.duelsTopDecks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('duelsTopDecks$');
+		return this.duelsTopDecks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
-		return this.gameStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('gameStats$');
+		return this.gameStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
-		return this.duelsRuns.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('duelsRuns$');
+		return this.duelsRuns.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
-		return this.duelsDecks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('duelsDecks$');
+		const result = this.duelsDecks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return result;
 	}
 
 	public mails$(): Observable<MailState> {
-		return this.mails.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('mails$');
+		return this.mails.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public tavernBrawl$(): Observable<TavernBrawlState> {
-		return this.tavernBrawl.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('tavernBrawl$');
+		return this.tavernBrawl.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {
-		return this.decks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		this.debugCall('decks$');
+		return this.decks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public send(event: MainWindowStoreEvent) {
@@ -489,6 +544,11 @@ export class AppUiStoreService {
 				}),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));
+	}
+
+	private debugCall(...args) {
+		return;
+		console.debug('[store]', args, new Error());
 	}
 }
 
