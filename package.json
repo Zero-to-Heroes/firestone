@@ -8,7 +8,7 @@
 		"dev": "nx build --source-map=true --watch",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
-		"build": "nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
+		"build": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
 		"build-local": "nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
 		"test": "nx test"
 	},

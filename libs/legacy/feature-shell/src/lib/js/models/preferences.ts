@@ -450,6 +450,9 @@ export class Preferences {
 	readonly playerBgsSouthseaCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsSouthseaCounterWidgetPosition: { left: number; top: number };
+	readonly playerBgsMagmalocCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBgsMagmalocCounterWidgetPosition: { left: number; top: number };
 	readonly playerBgsMajordomoCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsMajordomoCounterWidgetPosition: { left: number; top: number };

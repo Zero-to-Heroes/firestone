@@ -8,9 +8,9 @@ import { BonelordFrostwhisperCounterDefinition } from '@components/game-counters
 import { CoralKeeperCounterDefinition } from '@components/game-counters/definitions/coral-keeper-counter';
 import { GreySageParrotCounterDefinition } from '@components/game-counters/definitions/grey-sage-parrot-counter';
 import { ShockspitterCounterDefinition } from '@components/game-counters/definitions/shockspitter-counter';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { DebugService } from '../../services/debug.service';
@@ -18,6 +18,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { AttackCounterDefinition } from './definitions/attack-counter';
+import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
@@ -201,6 +202,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 					this.allCards,
 					this.i18n,
 				);
+			case 'bgsMagmaloc':
+				return BgsMagmalocCounterDefinition.create(gameState, side, deckState, this.allCards, this.i18n);
 			case 'bgsMajordomo':
 				return BgsMajordomoCounterDefinition.create(gameState, side, deckState, this.allCards, this.i18n);
 			default:

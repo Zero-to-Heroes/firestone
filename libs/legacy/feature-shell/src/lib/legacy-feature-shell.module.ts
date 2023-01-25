@@ -462,6 +462,7 @@ import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
 import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
+import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
@@ -1534,6 +1535,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerMulticasterWidgetWrapperComponent,
 		PlayerCoralKeeperWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
+		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
 
 		OpponentCounterWidgetWrapperComponent,

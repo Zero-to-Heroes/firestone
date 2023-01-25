@@ -42,6 +42,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = [];
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[] = [];
+	readonly minionsPlayedOverTurn: readonly NumericTurnInfo[] = [];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[] = [];
 	readonly luckFactor: number = 0;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];

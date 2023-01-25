@@ -124,6 +124,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
+			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 		</div>
 	`,

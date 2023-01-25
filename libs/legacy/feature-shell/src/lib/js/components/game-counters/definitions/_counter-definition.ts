@@ -45,4 +45,5 @@ export type CounterType =
 	| 'coralKeeper'
 	| 'bgsPogo'
 	| 'bgsSouthsea'
+	| 'bgsMagmaloc'
 	| 'bgsMajordomo';

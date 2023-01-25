@@ -238,16 +238,22 @@ import { Knob } from '../preference-slider.component';
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.counters-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
-					field="playerBgsSouthseaCounter"
-					[ngClass]="{ disabled: !value.bgsFullToggle }"
-					[label]="'settings.battlegrounds.overlay.counter-soutshsea-label' | owTranslate"
-					[tooltip]="'settings.battlegrounds.overlay.counter-soutshsea-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
 					field="playerBgsMajordomoCounter"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.counter-majordomo-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.counter-majordomo-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerBgsMagmalocCounter"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.overlay.counter-magmaloc-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.counter-magmaloc-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerBgsSouthseaCounter"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.overlay.counter-soutshsea-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.counter-soutshsea-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
@@ -13,6 +13,7 @@ import { RTStatsBgsFaceOffParser } from './event-parsers/battlegrounds/rtstats-b
 import { RTStatsBgsFreezeParser } from './event-parsers/battlegrounds/rtstats-bgs-freeze-parser';
 import { RTStatsBgsHeroSelectedParser } from './event-parsers/battlegrounds/rtstats-bgs-hero-selected-parser';
 import { RTStatBgsMinionsBoughtParser } from './event-parsers/battlegrounds/rtstats-bgs-minions-bought-parser';
+import { RTStatBgsMinionsPlayedParser } from './event-parsers/battlegrounds/rtstats-bgs-minions-played-parser';
 import { RTStatBgsMinionsSoldParser } from './event-parsers/battlegrounds/rtstats-bgs-minions-sold-parser';
 import { RTStatsBgsOpponentRevealedParser } from './event-parsers/battlegrounds/rtstats-bgs-opponent-revealed-parser';
 import { RTStatsBgsRerollsParser } from './event-parsers/battlegrounds/rtstats-bgs-rerolls-parser';
@@ -137,6 +138,7 @@ export class RealTimeStatsService {
 			new RTStatsBgsFreezeParser(),
 			new RTStatBgsMinionsBoughtParser(),
 			new RTStatBgsMinionsSoldParser(),
+			new RTStatBgsMinionsPlayedParser(this.allCards),
 			new RTStatBgsEnemyHeroKilledParser(),
 			new RTStatBgsAttackFirstParser(this.allCards),
 			new RTStatsBgsLeaderboardPositionUpdatedParser(this.allCards),
