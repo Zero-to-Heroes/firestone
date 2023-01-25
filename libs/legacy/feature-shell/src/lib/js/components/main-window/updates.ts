@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.1.7',
+		version: '10.1.8',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -61,6 +61,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `Add counter for Magmaloc.`,
+							},
 							{
 								type: 'content',
 								text: `Remove buddies from the simulator minions list.`,
