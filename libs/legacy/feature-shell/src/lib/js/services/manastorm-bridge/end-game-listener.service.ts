@@ -148,12 +148,13 @@ export class EndGameListenerService {
 
 		// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible
 		// that the rating doesn't change, this obersvable isn't reliable enough
-		const bgMemoryInfo$ = combineLatest([gameEnded$, metadata$]).pipe(
-			filter(([gameEnded, metadata]) => gameEnded.ended),
-			concatMap(async ([gameEnded, metadata]) => {
-				return isBattlegrounds(metadata.GameType) ? await this.getBattlegroundsEndGame() : null;
+		// It actually emits even if the ranking doesn't change, so we can use that
+		const bgMemoryInfo$ = bgNewRating$.pipe(
+			concatMap(async (_) => {
+				return await this.getBattlegroundsEndGame();
 			}),
 			startWith(null),
+			tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
 		);
 
 		combineLatest(
