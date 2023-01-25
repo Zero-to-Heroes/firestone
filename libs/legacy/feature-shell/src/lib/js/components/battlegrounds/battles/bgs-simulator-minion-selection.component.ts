@@ -12,9 +12,9 @@ import { FormControl } from '@angular/forms';
 import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -245,6 +245,7 @@ export class BgsSimulatorMinionSelectionComponent
 								TOKEN_CARD_IDS.includes(card.id as CardIds),
 						)
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
+						.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 						.filter(
 							(card) =>
 								!tribeFilter ||
