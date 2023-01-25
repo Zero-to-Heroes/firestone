@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
@@ -96,13 +96,14 @@ export class EndGameListenerService {
 			startWith(null),
 			// tap((info) => console.debug('[manastorm-bridge] gameSettings', info)),
 		);
-		// TODO: this won't work, as this is an information that we only get after the game is over
+		// This is triggered really early: as soon as the GameState match is over (no need to wait for
+		// the final combat animations)
 		const bgNewRating$ = this.events.on(Events.MEMORY_UPDATE).pipe(
 			map((event) => event.data[0] as MemoryUpdate),
 			filter((changes) => !!changes.BattlegroundsNewRating),
 			map((changes) => changes.BattlegroundsNewRating),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
+			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
 		);
 		const reviewId$ = this.reviewIdService.reviewId$;
 		// Doesn't work, reviewId arrives earlier
@@ -145,20 +146,53 @@ export class EndGameListenerService {
 			// tap((info) => console.debug('[manastorm-bridge] gameEnded', info)),
 		);
 
+		// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible
+		// that the rating doesn't change, this obersvable isn't reliable enough
+		const bgMemoryInfo$ = combineLatest([gameEnded$, metadata$]).pipe(
+			filter(([gameEnded, metadata]) => gameEnded.ended),
+			concatMap(async ([gameEnded, metadata]) => {
+				return isBattlegrounds(metadata.GameType) ? await this.getBattlegroundsEndGame() : null;
+			}),
+			startWith(null),
+		);
+
 		combineLatest(
 			// Groups of 6 max to have type inferrence
-			combineLatest(reviewId$, metadata$, gameEnded$, gameSettings$),
-			combineLatest(mercsInfo$, mercsCollectionInfo$),
-			combineLatest(duelsRunId$, duelsInfo$),
-			combineLatest(matchInfo$, playerDeck$, arenaInfo$, bgInfo$, bgNewRating$),
+			[
+				reviewId$,
+				metadata$,
+				gameEnded$,
+				gameSettings$,
+				mercsInfo$,
+				mercsCollectionInfo$,
+				duelsRunId$,
+				duelsInfo$,
+				matchInfo$,
+				playerDeck$,
+				arenaInfo$,
+				bgInfo$,
+			],
 		)
 			.pipe(
+				withLatestFrom(bgMemoryInfo$, bgNewRating$),
 				map(
 					([
-						[reviewId, metadata, gameEnded, gameSettings],
-						[mercsInfo, mercsCollectionInfo],
-						[duelsRunId, duelsInfo],
-						[matchInfo, playerDeck, arenaInfo, bgInfo, bgNewRating],
+						[
+							reviewId,
+							metadata,
+							gameEnded,
+							gameSettings,
+							mercsInfo,
+							mercsCollectionInfo,
+							duelsRunId,
+							duelsInfo,
+							matchInfo,
+							playerDeck,
+							arenaInfo,
+							bgInfo,
+						],
+						bgMemoryInfo,
+						bgNewRating,
 					]) =>
 						({
 							reviewId: reviewId,
@@ -173,6 +207,8 @@ export class EndGameListenerService {
 							bgInfo: bgInfo,
 							gameSettings: gameSettings,
 							duelsRunId: duelsRunId,
+							bgNewRating: bgNewRating,
+							battlegroundsInfoAfterGameOver: bgMemoryInfo,
 						} as UploadInfo),
 				),
 				// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
@@ -212,8 +248,28 @@ export class EndGameListenerService {
 		// 		: info.metadata.GameType === GameType.GT_PVPDR
 		// 		? info.duelsInfo?.Rating
 		// 		: null;
+		// Try to get the BG new rank info as soon as possible. If that doesn't work, we have a fallback
+		const bgNewRatingMemoryUpdate = info.bgNewRating && info.bgNewRating !== -1 ? info.bgNewRating : null;
+		const afterInfoNewRating =
+			info.battlegroundsInfoAfterGameOver?.NewRating != null &&
+			info.battlegroundsInfoAfterGameOver.NewRating !== -1
+				? info.battlegroundsInfoAfterGameOver.NewRating
+				: null;
+		const bgNewRating = bgNewRatingMemoryUpdate ?? afterInfoNewRating;
+		console.log('[manastorm-bridge] final bgNewRating', bgNewRating);
+		const newBgInfo =
+			info.battlegroundsInfoAfterGameOver?.NewRating != null &&
+			info.battlegroundsInfoAfterGameOver.NewRating !== -1
+				? info.battlegroundsInfoAfterGameOver
+				: isBattlegrounds(info.metadata.GameType)
+				? await this.getBattlegroundsEndGame()
+				: null;
+		const newBgInfoWithRating: BattlegroundsInfo = {
+			...newBgInfo,
+			NewRating: bgNewRating ?? newBgInfo.NewRating,
+		};
 		const [
-			battlegroundsInfoAfterGameOver,
+			// battlegroundsInfoAfterGameOver,
 			// The timing doesn't work, the diff is only computed later apparently, once the user is on the
 			// end screen
 			// Maybe this could be sent asynchronously via another API call, but for now I think it's
@@ -221,7 +277,7 @@ export class EndGameListenerService {
 			//  duelsPlayerRankAfterGameOver,
 			xpForGame,
 		] = await Promise.all([
-			isBattlegrounds(info.metadata.GameType) ? this.getBattlegroundsEndGame() : null,
+			// isBattlegrounds(info.metadata.GameType) ? this.getBattlegroundsEndGame() : null,
 			// isDuels(info.metadata.GameType) ? this.getDuelsNewPlayerRank(duelsInitialRank, info.duelsInfo) : null,
 			this.rewards.getXpForGameInfo(),
 		]);
@@ -229,7 +285,7 @@ export class EndGameListenerService {
 
 		const augmentedInfo: UploadInfo = {
 			...info,
-			battlegroundsInfoAfterGameOver: battlegroundsInfoAfterGameOver,
+			battlegroundsInfoAfterGameOver: newBgInfoWithRating,
 			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
 		};

@@ -119,7 +119,7 @@ export class EndGameUploaderService {
 			);
 			playerRank = info.bgInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
-			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating;
+			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating ?? info.bgInfo?.NewRating;
 			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				!!info.bgInfo?.Game?.AvailableRaces?.length
 					? info.bgInfo?.Game?.AvailableRaces
@@ -445,4 +445,5 @@ export interface UploadInfo {
 	battlegroundsInfoAfterGameOver?: BattlegroundsInfo;
 	duelsPlayerRankAfterGameOver?: number;
 	xpForGame?: XpForGameInfo;
+	bgNewRating: number;
 }

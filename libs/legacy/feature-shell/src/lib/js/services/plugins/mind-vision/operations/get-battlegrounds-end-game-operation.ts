@@ -16,7 +16,7 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 				Game: battlegroundsInfo.Game,
 			}),
 			50,
-			150,
+			300,
 		);
 	}
 }

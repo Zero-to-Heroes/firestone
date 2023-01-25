@@ -170,8 +170,8 @@ export class MemoryInspectionService {
 		// return this.mindVision.callMindVision(() => result;
 	}
 
-	public async getBattlegroundsEndGame(numberOfRetries?: number): Promise<BattlegroundsInfo> {
-		return this.mindVision.callMindVision(() => this.getBattlegroundsEndGameOperation.call(numberOfRetries));
+	public async getBattlegroundsEndGame(): Promise<BattlegroundsInfo> {
+		return this.mindVision.callMindVision(() => this.getBattlegroundsEndGameOperation.call());
 	}
 
 	public async getBattlegroundsMatchWithPlayers(
