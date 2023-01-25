@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.1.6',
+		version: '10.1.7',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -62,49 +62,20 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a "Reborn" minion tier in the minions list.`,
-							},
-							{
-								type: 'feature',
-								text: `You can now input the Eternal Legion (total number of Eternal Knights dead this game) and Undead Army (total undead attack bonus) buffs in the simulator.`,
-							},
-							{
-								type: 'feature',
-								text: `Putricide creations are now supported in the simulator.`,
+								type: 'content',
+								text: `Remove buddies from the simulator minions list.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a simulation issue where Sinrunner Blanchy would not come back at full health.`,
+								text: `Try to fix an issue where your new MMR can be empty when you finish 1st or 2nd.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a simulation issue where Lady Deathwhisper / Jelly Belly would proc on every minion spawn, and not just on reborns.`,
+								text: `Fix a sim issue with aura minions (like Cyborg Drake, Southsea Captain, etc.).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some minions would be shown in the list even if the tribe they were attached to was banned (e.g. Nomi).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where you couldn't hide specific players in the HP chart anymore.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the warband composition chart would only show Beasts, even when no beasts where available.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where hero health and tavern tiers would not be displayed when viewing the battles recap of past games.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the app would sometimes freeze up for a short while.`,
+								text: `Fix a sim issue when Putricide's creation had Reborn.`,
 							},
 						],
 					},
