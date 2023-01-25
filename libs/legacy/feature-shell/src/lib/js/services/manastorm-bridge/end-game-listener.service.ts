@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
@@ -104,6 +104,7 @@ export class EndGameListenerService {
 			map((changes) => changes.BattlegroundsNewRating),
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
+			share(),
 		);
 		const reviewId$ = this.reviewIdService.reviewId$;
 		// Doesn't work, reviewId arrives earlier
