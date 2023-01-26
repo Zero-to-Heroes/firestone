@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, map, share, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
@@ -104,7 +104,7 @@ export class EndGameListenerService {
 			map((changes) => changes.BattlegroundsNewRating),
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
-			share(),
+			// share(),
 		);
 		const reviewId$ = this.reviewIdService.reviewId$;
 		// Doesn't work, reviewId arrives earlier
@@ -113,6 +113,7 @@ export class EndGameListenerService {
 			this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_START)),
 			this.uploadStarted$$,
 		).pipe(
+			tap((info) => console.debug('[manastorm-bridge] game ended', info)),
 			map((event) => {
 				// The uploadStarted subject fired, we reset the "ended" flag so that a new review id
 				// won't trigger a new upload
@@ -213,6 +214,7 @@ export class EndGameListenerService {
 							battlegroundsInfoAfterGameOver: bgMemoryInfo,
 						} as UploadInfo),
 				),
+				tap((info) => console.log('[manastorm-bridge] triggering final observable', info)),
 				// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
 				// the current game) or the reviewId changed (to mark the start)
 				distinctUntilChanged((a, b) => {
@@ -266,10 +268,12 @@ export class EndGameListenerService {
 				: isBattlegrounds(info.metadata.GameType)
 				? await this.getBattlegroundsEndGame()
 				: null;
-		const newBgInfoWithRating: BattlegroundsInfo = {
-			...newBgInfo,
-			NewRating: bgNewRating ?? newBgInfo.NewRating,
-		};
+		const newBgInfoWithRating: BattlegroundsInfo = !!newBgInfo
+			? {
+					...newBgInfo,
+					NewRating: bgNewRating ?? newBgInfo.NewRating,
+			  }
+			: null;
 		const [
 			// battlegroundsInfoAfterGameOver,
 			// The timing doesn't work, the diff is only computed later apparently, once the user is on the
