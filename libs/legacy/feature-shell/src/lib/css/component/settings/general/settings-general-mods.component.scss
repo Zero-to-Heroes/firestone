@@ -43,6 +43,7 @@
 		display: inline;
 		font-size: 14px;
 		color: var(--inactive-link-color);
+		margin-top: 0;
 
 		&:hover {
 			color: var(--default-title-color);
@@ -69,6 +70,18 @@
 			display: flex;
 			align-items: center;
 			margin-bottom: 10px;
+
+			::ng-deep a {
+				color: #d9c3ab;
+			}
+
+			.mod-version {
+				margin-left: 10px;
+				font-size: 10px;
+				opacity: 0.8;
+				// To align the baseline with the mod name. Probably a better way to do it exists
+				margin-top: 2px;
+			}
 
 			.toggle-button {
 				margin-left: auto;

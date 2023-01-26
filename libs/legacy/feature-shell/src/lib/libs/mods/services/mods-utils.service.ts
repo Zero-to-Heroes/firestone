@@ -7,6 +7,8 @@ import { PreferencesService } from '@legacy-import/src/lib/js/services/preferenc
 import { sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { ModData } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { BehaviorSubject } from 'rxjs';
+import { toVersionString } from '../model/mods-config';
+import { ModsConfigService } from './mods-config.service';
 
 const MELON_LOADER_LATESTT_ZIP = 'https://github.com/LavaGang/MelonLoader/releases/download/v0.5.7/MelonLoader.x86.zip';
 const MODS_MANAGER_PLUGIN_URL =
@@ -23,6 +25,7 @@ export class ModsUtilsService {
 		private readonly io: OwUtilsService,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
+		private readonly modsConfig: ModsConfigService,
 	) {}
 
 	public async checkMods(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
@@ -42,7 +45,7 @@ export class ModsUtilsService {
 
 	public async installedMods(installPath: string): Promise<readonly ModData[]> {
 		const files = await this.ow.listFilesInDirectory(`${installPath}\\Mods`);
-		const prefs = await this.prefs.getPreferences();
+		const conf = this.modsConfig.getConfig();
 		const result = files.data
 			?.filter((f) => f.type === 'file')
 			.filter((f) => f?.name?.toLowerCase()?.endsWith('.dll'))
@@ -50,16 +53,17 @@ export class ModsUtilsService {
 			.filter((name) => name !== 'GameEventsConnector')
 			.filter((name) => name !== 'FirestoneMelonModsManager')
 			.map((assemblyName) => {
+				const existingConf = conf[assemblyName];
 				return {
 					AssemblyName: assemblyName,
-					DownloadLink: null,
-					Name: assemblyName,
-					Registered: prefs.mods[assemblyName] ?? true,
-					Version: null,
+					DownloadLink: existingConf?.downloadLink,
+					Name: existingConf?.modName ?? assemblyName,
+					Registered: existingConf?.enabled ?? true,
+					Version: toVersionString(existingConf?.lastKnownVersion),
 				};
 			})
-			.sort(sortByProperties((m) => [m.AssemblyName]));
-		console.debug('looking for installed mods', prefs.mods, result);
+			.sort(sortByProperties((m) => [m.Name]));
+		console.debug('looking for installed mods', conf, result);
 		return result;
 	}
 

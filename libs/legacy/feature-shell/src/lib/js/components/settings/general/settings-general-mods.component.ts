@@ -7,12 +7,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { ModConfig, ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
+import { ModsConfigService } from '@legacy-import/src/lib/libs/mods/services/mods-config.service';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, filter, Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -92,7 +93,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				<p class="description" [owTranslate]="'settings.general.mods.installed-mods-description'"></p>
 				<div class="installed-mods">
 					<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
-						<div class="mod-name">{{ mod.Name }}</div>
+						<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
+						<a class="mod-name" *ngIf="mod.DownloadLink" href="{{ mod.DownloadLink }}" target="_blank">{{
+							mod.Name
+						}}</a>
+						<div class="mod-version" *ngIf="mod.Version">v{{ mod.Version }}</div>
 						<fs-toggle-view
 							class="toggle-button"
 							[value]="mod.Registered"
@@ -137,6 +142,7 @@ export class SettingsGeneralModsComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly modUtils: ModsUtilsService,
 		private readonly prefs: PreferencesService,
+		private readonly modsConfig: ModsConfigService,
 		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
@@ -144,12 +150,13 @@ export class SettingsGeneralModsComponent
 
 	async ngAfterContentInit() {
 		this.modsManager = this.ow.getMainWindow().modsManager;
-		combineLatest([this.listenForBasicPref$((prefs) => prefs.mods), this.modsManager.modsData$$.asObservable()])
+		this.modsManager.modsData$$
+			.asObservable()
 			.pipe(
-				filter(([modsPrefs, modsData]) => !!modsData?.length),
-				this.mapData(([modsPrefs, modsData]) => ({ modsPrefs, modsData })),
+				filter((modsData) => !!modsData?.length),
+				this.mapData((modsData) => modsData),
 			)
-			.subscribe(async ({ modsPrefs, modsData }) => {
+			.subscribe(async (modsData) => {
 				this.installedMods = modsData;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
@@ -225,13 +232,21 @@ export class SettingsGeneralModsComponent
 
 	toggleMod(modName) {
 		return async (_: boolean) => {
-			const prefs = await this.prefs.getPreferences();
+			const config: ModsConfig = this.modsConfig.getConfig();
 			// const modNameForPrefs = modName.replace(/ /g, '');
-			const existingToggle = prefs.mods[modName] ?? true;
+			const existingConfigForMod = config[modName] ?? ({} as ModConfig);
+			const existingToggle = existingConfigForMod.enabled ?? true;
 			const newToggle = !existingToggle;
-			const newPrefs: Preferences = { ...prefs, mods: { ...prefs.mods, [modName]: newToggle } };
+			const newConf: ModsConfig = {
+				...config,
+				[modName]: {
+					...existingConfigForMod,
+					enabled: newToggle,
+				},
+			};
+			console.debug('updating mods conf', newConf, config);
 			// Make sure the prefs are saved first, so that we can use the pref value in the callback
-			await this.prefs.savePreferences(newPrefs);
+			this.modsConfig.updateConf(newConf);
 			await this.modsManager.toggleMods([modName]);
 		};
 	}

@@ -744,6 +744,7 @@ import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
+import { ModsConfigService } from './libs/mods/services/mods-config.service';
 import { translationFileVersion } from './translation-file-version';
 
 console.log('environment is ' + process.env['NODE_ENV']);
@@ -1635,6 +1636,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ModsBootstrapService,
 		ModsManagerService,
 		ModsUtilsService,
+		ModsConfigService,
 
 		AchievementHistoryStorageService,
 		AchievementsRepository,

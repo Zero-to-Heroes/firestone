@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { toModVersion, toVersionString } from '../model/mods-config';
+import { ModsConfigService } from './mods-config.service';
 
 @Injectable()
 export class ModsManagerService {
@@ -19,7 +19,7 @@ export class ModsManagerService {
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
 		private readonly gameStatus: GameStatusService,
-		private readonly prefs: PreferencesService,
+		private readonly modsConfigService: ModsConfigService,
 	) {
 		window['modsManager'] = this;
 	}
@@ -39,31 +39,40 @@ export class ModsManagerService {
 			}
 		});
 
-		combineLatest([this.internalModsData$$.asObservable(), this.store.listenPrefs$((prefs) => prefs.mods)])
-			.pipe(filter(([modsData, modsPrefs]) => !!modsData?.length))
-			.subscribe(async ([modsData, [modsPrefs]]) => {
+		combineLatest([this.internalModsData$$.asObservable(), this.store.listenModsConfig$((conf) => conf)])
+			.pipe(
+				tap((info) => console.debug('[mods-manager] processing mods data', info)),
+				filter(([modsData, conf]) => !!modsData?.length),
+			)
+			.subscribe(async ([modsData, [conf]]) => {
 				const modsToToggle = [];
 				for (const modData of modsData) {
-					if (modsPrefs[modData.AssemblyName] == null) {
-						modsPrefs[modData.AssemblyName] = modData.Registered;
+					if (conf[modData.AssemblyName] == null) {
+						conf[modData.AssemblyName] = {
+							assemblyName: modData.AssemblyName,
+							enabled: modData.Registered,
+						};
 						modsToToggle.push(modData.AssemblyName);
 					}
+					conf[modData.AssemblyName] = {
+						...conf[modData.AssemblyName],
+						modName: modData.Name,
+						downloadLink: modData.DownloadLink,
+						lastKnownVersion: toModVersion(modData.Version),
+					};
 				}
 				const result = [...modsData]
 					.map(
 						(modData) =>
 							({
 								...modData,
-								Registered: modsPrefs[modData.AssemblyName],
+								Registered: conf[modData.AssemblyName].enabled,
+								Version: toVersionString(conf[modData.AssemblyName].lastKnownVersion),
+								DownloadLink: conf[modData.AssemblyName].downloadLink,
 							} as ModData),
 					)
 					.sort(sortByProperties((m: ModData) => [m.Name]));
-
-				if (modsToToggle.length > 0) {
-					const prefs = await this.prefs.getPreferences();
-					const newPrefs: Preferences = { ...prefs, mods: modsPrefs };
-					await this.prefs.savePreferences(newPrefs);
-				}
+				this.modsConfigService.updateConf(conf);
 
 				// Because mods are loaded as Registered by default
 				const modsToDeactivate = modsData
@@ -76,6 +85,7 @@ export class ModsManagerService {
 					this.deactivateMods(modsToDeactivate.map((m) => m.AssemblyName));
 				}
 
+				console.debug('[mods-manager] sending mods data', result);
 				this.modsData$$.next(result);
 			});
 	}

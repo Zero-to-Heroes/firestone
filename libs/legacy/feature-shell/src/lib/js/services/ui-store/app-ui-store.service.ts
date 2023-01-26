@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
@@ -49,6 +50,7 @@ export type Selector<T> = (fullState: [MainWindowState, NavigationState, Prefere
 export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
 export type GameStateSelector<T> = (gameState: GameState) => T;
 export type PrefsSelector<T> = (prefs: Preferences) => T;
+export type ModsConfigSelector<T> = (conf: ModsConfig) => T;
 export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
 export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
 export type MercenariesStateSelector<T> = (
@@ -71,6 +73,7 @@ export class AppUiStoreService {
 	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
 	private mercenariesOutOfCombatStore: BehaviorSubject<MercenariesOutOfCombatState>;
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
+	private modsConfig: BehaviorSubject<ModsConfig>;
 
 	private bgsHeroStats = new BehaviorSubject<readonly BgsHeroStat[]>(null);
 	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
@@ -93,6 +96,7 @@ export class AppUiStoreService {
 				mainStore: this.mainStore.observers,
 				gameNativeState: this.gameNativeState.observers,
 				prefs: this.prefs.observers,
+				modsConfig: this.modsConfig.observers,
 				deckStore: this.deckStore.observers,
 				battlegroundsStore: this.battlegroundsStore.observers,
 				mercenariesStore: this.mercenariesStore.observers,
@@ -152,6 +156,7 @@ export class AppUiStoreService {
 	public start() {
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.ow.getMainWindow().preferencesEventBus;
+		this.modsConfig = this.ow.getMainWindow().modsConfig;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
 		this.gameNativeState = this.ow.getMainWindow().gameNativeStateStore;
 		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
@@ -164,6 +169,7 @@ export class AppUiStoreService {
 			!this.mainStore ||
 			!this.gameNativeState ||
 			!this.prefs ||
+			!this.modsConfig ||
 			!this.deckStore ||
 			!this.battlegroundsStore ||
 			!this.mercenariesStore ||
@@ -215,6 +221,16 @@ export class AppUiStoreService {
 			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }>;
+	}
+
+	public listenModsConfig$<S extends ModsConfigSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends ModsConfigSelector<infer T> ? T : never }> {
+		this.debugCall('listenModsConfigs$');
+		return this.modsConfig.pipe(
+			map((conf) => selectors.map((selector) => selector(conf))),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		) as Observable<{ [K in keyof S]: S[K] extends ModsConfigSelector<infer T> ? T : never }>;
 	}
 
 	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
