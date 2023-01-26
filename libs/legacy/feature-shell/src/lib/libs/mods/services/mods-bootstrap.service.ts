@@ -40,9 +40,31 @@ export class ModsBootstrapService {
 				// tap((state) => console.debug('[mods-boostrap] will send stringified state')),
 			)
 			.subscribe((state) => {
-				this.ws?.send(state);
+				this.sendToWs(state);
 				// console.debug('[mods-boostrap] sent state to websocket');
 			});
+	}
+
+	private async sendToWs(msg: string) {
+		await this.wsReady();
+		try {
+			this.ws?.send(msg);
+		} catch (e) {
+			console.warn('[mods-boostrap] could not send message to websocket', e);
+		}
+	}
+
+	private wsReady(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				if (this.ws?.readyState === this.ws?.OPEN) {
+					resolve();
+				} else {
+					setTimeout(() => dbWait(), 150);
+				}
+			};
+			dbWait();
+		});
 	}
 
 	private async connectWebSocket() {

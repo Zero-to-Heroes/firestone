@@ -110,7 +110,7 @@ export class ModsManagerService {
 			modNames: modNames,
 		};
 		console.debug('[mods-manager] toggling mods', message);
-		this.ws?.send(JSON.stringify(message));
+		this.sendToWs(JSON.stringify(message));
 	}
 
 	public async deactivateMods(modNames: readonly string[]) {
@@ -120,7 +120,29 @@ export class ModsManagerService {
 			status: 'off',
 		};
 		console.debug('[mods-manager] deactivating mods', message);
-		this.ws?.send(JSON.stringify(message));
+		this.sendToWs(JSON.stringify(message));
+	}
+
+	private async sendToWs(msg: string) {
+		await this.wsReady();
+		try {
+			this.ws?.send(msg);
+		} catch (e) {
+			console.warn('[mods-boostrap] could not send message to websocket', e);
+		}
+	}
+
+	private wsReady(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				if (this.ws?.readyState === this.ws?.OPEN) {
+					resolve();
+				} else {
+					setTimeout(() => dbWait(), 150);
+				}
+			};
+			dbWait();
+		});
 	}
 
 	public async hasUpdates(mod: ModData): Promise<boolean> {
