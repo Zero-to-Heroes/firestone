@@ -5,7 +5,7 @@ import { GameStatusService } from '@legacy-import/src/lib/js/services/game-statu
 import { OwUtilsService } from '@legacy-import/src/lib/js/services/plugins/ow-utils.service';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { sortByProperties } from '@legacy-import/src/lib/js/services/utils';
-import { ModData } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
+import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { BehaviorSubject } from 'rxjs';
 import { toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
@@ -16,9 +16,12 @@ const MODS_MANAGER_PLUGIN_URL =
 const GAME_CONNECTOR_MOD_URL =
 	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/latest/download/GameEventsConnector.dll';
 
+// TODO: most likely, this whole class should be incorporated into mods-manager
 @Injectable()
 export class ModsUtilsService {
 	public currentModsStatus$$ = new BehaviorSubject<string>(null);
+
+	private modsManager: ModsManagerService;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -26,7 +29,11 @@ export class ModsUtilsService {
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly modsConfig: ModsConfigService,
-	) {}
+	) {
+		setTimeout(() => {
+			this.modsManager = window['modsManager'];
+		}, 1000);
+	}
 
 	public async checkMods(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
 		const files = await this.ow.listFilesInDirectory(installPath);
@@ -60,6 +67,7 @@ export class ModsUtilsService {
 					Name: existingConf?.modName ?? assemblyName,
 					Registered: existingConf?.enabled ?? true,
 					Version: toVersionString(existingConf?.lastKnownVersion),
+					updateAvailable: existingConf?.updateAvailable ?? false,
 				};
 			})
 			.sort(sortByProperties((m) => [m.Name]));
@@ -102,6 +110,24 @@ export class ModsUtilsService {
 		}
 
 		return result;
+	}
+
+	public async updateMod(mod: ModData): Promise<boolean> {
+		const prefs = await this.prefs.getPreferences();
+		const installPath = prefs.gameInstallPath;
+		console.debug('[mods-manager] updating mod', mod, installPath);
+		const isModActivated = mod.Registered;
+		await this.modsManager.deactivateMods([mod.AssemblyName]);
+		const updated = await this.io.downloadFileTo(
+			mod.DownloadLink,
+			`${installPath}\\Mods`,
+			`${mod.AssemblyName}.dll`,
+		);
+		console.debug('[mods-manager] mod updated', updated);
+		if (isModActivated) {
+			await this.modsManager.toggleMods([mod.AssemblyName]);
+		}
+		return updated;
 	}
 
 	// Copy the managed libs

@@ -14,6 +14,7 @@ import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/se
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { filter, Observable } from 'rxjs';
+import { Preferences } from '../../../models/preferences';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -86,13 +87,30 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					></button>
 				</div>
 			</div>
-
 			<div class="section" [ngClass]="{ disabled: !modsChecked || !areModsInstalled }">
 				<h3 class="section-title" [owTranslate]="'settings.general.mods.add-mods-title'"></h3>
 				<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
 				<p class="description" [owTranslate]="'settings.general.mods.installed-mods-description'"></p>
+
+				<button
+					class="check-updates-button"
+					*ngIf="areModsInstalled && !!installedMods?.length"
+					[ngClass]="{ disabled: checkForUpdatesButtonDisabled }"
+					(mousedown)="checkForUpdates()"
+					[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | owTranslate"
+				>
+					{{ checkForUpdatesLabel }}
+				</button>
+
 				<div class="installed-mods">
 					<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
+						<div
+							class="update-available"
+							*ngIf="mod.updateAvailable"
+							inlineSVG="assets/svg/restore.svg"
+							[helpTooltip]="'settings.general.mods.update-available' | owTranslate"
+							(click)="updateMod(mod)"
+						></div>
 						<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
 						<a class="mod-name" *ngIf="mod.DownloadLink" href="{{ mod.DownloadLink }}" target="_blank">{{
 							mod.Name
@@ -133,6 +151,9 @@ export class SettingsGeneralModsComponent
 	addModsDescriptions = this.i18n.translateString('settings.general.mods.add-mods-description', {
 		link: `<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">${this.linkTitle}</a>`,
 	});
+
+	checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.check-for-updates');
+	checkForUpdatesButtonDisabled: boolean;
 
 	private modsManager: ModsManagerService;
 
@@ -206,6 +227,9 @@ export class SettingsGeneralModsComponent
 			return;
 		}
 		this.areModsInstalled = status === 'installed';
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = { ...prefs, modsEnabled: this.areModsInstalled };
+		await this.prefs.savePreferences(newPrefs);
 		this.installOngoing = false;
 		this.installedMods = await this.modUtils.installedMods(this.gameLocation);
 		console.debug('installedMods 2', this.installedMods);
@@ -267,9 +291,58 @@ export class SettingsGeneralModsComponent
 			return;
 		}
 		this.areModsInstalled = status === 'installed';
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = { ...prefs, modsEnabled: this.areModsInstalled };
+		await this.prefs.savePreferences(newPrefs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	async checkForUpdates() {
+		console.debug('checking for updates');
+		this.checkForUpdatesButtonDisabled = true;
+		this.checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.checking-for-updates');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+
+		const modsWithDownloadLinks = this.installedMods.filter((m) => !!m.DownloadLink);
+		console.debug('modsWithDownloadLinks', modsWithDownloadLinks);
+		for (const mod of modsWithDownloadLinks) {
+			console.debug('considering', mod);
+			this.checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.checking-mod-for-updates', {
+				modName: mod.Name,
+			});
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			const hasUpdateAvailable = await this.modsManager.hasUpdates(mod);
+			if (!hasUpdateAvailable) {
+				continue;
+			}
+			const existingConf = this.modsConfig.getConfig();
+			const confForMod = existingConf[mod.AssemblyName];
+			const newConfForMod: ModConfig = {
+				...confForMod,
+				updateAvailable: true,
+			};
+			const newConf: ModsConfig = {
+				...existingConf,
+				[mod.AssemblyName]: newConfForMod,
+			};
+			this.modsConfig.updateConf(newConf);
+		}
+
+		this.checkForUpdatesButtonDisabled = false;
+		this.checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.check-for-updates');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	async updateMod(mod: ModData): Promise<void> {
+		const updated = await this.modUtils.updateMod(mod);
 	}
 
 	preventDrag(event: MouseEvent) {

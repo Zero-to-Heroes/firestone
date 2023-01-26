@@ -64,6 +64,8 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly gameInstallPath: string;
 
+	readonly modsEnabled: boolean;
+
 	readonly launchAppOnGameStart: boolean = true;
 	readonly showSessionRecapOnExit: boolean = true;
 	readonly shareGamesWithVS: boolean = true;

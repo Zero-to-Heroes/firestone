@@ -60,6 +60,15 @@
 		}
 	}
 
+	.check-updates-button {
+		margin-bottom: 15px;
+
+		&.disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+	}
+
 	.installed-mods {
 		display: flex;
 		flex-direction: column;
@@ -73,6 +82,19 @@
 
 			::ng-deep a {
 				color: #d9c3ab;
+
+				&:hover {
+					color: var(--default-title-color);
+				}
+			}
+
+			.update-available {
+				width: 25px;
+				margin-left: -5px;
+
+				&:hover {
+					--icon-color: var(--default-title-color);
+				}
 			}
 
 			.mod-version {

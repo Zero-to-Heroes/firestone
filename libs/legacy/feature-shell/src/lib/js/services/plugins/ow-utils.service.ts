@@ -116,22 +116,23 @@ export class OwUtilsService {
 		});
 	}
 
-	public async downloadFileTo(fileUrl: string, path: string, targetFileName): Promise<void> {
-		return new Promise<void>(async (resolve, reject) => {
+	public async downloadFileTo(fileUrl: string, path: string, targetFileName): Promise<boolean> {
+		return new Promise<boolean>(async (resolve, reject) => {
 			console.log('[ow-utils] downloadFileTo-ing', path);
 			const plugin = await this.get();
 			try {
 				plugin.downloadFileTo(fileUrl, path, targetFileName, (status, message) => {
 					if (status) {
 						console.log('[ow-utils] downloadFileTod', path);
-						resolve();
+						resolve(true);
 					} else {
 						console.log('[ow-utils] downloadFileTo message', message);
+						resolve(false);
 					}
 				});
 			} catch (e) {
 				console.log('[ow-utils] could not downloadFileTo', fileUrl, path, e);
-				resolve();
+				resolve(false);
 			}
 		});
 	}

@@ -1,5 +1,5 @@
 export interface ModsConfig {
-	[modName: string]: ModConfig;
+	readonly [modName: string]: ModConfig;
 }
 
 export interface ModConfig {
@@ -8,6 +8,7 @@ export interface ModConfig {
 	readonly modName?: string;
 	readonly lastKnownVersion?: ModVersion;
 	readonly downloadLink?: string;
+	readonly updateAvailable?: boolean;
 }
 
 export interface ModVersion {
