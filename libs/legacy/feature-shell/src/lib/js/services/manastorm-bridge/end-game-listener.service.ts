@@ -214,7 +214,7 @@ export class EndGameListenerService {
 							battlegroundsInfoAfterGameOver: bgMemoryInfo,
 						} as UploadInfo),
 				),
-				tap((info) => console.log('[manastorm-bridge] triggering final observable', info)),
+				tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
 				// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
 				// the current game) or the reviewId changed (to mark the start)
 				distinctUntilChanged((a, b) => {
