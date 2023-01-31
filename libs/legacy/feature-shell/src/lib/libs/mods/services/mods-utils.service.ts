@@ -15,6 +15,8 @@ const MODS_MANAGER_PLUGIN_URL =
 	'https://github.com/Zero-to-Heroes/firestone-melon-mods-manager/releases/latest/download/FirestoneMelonModsManager.dll';
 const GAME_CONNECTOR_MOD_URL =
 	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/latest/download/GameEventsConnector.dll';
+const GAME_CONNECTOR_FLECK_URL =
+	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/download/0.0.1/Fleck.dll';
 
 // TODO: most likely, this whole class should be incorporated into mods-manager
 @Injectable()
@@ -226,6 +228,7 @@ export class ModsUtilsService {
 		// Download the Game Connecter Mod
 		this.currentModsStatus$$.next('settings.general.mods.installing-game-connector');
 		this.io.downloadFileTo(GAME_CONNECTOR_MOD_URL, `${installPath}\\Mods`, 'GameEventsConnector.dll');
+		this.io.downloadFileTo(GAME_CONNECTOR_FLECK_URL, `${installPath}\\UserLibs`, 'Fleck.dll');
 	}
 
 	private async createMelonConfig(installPath: string) {
