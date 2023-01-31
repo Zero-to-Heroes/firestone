@@ -7,7 +7,7 @@ import { PreferencesService } from '@legacy-import/src/lib/js/services/preferenc
 import { sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { BehaviorSubject } from 'rxjs';
-import { toVersionString } from '../model/mods-config';
+import { ModConfig, ModsConfig, toModVersion, toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
 
 const MELON_LOADER_LATESTT_ZIP = 'https://github.com/LavaGang/MelonLoader/releases/download/v0.5.7/MelonLoader.x86.zip';
@@ -67,7 +67,7 @@ export class ModsUtilsService {
 					Name: existingConf?.modName ?? assemblyName,
 					Registered: existingConf?.enabled ?? true,
 					Version: toVersionString(existingConf?.lastKnownVersion),
-					updateAvailable: existingConf?.updateAvailable ?? false,
+					updateAvailableVersion: toVersionString(existingConf?.updateAvailableVersion),
 				};
 			})
 			.sort(sortByProperties((m) => [m.Name]));
@@ -112,32 +112,55 @@ export class ModsUtilsService {
 		return result;
 	}
 
-	public async updateMod(mod: ModData): Promise<boolean> {
+	public async updateMod(mod: ModData): Promise<ModData> {
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
 		console.debug('[mods-manager] updating mod', mod, installPath);
-		const isModActivated = mod.Registered;
-		await this.modsManager.deactivateMods([mod.AssemblyName]);
+		// const isModActivated = mod.Registered;
+		// await this.modsManager.deactivateMods([mod.AssemblyName]);
 		const updated = await this.io.downloadFileTo(
 			mod.DownloadLink,
 			`${installPath}\\Mods`,
 			`${mod.AssemblyName}.dll`,
 		);
 		console.debug('[mods-manager] mod updated', updated);
-		if (isModActivated) {
-			await this.modsManager.toggleMods([mod.AssemblyName]);
+		if (!updated) {
+			return null;
 		}
-		return updated;
+		// if (isModActivated) {
+		// 	await this.modsManager.toggleMods([mod.AssemblyName]);
+		// }
+		const existingConf: ModsConfig = this.modsConfig.getConfig();
+		const existingModConf: ModConfig = existingConf[mod.AssemblyName] ?? {
+			assemblyName: mod.AssemblyName,
+			enabled: mod.Registered,
+		};
+		const newModConf: ModConfig = {
+			...existingModConf,
+			lastKnownVersion: toModVersion(mod.updateAvailableVersion),
+			updateAvailableVersion: null,
+		};
+		const newConf: ModsConfig = {
+			...existingConf,
+			[mod.AssemblyName]: newModConf,
+		};
+		console.debug('updating mods conf', newConf);
+		this.modsConfig.updateConf(newConf);
+		return null;
 	}
 
 	// Copy the managed libs
 	public async refreshEngine(
-		installPath: string,
+		installPath: string = null,
 	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
 		const isGameRunning = await this.gameStatus.inGame();
 		if (isGameRunning) {
 			console.warn('Please close the game before disabling mods');
 			return 'game-running';
+		}
+		if (!installPath?.length) {
+			const prefs = await this.prefs.getPreferences();
+			installPath = prefs.gameInstallPath;
 		}
 		if (!installPath?.includes('Hearthstone')) {
 			console.warn('Trying to install a path that does not contain Hearthstone, too risky', installPath);

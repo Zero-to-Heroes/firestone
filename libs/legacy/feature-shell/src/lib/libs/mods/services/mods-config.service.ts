@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalStorageService } from '@legacy-import/src/lib/js/services/local-storage';
 import { BehaviorSubject } from 'rxjs';
 import { ModsConfig } from '../model/mods-config';
@@ -7,21 +8,40 @@ import { ModsConfig } from '../model/mods-config';
 export class ModsConfigService {
 	public conf$$ = new BehaviorSubject<ModsConfig>({});
 
-	constructor(private readonly localStorage: LocalStorageService) {
-		window['modsConfig'] = this.conf$$;
+	private isMainNode: boolean;
+	// To avoid the boilerplate of using a facade, but maybe there is no choiced
+	private mainNode: ModsConfigService;
+
+	constructor(private readonly localStorage: LocalStorageService, private readonly ow: OverwolfService) {
 		this.init();
 	}
 
 	public updateConf(newConf: ModsConfig) {
-		this.localStorage.setItem('mods-config', newConf);
-		this.conf$$.next(newConf);
+		if (this.isMainNode) {
+			this.localStorage.setItem('mods-config', newConf);
+			this.conf$$.next(newConf);
+		} else {
+			this.mainNode.updateConf(newConf);
+		}
 	}
 
 	public getConfig(): ModsConfig {
-		return this.localStorage.getItem<ModsConfig>('mods-config') ?? {};
+		if (this.isMainNode) {
+			return this.localStorage.getItem<ModsConfig>('mods-config') ?? {};
+		} else {
+			return this.mainNode.getConfig();
+		}
 	}
 
-	private init() {
+	private async init() {
+		const currentWindow = await this.ow?.getCurrentWindow();
+		if (currentWindow?.name === OverwolfService.MAIN_WINDOW) {
+			this.isMainNode = true;
+			window['modsConfig'] = this.conf$$;
+			window['internalModsConfig'] = this;
+		} else {
+			this.mainNode = this.ow.getMainWindow()['internalModsConfig'];
+		}
 		const modsConfig = this.getConfig();
 		this.updateConf(modsConfig);
 	}

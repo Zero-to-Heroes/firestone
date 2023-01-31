@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { ModConfig, ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
+import { ModConfig, ModsConfig, toModVersion } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { ModsConfigService } from '@legacy-import/src/lib/libs/mods/services/mods-config.service';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, tap } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
+import { GameStatusService } from '../../../services/game-status.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -102,14 +103,20 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					{{ checkForUpdatesLabel }}
 				</button>
 
-				<div class="installed-mods">
+				<div class="installed-mods" *ngIf="{ inGame: inGame$ | async } as value">
 					<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
 						<div
 							class="update-available"
-							*ngIf="mod.updateAvailable"
+							*ngIf="!!mod.updateAvailableVersion && !value.inGame"
 							inlineSVG="assets/svg/restore.svg"
 							[helpTooltip]="'settings.general.mods.update-available' | owTranslate"
 							(click)="updateMod(mod)"
+						></div>
+						<div
+							class="update-available disabled"
+							*ngIf="!!mod.updateAvailableVersion && value.inGame"
+							inlineSVG="assets/svg/restore.svg"
+							[helpTooltip]="'settings.general.mods.update-disabled' | owTranslate"
 						></div>
 						<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
 						<a class="mod-name" *ngIf="mod.DownloadLink" href="{{ mod.DownloadLink }}" target="_blank">{{
@@ -134,6 +141,7 @@ export class SettingsGeneralModsComponent
 	implements AfterContentInit, AfterViewInit
 {
 	modsInstallStatus$: Observable<string>;
+	inGame$: Observable<boolean>;
 
 	gameLocation: string;
 	status: string;
@@ -165,12 +173,18 @@ export class SettingsGeneralModsComponent
 		private readonly prefs: PreferencesService,
 		private readonly modsConfig: ModsConfigService,
 		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		this.modsManager = this.ow.getMainWindow().modsManager;
+
+		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(
+			tap((info) => console.debug('mods in game?', info)),
+			this.mapData((info) => info),
+		);
 		this.modsManager.modsData$$
 			.asObservable()
 			.pipe(
@@ -317,20 +331,22 @@ export class SettingsGeneralModsComponent
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-			const hasUpdateAvailable = await this.modsManager.hasUpdates(mod);
-			if (!hasUpdateAvailable) {
+			const newAvailableVersion = await this.modsManager.hasUpdates(mod);
+			console.debug('newAvailableVersion', newAvailableVersion);
+			if (!newAvailableVersion) {
 				continue;
 			}
 			const existingConf = this.modsConfig.getConfig();
 			const confForMod = existingConf[mod.AssemblyName];
 			const newConfForMod: ModConfig = {
 				...confForMod,
-				updateAvailable: true,
+				updateAvailableVersion: toModVersion(newAvailableVersion),
 			};
 			const newConf: ModsConfig = {
 				...existingConf,
 				[mod.AssemblyName]: newConfForMod,
 			};
+			console.debug('updateConf', newConf);
 			this.modsConfig.updateConf(newConf);
 		}
 
@@ -342,7 +358,7 @@ export class SettingsGeneralModsComponent
 	}
 
 	async updateMod(mod: ModData): Promise<void> {
-		const updated = await this.modUtils.updateMod(mod);
+		await this.modUtils.updateMod(mod);
 	}
 
 	preventDrag(event: MouseEvent) {

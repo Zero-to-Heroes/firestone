@@ -92,7 +92,11 @@
 				width: 25px;
 				margin-left: -5px;
 
-				&:hover {
+				&.disabled {
+					opacity: 0.7;
+				}
+
+				&:not(.disabled):hover {
 					--icon-color: var(--default-title-color);
 				}
 			}

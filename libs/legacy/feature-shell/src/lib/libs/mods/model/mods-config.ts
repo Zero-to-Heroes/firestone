@@ -8,7 +8,7 @@ export interface ModConfig {
 	readonly modName?: string;
 	readonly lastKnownVersion?: ModVersion;
 	readonly downloadLink?: string;
-	readonly updateAvailable?: boolean;
+	readonly updateAvailableVersion?: ModVersion;
 }
 
 export interface ModVersion {

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class GameStatusService {
+	public inGame$$ = new BehaviorSubject<boolean>(false);
+
 	private startListeners = [];
 	private exitListeners = [];
 
@@ -29,8 +32,10 @@ export class GameStatusService {
 	private async init() {
 		this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (this.ow.exitGame(res)) {
+				this.inGame$$.next(false);
 				this.exitListeners.forEach((cb) => cb(res));
 			} else if ((await this.ow.inGame()) && (res.gameChanged || res.runningChanged)) {
+				this.inGame$$.next(true);
 				console.debug('[game-status] game launched', res);
 				this.startListeners.forEach((cb) => cb(res));
 				this.updateExecutionPathInPrefs(res.gameInfo?.executionPath);
@@ -39,6 +44,10 @@ export class GameStatusService {
 
 		const gameInfo = await this.ow.getRunningGameInfo();
 		this.updateExecutionPathInPrefs(gameInfo?.executionPath);
+
+		if (await this.ow.inGame()) {
+			this.inGame$$.next(true);
+		}
 	}
 
 	private async updateExecutionPathInPrefs(executionPath: string) {

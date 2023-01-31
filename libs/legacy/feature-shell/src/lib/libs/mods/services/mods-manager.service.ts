@@ -4,9 +4,10 @@ import { GameStatusService } from '@legacy-import/src/lib/js/services/game-statu
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { distinctUntilChanged, tap } from 'rxjs/operators';
 import { toModVersion, toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
+import { ModsUtilsService } from './mods-utils.service';
 
 @Injectable()
 export class ModsManagerService {
@@ -21,6 +22,7 @@ export class ModsManagerService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly gameStatus: GameStatusService,
 		private readonly modsConfigService: ModsConfigService,
+		private readonly modsUtils: ModsUtilsService,
 		private readonly api: ApiRunner,
 	) {
 		window['modsManager'] = this;
@@ -41,13 +43,22 @@ export class ModsManagerService {
 			}
 		});
 
+		// Typical use-case is that the game updates, starts, auto-quits (because of unstripped libs).
+		// Ideally this can then trigger, refresh the libs, so that on next launch it works
+		// TODO: test this!
+		this.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
+			if (!inGame) {
+				this.modsUtils.refreshEngine();
+			}
+		});
+
 		combineLatest([this.internalModsData$$.asObservable(), this.store.listenModsConfig$((conf) => conf)])
 			.pipe(
 				tap((info) => console.debug('[mods-manager] processing mods data', info)),
-				filter(([modsData, conf]) => !!modsData?.length),
+				// filter(([modsData, conf]) => !!modsData?.length),
 			)
 			.subscribe(async ([modsData, [conf]]) => {
-				const modsToToggle = [];
+				let modsDirty = false;
 				const newConf = { ...conf };
 				for (const modData of modsData) {
 					if (newConf[modData.AssemblyName] == null) {
@@ -55,21 +66,44 @@ export class ModsManagerService {
 							assemblyName: modData.AssemblyName,
 							enabled: modData.Registered,
 						};
-						modsToToggle.push(modData.AssemblyName);
+						modsDirty = true;
 					}
 
-					// Should only be necessary the first time a mod is loaded inside the game
-					if (!newConf[modData.AssemblyName].modName) {
-						newConf[modData.AssemblyName] = {
-							...newConf[modData.AssemblyName],
-							modName: modData.Name,
-							downloadLink: modData.DownloadLink,
-							lastKnownVersion: toModVersion(modData.Version),
-						};
-						modsToToggle.push(modData.AssemblyName);
+					newConf[modData.AssemblyName] = {
+						...newConf[modData.AssemblyName],
+						modName: modData.Name ?? newConf[modData.AssemblyName].modName,
+						downloadLink: modData.DownloadLink ?? newConf[modData.AssemblyName].downloadLink,
+						lastKnownVersion:
+							toModVersion(modData.Version) ?? newConf[modData.AssemblyName].lastKnownVersion,
+					};
+
+					if (conf[modData.AssemblyName].modName !== newConf[modData.AssemblyName].modName) {
+						modsDirty = true;
+					}
+					if (conf[modData.AssemblyName].downloadLink !== newConf[modData.AssemblyName].downloadLink) {
+						modsDirty = true;
+					}
+					if (
+						toVersionString(conf[modData.AssemblyName].lastKnownVersion) !==
+						toVersionString(newConf[modData.AssemblyName].lastKnownVersion)
+					) {
+						modsDirty = true;
+					}
+					if (
+						toVersionString(conf[modData.AssemblyName].updateAvailableVersion) !==
+						toVersionString(newConf[modData.AssemblyName].updateAvailableVersion)
+					) {
+						modsDirty = true;
 					}
 				}
-				const result = [...modsData]
+				// If we update a mod outside of a game, we don't have live data, so we have to rely fuily on the conf
+				const dataFromLiveOrPrefs: readonly Partial<ModData>[] = !!modsData?.length
+					? modsData
+					: Object.keys(newConf).map((assemblyName) => ({
+							AssemblyName: assemblyName,
+							Name: newConf[assemblyName].modName ?? assemblyName,
+					  }));
+				const result: ModData[] = [...dataFromLiveOrPrefs]
 					.map(
 						(modData) =>
 							({
@@ -77,13 +111,15 @@ export class ModsManagerService {
 								Registered: newConf[modData.AssemblyName].enabled,
 								Version: toVersionString(newConf[modData.AssemblyName].lastKnownVersion),
 								DownloadLink: newConf[modData.AssemblyName].downloadLink,
-								updateAvailable: newConf[modData.AssemblyName].updateAvailable,
+								updateAvailableVersion: toVersionString(
+									newConf[modData.AssemblyName].updateAvailableVersion,
+								),
 							} as ModData),
 					)
 					.sort(sortByProperties((m: ModData) => [m.Name]));
 
 				// To avoid infinite loops
-				if (modsToToggle.length > 0) {
+				if (modsDirty) {
 					this.modsConfigService.updateConf(newConf);
 				}
 
@@ -145,27 +181,27 @@ export class ModsManagerService {
 		});
 	}
 
-	public async hasUpdates(mod: ModData): Promise<boolean> {
+	public async hasUpdates(mod: ModData): Promise<string> {
 		const userRepo = mod.DownloadLink.split('https://github.com/')[1];
 		const apiCheckUrl = `https://api.github.com/repos/${userRepo}/releases/latest`;
 		console.debug('[mods-manager] checking updates for mod', mod, userRepo, apiCheckUrl);
 		const releaseDataStr = await this.api.get(apiCheckUrl);
 		console.debug('[mods-manager] releaseDataStr', releaseDataStr);
 		if (!releaseDataStr?.length) {
-			return false;
+			return null;
 		}
 
 		try {
 			const releaseData = JSON.parse(releaseDataStr);
 			console.debug('[mods-manager] releaseData', releaseData);
-			const tagName = releaseData.tag_name;
+			const tagName: string = releaseData.tag_name;
 			console.debug('[mods-manager] tagName', tagName);
 			const hasUpdate = isVersionBefore(mod.Version, tagName);
 			console.debug('[mods-manager] hasUpdate', hasUpdate);
-			return hasUpdate;
+			return hasUpdate ? tagName : null;
 		} catch (e) {
 			console.warn('[mods-manager] could not parse release data', releaseDataStr);
-			return false;
+			return null;
 		}
 	}
 
@@ -182,11 +218,11 @@ export class ModsManagerService {
 				this.ws.addEventListener('message', (msgEvent) => {
 					const messageData: ModMessage<readonly ModData[]> = JSON.parse(msgEvent.data);
 					console.debug('[mods-manager] received message', messageData);
-					if (messageData.type === 'mods-info') {
+					if (messageData?.type === 'mods-info') {
 						this.internalModsData$$.next(
 							messageData.data
-								.filter((d) => d.AssemblyName !== 'FirestoneMelonModsManager')
-								.filter((d) => d.AssemblyName !== 'GameEventsConnector'),
+								?.filter((d) => d.AssemblyName !== 'FirestoneMelonModsManager')
+								?.filter((d) => d.AssemblyName !== 'GameEventsConnector') ?? [],
 						);
 					}
 				});
@@ -204,6 +240,8 @@ export class ModsManagerService {
 		console.log('[mods-manager] discconnecting');
 		this.ws?.close();
 		this.ws = null;
+		// So that it doesn't conflict with the data from the config
+		this.internalModsData$$.next([]);
 	}
 }
 
@@ -218,5 +256,5 @@ export interface ModData {
 	readonly Version: string;
 	readonly DownloadLink: string;
 	readonly AssemblyName: string;
-	readonly updateAvailable: boolean;
+	readonly updateAvailableVersion: string;
 }
