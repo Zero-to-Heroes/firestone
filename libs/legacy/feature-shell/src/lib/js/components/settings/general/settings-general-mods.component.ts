@@ -6,6 +6,7 @@ import {
 	Component,
 	ViewRef,
 } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { ModConfig, ModsConfig, toModVersion } from '@legacy-import/src/lib/libs/mods/model/mods-config';
@@ -78,9 +79,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					<button
 						*ngIf="areModsInstalled"
 						(mousedown)="refreshEngine()"
-						[owTranslate]="'settings.general.mods.refresh-engine'"
 						[helpTooltip]="'settings.general.mods.refresh-engine-tooltip' | owTranslate"
-					></button>
+					>
+						{{ refreshEngineTitle }}
+					</button>
 					<button
 						*ngIf="areModsInstalled"
 						(mousedown)="disableMods()"
@@ -159,6 +161,8 @@ export class SettingsGeneralModsComponent
 	addModsDescriptions = this.i18n.translateString('settings.general.mods.add-mods-description', {
 		link: `<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">${this.linkTitle}</a>`,
 	});
+
+	refreshEngineTitle = this.i18n.translateString('settings.general.mods.refresh-engine');
 
 	checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.check-for-updates');
 	checkForUpdatesButtonDisabled: boolean;
@@ -254,7 +258,11 @@ export class SettingsGeneralModsComponent
 
 	async refreshEngine() {
 		console.debug('refreshing engine');
+		this.refreshEngineTitle = this.i18n.translateString('settings.general.mods.refreshing-engine');
+		// Because otherwise it's too quick and we think nothing happened
+		await sleep(500);
 		const status = await this.modUtils.refreshEngine(this.gameLocation);
+		this.refreshEngineTitle = this.i18n.translateString('settings.general.mods.refresh-engine');
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
