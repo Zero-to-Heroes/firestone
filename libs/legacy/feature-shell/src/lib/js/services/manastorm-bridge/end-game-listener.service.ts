@@ -104,7 +104,7 @@ export class EndGameListenerService {
 			map((changes) => changes.BattlegroundsNewRating),
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
-			// share(),
+			// share(), // This prevents the trigger of other observables?
 		);
 		const reviewId$ = this.reviewIdService.reviewId$;
 		// Doesn't work, reviewId arrives earlier
