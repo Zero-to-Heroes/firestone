@@ -11,7 +11,7 @@ import { MatchInfo } from '../../models/match-info';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { MemoryMercenariesCollectionInfo, MemoryTeam } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
+import { isBattlegrounds, TOTAL_RACES_IN_GAME } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
@@ -120,18 +120,24 @@ export class EndGameUploaderService {
 			playerRank = info.bgInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
 			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating ?? info.bgInfo?.NewRating;
-			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
-				!!info.bgInfo?.Game?.AvailableRaces?.length
+			const racesFromGame =
+				// Sometimes we get an array full of 0s
+				info.bgInfo?.Game?.AvailableRaces?.filter((r) => !!r).length === TOTAL_RACES_IN_GAME
 					? info.bgInfo?.Game?.AvailableRaces
-					: !!info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces?.length
+					: info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces?.filter((r) => !!r).length ===
+					  TOTAL_RACES_IN_GAME
 					? info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces
-					: this.bgsStore?.state?.currentGame?.availableRaces,
-			);
+					: this.bgsStore?.state?.currentGame?.availableRaces;
+			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(racesFromGame);
 			console.log(
 				'[manastorm-bridge]',
 				currentReviewId,
 				'available races',
 				availableRaces,
+				racesFromGame,
+				info.bgInfo?.Game?.AvailableRaces,
+				info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces,
+				this.bgsStore?.state?.currentGame?.availableRaces,
 				availableRaces?.map((r) => Race[r] ?? r),
 				this.bgsStore?.state?.currentGame?.availableRaces?.map((r) => Race[r] ?? r),
 			);

@@ -9,6 +9,8 @@ import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.t
 import { VisualAchievement } from '../../models/visual-achievement';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
+export const TOTAL_RACES_IN_GAME = 5;
+
 export const NON_BUYABLE_MINION_IDS = [
 	CardIds.CuddlgamBattlegrounds_TB_BaconShop_HP_033t_SKIN_A,
 	CardIds.CuddlgamBattlegrounds_TB_BaconShop_HP_033t_SKIN_A_G,
