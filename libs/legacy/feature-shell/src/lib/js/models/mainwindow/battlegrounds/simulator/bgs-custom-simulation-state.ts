@@ -38,6 +38,11 @@ export class BgsCustomSimulationState {
 						heroPowerId: null,
 						heroPowerUsed: true,
 						heroPowerInfo: 0,
+						globalInfo: {
+							EternalKnightsDeadThisGame: 0,
+							UndeadAttackBonus: 0,
+						},
+						questRewards: [] as readonly string[],
 					},
 				},
 				opponentBoard: {
@@ -49,6 +54,11 @@ export class BgsCustomSimulationState {
 						heroPowerId: null,
 						heroPowerUsed: true,
 						heroPowerInfo: 0,
+						globalInfo: {
+							EternalKnightsDeadThisGame: 0,
+							UndeadAttackBonus: 0,
+						},
+						questRewards: [] as readonly string[],
 					},
 				},
 				options: {

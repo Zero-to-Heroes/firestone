@@ -87,21 +87,17 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() set heroPowerCardId(value: string) {
 		this._heroPowerCardId = value;
-		if (value) {
-			this.heroPowerIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+		this.heroPowerIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
 	@Input() set questRewardCardId(value: string) {
 		this._questRewardCardId = value;
-		if (value) {
-			this.questRewardIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+		this.questRewardIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
