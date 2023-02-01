@@ -320,8 +320,9 @@
 
 				&:hover {
 					::ng-deep replay-info {
-						// .replay-info {
-						// }
+						.replay-info {
+							overflow: visible;
+						}
 						.warband {
 							background: var(--color-9);
 							display: flex;
