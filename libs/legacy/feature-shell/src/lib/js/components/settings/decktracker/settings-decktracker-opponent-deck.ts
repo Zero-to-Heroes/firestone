@@ -64,7 +64,7 @@ import { CounterSetting } from './model';
 				<preference-toggle
 					[ngClass]="{ disabled: !value.opponentTracker || !value.opponentOverlayGroupByZone }"
 					class="indented"
-					field="overlayShowGlobalEffects"
+					field="opponentOverlayShowGlobalEffects"
 					[label]="'settings.decktracker.opponent-deck.global-effects-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.global-effects-tooltip' | owTranslate"
 				></preference-toggle>
