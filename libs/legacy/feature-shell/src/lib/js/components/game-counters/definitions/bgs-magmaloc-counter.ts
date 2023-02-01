@@ -29,7 +29,7 @@ export class BgsMagmalocCounterDefinition implements CounterDefinition {
 			value: 1 + minionsPlayedThisTurn,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Magmaloc}.jpg`,
 			cssClass: 'magmaloc-counter',
-			tooltip: i18n.translateString(`counters.bgs-magmaloc.${side}`, { value: minionsPlayedThisTurn }),
+			tooltip: i18n.translateString(`counters.bgs-magmaloc.${side}`, { value: 1 + minionsPlayedThisTurn }),
 			standardCounter: true,
 		};
 	}
