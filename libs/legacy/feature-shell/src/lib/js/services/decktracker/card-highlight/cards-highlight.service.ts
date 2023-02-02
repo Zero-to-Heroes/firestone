@@ -556,7 +556,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.HighAbbessAlura:
 				return and(inDeck, spell);
 			case CardIds.HighCultistBasaleph:
-				return and(minionsDeadSinceLastTurn);
+				return and(minionsDeadSinceLastTurn, undead);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(taunt);
 			case CardIds.Hullbreaker:
