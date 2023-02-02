@@ -49,6 +49,7 @@ import {
 	inGraveyard,
 	inHand,
 	inOther,
+	isSi7,
 	lastAffectedByCardId,
 	legendary,
 	lifesteal,
@@ -814,6 +815,14 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.ShipsCannon:
 				return and(or(inDeck, inHand), minion, pirate);
+			case CardIds.Si7Assassin:
+			case CardIds.Si7Informant:
+			case CardIds.Si7Smuggler:
+			case CardIds.FindTheImposter:
+			case CardIds.FindTheImposter_LearnTheTruthToken:
+			case CardIds.FindTheImposter_MarkedATraitorToken:
+			case CardIds.JalTheSharpshot:
+				return and(or(inDeck, inHand), minion, isSi7);
 			case CardIds.ShroudOfConcealment:
 				return and(inDeck, minion);
 			case CardIds.Shudderwock:

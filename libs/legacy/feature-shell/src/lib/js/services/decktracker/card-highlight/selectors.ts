@@ -1,4 +1,14 @@
-import { CardClass, CardIds, CardType, GameTag, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
+import { getSi7Locale } from '@components/game-counters/definitions/si7-counter';
+import {
+	CardClass,
+	CardIds,
+	CardType,
+	GameTag,
+	Locale,
+	Race,
+	RarityTYpe,
+	SpellSchool,
+} from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Handler, SelectorOptions } from './cards-highlight.service';
 
@@ -153,6 +163,12 @@ export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
 export const dredge = hasMechanic(GameTag.DREDGE);
+
+export const isSi7 = (handler: Handler): boolean =>
+	Object.values(Locale)
+		.filter((loc) => loc === null || isNaN(Number(loc)))
+		.filter((loc) => loc !== Locale[Locale.UNKNOWN])
+		.some((locale: string) => handler.referenceCardProvider()?.name?.includes(getSi7Locale(locale)));
 
 export const spellSchool =
 	(spellSchool: SpellSchool) =>

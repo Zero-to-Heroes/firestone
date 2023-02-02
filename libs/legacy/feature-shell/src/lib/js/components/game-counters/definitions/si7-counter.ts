@@ -38,7 +38,7 @@ export class Si7CounterDefinition implements CounterDefinition {
 	}
 }
 
-const getSi7Locale = (locale: string): string => {
+export const getSi7Locale = (locale: string): string => {
 	switch (locale) {
 		case 'esES':
 		case 'esMX':
