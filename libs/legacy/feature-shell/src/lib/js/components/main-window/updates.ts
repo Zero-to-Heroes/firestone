@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.2.0',
+		version: '10.2.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -54,21 +54,54 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Add counter for Magmaloc.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issues where divine shields would sometimes not be removed after taking non-attack damage (eg from Kaboom Bot).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issues where Denathrius quests would be ignored.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where you couldn't set the Eternal Legion and Undead Army buffs at the same time in the simulator.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where hitting the "reset" button in the simulator would not reset the hero power and quest reward.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Magmaloc counter's tooltip would give an incorrect value.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where tribes would sometimes not be properly recorded when uploading a game.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where you wouldn't see the full board when mousing over games in the session widget.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the "show global effects" option would not work for the opponent's deck.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
