@@ -478,7 +478,7 @@ export class Preferences {
 	readonly bgsShowBannedTribesOverlay = true;
 	readonly bgsShowAvailableTribesOverlay = false;
 	readonly bgsTribesOverlaySingleRow = false;
-	readonly bgsForceShowPostMatchStats = true;
+	readonly bgsForceShowPostMatchStats2 = false;
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;

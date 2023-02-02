@@ -111,7 +111,7 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.battlegrounds.general.show-overlay-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
-						field="bgsForceShowPostMatchStats"
+						field="bgsForceShowPostMatchStats2"
 						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.popup-post-match-stats-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.popup-post-match-stats-tooltip' | owTranslate"

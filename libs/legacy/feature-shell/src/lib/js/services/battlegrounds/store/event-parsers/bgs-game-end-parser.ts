@@ -53,7 +53,7 @@ export class BgsGameEndParser implements EventParser {
 		stateUpdater.next(new BgsTribesFilterSelectedEvent(savedPrefs.bgsActiveTribesFilter));
 		stateUpdater.next(new BgsRankFilterSelectedEvent(savedPrefs.bgsActiveRankFilter));
 
-		console.log('will build post-match info', prefs.bgsForceShowPostMatchStats);
+		console.log('will build post-match info', prefs.bgsForceShowPostMatchStats2);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
 		const newPostMatchStatsStage: BgsPostMatchStatsPanel = this.buildPostMatchPanel(
 			currentState,
@@ -68,7 +68,7 @@ export class BgsGameEndParser implements EventParser {
 		return currentState.update({
 			panels: panels,
 			// currentPanelId: 'bgs-post-match-stats',
-			forceOpen: false, // prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
+			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats2 && prefs.bgsFullToggle ? true : false,
 			highlightedMinions: [] as readonly string[],
 			highlightedTribes: [] as readonly Race[],
 			highlightedMechanics: [] as readonly GameTag[],
