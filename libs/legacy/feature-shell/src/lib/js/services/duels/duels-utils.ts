@@ -9,9 +9,9 @@ import {
 	duelsPassivePool2UltraRare,
 	GameType,
 } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@models/mainwindow/stats/stat-game-mode.type';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 const PASSIVES = [...duelsPassivePool1, ...duelsPassivePool2, ...duelsPassivePool2UltraRare];
 
@@ -25,11 +25,7 @@ export const isDuels = (gameType: GameType | StatGameModeType): boolean => {
 };
 
 export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
-	const card = allCards.getCard(cardId);
-	return (
-		allDuelsSignatureTreasures.includes(cardId as CardIds) ||
-		(card && ['Minion', 'Spell'].includes(card.type) && card.id.startsWith('PVPDR_DMF_'))
-	);
+	return allDuelsSignatureTreasures.includes(cardId as CardIds);
 };
 
 export const isPassive = (cardId: string, allCards: CardsFacadeService): boolean => {
