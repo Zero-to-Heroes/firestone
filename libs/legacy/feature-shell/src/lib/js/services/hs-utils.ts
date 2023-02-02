@@ -89,6 +89,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.DarkPharaohTekahn,
 	CardIds.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
 	CardIds.DemonslayerKurtrusToken,
+	CardIds.DrBoomMadGenius,
 	CardIds.FrizzKindleroost,
 	CardIds.FrostLichJaina_CORE_ICC_833,
 	CardIds.FrostLichJaina_ICC_833,
