@@ -511,6 +511,7 @@ const publicCardGiftCreators = [
 	CardIds.MailboxDancer,
 	CardIds.MalygosAspectOfMagic,
 	CardIds.MalygosTheSpellweaverCore,
+	CardIds.ManaBind,
 	CardIds.Mankrik,
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
