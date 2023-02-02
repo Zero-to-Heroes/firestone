@@ -19,8 +19,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { ApiRunner } from '../../../services/api-runner';
@@ -383,7 +382,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							playerBoard: {
 								player: {
 									globalInfo: {
-										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
 										UndeadAttackBonus: newValue,
 									},
 								},
@@ -395,13 +393,13 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							opponentBoard: {
 								player: {
 									globalInfo: {
-										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
 										UndeadAttackBonus: newValue,
 									},
 								},
 							},
 						},
 				  } as BgsFaceOffWithSimulation);
+		console.debug('updating undead army', side, newValue, request);
 		this.simulationUpdater(this._faceOff, request);
 	}
 
@@ -413,7 +411,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							playerBoard: {
 								player: {
 									globalInfo: {
-										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
 										EternalKnightsDeadThisGame: newValue,
 									},
 								},
@@ -425,13 +422,13 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							opponentBoard: {
 								player: {
 									globalInfo: {
-										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
 										EternalKnightsDeadThisGame: newValue,
 									},
 								},
 							},
 						},
 				  } as BgsFaceOffWithSimulation);
+		console.debug('updating eternal legion', side, newValue, request);
 		this.simulationUpdater(this._faceOff, request);
 	}
 
