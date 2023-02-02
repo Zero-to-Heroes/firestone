@@ -70,6 +70,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 		this.settingsSubscription = this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) => {
 			this.selectApp(selectedApp ?? 'general', selectedMenu);
 		});
+		console.log('ngAfterViewInit complete');
 		// this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
 		// 	if (message.id === 'move') {
 		// 		const window = await this.ow.getCurrentWindow();
@@ -93,6 +94,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 	selectApp(selectedApp: string, selectedMenu?: string) {
 		this.selectedApp = selectedApp === 'duels' ? 'general' : selectedApp;
 		this.selectedMenu = selectedMenu || this.getDefaultMenu(selectedApp);
+		console.log('selecting app', this.selectedApp, this.selectedMenu);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
