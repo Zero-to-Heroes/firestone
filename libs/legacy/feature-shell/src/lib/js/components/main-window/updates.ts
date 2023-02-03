@@ -89,6 +89,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where you wouldn't see the full board when mousing over games in the session widget.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "popup post-match stats" option would not work anymore.`,
+							},
 						],
 					},
 					{
@@ -97,6 +101,28 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where the "show global effects" option would not work for the opponent's deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Bleeds created by Garrote were added to the wrong deck.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where some passive treasures could appear as Signature Treasure for high-win runs. This fix is however not retroactive (so existing runs can still be buggy).`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where some tasks were sorted incorrectly, which caused the wrong task to appear as the "next task".`,
 							},
 						],
 					},
