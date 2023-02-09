@@ -70,6 +70,33 @@ export class BattlegroundsMetaStatsHeroesComponent
 	}
 
 	ngAfterContentInit() {
+		combineLatest([
+			this.store.bgsMetaStatsHero$(),
+			this.store.listenPrefs$((prefs) => prefs.bgsActiveHeroSortFilter),
+		]).pipe(
+			this.mapData(([stats, [heroSort]]) => {
+				switch (heroSort) {
+					case 'tier':
+						return buildTiers([...stats].sort(sortByProperties((s) => [s.averagePosition])), this.i18n);
+					case 'average-position':
+						// Make sure we keep the items without data at the end
+						return this.buildMonoTier(
+							[...stats].sort(sortByProperties((s) => [s.playerAveragePosition ?? 9])),
+						);
+					case 'games-played':
+						return this.buildMonoTier([...stats].sort(sortByProperties((s) => [-s.playerDataPoints])));
+					case 'mmr':
+						return this.buildMonoTier(
+							[...stats].sort(sortByProperties((s) => [-(s.playerNetMmr ?? -10000)])),
+						);
+					case 'last-played':
+						return this.buildMonoTier(
+							[...stats].sort(sortByProperties((s) => [-s.playerLastPlayedTimestamp])),
+						);
+				}
+			}),
+		);
+
 		const statsWithOnlyGlobalData$ = combineLatest([
 			this.store.listen$(([main]) => main.battlegrounds.getMetaHeroStats()),
 			this.store.listenPrefs$(

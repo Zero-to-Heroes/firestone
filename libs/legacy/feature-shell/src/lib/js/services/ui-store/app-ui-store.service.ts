@@ -1,6 +1,12 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	BgsMetaHeroStatTierItem,
+	buildHeroStats,
+	enhanceHeroStat,
+} from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
@@ -37,6 +43,7 @@ import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-bat
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
+import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { GameNativeState } from '../game/game-native-state';
@@ -44,7 +51,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual } from '../utils';
-import { buildHeroStats } from './bgs-ui-helper';
+import { buildHeroStats as buildHeroStatsOld, filterBgsMatchStats } from './bgs-ui-helper';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
@@ -75,7 +82,9 @@ export class AppUiStoreService {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 	private modsConfig: BehaviorSubject<ModsConfig>;
 
+	/** @deprecated */
 	private bgsHeroStats = new BehaviorSubject<readonly BgsHeroStat[]>(null);
+	private bgsMetaStatsHero = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
 	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
 	private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
 	private gameStats = new BehaviorSubject<readonly GameStat[]>(null);
@@ -103,6 +112,7 @@ export class AppUiStoreService {
 				mercenariesOutOfCombatStore: this.mercenariesOutOfCombatStore.observers,
 				mercenariesSynergiesStore: this.mercenariesSynergiesStore.observers,
 				bgsHeroStats: this.bgsHeroStats.observers,
+				bgsMetaStatsHero: this.bgsMetaStatsHero.observers,
 				duelsHeroStats: this.duelsHeroStats.observers,
 				duelsTopDecks: this.duelsTopDecks.observers,
 				gameStats: this.gameStats.observers,
@@ -305,6 +315,11 @@ export class AppUiStoreService {
 		return this.bgsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
+		this.debugCall('bgHeroStats$');
+		return this.bgsMetaStatsHero.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
 		this.debugCall('duelsHeroStats$');
 		return this.duelsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -354,6 +369,7 @@ export class AppUiStoreService {
 	// start appearing
 	private init() {
 		this.initBgsHeroStats();
+		this.initBgsMetaStatsHero();
 		this.initDuelsHeroStats();
 		this.initDuelsTopDecks();
 		this.initGameStats();
@@ -519,6 +535,67 @@ export class AppUiStoreService {
 			.subscribe((stats) => this.duelsHeroStats.next(stats));
 	}
 
+	private initBgsMetaStatsHero() {
+		const statsWithOnlyGlobalData$ = combineLatest([
+			this.listen$(([main]) => main.battlegrounds.getMetaHeroStats()),
+			this.listenPrefs$(
+				(prefs) => prefs.bgsActiveRankFilter,
+				(prefs) => prefs.bgsActiveTribesFilter,
+			),
+		]).pipe(
+			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter]]) => {
+				console.debug('showing meta hero stats', stats);
+				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
+					stats?.heroStats,
+					bgsActiveRankFilter,
+					bgsActiveTribesFilter,
+				);
+				console.debug('built global stats', result);
+				return result;
+			}),
+		);
+
+		const playerBgGames$ = combineLatest([
+			this.gameStats$(),
+			this.listen$(
+				([main]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles ?? [],
+				([main]) => main.battlegrounds.currentBattlegroundsMetaPatch,
+			),
+			this.listenPrefs$(
+				(prefs) => prefs.bgsActiveRankFilter,
+				(prefs) => prefs.bgsActiveTribesFilter,
+				(prefs) => prefs.bgsActiveTimeFilter,
+			),
+		]).pipe(
+			distinctUntilChanged(),
+			map(([games, [mmrPercentiles, patchInfo], [rankFilter, tribesFilter, timeFilter]]) => {
+				const targetRank: number =
+					!mmrPercentiles?.length || !rankFilter
+						? 0
+						: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
+				console.debug('targetRank', targetRank);
+				const bgGames = games
+					.filter((g) => isBattlegrounds(g.gameMode))
+					.filter(
+						(g) =>
+							!tribesFilter?.length ||
+							tribesFilter.length === ALL_BG_RACES.length ||
+							tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
+					);
+				const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
+				return afterFilter;
+			}),
+			distinctUntilChanged(),
+		);
+
+		const enhancedStats$ = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
+			map(([stats, playerBgGames]) => stats.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards))),
+		);
+
+		enhancedStats$.subscribe(this.bgsMetaStatsHero$);
+	}
+
+	/** @deprecated */
 	private initBgsHeroStats() {
 		combineLatest(
 			this.gameStats$(),
@@ -556,7 +633,7 @@ export class AppUiStoreService {
 				// Do two steps, so that if we're playing constructed nothing triggers here
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([stats, matches, timeFilter, rankFilter, heroSort, patch]) => {
-					return buildHeroStats(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
+					return buildHeroStatsOld(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
 				}),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));

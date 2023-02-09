@@ -10,6 +10,7 @@ import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { BgsMetaHeroStatTierItem } from '../battlegrounds/bgs-meta-hero-stats';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
 	AppUiStoreService,
@@ -109,9 +110,15 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.listenMercenariesHighlights$(...selectors));
 	}
 
+	/** @deprecated */
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
 		this.debugCall('bgHeroStats$');
 		return this.debugObservable(this.store.bgHeroStats$());
+	}
+
+	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
+		this.debugCall('bgsMetaStatsHero$');
+		return this.debugObservable(this.store.bgsMetaStatsHero$());
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
