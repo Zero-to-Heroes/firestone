@@ -7,6 +7,7 @@ export class NavigationBattlegrounds {
 	readonly menuDisplayType: string = 'menu';
 	readonly selectedCategoryId:
 		| 'bgs-category-personal-heroes'
+		| 'bgs-category-meta-heroes'
 		| 'bgs-category-personal-quests'
 		| 'bgs-category-personal-hero-details'
 		| 'bgs-category-personal-rating'

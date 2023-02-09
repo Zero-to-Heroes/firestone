@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationService } from '@services/localization.service';
@@ -32,7 +32,6 @@ import { DuelsIsOnDeckBuildingLobbyScreenProcessor } from '@services/mainwindow/
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
 import { DuelsStateUpdatedProcessor } from '@services/mainwindow/store/processors/duels/duels-state-updated-processor';
 import { Map } from 'immutable';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
 import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services/mailbox-mark-message-read-processor';
@@ -82,6 +81,7 @@ import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds
 import { BgsBestStatsLoadedEvent } from './events/battlegrounds/bgs-best-stats-loaded-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BattlegroundsMetaHeroStatsLoadedEvent } from './events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs-perfect-games-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
@@ -233,6 +233,7 @@ import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battl
 import { BgsBestStatsLoadedProcessor } from './processors/battlegrounds/bgs-best-stats-loaded-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
+import { BattlegroundsMetaHeroStatsLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-stats-loaded-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
 import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegrounds/bgs-perfect-games-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
@@ -752,6 +753,7 @@ export class MainWindowStoreService {
 				new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
 			],
 			[BattlegroundsPerfectGamesLoadedEvent.eventName(), new BattlegroundsPerfectGamesLoadedProcessor()],
+			[BattlegroundsMetaHeroStatsLoadedEvent.eventName(), new BattlegroundsMetaHeroStatsLoadedProcessor()],
 			[BgsQuestsDataLoadedEvent.eventName(), new BgsQuestsDataLoadedProcessor()],
 			[
 				// Streams

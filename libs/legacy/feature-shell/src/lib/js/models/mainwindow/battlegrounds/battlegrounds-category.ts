@@ -4,6 +4,7 @@ export class BattlegroundsCategory {
 	readonly id:
 		| 'bgs-category-overview'
 		| 'bgs-category-personal-heroes'
+		| 'bgs-category-meta-heroes'
 		| 'bgs-category-personal-quests'
 		| 'bgs-category-personal-hero-details-' // Also add the hero card Id as suffix
 		| 'bgs-category-personal-rating'

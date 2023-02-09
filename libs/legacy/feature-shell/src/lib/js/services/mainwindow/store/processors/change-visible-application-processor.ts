@@ -52,7 +52,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'battlegrounds'
 				? navigationState.navigationBattlegrounds.update({
 						currentView: 'list',
-						selectedCategoryId: 'bgs-category-personal-heroes',
+						selectedCategoryId: 'bgs-category-meta-heroes',
 						menuDisplayType: 'menu',
 				  } as NavigationBattlegrounds)
 				: navigationState.navigationBattlegrounds;

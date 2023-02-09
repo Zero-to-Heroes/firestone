@@ -1,0 +1,108 @@
+.info {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	padding: 5px;
+	background: rgba(255, 255, 255, 0.08);
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.portrait {
+		height: 100%;
+		margin-right: 20px;
+
+		::ng-deep {
+			.health {
+				bottom: 0;
+			}
+		}
+	}
+
+	.hero-details {
+		display: flex;
+		flex-direction: column;
+
+		.name {
+			color: var(--default-title-color);
+		}
+
+		.data-points {
+			font-size: 12px;
+			display: flex;
+
+			.player {
+				margin-left: 5px;
+
+				.value {
+					color: var(--default-title-color);
+				}
+			}
+		}
+	}
+
+	.position {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		color: var(--color-1);
+
+		.player {
+			margin-top: 0;
+			font-size: 12px;
+
+			.value {
+				color: var(--default-title-color);
+			}
+		}
+	}
+
+	.placement {
+		padding-top: 5px;
+
+		.placement-distribution {
+			height: 100%;
+
+			::ng-deep .label {
+				font-size: 10px;
+				margin-bottom: -5px;
+			}
+
+			::ng-deep .chart-container .bar-container:nth-child(n + 6) .bar {
+				opacity: 0.5;
+			}
+		}
+	}
+
+	.net-mmr {
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.value.negative {
+			color: #ff4747;
+		}
+
+		.value.positive {
+			color: #61ff47;
+		}
+
+		.value.missing {
+			color: inherit;
+		}
+	}
+
+	// .winrate {
+	// 	::ng-deep bgs-winrate-chart {
+	// 		graph-with-comparison-new {
+	// 			height: 100%;
+	// 		}
+	// 		.legend {
+	// 			display: none;
+	// 		}
+	// 	}
+	// }
+}

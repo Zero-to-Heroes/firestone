@@ -35,7 +35,9 @@ export class BgsWinrateChartComponent {
 
 	@Input() showYAxis = true;
 
-	@Input() set heroStat(value: BgsHeroStat | BgsQuestStat) {
+	@Input() set heroStat(
+		value: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] } | BgsQuestStat,
+	) {
 		if (!value) {
 			return;
 		}

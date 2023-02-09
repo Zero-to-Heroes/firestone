@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -76,7 +75,8 @@ export class BgsInitService {
 			// 	id: 'bgs-category-overview',
 			// 	name: this.i18n.translateString('app.battlegrounds.menu.overview'),
 			// }),
-			this.buildPersonalHeroesCategory(bgsGlobalStats),
+			// this.buildPersonalHeroesCategory(bgsGlobalStats),
+			this.buildMetaHeroesCategory(bgsGlobalStats),
 			BattlegroundsCategory.create({
 				id: 'bgs-category-personal-quests',
 				name: this.i18n.translateString('app.battlegrounds.menu.quests'),
@@ -97,7 +97,7 @@ export class BgsInitService {
 				id: 'bgs-category-simulator',
 				name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
 			}),
-		].filter((cat) => cat);
+		];
 		return BattlegroundsAppState.create({
 			categories: categories,
 			globalStats: bgsGlobalStats,
@@ -127,5 +127,32 @@ export class BgsInitService {
 			name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
 			categories: heroDetailCategories,
 		} as BattlegroundsPersonalHeroesCategory);
+	}
+
+	private buildMetaHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
+		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
+		const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
+			BattlegroundsPersonalStatsHeroDetailsCategory.create({
+				id: 'bgs-category-personal-hero-details-' + heroCardId,
+				name: this.cards.getCard(heroCardId)?.name,
+				heroId: heroCardId,
+				tabs: [
+					'winrate-stats',
+					// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
+					// 'mmr',
+					'warband-stats',
+					'final-warbands',
+				] as readonly BgsHeroStatsFilterId[],
+			} as BattlegroundsPersonalStatsHeroDetailsCategory),
+		);
+		return BattlegroundsCategory.create({
+			id: 'bgs-category-meta-heroes',
+			name: this.i18n.translateString('app.battlegrounds.menu.meta-heroes'),
+			categories: heroDetailCategories,
+		});
+		// return BattlegroundsPersonalHeroesCategory.create({
+		// 	name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
+		// 	categories: heroDetailCategories,
+		// } as BattlegroundsPersonalHeroesCategory);
 	}
 }

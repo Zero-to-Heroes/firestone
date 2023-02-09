@@ -1,3 +1,4 @@
+import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { AppInjector } from '../../../services/app-injector';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
@@ -20,6 +21,7 @@ export class BattlegroundsAppState {
 
 	// See decktracker-state.ts for more info
 	readonly perfectGames: readonly GameStat[] = undefined;
+	readonly metaHeroStats: BgsHeroStatsV2 = undefined;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
@@ -36,6 +38,15 @@ export class BattlegroundsAppState {
 			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('battlegrounds-perfect-games');
 		}
 		return this.perfectGames;
+	}
+
+	public getMetaHeroStats(): BgsHeroStatsV2 {
+		if (this.metaHeroStats === undefined) {
+			console.log('metaHeroStats not initialized yet');
+			(this.metaHeroStats as BgsHeroStatsV2) = null;
+			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('bgs-meta-hero-stats');
+		}
+		return this.metaHeroStats;
 	}
 
 	public findCategory(categoryId: string) {

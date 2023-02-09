@@ -84,7 +84,7 @@ export const buildQuestStats = (
 	return result;
 };
 
-const filterBgsMatchStats = (
+export const filterBgsMatchStats = (
 	bgsMatchStats: readonly GameStat[],
 	timeFilter: BgsActiveTimeFilterType,
 	mmrThreshold: number,
@@ -379,8 +379,9 @@ const filterTime = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: 
 			// Since the patch itself usually goes live in the evening, maybe we can just use the day after
 			// as the start for the patch period
 			return (
-				stat.buildNumber >= patch.number ||
-				stat.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+				patch != null &&
+				(stat.buildNumber >= patch.number ||
+					stat.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000)
 			);
 		case 'past-three':
 			return Date.now() - stat.creationTimestamp <= 3 * 24 * 60 * 60 * 1000;

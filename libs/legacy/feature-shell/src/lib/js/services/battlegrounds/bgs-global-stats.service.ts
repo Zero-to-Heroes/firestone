@@ -25,7 +25,12 @@ export class BgsGlobalStatsService {
 			fixInvalidTimeSuffix(timeSuffix),
 		);
 		const result: BgsGlobalStats2 = await this.api.callGetApi(url);
-		const globalStats = BgsStats.create(result as BgsStats);
+		const globalStats = BgsStats.create({
+			allTribes: result.allTribes,
+			heroStats: result.heroStats,
+			lastUpdateDate: result.lastUpdateDate,
+			mmrPercentiles: result.mmrPercentiles,
+		} as BgsStats);
 		if (!globalStats?.heroStats?.length) {
 			console.error('could not load bgs global stats', url, tribes, result);
 		}

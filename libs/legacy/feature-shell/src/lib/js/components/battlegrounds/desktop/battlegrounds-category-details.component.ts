@@ -18,16 +18,18 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		>
 			<battlegrounds-desktop-overview *ngIf="selectedCategoryId === 'bgs-category-overview'" role="region">
 			</battlegrounds-desktop-overview>
+			<battlegrounds-meta-stats-heroes *ngIf="selectedCategoryId === 'bgs-category-meta-heroes'" role="region">
+			</battlegrounds-meta-stats-heroes>
 			<battlegrounds-personal-stats-heroes
 				*ngIf="selectedCategoryId === 'bgs-category-personal-heroes'"
 				role="region"
 			>
 			</battlegrounds-personal-stats-heroes>
-			<battlegrounds-personal-stats-quests
+			<!-- <battlegrounds-personal-stats-quests
 				*ngIf="selectedCategoryId === 'bgs-category-personal-quests'"
 				role="region"
 			>
-			</battlegrounds-personal-stats-quests>
+			</battlegrounds-personal-stats-quests> -->
 			<battlegrounds-personal-stats-rating *ngIf="selectedCategoryId === 'bgs-category-personal-rating'">
 			</battlegrounds-personal-stats-rating>
 			<battlegrounds-personal-stats-stats *ngIf="selectedCategoryId === 'bgs-category-personal-stats'">

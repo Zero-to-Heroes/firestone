@@ -1,0 +1,46 @@
+.tier {
+	padding-bottom: 5px;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 15px;
+
+	.header {
+		margin-bottom: 10px;
+		width: fit-content;
+
+		&.s {
+			color: #ffb948;
+		}
+
+		&.a {
+			color: #ff8a48;
+		}
+
+		&.b {
+			color: #42d8a2;
+		}
+
+		&.c {
+			color: #55d6ff;
+		}
+
+		&.d {
+			color: #4376d8;
+		}
+
+		&.e {
+			color: #b346e7;
+		}
+	}
+
+	.items {
+		display: flex;
+		flex-direction: column;
+
+		.item-container {
+			position: relative;
+			height: 50px;
+			margin-bottom: 2px;
+		}
+	}
+}

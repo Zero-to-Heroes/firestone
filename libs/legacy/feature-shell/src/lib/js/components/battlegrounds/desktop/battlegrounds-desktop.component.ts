@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -46,6 +46,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[ngClass]="{
 								top:
 									category.value?.id !== 'bgs-category-personal-heroes' &&
+									category.value?.id !== 'bgs-category-meta-heroes' &&
 									category.value?.id !== 'bgs-category-personal-quests' &&
 									category.value?.id !== 'bgs-category-simulator'
 							}"
@@ -56,7 +57,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			</section>
 			<section class="secondary">
 				<battlegrounds-tier-list
-					*ngIf="category.value?.id === 'bgs-category-personal-heroes'"
+					*ngIf="
+						category.value?.id === 'bgs-category-personal-heroes' ||
+						category.value?.id === 'bgs-category-meta-heroes'
+					"
 				></battlegrounds-tier-list>
 				<battlegrounds-quests-tier-list
 					*ngIf="category.value?.id === 'bgs-category-personal-quests'"
@@ -118,7 +122,10 @@ export class BattlegroundsDesktopComponent
 			.pipe(this.mapData(([currentView]) => currentView));
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.categories)
-			.pipe(this.mapData(([categories]) => categories ?? []));
+			.pipe(
+				tap((info) => console.debug('categories', info)),
+				this.mapData(([categories]) => categories ?? []),
+			);
 	}
 
 	ngAfterViewInit() {

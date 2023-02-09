@@ -17,7 +17,7 @@ import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-char
 						[helpTooltip]="bar.tooltip"
 					></div>
 				</div>
-				<div class="label">{{ container.label }}</div>
+				<div class="label" *ngIf="showLabels">{{ container.label }}</div>
 			</div>
 		</div>
 	`,
@@ -41,6 +41,8 @@ export class BasicBarChart2Component {
 		this._midLineValue = value;
 		this.udpateStats();
 	}
+
+	@Input() showLabels = true;
 
 	barContainers: readonly BarContainer[] = [];
 	midLineHeight: number;
@@ -88,11 +90,15 @@ export class BasicBarChart2Component {
 			bars: elements.map((data, i) => {
 				const tooltipTitle = this._tooltipTitle ? `<div class="title">${this._tooltipTitle}</div>` : '';
 				const placeLabel = this.i18n.translateString('battlegrounds.hero-stats.place', {
-					value: data.rawValue,
+					value: data.label,
 				});
-				const matchesLabel = this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
-					value: data.rawValue,
-				});
+				const matchesLabel =
+					data.rawValue != null
+						? this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
+								value: data.rawValue,
+						  })
+						: null;
+				const matchesElement = !!matchesLabel ? `<div class="raw-value">${matchesLabel}</div>` : '';
 				return {
 					// Ensure a min height to make the graph look better
 					height: Math.max((100 * data.value) / maxValues[i], 2),
@@ -101,7 +107,7 @@ export class BasicBarChart2Component {
 					<div class="body">
 						${tooltipTitle}
 						<div class="label">${placeLabel}</div>
-						<div class="raw-value">${matchesLabel}</div>
+						${matchesElement}
 						<div class="value">${(+data.value).toFixed(1)}%</div>
 					</div>`,
 				};

@@ -32,6 +32,7 @@ export class GameReplayComponent {
 			return;
 		}
 
+		amplitude.getInstance().logEvent('load-replay');
 		console.log('[game-replay] setting game', value.replayInfo.reviewId);
 		this.loadReview(value.replayInfo.reviewId);
 	}

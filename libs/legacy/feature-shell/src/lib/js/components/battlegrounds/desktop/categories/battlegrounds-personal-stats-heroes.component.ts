@@ -41,7 +41,6 @@ export class BattlegroundsPersonalStatsHeroesComponent
 	implements AfterContentInit, AfterViewInit
 {
 	stats$: Observable<readonly BgsHeroStat[]>;
-
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(

@@ -33,7 +33,6 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
-			[validSelectionNumber]="5"
 			[validationErrorTooltip]="validationErrorTooltip"
 			(onOptionSelected)="onSelected($event)"
 		></filter-dropdown-multiselect>

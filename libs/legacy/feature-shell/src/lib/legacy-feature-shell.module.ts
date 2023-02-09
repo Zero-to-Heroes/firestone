@@ -456,6 +456,9 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { BattlegroundsMetaStatsHeroInfoComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-info.component';
+import { BattlegroundsMetaStatsHeroTierComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-tier.component';
+import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
@@ -639,6 +642,7 @@ import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-us
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from './js/services/battlegrounds/bgs-init.service';
+import { BgsMetaHeroStatsService } from './js/services/battlegrounds/bgs-meta-hero-stats.service';
 import { BattlegroundsQuestsService } from './js/services/battlegrounds/bgs-quests.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
@@ -1304,6 +1308,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsDesktopOverviewComponent,
+		BattlegroundsMetaStatsHeroesComponent,
+		BattlegroundsMetaStatsHeroTierComponent,
+		BattlegroundsMetaStatsHeroInfoComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsHeroVignetteComponent,
@@ -1728,6 +1735,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		BattlegroundsStoreService,
 		BgsInitService,
+		BgsMetaHeroStatsService,
 		BgsGlobalStatsService,
 		BattlegroundsQuestsService,
 		BgsBattleSimulationService,

@@ -15,12 +15,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	template: `
 		<div class="battlegrounds-filters" [attr.aria-label]="'Battlegrounds filters'" role="list">
 			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
-			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
 			<battlegrounds-hero-filter-dropdown class="hero-filter"></battlegrounds-hero-filter-dropdown>
 			<battlegrounds-rank-filter-dropdown class="rank-filter"></battlegrounds-rank-filter-dropdown>
 			<battlegrounds-tribes-filter-dropdown class="tribes-filter"></battlegrounds-tribes-filter-dropdown>
 			<battlegrounds-rank-group-dropdown class="rank-group"></battlegrounds-rank-group-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
+			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
