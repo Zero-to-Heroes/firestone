@@ -87,10 +87,11 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 								: null;
 						})
 						.filter((info) => info);
+		const heroStat = heroStats.find((stat) => stat.id === heroId);
+		console.debug('building value', heroStat, heroStats, postMatch, heroId);
 		return {
-			community: heroStats
-				.find((stat) => stat.id === heroId)
-				?.warbandStats?.map((stat) => ({ turn: stat.turn, value: stat.averageStats } as NumericTurnInfo))
+			community: heroStat?.warbandStats
+				?.map((stat) => ({ turn: stat.turn, value: stat.averageStats } as NumericTurnInfo))
 				.filter((stat) => stat)
 				.slice(0, 15),
 			your: your,

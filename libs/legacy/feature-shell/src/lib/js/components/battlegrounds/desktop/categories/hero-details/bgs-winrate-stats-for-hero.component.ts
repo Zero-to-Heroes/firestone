@@ -94,10 +94,11 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreCo
 										: null,
 							};
 						});
+		const heroStat = heroStats.find((stat) => stat.id === heroId);
+		console.debug('building value', heroStat, heroStats, postMatch, heroId);
 		return {
-			community: heroStats
-				.find((stat) => stat.id === heroId)
-				?.combatWinrate?.filter((stat) => stat.turn > 0)
+			community: heroStat?.combatWinrate
+				?.filter((stat) => stat.turn > 0)
 				?.map((stat) => ({ turn: stat.turn, value: Math.round(10 * stat.winrate) / 10 } as NumericTurnInfo))
 				.filter((stat) => stat)
 				.slice(0, 15),

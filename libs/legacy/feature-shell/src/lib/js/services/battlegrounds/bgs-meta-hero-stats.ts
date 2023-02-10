@@ -165,11 +165,11 @@ export const buildHeroStats = (
 						.filter((t) => t.dataPoints > stat.dataPoints / 20)
 				: [];
 
-			const debug = stat.heroCardId === CardIds.LichBazhialBattlegrounds;
+			const debug = stat.heroCardId === CardIds.SylvanasWindrunner_BG23_HERO_306;
 			const tribesModifier = useTribesModifier
 				? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
 				: 0;
-			debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes);
+			debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
 
 			let placementDistribution = stat.placementDistribution;
 			let placementDistributionImpact = null;
@@ -195,7 +195,8 @@ export const buildHeroStats = (
 						return {
 							rank: p.rank,
 							percentage:
-								p.percentage + placementDistributionImpact.find((t) => t.rank === p.rank).percentage,
+								p.percentage +
+								(placementDistributionImpact.find((t) => t.rank === p.rank).percentage ?? 0),
 						};
 					}) ?? [];
 
@@ -215,7 +216,7 @@ export const buildHeroStats = (
 					stat.combatWinrate?.map((p) => {
 						return {
 							turn: p.turn,
-							winrate: p.winrate + combatWinrateImpact.find((t) => t.turn === p.turn).winrate,
+							winrate: p.winrate + (combatWinrateImpact.find((t) => t.turn === p.turn).winrate ?? 0),
 						};
 					}) ?? [];
 
@@ -236,9 +237,11 @@ export const buildHeroStats = (
 						return {
 							turn: p.turn,
 							averageStats:
-								p.averageStats + warbandStatsImpact.find((t) => t.turn === p.turn).averageStats,
+								p.averageStats + (warbandStatsImpact.find((t) => t.turn === p.turn).averageStats ?? 0),
 						};
 					}) ?? [];
+
+				debug && console.debug('warbandStats', warbandStats, warbandStatsImpact, stat.warbandStats);
 			}
 
 			const result: BgsMetaHeroStatTierItem = {

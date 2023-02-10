@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable, tap } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -48,10 +48,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 	}
 
 	ngAfterContentInit(): void {
-		const tiers$ = this.store.bgsMetaStatsHero$().pipe(
-			this.mapData((stats) => buildTiers(stats, this.i18n)),
-			tap((info) => console.debug('tiers', info)),
-		);
+		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
@@ -66,7 +63,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		]).pipe(
-			tap((info) => console.debug('rebuilding overviews', info)),
 			this.mapData(([tiers, [achievements], [panel, showAchievements]]) => {
 				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
 				if (!panel || !heroesAchievementCategory) {
