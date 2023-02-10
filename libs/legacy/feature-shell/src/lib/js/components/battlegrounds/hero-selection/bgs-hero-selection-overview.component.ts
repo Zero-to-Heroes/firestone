@@ -1,14 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
+import { BgsMetaHeroStatTierItem, buildTiers } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -32,28 +32,26 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	tiers$: Observable<readonly { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[]>;
+	// tiers$: Observable<readonly BgsMetaHeroStatTier[]>;
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
 
 	showAds = true;
 
 	constructor(
-		private readonly ads: AdService,
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ads: AdService,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
-		this.tiers$ = this.store.bgHeroStats$().pipe(
-			filter((stats) => !!stats),
-			this.mapData((stats) => this.buildTiers(stats)),
-		);
+		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
 
-		this.heroOverviews$ = combineLatest(
-			this.store.bgHeroStats$(),
+		this.heroOverviews$ = combineLatest([
+			tiers$,
 			this.store.listen$(([main, nav]) => main.achievements),
 			this.store.listenBattlegrounds$(
 				([main, prefs]) =>
@@ -64,8 +62,8 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 					) as BgsHeroSelectionOverviewPanel,
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
-		).pipe(
-			this.mapData(([stats, [achievements], [panel, showAchievements]]) => {
+		]).pipe(
+			this.mapData(([tiers, [achievements], [panel, showAchievements]]) => {
 				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
 				if (!panel || !heroesAchievementCategory) {
 					return [];
@@ -79,10 +77,11 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 				const heroAchievements: readonly VisualAchievement[] =
 					heroesAchievementCategory.retrieveAllAchievements();
-				const heroOverviews = selectionOptions.map((cardId) => {
+				const heroOverviews: readonly InternalBgsHeroStat[] = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
-					const existingStat = stats?.find((overview) => overview.id === normalized);
-					const statWithDefault = existingStat ?? BgsHeroStat.create({ id: normalized } as BgsHeroStat);
+					const tier = tiers.find((t) => t.items.map((i) => i.baseCardId).includes(normalized));
+					const existingStat = tier?.items?.find((overview) => overview.id === normalized);
+					const statWithDefault = existingStat ?? ({ id: normalized } as BgsMetaHeroStatTierItem);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
@@ -91,6 +90,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 						id: cardId,
 						name: this.allCards.getCard(cardId)?.name,
 						baseCardId: normalized,
+						tier: tier?.id,
 						achievements: achievementsForHero,
 						combatWinrate: statWithDefault.combatWinrate?.slice(0, 15) ?? [],
 					};
@@ -108,60 +108,15 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 		this.init();
 	}
 
-	private buildTiers(
-		stats: readonly BgsHeroStat[],
-	): readonly { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] {
-		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
-		const groupedByTier: (readonly BgsHeroStat[])[] = Object.values(groupingByTier(stats));
-		return [
-			{
-				tier: 'S' as BgsHeroTier,
-				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'S')) ?? [])].sort(
-					(a, b) => a.averagePosition - b.averagePosition,
-				),
-			},
-			{
-				tier: 'A' as BgsHeroTier,
-				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'A')) ?? [])].sort(
-					(a, b) => a.averagePosition - b.averagePosition,
-				),
-			},
-			{
-				tier: 'B' as BgsHeroTier,
-				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'B')) ?? [])].sort(
-					(a, b) => a.averagePosition - b.averagePosition,
-				),
-			},
-			{
-				tier: 'C' as BgsHeroTier,
-				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'C')) ?? [])].sort(
-					(a, b) => a.averagePosition - b.averagePosition,
-				),
-			},
-			{
-				tier: 'D' as BgsHeroTier,
-				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'D')) ?? [])].sort(
-					(a, b) => a.averagePosition - b.averagePosition,
-				),
-			},
-			{
-				tier: 'E' as BgsHeroTier,
-				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'E')) ?? [])].sort(
-					(a, b) => a.averagePosition - b.averagePosition,
-				),
-			},
-		].filter((tier) => tier.heroes);
-	}
-
 	getOverviewWidth(): number {
 		return 24;
 	}
 
-	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }) {
+	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsMetaHeroStatTierItem[] }) {
 		return item.tier;
 	}
 
-	trackByHeroFn(index, item: BgsHeroStat) {
+	trackByHeroFn(index, item: BgsMetaHeroStatTierItem) {
 		return item?.id;
 	}
 
@@ -173,6 +128,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 	}
 }
 
-interface InternalBgsHeroStat extends BgsHeroStat {
+interface InternalBgsHeroStat extends BgsMetaHeroStatTierItem {
 	readonly achievements: readonly VisualAchievement[];
 }

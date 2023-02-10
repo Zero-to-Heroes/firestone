@@ -14,7 +14,7 @@ import { filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -88,7 +88,7 @@ export class BgsPostMatchStatsTabsComponent
 	tabs: readonly BgsStatsFilterId[];
 	faceOffs: readonly BgsFaceOffWithSimulation[];
 
-	heroStat$: Observable<BgsHeroStat>;
+	heroStat$: Observable<BgsMetaHeroStatTierItem>;
 
 	private currentHeroId$$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
@@ -133,7 +133,7 @@ export class BgsPostMatchStatsTabsComponent
 	}
 
 	ngAfterContentInit() {
-		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
+		this.heroStat$ = combineLatest([this.store.bgsMetaStatsHero$(), this.currentHeroId$$.asObservable()]).pipe(
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
 			this.mapData(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
 		);

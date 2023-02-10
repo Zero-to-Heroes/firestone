@@ -1,13 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { VisualAchievementCategory } from '../../../models/visual-achievement-category';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -57,58 +55,44 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 	ngAfterContentInit() {
 		this.heroTooltipActive$ = this.listenForBasicPref$((prefs) => prefs.bgsShowHeroSelectionTooltip);
 		this.showTierOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsShowHeroSelectionTiers);
-		this.heroOverviews$ = combineLatest(
-			this.store.bgHeroStats$(),
+		this.heroOverviews$ = combineLatest([
+			this.store.bgsMetaStatsHero$(),
 			this.store.listen$(([main, nav]) => main.achievements),
 			this.store.listenBattlegrounds$(
 				([main, prefs]) => main.panels,
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
-		).pipe(
-			map(
-				([stats, [achievements], [panels, showAchievements]]) =>
-					[
-						stats,
-						achievements.findCategory('hearthstone_game_sub_13'),
-						panels.find(
-							(panel) => panel.id === 'bgs-hero-selection-overview',
-						) as BgsHeroSelectionOverviewPanel,
-						showAchievements,
-					] as readonly [
-						readonly BgsHeroStat[],
-						VisualAchievementCategory,
-						BgsHeroSelectionOverviewPanel,
-						boolean,
-					],
-			),
-			filter(
-				([stats, heroesAchievementCategory, panel, showAchievements]) =>
-					!!panel?.heroOptionCardIds?.length && !!heroesAchievementCategory,
-			),
-			map(
-				([stats, heroesAchievementCategory, panel, showAchievements]) =>
-					[
-						panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null),
-						heroesAchievementCategory,
-						stats,
-						showAchievements,
-					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
-			),
-			filter(
-				([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => !!selectionOptions?.length,
-			),
-			this.mapData(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
+		]).pipe(
+			map(([stats, [achievements], [panels, showAchievements]]) => ({
+				stats: stats,
+				heroesAchievementCategory: achievements.findCategory('hearthstone_game_sub_13'),
+				panel: panels.find(
+					(panel) => panel.id === 'bgs-hero-selection-overview',
+				) as BgsHeroSelectionOverviewPanel,
+				showAchievements: showAchievements,
+			})),
+			filter((info) => !!info.panel?.heroOptionCardIds?.length && !!info.heroesAchievementCategory),
+			map((info) => ({
+				selectionOptions:
+					info.panel?.heroOptionCardIds ??
+					(info.panel.selectedHeroCardId ? [info.panel.selectedHeroCardId] : null),
+				heroesAchievementCategory: info.heroesAchievementCategory,
+				stats: info.stats,
+				showAchievements: info.showAchievements,
+			})),
+			filter((info) => !!info.selectionOptions?.length),
+			this.mapData((info) => {
 				const heroAchievements: readonly VisualAchievement[] =
-					heroesAchievementCategory?.retrieveAllAchievements();
-				const heroOverviews = selectionOptions.map((cardId, index) => {
+					info.heroesAchievementCategory?.retrieveAllAchievements();
+				const heroOverviews = info.selectionOptions.map((cardId, index) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
-					const existingStat = stats.find((overview) => overview.id === normalized);
-					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized } as BgsHeroStat);
-					const achievementsForHero: readonly VisualAchievement[] = showAchievements
+					const existingStat = info.stats.find((overview) => overview.id === normalized);
+					const statWithDefault = existingStat ?? ({ id: normalized } as BgsMetaHeroStatTierItem);
+					const achievementsForHero: readonly VisualAchievement[] = info.showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
 					const tooltipPosition: TooltipPositionType = 'fixed-top-center';
-					return {
+					const result: InternalBgsHeroStat = {
 						...statWithDefault,
 						id: cardId,
 						name: this.allCards.getCard(cardId)?.name,
@@ -117,6 +101,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 						tooltipPosition: tooltipPosition,
 						tooltipClass: `hero-selection-overlay ${tooltipPosition}`,
 					};
+					return result;
 				});
 				if (heroOverviews.length === 2) {
 					return [null, ...heroOverviews, null];
@@ -129,12 +114,12 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 		);
 	}
 
-	trackByHeroFn(index, item: BgsHeroStat) {
+	trackByHeroFn(index, item: BgsMetaHeroStatTierItem) {
 		return item?.id;
 	}
 }
 
-interface InternalBgsHeroStat extends BgsHeroStat {
+interface InternalBgsHeroStat extends BgsMetaHeroStatTierItem {
 	readonly achievements: readonly VisualAchievement[];
 	readonly tooltipPosition: TooltipPositionType;
 	readonly tooltipClass: string;

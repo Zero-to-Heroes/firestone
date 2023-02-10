@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsHeroStat, BgsHeroTier, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroTier, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 
 @Component({
 	selector: 'bgs-hero-tier',
@@ -18,14 +19,14 @@ import { BgsHeroStat, BgsHeroTier, BgsQuestStat } from '../../../models/battlegr
 })
 export class BgsHeroTierComponent {
 	_tier: BgsHeroTier;
-	heroes: readonly (BgsHeroStat | BgsQuestStat)[];
+	heroes: readonly (BgsMetaHeroStatTierItem | BgsQuestStat)[];
 
-	@Input() set tier(value: { tier: BgsHeroTier; heroes: readonly (BgsHeroStat | BgsQuestStat)[] }) {
+	@Input() set tier(value: { tier: BgsHeroTier; heroes: readonly (BgsMetaHeroStatTierItem | BgsQuestStat)[] }) {
 		this._tier = value.tier;
 		this.heroes = value.heroes;
 	}
 
-	trackByHeroFn(index, item: BgsHeroStat | BgsQuestStat) {
+	trackByHeroFn(index, item: BgsMetaHeroStatTierItem | BgsQuestStat) {
 		return item.id;
 	}
 }

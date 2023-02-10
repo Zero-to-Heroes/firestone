@@ -10,7 +10,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -88,19 +87,19 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				filter(([tab]) => !!tab),
 				this.mapData(([tab]) => tab),
 			);
-		this.player$ = combineLatest(
-			this.store.bgHeroStats$(),
+		this.player$ = combineLatest([
+			this.store.bgsMetaStatsHero$(),
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
-		).pipe(
-			map(
-				([heroStats, [battlegrounds, selectedCategoryId]]) =>
-					[heroStats, currentBgHeroId(battlegrounds, selectedCategoryId)] as [BgsHeroStat[], string],
-			),
-			filter(([heroStats, heroId]) => !!heroStats && !!heroId),
-			map(([heroStats, heroId]) => heroStats?.find((stat) => stat.id === heroId)),
+		]).pipe(
+			map(([heroStats, [battlegrounds, selectedCategoryId]]) => ({
+				heroStats: heroStats,
+				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
+			})),
+			filter((info) => !!info.heroStats?.length && !!info.heroId),
+			map((info) => info.heroStats.find((stat) => stat.id === info.heroId)),
 			distinctUntilChanged(),
 			this.mapData((heroStat) =>
 				BgsPlayer.create({

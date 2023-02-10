@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
-import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { deepEqual } from '../../../services/utils';
 
 @Component({
@@ -41,7 +42,7 @@ export class BgsWinrateChartComponent {
 		if (!value) {
 			return;
 		}
-		const communityValues = (value as BgsHeroStat).combatWinrate
+		const communityValues = (value as BgsMetaHeroStatTierItem).combatWinrate
 			?.filter((stat) => stat.turn > 0)
 			.filter((stat) => stat.turn <= 13)
 			.map((stat) => {

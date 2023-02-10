@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
@@ -74,24 +74,25 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 	playerAveragePosition: number;
 	totalPlayerMatches: number;
 	cardId: string;
-	_hero: BgsHeroStat | BgsQuestStat;
+	_hero: BgsMetaHeroStatTierItem | BgsQuestStat;
 	showTurnWinrates: boolean;
 
 	private placementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 	private playerPlacementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 
-	@Input() set hero(value: BgsHeroStat | BgsQuestStat) {
+	@Input() set hero(value: BgsMetaHeroStatTierItem) {
+		// | BgsQuestStat) {
 		if (!value) {
 			return;
 		}
 		this.cardId = value.id;
 		this._hero = value;
 		this.averagePosition = value.averagePosition;
-		this.totalPlayerMatches = value.playerGamesPlayed;
+		this.totalPlayerMatches = value.playerDataPoints;
 		this.playerAveragePosition = value.playerAveragePosition;
 		this.placementDistribution$.next(value.placementDistribution);
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
-		this.showTurnWinrates = !!(value as BgsHeroStat)?.combatWinrate?.length;
+		this.showTurnWinrates = !!(value as BgsMetaHeroStatTierItem)?.combatWinrate?.length;
 	}
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
@@ -99,50 +100,32 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	ngAfterContentInit(): void {
-		this.placementChartData$ = combineLatest(
+		this.placementChartData$ = combineLatest([
 			this.placementDistribution$.asObservable(),
 			this.playerPlacementDistribution$.asObservable(),
-			this.store.bgHeroStats$(),
-		).pipe(
+			this.store.bgsMetaStatsHero$(),
+		]).pipe(
 			filter(([global, player, globalStats]) => !!global && !!player && !!globalStats),
-			map(
-				([global, player, globalStats]) =>
-					[
-						global,
-						player,
-						Math.max(
-							...globalStats
-								.map((stat) => {
-									const totalStatMatches = sumOnArray(
-										stat.placementDistribution,
-										(info) => info.totalMatches,
-									);
-									const highestStatValue = Math.max(
-										...stat.placementDistribution.map(
-											(info) => info.totalMatches / totalStatMatches,
-										),
-									);
-									return highestStatValue;
-								})
-								.reduce((a, b) => a.concat(b), []),
-						),
-					] as [readonly PlacementDistribution[], readonly PlacementDistribution[], number],
-			),
-			this.mapData(([global, player, maxGlobalValue]) => {
-				const totalGlobalMatches = sumOnArray(global, (info) => info.totalMatches);
+			map(([global, player, globalStats]) => ({
+				global: global,
+				player: player,
+				maxGlobalValue: Math.max(
+					...globalStats
+						.map((stat) => Math.max(...stat.placementDistribution.map((info) => info.percentage)))
+						.reduce((a, b) => a.concat(b), []),
+				),
+			})),
+			this.mapData((info) => {
 				const globalChartData: SimpleBarChartData = {
-					data: global.map((info) => ({
+					data: info.global.map((info) => ({
 						label: '' + info.rank,
-						value: (100 * info.totalMatches) / totalGlobalMatches,
-						rawValue: info.totalMatches,
+						value: info.percentage,
 					})),
 				};
-				const totalPlayerMatches = sumOnArray(player, (info) => info.totalMatches);
 				const playerChartData: SimpleBarChartData = {
-					data: player.map((info) => ({
+					data: info.player.map((info) => ({
 						label: '' + info.rank,
-						value: totalPlayerMatches ? (100 * info.totalMatches) / totalPlayerMatches : 0,
-						rawValue: info.totalMatches,
+						value: info.percentage,
 					})),
 				};
 				return [globalChartData, playerChartData];
@@ -161,5 +144,5 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 
 interface PlacementDistribution {
 	readonly rank: number;
-	readonly totalMatches: number;
+	readonly percentage: number;
 }

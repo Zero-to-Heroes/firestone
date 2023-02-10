@@ -55,12 +55,10 @@ import { BattlegroundsDesktopComponent } from './js/components/battlegrounds/des
 import { BattlegroundsDesktopOverviewComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-desktop-overview.component';
 import { BattlegroundsPerfectGamesComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
-import { BattlegroundsPersonalStatsHeroesComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
 import { BattlegroundsPersonalStatsQuestsComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-quests.component';
 import { BattlegroundsPersonalStatsRatingComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsPersonalStatsStatsComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component';
 import { BattlegroundsSimulatorComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-simulator.component';
-import { BattlegroundsStatsHeroVignetteComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import { BattlegroundsStatsQuestVignetteComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-stats-quest-vignette.component';
 import {
 	BgsGlobalValueComponent,
@@ -1311,9 +1309,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsMetaStatsHeroesComponent,
 		BattlegroundsMetaStatsHeroTierComponent,
 		BattlegroundsMetaStatsHeroInfoComponent,
-		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsPersonalStatsQuestsComponent,
-		BattlegroundsStatsHeroVignetteComponent,
 		BattlegroundsStatsQuestVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
 		BattlegroundsPerfectGamesComponent,

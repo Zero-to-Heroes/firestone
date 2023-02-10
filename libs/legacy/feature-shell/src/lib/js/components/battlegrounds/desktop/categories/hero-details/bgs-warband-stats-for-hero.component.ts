@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { BgsMetaHeroStatTierItem } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
-import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
@@ -42,30 +42,27 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 	}
 
 	ngAfterContentInit(): void {
-		this.values$ = combineLatest(
-			this.store.bgHeroStats$(),
+		this.values$ = combineLatest([
+			this.store.bgsMetaStatsHero$(),
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
-		).pipe(
-			map(
-				([heroStats, [postMatch, battlegrounds, selectedCategoryId]]) =>
-					[heroStats, postMatch, currentBgHeroId(battlegrounds, selectedCategoryId)] as [
-						BgsHeroStat[],
-						BgsPostMatchStatsForReview[],
-						string,
-					],
-			),
-			filter(([heroStats, postMatch, heroId]) => !!heroStats && !!postMatch && !!heroId),
+		]).pipe(
+			map(([heroStats, [postMatch, battlegrounds, selectedCategoryId]]) => ({
+				heroStats: heroStats,
+				postMatch: postMatch,
+				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
+			})),
+			filter((info) => !!info.heroStats?.length && !!info.postMatch && !!info.heroId),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
+			this.mapData((info) => this.buildValue(info.heroStats, info.postMatch, info.heroId)),
 		);
 	}
 
 	private buildValue(
-		heroStats: readonly BgsHeroStat[],
+		heroStats: readonly BgsMetaHeroStatTierItem[],
 		postMatch: readonly BgsPostMatchStatsForReview[],
 		heroId: string,
 	): Value {
@@ -93,7 +90,7 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 		return {
 			community: heroStats
 				.find((stat) => stat.id === heroId)
-				?.warbandStats?.map((stat) => ({ turn: stat.turn, value: stat.totalStats } as NumericTurnInfo))
+				?.warbandStats?.map((stat) => ({ turn: stat.turn, value: stat.averageStats } as NumericTurnInfo))
 				.filter((stat) => stat)
 				.slice(0, 15),
 			your: your,

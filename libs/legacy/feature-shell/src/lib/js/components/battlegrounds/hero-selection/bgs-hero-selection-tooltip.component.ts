@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -23,7 +23,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionTooltipComponent {
-	_hero: BgsHeroStat;
+	_hero: BgsMetaHeroStatTierItem;
 	_visible = true;
 	_cssClass: string;
 	heroPowerImage: string;
@@ -39,9 +39,9 @@ export class BgsHeroSelectionTooltipComponent {
 		}
 	}
 
-	@Input() set config(value: BgsHeroStat) {
+	@Input() set config(value: BgsMetaHeroStatTierItem) {
 		this._hero = value;
-		this.totalMatches = value.totalMatches;
+		this.totalMatches = value.dataPoints;
 		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
 		this.questImage = !!this.heroPowerImage ? null : this.i18n.getCardImage(value.id);
 		// this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds, this.allCards), {

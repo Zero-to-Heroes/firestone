@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { deepEqual } from '../../../services/utils';
 
 @Component({
@@ -30,7 +30,7 @@ export class BgsChartWarbandStatsComponent {
 	communityValues: readonly NumericTurnInfo[];
 	yourValues: readonly NumericTurnInfo[];
 
-	@Input() set heroStat(value: BgsHeroStat) {
+	@Input() set heroStat(value: BgsMetaHeroStatTierItem) {
 		if (!value) {
 			return;
 		}
@@ -39,7 +39,7 @@ export class BgsChartWarbandStatsComponent {
 			.map((stat) => {
 				return {
 					turn: stat.turn,
-					value: Math.round(stat.totalStats),
+					value: Math.round(stat.averageStats),
 				} as NumericTurnInfo;
 			})
 			.filter((stat) => stat)

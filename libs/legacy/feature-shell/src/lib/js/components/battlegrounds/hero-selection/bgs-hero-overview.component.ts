@@ -3,8 +3,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { GameType } from '@firestone-hs/reference-data';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
@@ -72,13 +73,13 @@ export class BgsHeroOverviewComponent {
 	@Input() heroTooltipPosition: TooltipPositionType = 'right';
 	@Input() tooltipAdditionalClass: string;
 
-	_hero: BgsHeroStat;
+	_hero: BgsMetaHeroStatTierItem;
 	player: BgsPlayer;
 	health: number;
 	tier: BgsHeroTier;
 	achievementsToDisplay: readonly InternalAchievement[] = [];
 
-	@Input() set hero(value: BgsHeroStat) {
+	@Input() set hero(value: BgsMetaHeroStatTierItem) {
 		this._hero = value;
 		if (!value) {
 			return;

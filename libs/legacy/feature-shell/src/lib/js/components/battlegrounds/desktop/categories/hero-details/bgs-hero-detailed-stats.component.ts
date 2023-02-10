@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { BgsMetaHeroStatTierItem } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
@@ -21,7 +21,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.games-played'"
 					></div>
 					<div class="values">
-						<div class="my-value">{{ stats.playerGamesPlayed }}</div>
+						<div class="my-value">{{ stats.playerDataPoints }}</div>
 					</div>
 				</div>
 				<div class="stat">
@@ -66,11 +66,11 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 						<div
 							class="my-value"
 							[ngClass]="{
-								positive: stats.playerAverageMmr > 0,
-								negative: stats.playerAverageMmr < 0
+								positive: stats.playerNetMmr > 0,
+								negative: stats.playerNetMmr < 0
 							}"
 						>
-							{{ buildValue(stats.playerAverageMmr, 0) }}
+							{{ buildValue(stats.playerNetMmr, 0) }}
 						</div>
 					</div>
 				</div>
@@ -120,26 +120,26 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	bgHeroStats$: Observable<BgsHeroStat>;
+	bgHeroStats$: Observable<BgsMetaHeroStatTierItem>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
-		this.bgHeroStats$ = combineLatest(
-			this.store.bgHeroStats$(),
+		this.bgHeroStats$ = combineLatest([
+			this.store.bgsMetaStatsHero$(),
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
-		).pipe(
-			map(
-				([bgsStats, [battlegrounds, selectedCategoryId]]) =>
-					[currentBgHeroId(battlegrounds, selectedCategoryId), bgsStats] as [string, readonly BgsHeroStat[]],
-			),
-			filter(([heroId, bgsStats]) => !!heroId && !!bgsStats),
-			this.mapData(([heroId, bgsStats]) => bgsStats.find((stat) => stat.id === heroId)),
+		]).pipe(
+			map(([heroStats, [battlegrounds, selectedCategoryId]]) => ({
+				heroStats: heroStats,
+				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
+			})),
+			filter((info) => !!info.heroId && !!info.heroStats?.length),
+			this.mapData((info) => info.heroStats.find((stat) => stat.id === info.heroId)),
 		);
 	}
 

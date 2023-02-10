@@ -26,14 +26,9 @@ import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
-import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { GameState } from '../../models/decktracker/game-state';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
-import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { BgsHeroSortFilterType } from '../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
-import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
@@ -41,7 +36,6 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
@@ -51,7 +45,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual } from '../utils';
-import { buildHeroStats as buildHeroStatsOld, filterBgsMatchStats } from './bgs-ui-helper';
+import { filterBgsMatchStats } from './bgs-ui-helper';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
@@ -82,8 +76,6 @@ export class AppUiStoreService {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 	private modsConfig: BehaviorSubject<ModsConfig>;
 
-	/** @deprecated */
-	private bgsHeroStats = new BehaviorSubject<readonly BgsHeroStat[]>(null);
 	private bgsMetaStatsHero = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
 	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
 	private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
@@ -111,7 +103,7 @@ export class AppUiStoreService {
 				mercenariesStore: this.mercenariesStore.observers,
 				mercenariesOutOfCombatStore: this.mercenariesOutOfCombatStore.observers,
 				mercenariesSynergiesStore: this.mercenariesSynergiesStore.observers,
-				bgsHeroStats: this.bgsHeroStats.observers,
+				// bgsHeroStats: this.bgsHeroStats.observers,
 				bgsMetaStatsHero: this.bgsMetaStatsHero.observers,
 				duelsHeroStats: this.duelsHeroStats.observers,
 				duelsTopDecks: this.duelsTopDecks.observers,
@@ -310,11 +302,6 @@ export class AppUiStoreService {
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }>;
 	}
 
-	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
-		this.debugCall('bgHeroStats$');
-		return this.bgsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
-	}
-
 	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
 		this.debugCall('bgHeroStats$');
 		return this.bgsMetaStatsHero.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -368,7 +355,6 @@ export class AppUiStoreService {
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
 	private init() {
-		this.initBgsHeroStats();
 		this.initBgsMetaStatsHero();
 		this.initDuelsHeroStats();
 		this.initDuelsTopDecks();
@@ -549,6 +535,7 @@ export class AppUiStoreService {
 					stats?.heroStats,
 					bgsActiveRankFilter,
 					bgsActiveTribesFilter,
+					this.allCards,
 				);
 				console.debug('built global stats', result);
 				return result;
@@ -592,51 +579,7 @@ export class AppUiStoreService {
 			map(([stats, playerBgGames]) => stats.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards))),
 		);
 
-		enhancedStats$.subscribe(this.bgsMetaStatsHero$);
-	}
-
-	/** @deprecated */
-	private initBgsHeroStats() {
-		combineLatest(
-			this.gameStats$(),
-			this.listen$(
-				([main, nav]) => main.battlegrounds.globalStats,
-				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
-				([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
-				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
-			),
-		)
-			.pipe(
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(
-					([gameStats, [stats, timeFilter, rankFilter, heroSort, patch]]) =>
-						[
-							stats,
-							gameStats?.filter(
-								(stat) =>
-									stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
-							) ?? [],
-							timeFilter,
-							rankFilter <= 100 ? rankFilter : 100,
-							heroSort,
-							patch,
-						] as readonly [
-							BgsStats,
-							readonly GameStat[],
-							BgsActiveTimeFilterType,
-							BgsRankFilterType,
-							BgsHeroSortFilterType,
-							PatchInfo,
-						],
-				),
-				// Do two steps, so that if we're playing constructed nothing triggers here
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([stats, matches, timeFilter, rankFilter, heroSort, patch]) => {
-					return buildHeroStatsOld(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
-				}),
-			)
-			.subscribe((stats) => this.bgsHeroStats.next(stats));
+		enhancedStats$.subscribe(this.bgsMetaStatsHero);
 	}
 
 	private debugCall(...args) {

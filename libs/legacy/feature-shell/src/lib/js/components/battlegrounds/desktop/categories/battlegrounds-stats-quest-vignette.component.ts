@@ -59,7 +59,7 @@ export class BattlegroundsStatsQuestVignetteComponent {
 		this.cardId = value.id;
 		this.name = value.name;
 		this.averagePosition = value.playerAveragePosition;
-		this.gamesPlayed = value.playerGamesPlayed;
+		this.gamesPlayed = value.playerDataPoints;
 		this.netMmr = value.playerAverageMmr;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
 	}

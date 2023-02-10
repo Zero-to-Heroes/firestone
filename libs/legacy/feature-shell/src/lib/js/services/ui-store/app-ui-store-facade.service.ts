@@ -5,7 +5,6 @@ import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable, Subscription } from 'rxjs';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
-import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
@@ -108,12 +107,6 @@ export class AppUiStoreFacadeService {
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
 		this.debugCall('listenMercenariesHighlights$');
 		return this.debugObservable(this.store.listenMercenariesHighlights$(...selectors));
-	}
-
-	/** @deprecated */
-	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
-		this.debugCall('bgHeroStats$');
-		return this.debugObservable(this.store.bgHeroStats$());
 	}
 
 	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {

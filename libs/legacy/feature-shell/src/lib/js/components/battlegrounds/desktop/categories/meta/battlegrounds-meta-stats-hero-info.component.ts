@@ -79,9 +79,9 @@ import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-s
 })
 export class BattlegroundsMetaStatsHeroInfoComponent {
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
-		this.heroCardId = value.heroCardId;
-		this.heroName = this.allCards.getCard(value.heroCardId).name;
-		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.heroCardId);
+		this.heroCardId = value.id;
+		this.heroName = this.allCards.getCard(value.id).name;
+		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});

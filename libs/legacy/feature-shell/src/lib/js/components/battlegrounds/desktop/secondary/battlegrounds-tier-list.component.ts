@@ -10,16 +10,20 @@ import {
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import {
+	BgsMetaHeroStatTierItem,
+	buildTiers,
+} from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsFilterLiveMmrEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-mmr-event';
 import { BgsFilterLiveTribesEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-tribes-event';
 import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction, sumOnArray } from '../../../../services/utils';
+import { sortByProperties, sumOnArray } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
 import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
@@ -95,8 +99,8 @@ export class BattlegroundsTierListComponent
 			.subscribe((percentiles) => {
 				this.percentiles = percentiles;
 			});
-		this.stats$ = combineLatest(
-			this.store.bgHeroStats$(),
+		this.stats$ = combineLatest([
+			this.store.bgsMetaStatsHero$(),
 			this.store.listen$(
 				([main, nav, prefs]) => main.battlegrounds.globalStats.mmrPercentiles,
 				([main, nav, prefs]) => main.battlegrounds.globalStats.allTribes,
@@ -105,7 +109,7 @@ export class BattlegroundsTierListComponent
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
-		).pipe(
+		]).pipe(
 			filter(
 				([stats, [mmrPercentiles, allTribes, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) =>
 					!!stats?.length,
@@ -121,47 +125,21 @@ export class BattlegroundsTierListComponent
 			})),
 			this.mapData((info) => {
 				const stats = info.stats;
-				const totalMatches = sumOnArray(stats, (stat) => stat.totalMatches);
-				const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
-				const groupedByTier: (readonly BgsHeroStat[])[] = Object.values(groupingByTier(stats));
-				const tiers: readonly HeroTier[] = [
-					{
-						tier: 'S' as BgsHeroTier,
-						heroes: [
-							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'S')) ?? []),
-						].sort((a, b) => a.averagePosition - b.averagePosition),
-					},
-					{
-						tier: 'A' as BgsHeroTier,
-						heroes: [
-							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'A')) ?? []),
-						].sort((a, b) => a.averagePosition - b.averagePosition),
-					},
-					{
-						tier: 'B' as BgsHeroTier,
-						heroes: [
-							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'B')) ?? []),
-						].sort((a, b) => a.averagePosition - b.averagePosition),
-					},
-					{
-						tier: 'C' as BgsHeroTier,
-						heroes: [
-							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'C')) ?? []),
-						].sort((a, b) => a.averagePosition - b.averagePosition),
-					},
-					{
-						tier: 'D' as BgsHeroTier,
-						heroes: [
-							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'D')) ?? []),
-						].sort((a, b) => a.averagePosition - b.averagePosition),
-					},
-					{
-						tier: 'E' as BgsHeroTier,
-						heroes: [
-							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'E')) ?? []),
-						].sort((a, b) => a.averagePosition - b.averagePosition),
-					},
-				].filter((tier) => !!tier.heroes?.length);
+				const totalMatches = sumOnArray(stats, (stat) => stat.dataPoints);
+
+				const refTiers = buildTiers(
+					[...stats].sort(sortByProperties((s) => [s.averagePosition])),
+					this.i18n,
+					false,
+				);
+				const tiers: readonly HeroTier[] = refTiers.map(
+					(tier) =>
+						({
+							tier: tier.label,
+							heroes: tier.items,
+						} as HeroTier),
+				);
+
 				const title = this.i18n.translateString('battlegrounds.hero-selection.tier-list-title-tooltip', {
 					totalMatches: totalMatches.toLocaleString('en-US'),
 				});
@@ -220,5 +198,5 @@ export class BattlegroundsTierListComponent
 
 interface HeroTier {
 	readonly tier: BgsHeroTier;
-	readonly heroes: readonly BgsHeroStat[];
+	readonly heroes: readonly BgsMetaHeroStatTierItem[];
 }

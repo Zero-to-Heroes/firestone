@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 
 @Component({
@@ -31,7 +31,7 @@ import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 export class BgsHeroTribesComponent {
 	tribes: readonly { tribe: string; percent: string }[];
 
-	@Input() set hero(value: BgsHeroStat) {
+	@Input() set hero(value: BgsMetaHeroStatTierItem) {
 		// this.tribes = [...value.tribesStat]
 		// 	.sort((a, b) => b.percent - a.percent)
 		// 	.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))

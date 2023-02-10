@@ -1,7 +1,8 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
@@ -30,17 +31,17 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 export class BgsHeroMiniComponent {
 	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
 
-	_hero: BgsHeroStat | BgsQuestStat;
+	_hero: BgsMetaHeroStatTierItem | BgsQuestStat;
 	icon: string;
 	heroCardId: string;
 	heroStartingHealth: number;
 	isQuest: boolean;
 
-	@Input() set hero(value: BgsHeroStat | BgsQuestStat) {
+	@Input() set hero(value: BgsMetaHeroStatTierItem | BgsQuestStat) {
 		this._hero = value;
 		this.heroCardId = value.id;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
-		this.isQuest = !(value as BgsHeroStat).heroPowerCardId;
+		this.isQuest = !(value as BgsMetaHeroStatTierItem).heroPowerCardId;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
 	}
 }
