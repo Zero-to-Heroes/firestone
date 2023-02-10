@@ -21,4 +21,19 @@
 		overflow: scroll;
 		min-height: 0;
 	}
+
+	.more-info {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		margin-right: 15px;
+		margin-top: 15px;
+		margin-bottom: 5px;
+		color: var(--default-text-color);
+		font-size: 13px;
+
+		&:hover {
+			color: var(--default-title-color);
+		}
+	}
 }

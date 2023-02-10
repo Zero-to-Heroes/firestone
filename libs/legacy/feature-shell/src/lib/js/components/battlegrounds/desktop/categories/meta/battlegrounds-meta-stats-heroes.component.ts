@@ -44,6 +44,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 					role="listitem"
 					[tier]="tier"
 				></battlegrounds-meta-stats-hero-tier>
+				<a
+					class="more-info"
+					href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Meta-Stats-for-Heroes"
+					target="_blank"
+					[owTranslate]="'app.battlegrounds.tier-list.learn-more'"
+				></a>
 			</div>
 		</section>
 	`,
