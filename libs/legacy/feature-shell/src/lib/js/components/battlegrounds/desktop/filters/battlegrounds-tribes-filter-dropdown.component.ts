@@ -64,8 +64,8 @@ export class BattlegroundsTribesFilterDropdownComponent
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(
 				filter(([allTribes]) => !!allTribes?.length),
-				this.mapData(([allTribes]) =>
-					allTribes
+				this.mapData(([allTribes]) => {
+					const result = allTribes
 						.map(
 							(tribe) =>
 								({
@@ -74,10 +74,12 @@ export class BattlegroundsTribesFilterDropdownComponent
 									image: getTribeIcon(tribe),
 								} as MultiselectOption),
 						)
-						.sort((a, b) => (a.label < b.label ? -1 : 1)),
-				),
+						.sort((a, b) => (a.label < b.label ? -1 : 1));
+					console.debug('options', result);
+					return result;
+				}),
 			);
-		this.filter$ = combineLatest(
+		this.filter$ = combineLatest([
 			this.options$,
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
@@ -85,22 +87,28 @@ export class BattlegroundsTribesFilterDropdownComponent
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
-		).pipe(
+		]).pipe(
 			filter(
 				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
 					!!tribesFilter && !!allTribes?.length && !!categoryId && !!currentView,
 			),
-			this.mapData(([options, [tribesFilter, allTribes, categoryId, currentView]]) => ({
-				selected: !!tribesFilter?.length
-					? tribesFilter.map((tribe) => '' + tribe)
-					: allTribes.map((tribe) => '' + tribe),
-				placeholder: this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes'),
-				visible:
-					!['categories', 'category'].includes(currentView) &&
-					!['bgs-category-personal-stats', 'bgs-category-simulator', 'bgs-category-personal-rating'].includes(
-						categoryId,
-					),
-			})),
+			this.mapData(([options, [tribesFilter, allTribes, categoryId, currentView]]) => {
+				const result = {
+					selected: !!tribesFilter?.length
+						? tribesFilter.map((tribe) => '' + tribe)
+						: allTribes.map((tribe) => '' + tribe),
+					placeholder: this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes'),
+					visible:
+						!['categories', 'category'].includes(currentView) &&
+						![
+							'bgs-category-personal-stats',
+							'bgs-category-simulator',
+							'bgs-category-personal-rating',
+						].includes(categoryId),
+				};
+				console.debug('dropdown config', result);
+				return result;
+			}),
 		);
 	}
 

@@ -124,7 +124,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 		super(store, cdr);
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
 		// the first time (maybe because of "visible"?)
-		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
+		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
 			filter(([options, selected]) => !!options?.length),
 			this.mapData(([options, selected]) => {
 				if (!selected?.length || selected.length === options.length) {
@@ -143,15 +143,17 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 		this.sub$$ = this.options$
 			.pipe(
 				filter((options) => !!options),
-				// distinctUntilChanged((a, b) => deepEqual(a, b)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			)
 			.subscribe((options) => {
-				this.tempSelected$.next(options.map((option) => option.value));
+				this.tempSelected$.next(
+					options
+						.map((option) => option.value)
+						.filter((option) => this.tempSelected$.value?.includes(option)),
+				);
 			});
-		this.workingOptions$ = combineLatest(this.options$.asObservable(), this.tempSelected$.asObservable()).pipe(
+		this.workingOptions$ = combineLatest([this.options$.asObservable(), this.tempSelected$.asObservable()]).pipe(
 			filter(([options, tempSelected]) => !!options),
-			// distinctUntilChanged((a, b) => deepEqual(a, b)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([options, tempSelected]) => {
 				const result = options.map((option) => ({
@@ -161,7 +163,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 				return result;
 			}),
 		);
-		this.validSelection$ = combineLatest(this.options$.asObservable(), this.workingOptions$).pipe(
+		this.validSelection$ = combineLatest([this.options$.asObservable(), this.workingOptions$]).pipe(
 			filter(([options, workingOptions]) => !!options),
 			this.mapData(([options, workingOptions]) => this.isValidSelection(options, workingOptions)),
 		);

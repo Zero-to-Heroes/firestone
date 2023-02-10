@@ -22,7 +22,7 @@ import {
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -529,15 +529,23 @@ export class AppUiStoreService {
 				(prefs) => prefs.bgsActiveTribesFilter,
 			),
 		]).pipe(
+			debounceTime(200),
 			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter]]) => {
-				console.debug('showing meta hero stats', stats);
+				console.debug(
+					'[bgs] rebuilding meta hero stats',
+					stats,
+					'rankFilter',
+					bgsActiveRankFilter,
+					'tribesFilter',
+					bgsActiveTribesFilter,
+				);
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					stats?.heroStats,
 					bgsActiveRankFilter,
 					bgsActiveTribesFilter,
 					this.allCards,
 				);
-				console.debug('built global stats', result);
+				console.debug('[bgs] built global stats', result, bgsActiveRankFilter, bgsActiveTribesFilter);
 				return result;
 			}),
 		);
@@ -560,7 +568,6 @@ export class AppUiStoreService {
 					!mmrPercentiles?.length || !rankFilter
 						? 0
 						: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
-				console.debug('targetRank', targetRank);
 				const bgGames = games
 					.filter((g) => isBattlegrounds(g.gameMode))
 					.filter(

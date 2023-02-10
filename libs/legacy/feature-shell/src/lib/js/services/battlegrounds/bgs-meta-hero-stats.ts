@@ -1,7 +1,7 @@
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
 import { BgsGlobalHeroStat } from '@firestone-hs/bgs-global-stats/dist/stats-v2/bgs-hero-stat';
-import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, CardIds, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsHeroTier } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -88,11 +88,13 @@ export const buildTiers = (
 	i18n: LocalizationFacadeService,
 	localize = true,
 ): readonly BgsMetaHeroStatTier[] => {
+	console.debug('buildTiers', stats);
 	if (!stats?.length) {
 		return [];
 	}
 
 	const heroStats = [...stats].sort(sortByProperties((s) => [s.averagePosition]));
+	console.debug('heroStats', heroStats);
 	const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.averagePosition));
 
 	return [
@@ -147,12 +149,12 @@ export const buildHeroStats = (
 			// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
 			// that stat
 			// We can still have some leftover stats in the data, but that it very likely something bogus
-			const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > stat.dataPoints / 2);
-			return (
+			const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints);
+			const isIn =
 				!overlyDominentTribes.length ||
 				!tribes?.length ||
-				overlyDominentTribes.every((t) => tribes.includes(t.tribe))
-			);
+				overlyDominentTribes.every((t) => tribes.includes(t.tribe));
+			return isIn;
 		})
 		.map((stat) => {
 			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
@@ -163,9 +165,11 @@ export const buildHeroStats = (
 						.filter((t) => t.dataPoints > stat.dataPoints / 20)
 				: [];
 
+			const debug = stat.heroCardId === CardIds.LichBazhialBattlegrounds;
 			const tribesModifier = useTribesModifier
-				? 0
-				: tribeStatsToUse.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0);
+				? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
+				: 0;
+			debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes);
 
 			let placementDistribution = stat.placementDistribution;
 			let placementDistributionImpact = null;
@@ -174,60 +178,67 @@ export const buildHeroStats = (
 			let warbandStats = stat.warbandStats;
 			let warbandStatsImpact = null;
 			if (useTribesModifier) {
-				placementDistributionImpact = stat.placementDistribution.map((p) => {
-					const rankImpact = tribeStatsToUse
-						.flatMap((t) => t.impactPlacementDistribution)
-						.filter((t) => t.rank === p.rank)
-						.map((t) => t.impact)
-						.reduce((a, b) => a + b, 0);
-					return {
-						rank: p.rank,
-						percentage: rankImpact,
-					};
-				});
-				placementDistribution = stat.placementDistribution.map((p) => {
-					return {
-						rank: p.rank,
-						percentage:
-							p.percentage + placementDistributionImpact.find((t) => t.rank === p.rank).percentage,
-					};
-				});
+				placementDistributionImpact =
+					stat.placementDistribution?.map((p) => {
+						const rankImpact = tribeStatsToUse
+							.flatMap((t) => t.impactPlacementDistribution)
+							.filter((t) => t.rank === p.rank)
+							.map((t) => t.impact)
+							.reduce((a, b) => a + b, 0);
+						return {
+							rank: p.rank,
+							percentage: rankImpact,
+						};
+					}) ?? 0;
+				placementDistribution =
+					stat.placementDistribution?.map((p) => {
+						return {
+							rank: p.rank,
+							percentage:
+								p.percentage + placementDistributionImpact.find((t) => t.rank === p.rank).percentage,
+						};
+					}) ?? [];
 
-				combatWinrateImpact = stat.combatWinrate.map((p) => {
-					const turnImpact = tribeStatsToUse
-						.flatMap((t) => t.impactCombatWinrate)
-						.filter((t) => t.turn === p.turn)
-						.map((t) => t.impact)
-						.reduce((a, b) => a + b, 0);
-					return {
-						turn: p.turn,
-						percentage: turnImpact,
-					};
-				});
-				combatWinrate = stat.combatWinrate.map((p) => {
-					return {
-						turn: p.turn,
-						winrate: p.winrate + combatWinrateImpact.find((t) => t.turn === p.turn).winrate,
-					};
-				});
+				combatWinrateImpact =
+					stat.combatWinrate?.map((p) => {
+						const turnImpact = tribeStatsToUse
+							.flatMap((t) => t.impactCombatWinrate)
+							.filter((t) => t.turn === p.turn)
+							.map((t) => t.impact)
+							.reduce((a, b) => a + b, 0);
+						return {
+							turn: p.turn,
+							percentage: turnImpact,
+						};
+					}) ?? 0;
+				combatWinrate =
+					stat.combatWinrate?.map((p) => {
+						return {
+							turn: p.turn,
+							winrate: p.winrate + combatWinrateImpact.find((t) => t.turn === p.turn).winrate,
+						};
+					}) ?? [];
 
-				warbandStatsImpact = stat.warbandStats.map((p) => {
-					const turnImpact = tribeStatsToUse
-						.flatMap((t) => t.impactWarbandStats)
-						.filter((t) => t.turn === p.turn)
-						.map((t) => t.impact)
-						.reduce((a, b) => a + b, 0);
-					return {
-						turn: p.turn,
-						averageStats: turnImpact,
-					};
-				});
-				warbandStats = stat.warbandStats.map((p) => {
-					return {
-						turn: p.turn,
-						averageStats: p.averageStats + warbandStatsImpact.find((t) => t.turn === p.turn).averageStats,
-					};
-				});
+				warbandStatsImpact =
+					stat.warbandStats?.map((p) => {
+						const turnImpact = tribeStatsToUse
+							.flatMap((t) => t.impactWarbandStats)
+							.filter((t) => t.turn === p.turn)
+							.map((t) => t.impact)
+							.reduce((a, b) => a + b, 0);
+						return {
+							turn: p.turn,
+							averageStats: turnImpact,
+						};
+					}) ?? 0;
+				warbandStats =
+					stat.warbandStats?.map((p) => {
+						return {
+							turn: p.turn,
+							averageStats:
+								p.averageStats + warbandStatsImpact.find((t) => t.turn === p.turn).averageStats,
+						};
+					}) ?? [];
 			}
 
 			const result: BgsMetaHeroStatTierItem = {
