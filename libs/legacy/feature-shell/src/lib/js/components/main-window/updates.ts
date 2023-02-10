@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.2.1',
+		version: '10.2.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -49,6 +49,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Mods support is almost ready! I have added more visual feedback, and a way to automatically update the mods from the Mods screen in the settings. If you'd like to give it a try before it hits the live build (and help me make sure everything works properly ^^), please let me know on Discord.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `The Heroes tab now contains Meta stats, to let you know how each hero performs for the player base, depending on the rank and available tribes. Let me know what you think :)`,
 							},
 						],
 					},
