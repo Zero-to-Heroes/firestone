@@ -20,6 +20,7 @@ import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-s
 				aria-hidden="true"
 				class="portrait"
 				[heroCardId]="heroCardId"
+				[cardTooltip]="heroPowerCardId"
 				[health]="heroStartingHealth"
 			></bgs-hero-portrait>
 			<div class="hero-details">
@@ -80,6 +81,7 @@ import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-s
 export class BattlegroundsMetaStatsHeroInfoComponent {
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
 		this.heroCardId = value.id;
+		this.heroPowerCardId = value.heroPowerCardId;
 		this.heroName = this.allCards.getCard(value.id).name;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
@@ -110,6 +112,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	}
 
 	heroCardId: string;
+	heroPowerCardId: string;
 	heroName: string;
 	heroStartingHealth: number;
 	dataPoints: string;
