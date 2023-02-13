@@ -221,7 +221,7 @@
 				height: 100%;
 
 				.background {
-					background: var(--color-9);
+					background: transparent;
 					z-index: -1;
 					position: absolute;
 					left: 0;
@@ -263,6 +263,7 @@
 			&:hover {
 				.group-details {
 					overflow: visible;
+					background: var(--color-9);
 
 					.group-detail:nth-child(n + 5) {
 						display: flex;
