@@ -18,9 +18,9 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 		<div class="general-bug-report">
 			<div class="title" [owTranslate]="'settings.general.bug-report.title'"></div>
 			<p class="note">
-				{{ 'settings.general.bug-report.simulator-bug-text' | owTranslate }}
+				{{ 'settings.general.bug-report.general-bug-text' | owTranslate }}
 				<a
-					href="https://github.com/Zero-to-Heroes/firestone/wiki/How-to-report-a-simulator-bug"
+					href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting"
 					target="_blank"
 					(mousedown)="preventMiddleClick($event)"
 					(click)="preventMiddleClick($event)"
@@ -29,9 +29,9 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 				>
 			</p>
 			<p class="note">
-				{{ 'settings.general.bug-report.general-bug-text' | owTranslate }}
+				{{ 'settings.general.bug-report.simulator-bug-text' | owTranslate }}
 				<a
-					href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting"
+					href="https://github.com/Zero-to-Heroes/firestone/wiki/How-to-report-a-simulator-bug"
 					target="_blank"
 					(mousedown)="preventMiddleClick($event)"
 					(click)="preventMiddleClick($event)"
