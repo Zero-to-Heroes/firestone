@@ -8,7 +8,7 @@ import { BattlegroundsMetaHeroStatsLoadedEvent } from '../mainwindow/store/event
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
-const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/bgs-%timeSuffix%.gz.json?v=123';
+const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/bgs-%timeSuffix%.gz.json';
 
 @Injectable()
 export class BgsMetaHeroStatsService {

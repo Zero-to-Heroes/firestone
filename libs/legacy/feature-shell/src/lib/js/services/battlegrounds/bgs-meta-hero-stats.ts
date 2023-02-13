@@ -149,11 +149,17 @@ export const buildHeroStats = (
 			// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
 			// that stat
 			// We can still have some leftover stats in the data, but that it very likely something bogus
-			const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints);
+			const overlyDominentTribes = stat.tribeStats
+				.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints)
+				// Temporary, because since undeads where omnipresent the stats are skewed
+				.filter((t) => t.tribe !== Race.UNDEAD);
 			const isIn =
 				!overlyDominentTribes.length ||
 				!tribes?.length ||
 				overlyDominentTribes.every((t) => tribes.includes(t.tribe));
+			if (!isIn) {
+				console.debug('not in', stat.heroCardId, overlyDominentTribes, stat);
+			}
 			return isIn;
 		})
 		.map((stat) => {
