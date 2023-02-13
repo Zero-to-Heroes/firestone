@@ -25,7 +25,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true">
+		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true" [avoidGameOverlap]="true">
 			<ads
 				[parentComponent]="'battlegrounds'"
 				[adRefershToken]="adRefershToken$ | async"

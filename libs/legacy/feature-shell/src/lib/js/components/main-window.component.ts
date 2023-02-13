@@ -32,6 +32,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 			} as value"
 			[activeTheme]="activeTheme$ | async"
 			[allowResize]="true"
+			[avoidGameOverlap]="true"
 		>
 			<ng-container>
 				<section class="layout">

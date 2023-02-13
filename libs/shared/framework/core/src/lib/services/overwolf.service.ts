@@ -837,8 +837,8 @@ export class OverwolfService {
 		});
 	}
 
-	public async getMonitorsList(): Promise<any> {
-		return new Promise<any>((resolve) => {
+	public async getMonitorsList(): Promise<overwolf.utils.getMonitorsListResult> {
+		return new Promise<overwolf.utils.getMonitorsListResult>((resolve) => {
 			overwolf.utils.getMonitorsList((res) => {
 				resolve(res);
 			});
@@ -961,4 +961,5 @@ interface UpdateExtensionResult {
 
 export interface ExtendedWindowInfo extends overwolf.windows.WindowInfo {
 	dpiScale: number;
+	type: 'Deskopt' | string;
 }
