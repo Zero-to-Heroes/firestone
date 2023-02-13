@@ -57,7 +57,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `The Heroes tab now contains Meta stats, to let you know how each hero performs for the player base, depending on the rank and available tribes. Let me know what you think :)`,
+								text: `The Heroes tab now contains Meta stats (in addition to your own stats), to let you know how each hero performs for the player base, depending on the rank and available tribes. Let me know what you think :)`,
 							},
 						],
 					},
@@ -70,6 +70,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `The session widgets now displays the name of the hero. The tribes present in the lobby now only show when mousing over that particular game.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix a sim issues where divine shields would sometimes not be removed after taking non-attack damage (eg from Kaboom Bot).`,
