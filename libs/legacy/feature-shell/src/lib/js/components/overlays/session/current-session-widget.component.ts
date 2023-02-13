@@ -153,7 +153,7 @@ import { combineLatest, from, Observable } from 'rxjs';
 											<img class="icon" [src]="tribe.icon" />
 										</div>
 									</div>
-									<div class="board">
+									<div class="board" *ngIf="match?.finalWarband?.entities?.length">
 										<bgs-board
 											[entities]="match.finalWarband.entities"
 											[customTitle]="null"
