@@ -178,7 +178,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 		this.gameMode = this.replayInfo.gameMode;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(this.replayInfo, true);
 
-		this.result = this.buildMatchResultText(this.replayInfo);
+		this.result = buildMatchResultText(this.replayInfo, this.i18n);
 		this.reviewId = this.replayInfo.reviewId;
 
 		const isBg =
@@ -207,7 +207,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 			value: this.availableTribes.map((tribe) => tribe.tooltip).join(', '),
 		});
 		this.bgsPerfectGame = this.replayInfo.bgsPerfectGame;
-		this.finalWarband = this.buildFinalWarband();
+		this.finalWarband = buildFinalWarband(this.replayInfo, this.allCards);
 		this.hasPrizes = this.replayInfo.bgsHasPrizes;
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
@@ -225,44 +225,6 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 			return [`https://static.zerotoheroes.com/hearthstone/cardart/256x/TB_BaconShop_HERO_PH.jpg`, null];
 		}
 	}
-
-	private buildMatchResultText(info: GameStat): string {
-		if (info.additionalResult) {
-			if (info.bgsPerfectGame) {
-				return this.i18n.translateString('app.replays.replay-info.bgs-perfect-game-result');
-			}
-			return this.i18n.translateString(`app.replays.replay-info.bgs-result.${parseInt(info.additionalResult)}`);
-		}
-		return null;
-	}
-
-	private buildFinalWarband(): KnownBoard {
-		const postMatch = this.replayInfo.postMatchStats;
-		const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
-		if (!bgsBoard) {
-			return null;
-		}
-
-		const boardEntities = bgsBoard.board.map((boardEntity) =>
-			boardEntity instanceof Entity || boardEntity.tags instanceof Map
-				? Entity.create(new Entity(), boardEntity as EntityDefinition)
-				: Entity.fromJS(boardEntity as unknown as EntityAsJS),
-		) as readonly Entity[];
-		const normalizedIds = [
-			...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
-		];
-		const minionStats = normalizedIds.map(
-			(cardId) =>
-				({
-					cardId: cardId,
-				} as MinionStat),
-		);
-
-		return {
-			entities: boardEntities,
-			minionStats: minionStats,
-		} as KnownBoard;
-	}
 }
 
 interface InternalTribe {
@@ -271,9 +233,45 @@ interface InternalTribe {
 	tooltip: string;
 }
 
-interface KnownBoard {
+export interface KnownBoard {
 	readonly entities: readonly Entity[];
 	// readonly title: string;
 	readonly minionStats: readonly MinionStat[];
 	// readonly date: string;
 }
+
+export const buildFinalWarband = (replayInfo: GameStat, allCards: CardsFacadeService): KnownBoard => {
+	const postMatch = replayInfo.postMatchStats;
+	const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
+	if (!bgsBoard) {
+		return null;
+	}
+
+	const boardEntities = bgsBoard.board.map((boardEntity) =>
+		boardEntity instanceof Entity || boardEntity.tags instanceof Map
+			? Entity.create(new Entity(), boardEntity as EntityDefinition)
+			: Entity.fromJS(boardEntity as unknown as EntityAsJS),
+	) as readonly Entity[];
+	const normalizedIds = [...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, allCards)))];
+	const minionStats = normalizedIds.map(
+		(cardId) =>
+			({
+				cardId: cardId,
+			} as MinionStat),
+	);
+
+	return {
+		entities: boardEntities,
+		minionStats: minionStats,
+	} as KnownBoard;
+};
+
+export const buildMatchResultText = (info: GameStat, i18n: LocalizationFacadeService): string => {
+	if (info.additionalResult) {
+		if (info.bgsPerfectGame) {
+			return i18n.translateString('app.replays.replay-info.bgs-perfect-game-result');
+		}
+		return i18n.translateString(`app.replays.replay-info.bgs-result.${parseInt(info.additionalResult)}`);
+	}
+	return null;
+};

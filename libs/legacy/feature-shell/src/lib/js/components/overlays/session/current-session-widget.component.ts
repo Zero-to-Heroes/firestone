@@ -9,16 +9,28 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
+import {
+	buildFinalWarband,
+	buildMatchResultText,
+	KnownBoard,
+} from '@components/replays/replay-info/replay-info-battlegrounds.component';
 import { GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { Preferences } from '@models/preferences';
-import { isBattlegrounds, isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
+import {
+	getReferenceTribeCardId,
+	getTribeIcon,
+	getTribeName,
+	isBattlegrounds,
+	isBattlegroundsScene,
+	normalizeHeroCardId,
+} from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, from, Observable } from 'rxjs';
 
 @Component({
@@ -118,7 +130,41 @@ import { combineLatest, from, Observable } from 'rxjs';
 						<ng-container *ngIf="{ showMatches: showMatches$ | async, matches: matches$ | async } as value">
 							<div class="details" *ngIf="value.showMatches && value.matches?.length">
 								<div class="detail" *ngFor="let match of value.matches; trackBy: trackByMatchFn">
-									<replay-info [replay]="match" [displayTime]="false"></replay-info>
+									<div class="hero-portrait">
+										<img
+											class="player-class player"
+											[src]="match.heroPortraitImage"
+											[helpTooltip]="match.heroPortraitTooltip"
+										/>
+									</div>
+									<div class="hero-name">{{ match.heroName }}</div>
+									<div class="position">{{ match.placement }}</div>
+									<div
+										class="delta-mmr"
+										[ngClass]="{
+											positive: match.deltaMmr > 0,
+											negative: match.deltaMmr < 0
+										}"
+									>
+										{{ match.deltaMmr }}
+									</div>
+									<div class="tribes">
+										<div class="tribe" *ngFor="let tribe of match.availableTribes">
+											<img class="icon" [src]="tribe.icon" />
+										</div>
+									</div>
+									<div class="board">
+										<bgs-board
+											[entities]="match.finalWarband.entities"
+											[customTitle]="null"
+											[minionStats]="match.finalWarband.minionStats"
+											[finalBoard]="true"
+											[useFullWidth]="true"
+											[hideDamageHeader]="true"
+											[debug]="false"
+										></bgs-board>
+									</div>
+									<!-- <replay-info [replay]="match" [displayTime]="false"></replay-info> -->
 								</div>
 							</div>
 						</ng-container>
@@ -143,7 +189,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 	totalGamesLabel$: Observable<string>;
 	deltaRank$: Observable<number>;
 	groups$: Observable<readonly Group[]>;
-	matches$: Observable<readonly GameStat[]>;
+	matches$: Observable<readonly SessionMatch[]>;
 	gamesTooltip$: Observable<string>;
 	opacity$: Observable<number>;
 
@@ -263,11 +309,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 				return this.buildBgsGroups(games);
 			}),
 		);
-		this.matches$ = combineLatest(
+		this.matches$ = combineLatest([
 			lastGames$,
 			currentGameType$,
 			this.listenForBasicPref$((prefs) => prefs.sessionWidgetNumberOfMatchesToShow),
-		).pipe(
+		]).pipe(
 			this.mapData(([games, currentGameType, sessionWidgetNumberOfMatchesToShow]) => {
 				return this.buildBgsMatches(games, sessionWidgetNumberOfMatchesToShow);
 			}),
@@ -298,7 +344,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 		return item.id;
 	}
 
-	trackByMatchFn(index: number, item: GameStat) {
+	trackByMatchFn(index: number, item: SessionMatch) {
 		return item.reviewId;
 	}
 
@@ -376,11 +422,40 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 	private buildBgsMatches(
 		games: readonly GameStat[],
 		sessionWidgetNumberOfMatchesToShow: number,
-	): readonly GameStat[] {
+	): readonly SessionMatch[] {
 		const gamesWithFinalPosition = games.filter(
 			(game) => game.additionalResult && !isNaN(parseInt(game.additionalResult)),
 		);
-		return gamesWithFinalPosition.slice(0, sessionWidgetNumberOfMatchesToShow);
+		return gamesWithFinalPosition
+			.map((match) => this.toSessionMatch(match))
+			.slice(0, sessionWidgetNumberOfMatchesToShow);
+	}
+
+	private toSessionMatch(info: GameStat): SessionMatch {
+		const heroCard = this.allCards.getCard(info.playerCardId);
+		const normalizedCardId = normalizeHeroCardId(heroCard.id, this.allCards);
+		console.debug(
+			'session info',
+			this.allCards.getCard(normalizedCardId).name,
+			normalizedCardId,
+			info.playerCardId,
+		);
+		return {
+			reviewId: info.reviewId,
+			heroName: this.allCards.getCard(normalizedCardId).name,
+			heroPortraitImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${normalizedCardId}.jpg`,
+			heroPortraitTooltip: heroCard.name,
+			placement: buildMatchResultText(info, this.i18n),
+			deltaMmr: parseInt(info.newPlayerRank) - parseInt(info.playerRank),
+			availableTribes: [...(info.bgsAvailableTribes ?? [])]
+				.sort((a, b) => a - b)
+				.map((race) => ({
+					cardId: getReferenceTribeCardId(race),
+					icon: getTribeIcon(race),
+					tooltip: getTribeName(race, this.i18n),
+				})),
+			finalWarband: buildFinalWarband(info, this.allCards),
+		};
 	}
 
 	private buildBgsDetails(gamesForPosition: readonly GameStat[]): readonly BgsDetail[] {
@@ -415,4 +490,21 @@ interface Detail {
 
 interface BgsDetail extends Detail {
 	readonly boardEntities: readonly Entity[];
+}
+
+interface SessionMatch {
+	readonly reviewId: string;
+	readonly heroPortraitImage: string;
+	readonly heroPortraitTooltip: string;
+	readonly heroName: string;
+	readonly placement: string;
+	readonly deltaMmr: number;
+	readonly availableTribes: readonly InternalTribe[];
+	readonly finalWarband: KnownBoard;
+}
+
+interface InternalTribe {
+	readonly cardId: string;
+	readonly icon: string;
+	readonly tooltip: string;
 }
