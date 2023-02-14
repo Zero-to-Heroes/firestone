@@ -359,7 +359,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ConchsCall:
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
-				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
+				return and(cardsPlayedThisMatch, not(currentClass), not(neutral));
 			case CardIds.CookiesLadleTavernBrawl:
 				return and(or(inDeck, inHand), murloc);
 			case CardIds.Commencement:
