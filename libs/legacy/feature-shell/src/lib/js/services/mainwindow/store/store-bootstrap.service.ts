@@ -251,6 +251,7 @@ export class StoreBootstrapService {
 			mercenaries: mercenariesState,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
+			patchConfig: patchConfig,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}

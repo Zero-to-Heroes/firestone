@@ -82,6 +82,7 @@ import { BgsBestStatsLoadedEvent } from './events/battlegrounds/bgs-best-stats-l
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from './events/battlegrounds/bgs-meta-hero-stats-loaded-event';
+import { BattlegroundsMetaHeroStrategiesLoadedEvent } from './events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs-perfect-games-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
@@ -234,6 +235,7 @@ import { BgsBestStatsLoadedProcessor } from './processors/battlegrounds/bgs-best
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BattlegroundsMetaHeroStatsLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-stats-loaded-processor';
+import { BattlegroundsMetaHeroStrategiesLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-strategies-loaded-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
 import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegrounds/bgs-perfect-games-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
@@ -754,6 +756,10 @@ export class MainWindowStoreService {
 			],
 			[BattlegroundsPerfectGamesLoadedEvent.eventName(), new BattlegroundsPerfectGamesLoadedProcessor()],
 			[BattlegroundsMetaHeroStatsLoadedEvent.eventName(), new BattlegroundsMetaHeroStatsLoadedProcessor()],
+			[
+				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),
+				new BattlegroundsMetaHeroStrategiesLoadedProcessor(),
+			],
 			[BgsQuestsDataLoadedEvent.eventName(), new BgsQuestsDataLoadedProcessor()],
 			[
 				// Streams

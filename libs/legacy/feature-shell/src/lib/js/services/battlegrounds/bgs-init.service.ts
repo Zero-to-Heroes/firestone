@@ -4,7 +4,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -107,27 +106,28 @@ export class BgsInitService {
 		} as BattlegroundsAppState);
 	}
 
-	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
-		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
-		const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
-			BattlegroundsPersonalStatsHeroDetailsCategory.create({
-				id: 'bgs-category-personal-hero-details-' + heroCardId,
-				name: this.cards.getCard(heroCardId)?.name,
-				heroId: heroCardId,
-				tabs: [
-					'winrate-stats',
-					// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
-					// 'mmr',
-					'warband-stats',
-					'final-warbands',
-				] as readonly BgsHeroStatsFilterId[],
-			} as BattlegroundsPersonalStatsHeroDetailsCategory),
-		);
-		return BattlegroundsPersonalHeroesCategory.create({
-			name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
-			categories: heroDetailCategories,
-		} as BattlegroundsPersonalHeroesCategory);
-	}
+	// private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
+	// 	const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
+	// 	const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
+	// 		BattlegroundsPersonalStatsHeroDetailsCategory.create({
+	// 			id: 'bgs-category-personal-hero-details-' + heroCardId,
+	// 			name: this.cards.getCard(heroCardId)?.name,
+	// 			heroId: heroCardId,
+	// 			tabs: [
+	// 				'strategies',
+	// 				'winrate-stats',
+	// 				// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
+	// 				// 'mmr',
+	// 				'warband-stats',
+	// 				'final-warbands',
+	// 			] as readonly BgsHeroStatsFilterId[],
+	// 		} as BattlegroundsPersonalStatsHeroDetailsCategory),
+	// 	);
+	// 	return BattlegroundsPersonalHeroesCategory.create({
+	// 		name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
+	// 		categories: heroDetailCategories,
+	// 	} as BattlegroundsPersonalHeroesCategory);
+	// }
 
 	private buildMetaHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
 		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
@@ -137,6 +137,7 @@ export class BgsInitService {
 				name: this.cards.getCard(heroCardId)?.name,
 				heroId: heroCardId,
 				tabs: [
+					// 'strategies',
 					'winrate-stats',
 					// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
 					// 'mmr',

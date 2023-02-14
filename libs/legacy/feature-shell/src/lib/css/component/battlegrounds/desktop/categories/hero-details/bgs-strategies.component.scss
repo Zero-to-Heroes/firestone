@@ -1,0 +1,63 @@
+.strategies {
+	display: flex;
+	flex-direction: column;
+}
+
+.strategy {
+	margin-bottom: 20px;
+
+	.summary {
+		width: 600px;
+		font-size: 14px;
+		margin-bottom: 5px;
+		color: var(--color-1);
+		position: relative;
+
+		.background {
+			background: var(--color-7);
+			opacity: 0.5;
+			position: absolute;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			z-index: -1;
+			border-radius: 15px;
+		}
+
+		.text {
+			padding: 15px;
+
+			&:before {
+				content: '“';
+				font-size: 4em;
+				line-height: 0.1em;
+				margin-right: 0.25em;
+				vertical-align: -0.4em;
+			}
+		}
+	}
+
+	.author {
+		font-size: 12px;
+		display: flex;
+		justify-content: flex-end;
+
+		a {
+			color: var(--default-text-color);
+
+			&:hover {
+				color: var(--default-title-color);
+			}
+		}
+
+		.date {
+			&:before {
+				content: ',';
+				margin-right: 5px;
+			}
+
+			font-style: italic;
+		}
+	}
+}

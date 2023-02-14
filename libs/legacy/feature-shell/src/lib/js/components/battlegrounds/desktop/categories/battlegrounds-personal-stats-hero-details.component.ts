@@ -40,6 +40,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 						{{ getLabel(tab) }}
 					</li>
 				</ul>
+				<bgs-strategies class="stat" *ngIf="selectedTab === 'strategies'"> </bgs-strategies>
 				<bgs-last-warbands class="stat" *ngIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
 				<bgs-mmr-evolution-for-hero class="stat" *ngIf="selectedTab === 'mmr'"> </bgs-mmr-evolution-for-hero>
 				<bgs-warband-stats-for-hero class="stat" *ngIf="selectedTab === 'warband-stats'">

@@ -454,6 +454,7 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/categories/hero-details/bgs-strategies.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
@@ -641,6 +642,7 @@ import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-cust
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from './js/services/battlegrounds/bgs-init.service';
 import { BgsMetaHeroStatsService } from './js/services/battlegrounds/bgs-meta-hero-stats.service';
+import { BgsMetaHeroStrategiesService } from './js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { BattlegroundsQuestsService } from './js/services/battlegrounds/bgs-quests.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
@@ -1322,6 +1324,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsHeroRecordsBrokenComponent,
 		BattlegroundsReplaysRecapComponent,
 		BgsLastWarbandsComponent,
+		BgsStrategiesComponent,
 		BgsMmrEvolutionForHeroComponent,
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,
@@ -1732,6 +1735,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsStoreService,
 		BgsInitService,
 		BgsMetaHeroStatsService,
+		BgsMetaHeroStrategiesService,
 		BgsGlobalStatsService,
 		BattlegroundsQuestsService,
 		BgsBattleSimulationService,

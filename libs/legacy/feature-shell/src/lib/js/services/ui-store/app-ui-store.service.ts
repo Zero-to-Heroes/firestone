@@ -29,7 +29,6 @@ import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-sta
 import { GameState } from '../../models/decktracker/game-state';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
@@ -597,7 +596,7 @@ export class AppUiStoreService {
 
 export const currentBgHeroId = (battlegrounds: BattlegroundsAppState, selectedCategoryId: string): string => {
 	return selectedCategoryId?.includes('bgs-category-personal-hero-details-')
-		? (battlegrounds.findCategory(selectedCategoryId) as BattlegroundsPersonalStatsHeroDetailsCategory)?.heroId
+		? selectedCategoryId.split('bgs-category-personal-hero-details-')[1]
 		: null;
 };
 

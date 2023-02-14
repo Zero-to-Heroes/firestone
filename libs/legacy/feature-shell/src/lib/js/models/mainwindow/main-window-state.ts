@@ -6,6 +6,7 @@ import { NonFunctionProperties } from '../../services/utils';
 import { ArenaState } from '../arena/arena-state';
 import { DuelsState } from '../duels/duels-state';
 import { MercenariesState } from '../mercenaries/mercenaries-state';
+import { PatchesConfig } from '../patches';
 import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
@@ -34,6 +35,7 @@ export class MainWindowState {
 	readonly stats: StatsState = new StatsState();
 	readonly quests: QuestsState = new QuestsState();
 	readonly streams: StreamsState = new StreamsState();
+	readonly patchConfig: PatchesConfig;
 	readonly showAds: boolean = true;
 
 	// See decktracker-state.ts for more info
