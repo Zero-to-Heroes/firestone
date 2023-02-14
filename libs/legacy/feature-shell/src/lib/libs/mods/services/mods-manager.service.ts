@@ -77,7 +77,7 @@ export class ModsManagerService {
 							toModVersion(modData.Version) ?? newConf[modData.AssemblyName].lastKnownVersion,
 					};
 
-					if (conf[modData.AssemblyName].modName !== newConf[modData.AssemblyName].modName) {
+					if (conf[modData.AssemblyName]?.modName !== newConf[modData.AssemblyName].modName) {
 						modsDirty = true;
 					}
 					if (conf[modData.AssemblyName].downloadLink !== newConf[modData.AssemblyName].downloadLink) {
@@ -101,7 +101,7 @@ export class ModsManagerService {
 					? modsData
 					: Object.keys(newConf).map((assemblyName) => ({
 							AssemblyName: assemblyName,
-							Name: newConf[assemblyName].modName ?? assemblyName,
+							Name: newConf[assemblyName]?.modName ?? assemblyName,
 					  }));
 				const result: ModData[] = [...dataFromLiveOrPrefs]
 					.map(
