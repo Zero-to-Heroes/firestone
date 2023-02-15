@@ -15,7 +15,7 @@ export class SecretConfigService {
 	}
 
 	public getValidSecrets(metadata: Metadata, playerClass: string, creatorCardId?: string): readonly string[] {
-		const mode: string = this.getMode(metadata);
+		const mode: string = this.getMode(metadata, creatorCardId);
 		const config = this.secretConfigs.find((conf) => conf.mode === mode);
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
@@ -63,7 +63,11 @@ export class SecretConfigService {
 		});
 	}
 
-	private getMode(metadata: Metadata): string {
+	private getMode(metadata: Metadata, creatorCardId: string): string {
+		if (creatorCardId === CardIds.TearReality) {
+			return 'wild';
+		}
+
 		if (metadata.gameType === GameType.GT_ARENA) {
 			return 'arena';
 		}
