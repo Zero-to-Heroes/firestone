@@ -145,7 +145,7 @@ export interface MercenariesReferenceData {
 		readonly name: string;
 		readonly descriptionNormal: string;
 		readonly descriptionHeroic: string;
-		readonly descriptionLegendary: string;
+		readonly descriptionMythic: string;
 		readonly sortOrder: number;
 		readonly bounties: readonly {
 			readonly id: number;

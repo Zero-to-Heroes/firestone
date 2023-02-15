@@ -8,9 +8,8 @@ import {
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -150,7 +149,8 @@ export const extractHeroTimings = (
 	readonly mercEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 } => {
-	const mercStats = extractStats(game as ReviewMessage, replay, null, referenceData, allCards);
+	// FIXME: remove the "as any" once the lib has been updated with the new model
+	const mercStats = extractStats(game as ReviewMessage, replay, null, referenceData as any, allCards);
 
 	if (!mercStats?.filter((stat) => stat.statName === 'mercs-hero-timing').length) {
 		console.log('no hero timings, returning', mercStats);

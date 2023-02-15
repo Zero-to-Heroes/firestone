@@ -47,7 +47,7 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.EmperorCobraLegacy_EX1_170,
 	CardIds.SnakeLegacyToken,
 	CardIds.SnakeLegacy,
-	CardIds.StoneElemental,
+	CardIds.ElementEarth_StoneElementalToken,
 	CardIds.BolvarFireblood_CORE_ICC_858,
 	CardIds.BolvarFireblood_ICC_858,
 	// 25.2
@@ -319,6 +319,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.EnhanceOMechano_Enhancification;
 		case CardIds.ProfessorPutricide_BG25_HERO_100:
 			return CardIds.ProfessorPutricide_BuildAnUndead;
+		case CardIds.TeronGorefiend_BG25_HERO_103:
+			return CardIds.TeronGorefiend_RapidReanimation;
 
 		case '':
 			return null; // new heroes
@@ -710,6 +712,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 462;
 		case CardIds.ProfessorPutricide_BG25_HERO_100:
 			return 463;
+		case CardIds.TeronGorefiend_BG25_HERO_103:
+			return 464;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

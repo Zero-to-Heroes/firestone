@@ -446,6 +446,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion);
 			case CardIds.ExpeditedBurialTavernBrawl:
 				return and(minion, deathrattle);
+			case CardIds.FaithfulCompanions:
+				return and(inDeck, minion, beast);
 			case CardIds.FandralStaghelm:
 			case CardIds.FandralStaghelmCore:
 				return and(inDeck, chooseOne);
@@ -774,6 +776,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, not(rush));
 			case CardIds.RottenRodent:
 				return and(inDeck, minion, deathrattle);
+			case CardIds.RottingNecromancer:
+				return and(inDeck, minion, undead);
 			case CardIds.RoyalGreatswordTavernBrawlToken:
 				return and(inDeck, minion, legendary);
 			case CardIds.RuneforgingCore:
@@ -842,6 +846,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.SpecialDeliveryTavernBrawl:
 				return and(or(inDeck, inHand), minion, rush);
+			case CardIds.SpectralTrainee:
+				return and(or(inDeck, inHand), spell);
 			case CardIds.SpiritGuide:
 				return and(inDeck, spell, or(shadow, holy));
 			case CardIds.SpreadingSaplingsTavernBrawl:

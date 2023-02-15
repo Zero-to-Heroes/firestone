@@ -15,10 +15,9 @@ import {
 import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@firestone-hs/deckstrings';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -264,7 +263,7 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 		)
 			.pipe(
 				this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
-					buildTeamsForTasks(tasks, refData, collectionInfo, mercBackupIds, this.allCards, this.i18n),
+					buildTeamsForTasks(tasks, refData as any, collectionInfo, mercBackupIds, this.allCards, this.i18n),
 				),
 			)
 			.subscribe((infos) => {

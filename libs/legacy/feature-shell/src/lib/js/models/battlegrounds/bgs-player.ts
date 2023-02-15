@@ -2,9 +2,9 @@ import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-par
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PlayerBoardEntity } from '@legacy-import/src/lib/js/services/battlegrounds/store/events/bgs-player-board-event';
 import { NonFunctionProperties } from '@services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getHeroPower, normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
 import { BgsBoard } from './in-game/bgs-board';
@@ -111,68 +111,7 @@ export class BgsPlayer implements IBgsPlayer {
 			return [];
 		}
 
-		return logEntities.map((entity) => this.buildBgsEntity(entity, allCards));
-	}
-
-	private buildBgsEntity(logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity {
-		if (!logEntity) {
-			return null;
-		}
-
-		return {
-			cardId: logEntity.CardId,
-			attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
-			divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
-			enchantments: this.buildEnchantments(logEntity.Enchantments),
-			entityId: logEntity.Entity,
-			health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
-			poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
-			reborn: logEntity.Tags.find((tag) => tag.Name === GameTag.REBORN)?.Value === 1,
-			taunt: logEntity.Tags.find((tag) => tag.Name === GameTag.TAUNT)?.Value === 1,
-			cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
-			stealth: logEntity.Tags.find((tag) => tag.Name === GameTag.STEALTH)?.Value === 1,
-			windfury: logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 1,
-			megaWindfury:
-				logEntity.Tags.find((tag) => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
-				logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
-			friendly: true,
-			frenzyApplied: false,
-			definitelyDead: false,
-			immuneWhenAttackCharges: 0,
-			additionalCards: this.buildAdditionalCards(logEntity.CardId, logEntity.Tags, allCards),
-		};
-	}
-
-	private buildAdditionalCards(
-		cardId: string,
-		Tags: readonly { Name: number; Value: number }[],
-		allCards: CardsFacadeService,
-	): readonly string[] {
-		const modularTags = Tags?.filter(
-			(t) => t.Name === GameTag.MODULAR_ENTITY_PART_1 || t.Name === GameTag.MODULAR_ENTITY_PART_2,
-		);
-		if (!modularTags?.length) {
-			return null;
-		}
-
-		return modularTags
-			.map((t) => t.Value)
-			.map((dbfId) => allCards.getCard(dbfId).id)
-			.filter((id) => id !== cardId);
-	}
-
-	private buildEnchantments(
-		enchantments: readonly { EntityId: number; CardId: string }[],
-	): { cardId: string; originEntityId: number; timing: number }[] {
-		if (!enchantments?.length) {
-			return [];
-		}
-
-		return enchantments.map((enchant) => ({
-			originEntityId: enchant.EntityId,
-			cardId: enchant.CardId,
-			timing: 0,
-		}));
+		return logEntities.map((entity) => buildBgsEntity(entity, allCards));
 	}
 }
 
@@ -182,3 +121,64 @@ export interface QuestReward {
 	readonly completedTurn: number;
 	readonly isHeroPower: boolean;
 }
+
+export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity => {
+	if (!logEntity) {
+		return null;
+	}
+
+	return {
+		cardId: logEntity.CardId,
+		attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
+		divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
+		enchantments: buildEnchantments(logEntity.Enchantments),
+		entityId: logEntity.Entity,
+		health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
+		poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
+		reborn: logEntity.Tags.find((tag) => tag.Name === GameTag.REBORN)?.Value === 1,
+		taunt: logEntity.Tags.find((tag) => tag.Name === GameTag.TAUNT)?.Value === 1,
+		cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
+		stealth: logEntity.Tags.find((tag) => tag.Name === GameTag.STEALTH)?.Value === 1,
+		windfury: logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 1,
+		megaWindfury:
+			logEntity.Tags.find((tag) => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
+			logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
+		friendly: true,
+		frenzyApplied: false,
+		definitelyDead: false,
+		immuneWhenAttackCharges: 0,
+		additionalCards: buildAdditionalCards(logEntity.CardId, logEntity.Tags, allCards),
+	};
+};
+
+const buildAdditionalCards = (
+	cardId: string,
+	Tags: readonly { Name: number; Value: number }[],
+	allCards: CardsFacadeService,
+): readonly string[] => {
+	const modularTags = Tags?.filter(
+		(t) => t.Name === GameTag.MODULAR_ENTITY_PART_1 || t.Name === GameTag.MODULAR_ENTITY_PART_2,
+	);
+	if (!modularTags?.length) {
+		return null;
+	}
+
+	return modularTags
+		.map((t) => t.Value)
+		.map((dbfId) => allCards.getCard(dbfId).id)
+		.filter((id) => id !== cardId);
+};
+
+const buildEnchantments = (
+	enchantments: readonly { EntityId: number; CardId: string }[],
+): { cardId: string; originEntityId: number; timing: number }[] => {
+	if (!enchantments?.length) {
+		return [];
+	}
+
+	return enchantments.map((enchant) => ({
+		originEntityId: enchant.EntityId,
+		cardId: enchant.CardId,
+		timing: 0,
+	}));
+};

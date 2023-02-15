@@ -15,9 +15,15 @@ export const standardSets: readonly string[] = [
 	'icecrown',
 	'return_of_the_lich_king',
 	'path_of_arthas',
+	'return_to_naxxramas',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'return_to_naxxramas',
+		name: `Return to Naxxramas`,
+		launchDate: new Date('2023-02-14'),
+	},
 	{
 		id: 'path_of_arthas',
 		name: `Path of Arthas`,

@@ -5,8 +5,8 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
-import { Map } from 'immutable';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Map } from 'immutable';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -180,7 +180,10 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,
 				questRewards: playerBoard.questRewards,
-				globalInfo: playerBoard.globalInfo,
+				globalInfo: {
+					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
+					UndeadAttackBonus: playerBoard.globalInfo?.UndeadAttackBonus ?? 0,
+				},
 				debugArmor: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value,
 				debugHealth: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
 			} as BgsPlayerEntity & { debugArmor: number; debugHealth: number },
