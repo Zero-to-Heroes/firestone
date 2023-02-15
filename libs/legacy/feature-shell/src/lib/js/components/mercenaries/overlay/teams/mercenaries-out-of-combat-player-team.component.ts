@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import {
 	BattleAbility,
@@ -55,7 +55,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 			filter(([[currentScene, referenceData, mapInfo]]) => !!referenceData),
 			this.mapData(([[currentScene, referenceData, refMapInfo]]) => {
 				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
-				return MercenariesBattleTeam.create({
+				const result = MercenariesBattleTeam.create({
 					mercenaries:
 						mapInfo?.PlayerTeam?.map((playerTeamInfo) => {
 							const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
@@ -72,14 +72,21 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 								isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
 								abilities: [
 									...playerTeamInfo.Abilities.map((ability) => {
+										console.debug('ability', ability.CardId, ability);
 										return BattleAbility.create({
 											cardId: ability.CardId,
+											nameData1: ability.Tier,
 										});
 									}),
-									...(playerTeamInfo.TreasureCardDbfIds ?? []).map((treasureDbfId) => {
+									...(playerTeamInfo.Treasures ?? []).map((treasure) => {
+										const refTreasure = referenceData.mercenaryTreasures?.find(
+											(t) => t.id === treasure.TreasureId,
+										);
+										console.debug('treasures', treasure.TreasureId, refTreasure, treasure);
 										return BattleAbility.create({
-											cardId: this.allCards.getCardFromDbfId(treasureDbfId).id,
+											cardId: this.allCards.getCard(refTreasure?.cardId).id,
 											isTreasure: true,
+											nameData1: (treasure.Scalar ?? 0) + 1,
 										});
 									}),
 								],
@@ -93,12 +100,15 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 										return BattleEquipment.create({
 											cardId: this.allCards.getCard(refTier?.cardDbfId)?.id,
 											level: equip.Tier,
+											nameData1: equip.Tier,
 										});
 									})
 									.pop(),
 							});
 						}) ?? [],
 				});
+				console.debug('ooc team', result, currentScene, referenceData, refMapInfo);
+				return result;
 			}),
 		);
 	}

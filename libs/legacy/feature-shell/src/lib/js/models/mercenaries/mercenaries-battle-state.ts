@@ -117,6 +117,7 @@ export class BattleEquipment {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly level: number;
+	readonly nameData1?: number;
 
 	public static create(base: Partial<NonFunctionProperties<BattleEquipment>>): BattleEquipment {
 		return Object.assign(new BattleEquipment(), base);
@@ -138,6 +139,7 @@ export class BattleAbility {
 	readonly totalUsed: number;
 	readonly isTreasure: boolean;
 	readonly speedModifier: BattleSpeedModifier;
+	readonly nameData1?: number;
 
 	public static create(base: Partial<NonFunctionProperties<BattleAbility>>): BattleAbility {
 		return Object.assign(new BattleAbility(), base);

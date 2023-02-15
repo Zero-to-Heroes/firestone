@@ -25,7 +25,7 @@ export interface MemoryMercenary {
 	readonly Abilities: readonly MemoryMercenaryAbility[];
 	readonly Equipments: readonly MemoryMercenaryEquipment[];
 	readonly Skins: readonly MemoryMercenarySkin[];
-	readonly TreasureCardDbfIds: readonly number[];
+	readonly Treasures: readonly MemoryTreasure[];
 	readonly Attack: number;
 	readonly Health: number;
 	readonly CurrencyAmount: number;
@@ -36,6 +36,11 @@ export interface MemoryMercenary {
 	readonly Rarity: RarityTYpe;
 	readonly Role: TagRole;
 	readonly Loadout: MercenaryLoadout;
+}
+
+export interface MemoryTreasure {
+	readonly TreasureId: number;
+	readonly Scalar: number;
 }
 
 export interface MercenaryLoadout {

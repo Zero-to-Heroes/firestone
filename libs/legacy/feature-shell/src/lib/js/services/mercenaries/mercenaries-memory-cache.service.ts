@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { Subject } from 'rxjs';
-import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
+import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { LocalStorageService } from '../local-storage';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { deepEqual, sleep } from '../utils';
+import { sleep } from '../utils';
 
 export const MERCENARIES_SCENES = [
 	SceneMode.LETTUCE_BOUNTY_BOARD,
@@ -41,9 +41,6 @@ export class MercenariesMemoryCacheService {
 	public memoryMapInfo$ = new Subject<MemoryMercenariesInfo>();
 
 	private previousScene: SceneMode;
-	private previousCollectionInfo: MemoryMercenariesCollectionInfo;
-	private previousVisitorsInfo: readonly MemoryVisitor[];
-	private previousMapInfo: MemoryMercenariesInfo;
 
 	constructor(
 		private readonly memoryService: MemoryInspectionService,
@@ -79,11 +76,16 @@ export class MercenariesMemoryCacheService {
 				this.memoryCollectionInfo$.next(newMercenariesCollectionInfo);
 			}
 
-			const mapInfo = await this.memoryService.getMercenariesInfo();
-			if (!deepEqual(mapInfo, this.previousMapInfo)) {
-				this.previousMapInfo = mapInfo;
-				this.memoryMapInfo$.next(mapInfo);
+			let mapInfo = await this.memoryService.getMercenariesInfo(1);
+			let retiesLeft = 5;
+			while (!mapInfo?.Map?.PlayerTeam?.length && retiesLeft >= 0) {
+				await sleep(200);
+				mapInfo = await this.memoryService.getMercenariesInfo(1);
+				retiesLeft--;
 			}
+
+			console.debug('[mercs] got mapInfo', mapInfo);
+			this.memoryMapInfo$.next(mapInfo);
 		});
 	}
 

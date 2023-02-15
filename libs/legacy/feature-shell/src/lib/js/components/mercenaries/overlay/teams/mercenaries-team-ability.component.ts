@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
 
@@ -78,7 +78,7 @@ export class MercenariesTeamAbilityComponent {
 		this.type = value.type;
 		this.cardId = value.cardId;
 		this.cardImage = value.cardImage;
-		this.name = abilityCard.name;
+		this.name = value.name;
 		this.cooldown = value.cooldown;
 		this.cooldownLeft = value.cooldownLeft;
 		this.cooldownLeftTooltip = this.i18n.translateString('mercenaries.team-widget.cooldown-left-tooltip', {

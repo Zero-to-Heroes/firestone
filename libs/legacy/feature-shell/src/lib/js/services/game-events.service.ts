@@ -1332,6 +1332,7 @@ export class GameEvents {
 						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
 						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
 						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+						abilityNameData1: gameEvent.Value.AdditionalProps.AbilityNameData1,
 						isTreasure: gameEvent.Value.AdditionalProps.IsTreasure,
 					}),
 				);
@@ -1340,6 +1341,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MERCENARIES_EQUIPMENT_REVEALED, gameEvent, {
 						equipmentOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+						abilityNameData1: gameEvent.Value.AdditionalProps.AbilityNameData1,
 					}),
 				);
 				break;

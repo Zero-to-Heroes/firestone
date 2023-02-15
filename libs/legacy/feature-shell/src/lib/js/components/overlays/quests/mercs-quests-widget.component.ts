@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import {
 	BattleAbility,
@@ -119,9 +119,12 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 											cardId: ability.CardId,
 										});
 									}),
-									...(playerTeamInfo.TreasureCardDbfIds ?? []).map((treasureDbfId) => {
+									...(playerTeamInfo.Treasures ?? []).map((treasure) => {
+										const refTreasure = referenceData.mercenaryTreasures?.find(
+											(t) => t.id === treasure.TreasureId,
+										);
 										return BattleAbility.create({
-											cardId: this.allCards.getCardFromDbfId(treasureDbfId).id,
+											cardId: this.allCards.getCardFromDbfId(refTreasure?.cardId).id,
 											isTreasure: true,
 										});
 									}),

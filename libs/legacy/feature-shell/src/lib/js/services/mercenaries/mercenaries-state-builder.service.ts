@@ -169,6 +169,10 @@ export interface MercenariesReferenceData {
 		readonly tasks: readonly InternalTask[];
 	}[];
 	readonly repeatableTasks: readonly InternalTask[];
+	readonly mercenaryTreasures: readonly {
+		readonly id: number;
+		readonly cardId: number;
+	}[];
 }
 
 export interface InternalTask {

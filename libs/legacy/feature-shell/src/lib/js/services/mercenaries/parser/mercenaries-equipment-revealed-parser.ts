@@ -41,6 +41,7 @@ export class MercenariesEquipmentRevealedParser implements MercenariesParser {
 				cardId: cardId,
 				entityId: entityId,
 				level: getMercCardLevel(cardId),
+				nameData1: event.additionalData.abilityNameData1,
 			}),
 		});
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);

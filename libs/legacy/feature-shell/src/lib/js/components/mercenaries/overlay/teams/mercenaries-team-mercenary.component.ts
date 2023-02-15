@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { TagRole, Zone } from '@firestone-hs/reference-data';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { isPassiveMercsTreasure } from '../../../../services/mercenaries/mercenaries-utils';
@@ -76,7 +76,7 @@ export class MercenariesTeamMercenaryComponent {
 				cardImage: ability.isTreasure
 					? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png)`
 					: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png)`,
-				name: abilityCard.name,
+				name: abilityCard.name?.replace('{0}', '' + ability.nameData1),
 				speed: isPassiveMercsTreasure(ability.cardId, this.allCards)
 					? null
 					: ability.speed ?? abilityCard.cost ?? 0,
@@ -88,12 +88,15 @@ export class MercenariesTeamMercenaryComponent {
 				heroSpeedModifier: value.speedModifier,
 			};
 		});
+		console.debug('building equipment', value.equipment, this.allCards.getCard(value.equipment.cardId));
 		this.equipment = value.equipment
 			? ({
 					type: 'equipment',
 					cardId: value.equipment.cardId,
 					cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_background.png)`,
-					name: this.allCards.getCard(value.equipment.cardId).name,
+					name: this.allCards
+						.getCard(value.equipment.cardId)
+						.name?.replace('{0}', '' + value.equipment.nameData1),
 			  } as Ability)
 			: null;
 		this.isDead = value.isDead;
