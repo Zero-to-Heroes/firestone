@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { MercenariesMapType, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -72,17 +72,19 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 								isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
 								abilities: [
 									...playerTeamInfo.Abilities.map((ability) => {
-										console.debug('ability', ability.CardId, ability);
+										const mythicModifier =
+											refMapInfo.Map.MapType === MercenariesMapType.TYPE_BOSS_RUSH
+												? ability.MythicModifier ?? 0
+												: 0;
 										return BattleAbility.create({
 											cardId: ability.CardId,
-											nameData1: ability.Tier,
+											nameData1: ability.Tier + mythicModifier,
 										});
 									}),
 									...(playerTeamInfo.Treasures ?? []).map((treasure) => {
 										const refTreasure = referenceData.mercenaryTreasures?.find(
 											(t) => t.id === treasure.TreasureId,
 										);
-										console.debug('treasures', treasure.TreasureId, refTreasure, treasure);
 										return BattleAbility.create({
 											cardId: this.allCards.getCard(refTreasure?.cardId).id,
 											isTreasure: true,
@@ -97,10 +99,14 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 											(e) => e.equipmentId === equip.Id,
 										);
 										const refTier = refEquipment.tiers.find((t) => t.tier === equip.Tier);
+										const mythicModifier =
+											refMapInfo.Map.MapType === MercenariesMapType.TYPE_BOSS_RUSH
+												? equip.MythicModifier ?? 0
+												: 0;
 										return BattleEquipment.create({
 											cardId: this.allCards.getCard(refTier?.cardDbfId)?.id,
 											level: equip.Tier,
-											nameData1: equip.Tier,
+											nameData1: equip.Tier + mythicModifier,
 										});
 									})
 									.pop(),

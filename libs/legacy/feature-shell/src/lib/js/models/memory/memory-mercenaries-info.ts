@@ -1,4 +1,4 @@
-import { RarityTYpe, TagRole } from '@firestone-hs/reference-data';
+import { MercenariesMapType, RarityTYpe, TagRole } from '@firestone-hs/reference-data';
 
 export interface MemoryMercenariesInfo {
 	readonly PvpRating: number;
@@ -8,6 +8,7 @@ export interface MemoryMercenariesInfo {
 export interface MemoryMercenariesMap {
 	readonly BountyId: number;
 	readonly MapId: number;
+	readonly MapType: MercenariesMapType;
 	readonly Seed: number;
 	readonly PlayerTeamId: number;
 	readonly PlayerTeamName: string;
@@ -72,6 +73,7 @@ export interface MemoryMercenarySkin {
 export interface MemoryMercenaryAbility {
 	readonly CardId: string;
 	readonly Tier: number;
+	readonly MythicModifier: number;
 }
 
 export interface MemoryMercenaryEquipment {
@@ -79,4 +81,5 @@ export interface MemoryMercenaryEquipment {
 	readonly Owned: boolean;
 	readonly Equipped: boolean;
 	readonly Tier: number;
+	readonly MythicModifier: number;
 }
