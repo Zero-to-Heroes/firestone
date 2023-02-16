@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.2.12',
+		version: '10.2.13',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -54,84 +54,34 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `The session widgets now displays the name of the hero. The tribes present in the lobby now only show when mousing over that particular game.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a sim issues where divine shields would sometimes not be removed after taking non-attack damage (eg from Kaboom Bot).`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a sim issues where Denathrius quests would be ignored.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where you couldn't set the Eternal Legion and Undead Army buffs at the same time in the simulator.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where hitting the "reset" button in the simulator would not reset the hero power and quest reward.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the Magmaloc counter's tooltip would give an incorrect value.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where tribes would sometimes not be properly recorded when uploading a game.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where you wouldn't see the full board when mousing over games in the session widget.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the "popup post-match stats" option would not work anymore.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the "show global effects" option would not work for the opponent's deck.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where Bleeds created by Garrote were added to the wrong deck.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'duels',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where some passive treasures could appear as Signature Treasure for high-win runs. This fix is however not retroactive (so existing runs can still be buggy).`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'mercenaries',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where some tasks were sorted incorrectly, which caused the wrong task to appear as the "next task".`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where the aura from Southsea Captain would be re-applied at the start of combat.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Mercenaries equipments and abilities now properly show their Mythical Bonus in the team widget when doing Boss Rush.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where treasure highlights had stopped working. It also now properly supports the multiple treasure selection from Boss Rush.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
