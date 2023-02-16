@@ -62,6 +62,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return demon;
 		case CardIds.CantTouchThis5Lettuce:
 			return taunt;
+		case CardIds.CelestialProtection5Lettuce:
+			return celestial;
 		case CardIds.CenarionSurge1Lettuce:
 		case CardIds.CenarionSurge2Lettuce:
 		case CardIds.CenarionSurge3Lettuce:
@@ -295,6 +297,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return or(and(dealsDamage, nature), and(dealsDamage, fire), beast, dragon);
 		case CardIds.RaceToTheFeast5Lettuce:
 			return or(beast, dragon);
+		case CardIds.RevealedInMoonlight5Lettuce:
+			return or(nightelf, tauren, troll);
 		case CardIds.RodOfTheArchmage5Lettuce:
 			return and(fire, dealsDamage);
 		case CardIds.SafetyBubble5Lettuce:
@@ -426,6 +430,7 @@ const minion = (card: ReferenceCard) => !!card.races?.length && !card.mercenary;
 const race = (card: ReferenceCard, race: Race) => card.races?.includes(Race[race]);
 const beast = (card: ReferenceCard) => race(card, Race.BEAST);
 const bloodelf = (card: ReferenceCard) => race(card, Race.BLOODELF);
+const celestial = (card: ReferenceCard) => race(card, Race.CELESTIAL);
 const demon = (card: ReferenceCard) => race(card, Race.DEMON);
 const draenei = (card: ReferenceCard) => race(card, Race.DRAENEI);
 const dragon = (card: ReferenceCard) => race(card, Race.DRAGON);
