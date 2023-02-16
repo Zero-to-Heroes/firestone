@@ -1,6 +1,6 @@
 import { GameType } from '@firestone-hs/reference-data';
-import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -36,7 +36,7 @@ export class MatchMetadataParser implements EventParser {
 			// Ensure that the reference data is properly loaded
 			// This lets us use synchronous processes throughout the server / parser code
 			await this.mercenariesStateBuilder.loadReferenceData();
-			return null;
+			return currentState;
 		}
 
 		const format = gameEvent.additionalData.metaData.FormatType as number;
