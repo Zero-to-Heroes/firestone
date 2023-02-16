@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { AttackParser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/attack-parser';
 import { CustomEffects2Parser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/custom-effects-2-parser';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
@@ -10,7 +10,6 @@ import { ReconnectStartParser } from '@services/decktracker/event-parser/reconne
 import { ShuffleDeckParser } from '@services/decktracker/event-parser/shuffle-deck-parser';
 import { SpecialCardPowerTriggeredParser } from '@services/decktracker/event-parser/special-card-power-triggered-parser';
 import { SphereOfSapienceParser } from '@services/decktracker/event-parser/special-cases/sphere-of-sapience-parser';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
@@ -307,6 +306,9 @@ export class GameStateService {
 				if (parser.applies(event, this.state)) {
 					this.state = await parser.parse(this.state, event);
 				}
+				if (!this.state) {
+					console.error('[game-state] parser returned null state for non-match event', parser.event());
+				}
 			} catch (e) {
 				console.error(
 					'[game-state] Exception while applying parser for non-match event',
@@ -372,6 +374,9 @@ export class GameStateService {
 						secretWillTrigger: this.secretWillTrigger,
 						minionsWillDie: this.minionsWillDie,
 					});
+					if (!this.state) {
+						console.error('[game-state] parser returned null state', parser.event());
+					}
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
