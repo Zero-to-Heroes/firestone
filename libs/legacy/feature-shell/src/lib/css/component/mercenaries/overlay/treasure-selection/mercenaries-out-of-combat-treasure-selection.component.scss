@@ -7,17 +7,17 @@
 
 	.empty-card {
 		height: 100%;
-		width: 17%;
 		background: rgba(255, 255, 255, 0.01);
 		flex-grow: 0;
 		flex-shrink: 0;
 	}
 
 	.hero-card {
-		margin-right: 8%;
+		width: 21vh;
+		margin-right: 5vh;
 	}
 
 	.treasure-card {
-		width: 22%;
+		width: 27vh;
 	}
 }

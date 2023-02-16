@@ -7,7 +7,7 @@ import {
 	HostListener,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { MercenariesSynergiesHighlightService } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -40,18 +40,29 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 	private highlightService: MercenariesSynergiesHighlightService;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
-			this.mapData(([[state]]) =>
-				!!state.treasureSelection?.treasures?.length ? state.treasureSelection.treasures : null,
-			),
+		this.treasures$ = combineLatest([
+			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
+			this.store.listen$(([main]) => main.mercenaries.getReferenceData()),
+		]).pipe(
+			this.mapData(([[state], [refData]]) => {
+				if (!state.treasureSelection?.treasureIds?.length) {
+					return null;
+				}
+				return state.treasureSelection.treasureIds.map((treasureId) => {
+					const refTreasure = refData.mercenaryTreasures.find((t) => t.id === treasureId);
+					const dbfId = refTreasure?.cardId;
+					return this.allCards.getCard(dbfId);
+				});
+			}),
 		);
 	}
 

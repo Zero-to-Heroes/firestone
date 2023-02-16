@@ -30,8 +30,8 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit
 {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.15;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0.25 * gameHeight;
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.1;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0.29 * gameHeight;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
@@ -54,7 +54,9 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.mercenariesHighlightSynergies),
-			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => !!state?.treasureSelection?.treasures?.length),
+			this.store.listenMercenariesOutOfCombat$(
+				([state, prefs]) => !!state?.treasureSelection?.treasureIds?.length,
+			),
 		).pipe(
 			this.mapData(([[displayFromPrefs], [hasTreasures]]) => {
 				return displayFromPrefs && hasTreasures;
@@ -69,7 +71,7 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 			return;
 		}
 		const gameHeight = gameInfo.height;
-		this.windowWidth = gameHeight * 1.12;
+		this.windowWidth = gameHeight * 1.2;
 		this.windowHeight = gameHeight * 0.4;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

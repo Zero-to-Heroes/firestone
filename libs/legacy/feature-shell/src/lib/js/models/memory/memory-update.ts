@@ -10,7 +10,7 @@ export interface MemoryUpdate {
 	readonly ArenaRewards: readonly Reward[];
 	readonly IsOpeningPack: boolean;
 	// true means the treasure selection has started, null means nothing changed, and false means it has ended
-	readonly IsMercenariesSelectingTreasure: boolean;
+	readonly MercenariesTreasureSelectionIndex: number;
 	readonly IsMercenariesTasksUpdated: boolean;
 	readonly MercenariesPendingTreasureSelection: MercenaryTreasureSelection;
 	readonly BattlegroundsNewRating: number;

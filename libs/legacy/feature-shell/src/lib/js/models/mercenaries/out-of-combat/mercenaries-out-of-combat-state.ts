@@ -1,4 +1,3 @@
-import { ReferenceCard } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '../../../services/utils';
 
 export class MercenariesOutOfCombatState {
@@ -10,5 +9,5 @@ export class MercenariesOutOfCombatState {
 }
 
 export interface TreasureSelection {
-	readonly treasures: readonly ReferenceCard[];
+	readonly treasureIds: readonly number[];
 }

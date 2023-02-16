@@ -18,18 +18,16 @@ export class MercenariesTreasureSelectionParser implements MercenariesOutOfComba
 		currentScene: SceneMode,
 	): Promise<MercenariesOutOfCombatState> {
 		const changes: MemoryUpdate = event.data[0];
-		if (changes.IsMercenariesSelectingTreasure && changes.MercenariesPendingTreasureSelection) {
+		if (changes.MercenariesTreasureSelectionIndex != null && changes.MercenariesPendingTreasureSelection) {
 			const result = state.update({
 				treasureSelection: {
-					treasures: changes.MercenariesPendingTreasureSelection.Options.map((option) =>
-						this.allCards.getCardFromDbfId(option),
-					),
+					treasureIds: changes.MercenariesPendingTreasureSelection.Options,
 				},
 			});
 			return result;
-		} else if (changes.IsMercenariesSelectingTreasure == null) {
+		} else if (changes.MercenariesTreasureSelectionIndex == null) {
 			return state;
-		} else if (changes.IsMercenariesSelectingTreasure == false) {
+		} else if (changes.MercenariesTreasureSelectionIndex == -1) {
 			return state.update({ treasureSelection: null });
 		}
 		// Can happen when selecting a treasure for Duels (it's the same event that is sent)
