@@ -28,8 +28,11 @@ export class DecktrackerState {
 	public getMetaDecks(): readonly DeckStat[] {
 		if (this.metaDecks === undefined) {
 			console.log('meta decks not initialized yet');
-			(this.metaDecks as readonly DeckStat[]) = [];
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('constructed-meta-decks');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.metaDecks as readonly DeckStat[]) = [];
+				service.requestLoad('constructed-meta-decks');
+			}
 		}
 		return this.metaDecks;
 	}

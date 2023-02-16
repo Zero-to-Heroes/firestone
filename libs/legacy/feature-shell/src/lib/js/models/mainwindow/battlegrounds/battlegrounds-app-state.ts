@@ -36,8 +36,11 @@ export class BattlegroundsAppState {
 	public getPerfectGames(): readonly GameStat[] {
 		if (this.perfectGames === undefined) {
 			console.log('perfectGames not initialized yet');
-			(this.perfectGames as readonly GameStat[]) = [];
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('battlegrounds-perfect-games');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.perfectGames as readonly GameStat[]) = [];
+				service.requestLoad('battlegrounds-perfect-games');
+			}
 		}
 		return this.perfectGames;
 	}
@@ -45,8 +48,11 @@ export class BattlegroundsAppState {
 	public getMetaHeroStats(): BgsHeroStatsV2 {
 		if (this.metaHeroStats === undefined) {
 			console.log('metaHeroStats not initialized yet');
-			(this.metaHeroStats as BgsHeroStatsV2) = null;
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('bgs-meta-hero-stats');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.metaHeroStats as BgsHeroStatsV2) = null;
+				service.requestLoad('bgs-meta-hero-stats');
+			}
 		}
 		return this.metaHeroStats;
 	}
@@ -54,8 +60,11 @@ export class BattlegroundsAppState {
 	public getMetaHeroStrategies(): BgsHeroStrategies {
 		if (this.metaHeroStrategies === undefined) {
 			console.log('metaHeroStrategies not initialized yet');
-			(this.metaHeroStrategies as BgsHeroStrategies) = null;
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('bgs-meta-hero-strategies');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.metaHeroStrategies as BgsHeroStrategies) = null;
+				service.requestLoad('bgs-meta-hero-strategies');
+			}
 		}
 		return this.metaHeroStrategies;
 	}

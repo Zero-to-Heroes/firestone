@@ -21,8 +21,11 @@ export class QuestsState {
 	public getReferenceQuests(): QuestsInfo {
 		if (this.referenceQuests === undefined) {
 			console.log('referenceQuests not initialized yet');
-			(this.referenceQuests as QuestsInfo) = null;
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('reference-quests');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.referenceQuests as QuestsInfo) = null;
+				service.requestLoad('reference-quests');
+			}
 		}
 		return this.referenceQuests;
 	}

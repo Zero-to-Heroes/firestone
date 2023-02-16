@@ -20,8 +20,11 @@ export class StreamsState {
 	public getLiveStreamsData(): PresenceResult {
 		if (this.liveStreamsData === undefined) {
 			console.log('liveStreamsData not initialized yet');
-			(this.liveStreamsData as PresenceResult) = null;
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('live-streams');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.liveStreamsData as PresenceResult) = null;
+				service.requestLoad('live-streams');
+			}
 		}
 		return this.liveStreamsData;
 	}

@@ -23,8 +23,11 @@ export class BgsStats {
 	public getQuestStats(): readonly BgsGlobalHeroStat2[] {
 		if (this.questStats === undefined) {
 			console.log('bgs quest stats not initialized yet');
-			(this.questStats as readonly BgsGlobalHeroStat2[]) = [];
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('bgs-quest-stats');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.questStats as readonly BgsGlobalHeroStat2[]) = [];
+				service.requestLoad('bgs-quest-stats');
+			}
 		}
 		return this.questStats;
 	}

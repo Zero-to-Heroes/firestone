@@ -31,8 +31,11 @@ export class StatsState {
 	public getBestBgsUserStats(): readonly BgsBestStat[] {
 		if (this.bestBgsUserStats === undefined) {
 			console.log('bestBgsUserStats not initialized yet');
-			(this.bestBgsUserStats as readonly BgsBestStat[]) = [];
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('user-bgs-best-stats');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.bestBgsUserStats as readonly BgsBestStat[]) = [];
+				service.requestLoad('user-bgs-best-stats');
+			}
 		}
 		return this.bestBgsUserStats;
 	}

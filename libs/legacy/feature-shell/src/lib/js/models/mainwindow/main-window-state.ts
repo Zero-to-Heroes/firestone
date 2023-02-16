@@ -61,8 +61,11 @@ export class MainWindowState {
 	public getGlobalStats(): GlobalStats {
 		if (this.globalStats === undefined) {
 			console.log('globalStats not initialized yet');
-			(this.globalStats as GlobalStats) = null;
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('user-global-stats');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.globalStats as GlobalStats) = null;
+				service.requestLoad('user-global-stats');
+			}
 		}
 		return this.globalStats;
 	}

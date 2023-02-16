@@ -11,6 +11,8 @@ import { LiveStreamsService } from './mainwindow/live-streams.service';
 import { MercenariesStateBuilderService } from './mercenaries/mercenaries-state-builder.service';
 import { QuestsService } from './quests.service';
 
+// Called from the data model, which lives in the main window (even though it is often accessed from
+// other windows). So there is no need for a facade
 @Injectable()
 export class LazyDataInitService {
 	constructor(
@@ -27,7 +29,7 @@ export class LazyDataInitService {
 		private readonly tavernBrawlService: TavernBrawlService,
 	) {}
 
-	public requestLoad(dataType: StateDataType) {
+	public async requestLoad(dataType: StateDataType) {
 		switch (dataType) {
 			case 'constructed-meta-decks':
 				return this.constructedMetaDecksStateBuilder.loadInitialStats();

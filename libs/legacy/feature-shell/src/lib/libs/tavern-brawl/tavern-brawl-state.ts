@@ -23,8 +23,11 @@ export class TavernBrawlState {
 	public getCurrentStats(): TavernBrawlStats {
 		if (this.currentStats === undefined) {
 			console.log('currentStats not initialized yet');
-			(this.currentStats as TavernBrawlStats) = null;
-			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('tavern-brawl-stats');
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (!!service) {
+				(this.currentStats as TavernBrawlStats) = null;
+				service.requestLoad('tavern-brawl-stats');
+			}
 		}
 		return this.currentStats;
 	}
