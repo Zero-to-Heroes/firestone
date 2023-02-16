@@ -36,7 +36,7 @@ export class MatchMetadataParser implements EventParser {
 			// Ensure that the reference data is properly loaded
 			// This lets us use synchronous processes throughout the server / parser code
 			await this.mercenariesStateBuilder.loadReferenceData();
-			return currentState;
+			return null;
 		}
 
 		const format = gameEvent.additionalData.metaData.FormatType as number;

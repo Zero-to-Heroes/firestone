@@ -16,7 +16,7 @@ export class CustomEffects2Parser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return gameEvent.type === GameEvent.SUB_SPELL_END;
+		return state && gameEvent.type === GameEvent.SUB_SPELL_END;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

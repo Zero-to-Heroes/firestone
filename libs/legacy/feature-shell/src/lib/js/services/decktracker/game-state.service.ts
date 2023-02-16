@@ -306,9 +306,9 @@ export class GameStateService {
 				if (parser.applies(event, this.state)) {
 					this.state = await parser.parse(this.state, event);
 				}
-				if (!this.state) {
-					console.error('[game-state] parser returned null state for non-match event', parser.event());
-				}
+				// if (!this.state) {
+				// 	console.error('[game-state] parser returned null state for non-match event', parser.event());
+				// }
 			} catch (e) {
 				console.error(
 					'[game-state] Exception while applying parser for non-match event',
@@ -374,9 +374,9 @@ export class GameStateService {
 						secretWillTrigger: this.secretWillTrigger,
 						minionsWillDie: this.minionsWillDie,
 					});
-					if (!this.state) {
-						console.error('[game-state] parser returned null state', parser.event());
-					}
+					// if (!this.state) {
+					// 	console.error('[game-state] parser returned null state', parser.event());
+					// }
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
@@ -412,7 +412,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
