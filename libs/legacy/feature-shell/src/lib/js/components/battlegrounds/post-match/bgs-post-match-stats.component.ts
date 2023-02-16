@@ -8,8 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { QuestReward } from '../../../models/battlegrounds/bgs-player';

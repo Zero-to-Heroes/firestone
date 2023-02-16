@@ -1,8 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Input as ArenaRewards } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { ArenaInfo } from '../../models/arena-info';
 import { GameEvent } from '../../models/game-event';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -98,6 +97,11 @@ export class ArenaRunParserService {
 		}
 		if (!this.arenaInfo) {
 			this.arenaInfo = await this.memory.getArenaInfo();
+		}
+
+		if (!this.arenaInfo) {
+			console.warn('could not retrieve arena info', this.currentReviewId, this.currentArenaRunId, rewards);
+			return;
 		}
 
 		const user = await this.ow.getCurrentUser();

@@ -88,7 +88,6 @@ export class MercenariesTeamMercenaryComponent {
 				heroSpeedModifier: value.speedModifier,
 			};
 		});
-		console.debug('building equipment', value.equipment, this.allCards.getCard(value.equipment.cardId));
 		this.equipment = value.equipment
 			? ({
 					type: 'equipment',

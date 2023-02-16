@@ -87,31 +87,33 @@ export class BasicBarChart2Component {
 		xValue: number,
 	): BarContainer {
 		return {
-			bars: elements.map((data, i) => {
-				const tooltipTitle = this._tooltipTitle ? `<div class="title">${this._tooltipTitle}</div>` : '';
-				const placeLabel = this.i18n.translateString('battlegrounds.hero-stats.place', {
-					value: data.label,
-				});
-				const matchesLabel =
-					data.rawValue != null
-						? this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
-								value: data.rawValue,
-						  })
-						: null;
-				const matchesElement = !!matchesLabel ? `<div class="raw-value">${matchesLabel}</div>` : '';
-				return {
-					// Ensure a min height to make the graph look better
-					height: Math.max((100 * data.value) / maxValues[i], 2),
-					class: `data-${i} data-x-${xValue}`,
-					tooltip: `
+			bars: elements
+				.filter((data) => !!data)
+				.map((data, i) => {
+					const tooltipTitle = this._tooltipTitle ? `<div class="title">${this._tooltipTitle}</div>` : '';
+					const placeLabel = this.i18n.translateString('battlegrounds.hero-stats.place', {
+						value: data.label,
+					});
+					const matchesLabel =
+						data.rawValue != null
+							? this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
+									value: data.rawValue,
+							  })
+							: null;
+					const matchesElement = !!matchesLabel ? `<div class="raw-value">${matchesLabel}</div>` : '';
+					return {
+						// Ensure a min height to make the graph look better
+						height: Math.max((100 * data.value) / maxValues[i], 2),
+						class: `data-${i} data-x-${xValue}`,
+						tooltip: `
 					<div class="body">
 						${tooltipTitle}
 						<div class="label">${placeLabel}</div>
 						${matchesElement}
 						<div class="value">${(+data.value).toFixed(1)}%</div>
 					</div>`,
-				};
-			}),
+					};
+				}),
 			label: '' + (xValue + 1),
 		} as BarContainer;
 	}

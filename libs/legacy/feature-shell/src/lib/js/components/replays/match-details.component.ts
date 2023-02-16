@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, startWith } from 'rxjs';
 import { BgsStatsFilterId } from '../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';
@@ -63,6 +63,7 @@ export class MatchDetailsComponent extends AbstractSubscriptionStoreComponent im
 				([main, nav, prefs]) => nav.navigationReplays.numberOfDisplayedTabs,
 			)
 			.pipe(
+				startWith([]),
 				this.mapData(([selectedStatsTabs, numberOfDisplayedTabs]) =>
 					selectedStatsTabs.slice(0, numberOfDisplayedTabs),
 				),

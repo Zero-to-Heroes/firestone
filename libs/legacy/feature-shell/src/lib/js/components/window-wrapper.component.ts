@@ -189,9 +189,9 @@ export class WindowWrapperComponent
 					const gameInfo = await this.ow.getRunningGameInfo();
 					const gameMonitorHandle = gameInfo.monitorHandle?.value;
 					const gameMonitor = monitors.displays.find((m) => m.handle?.value === gameMonitorHandle);
-					console.debug('going in game', gameInfo, gameMonitorHandle, gameMonitor);
+					// console.debug('going in game', gameInfo, gameMonitorHandle, gameMonitor);
 					// Game opens on the same screen as the window, so move it elsewhere
-					if (theWindow.monitorId === gameMonitor.id) {
+					if (theWindow.monitorId === gameMonitor?.id) {
 						const possibleTargets = monitors.displays.filter((m) => m.handle?.value !== gameMonitorHandle);
 						const target = possibleTargets[0];
 						console.debug('moving window to', target);
