@@ -17,10 +17,10 @@ import { concatMap, filter, map, tap } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { Message } from '../services/notifications.service';
 import { PreferencesService } from '../services/preferences.service';
 import { ProcessingQueue } from '../services/processing-queue.service';
+import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 
 declare let amplitude;
 
@@ -62,7 +62,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private settingsEventBus: EventEmitter<[string, string]>;
 
 	private processingQueue = new ProcessingQueue<Message>(
@@ -78,6 +77,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private elRef: ElementRef,
 		private prefs: PreferencesService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
 	}
@@ -121,7 +121,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			this.resize();
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		this.resize();
 	}
@@ -226,15 +225,15 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		if (messageObject.eventToSendOnClick) {
 			// console.log('event to send on click', messageObject.eventToSendOnClick);
 			const eventToSend = messageObject.eventToSendOnClick();
-			this.stateUpdater.next(eventToSend);
+			this.store.send(eventToSend);
 		}
 		if (messageObject.cardId) {
 			const isAchievement = messageObject.app === 'achievement';
 			if (isAchievement) {
-				this.stateUpdater.next(new ShowAchievementDetailsEvent(messageObject.cardId));
+				this.store.send(new ShowAchievementDetailsEvent(messageObject.cardId));
 				this.fadeNotificationOut(messageObject.notificationId);
 			} else {
-				this.stateUpdater.next(new ShowCardDetailsEvent(messageObject.cardId));
+				this.store.send(new ShowCardDetailsEvent(messageObject.cardId));
 			}
 		}
 	}
@@ -322,15 +321,15 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				if (messageObject.eventToSendOnClick) {
 					// console.log('event to send on click', messageObject.eventToSendOnClick);
 					const eventToSend = messageObject.eventToSendOnClick();
-					this.stateUpdater.next(eventToSend);
+					this.store.send(eventToSend);
 				}
 				if (cardId) {
 					const isAchievement = messageObject.app === 'achievement';
 					if (isAchievement) {
-						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
+						this.store.send(new ShowAchievementDetailsEvent(cardId));
 						this.fadeNotificationOut(messageObject.notificationId);
 					} else {
-						this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
+						this.store.send(new ShowCardDetailsEvent(cardId));
 					}
 				}
 				if (!(this.cdr as ViewRef)?.destroyed) {
