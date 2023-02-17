@@ -320,6 +320,7 @@ const publicCardGiftCreators = [
 	CardIds.AstalorBloodsworn,
 	CardIds.AstalorBloodsworn_AstalorTheProtectorToken,
 	CardIds.AthleticStudies_SCH_237,
+	CardIds.AstralRift,
 	CardIds.AwakenTheMakers,
 	CardIds.AzsharanSweeper_TSC_776,
 	CardIds.AzsharanScroll,
