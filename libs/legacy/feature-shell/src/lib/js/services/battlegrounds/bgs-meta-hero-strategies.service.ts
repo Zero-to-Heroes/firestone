@@ -32,6 +32,7 @@ export class BgsMetaHeroStrategiesService {
 export interface BgsHeroStrategies {
 	readonly lastUpdateDate: Date;
 	readonly heroes: readonly BgsHeroStratHero[];
+	readonly curves: readonly BgsHeroCurve[];
 	readonly authors: readonly BgsHeroStratAuthor[];
 }
 
@@ -43,6 +44,7 @@ export interface BgsHeroStratHero {
 export interface BgsHeroStratTip {
 	readonly summary: string;
 	readonly description: string;
+	readonly curves: readonly BgsHeroCurveId[];
 	readonly author: string;
 	readonly language: string;
 	readonly patch: number;
@@ -56,3 +58,22 @@ export interface BgsHeroStratAuthor {
 	readonly pictureUrl: string;
 	readonly highlights: string;
 }
+
+export interface BgsHeroCurve {
+	readonly id: BgsHeroCurveId;
+	readonly name: string;
+	readonly steps: readonly BgsHeroCurveStep[];
+}
+
+export interface BgsHeroCurveStep {
+	readonly turn: number;
+	readonly actions: readonly (BgsHeroCurveAction | BgsHeroCurveActionExtended)[];
+}
+
+export interface BgsHeroCurveActionExtended {
+	readonly type: BgsHeroCurveAction;
+	readonly param: number;
+}
+
+export type BgsHeroCurveId = 'basic' | '3-on-3';
+export type BgsHeroCurveAction = 'buy' | 'roll' | 'sell' | 'level';
