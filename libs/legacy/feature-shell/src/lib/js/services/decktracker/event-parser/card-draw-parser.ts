@@ -53,18 +53,21 @@ export class CardDrawParser implements EventParser {
 			// console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
 		}
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
-		// If we don't have info on the entityId, we try to remove the one at the top
-		// Not sure this fix is needed, keeping it in case
-		// const useTopOfDeckToIdentifyCard = !shouldUseEntityId && deck.deck.some((c) => c.positionFromTop != null);
+		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide].includes(gameEvent.additionalData.drawnByCardId);
+		const useBottomOfDeckToIdentifyCard =
+			!isPlayer && deck.deck.some((c) => c.positionFromBottom != null) && cardDrawnFromBottom;
 		// console.debug(
 		// 	'useTopOfDeckToIdentifyCard',
 		// 	useTopOfDeckToIdentifyCard,
+		// 	useBottomOfDeckToIdentifyCard,
 		// 	isPlayer,
 		// 	deck.deck.filter((c) => c.positionFromTop != null),
 		// 	deck,
 		// );
 		const card = useTopOfDeckToIdentifyCard
 			? [...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
+			: useBottomOfDeckToIdentifyCard
+			? [...deck.deck].filter((c) => c.positionFromBottom != null).sort((c) => c.positionFromBottom)[0]
 			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 		// console.debug(
@@ -93,6 +96,7 @@ export class CardDrawParser implements EventParser {
 			// 3. As a result, the card info is considered public, and we show it
 			isPlayer ||
 			useTopOfDeckToIdentifyCard ||
+			useBottomOfDeckToIdentifyCard ||
 			(!isCardDrawnBySecretPassage && cardsRevealedWhenDrawn.includes(updatedCardId as CardIds)) ||
 			publicCardInfos.includes(lastInfluencedByCardId);
 		const isCreatorPublic =
