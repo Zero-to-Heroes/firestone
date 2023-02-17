@@ -40,6 +40,17 @@ export class SecretConfigService {
 		const result = config.secrets
 			.filter((secret) => secret.playerClass === playerClass)
 			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
+			.filter((secret) => {
+				if (creatorCardId !== CardIds.TearReality) {
+					return true;
+				}
+				const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
+				const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
+				if (standardSecretCardIds.includes(secret.cardId)) {
+					return false;
+				}
+				return true;
+			})
 			.map((secret) => secret.cardId);
 		return result;
 	}
