@@ -1,4 +1,4 @@
-import { CardIds, GameTag, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Race, ReferenceCard, SpellSchool, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { normalizeMercenariesCardId } from '../mercenaries-utils';
 import { HighlightSelector } from './mercenaries-synergies-highlight.service';
@@ -13,6 +13,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return and(dealsDamage, arcane);
 		case CardIds.ArcaneBlast5Lettuce:
 			return arcaneSpellPower;
+		case CardIds.APiratesLife5Lettuce:
+			return pirate;
 		case CardIds.ArcaneBolt1Lettuce:
 		case CardIds.ArcaneBolt2Lettuce:
 		case CardIds.ArcaneBolt3Lettuce:
@@ -21,10 +23,14 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return arcane;
 		case CardIds.ArcaneLance5Lettuce:
 			return arcane;
+		case CardIds.ArcaneRitual5Lettuce:
+			return and(dealsDamage, arcane);
 		case CardIds.ArcaneStaff5Lettuce:
 			return arcane;
 		case CardIds.ArcaneVolley5Lettuce:
 			return arcane;
+		case CardIds.AshfallenRebuke5Lettuce:
+			return and(dealsDamage, fel);
 		case CardIds.Atiesh5Lettuce:
 			return and(dealsDamage, or(fire, frost));
 		case CardIds.AvatarOfStormpike1Lettuce:
@@ -38,6 +44,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return speedIsOdd;
 		case CardIds.BannerOfTheHorde5Lettuce:
 			return horde;
+		case CardIds.BaronsBoon5Lettuce:
+			return deathrattle;
 		case CardIds.BestialWrath5Lettuce:
 			return beast;
 		case CardIds.BirdBuddy5Lettuce:
@@ -56,12 +64,18 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BoonOfAtiesh3Lettuce:
 		case CardIds.BoonOfAtiesh5Lettuce:
 			return and(dealsDamage, or(fire, frost, arcane));
+		case CardIds.BowlOfBones5Lettuce:
+			return summon;
 		case CardIds.BrilliantAmity5Lettuce:
 			return taunt;
 		case CardIds.BurningLegionTabard5Lettuce:
 			return demon;
+		case CardIds.CallOfTheDeep5Lettuce:
+			return naga;
 		case CardIds.CantTouchThis5Lettuce:
 			return taunt;
+		case CardIds.CastThemOverboard5Lettuce:
+			return caster;
 		case CardIds.CelestialProtection5Lettuce:
 			return celestial;
 		case CardIds.CenarionSurge1Lettuce:
@@ -97,6 +111,14 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return horde;
 		case CardIds.DeceivingFire5Lettuce:
 			return pirate;
+		case CardIds.DeepBreath1Lettuce:
+		case CardIds.DeepBreath2Lettuce:
+		case CardIds.DeepBreath3Lettuce:
+		case CardIds.DeepBreath4Lettuce:
+		case CardIds.DeepBreath5Lettuce:
+			return and(fire, dealsDamage);
+		case CardIds.DelightfulDreamInfusion5Lettuce:
+			return dragon;
 		case CardIds.Demonfire5Lettuce:
 			return demon;
 		case CardIds.DemonSoul1Lettuce:
@@ -104,18 +126,22 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.DemonSoul3Lettuce:
 		case CardIds.DemonSoul5Lettuce:
 			return and(fel, dealsDamage);
-		case CardIds.DeepBreath1Lettuce:
-		case CardIds.DeepBreath2Lettuce:
-		case CardIds.DeepBreath3Lettuce:
-		case CardIds.DeepBreath4Lettuce:
-		case CardIds.DeepBreath5Lettuce:
-			return and(fire, dealsDamage);
+		case CardIds.DevotedWorshippers5Lettuce:
+			return or(summon, oldgod);
+		case CardIds.DiverDown5Lettuce:
+			return naga;
+		case CardIds.DownToBusiness5Lettuce:
+			return fighter;
 		case CardIds.ElementaryStudies5Lettuce:
 			return or(human, elemental, and(fire, dealsDamage));
+		case CardIds.ElunesOvergrowth5Lettuce:
+			return nature;
 		case CardIds.ElvenBanner5Lettuce:
 			return or(bloodelf, highelf, nightelf);
 		case CardIds.EmeraldBlessing5Lettuce:
 			return dragon;
+		case CardIds.EredarLord5Lettuce:
+			return and(dealsDamage, fel);
 		case CardIds.EssenceOfTheBlack5Lettuce:
 			return or(and(dealsDamage, shadow), dragon);
 		case CardIds.EverywhereWorgen5Lettuce:
@@ -129,14 +155,20 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 					CardIds.MindFlay4Lettuce,
 					CardIds.MindFlay5Lettuce,
 				].includes(normalizeMercenariesCardId(card.id) as CardIds);
+		case CardIds.EyeOfTheStorm5Lettuce:
+			return nature;
 		case CardIds.FamilyJustice5Lettuce:
 		case CardIds.FamilyDefense5Lettuce:
 			return (card: ReferenceCard) =>
 				[CardIds.CarielRoameLettuce_LETL_020H_01, CardIds.CorneliusRoameLettuce_SWL_06H_01].includes(
 					normalizeMercenariesCardId(card.id) as CardIds,
 				);
+		case CardIds.FateForeseen5Lettuce:
+			return caster;
 		case CardIds.FelBlast5Lettuce:
 			return fel;
+		case CardIds.FelBurst5Lettuce:
+			return felSpellPower;
 		case CardIds.FelCorruption1Lettuce:
 		case CardIds.FelCorruption2Lettuce:
 		case CardIds.FelCorruption3Lettuce:
@@ -153,7 +185,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return fel;
 		case CardIds.FireballVolley5Lettuce:
 			return fire;
+		case CardIds.FireBurst5Lettuce:
+			return fireSpellPower;
 		case CardIds.FireLance5Lettuce:
+			return fire;
+		case CardIds.FireRitual5Lettuce:
 			return fire;
 		case CardIds.FlameBuffet1Lettuce:
 		case CardIds.FlameBuffet2Lettuce:
@@ -171,6 +207,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FishyBarrage4Lettuce:
 		case CardIds.FishyBarrage5Lettuce:
 			return murloc;
+		case CardIds.ForTheAlliance5Lettuce:
+			return alliance;
 		case CardIds.ForTheFin5Lettuce:
 			return murloc;
 		case CardIds.FrostBlast1Lettuce:
@@ -179,6 +217,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FrostBlast4Lettuce:
 		case CardIds.FrostBlast5Lettuce:
 			return frost;
+		case CardIds.FrostRitual5Lettuce:
+			return and(frost, dealsDamage);
 		case CardIds.FrostVolley5Lettuce:
 			return frost;
 		case CardIds.FrostStaff5Lettuce:
@@ -186,6 +226,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.GiveInToYourRage5Lettuce:
 		case CardIds.GiveInToYourRage2Lettuce:
 			return oldgod;
+		case CardIds.GodfreysArmy5Lettuce:
+			return undead;
+		case CardIds.GreenSavior5Lettuce:
+			return orc;
+		case CardIds.HellScream5Lettuce:
+			return orc;
 		case CardIds.HeroicLeap1Lettuce:
 		case CardIds.HeroicLeap2Lettuce:
 		case CardIds.HeroicLeap3Lettuce:
@@ -198,12 +244,16 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.HeatingUp4Lettuce:
 		case CardIds.HeatingUp5Lettuce:
 			return fire;
+		case CardIds.HolyBurst5Lettuce:
+			return holySpellPower;
 		case CardIds.HolyJudgment1Lettuce:
 		case CardIds.HolyJudgment2Lettuce:
 		case CardIds.HolyJudgment3Lettuce:
 		case CardIds.HolyJudgment4Lettuce:
 		case CardIds.HolyJudgment5Lettuce:
 			return and(holy, combo(refCard));
+		case CardIds.HolyRitual5Lettuce:
+			return and(holy, or(dealsDamage, restoresHealth));
 		case CardIds.HolyShock5Lettuce:
 			return holy;
 		case CardIds.HolyStaff5Lettuce:
@@ -216,6 +266,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return human;
 		case CardIds.HuntingParty5Lettuce:
 			return beast;
+		case CardIds.ImprovedXalatath5Lettuce:
+			return shadow;
 		case CardIds.InfernalCombustion5Lettuce:
 			return and(fire, dealsDamage);
 		case CardIds.Inferno1Lettuce:
@@ -226,13 +278,19 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return and(fire, combo(refCard));
 		case CardIds.KittyRide5Lettuce:
 			return or(dragon, beast);
+		case CardIds.KnowledgeIsPower5Lettuce:
+			return summon;
 		case CardIds.LeagueRecruitmentFlyer5Lettuce:
 			return explorer;
 		case CardIds.LeechingPoison5Lettuce:
 		case CardIds.LeechingPoison2Lettuce:
 			return bleed;
+		case CardIds.LegionSweep5Lettuce:
+			return demon;
 		case CardIds.LifebindersLocket5Lettuce:
 			return and(fire, dealsDamage);
+		case CardIds.LightEater5Lettuce:
+			return holy;
 		case CardIds.LightningBolt1Lettuce:
 		case CardIds.LightningBolt2Lettuce:
 		case CardIds.LightningBolt3Lettuce:
@@ -273,8 +331,14 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return and(murloc, merc);
 		case CardIds.MurlocScrabble5Lettuce:
 			return or(taunt, divineShield);
+		case CardIds.MurkyMastery5Lettuce:
+			return murloc;
 		case CardIds.NatureBlast5Lettuce:
 			return and(nature, dealsDamage);
+		case CardIds.NatureBurst5Lettuce:
+			return natureSpellPower;
+		case CardIds.NatureRitual5Lettuce:
+			return nature;
 		case CardIds.NaturesBite5Lettuce:
 			return nature;
 		case CardIds.NatureStaff5Lettuce:
@@ -293,10 +357,16 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return orc;
 		case CardIds.OrgrimmarTabard5Lettuce:
 			return orc;
+		case CardIds.PackedSnow5Lettuce:
+			return frost;
 		case CardIds.PositiveEquilibrium5Lettuce:
 			return or(and(dealsDamage, nature), and(dealsDamage, fire), beast, dragon);
+		case CardIds.PunishedHellscream5Lettuce:
+			return orc;
 		case CardIds.RaceToTheFeast5Lettuce:
 			return or(beast, dragon);
+		case CardIds.Regeneratin5Lettuce:
+			return troll;
 		case CardIds.RevealedInMoonlight5Lettuce:
 			return or(nightelf, tauren, troll);
 		case CardIds.RodOfTheArchmage5Lettuce:
@@ -313,6 +383,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return fire;
 		case CardIds.SecretOfTheNaga5Lettuce:
 			return naga;
+		case CardIds.ShadowBurst5Lettuce:
+			return shadowSpellPower;
 		case CardIds.Shadowflame1Lettuce_LT22_011P3_01:
 		case CardIds.Shadowflame2Lettuce_LT22_011P3_02:
 		case CardIds.Shadowflame3Lettuce_LT22_011P3_03:
@@ -320,6 +392,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.Shadowflame5Lettuce_LT22_011P3_05:
 			return dragon;
 		case CardIds.ShadowLance5Lettuce:
+			return shadow;
+		case CardIds.ShadowRitual5Lettuce:
 			return shadow;
 		case CardIds.ShadowStaff5Lettuce:
 			return and(shadow, dealsDamage);
@@ -331,6 +405,10 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return and(shadow, combo(refCard));
 		case CardIds.ShadowVolley5Lettuce:
 			return shadow;
+		case CardIds.ShoutOfTheUnforgiven5Lettuce:
+			return orc;
+		case CardIds.SicSemperTyrannosaurus5Lettuce:
+			return beast;
 		case CardIds.SnapFreeze5Lettuce:
 			return freeze;
 		case CardIds.SpareParts1Lettuce:
@@ -338,6 +416,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SpareParts3Lettuce:
 		case CardIds.SpareParts5Lettuce:
 			return dragon;
+		case CardIds.SpiritOfTheDeadEr5Lettuce:
+			return troll;
 		case CardIds.SplittingStrike1Lettuce:
 		case CardIds.SplittingStrike2Lettuce:
 		case CardIds.SplittingStrike3Lettuce:
@@ -350,6 +430,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return restoresHealth;
 		case CardIds.SteadfastShield5Lettuce:
 			return taunt;
+		case CardIds.StonehearthSalvation5Lettuce:
+			return or(fire, frost);
 		case CardIds.StormwindTabard5Lettuce:
 			return human;
 		case CardIds.StrengthOfTheElements5Lettuce:
@@ -367,16 +449,24 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return or(human, and(holy, dealsDamage));
 		case CardIds.SurvivalTraining5Lettuce:
 			return beast;
+		case CardIds.TeamworkIsDreamWork5Lettuce:
+			return explorer;
 		case CardIds.TempestsFury5Lettuce:
 			return and(nature, dealsDamage);
+		case CardIds.TheAllConsumingVoid5Lettuce:
+			return shadow;
 		case CardIds.TheBeastWithin5Lettuce:
 			return beast;
+		case CardIds.TheFinHeadedLeague5Lettuce:
+			return murloc;
 		case CardIds.TidalStrike1Lettuce:
 		case CardIds.TidalStrike2Lettuce:
 		case CardIds.TidalStrike3Lettuce:
 		case CardIds.TidalStrike4Lettuce:
 		case CardIds.TidalStrike5Lettuce:
 			return and(frost, combo(refCard));
+		case CardIds.TirisfalenTriumph5Lettuce:
+			return caster;
 		case CardIds.ToxicVenom1Lettuce:
 		case CardIds.ToxicVenom2Lettuce:
 		case CardIds.ToxicVenom3Lettuce:
@@ -390,6 +480,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.TribalWarfare4Lettuce:
 		case CardIds.TribalWarfare5Lettuce:
 			return orc;
+		case CardIds.UndeathToUnlife5Lettuce:
+			return undead;
 		case CardIds.VelensBlessing1Lettuce:
 		case CardIds.VelensBlessing2Lettuce:
 		case CardIds.VelensBlessing3Lettuce:
@@ -400,6 +492,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return holy;
 		case CardIds.WarchiefsBlessing5Lettuce:
 			return horde;
+		case CardIds.YourMotherWasAMurloc5Lettuce:
+			return taunt;
 		case CardIds.ZhardoomGreatstaffOfTheDevourer5Lettuce:
 			return or(and(shadow, dealsDamage), and(fel, dealsDamage));
 	}
@@ -452,6 +546,11 @@ const troll = (card: ReferenceCard) => race(card, Race.TROLL);
 const undead = (card: ReferenceCard) => race(card, Race.UNDEAD);
 const worgen = (card: ReferenceCard) => race(card, Race.WORGEN);
 
+const hasRole = (card: ReferenceCard, role: TagRole) => card.mercenaryRole === TagRole[role];
+const caster = (card: ReferenceCard) => hasRole(card, TagRole.CASTER);
+const fighter = (card: ReferenceCard) => hasRole(card, TagRole.FIGHTER);
+const protector = (card: ReferenceCard) => hasRole(card, TagRole.TANK);
+
 const alliance = or(draenei, dwarf, gnome, highelf, human, nightelf, worgen);
 const horde = or(bloodelf, goblin, halforc, orc, tauren, troll, undead);
 const explorer = (card: ReferenceCard) => hasTag(card, GameTag.MERCS_EXPLORER);
@@ -486,9 +585,11 @@ const anySpellPower = or(
 );
 
 const bleed = (card: ReferenceCard) => hasMechanic(card, GameTag.BLEED);
+const deathrattle = (card: ReferenceCard) => hasMechanic(card, GameTag.DEATHRATTLE);
 const divineShield = (card: ReferenceCard) => hasMechanic(card, GameTag.DIVINE_SHIELD);
 const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);
 const stealth = (card: ReferenceCard) => hasMechanic(card, GameTag.STEALTH);
+const summon = (card: ReferenceCard) => hasMechanic(card, GameTag.SUMMON);
 const taunt = (card: ReferenceCard) => hasMechanic(card, GameTag.TAUNT);
 
 const isAbility = (card: ReferenceCard) => !card.mercenary && !card.mercenaryEquipment;
