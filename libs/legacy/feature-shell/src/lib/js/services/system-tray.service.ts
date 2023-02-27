@@ -29,6 +29,10 @@ export class SystemTrayService {
 					label: this.i18n.translateString('app.tray.settings'),
 				},
 				{
+					id: 'reset-positions',
+					label: this.i18n.translateString('app.tray.reset-positions'),
+				},
+				{
 					id: 'restart',
 					label: this.i18n.translateString('app.tray.restart'),
 				},
@@ -48,6 +52,9 @@ export class SystemTrayService {
 				case 'settings':
 					this.showSettingsWindow();
 					return;
+				case 'reset-positions':
+					this.resetWindowPositions();
+					return;
 				case 'restart':
 					this.ow.relaunchApp();
 					return;
@@ -57,6 +64,23 @@ export class SystemTrayService {
 			}
 		});
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
+	}
+
+	private async resetWindowPositions() {
+		const windows = [
+			OverwolfService.COLLECTION_WINDOW,
+			OverwolfService.SETTINGS_WINDOW,
+			OverwolfService.LOADING_WINDOW,
+			OverwolfService.BATTLEGROUNDS_WINDOW,
+		];
+		for (const w of windows) {
+			const cWindow = await this.ow.obtainDeclaredWindow(w);
+			const wasVisible = cWindow.isVisible;
+			await this.ow.changeWindowPosition(cWindow.id, 0, 0);
+			if (!wasVisible) {
+				await this.ow.closeWindow(cWindow.id);
+			}
+		}
 	}
 
 	private async showSettingsWindow() {

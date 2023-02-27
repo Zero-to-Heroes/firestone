@@ -522,13 +522,11 @@ export class OverwolfService {
 		});
 	}
 
-	public async obtainDeclaredWindow(windowName: string): Promise<any> {
-		return new Promise<any>((resolve, reject) => {
-			overwolf.windows.obtainDeclaredWindow(windowName, (res: any) => {
-				if (res.status === 'success') {
+	public async obtainDeclaredWindow(windowName: string): Promise<overwolf.windows.WindowInfo> {
+		return new Promise<overwolf.windows.WindowInfo>((resolve, reject) => {
+			overwolf.windows.obtainDeclaredWindow(windowName, (res) => {
+				if (res.success) {
 					resolve(res.window);
-				} else {
-					resolve(res);
 				}
 			});
 		});
