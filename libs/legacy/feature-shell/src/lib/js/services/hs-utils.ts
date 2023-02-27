@@ -591,6 +591,8 @@ const publicCardGiftCreators = [
 	CardIds.ServiceBell,
 	CardIds.ShadowVisions,
 	CardIds.ShiftingShade,
+	CardIds.Simulacrum_CORE_ICC_823,
+	CardIds.Simulacrum_ICC_823,
 	CardIds.SinfulSousChef,
 	CardIds.SinisterDeal,
 	CardIds.SirakessCultist,
