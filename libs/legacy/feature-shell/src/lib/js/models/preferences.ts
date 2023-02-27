@@ -541,6 +541,7 @@ export class Preferences {
 	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' = 'all';
 	readonly bgsSavedRankFilter: BgsRankFilterType = 100;
 	readonly bgsSavedTribesFilter: readonly Race[] = [];
+	readonly bgsHeroesUseConservativeEstimate: boolean = true;
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

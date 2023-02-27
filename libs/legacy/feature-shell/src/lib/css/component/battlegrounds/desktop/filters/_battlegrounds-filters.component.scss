@@ -1,10 +1,35 @@
 .battlegrounds-filters {
 	display: flex;
+	width: 100%;
 
 	::ng-deep filter-dropdown ng-select {
 		margin-right: 15px;
 		width: 155px;
 		height: 30px;
 		margin-bottom: 15px;
+	}
+
+	::ng-deep preference-toggle {
+		.preference-toggle {
+			margin-top: 0;
+			height: fit-content;
+
+			p {
+				color: var(--color-1);
+				width: auto;
+
+				i {
+					--icon-color: var(--color-1);
+				}
+			}
+		}
+	}
+
+	.use-conservative-estimate-link {
+		margin-left: auto;
+		margin-right: 15px;
+		align-items: center;
+		position: relative;
+		top: -8px;
 	}
 }

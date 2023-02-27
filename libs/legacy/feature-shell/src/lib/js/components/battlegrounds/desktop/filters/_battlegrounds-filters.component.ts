@@ -21,12 +21,21 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-rank-group-dropdown class="rank-group"></battlegrounds-rank-group-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
+
+			<preference-toggle
+				class="use-conservative-estimate-link"
+				*ngIf="showConservativeEstimateLink$ | async"
+				field="bgsHeroesUseConservativeEstimate"
+				[label]="'app.decktracker.filters.use-conservative-estimate' | owTranslate"
+				[tooltip]="'app.decktracker.filters.use-conservative-estimate-tooltip' | owTranslate"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
+	showConservativeEstimateLink$: Observable<boolean>;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -48,6 +57,12 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 						currentView !== 'bgs-category-perfect-games' &&
 						currentView !== 'bgs-category-simulator',
 				),
+			);
+		this.showConservativeEstimateLink$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationBattlegrounds.selectedCategoryId)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(([currentView]) => currentView === 'bgs-category-meta-heroes'),
 			);
 	}
 }

@@ -526,10 +526,11 @@ export class AppUiStoreService {
 			this.listenPrefs$(
 				(prefs) => prefs.bgsActiveRankFilter,
 				(prefs) => prefs.bgsActiveTribesFilter,
+				(prefs) => prefs.bgsHeroesUseConservativeEstimate,
 			),
 		]).pipe(
 			debounceTime(200),
-			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter]]) => {
+			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter, bgsHeroesUseConservativeEstimate]]) => {
 				console.debug(
 					'[bgs] rebuilding meta hero stats',
 					stats,
@@ -537,11 +538,14 @@ export class AppUiStoreService {
 					bgsActiveRankFilter,
 					'tribesFilter',
 					bgsActiveTribesFilter,
+					'bgsHeroesUseConservativeEstimate',
+					bgsHeroesUseConservativeEstimate,
 				);
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					stats?.heroStats,
 					bgsActiveRankFilter,
 					bgsActiveTribesFilter,
+					bgsHeroesUseConservativeEstimate,
 					this.allCards,
 				);
 				console.debug('[bgs] built global stats', result, bgsActiveRankFilter, bgsActiveTribesFilter);

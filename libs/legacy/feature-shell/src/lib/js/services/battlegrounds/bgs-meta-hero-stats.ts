@@ -141,6 +141,7 @@ export const buildHeroStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalHeroStat>[],
 	mmrPercentile: MmrPercentile['percentile'],
 	tribes: readonly Race[],
+	useConservativeEstimate: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {
 	const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
@@ -253,7 +254,9 @@ export const buildHeroStats = (
 			const result: BgsMetaHeroStatTierItem = {
 				id: stat.heroCardId,
 				dataPoints: stat.dataPoints,
-				averagePosition: stat.averagePosition + tribesModifier,
+				averagePosition:
+					(useConservativeEstimate ? stat.conservativePositionEstimate : stat.averagePosition) +
+					tribesModifier,
 				positionTribesModifier: tribesModifier,
 				placementDistribution: placementDistribution,
 				placementDistributionImpact: placementDistributionImpact,
