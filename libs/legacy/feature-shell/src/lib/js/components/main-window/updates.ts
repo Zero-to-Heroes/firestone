@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.2.13',
+		version: '10.3.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -44,11 +44,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `The app has been mostly updated for 25.4. There are probably some bugs lingering here and there, and there is still some work to do to properly support the Boss Rush mode in Mercenaries, and I'm working on these :)`,
+								text: `Add an icon to merge deck versions together. This is not a functional change, but it should make the deck merge feature easier to discover and understand.`,
 							},
 						],
 					},
@@ -62,21 +62,46 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `The MMR graph (in the Rating tab) now doesn't always start at 0, and focuses more on the current rank.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix a simulation issue where the aura from Southsea Captain would be re-applied at the start of combat.`,
+								text: `Fix a simulation issue where Teron's Hero Power could cause the first attacker to be recomputed.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Amber Guardian could sometimes apply its buff twice.`,
 							},
 						],
 					},
 					{
-						category: 'mercenaries',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Mercenaries equipments and abilities now properly show their Mythical Bonus in the team widget when doing Boss Rush.`,
+								text: `Show the Volatile Skeleton counter in some cases when Xyrella is in the deck.`,
+							},
+							{
+								type: 'feature',
+								text: `Secrets created by Tear Reality now exclude Standard secrets.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where treasure highlights had stopped working. It also now properly supports the multiple treasure selection from Boss Rush.`,
+								text: `Fix an issue where Sir Finley would not remove cards at the bottom of the opponent's deck.`,
+							},
+							{
+								type: 'bug',
+								text: `The +X modifiers (for cards like Ignite) are now hidden when using the Legacy display mode (when Modern Tracker is turned off). They will be reintroduced later on once I'm able to properly do it in that display mode.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now reset the main window positions from the system tray icon. This should help for the rare case where some of these windows get moved outside of the screens.`,
 							},
 						],
 					},
