@@ -6,8 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
@@ -40,7 +39,8 @@ export class OpponentVolatileSkeletonWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentVolatileSkeletonCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck?.volatileSkeletonsDeadThisMatch > 0 ||
-			!!state.opponentDeck?.containsVolatileSkeletonCards();
+			state.opponentDeck?.containsVolatileSkeletonCards() ||
+			state.opponentDeck?.hasSecondarySkeletonActivator();
 		super.ngAfterContentInit();
 	}
 }

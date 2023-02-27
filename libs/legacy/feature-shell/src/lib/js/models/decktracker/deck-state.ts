@@ -1,7 +1,7 @@
 import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ShortCard } from '@models/decktracker/game-state';
 import { NonFunctionProperties } from '@services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ChoosingOptionsGameEvent } from '../mainwindow/game-events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
@@ -273,6 +273,15 @@ export class DeckState {
 					card.cardId as CardIds,
 				),
 			);
+	}
+
+	public hasSecondarySkeletonActivator(): boolean {
+		return (
+			this.volatileSkeletonsDeadThisMatch > 0 &&
+			this.getAllCardsInDeck()
+				.filter((card) => card.cardId)
+				.some((card) => [CardIds.XyrellaTheDevout].includes(card.cardId as CardIds))
+		);
 	}
 
 	public containsRelicCards(): boolean {
