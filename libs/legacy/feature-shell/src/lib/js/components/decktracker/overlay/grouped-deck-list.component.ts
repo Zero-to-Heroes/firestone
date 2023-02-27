@@ -8,9 +8,9 @@ import {
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -224,7 +224,12 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 				? this.buildBaseCardForFocus(deckState, hideGeneratedCardsInOtherZone)
 				: this.buildBaseCardsForShowPlayed(deckState, hideGeneratedCardsInOtherZone);
 		console.debug('base cards', mode, baseCards[0]?.cardName, baseCards, deckState);
-		return baseCards;
+		return baseCards.map((c) => {
+			return VisualDeckCard.create({
+				...c,
+				mainAttributeChange: null, // FIXME
+			});
+		});
 	}
 
 	private buildBaseCardForFocus(
