@@ -68,7 +68,8 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 			takeUntil(this.destroyed$),
 		);
 		this.currentWindowName$.subscribe((name) => {
-			this.titleService.setTitle(`Firestone - ${name}`);
+			const humanFriendlyName = this.buildHumanFriendlyName(name);
+			this.titleService.setTitle(`Firestone - ${humanFriendlyName}`);
 		});
 		this.currentWindowName$.subscribe((name) => {
 			if (name === 'MainWindow') {
@@ -76,6 +77,32 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 				this.modsManager.init();
 			}
 		});
+	}
+
+	private buildHumanFriendlyName(name: string): string {
+		switch (name) {
+			case 'MainWindow':
+				return 'Background';
+			case 'CollectionOverlayWindow':
+			case 'CollectionWindow':
+				return 'Main';
+			case 'FullScreenOverlaysWindow':
+				return 'Overlays';
+			case 'FullScreenOverlaysClickthroughWindow':
+				return 'Overlays clickthrough';
+			case 'LoadingWindow':
+				return 'Loading';
+			case 'NotificationsWindow':
+				return 'Notifications';
+			case 'SettingsOverlayWindow':
+			case 'SettingsWindow':
+				return 'Settings';
+			case 'BattlegroundsOverlayWindow':
+			case 'BattlegroundsWindow':
+				return 'Battlegrounds';
+			default:
+				return name;
+		}
 	}
 
 	private mapWindowName(name: string): string {
