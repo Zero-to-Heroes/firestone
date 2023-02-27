@@ -56,40 +56,51 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 					[attr.aria-label]="'app.decktracker.deck-summary.created-on' | owTranslate: { value: lastUsed }"
 				></div>
 			</div>
-			<button
-				class="close-button"
-				[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | owTranslate"
-				(mousedown)="hideDeck($event)"
-				*ngIf="!hidden"
-				aria-hidden="true"
-			>
-				<svg class="svg-icon-fill">
-					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#hide"></use>
-				</svg>
-			</button>
-			<button
-				class="restore-button"
-				[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | owTranslate"
-				(mousedown)="restoreDeck($event)"
-				*ngIf="hidden"
-				aria-hidden="true"
-			>
-				<svg class="svg-icon-fill">
-					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#show"></use>
-				</svg>
-			</button>
-			<button
-				class="delete-button"
-				[helpTooltip]="deleteDeckTooltip"
-				confirmationTooltip
-				[askConfirmation]="true"
-				[confirmationTitle]="'app.duels.deck-stat.delete-deck-confirmation-title' | owTranslate"
-				[confirmationText]="'app.duels.deck-stat.delete-deck-confirmation-text' | owTranslate"
-				[validButtonText]="'app.duels.deck-stat.delete-deck-confirmation-ok' | owTranslate"
-				[cancelButtonText]="'app.duels.deck-stat.delete-deck-confirmation-cancel' | owTranslate"
-				(onConfirm)="deleteDeck()"
-				inlineSVG="assets/svg/bin.svg"
-			></button>
+			<div class="buttons">
+				<button
+					class="move-button"
+					[helpTooltip]="'app.decktracker.deck-summary.move-button-tooltip' | owTranslate"
+					aria-hidden="true"
+				>
+					<svg class="svg-icon-fill">
+						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#move"></use>
+					</svg>
+				</button>
+				<button
+					class="close-button"
+					[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | owTranslate"
+					(mousedown)="hideDeck($event)"
+					*ngIf="!hidden"
+					aria-hidden="true"
+				>
+					<svg class="svg-icon-fill">
+						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#hide"></use>
+					</svg>
+				</button>
+				<button
+					class="restore-button"
+					[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | owTranslate"
+					(mousedown)="restoreDeck($event)"
+					*ngIf="hidden"
+					aria-hidden="true"
+				>
+					<svg class="svg-icon-fill">
+						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#show"></use>
+					</svg>
+				</button>
+				<button
+					class="delete-button"
+					[helpTooltip]="deleteDeckTooltip"
+					confirmationTooltip
+					[askConfirmation]="true"
+					[confirmationTitle]="'app.duels.deck-stat.delete-deck-confirmation-title' | owTranslate"
+					[confirmationText]="'app.duels.deck-stat.delete-deck-confirmation-text' | owTranslate"
+					[validButtonText]="'app.duels.deck-stat.delete-deck-confirmation-ok' | owTranslate"
+					[cancelButtonText]="'app.duels.deck-stat.delete-deck-confirmation-cancel' | owTranslate"
+					(onConfirm)="deleteDeck()"
+					inlineSVG="assets/svg/bin.svg"
+				></button>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
