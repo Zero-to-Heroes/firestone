@@ -24,6 +24,8 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				<graph-with-single-value
 					[data]="value"
 					[emptyStateMessage]="'app.battlegrounds.personal-stats.rating.empty-state-message' | owTranslate"
+					[beginAtZero]="false"
+					[reverse]="false"
 				></graph-with-single-value>
 			</ng-container>
 			<ng-template #emptyState>

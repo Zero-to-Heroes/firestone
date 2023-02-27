@@ -65,11 +65,17 @@ export class GraphWithSingleValueComponent
 		this.lineChartOptions = this.buildOptions();
 	}
 
+	@Input() set beginAtZero(value: boolean) {
+		this._beginAtZero = value;
+		this.lineChartOptions = this.buildOptions();
+	}
+
 	colors$$: Subscription;
 	lineChartOptions: ChartOptions = this.buildOptions();
 
 	private _labelFormattingFn: (label: string, index: number) => string;
 	private _reverse = true;
+	private _beginAtZero = true;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -210,7 +216,7 @@ export class GraphWithSingleValueComponent
 							? (label, index) => this._labelFormattingFn('' + label, index)
 							: (label, index) => label,
 					},
-					beginAtZero: true,
+					beginAtZero: this._beginAtZero,
 					reverse: this._reverse,
 				},
 			},
