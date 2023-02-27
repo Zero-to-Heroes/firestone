@@ -452,6 +452,7 @@ const publicCardGiftCreators = [
 	CardIds.GorillabotA3,
 	CardIds.GorillabotA3Core,
 	CardIds.GrandLackeyErkh,
+	CardIds.GraveDefiler,
 	CardIds.GrimestreetInformant,
 	CardIds.Guidance_YOP_024,
 	CardIds.HalazziTheLynx,
