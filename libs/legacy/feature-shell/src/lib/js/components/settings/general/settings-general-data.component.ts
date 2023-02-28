@@ -1,11 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsFullRefreshEvent } from '../../../services/mainwindow/store/events/achievements/achievements-full-refresh-event';
 import { CollectionRefreshPacksEvent } from '../../../services/mainwindow/store/events/collection/colection-refresh-packs-event';
 import { GamesFullClearEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-clear-event';
 import { GamesFullRefreshEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-refresh-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -24,6 +26,12 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		<div class="settings-group general-data">
 			<h3 class="remote-data" [owTranslate]="'settings.general.data.games-title'"></h3>
 			<div class="games-synced">{{ gamesSynced$ | async }}</div>
+			<preferences-dropdown
+				field="replaysLoadPeriod"
+				[label]="'settings.general.data.games-period' | owTranslate"
+				[options]="gamesPeriodOptions"
+				advancedSetting
+			></preferences-dropdown>
 			<div class="resync games">
 				<button
 					(mousedown)="refreshGames()"
@@ -77,6 +85,13 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 	isRefreshingAchievements$: Observable<boolean>;
 
 	gamesSynced$: Observable<string>;
+
+	gamesPeriodOptions: IOption[] = ['all-time', 'past-100', 'last-patch', 'past-7', 'season-start']
+		.map((value) => ({
+			value: value,
+			label: this.i18n.translateString(`settings.general.data.games-period-options.${value}`) ?? '',
+		}))
+		.sort(sortByProperties((o) => [o.label]));
 
 	private isRefreshingGames = new BehaviorSubject<boolean>(false);
 	private isClearingGames = new BehaviorSubject<boolean>(false);

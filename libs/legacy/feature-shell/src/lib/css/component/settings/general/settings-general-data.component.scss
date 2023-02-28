@@ -25,6 +25,16 @@
 	}
 }
 
+:host ::ng-deep preferences-dropdown {
+	margin-top: 10px;
+	margin-bottom: 10px;
+
+	.label {
+		width: auto;
+		margin-right: 15px;
+	}
+}
+
 button {
 	border: 1px solid #d9c3ab;
 	padding-left: 15px;

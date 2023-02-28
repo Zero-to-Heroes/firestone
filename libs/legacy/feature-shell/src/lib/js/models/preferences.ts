@@ -84,7 +84,6 @@ export class Preferences {
 
 	readonly enableMailbox: boolean = true;
 	readonly enableMailboxUnread: boolean = true;
-
 	readonly mailboxLastVisitDate: Date;
 
 	readonly advancedModeToggledOn: boolean;
@@ -457,6 +456,7 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsMajordomoCounterWidgetPosition: { left: number; top: number };
 
+	readonly replaysLoadPeriod: 'all-time' | 'past-100' | 'last-patch' | 'season-start' | 'past-7' = 'past-100';
 	readonly replaysShowNotification: boolean = false;
 	readonly replaysFilterDeckstring: string;
 	readonly replaysFilterGameMode: string;

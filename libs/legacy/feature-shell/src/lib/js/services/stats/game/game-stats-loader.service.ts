@@ -6,6 +6,7 @@ import { filter } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
+import { PatchInfo } from '../../../models/patches';
 import { ApiRunner } from '../../api-runner';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
@@ -25,6 +26,8 @@ const LOCAL_STORAGE_KEY = 'game-stats';
 @Injectable()
 export class GameStatsLoaderService {
 	private gameStats: GameStats;
+
+	private patchInfo: PatchInfo;
 
 	constructor(
 		private readonly api: ApiRunner,
@@ -48,6 +51,12 @@ export class GameStatsLoaderService {
 				console.log('[game-stats-loader] updating local games', gameStats.stats);
 				this.saveLocalStats(gameStats.stats);
 			});
+		this.store
+			.listen$(([main]) => main.patchConfig.patches)
+			.subscribe(([patches]) => {
+				const lastPatch = patches?.at(-1);
+				this.patchInfo = lastPatch;
+			});
 	}
 
 	public async retrieveStats(): Promise<GameStats> {
@@ -57,6 +66,7 @@ export class GameStatsLoaderService {
 			const prefs = await this.prefs.getPreferences();
 			return GameStats.create({
 				stats: localStats
+					.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
 					// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
 					// appear anywhere
 					.filter(
@@ -128,7 +138,8 @@ export class GameStatsLoaderService {
 							?.playerCardId,
 				};
 			})
-			.map((stat) => Object.assign(new GameStat(), stat));
+			.map((stat) => Object.assign(new GameStat(), stat))
+			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod));
 		await this.saveLocalStats(stats);
 		this.gameStats = GameStats.create({
 			stats: stats
@@ -147,6 +158,35 @@ export class GameStatsLoaderService {
 		});
 		console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
 		return this.gameStats;
+	}
+
+	private isCorrectPeriod(
+		stat: GameStat,
+		replaysLoadPeriod: 'all-time' | 'past-100' | 'last-patch' | 'past-7' | 'season-start',
+	): boolean {
+		switch (replaysLoadPeriod) {
+			case 'season-start':
+				const startOfMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+				return stat.creationTimestamp >= startOfMonthDate.getTime();
+			case 'last-patch':
+				if (!this.patchInfo) {
+					return false;
+				}
+				// See bgs-ui-helper
+				return (
+					stat.buildNumber >= this.patchInfo.number ||
+					stat.creationTimestamp > new Date(this.patchInfo.date).getTime() + 24 * 60 * 60 * 1000
+				);
+			case 'past-7':
+				const past7Date = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+				return stat.creationTimestamp >= past7Date.getTime();
+			case 'past-100':
+				const past100Date = new Date(Date.now() - 100 * 24 * 60 * 60 * 1000);
+				return stat.creationTimestamp >= past100Date.getTime();
+			case 'all-time':
+			default:
+				return true;
+		}
 	}
 
 	private async saveLocalStats(gameStats: readonly GameStat[]) {

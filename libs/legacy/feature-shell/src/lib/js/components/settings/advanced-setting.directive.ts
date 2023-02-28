@@ -23,6 +23,6 @@ export class AdvancedSettingDirective extends AbstractSubscriptionStoreComponent
 	}
 
 	private updateVisibility(advancedModeToggledOn: boolean) {
-		this.renderer.setStyle(this.el.nativeElement, 'display', advancedModeToggledOn ? 'initial' : 'none');
+		this.renderer.setStyle(this.el.nativeElement, 'display', advancedModeToggledOn ? 'inherit' : 'none');
 	}
 }
