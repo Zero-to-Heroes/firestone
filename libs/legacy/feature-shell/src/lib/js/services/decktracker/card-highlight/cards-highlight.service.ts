@@ -766,6 +766,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, legendary);
 			case CardIds.RingOfRefreshmentTavernBrawl:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.RivendareWarrider:
+				return and(
+					inGraveyard,
+					cardIs(
+						CardIds.RivendareWarrider,
+						CardIds.RivendareWarrider_BlaumeauxFamineriderToken,
+						CardIds.RivendareWarrider_KorthazzDeathriderToken,
+						CardIds.RivendareWarrider_ZeliekConquestriderToken,
+					),
+				);
 			case CardIds.RobeOfTheApprenticeTavernBrawl:
 				return and(or(inDeck, inHand), spell, dealsDamage);
 			case CardIds.RobeOfTheMagi:
