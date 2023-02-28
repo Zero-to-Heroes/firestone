@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { filter } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { ApiRunner } from '../../api-runner';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
+import { LocalStorageService } from '../../local-storage';
+import { UpdateGameStatsEvent } from '../../mainwindow/store/events/stats/update-game-stats-event';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../preferences.service';
+import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
 import { decode } from '../../utils';
 
-const GAME_STATS_ENDPOINT = 'https://api.firestoneapp.com/retrieveUserMatchStats/matchStats';
+const GAME_STATS_ENDPOINT = 'https://lq32rsf3wgmmjxihavjplf5jfq0ntetn.lambda-url.us-west-2.on.aws/';
 const ARCHETYPE_CONFIG_ENDPOINT = 'https://static.zerotoheroes.com/api/decks-config.json';
 const ARCHETYPE_STATS_ENDPOINT = 'https://static.zerotoheroes.com/api/ranked-decks.json';
+
+const LOCAL_STORAGE_KEY = 'game-stats';
 
 @Injectable()
 export class GameStatsLoaderService {
@@ -27,26 +32,67 @@ export class GameStatsLoaderService {
 		private readonly prefs: PreferencesService,
 		private readonly handler: DeckHandlerService,
 		private readonly allCards: CardsFacadeService,
-	) {}
+		private readonly localStorage: LocalStorageService,
+		private readonly store: AppUiStoreService,
+	) {
+		this.init();
+	}
 
-	// public async retrieveArchetypesConfig(): Promise<readonly ArchetypeConfig[]> {
-	// 	const config = await this.api.callGetApi<readonly ArchetypeConfig[]>(ARCHETYPE_CONFIG_ENDPOINT);
-	// 	console.log('[game-stats-loader] retrieving archetype config');
-	// 	return config;
-	// }
+	private async init() {
+		await this.store.initComplete();
 
-	// public async retrieveArchetypesStats(): Promise<ArchetypeStats> {
-	// 	const stats = await this.api.callGetApi<ArchetypeStats>(ARCHETYPE_STATS_ENDPOINT);
-	// 	console.log('[game-stats-loader] retrieving archetype stats');
-	// 	return stats;
-	// }
+		this.store
+			.listen$(([main]) => main.stats?.gameStats)
+			.pipe(filter(([gameStats]) => !!gameStats?.stats?.length))
+			.subscribe(([gameStats]) => {
+				console.log('[game-stats-loader] updating local games', gameStats.stats);
+				this.saveLocalStats(gameStats.stats);
+			});
+	}
 
 	public async retrieveStats(): Promise<GameStats> {
+		const localStats = await this.loadLocalGameStats();
+		if (!!localStats?.length) {
+			console.log('[game-stats-loader] retrieved stats locally', localStats);
+			const prefs = await this.prefs.getPreferences();
+			return GameStats.create({
+				stats: localStats
+					// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
+					// appear anywhere
+					.filter(
+						(stat) =>
+							!prefs?.desktopDeckDeletes ||
+							!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
+							prefs.desktopDeckDeletes[stat.playerDecklist][
+								prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
+							] < stat.creationTimestamp,
+					),
+			});
+		}
+
+		return this.refreshGameStats(false);
+	}
+
+	public async clearGames() {
+		console.log('[game-stats-loader] clearing games');
+		await this.saveLocalStats([]);
+		const stats = await this.refreshGameStats(false);
+		this.store.send(new UpdateGameStatsEvent(stats.stats));
+	}
+
+	public async fullRefresh() {
+		console.log('[game-stats-loader] triggering full refresh');
+		const stats = await this.refreshGameStats(true);
+		this.store.send(new UpdateGameStatsEvent(stats.stats));
+	}
+
+	private async refreshGameStats(fullRetrieve: boolean) {
 		const user = await this.ow.getCurrentUser();
 		const prefs = await this.prefs.getPreferences();
 		const input = {
 			userId: user.userId,
 			userName: user.username,
+			fullRetrieve: fullRetrieve,
 		};
 		// const input = {
 		// 	userId: 'zerg',
@@ -82,22 +128,33 @@ export class GameStatsLoaderService {
 							?.playerCardId,
 				};
 			})
-			.map((stat) => Object.assign(new GameStat(), stat))
-			// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
-			// appear anywhere
-			.filter(
-				(stat) =>
-					!prefs?.desktopDeckDeletes ||
-					!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
-					prefs.desktopDeckDeletes[stat.playerDecklist][
-						prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
-					] < stat.creationTimestamp,
-			);
-		this.gameStats = Object.assign(new GameStats(), {
-			stats: stats,
-		} as GameStats);
+			.map((stat) => Object.assign(new GameStat(), stat));
+		await this.saveLocalStats(stats);
+		this.gameStats = GameStats.create({
+			stats: stats
+				// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
+				// appear anywhere
+				// TODO: this isn't good, because it means that the "stats" field isn't a reliable representation of
+				// all the user stats. What if they un-delete a deck somehow?
+				.filter(
+					(stat) =>
+						!prefs?.desktopDeckDeletes ||
+						!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
+						prefs.desktopDeckDeletes[stat.playerDecklist][
+							prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
+						] < stat.creationTimestamp,
+				),
+		});
 		console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
 		return this.gameStats;
+	}
+
+	private async saveLocalStats(gameStats: readonly GameStat[]) {
+		this.localStorage.setItem(LOCAL_STORAGE_KEY, gameStats);
+	}
+
+	private async loadLocalGameStats(): Promise<readonly GameStat[]> {
+		return this.localStorage.getItem(LOCAL_STORAGE_KEY);
 	}
 }
 

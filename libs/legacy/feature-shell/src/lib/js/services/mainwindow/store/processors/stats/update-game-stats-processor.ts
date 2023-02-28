@@ -1,16 +1,15 @@
 import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';
 import { Events } from '../../../../events.service';
 import { PreferencesService } from '../../../../preferences.service';
-import { RecomputeGameStatsEvent } from '../../events/stats/recompute-game-stats-event';
+import { UpdateGameStatsEvent } from '../../events/stats/update-game-stats-event';
 import { Processor } from '../processor';
 
-export class RecomputeGameStatsProcessor implements Processor {
+export class UpdateGameStatsProcessor implements Processor {
 	constructor(
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly events: Events,
@@ -18,12 +17,12 @@ export class RecomputeGameStatsProcessor implements Processor {
 	) {}
 
 	public async process(
-		event: RecomputeGameStatsEvent,
+		event: UpdateGameStatsEvent,
 		currentState: MainWindowState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[recompute-game-stats-processor] starting process');
 		const newGameStats: GameStats = currentState.stats.gameStats.update({
-			stats: [event.gameStat, ...currentState.stats.gameStats.stats] as readonly GameStat[],
+			stats: event.stats,
 		} as GameStats);
 		this.events.broadcast(Events.GAME_STATS_UPDATED, newGameStats);
 		const newStatsState: StatsState = Object.assign(new StatsState(), currentState.stats, {

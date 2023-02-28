@@ -208,6 +208,7 @@
 		},
 		"externally_connectable": {
 			"matches": [
+				"https://localhost",
 				"http://*.overwolf.com",
 				"https://*.overwolf.com",
 				"http://static.zerotoheroes.com",
@@ -215,15 +216,15 @@
 				"http://*.firestoneapp.com",
 				"https://*.firestoneapp.com",
 				"http://www.zerotoheroes.com",
-				"https://www.googletagmanager.com",
 				"https://*.execute-api.us-west-2.amazonaws.com",
-				"https://localhost",
 				"http://*.amazonaws.com",
 				"https://*.amazonaws.com",
+				"https://*.lambda-url.us-west-2.on.aws",
 				"https://api.twitch.tv",
 				"http://*.twitch.tv",
 				"https://*.twitch.tv",
 				"https://*.outof.cards",
+				"https://www.googletagmanager.com",
 				"https://*.pastebin.com"
 			]
 		},

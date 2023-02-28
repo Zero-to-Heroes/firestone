@@ -1,3 +1,4 @@
+import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStats } from '../../battlegrounds/post-match/bgs-post-match-stats';
 import { GameStat } from './game-stat';
 
@@ -5,7 +6,11 @@ export class GameStats {
 	// Ordered from newest (index 0) to oldest
 	readonly stats: readonly GameStat[] = [];
 
-	public update(base: GameStats): GameStats {
+	public static create(base: Partial<NonFunctionProperties<GameStats>>): GameStats {
+		return Object.assign(new GameStats(), base);
+	}
+
+	public update(base: Partial<NonFunctionProperties<GameStats>>): GameStats {
 		return Object.assign(new GameStats(), this, base);
 	}
 

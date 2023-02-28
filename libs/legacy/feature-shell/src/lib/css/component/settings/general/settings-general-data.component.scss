@@ -5,7 +5,8 @@
 .general-data {
 	font-size: 13px;
 
-	h2 {
+	h2,
+	h3 {
 		margin-bottom: 10px;
 	}
 
@@ -16,6 +17,10 @@
 
 		.label {
 			margin-right: 20px;
+		}
+
+		button {
+			margin-right: 15px;
 		}
 	}
 }

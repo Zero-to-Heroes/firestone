@@ -209,10 +209,13 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { GamesFullClearEvent } from './events/stats/game-stats-full-clear-event';
+import { GamesFullRefreshEvent } from './events/stats/game-stats-full-refresh-event';
 import { GlobalStatsLoadedEvent } from './events/stats/global/global-stats-loaded-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
+import { UpdateGameStatsEvent } from './events/stats/update-game-stats-event';
 import { StoreInitEvent } from './events/store-init-event';
 import { LiveStreamsDataLoadedEvent } from './events/streams/live-streams-data-loaded-event';
 import { LiveStreamsForceReloadEvent } from './events/streams/live-streams-force-reload-event';
@@ -362,10 +365,13 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-clear-processor';
+import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
 import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-stats-loaded-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
+import { UpdateGameStatsProcessor } from './processors/stats/update-game-stats-processor';
 import { LiveStreamsDataLoadedProcessor } from './processors/sterams/live-streams-data-loaded-processor';
 import { LiveStreamsForceReloadProcessor } from './processors/sterams/live-streams-force-reload-processor';
 import { StoreInitProcessor } from './processors/store-init-processor';
@@ -640,16 +646,17 @@ export class MainWindowStoreService {
 			],
 			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor()],
 			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs)],
+			// Stats
 			[
-				// Stats
 				RecomputeGameStatsEvent.eventName(),
-				new RecomputeGameStatsProcessor(
-					this.decktrackerStateLoader,
-					this.replaysStateBuilder,
-					this.events,
-					this.prefs,
-				),
+				new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.events, this.prefs),
 			],
+			[
+				UpdateGameStatsEvent.eventName(),
+				new UpdateGameStatsProcessor(this.decktrackerStateLoader, this.events, this.prefs),
+			],
+			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
+			[GamesFullClearEvent.eventName(), new GameStatsFullClearProcessor(this.gameStatsLoader)],
 			[
 				// Mailbox
 				MailboxMarkMessageReadEvent.eventName(),
