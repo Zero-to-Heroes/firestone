@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { Achievement } from '../../models/achievement';
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { ApiRunner } from '../api-runner';
 import { GameStateService } from '../decktracker/game-state.service';
-import { LocalStorageService } from '../local-storage';
 import { AchievementsFullUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-full-updated-event';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -152,7 +152,9 @@ export class RemoteAchievementsService {
 	}
 
 	private updateLocalAchievements(achievement: Achievement) {
-		const localResult = this.localStorage.getItem<LocalRemoteAchievements>('achievements-user-completed');
+		const localResult = this.localStorage.getItem<LocalRemoteAchievements>(
+			LocalStorageService.ACHIEVEMENTS_USER_COMPLETED,
+		);
 		if (!localResult) {
 			console.error('Empty local achievements');
 			return;
@@ -166,7 +168,7 @@ export class RemoteAchievementsService {
 			lastUpdateDate: new Date(localResult.lastUpdateDate),
 			achievements: [newAchievement, ...localResult.achievements],
 		};
-		this.localStorage.setItem('achievements-user-completed', newResult);
+		this.localStorage.setItem(LocalStorageService.ACHIEVEMENTS_USER_COMPLETED, newResult);
 	}
 
 	public async loadRemoteAchievements(
@@ -174,7 +176,9 @@ export class RemoteAchievementsService {
 		sendEvent = false,
 	): Promise<readonly CompletedAchievement[]> {
 		if (loadFromLocal) {
-			const localResult = this.localStorage.getItem<LocalRemoteAchievements>('achievements-user-completed');
+			const localResult = this.localStorage.getItem<LocalRemoteAchievements>(
+				LocalStorageService.ACHIEVEMENTS_USER_COMPLETED,
+			);
 			// Cache the local results for 7 days
 			if (localResult && Date.now() - new Date(localResult.lastUpdateDate).getTime() <= 7 * 24 * 60 * 60 * 1000) {
 				return localResult.achievements;
@@ -192,7 +196,7 @@ export class RemoteAchievementsService {
 			lastUpdateDate: new Date(),
 			achievements: remoteResult,
 		};
-		this.localStorage.setItem('achievements-user-completed', newResult);
+		this.localStorage.setItem(LocalStorageService.ACHIEVEMENTS_USER_COMPLETED, newResult);
 		if (sendEvent) {
 			this.store.send(new AchievementsFullUpdatedEvent());
 		}

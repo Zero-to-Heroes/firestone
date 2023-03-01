@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
+import { DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
-import { LocalStorageService } from '../local-storage';
 
 declare let amplitude;
 
 @Injectable()
 export class CollectionStorageService {
-	constructor(private readonly localStorageService: LocalStorageService) {}
+	constructor(
+		private readonly localStorageService: LocalStorageService,
+		private readonly diskCache: DiskCacheService,
+	) {}
 
 	public async saveCollection(collection: readonly Card[]): Promise<readonly Card[]> {
-		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_COLLECTION, collection);
+		await this.diskCache.storeItem(DiskCacheService.COLLECTION, collection);
 		return collection;
 	}
 
@@ -42,9 +45,7 @@ export class CollectionStorageService {
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
-		const fromStorage = this.localStorageService.getItem<readonly Card[]>(
-			LocalStorageService.LOCAL_STORAGE_COLLECTION,
-		);
+		const fromStorage = await this.diskCache.getItem<readonly Card[]>(DiskCacheService.COLLECTION);
 		return fromStorage ?? [];
 	}
 
@@ -68,17 +69,15 @@ export class CollectionStorageService {
 	}
 
 	public async saveCardHistory(history: CardHistory): Promise<CardHistory> {
-		const fromStorage = this.localStorageService.getItem<readonly CardHistory[]>(
-			LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY,
-		);
+		const fromStorage = await this.diskCache.getItem<readonly CardHistory[]>(DiskCacheService.CARDS_HISTORY);
 		const historyList: readonly CardHistory[] = fromStorage ?? [];
 		const newHistory = [history, ...historyList];
-		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY, newHistory);
+		await this.diskCache.storeItem(DiskCacheService.CARDS_HISTORY, newHistory);
 		return history;
 	}
 
 	public async saveFullCardHistory(history: readonly CardHistory[]): Promise<readonly CardHistory[]> {
-		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY, history);
+		await this.diskCache.storeItem(DiskCacheService.CARDS_HISTORY, history);
 		return history ?? [];
 	}
 
@@ -88,9 +87,7 @@ export class CollectionStorageService {
 	}
 
 	public async getAllCardHistory(limit: number): Promise<readonly CardHistory[]> {
-		const fromStorage = this.localStorageService.getItem<readonly CardHistory[]>(
-			LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY,
-		);
+		const fromStorage = await this.diskCache.getItem<readonly CardHistory[]>(DiskCacheService.CARDS_HISTORY);
 		if (!!fromStorage) {
 			const result: readonly CardHistory[] = fromStorage ?? [];
 			return result.slice(0, limit);

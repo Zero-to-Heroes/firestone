@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { AdventuresInfo } from '@models/memory/memory-duels';
-import { LocalStorageService } from '@services/local-storage';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 
 @Injectable()

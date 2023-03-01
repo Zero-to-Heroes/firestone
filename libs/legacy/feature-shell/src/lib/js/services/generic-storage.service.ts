@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { Preferences } from '../models/preferences';
-import { LocalStorageService } from './local-storage';
 
 declare let amplitude;
 

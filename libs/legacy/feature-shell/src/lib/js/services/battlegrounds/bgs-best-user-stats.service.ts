@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
 import { ApiRunner } from '../api-runner';
-import { LocalStorageService } from '../local-storage';
 import { BgsBestStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-best-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
@@ -18,7 +17,7 @@ export class BgsBestUserStatsService {
 	) {}
 
 	public async loadBgsBestUserStats(): Promise<readonly BgsBestStat[]> {
-		const localInfo = this.localStorage.getItem<LocalBgsBestStats>('user-bgs-best-stats');
+		const localInfo = this.localStorage.getItem<LocalBgsBestStats>(LocalStorageService.USER_BGS_BEST_STATS);
 		// This is non-sensitive info, we cache it for a while
 		if (
 			!!localInfo?.stats?.length &&
@@ -37,7 +36,7 @@ export class BgsBestUserStatsService {
 			lastUpdateDate: new Date(),
 			stats: remoteData,
 		};
-		this.localStorage.setItem('user-bgs-best-stats', newInfo);
+		this.localStorage.setItem(LocalStorageService.USER_BGS_BEST_STATS, newInfo);
 		console.log('loaded remote bestBgsStats');
 		this.store.send(new BgsBestStatsLoadedEvent(newInfo.stats));
 		return remoteData;

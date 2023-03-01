@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { ApiRunner } from '../api-runner';
-import { LocalStorageService } from '../local-storage';
 import { BattlegroundsMetaHeroStrategiesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
@@ -16,7 +16,7 @@ export class BgsMetaHeroStrategiesService {
 	) {}
 
 	public async loadMetaHeroStrategies() {
-		const localStats = this.localStorage.getItem<BgsHeroStrategies>('bgs-meta-hero-strategies');
+		const localStats = this.localStorage.getItem<BgsHeroStrategies>(LocalStorageService.BGS_META_HERO_STRATEGIES);
 		console.debug('[bgs-meta-strat] localStats', localStats);
 		if (!!localStats?.heroes?.length) {
 			this.store.send(new BattlegroundsMetaHeroStrategiesLoadedEvent(localStats));
@@ -24,7 +24,7 @@ export class BgsMetaHeroStrategiesService {
 
 		const result = await this.api.callGetApi<BgsHeroStrategies>(META_HERO_STRATEGIES_URL);
 		console.debug('[bgs-meta-strat] result', result);
-		this.localStorage.setItem('bgs-meta-hero-strategies', result);
+		this.localStorage.setItem(LocalStorageService.BGS_META_HERO_STRATEGIES, result);
 		this.store.send(new BattlegroundsMetaHeroStrategiesLoadedEvent(result));
 	}
 }

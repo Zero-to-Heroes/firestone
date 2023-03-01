@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { BgsGlobalHeroStat2, BgsGlobalStats2 } from '@firestone-hs/bgs-global-stats';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { ApiRunner } from '../api-runner';
-import { LocalStorageService } from '../local-storage';
 import { BgsQuestsDataLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-quests-data-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { fixInvalidTimeSuffix } from './bgs-global-stats.service';
@@ -39,7 +39,7 @@ export class BattlegroundsQuestsService {
 	}
 
 	public async loadReferenceData(timeFilter: BgsActiveTimeFilterType) {
-		const localInfo = this.localStorage.getItem<readonly BgsGlobalHeroStat2[]>('bgs-quests-data');
+		const localInfo = this.localStorage.getItem<readonly BgsGlobalHeroStat2[]>(LocalStorageService.BGS_QUESTS_DATA);
 		if (!!localInfo?.length) {
 			console.log('loaded local bgs quests data');
 			this.store.send(new BgsQuestsDataLoadedEvent(localInfo));
@@ -49,7 +49,7 @@ export class BattlegroundsQuestsService {
 			`${BGS_STATS_RETRIEVE_URL.replace('%timeSuffix%', fixInvalidTimeSuffix(timeFilter))}`,
 		);
 		const referenceData = result?.heroStats;
-		this.localStorage.setItem('bgs-quests-data', referenceData);
+		this.localStorage.setItem(LocalStorageService.BGS_QUESTS_DATA, referenceData);
 		console.log('loaded bgs-quests-data ref data');
 		this.store.send(new BgsQuestsDataLoadedEvent(referenceData));
 		return referenceData;

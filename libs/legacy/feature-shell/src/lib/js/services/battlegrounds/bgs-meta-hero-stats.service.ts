@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
+import { DiskCacheService } from '@firestone/shared/framework/core';
 import { distinctUntilChanged } from 'rxjs';
 import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { ApiRunner } from '../api-runner';
-import { LocalStorageService } from '../local-storage';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -13,7 +13,7 @@ const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/bg
 @Injectable()
 export class BgsMetaHeroStatsService {
 	constructor(
-		private readonly localStorage: LocalStorageService,
+		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
 		private readonly prefs: PreferencesService,
@@ -29,15 +29,16 @@ export class BgsMetaHeroStatsService {
 	}
 
 	public async loadInitialMetaHeroStats() {
-		const localStats = this.localStorage.getItem<BgsHeroStatsV2>('bgs-meta-hero-stats');
+		const localStats = await this.diskCache.getItem<BgsHeroStatsV2>(DiskCacheService.BATTLEGROUNDS_META_HERO_STATS);
 		console.debug('[bgs-meta-hero] localStats', localStats);
 		if (!!localStats?.heroStats?.length) {
 			this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(localStats));
 		}
 
-		const prefs = await this.prefs.getPreferences();
-		const timeFilter = prefs.bgsActiveTimeFilter;
-		this.loadMetaHeroStats(timeFilter);
+		// Not necessary, as this will be triggered by the bgsActiveTimeFilter listener
+		// const prefs = await this.prefs.getPreferences();
+		// const timeFilter = prefs.bgsActiveTimeFilter;
+		// this.loadMetaHeroStats(timeFilter);
 	}
 
 	private async loadMetaHeroStats(timeFilter: BgsActiveTimeFilterType) {
@@ -45,7 +46,7 @@ export class BgsMetaHeroStatsService {
 		console.debug('[bgs-meta-hero] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
 		console.debug('[bgs-meta-hero] result', result);
-		this.localStorage.setItem('bgs-meta-hero-stats', result);
+		this.diskCache.storeItem(DiskCacheService.BATTLEGROUNDS_META_HERO_STATS, result);
 		this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(result));
 	}
 }

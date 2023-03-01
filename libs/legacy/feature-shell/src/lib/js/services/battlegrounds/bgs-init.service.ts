@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
@@ -11,7 +11,6 @@ import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
-import { LocalStorageService } from '../local-storage';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
@@ -29,7 +28,7 @@ export class BgsInitService {
 		private readonly cards: CardsFacadeService,
 		private readonly api: ApiRunner,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly localStorage: LocalStorageService,
+		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
@@ -43,7 +42,9 @@ export class BgsInitService {
 	}
 
 	public async loadInitialPerfectGames() {
-		const localPercectGames = this.localStorage.getItem<readonly GameStat[]>('battlegrounds-perfect-games');
+		const localPercectGames = await this.diskCache.getItem<readonly GameStat[]>(
+			DiskCacheService.BATTLEGROUNDS_PERFECT_GAMES,
+		);
 		if (!!localPercectGames?.length) {
 			this.store.send(new BattlegroundsPerfectGamesLoadedEvent(localPercectGames));
 		}
@@ -60,7 +61,7 @@ export class BgsInitService {
 				} as GameStat),
 			)
 			.filter((stat) => stat.playerRank);
-		this.localStorage.setItem('battlegrounds-perfect-games', remotePerfectGames);
+		this.diskCache.storeItem(DiskCacheService.BATTLEGROUNDS_PERFECT_GAMES, remotePerfectGames);
 		this.store.send(new BattlegroundsPerfectGamesLoadedEvent(remotePerfectGames));
 	}
 

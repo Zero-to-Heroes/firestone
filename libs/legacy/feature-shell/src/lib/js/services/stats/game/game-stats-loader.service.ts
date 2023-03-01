@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { filter } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
@@ -10,7 +10,6 @@ import { PatchInfo } from '../../../models/patches';
 import { ApiRunner } from '../../api-runner';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
-import { LocalStorageService } from '../../local-storage';
 import { UpdateGameStatsEvent } from '../../mainwindow/store/events/stats/update-game-stats-event';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../preferences.service';
@@ -20,8 +19,6 @@ import { decode } from '../../utils';
 const GAME_STATS_ENDPOINT = 'https://lq32rsf3wgmmjxihavjplf5jfq0ntetn.lambda-url.us-west-2.on.aws/';
 const ARCHETYPE_CONFIG_ENDPOINT = 'https://static.zerotoheroes.com/api/decks-config.json';
 const ARCHETYPE_STATS_ENDPOINT = 'https://static.zerotoheroes.com/api/ranked-decks.json';
-
-const LOCAL_STORAGE_KEY = 'game-stats';
 
 @Injectable()
 export class GameStatsLoaderService {
@@ -35,7 +32,7 @@ export class GameStatsLoaderService {
 		private readonly prefs: PreferencesService,
 		private readonly handler: DeckHandlerService,
 		private readonly allCards: CardsFacadeService,
-		private readonly localStorage: LocalStorageService,
+		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreService,
 	) {
 		this.init();
@@ -52,9 +49,10 @@ export class GameStatsLoaderService {
 				this.saveLocalStats(gameStats.stats);
 			});
 		this.store
-			.listen$(([main]) => main.patchConfig.patches)
+			.listen$(([main]) => main.patchConfig?.patches)
+			.pipe(filter(([patches]) => !!patches?.length))
 			.subscribe(([patches]) => {
-				const lastPatch = patches?.at(-1);
+				const lastPatch = patches[patches.length - 1];
 				this.patchInfo = lastPatch;
 			});
 	}
@@ -190,11 +188,11 @@ export class GameStatsLoaderService {
 	}
 
 	private async saveLocalStats(gameStats: readonly GameStat[]) {
-		this.localStorage.setItem(LOCAL_STORAGE_KEY, gameStats);
+		await this.diskCache.storeItem(DiskCacheService.USER_MATCH_HISTORY, gameStats);
 	}
 
 	private async loadLocalGameStats(): Promise<readonly GameStat[]> {
-		return this.localStorage.getItem(LOCAL_STORAGE_KEY);
+		return await this.diskCache.getItem(DiskCacheService.USER_MATCH_HISTORY);
 	}
 }
 

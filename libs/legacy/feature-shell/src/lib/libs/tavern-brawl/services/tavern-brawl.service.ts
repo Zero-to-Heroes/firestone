@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { TavernBrawlStats } from '@firestone-hs/tavern-brawl-stats';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { ApiRunner } from '@services/api-runner';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LocalStorageService } from '../../../js/services/local-storage';
 import { TavernBrawlState } from '../tavern-brawl-state';
 
 const TAVERN_BRAWL_URL = 'https://static.zerotoheroes.com/api/tavern-brawl/tavern-brawl-stats.gz.json';
@@ -35,7 +35,7 @@ export class TavernBrawlService {
 	}
 
 	public async loadStats() {
-		const localInfo = this.localStorage.getItem<TavernBrawlStats>('tavern-brawl-stats');
+		const localInfo = this.localStorage.getItem<TavernBrawlStats>(LocalStorageService.TAVERN_BRAWL_STATS);
 		if (!!localInfo?.stats?.length) {
 			console.log('loaded tavern brawl stats');
 			this.updateStats(localInfo);
@@ -53,7 +53,7 @@ export class TavernBrawlService {
 		const newState = this.tavernBrawl$.value.update({
 			currentStats: result,
 		});
-		this.localStorage.setItem('tavern-brawl-stats', result);
+		this.localStorage.setItem(LocalStorageService.TAVERN_BRAWL_STATS, result);
 		this.tavernBrawl$.next(newState);
 	}
 }

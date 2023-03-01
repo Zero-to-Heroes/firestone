@@ -814,6 +814,35 @@ export class OverwolfService {
 		});
 	}
 
+	public async storeAppFile(fileName: string, content: string): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			overwolf.extensions.io.writeTextFile(
+				overwolf.extensions.io.enums.StorageSpace.appData,
+				fileName,
+				content,
+				(res) => {
+					resolve(res.success);
+				},
+			);
+		});
+	}
+
+	public async readAppFile(fileName: string): Promise<string | null> {
+		return new Promise<string | null>((resolve) => {
+			overwolf.extensions.io.readTextFile(overwolf.extensions.io.enums.StorageSpace.appData, fileName, (res) => {
+				resolve(res.success ? res.content : null);
+			});
+		});
+	}
+
+	public async deleteAppFile(fileName: string): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			overwolf.extensions.io.delete(overwolf.extensions.io.enums.StorageSpace.appData, fileName, (res) => {
+				resolve(res.success);
+			});
+		});
+	}
+
 	public openStore() {
 		overwolf.utils.openStore({
 			page: overwolf.utils.enums.eStorePage.SubscriptionPage,

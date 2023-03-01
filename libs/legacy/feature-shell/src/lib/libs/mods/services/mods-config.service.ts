@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { LocalStorageService } from '@legacy-import/src/lib/js/services/local-storage';
+import { LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { ModsConfig } from '../model/mods-config';
 
@@ -18,7 +17,7 @@ export class ModsConfigService {
 
 	public updateConf(newConf: ModsConfig) {
 		if (this.isMainNode) {
-			this.localStorage.setItem('mods-config', newConf);
+			this.localStorage.setItem(LocalStorageService.MODS_CONFIG, newConf);
 			this.conf$$.next(newConf);
 		} else {
 			this.mainNode.updateConf(newConf);
@@ -27,7 +26,7 @@ export class ModsConfigService {
 
 	public getConfig(): ModsConfig {
 		if (this.isMainNode) {
-			return this.localStorage.getItem<ModsConfig>('mods-config') ?? {};
+			return this.localStorage.getItem<ModsConfig>(LocalStorageService.MODS_CONFIG) ?? {};
 		} else {
 			return this.mainNode.getConfig();
 		}

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { MemoryUpdate } from '../models/memory/memory-update';
 import { ApiRunner } from './api-runner';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
-import { LocalStorageService } from './local-storage';
 import { ActiveQuestsUpdatedEvent } from './mainwindow/store/events/quests/active-quests-updated-event';
 import { ReferenceQuestsLoadedEvent } from './mainwindow/store/events/quests/reference-quests-loaded-event';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
@@ -65,11 +65,11 @@ export class QuestsService {
 	}
 
 	public updateReferenceQuests(info: QuestsInfo) {
-		this.localStorage.setItem('reference-quests', info);
+		this.localStorage.setItem(LocalStorageService.REFERENCE_QUESTS, info);
 	}
 
 	public async loadReferenceQuests(locale?: string) {
-		const localInfo = this.localStorage.getItem<QuestsInfo>('reference-quests');
+		const localInfo = this.localStorage.getItem<QuestsInfo>(LocalStorageService.REFERENCE_QUESTS);
 		if (!!localInfo?.quests?.length) {
 			console.log('[quests] loaded local reference quests');
 			this.store.send(new ReferenceQuestsLoadedEvent(localInfo));
@@ -77,7 +77,7 @@ export class QuestsService {
 
 		locale = locale ?? (await this.prefs.getPreferences()).locale;
 		const result = await this.api.callGetApi<QuestsInfo>(REFERENCE_QUESTS_URL.replace('%locale%', locale));
-		this.localStorage.setItem('reference-quests', result);
+		this.localStorage.setItem(LocalStorageService.REFERENCE_QUESTS, result);
 		this.store.send(new ReferenceQuestsLoadedEvent(result));
 	}
 }

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
+import { DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@services/preferences.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -8,7 +9,6 @@ import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-merc
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
-import { LocalStorageService } from '../local-storage';
 import { MercenariesGlobalStatsLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-global-stats-loaded-event';
 import { MercenariesReferenceDataLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-reference-data-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -25,6 +25,7 @@ export class MercenariesStateBuilderService {
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly localStorage: LocalStorageService,
+		private readonly diskCache: DiskCacheService,
 	) {
 		this.init();
 	}
@@ -43,13 +44,15 @@ export class MercenariesStateBuilderService {
 	}
 
 	public async loadInitialGlobalStats() {
-		const localInfo = this.localStorage.getItem<MercenariesGlobalStats>('mercenaries-global-stats');
+		const localInfo = this.localStorage.getItem<MercenariesGlobalStats>(
+			LocalStorageService.MERCENARIES_GLOBAL_STATS,
+		);
 		if (!!localInfo) {
 			this.store.send(new MercenariesGlobalStatsLoadedEvent(localInfo));
 		}
 
 		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-		this.localStorage.setItem('mercenaries-global-stats', globalStats);
+		this.localStorage.setItem(LocalStorageService.MERCENARIES_GLOBAL_STATS, globalStats);
 		this.store.send(new MercenariesGlobalStatsLoadedEvent(globalStats));
 	}
 
@@ -58,7 +61,9 @@ export class MercenariesStateBuilderService {
 	}
 
 	public async loadReferenceData(locale?: string) {
-		const localInfo = this.localStorage.getItem<MercenariesReferenceData>('mercenaries-reference-data');
+		const localInfo = await this.diskCache.getItem<MercenariesReferenceData>(
+			DiskCacheService.MERCENARIES_REFERENCE_DATA,
+		);
 		if (!!localInfo?.mercenaries?.length) {
 			console.log('loaded local mercenaries ref data');
 			this.store.send(new MercenariesReferenceDataLoadedEvent(localInfo));
@@ -68,7 +73,7 @@ export class MercenariesStateBuilderService {
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
 			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
-		this.localStorage.setItem('mercenaries-reference-data', referenceData);
+		await this.diskCache.storeItem(DiskCacheService.MERCENARIES_REFERENCE_DATA, referenceData);
 		console.log('loaded remote mercenaries ref data');
 		this.store.send(new MercenariesReferenceDataLoadedEvent(referenceData));
 		return referenceData;

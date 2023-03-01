@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { LocalStorageService } from '../local-storage';
 import { HsAchievementsInfo } from './achievements-info';
 
 declare let amplitude;

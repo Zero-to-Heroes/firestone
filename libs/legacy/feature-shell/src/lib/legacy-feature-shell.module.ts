@@ -693,7 +693,6 @@ import { GlobalStatsNotifierService } from './js/services/global-stats/global-st
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
 import { LazyDataInitService } from './js/services/lazy-data-init.service';
-import { LocalStorageService } from './js/services/local-storage';
 import { LocalizationFacadeService } from './js/services/localization-facade.service';
 import { LocalizationService } from './js/services/localization.service';
 import { LogListenerService } from './js/services/log-listener.service';
@@ -1676,7 +1675,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		StoreBootstrapService,
 		CollaboratorsService,
 		UserService,
-		LocalStorageService,
 		LazyDataInitService,
 		GameStatusService,
 		QuestsService,

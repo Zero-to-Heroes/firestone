@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ApiRunner } from '../api-runner';
-import { LocalStorageService } from '../local-storage';
 import { GlobalStatsLoadedEvent } from '../mainwindow/store/events/stats/global/global-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
@@ -35,11 +34,11 @@ export class GlobalStatsService {
 	}
 
 	public updateGlobalStats(stats: GlobalStats) {
-		this.localStorage.setItem('user-global-stats', stats);
+		this.localStorage.setItem(LocalStorageService.USER_GLOBAL_STATS, stats);
 	}
 
 	public async loadGlobalStats() {
-		const localInfo = this.localStorage.getItem<GlobalStats>('user-global-stats');
+		const localInfo = this.localStorage.getItem<GlobalStats>(LocalStorageService.USER_GLOBAL_STATS);
 		if (!!localInfo?.stats?.length) {
 			console.log('loaded local global stats');
 			this.store.send(new GlobalStatsLoadedEvent(localInfo));
@@ -51,7 +50,7 @@ export class GlobalStatsService {
 			userId: currentUser.userId,
 			machineId: currentUser.machineId,
 		});
-		this.localStorage.setItem('user-global-stats', remoteData?.result);
+		this.localStorage.setItem(LocalStorageService.USER_GLOBAL_STATS, remoteData?.result);
 		console.log('loaded remote globalStats');
 		this.store.send(new GlobalStatsLoadedEvent(remoteData?.result));
 		return remoteData;
