@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.3.0',
+		version: '10.3.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -43,6 +43,19 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now download your full game history from the Settings > General > Data tab, as well as modify how far back you wish the app to load your games. Beware though that loading your full history might take a while, depending on the amount of games you have.`,
+							},
+							{
+								type: 'feature',
+								text: `Your game history (as well as other data) is now cached on your disk, under %localAppData%\Roaming\Overwolf\lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob.`,
+							},
+						],
+					},
 					{
 						category: 'decktracker',
 						details: [
