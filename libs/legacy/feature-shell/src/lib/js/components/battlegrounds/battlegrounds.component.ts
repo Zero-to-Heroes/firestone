@@ -26,11 +26,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true" [avoidGameOverlap]="true">
-			<ads
-				[parentComponent]="'battlegrounds'"
-				[adRefershToken]="adRefershToken$ | async"
-				*ngIf="showAds$ | async"
-			></ads>
+			<ads *ngIf="showAds$ | async"></ads>
 			<battlegrounds-content> </battlegrounds-content>
 		</window-wrapper>
 	`,
@@ -40,7 +36,6 @@ export class BattlegroundsComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	adRefershToken$: Observable<string>;
 	showAds$: Observable<boolean>;
 
 	windowId: string;
@@ -61,9 +56,6 @@ export class BattlegroundsComponent
 	}
 
 	ngAfterContentInit() {
-		this.adRefershToken$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.reviewId)
-			.pipe(this.mapData(([reviewId]) => reviewId));
 		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(takeUntil(this.destroyed$));
 	}
 

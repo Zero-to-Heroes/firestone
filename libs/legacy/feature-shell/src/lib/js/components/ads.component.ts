@@ -5,7 +5,6 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
-	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -53,34 +52,16 @@ declare let amplitude: any;
 export class AdsComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit, OnDestroy {
 	tip$: Observable<string>;
 
-	@Input() parentComponent: string;
-
-	@Input() set adRefershToken(value: any) {
-		// if (!value || this.forceRefreshToken === value || this.refreshesLeft === REFRESH_CAP) {
-		// 	return;
-		// }
-		// console.log('[ads] forcing refresh', value, this.forceRefreshToken, this.refreshesLeft);
-		// this.forceRefreshToken = value;
-		// this.refreshesLeft = REFRESH_CAP;
-		// this.tentativeAdRefresh();
-	}
-
 	shouldDisplayAds = true;
-
-	private windowId: string;
-	// private forceRefreshToken: any;
 
 	private adRef;
 	private adInit = false;
 	private owAdsReady = false;
-	private stateChangedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
 	private displayImpressionListener: (message: any) => void;
 	private owAdsReadyListener: (message: any) => void;
-	// private refreshTimer;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	// private refreshesLeft = REFRESH_CAP;
 
 	private tip = new BehaviorSubject<string>(null);
 	private tipInterval;
@@ -96,18 +77,7 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	}
 
 	async ngAfterViewInit() {
-		// this.cdr.detach();
-		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, (message) => {
-			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
-				console.log('[ads] removing ad', message.window_state);
-				this.removeAds();
-			} else if (message.window_previous_state !== 'normal' && message.window_previous_state !== 'maximized') {
-				console.log('[ads] refreshing ad', message.window_state, message.window_previous_state, message);
-				this.refreshAds();
-			}
-		});
 		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
 		console.log('[ads] should display ads?', this.shouldDisplayAds);
 		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
@@ -125,7 +95,6 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		console.log('[ads] removing event listeners');
-		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.adRef?.removeEventListener(this.impressionListener);
 		this.adRef?.removeEventListener(this.displayImpressionListener);
 		this.adRef?.removeEventListener(this.owAdsReadyListener);
@@ -193,18 +162,6 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 
 					this.displayImpressionListener = async (data) => {
 						console.log('[ads] display ad impression');
-						// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
-						// impression
-						// if (!this.refreshTimer) {
-						// 	if (this.refreshesLeft > 0) {
-						// 		this.refreshTimer = setTimeout(() => {
-						// 			console.log(`[ads] refreshing ad after ${REFRESH_IN_MINUTES} minutes timeout`);
-						// 			this.refreshTimer = null;
-						// 			this.refreshesLeft--;
-						// 			this.refreshAds();
-						// 		}, REFRESH_IN_MINUTES * 60 * 1000);
-						// 	}
-						// }
 					};
 					this.owAdsReadyListener = async (data) => {
 						// console.log('[ads] owAdsReady', data);
@@ -219,16 +176,7 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 					}
 				}
 				this.adInit = false;
-				setTimeout(() => {
-					this.refreshAds();
-				}, 1000);
 				return;
-			}
-			if (this.owAdsReady) {
-				console.log('[ads] refreshed ads');
-				this.adRef.refreshAd();
-			} else {
-				console.log('[ads] ads not ready yet, not refreshing ads');
 			}
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -239,17 +187,5 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 				this.refreshAds();
 			}, 10000);
 		}
-	}
-
-	private removeAds() {
-		// if (this.refreshTimer) {
-		// 	clearTimeout(this.refreshTimer);
-		// 	this.refreshTimer = null;
-		// }
-		if (!this.adRef) {
-			return;
-		}
-		console.log('[ads] removing ads');
-		this.adRef.removeAd();
 	}
 }

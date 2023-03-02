@@ -99,11 +99,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					</div>
 				</section>
 				<ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue>
-				<ads
-					[parentComponent]="'main-window'"
-					[adRefershToken]="adRefershToken$ | async"
-					*ngIf="value.showAds"
-				></ads>
+				<ads *ngIf="value.showAds"></ads>
 				<new-version-notification
 					class="new-version"
 					[forceOpen]="forceShowReleaseNotes$ | async"
@@ -118,7 +114,6 @@ export class MainWindowComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
-	adRefershToken$: Observable<boolean>;
 	activeTheme$: Observable<CurrentAppType | 'decktracker-desktop'>;
 	forceShowReleaseNotes$: Observable<boolean>;
 	showAds$: Observable<boolean>;
@@ -153,9 +148,6 @@ export class MainWindowComponent
 
 	ngAfterContentInit() {
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
-		this.adRefershToken$ = this.store
-			.listenDeckState$((gameState) => gameState)
-			.pipe(this.mapData(([gameState]) => gameState.gameStarted));
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => showFtue));
