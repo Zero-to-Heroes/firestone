@@ -52,7 +52,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `Your game history (as well as other data) is now cached on your disk, under %localAppData%\Roaming\Overwolf\lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob.`,
+								text: `Your game history (as well as other data) is now cached on your disk, under %localAppData%\Roaming\Overwolf\lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob`,
 							},
 						],
 					},

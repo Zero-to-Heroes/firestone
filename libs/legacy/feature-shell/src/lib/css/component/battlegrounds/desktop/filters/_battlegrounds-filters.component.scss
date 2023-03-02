@@ -1,6 +1,7 @@
 .battlegrounds-filters {
 	display: flex;
 	width: 100%;
+	flex-wrap: wrap;
 
 	::ng-deep filter-dropdown ng-select {
 		margin-right: 15px;
@@ -30,6 +31,5 @@
 		margin-right: 15px;
 		align-items: center;
 		position: relative;
-		top: -8px;
 	}
 }

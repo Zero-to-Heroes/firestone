@@ -1,28 +1,43 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import {
+	BgsHeroCurve,
+	BgsHeroCurveActionExtended,
+	BgsHeroCurveStep,
 	BgsHeroStratAuthor,
 	BgsHeroStratTip,
 } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { currentBgHeroId } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
+import { BgsStrategyCurveComponent } from './bgs-strategy-curve.component';
 
 @Component({
 	selector: 'bgs-strategies',
-	styleUrls: [
-		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-strategies.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/battlegrounds/desktop/strategy/bgs-strategies.component.scss`],
 	template: `
 		<div class="strategies" *ngIf="{ strategies: strategies$ | async } as value">
 			<div class="strategy" *ngFor="let strat of value.strategies">
 				<div class="summary">
 					<div class="background"></div>
 					<blockquote class="text" [innerHTML]="strat.summary"></blockquote>
+					<div class="curves" *ngIf="strat.curves?.length">
+						<div class="label" [owTranslate]="'app.battlegrounds.strategies.curve-label'"></div>
+						<div
+							class="curve"
+							*ngFor="let curve of strat.curves"
+							componentTooltip
+							[componentType]="componentType"
+							[componentInput]="curve"
+						>
+							{{ curve.name }}
+						</div>
+					</div>
 				</div>
 				<div class="author">
 					<div class="name" [helpTooltip]="strat.author?.tooltip" *ngIf="!strat.author?.link">
@@ -44,6 +59,8 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsStrategiesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	componentType: ComponentType<BgsStrategyCurveComponent> = BgsStrategyCurveComponent;
+
 	strategies$: Observable<readonly Strategy[]>;
 
 	loading = true;
@@ -76,8 +93,7 @@ export class BgsStrategiesComponent extends AbstractSubscriptionStoreComponent i
 					return stratsForHero.map((strat) => {
 						const author: BgsHeroStratAuthor = strats.authors.find((a) => a.id === strat.author);
 						const patch: PatchInfo = patchConfig?.patches?.find((p) => p.number === strat.patch);
-						return {
-							summary: strat.summary,
+						const result: Strategy = {
 							date: this.i18n.translateString('app.battlegrounds.strategies.date', {
 								date: new Date(strat.date).toLocaleString(this.i18n.formatCurrentLocale(), {
 									year: 'numeric',
@@ -86,12 +102,63 @@ export class BgsStrategiesComponent extends AbstractSubscriptionStoreComponent i
 								}),
 								patch: patch?.version ?? strat.patch,
 							}),
+							summary: strat.summary,
+							curves: strat.curves
+								.map((curveId) => strats.curves?.find((c) => c.id === curveId))
+								.filter((curve) => !!curve)
+								.map((curve) => {
+									const result: LocalizedBgsHeroCurve = {
+										...curve,
+										name: this.i18n.translateString(
+											`app.battlegrounds.strategies.curve.name.${curve.id}`,
+										),
+										notes: this.i18n.translateString(
+											`app.battlegrounds.strategies.curve.notes.${curve.id}`,
+										),
+										steps: curve.steps.map((step) => {
+											const result: LocalizedBgsHeroCurveStep = {
+												...step,
+												turnLabel: this.i18n.translateString(
+													`app.battlegrounds.strategies.curve.step.turn`,
+													{
+														value: step.turn,
+													},
+												),
+												goldLabel: this.i18n.translateString(
+													`app.battlegrounds.strategies.curve.step.gold`,
+													{
+														value: step.turn + 2,
+													},
+												),
+												localizedActions: step.actions.map((action) => {
+													if ((action as BgsHeroCurveActionExtended).type) {
+														return this.i18n.translateString(
+															`app.battlegrounds.strategies.curve.action.${
+																(action as BgsHeroCurveActionExtended).type
+															}`,
+															{
+																value: (action as BgsHeroCurveActionExtended).param,
+															},
+														);
+													} else {
+														return this.i18n.translateString(
+															`app.battlegrounds.strategies.curve.action.${action}`,
+														);
+													}
+												}),
+											};
+											return result;
+										}),
+									};
+									return result;
+								}),
 							author: {
 								name: author?.name,
 								tooltip: author?.highlights,
 								link: author?.link,
 							},
 						};
+						return result;
 					});
 				}),
 			);
@@ -99,11 +166,22 @@ export class BgsStrategiesComponent extends AbstractSubscriptionStoreComponent i
 }
 
 interface Strategy {
-	readonly summary: string;
 	readonly date: string;
+	readonly summary: string;
+	readonly curves: readonly LocalizedBgsHeroCurve[];
 	readonly author: {
 		readonly name: string;
 		readonly tooltip: string;
 		readonly link?: string;
 	};
+}
+
+export interface LocalizedBgsHeroCurve extends BgsHeroCurve {
+	readonly steps: readonly LocalizedBgsHeroCurveStep[];
+}
+
+export interface LocalizedBgsHeroCurveStep extends BgsHeroCurveStep {
+	readonly turnLabel: string;
+	readonly goldLabel: string;
+	readonly localizedActions: readonly string[];
 }

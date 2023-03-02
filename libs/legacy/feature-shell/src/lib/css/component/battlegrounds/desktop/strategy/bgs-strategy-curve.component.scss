@@ -1,0 +1,98 @@
+.curve {
+	display: flex;
+	background: var(--color-4);
+
+	background-image: radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/decktracker_bg.png');
+	background-size: 100%;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+
+	border-color: #ffb948;
+	border-radius: 25px;
+	border-width: 1px;
+	border-style: solid;
+	border-image-slice: 1;
+	margin-top: 3px;
+
+	// height: 460px;
+	// width: 750px;
+	align-items: center;
+	padding: 10px 30px;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 13px;
+	line-height: 22px;
+	pointer-events: none;
+
+	width: 500px;
+	flex-direction: column;
+
+	.title {
+		font-size: 16px;
+		color: var(--default-title-color);
+		margin-bottom: 10px;
+	}
+
+	.notes {
+		margin-bottom: 10px;
+	}
+
+	.steps {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+
+		.step {
+			display: flex;
+			padding: 10px;
+			position: relative;
+
+			.background {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 0;
+			}
+
+			&:not(:last-child) {
+				border-bottom: 1px solid var(--color-1);
+			}
+
+			&:nth-child(even) {
+				.background {
+					background: var(--color-5);
+					opacity: 0.5;
+				}
+			}
+		}
+
+		.turn {
+			width: 75px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin-right: 10px;
+			z-index: 1;
+		}
+
+		.actions {
+			display: flex;
+			align-items: center;
+			z-index: 1;
+
+			.action {
+				&:not(:first-child)::before {
+					content: ',';
+					margin-right: 5px;
+				}
+			}
+		}
+	}
+}

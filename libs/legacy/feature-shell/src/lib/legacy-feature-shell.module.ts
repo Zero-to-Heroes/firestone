@@ -454,10 +454,11 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
-import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/categories/hero-details/bgs-strategies.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
+import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
+import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
@@ -950,6 +951,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
 		BgsQuestRewardsComponent,
+		BgsStrategyCurveComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
@@ -1089,6 +1091,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
 		BgsQuestRewardsComponent,
+		BgsStrategyCurveComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,

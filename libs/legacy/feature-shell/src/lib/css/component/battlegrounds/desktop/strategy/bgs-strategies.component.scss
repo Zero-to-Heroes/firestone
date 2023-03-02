@@ -38,6 +38,21 @@
 		}
 	}
 
+	.curves {
+		display: flex;
+		font-size: 12px;
+		padding-bottom: 10px;
+		padding-left: 10px;
+
+		.label {
+			margin-right: 5px;
+		}
+	}
+
+	.curve {
+		text-decoration: underline;
+	}
+
 	.author {
 		font-size: 12px;
 		display: flex;

@@ -138,7 +138,7 @@ export class BgsInitService {
 				name: this.cards.getCard(heroCardId)?.name,
 				heroId: heroCardId,
 				tabs: [
-					// 'strategies',
+					'strategies',
 					'winrate-stats',
 					// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
 					// 'mmr',

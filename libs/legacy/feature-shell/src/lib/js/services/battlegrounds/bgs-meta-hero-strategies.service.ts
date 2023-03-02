@@ -62,6 +62,7 @@ export interface BgsHeroStratAuthor {
 export interface BgsHeroCurve {
 	readonly id: BgsHeroCurveId;
 	readonly name: string;
+	readonly notes: string;
 	readonly steps: readonly BgsHeroCurveStep[];
 }
 
