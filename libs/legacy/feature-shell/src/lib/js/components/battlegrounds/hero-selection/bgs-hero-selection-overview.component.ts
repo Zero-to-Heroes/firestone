@@ -1,10 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { AdService } from '../../../services/ad.service';
 import { BgsMetaHeroStatTierItem, buildTiers } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -15,7 +14,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	selector: 'bgs-hero-selection-overview',
 	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`],
 	template: `
-		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
+		<div class="container" [ngClass]="{ 'no-ads': !(showAds$ | async) }">
 			<div class="left">
 				<battlegrounds-tier-list [showFilters]="true"></battlegrounds-tier-list>
 			</div>
@@ -34,13 +33,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	// tiers$: Observable<readonly BgsMetaHeroStatTier[]>;
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
-
-	showAds = true;
+	showAds$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ads: AdService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
@@ -49,6 +46,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 	ngAfterContentInit(): void {
 		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
@@ -105,8 +103,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 				}
 			}),
 		);
-
-		this.init();
 	}
 
 	getOverviewWidth(): number {
@@ -119,13 +115,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 	trackByHeroFn(index, item: BgsMetaHeroStatTierItem) {
 		return item?.id;
-	}
-
-	private async init() {
-		this.showAds = await this.ads.shouldDisplayAds();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
 

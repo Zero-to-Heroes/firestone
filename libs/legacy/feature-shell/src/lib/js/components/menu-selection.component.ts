@@ -7,12 +7,10 @@ import {
 	EventEmitter,
 	Input,
 	ViewEncapsulation,
-	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
-import { AdService } from '../services/ad.service';
 import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
@@ -208,7 +206,7 @@ declare let amplitude;
 			</button>
 
 			<li class="push-down"></li>
-			<ng-container *ngIf="showGoPremium">
+			<ng-container *ngIf="showGoPremium$ | async">
 				<button
 					[attr.tabindex]="tabIndex$ | async"
 					type="button"
@@ -260,10 +258,9 @@ export class MenuSelectionComponent
 	tabIndex$: Observable<number>;
 	hasNewMail$: Observable<boolean>;
 	mailboxTextDetails$: Observable<string>;
+	showGoPremium$: Observable<boolean>;
 
 	@Input() selectedModule: string;
-
-	showGoPremium: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -271,7 +268,6 @@ export class MenuSelectionComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
-		private adService: AdService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
@@ -288,6 +284,7 @@ export class MenuSelectionComponent
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
 		this.enableMailboxTab$ = this.listenForBasicPref$((prefs) => prefs.enableMailbox);
+		this.showGoPremium$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
 		const enableMailboxUnread$ = this.listenForBasicPref$((prefs) => prefs.enableMailboxUnread);
 		this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
 			this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),
@@ -303,10 +300,6 @@ export class MenuSelectionComponent
 
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.showGoPremium = await this.adService.shouldDisplayAds();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	selectModule(module: CurrentAppType) {

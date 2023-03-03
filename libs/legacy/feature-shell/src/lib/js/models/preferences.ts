@@ -66,6 +66,8 @@ export class Preferences {
 
 	readonly modsEnabled: boolean;
 
+	readonly isPremium: boolean;
+
 	readonly launchAppOnGameStart: boolean = true;
 	readonly showSessionRecapOnExit: boolean = true;
 	readonly shareGamesWithVS: boolean = true;

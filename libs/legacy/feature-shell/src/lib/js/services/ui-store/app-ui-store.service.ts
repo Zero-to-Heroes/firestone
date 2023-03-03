@@ -36,6 +36,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../models/preferences';
+import { AdService } from '../ad.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
@@ -89,7 +90,11 @@ export class AppUiStoreService {
 
 	private initialized = false;
 
-	constructor(private readonly ow: OverwolfService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
+		private readonly ads: AdService,
+	) {
 		window['appStore'] = this;
 		window['snapshotAppStore'] = (showLog = true) => {
 			const snapshot = {
@@ -345,6 +350,11 @@ export class AppUiStoreService {
 	public decks$(): Observable<readonly DeckSummary[]> {
 		this.debugCall('decks$');
 		return this.decks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
+	public isPremiumUser$(): Observable<boolean> {
+		this.debugCall('isPremiumUser$');
+		return this.ads.shouldShowAds$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public send(event: MainWindowStoreEvent) {

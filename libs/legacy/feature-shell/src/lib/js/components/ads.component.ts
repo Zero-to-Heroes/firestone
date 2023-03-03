@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -10,7 +11,6 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AdService } from '../services/ad.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ShowAdsEvent } from '../services/mainwindow/store/events/show-ads-event';
 import { TipService } from '../services/tip.service';
@@ -49,7 +49,10 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdsComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit, OnDestroy {
+export class AdsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	tip$: Observable<string>;
 
 	shouldDisplayAds = true;
@@ -67,7 +70,6 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	private tipInterval;
 
 	constructor(
-		private adService: AdService,
 		private ow: OverwolfService,
 		private readonly tipService: TipService,
 		protected readonly store: AppUiStoreFacadeService,
@@ -76,9 +78,20 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 		super(store, cdr);
 	}
 
+	ngAfterContentInit(): void {
+		this.store
+			.isPremiumUser$()
+			.pipe(this.mapData((isPremium) => isPremium))
+			.subscribe((isPremium) => {
+				this.shouldDisplayAds = isPremium;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+	}
+
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
 		console.log('[ads] should display ads?', this.shouldDisplayAds);
 		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
 		this.refreshAds();

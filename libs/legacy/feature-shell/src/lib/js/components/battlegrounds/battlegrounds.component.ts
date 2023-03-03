@@ -9,9 +9,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { from, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AdService } from '../../services/ad.service';
+import { Observable } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -46,7 +44,6 @@ export class BattlegroundsComponent
 	constructor(
 		private readonly debug: DebugService,
 		private readonly prefs: PreferencesService,
-		private readonly ads: AdService,
 		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
@@ -56,7 +53,7 @@ export class BattlegroundsComponent
 	}
 
 	ngAfterContentInit() {
-		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(takeUntil(this.destroyed$));
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
 	}
 
 	private async init() {

@@ -155,6 +155,11 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.tavernBrawl$());
 	}
 
+	public isPremiumUser$(): Observable<boolean> {
+		this.debugCall('isPremiumUser$');
+		return this.debugObservable(this.store.isPremiumUser$());
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		return this.store.send(event);
 	}

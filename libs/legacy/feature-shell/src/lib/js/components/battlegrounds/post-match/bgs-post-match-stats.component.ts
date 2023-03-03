@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -7,20 +8,22 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
-import { AdService } from '../../../services/ad.service';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { normalizeCardId } from './card-utils';
 
 @Component({
@@ -30,7 +33,7 @@ import { normalizeCardId } from './card-utils';
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats.component.scss`,
 	],
 	template: `
-		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
+		<div class="container" [ngClass]="{ 'no-ads': !(showAds$ | async) }">
 			<div class="content empty-state" *ngIf="!_panel?.player && !mainPlayerCardId">
 				<i>
 					<svg>
@@ -103,7 +106,12 @@ import { normalizeCardId } from './card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsPostMatchStatsComponent implements AfterViewInit {
+export class BgsPostMatchStatsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
+	showAds$: Observable<boolean>;
+
 	enableMultiGraphs = FeatureFlags.ENABLE_MULTI_GRAPHS;
 
 	@Input() loadingTitle = "We're building the stats";
@@ -176,22 +184,24 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	boardMinions: readonly Entity[] = [];
 	minionStats: readonly MinionStat[];
 	questRewards: readonly QuestReward[];
-	// mmr: number;
-	showAds = true;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly owUtils: OwUtilsService,
-		private readonly ads: AdService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		this.init();
+		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
 	}
 
 	async ngAfterViewInit() {
@@ -233,12 +243,5 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
 			.map((cardId) => totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
-	}
-
-	private async init() {
-		this.showAds = await this.ads.shouldDisplayAds();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

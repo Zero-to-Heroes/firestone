@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
@@ -91,7 +90,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ads: AdService,
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
@@ -104,7 +102,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 		this.showNextOpponentRecapSeparately$ = this.listenForBasicPref$(
 			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
 		);
-		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(this.mapData((ads) => ads));
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state, prefs]) => state?.currentGame?.currentTurn)
 			.pipe(this.mapData(([turn]) => turn));

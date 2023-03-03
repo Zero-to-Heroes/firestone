@@ -1,10 +1,23 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AdService {
-	constructor(private http: HttpClient, private ow: OverwolfService) {}
+	public shouldShowAds$$ = new BehaviorSubject<boolean>(false);
+
+	constructor(private ow: OverwolfService) {
+		this.init();
+	}
+
+	private async init() {
+		this.ow.onSubscriptionChanged(async (event) => {
+			const showAds = await this.shouldDisplayAds();
+			this.shouldShowAds$$.next(showAds);
+		});
+		const showAds = await this.shouldDisplayAds();
+		this.shouldShowAds$$.next(showAds);
+	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
