@@ -61,6 +61,9 @@
 		.stats {
 			margin-top: 0;
 		}
+		.strategies {
+			display: none;
+		}
 	}
 
 	::ng-deep bgs-hero-tribes {
@@ -74,6 +77,31 @@
 					display: none;
 				}
 			}
+		}
+	}
+
+	::ng-deep bgs-strategies-view.strategies.strategies.strategies {
+		margin-left: 15px;
+
+		.summary {
+			max-width: 425px;
+			font-size: 12px;
+		}
+
+		.text {
+			padding: 10px;
+			&:before {
+				content: '';
+				margin: 0;
+			}
+		}
+
+		.curves {
+			padding-bottom: 0;
+		}
+
+		.author {
+			font-size: 10px;
 		}
 	}
 }

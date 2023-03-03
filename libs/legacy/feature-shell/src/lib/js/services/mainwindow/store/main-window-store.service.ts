@@ -91,6 +91,7 @@ import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-
 import { BgsQuestsDataLoadedEvent } from './events/battlegrounds/bgs-quests-data-loaded-event';
 import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsRequestNewGlobalStatsLoadEvent } from './events/battlegrounds/bgs-request-new-global-stats-load-event';
+import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategies-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { BgsTribesFilterSelectedEvent } from './events/battlegrounds/bgs-tribes-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
@@ -247,6 +248,7 @@ import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/b
 import { BgsQuestsDataLoadedProcessor } from './processors/battlegrounds/bgs-quests-data-loaded-processor';
 import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsRequestNewGlobalStatsLoadProcessor } from './processors/battlegrounds/bgs-request-new-global-stats-load-processor';
+import { BgsShowStrategiesProcessor } from './processors/battlegrounds/bgs-show-strategies-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { BgsTribesFilterSelectedProcessor } from './processors/battlegrounds/bgs-tribes-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
@@ -712,11 +714,8 @@ export class MainWindowStoreService {
 			[ConstructedNewDeckVersionEvent.eventName(), new ConstructedNewDeckVersionProcessor(this.prefs)],
 			[ConstructedEjectDeckVersionEvent.eventName(), new ConstructedEjectDeckVersionProcessor(this.prefs)],
 			[ConstructedToggleDeckVersionStatsEvent.eventName(), new ConstructedToggleDeckVersionStatsProcessor()],
-			[
-				// Battlegrounds
-				SelectBattlegroundsCategoryEvent.eventName(),
-				new SelectBattlegroundsCategoryProcessor(),
-			],
+			// Battlegrounds
+			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],
 			[BgsBestStatsLoadedEvent.eventName(), new BgsBestStatsLoadedProcessor()],
 			[BgsTimeFilterSelectedEvent.eventName(), new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater)],
 			[BgsRankFilterSelectedEvent.eventName(), new BgsRankFilterSelectedProcessor(this.prefs)],
@@ -768,17 +767,13 @@ export class MainWindowStoreService {
 				new BattlegroundsMetaHeroStrategiesLoadedProcessor(),
 			],
 			[BgsQuestsDataLoadedEvent.eventName(), new BgsQuestsDataLoadedProcessor()],
-			[
-				// Streams
-				LiveStreamsDataLoadedEvent.eventName(),
-				new LiveStreamsDataLoadedProcessor(),
-			],
+			[BgsShowStrategiesEvent.eventName(), new BgsShowStrategiesProcessor(this.events, this.cards, this.i18n)],
+
+			// Streams
+			[LiveStreamsDataLoadedEvent.eventName(), new LiveStreamsDataLoadedProcessor()],
 			[LiveStreamsForceReloadEvent.eventName(), new LiveStreamsForceReloadProcessor(this.streamsService)],
-			[
-				// Mercenaries
-				MercenariesGlobalStatsLoadedEvent.eventName(),
-				new MercenariesGlobalStatsLoadedProcessor(),
-			],
+			// Mercenaries
+			[MercenariesGlobalStatsLoadedEvent.eventName(), new MercenariesGlobalStatsLoadedProcessor()],
 			[MercenariesReferenceDataLoadedEvent.eventName(), new MercenariesReferenceDataLoadedProcessor()],
 			[MercenariesModeFilterSelectedEvent.eventName(), new MercenariesModeFilterSelectedProcessor(this.prefs)],
 			[MercenariesRoleFilterSelectedEvent.eventName(), new MercenariesRoleFilterSelectedProcessor(this.prefs)],

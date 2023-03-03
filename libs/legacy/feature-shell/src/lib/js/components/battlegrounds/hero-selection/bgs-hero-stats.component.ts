@@ -3,6 +3,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
+import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
@@ -55,6 +56,18 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 						{{ totalPlayerMatches }}
 					</div>
 				</div>
+			</div>
+			<div class="strategies" *ngIf="showTurnWinrates">
+				<div
+					class="title"
+					[owTranslate]="'app.battlegrounds.personal-stats.hero-details.tabs.strategies'"
+				></div>
+				<div
+					class="strategies-link"
+					[owTranslate]="'battlegrounds.hero-stats.strategies-link'"
+					[helpTooltip]="'battlegrounds.hero-stats.strategies-link-tooltip' | owTranslate"
+					(click)="showStrategies()"
+				></div>
 			</div>
 			<div class="winrate" *ngIf="showTurnWinrates">
 				<div
@@ -139,6 +152,10 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 
 	buildValue(value: number): string {
 		return value == null || isNaN(value) ? '-' : value.toFixed(2);
+	}
+
+	showStrategies() {
+		this.store.send(new BgsShowStrategiesEvent(this._hero.id));
 	}
 }
 

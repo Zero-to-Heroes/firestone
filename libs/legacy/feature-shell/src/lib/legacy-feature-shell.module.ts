@@ -457,6 +457,7 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
+import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
@@ -1327,6 +1328,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsReplaysRecapComponent,
 		BgsLastWarbandsComponent,
 		BgsStrategiesComponent,
+		BgsStrategiesViewComponent,
 		BgsMmrEvolutionForHeroComponent,
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,

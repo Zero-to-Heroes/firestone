@@ -8,6 +8,7 @@
 
 	.summary {
 		width: 600px;
+		max-width: 100%;
 		font-size: 14px;
 		margin-bottom: 5px;
 		color: var(--color-1);
@@ -51,6 +52,11 @@
 
 	.curve {
 		text-decoration: underline;
+
+		&:not(:last-child):after {
+			content: ',';
+			margin-right: 5px;
+		}
 	}
 
 	.author {

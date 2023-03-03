@@ -67,7 +67,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroOverviewComponent {
-	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
+	componentType: ComponentType<BgsHeroSelectionTooltipComponent> = BgsHeroSelectionTooltipComponent;
 
 	@Input() hideEmptyState: boolean;
 	@Input() heroTooltipPosition: TooltipPositionType = 'right';

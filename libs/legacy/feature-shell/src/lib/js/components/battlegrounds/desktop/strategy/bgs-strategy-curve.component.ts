@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { LocalizedBgsHeroCurve } from './bgs-strategies.component';
+import { LocalizedBgsHeroCurve } from './bgs-strategies-view.component';
 
 @Component({
 	selector: 'bgs-strategy-curve',

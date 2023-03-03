@@ -1,5 +1,8 @@
 :host {
 	width: 100%;
+	display: flex;
+	flex-grow: 0;
+	min-height: 0;
 }
 
 .stats {
@@ -7,6 +10,8 @@
 	margin-top: 0.1vh;
 	display: flex;
 	flex-direction: column;
+	flex-wrap: wrap;
+	overflow: hidden;
 
 	.stat-details {
 		display: flex;
@@ -73,5 +78,31 @@
 				}
 			}
 		}
+	}
+
+	.strategies {
+		margin-top: 20px;
+		width: 100%;
+
+		.strategies-link {
+			text-align: center;
+
+			&:hover {
+				color: var(--default-title-color);
+			}
+		}
+
+		// ::ng-deep bgs-strategies-view {
+		// 	.summary {
+		// 		font-size: 12px;
+		// 	}
+		// 	.text {
+		// 		padding: 7px;
+		// 		&:before {
+		// 			content: '';
+		// 			margin: 0;
+		// 		}
+		// 	}
+		// }
 	}
 }
