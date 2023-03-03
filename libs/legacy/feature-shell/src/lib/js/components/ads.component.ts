@@ -83,7 +83,7 @@ export class AdsComponent
 			.isPremiumUser$()
 			.pipe(this.mapData((isPremium) => isPremium))
 			.subscribe((isPremium) => {
-				this.shouldDisplayAds = isPremium;
+				this.shouldDisplayAds = !isPremium;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

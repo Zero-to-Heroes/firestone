@@ -4,12 +4,14 @@
 
 .preference-toggle {
 	margin-top: 15px;
+	display: flex;
 
 	label {
 		// margin-top: 15px;
 		margin-bottom: 0;
 		display: flex;
 		align-items: center;
+		position: relative;
 	}
 
 	p {
@@ -55,5 +57,25 @@
 				right: auto;
 			}
 		}
+	}
+
+	.premium-lock {
+		display: none;
+		height: 25px;
+		width: 25px;
+		--icon-color: var(--default-title-color);
+		position: absolute;
+		right: 3px;
+	}
+}
+
+:host.locked {
+	b {
+		--toggle-color-knob: var(--default-text-color);
+		border: 1px solid var(--default-text-color);
+		opacity: 0.3;
+	}
+	.premium-lock {
+		display: flex;
 	}
 }

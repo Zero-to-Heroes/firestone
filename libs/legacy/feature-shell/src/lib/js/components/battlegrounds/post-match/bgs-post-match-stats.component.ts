@@ -201,7 +201,7 @@ export class BgsPostMatchStatsComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
 	}
 
 	async ngAfterViewInit() {

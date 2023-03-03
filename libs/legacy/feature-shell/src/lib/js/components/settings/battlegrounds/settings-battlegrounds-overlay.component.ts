@@ -41,6 +41,19 @@ import { Knob } from '../preference-slider.component';
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.overlay-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
+					field="bgsShowHeroSelectionTooltip"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-hero-tooltip-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-hero-tooltip-tooltip' | owTranslate"
+					premiumSetting
+				></preference-toggle>
+				<preference-toggle
+					field="bgsShowHeroSelectionTiers"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-hero-tier-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-hero-tier-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowBannedTribesOverlay"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.show-banned-tribes-label' | owTranslate"

@@ -53,7 +53,7 @@ export class BattlegroundsComponent
 	}
 
 	ngAfterContentInit() {
-		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
 	}
 
 	private async init() {

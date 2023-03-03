@@ -470,6 +470,7 @@ import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/co
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
+import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -1623,6 +1624,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LocalizationDropdownComponent,
 
 		AdvancedSettingDirective,
+		PremiumSettingDirective,
 		MercenariesHighlightDirective,
 		AutofocusDirective,
 	],

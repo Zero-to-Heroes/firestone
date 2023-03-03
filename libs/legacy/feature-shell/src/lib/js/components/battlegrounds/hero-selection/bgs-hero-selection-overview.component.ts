@@ -46,7 +46,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 	ngAfterContentInit(): void {
 		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
-		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
+		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,

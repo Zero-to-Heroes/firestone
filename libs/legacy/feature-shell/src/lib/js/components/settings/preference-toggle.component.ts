@@ -8,7 +8,6 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -43,6 +42,11 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</i>
 				</p>
 				<b></b>
+				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#lock" />
+					</svg>
+				</div>
 			</label>
 			<div class="info-message" *ngIf="messageWhenToggleValue && shouldDisplayMessage()">
 				<svg class="attention-icon">
@@ -71,13 +75,14 @@ export class PreferenceToggleComponent
 	toggled = false;
 	uniqueId: string;
 
+	isLocked: boolean;
+
 	private sub$$: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private prefs: PreferencesService,
 	) {
 		super(store, cdr);
 		this.loadDefaultValues();
@@ -101,10 +106,12 @@ export class PreferenceToggleComponent
 	}
 
 	async toggleValue() {
+		if (this.isLocked) {
+			return;
+		}
 		this.toggled = true;
-		const oldPrefs = await this.prefs.getPreferences();
 		if (this.field) {
-			const newPrefs = await this.prefs.setValue(this.field, !this.value);
+			await this.prefs.setValue(this.field, !this.value);
 		}
 		if (this.toggleFunction) {
 			this.toggleFunction(!this.value);

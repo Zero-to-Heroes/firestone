@@ -354,7 +354,7 @@ export class AppUiStoreService {
 
 	public isPremiumUser$(): Observable<boolean> {
 		this.debugCall('isPremiumUser$');
-		return this.ads.shouldShowAds$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.ads.isPremium$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public send(event: MainWindowStoreEvent) {

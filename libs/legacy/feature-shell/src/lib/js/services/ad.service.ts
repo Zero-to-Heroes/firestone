@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AdService {
-	public shouldShowAds$$ = new BehaviorSubject<boolean>(false);
+	public isPremium$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(private ow: OverwolfService) {
 		this.init();
@@ -13,16 +13,16 @@ export class AdService {
 	private async init() {
 		this.ow.onSubscriptionChanged(async (event) => {
 			const showAds = await this.shouldDisplayAds();
-			this.shouldShowAds$$.next(showAds);
+			this.isPremium$$.next(!showAds);
 		});
 		const showAds = await this.shouldDisplayAds();
-		this.shouldShowAds$$.next(showAds);
+		this.isPremium$$.next(!showAds);
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('not display in dev');
-			return true;
+			return false;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
