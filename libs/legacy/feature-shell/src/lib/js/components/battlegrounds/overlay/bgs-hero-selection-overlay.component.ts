@@ -55,7 +55,10 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 			this.store.isPremiumUser$(),
 			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTooltip),
 		]).pipe(this.mapData(([premium, [bgsShowHeroSelectionTooltip]]) => premium && bgsShowHeroSelectionTooltip));
-		this.showTierOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsShowHeroSelectionTiers);
+		this.showTierOverlay$ = combineLatest([
+			this.store.isPremiumUser$(),
+			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTiers),
+		]).pipe(this.mapData(([premium, [bgsShowHeroSelectionTiers]]) => premium && bgsShowHeroSelectionTiers));
 
 		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
 
