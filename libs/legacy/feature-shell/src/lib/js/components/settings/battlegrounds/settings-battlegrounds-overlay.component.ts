@@ -89,6 +89,12 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.battlegrounds.overlay.battle-simulation-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.battle-simulation-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					field="bgsShowHeroSelectionAchievements"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-achievements-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-achievements-tooltip' | owTranslate"
+				></preference-toggle>
 			</div>
 
 			<div class="title" [owTranslate]="'settings.battlegrounds.general.simulator-config-title'"></div>
