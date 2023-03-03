@@ -1,5 +1,6 @@
 export interface Update {
 	readonly sections: readonly UpdateSection[];
+	readonly force: boolean;
 	readonly version: string;
 }
 
@@ -32,17 +33,47 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.3.1',
+		version: '10.3.2',
+		force: true,
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `Thank you all for using Firestone. It means a lot to me that so many of you use something that I made. I wish you a very happy new year.`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `I am considering changes to the Premium accounts, and move some features to be premium-only. You can read more about it <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads" target="_blank">here</a>, but the TL;DR is:
+				<ul>
+					<li>The ads business model is showing its limits, and I need to change how the app generates revenues to be able to continue doing this full-time</li>
+					<li>Premium will move from $3-remove-the-ads to $5-remove-the-ads-and-get-more-features</li>
+					<li>As much as possible, pure / low-processed data will be free. Premium features will be QoL and high-processing stuff</li>
+				</ul>
+				This is still experimental, so let me know what you think!<br/>
+				(PS: This message exceptionnaly ignores your "don't show me release notes" setting because I wanted to be sure that you all got the message)
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Strategy tips are here! Thanks to <a href="https://www.twitch.tv/rdulive" target="_blank">RDU</a> and the <a href="https://www.bgcurvesheet.com/" target="_blank">BG Curvesheet</a> for writing and sharing these tips! You can access them from the app's main window, or from the BG window while in-game`,
+							},
+							{
+								type: 'feature',
+								text: `[Premium] The strategy tips are now directly displayed when mousing over the hero portrait on the hero selection screen.`,
+							},
+							{
+								type: 'content',
+								text: `IMPORTANT: mousing over the hero portrait in the hero selection screen to show that hero's stats is now a premium-only feature. If you're not a Premium user, you can still bring up that data with the BG window (Alt + B).`,
+							},
+							{
+								type: 'content',
+								text: `IMPORTANT: same thing for showing the hero tier and average placement (and again, the info is available on the BG window).`,
+							},
+						],
+					},
 					{
 						category: 'general',
 						details: [

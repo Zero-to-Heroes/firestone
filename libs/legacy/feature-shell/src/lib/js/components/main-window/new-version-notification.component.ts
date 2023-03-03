@@ -166,7 +166,7 @@ export class NewVersionNotificationComponent implements AfterViewInit {
 		const lastUpdate = updates[0];
 		this.version = lastUpdate.version;
 		this.dontShowAgain = prefs.dontShowNewVersionNotif;
-		if (!this._forceOpen && prefs.dontShowNewVersionNotif) {
+		if (!this._forceOpen && prefs.dontShowNewVersionNotif && !updates[0].force) {
 			return;
 		}
 
