@@ -18,13 +18,21 @@ export class DiskCacheService {
 
 	constructor(private readonly ow: OverwolfService) {}
 
+	private savingFiles: { [fileKey: string]: boolean } = {};
+
 	public async storeItem(key: string, value: any) {
+		if (this.savingFiles[key]) {
+			return;
+		}
+
 		const start = Date.now();
 		// console.debug('[disk-cache] storing value', key);
 		const stringified = JSON.stringify(value);
+		this.savingFiles[key] = true;
 		await this.ow.deleteAppFile(key);
 		// console.debug('[disk-cache] deleted file', key);
 		await this.ow.storeAppFile(key, stringified);
+		this.savingFiles[key] = false;
 		console.debug('[disk-cache] stored value', key, Date.now() - start);
 	}
 
