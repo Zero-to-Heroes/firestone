@@ -117,6 +117,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a simulation issue where Amber Guardian could sometimes apply its buff twice.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Sinrunner Blanchy's reborn would not trigger if killed by a poisonous minion.`,
+							},
 						],
 					},
 					{
