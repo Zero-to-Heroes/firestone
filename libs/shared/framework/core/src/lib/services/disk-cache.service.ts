@@ -33,8 +33,13 @@ export class DiskCacheService {
 		// console.debug('[disk-cache] reading value', key);
 		const strResult = await this.ow.readAppFile(key);
 		// console.debug('[disk-cache] string value', key, strResult);
-		const result = !!strResult?.length ? JSON.parse(strResult) : null;
-		console.debug('[disk-cache] read value', key, Date.now() - start);
-		return result;
+		try {
+			const result = !!strResult?.length ? JSON.parse(strResult) : null;
+			console.debug('[disk-cache] read value', key, Date.now() - start);
+			return result;
+		} catch (e) {
+			console.error('[disk-cache] could not read value from disk', key, strResult);
+			return null;
+		}
 	}
 }
