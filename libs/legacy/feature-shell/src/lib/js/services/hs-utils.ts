@@ -209,6 +209,7 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.Chromie_CullingOfStratholmeToken,
 	CardIds.Chromie_EscapeFromDurnholdeToken,
 	CardIds.Chromie_OpeningTheDarkPortalToken,
+	CardIds.CurseOfAgony_AgonyToken,
 	CardIds.DeckOfWonders_ScrollOfWonderToken,
 	CardIds.EncumberedPackMule,
 	CardIds.FaldoreiStrider_SpiderAmbush,
