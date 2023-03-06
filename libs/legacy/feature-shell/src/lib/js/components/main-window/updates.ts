@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.3.2',
+		version: '10.3.4',
 		force: true,
 		sections: [
 			{
@@ -142,6 +142,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `The +X modifiers (for cards like Ignite) are now hidden when using the Legacy display mode (when Modern Tracker is turned off). They will be reintroduced later on once I'm able to properly do it in that display mode.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Agony cards created in the opponent's deck would not be removed from their decklist.`,
+							},
 						],
 					},
 					{
@@ -150,6 +154,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now reset the main window positions from the system tray icon. This should help for the rare case where some of these windows get moved outside of the screens.`,
+							},
+							{
+								type: 'feature',
+								text: `A few of the "past 100 days" filters have been renamed to "all time". They will work with all the data that the app has loaded, which is the past 100 days by default, but can be changed in the settings, under General > Data.`,
 							},
 						],
 					},
