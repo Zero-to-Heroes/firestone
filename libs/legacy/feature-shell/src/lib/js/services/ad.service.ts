@@ -22,7 +22,7 @@ export class AdService {
 	public async shouldDisplayAds(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('not display in dev');
-			return true;
+			return false;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
