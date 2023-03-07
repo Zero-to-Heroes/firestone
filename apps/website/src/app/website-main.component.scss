@@ -1,0 +1,12 @@
+.wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	outline: 1px solid var(--window-outline-color);
+	z-index: 1;
+}

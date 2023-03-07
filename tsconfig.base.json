@@ -24,6 +24,7 @@
 			"@firestone/shared/common/view": ["libs/shared/common/view/src/index.ts"],
 			"@firestone/shared/framework/common": ["libs/shared/framework/common/src/index.ts"],
 			"@firestone/shared/framework/core": ["libs/shared/framework/core/src/index.ts"],
+			"@firestone/shared/styles": ["libs/shared/styles/src/index.ts"],
 			"@legacy-import/*": ["libs/legacy/feature-shell/*"],
 			"@mails/*": ["libs/legacy/feature-shell/src/lib/libs/mails/*"],
 			"@models/*": ["libs/legacy/feature-shell/src/lib/js/models/*"],

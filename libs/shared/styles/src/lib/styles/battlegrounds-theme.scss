@@ -1,0 +1,62 @@
+:host.battlegrounds-theme,
+.battlegrounds-theme {
+	--window-background-image-backup: radial-gradient(
+		50vw at 50% 50%,
+		rgba(94, 11, 70, 1) 0%,
+		rgba(43, 24, 39, 1) 100%
+	);
+	--window-background-image: radial-gradient(50vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
+	--color-1: #dfb3d3;
+	--color-2: #ce73b4;
+	--color-3: #841063;
+	--color-4: #5f0b47;
+	--color-5: #40032e;
+	--color-6: #a89782;
+	--color-7: #1e0116;
+	--color-8: #cb9fd7;
+	--color-9: #39122e;
+	--color-common-1: #d9c3ab;
+	--color-common-2: #ffb948;
+
+	--ad-link-color: var(--color-2);
+	--on-ad-link-color-hover: var(--color-1);
+
+	--main-menu-background-color: var(--color-7);
+	--window-outline-color: #5f0b47;
+	--default-text-color: #d9c3ab;
+	--default-title-color: var(--color-common-2);
+	--secondary-text-color: var(--color-3);
+
+	--menu-selection-color: var(--color-3);
+	--on-menu-selection-color: var(--color-common-2);
+	--menu-bar-bottom-border-color: var(--color-4);
+
+	--tooltip-background-color: var(--color-3);
+	--tooltip-color: var(--color-1);
+
+	--ads-background-color: #190505;
+	--ads-color: var(--color-7);
+
+	--control-button-color: var(--color-1);
+	--on-control-button-background-color: var(--color-4);
+	--on-close-button-color: var(--color-7);
+	--on-close-button-background-color: var(--color-1);
+
+	--fs-scrollbar-thumb-color: var(--color-3);
+	--on-fs-scrollbar-thumb-color: var(--color-2);
+
+	--toggle-color-border: var(--color-1);
+	--toggle-color-knob: var(--color-1);
+
+	--confirmation-text-color: var(--color-1);
+	--on-confirmation-text-color: var(--color-5);
+	--on-confirmation-button-background-color: var(--color-1);
+
+	--variable-title-font-size: 13px;
+	--variable-title-font-size-big: 20px;
+
+	--popup-background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/bg_popup.png');
+	--confirmation-backdrop-color: var(--color-7);
+}
