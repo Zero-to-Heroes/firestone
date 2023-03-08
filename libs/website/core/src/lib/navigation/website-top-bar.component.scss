@@ -1,0 +1,19 @@
+:host {
+	display: flex;
+}
+
+.top-bar {
+	width: 100%;
+	background: var(--color-5);
+	padding: 10px;
+}
+
+.logo {
+	height: 100%;
+	width: 200px;
+
+	::ng-deep svg {
+		height: 100%;
+		width: auto;
+	}
+}

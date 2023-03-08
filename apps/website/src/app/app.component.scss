@@ -1,0 +1,33 @@
+.wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	outline: 1px solid var(--window-outline-color);
+	z-index: 1;
+
+	color: var(--default-text-color);
+}
+
+.main {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.content {
+	display: flex;
+}
+
+website-top-bar {
+	height: 65px;
+}
+
+website-navigation {
+	width: 200px;
+}

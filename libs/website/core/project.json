@@ -3,7 +3,7 @@
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
 	"sourceRoot": "libs/website/core/src",
-	"prefix": "firestone",
+	"prefix": "website",
 	"targets": {
 		"build": {
 			"executor": "@nrwl/angular:ng-packagr-lite",

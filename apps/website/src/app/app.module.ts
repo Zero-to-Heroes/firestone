@@ -6,10 +6,9 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBootstrapModule } from '@firestone/website/core';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
-import { WebsiteMainComponent } from './website-main.component';
 
 @NgModule({
-	declarations: [AppComponent, WebsiteMainComponent],
+	declarations: [AppComponent],
 	imports: [
 		BrowserModule,
 		RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),

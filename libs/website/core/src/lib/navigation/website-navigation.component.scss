@@ -1,0 +1,39 @@
+.menu-selection {
+	display: flex;
+	list-style: none;
+	flex-direction: column;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 100%;
+	background: var(--color-5);
+	border-top: 1px solid var(--color-3);
+
+	li,
+	button.menu-item {
+		width: 100%;
+		top: 0;
+		border: none;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		position: relative;
+		padding: 10px;
+
+		&.selected {
+			border: none;
+			border-right: 1px solid var(--default-title-color);
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+
+	.icon {
+		height: 40px;
+		width: 60px;
+
+		::ng-deep svg {
+			height: 100%;
+		}
+	}
+}
