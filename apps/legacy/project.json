@@ -16,7 +16,11 @@
 				"tsConfig": "apps/legacy/tsconfig.app.json",
 				"inlineStyleLanguage": "scss",
 				"assets": [
-					"apps/legacy/src/assets",
+					{
+						"glob": "**/*",
+						"input": "libs/shared/assets/src/assets",
+						"output": "./assets"
+					},
 					{
 						"glob": "**/*",
 						"input": "dependencies",
