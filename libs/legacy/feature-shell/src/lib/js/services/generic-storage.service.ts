@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from '@firestone/shared/framework/core';
 import { Preferences } from '../models/preferences';
 
-declare let amplitude;
-
 @Injectable()
 export class GenericStorageService {
 	constructor(private readonly localStorageService: LocalStorageService) {}

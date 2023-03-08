@@ -31,15 +31,14 @@ import {
 import { MercenariesPersonalHeroesSortCriteria } from '../models/mercenaries/personal-heroes-sort-criteria.type';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
-import { ApiRunner } from './api-runner';
 import { GenericStorageService } from './generic-storage.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { capitalizeFirstLetter, deepEqual } from './utils';
 
-declare let amplitude;
+// declare let amplitude;
 
-const PREF_UPDATE_URL = 'https://api.firestoneapp.com/userPrefs/post/preferences/{proxy+}';
-const PREF_RETRIEVE_URL = 'https://api.firestoneapp.com/userPrefs/get/preferences/{proxy+}';
+// const PREF_UPDATE_URL = 'https://api.firestoneapp.com/userPrefs/post/preferences/{proxy+}';
+// const PREF_RETRIEVE_URL = 'https://api.firestoneapp.com/userPrefs/get/preferences/{proxy+}';
 
 @Injectable()
 export class PreferencesService {
@@ -48,12 +47,11 @@ export class PreferencesService {
 	public static readonly DECKTRACKER_OVERLAY_SIZE = 'DECKTRACKER_OVERLAY_SIZE';
 	public static readonly TWITCH_CONNECTION_STATUS = 'TWITCH_CONNECTION_STATUS';
 
-	private preferencesEventBus = new BehaviorSubject<Preferences>(new Preferences());
+	public preferences$$ = new BehaviorSubject<Preferences>(new Preferences());
 
 	constructor(
 		private readonly storage: GenericStorageService,
-		@Optional() private readonly ow: OverwolfService,
-		private readonly api: ApiRunner,
+		@Optional() private readonly ow: OverwolfService, // private readonly api: ApiRunner,
 	) {
 		if (this.ow) {
 			this.setup();
@@ -61,7 +59,7 @@ export class PreferencesService {
 	}
 
 	private async setup() {
-		window['preferencesEventBus'] = this.preferencesEventBus;
+		window['preferencesEventBus'] = this.preferences$$;
 		const currentWindow = await this.ow?.getCurrentWindow();
 		if (currentWindow?.name !== OverwolfService.MAIN_WINDOW) {
 			window['preferencesEventBus'] = null;
@@ -635,44 +633,44 @@ export class PreferencesService {
 	}
 
 	public async updateRemotePreferences() {
-		if (!this.ow) {
-			return;
-		}
-		const userPrefs = await this.getPreferences();
-		console.log('[preferences] prefs from DB', userPrefs != null);
-		const currentUser = await this.ow.getCurrentUser();
-		const prefsToSync = new Preferences();
-		for (const prop in userPrefs) {
-			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSync, prop);
-			if (!meta) {
-				prefsToSync[prop] = userPrefs[prop];
-			}
-		}
-		console.log('[preferences] saving remote prefs');
-		await this.api.callPostApi(PREF_UPDATE_URL, {
-			userId: currentUser.userId,
-			userName: currentUser.username,
-			prefs: prefsToSync,
-		});
+		// if (!this.ow) {
+		// 	return;
+		// }
+		// const userPrefs = await this.getPreferences();
+		// console.log('[preferences] prefs from DB', userPrefs != null);
+		// const currentUser = await this.ow.getCurrentUser();
+		// const prefsToSync = new Preferences();
+		// for (const prop in userPrefs) {
+		// 	const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSync, prop);
+		// 	if (!meta) {
+		// 		prefsToSync[prop] = userPrefs[prop];
+		// 	}
+		// }
+		// console.log('[preferences] saving remote prefs');
+		// await this.api.callPostApi(PREF_UPDATE_URL, {
+		// 	userId: currentUser.userId,
+		// 	userName: currentUser.username,
+		// 	prefs: prefsToSync,
+		// });
 	}
 
 	public async loadRemotePrefs(): Promise<Preferences | undefined> {
-		if (!this.ow) {
-			return;
-		}
-		const currentUser = await this.ow.getCurrentUser();
-		const result: Preferences = await this.api.callPostApi(PREF_RETRIEVE_URL, {
-			userId: currentUser.userId,
-			userName: currentUser.username,
-		});
-		if (!result) {
-			return result;
-		}
-
-		const resultWithDate: Preferences = Preferences.deserialize(result);
-		this.currentSyncDate = resultWithDate.lastUpdateDate;
-		this.lastSyncPrefs = resultWithDate;
-		return resultWithDate;
+		return undefined;
+		// if (!this.ow) {
+		// 	return;
+		// }
+		// const currentUser = await this.ow.getCurrentUser();
+		// const result: Preferences = await this.api.callPostApi(PREF_RETRIEVE_URL, {
+		// 	userId: currentUser.userId,
+		// 	userName: currentUser.username,
+		// });
+		// if (!result) {
+		// 	return result;
+		// }
+		// const resultWithDate: Preferences = Preferences.deserialize(result);
+		// this.currentSyncDate = resultWithDate.lastUpdateDate;
+		// this.lastSyncPrefs = resultWithDate;
+		// return resultWithDate;
 	}
 
 	private buildCounterPropertyName(activeCounter: string, side: string): string {

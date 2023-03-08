@@ -1,6 +1,6 @@
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { Preferences } from '../../../../models/preferences';
 import { PreferencesService } from '../../../preferences.service';
 import { isWindowClosed } from '../../../utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

@@ -1,10 +1,10 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Preferences } from '@models/preferences';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { PreferencesService } from '@services/preferences.service';
 
 export class DuelsExploreDecksParser implements Processor {
 	constructor(private readonly prefs: PreferencesService) {}

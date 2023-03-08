@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { sleep } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
@@ -21,7 +21,7 @@ import {
 } from '../mercenaries/mercenaries-state-builder.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { groupByFunction, sleep } from '../utils';
+import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
 

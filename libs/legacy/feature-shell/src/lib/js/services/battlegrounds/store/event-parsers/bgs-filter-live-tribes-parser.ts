@@ -1,8 +1,8 @@
 import { EventEmitter } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BgsTribesFilterSelectedEvent } from '@services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { PreferencesService } from '@services/preferences.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { BgsFilterLiveTribesEvent } from '../events/bgs-filter-live-tribes-event';

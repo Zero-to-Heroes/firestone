@@ -1,7 +1,7 @@
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { PreferencesService } from '@services/preferences.service';
 import { DeckSummary } from '../../../../../models/mainwindow/decktracker/deck-summary';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../events/decktracker/constructed-deckbuilder-save-deck-event';
 

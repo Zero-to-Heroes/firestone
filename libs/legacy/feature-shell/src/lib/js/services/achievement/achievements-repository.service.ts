@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@services/preferences.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';

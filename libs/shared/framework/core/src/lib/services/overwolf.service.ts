@@ -43,7 +43,8 @@ export class OverwolfService {
 	}
 
 	public getMainWindow(): any {
-		return this.isOwEnabled() ? overwolf.windows.getMainWindow() : null;
+		// When dealing with the website / SPA without overwolf, the main window is simply the current window (since there is only one window)
+		return this.isOwEnabled() ? overwolf.windows.getMainWindow() : window;
 	}
 
 	// TODO: move preferences to a common module

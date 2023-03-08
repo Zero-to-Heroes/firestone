@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { PreferencesService } from '@services/preferences.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';

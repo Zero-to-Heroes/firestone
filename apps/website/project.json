@@ -15,7 +15,15 @@
 				"polyfills": ["zone.js"],
 				"tsConfig": "apps/website/tsconfig.app.json",
 				"inlineStyleLanguage": "scss",
-				"assets": ["apps/website/src/favicon.ico", "apps/website/src/assets"],
+				"assets": [
+					"apps/website/src/favicon.ico",
+					"apps/website/src/assets",
+					{
+						"glob": "**/*",
+						"input": "libs/shared/assets/src/assets",
+						"output": "./assets"
+					}
+				],
 				"styles": [
 					"apps/website/src/styles.scss",
 					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss"

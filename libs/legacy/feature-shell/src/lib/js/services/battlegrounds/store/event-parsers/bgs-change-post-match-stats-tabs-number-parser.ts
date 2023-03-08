@@ -1,6 +1,6 @@
+import { BgsPostMatchStatsPanel } from '@legacy-import/src/lib/js/models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

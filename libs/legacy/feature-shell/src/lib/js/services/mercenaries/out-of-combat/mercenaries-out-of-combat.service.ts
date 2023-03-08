@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../../models/preferences';
 import { BroadcastEvent, Events } from '../../events.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
-import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
-import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
 import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
@@ -34,9 +30,6 @@ export class MercenariesOutOfCombatService {
 	constructor(
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
-		private readonly prefs: PreferencesService,
-		private readonly memoryService: MemoryInspectionService,
-		private readonly memoryCache: MercenariesMemoryCacheService,
 		private readonly ow: OverwolfService,
 		private readonly store: AppUiStoreFacadeService,
 	) {

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
@@ -10,7 +9,6 @@ import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-bat
 import { Preferences } from '../../models/preferences';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { PreferencesService } from '../preferences.service';
 import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
@@ -52,7 +50,6 @@ export class MercenariesStoreService {
 	constructor(
 		private readonly events: GameEventsEmitterService,
 		private readonly allCards: CardsFacadeService,
-		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly memoryService: MemoryInspectionService,
 	) {

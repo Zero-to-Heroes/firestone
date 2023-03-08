@@ -1,9 +1,9 @@
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { DuelsDeckSummary } from '@models/duels/duels-personal-deck';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { PreferencesService } from '@services/preferences.service';
 
 export class DuelsDeckbuilderSaveDeckProcessor implements Processor {
 	constructor(private readonly prefs: PreferencesService) {}

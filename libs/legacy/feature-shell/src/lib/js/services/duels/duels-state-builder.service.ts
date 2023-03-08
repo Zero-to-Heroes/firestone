@@ -7,7 +7,7 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsConfig } from '@models/duels/duels-config';
 import { AdventuresInfo, DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
@@ -19,7 +19,6 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckStatInfo } from '../../models/duels/duels-personal-deck';

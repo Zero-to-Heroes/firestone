@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@services/preferences.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
 import { ApiRunner } from '../../api-runner';

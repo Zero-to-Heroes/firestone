@@ -1,8 +1,7 @@
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../models/card';
 import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';

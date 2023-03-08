@@ -474,6 +474,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
+import { translationFileVersion } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
@@ -751,8 +752,6 @@ import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-ess
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { ModsConfigService } from './libs/mods/services/mods-config.service';
-import { translationFileVersion } from './translation-file-version';
-
 console.log('environment is ' + process.env['NODE_ENV']);
 
 overwolf.extensions.current.getManifest((manifestResult) => {
@@ -823,7 +822,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		NgScrollbarModule,
 		InlineSVGModule.forRoot(),
 
-		CommonModule,
 		OverlayModule,
 		SelectModule,
 		FormsModule,

@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { PreferencesService } from '@services/preferences.service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
+import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'preferences-dropdown',

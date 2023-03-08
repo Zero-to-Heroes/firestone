@@ -7,8 +7,7 @@ import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-play
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../preferences.service';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';

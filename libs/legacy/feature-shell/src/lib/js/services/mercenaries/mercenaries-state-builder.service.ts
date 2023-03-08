@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@services/preferences.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';

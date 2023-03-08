@@ -1,3 +1,4 @@
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -7,7 +8,6 @@ import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/
 import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { Preferences } from '../../../../models/preferences';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsInitEvent } from '../events/bgs-init-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

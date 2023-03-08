@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { ModConfig, ModsConfig, toModVersion } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { ModsConfigService } from '@legacy-import/src/lib/libs/mods/services/mods-config.service';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
@@ -17,6 +16,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { filter, Observable, tap } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
 import { GameStatusService } from '../../../services/game-status.service';
+import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

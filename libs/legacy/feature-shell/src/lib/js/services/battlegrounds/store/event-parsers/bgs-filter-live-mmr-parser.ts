@@ -1,6 +1,6 @@
 import { EventEmitter } from '@angular/core';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { PreferencesService } from '@services/preferences.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { BgsRankFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';

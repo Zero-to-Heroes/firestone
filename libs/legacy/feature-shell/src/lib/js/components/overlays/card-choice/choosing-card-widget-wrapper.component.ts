@@ -10,9 +10,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
