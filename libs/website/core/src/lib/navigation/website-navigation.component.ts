@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -36,13 +36,9 @@ import { TranslateService } from '@ngx-translate/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteNavigationComponent extends AbstractSubscriptionComponent {
-	@Input() selectedModule: string;
+	selectedModule = 'battlegrounds';
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: TranslateService) {
 		super(cdr);
-	}
-
-	selectModule(module: string) {
-		console.debug('selected module', module);
 	}
 }

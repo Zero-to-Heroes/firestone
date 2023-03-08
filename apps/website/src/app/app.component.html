@@ -1,9 +1,13 @@
 <div class="battlegrounds-theme wrapper">
-	<div class="main" *ngIf="initComplete$ | async; else loadingState">
+	<div class="container" *ngIf="initComplete$ | async; else loadingState">
 		<website-top-bar></website-top-bar>
-		<div class="content">
+		<div class="main">
 			<website-navigation></website-navigation>
-			<router-outlet></router-outlet>
+			<div class="content-container">
+				<div class="content">
+					<router-outlet></router-outlet>
+				</div>
+			</div>
 		</div>
 	</div>
 	<ng-template #loadingState> Loading... </ng-template>

@@ -12,7 +12,7 @@
 	color: var(--default-text-color);
 }
 
-.main {
+.container {
 	display: flex;
 	width: 100%;
 	height: 100%;
@@ -20,9 +20,21 @@
 	flex-grow: 1;
 }
 
-.content {
+.main {
 	display: flex;
 	flex-grow: 1;
+}
+
+.content-container {
+	display: flex;
+	width: 100%;
+	max-width: 1200px;
+	justify-content: center;
+}
+
+.content {
+	max-width: 800px;
+	width: 100%;
 }
 
 website-top-bar {
