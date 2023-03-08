@@ -18,6 +18,19 @@ import { TranslateService } from '@ngx-translate/core';
 				<div class="icon" inlineSVG="assets/svg/whatsnew/battlegrounds.svg"></div>
 				<div class="menu-name" [translate]="'app.menu.battlegrounds-header'"></div>
 			</button>
+
+			<!-- Room for an ad -->
+
+			<div class="desktop-app-cta">
+				<div class="header" [translate]="'website.desktop-app.navigation-cta-header'"></div>
+				<div class="text" [translate]="'website.desktop-app.navigation-cta-text'"></div>
+				<a
+					class="download-button"
+					[translate]="'website.desktop-app.navigation-cta-button-text'"
+					href="https://www.firestoneapp.com/"
+					target="_blank"
+				></a>
+			</div>
 		</nav>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

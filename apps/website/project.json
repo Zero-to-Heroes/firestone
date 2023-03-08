@@ -27,6 +27,7 @@
 				"styles": [
 					"apps/website/src/styles.scss",
 					"libs/shared/styles/src/lib/styles/buttons.scss",
+					"libs/shared/styles/src/lib/styles/links.scss",
 					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss"
 				],
 				"scripts": []
