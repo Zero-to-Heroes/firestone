@@ -3,13 +3,12 @@
 	width: 100%;
 	height: 100%;
 	display: flex;
-	background-size: 100%;
-	background-repeat: round;
-	background-image: var(--window-background-image);
-	outline: 1px solid var(--window-outline-color);
 	z-index: 1;
 
 	color: var(--default-text-color);
+
+	// --navigation-background: var(--color-5);
+	--navigation-background: var(--color-7);
 }
 
 .container {
@@ -23,6 +22,10 @@
 .main {
 	display: flex;
 	flex-grow: 1;
+
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
 }
 
 .content-container {

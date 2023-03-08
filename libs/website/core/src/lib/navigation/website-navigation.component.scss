@@ -7,8 +7,9 @@
 	position: relative;
 	width: 100%;
 	height: 100%;
-	background: var(--color-5);
+	background: var(--navigation-background);
 	border-top: 1px solid var(--color-3);
+	border-right: 1px solid rgba(132, 16, 99, 0.5); // color-3
 
 	li,
 	button.menu-item {
@@ -23,6 +24,7 @@
 		padding: 10px;
 
 		&.selected {
+			color: var(--default-title-color);
 			border: none;
 			border-right: 1px solid var(--default-title-color);
 			background: rgba(255, 255, 255, 0.08);
