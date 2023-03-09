@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { FsTranslateDirective } from './localization/fs-translate.directive';
 import { FsTranslatePipe } from './localization/fs-translate.pipe';
+import { CardsFacadeStandaloneService } from './services/cards-facade-standalone.service';
 import { CardsFacadeService } from './services/cards-facade.service';
 import { DiskCacheService } from './services/disk-cache.service';
 import { LocalStorageService } from './services/local-storage';
@@ -12,7 +13,13 @@ const components = [FsTranslateDirective, FsTranslatePipe];
 
 @NgModule({
 	imports: [CommonModule, SharedFrameworkCommonModule],
-	providers: [OverwolfService, CardsFacadeService, DiskCacheService, LocalStorageService],
+	providers: [
+		OverwolfService,
+		CardsFacadeService,
+		CardsFacadeStandaloneService,
+		DiskCacheService,
+		LocalStorageService,
+	],
 	declarations: components,
 	exports: components,
 })

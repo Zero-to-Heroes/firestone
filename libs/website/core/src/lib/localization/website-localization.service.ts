@@ -1,7 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/reference-data';
-import { formatClass, ILocalizationService, ImageLocalizationOptions } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	formatClass,
+	ILocalizationService,
+	ImageLocalizationOptions,
+} from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
@@ -11,7 +15,7 @@ export class WebsiteLocalizationService extends ILocalizationService {
 
 	private translate: TranslateService;
 
-	constructor(private readonly allCards: AllCardsService) {
+	constructor(private readonly allCards: CardsFacadeService) {
 		super();
 	}
 

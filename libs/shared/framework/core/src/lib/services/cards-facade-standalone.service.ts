@@ -1,26 +1,32 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
 
-/** @deprecated: use the one in shared module */
 @Injectable()
 export class CardsFacadeStandaloneService {
-	constructor(private readonly service: AllCardsService) {
-		// this.setLocale('enUS');
+	private service: AllCardsService;
+
+	constructor() {
+		console.debug('init standalone service');
+	}
+
+	public async init(service: AllCardsService, locale: string) {
+		this.service = service;
+		await this.setLocale(locale);
 	}
 
 	public async setLocale(locale: string) {
 		console.log('setting locale', locale);
 		const fileName = this.getFileName(locale);
 		console.log('initializing cards db with', fileName);
-		await this.service.initializeCardsDb(null, fileName);
+		await this.service.initializeCardsDb(undefined, fileName);
 		console.log('cards initialized', this.service.getCards()[0]);
 		this.service['debug'] = 'tretre';
 	}
 
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards
 	// is the first thing we do
-	public getCard(id: string, errorWhenUndefined = true): ReferenceCard {
-		return this.service.getCard(id, errorWhenUndefined);
+	public getCard(id: string | number): ReferenceCard {
+		return this.service.getCard(id);
 	}
 
 	public getCardFromDbfId(dbfId: number): ReferenceCard {
