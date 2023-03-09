@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';

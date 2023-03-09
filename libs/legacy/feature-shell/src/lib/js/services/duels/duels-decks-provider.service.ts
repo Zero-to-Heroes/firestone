@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
+import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
@@ -18,7 +19,6 @@ import {
 	TreasureDuelsDeckStatInfo,
 } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

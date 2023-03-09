@@ -1,8 +1,9 @@
 import { DuelsHeroStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { DuelsTopDecksDustFilterType } from '@models/duels/duels-types';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
+import { DuelsTopDecksDustFilterType } from '@models/duels/duels-types';
 import { DuelsGameModeFilterType } from '../../models/duels/duels-game-mode-filter.type';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsHeroFilterType } from '../../models/duels/duels-hero-filter.type';
@@ -12,7 +13,6 @@ import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsStatTypeFilterType } from '../../models/duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from '../../models/duels/duels-time-filter.type';
 import { DuelsTreasureStatTypeFilterType } from '../../models/duels/duels-treasure-stat-type-filter.type';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
 import { duelsTreasureRank, isPassive } from '../duels/duels-utils';
 import { groupByFunction, sumOnArray } from '../utils';

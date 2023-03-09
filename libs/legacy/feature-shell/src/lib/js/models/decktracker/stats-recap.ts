@@ -1,4 +1,4 @@
-import { GameStat } from '../mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 
 export class StatsRecap {
 	readonly opponentClass: string | undefined;

@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { DomSanitizer } from '@angular/platform-browser';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../../models/duels/run-step';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';

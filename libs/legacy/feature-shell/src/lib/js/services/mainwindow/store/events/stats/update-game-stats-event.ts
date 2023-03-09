@@ -1,4 +1,4 @@
-import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class UpdateGameStatsEvent implements MainWindowStoreEvent {

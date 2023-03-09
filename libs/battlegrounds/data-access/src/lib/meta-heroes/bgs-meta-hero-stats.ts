@@ -1,13 +1,12 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
 import { BgsGlobalHeroStat } from '@firestone-hs/bgs-global-stats/dist/stats-v2/bgs-hero-stat';
-import { ALL_BG_RACES, CardIds, Race } from '@firestone-hs/reference-data';
-import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
-import { LocalizationFacadeService } from '../localization-facade.service';
-import { getStandardDeviation, groupByFunction, sortByProperties } from '../utils';
-import { getHeroPower, normalizeHeroCardId } from './bgs-utils';
+import { ALL_BG_RACES, CardIds, getHeroPower, normalizeHeroCardId, Race } from '@firestone-hs/reference-data';
+import { getStandardDeviation, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
+import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from './meta-heroes.model';
 
 export const enhanceHeroStat = (
 	hero: BgsMetaHeroStatTierItem,
@@ -15,7 +14,9 @@ export const enhanceHeroStat = (
 	allCards: CardsFacadeService,
 ): BgsMetaHeroStatTierItem => {
 	const gamesForHero = bgGames.filter(
-		(g) => normalizeHeroCardId(g.playerCardId, allCards) === normalizeHeroCardId(hero.id, allCards),
+		(g) =>
+			normalizeHeroCardId(g.playerCardId, allCards.getService()) ===
+			normalizeHeroCardId(hero.id, allCards.getService()),
 	);
 	const mmrDeltas = gamesForHero.map((g) => buildNetMmr(g)).filter((mmr) => mmr != null);
 	const mmrDeltasPositive = mmrDeltas.filter((d) => d > 0);
@@ -85,7 +86,7 @@ const buildNetMmr = (game: GameStat): number => {
 
 export const buildTiers = (
 	stats: readonly BgsMetaHeroStatTierItem[],
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 	localize = true,
 ): readonly BgsMetaHeroStatTier[] => {
 	console.debug('buildTiers', stats);
@@ -266,8 +267,8 @@ export const buildHeroStats = (
 				warbandStatsImpact: warbandStatsImpact,
 
 				name: allCards.getCard(stat.heroCardId)?.name,
-				baseCardId: normalizeHeroCardId(stat.heroCardId, allCards),
-				heroPowerCardId: getHeroPower(stat.heroCardId, allCards),
+				baseCardId: normalizeHeroCardId(stat.heroCardId, allCards.getService()),
+				heroPowerCardId: getHeroPower(stat.heroCardId, allCards.getService()),
 				top1: stat.placementDistribution.find((p) => p.rank === 1)?.percentage ?? 0,
 				top4: stat.placementDistribution.find((p) => p.rank <= 4)?.percentage ?? 0,
 			};

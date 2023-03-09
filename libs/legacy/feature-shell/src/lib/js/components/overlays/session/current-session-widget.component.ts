@@ -17,7 +17,7 @@ import {
 import { GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '@models/mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 import { Preferences } from '@models/preferences';
 import {
 	getReferenceTribeCardId,

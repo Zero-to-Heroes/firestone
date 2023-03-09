@@ -277,10 +277,12 @@ export const isMercenaries = (gameType: GameType | string): boolean => {
 	);
 };
 
+/** @deprecated */
 export const isMercenariesPvP = (gameType: GameType | string): boolean => {
 	return gameType === GameType.GT_MERCENARIES_PVP || gameType === 'mercenaries-pvp';
 };
 
+/** @deprecated */
 export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 	return (
 		gameType === GameType.GT_MERCENARIES_PVE ||

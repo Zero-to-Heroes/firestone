@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { GameStat } from '@firestone/stats/data-access';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
-import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
 import { WinAgsinstClassInRankedStandardInLimitedTimeReq } from './win-against-class-in-ranked-standard-in-limited-time-req';
 
@@ -192,8 +192,8 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 
 	test('req is intantiated with the correct target info', () => {
 		const rawReq: RawRequirement = {
-			'type': 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME',
-			'values': ['1', 'AT_LEAST', 'shaman', '8'],
+			type: 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME',
+			values: ['1', 'AT_LEAST', 'shaman', '8'],
 		};
 
 		const req = WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);

@@ -1,4 +1,4 @@
-import { BgsHeroSortFilterType } from '../../../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsHeroSortFilterSelectedEvent implements MainWindowStoreEvent {

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { ApiRunner } from '../api-runner';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';

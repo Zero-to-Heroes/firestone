@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 
 @Injectable()

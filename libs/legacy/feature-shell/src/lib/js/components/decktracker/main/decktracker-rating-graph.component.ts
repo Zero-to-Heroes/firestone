@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { GameStat } from '@models/mainwindow/stats/game-stat';
+import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
 import { combineLatest, Observable } from 'rxjs';
@@ -7,7 +7,6 @@ import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
-import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { PatchInfo } from '../../../models/patches';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';

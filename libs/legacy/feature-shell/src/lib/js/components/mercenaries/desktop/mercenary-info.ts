@@ -1,4 +1,4 @@
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 
 export interface MercenaryInfo {
 	readonly id: string;

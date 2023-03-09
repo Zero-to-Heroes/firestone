@@ -5,7 +5,6 @@ import { distinctUntilChanged } from 'rxjs';
 import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { ApiRunner } from '../api-runner';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-stats-loaded-event';
-import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/bgs-%timeSuffix%.gz.json';
@@ -16,7 +15,6 @@ export class BgsMetaHeroStatsService {
 		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
-		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 	}
@@ -25,7 +23,11 @@ export class BgsMetaHeroStatsService {
 		this.store
 			.listenPrefs$((prefs) => prefs.bgsActiveTimeFilter)
 			.pipe(distinctUntilChanged())
-			.subscribe(([timeFilter]) => this.loadMetaHeroStats(timeFilter));
+			.subscribe(async ([timeFilter]) => {
+				const stats = await this.loadMetaHeroStats(timeFilter);
+				this.diskCache.storeItem(DiskCacheService.BATTLEGROUNDS_META_HERO_STATS, stats);
+				this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(stats));
+			});
 	}
 
 	public async loadInitialMetaHeroStats() {
@@ -46,7 +48,6 @@ export class BgsMetaHeroStatsService {
 		console.debug('[bgs-meta-hero] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
 		console.debug('[bgs-meta-hero] result', result);
-		this.diskCache.storeItem(DiskCacheService.BATTLEGROUNDS_META_HERO_STATS, result);
-		this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(result));
+		return result;
 	}
 }

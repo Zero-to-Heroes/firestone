@@ -1,9 +1,8 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { getHeroPower, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsOpponentRevealedEvent } from '../events/bgs-opponent-revealed-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -21,13 +20,13 @@ export class BgsOpponentRevealedParser implements EventParser {
 			event.cardId,
 			currentState?.currentGame?.players?.map((player) => player.cardId),
 		);
-		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards);
+		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards.getService());
 		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
 			return currentState;
 		}
 
 		const existingPlayer = currentState.currentGame.players.find(
-			(player) => normalizeHeroCardId(player.cardId, this.allCards) === normalizedCardId,
+			(player) => normalizeHeroCardId(player.cardId, this.allCards.getService()) === normalizedCardId,
 		);
 		const newPlayer =
 			existingPlayer != null
@@ -36,14 +35,14 @@ export class BgsOpponentRevealedParser implements EventParser {
 				  } as BgsPlayer)
 				: BgsPlayer.create({
 						cardId: normalizedCardId,
-						heroPowerCardId: getHeroPower(event.cardId, this.allCards),
+						heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 						name: this.allCards.getCard(event.cardId).name,
 						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
 				  } as BgsPlayer);
 		const newGame = currentState.currentGame.update({
 			players: [
 				...currentState.currentGame.players.filter(
-					(player) => normalizeHeroCardId(player.cardId, this.allCards) !== normalizedCardId,
+					(player) => normalizeHeroCardId(player.cardId, this.allCards.getService()) !== normalizedCardId,
 				),
 				newPlayer,
 			] as readonly BgsPlayer[],

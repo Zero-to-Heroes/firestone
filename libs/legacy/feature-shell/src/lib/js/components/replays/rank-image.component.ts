@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { buildRankText, GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat';
 
 @Component({
 	selector: 'rank-image',
@@ -17,7 +17,7 @@ import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat
 					? rankIssueTooltip
 					: null
 			"
-			[ngClass]="{ 'legend': isLegend }"
+			[ngClass]="{ legend: isLegend }"
 		>
 			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
 				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" />

@@ -1,7 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
-import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
-import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
-import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
+import { MatchResultType, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { XpForGameInfo } from '../rewards/rewards-monitor';
 
 export class GameForUpload {

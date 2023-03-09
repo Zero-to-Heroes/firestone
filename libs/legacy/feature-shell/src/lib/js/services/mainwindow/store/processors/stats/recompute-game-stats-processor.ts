@@ -1,7 +1,7 @@
+import { GameStat } from '@firestone/stats/data-access';
 import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';

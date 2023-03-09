@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MercenariesHideTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hide-team-summary-event';
 import { MercenariesRestoreTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-restore-team-summary-event';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';

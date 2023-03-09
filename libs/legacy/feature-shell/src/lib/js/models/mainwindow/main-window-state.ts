@@ -1,5 +1,6 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { GameStat } from '@firestone/stats/data-access';
 import { AppInjector } from '../../services/app-injector';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
@@ -14,7 +15,6 @@ import { DecktrackerState } from './decktracker/decktracker-state';
 import { QuestsState } from './quests/quests-state';
 import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
-import { GameStat } from './stats/game-stat';
 import { StatsState } from './stats/stats-state';
 import { StreamsState } from './streams/streams-state';
 

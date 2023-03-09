@@ -1,12 +1,12 @@
 import { BgsGlobalHeroStat2, BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { getHeroPower, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { BgsQuestStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { BgsHeroSortFilterType } from '../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
-import { getHeroPower, isBattlegrounds, normalizeHeroCardId } from '../battlegrounds/bgs-utils';
 import { cutNumber, groupByFunction, sumOnArray } from '../utils';
 
 export const buildQuestStats = (
@@ -20,7 +20,7 @@ export const buildQuestStats = (
 	allCards: CardsFacadeService,
 ): readonly BgsQuestStat[] => {
 	const relevantMatches = playerMatches
-		.filter((stat) => isBattlegrounds(stat.gameMode))
+		.filter((stat) => isBattlegrounds(toGameTypeEnum(stat.gameMode)))
 		.filter((stat) => !!stat.bgsHeroQuestRewards?.length);
 	const cleanRankFilter = rankFilter <= 100 ? rankFilter : 100;
 
@@ -67,7 +67,9 @@ const buildQuestStat = (
 	allCards: CardsFacadeService,
 ): BgsQuestStat => {
 	const playerGamesPlayed = playerMatches.filter(
-		(stat) => normalizeHeroCardId(statCardExtractor(stat), allCards) === normalizeHeroCardId(heroCardId, allCards),
+		(stat) =>
+			normalizeHeroCardId(statCardExtractor(stat), allCards.getService()) ===
+			normalizeHeroCardId(heroCardId, allCards.getService()),
 	);
 	const totalPlayerGamesPlayed = playerGamesPlayed.length;
 	const playerPopularity = (100 * totalPlayerGamesPlayed) / playerMatches.length;
@@ -164,7 +166,7 @@ const convertToBgsQuestStat = (
 	const placementTotalMatches = sumOnArray(stat.placementDistribution, (info) => info.totalMatches);
 	return {
 		id: stat.cardId,
-		heroPowerCardId: getHeroPower(stat.cardId, allCards),
+		heroPowerCardId: getHeroPower(stat.cardId, allCards.getService()),
 		name: allCards.getCard(stat.cardId)?.name,
 		totalMatches: stat.totalMatches,
 		popularity: (100 * stat.totalMatches) / totalMatches,

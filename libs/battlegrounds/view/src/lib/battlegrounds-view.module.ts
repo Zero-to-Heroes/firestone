@@ -5,8 +5,10 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { BgsHeroPortraitComponent } from './common/bgs-hero-portrait.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from './meta-heroes/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from './meta-heroes/battlegrounds-meta-stats-hero-tier.component';
+import { BattlegroundsMetaStatsHeroesComponent } from './meta-heroes/battlegrounds-meta-stats-heroes-view.component';
 
 const components = [
+	BattlegroundsMetaStatsHeroesComponent,
 	BattlegroundsMetaStatsHeroTierComponent,
 	BattlegroundsMetaStatsHeroInfoComponent,
 	BgsHeroPortraitComponent,

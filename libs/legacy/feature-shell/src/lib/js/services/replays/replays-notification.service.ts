@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { buildRankText, GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';

@@ -18,6 +18,7 @@
 		"useDefineForClassFields": false,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
+		"strictNullChecks": false,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
 		"noImplicitReturns": true,

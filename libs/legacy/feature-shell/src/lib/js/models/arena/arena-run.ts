@@ -1,5 +1,5 @@
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { GameStat } from '../mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 
 export class ArenaRun {
 	readonly id: string;

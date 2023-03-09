@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { extractTotalDuration, extractTotalTurns, Replay } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
+import { MatchResultType } from '@firestone/stats/data-access';
 import { GameForUpload as Game } from './game-for-upload';
 
 @Injectable()

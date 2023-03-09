@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { ChartData } from 'chart.js';
 import { combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { isBattlegrounds } from '../../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';

@@ -1,8 +1,7 @@
+import { StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
 import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
-import { StatGameFormatType } from '../../../../models/mainwindow/stats/stat-game-format.type';
-import { StatGameModeType } from '../../../../models/mainwindow/stats/stat-game-mode.type';
 import { Requirement } from './_requirement';
 
 export class WinStreakReq implements Requirement {

@@ -7,10 +7,10 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { StatGameFormatType } from '../../../../models/mainwindow/stats/stat-game-format.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';

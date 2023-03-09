@@ -475,6 +475,7 @@ import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { Store, translationFileVersion } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
@@ -824,6 +825,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReplayColiseumModule,
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
+		StatsDataAccessModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

@@ -1,5 +1,5 @@
+import { GameStat } from '@firestone/stats/data-access';
 import { BgsPostMatchStatsPanel } from '../../battlegrounds/post-match/bgs-post-match-stats-panel';
-import { GameStat } from '../stats/game-stat';
 
 export class MatchDetail {
 	readonly replayInfo: GameStat;

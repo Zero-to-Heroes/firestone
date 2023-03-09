@@ -4,6 +4,7 @@ import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
 import { LocalizationFacadeService } from './localization-facade.service';
 
+/**@deprecated */
 export const groupByFunction =
 	<T>(keyExtractor: (obj: T) => string | number) =>
 	(array: readonly T[]): { [key: string]: readonly T[] } => {
@@ -52,6 +53,7 @@ export const isWindowHidden = (state: string): boolean => {
 	return state !== 'normal' && state !== 'maximized';
 };
 
+/** @deprecated */
 export const capitalizeFirstLetter = (input: string): string => {
 	if (!input) {
 		return null;
@@ -61,6 +63,7 @@ export const capitalizeFirstLetter = (input: string): string => {
 	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
 };
 
+/** @deprecated */
 export const capitalizeEachWord = (input: string): string => {
 	const lowerInput = input?.toLowerCase();
 	return !lowerInput ? null : lowerInput.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1));
@@ -114,6 +117,7 @@ export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): n
 	return array?.map((item) => prop(item)).reduce((a, b) => a + b, 0) ?? 0;
 };
 
+/** @deprecated */
 export const sortByProperties = <T>(sorter: (t: T) => any[]): ((a: T, b: T) => number) => {
 	return (a: T, b: T): number => {
 		const aProps = sorter(a);
@@ -228,6 +232,7 @@ export const pickRandom = <T>(array: readonly T[]): T => {
 	return array[Math.floor(Math.random() * array.length)];
 };
 
+/**@deprecated */
 export const getStandardDeviation = (array: readonly number[]): { mean: number; standardDeviation: number } => {
 	if (!array?.length) {
 		return {
@@ -253,7 +258,9 @@ export const chunk = <T>(array: T[], size: number): T[][] =>
 		return acc;
 	}, []);
 
+/** @deprecated */
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
+/** @deprecated */
 export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;

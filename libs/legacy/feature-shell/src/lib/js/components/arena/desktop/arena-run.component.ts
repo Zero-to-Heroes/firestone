@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { ArenaRun } from '../../../models/arena/arena-run';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

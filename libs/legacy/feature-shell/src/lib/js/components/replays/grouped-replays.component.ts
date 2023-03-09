@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 
 @Component({
 	selector: 'grouped-replays',

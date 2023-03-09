@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { isDuels } from '@services/duels/duels-utils';
 import { isMercenaries } from '@services/mercenaries/mercenaries-utils';
 import { RunStep } from '../../../models/duels/run-step';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

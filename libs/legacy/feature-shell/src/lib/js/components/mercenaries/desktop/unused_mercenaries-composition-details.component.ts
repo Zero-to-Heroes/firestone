@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import {
 	MercenariesHeroLevelFilterType,
 	MercenariesModeFilterType,

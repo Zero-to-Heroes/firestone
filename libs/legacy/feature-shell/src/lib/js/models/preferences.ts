@@ -1,6 +1,8 @@
 import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
 import { allDuelsHeroes, BnetRegion, Race } from '@firestone-hs/reference-data';
+import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { IPreferences } from '@firestone/shared/framework/common';
+import { StatGameFormatType } from '@firestone/stats/data-access';
 import { DuelsDeckSummary } from '@models/duels/duels-personal-deck';
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
@@ -23,7 +25,6 @@ import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-typ
 import { DuelsTopDecksDustFilterType } from './duels/duels-types';
 import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from './mainwindow/current-app.type';
@@ -31,7 +32,6 @@ import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { DeckSummary } from './mainwindow/decktracker/deck-summary';
 import { ConstructedDeckVersions } from './mainwindow/decktracker/decktracker-state';
 import { ConstructedStatsTab } from './mainwindow/decktracker/decktracker-view.type';
-import { StatGameFormatType } from './mainwindow/stats/stat-game-format.type';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
 	MercenariesFullyUpgradedFilterType,

@@ -10,7 +10,7 @@ import {
 	GameType,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { StatGameModeType } from '@models/mainwindow/stats/stat-game-mode.type';
+import { StatGameModeType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 const PASSIVES = [...duelsPassivePool1, ...duelsPassivePool2, ...duelsPassivePool2UltraRare];

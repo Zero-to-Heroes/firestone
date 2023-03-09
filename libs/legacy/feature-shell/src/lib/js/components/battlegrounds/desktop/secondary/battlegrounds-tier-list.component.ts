@@ -9,9 +9,8 @@ import {
 } from '@angular/core';
 import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
-import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { buildTiers } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';

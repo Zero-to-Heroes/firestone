@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { StatGameFormatType } from '@firestone/stats/data-access';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
-import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';

@@ -9,10 +9,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { getHeroPower } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
@@ -102,7 +102,7 @@ export class BgsSimulatorHeroSelectionComponent
 		if (!!heroCardId) {
 			this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCardId}.jpg`;
 			this.heroName = this.allCards.getCard(heroCardId)?.name;
-			const heroPower = getHeroPower(heroCardId, this.allCards);
+			const heroPower = getHeroPower(heroCardId, this.allCards.getService());
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPower)?.text);
 		} else {
 			this.heroIcon = null;
@@ -155,9 +155,9 @@ export class BgsSimulatorHeroSelectionComponent
 							icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 							name: card.name,
 							heroPower: {
-								id: getHeroPower(card.id, this.allCards),
+								id: getHeroPower(card.id, this.allCards.getService()),
 								text: this.sanitizeText(
-									this.allCards.getCard(getHeroPower(card.id, this.allCards))?.text,
+									this.allCards.getCard(getHeroPower(card.id, this.allCards.getService()))?.text,
 								),
 							},
 						}))

@@ -44,3 +44,52 @@ export const uuid = () => {
 		return v.toString(16);
 	});
 };
+
+export const sortByProperties = <T>(sorter: (t: T) => any[]): ((a: T, b: T) => number) => {
+	return (a: T, b: T): number => {
+		const aProps = sorter(a);
+		const bProps = sorter(b);
+		for (let i = 0; i < aProps.length; i++) {
+			if (aProps[i] !== bProps[i]) {
+				return aProps[i] < bProps[i] ? -1 : 1;
+			}
+		}
+		return 0;
+	};
+};
+
+export const getStandardDeviation = (array: readonly number[]): { mean: number; standardDeviation: number } => {
+	if (!array?.length) {
+		return {
+			mean: 0,
+			standardDeviation: 0,
+		};
+	}
+
+	const n = array.length;
+	const mean = array.reduce((a, b) => a + b) / n;
+	const deviation = Math.sqrt(array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+	return {
+		mean: mean,
+		standardDeviation: deviation,
+	};
+};
+
+export const capitalizeEachWord = (input: string): string | null => {
+	const lowerInput = input?.toLowerCase();
+	return !lowerInput ? null : lowerInput.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1));
+};
+
+export const capitalizeFirstLetter = (input: string): string | null => {
+	if (!input) {
+		return null;
+	}
+
+	const lowerInput = input.toLowerCase();
+	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
+};
+
+export type NonFunctionPropertyNames<T> = {
+	[K in keyof T]: T[K] extends Function ? never : K;
+}[keyof T];
+export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;

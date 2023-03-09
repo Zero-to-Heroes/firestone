@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { GameStat } from '@models/mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
 import { combineLatest, Observable } from 'rxjs';

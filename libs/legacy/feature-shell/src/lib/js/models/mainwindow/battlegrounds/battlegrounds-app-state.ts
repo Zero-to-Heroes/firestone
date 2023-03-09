@@ -1,4 +1,5 @@
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
+import { GameStat } from '@firestone/stats/data-access';
 import { AppInjector } from '../../../services/app-injector';
 import { BgsHeroStrategies } from '../../../services/battlegrounds/bgs-meta-hero-strategies.service';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
@@ -6,7 +7,6 @@ import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStatsForReview } from '../../battlegrounds/bgs-post-match-stats-for-review';
 import { BgsStats } from '../../battlegrounds/stats/bgs-stats';
 import { PatchInfo } from '../../patches';
-import { GameStat } from '../stats/game-stat';
 import { BattlegroundsCategory } from './battlegrounds-category';
 import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-state';
 

@@ -8,6 +8,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/d
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { DuelsConfig } from '@models/duels/duels-config';
 import { AdventuresInfo, DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
@@ -27,7 +28,6 @@ import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsBucketsData, DuelsState } from '../../models/duels/duels-state';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';

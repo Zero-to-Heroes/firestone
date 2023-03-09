@@ -1,4 +1,4 @@
-import { GameStat } from '../mainwindow/stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 
 export interface RunStep extends GameStat {
 	readonly treasureCardId: string;

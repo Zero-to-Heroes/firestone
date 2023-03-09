@@ -9,11 +9,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
@@ -191,7 +190,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 						.map((card) =>
 							card.type === 'Hero_power'
 								? card
-								: this.allCards.getCard(getHeroPower(card.id, this.allCards)),
+								: this.allCards.getCard(getHeroPower(card.id, this.allCards.getService())),
 						)
 						.map((card) => card.id);
 					const uniqueCardIds = Array.from(new Set(allCardIds));

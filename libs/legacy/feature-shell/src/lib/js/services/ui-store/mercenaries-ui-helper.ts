@@ -4,11 +4,11 @@ import {
 	TaskStatus,
 	VillageVisitorType,
 } from '@firestone-hs/reference-data';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import {
 	MercenariesHeroLevelFilterType,

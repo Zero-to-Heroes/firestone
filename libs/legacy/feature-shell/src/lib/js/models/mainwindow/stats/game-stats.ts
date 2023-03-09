@@ -1,6 +1,6 @@
+import { GameStat } from '@firestone/stats/data-access';
 import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStats } from '../../battlegrounds/post-match/bgs-post-match-stats';
-import { GameStat } from './game-stat';
 
 export class GameStats {
 	// Ordered from newest (index 0) to oldest

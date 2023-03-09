@@ -14,7 +14,7 @@ import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
-import { GameTag } from '@firestone-hs/reference-data';
+import { GameTag, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -29,7 +29,6 @@ import {
 } from '../../../services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningService } from '../../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
-import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { removeFromReadonlyArray, replaceInArray } from '../../../services/utils';
@@ -451,7 +450,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							playerBoard: {
 								player: {
 									cardId: newHeroCardId,
-									heroPowerId: getHeroPower(newHeroCardId, this.allCards),
+									heroPowerId: getHeroPower(newHeroCardId, this.allCards.getService()),
 								},
 							},
 						},
@@ -462,7 +461,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							opponentBoard: {
 								player: {
 									cardId: newHeroCardId,
-									heroPowerId: getHeroPower(newHeroCardId, this.allCards),
+									heroPowerId: getHeroPower(newHeroCardId, this.allCards.getService()),
 								},
 							},
 						},

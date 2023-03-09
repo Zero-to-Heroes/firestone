@@ -1,6 +1,6 @@
+import { GameStat } from '@firestone/stats/data-access';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
-import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
 import { WinStreakReq } from './win-streak-req';
 
@@ -136,8 +136,8 @@ describe('win-streak-req', () => {
 
 	test('req is intantiated with the correct target win streak and qualifier', () => {
 		const rawReq: RawRequirement = {
-			'type': 'WIN_STREAK_LENGTH',
-			'values': ['1', 'AT_LEAST', 'standard', 'ranked'],
+			type: 'WIN_STREAK_LENGTH',
+			values: ['1', 'AT_LEAST', 'standard', 'ranked'],
 		};
 
 		const req = WinStreakReq.create(rawReq);

@@ -1,6 +1,5 @@
+import { StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { MmrGroupFilterType } from '../battlegrounds/mmr-group-filter-type';
-import { StatGameFormatType } from '../stats/stat-game-format.type';
-import { StatGameModeType } from '../stats/stat-game-mode.type';
 import { DeckRankFilterType } from './deck-rank-filter.type';
 import { DeckRankingCategoryType } from './deck-ranking-category.type';
 import { DeckSortType } from './deck-sort.type';

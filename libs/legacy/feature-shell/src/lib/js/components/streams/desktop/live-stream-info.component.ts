@@ -1,11 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { toFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
-import { toGameType } from '../../../models/mainwindow/stats/stat-game-mode.type';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameStat, toFormatType, toGameType } from '@firestone/stats/data-access';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';

@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
+import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
@@ -13,7 +14,6 @@ import { DuelsTimeFilterType } from '../models/duels/duels-time-filter.type';
 import { DuelsTreasureStatTypeFilterType } from '../models/duels/duels-treasure-stat-type-filter.type';
 import { DuelsTopDecksDustFilterType } from '../models/duels/duels-types';
 import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';

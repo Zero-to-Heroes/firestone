@@ -8,9 +8,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { getHeroPower } from '@services/battlegrounds/bgs-utils';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { getHeroPower } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { from, Observable } from 'rxjs';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
@@ -84,7 +84,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 		// 	isPremium: true,
 		// 	isHighRes: true,
 		// });
-		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards);
+		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards.getService());
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,
 		});

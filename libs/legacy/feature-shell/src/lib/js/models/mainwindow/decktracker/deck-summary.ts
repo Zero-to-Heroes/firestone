@@ -1,6 +1,5 @@
-import { GameStat } from '../stats/game-stat';
+import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
 import { MatchupStat } from '../stats/matchup-stat';
-import { StatGameFormatType } from '../stats/stat-game-format.type';
 
 export interface DeckSummary {
 	readonly deckstring: string;

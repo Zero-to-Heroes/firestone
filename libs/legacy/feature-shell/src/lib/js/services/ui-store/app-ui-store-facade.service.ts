@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
@@ -10,7 +11,6 @@ import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state'
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {

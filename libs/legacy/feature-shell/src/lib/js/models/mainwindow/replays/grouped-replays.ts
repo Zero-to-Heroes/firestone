@@ -1,4 +1,4 @@
-import { GameStat } from '../stats/game-stat';
+import { GameStat } from '@firestone/stats/data-access';
 
 export class GroupedReplays {
 	readonly header: string;

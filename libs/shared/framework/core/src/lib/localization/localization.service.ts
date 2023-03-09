@@ -12,7 +12,7 @@ export abstract class ILocalizationService {
 	abstract getUnknownCardName(playerClass: string | null): string | null;
 	abstract getUnknownManaSpellName(manaCost: number): string | null;
 	abstract getUnknownRaceName(race: string): string | null;
-	abstract translateString(key: string, params: any): string | null;
+	abstract translateString(key: string, params?: any): string | null;
 	abstract formatCurrentLocale(): string | null;
 }
 

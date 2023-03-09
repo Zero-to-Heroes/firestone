@@ -1,6 +1,6 @@
-import { CardIds, GameType } from '@firestone-hs/reference-data';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardIds, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -8,7 +8,6 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { defaultStartingHp } from '../../../hs-utils';
-import { getHeroPower, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsHeroSelectedEvent } from '../events/bgs-hero-selected-event';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -24,7 +23,7 @@ export class BgsHeroSelectedParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectedEvent): Promise<BattlegroundsState> {
 		const existingMainPlayer = currentState.reconnectOngoing ? currentState.currentGame.getMainPlayer() : null;
-		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards);
+		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards.getService());
 		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
 			console.error('selecting KelThuzad in hero selection???');
 			return currentState;
@@ -33,7 +32,7 @@ export class BgsHeroSelectedParser implements EventParser {
 		const newPlayer = existingMainPlayer
 			? existingMainPlayer.update({
 					cardId: normalizedCardId,
-					heroPowerCardId: getHeroPower(event.cardId, this.allCards),
+					heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
 					initialHealth:
@@ -48,7 +47,7 @@ export class BgsHeroSelectedParser implements EventParser {
 			  } as BgsPlayer)
 			: BgsPlayer.create({
 					cardId: normalizedCardId,
-					heroPowerCardId: getHeroPower(event.cardId, this.allCards),
+					heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
 					initialHealth:

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { groupByFunction } from '../../services/utils';
 
 @Component({

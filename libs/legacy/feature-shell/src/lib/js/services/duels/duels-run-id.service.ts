@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../models/duels/duels-run';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels, isSignatureTreasure } from '../duels/duels-utils';
