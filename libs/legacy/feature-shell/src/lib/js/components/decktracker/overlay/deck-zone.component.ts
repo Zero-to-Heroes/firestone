@@ -8,8 +8,8 @@ import {
 	Optional,
 	Output,
 } from '@angular/core';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';

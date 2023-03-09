@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
 
 @Component({

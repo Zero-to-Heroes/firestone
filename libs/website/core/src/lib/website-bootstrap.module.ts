@@ -1,14 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { SharedFrameworkCommonModule, translationFileVersion } from '@firestone/shared/framework/common';
+import { AllCardsService } from '@firestone-hs/reference-data';
+import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import { SharedFrameworkCommonModule, Store, translationFileVersion } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { WebsiteBattlegroundsComponent } from './battlegrounds/website-battlegrounds.component';
+import { WebsiteLocalizationService } from './localization/website-localization.service';
 import { WebsiteNavigationComponent } from './navigation/website-navigation.component';
 import { WebsiteTopBarComponent } from './navigation/website-top-bar.component';
 import { WebsitePreferencesService } from './preferences/website-preferences.service';
+import { WebsiteStoreService } from './store/website-store.service';
 import { WebsiteBootstrapService } from './website-bootstrap.service';
 
 // AoT requires an exported function for factories
@@ -38,8 +43,16 @@ const components = [WebsiteBattlegroundsComponent, WebsiteNavigationComponent, W
 		InlineSVGModule.forRoot(),
 
 		SharedFrameworkCommonModule,
+		BattlegroundsDataAccessModule,
 	],
-	providers: [WebsiteBootstrapService, WebsitePreferencesService],
+	providers: [
+		{ provide: CardsFacadeService, useClass: AllCardsService },
+		{ provide: ILocalizationService, useClass: WebsiteLocalizationService },
+		{ provide: Store, useClass: WebsiteStoreService },
+
+		WebsiteBootstrapService,
+		WebsitePreferencesService,
+	],
 	declarations: components,
 	exports: components,
 })

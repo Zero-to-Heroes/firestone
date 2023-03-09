@@ -10,7 +10,6 @@
 					"error",
 					{
 						"type": "attribute",
-						"prefix": "firestone",
 						"style": "camelCase"
 					}
 				],
@@ -18,7 +17,6 @@
 					"error",
 					{
 						"type": "element",
-						"prefix": "firestone",
 						"style": "kebab-case"
 					}
 				],

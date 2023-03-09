@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MailState } from '@mails/mail-state';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
@@ -9,7 +11,7 @@ import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
-import { BgsMetaHeroStatTierItem } from '../battlegrounds/bgs-meta-hero-stats';
+import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
 	AppUiStoreService,
@@ -20,7 +22,6 @@ import {
 	MercenariesStateSelector,
 	ModsConfigSelector,
 	NativeGameStateSelector,
-	PrefsSelector,
 	Selector,
 } from './app-ui-store.service';
 
@@ -53,9 +54,9 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.listen$(...selectors));
 	}
 
-	public listenPrefs$<S extends PrefsSelector<any>[]>(
+	public listenPrefs$<S extends PrefsSelector<Preferences, any>[]>(
 		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }> {
+	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
 		this.debugCall('listenPrefs$');
 		return this.debugObservable(this.store.listenPrefs$(...selectors));
 	}

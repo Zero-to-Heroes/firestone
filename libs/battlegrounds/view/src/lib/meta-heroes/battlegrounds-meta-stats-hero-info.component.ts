@@ -1,19 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { SimpleBarChartData } from '@components/common/chart/simple-bar-chart-data';
-import { GameType } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsMetaHeroStatTierItem } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
-import { defaultStartingHp } from '@legacy-import/src/lib/js/services/hs-utils';
-import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
+/* eslint-disable no-mixed-spaces-and-tabs */
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { SimpleBarChartData } from '@firestone/shared/common/view';
+
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-hero-info',
-	styleUrls: [
-		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-columns.scss`,
-		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-info.component.scss`,
-	],
+	styleUrls: [`./battlegrounds-meta-stats-hero-columns.scss`, `./battlegrounds-meta-stats-hero-info.component.scss`],
 	template: `
 		<div class="info" (click)="seeDetailedHeroStats()">
 			<bgs-hero-portrait
@@ -32,7 +27,7 @@ import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-s
 					<div
 						class="player"
 						*ngIf="playerDataPoints"
-						[helpTooltip]="'app.battlegrounds.tier-list.player-data-points-tooltip' | owTranslate"
+						[helpTooltip]="'app.battlegrounds.tier-list.player-data-points-tooltip' | fsTranslate"
 					>
 						(<span class="value">{{ playerDataPoints }}</span
 						>)
@@ -44,7 +39,7 @@ import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-s
 				<div
 					class="player"
 					*ngIf="playerAveragePosition"
-					[helpTooltip]="'app.battlegrounds.tier-list.player-average-position-tooltip' | owTranslate"
+					[helpTooltip]="'app.battlegrounds.tier-list.player-average-position-tooltip' | fsTranslate"
 				>
 					(<span class="value">{{ playerAveragePosition }}</span
 					>)
@@ -79,6 +74,8 @@ import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-s
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMetaStatsHeroInfoComponent {
+	@Output() heroStatClick = new EventEmitter<string>();
+
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
 		this.heroCardId = value.id;
 		this.heroPowerCardId = value.heroPowerCardId;
@@ -123,17 +120,13 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	netMmr: number;
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };
 
-	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		private readonly store: AppUiStoreFacadeService,
-	) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 
 	buildValue(value: number): string {
 		return value == null ? '-' : value === 0 ? '0' : value.toFixed(0);
 	}
 
 	seeDetailedHeroStats() {
-		this.store.send(new BgsPersonalStatsSelectHeroDetailsEvent(this.heroCardId));
+		this.heroStatClick.next(this.heroCardId);
 	}
 }

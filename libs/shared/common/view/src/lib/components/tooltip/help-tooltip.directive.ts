@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
@@ -15,7 +16,7 @@ import {
 } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
+import { HelpTooltipComponent } from './help-tooltip.component';
 
 @Directive({
 	selector: '[helpTooltip]',
@@ -50,7 +51,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
-	private tooltipRef: ComponentRef<HelpTooltipComponent>;
+	private tooltipRef: ComponentRef<HelpTooltipComponent> | undefined;
 	private target: ElementRef;
 
 	constructor(

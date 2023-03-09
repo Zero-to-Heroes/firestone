@@ -1,8 +1,8 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 

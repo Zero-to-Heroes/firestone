@@ -1,11 +1,10 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';

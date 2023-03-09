@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
 	selector: 'help-tooltip',
-	styleUrls: [`../../../css/component/tooltip/help-tooltip.component.scss`],
+	styleUrls: [`./help-tooltip.component.scss`],
 	template: `
 		<div class="help-tooltip {{ _classes }}">
 			<div class="text" [innerHTML]="_text"></div>

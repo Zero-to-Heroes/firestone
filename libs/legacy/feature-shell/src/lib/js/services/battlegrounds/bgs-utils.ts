@@ -1037,6 +1037,7 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 	} as any);
 };
 
+/** @deprecated */
 export const isBattlegrounds = (gameType: GameType | StatGameModeType): boolean => {
 	return (
 		[

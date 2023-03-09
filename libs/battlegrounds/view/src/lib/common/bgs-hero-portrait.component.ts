@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 
 @Component({
 	selector: 'bgs-hero-portrait',
-	styleUrls: [`../../../css/component/battlegrounds/bgs-hero-portrait.component.scss`],
+	styleUrls: [`./bgs-hero-portrait.component.scss`],
 	template: `
 		<div class="hero-portrait">
 			<div class="hero-portrait-frame">
@@ -20,11 +20,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 					class="frame"
 				/>
 			</div>
-			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth, 'new': !!heroIcon }" *ngIf="_health">
+			<div class="health" [ngClass]="{ damaged: _health < _maxHealth, new: !!heroIcon }" *ngIf="_health">
 				<!-- <img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" /> -->
 				<div class="value">{{ _health }}</div>
 			</div>
-			<div class="rating" *ngIf="rating != null">
+			<div class="rating" *ngIf="rating !== null && rating !== undefined">
 				<div class="value">{{ rating?.toLocaleString('en-US') }}</div>
 			</div>
 		</div>

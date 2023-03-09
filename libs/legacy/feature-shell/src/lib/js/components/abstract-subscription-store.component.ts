@@ -3,6 +3,9 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { Preferences } from '../models/preferences';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 
+/**
+ * @deprecated Use the common abstract component, and add more data as needed
+ */
 @Injectable()
 export abstract class AbstractSubscriptionStoreComponent extends AbstractSubscriptionComponent {
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

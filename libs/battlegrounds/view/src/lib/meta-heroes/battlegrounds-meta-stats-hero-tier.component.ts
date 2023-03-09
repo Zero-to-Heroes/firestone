@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsMetaHeroStatTier } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { BgsMetaHeroStatTier } from '@firestone/battlegrounds/data-access';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-hero-tier',
-	styleUrls: [
-		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-tier.component.scss`,
-	],
+	styleUrls: [`./battlegrounds-meta-stats-hero-tier.component.scss`],
 	template: `
 		<div class="tier" *ngIf="tier">
 			<div
@@ -21,6 +19,7 @@ import { BgsMetaHeroStatTier } from '@legacy-import/src/lib/js/services/battlegr
 					class="item-container"
 					*ngFor="let item of tier.items"
 					[stat]="item"
+					(heroStatClick)="onHeroStatsClick($event)"
 				>
 				</battlegrounds-meta-stats-hero-info>
 			</div>
@@ -29,5 +28,11 @@ import { BgsMetaHeroStatTier } from '@legacy-import/src/lib/js/services/battlegr
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMetaStatsHeroTierComponent {
+	@Output() heroStatClick = new EventEmitter<string>();
+
 	@Input() tier: BgsMetaHeroStatTier;
+
+	onHeroStatsClick(heroCardId: string) {
+		this.heroStatClick.next(heroCardId);
+	}
 }

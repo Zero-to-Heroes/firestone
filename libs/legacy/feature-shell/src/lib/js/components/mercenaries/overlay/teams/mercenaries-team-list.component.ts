@@ -10,9 +10,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Zone } from '@firestone-hs/reference-data';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { Subscription } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { BattleMercenary, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';

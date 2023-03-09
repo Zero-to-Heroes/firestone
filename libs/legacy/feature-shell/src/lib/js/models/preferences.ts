@@ -1,5 +1,6 @@
 import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
 import { allDuelsHeroes, BnetRegion, Race } from '@firestone-hs/reference-data';
+import { IPreferences } from '@firestone/shared/framework/common';
 import { DuelsDeckSummary } from '@models/duels/duels-personal-deck';
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
@@ -47,7 +48,7 @@ import { Ftue } from './preferences/ftue';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
 
-export class Preferences {
+export class Preferences implements IPreferences {
 	public static deserialize(input: Preferences): Preferences {
 		return {
 			...input,

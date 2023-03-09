@@ -1,12 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import {
-	BgsMetaHeroStatTierItem,
-	buildHeroStats,
-	enhanceHeroStat,
-} from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
+import { buildHeroStats, enhanceHeroStat } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
@@ -50,7 +48,6 @@ import { filterBgsMatchStats } from './bgs-ui-helper';
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
 export type GameStateSelector<T> = (gameState: GameState) => T;
-export type PrefsSelector<T> = (prefs: Preferences) => T;
 export type ModsConfigSelector<T> = (conf: ModsConfig) => T;
 export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
 export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
@@ -65,7 +62,7 @@ export type MercenariesHighlightsSelector<T> = (
 ) => T;
 
 @Injectable()
-export class AppUiStoreService {
+export class AppUiStoreService extends Store<Preferences> {
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private gameNativeState: BehaviorSubject<GameNativeState>;
 	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
@@ -95,6 +92,7 @@ export class AppUiStoreService {
 		private readonly allCards: CardsFacadeService,
 		private readonly ads: AdService,
 	) {
+		super();
 		window['appStore'] = this;
 		window['snapshotAppStore'] = (showLog = true) => {
 			const snapshot = {
@@ -218,15 +216,15 @@ export class AppUiStoreService {
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
 	}
 
-	public listenPrefs$<S extends PrefsSelector<any>[]>(
+	public listenPrefs$<S extends PrefsSelector<Preferences, any>[]>(
 		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }> {
+	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
 		this.debugCall('listenPrefs$');
 		return this.prefs.pipe(
 			filter((prefs) => !!prefs?.preferences),
 			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }>;
+		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
 	}
 
 	public listenModsConfig$<S extends ModsConfigSelector<any>[]>(

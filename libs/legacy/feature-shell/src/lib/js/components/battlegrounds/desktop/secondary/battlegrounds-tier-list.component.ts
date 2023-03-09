@@ -7,16 +7,13 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import {
-	BgsMetaHeroStatTierItem,
-	buildTiers,
-} from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
+import { buildTiers } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsFilterLiveMmrEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-mmr-event';
 import { BgsFilterLiveTribesEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-tribes-event';

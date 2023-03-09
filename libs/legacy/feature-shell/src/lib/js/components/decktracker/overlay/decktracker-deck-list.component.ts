@@ -14,13 +14,13 @@ import {
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

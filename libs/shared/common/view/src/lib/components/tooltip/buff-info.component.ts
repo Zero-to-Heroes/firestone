@@ -3,7 +3,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'buff-info',
-	styleUrls: [`../../../css/component/tooltip/buff-info.component.scss`],
+	styleUrls: [`./buff-info.component.scss`],
 	template: `
 		<div class="buff-info">
 			<div class="header">

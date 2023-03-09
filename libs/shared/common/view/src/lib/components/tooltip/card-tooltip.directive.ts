@@ -10,11 +10,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
-import { DeckCard } from '../models/decktracker/deck-card';
-import { sleep } from '../services/utils';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
+import { CardTooltipComponent } from './card-tooltip.component';
 
 @Directive({
 	selector: '[cardTooltip]',
@@ -22,7 +21,12 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements OnDestroy {
 	@Input() cardTooltipType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
-	@Input() cardTooltipCard: DeckCard = undefined;
+	@Input() cardTooltipCard: {
+		cardId: string;
+		buffCardIds?: readonly string[];
+		creatorCardId?: string;
+		lastAffectedByCardId?: string;
+	} = undefined;
 	@Input() cardTooltipClass = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;

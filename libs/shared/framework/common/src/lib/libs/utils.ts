@@ -1,3 +1,15 @@
+export const groupByFunction =
+	<T>(keyExtractor: (obj: T) => string | number) =>
+	(array: readonly T[]): { [key: string]: readonly T[] } => {
+		return (array ?? []).reduce((objectsByKeyValue, obj) => {
+			const value = keyExtractor(obj);
+			objectsByKeyValue[value] = objectsByKeyValue[value] ?? [];
+			// Using push instead of concat is thousands of times faster on big arrays
+			objectsByKeyValue[value].push(obj);
+			return objectsByKeyValue;
+		}, {});
+	};
+
 export const arraysEqual = (a: readonly any[] | any, b: readonly any[] | any): boolean => {
 	if (a == null && b == null) {
 		return true;

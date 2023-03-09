@@ -11,9 +11,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
+import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS } from '../../../services/decktracker/card-highlight/merged-highlights';

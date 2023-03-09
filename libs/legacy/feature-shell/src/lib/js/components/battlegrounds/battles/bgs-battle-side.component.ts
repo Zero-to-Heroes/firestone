@@ -11,8 +11,8 @@ import {
 import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { buildEntityFromBoardEntity } from '../../../services/battlegrounds/bgs-utils';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';

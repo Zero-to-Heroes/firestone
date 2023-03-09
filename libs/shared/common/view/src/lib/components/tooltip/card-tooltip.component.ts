@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AfterContentInit,
 	AfterViewInit,
@@ -9,17 +10,18 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import {
+	AbstractSubscriptionStoreComponent,
+	groupByFunction,
+	IPreferences,
+	Store,
+} from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../models/decktracker/deck-card';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction } from '../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'card-tooltip',
-	styleUrls: [`../../../css/component/tooltip/card-tooltip.component.scss`],
+	styleUrls: [`./card-tooltip.component.scss`],
 	template: `
 		<ng-container
 			*ngIf="{
@@ -54,7 +56,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					hidden: !value.relativePosition
 				}"
 			>
-				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards.length > 6 }">
+				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards?.length > 6 }">
 					<div class="related-cards">
 						<div class="related-card" *ngFor="let card of value.relatedCards">
 							<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
@@ -101,13 +103,18 @@ export class CardTooltipComponent
 	@Input() set displayBuffs(value: boolean) {
 		this.displayBuffs$$.next(value);
 	}
-	@Input() set cardTooltipCard(value: DeckCard) {
+	@Input() set cardTooltipCard(value: {
+		cardId: string;
+		buffCardIds?: readonly string[];
+		creatorCardId?: string;
+		lastAffectedByCardId?: string;
+	}) {
 		this.buffs$$.next(
 			!value?.buffCardIds?.length
-				? null
+				? []
 				: Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds))
-						.map((buff: string[]) => buff ?? [])
-						.map((buff: string[]) => buff.filter((b) => !!b))
+						.map((buff: readonly string[]) => buff ?? [])
+						.map((buff: readonly string[]) => buff.filter((b) => !!b))
 						.filter((buff: string[]) => !!buff?.length)
 						.map((buff: string[]) => ({
 							buffCardId: buff[0],
@@ -115,7 +122,7 @@ export class CardTooltipComponent
 							count: buff.length,
 						})),
 		);
-		this.createdBy$$.next((value?.creatorCardId || value?.lastAffectedByCardId) && !value?.cardId);
+		this.createdBy$$.next((!!value?.creatorCardId || !!value?.lastAffectedByCardId) && !value?.cardId);
 		this.cardIds$$.next([value?.cardId || value?.creatorCardId || value?.lastAffectedByCardId]);
 	}
 
@@ -125,17 +132,21 @@ export class CardTooltipComponent
 	private isBgs$$ = new BehaviorSubject<boolean>(false);
 	private relativePosition$$ = new BehaviorSubject<'left' | 'right'>('left');
 	private cardType$$ = new BehaviorSubject<'NORMAL' | 'GOLDEN'>('NORMAL');
-	private additionalClass$$ = new BehaviorSubject<string>(null);
+	private additionalClass$$ = new BehaviorSubject<string | null>(null);
 	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
-	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>(null);
+	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 
 	private timeout;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		// FIXME: how to handle the various types of preferences?
+		// More generally, how to handle the store? Should I use the same model everywhere, and simply
+		// change how the model is emitted?
+		// Maybe I can little by little extract all the data to interfaces as I need them
+		protected override readonly store: Store<IPreferences>,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
@@ -147,7 +158,7 @@ export class CardTooltipComponent
 		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
 	}
 
-	ngOnDestroy(): void {
+	override ngOnDestroy(): void {
 		super.ngOnDestroy();
 		if (this.timeout) {
 			clearTimeout(this.timeout);

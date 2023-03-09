@@ -12,8 +12,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { from, Observable } from 'rxjs';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 

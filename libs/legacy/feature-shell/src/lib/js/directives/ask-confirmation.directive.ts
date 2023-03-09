@@ -12,10 +12,10 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ConfirmationComponent } from '../components/tooltip/confirmation.component';
 import { Events } from '../services/events.service';
-import { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Directive({
 	selector: '[confirmationTooltip]',

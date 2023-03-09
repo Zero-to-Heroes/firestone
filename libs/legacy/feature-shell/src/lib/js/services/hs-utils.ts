@@ -46,6 +46,7 @@ export const classesForPieChart = [
 	'priest',
 ];
 
+/** @deprecated */
 export const formatClass = (playerClass: string, i18n: { translateString: (string) => string }): string => {
 	return i18n.translateString(`global.class.${playerClass?.toLowerCase()}`);
 };
@@ -941,6 +942,7 @@ export const getGalakrondCardFor = (className: string, invokeCount: number): str
 	return CardIds.GalakrondTheNightmare;
 };
 
+/** @deprecated */
 export const defaultStartingHp = (gameType: GameType, heroCardId: string): number => {
 	if (isBattlegrounds(gameType)) {
 		switch (heroCardId) {

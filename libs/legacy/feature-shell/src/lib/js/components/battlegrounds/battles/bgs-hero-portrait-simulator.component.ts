@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 
 @Component({
 	selector: 'bgs-hero-portrait-simulator',

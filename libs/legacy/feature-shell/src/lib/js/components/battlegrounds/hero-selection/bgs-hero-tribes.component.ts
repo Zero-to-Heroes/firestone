@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 
 @Component({

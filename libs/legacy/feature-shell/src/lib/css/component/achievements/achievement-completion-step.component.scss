@@ -2,73 +2,76 @@
 @import '../../global/fonts';
 
 .completion-step {
-    margin-right: 10px;
-    // For tooltip positioning
-    position: relative;
-    top: -2px;
+	margin-right: 10px;
+	// For tooltip positioning
+	position: relative;
+	top: -2px;
 
-    i {
-        opacity: 0.5;
-        --icon-color: #D9C3AB;
-    }
+	i {
+		opacity: 0.5;
+		--icon-color: #d9c3ab;
+	}
 
-    &.completed {
-        i {
-            opacity: 1;
-            --icon-color: #FFB948;
-        }
-    }
+	&.completed {
+		i {
+			opacity: 1;
+			--icon-color: #ffb948;
+		}
+	}
 
-    &:hover {
-        .zth-tooltip {
-            opacity: 1;
-        }
-    }
+	&:hover {
+		.zth-tooltip {
+			opacity: 1;
+		}
+	}
 
-    .zth-tooltip {
-        background-color: #7D5A87;
-        text-align: center;
-        cursor: default;
-        opacity: 0;
-        position: absolute;
-        width: auto;
-        height: 30px;
-        padding-left: 15px;
-        padding-right: 15px;
-        pointer-events: none;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        bottom: -45px;
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
-        // Center it
-        left: 50%;
-        transform: translateX(-50%);
-    
-        .tooltip-arrow {
-            position: absolute;
-            width: 16px;
-            height: 9px;
-            fill: #7D5A87;
-            overflow: visible;
-        }
-    
-        p {
-            @extend %achievements-tooltip;
-            white-space: nowrap;
-            cursor: default;
-            margin: 0;
+	.zth-tooltip {
+		background-color: #7d5a87;
+		text-align: center;
+		cursor: default;
+		opacity: 0;
+		position: absolute;
+		width: auto;
+		height: 30px;
+		padding-left: 15px;
+		padding-right: 15px;
+		pointer-events: none;
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		bottom: -45px;
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
+		// Center it
+		left: 50%;
+		transform: translateX(-50%);
 
-            .number-of-times {
-                font-weight: 600;
-            }
-        }
-    
-        &.bottom {
-            .tooltip-arrow {
-                top: 0px;
-            }
-        }
-    }
+		.tooltip-arrow {
+			position: absolute;
+			width: 16px;
+			height: 9px;
+			fill: #7d5a87;
+			overflow: visible;
+		}
+
+		p {
+			font-family: 'Open Sans', sans-serif;
+			font-weight: 400;
+			font-size: 13px;
+			color: #190505;
+			white-space: nowrap;
+			cursor: default;
+			margin: 0;
+
+			.number-of-times {
+				font-weight: 600;
+			}
+		}
+
+		&.bottom {
+			.tooltip-arrow {
+				top: 0px;
+			}
+		}
+	}
 }

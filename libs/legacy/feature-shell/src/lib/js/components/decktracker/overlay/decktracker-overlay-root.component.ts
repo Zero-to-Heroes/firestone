@@ -150,7 +150,6 @@ export class DeckTrackerOverlayRootComponent
 
 	overlayWidthInPx = 227;
 
-	// tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
 	private showTooltipsFromPrefs = true;

@@ -1,9 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { BgsHeroTier } from '@firestone-hs/bgs-global-stats';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsMetaHeroStatTierItem } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsHeroTier, BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { buildQuestStats } from '../../../../services/ui-store/bgs-ui-helper';

@@ -1,11 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import {
-	BgsMetaHeroStatTier,
-	BgsMetaHeroStatTierItem,
-	buildTiers,
-} from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
+import { buildTiers } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-stats';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
+import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { combineLatest, Observable, tap } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
@@ -13,6 +11,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 
 @Component({
 	selector: 'battlegrounds-meta-stats-heroes',
+	// FIXME: columns declarations should move to the "view" component
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-columns.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component.scss`,
@@ -43,6 +42,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 					*ngFor="let tier of value.tiers; trackBy: trackByFn"
 					role="listitem"
 					[tier]="tier"
+					(heroStatClick)="onHeroStatsClick($event)"
 				></battlegrounds-meta-stats-hero-tier>
 				<a
 					class="more-info"
@@ -102,6 +102,10 @@ export class BattlegroundsMetaStatsHeroesComponent
 
 	trackByFn(index: number, stat: BgsMetaHeroStatTier) {
 		return stat.label;
+	}
+
+	onHeroStatsClick(heroCardId: string) {
+		this.store.send(new BgsPersonalStatsSelectHeroDetailsEvent(heroCardId));
 	}
 
 	private buildMonoTier(items: BgsMetaHeroStatTierItem[]): readonly BgsMetaHeroStatTier[] {

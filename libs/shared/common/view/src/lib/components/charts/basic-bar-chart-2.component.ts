@@ -1,10 +1,11 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-chart-data';
 
 @Component({
 	selector: 'basic-bar-chart-2',
-	styleUrls: [`../../../../css/component/common/chart/basic-bar-chart-2.component.scss`],
+	styleUrls: [`./basic-bar-chart-2.component.scss`],
 	template: `
 		<div class="chart-container" *ngIf="barContainers?.length">
 			<div class="mid-line" [style.bottom.%]="midLineHeight"></div>
@@ -51,7 +52,7 @@ export class BasicBarChart2Component {
 	private _tooltipTitle;
 	private _midLineValue: number;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
 
 	udpateStats() {
 		if (!this.chartData) {

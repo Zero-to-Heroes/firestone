@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Optional } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { DeckstringOverrideEvent } from '../../services/decktracker/event/deckstring-override-event';

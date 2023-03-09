@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { ImageLocalizationOptions, LocalizationService } from './localization.service';
+import { ILocalizationService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalizationService } from './localization.service';
 
 @Injectable()
-export class LocalizationFacadeService {
+export class LocalizationFacadeService implements ILocalizationService {
 	private service: LocalizationService;
 
 	constructor(private readonly ow: OverwolfService) {
 		this.init();
+	}
+
+	public getTranslateService(): TranslateService {
+		return this.service.getTranslateService();
 	}
 
 	public async setLocale(locale: string) {

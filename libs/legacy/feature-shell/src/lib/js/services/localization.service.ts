@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 import { formatClass } from './hs-utils';
@@ -50,6 +50,10 @@ export class LocalizationService {
 				this.useHighResImages = pref;
 			});
 		window['localizationService'] = this;
+	}
+
+	public getTranslateService(): TranslateService {
+		return this.translate;
 	}
 
 	public get locale() {
@@ -153,11 +157,4 @@ export class LocalizationService {
 				return 'en-US';
 		}
 	}
-}
-
-export interface ImageLocalizationOptions {
-	readonly isBgs?: boolean;
-	readonly isPremium?: boolean;
-	readonly isHighRes?: boolean;
-	readonly isHeroSkin?: boolean;
 }

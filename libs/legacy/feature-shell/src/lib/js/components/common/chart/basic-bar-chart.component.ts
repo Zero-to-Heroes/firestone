@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { SimpleBarChartData } from './simple-bar-chart-data';
 
 @Component({
 	selector: 'basic-bar-chart',

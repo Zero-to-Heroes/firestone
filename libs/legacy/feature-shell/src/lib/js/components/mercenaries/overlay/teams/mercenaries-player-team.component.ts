@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

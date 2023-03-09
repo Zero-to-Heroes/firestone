@@ -772,7 +772,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					inGraveyard,
 					cardIs(
 						CardIds.RivendareWarrider,
-						CardIds.RivendareWarrider_BlaumeauxFamineriderToken,
+						CardIds.RivendareWarrider_BlaumeuxFamineriderToken,
 						CardIds.RivendareWarrider_KorthazzDeathriderToken,
 						CardIds.RivendareWarrider_ZeliekConquestriderToken,
 					),

@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsMetaHeroStatTierItem } from '../../../services/battlegrounds/bgs-meta-hero-stats';
 import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
-import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
 @Component({
 	selector: 'bgs-hero-stats',

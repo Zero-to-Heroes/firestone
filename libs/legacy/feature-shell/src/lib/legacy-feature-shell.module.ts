@@ -7,7 +7,6 @@ import { ErrorHandler, Injectable, Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PieChartComponent } from '@components/common/chart/pie-chart.component';
-import { CardTooltipDirective } from '@directives/card-tooltip.directive';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
@@ -454,8 +453,6 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
-import { BattlegroundsMetaStatsHeroInfoComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-info.component';
-import { BattlegroundsMetaStatsHeroTierComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
@@ -472,10 +469,12 @@ import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/c
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
-import { translationFileVersion } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Store, translationFileVersion } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
@@ -509,7 +508,6 @@ import { BgsPlusButtonComponent } from './js/components/battlegrounds/battles/bg
 import { BgsSimulatorKeyboardControls } from './js/components/battlegrounds/battles/simulator-keyboard-controls.service';
 import { BgsBoardComponent } from './js/components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from './js/components/battlegrounds/bgs-card-tooltip.component';
-import { BgsHeroPortraitComponent } from './js/components/battlegrounds/bgs-hero-portrait.component';
 import { BgsPlayerCapsuleComponent } from './js/components/battlegrounds/bgs-player-capsule.component';
 import { GraphWithComparisonNewComponent } from './js/components/battlegrounds/graph-with-comparison-new.component';
 import { BgsHeroMiniComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-mini.component';
@@ -543,7 +541,6 @@ import { BgsWinrateChartComponent } from './js/components/battlegrounds/post-mat
 import { StatCellComponent } from './js/components/battlegrounds/post-match/stat-cell.component';
 import { CdkOverlayContainer } from './js/components/cdk-overlay-container.component';
 import { CardComponent } from './js/components/collection/card.component';
-import { BasicBarChart2Component } from './js/components/common/chart/basic-bar-chart-2.component';
 import { BasicBarChartComponent } from './js/components/common/chart/basic-bar-chart.component';
 import { ControlBugComponent } from './js/components/controls/control-bug.component';
 import { ControlCloseComponent } from './js/components/controls/control-close.component';
@@ -598,10 +595,7 @@ import { SocialShareModalComponent } from './js/components/sharing/social-share-
 import { SocialSharesComponent } from './js/components/sharing/social-shares.component';
 import { TwitterShareButtonComponent } from './js/components/sharing/twitter/twitter-share-button.component';
 import { TwitterShareModalComponent } from './js/components/sharing/twitter/twitter-share-modal.component';
-import { BuffInfoComponent } from './js/components/tooltip/buff-info.component';
-import { CardTooltipComponent } from './js/components/tooltip/card-tooltip.component';
 import { ConfirmationComponent } from './js/components/tooltip/confirmation.component';
-import { HelpTooltipComponent } from './js/components/tooltip/help-tooltip.component';
 import { VersionComponent } from './js/components/version.component';
 import { WindowWrapperComponent } from './js/components/window-wrapper.component';
 import { WithLoadingComponent } from './js/components/with-loading.component';
@@ -612,7 +606,6 @@ import { CachedComponentTooltipDirective } from './js/directives/cached-componen
 import { ComponentTooltipDirective } from './js/directives/component-tooltip.directive';
 import { DoubleClickDirective } from './js/directives/exclusive-double-click.directive';
 import { GrowOnClickDirective } from './js/directives/grow-on-click.directive';
-import { HelpTooltipDirective } from './js/directives/help-tooltip.directive';
 import { NgxCacheIfDirective } from './js/directives/ngx-cache-if.directive';
 import { OwTranslateDirective } from './js/directives/ow-translate.directive';
 import { OwTranslatePipe } from './js/directives/ow-translate.pipe';
@@ -829,6 +822,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		SharedCommonViewModule,
 		ReplayColiseumModule,
+		BattlegroundsDataAccessModule,
+		BattlegroundsViewModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -867,14 +862,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		HotkeyComponent,
 		VersionComponent,
 
-		CardTooltipComponent,
-		HelpTooltipComponent,
 		ConfirmationComponent,
 
 		ComponentTooltipDirective,
 		CachedComponentTooltipDirective,
-		CardTooltipDirective,
-		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
@@ -928,7 +919,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
 		BgsCardTooltipComponent,
-		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
 		BgsHeroTribesComponent,
@@ -972,7 +962,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		GraphWithComparisonNewComponent,
 		BasicBarChartComponent,
-		BasicBarChart2Component,
 		PieChartComponent,
 
 		FilterDropdownComponent,
@@ -1007,15 +996,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		HotkeyComponent,
 		VersionComponent,
 
-		CardTooltipComponent,
-		BuffInfoComponent,
-		HelpTooltipComponent,
 		ConfirmationComponent,
 
-		CardTooltipDirective,
 		ComponentTooltipDirective,
 		CachedComponentTooltipDirective,
-		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
@@ -1068,7 +1052,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
 		BgsCardTooltipComponent,
-		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
 		BgsHeroTribesComponent,
@@ -1113,7 +1096,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		GraphWithComparisonNewComponent,
 		BasicBarChartComponent,
-		BasicBarChart2Component,
 		PieChartComponent,
 
 		FilterDropdownComponent,
@@ -1311,8 +1293,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsMetaStatsHeroesComponent,
-		BattlegroundsMetaStatsHeroTierComponent,
-		BattlegroundsMetaStatsHeroInfoComponent,
 		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsQuestVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
@@ -1687,9 +1667,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SystemTrayService,
 
 		AppUiStoreService,
+		// Not sure that this is needed, but I don't want to replace all instances of the facade by the interface
+		{ provide: Store, useClass: AppUiStoreFacadeService },
 		AppUiStoreFacadeService,
-		LocalizationService,
+		{ provide: ILocalizationService, useClass: LocalizationFacadeService },
 		LocalizationFacadeService,
+
+		LocalizationService,
 		CardsInitService,
 		// CardsFacadeService,
 		RefCards,
@@ -1798,8 +1782,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MailsService,
 	],
 	entryComponents: [
-		HelpTooltipComponent,
-		CardTooltipComponent,
 		ConfirmationComponent,
 		BgsHeroSelectionTooltipComponent,
 		TwitterShareModalComponent,

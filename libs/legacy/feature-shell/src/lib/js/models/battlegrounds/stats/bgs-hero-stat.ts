@@ -1,3 +1,5 @@
+import { BgsHeroTier } from '@firestone/battlegrounds/data-access';
+
 export class BgsQuestStat {
 	readonly id: string;
 	readonly baseCardId?: string;
@@ -30,5 +32,3 @@ export class BgsQuestStat {
 		return Object.assign(new BgsQuestStat(), base);
 	}
 }
-
-export type BgsHeroTier = 'S' | 'A' | 'B' | 'C' | 'D' | 'E';

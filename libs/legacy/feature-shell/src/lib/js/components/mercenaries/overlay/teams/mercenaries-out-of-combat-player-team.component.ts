@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { MercenariesMapType, SceneMode } from '@firestone-hs/reference-data';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import {
 	BattleAbility,
 	BattleEquipment,
