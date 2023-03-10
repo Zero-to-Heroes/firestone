@@ -7,8 +7,8 @@
 
 	color: var(--default-text-color);
 
-	// --navigation-background: var(--color-5);
 	--navigation-background: var(--color-7);
+	--navigation-height: 65px;
 }
 
 .container {
@@ -22,6 +22,7 @@
 .main {
 	display: flex;
 	flex-grow: 1;
+	margin-top: var(--navigation-height);
 
 	background-size: 100%;
 	background-repeat: round;
@@ -42,7 +43,11 @@
 }
 
 website-top-bar {
-	height: 65px;
+	height: var(--navigation-height);
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	z-index: 10;
 }
 
 website-navigation {

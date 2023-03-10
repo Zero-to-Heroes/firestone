@@ -15,5 +15,11 @@ battlegrounds-meta-stats-heroes-view {
 				}
 			}
 		}
+
+		battlegrounds-meta-stats-hero-info .info {
+			&:hover {
+				background: rgba(255, 255, 255, 0.08);
+			}
+		}
 	}
 }

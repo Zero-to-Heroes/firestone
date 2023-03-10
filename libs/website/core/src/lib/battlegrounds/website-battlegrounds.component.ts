@@ -14,7 +14,7 @@ import { from, Observable } from 'rxjs';
 	styleUrls: [`./website-battlegrounds.component.scss`],
 	template: `
 		<section class="section">
-			Time: last patch, Rank: all, Tribes: all
+			(Work in progress) Time: last patch, Rank: all, Tribes: all
 			<battlegrounds-meta-stats-heroes-view
 				*ngIf="stats$ | async as stats"
 				[stats]="stats"
