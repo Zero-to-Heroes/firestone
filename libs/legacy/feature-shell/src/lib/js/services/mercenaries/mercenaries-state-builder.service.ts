@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
-import { DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
-import { ApiRunner } from '../api-runner';
 import { MercenariesGlobalStatsLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-global-stats-loaded-event';
 import { MercenariesReferenceDataLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-reference-data-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

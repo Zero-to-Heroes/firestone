@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { ConstructedConfig } from '../../../models/decktracker/constructed-config';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
-import { ApiRunner } from '../../api-runner';
 
 const CONSTRUCTED_CONFIG_URL = 'https://static.firestoneapp.com/data/constructed-config.json';
 

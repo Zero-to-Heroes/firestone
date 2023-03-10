@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { SharedFrameworkCommonModule, Store, translationFileVersion } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -44,11 +45,12 @@ const components = [WebsiteBattlegroundsComponent, WebsiteNavigationComponent, W
 
 		SharedFrameworkCommonModule,
 		BattlegroundsDataAccessModule,
+		BattlegroundsViewModule,
 	],
 	providers: [
-		{ provide: CardsFacadeService, useClass: CardsFacadeStandaloneService },
-		{ provide: ILocalizationService, useClass: WebsiteLocalizationService },
-		{ provide: Store, useClass: WebsiteStoreService },
+		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
+		{ provide: ILocalizationService, useExisting: WebsiteLocalizationService },
+		{ provide: Store, useExisting: WebsiteStoreService },
 
 		WebsiteBootstrapService,
 		WebsitePreferencesService,

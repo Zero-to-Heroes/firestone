@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { GameStat } from '@firestone/stats/data-access';
 import { ChartData } from 'chart.js';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { PatchInfo } from '../../../../models/patches';
 import { isBattlegrounds } from '../../../../services/battlegrounds/bgs-utils';

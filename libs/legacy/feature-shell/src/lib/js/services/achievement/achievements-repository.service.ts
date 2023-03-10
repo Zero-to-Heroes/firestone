@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../models/achievement';
@@ -7,7 +7,6 @@ import { CompletedAchievement } from '../../models/completed-achievement';
 import { IndexedVisualAchievement } from '../../models/indexed-visual-achievement';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
-import { ApiRunner } from '../api-runner';
 import { AchievementsInitEvent } from '../mainwindow/store/events/achievements/achievements-init-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { AchievementsLoaderService } from './data/achievements-loader.service';

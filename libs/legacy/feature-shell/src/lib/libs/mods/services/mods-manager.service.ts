@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiRunner } from '@legacy-import/src/lib/js/services/api-runner';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';

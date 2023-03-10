@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
-import { LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
-import { ApiRunner } from '../api-runner';
+import { ApiRunner, LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsBestStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-best-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 

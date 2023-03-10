@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { BgsGlobalHeroStat2, BgsGlobalStats2 } from '@firestone-hs/bgs-global-stats';
-import { LocalStorageService } from '@firestone/shared/framework/core';
+import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { ApiRunner } from '../api-runner';
 import { BgsQuestsDataLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-quests-data-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { fixInvalidTimeSuffix } from './bgs-global-stats.service';

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BgsGlobalStats2 } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
+import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
-import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { ApiRunner } from '../api-runner';
 
 // The light version doesn't have tribe filtering
 const BGS_STATS_RETRIEVE_URL =

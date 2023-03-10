@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { Achievement } from '../../models/achievement';
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { ApiRunner } from '../api-runner';
 import { GameStateService } from '../decktracker/game-state.service';
 import { AchievementsFullUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-full-updated-event';
 import { PreferencesService } from '../preferences.service';

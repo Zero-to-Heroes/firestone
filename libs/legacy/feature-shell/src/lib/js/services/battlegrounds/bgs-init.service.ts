@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
@@ -9,7 +9,6 @@ import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/main
 import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
-import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

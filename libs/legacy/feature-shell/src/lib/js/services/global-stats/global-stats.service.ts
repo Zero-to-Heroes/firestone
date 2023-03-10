@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ApiRunner } from '../api-runner';
 import { GlobalStatsLoadedEvent } from '../mainwindow/store/events/stats/global/global-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
-import { LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { MemoryUpdate } from '../models/memory/memory-update';
-import { ApiRunner } from './api-runner';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
 import { ActiveQuestsUpdatedEvent } from './mainwindow/store/events/quests/active-quests-updated-event';

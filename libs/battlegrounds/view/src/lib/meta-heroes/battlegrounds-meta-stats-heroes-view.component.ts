@@ -10,7 +10,7 @@ import {
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, Observable, tap } from 'rxjs';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
@@ -58,7 +58,10 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsMetaStatsHeroesViewComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit
+{
 	tiers$: Observable<readonly BgsMetaHeroStatTier[]>;
 
 	@Output() heroStatClick = new EventEmitter<string>();
@@ -80,7 +83,8 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 	ngAfterContentInit() {
 		this.tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
 			tap((info) => console.debug('heroes info', info)),
-			this.mapData(([stats, [heroSort]]) => {
+			filter(([stats, heroSort]) => !!stats && !!heroSort),
+			this.mapData(([stats, heroSort]) => {
 				switch (heroSort) {
 					case 'average-position':
 						// Make sure we keep the items without data at the end
@@ -110,7 +114,9 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 	}
 
 	onHeroStatsClick(heroCardId: string) {
-		this.heroStatClick.next(heroCardId);
+		if (this.heroStatClick) {
+			this.heroStatClick.next(heroCardId);
+		}
 	}
 
 	private buildMonoTier(items: BgsMetaHeroStatTierItem[]): readonly BgsMetaHeroStatTier[] {

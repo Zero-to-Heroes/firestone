@@ -1,5 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
-import { BgsActiveTimeFilterType } from '../../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
+import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsRequestNewGlobalStatsLoadEvent implements MainWindowStoreEvent {

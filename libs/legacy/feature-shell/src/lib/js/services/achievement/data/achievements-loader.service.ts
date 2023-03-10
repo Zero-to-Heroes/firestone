@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
-import { ApiRunner } from '../../api-runner';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
 

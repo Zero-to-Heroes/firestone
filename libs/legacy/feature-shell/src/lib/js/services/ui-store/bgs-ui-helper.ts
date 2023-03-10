@@ -1,10 +1,10 @@
 import { BgsGlobalHeroStat2, BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { getHeroPower, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { BgsQuestStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { PatchInfo } from '../../models/patches';
 import { cutNumber, groupByFunction, sumOnArray } from '../utils';

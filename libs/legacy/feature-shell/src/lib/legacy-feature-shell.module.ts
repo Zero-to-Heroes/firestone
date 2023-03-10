@@ -626,7 +626,6 @@ import { AchievementsLoaderService } from './js/services/achievement/data/achiev
 import { RemoteAchievementsService } from './js/services/achievement/remote-achievements.service';
 import { TemporaryResolutionOverrideService } from './js/services/achievement/temporary-resolution-override-service';
 import { AdService } from './js/services/ad.service';
-import { ApiRunner } from './js/services/api-runner';
 import { setAppInjector } from './js/services/app-injector';
 import { ArenaStateBuilderService } from './js/services/arena/arena-state-builder.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
@@ -1644,7 +1643,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MindVisionStateMachineService,
 		OwUtilsService,
 		HotkeyService,
-		ApiRunner,
 		CardsHighlightService,
 		CardsHighlightFacadeService,
 

@@ -1,10 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat, buildNewStats, Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
-import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';

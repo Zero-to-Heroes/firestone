@@ -1,0 +1,19 @@
+battlegrounds-meta-stats-heroes-view {
+	::ng-deep {
+		.battlegrounds-meta-stats-heroes {
+			.net-mmr.net-mmr.net-mmr {
+				display: none;
+			}
+			.placement.placement.placement.placement {
+				flex-grow: 1;
+				display: flex;
+				align-content: center;
+				justify-content: center;
+
+				.placement-distribution {
+					width: 200px;
+				}
+			}
+		}
+	}
+}

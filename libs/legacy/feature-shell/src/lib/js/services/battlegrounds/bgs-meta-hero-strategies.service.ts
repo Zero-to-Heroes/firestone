@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from '@firestone/shared/framework/core';
-import { ApiRunner } from '../api-runner';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BattlegroundsMetaHeroStrategiesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 

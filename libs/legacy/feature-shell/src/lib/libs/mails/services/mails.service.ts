@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { MailboxMessagesInfo } from '@firestone-hs/mailbox';
-import { ApiRunner } from '@services/api-runner';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '@services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';

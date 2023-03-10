@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PresenceResult } from '@firestone-hs/twitch-presence';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ApiRunner } from '../api-runner';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { LiveStreamsDataLoadedEvent } from './store/events/streams/live-streams-data-loaded-event';
 

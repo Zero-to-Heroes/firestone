@@ -12,8 +12,8 @@ export class ApiRunner {
 			contentType?: string;
 			bearerToken?: string;
 		},
-	): Promise<T> {
-		return new Promise<T>((resolve, reject) => {
+	): Promise<T | null> {
+		return new Promise<T | null>((resolve, reject) => {
 			let headers = new HttpHeaders({
 				'Content-Type': options?.contentType ?? 'application/json',
 			});
@@ -38,8 +38,8 @@ export class ApiRunner {
 	}
 
 	// For JSON output
-	public async callGetApi<T>(url: string): Promise<T> {
-		return new Promise<T>((resolve, reject) => {
+	public async callGetApi<T>(url: string): Promise<T | null> {
+		return new Promise<T | null>((resolve, reject) => {
 			this.http.get(url).subscribe(
 				(result: any) => {
 					console.log('retrieved GET call', url);
@@ -56,7 +56,7 @@ export class ApiRunner {
 		});
 	}
 
-	public async get(url: string): Promise<string> {
+	public async get(url: string): Promise<string | undefined> {
 		return this.http
 			.get(url, {
 				responseType: 'text',

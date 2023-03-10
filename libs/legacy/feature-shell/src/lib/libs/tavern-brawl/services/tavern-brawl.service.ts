@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { TavernBrawlStats } from '@firestone-hs/tavern-brawl-stats';
-import { LocalStorageService } from '@firestone/shared/framework/core';
-import { ApiRunner } from '@services/api-runner';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';

@@ -1,13 +1,12 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Input as ArenaRewards } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ArenaInfo } from '../../models/arena-info';
 import { GameEvent } from '../../models/game-event';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
-import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { ArenaRewardsUpdatedEvent } from '../mainwindow/store/events/arena/arena-rewards-updated-event';

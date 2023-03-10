@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DataForRank, DeckStat, FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
-import { LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ApiRunner } from '../api-runner';
 import { ConstructedMetaDecksLoadedEvent } from '../mainwindow/store/events/decktracker/constructed-meta-decks-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 

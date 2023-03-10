@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { ApiRunner } from './api-runner';
+import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 
