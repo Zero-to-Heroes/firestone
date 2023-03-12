@@ -160,7 +160,7 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreCompone
 						author: {
 							name: author?.name,
 							tooltip: author?.highlights,
-							link: author?.link,
+							link: `${author?.link}?utm_source=firestone`,
 						},
 					};
 					return result;
