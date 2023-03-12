@@ -10,6 +10,7 @@ import {
 import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import { getBgsRankFilterLabelFor } from '@firestone/battlegrounds/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -21,7 +22,6 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
-import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
 import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
 
 @Component({
