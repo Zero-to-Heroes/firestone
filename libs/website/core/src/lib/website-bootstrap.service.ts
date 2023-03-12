@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { IPreferences } from '@firestone/shared/framework/common';
+import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CardsFacadeStandaloneService } from 'libs/shared/framework/core/src/lib/services/cards-facade-standalone.service';
 import { WebsiteLocalizationService } from './localization/website-localization.service';
 import { WebsitePreferences } from './preferences/website-preferences';
 import { WebsitePreferencesService } from './preferences/website-preferences.service';
