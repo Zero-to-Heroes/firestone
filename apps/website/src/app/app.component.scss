@@ -9,6 +9,7 @@
 
 	--navigation-background: var(--color-7);
 	--navigation-height: 65px;
+	--left-navigation-width: 200px;
 }
 
 .container {
@@ -35,6 +36,8 @@
 	width: 100%;
 	max-width: 1200px;
 	justify-content: center;
+	position: relative;
+	left: var(--left-navigation-width);
 }
 
 .content {
@@ -51,5 +54,8 @@ website-top-bar {
 }
 
 website-navigation {
-	width: 200px;
+	width: var(--left-navigation-width);
+	position: fixed;
+	left: 0;
+	top: var(--navigation-height);
 }
