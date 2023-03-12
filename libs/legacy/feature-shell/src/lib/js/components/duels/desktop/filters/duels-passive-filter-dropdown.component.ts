@@ -8,10 +8,9 @@ import {
 } from '@angular/core';
 import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { allDuelsPassiveTreasures } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsPassivesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-passives-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -20,12 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 
 @Component({
 	selector: 'duels-passive-filter-dropdown',
-	styleUrls: [
-		`../../../../../css/global/filters.scss`,
-		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
-		`../../../../../css/component/duels/desktop/filters/duels-hero-filter-dropdown.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/duels/desktop/filters/duels-hero-filter-dropdown.component.scss`],
 	template: `
 		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"

@@ -7,12 +7,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 
 @Component({
 	selector: 'preferences-dropdown',
-	styleUrls: [
-		`../../../css/global/filters.scss`,
-		`../../../css/component/app-section.component.scss`,
-		`../../../css/component/filter-dropdown.component.scss`,
-		`../../../css/component/settings/preference-dropdown.component.scss`,
-	],
+	styleUrls: [`../../../css/component/settings/preference-dropdown.component.scss`],
 	template: `
 		<label class="label">
 			{{ label }}

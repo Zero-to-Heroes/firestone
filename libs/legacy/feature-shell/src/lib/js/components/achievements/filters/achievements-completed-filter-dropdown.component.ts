@@ -17,11 +17,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 
 @Component({
 	selector: 'achievements-completed-filter-dropdown',
-	styleUrls: [
-		`../../../../css/global/filters.scss`,
-		`../../../../css/component/app-section.component.scss`,
-		`../../../../css/component/filter-dropdown.component.scss`,
-	],
+	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"

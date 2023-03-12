@@ -13,11 +13,11 @@ import { NavigationState } from '../models/mainwindow/navigation/navigation-stat
 
 @Component({
 	selector: 'fs-filter-dropdown',
-	styleUrls: [`../../css/component/fs-filter-dropdown.component.scss`],
+	styleUrls: [],
 	template: `
 		<filter-dropdown
 			class="hero-sort-filter"
-			[ngClass]="{ 'visible': visible }"
+			[ngClass]="{ visible: visible }"
 			[options]="_options"
 			[filter]="filter"
 			[placeholder]="placeholder"

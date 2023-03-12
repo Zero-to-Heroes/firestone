@@ -6,8 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -19,11 +18,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 
 @Component({
 	selector: 'battlegrounds-hero-filter-dropdown',
-	styleUrls: [
-		`../../../../../css/global/filters.scss`,
-		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
-	],
+	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"

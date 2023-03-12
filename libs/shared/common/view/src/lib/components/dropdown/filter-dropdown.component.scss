@@ -1,6 +1,3 @@
-@import '../global/variables';
-@import '../global/fonts';
-
 :host {
 	display: flex;
 	flex-shrink: 0;
@@ -12,7 +9,9 @@ ng-select.disabled {
 }
 
 :host ::ng-deep ng-select {
-	@extend %search-active;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 13px;
 	color: var(--color-1);
 	height: 30px;
 	background: rgba(255, 255, 255, 0.08);

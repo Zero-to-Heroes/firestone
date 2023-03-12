@@ -569,7 +569,6 @@ import { GroupedDeckListComponent } from './js/components/decktracker/overlay/gr
 import { LeaderboardEmptyCardComponent } from './js/components/decktracker/overlay/twitch/leaderboard-empty-card.component';
 import { TwitchBgsHeroOverviewComponent } from './js/components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { FilterDropdownMultiselectComponent } from './js/components/filter-dropdown-multiselect.component';
-import { FilterDropdownComponent } from './js/components/filter-dropdown.component';
 import { FilterComponent } from './js/components/filter.component';
 import { FsFilterDropdownComponent } from './js/components/fs-filter-dropdown.component';
 import { HotkeyComponent } from './js/components/hotkey.component';
@@ -809,7 +808,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CommonModule,
 		HttpClientModule,
 		BrowserAnimationsModule,
-		SelectModule,
 		FormsModule,
 		ReactiveFormsModule,
 		NgScrollbarModule,
@@ -965,7 +963,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BasicBarChartComponent,
 		PieChartComponent,
 
-		FilterDropdownComponent,
 		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
 
@@ -1099,7 +1096,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BasicBarChartComponent,
 		PieChartComponent,
 
-		FilterDropdownComponent,
 		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
 

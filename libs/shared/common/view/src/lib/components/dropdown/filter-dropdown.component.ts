@@ -13,7 +13,7 @@ import { IOption } from 'ng-select';
 
 @Component({
 	selector: 'filter-dropdown',
-	styleUrls: [`../../css/component/filter-dropdown.component.scss`],
+	styleUrls: [`./filter-dropdown.component.scss`],
 	template: `
 		<ng-select
 			*ngIf="_visible"
@@ -48,6 +48,7 @@ import { IOption } from 'ng-select';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDropdownComponent implements AfterViewInit {
+	// eslint-disable-next-line @angular-eslint/no-output-on-prefix
 	@Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
 
 	@Input() options: IOption[];

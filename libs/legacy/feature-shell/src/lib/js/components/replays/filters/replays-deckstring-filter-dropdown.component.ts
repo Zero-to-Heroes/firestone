@@ -11,11 +11,7 @@ import { MultiselectOption } from '../../filter-dropdown-multiselect.component';
 
 @Component({
 	selector: 'replays-deckstring-filter-dropdown',
-	styleUrls: [
-		`../../../../css/global/filters.scss`,
-		`../../../../css/component/app-section.component.scss`,
-		`../../../../css/component/filter-dropdown.component.scss`,
-	],
+	styleUrls: [],
 	template: `
 		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"

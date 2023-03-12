@@ -1,19 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replays-bg-hero-filter-dropdown',
-	styleUrls: [
-		`../../../../css/global/filters.scss`,
-		`../../../../css/component/app-section.component.scss`,
-		`../../../../css/component/filter-dropdown.component.scss`,
-	],
+	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"

@@ -7,11 +7,10 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { formatClass } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -22,11 +21,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 
 @Component({
 	selector: 'duels-hero-power-filter-dropdown',
-	styleUrls: [
-		`../../../../../css/global/filters.scss`,
-		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
-	],
+	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"

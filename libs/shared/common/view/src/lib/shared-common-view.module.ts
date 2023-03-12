@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { SelectModule } from 'ng-select';
 import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.component';
+import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
 import { NumericInputWithArrowsComponent } from './components/input/numeric-input-with-arrows.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
@@ -19,6 +21,8 @@ const components = [
 	HelpTooltipDirective,
 	HelpTooltipComponent,
 
+	FilterDropdownComponent,
+
 	BasicBarChart2Component,
 
 	NumericInputWithArrowsComponent,
@@ -26,7 +30,7 @@ const components = [
 ];
 
 @NgModule({
-	imports: [CommonModule, FormsModule, InlineSVGModule.forRoot(), SharedFrameworkCommonModule],
+	imports: [CommonModule, FormsModule, InlineSVGModule.forRoot(), SelectModule, SharedFrameworkCommonModule],
 	declarations: components,
 	exports: components,
 })

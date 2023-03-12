@@ -20,9 +20,6 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 @Component({
 	selector: 'decktracker-rank-filter-dropdown',
 	styleUrls: [
-		`../../../../../css/global/filters.scss`,
-		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
 		`../../../../../css/component/decktracker/main/filters/decktracker-rank-filter-dropdown.component.scss`,
 	],
 	template: `

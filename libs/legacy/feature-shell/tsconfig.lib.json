@@ -6,9 +6,5 @@
 		"declarationMap": true
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-	"include": [
-		"**/*.ts",
-		"../../shared/framework/core/src/lib/services/api-runner.ts",
-		"../../battlegrounds/data-access/src/lib/meta-heroes/bgs-active-time-filter.type.ts"
-	]
+	"include": ["**/*.ts"]
 }

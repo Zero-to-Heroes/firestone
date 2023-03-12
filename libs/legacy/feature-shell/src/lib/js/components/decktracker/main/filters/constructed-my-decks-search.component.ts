@@ -11,12 +11,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 
 @Component({
 	selector: 'constructed-my-decks-search',
-	styleUrls: [
-		`../../../../../css/global/filters.scss`,
-		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
-		`../../../../../css/component/decktracker/main/filters/constructed-my-decks-search.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/decktracker/main/filters/constructed-my-decks-search.component.scss`],
 	template: `
 		<div class="decks-search" *ngIf="showWidget$ | async">
 			<label class="search-label">
