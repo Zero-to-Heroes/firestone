@@ -66,6 +66,7 @@
 
 		a {
 			color: var(--default-text-color);
+			text-decoration: underline;
 
 			&:hover {
 				color: var(--default-title-color);
