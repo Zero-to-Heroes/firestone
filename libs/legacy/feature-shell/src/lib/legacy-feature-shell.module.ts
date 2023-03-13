@@ -457,6 +457,7 @@ import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
+import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
@@ -941,6 +942,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroFaceOffComponent,
 		BgsQuestRewardsComponent,
 		BgsStrategyCurveComponent,
+		BgsBuddiesComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,

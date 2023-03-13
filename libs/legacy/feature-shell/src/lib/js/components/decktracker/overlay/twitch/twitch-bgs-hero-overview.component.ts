@@ -8,8 +8,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { getHeroPower } from '@firestone-hs/reference-data';
+import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getBuddy } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { from, Observable } from 'rxjs';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -41,8 +42,8 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 						<img class="card buddy normal" [src]="reward.image" />
 					</div>
 				</ng-container>
-				<!-- <img class="card buddy normal" [src]="buddyCardImage" />
-				<img class="card buddy golden" [src]="buddyCardGoldenImage" /> -->
+				<img class="card buddy normal" [src]="buddyCardImage" />
+				<img class="card buddy golden" [src]="buddyCardGoldenImage" />
 			</div>
 		</div>
 	`,
@@ -57,8 +58,8 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 	heroPowerImage: string;
 	leaderboardPositionClass: string;
 	rewards: readonly Reward[];
-	// buddyCardImage: string;
-	// buddyCardGoldenImage: string;
+	buddyCardImage: string;
+	buddyCardGoldenImage: string;
 
 	@Input() set config(value: { player: BgsPlayer; currentTurn: number; showLogo: boolean }) {
 		this._opponent = value.player;
@@ -72,18 +73,18 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 			}),
 			completed: reward.completed,
 		}));
-		// const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
-		// const buddyCard = this.cards.getCard(buddyCardId);
-		// const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
-		// this.buddyCardImage = this.i18n.getCardImage(buddyCardId, {
-		// 	isBgs: true,
-		// 	isHighRes: true,
-		// });
-		// this.buddyCardGoldenImage = this.i18n.getCardImage(buddyCardGolden.id, {
-		// 	isBgs: true,
-		// 	isPremium: true,
-		// 	isHighRes: true,
-		// });
+		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
+		const buddyCard = this.cards.getCard(buddyCardId);
+		const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
+		this.buddyCardImage = this.i18n.getCardImage(buddyCardId, {
+			isBgs: true,
+			isHighRes: true,
+		});
+		this.buddyCardGoldenImage = this.i18n.getCardImage(buddyCardGolden.id, {
+			isBgs: true,
+			isPremium: true,
+			isHighRes: true,
+		});
 		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards.getService());
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,

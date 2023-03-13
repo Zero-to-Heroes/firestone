@@ -61,6 +61,17 @@
 		top: 5px;
 	}
 
+	.buddy {
+		.icon {
+		}
+
+		&.missing {
+			.icon {
+				opacity: 0.3;
+			}
+		}
+	}
+
 	.tribes {
 		.icon {
 			clip-path: ellipse(35% 35% at 50% 50%);

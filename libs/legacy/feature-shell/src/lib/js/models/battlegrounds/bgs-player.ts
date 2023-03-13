@@ -35,7 +35,7 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly currentWinStreak: number;
 	readonly highestWinStreak: number;
 	// Most recent last
-	// readonly buddyTurns: readonly number[] = [];
+	readonly buddyTurns: readonly number[] = [];
 
 	public static create(base: Partial<NonFunctionProperties<BgsPlayer>>): BgsPlayer {
 		const startingHealth = base.cardId === CardIds.PatchwerkBattlegrounds ? 60 : 40;

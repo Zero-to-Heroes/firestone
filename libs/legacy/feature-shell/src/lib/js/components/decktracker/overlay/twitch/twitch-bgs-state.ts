@@ -36,7 +36,7 @@ export interface TwitchBgsPlayer {
 	readonly lastKnownComposition: BgsComposition;
 	readonly lastKnownBattleHistory: BgsBattleHistory;
 	readonly questRewards: readonly QuestReward[];
-	// readonly buddyTurns: readonly number[];
+	readonly buddyTurns: readonly number[];
 }
 
 export interface TwitchBgsBoard {

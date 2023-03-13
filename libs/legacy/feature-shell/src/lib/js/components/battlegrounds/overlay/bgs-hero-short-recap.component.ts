@@ -7,6 +7,9 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 	template: `
 		<div class="short-recap">
 			<tavern-level-icon [level]="tavernTier" class="element tavern" *ngIf="tavernTier"></tavern-level-icon>
+			<div class="buddy {{ buddyClass }}" *ngIf="buddiesEnabled">
+				<img class="icon" [src]="buddyImage" />
+			</div>
 			<div class="element triples">
 				<img class="icon" [src]="triplesImage" />
 				<div class="value">{{ triples }}</div>
@@ -41,6 +44,8 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroShortRecapComponent {
+	@Input() buddiesEnabled: boolean;
+
 	@Input() tavernTier: number;
 	@Input() triples: number;
 	@Input() winStreak: number;
@@ -48,6 +53,8 @@ export class BgsHeroShortRecapComponent {
 	@Input() tribeCount: number;
 	@Input() damage: number;
 	@Input() questRewards: readonly QuestReward[];
+	@Input() buddyImage: string;
+	@Input() buddyClass: string;
 
 	triplesImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_triple.png';
 	winStreakImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_winstreak.png';

@@ -52,7 +52,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
 				></div>
 			</div>
-			<!-- <bgs-buddies [buddies]="buddies"></bgs-buddies> -->
+			<bgs-buddies [buddies]="buddies" *ngIf="buddiesEnabled"></bgs-buddies>
 			<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 			<div
@@ -78,9 +78,10 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	triples: readonly BgsTriple[];
 	questRewards: readonly QuestReward[];
 	debug = false;
-	// buddies: readonly number[];
+	buddies: readonly number[];
 
 	@Input() showLastOpponentIcon: boolean;
+	@Input() buddiesEnabled: boolean;
 
 	@Input() currentTurn: number;
 
@@ -107,7 +108,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.tavernUpgrades = [...value.tavernUpgradeHistory].reverse();
 		this.triples = value.tripleHistory;
 		this.questRewards = value.questRewards;
-		// this.buddies = value.buddyTurns;
+		this.buddies = value.buddyTurns;
 	}
 
 	private _opponent: BgsPlayer;

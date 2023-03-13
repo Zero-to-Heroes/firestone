@@ -13,6 +13,8 @@ export class BgsGameSettingsParser implements EventParser {
 		return currentState.update({
 			currentGame: currentState.currentGame?.update({
 				hasPrizes: event.event.additionalData.battlegroundsPrizes,
+				hasQuests: event.event.additionalData.battlegroundsQuests,
+				hasBuddies: event.event.additionalData.battlegroundsBuddies,
 			} as BgsGame),
 		} as BattlegroundsState);
 	}

@@ -8,9 +8,8 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -41,6 +40,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 				<bgs-hero-short-recap
 					class="short-recap"
 					[ngClass]="{ active: showLiveInfo$ | async }"
+					[buddiesEnabled]="buddiesEnabled"
 					[tavernTier]="tavernTier"
 					[triples]="triples"
 					[winStreak]="winStreak"
@@ -48,6 +48,8 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[tribeCount]="tribeCount"
 					[damage]="damage"
 					[questRewards]="questRewards"
+					[buddyImage]="buddyImage"
+					[buddyClass]="buddyClass"
 				></bgs-hero-short-recap>
 			</div>
 		</div>
@@ -58,7 +60,7 @@ export class BgsLeaderboardEmptyCardComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
-	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
+	componentType: ComponentType<BgsOverlayHeroOverviewComponent> = BgsOverlayHeroOverviewComponent;
 	showLiveInfo$: Observable<boolean>;
 	showLiveInfo = new BehaviorSubject<boolean>(false);
 
@@ -87,12 +89,16 @@ export class BgsLeaderboardEmptyCardComponent
 	}
 
 	@Input() showLastOpponentIcon: boolean;
+	@Input() buddiesEnabled: boolean;
 
 	position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';
 
 	componentClass: string;
 	_bgsPlayer: {
 		player: BgsPlayer;
+		config: {
+			hasBuddies: boolean;
+		};
 		currentTurn: number;
 		isLastOpponent: boolean;
 		additionalClasses: string;
@@ -112,7 +118,11 @@ export class BgsLeaderboardEmptyCardComponent
 	tribeImage: string;
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
 	damage: number;
+
 	questRewards: readonly QuestReward[];
+
+	buddyImage: string;
+	buddyClass: string;
 
 	private callbackHandle;
 
@@ -173,8 +183,11 @@ export class BgsLeaderboardEmptyCardComponent
 				tripleHistory: this._previousPlayer.tripleHistory,
 				boardHistory: this._previousPlayer?.boardHistory ?? [],
 				questRewards: this._previousPlayer?.questRewards,
-				// buddyTurns: this._previousPlayer?.buddyTurns ?? [],
+				buddyTurns: this._previousPlayer?.buddyTurns ?? [],
 			}),
+			config: {
+				hasBuddies: this.buddiesEnabled,
+			},
 			currentTurn: this._currentTurn,
 			isLastOpponent: this.isLastOpponent,
 			additionalClasses: this.componentClass,
@@ -188,6 +201,13 @@ export class BgsLeaderboardEmptyCardComponent
 		this.tribeImage = getTribeIcon(tribe);
 		this.damage = this._previousPlayer.getLastKnownBattleHistory()?.damage ?? 0;
 		this.questRewards = this._bgsPlayer.player.questRewards;
+		const buddyImageRoot = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images`;
+		this.buddyImage =
+			this._previousPlayer.buddyTurns.length > 1
+				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
+				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
+		this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
+
 		if (this.winStreak === 0 && this.damage > 0) {
 			this.damage = -this.damage;
 		}

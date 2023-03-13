@@ -678,6 +678,28 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.SubmersibleChef;
 		case CardIds.IniStormcoil_BG22_HERO_200:
 			return CardIds.SubScrubber;
+		// case CardIds.QueenAzshara_BG22_HERO_007:
+		// 	return CardIds.ImperialDefender;
+		// case CardIds.Ozumat_BG23_HERO_201:
+		// 	return CardIds.Tamuzo;
+		// case CardIds.LadyVashj_BG23_HERO_304:
+		// 	return CardIds.CoilfangElite;
+		// case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
+		// 	return CardIds.WaxadredTheDrippy;
+		// case CardIds.SireDenathrius_BG24_HERO_100:
+		// 	return CardIds.ShadyAristocrat;
+		// case CardIds.SylvanasWindrunner_BG23_HERO_306:
+		// 	return CardIds.NathanosBlightcallerBuddy;
+		// case CardIds.TheJailerBattlegrounds:
+		// 	return CardIds.MawswornSoulkeeper;
+		// case CardIds.EnhanceOMechano_BG24_HERO_204:
+		// 	return CardIds.EnhanceoMedico;
+		// case CardIds.ProfessorPutricide_BG25_HERO_100:
+		// 	return CardIds.FestergutBuddy;
+		// case CardIds.TeronGorefiend_BG25_HERO_103:
+		// 	return CardIds.ShadowyConstructBuddy;
+		// case CardIds.MurlocHolmes_BG23_HERO_303:
+		// 	return CardIds.WatfinBuddy;
 		default:
 			console.error('missing buddy section for ', heroCardId);
 			return null;

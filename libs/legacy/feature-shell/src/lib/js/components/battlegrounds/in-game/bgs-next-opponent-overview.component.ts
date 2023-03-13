@@ -18,7 +18,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			class="container"
 			*ngIf="{
 				showNextOpponentRecapSeparately: showNextOpponentRecapSeparately$ | async,
-				opponents: opponents$ | async
+				opponents: opponents$ | async,
+				buddiesEnabled: buddiesEnabled$ | async
 			} as value2"
 			[ngClass]="{ 'no-ads': !(showAds$ | async), 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
 		>
@@ -35,6 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						[currentTurn]="value.currentTurn"
 						[enableSimulation]="enableSimulation$ | async"
 						[nextBattle]="nextBattle$ | async"
+						[buddiesEnabled]="value2.buddiesEnabled"
 					></bgs-opponent-overview-big>
 					<div class="other-opponents">
 						<div class="subtitle" [owTranslate]="'battlegrounds.in-game.opponents.title'"></div>
@@ -44,6 +46,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								[opponent]="opponent"
 								[currentTurn]="value.currentTurn"
 								[showLastOpponentIcon]="isLastOpponent(opponent, lastOpponentCardId$ | async)"
+								[buddiesEnabled]="value2.buddiesEnabled"
 							></bgs-opponent-overview>
 						</div>
 					</div>
@@ -85,6 +88,8 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	lastOpponentCardId$: Observable<string>;
 
+	buddiesEnabled$: Observable<boolean>;
+
 	opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
 
 	constructor(
@@ -103,6 +108,9 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
 		);
 		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
+		this.buddiesEnabled$ = this.store
+			.listenBattlegrounds$(([state]) => state?.currentGame?.hasBuddies)
+			.pipe(this.mapData(([hasBuddies]) => hasBuddies));
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state, prefs]) => state?.currentGame?.currentTurn)
 			.pipe(this.mapData(([turn]) => turn));

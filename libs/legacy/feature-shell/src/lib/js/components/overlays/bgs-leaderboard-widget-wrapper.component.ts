@@ -27,7 +27,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				bgsPlayers: bgsPlayers$ | async,
 				currentTurn: currentTurn$ | async,
 				lastOpponentCardId: lastOpponentCardId$ | async,
-				showLastOpponentIcon: showLastOpponentIcon$ | async
+				showLastOpponentIcon: showLastOpponentIcon$ | async,
+				buddiesEnabled: buddiesEnabled$ | async
 			} as value"
 		>
 			<div class="bgs-leaderboard" *ngIf="showWidget$ | async">
@@ -38,6 +39,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 					[currentTurn]="value.currentTurn"
 					[lastOpponentCardId]="value.lastOpponentCardId"
 					[showLastOpponentIcon]="value.showLastOpponentIcon"
+					[buddiesEnabled]="value.buddiesEnabled"
 				>
 				</bgs-leaderboard-empty-card>
 				<div class="mouse-leave-fix top"></div>
@@ -59,6 +61,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	lastOpponentCardId$: Observable<string>;
 	currentTurn$: Observable<number>;
 	showLastOpponentIcon$: Observable<boolean>;
+	buddiesEnabled$: Observable<boolean>;
 	windowWidth: number;
 	windowHeight: number;
 
@@ -94,6 +97,9 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 			this.handleReposition(),
 		);
+		this.buddiesEnabled$ = this.store
+			.listenBattlegrounds$(([state]) => state?.currentGame?.hasBuddies)
+			.pipe(this.mapData(([hasBuddies]) => hasBuddies));
 		this.bgsPlayers$ = this.store
 			.listenBattlegrounds$(([state]) => state?.currentGame?.players)
 			.pipe(

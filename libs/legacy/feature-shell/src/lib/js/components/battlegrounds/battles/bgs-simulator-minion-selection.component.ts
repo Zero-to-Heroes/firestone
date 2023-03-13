@@ -245,7 +245,7 @@ export class BgsSimulatorMinionSelectionComponent
 								TOKEN_CARD_IDS.includes(card.id as CardIds),
 						)
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
-						.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
+						// .filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 						.filter(
 							(card) =>
 								!tribeFilter ||

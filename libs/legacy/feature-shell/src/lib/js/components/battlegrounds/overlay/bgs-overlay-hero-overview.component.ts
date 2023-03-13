@@ -30,6 +30,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[tavernTitle]="'battlegrounds.in-game.opponents.tavern-latest-upgrade-title' | owTranslate"
 				[showTavernsIfEmpty]="false"
 				[showLastOpponentIcon]="isLastOpponent"
+				[buddiesEnabled]="buddiesEnabled"
 			></bgs-opponent-overview-big>
 		</div>
 	`,
@@ -38,6 +39,9 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() set config(value: {
 		player: BgsPlayer;
+		config: {
+			hasBuddies: boolean;
+		};
 		currentTurn: number;
 		isLastOpponent: boolean;
 		additionalClasses: string;
@@ -46,6 +50,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 		this.currentTurn = value.currentTurn;
 		this.isLastOpponent = value.isLastOpponent;
 		this.componentClass = value.additionalClasses;
+		this.buddiesEnabled = value.config?.hasBuddies;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -60,6 +65,8 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 	currentTurn: number;
 	isLastOpponent: boolean;
 	scale: number;
+
+	buddiesEnabled: boolean;
 
 	constructor(
 		private readonly el: ElementRef,

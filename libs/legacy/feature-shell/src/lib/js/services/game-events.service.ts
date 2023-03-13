@@ -157,6 +157,7 @@ export class GameEvents {
 						additionalData: {
 							battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
 							battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
+							battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
 						},
 					} as GameEvent),
 				);

@@ -323,7 +323,7 @@ export class TwitchAuthService {
 			lastKnownComposition: player.getLastKnownComposition(),
 			lastKnownBattleHistory: player.getLastKnownBattleHistory(),
 			questRewards: player.questRewards,
-			// buddyTurns: player.buddyTurns,
+			buddyTurns: player.buddyTurns,
 		};
 	}
 
