@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
-import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { SharedFrameworkCommonModule, Store, translationFileVersion } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
@@ -12,7 +10,6 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { WebsiteBattlegroundsComponent } from './battlegrounds/website-battlegrounds.component';
 import { WebsiteLocalizationService } from './localization/website-localization.service';
 import { WebsiteNavigationComponent } from './navigation/website-navigation.component';
 import { WebsiteTopBarComponent } from './navigation/website-top-bar.component';
@@ -29,7 +26,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 	);
 }
 
-const components = [WebsiteBattlegroundsComponent, WebsiteNavigationComponent, WebsiteTopBarComponent];
+const components = [WebsiteNavigationComponent, WebsiteTopBarComponent];
 
 @NgModule({
 	imports: [
@@ -47,8 +44,6 @@ const components = [WebsiteBattlegroundsComponent, WebsiteNavigationComponent, W
 		InlineSVGModule.forRoot(),
 
 		SharedFrameworkCommonModule,
-		BattlegroundsDataAccessModule,
-		BattlegroundsViewModule,
 	],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },

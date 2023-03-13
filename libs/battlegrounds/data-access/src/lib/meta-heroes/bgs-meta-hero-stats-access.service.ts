@@ -9,7 +9,7 @@ const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/bg
 export class BgsMetaHeroStatsAccessService {
 	constructor(private readonly api: ApiRunner) {}
 
-	public async loadMetaHeroStats(timeFilter: BgsActiveTimeFilterType) {
+	public async loadMetaHeroStats(timeFilter: BgsActiveTimeFilterType): Promise<BgsHeroStatsV2> {
 		const url = META_HERO_STATS_URL.replace('%timeSuffix%', timeFilter);
 		console.debug('[bgs-meta-hero] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);

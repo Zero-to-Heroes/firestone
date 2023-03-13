@@ -1,0 +1,52 @@
+import { Action, createReducer, on } from '@ngrx/store';
+
+import * as MetaHeroStatsStateActions from './meta-hero-stats.actions';
+import { MetaHeroStatsState } from './meta-hero-stats.models';
+
+export const WEBSITE_BGS_META_HERO_STATS_FEATURE_KEY = 'websiteBgsMetaHeroStats';
+
+export interface MetaHeroStatsPartialState {
+	readonly [WEBSITE_BGS_META_HERO_STATS_FEATURE_KEY]: MetaHeroStatsState;
+}
+
+export const initialMetaHeroStatsState: MetaHeroStatsState = {
+	loaded: false,
+	currentPercentileSelection: 100,
+	currentTimePeriodSelection: 'last-patch',
+	currentTribesSelection: [],
+};
+
+const reducer = createReducer(
+	initialMetaHeroStatsState,
+	on(MetaHeroStatsStateActions.initBgsMetaHeroStats, (state) => ({ ...state, loaded: false, error: null })),
+	on(MetaHeroStatsStateActions.loadBgsMetaHeroStatsSuccess, (state, { stats, lastUpdateDate, mmrPercentiles }) => ({
+		...state,
+		stats: stats,
+		lastUpdateDate: lastUpdateDate,
+		mmrPercentiles: mmrPercentiles,
+		loaded: true,
+	})),
+	on(MetaHeroStatsStateActions.loadBgsMetaHeroStatsFailure, (state, { error }) => ({ ...state, error })),
+	on(MetaHeroStatsStateActions.changeMetaHeroStatsTimeFilter, (state, { currentTimePeriodSelection }) => ({
+		...state,
+		currentTimePeriodSelection: currentTimePeriodSelection,
+		loaded: false,
+		error: null,
+	})),
+	on(MetaHeroStatsStateActions.changeMetaHeroStatsPercentileFilter, (state, { currentPercentileSelection }) => ({
+		...state,
+		currentPercentileSelection: currentPercentileSelection,
+		loaded: false,
+		error: null,
+	})),
+	on(MetaHeroStatsStateActions.changeMetaHeroStatsTribesFilter, (state, { currentTribesSelection }) => ({
+		...state,
+		currentTribesSelection: currentTribesSelection,
+		loaded: false,
+		error: null,
+	})),
+);
+
+export function metaHeroStatsStateReducer(state: MetaHeroStatsState | undefined, action: Action) {
+	return reducer(state, action);
+}

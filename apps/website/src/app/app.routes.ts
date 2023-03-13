@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { WebsiteBattlegroundsComponent } from '@firestone/website/core';
+import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds';
 
 export const appRoutes: Route[] = [
 	{
