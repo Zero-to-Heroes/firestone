@@ -95,6 +95,10 @@ export class OpponentCardInfoIdComponent {
 		switch (cardId) {
 			case CardIds.DrawOffensivePlayTavernBrawlEnchantment:
 				return CardIds.OffensivePlayTavernBrawl;
+			case CardIds.SecretPassage_SecretEntranceEnchantment:
+			case CardIds.SecretPassage_SecretExitEnchantment:
+			case CardIds.SecretPassage_SecretPassagePlayerEnchantment:
+				return CardIds.SecretPassage;
 		}
 
 		// The base case
