@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
+import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
+import { EntityGameState, PlayerGameState } from '../../models/game-event';
 
 @Injectable()
 export class AttackOnBoardService {
-	public computeAttackOnBoard(deck: DeckState, playerFromTracker): AttackOnBoard {
+	public computeAttackOnBoard(deck: DeckState, playerFromTracker: PlayerGameState): AttackOnBoard {
 		const numberOfVoidtouchedAttendants =
 			deck.board.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant).length || 0;
 		const entitiesOnBoardThatCanAttack = deck.board
@@ -14,7 +16,11 @@ export class AttackOnBoardService {
 			.filter((entity) => this.canAttack(entity, deck.isActivePlayer))
 			.filter((entity) => entity.attack > 0);
 		const totalAttackOnBoard = entitiesOnBoardThatCanAttack
-			.map((entity) => this.windfuryMultiplier(entity) * (numberOfVoidtouchedAttendants + entity.attack))
+			.map(
+				(entity) =>
+					this.windfuryMultiplier(entity) *
+					this.getEntityAttack(entity, numberOfVoidtouchedAttendants, deck.board, playerFromTracker.Board),
+			)
 			.reduce((a, b) => a + b, 0);
 		const baseHeroAttack = deck.isActivePlayer
 			? Math.max(playerFromTracker?.Hero?.attack || 0, 0)
@@ -27,6 +33,30 @@ export class AttackOnBoardService {
 			board: totalAttackOnBoard,
 			hero: heroAttack,
 		} as AttackOnBoard;
+	}
+
+	private getEntityAttack(
+		entity: EntityGameState,
+		numberOfVoidtouchedAttendants: number,
+		board: readonly DeckCard[],
+		boardFromTracker: readonly EntityGameState[],
+	): number {
+		if (entity.cardId === CardIds.NeptulonTheTidehunter) {
+			const hands = board
+				.filter(
+					(e) =>
+						e.cardId === CardIds.NeptulonTheTidehunter_NeptulonsHandToken_TID_712t ||
+						e.cardId === CardIds.NeptulonTheTidehunter_NeptulonsHandToken_TID_712t2,
+				)
+				.map((h) => boardFromTracker.find((e) => e.entityId === h.entityId))
+				.filter((h) => !!h);
+			if (!hands.length) {
+				return entity.attack + numberOfVoidtouchedAttendants;
+			}
+			const handAttacks = hands.map((h) => h.attack + numberOfVoidtouchedAttendants).reduce((a, b) => a + b, 0);
+			return handAttacks;
+		}
+		return entity.attack + numberOfVoidtouchedAttendants;
 	}
 
 	private windfuryMultiplier(entity): number {

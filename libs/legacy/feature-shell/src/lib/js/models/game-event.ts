@@ -222,8 +222,10 @@ export interface GameState {
 
 export interface PlayerGameState {
 	readonly Hero: EntityGameState;
+	readonly Weapon: EntityGameState;
 	readonly Hand: readonly EntityGameState[];
 	readonly Board: readonly EntityGameState[];
+	readonly Deck: readonly EntityGameState[];
 	readonly LettuceAbilities: readonly EntityGameState[];
 }
 

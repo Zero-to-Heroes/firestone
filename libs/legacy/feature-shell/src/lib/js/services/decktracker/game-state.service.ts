@@ -16,7 +16,7 @@ import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { HeroCard } from '../../models/decktracker/hero-card';
-import { GameEvent } from '../../models/game-event';
+import { GameEvent, PlayerGameState } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
@@ -439,7 +439,7 @@ export class GameStateService {
 	}
 
 	// TODO: this should move elsewhere
-	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
+	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker: PlayerGameState): DeckState {
 		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
@@ -457,8 +457,8 @@ export class GameStateService {
 				dormant: hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
-		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES);
-		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED);
+		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES)?.Value ?? 0;
+		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED)?.Value ?? 0;
 		const newHero: HeroCard = playerDeckWithZonesOrdered.hero?.update({
 			manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
 		});
