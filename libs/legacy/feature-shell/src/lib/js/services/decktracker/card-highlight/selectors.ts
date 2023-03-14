@@ -80,7 +80,7 @@ export const notInInitialDeck = (handler: Handler): boolean => {
 export const excludeEntityId =
 	(entityId: number) =>
 	(handler: Handler): boolean => {
-		return handler.deckCardProvider().entityId != entityId;
+		return !!handler.deckCardProvider()?.entityId && handler.deckCardProvider()?.entityId != entityId;
 	};
 
 export const lastAffectedByCardId =

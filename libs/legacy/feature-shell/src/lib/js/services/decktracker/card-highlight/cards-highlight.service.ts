@@ -467,7 +467,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FlameWavesTavernBrawl:
 				return and(or(inDeck, inHand), spell, fire);
 			case CardIds.FleshBehemoth_RLK_830:
-				return and(inDeck, minion, undead, excludeEntityId(card.entityId));
+				return and(inDeck, minion, undead, excludeEntityId(card?.entityId));
 			case CardIds.FossilFanatic:
 				return and(inDeck, spell, fel);
 			case CardIds.FrizzKindleroost:

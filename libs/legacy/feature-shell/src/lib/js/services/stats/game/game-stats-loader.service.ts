@@ -62,6 +62,7 @@ export class GameStatsLoaderService {
 			const prefs = await this.prefs.getPreferences();
 			return GameStats.create({
 				stats: localStats
+					.map((stat) => GameStat.create({ ...stat }))
 					.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
 					// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
 					// appear anywhere
