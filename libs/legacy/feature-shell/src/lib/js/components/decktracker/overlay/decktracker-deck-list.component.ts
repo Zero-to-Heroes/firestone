@@ -15,10 +15,10 @@ import {
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
-import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -183,6 +183,16 @@ export class DeckTrackerDeckListComponent
 					]),
 					heroes: [heroCardId],
 					format: GameFormat.FT_WILD,
+					sideboards: !deckState.sideboards?.length
+						? null
+						: deckState.sideboards.map((sideboard) => {
+								return {
+									keyCardDbfId: this.allCards.getCard(sideboard.keyCardId).dbfId,
+									cards: Object.values(
+										groupByFunction((cardId: string) => cardId)(sideboard.cards),
+									).map((cardIds) => [this.allCards.getCard(cardIds[0]).dbfId, cardIds.length]),
+								};
+						  }),
 				};
 				return encode(deckDefinition);
 			}),

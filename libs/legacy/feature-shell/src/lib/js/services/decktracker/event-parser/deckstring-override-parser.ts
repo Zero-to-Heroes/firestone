@@ -1,5 +1,5 @@
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
+import { DeckSideboard, DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckHandlerService } from '../deck-handler.service';
@@ -53,6 +53,7 @@ export class DeckstringOverrideParser implements EventParser {
 			.filter((card) => !card.creatorCardId);
 
 		const cardsFromDeckstring = this.deckHandler.buildDeckList(deckstring);
+		const sideboards: readonly DeckSideboard[] = this.deckHandler.buildSideboards(deckstring);
 
 		// Now remove the from this list the cards that were moved out of the initial deck
 		const newDeckContents = [...cardsFromDeckstring];
@@ -70,6 +71,7 @@ export class DeckstringOverrideParser implements EventParser {
 			deckstring: deckstring,
 			name: deckName,
 			deckList: cardsFromDeckstring,
+			sideboards: sideboards,
 			deck: finalDeckContents as readonly DeckCard[],
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {

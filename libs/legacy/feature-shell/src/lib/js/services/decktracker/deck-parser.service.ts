@@ -316,15 +316,15 @@ export class DeckParserService {
 				: deckFromMemory.HeroClass
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],
+			sideboards: !deckFromMemory.Sideboards?.length
+				? null
+				: deckFromMemory.Sideboards.map((sideboard) => {
+						return {
+							keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
+							cards: this.explodeDecklist(this.normalizeWithDbfIds(sideboard.Cards)),
+						};
+				  }),
 		};
-		if (deckFromMemory.Sideboards?.length) {
-			deckDefinition.sideboards = deckFromMemory.Sideboards.map((sideboard) => {
-				return {
-					keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
-					cards: this.explodeDecklist(this.normalizeWithDbfIds(sideboard.Cards)),
-				};
-			});
-		}
 		console.log(
 			'[deck-parser] built deck definition',
 			deckFromMemory.HeroCardId,

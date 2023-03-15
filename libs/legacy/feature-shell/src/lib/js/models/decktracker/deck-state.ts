@@ -52,6 +52,7 @@ export class DeckState {
 	readonly isActivePlayer: boolean;
 	readonly isOpponent: boolean;
 	readonly deckstring?: string;
+	readonly sideboards?: readonly DeckSideboard[];
 	readonly name?: string;
 	readonly hero?: HeroCard;
 	readonly heroPower: DeckCard;
@@ -408,4 +409,9 @@ export interface CardOption {
 	readonly cardId: string;
 	readonly source: string;
 	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
+}
+
+export interface DeckSideboard {
+	readonly keyCardId: string;
+	readonly cards: readonly string[];
 }

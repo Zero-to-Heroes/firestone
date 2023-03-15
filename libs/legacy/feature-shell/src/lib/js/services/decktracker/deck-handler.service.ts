@@ -3,6 +3,7 @@ import { decode, encode } from '@firestone-hs/deckstrings';
 import { Board, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
+import { DeckSideboard } from '../../models/decktracker/deck-state';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
@@ -52,6 +53,15 @@ export class DeckHandlerService {
 			);
 		}
 		return result;
+	}
+
+	public buildSideboards(deckstring: string): readonly DeckSideboard[] {
+		return decode(deckstring)?.sideboards?.map((s) => {
+			return {
+				keyCardId: this.allCards.getCard(s.keyCardDbfId).id,
+				cards: s.cards.flatMap((pair) => new Array(pair[1]).fill(this.allCards.getCard(pair[0]).id)),
+			};
+		});
 	}
 
 	public async postProcessDeck(deck: readonly DeckCard[], boardId: Board): Promise<readonly DeckCard[]> {

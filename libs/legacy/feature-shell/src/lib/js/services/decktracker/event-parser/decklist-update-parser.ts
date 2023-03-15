@@ -1,5 +1,5 @@
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { DeckState } from '../../../models/decktracker/deck-state';
+import { DeckSideboard, DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
@@ -50,9 +50,11 @@ export class DecklistUpdateParser implements EventParser {
 
 		const board = await this.memory.getCurrentBoard();
 		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), board);
+		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(newDeckstring);
 
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,
+			sideboards: shouldLoadDecklist ? sideboards : currentState.opponentDeck.sideboards,
 			deck: decklist,
 		} as DeckState);
 

@@ -2,7 +2,7 @@ import { GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
+import { DeckSideboard, DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
@@ -76,6 +76,7 @@ export class MatchMetadataParser implements EventParser {
 		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
 		const board = await this.memory.getCurrentBoard();
 		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(this.buildDeck(currentDeck), board);
+		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(currentDeck?.deckstring);
 		const hero: HeroCard = this.buildHero(currentDeck);
 
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
@@ -87,6 +88,7 @@ export class MatchMetadataParser implements EventParser {
 				name: currentDeck ? currentDeck.name : null,
 				hero: hero,
 				deckList: deckList,
+				sideboards: sideboards,
 				deck: deckList,
 			} as DeckState),
 			opponentDeck: currentState.opponentDeck.update({
