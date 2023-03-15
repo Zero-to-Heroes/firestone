@@ -73,7 +73,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
 					>
 					</copy-deckstring>
-					<deck-list class="deck-list" [deckstring]="value.selectedDeck?.deckstring"></deck-list>
+
+					<deck-list-static
+						class="deck-list"
+						[deckstring]="value.selectedDeck?.deckstring"
+					></deck-list-static>
 				</div>
 				<deck-winrate-matrix
 					[deck]="value.selectedDeck"

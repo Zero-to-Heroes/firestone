@@ -16,7 +16,7 @@ export class CardsHighlightFacadeService {
 	}
 
 	public async init(options?: SelectorOptions) {
-		this.service.init();
+		this.service.init(options);
 	}
 
 	public async initForDuels() {

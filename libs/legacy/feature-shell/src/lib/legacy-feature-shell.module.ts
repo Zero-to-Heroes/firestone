@@ -458,6 +458,7 @@ import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/st
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
+import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
@@ -914,6 +915,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckZoneComponent,
 		CopyDesckstringComponent,
 		DeckListComponent,
+		DeckListStaticComponent,
 		DkRunesComponent,
 
 		BgsOpponentOverviewBigComponent,
@@ -1047,7 +1049,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		GroupedDeckListComponent,
 		DeckZoneComponent,
 		CopyDesckstringComponent,
-		DeckListComponent,
+		DeckListStaticComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,

@@ -173,6 +173,7 @@ import { uuid } from '../../../services/utils';
 export class DeckCardComponent implements OnDestroy {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
+	/** @deprecated */
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 		this.cdr.detectChanges();
