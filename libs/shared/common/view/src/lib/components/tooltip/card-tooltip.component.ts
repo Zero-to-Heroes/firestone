@@ -38,7 +38,11 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 			>
 				<div *ngIf="card.createdBy" class="created-by">Created by</div>
 				<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
-				<div class="buffs" *ngIf="card.buffs && value.displayBuffs" [ngClass]="{ 'only-buffs': !card.image }">
+				<div
+					class="buffs"
+					*ngIf="card.buffs?.length && value.displayBuffs"
+					[ngClass]="{ 'only-buffs': !card.image }"
+				>
 					<div class="background">
 						<div class="body"></div>
 						<div class="bottom"></div>
