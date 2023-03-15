@@ -7,7 +7,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import {
 	DuelsDeckStatInfo,
@@ -49,6 +49,10 @@ export class DuelsDecksProviderService {
 			this.store.gameStats$(),
 		])
 			.pipe(
+				filter(
+					([[duelsRunInfos, duelsRewardsInfo], gameStats]) =>
+						!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
+				),
 				map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
 					const duelMatches =
 						gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
