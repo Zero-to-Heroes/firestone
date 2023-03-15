@@ -161,10 +161,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionStoreComponen
 				} else {
 					return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp.webp';
 				}
-			case RewardTrackType.EVENT_DK_LAUNCH:
-			case RewardTrackType.EVENT_HALLOWS_END:
-			case RewardTrackType.EVENT_LUNAR_NEW_YEAR:
-			case RewardTrackType.EVENT_WINTER_VEIL:
+			case RewardTrackType.EVENT:
 			default:
 				return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_event.webp';
 		}

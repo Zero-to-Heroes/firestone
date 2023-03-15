@@ -1,11 +1,11 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { defaultStartingHp } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
@@ -84,9 +84,10 @@ export class BgsHeroOverviewComponent {
 			return;
 		}
 
-		this.health = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.baseCardId);
+		this.health = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.baseCardId, this.allCards);
 		this.player = BgsPlayer.create({
 			cardId: value.baseCardId,
+			initialHealth: this.health,
 		} as BgsPlayer);
 		this.tier = value.tier;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -130,7 +131,11 @@ export class BgsHeroOverviewComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	trackByFn(index, item: InternalAchievement) {
 		return index;

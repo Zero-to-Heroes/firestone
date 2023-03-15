@@ -1,5 +1,5 @@
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag, GameType } from '@firestone-hs/reference-data';
+import { defaultStartingHp, GameTag, GameType } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
@@ -12,7 +12,6 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { GameEvents } from '../../../game-events.service';
-import { defaultStartingHp } from '../../../hs-utils';
 import { LogsUploaderService } from '../../../logs-uploader.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
@@ -162,7 +161,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		const health =
 			(playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value ??
-				defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerBoard.hero.CardId)) +
+				defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerBoard.hero.CardId, this.allCards)) +
 			(playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value ?? 0);
 		const damage = playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.DAMAGE)?.Value ?? 0;
 		const hpLeft = health - damage;

@@ -1,4 +1,4 @@
-import { CardIds, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, defaultStartingHp, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -38,6 +38,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 						heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 						name: this.allCards.getCard(event.cardId).name,
 						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
+						initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
 				  } as BgsPlayer);
 		const newGame = currentState.currentGame.update({
 			players: [

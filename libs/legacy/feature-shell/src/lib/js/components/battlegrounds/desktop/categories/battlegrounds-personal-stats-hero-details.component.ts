@@ -6,7 +6,8 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -63,10 +64,11 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -107,6 +109,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 					cardId: heroStat.id,
 					displayedCardId: heroStat.id,
 					heroPowerCardId: heroStat.heroPowerCardId,
+					initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, heroStat.id, this.allCards),
 				} as BgsPlayer),
 			),
 		);

@@ -1,4 +1,4 @@
-import { CardIds, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, defaultStartingHp, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
@@ -7,7 +7,6 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
-import { defaultStartingHp } from '../../../hs-utils';
 import { BgsHeroSelectedEvent } from '../events/bgs-hero-selected-event';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -36,7 +35,8 @@ export class BgsHeroSelectedParser implements EventParser {
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
 					initialHealth:
-						event.additionalData?.health ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId),
+						event.additionalData?.health ??
+						defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
 					damageTaken: event?.additionalData?.damage ?? 0,
 					leaderboardPlace: event.additionalData?.leaderboardPlace,
 					tavernUpgradeHistory: this.updateTavernHistory(
@@ -51,7 +51,8 @@ export class BgsHeroSelectedParser implements EventParser {
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
 					initialHealth:
-						event.additionalData?.health ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId),
+						event.additionalData?.health ??
+						defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
 					damageTaken: event?.additionalData?.damage ?? 0,
 					leaderboardPlace: event.additionalData?.leaderboardPlace,
 					tavernUpgradeHistory: event.additionalData?.tavernLevel

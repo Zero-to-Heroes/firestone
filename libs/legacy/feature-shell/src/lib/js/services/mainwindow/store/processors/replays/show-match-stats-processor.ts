@@ -1,4 +1,6 @@
+import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { BgsPlayer } from '../../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../../models/battlegrounds/in-game/bgs-board';
@@ -12,7 +14,11 @@ import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event
 import { Processor } from '../processor';
 
 export class ShowMatchStatsProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService, private readonly i18n: LocalizationService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	public async process(
 		event: ShowMatchStatsEvent,
@@ -46,6 +52,7 @@ export class ShowMatchStatsProcessor implements Processor {
 							tavernUpgradeHistory: matchStats?.tavernTimings || [],
 							boardHistory: mappedBoardInfo as readonly BgsBoard[],
 							highestWinStreak: matchStats?.highestWinStreak,
+							initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerCardId, this.allCards),
 							// questRewards: matchStats.qu TODO: implement this
 					  } as BgsPlayer)
 					: null,

@@ -1,9 +1,9 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 @Component({
@@ -40,8 +40,10 @@ export class BgsHeroMiniComponent {
 	@Input() set hero(value: BgsMetaHeroStatTierItem | BgsQuestStat) {
 		this._hero = value;
 		this.heroCardId = value.id;
-		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
+		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id, this.allCards);
 		this.isQuest = !(value as BgsMetaHeroStatTierItem).heroPowerCardId;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
 	}
+
+	constructor(private readonly allCards: CardsFacadeService) {}
 }

@@ -1,5 +1,5 @@
 import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { CardIds, GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -38,8 +38,7 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly buddyTurns: readonly number[] = [];
 
 	public static create(base: Partial<NonFunctionProperties<BgsPlayer>>): BgsPlayer {
-		const startingHealth = base.cardId === CardIds.PatchwerkBattlegrounds ? 60 : 40;
-		return Object.assign(new BgsPlayer(), { initialHealth: startingHealth }, base);
+		return Object.assign(new BgsPlayer(), base);
 	}
 
 	public update(base: Partial<NonFunctionProperties<BgsPlayer>>) {

@@ -507,6 +507,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 463;
 		case CardIds.TeronGorefiend_BG25_HERO_103:
 			return 464;
+		case CardIds.ETCBandManager_BG25_HERO_105:
+			return 478;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);
@@ -678,28 +680,30 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.SubmersibleChef;
 		case CardIds.IniStormcoil_BG22_HERO_200:
 			return CardIds.SubScrubber;
-		// case CardIds.QueenAzshara_BG22_HERO_007:
-		// 	return CardIds.ImperialDefender;
-		// case CardIds.Ozumat_BG23_HERO_201:
-		// 	return CardIds.Tamuzo;
-		// case CardIds.LadyVashj_BG23_HERO_304:
-		// 	return CardIds.CoilfangElite;
-		// case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
-		// 	return CardIds.WaxadredTheDrippy;
-		// case CardIds.SireDenathrius_BG24_HERO_100:
-		// 	return CardIds.ShadyAristocrat;
-		// case CardIds.SylvanasWindrunner_BG23_HERO_306:
-		// 	return CardIds.NathanosBlightcallerBuddy;
-		// case CardIds.TheJailerBattlegrounds:
-		// 	return CardIds.MawswornSoulkeeper;
-		// case CardIds.EnhanceOMechano_BG24_HERO_204:
-		// 	return CardIds.EnhanceoMedico;
-		// case CardIds.ProfessorPutricide_BG25_HERO_100:
-		// 	return CardIds.FestergutBuddy;
-		// case CardIds.TeronGorefiend_BG25_HERO_103:
-		// 	return CardIds.ShadowyConstructBuddy;
-		// case CardIds.MurlocHolmes_BG23_HERO_303:
-		// 	return CardIds.WatfinBuddy;
+		case CardIds.QueenAzshara_BG22_HERO_007:
+			return CardIds.ImperialDefender;
+		case CardIds.Ozumat_BG23_HERO_201:
+			return CardIds.Tamuzo;
+		case CardIds.LadyVashj_BG23_HERO_304:
+			return CardIds.CoilfangElite;
+		case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
+			return CardIds.WaxadredTheDrippy;
+		case CardIds.SireDenathrius_BG24_HERO_100:
+			return CardIds.ShadyAristocrat;
+		case CardIds.SylvanasWindrunner_BG23_HERO_306:
+			return CardIds.NathanosBlightcaller_BG23_HERO_306_Buddy;
+		case CardIds.TheJailerBattlegrounds:
+			return CardIds.MawswornSoulkeeperBattlegrounds_TB_BaconShop_HERO_702_Buddy;
+		case CardIds.EnhanceOMechano_BG24_HERO_204:
+			return CardIds.EnhanceOMedico;
+		case CardIds.ProfessorPutricide_BG25_HERO_100:
+			return CardIds.Festergut_BG25_HERO_100_Buddy;
+		case CardIds.TeronGorefiend_BG25_HERO_103:
+			return CardIds.ShadowyConstruct;
+		case CardIds.MurlocHolmes_BG23_HERO_303:
+			return CardIds.Watfin;
+		case CardIds.ETCBandManager_BG25_HERO_105:
+			return CardIds.TalentScout;
 		default:
 			console.error('missing buddy section for ', heroCardId);
 			return null;
@@ -764,6 +768,11 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'piloted-whirl-o-tron',
 			};
+		} else if (hasFestergut(boardInfo)) {
+			return {
+				isSupported: false,
+				reason: 'festergut',
+			};
 		} else if (boardInfo?.secrets?.length > 0) {
 			return {
 				isSupported: false,
@@ -790,6 +799,13 @@ const isSupportedScenarioForPlayer = (
 const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	return (
 		hasMinionOnBoard(boardInfo, CardIds.Scallywag) || hasMinionOnBoard(boardInfo, CardIds.ScallywagBattlegrounds)
+	);
+};
+
+const hasFestergut = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.Festergut_BG25_HERO_100_Buddy) ||
+		hasMinionOnBoard(boardInfo, CardIds.FestergutBattlegrounds)
 	);
 };
 

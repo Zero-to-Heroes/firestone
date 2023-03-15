@@ -8,4 +8,10 @@ export interface DeckInfoFromMemory {
 	readonly HeroCardId: string;
 	readonly HeroClass?: number;
 	readonly FormatType: GameFormat;
+	readonly Sideboards?: readonly DeckSideboardFromMemory[];
+}
+
+export interface DeckSideboardFromMemory {
+	readonly KeyCardId: string;
+	readonly Cards: readonly string[];
 }

@@ -1,14 +1,6 @@
-import {
-	allDuelsHeroesExtended,
-	BoosterType,
-	CardClass,
-	CardIds,
-	COIN_IDS,
-	GameType,
-} from '@firestone-hs/reference-data';
+import { allDuelsHeroesExtended, BoosterType, CardClass, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { isBattlegrounds } from './battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 // Don't specify anything by default, so that the "cache refresh" properly refreshes the data
@@ -951,19 +943,6 @@ export const getGalakrondCardFor = (className: string, invokeCount: number): str
 	return CardIds.GalakrondTheNightmare;
 };
 
-/** @deprecated */
-export const defaultStartingHp = (gameType: GameType, heroCardId: string): number => {
-	if (isBattlegrounds(gameType)) {
-		switch (heroCardId) {
-			case CardIds.PatchwerkBattlegrounds:
-				return 60;
-			default:
-				return 40;
-		}
-	}
-	return 30;
-};
-
 export const dustFor = (rarity: string): number => {
 	switch (rarity?.toLowerCase()) {
 		case 'legendary':
@@ -1058,6 +1037,8 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.RETURN_OF_THE_LICH_KING:
 		case BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING:
 			return 'return_of_the_lich_king';
+		case BoosterType.BATTLE_OF_THE_BANDS:
+			return 'battle_of_the_bands';
 		default:
 			// console.warn('unsupported booster type', boosterId);
 			return null;
@@ -1119,6 +1100,8 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'return_of_the_lich_king':
 		case 'path_of_arthas':
 			return BoosterType.RETURN_OF_THE_LICH_KING;
+		case 'battle_of_the_bands':
+			return BoosterType.BATTLE_OF_THE_BANDS;
 		default:
 			console.warn('no default booster type for set id', setId);
 			return null;

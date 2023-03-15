@@ -80,7 +80,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 		this.heroCardId = value.id;
 		this.heroPowerCardId = value.heroPowerCardId;
 		this.heroName = this.allCards.getCard(value.id).name;
-		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
+		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id, this.allCards);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});

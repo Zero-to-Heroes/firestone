@@ -8,13 +8,12 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { CardIds, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { buildEntityFromBoardEntity } from '../../../services/battlegrounds/bgs-utils';
-import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
 @Component({
@@ -233,7 +232,7 @@ export class BgsBattleSideComponent {
 			? this._player.player?.questRewards[0]
 			: null;
 		this.health = this._player.player.hpLeft;
-		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
+		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;

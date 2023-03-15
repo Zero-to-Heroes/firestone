@@ -8,10 +8,10 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
@@ -460,10 +460,10 @@ export class BgsChartHpComponent {
 		if (playerOrder.length > 8) {
 			const candidatesToRemove = turnAtWhichEachPlayerDies
 				.filter((info) => info.turnDeath === 99)
-				.filter((info) =>
-					info.playerCardId === CardIds.PatchwerkBattlegrounds
-						? info.lastKnownHp === 60
-						: info.lastKnownHp === 40,
+				.filter(
+					(info) =>
+						info.lastKnownHp ===
+						defaultStartingHp(GameType.GT_BATTLEGROUNDS, info.playerCardId, this.allCards),
 				)
 				.filter((info) => info.playerCardId !== this._mainPlayerCardId);
 			playerOrder = playerOrder.filter(

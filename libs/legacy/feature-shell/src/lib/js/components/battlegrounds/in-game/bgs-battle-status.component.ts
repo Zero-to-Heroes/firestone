@@ -200,6 +200,16 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
+			case 'festergut':
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.i18n.translateString(
+							'battlegrounds.battle.composition-not-supported.reason-festergut',
+						),
+					},
+				);
+				break;
 			case 'secret':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',

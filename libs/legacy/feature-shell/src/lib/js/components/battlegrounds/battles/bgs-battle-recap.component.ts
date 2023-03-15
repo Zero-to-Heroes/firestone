@@ -1,11 +1,10 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { buildEntityFromBoardEntity } from '../../../services/battlegrounds/bgs-utils';
-import { defaultStartingHp } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
@@ -90,14 +89,14 @@ export class BgsBattleRecapComponent {
 			: undefined;
 
 		this.playerHeroCardId = value.playerCardId;
-		this.playerMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.playerHeroCardId);
+		this.playerMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.playerHeroCardId, this.allCards);
 		this.playerHealth = value.playerHpLeft ?? value.battleInfo?.playerBoard?.player?.hpLeft;
 		this.playerTavernTier = value.playerTavern ?? value.battleInfo?.playerBoard?.player?.tavernTier;
 
 		this.battle = value;
 
 		this.opponentHeroCardId = value.opponentCardId;
-		this.opponentMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.opponentHeroCardId);
+		this.opponentMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.opponentHeroCardId, this.allCards);
 		this.opponentHealth = value.opponentHpLeft ?? value.battleInfo?.opponentBoard?.player?.hpLeft;
 		this.opponentTavernTier = value.opponentTavern ?? value.battleInfo?.opponentBoard?.player?.tavernTier;
 

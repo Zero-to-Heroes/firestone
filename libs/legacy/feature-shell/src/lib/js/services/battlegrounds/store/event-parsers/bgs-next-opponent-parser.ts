@@ -1,14 +1,12 @@
-import { GameType } from '@firestone-hs/reference-data';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { defaultStartingHp, GameType, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsOpponentOverview } from '../../../../models/battlegrounds/in-game/bgs-opponent-overview';
-import { defaultStartingHp } from '../../../hs-utils';
-import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -36,12 +34,14 @@ export class BgsNextOpponentParser implements EventParser {
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerCardId: mainPlayer?.cardId,
 			playerHpLeft:
-				(mainPlayer?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, mainPlayer?.cardId)) -
+				(mainPlayer?.initialHealth ??
+					defaultStartingHp(GameType.GT_BATTLEGROUNDS, mainPlayer?.cardId, this.allCards)) -
 				(mainPlayer?.damageTaken ?? 0),
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
 			opponentCardId: opponent?.getNormalizedHeroCardId(this.allCards),
 			opponentHpLeft:
-				(opponent?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId)) -
+				(opponent?.initialHealth ??
+					defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId, this.allCards)) -
 				(opponent?.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		} as BgsFaceOffWithSimulation);

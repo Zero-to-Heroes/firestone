@@ -674,7 +674,7 @@ export class MainWindowStoreService {
 				TriggerShowMatchStatsEvent.eventName(),
 				new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs, this.i18n),
 			],
-			[ShowMatchStatsEvent.eventName(), new ShowMatchStatsProcessor(this.prefs, this.i18n)],
+			[ShowMatchStatsEvent.eventName(), new ShowMatchStatsProcessor(this.prefs, this.i18n, this.cards)],
 			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
 			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
 			[

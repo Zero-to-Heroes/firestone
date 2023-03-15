@@ -16,9 +16,15 @@ export const standardSets: readonly string[] = [
 	'return_of_the_lich_king',
 	'path_of_arthas',
 	'return_to_naxxramas',
+	'battle_of_the_bands',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'battle_of_the_bands',
+		name: `Battle of the Bands`,
+		launchDate: new Date('2023-03-15'),
+	},
 	{
 		id: 'return_to_naxxramas',
 		name: `Return to Naxxramas`,
