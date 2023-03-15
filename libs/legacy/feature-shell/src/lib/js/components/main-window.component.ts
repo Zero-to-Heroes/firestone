@@ -163,15 +163,13 @@ export class MainWindowComponent
 				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
 			),
 		);
-		this.showAds$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.showAds,
-				([main, nav, prefs]) => main.showFtue,
-			)
-			.pipe(
-				this.mapData(([showAds, showFtue]) => showAds && !showFtue),
-				startWith(true),
-			);
+		this.showAds$ = combineLatest([
+			this.store.showAds$(),
+			this.store.listen$(([main, nav, prefs]) => main.showFtue),
+		]).pipe(
+			this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),
+			startWith(true),
+		);
 		this.store
 			.listen$(([main, nav, prefs]) => nav.isVisible)
 			.pipe(this.mapData(([visible]) => visible))

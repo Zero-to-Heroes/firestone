@@ -203,7 +203,6 @@ import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowReplaysEvent } from './events/replays/show-replays-event';
 import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
 import { SceneChangedEvent } from './events/scene-changed-event';
-import { ShowAdsEvent } from './events/show-ads-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
 import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
@@ -360,7 +359,6 @@ import { ShowReplayProcessor } from './processors/replays/show-replay-processor'
 import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
 import { SceneChangedProcessor } from './processors/scene-changed-processor';
-import { ShowAdsProcessor } from './processors/show-ads-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
@@ -578,7 +576,6 @@ export class MainWindowStoreService {
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor()],
 			[CurrentUserEvent.eventName(), new CurrentUserProcessor()],
-			[ShowAdsEvent.eventName(), new ShowAdsProcessor()],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
 			[LocalizationUpdateEvent.eventName(), new LocalizationUpdateProcessor(this.prefs, this.translate)],
 			[SceneChangedEvent.eventName(), new SceneChangedProcessor()],

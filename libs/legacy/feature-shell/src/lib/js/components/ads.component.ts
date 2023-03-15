@@ -4,15 +4,12 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
-import { ShowAdsEvent } from '../services/mainwindow/store/events/show-ads-event';
 import { TipService } from '../services/tip.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
@@ -63,8 +60,6 @@ export class AdsComponent
 	private displayImpressionListener: (message: any) => void;
 	private owAdsReadyListener: (message: any) => void;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	private tip = new BehaviorSubject<string>(null);
 	private tipInterval;
 
@@ -90,9 +85,7 @@ export class AdsComponent
 	}
 
 	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		console.log('[ads] should display ads?', this.shouldDisplayAds);
-		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
 		this.refreshAds();
 		this.tip$ = this.tip.asObservable().pipe(this.mapData((tip) => tip));
 		this.tipInterval = setInterval(() => {

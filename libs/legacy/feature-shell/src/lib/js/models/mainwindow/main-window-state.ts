@@ -36,7 +36,6 @@ export class MainWindowState {
 	readonly quests: QuestsState = new QuestsState();
 	readonly streams: StreamsState = new StreamsState();
 	readonly patchConfig: PatchesConfig;
-	readonly showAds: boolean = true;
 
 	// See decktracker-state.ts for more info
 	readonly globalStats: GlobalStats = undefined;
