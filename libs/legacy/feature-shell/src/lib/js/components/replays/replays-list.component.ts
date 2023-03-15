@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '@firestone/stats/data-access';
+import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -127,17 +127,19 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		playerClassFilter: string,
 		opponentClassFilter: string,
 	): readonly GameStat[] {
-		return replays
+		const result = replays
 			.filter((replay) => this.gameModeFilter(replay, gameModeFilter))
-			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter))
-			.filter((replay) =>
-				!gameModeFilter || gameModeFilter === 'all' ? true : this.deckstringFilter(replay, deckstringsFilter),
-			)
-			.filter((replay) => this.playerClassFilter(replay, playerClassFilter))
-			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter));
+			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter, gameModeFilter))
+			.filter((replay) => this.deckstringFilter(replay, deckstringsFilter, gameModeFilter))
+			.filter((replay) => this.playerClassFilter(replay, playerClassFilter, gameModeFilter))
+			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter, gameModeFilter));
+		return result;
 	}
 
-	private playerClassFilter(stat: GameStat, filter: string): boolean {
+	private playerClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) {
+			return true;
+		}
 		if (stat.gameMode !== 'ranked') {
 			return true;
 		}
@@ -145,7 +147,10 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		return !filter || stat.playerClass === filter;
 	}
 
-	private opponentClassFilter(stat: GameStat, filter: string): boolean {
+	private opponentClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) {
+			return true;
+		}
 		if (stat.gameMode !== 'ranked') {
 			return true;
 		}
@@ -153,7 +158,11 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		return !filter || stat.opponentClass === filter;
 	}
 
-	private deckstringFilter(stat: GameStat, filter: readonly string[]): boolean {
+	private deckstringFilter(stat: GameStat, filter: readonly string[], gameModeFilter: string): boolean {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) {
+			return true;
+		}
+
 		if (stat.gameMode !== 'ranked') {
 			return true;
 		}
@@ -161,8 +170,12 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		return !filter?.length || filter.includes(stat.playerDecklist);
 	}
 
-	private bgHeroFilter(stat: GameStat, filter: string): boolean {
-		if (stat.gameMode !== 'battlegrounds' && stat.gameMode !== 'battlegrounds-friendly') {
+	private bgHeroFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
+		if (gameModeFilter !== 'battlegrounds') {
+			return true;
+		}
+
+		if (!isBattlegrounds(toGameTypeEnum(stat.gameMode))) {
 			return true;
 		}
 
