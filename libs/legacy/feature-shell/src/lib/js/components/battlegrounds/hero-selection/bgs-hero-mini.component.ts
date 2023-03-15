@@ -29,7 +29,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroMiniComponent {
-	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
+	componentType: ComponentType<BgsHeroSelectionTooltipComponent> = BgsHeroSelectionTooltipComponent;
 
 	_hero: BgsMetaHeroStatTierItem | BgsQuestStat;
 	icon: string;
