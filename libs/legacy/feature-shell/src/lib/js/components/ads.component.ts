@@ -59,7 +59,6 @@ export class AdsComponent
 
 	private adRef;
 	private adInit = false;
-	private owAdsReady = false;
 	private impressionListener: (message: any) => void;
 	private displayImpressionListener: (message: any) => void;
 	private owAdsReadyListener: (message: any) => void;
@@ -80,10 +79,10 @@ export class AdsComponent
 
 	ngAfterContentInit(): void {
 		this.store
-			.isPremiumUser$()
-			.pipe(this.mapData((isPremium) => isPremium))
-			.subscribe((isPremium) => {
-				this.shouldDisplayAds = !isPremium;
+			.showAds$()
+			.pipe(this.mapData((showAds) => showAds))
+			.subscribe((showAds) => {
+				this.shouldDisplayAds = showAds;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -121,13 +120,6 @@ export class AdsComponent
 		this.ow.openStore();
 	}
 
-	private async tentativeAdRefresh() {
-		const window = await this.ow.getCurrentWindow();
-		if (window.isVisible) {
-			this.refreshAds();
-		}
-	}
-
 	private async refreshAds() {
 		try {
 			if (!this.shouldDisplayAds) {
@@ -161,32 +153,26 @@ export class AdsComponent
 					);
 				}
 				this.adInit = true;
-				const window = await this.ow.getCurrentWindow();
-				if (window.isVisible) {
-					console.log('[ads] first time init ads, creating OwAd');
-					this.owAdsReady = false;
-					this.adRef = new OwAd(document.getElementById('ad-div'));
+				console.log('[ads] first time init ads, creating OwAd');
+				this.adRef = new OwAd(document.getElementById('ad-div'));
 
-					this.impressionListener = async (data) => {
-						// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
-						console.log('[ads] impression');
-					};
-					this.adRef.addEventListener('impression', this.impressionListener);
+				this.impressionListener = async (data) => {
+					// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
+					console.log('[ads] impression');
+				};
+				this.displayImpressionListener = async (data) => {
+					console.log('[ads] display ad impression');
+				};
+				this.owAdsReadyListener = async (data) => {
+					console.log('[ads] owAdsReady', data);
+				};
+				this.adRef.addEventListener('impression', this.impressionListener);
+				this.adRef.addEventListener('display_ad_loaded', this.displayImpressionListener);
+				this.adRef.addEventListener('ow_internal_rendered', this.owAdsReadyListener);
 
-					this.displayImpressionListener = async (data) => {
-						console.log('[ads] display ad impression');
-					};
-					this.owAdsReadyListener = async (data) => {
-						// console.log('[ads] owAdsReady', data);
-						this.owAdsReady = true;
-					};
-					this.adRef.addEventListener('display_ad_loaded', this.displayImpressionListener);
-					this.adRef.addEventListener('ow_internal_rendered', this.owAdsReadyListener);
-
-					console.log('[ads] init OwAd');
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
+				console.log('[ads] init OwAd');
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
 				}
 				this.adInit = false;
 				return;

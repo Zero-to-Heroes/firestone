@@ -107,7 +107,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 		this.showNextOpponentRecapSeparately$ = this.listenForBasicPref$(
 			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
 		);
-		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((showAds) => showAds));
 		this.buddiesEnabled$ = this.store
 			.listenBattlegrounds$(([state]) => state?.currentGame?.hasBuddies)
 			.pipe(this.mapData(([hasBuddies]) => hasBuddies));

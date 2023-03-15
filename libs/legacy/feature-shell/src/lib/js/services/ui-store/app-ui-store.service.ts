@@ -349,6 +349,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.decks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public showAds$(): Observable<boolean> {
+		this.debugCall('shouldShowAds$');
+		return this.ads.showAds$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public isPremiumUser$(): Observable<boolean> {
 		this.debugCall('isPremiumUser$');
 		return this.ads.isPremium$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));

@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, startWith } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -53,7 +53,10 @@ export class BattlegroundsComponent
 	}
 
 	ngAfterContentInit() {
-		this.showAds$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
+		this.showAds$ = this.store.showAds$().pipe(
+			this.mapData((showAds) => showAds),
+			startWith(true),
+		);
 	}
 
 	private async init() {

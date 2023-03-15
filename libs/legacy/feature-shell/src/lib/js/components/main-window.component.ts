@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
@@ -168,7 +168,10 @@ export class MainWindowComponent
 				([main, nav, prefs]) => main.showAds,
 				([main, nav, prefs]) => main.showFtue,
 			)
-			.pipe(this.mapData(([showAds, showFtue]) => showAds && !showFtue));
+			.pipe(
+				this.mapData(([showAds, showFtue]) => showAds && !showFtue),
+				startWith(true),
+			);
 		this.store
 			.listen$(([main, nav, prefs]) => nav.isVisible)
 			.pipe(this.mapData(([visible]) => visible))
