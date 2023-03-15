@@ -29,7 +29,7 @@
 		"@firestone-hs/build-global-stats": "^1.0.8",
 		"@firestone-hs/coliseum-components": "^0.0.24",
 		"@firestone-hs/deck-stats": "^1.0.4",
-		"@firestone-hs/deckstrings": "^2.2.4",
+		"@firestone-hs/deckstrings": "^2.2.5",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.5",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.110",

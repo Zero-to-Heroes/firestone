@@ -317,6 +317,14 @@ export class DeckParserService {
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],
 		};
+		if (deckFromMemory.Sideboards?.length) {
+			deckDefinition.sideboards = deckFromMemory.Sideboards.map((sideboard) => {
+				return {
+					keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
+					cards: this.explodeDecklist(this.normalizeWithDbfIds(sideboard.Cards)),
+				};
+			});
+		}
 		console.log(
 			'[deck-parser] built deck definition',
 			deckFromMemory.HeroCardId,
@@ -343,20 +351,7 @@ export class DeckParserService {
 	}
 
 	private normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
-		return decklist.map((cardId) => {
-			const isDbfId = !isNaN(+cardId);
-			const card = isDbfId ? this.allCards.getCardFromDbfId(+cardId) : this.allCards.getCard(cardId as string);
-			if (!card?.dbfId) {
-				// console.warn(
-				// 	'[deck-parser] could not find card for dbfId',
-				// 	cardId,
-				// 	isDbfId,
-				// 	card,
-				// 	this.allCards.getCards()?.length,
-				// );
-			}
-			return card?.dbfId;
-		});
+		return decklist.map((cardId) => this.allCards.getCard(cardId)?.dbfId);
 	}
 
 	private isDeckLogged(scenarioId: number): boolean {
