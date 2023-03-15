@@ -1,5 +1,5 @@
-import { NumericTurnInfo } from '@models/battlegrounds/post-match/numeric-turn-info';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { NumericTurnInfo } from '@models/battlegrounds/post-match/numeric-turn-info';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
@@ -19,6 +19,7 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 		const heroCardId = normalizeHeroCardId(gameEvent.additionalData.cardId, this.allCards);
 		// const armor = gameEvent.additionalData.armor;
 		const health = gameEvent.additionalData.health;
+		const armor = gameEvent.additionalData.armor;
 		const leaderboardPosition = gameEvent.additionalData.leaderboardPlace;
 
 		const turn = currentState.reconnectOngoing ? currentState.currentTurn : 0;
@@ -34,7 +35,7 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 					turn === 0 || existingHpData.length === 0
 						? health
 						: existingHpData[existingHpData.length - 1].value,
-				armor: 0,
+				armor: armor,
 			},
 		];
 		const newPositionData: readonly NumericTurnInfo[] = [

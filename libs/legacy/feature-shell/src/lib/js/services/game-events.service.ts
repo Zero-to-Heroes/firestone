@@ -1074,6 +1074,7 @@ export class GameEvents {
 							cardId: gameEvent.Value.CardId,
 							leaderboardPlace: gameEvent.Value.LeaderboardPlace,
 							health: gameEvent.Value.Health,
+							armor: gameEvent.Value.Armor,
 						},
 					} as GameEvent),
 				);

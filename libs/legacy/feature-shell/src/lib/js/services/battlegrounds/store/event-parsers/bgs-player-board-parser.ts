@@ -39,6 +39,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			event.playerBoard?.secrets?.length,
 			event.opponentBoard?.secrets?.length,
 		);
+		console.debug('[bgs-simulation] received player boards', event);
 
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
 			setTimeout(async () => {

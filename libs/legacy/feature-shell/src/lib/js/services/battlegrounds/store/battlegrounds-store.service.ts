@@ -30,6 +30,7 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../bgs-best-user-stats.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { isBattlegrounds } from '../bgs-utils';
+import { BgsArmorChangedParser } from './event-parsers/bgs-armor-changed-parser';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsBattleSimulationResetParser } from './event-parsers/bgs-battle-simulation-reset-parser';
@@ -71,6 +72,7 @@ import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parse
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { EventParser } from './event-parsers/_event-parser';
+import { BgsArmorChangedEvent } from './events/bgs-armor-changed-event';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
@@ -249,6 +251,8 @@ export class BattlegroundsStoreService {
 					new BgsOpponentRevealedEvent(
 						gameEvent.additionalData.cardId,
 						gameEvent.additionalData.leaderboardPlace,
+						gameEvent.additionalData.health,
+						gameEvent.additionalData.armor,
 					),
 				);
 			} else if (gameEvent.type === GameEvent.TURN_START) {
@@ -293,6 +297,10 @@ export class BattlegroundsStoreService {
 				const playerCardId = targetValues[0].TargetCardId;
 				const damage = targetValues.find((target) => target.TargetCardId === playerCardId)?.Damage;
 				this.battlegroundsUpdater.next(new BgsDamageDealtEvent(playerCardId, damage));
+			} else if (gameEvent.type === GameEvent.ARMOR_CHANGED) {
+				this.battlegroundsUpdater.next(
+					new BgsArmorChangedEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.totalArmor),
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(
 					new BgsPlayerBoardEvent(
@@ -555,6 +563,7 @@ export class BattlegroundsStoreService {
 			new BgsGameEndParser(this.prefs, this.i18n, () => this.stateUpdater),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService),
+			new BgsArmorChangedParser(this.allCards),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.allCards),
 			new BgsPostMatchStatsFilterChangeParser(this.prefs),

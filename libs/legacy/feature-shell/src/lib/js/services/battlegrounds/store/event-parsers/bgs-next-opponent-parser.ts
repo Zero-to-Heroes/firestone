@@ -30,19 +30,23 @@ export class BgsNextOpponentParser implements EventParser {
 			return currentState;
 		}
 
+		const playerHpLeft =
+			(mainPlayer.initialHealth ??
+				defaultStartingHp(GameType.GT_BATTLEGROUNDS, mainPlayer?.cardId, this.allCards)) +
+			(mainPlayer.currentArmor ?? 0) -
+			(mainPlayer.damageTaken ?? 0);
+
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerCardId: mainPlayer?.cardId,
-			playerHpLeft:
-				(mainPlayer?.initialHealth ??
-					defaultStartingHp(GameType.GT_BATTLEGROUNDS, mainPlayer?.cardId, this.allCards)) -
-				(mainPlayer?.damageTaken ?? 0),
+			playerHpLeft: playerHpLeft,
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
 			opponentCardId: opponent?.getNormalizedHeroCardId(this.allCards),
 			opponentHpLeft:
-				(opponent?.initialHealth ??
-					defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId, this.allCards)) -
-				(opponent?.damageTaken ?? 0),
+				(opponent.initialHealth ??
+					defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId, this.allCards)) +
+				(opponent.currentArmor ?? 0) -
+				(opponent.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		} as BgsFaceOffWithSimulation);
 		if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH') {

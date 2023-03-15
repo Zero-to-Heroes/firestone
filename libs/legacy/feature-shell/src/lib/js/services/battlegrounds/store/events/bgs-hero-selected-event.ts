@@ -7,6 +7,7 @@ export class BgsHeroSelectedEvent extends BattlegroundsStoreEvent {
 			leaderboardPlace: number;
 			health: number;
 			damage: number;
+			armor: number;
 			tavernLevel: number;
 			nextOpponentCardId: number;
 		},

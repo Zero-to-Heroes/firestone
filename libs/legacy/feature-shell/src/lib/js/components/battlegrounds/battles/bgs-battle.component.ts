@@ -14,7 +14,7 @@ import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
-import { GameTag, getHeroPower } from '@firestone-hs/reference-data';
+import { defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -208,7 +208,13 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						board: [],
 						player: {
 							cardId: this._faceOff.playerCardId ?? 'TB_BaconShop_HERO_KelThuzad',
-							hpLeft: this._faceOff.playerHpLeft ?? 40,
+							hpLeft:
+								this._faceOff.playerHpLeft ??
+								defaultStartingHp(
+									GameType.GT_BATTLEGROUNDS,
+									this._faceOff.playerCardId ?? 'TB_BaconShop_HERO_KelThuzad',
+									this.allCards,
+								),
 							tavernTier: this._faceOff.playerTavern ?? 6,
 							heroPowerId: null,
 							heroPowerUsed: true,

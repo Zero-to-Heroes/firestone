@@ -69,7 +69,7 @@ export class BgsPlayerCapsuleComponent {
 		}
 
 		this.heroCardId = value.getDisplayCardId();
-		this.health = value.initialHealth - value.damageTaken;
+		this.health = value.initialHealth + value.currentArmor - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
 		// this.questRewardCardId = value.questRewardCardId;

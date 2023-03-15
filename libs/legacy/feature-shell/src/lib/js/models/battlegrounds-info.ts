@@ -17,6 +17,7 @@ export interface MemoryBgPlayer {
 	readonly CardId: string;
 	readonly Name: string;
 	readonly MaxHealth: number;
+	readonly Armor: number;
 	readonly Damage: number;
 	readonly LeaderboardPosition: number;
 	readonly TriplesCount: number;

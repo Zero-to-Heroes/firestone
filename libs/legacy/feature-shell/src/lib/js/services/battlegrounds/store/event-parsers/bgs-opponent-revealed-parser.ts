@@ -30,22 +30,24 @@ export class BgsOpponentRevealedParser implements EventParser {
 		);
 		const newPlayer =
 			existingPlayer != null
-				? existingPlayer.update({
-						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
-				  } as BgsPlayer)
+				? existingPlayer
 				: BgsPlayer.create({
 						cardId: normalizedCardId,
 						heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 						name: this.allCards.getCard(event.cardId).name,
-						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
 						initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
 				  } as BgsPlayer);
+		const updatedPlayer = newPlayer.update({
+			leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
+			currentArmor: event.armor,
+			initialHealth: event.health,
+		});
 		const newGame = currentState.currentGame.update({
 			players: [
 				...currentState.currentGame.players.filter(
 					(player) => normalizeHeroCardId(player.cardId, this.allCards.getService()) !== normalizedCardId,
 				),
-				newPlayer,
+				updatedPlayer,
 			] as readonly BgsPlayer[],
 		} as BgsGame);
 		return currentState.update({

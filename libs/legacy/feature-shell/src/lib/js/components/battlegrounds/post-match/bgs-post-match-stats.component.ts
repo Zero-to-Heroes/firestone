@@ -147,7 +147,7 @@ export class BgsPostMatchStatsComponent
 		}
 		this._panel = value;
 		this.icon = this.i18n.getCardImage(value.player.getDisplayCardId(), { isBgs: true });
-		this.health = value.player.initialHealth - value.player.damageTaken;
+		this.health = value.player.initialHealth + value.player.currentArmor - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
 		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.player.name;

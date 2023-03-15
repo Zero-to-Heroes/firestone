@@ -42,7 +42,7 @@ export class BgsHeroFaceOffComponent {
 		this.heroCardId = value.getDisplayCardId();
 		this.heroPowerIcon = value.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.name;
-		this.health = Math.max(value.initialHealth - value.damageTaken, 0);
+		this.health = Math.max(value.initialHealth + value.currentArmor - value.damageTaken, 0);
 		this.maxHealth = value.initialHealth;
 	}
 

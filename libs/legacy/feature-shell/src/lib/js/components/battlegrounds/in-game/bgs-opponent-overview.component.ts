@@ -98,7 +98,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 			return;
 		}
 		this.heroCardId = value.getDisplayCardId();
-		this.health = value.initialHealth - value.damageTaken;
+		this.health = value.initialHealth + value.currentArmor - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.name;

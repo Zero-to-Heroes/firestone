@@ -37,6 +37,7 @@ export class BgsHeroSelectedParser implements EventParser {
 					initialHealth:
 						event.additionalData?.health ??
 						defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
+					currentArmor: event.additionalData.armor ?? 0,
 					damageTaken: event?.additionalData?.damage ?? 0,
 					leaderboardPlace: event.additionalData?.leaderboardPlace,
 					tavernUpgradeHistory: this.updateTavernHistory(
@@ -53,6 +54,7 @@ export class BgsHeroSelectedParser implements EventParser {
 					initialHealth:
 						event.additionalData?.health ??
 						defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
+					currentArmor: event.additionalData.armor ?? 0,
 					damageTaken: event?.additionalData?.damage ?? 0,
 					leaderboardPlace: event.additionalData?.leaderboardPlace,
 					tavernUpgradeHistory: event.additionalData?.tavernLevel

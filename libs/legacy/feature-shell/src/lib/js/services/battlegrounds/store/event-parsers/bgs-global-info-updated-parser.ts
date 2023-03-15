@@ -58,6 +58,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					displayedCardId: playerFromMemory.CardId,
 					damageTaken: newDamage,
 					initialHealth: playerFromMemory.MaxHealth ?? player.initialHealth,
+					currentArmor: playerFromMemory.Armor ?? 0,
 					currentWinStreak: newWinStreak,
 					highestWinStreak: newHighestWinStreak,
 					compositionHistory: newCompositionHistory,

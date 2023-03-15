@@ -30,6 +30,7 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly damageHistory: readonly BgsDamage[] = [];
 	readonly tribeHistory: readonly BgsTribe[] = [];
 	readonly initialHealth: number;
+	readonly currentArmor: number = 0;
 	readonly damageTaken: number = 0;
 	readonly leaderboardPlace: number;
 	readonly currentWinStreak: number;
