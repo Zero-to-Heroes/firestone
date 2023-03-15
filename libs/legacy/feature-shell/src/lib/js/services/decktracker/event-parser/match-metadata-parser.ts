@@ -75,8 +75,11 @@ export class MatchMetadataParser implements EventParser {
 
 		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
 		const board = await this.memory.getCurrentBoard();
-		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(this.buildDeck(currentDeck), board);
 		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(currentDeck?.deckstring);
+		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(
+			this.buildDeck(currentDeck, sideboards),
+			board,
+		);
 		const hero: HeroCard = this.buildHero(currentDeck);
 
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
@@ -101,7 +104,7 @@ export class MatchMetadataParser implements EventParser {
 		return GameEvent.MATCH_METADATA;
 	}
 
-	private buildDeck(currentDeck: DeckInfo): readonly DeckCard[] {
+	private buildDeck(currentDeck: DeckInfo, sideboards: readonly DeckSideboard[]): readonly DeckCard[] {
 		if (currentDeck && currentDeck.deckstring) {
 			return this.handler.buildDeckList(currentDeck.deckstring);
 		}
@@ -111,14 +114,14 @@ export class MatchMetadataParser implements EventParser {
 		return (
 			currentDeck.deck.cards
 				// [dbfid, count] pair
-				.map((pair) => this.buildDeckCards(pair))
+				.map((pair) => this.buildDeckCards(pair, sideboards))
 				.reduce((a, b) => a.concat(b), [])
 				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
 		);
 	}
 
-	private buildDeckCards(pair): DeckCard[] {
-		return this.handler.buildDeckCards(pair);
+	private buildDeckCards(pair, sideboards: readonly DeckSideboard[]): DeckCard[] {
+		return this.handler.buildDeckCards(pair, sideboards);
 	}
 
 	private buildHero(currentDeck: any): HeroCard {

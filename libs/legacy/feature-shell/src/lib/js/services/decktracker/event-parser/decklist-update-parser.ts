@@ -49,8 +49,8 @@ export class DecklistUpdateParser implements EventParser {
 		}
 
 		const board = await this.memory.getCurrentBoard();
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), board);
 		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(newDeckstring);
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), board);
 
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { decode, encode } from '@firestone-hs/deckstrings';
+import { decode, encode, Sideboard } from '@firestone-hs/deckstrings';
 import { Board, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
@@ -17,10 +17,11 @@ export class DeckHandlerService {
 		}
 
 		const deck = decode(deckstring);
+		const sideboards: readonly DeckSideboard[] = this.convertSideboards(deck.sideboards);
 		return deck
 			? deck.cards
 					// [dbfid, count] pair
-					.map((pair) => this.buildDeckCards(pair))
+					.map((pair) => this.buildDeckCards(pair, sideboards))
 					.reduce((a, b) => a.concat(b), [])
 					.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
 			: [];
@@ -30,7 +31,7 @@ export class DeckHandlerService {
 		return new Array(deckSize).fill(DeckCard.create({} as DeckCard));
 	}
 
-	public buildDeckCards(pair): DeckCard[] {
+	public buildDeckCards(pair: [number, number], sideboards: readonly DeckSideboard[]): DeckCard[] {
 		const dbfId = +pair[0];
 		const card = !isNaN(dbfId) ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
@@ -43,12 +44,14 @@ export class DeckHandlerService {
 			return result;
 		}
 		for (let i = 0; i < pair[1]; i++) {
+			const sideboard = sideboards?.find((s) => s.keyCardId === card.id);
 			result.push(
 				DeckCard.create({
 					cardId: card.id,
 					cardName: this.i18n.getCardName(card.id),
 					manaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
+					relatedCardIds: !!sideboard ? sideboard.cards : null,
 				} as DeckCard),
 			);
 		}
@@ -56,7 +59,11 @@ export class DeckHandlerService {
 	}
 
 	public buildSideboards(deckstring: string): readonly DeckSideboard[] {
-		return decode(deckstring)?.sideboards?.map((s) => {
+		return this.convertSideboards(decode(deckstring)?.sideboards);
+	}
+
+	public convertSideboards(sideboards: readonly Sideboard[]): readonly DeckSideboard[] {
+		return sideboards?.map((s) => {
 			return {
 				keyCardId: this.allCards.getCard(s.keyCardDbfId).id,
 				cards: s.cards.flatMap((pair) => new Array(pair[1]).fill(this.allCards.getCard(pair[0]).id)),
