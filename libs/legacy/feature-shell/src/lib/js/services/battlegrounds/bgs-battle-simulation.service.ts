@@ -101,7 +101,11 @@ export class BgsBattleSimulationService {
 		const result: SimulationResult = prefs.bgsUseLocalSimulator
 			? await this.simulateLocalBattle(battleInfoInput, prefs)
 			: ((await this.http.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput).toPromise()) as SimulationResult);
-		console.log('[bgs-simulation] battle simulation result', result);
+		const resultForLog = !!result ? { ...result } : null;
+		if (!!resultForLog) {
+			delete resultForLog.outcomeSamples;
+		}
+		console.log('[bgs-simulation] battle simulation result', resultForLog);
 		this.stateUpdater.next(
 			new BattlegroundsBattleSimulationEvent(
 				battleId,

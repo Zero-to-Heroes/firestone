@@ -43,7 +43,7 @@ export class GameStatsLoaderService {
 			.listen$(([main]) => main.stats?.gameStats)
 			.pipe(filter(([gameStats]) => !!gameStats?.stats?.length))
 			.subscribe(([gameStats]) => {
-				console.log('[game-stats-loader] updating local games', gameStats.stats);
+				console.log('[game-stats-loader] updating local games');
 				this.saveLocalStats(gameStats.stats);
 			});
 		this.store
