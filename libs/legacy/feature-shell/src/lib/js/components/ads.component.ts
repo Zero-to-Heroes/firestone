@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, startWith } from 'rxjs';
 import { TipService } from '../services/tip.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
@@ -75,9 +75,13 @@ export class AdsComponent
 	ngAfterContentInit(): void {
 		this.store
 			.showAds$()
-			.pipe(this.mapData((showAds) => showAds))
+			.pipe(
+				this.mapData((showAds) => showAds),
+				startWith(true),
+			)
 			.subscribe((showAds) => {
 				this.shouldDisplayAds = showAds;
+				console.log('[ads] should display ads?', this.shouldDisplayAds);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -86,7 +90,7 @@ export class AdsComponent
 
 	async ngAfterViewInit() {
 		console.log('[ads] should display ads?', this.shouldDisplayAds);
-		this.refreshAds();
+		this.initializeAds();
 		this.tip$ = this.tip.asObservable().pipe(this.mapData((tip) => tip));
 		this.tipInterval = setInterval(() => {
 			this.tip.next(this.tipService.getRandomTip());
@@ -113,7 +117,7 @@ export class AdsComponent
 		this.ow.openStore();
 	}
 
-	private async refreshAds() {
+	private async initializeAds() {
 		try {
 			if (!this.shouldDisplayAds) {
 				console.log('[ads] ad-free app, not showing ads and returning');
@@ -126,14 +130,14 @@ export class AdsComponent
 			if (!adsReady || !OwAd) {
 				console.log('[ads] ads container not ready, returning');
 				setTimeout(() => {
-					this.refreshAds();
+					this.initializeAds();
 				}, 1000);
 				return;
 			}
 			if (!document.getElementById('ad-div')) {
 				console.log('[ads] ad-div not ready, returning');
 				setTimeout(() => {
-					this.refreshAds();
+					this.initializeAds();
 				}, 1000);
 				return;
 			}
@@ -176,7 +180,7 @@ export class AdsComponent
 		} catch (e) {
 			console.warn('[ads] exception while initializing ads, retrying', e);
 			setTimeout(() => {
-				this.refreshAds();
+				this.initializeAds();
 			}, 10000);
 		}
 	}
