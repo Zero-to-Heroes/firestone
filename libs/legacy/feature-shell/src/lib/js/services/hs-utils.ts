@@ -734,6 +734,7 @@ export const cardTutors = [
 	CardIds.ClericOfScales,
 	CardIds.ColdStorage,
 	CardIds.CountessAshmore,
+	CardIds.CrushclawEnforcer,
 	CardIds.Crystology,
 	CardIds.CursedCastaway,
 	CardIds.CutlassCourier,
