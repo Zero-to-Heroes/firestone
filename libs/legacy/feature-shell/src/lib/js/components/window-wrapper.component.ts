@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
 import { GameStatusService } from '../services/game-status.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
@@ -88,7 +88,7 @@ export class WindowWrapperComponent
 	private originalHeight = 0;
 
 	private sub$$: Subscription;
-	private sub2$$: Subscription;
+	// private sub2$$: Subscription;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -170,39 +170,39 @@ export class WindowWrapperComponent
 			}, 200);
 		});
 
-		this.sub2$$ = combineLatest([this.gameStatus.inGame$$])
-			.pipe(
-				distinctUntilChanged(),
-				this.mapData(([inGame]) => {
-					return inGame;
-				}),
-			)
-			.subscribe(async (inGame) => {
-				if (!this.avoidGameOverlap) {
-					return;
-				}
+		// this.sub2$$ = combineLatest([this.gameStatus.inGame$$])
+		// 	.pipe(
+		// 		distinctUntilChanged(),
+		// 		this.mapData(([inGame]) => {
+		// 			return inGame;
+		// 		}),
+		// 	)
+		// 	.subscribe(async (inGame) => {
+		// 		if (!this.avoidGameOverlap) {
+		// 			return;
+		// 		}
 
-				const monitors = await this.ow.getMonitorsList();
-				const theWindow = await this.ow.getCurrentWindow();
-				console.debug('theWindow', theWindow, monitors, inGame);
-				if (theWindow.type === 'Desktop' && inGame && monitors.displays.length > 1) {
-					const gameInfo = await this.ow.getRunningGameInfo();
-					const gameMonitorHandle = gameInfo.monitorHandle?.value;
-					const gameMonitor = monitors.displays.find((m) => m.handle?.value === gameMonitorHandle);
-					// console.debug('going in game', gameInfo, gameMonitorHandle, gameMonitor);
-					// Game opens on the same screen as the window, so move it elsewhere
-					if (theWindow.monitorId === gameMonitor?.id) {
-						const possibleTargets = monitors.displays.filter((m) => m.handle?.value !== gameMonitorHandle);
-						const target = possibleTargets[0];
-						console.debug('moving window to', target);
-						const newX = target.x;
-						const newY = target.y;
-						console.debug('changing position', newX, newY);
-						await this.ow.changeWindowPosition(theWindow.id, newX, newY);
-						await this.ow.restoreWindow(theWindow.id);
-					}
-				}
-			});
+		// 		const monitors = await this.ow.getMonitorsList();
+		// 		const theWindow = await this.ow.getCurrentWindow();
+		// 		console.debug('theWindow', theWindow, monitors, inGame);
+		// 		if (theWindow.type === 'Desktop' && inGame && monitors.displays.length > 1) {
+		// 			const gameInfo = await this.ow.getRunningGameInfo();
+		// 			const gameMonitorHandle = gameInfo.monitorHandle?.value;
+		// 			const gameMonitor = monitors.displays.find((m) => m.handle?.value === gameMonitorHandle);
+		// 			// console.debug('going in game', gameInfo, gameMonitorHandle, gameMonitor);
+		// 			// Game opens on the same screen as the window, so move it elsewhere
+		// 			if (theWindow.monitorId === gameMonitor?.id) {
+		// 				const possibleTargets = monitors.displays.filter((m) => m.handle?.value !== gameMonitorHandle);
+		// 				const target = possibleTargets[0];
+		// 				console.debug('moving window to', target);
+		// 				const newX = target.x;
+		// 				const newY = target.y;
+		// 				console.debug('changing position', newX, newY);
+		// 				await this.ow.changeWindowPosition(theWindow.id, newX, newY);
+		// 				await this.ow.restoreWindow(theWindow.id);
+		// 			}
+		// 		}
+		// 	});
 	}
 
 	async dragResize(event: MouseEvent, edge) {
@@ -240,6 +240,6 @@ export class WindowWrapperComponent
 		super.ngOnDestroy();
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.sub$$?.unsubscribe();
-		this.sub2$$?.unsubscribe();
+		// this.sub2$$?.unsubscribe();
 	}
 }
