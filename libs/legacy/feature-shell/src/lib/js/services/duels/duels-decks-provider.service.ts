@@ -6,8 +6,8 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, concat } from 'rxjs';
+import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import {
 	DuelsDeckStatInfo,
@@ -41,18 +41,32 @@ export class DuelsDecksProviderService {
 	private async init() {
 		await this.store.initComplete();
 
-		combineLatest([
+		// The idea is to compute the initial value, whatever the most recent game is, and
+		// once this is done, we only recompute things once the most recent stat is not empty
+		const runSourceFirstValue$ = combineLatest([
 			this.store.listen$(
 				([main, nav]) => main.duels.duelsRunInfos,
 				([main, nav]) => main.duels.duelsRewardsInfo,
 			),
 			this.store.gameStats$(),
-		])
+		]).pipe(
+			filter(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => !!gameStats?.length),
+			take(1),
+		);
+		const runSourceFilteredValues$ = combineLatest([
+			this.store.listen$(
+				([main, nav]) => main.duels.duelsRunInfos,
+				([main, nav]) => main.duels.duelsRewardsInfo,
+			),
+			this.store.gameStats$(),
+		]).pipe(
+			filter(
+				([[duelsRunInfos, duelsRewardsInfo], gameStats]) =>
+					!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
+			),
+		);
+		concat(runSourceFirstValue$, runSourceFilteredValues$)
 			.pipe(
-				filter(
-					([[duelsRunInfos, duelsRewardsInfo], gameStats]) =>
-						!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
-				),
 				map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
 					const duelMatches =
 						gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
