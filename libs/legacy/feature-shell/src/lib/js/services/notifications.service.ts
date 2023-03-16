@@ -3,7 +3,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
-import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
@@ -142,5 +141,5 @@ export interface Message {
 	timeout?: number;
 	theClass?: string;
 	clickToClose?: boolean;
-	eventToSendOnClick?: () => MainWindowStoreEvent;
+	eventToSendOnClick?: () => void;
 }
