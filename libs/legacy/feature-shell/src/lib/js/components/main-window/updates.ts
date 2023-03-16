@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.3.9',
+		version: '10.3.11',
 		force: false,
 		sections: [
 			// {
@@ -58,7 +58,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where Duels / Arena decks would not be detected after the patch.`,
+								text: `Fix an where the tracker could go crazy and stop updating properly in some cases.`,
 							},
 						],
 					},
@@ -73,15 +73,42 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `You can now see the contents of your sideboard when mousing over ETC Band Manager in your decklist.`,
+								text: `The players' health in the Simulator tab (that shows a recap of past battles) now also includes their armor.`,
 							},
 							{
-								type: 'feature',
-								text: `Show the contents of the deck's sideboard below ETC Band Manager when viewing a ranked deck details.`,
+								type: 'bug',
+								text: `Fix a sim issue where Ozumat's Tentacular would sometimes be summoned twice.`,
 							},
 							{
-								type: 'feature',
-								text: `The attack counter should now properly take Neptulon's unique way of attacking into account.`,
+								type: 'bug',
+								text: `Fix an issue where the hero's tooltip would spill out of the window when having it at its minimum size.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where some filters (like the BG hero filter) would be taken into account even if the filter dropdown wasn't visible .`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the runs list would sometimes be empty until you played a Duels game.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `A while ago, I introduced a new behavior to the main app's windows: if you had multiple monitors and the app's main window was open, the window would sometimes automatically move to another screen (to maximize "ad visibility", i.e. avoid showing ads on the window while it was hidden). This update didn't really improve this "ad visibility" metric, and was annoying, so I have reverted the behavior to how it was before.`,
 							},
 						],
 					},
