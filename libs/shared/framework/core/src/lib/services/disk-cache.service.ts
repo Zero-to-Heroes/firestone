@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { promiseWithTimeout } from '@firestone/shared/framework/common';
 import { OverwolfService } from './overwolf.service';
 
 // Only move items that are too big for localstorage
@@ -21,6 +22,10 @@ export class DiskCacheService {
 	private savingFiles: { [fileKey: string]: boolean } = {};
 
 	public async storeItem(key: string, value: any) {
+		return promiseWithTimeout(this.storeItemInternal(key, value), 5000, key);
+	}
+
+	private async storeItemInternal(key: string, value: any): Promise<void> {
 		if (this.savingFiles[key]) {
 			return;
 		}
@@ -37,6 +42,10 @@ export class DiskCacheService {
 	}
 
 	public async getItem<T>(key: string): Promise<T | null> {
+		return promiseWithTimeout(this.getItemInternal(key), 5000, key);
+	}
+
+	private async getItemInternal<T>(key: string): Promise<T | null> {
 		const start = Date.now();
 		// console.debug('[disk-cache] reading value', key);
 		const strResult = await this.ow.readAppFile(key);

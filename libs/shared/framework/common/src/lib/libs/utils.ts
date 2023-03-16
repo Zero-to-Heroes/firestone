@@ -89,6 +89,19 @@ export const capitalizeFirstLetter = (input: string): string | null => {
 	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
 };
 
+export const promiseWithTimeout = <T>(promise: Promise<T>, timeout: number, ...logInfo: any): Promise<T | null> => {
+	return Promise.race([
+		new Promise<null>((resolve) => {
+			const interval = setInterval(() => {
+				console.error('promise didnt resolve fast enough', timeout, ...logInfo);
+				clearInterval(interval);
+				resolve(null);
+			}, timeout);
+		}),
+		promise,
+	]);
+};
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
