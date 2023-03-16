@@ -25,7 +25,7 @@ export class OwUtilsService {
 					resolve();
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not flash window', e);
+				console.warn('[ow-utils] could not flash window', e);
 				resolve();
 			}
 		});
@@ -42,7 +42,7 @@ export class OwUtilsService {
 					resolve([screenshotLocation, byteArray]);
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not take screenshot', e);
+				console.warn('[ow-utils] could not take screenshot', e);
 				resolve(null);
 			}
 		});
@@ -58,7 +58,7 @@ export class OwUtilsService {
 					resolve([screenshotLocation, byteArray]);
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not take screenshot', e);
+				console.warn('[ow-utils] could not take screenshot', e);
 				resolve(null);
 			}
 		});
@@ -74,7 +74,7 @@ export class OwUtilsService {
 					resolve();
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not delete file or folder', path, e);
+				console.warn('[ow-utils] could not delete file or folder', path, e);
 				resolve();
 			}
 		});
@@ -90,7 +90,7 @@ export class OwUtilsService {
 					resolve();
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not copyFiles', sourceDirectory, destinationDirectory, e);
+				console.warn('[ow-utils] could not copyFiles', sourceDirectory, destinationDirectory, e);
 				resolve();
 			}
 		});
@@ -110,7 +110,7 @@ export class OwUtilsService {
 					}
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not downloadAndUnzipFile', fileUrl, path, e);
+				console.warn('[ow-utils] could not downloadAndUnzipFile', fileUrl, path, e);
 				resolve();
 			}
 		});
@@ -131,7 +131,7 @@ export class OwUtilsService {
 					}
 				});
 			} catch (e) {
-				console.log('[ow-utils] could not downloadFileTo', fileUrl, path, e);
+				console.warn('[ow-utils] could not downloadFileTo', fileUrl, path, e);
 				resolve(false);
 			}
 		});

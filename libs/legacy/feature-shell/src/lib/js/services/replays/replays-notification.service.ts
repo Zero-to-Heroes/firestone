@@ -59,7 +59,6 @@ export class ReplaysNotificationService {
 	}
 
 	private async showBgsMatchEndNotification(gameStat: GameStat) {
-		return;
 		this.notificationService.emitNewNotification({
 			notificationId: `replay-bg-${gameStat.reviewId}`,
 			content: this.buildBgsNotificationTemplate(gameStat),

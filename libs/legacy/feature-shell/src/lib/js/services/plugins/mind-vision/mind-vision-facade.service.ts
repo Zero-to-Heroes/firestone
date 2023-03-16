@@ -47,7 +47,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse memory update', e);
+				console.warn('[mind-vision] could not parse memory update', e);
 				resolve(null);
 			}
 		});
@@ -65,7 +65,7 @@ export class MindVisionFacadeService {
 				try {
 					resolve(collection ? JSON.parse(collection) : null);
 				} catch (e) {
-					console.log('[mind-vision] could not parse collection', e);
+					console.warn('[mind-vision] could not parse collection', e);
 					resolve(null);
 				}
 			});
@@ -80,7 +80,7 @@ export class MindVisionFacadeService {
 					resolve(collection ? JSON.parse(collection) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getBattlegroundsOwnedHeroSkinDbfIds', e);
+				console.warn('[mind-vision] could not parse getBattlegroundsOwnedHeroSkinDbfIds', e);
 				resolve(null);
 			}
 		});
@@ -94,7 +94,7 @@ export class MindVisionFacadeService {
 					resolve(cardBacks ? JSON.parse(cardBacks) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getCardBacks', e);
+				console.warn('[mind-vision] could not parse getCardBacks', e);
 				resolve(null);
 			}
 		});
@@ -108,7 +108,7 @@ export class MindVisionFacadeService {
 					resolve(cardBacks ? JSON.parse(cardBacks) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getCoins', e);
+				console.warn('[mind-vision] could not parse getCoins', e);
 				resolve(null);
 			}
 		});
@@ -122,7 +122,7 @@ export class MindVisionFacadeService {
 					resolve(matchInfo ? JSON.parse(matchInfo) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse matchInfo', e);
+				console.warn('[mind-vision] could not parse matchInfo', e);
 				resolve(null);
 			}
 		});
@@ -136,7 +136,7 @@ export class MindVisionFacadeService {
 					resolve(matchInfo ? JSON.parse(matchInfo) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse matchInfo', e);
+				console.warn('[mind-vision] could not parse matchInfo', e);
 				resolve(null);
 			}
 		});
@@ -150,7 +150,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getAdventuresInfo', e);
+				console.warn('[mind-vision] could not parse getAdventuresInfo', e);
 				resolve(null);
 			}
 		});
@@ -164,7 +164,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse duelsInfo', e);
+				console.warn('[mind-vision] could not parse duelsInfo', e);
 				resolve(null);
 			}
 		});
@@ -178,7 +178,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getDuelsDeck', e);
+				console.warn('[mind-vision] could not parse getDuelsDeck', e);
 				resolve(null);
 			}
 		});
@@ -192,7 +192,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getDuelsHeroOptions', e);
+				console.warn('[mind-vision] could not parse getDuelsHeroOptions', e);
 				resolve(null);
 			}
 		});
@@ -206,7 +206,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getDuelsHeroPowerOptions', e);
+				console.warn('[mind-vision] could not parse getDuelsHeroPowerOptions', e);
 				resolve(null);
 			}
 		});
@@ -220,7 +220,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getDuelsSignatureTreasureOptions', e);
+				console.warn('[mind-vision] could not parse getDuelsSignatureTreasureOptions', e);
 				resolve(null);
 			}
 		});
@@ -236,7 +236,7 @@ export class MindVisionFacadeService {
 					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse battlegroundsInfo', e);
+				console.warn('[mind-vision] could not parse battlegroundsInfo', e);
 				resolve(null);
 			}
 		});
@@ -250,7 +250,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getMercenariesInfo', e);
+				console.warn('[mind-vision] could not parse getMercenariesInfo', e);
 				resolve(null);
 			}
 		});
@@ -264,7 +264,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getMercenariesCollectionInfo', e);
+				console.warn('[mind-vision] could not parse getMercenariesCollectionInfo', e);
 				resolve(null);
 			}
 		});
@@ -278,7 +278,7 @@ export class MindVisionFacadeService {
 					resolve(arenaInfo ? JSON.parse(arenaInfo) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getArenaInfo', e);
+				console.warn('[mind-vision] could not parse getArenaInfo', e);
 				resolve(null);
 			}
 		});
@@ -292,7 +292,7 @@ export class MindVisionFacadeService {
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse activeDeck', e);
+				console.warn('[mind-vision] could not parse activeDeck', e);
 				resolve(null);
 			}
 		});
@@ -306,7 +306,7 @@ export class MindVisionFacadeService {
 					resolve(activeDeck);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getSelectedDeckId', e);
+				console.warn('[mind-vision] could not parse getSelectedDeckId', e);
 				resolve(null);
 			}
 		});
@@ -320,7 +320,7 @@ export class MindVisionFacadeService {
 					resolve(deck ? JSON.parse(deck) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getWhizbangDeck', e);
+				console.warn('[mind-vision] could not parse getWhizbangDeck', e);
 				resolve(null);
 			}
 		});
@@ -334,7 +334,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse rewards track info', e);
+				console.warn('[mind-vision] could not parse rewards track info', e);
 				resolve(null);
 			}
 		});
@@ -348,7 +348,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse rewards track info', e);
+				console.warn('[mind-vision] could not parse rewards track info', e);
 				resolve(null);
 			}
 		});
@@ -362,7 +362,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not get achievements info', e);
+				console.warn('[mind-vision] could not get achievements info', e);
 				resolve(null);
 			}
 		});
@@ -376,7 +376,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not get achievements info', e);
+				console.warn('[mind-vision] could not get achievements info', e);
 				resolve(null);
 			}
 		});
@@ -390,7 +390,7 @@ export class MindVisionFacadeService {
 					resolve(scene);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse activeDeck', e);
+				console.warn('[mind-vision] could not parse activeDeck', e);
 				resolve(null);
 			}
 		});
@@ -404,7 +404,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getBoostersInfo', e);
+				console.warn('[mind-vision] could not parse getBoostersInfo', e);
 				resolve(null);
 			}
 		});
@@ -418,7 +418,7 @@ export class MindVisionFacadeService {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not parse getActiveQuests', e);
+				console.warn('[mind-vision] could not parse getActiveQuests', e);
 				resolve(null);
 			}
 		});
@@ -448,7 +448,7 @@ export class MindVisionFacadeService {
 					resolve();
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not reset', e);
+				console.warn('[mind-vision] could not reset', e);
 				resolve(null);
 			}
 		});
@@ -466,7 +466,7 @@ export class MindVisionFacadeService {
 					resolve();
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not tearDown', e);
+				console.warn('[mind-vision] could not tearDown', e);
 				resolve(null);
 			}
 		});

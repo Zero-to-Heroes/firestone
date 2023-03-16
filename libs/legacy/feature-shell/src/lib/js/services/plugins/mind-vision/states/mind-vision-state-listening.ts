@@ -80,7 +80,7 @@ export class MindVisionStateListening implements MindVisionState {
 				try {
 					collection = await this.mindVision.getCollection(true);
 				} catch (e) {
-					this.log('caught exception', e);
+					this.warn('caught exception', e);
 					reject();
 				}
 			}
