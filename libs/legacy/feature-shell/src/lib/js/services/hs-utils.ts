@@ -1069,6 +1069,7 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'boomsday':
 			return BoosterType.THE_BOOMSDAY_PROJECT;
 		case 'troll':
+		case 'rumble':
 			return BoosterType.RASTAKHANS_RUMBLE;
 		case 'dalaran':
 			return BoosterType.DALARAN;
