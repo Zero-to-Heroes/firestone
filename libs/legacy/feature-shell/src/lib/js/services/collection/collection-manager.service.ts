@@ -145,7 +145,7 @@ export class CollectionManager {
 				owned: memoryCoins.find((c) => c.CoinId === coin.dbfId) != null,
 				cardDbfId: coin.dbfId,
 			}));
-			console.log('[collection-manager] updating coins in db', coins);
+			console.log('[collection-manager] updating coins in db');
 			const saved = await this.db.saveCoins(coins);
 			return saved;
 		}
