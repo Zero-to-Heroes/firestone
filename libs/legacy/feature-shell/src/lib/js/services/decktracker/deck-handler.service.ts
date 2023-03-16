@@ -51,7 +51,7 @@ export class DeckHandlerService {
 					cardName: this.i18n.getCardName(card.id),
 					manaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
-					relatedCardIds: !!sideboard ? sideboard.cards : null,
+					relatedCardIds: !!sideboard ? sideboard.cards : [],
 				} as DeckCard),
 			);
 		}
@@ -59,7 +59,16 @@ export class DeckHandlerService {
 	}
 
 	public buildSideboards(deckstring: string): readonly DeckSideboard[] {
-		return this.convertSideboards(decode(deckstring)?.sideboards);
+		if (!deckstring?.length) {
+			return null;
+		}
+
+		try {
+			return this.convertSideboards(decode(deckstring)?.sideboards);
+		} catch (e) {
+			console.error('could not convert sideboards', deckstring);
+			return [];
+		}
 	}
 
 	public convertSideboards(sideboards: readonly Sideboard[]): readonly DeckSideboard[] {
