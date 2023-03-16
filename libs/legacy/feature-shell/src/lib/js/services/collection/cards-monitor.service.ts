@@ -99,7 +99,7 @@ export class CardsMonitorService {
 	private async triggerMemoryDetection(process = true) {
 		console.log('[cards-monitor] triggerging memory detection');
 		const changes: MemoryUpdate = await this.memoryService.getMemoryChanges();
-		console.log('[cards-monitor] memoryChanges detection', process && changes);
+		console.log('[cards-monitor] memoryChanges detection');
 		if (!process || !changes) {
 			return;
 		}

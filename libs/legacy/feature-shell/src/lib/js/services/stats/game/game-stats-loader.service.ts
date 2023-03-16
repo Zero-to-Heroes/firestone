@@ -58,7 +58,7 @@ export class GameStatsLoaderService {
 	public async retrieveStats(): Promise<GameStats> {
 		const localStats = await this.loadLocalGameStats();
 		if (!!localStats?.length) {
-			console.log('[game-stats-loader] retrieved stats locally', localStats);
+			console.log('[game-stats-loader] retrieved stats locally', localStats.length);
 			const prefs = await this.prefs.getPreferences();
 			return GameStats.create({
 				stats: localStats

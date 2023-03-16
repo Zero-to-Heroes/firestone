@@ -85,6 +85,7 @@ export class DuelsRunIdService {
 						return uuid();
 					}
 					if (isNewRun(duelsInfo, currentRun, latestDuelsMatch, this.allCards)) {
+						console.log('[duels-run] new run');
 						console.debug('[duels-run] new run', duelsInfo, currentRun, latestDuelsMatch);
 						return uuid();
 					}
@@ -92,7 +93,8 @@ export class DuelsRunIdService {
 						return uuid();
 					}
 
-					console.log('[duels-run] default keeping the old run', duelsInfo, currentRun, latestDuelsMatch);
+					console.log('[duels-run] default keeping the old run');
+					console.debug('[duels-run] default keeping the old run', duelsInfo, currentRun, latestDuelsMatch);
 					return latestDuelsMatch.runId;
 				}),
 				startWith(uuid()),
