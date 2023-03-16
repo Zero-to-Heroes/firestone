@@ -60,6 +60,7 @@ import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-p
 import { BgsRewardGainedParser } from './event-parsers/bgs-reward-gained-parser';
 import { BgsRewardRevealedParser } from './event-parsers/bgs-reward-revealed-parser';
 import { BgsSelectBattleParser } from './event-parsers/bgs-select-battle-parser';
+import { BgsShowPostMatchStatsParser } from './event-parsers/bgs-show-post-match-stats-parser';
 import { BgsSpectatingParser } from './event-parsers/bgs-spectating-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
@@ -108,12 +109,12 @@ import { RealTimeStatsService } from './real-time-stats/real-time-stats.service'
 @Injectable()
 export class BattlegroundsStoreService {
 	public state: BattlegroundsState = new BattlegroundsState();
+	public battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
 
 	private mainWindowState: MainWindowState;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private deckState: GameState;
 	private eventParsers: readonly EventParser[] = [];
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
 	private battlegroundsStoreEventBus = new BehaviorSubject<BattlegroundsState>(null);
 	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -589,6 +590,8 @@ export class BattlegroundsStoreService {
 			new BgsBattleSimulationResetParser(),
 
 			new BgsRealTimeStatsUpdatedParser(this.i18n),
+
+			new BgsShowPostMatchStatsParser(),
 		];
 
 		return eventParsers;
