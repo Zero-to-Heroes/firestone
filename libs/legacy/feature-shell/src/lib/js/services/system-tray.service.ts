@@ -101,6 +101,7 @@ export class SystemTrayService {
 	}
 
 	private exitApp() {
+		console.log('existing app');
 		this.ow.closeWindow(OverwolfService.MAIN_WINDOW);
 	}
 }
