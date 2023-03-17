@@ -143,7 +143,11 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			cards: groupedByTier[tierLevel],
 			groupingFunction: (card: ReferenceCard) =>
 				getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
-					(t) => !availableTribes?.length || availableTribes.includes(Race[t]) || Race[t] === Race.BLANK,
+					(t) =>
+						!availableTribes?.length ||
+						availableTribes.includes(Race[t]) ||
+						Race[t] === Race.BLANK ||
+						Race[t] === Race.ALL,
 				),
 			type: 'standard',
 		}));
