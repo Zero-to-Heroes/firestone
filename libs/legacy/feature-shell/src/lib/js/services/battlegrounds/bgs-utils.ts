@@ -733,11 +733,6 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'piloted-whirl-o-tron',
 			};
-		} else if (hasFestergut(boardInfo)) {
-			return {
-				isSupported: false,
-				reason: 'festergut',
-			};
 		} else if (boardInfo?.secrets?.length > 0) {
 			return {
 				isSupported: false,
@@ -764,13 +759,6 @@ const isSupportedScenarioForPlayer = (
 const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	return (
 		hasMinionOnBoard(boardInfo, CardIds.Scallywag) || hasMinionOnBoard(boardInfo, CardIds.ScallywagBattlegrounds)
-	);
-};
-
-const hasFestergut = (boardInfo: BgsBoardInfo) => {
-	return (
-		hasMinionOnBoard(boardInfo, CardIds.Festergut_BG25_HERO_100_Buddy) ||
-		hasMinionOnBoard(boardInfo, CardIds.FestergutBattlegrounds)
 	);
 };
 
