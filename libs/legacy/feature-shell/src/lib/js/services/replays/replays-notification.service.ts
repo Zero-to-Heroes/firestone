@@ -12,6 +12,8 @@ import { PreferencesService } from '../preferences.service';
 import { RewardMonitorService, XpForGameInfo } from '../rewards/rewards-monitor';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
+declare let amplitude;
+
 @Injectable()
 export class ReplaysNotificationService {
 	constructor(
@@ -69,6 +71,7 @@ export class ReplaysNotificationService {
 			theClass: 'active',
 			clickToClose: true,
 			eventToSendOnClick: () => {
+				amplitude.getInstance().logEvent('show-bg-stats-click');
 				console.debug('[replays-notification] clicking on bgs match end');
 				this.bgsStore.battlegroundsUpdater.next(new BgsShowPostMatchStatsEvent());
 			},
