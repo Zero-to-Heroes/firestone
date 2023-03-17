@@ -25,19 +25,23 @@ export class DiskCacheService {
 	}
 
 	private async storeItemInternal(key: string, value: any): Promise<void> {
-		if (this.savingFiles[key]) {
-			return;
-		}
+		try {
+			if (this.savingFiles[key]) {
+				return;
+			}
 
-		const start = Date.now();
-		// console.debug('[disk-cache] storing value', key);
-		const stringified = JSON.stringify(value);
-		this.savingFiles[key] = true;
-		await this.ow.deleteAppFile(key);
-		// console.debug('[disk-cache] deleted file', key);
-		await this.ow.storeAppFile(key, stringified);
-		this.savingFiles[key] = false;
-		console.debug('[disk-cache] stored value', key, Date.now() - start);
+			const start = Date.now();
+			console.debug('[disk-cache] storing value', key);
+			const stringified = JSON.stringify(value);
+			this.savingFiles[key] = true;
+			await this.ow.deleteAppFile(key);
+			console.debug('[disk-cache] deleted file', key);
+			await this.ow.storeAppFile(key, stringified);
+			this.savingFiles[key] = false;
+			console.log('[disk-cache] stored value', key, Date.now() - start);
+		} catch (e) {
+			console.error('[disk-cache] error while storing info on local disk', key);
+		}
 	}
 
 	public async getItem<T>(key: string): Promise<T | null> {
@@ -45,16 +49,16 @@ export class DiskCacheService {
 	}
 
 	private async getItemInternal<T>(key: string): Promise<T | null> {
-		const start = Date.now();
-		// console.debug('[disk-cache] reading value', key);
-		const strResult = await this.ow.readAppFile(key);
-		// console.debug('[disk-cache] string value', key, strResult);
 		try {
+			const start = Date.now();
+			console.debug('[disk-cache] reading value', key);
+			const strResult = await this.ow.readAppFile(key);
+			console.debug('[disk-cache] string value', key, strResult);
 			const result = !!strResult?.length ? JSON.parse(strResult) : null;
-			console.debug('[disk-cache] read value', key, Date.now() - start);
+			console.log('[disk-cache] read value', key, Date.now() - start);
 			return result;
 		} catch (e) {
-			console.error('[disk-cache] could not read value from disk', key, strResult);
+			console.error('[disk-cache] could not read value from disk', key);
 			return null;
 		}
 	}
