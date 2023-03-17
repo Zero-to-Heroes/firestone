@@ -23,7 +23,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		`../../../css/component/settings/preference-toggle.component.scss`,
 	],
 	template: `
-		<div class="preference-toggle" [ngClass]="{ 'toggled-on': value }">
+		<div class="preference-toggle" [ngClass]="{ 'toggled-on': value, 'toggled-off': value }">
 			<input
 				hidden
 				type="checkbox"

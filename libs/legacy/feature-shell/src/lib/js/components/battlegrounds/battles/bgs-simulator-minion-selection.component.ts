@@ -13,12 +13,12 @@ import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual, sortByProperties } from '../../../services/utils';
+import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -147,10 +147,15 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								[placeholder]="'battlegrounds.sim.search-minion-placeholder' | owTranslate"
 							/>
 						</label>
+						<preference-toggle
+							class="show-buddies-button"
+							field="bgsShowBuddiesInSimulatorSelection"
+							[label]="'battlegrounds.sim.show-buddies-button-title' | owTranslate"
+						></preference-toggle>
 					</div>
 					<div class="heroes" scrollable>
 						<div
-							*ngFor="let minion of allMinions"
+							*ngFor="let minion of allMinions; trackBy: trackByMinion"
 							class="hero-portrait-frame"
 							[ngClass]="{ selected: minion.id === cardId }"
 							(click)="selectMinion(minion)"
@@ -225,18 +230,20 @@ export class BgsSimulatorMinionSelectionComponent
 	}
 
 	ngAfterContentInit(): void {
-		combineLatest(
+		const showBuddies$: Observable<boolean> = this.listenForBasicPref$(
+			(prefs) => prefs.bgsShowBuddiesInSimulatorSelection,
+		);
+		combineLatest([
 			this.searchString.asObservable(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTribeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter,
 			),
-		)
+			showBuddies$,
+		])
 			.pipe(
 				debounceTime(200),
-				map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				this.mapData(([searchString, tribeFilter, tierFilter]) => {
+				this.mapData(([searchString, [tribeFilter, tierFilter], showBuddies]) => {
 					const result = this.allCards
 						.getCards()
 						.filter(
@@ -245,7 +252,9 @@ export class BgsSimulatorMinionSelectionComponent
 								TOKEN_CARD_IDS.includes(card.id as CardIds),
 						)
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
-						// .filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
+						.filter((card) =>
+							showBuddies ? true : !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]),
+						)
 						.filter(
 							(card) =>
 								!tribeFilter ||
@@ -465,6 +474,10 @@ export class BgsSimulatorMinionSelectionComponent
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
+	}
+
+	trackByMinion(index: number, item: Minion) {
+		return item.id;
 	}
 
 	private async updateValues() {

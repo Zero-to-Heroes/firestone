@@ -546,6 +546,7 @@ export class Preferences implements IPreferences {
 	readonly bgsSavedRankFilter: BgsRankFilterType = 100;
 	readonly bgsSavedTribesFilter: readonly Race[] = [];
 	readonly bgsHeroesUseConservativeEstimate: boolean = true;
+	readonly bgsShowBuddiesInSimulatorSelection: boolean = false;
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

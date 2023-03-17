@@ -228,7 +228,12 @@ export class WindowWrapperComponent
 			return;
 		}
 		console.debug('changing window size', this.originalWidth, this.originalHeight, this.zoom);
-		await this.ow.changeWindowSize(
+		// await this.ow.changeWindowSize(
+		// 	this.windowId.value,
+		// 	Math.max(this.originalWidth, this.zoom * this.originalWidth),
+		// 	Math.max(this.originalHeight, this.zoom * this.originalHeight),
+		// );
+		await this.ow.changeWindowSize2(
 			this.windowId.value,
 			Math.max(this.originalWidth, this.zoom * this.originalWidth),
 			Math.max(this.originalHeight, this.zoom * this.originalHeight),

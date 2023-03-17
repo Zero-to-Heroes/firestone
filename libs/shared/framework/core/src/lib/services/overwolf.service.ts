@@ -596,6 +596,26 @@ export class OverwolfService {
 		});
 	}
 
+	public async changeWindowSize2(windowId: string, width: number, height: number): Promise<void> {
+		return new Promise<void>((resolve) => {
+			try {
+				overwolf.windows.changeSize(
+					{
+						window_id: windowId,
+						width: Math.round(width),
+						height: Math.round(height),
+					},
+					(res) => {
+						resolve();
+					},
+				);
+			} catch (e) {
+				console.error('Exception while trying to changeSize', windowId, width, height, e);
+				resolve();
+			}
+		});
+	}
+
 	public setZoom(zoomFactor: number) {
 		overwolf.windows.setZoom(zoomFactor, null as any);
 	}
