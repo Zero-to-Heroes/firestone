@@ -35,12 +35,10 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 			return;
 		}
 
-		const inGame = state && state.inGame;
 		if (state?.forceOpen) {
 			this.closedByUser = false;
 		}
-		// console.warn(battlegroundsWindow);
-		if (inGame && this.bgsActive && state.forceOpen) {
+		if (this.bgsActive && state?.forceOpen) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
 				// 	'[bgs-main-window] restoring window',

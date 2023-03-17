@@ -93,6 +93,12 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.battlegrounds.general.show-next-opponent-recap-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowEndGameNotif"
+						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.show-game-end-notif-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-game-end-notif-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsForceShowPostMatchStats2"
 						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.popup-post-match-stats-label' | owTranslate"

@@ -24,14 +24,15 @@ export class ReplaysNotificationService {
 		private readonly bgsStore: BattlegroundsStoreService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((data) => this.showNewMatchEndNotification(data.data[0]));
-		console.log('[replays-notification] listening for achievement completion events');
+		console.log('[replays-notification] listening for replay completion events');
 	}
 
 	private async showNewMatchEndNotification(gameStats: GameStats) {
+		console.log('[replays-notification] received new game, preparing notification?');
 		const gameStat = gameStats.stats[0];
 		const prefs = await this.prefs.getPreferences();
 		if (isBattlegrounds(gameStat.gameMode) && prefs.bgsShowEndGameNotif) {
-			await this.showBgsMatchEndNotification(gameStat);
+			this.showBgsMatchEndNotification(gameStat);
 		}
 
 		if (!prefs.showXpRecapAtGameEnd) {
@@ -67,7 +68,10 @@ export class ReplaysNotificationService {
 			cardId: undefined,
 			theClass: 'active',
 			clickToClose: true,
-			eventToSendOnClick: () => this.bgsStore.battlegroundsUpdater.next(new BgsShowPostMatchStatsEvent()),
+			eventToSendOnClick: () => {
+				console.debug('[replays-notification] clicking on bgs match end');
+				this.bgsStore.battlegroundsUpdater.next(new BgsShowPostMatchStatsEvent());
+			},
 		} as Message);
 	}
 

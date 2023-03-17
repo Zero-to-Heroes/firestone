@@ -112,8 +112,6 @@ export class DevService {
 					] as readonly GameStat[],
 				} as GameStats),
 			);
-			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
-			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		};
 		window['loadEvents'] = async (
 			fileName,
