@@ -17,6 +17,7 @@ import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsLootParserService } from '../duels/duels-loot-parser.service';
 import { isDuels } from '../duels/duels-utils';
+import { Events } from '../events.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LogsUploaderService } from '../logs-uploader.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
@@ -31,6 +32,7 @@ import { XpForGameInfo } from '../rewards/rewards-monitor';
 import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
 import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
+import { ManastormInfo } from './manastorm-info';
 import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
@@ -56,14 +58,28 @@ export class EndGameUploaderService {
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly events: Events,
 	) {}
 
 	public async upload2(info: UploadInfo): Promise<void> {
 		console.log('[manastorm-bridge]', info.reviewId, 'Uploading game info');
 		const game: GameForUpload = await this.initializeGame(info);
 		if (!!game) {
+			this.emitNewGameEvent(game);
 			await this.replayUploadService.uploadGame(game);
 		}
+	}
+
+	private emitNewGameEvent(game: GameForUpload) {
+		const reviewId = game.reviewId;
+		console.log('[manastorm-bridge] Uploaded game', reviewId);
+		const info: ManastormInfo = {
+			type: 'new-review',
+			reviewId: reviewId,
+			replayUrl: `https://replays.firestoneapp.com/?reviewId=${reviewId}`,
+			game: game,
+		};
+		this.events.broadcast(Events.REVIEW_FINALIZED, info);
 	}
 
 	private async initializeGame(info: UploadInfo): Promise<GameForUpload> {

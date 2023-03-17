@@ -7,7 +7,6 @@ import { Events } from '../events.service';
 import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
 import { GameForUpload } from './game-for-upload';
-import { ManastormInfo } from './manastorm-info';
 
 const BUCKET = 'com.zerotoheroes.batch';
 
@@ -114,15 +113,6 @@ export class ReplayUploadService {
 					this.performReplayUpload(game, reviewId, params, retriesLeft - 1);
 					return;
 				}
-			} else {
-				console.log('[manastorm-bridge] Uploaded game', reviewId);
-				const info: ManastormInfo = {
-					type: 'new-review',
-					reviewId: reviewId,
-					replayUrl: `https://replays.firestoneapp.com/?reviewId=${reviewId}`,
-					game: game,
-				};
-				this.events.broadcast(Events.REVIEW_FINALIZED, info);
 			}
 		});
 	}
