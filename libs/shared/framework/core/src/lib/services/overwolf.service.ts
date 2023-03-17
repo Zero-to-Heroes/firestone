@@ -828,7 +828,7 @@ export class OverwolfService {
 				fileName,
 				content,
 				(res) => {
-					resolve(res.success);
+					resolve(res?.success);
 				},
 			);
 		});
@@ -837,7 +837,7 @@ export class OverwolfService {
 	public async readAppFile(fileName: string): Promise<string | null> {
 		return new Promise<string | null>((resolve) => {
 			overwolf.extensions.io.readTextFile(overwolf.extensions.io.enums.StorageSpace.appData, fileName, (res) => {
-				resolve(res.success ? res.content : null);
+				resolve(res?.success ? res.content : null);
 			});
 		});
 	}
