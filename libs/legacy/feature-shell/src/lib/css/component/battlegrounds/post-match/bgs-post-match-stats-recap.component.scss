@@ -27,6 +27,7 @@
 
 	.cell {
 		display: flex;
+		width: 100%;
 
 		.label {
 			flex-grow: 1;
@@ -50,10 +51,14 @@
 		}
 	}
 
-	.battle-luck .label {
-		display: flex;
-		flex-direction: column;
-		position: relative;
+	.battle-luck {
+		padding-left: 10px;
+
+		.label {
+			display: flex;
+			flex-direction: column;
+			position: relative;
+		}
 	}
 
 	.explain-link {
