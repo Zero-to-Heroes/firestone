@@ -204,6 +204,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private async handleHotkeyPressed(force = false) {
+		console.log('[bgs-store] pressed hotkey', force);
 		if (this.overlayHandlers) {
 			await Promise.all(this.overlayHandlers.map((handler) => handler.handleHotkeyPressed(this.state, force)));
 		}

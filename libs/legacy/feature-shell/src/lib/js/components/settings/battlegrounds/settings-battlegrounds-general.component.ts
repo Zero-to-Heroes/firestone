@@ -200,6 +200,7 @@ export class SettingsBattlegroundsGeneralComponent
 	}
 
 	toggleOverlay = () => {
+		console.log('toggling overlay, reloading windows');
 		this.reloadBgWindows();
 	};
 }
