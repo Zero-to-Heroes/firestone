@@ -25,7 +25,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<achievements-filter></achievements-filter>
 				<achievement-history></achievement-history>
 			</section>
@@ -36,6 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 export class AchievementsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	currentView$: Observable<CurrentView>;
 	isLoading$: Observable<boolean>;
+	showAds$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -48,5 +49,6 @@ export class AchievementsComponent extends AbstractSubscriptionStoreComponent im
 		this.currentView$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationAchievements.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 }

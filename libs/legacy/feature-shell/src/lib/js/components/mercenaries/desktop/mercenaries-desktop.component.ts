@@ -68,7 +68,7 @@ declare let amplitude;
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
 					<mercenaries-hero-search
 						*ngIf="
@@ -91,6 +91,7 @@ export class MercenariesDesktopComponent
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly MercenariesCategoryId[]>;
 	selectedCategoryId$: Observable<MercenariesCategoryId>;
+	showAds$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -121,6 +122,7 @@ export class MercenariesDesktopComponent
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)
 			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	ngAfterViewInit() {

@@ -55,7 +55,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<battlegrounds-tier-list
 					*ngIf="
 						category.value?.id === 'bgs-category-personal-heroes' ||
@@ -89,6 +89,7 @@ export class BattlegroundsDesktopComponent
 	currentView$: Observable<string>;
 	categories$: Observable<readonly BattlegroundsCategory[]>;
 	category$: Observable<BattlegroundsCategory>;
+	showAds$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -126,6 +127,7 @@ export class BattlegroundsDesktopComponent
 				tap((info) => console.debug('categories', info)),
 				this.mapData(([categories]) => categories ?? []),
 			);
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	ngAfterViewInit() {

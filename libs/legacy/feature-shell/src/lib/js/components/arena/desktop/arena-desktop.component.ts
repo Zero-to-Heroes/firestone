@@ -32,7 +32,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<arena-classes-recap *ngIf="category.value?.id === 'arena-runs'"></arena-classes-recap>
 			</section>
 		</div>
@@ -44,6 +44,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent im
 	menuDisplayType$: Observable<string>;
 	category$: Observable<ArenaCategory>;
 	categories$: Observable<readonly ArenaCategory[]>;
+	showAds$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -65,6 +66,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent im
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.arena.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	selectCategory(categoryId: ArenaCategoryType) {

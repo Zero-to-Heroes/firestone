@@ -28,11 +28,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							</li>
 						</ul>
 						<stats-filters> </stats-filters>
-						<stats-xp-graph *ngIf="category.value?.id === 'xp-graph'">></stats-xp-graph>
+						<stats-xp-graph *ngIf="category.value?.id === 'xp-graph'"></stats-xp-graph>
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +42,7 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StatsCategory>;
 	categories$: Observable<readonly StatsCategory[]>;
+	showAds$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -63,6 +64,7 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.stats.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	selectCategory(categoryId: StatsCategoryType) {

@@ -22,28 +22,30 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</div>
 				</with-loading>
 			</section>
-			<section
-				class="secondary"
-				*ngIf="{
-					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
-					isShowingDuels: isShowingDuels$ | async
-				} as value"
-			>
-				<div class="match-stats" *ngIf="value.bgsPostMatchStatsPanel?.player?.cardId">
-					<div class="title" [owTranslate]="'app.replays.bg-stats.title'"></div>
-					<bgs-post-match-stats-recap [stats]="value.bgsPostMatchStatsPanel"></bgs-post-match-stats-recap>
-				</div>
-				<div class="replays-list" *ngIf="value.isShowingDuels && currentView === 'match-details'">
-					<duels-replays-recap-for-run></duels-replays-recap-for-run>
-				</div>
-				<secondary-default
-					*ngIf="
-						currentView === 'list' ||
-						(currentView === 'match-details' &&
-							!value.isShowingDuels &&
-							!value.bgsPostMatchStatsPanel?.player?.cardId)
-					"
-				></secondary-default>
+
+			<section class="secondary" *ngIf="!(showAds$ | async)">
+				<ng-container
+					*ngIf="{
+						bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
+						isShowingDuels: isShowingDuels$ | async
+					} as value"
+				>
+					<div class="match-stats" *ngIf="value.bgsPostMatchStatsPanel?.player?.cardId">
+						<div class="title" [owTranslate]="'app.replays.bg-stats.title'"></div>
+						<bgs-post-match-stats-recap [stats]="value.bgsPostMatchStatsPanel"></bgs-post-match-stats-recap>
+					</div>
+					<div class="replays-list" *ngIf="value.isShowingDuels && currentView === 'match-details'">
+						<duels-replays-recap-for-run></duels-replays-recap-for-run>
+					</div>
+					<secondary-default
+						*ngIf="
+							currentView === 'list' ||
+							(currentView === 'match-details' &&
+								!value.isShowingDuels &&
+								!value.bgsPostMatchStatsPanel?.player?.cardId)
+						"
+					></secondary-default>
+				</ng-container>
 			</section>
 		</div>
 	`,
@@ -55,6 +57,7 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 	currentView$: Observable<CurrentViewType>;
 	bgsPostMatchStatsPanel$: Observable<BgsPostMatchStatsPanel>;
 	isShowingDuels$: Observable<boolean>;
+	showAds$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -76,5 +79,6 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 		this.isShowingDuels$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.replayInfo)
 			.pipe(this.mapData(([replayInfo]) => replayInfo?.isDuels()));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 }

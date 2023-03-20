@@ -29,7 +29,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					<live-streams *ngIf="value.category === 'live-streams'"></live-streams>
 				</div>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +38,7 @@ export class StreamsDesktopComponent extends AbstractSubscriptionStoreComponent 
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StreamsCategoryType>;
 	categories$: Observable<readonly StreamsCategoryType[]>;
+	showAds$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -57,6 +58,7 @@ export class StreamsDesktopComponent extends AbstractSubscriptionStoreComponent 
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.streams.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	selectCategory(categoryId: StreamsCategoryType) {

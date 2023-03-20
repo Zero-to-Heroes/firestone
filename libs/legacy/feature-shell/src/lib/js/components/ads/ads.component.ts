@@ -20,7 +20,7 @@ declare let amplitude: any;
 	styleUrls: [`../../../css/component/ads/ads.component.scss`],
 	template: `
 		<div class="ads">
-			<div class="ad-container top" *ngIf="showTopAd">
+			<div class="ad-container top-ads" *ngIf="showTopAd">
 				<single-ad [adId]="'top'"></single-ad>
 			</div>
 			<div
@@ -29,7 +29,7 @@ declare let amplitude: any;
 				[owTranslate]="'app.global.ads.support-the-dev'"
 			></div>
 
-			<div class="ad-container bottom">
+			<div class="ad-container bottom-ads">
 				<single-ad [adId]="'bottom'" [tip]="tip$ | async"></single-ad>
 			</div>
 		</div>

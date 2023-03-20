@@ -25,7 +25,7 @@ import { MailCategoryType } from '../mail-state';
 					<mailbox *ngIf="value.category === 'inbox'"></mailbox>
 				</div>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +34,7 @@ export class MailboxDesktopComponent extends AbstractSubscriptionStoreComponent 
 	menuDisplayType$: Observable<string>;
 	category$: Observable<MailCategoryType>;
 	categories$: Observable<readonly MailCategoryType[]>;
+	showAds$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -47,6 +48,7 @@ export class MailboxDesktopComponent extends AbstractSubscriptionStoreComponent 
 		this.menuDisplayType$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.menuDisplayType));
 		this.category$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.selectedCategoryId));
 		this.categories$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.categories));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	selectCategory(categoryId: MailCategoryType) {

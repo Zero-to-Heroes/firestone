@@ -61,7 +61,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<card-search
 					*ngIf="
 						value.currentView !== 'packs' &&
@@ -95,6 +95,7 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 	selectedSet$: Observable<Set>;
 	selectedCard$: Observable<SetCard | ReferenceCard>;
 	selectedCardBack$: Observable<CardBack>;
+	showAds$: Observable<boolean>;
 
 	isSetDetails(currentView: CurrentView, selectedSet: Set, searchString: string): boolean {
 		return currentView === 'cards' && !!selectedSet && !searchString;
@@ -154,5 +155,6 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 					cardBacks.find((cardBack) => cardBack.id === selectedCardBackId),
 				),
 			);
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 }

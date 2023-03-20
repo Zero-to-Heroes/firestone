@@ -34,78 +34,70 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 			[allowResize]="true"
 			[avoidGameOverlap]="true"
 		>
-			<ng-container>
-				<section class="layout">
-					<div class="navigation" [ngClass]="{ 'navigation-ftue': value.showFtue }">
-						<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
-						<div class="main-menu-separator"></div>
-						<menu-selection [selectedModule]="value.currentApp"></menu-selection>
-					</div>
-					<div class="main">
-						<section class="menu-bar">
-							<div class="before-main-divider"></div>
-							<hotkey></hotkey>
-							<div class="controls">
-								<control-share
-									[onSocialClick]="takeScreenshotFunction"
-									[page]="value.currentApp"
-								></control-share>
-								<control-bug></control-bug>
-								<control-settings [settingsApp]="value.currentApp"></control-settings>
-								<control-help (help)="onHelp()"></control-help>
-								<control-discord></control-discord>
-								<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
-								<control-maximize [windowId]="windowId"></control-maximize>
-								<control-close
-									[windowId]="windowId"
-									[helpTooltip]="hotkeyText"
-									helpTooltipPosition="bottom-left"
-									[isMainWindow]="true"
-									[closeAll]="true"
-								></control-close>
-							</div>
-						</section>
-						<section
-							role="main"
-							class="content-container"
-							*ngIf="!value.showFtue"
-							[ngClass]="{ 'hide-ads': !value.showAds }"
+			<section class="menu-bar">
+				<div class="before-main-divider"></div>
+				<hotkey></hotkey>
+				<div class="controls">
+					<control-share [onSocialClick]="takeScreenshotFunction" [page]="value.currentApp"></control-share>
+					<control-bug></control-bug>
+					<control-settings [settingsApp]="value.currentApp"></control-settings>
+					<control-help (help)="onHelp()"></control-help>
+					<control-discord></control-discord>
+					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+					<control-maximize [windowId]="windowId"></control-maximize>
+					<control-close
+						[windowId]="windowId"
+						[helpTooltip]="hotkeyText"
+						helpTooltipPosition="bottom-left"
+						[isMainWindow]="true"
+						[closeAll]="true"
+					></control-close>
+				</div>
+			</section>
+			<section class="layout">
+				<div class="navigation" [ngClass]="{ 'navigation-ftue': value.showFtue }">
+					<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
+					<div class="main-menu-separator"></div>
+					<menu-selection [selectedModule]="value.currentApp"></menu-selection>
+				</div>
+				<div class="main">
+					<section
+						role="main"
+						class="content-container"
+						*ngIf="!value.showFtue"
+						[ngClass]="{ 'hide-ads': !value.showAds }"
+					>
+						<!-- Don't cache the DOM, as it can cause some lag when many replays are loaded -->
+						<replays class="main-section" *ngIf="value.currentApp === 'replays'"></replays>
+						<achievements class="main-section" *ngIf="value.currentApp === 'achievements'"> </achievements>
+						<collection class="main-section" *ngIf="value.currentApp === 'collection'"></collection>
+						<decktracker
+							class="main-section"
+							[showAds]="value.showAds"
+							*ngIf="value.currentApp === 'decktracker'"
 						>
-							<!-- Don't cache the DOM, as it can cause some lag when many replays are loaded -->
-							<replays class="main-section" *ngIf="value.currentApp === 'replays'"></replays>
-							<achievements class="main-section" *ngIf="value.currentApp === 'achievements'">
-							</achievements>
-							<collection class="main-section" *ngIf="value.currentApp === 'collection'"></collection>
-							<decktracker
-								class="main-section"
-								[showAds]="value.showAds"
-								*ngIf="value.currentApp === 'decktracker'"
-							>
-							</decktracker>
-							<battlegrounds-desktop class="main-section" *ngIf="value.currentApp === 'battlegrounds'">
-							</battlegrounds-desktop>
-							<mercenaries-desktop class="main-section" *ngIf="value.currentApp === 'mercenaries'">
-							</mercenaries-desktop>
-							<duels-desktop class="main-section" *ngIf="value.currentApp === 'duels'"> </duels-desktop>
-							<arena-desktop class="main-section" *ngIf="value.currentApp === 'arena'"> </arena-desktop>
-							<tavern-brawl-desktop class="main-section" *ngIf="value.currentApp === 'tavern-brawl'">
-							</tavern-brawl-desktop>
-							<stats-desktop class="main-section" *ngIf="value.currentApp === 'stats'"> </stats-desktop>
-							<mailbox-desktop class="main-section" *ngIf="value.currentApp === 'mailbox'">
-							</mailbox-desktop>
-							<streams-desktop class="main-section" *ngIf="value.currentApp === 'streams'">
-							</streams-desktop>
-						</section>
-					</div>
-				</section>
-				<ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue>
-				<ads *ngIf="value.showAds"></ads>
-				<new-version-notification
-					class="new-version"
-					[forceOpen]="forceShowReleaseNotes$ | async"
-					(notificationDisplayed)="onNewVersionDisplayed($event)"
-				></new-version-notification>
-			</ng-container>
+						</decktracker>
+						<battlegrounds-desktop class="main-section" *ngIf="value.currentApp === 'battlegrounds'">
+						</battlegrounds-desktop>
+						<mercenaries-desktop class="main-section" *ngIf="value.currentApp === 'mercenaries'">
+						</mercenaries-desktop>
+						<duels-desktop class="main-section" *ngIf="value.currentApp === 'duels'"> </duels-desktop>
+						<arena-desktop class="main-section" *ngIf="value.currentApp === 'arena'"> </arena-desktop>
+						<tavern-brawl-desktop class="main-section" *ngIf="value.currentApp === 'tavern-brawl'">
+						</tavern-brawl-desktop>
+						<stats-desktop class="main-section" *ngIf="value.currentApp === 'stats'"> </stats-desktop>
+						<mailbox-desktop class="main-section" *ngIf="value.currentApp === 'mailbox'"> </mailbox-desktop>
+						<streams-desktop class="main-section" *ngIf="value.currentApp === 'streams'"> </streams-desktop>
+					</section>
+				</div>
+				<ads *ngIf="value.showAds" [showTopAd]="true"></ads>
+			</section>
+			<!-- <ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue> -->
+			<new-version-notification
+				class="new-version"
+				[forceOpen]="forceShowReleaseNotes$ | async"
+				(notificationDisplayed)="onNewVersionDisplayed($event)"
+			></new-version-notification>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

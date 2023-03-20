@@ -27,7 +27,7 @@ declare let OwAd: any;
 				</i>
 				<div class="tip" *ngIf="tip" [innerHTML]="tip"></div>
 			</div>
-			<div class="ads" id="ads-div"></div>
+			<div class="ads" id="ads-div-{{ this.adId }}"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -72,7 +72,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				}, 1000);
 				return;
 			}
-			if (!document.getElementById('ads-div')) {
+			if (!document.getElementById(`ads-div-${this.adId}`)) {
 				console.log(`[ads-${this.adId}] ads-video not ready, returning`);
 				setTimeout(() => {
 					this.initializeAds();
@@ -89,7 +89,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				}
 				this.adInit = true;
 				console.log(`[ads-${this.adId}] first time init ads, creating OwAd`);
-				this.adRef = new OwAd(document.getElementById('ads-div'));
+				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`));
 
 				this.impressionListener = async (data) => {
 					// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });

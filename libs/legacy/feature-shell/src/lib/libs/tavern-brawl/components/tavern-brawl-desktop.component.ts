@@ -25,7 +25,7 @@ import { TavernBrawlCategoryType } from '../tavern-brawl-state';
 					<tavern-brawl-meta *ngIf="value.category === 'meta'"></tavern-brawl-meta>
 				</div>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +37,7 @@ export class TavernBrawlDesktopComponent
 	menuDisplayType$: Observable<string>;
 	category$: Observable<TavernBrawlCategoryType>;
 	categories$: Observable<readonly TavernBrawlCategoryType[]>;
+	showAds$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -50,6 +51,7 @@ export class TavernBrawlDesktopComponent
 		this.menuDisplayType$ = this.store.tavernBrawl$().pipe(this.mapData((state) => state.menuDisplayType));
 		this.category$ = this.store.tavernBrawl$().pipe(this.mapData((state) => state.selectedCategoryId));
 		this.categories$ = this.store.tavernBrawl$().pipe(this.mapData((state) => state.categories));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	selectCategory(categoryId: TavernBrawlCategoryType) {

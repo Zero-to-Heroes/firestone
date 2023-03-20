@@ -58,7 +58,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<duels-hero-search *ngIf="category.value?.id === 'duels-stats'"></duels-hero-search>
 				<duels-treasure-search *ngIf="category.value?.id === 'duels-treasures'"></duels-treasure-search>
 				<duels-classes-recap *ngIf="category.value?.id === 'duels-runs'"></duels-classes-recap>
@@ -87,6 +87,7 @@ export class DuelsDesktopComponent
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly DuelsCategory[]>;
 	category$: Observable<DuelsCategory>;
+	showAds$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -114,6 +115,7 @@ export class DuelsDesktopComponent
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(this.mapData(([duels, selectedCategoryId]) => duels.findCategory(selectedCategoryId)));
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	ngAfterViewInit() {
