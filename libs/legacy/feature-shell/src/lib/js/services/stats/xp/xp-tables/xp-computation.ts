@@ -4,6 +4,7 @@ import { Season3 } from './season-3';
 import { Season4 } from './season-4';
 import { Season5 } from './season-5';
 import { Season6 } from './season-6';
+import { Season7 } from './season-7';
 import { Season } from './_season';
 
 export const xpSeason1 = new Season1();
@@ -12,7 +13,9 @@ export const xpSeason3 = new Season3();
 export const xpSeason4 = new Season4();
 export const xpSeason5 = new Season5();
 export const xpSeason6 = new Season6();
-const allSeasons: readonly Season[] = [xpSeason1, xpSeason2, xpSeason3, xpSeason4, xpSeason5, xpSeason6];
+export const xpSeason7 = new Season7();
+
+const allSeasons: readonly Season[] = [xpSeason1, xpSeason2, xpSeason3, xpSeason4, xpSeason5, xpSeason6, xpSeason7];
 
 export const computeXpFromLevel = (fullLevel: string, timestamp: number): number => {
 	if (!fullLevel.includes('-')) {
@@ -30,7 +33,8 @@ export const computeXpFromLevel = (fullLevel: string, timestamp: number): number
 };
 
 export const getSeason = (timestamp: number): Season => {
-	return allSeasons.find(
+	const result = allSeasons.find(
 		(season) => season.startDate.getTime() <= timestamp && timestamp <= season.endDate.getTime(),
 	);
+	return result;
 };

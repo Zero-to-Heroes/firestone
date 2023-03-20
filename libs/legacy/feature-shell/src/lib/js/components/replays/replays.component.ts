@@ -23,12 +23,18 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				</with-loading>
 			</section>
 
-			<section class="secondary" *ngIf="!(showAds$ | async)">
-				<ng-container
-					*ngIf="{
-						bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
-						isShowingDuels: isShowingDuels$ | async
-					} as value"
+			<ng-container
+				*ngIf="{
+					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
+					isShowingDuels: isShowingDuels$ | async
+				} as value"
+			>
+				<section
+					class="secondary"
+					*ngIf="
+						!(showAds$ | async) &&
+						showSidebar(currentView, value.isShowingDuels, value.bgsPostMatchStatsPanel?.player?.cardId)
+					"
 				>
 					<div class="match-stats" *ngIf="value.bgsPostMatchStatsPanel?.player?.cardId">
 						<div class="title" [owTranslate]="'app.replays.bg-stats.title'"></div>
@@ -37,16 +43,8 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					<div class="replays-list" *ngIf="value.isShowingDuels && currentView === 'match-details'">
 						<duels-replays-recap-for-run></duels-replays-recap-for-run>
 					</div>
-					<secondary-default
-						*ngIf="
-							currentView === 'list' ||
-							(currentView === 'match-details' &&
-								!value.isShowingDuels &&
-								!value.bgsPostMatchStatsPanel?.player?.cardId)
-						"
-					></secondary-default>
-				</ng-container>
-			</section>
+				</section>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,5 +78,9 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.replayInfo)
 			.pipe(this.mapData(([replayInfo]) => replayInfo?.isDuels()));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+	}
+
+	showSidebar(currentView: CurrentViewType, isShowingDuels: boolean, bgsPlayerCardId: string): boolean {
+		return !(currentView === 'list' || (currentView === 'match-details' && !isShowingDuels && !bgsPlayerCardId));
 	}
 }

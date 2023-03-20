@@ -88,16 +88,8 @@ export class GraphWithSingleValueComponent
 	ngAfterContentInit(): void {
 		this.colors$$ = fromEvent(window, 'resize')
 			.pipe(this.mapData((event) => event))
-			// Do this because using the observable directly makes it difficult to have an
-			// initial value (I tried several approaches but didn't manage to have one)
 			.subscribe((event) => {
-				if (this.data.datasets[0]) {
-					this.data.datasets[0].backgroundColor = this.getBackgroundColor();
-					this.data.datasets[0].borderColor = '#CE73B4';
-				}
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
+				this.updateGraphColor();
 			});
 	}
 
@@ -108,18 +100,18 @@ export class GraphWithSingleValueComponent
 	}
 
 	ngAfterViewInit() {
-		setTimeout(() => {
-			// Because the gradient requires an absolute value in pixels, we need to get
-			// the size of the container, which in turn means we need to wait until the
-			// canvas has been fully rendered
-			if (this.data.datasets[0]) {
-				this.data.datasets[0].backgroundColor = this.getBackgroundColor();
-				this.data.datasets[0].borderColor = '#CE73B4';
-			}
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		this.updateGraphColor();
+	}
+
+	private updateGraphColor() {
+		if (this.data.datasets[0]) {
+			this.data.datasets[0].backgroundColor = this.getBackgroundColor();
+			this.data.datasets[0].borderColor = '#CE73B4';
+		}
+		this.buildOptions();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private getBackgroundColor(): string {

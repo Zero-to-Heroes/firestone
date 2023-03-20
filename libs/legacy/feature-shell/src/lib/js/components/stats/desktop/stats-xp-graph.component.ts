@@ -3,7 +3,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { StatsXpGraphSeasonFilterType } from '../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
 	computeXpFromLevel,
@@ -14,6 +14,7 @@ import {
 	xpSeason4,
 	xpSeason5,
 	xpSeason6,
+	xpSeason7,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -43,6 +44,7 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 			this.store.gameStats$(),
 			this.store.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter),
 		).pipe(
+			tap((info) => console.debug('info', info)),
 			filter(([stats, seasonFilter]) => !!seasonFilter),
 			this.mapData(([stats, [seasonFilter]]) =>
 				this.buildValue(
@@ -56,6 +58,7 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 	private buildValue(stats: readonly GameStat[], seasonFilter: StatsXpGraphSeasonFilterType): Value {
 		const data = [...stats].reverse();
 		const dataWithTime = data.filter((stat) => this.isValidDate(stat, seasonFilter));
+		console.debug('buildValue', stats, seasonFilter, dataWithTime);
 		if (!dataWithTime?.length) {
 			return {
 				data: {
@@ -85,6 +88,7 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 			const previousDayXp = !!values?.length ? values[values.length - 1] : 0;
 			values.push(previousDayXp + xpForDay);
 		}
+		console.debug('result', values);
 		return {
 			data: {
 				datasets: [
@@ -112,6 +116,8 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 				return getSeason(stat.creationTimestamp) === xpSeason5;
 			case 'season-6':
 				return getSeason(stat.creationTimestamp) === xpSeason6;
+			case 'season-7':
+				return getSeason(stat.creationTimestamp) === xpSeason7;
 			case 'all-seasons':
 			default:
 				return true;

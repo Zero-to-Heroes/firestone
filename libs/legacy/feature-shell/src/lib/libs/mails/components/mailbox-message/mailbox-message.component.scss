@@ -36,6 +36,7 @@
 	.info {
 		display: flex;
 		flex-direction: column;
+		max-width: 800px;
 
 		.date {
 			font-size: 12px;

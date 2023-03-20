@@ -68,17 +68,6 @@ declare let amplitude;
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)">
-				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
-					<mercenaries-hero-search
-						*ngIf="
-							selectedCategoryId === 'mercenaries-personal-hero-stats' ||
-							selectedCategoryId === 'mercenaries-hero-stats'
-						"
-					></mercenaries-hero-search>
-					<secondary-default></secondary-default>
-				</ng-container>
-			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

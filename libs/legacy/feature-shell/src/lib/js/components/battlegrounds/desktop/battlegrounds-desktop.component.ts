@@ -55,7 +55,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)">
+			<section class="secondary" *ngIf="!(showAds$ | async) && showSidebar(category.value?.id)">
 				<battlegrounds-tier-list
 					*ngIf="
 						category.value?.id === 'bgs-category-personal-heroes' ||
@@ -74,7 +74,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						category.value?.id?.includes('bgs-category-personal-hero-details-')
 					"
 				></battlegrounds-replays-recap>
-				<secondary-default *ngIf="category.value?.id === 'bgs-category-simulator'"></secondary-default>
+				<secondary-default></secondary-default>
 			</section>
 		</div>
 	`,
@@ -136,5 +136,9 @@ export class BattlegroundsDesktopComponent
 
 	selectCategory(categoryId: string) {
 		this.stateUpdater.next(new SelectBattlegroundsCategoryEvent(categoryId));
+	}
+
+	showSidebar(categoryId: string): boolean {
+		return categoryId !== 'bgs-category-simulator';
 	}
 }

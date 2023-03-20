@@ -32,7 +32,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async) && false"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

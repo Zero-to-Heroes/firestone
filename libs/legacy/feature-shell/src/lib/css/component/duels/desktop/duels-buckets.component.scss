@@ -47,11 +47,13 @@
 		width: 100%;
 		width: 200px;
 		margin-right: 50px;
+		height: 30px;
 
 		label {
 			width: 100%;
 			outline: 1px solid var(--color-3);
 			display: flex;
+			height: 100%;
 
 			&:focus-within,
 			&:hover {
@@ -100,7 +102,7 @@
 			margin-right: 10px;
 			margin-bottom: 15px;
 
-			.bucket-name{
+			.bucket-name {
 				padding-left: 30px;
 				white-space: nowrap;
 				overflow: hidden;

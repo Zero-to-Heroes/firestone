@@ -26,7 +26,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	selector: 'mercenaries-personal-hero-stats',
 	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stats.component.scss`],
 	template: `
-		<div class="mercenaries-personal-hero-stats" *ngIf="stats$ | async as stats; else emptyState">
+		<div
+			class="mercenaries-personal-hero-stats"
+			*ngIf="stats$ | async as stats; else emptyState"
+			[ngClass]="{ wide: !(showAds$ | async) }"
+		>
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
 				<sortable-label
 					class="level"
@@ -127,6 +131,7 @@ export class MercenariesPersonalHeroStatsComponent
 {
 	stats$: Observable<readonly PersonalHeroStat[]>;
 	sortCriteria$: Observable<MercenariesPersonalHeroesSortCriteria>;
+	showAds$: Observable<boolean>;
 
 	private unsortedStats$: Observable<readonly PersonalHeroStat[]>;
 
@@ -176,6 +181,7 @@ export class MercenariesPersonalHeroStatsComponent
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, owned, sortCriteria, referenceData),
 			),
 		);
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	private buildMercenaryStat(

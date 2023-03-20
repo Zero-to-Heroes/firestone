@@ -88,6 +88,11 @@ export class StatsXpSeasonFilterDropdownComponent
 							label: 'Season 6',
 							tooltip: 'From 2022-08-02',
 						},
+						{
+							value: 'season-7',
+							label: 'Season 7',
+							tooltip: 'From 2022-12-02',
+						},
 					] as FilterOption[];
 					return {
 						filter: filter,

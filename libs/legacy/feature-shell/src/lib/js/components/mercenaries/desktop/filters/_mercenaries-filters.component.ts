@@ -27,6 +27,8 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			></mercenaries-fully-upgraded-filter-dropdown>
 			<mercenaries-owned-filter-dropdown class="owned"></mercenaries-owned-filter-dropdown>
 
+			<mercenaries-hero-search *ngIf="showSearch$ | async"></mercenaries-hero-search>
+
 			<preference-toggle
 				class="show-hidden-teams-link"
 				*ngIf="showHiddenTeamsLink$ | async"
@@ -48,6 +50,7 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionStoreCompon
 	showHiddenTeamsLink$: Observable<boolean>;
 	showMercNamesInTeamsLink$: Observable<boolean>;
 	showRegionFilter$: Observable<boolean>;
+	showSearch$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -77,6 +80,15 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionStoreCompon
 			.pipe(
 				filter(([currentView]) => !!currentView),
 				this.mapData(([currentView]) => currentView === 'mercenaries-my-teams'),
+			);
+		this.showSearch$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(
+					([currentView]) =>
+						currentView === 'mercenaries-personal-hero-stats' || currentView === 'mercenaries-hero-stats',
+				),
 			);
 	}
 

@@ -25,7 +25,7 @@ import { TavernBrawlCategoryType } from '../tavern-brawl-state';
 					<tavern-brawl-meta *ngIf="value.category === 'meta'"></tavern-brawl-meta>
 				</div>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async) && false"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

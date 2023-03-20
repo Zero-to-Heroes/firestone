@@ -25,7 +25,7 @@ import { MailCategoryType } from '../mail-state';
 					<mailbox *ngIf="value.category === 'inbox'"></mailbox>
 				</div>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
+			<section class="secondary" *ngIf="!(showAds$ | async) && false"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

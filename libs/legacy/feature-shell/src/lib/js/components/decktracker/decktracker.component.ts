@@ -47,7 +47,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			</section>
 			<section
 				class="secondary"
-				*ngIf="!(showAds$ | async)"
+				*ngIf="!(showAds$ | async) && showSidebar(value.currentView)"
 				[ngClass]="{
 					'second-display': !showAds && value.currentView === 'deck-details'
 				}"
@@ -82,6 +82,10 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 			.listen$(([main, nav, prefs]) => main.decktracker.isLoading)
 			.pipe(this.mapData(([isLoading]) => isLoading));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+	}
+
+	showSidebar(currentView: DecktrackerViewType): boolean {
+		return currentView === 'deck-details' || this.showReplaysRecap(currentView);
 	}
 
 	showReplaysRecap(currentView: DecktrackerViewType): boolean {

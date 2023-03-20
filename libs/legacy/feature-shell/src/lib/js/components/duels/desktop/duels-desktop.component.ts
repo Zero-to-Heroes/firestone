@@ -58,7 +58,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)">
+			<section class="secondary" *ngIf="!(showAds$ | async) && showSidebar(category.value?.id)">
 				<duels-hero-search *ngIf="category.value?.id === 'duels-stats'"></duels-hero-search>
 				<duels-treasure-search *ngIf="category.value?.id === 'duels-treasures'"></duels-treasure-search>
 				<duels-classes-recap *ngIf="category.value?.id === 'duels-runs'"></duels-classes-recap>
@@ -71,9 +71,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						category.value?.id === 'duels-deck-details'
 					"
 				></duels-deck-stats>
-				<secondary-default
-					*ngIf="category.value?.id === 'duels-top-decks' || category.value?.id === 'duels-leaderboard'"
-				></secondary-default>
 			</section>
 		</div>
 	`,
@@ -124,5 +121,9 @@ export class DuelsDesktopComponent
 
 	selectCategory(categoryId: DuelsCategoryType) {
 		this.stateUpdater.next(new DuelsSelectCategoryEvent(categoryId));
+	}
+
+	showSidebar(categoryId: DuelsCategoryType): boolean {
+		return !['duels-top-decks', 'duels-leaderboard', 'duels-deckbuilder', 'duels-buckets'].includes(categoryId);
 	}
 }

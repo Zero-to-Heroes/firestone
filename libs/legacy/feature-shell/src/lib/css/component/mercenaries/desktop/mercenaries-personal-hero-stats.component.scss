@@ -100,6 +100,23 @@
 	}
 }
 
+.mercenaries-personal-hero-stats.wide {
+	.header .coins.left {
+		display: flex;
+	}
+	.header .coins.to-farm {
+		display: flex;
+	}
+	::ng-deep .mercenaries-personal-hero-stat {
+		.coins.left {
+			display: flex;
+		}
+		.coins.to-farm {
+			display: flex;
+		}
+	}
+}
+
 @media (min-width: 1420px) {
 	.mercenaries-personal-hero-stats .header .coins.left {
 		display: flex;
