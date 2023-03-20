@@ -10,10 +10,10 @@
 	flex-direction: column;
 	position: relative;
 	flex-shrink: 0;
-	height: 100%;
+	height: calc(100% + 30px);
 	width: 65px;
 	background: var(--main-menu-background-color);
-	top: 0px;
+	top: -30px;
 	flex-grow: 0;
 	align-items: stretch;
 
