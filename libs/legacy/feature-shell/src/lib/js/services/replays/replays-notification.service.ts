@@ -70,6 +70,7 @@ export class ReplaysNotificationService {
 			cardId: undefined,
 			theClass: 'active',
 			clickToClose: true,
+			timeout: 8000,
 			eventToSendOnClick: () => {
 				amplitude.getInstance().logEvent('show-bg-stats-click');
 				console.debug('[replays-notification] clicking on bgs match end');
