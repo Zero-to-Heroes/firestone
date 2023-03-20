@@ -80,7 +80,7 @@ export class ModsManagerService {
 					if (conf[modData.AssemblyName]?.modName !== newConf[modData.AssemblyName].modName) {
 						modsDirty = true;
 					}
-					if (conf[modData.AssemblyName].downloadLink !== newConf[modData.AssemblyName].downloadLink) {
+					if (conf[modData.AssemblyName]?.downloadLink !== newConf[modData.AssemblyName].downloadLink) {
 						modsDirty = true;
 					}
 					if (

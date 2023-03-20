@@ -196,7 +196,7 @@ export class SettingsGeneralModsComponent
 				this.mapData((modsData) => modsData),
 			)
 			.subscribe(async (modsData) => {
-				this.installedMods = modsData;
+				this.installedMods = modsData.filter((mod) => !!mod);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

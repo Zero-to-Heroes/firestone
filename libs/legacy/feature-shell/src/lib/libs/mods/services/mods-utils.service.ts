@@ -72,6 +72,7 @@ export class ModsUtilsService {
 					updateAvailableVersion: toVersionString(existingConf?.updateAvailableVersion),
 				};
 			})
+			.filter((mod) => !!mod)
 			.sort(sortByProperties((m) => [m.Name]));
 		console.debug('looking for installed mods', conf, result);
 		return result;
