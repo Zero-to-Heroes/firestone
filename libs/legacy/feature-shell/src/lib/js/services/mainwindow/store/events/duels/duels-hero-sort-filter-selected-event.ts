@@ -1,4 +1,4 @@
-import { DuelsHeroSortFilterType } from '../../../../../models/duels/duels-hero-sort-filter.type';
+import { DuelsHeroSortFilterType } from '@firestone/duels/view';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsHeroSortFilterSelectedEvent implements MainWindowStoreEvent {

@@ -1,12 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsHeroSortFilterType, DuelsMetaStatsViewComponent } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../../models/duels/duels-run';
-import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import {
 	buildDuelsHeroTreasurePlayerStats,
@@ -108,7 +107,7 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 				[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
 					.sort(this.sortBy(treasureSorting))
 					.filter((stat) =>
-						hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+						hideThreshold ? stat.globalTotalMatches >= DuelsMetaStatsViewComponent.STATS_THRESHOLD : true,
 					),
 			),
 		);

@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { DuelsDeckSortFilterType } from '@firestone/duels/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DuelsDeckSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';

@@ -1,9 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
-import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
-import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
+import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -12,7 +10,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	styleUrls: [`../../../../css/component/duels/desktop/duels-hero-stats.component.scss`],
 	template: `
 		<div *ngIf="stats$ | async as stats; else emptyState" class="duels-hero-stats" scrollable>
-			<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>
+			<duels-meta-stats-view
+				[stats]="stats"
+				[sort]="sort$ | async"
+				[hideLowData]="hideLowData$ | async"
+			></duels-meta-stats-view>
 		</div>
 		<ng-template #emptyState>
 			<duels-empty-state></duels-empty-state>
@@ -21,7 +23,9 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
+	stats$: Observable<readonly DuelsMetaStats[]>;
+	sort$: Observable<DuelsHeroSortFilterType>;
+	hideLowData$: Observable<boolean>;
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
@@ -32,31 +36,31 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 	}
 
 	ngAfterContentInit() {
-		this.stats$ = combineLatest(
-			this.store.duelsHeroStats$(),
-			this.store.listenPrefs$(
-				(prefs) => prefs.duelsActiveHeroSortFilter,
-				(prefs) => prefs.duelsHideStatsBelowThreshold,
-			),
-		).pipe(
-			this.mapData(([stats, [heroSorting, hideThreshold]]) =>
-				[...(stats ?? [])]
-					.sort(this.sortBy(heroSorting))
-					.filter((stat) =>
-						hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
-					),
-			),
+		this.stats$ = this.store.duelsHeroStats$().pipe(
+			this.mapData((stats) => {
+				const tieredStats = stats.map((stat) => {
+					const card = this.allCards.getCard(stat.cardId);
+					const result: DuelsMetaStats = {
+						cardId: stat.cardId,
+						cardName: card.name,
+						globalRunsPlayed: stat.globalTotalMatches,
+						globalPopularity: stat.globalPopularity,
+						globalWinrate: stat.globalWinrate,
+						placementDistribution: stat.globalWinDistribution.map((info) => ({
+							wins: info.winNumber,
+							percentage: info.value,
+							runs: Math.round(info.value * stat.globalTotalMatches),
+						})),
+						playerRunsPlayed: stat.playerTotalMatches,
+						playerWinrate: stat.playerWinrate,
+					};
+					return result;
+				});
+				console.debug('tieredStats', tieredStats);
+				return tieredStats;
+			}),
 		);
-	}
-
-	private sortBy(heroSorting: DuelsHeroSortFilterType): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {
-		switch (heroSorting) {
-			case 'games-played':
-				return (a, b) => b.playerTotalMatches - a.playerTotalMatches;
-			case 'global-winrate':
-				return (a, b) => b.globalWinrate - a.globalWinrate;
-			case 'player-winrate':
-				return (a, b) => b.playerWinrate - a.playerWinrate;
-		}
+		this.sort$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroSortFilter);
+		this.hideLowData$ = this.listenForBasicPref$((prefs) => prefs.duelsHideStatsBelowThreshold);
 	}
 }

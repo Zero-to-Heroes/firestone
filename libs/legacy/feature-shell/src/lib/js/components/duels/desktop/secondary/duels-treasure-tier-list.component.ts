@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { getStandardDeviation } from '@services/utils';
+import { DuelsMetaStatsViewComponent } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getStandardDeviation } from '@services/utils';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
-import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import {
@@ -87,7 +87,9 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionStoreCom
 					const stats = [...buildDuelsHeroTreasurePlayerStats(treasures)]
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.filter((stat) =>
-							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+							hideThreshold
+								? stat.globalTotalMatches >= DuelsMetaStatsViewComponent.STATS_THRESHOLD
+								: true,
 						);
 					const { mean, standardDeviation } = getStandardDeviation(stats.map((stat) => stat.globalWinrate));
 

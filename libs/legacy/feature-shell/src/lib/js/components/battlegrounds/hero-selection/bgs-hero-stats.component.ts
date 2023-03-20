@@ -23,6 +23,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[data]="placementChartData$ | async"
 					[id]="'placementDistribution' + cardId"
 					[midLineValue]="100 / 8"
+					[offsetValue]="1"
 				></basic-bar-chart-2>
 				<div class="entry average-position">
 					<div

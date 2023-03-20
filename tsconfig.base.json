@@ -21,6 +21,7 @@
 			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
 			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
+			"@firestone/duels/view": ["libs/duels/view/src/index.ts"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/replay/coliseum": ["libs/replay/coliseum/src/index.ts"],
 			"@firestone/shared/assets": ["libs/shared/assets/src/index.ts"],

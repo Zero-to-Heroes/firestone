@@ -51,6 +51,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 					[data]="placementChartData"
 					[id]="'placementDistribution' + heroCardId"
 					[midLineValue]="100 / 8"
+					[offsetValue]="1"
 				></basic-bar-chart-2>
 			</div>
 			<div class="net-mmr">

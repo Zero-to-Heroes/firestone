@@ -50,8 +50,6 @@ const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-bucke
 
 @Injectable()
 export class DuelsStateBuilderService {
-	public static STATS_THRESHOLD = 40;
-
 	public isOnMainScreen = new BehaviorSubject<boolean>(false);
 	public duelsInfo$$ = new BehaviorSubject<DuelsInfo>(null);
 

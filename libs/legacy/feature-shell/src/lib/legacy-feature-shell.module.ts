@@ -473,6 +473,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
+import { DuelsViewModule } from '@firestone/duels/view';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { Store, translationFileVersion } from '@firestone/shared/framework/common';
@@ -825,6 +826,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
 		StatsDataAccessModule,
+		DuelsViewModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

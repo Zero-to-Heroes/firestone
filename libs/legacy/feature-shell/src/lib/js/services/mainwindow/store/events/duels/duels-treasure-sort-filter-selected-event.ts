@@ -1,5 +1,4 @@
-// import { DuelsTreasureSortFilterType } from '../../../../../models/duels/duels-treasure-sort-filter.type';
-import { DuelsHeroSortFilterType } from '../../../../../models/duels/duels-hero-sort-filter.type';
+import { DuelsHeroSortFilterType } from '@firestone/duels/view';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsTreasureSortFilterSelectedEvent implements MainWindowStoreEvent {
@@ -7,7 +6,6 @@ export class DuelsTreasureSortFilterSelectedEvent implements MainWindowStoreEven
 		return 'DuelsTreasureSortFilterSelectedEvent';
 	}
 
-	// constructor(public readonly value: DuelsTreasureSortFilterType) {}
 	constructor(public readonly value: DuelsHeroSortFilterType) {}
 
 	public eventName(): string {

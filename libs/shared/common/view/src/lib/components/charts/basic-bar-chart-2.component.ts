@@ -43,6 +43,11 @@ export class BasicBarChart2Component {
 		this.udpateStats();
 	}
 
+	@Input() set offsetValue(value: number) {
+		this._offsetValue = value;
+		this.udpateStats();
+	}
+
 	@Input() showLabels = true;
 
 	barContainers: readonly BarContainer[] = [];
@@ -51,6 +56,7 @@ export class BasicBarChart2Component {
 	private chartData: readonly SimpleBarChartData[];
 	private _tooltipTitle;
 	private _midLineValue: number;
+	private _offsetValue = 0;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
 
@@ -107,15 +113,15 @@ export class BasicBarChart2Component {
 						height: Math.max((100 * data.value) / maxValues[i], 2),
 						class: `data-${i} data-x-${xValue}`,
 						tooltip: `
-					<div class="body">
-						${tooltipTitle}
-						<div class="label">${placeLabel}</div>
-						${matchesElement}
-						<div class="value">${(+data.value).toFixed(1)}%</div>
-					</div>`,
+							<div class="body">
+								${tooltipTitle}
+								<div class="label">${placeLabel}</div>
+								${matchesElement}
+								<div class="value">${(+data.value).toFixed(1)}%</div>
+							</div>`,
 					};
 				}),
-			label: '' + (xValue + 1),
+			label: '' + (xValue + this._offsetValue),
 		} as BarContainer;
 	}
 }
