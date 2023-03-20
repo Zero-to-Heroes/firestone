@@ -580,6 +580,7 @@ const publicCardGiftCreators = [
 	CardIds.Renew_BT_252,
 	CardIds.RenounceDarkness,
 	CardIds.ResizingPouch,
+	CardIds.Rhonin,
 	CardIds.RiseToTheOccasion_AvengeTheFallenToken, // Lightborn Cariel
 	CardIds.RisingWinds,
 	CardIds.RunedOrb_BAR_541,
