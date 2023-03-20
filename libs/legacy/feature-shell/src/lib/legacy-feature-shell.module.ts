@@ -453,6 +453,7 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
@@ -501,7 +502,7 @@ import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-b
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { AdsComponent } from './js/components/ads.component';
+import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleRecapComponent } from './js/components/battlegrounds/battles/bgs-battle-recap.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -896,8 +897,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SafeHtmlPipe,
 		OwTranslatePipe,
 
-		AdsComponent,
-
 		SocialSharesComponent,
 		SocialShareModalComponent,
 		ShareLoginComponent,
@@ -1044,6 +1043,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ClipboardShareButtonComponent,
 
 		AdsComponent,
+		SingleAdComponent,
 
 		DeckCardComponent,
 		DeckTrackerDeckListComponent,
