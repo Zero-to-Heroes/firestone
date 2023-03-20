@@ -4,6 +4,8 @@ import { NavigationState } from '../../../../../models/mainwindow/navigation/nav
 import { DuelsTreasureSearchEvent } from '../../events/duels/duels-treasure-search-event';
 import { Processor } from '../processor';
 
+declare let amplitude;
+
 export class DuelsTreasureSearchProcessor implements Processor {
 	public async process(
 		event: DuelsTreasureSearchEvent,
@@ -11,6 +13,11 @@ export class DuelsTreasureSearchProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		if (event.value?.length) {
+			amplitude.getInstance().logEvent('search', {
+				page: 'duels-treasure',
+			});
+		}
 		return [
 			null,
 			navigationState.update({

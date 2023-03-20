@@ -43,6 +43,9 @@ export class CardSearchComponent extends AbstractSubscriptionStoreComponent impl
 	}
 
 	showCard(result: SetCard) {
+		amplitude.getInstance().logEvent('search', {
+			page: 'collection',
+		});
 		this.store.send(new ShowCardDetailsEvent(result.id));
 	}
 }

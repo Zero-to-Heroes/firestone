@@ -9,6 +9,8 @@ import { SetsService } from '../../../../collection/sets-service.service';
 import { SearchCardsEvent } from '../../events/collection/search-cards-event';
 import { Processor } from '../processor';
 
+declare let amplitude;
+
 export class SearchCardProcessor implements Processor {
 	constructor(
 		private collectionManager: CollectionManager,
@@ -35,6 +37,12 @@ export class SearchCardProcessor implements Processor {
 				collectionCard ? collectionCard.premiumCount : 0,
 			);
 		});
+
+		if (event.searchString?.length) {
+			amplitude.getInstance().logEvent('search', {
+				page: 'collection',
+			});
+		}
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',

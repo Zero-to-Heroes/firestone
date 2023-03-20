@@ -23,7 +23,6 @@ export class FilterShownAchievementsProcessor implements Processor {
 		if (searchString?.length) {
 			amplitude.getInstance().logEvent('search', {
 				page: 'achievements',
-				searchString: searchString,
 			});
 		}
 
