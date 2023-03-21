@@ -121,22 +121,22 @@
 	}
 }
 
-// .subscription-link {
-// 	pointer-events: all;
-// 	position: relative;
-// 	text-align: center;
-// 	font-family: 'Open Sans', sans-serif;
-// 	font-weight: 400;
-// 	font-size: 13px;
-// 	color: var(--ad-link-color);
-// 	text-decoration: underline;
-// 	margin-top: auto;
-// 	height: 30px;
-// 	justify-content: center;
-// 	display: flex;
-// 	align-items: center;
+.subscription-link {
+	pointer-events: all;
+	position: relative;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--ad-link-color);
+	text-decoration: underline;
+	margin-top: auto;
+	height: 30px;
+	justify-content: center;
+	display: flex;
+	align-items: center;
 
-// 	&:hover {
-// 		color: var(--on-ad-link-color-hover);
-// 	}
-// }
+	&:hover {
+		color: var(--on-ad-link-color-hover);
+	}
+}

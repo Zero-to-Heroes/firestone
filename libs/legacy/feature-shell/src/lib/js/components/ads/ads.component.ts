@@ -24,7 +24,7 @@ declare let amplitude: any;
 				<single-ad [adId]="'top'"></single-ad>
 			</div>
 
-			<div class="unlock-premium-banner" (click)="showSubscription()">
+			<div class="unlock-premium-banner" (click)="showSubscription()" *ngIf="showTopAd">
 				<div class="background"></div>
 				<div class="background-gradient"></div>
 				<div class="content">
@@ -35,6 +35,12 @@ declare let amplitude: any;
 					<button class="cta" [owTranslate]="'app.global.ads.cta-text'"></button>
 				</div>
 			</div>
+			<div
+				class="subscription-link"
+				*ngIf="!showTopAd"
+				(click)="showSubscription()"
+				[owTranslate]="'app.global.ads.support-the-dev'"
+			></div>
 
 			<div class="ad-container bottom-ads">
 				<single-ad [adId]="'bottom'" [tip]="tip$ | async"></single-ad>

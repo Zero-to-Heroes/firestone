@@ -24,8 +24,8 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true" [avoidGameOverlap]="true">
-			<ads *ngIf="showAds$ | async"></ads>
 			<battlegrounds-content> </battlegrounds-content>
+			<ads *ngIf="showAds$ | async"></ads>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

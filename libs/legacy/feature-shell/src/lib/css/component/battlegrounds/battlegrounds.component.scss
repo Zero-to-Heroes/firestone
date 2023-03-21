@@ -12,8 +12,9 @@ battlegrounds-content {
 }
 
 ads {
-	bottom: 10px;
-	right: 10px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }
 
 .card-tooltip.bgs-hero-select.bgs-hero-select.bgs-hero-select img,
