@@ -117,9 +117,12 @@ button {
 	); // https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way
 }
 
-ads {
+.ads {
 	bottom: 25px;
 	left: 20px;
+	width: 400px;
+	height: 300px;
+	position: absolute;
 }
 
 ::ng-deep .version-info {

@@ -70,7 +70,7 @@ declare let amplitude: any;
 					<hotkey></hotkey>
 				</div>
 			</section>
-			<ads></ads>
+			<single-ad [adId]="'loading'" class="ads"></single-ad>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

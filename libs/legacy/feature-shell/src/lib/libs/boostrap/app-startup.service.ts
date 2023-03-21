@@ -181,7 +181,7 @@ export class AppStartupService {
 		const collectionWindow = await this.ow.getCollectionWindow(prefs);
 		const shouldShowAds = await this.ads.shouldDisplayAds();
 		const isDev = !!process.env.NODE_ENV && process.env.NODE_ENV !== 'production';
-		if (shouldShowAds && !collectionWindow.isVisible && !isDev) {
+		if (shouldShowAds && !collectionWindow.isVisible) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
 			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
 			console.log('[startup] final restore for loadingwindow done', result);
