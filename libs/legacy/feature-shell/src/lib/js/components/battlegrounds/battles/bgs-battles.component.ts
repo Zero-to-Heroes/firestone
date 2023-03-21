@@ -35,6 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			[selectedFaceOff]="value.selectedFaceOff"
 			[actualBattle]="actualBattle$ | async"
 			[battleResultHistory]="battleResultHistory$ | async"
+			[showAds]="showAds$ | async"
 		>
 		</bgs-battles-view>
 	`,
@@ -48,6 +49,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent impl
 	selectedFaceOff$: Observable<BgsFaceOffWithSimulation>;
 	actualBattle$: Observable<BgsFaceOffWithSimulation>;
 	battleResultHistory$: Observable<readonly BattleResultHistory[]>;
+	showAds$: Observable<boolean>;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -134,6 +136,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent impl
 					),
 				),
 			);
+		this.showAds$ = this.store.showAds$().pipe(this.mapData((showAds) => showAds));
 	}
 
 	async ngAfterViewInit() {

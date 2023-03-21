@@ -4,12 +4,6 @@
 	flex-grow: 1;
 	min-width: 0;
 
-	&.no-ads {
-		.left {
-			height: calc(100% + 25px);
-		}
-	}
-
 	&.no-opp-recap {
 		.content {
 			padding-top: 0;
@@ -26,7 +20,7 @@
 
 .left {
 	width: 400px;
-	height: calc(100% - 300px);
+	height: calc(100% + 30px);
 	flex-shrink: 0;
 	order: 2;
 	font-size: 20px;

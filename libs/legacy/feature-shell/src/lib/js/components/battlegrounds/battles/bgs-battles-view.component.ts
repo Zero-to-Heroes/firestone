@@ -75,7 +75,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</div>
 			</ng-container>
-			<div class="left">
+			<div class="left" *ngIf="!showAds">
 				<div class="header" [owTranslate]="'battlegrounds.sim.turn-winrate-graph-title'"></div>
 				<div class="left-info">
 					<bgs-winrate-chart class="chart" [battleResultHistory]="battleResultHistory"></bgs-winrate-chart>
@@ -93,6 +93,7 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	@Input() selectedFaceOff: BgsFaceOffWithSimulation;
 	@Input() actualBattle: BgsFaceOffWithSimulation;
 	@Input() battleResultHistory: readonly BattleResultHistory[];
+	@Input() showAds: boolean;
 
 	@Input() set isMainWindow(value: boolean) {
 		this._isMainWindow = value;

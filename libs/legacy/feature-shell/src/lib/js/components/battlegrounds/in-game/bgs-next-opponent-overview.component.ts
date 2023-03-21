@@ -21,7 +21,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				opponents: opponents$ | async,
 				buddiesEnabled: buddiesEnabled$ | async
 			} as value2"
-			[ngClass]="{ 'no-ads': !(showAds$ | async), 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
+			[ngClass]="{ 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
 		>
 			<div class="content" *ngIf="value2.opponents; else emptyState">
 				<ng-container
@@ -65,7 +65,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						[owTranslate]="'battlegrounds.in-game.opponents.empty-state-subtitle'"
 					></span></div
 			></ng-template>
-			<div class="left">
+			<div class="left" *ngIf="!(showAds$ | async)">
 				<div
 					class="title"
 					[helpTooltip]="'battlegrounds.in-game.opponents.score-board-tooltip' | owTranslate"

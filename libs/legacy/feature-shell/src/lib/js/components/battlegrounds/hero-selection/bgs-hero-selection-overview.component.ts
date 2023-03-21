@@ -13,8 +13,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	selector: 'bgs-hero-selection-overview',
 	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`],
 	template: `
-		<div class="container" [ngClass]="{ 'no-ads': !(showAds$ | async) }">
-			<div class="left">
+		<div class="container">
+			<div class="left" *ngIf="!(showAds$ | async)">
 				<battlegrounds-tier-list [showFilters]="true"></battlegrounds-tier-list>
 			</div>
 			<div class="hero-selection-overview">

@@ -33,7 +33,7 @@ import { normalizeCardId } from './card-utils';
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats.component.scss`,
 	],
 	template: `
-		<div class="container" [ngClass]="{ 'no-ads': !(showAds$ | async) }">
+		<div class="container">
 			<div class="content empty-state" *ngIf="!_panel?.player && !mainPlayerCardId">
 				<i>
 					<svg>
@@ -94,7 +94,7 @@ import { normalizeCardId } from './card-utils';
 				</div>
 			</div>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
-			<div class="left" *ngIf="_panel?.player">
+			<div class="left" *ngIf="_panel?.player && !(showAds$ | async)">
 				<div class="title" [owTranslate]="'battlegrounds.post-match-stats.title'"></div>
 				<bgs-post-match-stats-recap
 					[stats]="_panel"

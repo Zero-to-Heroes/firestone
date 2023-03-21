@@ -1,5 +1,4 @@
 import {
-	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -9,7 +8,6 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, startWith } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -21,21 +19,40 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		`../../../css/global/ngx-tooltips.scss`,
 		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
 	],
-	encapsulation: ViewEncapsulation.None,
+	encapsulation: ViewEncapsulation.None, // FIXME: not sure that's needed
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true" [avoidGameOverlap]="true">
+			<section class="menu-bar">
+				<div class="first">
+					<div class="navigation">
+						<i class="i-117X33 gold-theme logo">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#logo" />
+							</svg>
+						</i>
+						<menu-selection-bgs></menu-selection-bgs>
+					</div>
+				</div>
+				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
+				<div class="controls exclude-dbclick">
+					<control-bug></control-bug>
+					<control-settings [settingsApp]="'battlegrounds'"></control-settings>
+					<control-discord></control-discord>
+					<control-minimize [windowId]="windowId"></control-minimize>
+					<control-maximize
+						[windowId]="windowId"
+						[doubleClickListenerParentClass]="'menu-bar'"
+						[exludeClassForDoubleClick]="'exclude-dbclick'"
+					></control-maximize>
+					<control-close [windowId]="windowId" [closeAll]="true"></control-close>
+				</div>
+			</section>
 			<battlegrounds-content> </battlegrounds-content>
-			<ads *ngIf="showAds$ | async"></ads>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
-	showAds$: Observable<boolean>;
-
+export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
 	windowId: string;
 
 	private hotkeyPressedHandler: EventEmitter<boolean>;
@@ -50,13 +67,6 @@ export class BattlegroundsComponent
 	) {
 		super(store, cdr);
 		this.init();
-	}
-
-	ngAfterContentInit() {
-		this.showAds$ = this.store.showAds$().pipe(
-			this.mapData((showAds) => showAds),
-			startWith(true),
-		);
 	}
 
 	private async init() {

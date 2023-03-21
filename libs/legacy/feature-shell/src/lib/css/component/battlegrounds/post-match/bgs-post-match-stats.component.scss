@@ -10,12 +10,6 @@
 	height: 100%;
 	width: 100%;
 	flex-grow: 1;
-
-	&.no-ads {
-		.left {
-			height: calc(100% + 25px);
-		}
-	}
 }
 
 .left {
@@ -35,7 +29,7 @@
 	flex-grow: 1;
 	flex-shrink: 1;
 	width: 100%;
-	max-width: calc(100% - 410px);
+	// max-width: calc(100% - 410px);
 	min-height: 0;
 	// overflow: hidden;
 	// So that the divine shields are the top are not truncated
@@ -174,7 +168,7 @@
 
 .left {
 	width: 400px;
-	height: calc(100% - 300px);
+	height: calc(100% + 30px);
 	flex-shrink: 0;
 	order: 2;
 	font-size: 20px;

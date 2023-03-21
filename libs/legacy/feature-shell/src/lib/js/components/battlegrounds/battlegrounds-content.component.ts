@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, startWith } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -21,35 +21,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	styleUrls: [`../../../css/component/battlegrounds/battlegrounds-content.component.scss`],
 	template: `
 		<div class="battlegrounds">
-			<section class="menu-bar">
-				<div class="first">
-					<div class="navigation">
-						<i class="i-117X33 gold-theme logo">
-							<svg class="svg-icon-fill">
-								<use xlink:href="assets/svg/sprite.svg#logo" />
-							</svg>
-						</i>
-						<menu-selection-bgs></menu-selection-bgs>
-					</div>
-				</div>
-				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
-				<div class="controls exclude-dbclick">
-					<control-bug></control-bug>
-					<control-settings [settingsApp]="'battlegrounds'"></control-settings>
-					<control-discord></control-discord>
-					<control-minimize [windowId]="windowId"></control-minimize>
-					<control-maximize
-						[windowId]="windowId"
-						[doubleClickListenerParentClass]="'menu-bar'"
-						[exludeClassForDoubleClick]="'exclude-dbclick'"
-					></control-maximize>
-					<control-close
-						[windowId]="windowId"
-						[eventProvider]="closeHandler"
-						[closeAll]="true"
-					></control-close>
-				</div>
-			</section>
 			<section
 				class="content-container"
 				*ngIf="{ currentPanelId: currentPanelId$ | async, currentPanel: currentPanel$ | async } as value"
@@ -74,6 +45,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				</ng-container>
 			</section>
 		</div>
+		<ads *ngIf="showAds$ | async" [showTopAd]="true"></ads>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -83,18 +55,15 @@ export class BattlegroundsContentComponent
 {
 	showTitle$: Observable<boolean>;
 	currentPanelId$: Observable<string>;
-	// TODO
 	currentPanel$: Observable<BgsPanel | any>;
 	reviewId$: Observable<string>;
 	mainPlayerCardId$: Observable<string>;
 	mmr$: Observable<number>;
 	gameEnded$: Observable<boolean>;
 	faceOffs$: Observable<readonly BgsFaceOffWithSimulation[]>;
-	// currentGame$: Observable<BgsGame>;
+	showAds$: Observable<boolean>;
 
 	windowId: string;
-
-	closeHandler: () => void;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -156,6 +125,10 @@ export class BattlegroundsContentComponent
 					0,
 				),
 			);
+		this.showAds$ = this.store.showAds$().pipe(
+			this.mapData((showAds) => showAds),
+			startWith(true),
+		);
 	}
 
 	async ngAfterViewInit() {

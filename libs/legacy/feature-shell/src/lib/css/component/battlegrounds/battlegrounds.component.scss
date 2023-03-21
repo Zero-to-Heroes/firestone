@@ -9,12 +9,79 @@ battlegrounds-content {
 	line-height: 22px;
 	z-index: 9;
 	position: relative;
+	min-width: 0;
+	min-height: 0;
 }
 
-ads {
-	position: absolute;
-	bottom: 0;
-	right: 0;
+.navigation {
+	display: flex;
+	position: relative;
+	flex-shrink: 0;
+	height: 100%;
+	align-items: center;
+
+	.logo {
+		position: relative;
+		margin-left: 20px;
+		margin-right: 35px;
+		top: -5px;
+	}
+
+	menu-selection-bgs {
+		display: flex;
+		align-items: flex-end;
+	}
+
+	.main-section {
+		display: flex;
+	}
+}
+
+.menu-bar {
+	background: transparent;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	position: relative;
+	width: 100%;
+	padding-right: 10px;
+	height: 50px;
+	z-index: 400;
+	flex-shrink: 0;
+	border: none;
+	flex-grow: 1;
+
+	.first {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		justify-content: center;
+	}
+
+	::ng-deep hotkey {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		margin-right: 35px;
+		align-items: flex-start;
+		position: relative;
+		top: 5px;
+
+		.key {
+			border: none;
+			width: auto;
+			height: auto;
+		}
+		.plus {
+			margin: 0;
+		}
+	}
+
+	.controls {
+		height: 30px;
+		display: flex;
+		margin-right: -10px;
+	}
 }
 
 .card-tooltip.bgs-hero-select.bgs-hero-select.bgs-hero-select img,

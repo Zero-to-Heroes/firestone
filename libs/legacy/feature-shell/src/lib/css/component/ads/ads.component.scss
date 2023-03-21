@@ -33,9 +33,15 @@
 	}
 
 	&.top-ads {
+		height: 275px;
+		min-height: 275px;
+		max-height: 275px;
+
 		single-ad {
 			width: 300px;
 			height: 250px;
+			min-height: 250px;
+			max-height: 250px;
 			display: flex;
 		}
 	}
@@ -47,8 +53,8 @@
 	height: 110px;
 	position: relative;
 	pointer-events: all;
-	margin-top: 12px;
-	margin-bottom: 12px;
+	margin-top: 10px;
+	margin-bottom: auto;
 
 	.background {
 		position: absolute;
