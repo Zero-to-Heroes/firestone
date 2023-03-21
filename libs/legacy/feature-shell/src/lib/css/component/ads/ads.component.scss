@@ -47,14 +47,22 @@
 	}
 }
 
+.banner-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: fit-content;
+	margin-top: 10px;
+	margin-bottom: auto;
+	pointer-events: all;
+}
+
 .unlock-premium-banner {
 	display: flex;
 	width: 400px;
 	height: 110px;
 	position: relative;
-	pointer-events: all;
-	margin-top: 10px;
-	margin-bottom: auto;
 
 	.background {
 		position: absolute;
@@ -127,7 +135,7 @@
 	}
 }
 
-.subscription-link {
+.features-link {
 	pointer-events: all;
 	position: relative;
 	text-align: center;
