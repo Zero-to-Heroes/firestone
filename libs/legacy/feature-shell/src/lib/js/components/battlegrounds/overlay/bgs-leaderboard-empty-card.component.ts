@@ -125,6 +125,7 @@ export class BgsLeaderboardEmptyCardComponent
 	buddyClass: string;
 
 	private callbackHandle;
+	private isPremiumUser: boolean;
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
@@ -140,6 +141,10 @@ export class BgsLeaderboardEmptyCardComponent
 			this.position = value ? 'global-top-left' : 'global-bottom-left';
 			this.componentClass = value ? null : 'bottom';
 			this.updateInfo();
+		});
+
+		this.store.isPremiumUser$().subscribe((premium) => {
+			this.isPremiumUser = premium;
 		});
 		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(this.mapData((info) => info));
 		this.callbackHandle = this.ow.addHotKeyHoldListener(
@@ -157,7 +162,9 @@ export class BgsLeaderboardEmptyCardComponent
 	}
 
 	private onTabDown() {
-		this.showLiveInfo.next(true);
+		if (this.isPremiumUser) {
+			this.showLiveInfo.next(true);
+		}
 	}
 
 	private onTabUp() {
