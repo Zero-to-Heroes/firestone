@@ -98,9 +98,12 @@ export class BgsBattleSimulationService {
 			},
 		);
 
-		const result: SimulationResult = prefs.bgsUseLocalSimulator
-			? await this.simulateLocalBattle(battleInfoInput, prefs)
-			: ((await this.http.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput).toPromise()) as SimulationResult);
+		const result: SimulationResult =
+			prefs.bgsUseLocalSimulator && prefs.isPremium
+				? await this.simulateLocalBattle(battleInfoInput, prefs)
+				: ((await this.http
+						.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput)
+						.toPromise()) as SimulationResult);
 		const resultForLog = !!result ? { ...result } : null;
 		if (!!resultForLog) {
 			delete resultForLog.outcomeSamples;

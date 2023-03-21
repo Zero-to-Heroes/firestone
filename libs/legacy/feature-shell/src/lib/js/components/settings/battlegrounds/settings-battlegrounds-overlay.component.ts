@@ -17,7 +17,6 @@ import { Knob } from '../preference-slider.component';
 		<div
 			class="battlegrounds-general"
 			*ngIf="{
-				useLocalSimulator: useLocalSimulator$ | async,
 				enableSimulation: enableSimulation$ | async,
 				bgsEnableBattleSimulationOverlay: bgsEnableBattleSimulationOverlay$ | async,
 				bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit$ | async,
@@ -284,7 +283,6 @@ export class SettingsBattlegroundsOverlayComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
-	useLocalSimulator$: Observable<boolean>;
 	enableSimulation$: Observable<boolean>;
 	bgsEnableBattleSimulationOverlay$: Observable<boolean>;
 	bgsHideSimResultsOnRecruit$: Observable<boolean>;
@@ -325,7 +323,6 @@ export class SettingsBattlegroundsOverlayComponent
 	}
 
 	ngAfterContentInit() {
-		this.useLocalSimulator$ = this.listenForBasicPref$((prefs) => prefs.bgsUseLocalSimulator);
 		this.enableSimulation$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableSimulation);
 		this.bgsEnableBattleSimulationOverlay$ = this.listenForBasicPref$(
 			(prefs) => prefs.bgsEnableBattleSimulationOverlay,
