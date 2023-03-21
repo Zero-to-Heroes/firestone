@@ -41,22 +41,102 @@
 	}
 }
 
-.subscription-link {
-	pointer-events: all;
-	position: relative;
-	text-align: center;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 400;
-	font-size: 13px;
-	color: var(--ad-link-color);
-	text-decoration: underline;
-	margin-top: auto;
-	height: 30px;
-	justify-content: center;
+.unlock-premium-banner {
 	display: flex;
-	align-items: center;
+	width: 400px;
+	height: 110px;
+	position: relative;
+	pointer-events: all;
+	margin-top: 12px;
+	margin-bottom: 12px;
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/premium_banner.png');
+	}
+
+	.background-gradient {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(180deg, rgba(20, 20, 20, 0) -21.64%, #141414 100%);
+	}
+
+	.content {
+		font-family: 'Open Sans';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 22px;
+		line-height: 30px;
+		color: #f8f8f8;
+		margin: 15px 20px;
+		position: relative;
+		width: 100%;
+
+		.text {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+
+			.main-text {
+			}
+
+			.sub-text {
+				font-size: 16px;
+				margin-left: auto;
+				opacity: 0.8;
+				margin-top: 5px;
+			}
+		}
+
+		.cta {
+			padding: 10px;
+			background-color: #ffb948;
+			font-family: 'Poppins';
+			font-style: normal;
+			font-weight: 800;
+			font-size: 16px;
+			line-height: 24px;
+			color: #190505;
+			opacity: 0.8;
+			position: absolute;
+			bottom: 0;
+		}
+	}
 
 	&:hover {
-		color: var(--on-ad-link-color-hover);
+		.content .cta {
+			opacity: 1;
+		}
 	}
 }
+
+// .subscription-link {
+// 	pointer-events: all;
+// 	position: relative;
+// 	text-align: center;
+// 	font-family: 'Open Sans', sans-serif;
+// 	font-weight: 400;
+// 	font-size: 13px;
+// 	color: var(--ad-link-color);
+// 	text-decoration: underline;
+// 	margin-top: auto;
+// 	height: 30px;
+// 	justify-content: center;
+// 	display: flex;
+// 	align-items: center;
+
+// 	&:hover {
+// 		color: var(--on-ad-link-color-hover);
+// 	}
+// }

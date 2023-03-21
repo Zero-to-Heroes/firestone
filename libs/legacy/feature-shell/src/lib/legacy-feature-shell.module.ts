@@ -790,7 +790,7 @@ overwolf.extensions.current.getManifest((manifestResult) => {
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
 	handleError(error: { originalError: unknown }): unknown {
-		console.log('capturing error', error);
+		// console.log('capturing error', error);
 		const originalError = error.originalError ?? error;
 		captureException(originalError);
 		throw error;

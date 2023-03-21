@@ -23,11 +23,18 @@ declare let amplitude: any;
 			<div class="ad-container top-ads" *ngIf="showTopAd">
 				<single-ad [adId]="'top'"></single-ad>
 			</div>
-			<div
-				class="subscription-link"
-				(click)="showSubscription()"
-				[owTranslate]="'app.global.ads.support-the-dev'"
-			></div>
+
+			<div class="unlock-premium-banner" (click)="showSubscription()">
+				<div class="background"></div>
+				<div class="background-gradient"></div>
+				<div class="content">
+					<div class="text">
+						<span class="main-text" [owTranslate]="'app.global.ads.unlock-text'"></span>
+						<span class="sub-text" [owTranslate]="'app.global.ads.unlock-subtext'"></span>
+					</div>
+					<button class="cta" [owTranslate]="'app.global.ads.cta-text'"></button>
+				</div>
+			</div>
 
 			<div class="ad-container bottom-ads">
 				<single-ad [adId]="'bottom'" [tip]="tip$ | async"></single-ad>
