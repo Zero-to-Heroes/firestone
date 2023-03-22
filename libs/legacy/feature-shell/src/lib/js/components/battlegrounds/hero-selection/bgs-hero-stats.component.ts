@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
@@ -7,6 +8,7 @@ import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat'
 import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-tooltip.component';
 
 @Component({
 	selector: 'bgs-hero-stats',
@@ -66,8 +68,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				<div
 					class="strategies-link"
 					[owTranslate]="'battlegrounds.hero-stats.strategies-link'"
-					[helpTooltip]="'battlegrounds.hero-stats.strategies-link-tooltip' | owTranslate"
 					(click)="showStrategies()"
+					componentTooltip
+					[componentType]="componentType"
+					[componentInput]="cardId"
 				></div>
 			</div>
 			<div class="winrate" *ngIf="showTurnWinrates">
@@ -83,6 +87,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	componentType: ComponentType<BgsHeroStrategyTipsTooltipComponent> = BgsHeroStrategyTipsTooltipComponent;
+
 	placementChartData$: Observable<SimpleBarChartData[]>;
 	averagePosition: number;
 	playerAveragePosition: number;

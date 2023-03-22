@@ -458,6 +458,7 @@ import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
+import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
@@ -929,6 +930,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroTierComponent,
 		BgsHeroMiniComponent,
 		BgsHeroSelectionTooltipComponent,
+		BgsHeroStrategyTipsTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
 		BgsPostMatchStatsComponent,
@@ -1063,6 +1065,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroTierComponent,
 		BgsHeroMiniComponent,
 		BgsHeroSelectionTooltipComponent,
+		BgsHeroStrategyTipsTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
 		BgsPostMatchStatsComponent,
@@ -1786,6 +1789,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 	entryComponents: [
 		ConfirmationComponent,
 		BgsHeroSelectionTooltipComponent,
+		BgsHeroStrategyTipsTooltipComponent,
 		TwitterShareModalComponent,
 		RedditShareModalComponent,
 		BgsOverlayHeroOverviewComponent,
