@@ -1,0 +1,10 @@
+.root {
+	width: 90px;
+	height: 90px;
+
+	img {
+		height: 100%;
+		clip-path: circle(30% at 50% 50%);
+		transform: scale(1.5);
+	}
+}

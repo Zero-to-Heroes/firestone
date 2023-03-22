@@ -282,6 +282,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateBgsHeroTipsPosition(left: any, top: any) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsHeroTipsWidgetPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateBgsMinionsListPosition(left: any, top: any) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsMinionsListPosition: { left, top } };

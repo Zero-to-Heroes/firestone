@@ -54,6 +54,13 @@ import { Knob } from '../preference-slider.component';
 					premiumSetting
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowHeroTipsOverlay"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-hero-tips-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-hero-tips-tooltip' | owTranslate"
+					premiumSetting
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowBannedTribesOverlay"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.show-banned-tribes-label' | owTranslate"

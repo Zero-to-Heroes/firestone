@@ -129,7 +129,6 @@ export const getAllCardsInGame = (
 				return true;
 			}
 			const tribesForCard = getTribesForInclusion(card, false);
-			card.name.includes('Boar') && console.debug('tribesForCard', tribesForCard, card);
 			if (!tribesForCard.filter((t) => t !== Race.BLANK).length) {
 				return true;
 			}

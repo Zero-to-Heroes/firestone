@@ -470,6 +470,8 @@ import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counte
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
+import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
+import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -1122,6 +1124,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsMinionsTiersOverlayComponent,
 		BattlegroundsOverlayButtonComponent,
 		BgsBannedTribesComponent,
+		BgsHeroTipsComponent,
 		BgsSimulationOverlayComponent,
 		BgsHeroSelectionOverlayComponent,
 		// ConstructedComponent,
@@ -1487,6 +1490,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,
 		BgsBannedTribesWidgetWrapperComponent,
+		BgsHeroTipsWidgetWrapperComponent,
 		BgsWindowButtonWidgetWrapperComponent,
 		BgsHeroSelectionWidgetWrapperComponent,
 		BgsLeaderboardWidgetWrapperComponent,

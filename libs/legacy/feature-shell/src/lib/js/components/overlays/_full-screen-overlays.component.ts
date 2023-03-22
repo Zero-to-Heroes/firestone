@@ -65,6 +65,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
 			<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
 			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
+			<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>

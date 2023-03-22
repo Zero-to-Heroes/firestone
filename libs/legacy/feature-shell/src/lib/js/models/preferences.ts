@@ -479,6 +479,7 @@ export class Preferences implements IPreferences {
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
 	readonly bgsShowBannedTribesOverlay = true;
+	readonly bgsShowHeroTipsOverlay = true;
 	readonly bgsShowAvailableTribesOverlay = false;
 	readonly bgsTribesOverlaySingleRow = false;
 	readonly bgsForceShowPostMatchStats2 = false;
@@ -499,6 +500,8 @@ export class Preferences implements IPreferences {
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsHeroTipsWidgetPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsBannedTribeScale = 101.6;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

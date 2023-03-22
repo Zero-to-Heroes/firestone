@@ -434,12 +434,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 	private toSessionMatch(info: GameStat): SessionMatch {
 		const heroCard = this.allCards.getCard(info.playerCardId);
 		const normalizedCardId = normalizeHeroCardId(heroCard.id, this.allCards);
-		console.debug(
-			'session info',
-			this.allCards.getCard(normalizedCardId).name,
-			normalizedCardId,
-			info.playerCardId,
-		);
 		return {
 			reviewId: info.reviewId,
 			heroName: this.allCards.getCard(normalizedCardId).name,
