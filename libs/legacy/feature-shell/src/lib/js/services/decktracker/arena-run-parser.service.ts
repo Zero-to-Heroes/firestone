@@ -121,14 +121,13 @@ export class ArenaRunParserService {
 	}
 
 	public setLastArenaMatch(stats: readonly GameStat[]) {
-		this.log('trying to set last arena match', stats?.length && stats[0]);
 		if (!stats?.length) {
 			return;
 		}
 
 		if (stats[0].gameMode === 'arena') {
 			this.log(
-				'correct game mode, trying to see if it is the last match in run',
+				'setting last arena match, trying to see if it is the last match in run',
 				stats[0].additionalResult,
 				stats[0].result,
 			);
