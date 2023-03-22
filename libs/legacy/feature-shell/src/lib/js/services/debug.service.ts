@@ -61,6 +61,10 @@ export class DebugService {
 				let argsString = stack + '\n|';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
+					const arg = arguments[i];
+					if (!!arg?.includes && arg?.includes('ResizeObserver loop limit exceeded')) {
+						continue;
+					}
 					argsString +=
 						(
 							JSON.stringify(arguments[i], function (key, value) {
