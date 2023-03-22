@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.1',
+		version: '11.0.3',
 		force: false,
 		sections: [
 			{
@@ -60,6 +60,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Duels now has real tier lists for Heroes, Hero Powers, Signature Treasures, and Active and Passive Treasures.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now see the strategy tips for each hero by mousing over the "click to view the tips" text in the BG window`,
+							},
+							{
+								type: 'feature',
+								text: `(PREMIUM) Premium users can also see this information directly in the overlay`,
 							},
 						],
 					},
