@@ -600,6 +600,7 @@ const publicCardGiftCreators = [
 	CardIds.SethekkVeilweaver,
 	CardIds.ShadowVisions,
 	CardIds.ShiftingShade,
+	CardIds.Shimmerfly,
 	CardIds.Simulacrum_CORE_ICC_823,
 	CardIds.Simulacrum_ICC_823,
 	CardIds.SinfulSousChef,
