@@ -99,7 +99,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 					console.log(`[ads-${this.adId}] display ad impression`);
 				};
 				this.owAdsReadyListener = async (data) => {
-					console.log(`[ads-${this.adId}] owAdsReady`, data);
+					console.log(`[ads-${this.adId}] ready to serve ad`);
 				};
 				this.adRef.addEventListener('impression', this.impressionListener);
 				this.adRef.addEventListener('display_ad_loaded', this.videoAdsDisplayimpressionListener);
