@@ -92,7 +92,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 				</div>
 				<ads *ngIf="value.showAds" [showTopAd]="true"></ads>
 			</section>
-			<!-- <ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue> -->
+			<ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue>
 			<new-version-notification
 				class="new-version"
 				[forceOpen]="forceShowReleaseNotes$ | async"
