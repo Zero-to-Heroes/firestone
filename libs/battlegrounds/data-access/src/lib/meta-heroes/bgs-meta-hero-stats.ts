@@ -269,8 +269,14 @@ export const buildHeroStats = (
 				name: allCards.getCard(stat.heroCardId)?.name,
 				baseCardId: normalizeHeroCardId(stat.heroCardId, allCards.getService()),
 				heroPowerCardId: getHeroPower(stat.heroCardId, allCards.getService()),
-				top1: stat.placementDistribution.find((p) => p.rank === 1)?.percentage ?? 0,
-				top4: stat.placementDistribution.find((p) => p.rank <= 4)?.percentage ?? 0,
+				top1: stat.placementDistribution
+					.filter((p) => p.rank === 1)
+					.map((p) => p.percentage)
+					.reduce((a, b) => a + b, 0),
+				top4: stat.placementDistribution
+					.filter((p) => p.rank <= 4)
+					.map((p) => p.percentage)
+					.reduce((a, b) => a + b, 0),
 			};
 			return result;
 		})
