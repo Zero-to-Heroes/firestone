@@ -53,6 +53,7 @@ export class BgsBattleResultParser implements EventParser {
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.update({
 			faceOffs: newFaceOffs,
 		});
+		newFaceOff.checkIntegrity(gameAfterFirstFaceOff);
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,
 		} as BgsGame);
