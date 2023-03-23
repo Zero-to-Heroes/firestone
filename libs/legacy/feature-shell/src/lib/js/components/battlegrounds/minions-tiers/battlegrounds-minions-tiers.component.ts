@@ -11,7 +11,7 @@ import {
 import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { getAllCardsInGame, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
+import { getAllCardsInGame, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -79,23 +79,32 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = combineLatest(
+		this.tiers$ = combineLatest([
 			this.store.listenPrefs$(
 				(prefs) => prefs.bgsShowMechanicsTiers,
 				(prefs) => prefs.bgsGroupMinionsIntoTheirTribeGroup,
 			),
-			this.store.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces),
-		).pipe(
-			this.mapData(([[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup], [races]]) => {
-				const cardsInGame = getAllCardsInGame(races, this.allCards);
-				const result = this.buildTiers(
-					cardsInGame,
-					bgsGroupMinionsIntoTheirTribeGroup,
-					showMechanicsTiers,
-					races,
-				);
-				return result;
-			}),
+			this.store.listenBattlegrounds$(
+				([main, prefs]) => main?.currentGame?.availableRaces,
+				([main, prefs]) => main?.currentGame?.hasBuddies,
+				([main, prefs]) => main?.currentGame?.getMainPlayer()?.cardId,
+			),
+		]).pipe(
+			this.mapData(
+				([[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup], [races, hasBuddies, playerCardId]]) => {
+					const ownBuddyId = hasBuddies ? getBuddy(playerCardId as CardIds, this.allCards) : null;
+					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
+					const cardsInGame = getAllCardsInGame(races, this.allCards);
+					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
+					const result = this.buildTiers(
+						cardsToIncludes,
+						bgsGroupMinionsIntoTheirTribeGroup,
+						showMechanicsTiers,
+						races,
+					);
+					return result;
+				},
+			),
 		);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
