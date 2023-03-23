@@ -29,7 +29,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					<live-streams *ngIf="value.category === 'live-streams'"></live-streams>
 				</div>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)"></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
