@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.5',
+		version: '11.0.6',
 		force: false,
 		sections: [
 			{
@@ -73,6 +73,18 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `(PREMIUM) Premium users can also see this information directly in the overlay`,
+							},
+							{
+								type: 'feature',
+								text: `Your own buddy now appears in the minions list. This lets you check out its golden version easily`,
+							},
+							{
+								type: 'feature',
+								text: `If you're playing ETC Band Manager, a new "Buds" tier will appear in the bottom row of the minions list with all the Buddies that they can discover from.`,
+							},
+							{
+								type: 'feature',
+								text: `If you're playing Tess or Scabbs, a new "Buds" tier will appear in the bottom row of the minions list with the buddies from all the players in the lobby.`,
 							},
 						],
 					},
