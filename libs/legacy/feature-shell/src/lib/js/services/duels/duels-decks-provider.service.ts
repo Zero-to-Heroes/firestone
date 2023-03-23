@@ -82,7 +82,14 @@ export class DuelsDecksProviderService {
 							),
 						)
 						.filter((run) => run);
-					console.debug('[duels-runs] rebuilding runs', runs, duelsRunInfos, duelsRewardsInfo, gameStats);
+					console.debug('[duels-runs] rebuilding runs', {
+						runs,
+						duelsRunInfos,
+						duelsRewardsInfo,
+						duelGames: gameStats?.filter((match) => isDuels(match.gameMode)),
+						duelGamesWithRunId: duelMatches,
+						gameStats,
+					});
 					return runs;
 				}),
 			)
