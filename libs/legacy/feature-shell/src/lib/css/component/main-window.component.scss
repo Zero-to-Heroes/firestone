@@ -52,6 +52,7 @@
 	flex-direction: column;
 	flex-grow: 1;
 	max-width: calc(100% - 65px);
+	min-width: 0;
 }
 
 .menu-bar {
