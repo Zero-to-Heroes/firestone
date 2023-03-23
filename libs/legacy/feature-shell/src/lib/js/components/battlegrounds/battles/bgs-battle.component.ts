@@ -75,10 +75,12 @@ declare let amplitude;
 						<div class="controls">
 							<div
 								class="button simulate"
+								[ngClass]="{ disabled: simulateButtonDisabled }"
 								(click)="simulateNewBattle()"
 								[helpTooltip]="tooltip"
-								[owTranslate]="'battlegrounds.sim.simulate-button'"
-							></div>
+							>
+								{{ simulateButtonLabel }}
+							</div>
 						</div>
 						<div class="result new">
 							<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
@@ -130,10 +132,12 @@ declare let amplitude;
 					<div class="controls">
 						<div
 							class="button simulate"
+							[ngClass]="{ disabled: simulateButtonDisabled }"
 							(click)="simulateNewBattle()"
 							[helpTooltip]="tooltip"
-							[owTranslate]="'battlegrounds.sim.simulate-button'"
-						></div>
+						>
+							{{ simulateButtonLabel }}
+						</div>
 						<div class="side-buttons">
 							<div
 								class="export"
@@ -283,6 +287,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	exportConfirmationTimeout = 4_000;
 	importConfirmationText = this.i18n.translateString('battlegrounds.sim.importing');
 	importConfirmationTimeout = 4_000;
+	simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
+	simulateButtonDisabled = false;
 
 	repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
 	repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
@@ -727,11 +733,17 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	// For now do it purely in the UI, let's see later on if we want to use the store
 	async simulateNewBattle() {
+		if (this.simulateButtonDisabled) {
+			return;
+		}
+
 		amplitude.getInstance().logEvent('battle-resim');
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'waiting-for-result',
 			battleResult: null,
 		} as BgsFaceOffWithSimulation);
+		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulating-button');
+		this.simulateButtonDisabled = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -766,7 +778,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			battleInfoStatus: 'done',
 			battleResult: newSim,
 		} as BgsFaceOffWithSimulation);
-		// this.newBattleStatus = 'done';
+		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
+		this.simulateButtonDisabled = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

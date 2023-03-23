@@ -82,25 +82,25 @@
 				max-height: 20px;
 			}
 
-			&:hover {
+			&:hover:not(.disabled) {
 				background: var(--on-confirmation-button-background-color);
 				color: var(--on-confirmation-text-color);
 			}
 
-			&.simulate.disabled {
-				background: var(--default-title-color);
-				border: 1px solid var(--default-title-color);
-				color: var(--color-7);
-				font-weight: bold;
-				opacity: 0.8;
+			// &.simulate.disabled {
+			// 	// background: var(--default-title-color);
+			// 	// border: 1px solid var(--default-title-color);
+			// 	// color: var(--color-7);
+			// 	// font-weight: bold;
+			// 	// opacity: 0.8;
 
-				&:hover {
-					background: var(--default-title-color);
-					border: 1px solid var(--default-title-color);
-					color: var(--color-7);
-					opacity: 1;
-				}
-			}
+			// 	// &:hover {
+			// 	// 	background: var(--default-title-color);
+			// 	// 	border: 1px solid var(--default-title-color);
+			// 	// 	color: var(--color-7);
+			// 	// 	opacity: 1;
+			// 	// }
+			// }
 		}
 	}
 
@@ -293,7 +293,7 @@
 					border: none;
 					width: 80px;
 
-					&:hover {
+					&:hover:not(.disabled) {
 						background: var(--color-1);
 					}
 				}
@@ -388,7 +388,7 @@
 					color: var(--color-5);
 					border: none;
 
-					&:hover {
+					&:hover:not(.disabled) {
 						background: var(--color-1);
 					}
 
@@ -419,7 +419,7 @@
 						// }
 					}
 
-					&:hover {
+					&:hover:not(.disabled) {
 						.button.cancel {
 							display: flex;
 							opacity: 1;
@@ -477,7 +477,7 @@
 				--icon-color: var(--default-title-color);
 			}
 
-			&:hover {
+			&:hover:not(.disabled) {
 				color: var(--default-title-color);
 			}
 
@@ -497,7 +497,7 @@
 					margin-right: 5px;
 				}
 
-				&:hover .icon {
+				&:hover:not(.disabled) .icon {
 					--icon-color: var(--default-title-color);
 				}
 			}
@@ -533,4 +533,8 @@
 			}
 		}
 	}
+}
+
+.button.disabled {
+	opacity: 0.7;
 }
