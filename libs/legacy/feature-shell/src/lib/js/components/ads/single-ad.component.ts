@@ -39,7 +39,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	private adRef;
 	private adInit = false;
 	private impressionListener: (message: any) => void;
-	private videoAdsDisplayimpressionListener: (message: any) => void;
+	private displayAdLoadedListener: (message: any) => void;
 	private owAdsReadyListener: (message: any) => void;
 
 	constructor(protected readonly cdr: ChangeDetectorRef, private ow: OverwolfService) {
@@ -55,7 +55,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 		super.ngOnDestroy();
 		console.log(`[ads-${this.adId}] removing event listeners`);
 		this.adRef?.removeEventListener(this.impressionListener);
-		this.adRef?.removeEventListener(this.videoAdsDisplayimpressionListener);
+		this.adRef?.removeEventListener(this.displayAdLoadedListener);
 		this.adRef?.removeEventListener(this.owAdsReadyListener);
 	}
 
@@ -80,11 +80,11 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				return;
 			}
 			if (!this.adRef) {
-				if (this.impressionListener || this.videoAdsDisplayimpressionListener) {
+				if (this.impressionListener || this.displayAdLoadedListener) {
 					console.warn(
 						`[ads-${this.adId}] Redefining the impression listener, could cause memory leaks`,
 						this.impressionListener,
-						this.videoAdsDisplayimpressionListener,
+						this.displayAdLoadedListener,
 					);
 				}
 				this.adInit = true;
@@ -95,14 +95,14 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 					// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
 					console.log(`[ads-${this.adId}] impression`);
 				};
-				this.videoAdsDisplayimpressionListener = async (data) => {
-					console.log(`[ads-${this.adId}] display ad impression`);
+				this.displayAdLoadedListener = async (data) => {
+					console.log(`[ads-${this.adId}] display ad loaded`);
 				};
 				this.owAdsReadyListener = async (data) => {
 					console.log(`[ads-${this.adId}] ready to serve ad`);
 				};
 				this.adRef.addEventListener('impression', this.impressionListener);
-				this.adRef.addEventListener('display_ad_loaded', this.videoAdsDisplayimpressionListener);
+				this.adRef.addEventListener('display_ad_loaded', this.displayAdLoadedListener);
 				this.adRef.addEventListener('ow_internal_rendered', this.owAdsReadyListener);
 
 				console.log(`[ads-${this.adId}] init OwAd`);
