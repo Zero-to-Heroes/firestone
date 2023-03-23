@@ -38,9 +38,10 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 
 	private adRef;
 	private adInit = false;
-	private impressionListener: (message: any) => void;
+	private videoImpressionListener: (message: any) => void;
+	private playListener: (message: any) => void;
 	private displayAdLoadedListener: (message: any) => void;
-	private owAdsReadyListener: (message: any) => void;
+	private adsReadyListener: (message: any) => void;
 
 	constructor(protected readonly cdr: ChangeDetectorRef, private ow: OverwolfService) {
 		super(cdr);
@@ -54,9 +55,10 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		console.log(`[ads-${this.adId}] removing event listeners`);
-		this.adRef?.removeEventListener(this.impressionListener);
+		this.adRef?.removeEventListener(this.videoImpressionListener);
+		this.adRef?.removeEventListener(this.playListener);
 		this.adRef?.removeEventListener(this.displayAdLoadedListener);
-		this.adRef?.removeEventListener(this.owAdsReadyListener);
+		this.adRef?.removeEventListener(this.adsReadyListener);
 	}
 
 	private async initializeAds() {
@@ -80,30 +82,39 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				return;
 			}
 			if (!this.adRef) {
-				if (this.impressionListener || this.displayAdLoadedListener) {
-					console.warn(
-						`[ads-${this.adId}] Redefining the impression listener, could cause memory leaks`,
-						this.impressionListener,
-						this.displayAdLoadedListener,
-					);
+				if (this.videoImpressionListener || this.displayAdLoadedListener || this.playListener) {
+					console.warn(`[ads-${this.adId}] Redefining the impression listener, could cause memory leaks`);
 				}
 				this.adInit = true;
 				console.log(`[ads-${this.adId}] first time init ads, creating OwAd`);
 				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`));
 
-				this.impressionListener = async (data) => {
-					// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
-					console.log(`[ads-${this.adId}] impression`);
-				};
 				this.displayAdLoadedListener = async (data) => {
 					console.log(`[ads-${this.adId}] display ad loaded`);
 				};
-				this.owAdsReadyListener = async (data) => {
+				this.adsReadyListener = async (data) => {
 					console.log(`[ads-${this.adId}] ready to serve ad`);
 				};
-				this.adRef.addEventListener('impression', this.impressionListener);
+				this.playListener = async (data) => {
+					console.log(`[ads-${this.adId}] play`);
+				};
+				this.videoImpressionListener = async (data) => {
+					// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
+					console.log(`[ads-${this.adId}] video impression`);
+				};
+				// https://overwolf.github.io/api/general/ads-sdk/overwolf-platform/owad
+				// Fires when an Ad started "playing" (Video Ad started playing, or display Ad was presented).
+				this.adRef.addEventListener('play', this.playListener);
+				//     Fires when a Video Ad triggered an Impression. This happens at different intervals depending on the advertiser.
+				this.adRef.addEventListener('impression', this.videoImpressionListener);
+				// Fires when a Display Ad was served to the container.
+				// this event fires when the process to get a billable ad impression starts and not
+				// when the actual display ad is served. There are various reasons for not getting a
+				// display impression served after the display_ad_loaded event like user
+				// history/size/geo/time of day etc. all could affect fill rates.
 				this.adRef.addEventListener('display_ad_loaded', this.displayAdLoadedListener);
-				this.adRef.addEventListener('ow_internal_rendered', this.owAdsReadyListener);
+				// Internal event, should be removed?
+				this.adRef.addEventListener('ow_internal_rendered', this.adsReadyListener);
 
 				console.log(`[ads-${this.adId}] init OwAd`);
 				if (!(this.cdr as ViewRef)?.destroyed) {
