@@ -28,14 +28,29 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 						></div>
 					</div>
 					<ng-container *ngIf="showMinionsList">
-						<ul class="tiers">
+						<ul class="tiers tier-levels">
 							<div
 								class="tier {{ currentTier.tavernTier }}"
-								*ngFor="let currentTier of tiers; trackBy: trackByFn"
+								*ngFor="let currentTier of tierLevels; trackBy: trackByFn"
 								[ngClass]="{
 									selected: displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
-									locked: isLocked(currentTier),
-									mechanics: currentTier.type === 'mechanics'
+									locked: isLocked(currentTier)
+								}"
+								[helpTooltip]="currentTier.tooltip"
+								(mouseover)="onTavernMouseOver(currentTier)"
+								(click)="onTavernClick(currentTier)"
+							>
+								<img class="icon" src="assets/images/bgs/star.png" />
+								<div class="number">{{ currentTier.tavernTier }}</div>
+							</div>
+						</ul>
+						<ul class="tiers mechanical" *ngIf="!!mechanicalTiers?.length">
+							<div
+								class="tier {{ currentTier.tavernTier }} mechanics"
+								*ngFor="let currentTier of mechanicalTiers; trackBy: trackByFn"
+								[ngClass]="{
+									selected: displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
+									locked: isLocked(currentTier)
 								}"
 								[helpTooltip]="currentTier.tooltip"
 								(mouseover)="onTavernMouseOver(currentTier)"
@@ -46,7 +61,7 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 							</div>
 						</ul>
 						<bgs-minions-list
-							*ngFor="let tier of tiers; trackBy: trackByFn"
+							*ngFor="let tier of allTiers; trackBy: trackByFn"
 							class="minions-list"
 							[ngClass]="{
 								active:
@@ -70,7 +85,10 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersViewOverlayComponent {
-	@Input() tiers: readonly Tier[];
+	tierLevels: readonly Tier[] = [];
+	mechanicalTiers: readonly Tier[] = [];
+	allTiers: readonly Tier[] = [];
+
 	@Input() highlightedTribes: readonly Race[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() highlightedMinions: readonly string[];
@@ -83,6 +101,15 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 	@Input() enableMouseOver: boolean;
 	@Input() showGoldenCards: boolean;
 
+	@Input() set tiers(value: readonly Tier[]) {
+		if (!value) {
+			return;
+		}
+		this.tierLevels = value.filter((t) => t.type === 'standard');
+		this.mechanicalTiers = value.filter((t) => t.type === 'mechanics');
+		this.allTiers = [...this.tierLevels, ...this.mechanicalTiers];
+	}
+
 	@Input() set tavernTier(value: number) {
 		if (!value) {
 			return;
@@ -92,7 +119,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 		// so that we don't change the display if the user wants to keep the focus on another
 		// tier (eg tier 5 or 6 to see their endgame options)
 		if (!!this.lockedTier && this.lockedTier.tavernTier === this.currentTavernTier) {
-			this.lockedTier = this.tiers.find((t) => t.tavernTier === value);
+			this.lockedTier = this.allTiers.find((t) => t.tavernTier === value);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -151,7 +178,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 }
 
 export interface Tier {
-	tavernTier: number | 'B' | 'D' | 'DS' | 'T' | 'E' | 'R';
+	tavernTier: number | 'B' | 'D' | 'DS' | 'T' | 'E' | 'R' | 'Buds';
 	cards: readonly ReferenceCard[];
 	groupingFunction: (card: ReferenceCard) => readonly string[];
 	tooltip?: string;

@@ -8,7 +8,7 @@ import {
 	Renderer2,
 	ViewEncapsulation,
 } from '@angular/core';
-import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, normalizeHeroCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { getAllCardsInGame, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
@@ -92,7 +92,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		]).pipe(
 			this.mapData(
 				([[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup], [races, hasBuddies, playerCardId]]) => {
-					const ownBuddyId = hasBuddies ? getBuddy(playerCardId as CardIds, this.allCards) : null;
+					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
@@ -101,6 +102,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						bgsGroupMinionsIntoTheirTribeGroup,
 						showMechanicsTiers,
 						races,
+						normalizedCardId,
 					);
 					return result;
 				},
@@ -139,6 +141,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		groupMinionsIntoTheirTribeGroup: boolean,
 		showMechanicsTiers: boolean,
 		availableTribes: readonly Race[],
+		playerCardId: string,
 	): readonly Tier[] {
 		if (!cardsInGame?.length) {
 			return [];
@@ -160,12 +163,18 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				),
 			type: 'standard',
 		}));
-		const mechanicsTiers = showMechanicsTiers ? this.buildMechanicsTiers(cardsInGame) : [];
+		const mechanicsTiers = showMechanicsTiers
+			? this.buildMechanicsTiers(cardsInGame, playerCardId, availableTribes)
+			: [];
 		return [...standardTiers, ...mechanicsTiers];
 	}
 
-	private buildMechanicsTiers(cardsInGame: readonly ReferenceCard[]): readonly Tier[] {
-		return [
+	private buildMechanicsTiers(
+		cardsInGame: readonly ReferenceCard[],
+		playerCardId: string,
+		availableTribes: readonly Race[],
+	): readonly Tier[] {
+		const mechanicalTiers: Tier[] = [
 			{
 				tavernTier: 'B',
 				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BATTLECRY])),
@@ -226,5 +235,23 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				type: 'mechanics',
 			},
 		];
+		// Add a tier with all the buddies
+		if (playerCardId === CardIds.ETCBandManager_BG25_HERO_105) {
+			const allBuddies = this.allCards
+				.getCards()
+				.filter((c) => !!c.techLevel)
+				.filter((c) => !!c.battlegroundsPremiumDbfId)
+				.filter((card) => card.set !== 'Vanilla')
+				.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+			mechanicalTiers.push({
+				tavernTier: 'Buds',
+				cards: allBuddies,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
+				type: 'mechanics',
+			});
+		}
+
+		return mechanicalTiers;
 	}
 }

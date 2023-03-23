@@ -1,7 +1,12 @@
+:host {
+	max-height: 100%;
+}
+
 .widget.hidden {
 	display: none;
 }
 
 battlegrounds-minions-tiers {
-	width: 250px;
+	// width: 250px;
+	width: auto;
 }
