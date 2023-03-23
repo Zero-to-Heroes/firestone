@@ -8,7 +8,15 @@ import {
 	Renderer2,
 	ViewEncapsulation,
 } from '@angular/core';
-import { CardIds, GameTag, normalizeHeroCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	BUDDIES_TRIBE_REQUIREMENTS,
+	CardIds,
+	GameTag,
+	NON_DISCOVERABLE_BUDDIES,
+	normalizeHeroCardId,
+	Race,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { getAllCardsInGame, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
@@ -88,11 +96,16 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				([main, prefs]) => main?.currentGame?.availableRaces,
 				([main, prefs]) => main?.currentGame?.hasBuddies,
 				([main, prefs]) => main?.currentGame?.getMainPlayer()?.cardId,
+				([main, prefs]) => main?.currentGame?.players?.map((p) => p.cardId),
 			),
 		]).pipe(
 			this.mapData(
-				([[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup], [races, hasBuddies, playerCardId]]) => {
+				([
+					[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup],
+					[races, hasBuddies, playerCardId, allPlayersCardIds],
+				]) => {
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
@@ -103,6 +116,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showMechanicsTiers,
 						races,
 						normalizedCardId,
+						allPlayerCardIds,
 					);
 					return result;
 				},
@@ -142,6 +156,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		showMechanicsTiers: boolean,
 		availableTribes: readonly Race[],
 		playerCardId: string,
+		allPlayerCardIds: readonly string[],
 	): readonly Tier[] {
 		if (!cardsInGame?.length) {
 			return [];
@@ -164,7 +179,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			type: 'standard',
 		}));
 		const mechanicsTiers = showMechanicsTiers
-			? this.buildMechanicsTiers(cardsInGame, playerCardId, availableTribes)
+			? this.buildMechanicsTiers(cardsInGame, playerCardId, availableTribes, allPlayerCardIds)
 			: [];
 		return [...standardTiers, ...mechanicsTiers];
 	}
@@ -173,6 +188,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		cardsInGame: readonly ReferenceCard[],
 		playerCardId: string,
 		availableTribes: readonly Race[],
+		allPlayerCardIds: readonly string[],
 	): readonly Tier[] {
 		const mechanicalTiers: Tier[] = [
 			{
@@ -236,16 +252,40 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			},
 		];
 		// Add a tier with all the buddies
-		if (playerCardId === CardIds.ETCBandManager_BG25_HERO_105) {
+		if (
+			[
+				CardIds.ETCBandManager_BG25_HERO_105,
+				CardIds.TessGreymaneBattlegrounds,
+				CardIds.ScabbsCutterbutter_BG21_HERO_010,
+			].includes(playerCardId as CardIds)
+		) {
 			const allBuddies = this.allCards
 				.getCards()
 				.filter((c) => !!c.techLevel)
 				.filter((c) => !!c.battlegroundsPremiumDbfId)
 				.filter((card) => card.set !== 'Vanilla')
 				.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+			const buddies: readonly ReferenceCard[] =
+				playerCardId === CardIds.ETCBandManager_BG25_HERO_105
+					? allBuddies
+							.filter((b) => !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds))
+							.filter(
+								(b) =>
+									!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
+									availableTribes.includes(
+										BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe,
+									),
+							)
+					: [CardIds.TessGreymaneBattlegrounds, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+							playerCardId as CardIds,
+					  )
+					? allPlayerCardIds
+							.map((p) => getBuddy(p as CardIds, this.allCards))
+							.map((b) => this.allCards.getCard(b))
+					: [];
 			mechanicalTiers.push({
 				tavernTier: 'Buds',
-				cards: allBuddies,
+				cards: buddies,
 				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
 				type: 'mechanics',

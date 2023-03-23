@@ -669,7 +669,9 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 		case CardIds.ETCBandManager_BG25_HERO_105:
 			return CardIds.TalentScout;
 		default:
-			console.error('missing buddy section for ', heroCardId);
+			if (!!heroCardId) {
+				console.error('missing buddy section for ', heroCardId);
+			}
 			return null;
 	}
 };
