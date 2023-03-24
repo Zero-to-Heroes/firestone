@@ -101,6 +101,19 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `The "Simulate" button now changes text while the simulation is ongoing.`,
 							},
+							{
+								type: 'feature',
+								text: `Fix a simulator issue with Frostwolf Lieutenant.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue that would prevent the app from updating the in-game achievements progress.`,
+							},
 						],
 					},
 					{
