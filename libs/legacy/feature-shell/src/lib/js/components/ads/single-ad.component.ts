@@ -35,6 +35,7 @@ declare let OwAd: any;
 export class SingleAdComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() tip: string;
 	@Input() adId: string;
+	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
 
 	private adRef;
 	private adInit = false;
@@ -87,7 +88,9 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				}
 				this.adInit = true;
 				console.log(`[ads-${this.adId}] first time init ads, creating OwAd`);
-				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`));
+				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`), {
+					size: this.adSize,
+				});
 
 				this.displayAdLoadedListener = async (data) => {
 					console.log(`[ads-${this.adId}] display ad loaded`);

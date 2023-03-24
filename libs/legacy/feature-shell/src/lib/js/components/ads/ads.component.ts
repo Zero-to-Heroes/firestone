@@ -21,7 +21,7 @@ declare let amplitude: any;
 	template: `
 		<div class="ads">
 			<div class="ad-container top-ads" *ngIf="showTopAd">
-				<single-ad [adId]="'top'"></single-ad>
+				<single-ad [adId]="'top'" [adSize]="topAdSize"></single-ad>
 			</div>
 
 			<div class="banner-container">
@@ -54,6 +54,8 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	tip$: Observable<string>;
 
 	@Input() showTopAd = false;
+
+	topAdSize = { width: 300, height: 250 };
 
 	private tip = new BehaviorSubject<string>(null);
 	private tipInterval;
