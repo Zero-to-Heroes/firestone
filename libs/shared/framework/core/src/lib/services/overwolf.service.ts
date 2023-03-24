@@ -294,8 +294,8 @@ export class OverwolfService {
 		});
 	}
 
-	public async restoreWindow(windowId: string) {
-		return new Promise<any>((resolve) => {
+	public async restoreWindow(windowId: string): Promise<overwolf.windows.WindowIdResult | null> {
+		return new Promise<overwolf.windows.WindowIdResult | null>((resolve) => {
 			try {
 				overwolf.windows.restore(windowId, async (result) => {
 					resolve(result);
@@ -321,8 +321,8 @@ export class OverwolfService {
 		});
 	}
 
-	public async bringToFront(windowId: string, grabFocus = false) {
-		return new Promise<any>((resolve) => {
+	public async bringToFront(windowId: string, grabFocus = false): Promise<overwolf.windows.WindowIdResult | null> {
+		return new Promise<overwolf.windows.WindowIdResult | null>((resolve) => {
 			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 			try {
 				overwolf.windows.bringToFront(windowId, grabFocus, (result) => {
