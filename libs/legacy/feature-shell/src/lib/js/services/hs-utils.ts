@@ -385,6 +385,7 @@ const publicCardGiftCreators = [
 	CardIds.DeathbringerSaurfangCore_RLK_082,
 	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
+	CardIds.DemonicStudies,
 	CardIds.Dendrologist,
 	CardIds.DesperateMeasures_DAL_141,
 	CardIds.DevouringSwarm,
@@ -408,6 +409,7 @@ const publicCardGiftCreators = [
 	CardIds.EmeraldExplorer_DRG_313,
 	CardIds.EncumberedPackMule,
 	CardIds.EnergyShaper,
+	CardIds.ETCBandManager_ETC_080,
 	CardIds.EtherealConjurer,
 	CardIds.EtherealConjurerCore,
 	CardIds.EtherealLackey,
