@@ -71,7 +71,6 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 					[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | owTranslate"
 					(mousedown)="hideDeck($event)"
 					*ngIf="!hidden"
-					aria-hidden="true"
 				>
 					<svg class="svg-icon-fill">
 						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#hide"></use>
@@ -82,7 +81,6 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 					[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | owTranslate"
 					(mousedown)="restoreDeck($event)"
 					*ngIf="hidden"
-					aria-hidden="true"
 				>
 					<svg class="svg-icon-fill">
 						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#show"></use>
