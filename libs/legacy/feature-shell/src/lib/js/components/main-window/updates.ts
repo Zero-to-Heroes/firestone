@@ -33,8 +33,8 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.6',
-		force: false,
+		version: '11.0.10',
+		force: true,
 		sections: [
 			{
 				type: 'intro',
@@ -66,6 +66,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'content',
+								text: `The strategy tips by Minder & Jkirek (BG curvesheet) have been updated for the buddies!`,
+							},
 							{
 								type: 'feature',
 								text: `You can now see the strategy tips for each hero by mousing over the "click to view the tips" text in the BG window`,
