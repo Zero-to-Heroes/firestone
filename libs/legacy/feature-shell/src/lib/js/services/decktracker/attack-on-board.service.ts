@@ -9,7 +9,9 @@ import { EntityGameState, PlayerGameState } from '../../models/game-event';
 export class AttackOnBoardService {
 	public computeAttackOnBoard(deck: DeckState, playerFromTracker: PlayerGameState): AttackOnBoard {
 		const numberOfVoidtouchedAttendants =
-			deck.board.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant).length || 0;
+			deck.board
+				.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant)
+				.filter((entity) => !this.isSilenced(entity.entityId, playerFromTracker.Board)).length || 0;
 		const entitiesOnBoardThatCanAttack = deck.board
 			.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
 			.filter((entity) => entity)
@@ -35,13 +37,21 @@ export class AttackOnBoardService {
 		} as AttackOnBoard;
 	}
 
+	private isSilenced(entityId: number, board: readonly EntityGameState[]): boolean {
+		const entityOnBoard = board.find((e) => e.entityId === entityId);
+		if (!entityOnBoard) {
+			return false;
+		}
+		return !!entityOnBoard.tags?.find((t) => t.Name === GameTag.SILENCED && t.Value > 0);
+	}
+
 	private getEntityAttack(
 		entity: EntityGameState,
 		numberOfVoidtouchedAttendants: number,
 		board: readonly DeckCard[],
 		boardFromTracker: readonly EntityGameState[],
 	): number {
-		if (entity.cardId === CardIds.NeptulonTheTidehunter) {
+		if (entity.cardId === CardIds.NeptulonTheTidehunter && !this.isSilenced(entity.entityId, boardFromTracker)) {
 			const hands = board
 				.filter(
 					(e) =>
@@ -60,6 +70,9 @@ export class AttackOnBoardService {
 	}
 
 	private windfuryMultiplier(entity): number {
+		if (hasTag(entity, GameTag.SILENCED)) {
+			return 1;
+		}
 		if (hasTag(entity, GameTag.MEGA_WINDFURY) || hasTag(entity, GameTag.WINDFURY, 3)) {
 			return 4;
 		}
