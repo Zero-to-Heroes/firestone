@@ -13,7 +13,8 @@ import { getAllMetaHeroStats } from './+state/meta-hero-stats/meta-hero-stats.se
 		<section class="section">
 			<!-- (Work in progress) Time: last patch, Rank: all, Tribes: all -->
 			<div class="filters">
-				<website-battlegrounds-rank-filter-dropdown></website-battlegrounds-rank-filter-dropdown>
+				<website-battlegrounds-rank-filter-dropdown class="filter"></website-battlegrounds-rank-filter-dropdown>
+				<website-battlegrounds-time-filter-dropdown class="filter"></website-battlegrounds-time-filter-dropdown>
 			</div>
 
 			<battlegrounds-meta-stats-heroes-view

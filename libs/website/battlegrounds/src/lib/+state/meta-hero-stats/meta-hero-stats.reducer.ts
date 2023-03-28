@@ -17,8 +17,8 @@ const localPrefs = localPrefsService.getPreferences();
 export const initialMetaHeroStatsState: MetaHeroStatsState = {
 	loaded: false,
 	currentPercentileSelection: localPrefs?.bgsActiveRankFilter ?? 100,
-	currentTimePeriodSelection: 'last-patch',
-	currentTribesSelection: [],
+	currentTimePeriodSelection: localPrefs?.bgsActiveTimeFilter ?? 'last-patch',
+	currentTribesSelection: localPrefs?.bgsActiveTribesFilter ?? [],
 };
 
 const reducer = createReducer(

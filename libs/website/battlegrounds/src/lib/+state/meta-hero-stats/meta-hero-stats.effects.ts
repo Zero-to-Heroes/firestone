@@ -10,10 +10,10 @@ import { Store } from '@ngrx/store';
 import { WebsitePreferences } from 'libs/website/core/src/lib/preferences/website-preferences';
 import { WebsitePreferencesService } from 'libs/website/core/src/lib/preferences/website-preferences.service';
 
-import { map, switchMap, tap, withLatestFrom } from 'rxjs';
+import { switchMap, tap, withLatestFrom } from 'rxjs';
 import * as MetaHeroStatsActions from './meta-hero-stats.actions';
 import { MetaHeroStatsState } from './meta-hero-stats.models';
-import { getCurrentPercentileFilter } from './meta-hero-stats.selectors';
+import { getCurrentPercentileFilter, getCurrentTimerFilter, getCurrentTribesFilter } from './meta-hero-stats.selectors';
 
 @Injectable()
 export class MetaHeroStatsEffects {
@@ -33,12 +33,16 @@ export class MetaHeroStatsEffects {
 			tap((e) => console.debug('in tap', e)),
 			ofType(MetaHeroStatsActions.initBgsMetaHeroStats),
 			tap((e) => console.debug('in tap 2', e)),
-			withLatestFrom(this.store.select(getCurrentPercentileFilter)),
-			switchMap(async ([action, percentileFilter]) => {
+			withLatestFrom(
+				this.store.select(getCurrentPercentileFilter),
+				this.store.select(getCurrentTimerFilter),
+				this.store.select(getCurrentTribesFilter),
+			),
+			switchMap(async ([action, percentileFilter, timeFilter, tribesFilter]) => {
 				console.debug('initBgsMetaHeroStats', action, percentileFilter);
 				const mmrPercentile = percentileFilter;
-				const tribes = [];
-				const timePeriod = 'last-patch';
+				const tribes = tribesFilter;
+				const timePeriod = timeFilter;
 				const apiResult = await this.access.loadMetaHeroStats(timePeriod);
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					apiResult?.heroStats ?? [],
@@ -60,7 +64,15 @@ export class MetaHeroStatsEffects {
 		this.actions$.pipe(
 			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
 			ofType(MetaHeroStatsActions.changeMetaHeroStatsTimeFilter),
-			map((action) => MetaHeroStatsActions.initBgsMetaHeroStats()),
+			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					bgsActiveTimeFilter: action.currentTimePeriodSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
+				return MetaHeroStatsActions.initBgsMetaHeroStats();
+			}),
 		),
 	);
 
@@ -84,7 +96,15 @@ export class MetaHeroStatsEffects {
 		this.actions$.pipe(
 			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
 			ofType(MetaHeroStatsActions.changeMetaHeroStatsTribesFilter),
-			map((action) => MetaHeroStatsActions.initBgsMetaHeroStats()),
+			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					bgsActiveTribesFilter: action.currentTribesSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
+				return MetaHeroStatsActions.initBgsMetaHeroStats();
+			}),
 		),
 	);
 }

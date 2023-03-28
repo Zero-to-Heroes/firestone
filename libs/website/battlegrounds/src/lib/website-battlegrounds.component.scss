@@ -1,3 +1,11 @@
+.filters {
+	display: flex;
+
+	.filter {
+		margin-right: 10px;
+	}
+}
+
 battlegrounds-meta-stats-heroes-view {
 	::ng-deep {
 		.battlegrounds-meta-stats-heroes {

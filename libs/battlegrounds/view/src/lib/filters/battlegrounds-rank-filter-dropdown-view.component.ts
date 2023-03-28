@@ -84,8 +84,8 @@ export class BattlegroundsRankFilterDropdownViewComponent
 		);
 	}
 
-	onSelected(option: RankFilterOption) {
-		this.valueSelected.next(option);
+	onSelected(option: IOption) {
+		this.valueSelected.next(option as RankFilterOption);
 	}
 }
 
