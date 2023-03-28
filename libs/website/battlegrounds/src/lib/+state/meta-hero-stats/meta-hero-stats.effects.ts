@@ -7,6 +7,7 @@ import {
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { WebsitePreferences } from 'libs/website/core/src/lib/preferences/website-preferences';
 import { WebsitePreferencesService } from 'libs/website/core/src/lib/preferences/website-preferences.service';
 
 import { map, switchMap, tap, withLatestFrom } from 'rxjs';
@@ -68,6 +69,12 @@ export class MetaHeroStatsEffects {
 			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
 			ofType(MetaHeroStatsActions.changeMetaHeroStatsPercentileFilter),
 			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					bgsActiveRankFilter: action.currentPercentileSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
 				return MetaHeroStatsActions.initBgsMetaHeroStats();
 			}),
 		),

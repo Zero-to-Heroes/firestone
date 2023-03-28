@@ -1,4 +1,6 @@
+import { LocalStorageService } from '@firestone/shared/framework/core';
 import { Action, createReducer, on } from '@ngrx/store';
+import { WebsitePreferencesService } from 'libs/website/core/src/lib/preferences/website-preferences.service';
 
 import * as MetaHeroStatsStateActions from './meta-hero-stats.actions';
 import { MetaHeroStatsState } from './meta-hero-stats.models';
@@ -9,9 +11,12 @@ export interface MetaHeroStatsPartialState {
 	readonly [WEBSITE_BGS_META_HERO_STATS_FEATURE_KEY]: MetaHeroStatsState;
 }
 
+const localPrefsService = new WebsitePreferencesService(new LocalStorageService());
+const localPrefs = localPrefsService.getPreferences();
+
 export const initialMetaHeroStatsState: MetaHeroStatsState = {
 	loaded: false,
-	currentPercentileSelection: 100,
+	currentPercentileSelection: localPrefs?.bgsActiveRankFilter ?? 100,
 	currentTimePeriodSelection: 'last-patch',
 	currentTribesSelection: [],
 };

@@ -9,12 +9,12 @@ export class WebsitePreferencesService {
 
 	constructor(private readonly localStorageService: LocalStorageService) {}
 
-	public async savePreferences(preferences: WebsitePreferences): Promise<WebsitePreferences> {
+	public savePreferences(preferences: WebsitePreferences): WebsitePreferences {
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES, preferences);
 		return preferences;
 	}
 
-	public async getPreferences(): Promise<WebsitePreferences> {
+	public getPreferences(): WebsitePreferences {
 		const strPrefs = localStorage.getItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES);
 		const result = !!strPrefs
 			? Object.assign(new WebsitePreferences(), JSON.parse(strPrefs))
