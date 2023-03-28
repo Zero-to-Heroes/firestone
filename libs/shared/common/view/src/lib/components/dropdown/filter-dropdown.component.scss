@@ -46,10 +46,13 @@ ng-select.disabled {
 		width: 30px;
 		height: 30px;
 		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		svg {
-			width: 100%;
-			height: 100%;
+			width: 35%;
+			height: 35%;
 			fill: currentColor;
 		}
 	}
@@ -67,6 +70,11 @@ ng-select.disabled {
 
 	.open .caret {
 		transform: scale(1, -1);
+	}
+
+	.below .single .value {
+		align-content: center;
+		display: flex;
 	}
 
 	select-dropdown {

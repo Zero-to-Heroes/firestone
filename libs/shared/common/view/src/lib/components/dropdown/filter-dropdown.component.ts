@@ -97,10 +97,13 @@ export class FilterDropdownComponent implements AfterViewInit {
 
 		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
-			caretEl.innerHTML = `<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#arrow"/>
-				</svg>`;
-			caretEl.classList.add('i-30');
+			// caretEl.innerHTML = `<svg class="svg-icon-fill">
+			// 		<use xlink:href="assets/svg/sprite.svg#arrow"/>
+			// 	</svg>`;
+			// Arrow. Inline it because website doesn't manage to get the reference
+			caretEl.innerHTML = `<svg class="svg-icon-fill" width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M7.66602 5.66675L3.91602 0.666747L0.166017 5.66675L7.66602 5.66675Z" fill="var(--icon-color, currentcolor)"/>
+			</svg>`;
 			caretEl.classList.add('caret');
 		});
 		if (!(this.cdr as ViewRef)?.destroyed) {

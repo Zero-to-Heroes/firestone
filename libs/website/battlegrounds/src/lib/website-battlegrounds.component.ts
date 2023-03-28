@@ -11,10 +11,10 @@ import { getAllMetaHeroStats } from './+state/meta-hero-stats/meta-hero-stats.se
 	styleUrls: [`./website-battlegrounds.component.scss`],
 	template: `
 		<section class="section">
-			<!-- (Work in progress) Time: last patch, Rank: all, Tribes: all
+			<!-- (Work in progress) Time: last patch, Rank: all, Tribes: all -->
 			<div class="filters">
 				<website-battlegrounds-rank-filter-dropdown></website-battlegrounds-rank-filter-dropdown>
-			</div> -->
+			</div>
 
 			<battlegrounds-meta-stats-heroes-view
 				*ngIf="stats$ | async as stats"

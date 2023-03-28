@@ -32,6 +32,7 @@ export class WebsiteBattlegroundsRankFilterDropdownComponent implements AfterCon
 	}
 
 	onSelected(option: RankFilterOption) {
+		console.debug('selected option', option);
 		this.store.dispatch(
 			changeMetaHeroStatsPercentileFilter({
 				currentPercentileSelection: +option.value as MmrPercentile['percentile'],

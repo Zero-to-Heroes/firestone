@@ -146,6 +146,7 @@ export const buildHeroStats = (
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {
 	const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
+	console.debug('statsForMmr', statsForMmr, mmrPercentile, stats);
 	return statsForMmr
 		.filter((stat) => {
 			// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out

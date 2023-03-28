@@ -6,10 +6,13 @@ import {
 } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { WebsitePreferencesService } from 'libs/website/core/src/lib/preferences/website-preferences.service';
 
-import { map, switchMap, tap } from 'rxjs';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as MetaHeroStatsActions from './meta-hero-stats.actions';
+import { MetaHeroStatsState } from './meta-hero-stats.models';
+import { getCurrentPercentileFilter } from './meta-hero-stats.selectors';
 
 @Injectable()
 export class MetaHeroStatsEffects {
@@ -17,6 +20,7 @@ export class MetaHeroStatsEffects {
 
 	constructor(
 		private readonly actions$: Actions,
+		private readonly store: Store<MetaHeroStatsState>,
 		private readonly access: BgsMetaHeroStatsAccessService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: WebsitePreferencesService,
@@ -28,10 +32,10 @@ export class MetaHeroStatsEffects {
 			tap((e) => console.debug('in tap', e)),
 			ofType(MetaHeroStatsActions.initBgsMetaHeroStats),
 			tap((e) => console.debug('in tap 2', e)),
-			switchMap(async (action) => {
-				console.debug('initBgsMetaHeroStats', action);
-				const prefs = await this.prefs.getPreferences();
-				const mmrPercentile = 100;
+			withLatestFrom(this.store.select(getCurrentPercentileFilter)),
+			switchMap(async ([action, percentileFilter]) => {
+				console.debug('initBgsMetaHeroStats', action, percentileFilter);
+				const mmrPercentile = percentileFilter;
 				const tribes = [];
 				const timePeriod = 'last-patch';
 				const apiResult = await this.access.loadMetaHeroStats(timePeriod);
@@ -63,7 +67,9 @@ export class MetaHeroStatsEffects {
 		this.actions$.pipe(
 			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
 			ofType(MetaHeroStatsActions.changeMetaHeroStatsPercentileFilter),
-			map((action) => MetaHeroStatsActions.initBgsMetaHeroStats()),
+			switchMap(async (action) => {
+				return MetaHeroStatsActions.initBgsMetaHeroStats();
+			}),
 		),
 	);
 
