@@ -1,5 +1,5 @@
 {
-	"name": "battlegrounds-view",
+	"name": "battlegrounds/view",
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
 	"sourceRoot": "libs/battlegrounds/view/src",

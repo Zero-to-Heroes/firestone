@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { WebsiteBootstrapService } from 'libs/website/core/src/lib/website-bootstrap.service';
+import { WebsiteBootstrapService } from '@firestone/website/core';
 import { from, Observable, startWith } from 'rxjs';
 
 @Component({

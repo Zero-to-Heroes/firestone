@@ -10,7 +10,7 @@ import {
 import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
-import { getBgsRankFilterLabelFor } from '@firestone/battlegrounds/view';
+import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -22,7 +22,6 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
-import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
 
 @Component({
 	selector: 'battlegrounds-tier-list',
@@ -152,7 +151,7 @@ export class BattlegroundsTierListComponent
 						<div class="content">
 							<div class="title">${title}</div>
 							<ul class="filters">
-								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null, this.i18n)}</li>
+								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, this.i18n)}</li>
 								<li class="filter rank">${getBgsRankFilterLabelFor(
 									info.mmrPercentiles?.find(
 										(percentile) => percentile.percentile === info.rankFilter,

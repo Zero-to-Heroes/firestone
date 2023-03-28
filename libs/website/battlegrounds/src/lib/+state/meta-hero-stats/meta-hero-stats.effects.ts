@@ -5,10 +5,9 @@ import {
 	buildHeroStats,
 } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { WebsitePreferences, WebsitePreferencesService } from '@firestone/website/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { WebsitePreferences } from 'libs/website/core/src/lib/preferences/website-preferences';
-import { WebsitePreferencesService } from 'libs/website/core/src/lib/preferences/website-preferences.service';
 
 import { switchMap, tap, withLatestFrom } from 'rxjs';
 import * as MetaHeroStatsActions from './meta-hero-stats.actions';

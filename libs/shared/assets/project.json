@@ -1,5 +1,5 @@
 {
-	"name": "shared-assets",
+	"name": "@firestone/shared/assets",
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
 	"sourceRoot": "libs/shared/assets/src",

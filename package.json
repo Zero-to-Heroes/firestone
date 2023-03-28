@@ -11,6 +11,7 @@
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
 		"build": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
 		"build-local": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
+		"build-web": "rm -rf node_modules/.cache/nx && nx build website --configuration=production --source-map",
 		"test": "nx test"
 	},
 	"private": true,

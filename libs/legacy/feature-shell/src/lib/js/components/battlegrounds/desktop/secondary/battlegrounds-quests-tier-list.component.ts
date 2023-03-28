@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsHeroTier } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { getBgsRankFilterLabelFor } from '@firestone/battlegrounds/view';
+import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -11,7 +11,6 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { buildQuestStats } from '../../../../services/ui-store/bgs-ui-helper';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
-import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
 
 @Component({
 	selector: 'battlegrounds-quests-tier-list',
@@ -166,7 +165,7 @@ export class BattlegroundsQuestsTierListComponent
 								<div class="content">
 									<div class="title">${title}</div>
 									<ul class="filters">
-										<li class="filter time">${getBgsTimeFilterLabelFor(timeFilter, null, this.i18n)}</li>
+										<li class="filter time">${getBgsTimeFilterLabelFor(timeFilter, this.i18n)}</li>
 										<li class="filter rank">${getBgsRankFilterLabelFor(
 											mmrPercentiles?.find((percentile) => percentile.percentile === rankFilter),
 											this.i18n,

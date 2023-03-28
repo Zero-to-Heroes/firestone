@@ -1,5 +1,4 @@
 import { Race } from '@firestone-hs/reference-data';
-import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 
 export interface IPreferences {
 	readonly locale: string;
@@ -7,6 +6,6 @@ export interface IPreferences {
 	readonly overlayShowRarityColors: boolean;
 
 	readonly bgsActiveRankFilter: 100 | 50 | 25 | 10 | 1;
-	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType;
+	readonly bgsActiveTimeFilter: 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
 	readonly bgsActiveTribesFilter: readonly Race[];
 }

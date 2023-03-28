@@ -1,6 +1,6 @@
 import { LocalStorageService } from '@firestone/shared/framework/core';
+import { WebsitePreferencesService } from '@firestone/website/core';
 import { Action, createReducer, on } from '@ngrx/store';
-import { WebsitePreferencesService } from 'libs/website/core/src/lib/preferences/website-preferences.service';
 
 import * as MetaHeroStatsStateActions from './meta-hero-stats.actions';
 import { MetaHeroStatsState } from './meta-hero-stats.models';

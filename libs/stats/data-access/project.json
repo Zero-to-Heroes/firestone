@@ -1,5 +1,5 @@
 {
-	"name": "stats-data-access",
+	"name": "stats/data-access",
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
 	"sourceRoot": "libs/stats/data-access/src",

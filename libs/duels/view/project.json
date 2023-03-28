@@ -1,5 +1,5 @@
 {
-	"name": "duels-view",
+	"name": "duels/view",
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
 	"sourceRoot": "libs/duels/view/src",
