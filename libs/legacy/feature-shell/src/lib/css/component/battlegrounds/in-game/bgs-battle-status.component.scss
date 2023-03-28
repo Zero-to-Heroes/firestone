@@ -56,11 +56,15 @@
 
 			.damage-value {
 				width: 30px;
+				color: #61ff47;
 			}
 
 			&.received {
 				.damage-icon {
 					transform: rotate(180deg);
+				}
+				.damage-value {
+					color: #ff4747;
 				}
 			}
 		}
