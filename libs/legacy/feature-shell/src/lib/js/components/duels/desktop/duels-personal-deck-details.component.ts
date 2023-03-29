@@ -58,6 +58,12 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						</label>
 					</div>
 				</ng-container>
+				<copy-deckstring
+					class="copy-deckcode"
+					[deckstring]="decklist$ | async"
+					[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
+				>
+				</copy-deckstring>
 				<deck-list
 					class="deck-list"
 					[deckstring]="decklist$ | async"
