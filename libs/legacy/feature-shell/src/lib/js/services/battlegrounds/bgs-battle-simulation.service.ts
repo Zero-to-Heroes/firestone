@@ -99,7 +99,7 @@ export class BgsBattleSimulationService {
 		);
 
 		const result: SimulationResult =
-			prefs.bgsUseLocalSimulator && prefs.isPremium
+			prefs.bgsUseLocalSimulator || !prefs.isPremium
 				? await this.simulateLocalBattle(battleInfoInput, prefs)
 				: ((await this.http
 						.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput)

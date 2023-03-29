@@ -1,7 +1,7 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
@@ -182,7 +182,11 @@ export class SettingsBattlegroundsGeneralComponent
 	}
 
 	ngAfterContentInit() {
-		this.useLocalSimulator$ = this.listenForBasicPref$((prefs) => prefs.bgsUseLocalSimulator);
+		const premium$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
+		this.useLocalSimulator$ = combineLatest([
+			premium$,
+			this.store.listenPrefs$((prefs) => prefs.bgsUseLocalSimulator),
+		]).pipe(this.mapData(([premium, [useLocalSimulator]]) => !premium || useLocalSimulator));
 		this.enableSimulation$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableSimulation);
 		this.bgsHideSimResultsOnRecruit$ = this.listenForBasicPref$((prefs) => prefs.bgsHideSimResultsOnRecruit);
 		this.bgsShowSimResultsOnlyOnRecruit$ = this.listenForBasicPref$(
