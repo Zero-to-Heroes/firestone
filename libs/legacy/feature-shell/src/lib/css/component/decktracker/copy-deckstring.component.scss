@@ -7,9 +7,10 @@
 }
 
 .copy-deckstring {
-    display: flex;
-    flex-direction: row;
-	--icon-color: var(--color-6);
+	display: flex;
+	flex-direction: row;
+	// --icon-color: var(--color-6);
+	--icon-color: var(--color-4);
 	--icon-color-secondary: var(--color-1);
 
 	svg {
@@ -25,5 +26,3 @@
 		margin-left: 10px;
 	}
 }
-
-
