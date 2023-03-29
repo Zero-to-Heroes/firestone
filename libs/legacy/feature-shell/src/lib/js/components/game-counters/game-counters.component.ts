@@ -34,6 +34,7 @@ import { LibramCounterDefinition } from './definitions/libram-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
+import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
@@ -152,6 +153,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'overdraft':
+				return OverdraftCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'asvedon':
 				return AsvedonCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':

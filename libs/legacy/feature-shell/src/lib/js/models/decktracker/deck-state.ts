@@ -73,6 +73,7 @@ export class DeckState {
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
+	readonly overloadedCrystals: number = 0;
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
@@ -324,6 +325,12 @@ export class DeckState {
 		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)
 			.some((card) => card.cardId === CardIds.VanessaVancleefCore);
+	}
+
+	public hasCardInHandAndDeck(cardId: CardIds) {
+		return [...this.hand, ...this.deck, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === cardId);
 	}
 
 	public hasAsvedon() {

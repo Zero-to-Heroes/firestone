@@ -278,6 +278,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
 		},
 		{
+			id: 'overdraft',
+			field: 'playerOverdraftCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.overdraft-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.overdraft-tooltip'),
+		},
+		{
 			id: 'asvedon',
 			field: 'playerAsvedonCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.asvedon-label'),

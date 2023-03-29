@@ -103,6 +103,7 @@ import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
 import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
+import { OverloadParser } from './event-parser/overload-parser';
 import { PassiveTriggeredParser } from './event-parser/passive-triggered-parser';
 import { PlayersInfoParser } from './event-parser/players-info-parser';
 import { PogoPlayedParser } from './event-parser/pogo-played-parser';
@@ -412,7 +413,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -590,6 +591,7 @@ export class GameStateService {
 			new ChoosingOptionsParser(),
 			new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper),
 			new AttackParser(this.allCards),
+			new OverloadParser(),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

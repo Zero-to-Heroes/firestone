@@ -804,6 +804,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'OVERLOADED_CRYSTALS_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.OVERLOADED_CRYSTALS_CHANGED, gameEvent, {
+						overload: gameEvent.Value.AdditionalProps.Overload,
+					}),
+				);
+				break;
 			case 'DATA_SCRIPT_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {

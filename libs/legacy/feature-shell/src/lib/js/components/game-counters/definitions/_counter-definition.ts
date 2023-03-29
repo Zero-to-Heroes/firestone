@@ -26,6 +26,7 @@ export type CounterType =
 	| 'brilliantMacaw'
 	| 'monstrousParrot'
 	| 'vanessaVanCleef'
+	| 'overdraft'
 	| 'asvedon'
 	| 'murozondTheInfinite'
 	| 'anachronos'
