@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds';
 import { WebsitePremiumComponent } from '@firestone/website/core';
 import { AuthGuard } from './auth-guard.service';
+import { PremiumRedirectGuard } from './premium-redirect.service';
 
 export const appRoutes: Route[] = [
 	{
@@ -12,10 +13,7 @@ export const appRoutes: Route[] = [
 	{
 		path: 'premium',
 		component: WebsitePremiumComponent,
-	},
-	{
-		path: 'become-premium',
-		redirectTo: '/premium',
+		canActivate: [PremiumRedirectGuard],
 		pathMatch: 'full',
 	},
 	{

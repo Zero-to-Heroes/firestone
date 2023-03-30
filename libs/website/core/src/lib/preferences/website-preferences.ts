@@ -10,4 +10,12 @@ export class WebsitePreferences implements IPreferences {
 	readonly bgsActiveRankFilter: 100 | 50 | 25 | 10 | 1;
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveTribesFilter: readonly Race[] = [];
+
+	// website-exclusive
+	readonly premium: PremiumInfo;
+}
+
+export interface PremiumInfo {
+	lastUpdateDate: string;
+	isPremium: boolean;
 }

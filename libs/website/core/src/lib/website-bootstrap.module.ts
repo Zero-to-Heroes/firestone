@@ -18,6 +18,10 @@ import { AuthenticationService } from './security/authentication.service';
 import { WebsitePremiumComponent } from './security/website-premium.component';
 import { WebsiteStoreService } from './store/website-store.service';
 import { WebsiteBootstrapService } from './website-bootstrap.service';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import * as fromWebsiteCore from './+state/website/core.reducer';
+import { WebsiteCoreEffects } from './+state/website/core.effects';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -46,6 +50,10 @@ const components = [WebsiteNavigationComponent, WebsiteTopBarComponent, WebsiteP
 		InlineSVGModule.forRoot(),
 
 		SharedFrameworkCommonModule,
+
+		StoreModule.forFeature(fromWebsiteCore.WEBSITE_CORE_FEATURE_KEY, fromWebsiteCore.websiteCoreReducer),
+
+		EffectsModule.forFeature([WebsiteCoreEffects]),
 	],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },

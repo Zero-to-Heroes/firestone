@@ -4,16 +4,15 @@ import { AuthenticationService } from 'libs/website/core/src/lib/security/authen
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class PremiumRedirectGuard implements CanActivate {
 	constructor(private auth: AuthenticationService, private router: Router) {}
 
 	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
 		if (this.auth.isPremium()) {
-			// This is the injected auth service which depends on what you are using
+			this.router.navigate(['/battlegrounds']);
 			return true;
 		}
 
-		this.router.navigate(['/premium']);
-		return false;
+		return true;
 	}
 }

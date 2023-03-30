@@ -12,6 +12,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { AuthGuard } from './auth-guard.service';
+import { PremiumRedirectGuard } from './premium-redirect.service';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -37,7 +38,7 @@ import { AuthGuard } from './auth-guard.service';
 		WebsiteBootstrapModule,
 		WebsiteBattlegroundsModule,
 	],
-	providers: [AuthGuard],
+	providers: [AuthGuard, PremiumRedirectGuard],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}
