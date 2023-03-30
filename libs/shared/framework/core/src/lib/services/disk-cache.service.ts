@@ -31,11 +31,11 @@ export class DiskCacheService {
 			}
 
 			const start = Date.now();
-			console.debug('[disk-cache] storing value', key);
+			// console.debug('[disk-cache] storing value', key);
 			const stringified = JSON.stringify(value);
 			this.savingFiles[key] = true;
 			await this.ow.deleteAppFile(key);
-			console.debug('[disk-cache] deleted file', key);
+			// console.debug('[disk-cache] deleted file', key);
 			await this.ow.storeAppFile(key, stringified);
 			this.savingFiles[key] = false;
 			console.log('[disk-cache] stored value', key, Date.now() - start);
@@ -51,9 +51,9 @@ export class DiskCacheService {
 	private async getItemInternal<T>(key: string): Promise<T | null> {
 		try {
 			const start = Date.now();
-			console.debug('[disk-cache] reading value', key);
+			// console.debug('[disk-cache] reading value', key);
 			const strResult = await this.ow.readAppFile(key);
-			console.debug('[disk-cache] string value', key, strResult);
+			// console.debug('[disk-cache] string value', key, strResult);
 			const result = !!strResult?.length ? JSON.parse(strResult) : null;
 			console.log('[disk-cache] read value', key, Date.now() - start);
 			return result;
