@@ -10,6 +10,7 @@ import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/sp
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../preferences.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 import { normalizeHeroCardId } from './bgs-utils';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
@@ -24,11 +25,13 @@ export class BgsBattleSimulationService {
 	private cardsData: CardsData;
 
 	private cpuCount: number;
+	private isPremium: boolean;
 
 	constructor(
 		private readonly http: HttpClient,
 		private readonly cards: CardsFacadeService,
 		private readonly executor: BgsBattleSimulationExecutorService,
+		private readonly store: AppUiStoreFacadeService,
 		@Optional() private readonly ow: OverwolfService,
 		@Optional() private readonly prefs: PreferencesService,
 	) {
@@ -49,6 +52,9 @@ export class BgsBattleSimulationService {
 			this.cpuCount = systemInfo?.PhysicalCPUCount ?? 1;
 			console.log('CPU count', this.cpuCount);
 		}
+		this.store.isPremiumUser$().subscribe((premium) => {
+			this.isPremium = premium;
+		});
 	}
 
 	public async startBgsBattleSimulation(
@@ -98,12 +104,16 @@ export class BgsBattleSimulationService {
 			},
 		);
 
-		const result: SimulationResult =
-			prefs.bgsUseLocalSimulator || !prefs.isPremium
-				? await this.simulateLocalBattle(battleInfoInput, prefs)
-				: ((await this.http
-						.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput)
-						.toPromise()) as SimulationResult);
+		const shouldUseLocalSimulator = prefs.bgsUseLocalSimulator || !this.isPremium;
+		console.debug(
+			'[bgs-simulation] useLocalSim?',
+			shouldUseLocalSimulator,
+			prefs.bgsUseLocalSimulator,
+			this.isPremium,
+		);
+		const result: SimulationResult = shouldUseLocalSimulator
+			? await this.simulateLocalBattle(battleInfoInput, prefs)
+			: ((await this.http.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput).toPromise()) as SimulationResult);
 		const resultForLog = !!result ? { ...result } : null;
 		if (!!resultForLog) {
 			delete resultForLog.outcomeSamples;
