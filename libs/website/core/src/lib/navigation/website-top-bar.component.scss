@@ -6,6 +6,7 @@
 	width: 100%;
 	background: var(--navigation-background);
 	padding: 10px;
+	display: flex;
 }
 
 .logo {
@@ -15,5 +16,22 @@
 	::ng-deep svg {
 		height: 100%;
 		width: auto;
+	}
+}
+
+.login-button {
+	margin-left: auto;
+	padding: 10px;
+	border: 1px solid var(--default-title-color);
+	margin-top: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	cursor: pointer;
+
+	&:hover {
+		background: var(--default-title-color);
+		color: var(--color-7);
 	}
 }

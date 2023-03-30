@@ -38,7 +38,6 @@ export class UserService {
 		this.store = store;
 
 		const user = await this.retrieveUserInfo();
-		console.debug('[user-service] retrieved new user', user);
 		this.user$$.next(user);
 
 		this.ow.addLoginStateChangedListener(async () => {

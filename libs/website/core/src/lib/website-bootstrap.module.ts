@@ -14,6 +14,8 @@ import { WebsiteLocalizationService } from './localization/website-localization.
 import { WebsiteNavigationComponent } from './navigation/website-navigation.component';
 import { WebsiteTopBarComponent } from './navigation/website-top-bar.component';
 import { WebsitePreferencesService } from './preferences/website-preferences.service';
+import { AuthenticationService } from './security/authentication.service';
+import { WebsitePremiumComponent } from './security/website-premium.component';
 import { WebsiteStoreService } from './store/website-store.service';
 import { WebsiteBootstrapService } from './website-bootstrap.service';
 
@@ -26,7 +28,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 	);
 }
 
-const components = [WebsiteNavigationComponent, WebsiteTopBarComponent];
+const components = [WebsiteNavigationComponent, WebsiteTopBarComponent, WebsitePremiumComponent];
 
 @NgModule({
 	imports: [
@@ -54,6 +56,8 @@ const components = [WebsiteNavigationComponent, WebsiteTopBarComponent];
 		WebsitePreferencesService,
 		WebsiteLocalizationService,
 		WebsiteStoreService,
+
+		AuthenticationService,
 	],
 	declarations: components,
 	exports: components,
