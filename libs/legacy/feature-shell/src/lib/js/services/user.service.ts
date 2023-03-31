@@ -59,10 +59,10 @@ export class UserService {
 
 	private async sendCurrentUser(user: overwolf.profile.GetCurrentUserResult, isPremium: boolean) {
 		// Don't send anything in dev to allow for impersonation
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	console.warn('not sending user mapping in dev');
-		// 	return;
-		// }
+		if (process.env.NODE_ENV !== 'production') {
+			console.warn('not sending user mapping in dev');
+			return;
+		}
 
 		console.debug('[user-service] sending current user', user, isPremium);
 		this.store.stateUpdater.next(new CurrentUserEvent(user));
