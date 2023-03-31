@@ -38,11 +38,14 @@
 	justify-content: center;
 	position: relative;
 	left: var(--left-navigation-width);
+	margin-right: var(--left-navigation-width);
 }
 
 .content {
 	max-width: 800px;
 	width: 100%;
+	margin-left: 20px;
+	margin-right: 20px;
 }
 
 website-top-bar {
@@ -58,4 +61,10 @@ website-navigation {
 	position: fixed;
 	left: 0;
 	top: var(--navigation-height);
+}
+
+@media (max-width: 840px) {
+	.wrapper {
+		--left-navigation-width: 75px;
+	}
 }

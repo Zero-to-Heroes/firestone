@@ -106,3 +106,28 @@
 	// 	}
 	// }
 }
+
+@media (max-width: 720px) {
+	:host {
+		height: auto !important;
+	}
+
+	.info {
+		flex-wrap: wrap;
+		margin-bottom: 10px;
+
+		.hero-details {
+			align-items: center;
+			width: calc((100% - 60px) / 2);
+		}
+
+		.position {
+			width: calc((100% - 60px) / 2);
+		}
+
+		.placement {
+			width: 100%;
+			height: 50px;
+		}
+	}
+}

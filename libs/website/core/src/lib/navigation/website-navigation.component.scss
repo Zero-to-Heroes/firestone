@@ -76,3 +76,15 @@
 		}
 	}
 }
+
+@media (max-width: 840px) {
+	.desktop-app-cta {
+		display: none;
+	}
+
+	.menu-item {
+		.menu-name {
+			display: none;
+		}
+	}
+}

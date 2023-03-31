@@ -38,3 +38,16 @@
 		}
 	}
 }
+
+@media (max-width: 720px) {
+	.battlegrounds-meta-stats-heroes .header {
+		.hero-details,
+		.position {
+			width: calc((100% - 60px) / 2);
+		}
+
+		.placement.placement.placement.placement {
+			display: none;
+		}
+	}
+}
