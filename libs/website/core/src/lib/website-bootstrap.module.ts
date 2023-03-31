@@ -7,21 +7,22 @@ import {
 	CardsFacadeStandaloneService,
 	ILocalizationService,
 } from '@firestone/shared/framework/core';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { WebsiteCoreEffects } from './+state/website/core.effects';
+import * as fromWebsiteCore from './+state/website/core.reducer';
 import { WebsiteLocalizationService } from './localization/website-localization.service';
 import { WebsiteNavigationComponent } from './navigation/website-navigation.component';
 import { WebsiteTopBarComponent } from './navigation/website-top-bar.component';
 import { WebsitePreferencesService } from './preferences/website-preferences.service';
 import { AuthenticationService } from './security/authentication.service';
+import { WebsiteAuthComponent } from './security/website-auth.component';
 import { WebsitePremiumComponent } from './security/website-premium.component';
 import { WebsiteStoreService } from './store/website-store.service';
 import { WebsiteBootstrapService } from './website-bootstrap.service';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import * as fromWebsiteCore from './+state/website/core.reducer';
-import { WebsiteCoreEffects } from './+state/website/core.effects';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -32,7 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 	);
 }
 
-const components = [WebsiteNavigationComponent, WebsiteTopBarComponent, WebsitePremiumComponent];
+const components = [WebsiteNavigationComponent, WebsiteTopBarComponent, WebsitePremiumComponent, WebsiteAuthComponent];
 
 @NgModule({
 	imports: [

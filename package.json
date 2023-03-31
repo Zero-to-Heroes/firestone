@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "11.0.13",
+	"version": "11.0.14",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
@@ -12,7 +12,7 @@
 		"build": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
 		"build-local": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
 		"upload-web": "npx ts-node ./build-tools/upload-website.ts",
-		"build-web": "rm -rf node_modules/.cache/nx && nx build website --configuration=production --source-map",
+		"build-web": "rm -rf node_modules/.cache/nx && nx build website --configuration=production --source-map && npm run upload-web",
 		"test": "nx test"
 	},
 	"private": true,

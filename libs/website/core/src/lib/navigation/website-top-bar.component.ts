@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { initAuthentication } from '../+state/website/core.actions';
 import { WebsiteCoreState } from '../+state/website/core.models';
+import { loginUrl } from '../security/authentication.service';
 
 @Component({
 	selector: 'website-top-bar',
@@ -18,10 +18,6 @@ import { WebsiteCoreState } from '../+state/website/core.models';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteTopBarComponent extends AbstractSubscriptionComponent {
-	clientId = `c2w6jk8xh548uxeh6wqu3ivmxpgnh8qi`;
-	redirectUri = ``;
-	loginUrl = `https://accounts.overwolf.com/oauth2/auth?response_type=code&client_id=${this.clientId}&redirect_uri=${this.redirectUri}&scope=openid+profile+email`;
-
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: TranslateService,
@@ -32,9 +28,9 @@ export class WebsiteTopBarComponent extends AbstractSubscriptionComponent {
 	}
 
 	login() {
-		window.open(this.loginUrl, '_blank')?.focus();
-		const action = initAuthentication({ userName: 'fakeUserName' });
-		this.store.dispatch(action);
-		this.router.navigate(['/battlegrounds']);
+		window.open(loginUrl, '_blank')?.focus();
+		// const action = initAuthentication({ userName: 'fakeUserName' });
+		// this.store.dispatch(action);
+		// this.router.navigate(['/battlegrounds']);
 	}
 }

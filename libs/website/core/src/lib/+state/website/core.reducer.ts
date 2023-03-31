@@ -1,11 +1,24 @@
 import { LocalStorageService } from '@firestone/shared/framework/core';
 import { Action, createReducer, on } from '@ngrx/store';
+import { PremiumInfo } from '../../preferences/website-preferences';
 import { WebsitePreferencesService } from '../../preferences/website-preferences.service';
-import { isValidPremium } from '../../security/authentication.service';
 import * as CoreActions from './core.actions';
 import { WebsiteCoreState } from './core.models';
 
+console.log('creating feature key');
 export const WEBSITE_CORE_FEATURE_KEY = 'websiteCore';
+
+// TODO: move this?
+const isValidPremium = (premium: PremiumInfo): boolean => {
+	console.log(
+		'isValidPremium?',
+		premium,
+		premium?.isPremium,
+		premium?.expires,
+		Date.now() - (premium?.expires ?? 0) * 1000,
+	);
+	return premium?.isPremium && !!premium.expires && Date.now() - premium.expires * 1000 < 7 * 24 * 3600 * 1000;
+};
 
 export interface WebsiteCorePartialState {
 	readonly [WEBSITE_CORE_FEATURE_KEY]: WebsiteCoreState;
@@ -21,7 +34,7 @@ export const initialWebsiteCoreState: WebsiteCoreState = {
 const reducer = createReducer(
 	initialWebsiteCoreState,
 	// on(CoreActions.initAuthentication, (state, { }))
-	on(CoreActions.authenticationSuccess, (state, { userName, isLoggedIn, isPremium }) => ({
+	on(CoreActions.afterAuthentication, (state, { userName, isLoggedIn, isPremium }) => ({
 		...state,
 		isPremium: isPremium,
 		isLoggedIn: isLoggedIn,

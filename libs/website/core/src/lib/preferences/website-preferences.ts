@@ -16,6 +16,6 @@ export class WebsitePreferences implements IPreferences {
 }
 
 export interface PremiumInfo {
-	lastUpdateDate: string;
+	expires?: number;
 	isPremium: boolean;
 }
