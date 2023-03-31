@@ -77,6 +77,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	taunt,
+	tribeless,
 	undead,
 	weapon,
 	whelp,
@@ -946,6 +947,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.TheCountess:
 				return and(inDeck, neutral);
+			case CardIds.ThePurator:
+				return and(inDeck, minion, not(tribeless));
 			case CardIds.TheUpperHand:
 				return and(inDeck, spell);
 			case CardIds.Thoribelore:

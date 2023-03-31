@@ -1,8 +1,8 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, on, Action } from '@ngrx/store';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createReducer, on } from '@ngrx/store';
 
-import * as WebsiteDuelsActions from './website/duels.actions';
-import { WebsiteDuelsEntity } from './website/duels.models';
+import * as WebsiteDuelsActions from './duels.actions';
+import { WebsiteDuelsEntity } from './duels.models';
 
 export const WEBSITE_DUELS_FEATURE_KEY = 'websiteDuels';
 
@@ -25,11 +25,15 @@ export const initialWebsiteDuelsState: WebsiteDuelsState = websiteDuelsAdapter.g
 
 const reducer = createReducer(
 	initialWebsiteDuelsState,
-	on(WebsiteDuelsActions.initWebsiteDuels, (state) => ({ ...state, loaded: false, error: null })),
-	on(WebsiteDuelsActions.loadWebsiteDuelsSuccess, (state, { websiteDuels }) =>
-		websiteDuelsAdapter.setAll(websiteDuels, { ...state, loaded: true }),
-	),
-	on(WebsiteDuelsActions.loadWebsiteDuelsFailure, (state, { error }) => ({ ...state, error })),
+	on(WebsiteDuelsActions.initDuelsMetaHeroStats, (state) => ({ ...state, loaded: false, error: null })),
+	on(WebsiteDuelsActions.loadDuelsMetaHeroStatsSuccess, (state, { stats, lastUpdateDate, mmrPercentiles }) => ({
+		...state,
+		stats: stats,
+		lastUpdateDate: lastUpdateDate,
+		mmrPercentiles: mmrPercentiles,
+		loaded: true,
+	})),
+	on(WebsiteDuelsActions.loadDuelsMetaHeroStatsFailure, (state, { error }) => ({ ...state, error })),
 );
 
 export function websiteDuelsReducer(state: WebsiteDuelsState | undefined, action: Action) {

@@ -222,6 +222,9 @@ export const pirate = race(Race.PIRATE);
 export const undead = race(Race.UNDEAD);
 export const imp = hasMechanic(GameTag.IMP);
 export const whelp = hasMechanic(GameTag.WHELP);
+export const tribeless = (handler: Handler): boolean => {
+	return (handler.referenceCardProvider()?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
+};
 
 export const currentClass = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
 	return handler.referenceCardProvider()?.cardClass === deckState?.hero?.playerClass?.toUpperCase();
