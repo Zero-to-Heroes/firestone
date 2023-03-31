@@ -29,8 +29,5 @@ export class WebsiteTopBarComponent extends AbstractSubscriptionComponent {
 
 	login() {
 		window.open(loginUrl, '_blank')?.focus();
-		// const action = initAuthentication({ userName: 'fakeUserName' });
-		// this.store.dispatch(action);
-		// this.router.navigate(['/battlegrounds']);
 	}
 }

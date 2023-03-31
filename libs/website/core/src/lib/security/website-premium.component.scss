@@ -1,0 +1,19 @@
+.title {
+	color: var(--color-common-2);
+	font-size: 20px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.subtext {
+	margin-bottom: 20px;
+}
+
+a {
+	color: var(--color-2);
+
+	&:hover {
+		color: var(--color-common-2);
+		cursor: pointer;
+	}
+}
