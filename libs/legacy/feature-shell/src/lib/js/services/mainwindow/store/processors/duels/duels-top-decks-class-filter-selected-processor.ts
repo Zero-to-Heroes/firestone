@@ -1,5 +1,6 @@
 import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
-import { DuelsHeroFilterType } from '@models/duels/duels-hero-filter.type';
+import { DuelsHeroFilterType } from '@firestone/duels/data-access';
+
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
@@ -18,7 +19,7 @@ export class DuelsHeroFilterSelectedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const uniqueNormalizedHeroes: DuelsHeroFilterType = [
 			...new Set(event.value.map((hero) => normalizeDuelsHeroCardId(hero) as CardIds)),
-		];
+		] as DuelsHeroFilterType;
 		await this.prefs.updateDuelsHeroFilter(uniqueNormalizedHeroes);
 		// Update hero power and signature treasure filters if not compatible with the new hero selection
 		const prefs = await this.prefs.getPreferences();

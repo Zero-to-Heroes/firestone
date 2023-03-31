@@ -8,18 +8,18 @@ import {
 	normalizeDuelsHeroCardId,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
+import { filterDuelsHeroStats } from '@firestone/duels/data-access';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import {
 	buildDuelsHeroPlayerStats,
-	filterDuelsHeroStats,
 	filterDuelsRuns,
 	getDuelsMmrFilterNumber,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, uuid } from '@services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

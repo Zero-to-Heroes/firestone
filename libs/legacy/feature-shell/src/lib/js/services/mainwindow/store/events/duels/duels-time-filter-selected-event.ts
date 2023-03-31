@@ -1,4 +1,4 @@
-import { DuelsTimeFilterType } from '../../../../../models/duels/duels-time-filter.type';
+import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsTimeFilterSelectedEvent implements MainWindowStoreEvent {

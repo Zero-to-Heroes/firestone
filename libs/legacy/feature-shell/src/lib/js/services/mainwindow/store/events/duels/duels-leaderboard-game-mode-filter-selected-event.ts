@@ -1,4 +1,4 @@
-import { DuelsGameModeFilterType } from '../../../../../models/duels/duels-game-mode-filter.type';
+import { DuelsGameModeFilterType } from '@firestone/duels/data-access';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsLeaderboardGameModeFilterSelectedEvent implements MainWindowStoreEvent {

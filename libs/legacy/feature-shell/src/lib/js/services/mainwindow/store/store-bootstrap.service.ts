@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -70,6 +71,7 @@ export class StoreBootstrapService {
 		private readonly memory: MemoryInspectionService,
 		private readonly duelsMemoryCache: DuelsMemoryCacheService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 	) {
 		console.log('[store-boostrap] constructor');
 		setTimeout(() => {
@@ -143,7 +145,7 @@ export class StoreBootstrapService {
 			]),
 			Promise.all([
 				this.duels.loadRuns(),
-				this.duels.loadGlobalStats(),
+				this.duelsAccess.loadMetaHeroes(mergedPrefs.duelsActiveMmrFilter, mergedPrefs.duelsActiveTimeFilter),
 				this.duels.loadTopDecks(),
 				this.duels.loadConfig(),
 				this.duels.loadLeaderboard(),

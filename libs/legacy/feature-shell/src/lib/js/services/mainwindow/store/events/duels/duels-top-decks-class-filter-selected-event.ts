@@ -1,4 +1,4 @@
-import { DuelsHeroFilterType } from '../../../../../models/duels/duels-hero-filter.type';
+import { DuelsHeroFilterType } from '@firestone/duels/data-access';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsTopDecksHeroFilterSelectedEvent implements MainWindowStoreEvent {

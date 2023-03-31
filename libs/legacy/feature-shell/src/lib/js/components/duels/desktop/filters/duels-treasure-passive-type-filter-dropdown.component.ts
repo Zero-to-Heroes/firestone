@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { DuelsTreasureStatTypeFilterType } from '@firestone/duels/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DuelsTreasureStatTypeFilterType } from '../../../../models/duels/duels-treasure-stat-type-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-passive-type-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';

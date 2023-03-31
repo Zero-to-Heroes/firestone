@@ -2,17 +2,19 @@ import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
+import {
+	DuelsGameModeFilterType,
+	DuelsHeroFilterType,
+	DuelsStatTypeFilterType,
+	DuelsTimeFilterType,
+	DuelsTreasureStatTypeFilterType,
+} from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType } from '@firestone/duels/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { DuelsGameModeFilterType } from '../models/duels/duels-game-mode-filter.type';
-import { DuelsHeroFilterType } from '../models/duels/duels-hero-filter.type';
-import { DuelsStatTypeFilterType } from '../models/duels/duels-stat-type-filter.type';
-import { DuelsTimeFilterType } from '../models/duels/duels-time-filter.type';
-import { DuelsTreasureStatTypeFilterType } from '../models/duels/duels-treasure-stat-type-filter.type';
 import { DuelsTopDecksDustFilterType } from '../models/duels/duels-types';
 import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group-filter-type';

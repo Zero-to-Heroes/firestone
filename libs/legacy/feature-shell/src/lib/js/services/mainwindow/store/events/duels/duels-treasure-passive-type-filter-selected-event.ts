@@ -1,4 +1,4 @@
-import { DuelsTreasureStatTypeFilterType } from '../../../../../models/duels/duels-treasure-stat-type-filter.type';
+import { DuelsTreasureStatTypeFilterType } from '@firestone/duels/data-access';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsTreasurePassiveTypeFilterSelectedEvent implements MainWindowStoreEvent {

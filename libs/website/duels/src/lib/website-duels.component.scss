@@ -1,0 +1,33 @@
+.filters {
+	display: flex;
+
+	.filter {
+		margin-right: 10px;
+	}
+}
+
+battlegrounds-meta-stats-heroes-view {
+	::ng-deep {
+		.battlegrounds-meta-stats-heroes {
+			.net-mmr.net-mmr.net-mmr {
+				display: none;
+			}
+			.placement.placement.placement.placement {
+				flex-grow: 1;
+				display: flex;
+				align-content: center;
+				justify-content: center;
+
+				.placement-distribution {
+					width: 200px;
+				}
+			}
+		}
+
+		battlegrounds-meta-stats-hero-info .info {
+			&:hover {
+				background: rgba(255, 255, 255, 0.08);
+			}
+		}
+	}
+}

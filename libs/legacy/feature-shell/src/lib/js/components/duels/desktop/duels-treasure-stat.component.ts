@@ -1,16 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { filterDuelsTreasureStats } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import {
-	buildDuelsHeroTreasurePlayerStats,
-	filterDuelsRuns,
-	filterDuelsTreasureStats,
-} from '../../../services/ui-store/duels-ui-helper';
+import { buildDuelsHeroTreasurePlayerStats, filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({

@@ -39,8 +39,6 @@ import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json';
-const DUELS_GLOBAL_STATS_URL_SPLIT =
-	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json';
 const DUELS_GLOBAL_STATS_DECKS =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
@@ -191,16 +189,6 @@ export class DuelsStateBuilderService {
 		const rewardsResults: readonly DuelsRewardsInfo[] = results?.rewardsResults || [];
 		console.log('[duels-state-builder] loaded result');
 		return [stepResults, rewardsResults];
-	}
-
-	public async loadGlobalStats(): Promise<DuelsStat> {
-		const prefs = await this.prefs.getPreferences();
-		const mmr = (prefs.duelsActiveMmrFilter as any) === 'all' ? 100 : Math.min(100, prefs.duelsActiveMmrFilter);
-		const result: DuelsStat = await this.api.callGetApi(
-			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + mmr).replace('%date%', prefs.duelsActiveTimeFilter),
-		);
-		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
-		return result;
 	}
 
 	public async loadTopDecks(): Promise<DuelsStatDecks> {

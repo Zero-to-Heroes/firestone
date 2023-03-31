@@ -18,7 +18,7 @@ import { WebsiteCoreState } from '../+state/website/core.models';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteTopBarComponent extends AbstractSubscriptionComponent {
-	clientId = ``;
+	clientId = `c2w6jk8xh548uxeh6wqu3ivmxpgnh8qi`;
 	redirectUri = ``;
 	loginUrl = `https://accounts.overwolf.com/oauth2/auth?response_type=code&client_id=${this.clientId}&redirect_uri=${this.redirectUri}&scope=openid+profile+email`;
 

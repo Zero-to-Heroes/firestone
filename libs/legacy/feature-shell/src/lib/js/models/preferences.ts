@@ -2,6 +2,13 @@ import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-
 import { allDuelsHeroes, BnetRegion, Race } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
+import {
+	DuelsGameModeFilterType,
+	DuelsHeroFilterType,
+	DuelsStatTypeFilterType,
+	DuelsTimeFilterType,
+	DuelsTreasureStatTypeFilterType,
+} from '@firestone/duels/data-access';
 import { DuelsDeckSortFilterType, DuelsHeroSortFilterType } from '@firestone/duels/view';
 import { IPreferences } from '@firestone/shared/framework/common';
 import { StatGameFormatType } from '@firestone/stats/data-access';
@@ -18,11 +25,6 @@ import {
 	CollectionPortraitCategoryFilter,
 	CollectionPortraitOwnedFilter,
 } from './collection/filter-types';
-import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
-import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
-import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
-import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
-import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
 import { DuelsTopDecksDustFilterType } from './duels/duels-types';
 import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
 import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';

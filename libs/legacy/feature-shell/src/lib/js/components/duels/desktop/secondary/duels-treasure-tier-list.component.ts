@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { filterDuelsTreasureStats } from '@firestone/duels/data-access';
 import { DuelsMetaStatsViewComponent } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getStandardDeviation } from '@services/utils';
@@ -8,10 +9,7 @@ import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import {
-	buildDuelsHeroTreasurePlayerStats,
-	filterDuelsTreasureStats,
-} from '../../../../services/ui-store/duels-ui-helper';
+import { buildDuelsHeroTreasurePlayerStats } from '../../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 

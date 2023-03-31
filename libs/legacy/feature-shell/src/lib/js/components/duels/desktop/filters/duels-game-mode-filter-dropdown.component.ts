@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { DuelsGameModeFilterType } from '@firestone/duels/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';

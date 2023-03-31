@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isSignatureTreasure } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest } from 'rxjs';
@@ -6,7 +7,7 @@ import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operator
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
-import { isDuels, isSignatureTreasure } from '../duels/duels-utils';
+import { isDuels } from '../duels/duels-utils';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { uuid } from '../utils';
 
@@ -182,8 +183,7 @@ const isNewRun = (
 };
 
 export const findSignatureTreasure = (deckList: readonly (string | number)[], allCards: CardsFacadeService): string => {
-	return deckList.map((cardId) => allCards.getCard(cardId)).find((card) => isSignatureTreasure(card?.id, allCards))
-		?.id;
+	return deckList.map((cardId) => allCards.getCard(cardId)).find((card) => isSignatureTreasure(card?.id))?.id;
 };
 
 const isMatchInRun = (additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean => {

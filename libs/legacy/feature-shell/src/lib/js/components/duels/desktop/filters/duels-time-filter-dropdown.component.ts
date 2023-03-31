@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DuelsTimeFilterType } from '../../../../models/duels/duels-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';

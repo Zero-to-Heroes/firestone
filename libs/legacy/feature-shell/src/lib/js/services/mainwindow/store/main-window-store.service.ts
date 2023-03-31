@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
@@ -428,6 +429,7 @@ export class MainWindowStoreService {
 		private readonly i18n: LocalizationService,
 		private readonly packsService: PackStatsService,
 		private readonly streamsService: LiveStreamsService,
+		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -893,7 +895,7 @@ export class MainWindowStoreService {
 			[DuelsHeroSearchEvent.eventName(), new DuelsHeroSearchProcessor()],
 			[
 				DuelsRequestNewGlobalStatsLoadEvent.eventName(),
-				new DuelsRequestNewGlobalStatsLoadProcessor(this.duelsBuilder),
+				new DuelsRequestNewGlobalStatsLoadProcessor(this.duelsAccess, this.prefs),
 			],
 			[DuelsCurrentDeckEvent.eventName(), new DuelsCurrentDeckProcessor()],
 			[DuelsIsOnMainScreenEvent.eventName(), new DuelsIsOnMainScreenProcessor()],

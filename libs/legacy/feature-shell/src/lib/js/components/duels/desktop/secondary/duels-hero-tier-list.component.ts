@@ -1,16 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardIds } from '@firestone-hs/reference-data';
+import { DuelsStatTypeFilterType, filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { DuelsMetaStatsViewComponent } from '@firestone/duels/view';
 import { getStandardDeviation } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
-import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
+import { buildDuelsHeroPlayerStats } from '../../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 

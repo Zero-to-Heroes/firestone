@@ -41,14 +41,14 @@ export class DuelsMetaStatsViewComponent extends AbstractSubscriptionComponent i
 	// Preparing the data to be displayed according to all the filters / sorts
 	// should be done in the business component, and extracted to helper methods
 	// to avoid duplication
-	@Input() set stats(value: readonly DuelsMetaStats[]) {
-		this.stats$$.next(value);
+	@Input() set stats(value: readonly DuelsMetaStats[] | null) {
+		this.stats$$.next(value ?? []);
 	}
-	@Input() set sort(value: DuelsHeroSortFilterType) {
-		this.sort$$.next(value);
+	@Input() set sort(value: DuelsHeroSortFilterType | null) {
+		this.sort$$.next(value ?? 'global-winrate');
 	}
-	@Input() set hideLowData(value: boolean) {
-		this.hideLowData$$.next(value);
+	@Input() set hideLowData(value: boolean | null) {
+		this.hideLowData$$.next(value ?? false);
 	}
 	@Input() set showPlayerGamesPlayed(value: boolean) {
 		this.showPlayerGamesPlayed$$.next(value);

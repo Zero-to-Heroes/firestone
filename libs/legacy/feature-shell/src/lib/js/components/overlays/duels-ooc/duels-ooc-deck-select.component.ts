@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
-import { allDuelsSignatureTreasures, CardIds } from '@firestone-hs/reference-data';
+import { allDuelsSignatureTreasures, CardIds, isPassive } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -10,7 +10,6 @@ import { DuelsDeckStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
 import { DuelsDeck } from '@models/memory/memory-duels';
 import { SetCard } from '@models/set';
-import { isPassive } from '@services/duels/duels-utils';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';

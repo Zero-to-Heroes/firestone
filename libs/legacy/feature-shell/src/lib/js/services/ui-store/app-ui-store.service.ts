@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildHeroStats, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
+import { filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -11,14 +12,14 @@ import { MailsService } from '@mails/services/mails.service';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
-import { DuelsStatTypeFilterType } from '@models/duels/duels-stat-type-filter.type';
 import {
 	buildDuelsHeroPlayerStats,
-	filterDuelsHeroStats,
 	filterDuelsRuns,
 	getDuelsMmrFilterNumber,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
+
+import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
