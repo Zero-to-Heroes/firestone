@@ -1,9 +1,9 @@
 import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
-import { duelsHeroConfigs, normalizeDuelsHeroCardIdForDeckCode } from '@firestone-hs/reference-data';
+import { duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsDeckbuilderImportDeckEvent } from '../../events/duels/duels-deckbuilder-import-deck-event';
 
 export class DuelsDeckbuilderImportDeckProcessor implements Processor {
@@ -26,9 +26,7 @@ export class DuelsDeckbuilderImportDeckProcessor implements Processor {
 		const inputHeroCardId = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]).id;
 		const config =
 			duelsHeroConfigs.find(
-				(config) =>
-					normalizeDuelsHeroCardIdForDeckCode(config.hero) ===
-					normalizeDuelsHeroCardIdForDeckCode(inputHeroCardId),
+				(config) => normalizeDuelsHeroCardId(config.hero) === normalizeDuelsHeroCardId(inputHeroCardId),
 			) ??
 			// Deck codes can have a non-duels class as their hero
 			duelsHeroConfigs.find(
