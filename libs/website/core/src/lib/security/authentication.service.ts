@@ -8,7 +8,8 @@ import { getPremium } from '../+state/website/core.selectors';
 const AUTH_TOKEN_VALIDATION_URL = 'https://337o3p2lawguj5btgccdgogudi0hqcti.lambda-url.us-west-2.on.aws/';
 
 const clientId = `c2w6jk8xh548uxeh6wqu3ivmxpgnh8qi`;
-const redirectUri = `https://www.firestoneapp.gg/owAuth`;
+const redirectUri =
+	process.env['NODE_ENV'] === 'production' ? `https://www.firestoneapp.gg/owAuth` : `http://localhost:4200/owAuth`;
 const scope = `openid+profile`;
 export const loginUrl = `https://accounts.overwolf.com/oauth2/auth?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
 
@@ -43,7 +44,10 @@ export class AuthenticationService {
 			readonly userName: string;
 			readonly issuedAt: number;
 			readonly expiration: number;
-		} | null = await this.api.callPostApi(AUTH_TOKEN_VALIDATION_URL, { authCode });
+		} | null = await this.api.callPostApi(AUTH_TOKEN_VALIDATION_URL, {
+			authCode,
+			dev: process.env['NODE_ENV'] !== 'production',
+		});
 		console.log('retrieved auth info', authInfo);
 
 		// update the prefs

@@ -18,9 +18,6 @@ const isValidPremium = (premium: PremiumInfo): boolean => {
 		Date.now() - (premium?.expires ?? 0) * 1000,
 		window.location,
 	);
-	if (window.location.hostname === 'localhost') {
-		return true;
-	}
 	return premium?.isPremium && !!premium.expires && Date.now() - premium.expires * 1000 < 7 * 24 * 3600 * 1000;
 };
 
