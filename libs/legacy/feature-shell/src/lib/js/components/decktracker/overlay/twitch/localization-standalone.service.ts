@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
+import { CardsFacadeStandaloneService, ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { formatClass } from '../../../../services/hs-utils';
-import { ImageLocalizationOptions } from '../../../../services/localization.service';
 import { capitalizeEachWord } from '../../../../services/utils';
-import { CardsFacadeStandaloneService } from './cards-facade-standalone.service';
 
 // For Twitch
 @Injectable()

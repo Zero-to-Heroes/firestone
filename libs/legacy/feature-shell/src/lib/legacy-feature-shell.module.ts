@@ -462,6 +462,16 @@ import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/h
 import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
+import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
+import { BgsSimulationOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
+import { DeckTrackerOverlayContainerComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
+import { DeckTrackerOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
+import { DeckTrackerTwitchTitleBarComponent } from '@components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
+import { EmptyCardComponent } from '@components/decktracker/overlay/twitch/empty-card.component';
+import { LocalizationStandaloneService } from '@components/decktracker/overlay/twitch/localization-standalone.service';
+import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/state-mouse-over.component';
+import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
@@ -1619,6 +1629,18 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PremiumSettingDirective,
 		MercenariesHighlightDirective,
 		AutofocusDirective,
+
+		// Twitch
+		BattlegroundsMinionsTiersTwitchOverlayComponent,
+		BgsSimulationOverlayStandaloneComponent,
+		DeckTrackerOverlayContainerComponent,
+		DeckTrackerOverlayStandaloneComponent,
+		DeckTrackerTwitchTitleBarComponent,
+		EmptyCardComponent,
+		LeaderboardEmptyCardComponent,
+		StateMouseOverComponent,
+		TwitchBgsHeroOverviewComponent,
+		TwitchConfigWidgetComponent,
 	],
 	providers: [
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
@@ -1793,6 +1815,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		TavernBrawlService,
 		MailsService,
+
+		// Twitch
+		LocalizationStandaloneService,
+		TwitchPreferencesService,
 	],
 	entryComponents: [
 		ConfirmationComponent,

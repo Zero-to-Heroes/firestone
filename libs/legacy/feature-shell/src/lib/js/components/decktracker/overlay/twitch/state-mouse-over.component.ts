@@ -457,7 +457,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 				),
 				positionTop: Map.of(0, 22, 1, 16, 2, 10, 3, 10, 4, 9, 5, 9, 6, 10, 7, 15, 8, 19, 9, 28, 10, 38, 11, 41),
 			} as Adjustment,
-		);
+		) as Map<number, Adjustment>;
 	}
 }
 

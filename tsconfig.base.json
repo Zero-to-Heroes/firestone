@@ -48,6 +48,8 @@
 		"noImplicitAny": false,
 		"noImplicitOverride": false,
 		"strictPropertyInitialization": false,
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
 		"noPropertyAccessFromIndexSignature": false
 	},
 	"exclude": ["node_modules", "tmp"]

@@ -63,7 +63,7 @@ export class EmptyCardComponent {
 	_leftOFfset: number;
 	_topOffset: number;
 	_transform: string;
-	_cardTooltipPosition: string;
+	_cardTooltipPosition: any;
 	_cardTooltipBgs: boolean;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

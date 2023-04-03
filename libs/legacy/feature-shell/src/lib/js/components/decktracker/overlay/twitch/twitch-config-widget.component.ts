@@ -136,7 +136,7 @@ export class TwitchConfigWidgetComponent
 {
 	prefs$: Observable<TwitchPreferences>;
 
-	autoTrueFalseOptions: readonly DropdownOption[] = [
+	autoTrueFalseOptions: DropdownOption[] = [
 		{
 			value: null,
 			label: 'Auto',
@@ -219,14 +219,14 @@ export class TwitchConfigWidgetComponent
 		this.prefs.savePrefs(newPrefs);
 	}
 
-	onHideBattleOddsInCombatChanged(prefs: TwitchPreferences, value: 'auto' | 'true' | 'false') {
-		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInCombat: value };
+	onHideBattleOddsInCombatChanged(prefs: TwitchPreferences, value: any) {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInCombat: value as 'auto' | 'true' | 'false' };
 		console.log('changing hideBattleOddsInCombat pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 
-	onHideBattleOddsInTavernChanged(prefs: TwitchPreferences, value: 'auto' | 'true' | 'false') {
-		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInTavern: value };
+	onHideBattleOddsInTavernChanged(prefs: TwitchPreferences, value: any) {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInTavern: value as 'auto' | 'true' | 'false' };
 		console.log('changing hideBattleOddsInTavern pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
