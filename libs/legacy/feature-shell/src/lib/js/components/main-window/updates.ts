@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.12',
+		version: '11.0.15',
 		force: false,
 		sections: [
 			// {
@@ -55,11 +55,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'duels',
+						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the "copy deck" button had gone missing when viewing a Duels deck.`,
+								type: 'feature',
+								text: `(PREMIUM) A very first version of the Firestone website is up at https://www.firestoneapp.gg. This website will gradually expose some of the information that is today available in the app (for now, it contains Battlegrounds hero stats). Please note that you need to be logged in and have a premium account to access the website`,
 							},
 						],
 					},
@@ -70,11 +70,24 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a counter for Overdraft.`,
+								type: 'bug',
+								text: `Fix a sim issue where Greybough's buddy would not apply its effect to minnions taunted by Sprout it Out, Greybough's hero power.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where premium users could not use the remote simulator anymore.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where pasting a deck code for Drek'Thar / Vanndar in the deckbuilder would create the deck for its equivalent basic class.`,
 							},
 						],
 					},
