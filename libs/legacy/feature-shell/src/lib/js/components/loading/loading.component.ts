@@ -28,6 +28,7 @@ declare let amplitude: any;
 				<div class="controls">
 					<control-settings></control-settings>
 					<control-discord></control-discord>
+					<control-website></control-website>
 					<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
 						<svg class="svg-icon-fill">
 							<use

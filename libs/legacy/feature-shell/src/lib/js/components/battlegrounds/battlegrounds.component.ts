@@ -38,6 +38,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					<control-bug></control-bug>
 					<control-settings [settingsApp]="'battlegrounds'"></control-settings>
 					<control-discord></control-discord>
+					<control-website></control-website>
 					<control-minimize [windowId]="windowId"></control-minimize>
 					<control-maximize
 						[windowId]="windowId"

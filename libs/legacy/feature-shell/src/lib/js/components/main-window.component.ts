@@ -43,6 +43,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					<control-settings [settingsApp]="value.currentApp"></control-settings>
 					<control-help (help)="onHelp()"></control-help>
 					<control-discord></control-discord>
+					<control-website></control-website>
 					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 					<control-maximize [windowId]="windowId"></control-maximize>
 					<control-close

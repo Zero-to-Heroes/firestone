@@ -460,6 +460,7 @@ import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strate
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
+import { ControlWebsiteComponent } from '@components/controls/control-website.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
@@ -876,6 +877,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ControlCloseComponent,
 		ControlSettingsComponent,
 		ControlDiscordComponent,
+		ControlWebsiteComponent,
 		ControlBugComponent,
 		ControlShareComponent,
 
@@ -1009,7 +1011,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ControlMaximizeComponent,
 		ControlCloseComponent,
 		ControlSettingsComponent,
-		ControlDiscordComponent,
 		ControlBugComponent,
 		ControlShareComponent,
 
