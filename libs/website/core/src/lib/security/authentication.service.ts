@@ -65,4 +65,16 @@ export class AuthenticationService {
 			premium: authInfo?.premium ?? false,
 		};
 	}
+
+	public logout() {
+		this.store.dispatch(
+			authenticationSuccess({
+				userName: null,
+				isLoggedIn: false,
+				isPremium: false,
+				issuedAt: undefined,
+				expiration: undefined,
+			}),
+		);
+	}
 }
