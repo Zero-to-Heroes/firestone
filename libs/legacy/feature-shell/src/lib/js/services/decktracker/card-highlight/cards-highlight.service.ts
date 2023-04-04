@@ -343,6 +343,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.CastleKennels_REV_362:
 			case CardIds.CastleKennels_REV_790:
 				return and(inDeck, minion, beast);
+			case CardIds.CatrinaMuerte:
+				return and(inGraveyard, undead, minion);
 			case CardIds.ChattyBartender:
 				return and(inDeck, secret);
 			case CardIds.ClassActionLawyer:
@@ -358,6 +360,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, mech);
 			case CardIds.CoilCastingTavernBrawl:
 				return and(or(inDeck, inHand), naga);
+			case CardIds.CollectorsIreTavernBrawlToken:
+				return and(inDeck, minion, or(dragon, pirate, mech));
 			case CardIds.ConchsCall:
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
