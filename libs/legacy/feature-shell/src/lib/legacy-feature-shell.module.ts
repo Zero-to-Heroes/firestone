@@ -764,44 +764,48 @@ import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-ess
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { ModsConfigService } from './libs/mods/services/mods-config.service';
-console.log('environment is ' + process.env['NODE_ENV']);
+console.log('environment is ' + process.env['NODE_ENV'], process.env);
 
-overwolf.extensions.current.getManifest((manifestResult) => {
-	process.env['APP_VERSION'] = manifestResult.meta.version;
-	console.log('version is ' + process.env['APP_VERSION']);
+try {
+	overwolf?.extensions.current.getManifest((manifestResult) => {
+		process.env['APP_VERSION'] = manifestResult.meta.version;
+		console.log('version is ' + process.env['APP_VERSION']);
 
-	overwolf.settings.getExtensionSettings((settingsResult) => {
-		const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
-		process.env['APP_CHANNEL'] = settingsResult?.settings?.channel;
-		const release = `firestone@${manifestResult.meta.version}`;
-		console.log(
-			'init Sentry with sampleRate',
-			sampleRate,
-			release,
-			settingsResult?.settings?.channel,
-			settingsResult,
-		);
-		init({
-			dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
-			enabled: process.env['NODE_ENV'] === 'production',
-			release: release,
-			attachStacktrace: true,
-			sampleRate: sampleRate,
-			normalizeDepth: 6,
-			ignoreErrors: ['ResizeObserver loop limit exceeded'],
-			integrations: [
-				new Integrations.GlobalHandlers({
-					onerror: true,
-					onunhandledrejection: true,
-				}),
-				new ExtraErrorData(),
-				new CaptureConsole({
-					levels: ['error'],
-				}),
-			],
+		overwolf.settings.getExtensionSettings((settingsResult) => {
+			const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
+			process.env['APP_CHANNEL'] = settingsResult?.settings?.channel;
+			const release = `firestone@${manifestResult.meta.version}`;
+			console.log(
+				'init Sentry with sampleRate',
+				sampleRate,
+				release,
+				settingsResult?.settings?.channel,
+				settingsResult,
+			);
+			init({
+				dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
+				enabled: process.env['NODE_ENV'] === 'production',
+				release: release,
+				attachStacktrace: true,
+				sampleRate: sampleRate,
+				normalizeDepth: 6,
+				ignoreErrors: ['ResizeObserver loop limit exceeded'],
+				integrations: [
+					new Integrations.GlobalHandlers({
+						onerror: true,
+						onunhandledrejection: true,
+					}),
+					new ExtraErrorData(),
+					new CaptureConsole({
+						levels: ['error'],
+					}),
+				],
+			});
 		});
 	});
-});
+} catch (e) {
+	console.log('could not gt overwolf info, continuing', e);
+}
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
@@ -978,8 +982,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsMinusButtonComponent,
 		BgsHeroPortraitSimulatorComponent,
 
-		LeaderboardEmptyCardComponent,
-		TwitchBgsHeroOverviewComponent,
 		BgsLeaderboardEmptyCardComponent,
 		BgsOverlayHeroOverviewComponent,
 
@@ -1111,8 +1113,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsMinusButtonComponent,
 		BgsHeroPortraitSimulatorComponent,
 
-		LeaderboardEmptyCardComponent,
-		TwitchBgsHeroOverviewComponent,
 		BgsLeaderboardEmptyCardComponent,
 		BgsHeroShortRecapComponent,
 		BgsOverlayHeroOverviewComponent,
@@ -1632,6 +1632,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AutofocusDirective,
 
 		// Twitch
+		LeaderboardEmptyCardComponent,
+		TwitchBgsHeroOverviewComponent,
 		BattlegroundsMinionsTiersTwitchOverlayComponent,
 		BgsSimulationOverlayStandaloneComponent,
 		DeckTrackerOverlayContainerComponent,
@@ -1839,6 +1841,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OutOfCardsCallbackComponent,
 		FullScreenOverlaysComponent,
 		FullScreenOverlaysClickthroughComponent,
+
+		DeckTrackerOverlayContainerComponent,
 	],
 })
 export class LegacyFeatureShellModule {

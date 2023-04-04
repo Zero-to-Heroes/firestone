@@ -52,6 +52,7 @@ export class BgsBattleSimulationService {
 			this.cpuCount = systemInfo?.PhysicalCPUCount ?? 1;
 			console.log('CPU count', this.cpuCount);
 		}
+		await this.store.initComplete();
 		this.store.isPremiumUser$().subscribe((premium) => {
 			this.isPremium = premium;
 		});

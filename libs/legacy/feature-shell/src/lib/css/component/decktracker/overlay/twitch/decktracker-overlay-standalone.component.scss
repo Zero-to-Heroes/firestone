@@ -5,6 +5,7 @@
 
 .root {
 	height: 100%;
+	width: 100%;
 
 	.scalable {
 		transform: scale(1);
@@ -25,6 +26,36 @@
 			& > .deck-list.deck-list {
 				overflow: visible;
 				padding-bottom: 0;
+			}
+
+			grouped-deck-list {
+				display: flex;
+
+				.deck-list {
+					width: 100%;
+					display: flex;
+					margin: 0;
+					padding: 0;
+
+					deck-zone {
+						width: 100%;
+
+						.card-list {
+							display: flex;
+							margin: 0;
+							padding: 0;
+							width: 100%;
+
+							.section {
+								width: 100%;
+
+								.deck-card {
+									padding-right: 3px;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 

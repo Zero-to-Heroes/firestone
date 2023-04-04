@@ -16,7 +16,7 @@ export class LocalizationStandaloneService {
 	) {}
 
 	public async setLocale(locale: string) {
-		console.log('setting locale', locale);
+		console.log('setting locale', locale, this.allCards, this.translate);
 		this.locale = locale;
 		await this.translate.use(locale).toPromise();
 		await this.allCards.setLocale(locale);

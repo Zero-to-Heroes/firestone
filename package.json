@@ -13,7 +13,8 @@
 		"build-local": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
 		"upload-web": "npx ts-node ./build-tools/upload-website.ts",
 		"build-web": "rm -rf node_modules/.cache/nx && nx build website --configuration=production --source-map && npm run upload-web",
-		"test": "nx test"
+		"dev-twitch": "set IS_TWITCH=true&& nx build twitch-extension --configuration=development --watch",
+		"build-twitch": "rm -rf node_modules/.cache/nx && nx build twitch-extension --configuration=production"
 	},
 	"private": true,
 	"dependencies": {

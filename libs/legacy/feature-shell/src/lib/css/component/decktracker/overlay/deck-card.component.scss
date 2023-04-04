@@ -159,7 +159,8 @@
 	.icon-symbol,
 	.gift-symbol {
 		width: 23px;
-		height: 100%;
+		// height: 100%;
+		height: 23px;
 		background: #131010;
 		border: 1px solid #9fb6d7;
 		--icon-color: #9fb6d7;
@@ -169,6 +170,7 @@
 		padding: 1px;
 		z-index: 1;
 		flex-shrink: 0;
+		box-sizing: border-box;
 
 		.inner-border {
 			height: 100%;

@@ -6,5 +6,9 @@
 		"declarationMap": true
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-	"include": ["**/*.ts", "../../duels/data-access/src/lib/duels-meta-heroes.model.ts"]
+	"include": [
+		"**/*.ts",
+		"../../duels/data-access/src/lib/duels-meta-heroes.model.ts",
+		"src/lib/js/components/decktracker/overlay/twitch/abstract-subscription-twitch-resizable.component.ts"
+	]
 }

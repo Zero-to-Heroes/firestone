@@ -9,7 +9,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
+import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
@@ -97,6 +98,7 @@ export class DeckTrackerOverlayContainerComponent
 		protected readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly translate: TranslateService,
+		private readonly allCards: CardsFacadeStandaloneService,
 	) {
 		super(cdr, prefs, el, renderer);
 	}
@@ -120,6 +122,7 @@ export class DeckTrackerOverlayContainerComponent
 			return;
 		}
 
+		await this.allCards.init(new AllCardsService(), 'enUS');
 		this.translate.setDefaultLang('enUS');
 		this.twitch = (window as any).Twitch.ext;
 		this.twitch.onAuthorized(async (auth) => {
@@ -173,7 +176,7 @@ export class DeckTrackerOverlayContainerComponent
 			}
 		});
 		await this.addDebugGameState();
-		console.log('init done');
+		console.log('init done', process.env.NODE_ENV);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
