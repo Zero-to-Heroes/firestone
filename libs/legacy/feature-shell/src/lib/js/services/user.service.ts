@@ -31,7 +31,7 @@ export class UserService {
 		combineLatest([this.ads.isPremium$$, this.user$$])
 			.pipe(filter(([premium, user]) => !!user))
 			.subscribe(([premium, user]) => {
-				console.debug('[user-service] info', premium, user);
+				console.log('[user-service] info', premium, user);
 				this.sendCurrentUser(user, premium);
 			});
 
@@ -60,11 +60,11 @@ export class UserService {
 	private async sendCurrentUser(user: overwolf.profile.GetCurrentUserResult, isPremium: boolean) {
 		// Don't send anything in dev to allow for impersonation
 		if (process.env.NODE_ENV !== 'production') {
-			console.warn('not sending user mapping in dev');
+			console.warn('[user-service] not sending user mapping in dev');
 			return;
 		}
 
-		console.debug('[user-service] sending current user', user, isPremium);
+		console.log('[user-service] sending current user', user, isPremium);
 		this.store.stateUpdater.next(new CurrentUserEvent(user));
 		if (!!user.username) {
 			await this.api.callPostApi(USER_MAPPING_UPDATE_URL, {
