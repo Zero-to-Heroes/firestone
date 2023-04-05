@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.15',
+		version: '11.0.16',
 		force: false,
 		sections: [
 			// {
@@ -58,41 +58,41 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `(PREMIUM) A very first version of the Firestone website is up at https://www.firestoneapp.gg. This website will gradually expose some of the information that is today available in the app (for now, it contains Battlegrounds hero stats). Please note that you need to be logged in and have a premium account to access the website`,
+								type: 'content',
+								text: `Firestone has been updated for 26.0. Images of the new cards will be uploaded in the coming days.`,
 							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Greybough's buddy would not apply its effect to minnions taunted by Sprout it Out, Greybough's hero power.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where premium users could not use the remote simulator anymore.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where pasting a deck code for Drek'Thar / Vanndar in the deckbuilder would create the deck for its equivalent basic class.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'battlegrounds',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix a sim issue where Greybough's buddy would not apply its effect to minnions taunted by Sprout it Out, Greybough's hero power.`,
+			// 				},
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where premium users could not use the remote simulator anymore.`,
+			// 				},
+			// 			],
+			// 		},
+			// 		{
+			// 			category: 'duels',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where pasting a deck code for Drek'Thar / Vanndar in the deckbuilder would create the deck for its equivalent basic class.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
