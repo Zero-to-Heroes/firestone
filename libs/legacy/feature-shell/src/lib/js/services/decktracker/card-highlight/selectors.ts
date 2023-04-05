@@ -154,6 +154,7 @@ const hasMechanic =
 		(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
+export const combo = hasMechanic(GameTag.COMBO);
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);

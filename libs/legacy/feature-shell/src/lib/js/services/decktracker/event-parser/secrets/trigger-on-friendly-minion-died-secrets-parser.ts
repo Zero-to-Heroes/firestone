@@ -15,8 +15,9 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.RedemptionLegacy,
 		CardIds.RedemptionVanilla,
 		CardIds.Avenge_FP1_020,
-		CardIds.AvengeCore,
-		CardIds.CheatDeath,
+		CardIds.Avenge_CORE_FP1_020,
+		CardIds.CheatDeath_CORE_LOOT_204,
+		CardIds.CheatDeath_LOOT_204,
 		CardIds.EmergencyManeuvers,
 		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
 	];
@@ -47,13 +48,14 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		if (isHandFull) {
 			secretsWeCantRuleOut.push(CardIds.Duplicate);
 			secretsWeCantRuleOut.push(CardIds.GetawayKodo);
-			secretsWeCantRuleOut.push(CardIds.CheatDeath);
+			secretsWeCantRuleOut.push(CardIds.CheatDeath_CORE_LOOT_204);
+			secretsWeCantRuleOut.push(CardIds.CheatDeath_LOOT_204);
 		}
 
 		// If it's the only minion on board, we trigger nothing
 		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length === deadEnemyMinions.length) {
 			secretsWeCantRuleOut.push(CardIds.Avenge_FP1_020);
-			secretsWeCantRuleOut.push(CardIds.AvengeCore);
+			secretsWeCantRuleOut.push(CardIds.Avenge_CORE_FP1_020);
 		}
 		// TODO: Redemption will not trigger if deathrattles fill up the board
 

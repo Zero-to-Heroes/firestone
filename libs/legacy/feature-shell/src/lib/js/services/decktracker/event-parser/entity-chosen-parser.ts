@@ -6,7 +6,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 const CARDS_THAT_PUT_ON_TOP = [
-	CardIds.SightlessWatcherCore,
+	CardIds.SightlessWatcher,
 	CardIds.SightlessWatcherLegacy,
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.DraconicHerald,

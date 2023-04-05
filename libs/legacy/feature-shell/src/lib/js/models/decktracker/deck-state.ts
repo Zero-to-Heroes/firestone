@@ -87,6 +87,7 @@ export class DeckState {
 	readonly heroPowerDamageThisMatch: number = 0;
 	readonly heroAttacksThisMatch: number = 0;
 	readonly minionsDeadSinceLastTurn: readonly ShortCard[] = [];
+	readonly minionsDeadThisTurn: readonly ShortCard[] = [];
 	readonly anachronosTurnsPlayed: readonly number[] = [];
 	readonly bonelordFrostwhisperFirstTurnTrigger: number = null;
 	// readonly secretHelperActiveHover: boolean = false;
@@ -324,13 +325,17 @@ export class DeckState {
 	public hasVanessaVanCleef() {
 		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.VanessaVancleefCore);
+			.some(
+				(card) =>
+					card.cardId === CardIds.VanessaVancleefLegacy ||
+					card.cardId === CardIds.VanessaVancleef_CORE_CS3_005,
+			);
 	}
 
-	public hasCardInHandAndDeck(cardId: CardIds) {
+	public hasAnyCardInHandAndDeck(cardIds: readonly CardIds[]) {
 		return [...this.hand, ...this.deck, ...this.currentOptions]
 			.filter((card) => card.cardId)
-			.some((card) => card.cardId === cardId);
+			.some((card) => cardIds.includes(card.cardId as CardIds));
 	}
 
 	public hasAsvedon() {

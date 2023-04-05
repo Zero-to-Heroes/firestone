@@ -25,7 +25,8 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.RepentanceLegacy,
 		CardIds.RepentanceVanilla,
 		CardIds.SacredTrial,
-		CardIds.Ambush,
+		CardIds.Ambush_CORE_BT_707,
+		CardIds.Ambush_BT_707,
 		CardIds.Objection,
 		CardIds.Zombeeees,
 	];
@@ -95,7 +96,8 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.MirrorEntityLegacy);
 			secretsWeCantRuleOut.push(CardIds.MirrorEntity);
 			secretsWeCantRuleOut.push(CardIds.MirrorEntityVanilla);
-			secretsWeCantRuleOut.push(CardIds.Ambush);
+			secretsWeCantRuleOut.push(CardIds.Ambush_CORE_BT_707);
+			secretsWeCantRuleOut.push(CardIds.Ambush_BT_707);
 			secretsWeCantRuleOut.push(CardIds.Kidnap_REV_828);
 			secretsWeCantRuleOut.push(CardIds.Zombeeees);
 		}

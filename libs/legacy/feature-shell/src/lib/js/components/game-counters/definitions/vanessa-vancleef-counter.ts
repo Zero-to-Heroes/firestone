@@ -39,7 +39,7 @@ export class VanessaVanCleefCounterDefinition implements CounterDefinition {
 		return {
 			type: 'vanessaVanCleef',
 			value: null,
-			valueImg: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.VanessaVancleefCore}.jpg`,
+			valueImg: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.VanessaVancleefLegacy}.jpg`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${lastPlayedCard}.jpg`,
 			cssClass: 'vanessa-counter',
 			tooltip: tooltip,

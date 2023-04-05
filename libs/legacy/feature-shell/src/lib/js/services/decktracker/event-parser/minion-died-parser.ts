@@ -44,6 +44,10 @@ export class MinionDiedParser implements EventParser {
 					...deck.minionsDeadSinceLastTurn,
 					{ cardId: cardId, entityId: entityId },
 				] as readonly ShortCard[],
+				minionsDeadThisTurn: [
+					...deck.minionsDeadThisTurn,
+					{ cardId: cardId, entityId: entityId },
+				] as readonly ShortCard[],
 			} as DeckState);
 			result = Object.assign(new GameState(), result, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

@@ -15,7 +15,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.MisdirectionVanilla,
 		CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
 		CardIds.SnakeTrapLegacy,
-		CardIds.SnakeTrapCore,
+		CardIds.SnakeTrap_CORE_EX1_554,
 		CardIds.SnakeTrapVanilla,
 		CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
 		CardIds.PackTactics,
@@ -28,7 +28,8 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.FreezingTrapCore,
 		CardIds.FreezingTrapVanilla,
 		CardIds.VenomstrikeTrap_ICC_200,
-		CardIds.WanderingMonster,
+		CardIds.WanderingMonster_CORE_LOOT_079,
+		CardIds.WanderingMonster_LOOT_079,
 		CardIds.FlameWard,
 		CardIds.IceBarrierLegacy,
 		CardIds.IceBarrierCore,
@@ -38,7 +39,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.VaporizeLegacy,
 		CardIds.VaporizeVanilla,
 		CardIds.AutodefenseMatrix_BOT_908,
-		CardIds.NobleSacrificeCore,
+		CardIds.NobleSacrifice,
 		CardIds.NobleSacrificeLegacy,
 		CardIds.NobleSacrificeVanilla,
 		CardIds.JudgmentOfJustice,
@@ -127,14 +128,14 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.BearTrap);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapLegacy);
-			secretsWeCantRuleOut.push(CardIds.SnakeTrapCore);
+			secretsWeCantRuleOut.push(CardIds.SnakeTrap_CORE_EX1_554);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedPackTacticsToken);
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.SplittingImage_TRL_400);
 			secretsWeCantRuleOut.push(CardIds.OasisAlly);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeLegacy);
-			secretsWeCantRuleOut.push(CardIds.NobleSacrificeCore);
+			secretsWeCantRuleOut.push(CardIds.NobleSacrifice);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeVanilla);
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
 			secretsWeCantRuleOut.push(CardIds.VengefulVisage);
@@ -155,7 +156,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		if (!isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapLegacy);
-			secretsWeCantRuleOut.push(CardIds.SnakeTrapCore);
+			secretsWeCantRuleOut.push(CardIds.SnakeTrap_CORE_EX1_554);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedPackTacticsToken);
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
@@ -176,7 +177,8 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy_EX1_610);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapVanilla);
-			secretsWeCantRuleOut.push(CardIds.WanderingMonster);
+			secretsWeCantRuleOut.push(CardIds.WanderingMonster_CORE_LOOT_079);
+			secretsWeCantRuleOut.push(CardIds.WanderingMonster_LOOT_079);
 			secretsWeCantRuleOut.push(CardIds.FlameWard);
 			secretsWeCantRuleOut.push(CardIds.IceBarrierLegacy);
 			secretsWeCantRuleOut.push(CardIds.IceBarrierCore);

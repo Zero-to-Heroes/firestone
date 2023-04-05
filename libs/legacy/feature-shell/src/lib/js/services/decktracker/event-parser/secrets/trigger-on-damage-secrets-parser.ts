@@ -12,7 +12,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 	private secretsTriggeringOnDamage = [
 		CardIds.EyeForAnEyeLegacy,
 		CardIds.EyeForAnEyeVanilla,
-		CardIds.ReckoningCore,
+		CardIds.Reckoning,
 		CardIds.Evasion,
 	];
 
@@ -58,23 +58,23 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			? gameEvent.additionalData.sourceControllerId === localPlayer.PlayerId
 			: gameEvent.additionalData.sourceControllerId !== localPlayer.PlayerId;
 		if (!isEnemyDealing) {
-			secretsWeCantRuleOut.push(CardIds.ReckoningCore);
+			secretsWeCantRuleOut.push(CardIds.Reckoning);
 		} else {
 			const sourceCard = this.allCards.getCard(gameEvent.additionalData.sourceCardId);
 
 			if (sourceCard?.type !== 'Minion') {
-				secretsWeCantRuleOut.push(CardIds.ReckoningCore);
+				secretsWeCantRuleOut.push(CardIds.Reckoning);
 			} else {
 				const dealingEntityId = gameEvent.additionalData.sourceEntityId;
 				// If the minion dealing damage dies in the process, we can't rule out Reckoning
 				if (additionalInfo?.minionsWillDie?.map((minion) => minion.entityId)?.includes(dealingEntityId)) {
-					secretsWeCantRuleOut.push(CardIds.ReckoningCore);
+					secretsWeCantRuleOut.push(CardIds.Reckoning);
 				}
 				const maxDamage = Math.max(
 					...Object.values(gameEvent.additionalData.targets).map((target) => target.Damage),
 				);
 				if (maxDamage < 3) {
-					secretsWeCantRuleOut.push(CardIds.ReckoningCore);
+					secretsWeCantRuleOut.push(CardIds.Reckoning);
 				}
 			}
 		}

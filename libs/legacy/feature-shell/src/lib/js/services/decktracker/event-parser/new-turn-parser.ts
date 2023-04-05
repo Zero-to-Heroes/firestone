@@ -1,6 +1,6 @@
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState, TurnTiming } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
@@ -51,6 +51,7 @@ export class NewTurnParser implements EventParser {
 				: currentState.playerDeck.elementalsPlayedThisTurn,
 			elementalsPlayedThisTurn: 0,
 			minionsDeadSinceLastTurn: !isPlayerActive ? [] : currentState.playerDeck.minionsDeadSinceLastTurn,
+			minionsDeadThisTurn: [] as readonly ShortCard[],
 			turnTimings: playerTurnTimings,
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
@@ -63,6 +64,7 @@ export class NewTurnParser implements EventParser {
 				: currentState.opponentDeck.elementalsPlayedThisTurn,
 			elementalsPlayedThisTurn: 0,
 			minionsDeadSinceLastTurn: isPlayerActive ? [] : currentState.opponentDeck.minionsDeadSinceLastTurn,
+			minionsDeadThisTurn: [] as readonly ShortCard[],
 			turnTimings: opponentTurnTimings,
 		} as DeckState);
 
