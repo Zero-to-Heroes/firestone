@@ -53,6 +53,32 @@ export const filterDuelsHeroStats = (
 	allCards: CardsFacadeService,
 	searchString: string | null = null,
 ): readonly DuelsHeroStat[] => {
+	console.debug(
+		'filtering hero stats',
+		(heroStats ?? [])
+			.filter((stat) =>
+				!heroesFilter?.length
+					? false
+					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
+			)
+			.filter((stat) =>
+				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
+				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
+				heroPowerFilter === 'all' || statType !== 'signature-treasure'
+					? true
+					: stat.heroPowerCardId === heroPowerFilter,
+			)
+			.filter((stat) =>
+				// Similar
+				signatureTreasureFilter === 'all' || statType !== 'hero-power'
+					? true
+					: stat.signatureTreasureCardId === signatureTreasureFilter,
+			),
+		heroesFilter,
+		heroPowerFilter,
+		statType,
+		signatureTreasureFilter,
+	);
 	const result = (heroStats ?? [])
 		.filter((stat) =>
 			!heroesFilter?.length

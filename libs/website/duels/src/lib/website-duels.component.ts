@@ -1,6 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, Component } from '@angular/core';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { initDuelsMetaHeroStats } from './+state/website/duels.actions';
+import { WebsiteDuelsState } from './+state/website/duels.models';
+import { getAllMetaHeroStats } from './+state/website/duels.selectors';
 
 @Component({
 	selector: 'website-duels',
@@ -21,14 +25,14 @@ export class WebsiteDuelsComponent implements AfterContentInit {
 	sort$: Observable<DuelsHeroSortFilterType>;
 	hideLowData$: Observable<boolean>;
 
-	// constructor(private readonly store: Store<WebsiteDuelsState>) {}
+	constructor(private readonly store: Store<WebsiteDuelsState>) {}
 
 	ngAfterContentInit(): void {
-		// this.stats$ = this.store.select(getAllMetaHeroStats);
+		this.stats$ = this.store.select(getAllMetaHeroStats);
 		// console.debug('dispatching creation');
-		// const action = initBgsMetaHeroStats();
+		const action = initDuelsMetaHeroStats();
 		// console.debug('after action creation', action);
-		// this.store.dispatch(action);
+		this.store.dispatch(action);
 		return;
 	}
 }

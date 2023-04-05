@@ -1,20 +1,20 @@
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsCombinedHeroStat } from '@firestone/duels/data-access';
+import { DuelsMetaStats } from '@firestone/duels/view';
 import { createAction, props } from '@ngrx/store';
 
 export const initDuelsMetaHeroStats = createAction('[DUELS Meta Hero Stats Page] Init');
 
 export const loadDuelsMetaHeroStatsSuccess = createAction(
-	'[DUELS Meta Hero Stats/API] Load DuelsMetaHeroStatTierItem Success',
+	'[DUELS Meta Hero Stats/API] Load DuelsCombinedHeroStat Success',
 	props<{
-		stats: readonly DuelsCombinedHeroStat[];
+		stats: readonly DuelsMetaStats[];
 		lastUpdateDate: Date | undefined;
 		mmrPercentiles: readonly MmrPercentile[];
 	}>(),
 );
 
 export const loadDuelsMetaHeroStatsFailure = createAction(
-	'[DUELS Meta Hero Stats/API] Load DuelsMetaHeroStatTierItem Failure',
+	'[DUELS Meta Hero Stats/API] Load DuelsCombinedHeroStat Failure',
 	props<{ error: any }>(),
 );
 

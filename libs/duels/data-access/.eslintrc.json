@@ -21,7 +21,8 @@
 						"prefix": "firestone",
 						"style": "kebab-case"
 					}
-				]
+				],
+				"no-restricted-syntax": ["off"]
 			}
 		},
 		{

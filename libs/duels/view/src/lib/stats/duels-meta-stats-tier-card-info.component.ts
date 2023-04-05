@@ -93,7 +93,7 @@ export class DuelsMetaStatsTierCardInfoComponent {
 	dataPoints: string;
 	playerDataPoints: string | null;
 	globalWinrate: string;
-	playerWinrate: string;
+	playerWinrate: string | undefined;
 	placementChartData: SimpleBarChartData[];
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}

@@ -12,8 +12,8 @@ export interface DuelsMetaStats {
 	readonly globalWinrate: number;
 	readonly globalPopularity: number;
 	readonly placementDistribution: readonly { wins: number; runs: number; percentage: number }[];
-	readonly playerWinrate: number;
-	readonly playerRunsPlayed: number;
+	readonly playerWinrate?: number;
+	readonly playerRunsPlayed?: number;
 }
 
 export type DuelsMetaStatsTierLevel = 'S' | 'A' | 'B' | 'C' | 'D' | 'E';

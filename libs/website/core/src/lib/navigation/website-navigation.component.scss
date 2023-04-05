@@ -23,7 +23,8 @@
 		position: relative;
 		padding: 10px;
 
-		&.selected {
+		&.selected,
+		&:hover {
 			color: var(--default-title-color);
 			border: none;
 			border-right: 1px solid var(--default-title-color);

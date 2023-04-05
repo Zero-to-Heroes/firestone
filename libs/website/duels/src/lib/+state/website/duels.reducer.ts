@@ -1,27 +1,24 @@
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { LocalStorageService } from '@firestone/shared/framework/core';
+import { WebsitePreferencesService } from '@firestone/website/core';
 import { Action, createReducer, on } from '@ngrx/store';
 
 import * as WebsiteDuelsActions from './duels.actions';
-import { WebsiteDuelsEntity } from './duels.models';
+import { WebsiteDuelsState } from './duels.models';
 
 export const WEBSITE_DUELS_FEATURE_KEY = 'websiteDuels';
-
-export interface WebsiteDuelsState extends EntityState<WebsiteDuelsEntity> {
-	selectedId?: string | number; // which WebsiteDuels record has been selected
-	loaded: boolean; // has the WebsiteDuels list been loaded
-	error?: string | null; // last known error (if any)
-}
 
 export interface WebsiteDuelsPartialState {
 	readonly [WEBSITE_DUELS_FEATURE_KEY]: WebsiteDuelsState;
 }
 
-export const websiteDuelsAdapter: EntityAdapter<WebsiteDuelsEntity> = createEntityAdapter<WebsiteDuelsEntity>();
-
-export const initialWebsiteDuelsState: WebsiteDuelsState = websiteDuelsAdapter.getInitialState({
-	// set initial required properties
+const localPrefsService = new WebsitePreferencesService(new LocalStorageService());
+const localPrefs = localPrefsService.getPreferences();
+export const initialWebsiteDuelsState: WebsiteDuelsState = {
 	loaded: false,
-});
+	// currentPercentileSelection: localPrefs?.bgsActiveRankFilter ?? 100,
+	// currentTimePeriodSelection: localPrefs?.bgsActiveTimeFilter ?? 'last-patch',
+	// currentTribesSelection: localPrefs?.bgsActiveTribesFilter ?? [],
+};
 
 const reducer = createReducer(
 	initialWebsiteDuelsState,

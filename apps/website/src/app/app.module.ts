@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBattlegroundsModule } from '@firestone/website/battlegrounds';
 import { WebsiteBootstrapModule } from '@firestone/website/core';
+import { WebsiteDuelsModule } from '@firestone/website/duels';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
@@ -37,6 +38,7 @@ import { PremiumRedirectGuard } from './premium-redirect.service';
 		SharedFrameworkCoreModule,
 		WebsiteBootstrapModule,
 		WebsiteBattlegroundsModule,
+		WebsiteDuelsModule,
 	],
 	providers: [AuthGuard, PremiumRedirectGuard],
 	bootstrap: [AppComponent],
