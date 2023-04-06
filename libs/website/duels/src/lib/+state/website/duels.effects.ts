@@ -61,6 +61,21 @@ export class WebsiteDuelsEffects {
 		),
 	);
 
+	metaSignatures$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(WebsiteDuelsActions.initDuelsMetaSignatureTreasureStats),
+			withLatestFrom(this.store.select(getCurrentPercentileFilter), this.store.select(getCurrentTimerFilter)),
+			switchMap(async ([action, percentileFiler, timeFilter]) => {
+				const stats = await this.buildStats(percentileFiler, timeFilter, 'signature-treasure');
+				return WebsiteDuelsActions.loadDuelsMetaSignatureTreasureStatsSuccess({
+					stats: stats.stats,
+					lastUpdateDate: stats?.lastUpdateDate,
+					mmrPercentiles: stats?.mmrPercentiles ?? [],
+				});
+			}),
+		),
+	);
+
 	changePercentileFilter$ = createEffect(() =>
 		this.actions$.pipe(
 			// Effects seem to always be called after reducers, so the data in the state should have the proper value here

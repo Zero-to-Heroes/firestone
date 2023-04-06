@@ -16,6 +16,11 @@ export const getAllMetaHeroPowerStats = createSelector(
 	(state: WebsiteDuelsState) => state.heroPowerStats as readonly DuelsMetaStats[],
 );
 
+export const getAllMetaSignatureTreasureStats = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.signatureTreasureStats as readonly DuelsMetaStats[],
+);
+
 export const getMmrPercentiles = createSelector(
 	getWebsiteDuelsState,
 	(state: WebsiteDuelsState) => state.mmrPercentiles ?? [],

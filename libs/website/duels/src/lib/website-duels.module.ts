@@ -10,10 +10,12 @@ import { WebsiteDuelsRankFilterDropdownComponent } from './filters/website-duels
 import { WebsiteDuelsTimeFilterDropdownComponent } from './filters/website-duels-time-filter-dropdown.component';
 import { WebsiteDuelsHeroPowersComponent } from './website-duels-hero-powers.component';
 import { WebsiteDuelsHeroesComponent } from './website-duels-heroes.component';
+import { WebsiteDuelsSignatureTreasuresComponent } from './website-duels-signature-treasures.component';
 
 const components = [
 	WebsiteDuelsHeroesComponent,
 	WebsiteDuelsHeroPowersComponent,
+	WebsiteDuelsSignatureTreasuresComponent,
 	WebsiteDuelsRankFilterDropdownComponent,
 	WebsiteDuelsTimeFilterDropdownComponent,
 ];

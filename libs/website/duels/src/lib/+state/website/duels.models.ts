@@ -8,6 +8,7 @@ export interface WebsiteDuelsState {
 
 	heroStats?: readonly DuelsMetaStats[];
 	heroPowerStats?: readonly DuelsMetaStats[];
+	signatureTreasureStats?: readonly DuelsMetaStats[];
 	lastUpdateDate?: Date;
 	mmrPercentiles?: readonly MmrPercentile[];
 

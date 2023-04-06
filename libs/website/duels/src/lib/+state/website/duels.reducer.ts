@@ -31,6 +31,7 @@ const reducer = createReducer(
 		loaded: true,
 	})),
 	on(WebsiteDuelsActions.loadDuelsMetaHeroStatsFailure, (state, { error }) => ({ ...state, error })),
+
 	on(WebsiteDuelsActions.initDuelsMetaHeroPowerStats, (state) => ({ ...state, loaded: false, error: null })),
 	on(WebsiteDuelsActions.loadDuelsMetaHeroPowerStatsSuccess, (state, { stats, lastUpdateDate, mmrPercentiles }) => ({
 		...state,
@@ -40,6 +41,19 @@ const reducer = createReducer(
 		loaded: true,
 	})),
 	on(WebsiteDuelsActions.loadDuelsMetaHeroPowerStatsFailure, (state, { error }) => ({ ...state, error })),
+
+	on(WebsiteDuelsActions.initDuelsMetaSignatureTreasureStats, (state) => ({ ...state, loaded: false, error: null })),
+	on(
+		WebsiteDuelsActions.loadDuelsMetaSignatureTreasureStatsSuccess,
+		(state, { stats, lastUpdateDate, mmrPercentiles }) => ({
+			...state,
+			signatureTreasureStats: stats,
+			lastUpdateDate: lastUpdateDate,
+			mmrPercentiles: mmrPercentiles,
+			loaded: true,
+		}),
+	),
+	on(WebsiteDuelsActions.loadDuelsMetaSignatureTreasureStatsFailure, (state, { error }) => ({ ...state, error })),
 
 	on(WebsiteDuelsActions.changeMetaHeroStatsPercentileFilter, (state, { currentPercentileSelection }) => ({
 		...state,

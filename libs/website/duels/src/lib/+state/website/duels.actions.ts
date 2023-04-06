@@ -4,34 +4,44 @@ import { DuelsMetaStats } from '@firestone/duels/view';
 import { createAction, props } from '@ngrx/store';
 
 export const initDuelsMetaHeroStats = createAction('[DUELS Meta Hero Stats Page] Init');
-
 export const loadDuelsMetaHeroStatsSuccess = createAction(
-	'[DUELS Meta Hero Stats/API] Load DuelsCombinedHeroStat Success',
+	'[DUELS Meta Hero Stats/API] Load Success',
 	props<{
 		stats: readonly DuelsMetaStats[];
 		lastUpdateDate: Date | undefined;
 		mmrPercentiles: readonly MmrPercentile[];
 	}>(),
 );
-
 export const loadDuelsMetaHeroStatsFailure = createAction(
-	'[DUELS Meta Hero Stats/API] Load DuelsCombinedHeroStat Failure',
+	'[DUELS Meta Hero Stats/API] Load Failure',
 	props<{ error: any }>(),
 );
 
 export const initDuelsMetaHeroPowerStats = createAction('[DUELS Meta Hero Power Stats Page] Init');
-
 export const loadDuelsMetaHeroPowerStatsSuccess = createAction(
-	'[DUELS Meta Hero Power Stats/API] Load DuelsCombinedHeroStat Success',
+	'[DUELS Meta Hero Power Stats/API] Load Success',
 	props<{
 		stats: readonly DuelsMetaStats[];
 		lastUpdateDate: Date | undefined;
 		mmrPercentiles: readonly MmrPercentile[];
 	}>(),
 );
-
 export const loadDuelsMetaHeroPowerStatsFailure = createAction(
-	'[DUELS Meta Hero Power Stats/API] Load DuelsCombinedHeroStat Failure',
+	'[DUELS Meta Hero Power Stats/API] Load Failure',
+	props<{ error: any }>(),
+);
+
+export const initDuelsMetaSignatureTreasureStats = createAction('[DUELS Meta Signature Treasure Stats Page] Init');
+export const loadDuelsMetaSignatureTreasureStatsSuccess = createAction(
+	'[DUELS Meta Signature Treasure Stats/API] Load Success',
+	props<{
+		stats: readonly DuelsMetaStats[];
+		lastUpdateDate: Date | undefined;
+		mmrPercentiles: readonly MmrPercentile[];
+	}>(),
+);
+export const loadDuelsMetaSignatureTreasureStatsFailure = createAction(
+	'[DUELS Meta Signature Treasure Stats/API] Load Failure',
 	props<{ error: any }>(),
 );
 

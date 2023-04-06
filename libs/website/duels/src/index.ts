@@ -6,4 +6,5 @@ export * from './lib/filters/website-duels-rank-filter-dropdown.component';
 export * from './lib/filters/website-duels-time-filter-dropdown.component';
 export * from './lib/website-duels-hero-powers.component';
 export * from './lib/website-duels-heroes.component';
+export * from './lib/website-duels-signature-treasures.component';
 export * from './lib/website-duels.module';
