@@ -7,8 +7,8 @@ import { WebsiteDuelsState } from './+state/website/duels.models';
 import { getAllMetaHeroStats } from './+state/website/duels.selectors';
 
 @Component({
-	selector: 'website-duels',
-	styleUrls: [`./website-duels.component.scss`],
+	selector: 'website-duels-heroes',
+	styleUrls: ['./meta-info.scss', `./website-duels-heroes.component.scss`],
 	template: `
 		<section class="section">
 			<div class="filters">
@@ -25,7 +25,7 @@ import { getAllMetaHeroStats } from './+state/website/duels.selectors';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WebsiteDuelsComponent implements AfterContentInit {
+export class WebsiteDuelsHeroesComponent implements AfterContentInit {
 	stats$: Observable<readonly DuelsMetaStats[]>;
 	sort$: Observable<DuelsHeroSortFilterType>;
 	hideLowData$: Observable<boolean>;

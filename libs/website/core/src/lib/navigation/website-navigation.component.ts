@@ -1,6 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { filter } from 'rxjs';
 
 @Component({
@@ -8,32 +9,12 @@ import { filter } from 'rxjs';
 	styleUrls: [`./website-navigation.component.scss`],
 	template: `
 		<nav class="menu-selection">
-			<button
-				[attr.tabindex]="0"
-				type="button"
-				class="menu-item"
-				[attr.aria-label]="'app.menu.battlegrounds-header' | translate"
-				[ngClass]="{ selected: selectedModule === 'battlegrounds' }"
-				routerLink="battlegrounds"
-				(click)="selectModule('battlegrounds')"
+			<website-navigation-node
+				*ngFor="let node of navigationNodes"
+				[node]="node"
+				[selectedModule]="selectedModule"
 			>
-				<div class="icon" inlineSVG="assets/svg/whatsnew/battlegrounds.svg"></div>
-				<div class="menu-name" [translate]="'app.menu.battlegrounds-header'"></div>
-			</button>
-			<button
-				[attr.tabindex]="0"
-				type="button"
-				class="menu-item"
-				[attr.aria-label]="'app.menu.duels-header' | translate"
-				[ngClass]="{ selected: selectedModule === 'duels' }"
-				routerLink="duels"
-				(click)="selectModule('duels')"
-			>
-				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
-				<div class="menu-name" [translate]="'app.menu.duels-header'"></div>
-			</button>
-
-			<!-- Room for an ad -->
+			</website-navigation-node>
 
 			<div class="desktop-app-cta">
 				<div class="header" [translate]="'website.desktop-app.navigation-cta-header'"></div>
@@ -50,21 +31,105 @@ import { filter } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteNavigationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	selectedModule = 'battlegrounds';
+	navigationNodes: readonly Node[] = [
+		{
+			id: 'battlegrounds',
+			icon: 'assets/svg/whatsnew/battlegrounds.svg',
+			name: this.i18n.translateString('app.menu.battlegrounds-header'),
+		},
+		{
+			id: 'duels',
+			icon: 'assets/svg/whatsnew/duels.svg',
+			name: this.i18n.translateString('app.menu.duels-header'),
+			nodes: [
+				{
+					id: 'duels/hero',
+					icon: 'assets/svg/hero.svg',
+					name: this.i18n.translateString('app.menu.duels-hero-header'),
+				},
+				{
+					id: 'duels/hero-power',
+					icon: 'assets/svg/hero-power.svg',
+					name: this.i18n.translateString('app.menu.duels-hero-power-header'),
+				},
+			],
+		},
+	];
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly router: Router) {
+	selectedModule = this.navigationNodes[0].id;
+
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly router: Router,
+		private readonly i18n: ILocalizationService,
+	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
-		console.debug('router', this.router, this.router.routerState?.snapshot?.url);
+		console.debug('[nav] router', this.router, this.router.routerState?.snapshot?.url);
 		this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
-			this.selectedModule = (event as NavigationEnd).url?.replaceAll('/', '');
+			this.selectedModule = (event as NavigationEnd).urlAfterRedirects?.replace('/', '');
+			console.debug('[nav] selected module', this.selectedModule, event);
 		});
-		this.selectedModule = this.router.routerState?.snapshot?.url?.replaceAll('/', '');
+		this.router.events.pipe().subscribe((event) => {
+			console.debug('[nav] all-events', event);
+		});
+		this.selectedModule = this.router.routerState?.snapshot?.url?.replace('/', '');
+		console.debug('[nav] selected module', this.selectedModule);
+	}
+}
+
+@Component({
+	selector: 'website-navigation-node',
+	styleUrls: [`./website-navigation.component.scss`],
+	template: `
+		<button
+			[attr.tabindex]="0"
+			type="button"
+			class="menu-item depth-{{ depth }}"
+			[attr.aria-label]="node.name"
+			[ngClass]="{ selected: isSelected() }"
+			(click)="selectModule(node.id)"
+		>
+			<div class="icon" *ngIf="node.icon" [inlineSVG]="node.icon"></div>
+			<div class="menu-name">{{ node.name }}</div>
+		</button>
+		<ul class="sub-nodes" *ngIf="node.nodes?.length && isSelected()">
+			<website-navigation-node
+				*ngFor="let sub of node.nodes"
+				[node]="sub"
+				[selectedModule]="selectedModule"
+				[depth]="depth + 1"
+			>
+			</website-navigation-node>
+		</ul>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class WebsiteNavigationNodeComponent {
+	@Input() node: Node;
+	@Input() selectedModule: string;
+	@Input() depth = 0;
+
+	constructor(private readonly router: Router) {}
+
+	selectModule(target: string) {
+		console.debug('[nav] selecting', target);
+		this.router.navigate([`/${target}`]);
 	}
 
-	selectModule(module: string) {
-		this.router.navigate([`/${module}`]);
+	isSelected(): boolean {
+		const pathNodes = this.selectedModule.split('/');
+		const selected = this.selectedModule.startsWith(this.node.id + '/') || this.selectedModule === this.node.id;
+		console.debug('[nav] selected', this.node.id, selected, this.selectedModule, this.node);
+		return selected;
 	}
+}
+
+interface Node {
+	id: string;
+	name: string | null;
+	icon?: string;
+	nodes?: readonly Node[];
 }

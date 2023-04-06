@@ -1,3 +1,7 @@
+:host {
+	position: relative;
+}
+
 .menu-selection {
 	display: flex;
 	list-style: none;
@@ -10,36 +14,51 @@
 	background: var(--navigation-background);
 	border-top: 1px solid var(--color-3);
 	border-right: 1px solid rgba(132, 16, 99, 0.5); // color-3
+}
 
-	li,
-	button.menu-item {
-		width: 100%;
-		top: 0;
+.menu-item {
+	width: 100%;
+	top: 0;
+	border: none;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	position: relative;
+	padding: 10px;
+
+	&.selected,
+	&:hover {
+		color: var(--default-title-color);
 		border: none;
-		height: 50px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		position: relative;
-		padding: 10px;
-
-		&.selected,
-		&:hover {
-			color: var(--default-title-color);
-			border: none;
-			border-right: 1px solid var(--default-title-color);
-			background: rgba(255, 255, 255, 0.08);
-		}
+		border-right: 1px solid var(--default-title-color);
+		background: rgba(255, 255, 255, 0.08);
 	}
 
 	.icon {
-		height: 40px;
-		width: 60px;
+		height: 45px;
+		width: 45px;
+		display: flex;
 
 		::ng-deep svg {
 			height: 100%;
 		}
 	}
+
+	.menu-name {
+		margin-left: 10px;
+	}
+}
+
+.depth-1 .icon {
+	height: 35px;
+	width: 35px;
+}
+
+.sub-nodes {
+	margin-left: 30px;
+	flex-direction: column;
+	display: flex;
 }
 
 .desktop-app-cta {
@@ -87,5 +106,9 @@
 		.menu-name {
 			display: none;
 		}
+	}
+
+	.sub-nodes {
+		margin-left: 0;
 	}
 }

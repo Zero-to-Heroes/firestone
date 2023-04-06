@@ -19,6 +19,22 @@ export const loadDuelsMetaHeroStatsFailure = createAction(
 	props<{ error: any }>(),
 );
 
+export const initDuelsMetaHeroPowerStats = createAction('[DUELS Meta Hero Power Stats Page] Init');
+
+export const loadDuelsMetaHeroPowerStatsSuccess = createAction(
+	'[DUELS Meta Hero Power Stats/API] Load DuelsCombinedHeroStat Success',
+	props<{
+		stats: readonly DuelsMetaStats[];
+		lastUpdateDate: Date | undefined;
+		mmrPercentiles: readonly MmrPercentile[];
+	}>(),
+);
+
+export const loadDuelsMetaHeroPowerStatsFailure = createAction(
+	'[DUELS Meta Hero Power Stats/API] Load DuelsCombinedHeroStat Failure',
+	props<{ error: any }>(),
+);
+
 export const changeMetaHeroStatsPercentileFilter = createAction(
 	'[DUELS Meta Hero Stats] Changed percentile filter',
 	props<{

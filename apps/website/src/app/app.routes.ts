@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds';
 import { WebsiteAuthComponent, WebsitePremiumComponent } from '@firestone/website/core';
-import { WebsiteDuelsComponent } from '@firestone/website/duels';
+import { WebsiteDuelsHeroesComponent, WebsiteDuelsHeroPowersComponent } from '@firestone/website/duels';
 import { AuthGuard } from './auth-guard.service';
 import { PremiumRedirectGuard } from './premium-redirect.service';
 
@@ -12,9 +12,19 @@ export const appRoutes: Route[] = [
 		canActivate: [AuthGuard],
 	},
 	{
-		path: 'duels',
-		component: WebsiteDuelsComponent,
+		path: 'duels/hero',
+		component: WebsiteDuelsHeroesComponent,
 		canActivate: [AuthGuard],
+	},
+	{
+		path: 'duels/hero-power',
+		component: WebsiteDuelsHeroPowersComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'duels',
+		redirectTo: '/duels/hero',
+		pathMatch: 'full',
 	},
 	{
 		path: 'premium',

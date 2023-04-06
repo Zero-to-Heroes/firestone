@@ -6,7 +6,8 @@ export interface WebsiteDuelsState {
 	loaded: boolean;
 	error?: string | null;
 
-	stats?: readonly DuelsMetaStats[];
+	heroStats?: readonly DuelsMetaStats[];
+	heroPowerStats?: readonly DuelsMetaStats[];
 	lastUpdateDate?: Date;
 	mmrPercentiles?: readonly MmrPercentile[];
 

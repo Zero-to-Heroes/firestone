@@ -15,7 +15,7 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { WebsiteCoreEffects } from './+state/website/core.effects';
 import * as fromWebsiteCore from './+state/website/core.reducer';
 import { WebsiteLocalizationService } from './localization/website-localization.service';
-import { WebsiteNavigationComponent } from './navigation/website-navigation.component';
+import { WebsiteNavigationComponent, WebsiteNavigationNodeComponent } from './navigation/website-navigation.component';
 import { WebsiteTopBarComponent } from './navigation/website-top-bar.component';
 import { WebsitePreferencesService } from './preferences/website-preferences.service';
 import { AuthenticationService } from './security/authentication.service';
@@ -33,7 +33,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 	);
 }
 
-const components = [WebsiteNavigationComponent, WebsiteTopBarComponent, WebsitePremiumComponent, WebsiteAuthComponent];
+const components = [
+	WebsiteNavigationComponent,
+	WebsiteNavigationNodeComponent,
+	WebsiteTopBarComponent,
+	WebsitePremiumComponent,
+	WebsiteAuthComponent,
+];
 
 @NgModule({
 	imports: [

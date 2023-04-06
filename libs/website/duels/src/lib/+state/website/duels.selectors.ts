@@ -8,7 +8,12 @@ export const getWebsiteDuelsState = createFeatureSelector<WebsiteDuelsState>(WEB
 
 export const getAllMetaHeroStats = createSelector(
 	getWebsiteDuelsState,
-	(state: WebsiteDuelsState) => state.stats as readonly DuelsMetaStats[],
+	(state: WebsiteDuelsState) => state.heroStats as readonly DuelsMetaStats[],
+);
+
+export const getAllMetaHeroPowerStats = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.heroPowerStats as readonly DuelsMetaStats[],
 );
 
 export const getMmrPercentiles = createSelector(

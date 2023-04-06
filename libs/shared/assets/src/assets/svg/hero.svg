@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 2C7.029 2 3 6.029 3 11c0 3.26 2.529 7.51 6.902 10.402L12 22l2.098-1.357C18.471 18.509 21 14.26 21 11 21 6.029 16.971 2 12 2z" stroke="var(--icon-color, currentcolor)" stroke-width="0.5" />
+    <path d="M9 9h6v3h1l-4 3-4-3h1V9z" stroke-width="0" fill="var(--icon-color, currentcolor)" />
+</svg>
