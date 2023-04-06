@@ -16,7 +16,7 @@ const localPrefs = localPrefsService.getPreferences();
 export const initialWebsiteDuelsState: WebsiteDuelsState = {
 	loaded: false,
 	currentPercentileSelection: localPrefs?.duelsActiveMmrFilter ?? 100,
-	// currentTimePeriodSelection: localPrefs?.bgsActiveTimeFilter ?? 'last-patch',
+	currentTimePeriodSelection: localPrefs?.duelsActiveTimeFilter ?? 'last-patch',
 	// currentTribesSelection: localPrefs?.bgsActiveTribesFilter ?? [],
 };
 
@@ -34,6 +34,12 @@ const reducer = createReducer(
 	on(WebsiteDuelsActions.changeMetaHeroStatsPercentileFilter, (state, { currentPercentileSelection }) => ({
 		...state,
 		currentPercentileSelection: currentPercentileSelection,
+		loaded: false,
+		error: null,
+	})),
+	on(WebsiteDuelsActions.changeMetaHeroStatsTimeFilter, (state, { currentTimePeriodSelection }) => ({
+		...state,
+		currentTimePeriodSelection: currentTimePeriodSelection,
 		loaded: false,
 		error: null,
 	})),

@@ -20,3 +20,8 @@ export const getCurrentPercentileFilter = createSelector(
 	getWebsiteDuelsState,
 	(state: WebsiteDuelsState) => state.currentPercentileSelection,
 );
+
+export const getCurrentTimerFilter = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.currentTimePeriodSelection,
+);

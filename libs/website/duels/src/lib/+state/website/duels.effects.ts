@@ -17,7 +17,7 @@ import { switchMap, withLatestFrom } from 'rxjs';
 
 import * as WebsiteDuelsActions from './duels.actions';
 import { WebsiteDuelsState } from './duels.models';
-import { getCurrentPercentileFilter } from './duels.selectors';
+import { getCurrentPercentileFilter, getCurrentTimerFilter } from './duels.selectors';
 
 @Injectable()
 export class WebsiteDuelsEffects {
@@ -33,19 +33,17 @@ export class WebsiteDuelsEffects {
 	init$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(WebsiteDuelsActions.initDuelsMetaHeroStats),
-			withLatestFrom(this.store.select(getCurrentPercentileFilter)),
-			switchMap(async ([action, percentileFiler]) => {
-				const mmr = percentileFiler;
-				const timeFilter = 'last-patch';
+			withLatestFrom(this.store.select(getCurrentPercentileFilter), this.store.select(getCurrentTimerFilter)),
+			switchMap(async ([action, percentileFiler, timeFilter]) => {
 				const heroFilter = duelsHeroConfigs.map((conf) => conf.hero);
 				const heroPowerFilter = 'all';
 				const sigTreasureFilter = 'all';
 				const statType: DuelsStatTypeFilterType = 'hero';
 				const hideLowData = true;
 				const heroSearchString = null;
-				console.debug('loading duels stats', mmr, timeFilter);
+				console.debug('loading duels stats', percentileFiler, timeFilter);
 				// TODO: cache this somehow?
-				const apiResult: DuelsStat | null = await this.access.loadMetaHeroes(mmr, timeFilter);
+				const apiResult: DuelsStat | null = await this.access.loadMetaHeroes(percentileFiler, timeFilter);
 				const filteredStats = filterDuelsHeroStats(
 					apiResult?.heroes ?? [],
 					heroFilter,
@@ -100,6 +98,22 @@ export class WebsiteDuelsEffects {
 				const newPrefs: WebsitePreferences = {
 					...existingPrefs,
 					duelsActiveMmrFilter: action.currentPercentileSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
+				return WebsiteDuelsActions.initDuelsMetaHeroStats();
+			}),
+		),
+	);
+
+	changeTimeFilter$ = createEffect(() =>
+		this.actions$.pipe(
+			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
+			ofType(WebsiteDuelsActions.changeMetaHeroStatsTimeFilter),
+			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					duelsActiveTimeFilter: action.currentTimePeriodSelection,
 				};
 				await this.prefs.savePreferences(newPrefs);
 				return WebsiteDuelsActions.initDuelsMetaHeroStats();

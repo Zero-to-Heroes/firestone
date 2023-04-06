@@ -13,7 +13,7 @@ import { getAllMetaHeroStats } from './+state/website/duels.selectors';
 		<section class="section">
 			<div class="filters">
 				<website-duels-rank-filter-dropdown class="filter"></website-duels-rank-filter-dropdown>
-				<!-- <website-battlegrounds-time-filter-dropdown class="filter"></website-battlegrounds-time-filter-dropdown> -->
+				<website-duels-time-filter-dropdown class="filter"></website-duels-time-filter-dropdown>
 			</div>
 
 			<duels-meta-stats-view

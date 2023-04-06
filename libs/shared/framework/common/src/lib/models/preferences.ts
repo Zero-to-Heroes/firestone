@@ -10,4 +10,5 @@ export interface IPreferences {
 	readonly bgsActiveTribesFilter: readonly Race[];
 
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1;
+	readonly duelsActiveTimeFilter: 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
 }

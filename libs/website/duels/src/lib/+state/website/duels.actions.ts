@@ -1,4 +1,5 @@
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { DuelsMetaStats } from '@firestone/duels/view';
 import { createAction, props } from '@ngrx/store';
 
@@ -25,12 +26,12 @@ export const changeMetaHeroStatsPercentileFilter = createAction(
 	}>(),
 );
 
-// export const changeMetaHeroStatsTimeFilter = createAction(
-// 	'[DUELS Meta Hero Stats] Changed time filter',
-// 	props<{
-// 		currentTimePeriodSelection: DuelsActiveTimeFilterType;
-// 	}>(),
-// );
+export const changeMetaHeroStatsTimeFilter = createAction(
+	'[DUELS Meta Hero Stats] Changed time filter',
+	props<{
+		currentTimePeriodSelection: DuelsTimeFilterType;
+	}>(),
+);
 
 // export const changeMetaHeroStatsPercentileFilter = createAction(
 // 	'[DUELS Meta Hero Stats] Changed percentile filter',

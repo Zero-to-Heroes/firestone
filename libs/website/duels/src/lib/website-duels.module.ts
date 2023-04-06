@@ -7,9 +7,14 @@ import { StoreModule } from '@ngrx/store';
 import { WebsiteDuelsEffects } from './+state/website/duels.effects';
 import * as fromWebsiteDuels from './+state/website/duels.reducer';
 import { WebsiteDuelsRankFilterDropdownComponent } from './filters/website-duels-rank-filter-dropdown.component';
+import { WebsiteDuelsTimeFilterDropdownComponent } from './filters/website-duels-time-filter-dropdown.component';
 import { WebsiteDuelsComponent } from './website-duels.component';
 
-const components = [WebsiteDuelsComponent, WebsiteDuelsRankFilterDropdownComponent];
+const components = [
+	WebsiteDuelsComponent,
+	WebsiteDuelsRankFilterDropdownComponent,
+	WebsiteDuelsTimeFilterDropdownComponent,
+];
 
 @NgModule({
 	imports: [

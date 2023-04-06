@@ -7,6 +7,7 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { DuelsTimeFilterType } from '@firestone/duels/data-access';
+import { TimePeriod } from '@firestone/duels/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -22,15 +23,13 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	selector: 'duels-time-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<filter-dropdown
-			*ngIf="filter$ | async as value"
-			class="duels-time-filter-dropdown"
-			[options]="value.options"
-			[filter]="value.filter"
-			[placeholder]="value.placeholder"
-			[visible]="value.visible"
-			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+		<duels-time-filter-dropdown-view
+			class="battlegrounds-rank-filter-dropdown"
+			[timePeriods]="timePeriods$ | async"
+			[currentFilter]="currentFilter$ | async"
+			[visible]="visible$ | async"
+			(valueSelected)="onSelected($event)"
+		></duels-time-filter-dropdown-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,7 +37,9 @@ export class DuelsTimeFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	filter$: Observable<{ filter: string; options: IOption[]; placeholder: string; visible: boolean }>;
+	timePeriods$: Observable<readonly TimePeriod[]>;
+	currentFilter$: Observable<DuelsTimeFilterType>;
+	visible$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -52,48 +53,33 @@ export class DuelsTimeFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav]) => nav.navigationDuels.selectedCategoryId,
-				([main, nav]) => main.duels.currentDuelsMetaPatch,
-			)
+		this.timePeriods$ = this.store
+			.listen$(([main, nav]) => main.duels.currentDuelsMetaPatch)
 			.pipe(
-				filter(([filter, selectedCategoryId, patch]) => !!filter && !!selectedCategoryId && !!patch),
-				this.mapData(([filter, selectedCategoryId, patch]) => {
-					const options = [
-						{
-							value: 'all-time',
-							label: this.i18n.translateString('app.duels.filters.time.past-100'),
-						} as TimeFilterOption,
-						{
-							value: 'last-patch',
-							label: this.i18n.translateString('app.duels.filters.time.last-patch'),
-							tooltip: formatPatch(patch, this.i18n),
-						} as TimeFilterOption,
-						{
-							value: 'past-seven',
-							label: this.i18n.translateString('app.duels.filters.time.past-seven'),
-						} as TimeFilterOption,
-						{
-							value: 'past-three',
-							label: this.i18n.translateString('app.duels.filters.time.past-three'),
-						} as TimeFilterOption,
+				this.mapData(([patch]) => {
+					return [
+						{ value: 'all-time' },
+						{ value: 'past-seven' },
+						{ value: 'past-three' },
+						{ value: 'last-patch', tooltip: formatPatch(patch, this.i18n) },
 					];
-					return {
-						filter: filter,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: [
-							'duels-stats',
-							'duels-runs',
-							'duels-personal-decks',
-							'duels-personal-deck-details',
-							'duels-top-decks',
-							'duels-treasures',
-						].includes(selectedCategoryId),
-						options: options,
-					};
 				}),
+			);
+		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveTimeFilter);
+		this.visible$ = this.store
+			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
+			.pipe(
+				filter(([categoryId]) => !!categoryId),
+				this.mapData(([categoryId]) =>
+					[
+						'duels-stats',
+						'duels-runs',
+						'duels-personal-decks',
+						'duels-personal-deck-details',
+						'duels-top-decks',
+						'duels-treasures',
+					].includes(categoryId),
+				),
 			);
 	}
 
