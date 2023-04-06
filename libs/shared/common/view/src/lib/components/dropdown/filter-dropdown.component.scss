@@ -75,6 +75,11 @@ ng-select.disabled {
 	.below .single .value {
 		align-content: center;
 		display: flex;
+
+		.selected-icon,
+		.tooltip {
+			display: none;
+		}
 	}
 
 	select-dropdown {
