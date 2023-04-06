@@ -8,7 +8,10 @@
 
 battlegrounds-meta-stats-heroes-view {
 	::ng-deep {
-		.battlegrounds-meta-stats-heroes {
+		.battlegrounds-meta-stats-heroes.battlegrounds-meta-stats-heroes.battlegrounds-meta-stats-heroes {
+			.heroes-list {
+				overflow: auto;
+			}
 			.net-mmr.net-mmr.net-mmr {
 				display: none;
 			}
