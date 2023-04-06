@@ -18,6 +18,13 @@ export const loadDuelsMetaHeroStatsFailure = createAction(
 	props<{ error: any }>(),
 );
 
+export const changeMetaHeroStatsPercentileFilter = createAction(
+	'[DUELS Meta Hero Stats] Changed percentile filter',
+	props<{
+		currentPercentileSelection: MmrPercentile['percentile'];
+	}>(),
+);
+
 // export const changeMetaHeroStatsTimeFilter = createAction(
 // 	'[DUELS Meta Hero Stats] Changed time filter',
 // 	props<{

@@ -11,6 +11,11 @@ import { getAllMetaHeroStats } from './+state/website/duels.selectors';
 	styleUrls: [`./website-duels.component.scss`],
 	template: `
 		<section class="section">
+			<div class="filters">
+				<website-duels-rank-filter-dropdown class="filter"></website-duels-rank-filter-dropdown>
+				<!-- <website-battlegrounds-time-filter-dropdown class="filter"></website-battlegrounds-time-filter-dropdown> -->
+			</div>
+
 			<duels-meta-stats-view
 				[stats]="stats$ | async"
 				[sort]="sort$ | async"

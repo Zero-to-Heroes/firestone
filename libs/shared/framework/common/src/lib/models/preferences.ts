@@ -8,4 +8,6 @@ export interface IPreferences {
 	readonly bgsActiveRankFilter: 100 | 50 | 25 | 10 | 1;
 	readonly bgsActiveTimeFilter: 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
 	readonly bgsActiveTribesFilter: readonly Race[];
+
+	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1;
 }

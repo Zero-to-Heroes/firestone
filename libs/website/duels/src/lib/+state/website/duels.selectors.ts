@@ -10,3 +10,13 @@ export const getAllMetaHeroStats = createSelector(
 	getWebsiteDuelsState,
 	(state: WebsiteDuelsState) => state.stats as readonly DuelsMetaStats[],
 );
+
+export const getMmrPercentiles = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.mmrPercentiles ?? [],
+);
+
+export const getCurrentPercentileFilter = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.currentPercentileSelection,
+);

@@ -51,7 +51,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 	// eslint-disable-next-line @angular-eslint/no-output-on-prefix
 	@Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
 
-	@Input() options: IOption[];
+	@Input() options: IOption[] | null;
 	@Input() placeholder: string;
 
 	@Input() set filter(value: string) {

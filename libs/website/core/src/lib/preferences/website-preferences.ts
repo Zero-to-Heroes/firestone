@@ -11,6 +11,8 @@ export class WebsitePreferences implements IPreferences {
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveTribesFilter: readonly Race[] = [];
 
+	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
+
 	// website-exclusive
 	readonly premium: PremiumInfo;
 }

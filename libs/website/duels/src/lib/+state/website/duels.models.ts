@@ -8,4 +8,6 @@ export interface WebsiteDuelsState {
 	stats?: readonly DuelsMetaStats[];
 	lastUpdateDate?: Date;
 	mmrPercentiles?: readonly MmrPercentile[];
+
+	currentPercentileSelection: MmrPercentile['percentile'];
 }

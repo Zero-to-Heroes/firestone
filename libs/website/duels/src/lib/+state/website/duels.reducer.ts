@@ -15,7 +15,7 @@ const localPrefsService = new WebsitePreferencesService(new LocalStorageService(
 const localPrefs = localPrefsService.getPreferences();
 export const initialWebsiteDuelsState: WebsiteDuelsState = {
 	loaded: false,
-	// currentPercentileSelection: localPrefs?.bgsActiveRankFilter ?? 100,
+	currentPercentileSelection: localPrefs?.duelsActiveMmrFilter ?? 100,
 	// currentTimePeriodSelection: localPrefs?.bgsActiveTimeFilter ?? 'last-patch',
 	// currentTribesSelection: localPrefs?.bgsActiveTribesFilter ?? [],
 };
@@ -31,6 +31,12 @@ const reducer = createReducer(
 		loaded: true,
 	})),
 	on(WebsiteDuelsActions.loadDuelsMetaHeroStatsFailure, (state, { error }) => ({ ...state, error })),
+	on(WebsiteDuelsActions.changeMetaHeroStatsPercentileFilter, (state, { currentPercentileSelection }) => ({
+		...state,
+		currentPercentileSelection: currentPercentileSelection,
+		loaded: false,
+		error: null,
+	})),
 );
 
 export function websiteDuelsReducer(state: WebsiteDuelsState | undefined, action: Action) {
