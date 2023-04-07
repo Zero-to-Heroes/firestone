@@ -16,6 +16,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { Handler } from '../../../services/decktracker/card-highlight/cards-highlight.service';
 import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS } from '../../../services/decktracker/card-highlight/merged-highlights';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { uuid } from '../../../services/utils';
@@ -290,9 +291,11 @@ export class DeckCardComponent implements OnDestroy {
 				referenceCardProvider: () => this._referenceCard,
 				deckCardProvider: () => this._card,
 				zoneProvider: () => this._zone,
+				side: () => this._side,
 				highlightCallback: () => this.doHighlight(),
 				unhighlightCallback: () => this.doUnhighlight(),
-			},
+				debug: this,
+			} as Handler,
 			this._side,
 		);
 	}
@@ -305,6 +308,7 @@ export class DeckCardComponent implements OnDestroy {
 
 	doHighlight() {
 		this.isLinkedCardHighlight = true;
+		console.debug('highlighting', this, this.isLinkedCardHighlight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -322,12 +326,10 @@ export class DeckCardComponent implements OnDestroy {
 		if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS.includes(this.cardId as CardIds)) {
 			this.relatedCardIds = this.cardsHighlightService
 				?.getHighlightedCards(this.cardId, this._side, this._card)
-				.flatMap((handler) =>
-					new Array(handler.deckCardProvider()?.totalQuantity ?? 1).fill({
-						cardId: handler.referenceCardProvider()?.id,
-						timing: handler.deckCardProvider().playTiming,
-					}),
-				)
+				.flatMap((info) => ({
+					cardId: info.cardId,
+					timing: info.playTiming,
+				}))
 				.sort((a, b) => a.timing - b.timing)
 				.map((info) => info.cardId);
 			if (!(this.cdr as ViewRef)?.destroyed) {

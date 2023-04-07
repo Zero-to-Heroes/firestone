@@ -219,6 +219,7 @@ export class ChoosingCardOptionComponent {
 					zoneProvider: () => null,
 					highlightCallback: () => {},
 					unhighlightCallback: () => {},
+					side: () => 'player',
 				},
 				'player',
 			);

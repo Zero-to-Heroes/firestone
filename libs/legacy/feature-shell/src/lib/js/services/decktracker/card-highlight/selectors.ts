@@ -9,91 +9,85 @@ import {
 	RarityTYpe,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { Handler, SelectorOptions } from './cards-highlight.service';
+import { Selector, SelectorInput } from './cards-highlight.service';
 
-export const and = (
-	...filters: ((h: Handler, d?: DeckState, options?: SelectorOptions) => boolean)[]
-): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
-	return (handler, deckState, options?: SelectorOptions) =>
-		filters.every((filter) => filter(handler, deckState, options));
+export const and = (...filters: Selector[]): Selector => {
+	return (input: SelectorInput) => filters.every((filter) => filter(input));
 };
 
-export const or = (
-	...filters: ((h: Handler, d?: DeckState, options?: SelectorOptions) => boolean)[]
-): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
-	return (handler, deckState, options?: SelectorOptions) =>
-		filters.filter((f) => !!f).some((filter) => filter(handler, deckState, options));
+export const or = (...filters: Selector[]): Selector => {
+	return (input: SelectorInput) => filters.filter((f) => !!f).some((filter) => filter(input));
 };
 
-export const not = (
-	filter: (h: Handler, d?: DeckState, options?: SelectorOptions) => boolean,
-): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
-	return (handler, deckState, options?: SelectorOptions) => !filter(handler, deckState, options);
+export const not = (filter: Selector): Selector => {
+	return (input: SelectorInput) => !filter(input);
 };
 
-const inZoneId =
-	(zone: string) =>
-	(handler: Handler, d?: DeckState, options?: SelectorOptions): boolean =>
-		options?.uniqueZone || handler.zoneProvider()?.id?.toLowerCase() === zone?.toLowerCase();
 const inZoneName =
 	(zone: string) =>
-	(handler: Handler, d?: DeckState, options?: SelectorOptions): boolean =>
-		handler.deckCardProvider()?.zone?.toLowerCase() === zone?.toLowerCase();
-export const inDeck = or(inZoneId('deck'), inZoneId('deck-top'), inZoneId('deck-bottom'));
-export const inHand = inZoneId('hand');
-export const inOther = inZoneId('other');
-export const inGraveyard = inZoneName('GRAVEYARD');
+	(input: SelectorInput): boolean =>
+		input.zone?.toLowerCase() === zone?.toLowerCase();
+export const inDeck = inZoneName('deck');
+export const inHand = inZoneName('hand');
+export const inOther = inZoneName('other');
+export const inGraveyard = inZoneName('graveyard');
+
+export const side =
+	(side: 'player' | 'opponent' | 'duels') =>
+	(input: SelectorInput): boolean => {
+		console.debug('checking side', input, side);
+		return input.side === side;
+	};
+
+export const opposingSide =
+	(side: 'player' | 'opponent' | 'duels') =>
+	(input: SelectorInput): boolean => {
+		console.debug('checking side', input, side);
+		return side === 'player'
+			? input.side === 'opponent'
+			: side === 'opponent'
+			? input.side === 'player'
+			: input.side === 'duels';
+	};
 
 export const effectiveCostLess =
 	(cost: number) =>
-	(handler: Handler): boolean => {
-		return handler.deckCardProvider()?.getEffectiveManaCost() < cost;
-	};
+	(input: SelectorInput): boolean =>
+		input.deckCard?.getEffectiveManaCost() < cost;
 
-export const effectiveCostLessThanRemainingMana = (handler: Handler, deckState: DeckState): boolean => {
-	return handler.deckCardProvider()?.getEffectiveManaCost() < deckState.hero.manaLeft;
-};
+export const effectiveCostLessThanRemainingMana = (input: SelectorInput): boolean =>
+	input.deckCard?.getEffectiveManaCost() < input.deckState.hero.manaLeft;
 
 export const effectiveCostMore =
 	(cost: number) =>
-	(handler: Handler): boolean => {
-		return handler.deckCardProvider()?.getEffectiveManaCost() > cost;
-	};
+	(input: SelectorInput): boolean =>
+		input.deckCard?.getEffectiveManaCost() > cost;
 
 export const effectiveCostEqual =
 	(cost: number) =>
-	(handler: Handler): boolean => {
-		return handler.deckCardProvider()?.getEffectiveManaCost() === cost;
-	};
+	(input: SelectorInput): boolean =>
+		input.deckCard?.getEffectiveManaCost() === cost;
 
 export const baseCostEqual =
 	(cost: number) =>
-	(handler: Handler): boolean => {
-		return handler.deckCardProvider()?.manaCost === cost;
-	};
+	(input: SelectorInput): boolean =>
+		input.card?.cost === cost;
 
-export const notInInitialDeck = (handler: Handler): boolean => {
-	return handler.deckCardProvider().creatorCardId != null || handler.deckCardProvider().creatorCardIds?.length > 0;
-};
+export const notInInitialDeck = (input: SelectorInput): boolean => input.deckCard.creatorCardId != null;
 
 export const excludeEntityId =
 	(entityId: number) =>
-	(handler: Handler): boolean => {
-		return !!handler.deckCardProvider()?.entityId && handler.deckCardProvider()?.entityId != entityId;
-	};
+	(input: SelectorInput): boolean =>
+		input?.entityId && input?.entityId != entityId;
 
 export const lastAffectedByCardId =
 	(cardId: CardIds) =>
-	(handler: Handler, deckState: DeckState): boolean => {
-		const affectedCardIds = [
-			handler.deckCardProvider().lastAffectedByCardId,
-			...handler.deckCardProvider().lastAffectedByCardIds,
-		].filter((id) => !!id);
-		const affectedEntityIds = [handler.deckCardProvider().lastAffectedByEntityId].filter((id) => !!id);
+	(input: SelectorInput): boolean => {
+		const affectedCardIds = [input.deckCard.lastAffectedByCardId];
+		const affectedEntityIds = [input.deckCard.lastAffectedByEntityId].filter((id) => !!id);
 		const entityToCardIds = affectedEntityIds
 			.map((entityId) =>
-				deckState.getAllCardsInDeck().find((c) => c.entityId === entityId || c.entityId === -entityId),
+				input.deckState.getAllCardsInDeck().find((c) => c.entityId === entityId || c.entityId === -entityId),
 			)
 			.map((c) => c?.cardId)
 			.filter((id) => !!id);
@@ -101,57 +95,45 @@ export const lastAffectedByCardId =
 		return allCardIds.includes(cardId);
 	};
 
-export const healthBiggerThanAttack = (handler: Handler): boolean => {
-	return handler.referenceCardProvider().health > handler.referenceCardProvider().attack;
-};
+export const healthBiggerThanAttack = (input: SelectorInput): boolean => input.card.health > input.card.attack;
 
 export const attackLessThan =
 	(attack: number) =>
-	(handler: Handler): boolean => {
-		return handler.referenceCardProvider().attack != null && handler.referenceCardProvider().attack < attack;
-	};
+	(input: SelectorInput): boolean =>
+		input.card.attack != null && input.card.attack < attack;
 
 export const cardIs =
 	(...cardIds: readonly CardIds[]) =>
-	(handler: Handler): boolean => {
-		return cardIds.includes(handler.referenceCardProvider()?.id as CardIds);
-	};
+	(input: SelectorInput): boolean =>
+		cardIds.includes(input.card?.id as CardIds);
 
-export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
-	return (
-		deckState?.spellsPlayedThisMatch
-			.map((spell) => spell.entityId)
-			.includes(handler.deckCardProvider()?.entityId) ||
-		deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(-handler.deckCardProvider()?.entityId)
+export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
+	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(input.entityId) ||
+	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(-input.entityId);
+
+export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
+	const result =
+		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||
+		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
+	console.debug(
+		'cardPlayedThisMatch',
+		input.cardId,
+		input.entityId,
+		result,
+		input.deckState?.cardsPlayedThisMatch,
+		input,
 	);
-};
-export const cardsPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
-	const result =
-		deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(handler.deckCardProvider()?.entityId) ||
-		deckState?.cardsPlayedThisMatch
-			.map((card) => card.entityId)
-			.includes(-(handler.deckCardProvider()?.entityId ?? 0));
 	return result;
 };
-export const minionsDeadSinceLastTurn = (
-	handler: Handler,
-	deckState: DeckState,
-	options?: SelectorOptions,
-): boolean => {
-	const result =
-		deckState?.minionsDeadSinceLastTurn
-			.map((card) => card.entityId)
-			.includes(handler.deckCardProvider()?.entityId) ||
-		deckState?.minionsDeadSinceLastTurn
-			.map((card) => card.entityId)
-			.includes(-(handler.deckCardProvider()?.entityId ?? 0));
-	return result;
-};
+
+export const minionsDeadSinceLastTurn = (input: SelectorInput): boolean =>
+	input.deckState?.minionsDeadSinceLastTurn.map((card) => card.entityId).includes(input.entityId) ||
+	input.deckState?.minionsDeadSinceLastTurn.map((card) => card.entityId).includes(-(input.entityId ?? 0));
 
 const hasMechanic =
 	(mechanic: GameTag) =>
-	(handler: Handler): boolean =>
-		(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
+	(input: SelectorInput): boolean =>
+		(input.card?.mechanics ?? []).includes(GameTag[mechanic]);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
 export const combo = hasMechanic(GameTag.COMBO);
@@ -171,17 +153,16 @@ export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
 export const dredge = hasMechanic(GameTag.DREDGE);
 
-export const isSi7 = (handler: Handler): boolean =>
+export const isSi7 = (input: SelectorInput): boolean =>
 	Object.values(Locale)
 		.filter((loc) => loc === null || isNaN(Number(loc)))
 		.filter((loc) => loc !== Locale[Locale.UNKNOWN])
-		.some((locale: string) => handler.referenceCardProvider()?.name?.includes(getSi7Locale(locale)));
+		.some((locale: string) => input.card?.name?.includes(getSi7Locale(locale)));
 
 export const spellSchool =
 	(spellSchool: SpellSchool) =>
-	(handler: Handler): boolean => {
-		return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
-	};
+	(input: SelectorInput): boolean =>
+		input.card?.spellSchool === SpellSchool[spellSchool];
 export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
@@ -189,30 +170,22 @@ export const frost = spellSchool(SpellSchool.FROST);
 export const holy = spellSchool(SpellSchool.HOLY);
 export const nature = spellSchool(SpellSchool.NATURE);
 export const shadow = spellSchool(SpellSchool.SHADOW);
-export const hasSpellSchool = (handler: Handler): boolean => {
-	return !!handler.referenceCardProvider()?.spellSchool;
+export const hasSpellSchool = (input: SelectorInput): boolean => {
+	return !!input.card?.spellSchool;
 };
 
 export const cardType =
 	(type: CardType) =>
-	(handler: Handler): boolean => {
-		return (
-			handler.deckCardProvider()?.cardType?.toLowerCase() === CardType[type].toLowerCase() ||
-			handler.referenceCardProvider()?.type?.toLowerCase() === CardType[type].toLowerCase()
-		);
-	};
+	(input: SelectorInput): boolean =>
+		input.card?.type?.toLowerCase() === CardType[type].toLowerCase();
 export const minion = cardType(CardType.MINION);
 export const spell = cardType(CardType.SPELL);
 export const weapon = cardType(CardType.WEAPON);
 
 export const race =
 	(race: Race) =>
-	(handler: Handler): boolean => {
-		return (
-			handler.referenceCardProvider()?.races?.includes(Race[race]) ||
-			handler.referenceCardProvider()?.races?.includes(Race[Race.ALL])
-		);
-	};
+	(input: SelectorInput): boolean =>
+		input.card?.races?.includes(Race[race]) || input.card?.races?.includes(Race[Race.ALL]);
 export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
@@ -223,30 +196,27 @@ export const pirate = race(Race.PIRATE);
 export const undead = race(Race.UNDEAD);
 export const imp = hasMechanic(GameTag.IMP);
 export const whelp = hasMechanic(GameTag.WHELP);
-export const tribeless = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
-};
+export const tribeless = (input: SelectorInput): boolean =>
+	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
 
-export const currentClass = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
-	return handler.referenceCardProvider()?.cardClass === deckState?.hero?.playerClass?.toUpperCase();
-};
+export const currentClass = (input: SelectorInput): boolean =>
+	input.card?.cardClass === input.deckState?.hero?.playerClass?.toUpperCase();
+
 export const cardClass =
 	(cardClass: CardClass) =>
-	(handler: Handler): boolean => {
-		return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];
-	};
+	(input: SelectorInput): boolean =>
+		input.card?.cardClass === CardClass[cardClass];
 export const neutral = cardClass(CardClass.NEUTRAL);
 export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);
 
 export const rarity =
 	(rarity: RarityTYpe) =>
-	(handler: Handler): boolean => {
-		return handler.referenceCardProvider()?.rarity?.toLowerCase() === rarity?.toLowerCase();
-	};
+	(input: SelectorInput): boolean =>
+		input.card?.rarity?.toLowerCase() === rarity?.toLowerCase();
 export const legendary = rarity('Legendary');
 
 // TODO: implement it
-export const damage = (handler: Handler): boolean => {
+export const damage = (input: SelectorInput): boolean => {
 	return true;
 };

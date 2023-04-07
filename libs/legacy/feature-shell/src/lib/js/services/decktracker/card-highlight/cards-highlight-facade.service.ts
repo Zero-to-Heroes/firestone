@@ -39,7 +39,11 @@ export class CardsHighlightFacadeService {
 		this.service.onMouseEnter(cardId, side, card);
 	}
 
-	getHighlightedCards(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard): readonly Handler[] {
+	getHighlightedCards(
+		cardId: string,
+		side: 'player' | 'opponent' | 'duels',
+		card?: DeckCard,
+	): readonly { cardId: string; playTiming: number }[] {
 		return this.service.getHighlightedCards(cardId, side, card);
 	}
 

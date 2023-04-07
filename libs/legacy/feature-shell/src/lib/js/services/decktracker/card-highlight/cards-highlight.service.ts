@@ -74,6 +74,7 @@ import {
 	rush,
 	secret,
 	shadow,
+	side,
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
@@ -140,73 +141,92 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			return;
 		}
 
-		// if (!side) {
-		// 	console.warn('no side provided', cardId, side);
-		// }
+		const playerDeckProvider = () =>
+			this.options?.skipGameState ? this.buildFakeDeckStateFromRegisteredHandlers() : this.gameState.playerDeck;
+		const opponentDeckProvider = () => (this.options?.skipGameState ? null : this.gameState.opponentDeck);
 
-		const selector: (
-			handler: Handler,
-			deckState?: DeckState,
-			options?: SelectorOptions,
-			gameState?: GameState,
-		) => boolean = this.buildSelector(cardId, card);
-		// console.debug('built selector', selector);
-		if (selector) {
-			// console.debug(
-			// 	'highlighting',
-			// 	side,
-			// 	this.handlers,
-			// 	Object.keys(this.handlers).filter((key) => key.startsWith(side)),
-			// 	Object.keys(this.handlers)
-			// 		.filter((key) => key.startsWith(side))
-			// 		.map((key) => this.handlers[key]),
-			// );
-			Object.keys(this.handlers)
-				.filter((key) => key.startsWith(side))
-				.map((key) => this.handlers[key])
-				.filter((handler) => {
-					return selector(
-						handler,
-						side === 'player' ? this.gameState?.playerDeck : this.gameState?.opponentDeck,
-						this.options,
-						this.gameState,
-					);
-				})
-				.forEach((handler) => {
-					// console.debug('handler', handler);
-					handler.highlightCallback();
-				});
+		const cardsToHighlight = this.buildCardsToHighlight(
+			side,
+			cardId,
+			card,
+			playerDeckProvider,
+			opponentDeckProvider,
+		);
+		for (const card of cardsToHighlight) {
+			const handler = Object.values(this.handlers).find(
+				(h) =>
+					h.side() === card.side &&
+					h.deckCardProvider()?.cardId === card.cardId &&
+					(!card.entityId || card.entityId === h.deckCardProvider()?.entityId),
+			);
+			if (!!handler) {
+				console.debug('DO HIGHLGIHT', handler, handler.highlightCallback);
+				handler.highlightCallback();
+			}
 		}
 	}
 
-	getHighlightedCards(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard): readonly Handler[] {
+	getHighlightedCards(
+		cardId: string,
+		side: 'player' | 'opponent' | 'duels',
+		card?: DeckCard,
+	): readonly { cardId: string; playTiming: number }[] {
 		// Happens when using the deck-list component outside of a game
 		if (!this.options?.skipGameState && !this.gameState) {
-			return [];
+			return;
 		}
 
-		const selector: (
-			handler: Handler,
-			deckState?: DeckState,
-			options?: SelectorOptions,
-			gameState?: GameState,
-		) => boolean = this.buildSelector(cardId, card);
-		// console.debug('selector', selector);
-		const result = !!selector
-			? Object.keys(this.handlers)
-					.filter((key) => key.startsWith(side))
-					.map((key) => this.handlers[key])
-					.filter((handler) => {
-						return selector(
-							handler,
-							side === 'player' ? this.gameState?.playerDeck : this.gameState?.opponentDeck,
-							this.options,
-							this.gameState,
-						);
-					})
-					.map((handler) => handler)
-			: [];
-		// console.debug('result', result);
+		const playerDeckProvider = () =>
+			this.options?.skipGameState ? this.buildFakeDeckStateFromRegisteredHandlers() : this.gameState.playerDeck;
+		const opponentDeckProvider = () => (this.options?.skipGameState ? null : this.gameState.opponentDeck);
+
+		const cardsToHighlight = this.buildCardsToHighlight(
+			side,
+			cardId,
+			card,
+			playerDeckProvider,
+			opponentDeckProvider,
+		);
+		return cardsToHighlight.map((i) => ({
+			cardId: i.cardId,
+			playTiming: i.deckCard?.playTiming ?? 0,
+		}));
+	}
+
+	private buildFakeDeckStateFromRegisteredHandlers(): DeckState {
+		return DeckState.create({
+			deck: Object.values(this.handlers).map((h) => {
+				return !!h.deckCardProvider()
+					? h.deckCardProvider()
+					: DeckCard.create({
+							cardId: h.referenceCardProvider().id,
+					  });
+			}),
+		});
+	}
+
+	private buildCardsToHighlight(
+		side: 'player' | 'opponent' | 'duels',
+		cardId: string,
+		card: DeckCard,
+		playerDeckProvider: () => DeckState,
+		opponentDeckProvider: () => DeckState,
+	): readonly SelectorInput[] {
+		const result: SelectorInput[] = [];
+		const selector: Selector = this.buildSelector(cardId, card, side);
+		for (const card of this.getAllCards(!!playerDeckProvider ? playerDeckProvider() : null, side)) {
+			if (selector(card)) {
+				result.push(card);
+			}
+		}
+		for (const card of this.getAllCards(
+			!!opponentDeckProvider ? opponentDeckProvider() : null,
+			side === 'player' ? 'opponent' : side === 'opponent' ? 'player' : side,
+		)) {
+			if (selector(card)) {
+				result.push(card);
+			}
+		}
 		return result;
 	}
 
@@ -214,299 +234,352 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private buildSelector(
-		cardId: string,
-		card?: DeckCard,
-	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions, gameState?: GameState) => boolean {
-		const cardIdSelector = this.buildCardIdSelector(cardId, card);
+	private getAllCards(deckState: DeckState, side: 'player' | 'opponent' | 'duels'): readonly SelectorInput[] {
+		if (!deckState) {
+			return [];
+		}
+		const result: SelectorInput[] = [];
+		for (const card of [...deckState.deck]) {
+			result.push({
+				cardId: card.cardId,
+				entityId: card.entityId,
+				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
+				zone: 'deck',
+				side: side,
+				deckCard: card,
+				deckState: deckState,
+			});
+		}
+		for (const card of [...deckState.hand]) {
+			result.push({
+				cardId: card.cardId,
+				entityId: card.entityId,
+				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
+				zone: 'hand',
+				side: side,
+				deckCard: card,
+				deckState: deckState,
+			});
+		}
+		for (const card of [...deckState.board]) {
+			result.push({
+				cardId: card.cardId,
+				entityId: card.entityId,
+				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
+				zone: 'other',
+				side: side,
+				deckCard: card,
+				deckState: deckState,
+			});
+		}
+		for (const card of [...deckState.otherZone]) {
+			result.push({
+				cardId: card.cardId,
+				entityId: card.entityId,
+				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
+				zone: card.zone === 'GRAVEYARD' ? 'graveyard' : 'other',
+				side: side,
+				deckCard: card,
+				deckState: deckState,
+			});
+		}
+		return result;
+	}
+
+	private buildSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
+		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide);
 		const cardContextSelector = this.buildCardContextSelector(card);
 		return or(cardIdSelector, cardContextSelector);
 	}
 
-	private buildCardContextSelector(
-		card: DeckCard,
-	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions, gameState?: GameState) => boolean {
+	private buildCardContextSelector(card: DeckCard): Selector {
 		if (card?.dredged && !card.cardId && card.linkedEntityIds?.length) {
-			return (handler, deckState, options, gameState) =>
-				card.linkedEntityIds.includes(handler.deckCardProvider().entityId);
+			return (input: SelectorInput): boolean => card.linkedEntityIds.includes(input.entityId);
 		}
 	}
 
-	private buildCardIdSelector(
-		cardId: string,
-		card?: DeckCard,
-	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions, gameState?: GameState) => boolean {
+	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
 		switch (cardId) {
 			case CardIds.AbyssalDepths:
-				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
-					const cheapestMinions = [...deckState.deck]
+				return (input: SelectorInput): boolean => {
+					const cheapestMinions = [...input.deckState.deck]
 						.filter((c) => this.allCards.getCard(c.cardId).type === 'Minion')
 						.sort((a, b) => a.manaCost - b.manaCost)
 						.slice(0, 2);
 					const secondCheapestMinionCost = (cheapestMinions[1] ?? cheapestMinions[0])?.manaCost ?? 0;
 					return (
-						minion(handler) &&
-						inDeck(handler) &&
-						handler.deckCardProvider()?.getEffectiveManaCost() <= secondCheapestMinionCost
+						side(inputSide)(input) &&
+						minion(input) &&
+						inDeck(input) &&
+						input.deckCard?.getEffectiveManaCost() <= secondCheapestMinionCost
 					);
 				};
 			case CardIds.AdvancedTargetingMonocle:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.AllianceBannerman:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.AllShallServeTavernBrawl:
-				return and(minion, demon);
+				return and(side(inputSide), minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
-				return and(or(inDeck, inHand), battlecry);
+				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.AmberWhelp:
-				return and(or(inDeck, inHand), minion, dragon);
+				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 			case CardIds.AmuletOfUndying:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.AnimateDead:
-				return and(inGraveyard, minion, effectiveCostLess(3));
+				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
 			case CardIds.Ancharrr:
-				return and(inDeck, minion, pirate);
+				return and(side(inputSide), inDeck, minion, pirate);
 			case CardIds.Anubrekhan_RLK_659:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.ArcaneBrilliance:
 				return and(
+					side(inputSide),
 					inDeck,
 					spell,
 					or(effectiveCostEqual(7), effectiveCostEqual(8), effectiveCostEqual(9), effectiveCostEqual(10)),
 				);
 			case CardIds.ArcaneFluxTavernBrawl:
-				return and(spell, arcane);
+				return and(side(inputSide), spell, arcane);
 			case CardIds.ArcaneLuminary:
-				return and(inDeck, notInInitialDeck);
+				return and(side(inputSide), inDeck, notInInitialDeck);
 			case CardIds.ArcaneQuiver_RLK_817:
-				return and(inDeck, arcane);
+				return and(side(inputSide), inDeck, arcane);
 			case CardIds.ArcaniteCrystalTavernBrawl:
-				return and(spell, arcane);
+				return and(side(inputSide), spell, arcane);
 			case CardIds.Arcanologist:
-				return and(inDeck, spell, secret);
+				return and(side(inputSide), inDeck, spell, secret);
 			case CardIds.ArcanologistCore:
-				return and(inDeck, spell, secret);
+				return and(side(inputSide), inDeck, spell, secret);
 			case CardIds.ArcticArmorTavernBrawl:
-				return and(freeze);
+				return and(side(inputSide), freeze);
 			case CardIds.ArmsDealer_RLK_824:
-				return and(or(inDeck, inHand), undead);
+				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.Assembly:
 			case CardIds.Assembly_Assembly:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.AwakenTheMakers:
-				return and(or(inDeck, inHand), minion, deathrattle);
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.AxeBerserker:
-				return and(inDeck, weapon);
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.AzsharanGardens_SunkenGardensToken:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.AzsharanSaber_SunkenSaberToken:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.AzsharanScavenger_SunkenScavengerToken:
-				return and(minion, murloc);
+				return and(side(inputSide), minion, murloc);
 			case CardIds.BalindaStonehearth:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.BandOfBeesTavernBrawl:
-				return and(or(inDeck, inHand), minion, effectiveCostLess(3));
+				return and(side(inputSide), or(inDeck, inHand), minion, effectiveCostLess(3));
 			case CardIds.Banjosaur:
-				return and(inDeck, beast, minion);
+				return and(side(inputSide), inDeck, beast, minion);
 			case CardIds.BarakKodobane_BAR_551:
-				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
+				return and(
+					side(inputSide),
+					inDeck,
+					spell,
+					or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)),
+				);
 			case CardIds.BattleTotem_LOOTA_846:
-				return and(or(inDeck, inHand), battlecry);
+				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.BeckoningBicornTavernBrawl:
-				return and(or(inDeck, inHand), pirate);
+				return and(side(inputSide), or(inDeck, inHand), pirate);
 			case CardIds.BitterColdTavernBrawl:
-				return and(frost, dealsDamage);
+				return and(side(inputSide), frost, dealsDamage);
 			case CardIds.BlackwingCorruptor:
-				return and(or(inDeck, inHand), dragon);
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.BladeOfQuickeningTavernBrawlToken:
-				return and(inDeck, outcast);
+				return and(side(inputSide), inDeck, outcast);
 			case CardIds.BladeOfTheBurningSun:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.BloodCrusader:
-				return and(or(inDeck, inHand), minion, paladin);
+				return and(side(inputSide), or(inDeck, inHand), minion, paladin);
 			case CardIds.BloodOfGhuun:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.BloodreaverGuldan_CORE_ICC_831:
 			case CardIds.BloodreaverGuldan_ICC_831:
-				return and(inGraveyard, minion, demon);
+				return and(side(inputSide), inGraveyard, minion, demon);
 			case CardIds.Bonecaller:
-				return and(inGraveyard, minion, undead);
+				return and(side(inputSide), inGraveyard, minion, undead);
 			case CardIds.Boneshredder:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.BoogieDown:
-				return and(inDeck, minion, effectiveCostEqual(1));
+				return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 			case CardIds.BookOfSpecters:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.BronzeSignetTavernBrawl:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.CagematchCustodian:
-				return and(inDeck, cardType(CardType.WEAPON));
+				return and(side(inputSide), inDeck, cardType(CardType.WEAPON));
 			case CardIds.CapturedFlag:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.CariaFelsoul:
-				return and(inDeck, demon);
+				return and(side(inputSide), inDeck, demon);
 			case CardIds.CastleKennels_REV_362:
 			case CardIds.CastleKennels_REV_790:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.CatrinaMuerte_CORE_DAL_721:
 			case CardIds.CatrinaMuerte_DAL_721:
-				return and(inGraveyard, undead, minion);
+				return and(side(inputSide), inGraveyard, undead, minion);
 			case CardIds.ChattyBartender:
-				return and(inDeck, secret);
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.ChorusRiff:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.ClassActionLawyer:
-				return and(inDeck, neutral);
+				return and(side(inputSide), inDeck, neutral);
 			case CardIds.ClickClocker:
-				return and(inDeck, minion, mech);
+				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.ClockworkAssistant_GILA_907:
 			case CardIds.ClockworkAssistant_ONY_005ta11:
 			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48:
 			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.ClockworkKnight:
-				return and(or(inDeck, inHand), minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.CoilCastingTavernBrawl:
-				return and(or(inDeck, inHand), naga);
+				return and(side(inputSide), or(inDeck, inHand), naga);
 			case CardIds.CollectorsIreTavernBrawlToken:
-				return and(inDeck, minion, or(dragon, pirate, mech));
+				return and(side(inputSide), inDeck, minion, or(dragon, pirate, mech));
 			case CardIds.ConchsCall:
-				return and(inDeck, or(naga, spell));
+				return and(side(inputSide), inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
-				return and(cardsPlayedThisMatch, not(currentClass), not(neutral));
+				return and(side(inputSide), cardsPlayedThisMatch, not(currentClass), not(neutral));
 			case CardIds.CookiesLadleTavernBrawl:
-				return and(or(inDeck, inHand), murloc);
+				return and(side(inputSide), or(inDeck, inHand), murloc);
 			case CardIds.Commencement:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.CosmicKeyboard:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.CorruptedFelstoneTavernBrawl:
-				return and(or(inDeck, inHand), spell, fel);
+				return and(side(inputSide), or(inDeck, inHand), spell, fel);
 			case CardIds.CountessAshmore:
-				return and(inDeck, or(rush, lifesteal, deathrattle));
+				return and(side(inputSide), inDeck, or(rush, lifesteal, deathrattle));
 			case CardIds.CowardlyGrunt:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.CrushclawEnforcer:
-				return and(inDeck, naga);
+				return and(side(inputSide), inDeck, naga);
 			case CardIds.CrystalsmithCultist:
-				return and(or(inDeck, inHand), spell, shadow);
+				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Crystology:
-				return and(inDeck, minion, attackLessThan(2));
+				return and(side(inputSide), inDeck, minion, attackLessThan(2));
 			case CardIds.CutlassCourier:
-				return and(inDeck, pirate);
+				return and(side(inputSide), inDeck, pirate);
 			case CardIds.DaringDrake:
-				return and(or(inDeck, inHand), dragon);
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.DarkInquisitorXanesh:
-				return and(or(inDeck, inHand), or(corrupt, corrupted));
+				return and(side(inputSide), or(inDeck, inHand), or(corrupt, corrupted));
 			case CardIds.DaUndatakah:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DeadRinger:
-				return and(inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.DealWithADevil:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.DeathBlossomWhomper:
-				return and(inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.DeathlyDeathTavernBrawl:
-				return and(minion, deathrattle);
+				return and(side(inputSide), minion, deathrattle);
 			case CardIds.DeathstriderTavernBrawl:
-				return and(or(inDeck, inHand), minion, deathrattle);
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DeepwaterEvoker:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.DefenseAttorneyNathanos:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DevoutBlessingsTavernBrawlToken:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DinnerPerformer:
-				return and(inDeck, minion, effectiveCostLessThanRemainingMana);
+				return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
 			case CardIds.DirgeOfDespair:
-				return and(inDeck, demon, minion);
+				return and(side(inputSide), inDeck, demon, minion);
 			case CardIds.DiscoMaul:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.DisksOfLegendTavernBrawl:
-				return and(or(inDeck, inHand), minion, legendary);
+				return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 			case CardIds.DivineIlluminationTavernBrawl:
-				return and(holy);
+				return and(side(inputSide), holy);
 			case CardIds.DivingGryphon:
-				return and(inDeck, minion, rush);
+				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.DoorOfShadows:
 			case CardIds.DoorOfShadows_DoorOfShadowsToken:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.DoubleJump_SCH_422:
-				return and(inDeck, outcast);
+				return and(side(inputSide), inDeck, outcast);
 			case CardIds.DoubleTime:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.DraconicDreamTavernBrawl:
-				return and(dragon);
+				return and(side(inputSide), dragon);
 			case CardIds.DragonAffinityTavernBrawl:
-				return and(dragon);
+				return and(side(inputSide), dragon);
 			case CardIds.DragonbloodTavernBrawl:
-				return and(dragon);
+				return and(side(inputSide), dragon);
 			case CardIds.DragonboneRitualTavernBrawl:
-				return and(dragon);
+				return and(side(inputSide), dragon);
 			case CardIds.Drekthar_AV_100:
-				return !card ? null : and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+				return !card
+					? null
+					: and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.DrocomurchanicasTavernBrawlToken:
-				return and(inDeck, minion, or(dragon, murloc, mech));
+				return and(side(inputSide), inDeck, minion, or(dragon, murloc, mech));
 			case CardIds.DunBaldarBunker:
-				return and(inDeck, secret);
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.EdgeOfDredgeTavernBrawl:
-				return and(or(inDeck, inHand), dredge);
+				return and(side(inputSide), or(inDeck, inHand), dredge);
 			case CardIds.EerieStoneTavernBrawl:
-				return and(spell, shadow);
+				return and(side(inputSide), spell, shadow);
 			case CardIds.EerieStoneTavernBrawl:
-				return and(spell, shadow);
+				return and(side(inputSide), spell, shadow);
 			case CardIds.ElitistSnob:
-				return and(inHand, paladin);
+				return and(side(inputSide), inHand, paladin);
 			case CardIds.ElixirOfVigorTavernBrawl:
-				return and(minion);
+				return and(side(inputSide), minion);
 			case CardIds.EnduranceTrainingTavernBrawl:
-				return and(minion, taunt);
+				return and(side(inputSide), minion, taunt);
 			case CardIds.EternalServitude_CORE_ICC_213:
 			case CardIds.EternalServitude_ICC_213:
-				return and(inGraveyard, minion);
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.ExpeditedBurialTavernBrawl:
-				return and(minion, deathrattle);
+				return and(side(inputSide), minion, deathrattle);
 			case CardIds.FaithfulCompanions:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.FandralStaghelm:
 			case CardIds.FandralStaghelmCore:
-				return and(inDeck, chooseOne);
+				return and(side(inputSide), inDeck, chooseOne);
 			case CardIds.FeldoreiWarband:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.FelfireInTheHole:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.Felgorger_SW_043:
-				return and(inDeck, spell, fel);
+				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.FirekeepersIdolTavernBrawl:
-				return and(spell, fire);
+				return and(side(inputSide), spell, fire);
 			case CardIds.FiremancerFlurgl:
-				return and(race(Race.MURLOC), or(inDeck, inHand));
+				return and(side(inputSide), race(Race.MURLOC), or(inDeck, inHand));
 			case CardIds.FlamesOfTheKirinTorTavernBrawl:
-				return and(or(inDeck, inHand), spell, fire);
+				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.FlameWavesTavernBrawl:
-				return and(or(inDeck, inHand), spell, fire);
+				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.FleshBehemoth_RLK_830:
-				return and(inDeck, minion, undead, excludeEntityId(card?.entityId));
+				return and(side(inputSide), inDeck, minion, undead, excludeEntityId(card?.entityId));
 			case CardIds.Flowrider:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.FossilFanatic:
-				return and(inDeck, spell, fel);
+				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.FrizzKindleroost:
-				return and(inDeck, dragon);
+				return and(side(inputSide), inDeck, dragon);
 			case CardIds.FrontLines_TID_949:
 			case CardIds.FrontLines_Story_11_FrontLines:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.FrostweaveDungeoneer:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.FungalFortunes:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.GatherYourParty:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.GhoulishAlchemist:
 				return and(
+					side(inputSide),
 					or(inDeck, inHand),
 					cardIs(
 						CardIds.GhoulishAlchemist_SlimyConcoctionToken,
@@ -522,126 +595,135 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					),
 				);
 			case CardIds.Glaivetar:
-				return and(inDeck, outcast);
+				return and(side(inputSide), inDeck, outcast);
 			case CardIds.GluthSicleTavernBrawl:
-				return and(inDeck, minion, undead);
+				return and(side(inputSide), inDeck, minion, undead);
 			case CardIds.GluthTavernBrawl_PVPDR_Sai_T1:
-				return and(or(inDeck, inHand), minion, undead);
+				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.GlacialDownpourTavernBrawl:
-				return and(or(inDeck, inHand), spell, frost);
+				return and(side(inputSide), or(inDeck, inHand), spell, frost);
 			case CardIds.GorlocRavager:
-				return and(inDeck, murloc);
+				return and(side(inputSide), inDeck, murloc);
 			case CardIds.GrandMagisterRommath:
-				return and(cardsPlayedThisMatch, spell, notInInitialDeck);
+				return and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck);
 			case CardIds.GraveDefiler:
-				return and(inDeck, spell, fel);
+				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.GreedyGainsTavernBrawl:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.GreySageParrot:
-				return and(or(inDeck, inHand), spell, effectiveCostMore(4));
+				return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(4));
 			case CardIds.GrommashsArmguardsTavernBrawl:
-				return and(weapon);
+				return and(side(inputSide), weapon);
 			case CardIds.GuardianAnimals:
-				return and(inDeck, minion, beast, effectiveCostLess(6));
+				return and(side(inputSide), inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.GuardianLightTavernBrawl:
-				return and(or(inDeck, inHand), spell, holy);
+				return and(side(inputSide), or(inDeck, inHand), spell, holy);
 			case CardIds.GuessTheWeight_Less:
-				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
-					if (!deckState.hand.length) {
+				return (input: SelectorInput): boolean => {
+					if (!input.deckState.hand.length) {
 						return null;
 					}
-					const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
-					return inDeck(handler) && effectiveCostLess(lastDrawnCard?.getEffectiveManaCost() ?? 0)(handler);
+					const lastDrawnCard = input.deckState.hand[input.deckState.hand.length - 1];
+					return (
+						side(inputSide)(input) &&
+						inDeck(input) &&
+						effectiveCostLess(lastDrawnCard?.getEffectiveManaCost() ?? 0)(input)
+					);
 				};
 			case CardIds.GuessTheWeight_More:
-				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
-					if (!deckState.hand.length) {
+				return (input: SelectorInput): boolean => {
+					if (!input.deckState.hand.length) {
 						return null;
 					}
-					const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
-					return inDeck(handler) && effectiveCostMore(lastDrawnCard?.getEffectiveManaCost() ?? 0)(handler);
+					const lastDrawnCard = input.deckState.hand[input.deckState.hand.length - 1];
+					return (
+						side(inputSide)(input) &&
+						inDeck(input) &&
+						effectiveCostMore(lastDrawnCard?.getEffectiveManaCost() ?? 0)(input)
+					);
 				};
 			case CardIds.GuffRunetotem_BAR_720:
-				return and(spell, spellSchool(SpellSchool.NATURE));
+				return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.HabeasCorpses:
-				return and(inGraveyard, minion);
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.HalduronBrightwing:
-				return and(inDeck, spell, arcane);
+				return and(side(inputSide), inDeck, spell, arcane);
 			case CardIds.Hadronox_CORE_ICC_835:
 			case CardIds.Hadronox_ICC_835:
-				return and(inGraveyard, minion, taunt);
+				return and(side(inputSide), inGraveyard, minion, taunt);
 			case CardIds.HarborScamp:
-				return and(inDeck, pirate);
+				return and(side(inputSide), inDeck, pirate);
 			case CardIds.HarnessTheElementsTavernBrawl:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.HedgeMaze_REV_333:
 			case CardIds.HedgeMaze_REV_792:
-				return and(inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.HeraldOfLokholar:
-				return and(inDeck, spell, frost);
+				return and(side(inputSide), inDeck, spell, frost);
 			case CardIds.HeraldOfNature:
-				return and(or(inDeck, inHand), spell, nature);
+				return and(side(inputSide), or(inDeck, inHand), spell, nature);
 			case CardIds.HeraldOfShadows:
-				return and(inDeck, spell, shadow);
+				return and(side(inputSide), inDeck, spell, shadow);
 			case CardIds.HighAbbessAlura:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.HighCultistBasaleph:
-				return and(minionsDeadSinceLastTurn, undead);
+				return and(side(inputSide), minionsDeadSinceLastTurn, undead);
 			case CardIds.HoldTheLineTavernBrawl:
-				return and(taunt);
+				return and(side(inputSide), taunt);
 			case CardIds.Hullbreaker:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.IcebloodTower:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.IceFishing_CORE_ICC_089:
 			case CardIds.IceFishing_ICC_089:
-				return and(inDeck, murloc);
+				return and(side(inputSide), inDeck, murloc);
 			case CardIds.IceRevenant:
-				return and(inDeck, spell, frost);
+				return and(side(inputSide), inDeck, spell, frost);
 			case CardIds.ImpCredibleTrousersTavernBrawl:
-				return and(or(inDeck, inHand), spell, fel);
+				return and(side(inputSide), or(inDeck, inHand), spell, fel);
 			case CardIds.InfantryReanimator:
-				return and(inGraveyard, undead);
+				return and(side(inputSide), inGraveyard, undead);
 			case CardIds.Insight:
 			case CardIds.Insight_InsightToken:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.InspiringPresenceTavernBrawl:
-				return and(minion, legendary);
+				return and(side(inputSide), minion, legendary);
 			case CardIds.InstrumentTech:
-				return and(minion, weapon);
+				return and(side(inputSide), minion, weapon);
 			case CardIds.InvestmentOpportunity:
-				return and(inDeck, overload);
+				return and(side(inputSide), inDeck, overload);
 			case CardIds.InvigoratingLightTavernBrawl:
-				return and(spell, holy);
+				return and(side(inputSide), spell, holy);
 			case CardIds.InvigoratingSermon:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.IronRootsTavernBrawl:
-				return and(or(inDeck, inHand), spell, nature);
+				return and(side(inputSide), or(inDeck, inHand), spell, nature);
 			case CardIds.ItsRainingFin:
-				return and(inDeck, murloc);
+				return and(side(inputSide), inDeck, murloc);
 			case CardIds.JaceDarkweaver:
-				return and(spellPlayedThisMatch, spellSchool(SpellSchool.FEL));
+				return and(side(inputSide), spellPlayedThisMatch, spellSchool(SpellSchool.FEL));
 			case CardIds.JerryRigCarpenter:
-				return and(inDeck, spell, chooseOne);
+				return and(side(inputSide), inDeck, spell, chooseOne);
 			case CardIds.JewelOfNzoth:
-				return and(minion, inGraveyard, deathrattle);
+				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.JungleJammer:
-				return and(or(inHand, inDeck), spell);
+				return and(side(inputSide), or(inHand, inDeck), spell);
 			case CardIds.K90tron:
-				return and(inDeck, minion, effectiveCostEqual(1));
+				return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 			case CardIds.KangorsEndlessArmy:
-				return and(inGraveyard, mech);
+				return and(side(inputSide), inGraveyard, mech);
 			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
-				return and(demon, inGraveyard, minion);
+				return and(side(inputSide), demon, inGraveyard, minion);
 			case CardIds.KathrenaWinterwisp:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.Kazakusan_ONY_005:
-				return and(or(inDeck, cardsPlayedThisMatch), minion, dragon);
+				return and(side(inputSide), or(inDeck, cardsPlayedThisMatch), minion, dragon);
 			case CardIds.KhadgarsScryingOrb:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.KelthuzadTheInevitable_REV_514:
 			case CardIds.KelthuzadTheInevitable_REV_786:
 				return and(
+					side(inputSide),
 					or(inDeck, inHand),
 					cardIs(
 						CardIds.VolatileSkeleton,
@@ -656,56 +738,56 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				);
 			case CardIds.Kindle_DALA_911:
 			case CardIds.Kindle_ULDA_911:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.KindlingFlameTavernBrawl:
-				return and(spell, fire, dealsDamage);
+				return and(side(inputSide), spell, fire, dealsDamage);
 			case CardIds.KnightOfAnointment:
-				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
+				return and(side(inputSide), inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.LadyAnacondra_WC_006:
-				return and(spell, spellSchool(SpellSchool.NATURE));
+				return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.LadyAshvane_TSC_943:
 			case CardIds.LadyAshvane_Story_11_LadyAshvane:
-				return and(inDeck, weapon);
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.LadyDeathwhisper_RLK_713:
-				return and(or(inHand, inDeck), spell, frost);
+				return and(side(inputSide), or(inHand, inDeck), spell, frost);
 			case CardIds.LadyInWhite:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.LadyVashj_VashjPrimeToken:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.LastStand:
-				return and(inDeck, taunt);
+				return and(side(inputSide), inDeck, taunt);
 			// case CardIds.LeadDancer:
 			// 	return and(inDeck, minion, attackLessThan(card. ));
 			case CardIds.LineHopper:
-				return outcast;
+				return and(side(inputSide), outcast);
 			case CardIds.LivingSeedRank1:
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
-				return and(inDeck, beast);
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.LoveEverlasting:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.MagisterDawngrasp_AV_200:
-				return and(inOther, spell, hasSpellSchool, spellPlayedThisMatch);
+				return and(side(inputSide), inOther, spell, hasSpellSchool, spellPlayedThisMatch);
 			case CardIds.MagisterUnchainedTavernBrawlToken:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.MalygosTheSpellweaverCore:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.MagistersApprentice:
-				return and(inDeck, spell, arcane);
+				return and(side(inputSide), inDeck, spell, arcane);
 			case CardIds.MarkOfScorn:
-				return and(inDeck, not(minion));
+				return and(side(inputSide), inDeck, not(minion));
 			case CardIds.MaskedReveler:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.MastersCall:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.MasterJouster:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.MeatGrinder_RLK_120:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.MeekMasteryTavernBrawl:
-				return and(or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
+				return and(side(inputSide), or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
 			case CardIds.MendingPoolsTavernBrawl:
-				return and(spell, nature);
+				return and(side(inputSide), spell, nature);
 			// case CardIds.Mixtape:
 			// 	return (handler: Handler, deckState?: DeckState, options?: SelectorOptions,
 			// 		gameState?: GameState,): boolean => {
@@ -717,108 +799,109 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			// 		return inDeck(handler) && effectiveCostMore(lastDrawnCard?.getEffectiveManaCost() ?? 0)(handler);
 			// 	};
 			case CardIds.MulchMadnessTavernBrawl:
-				return and(minion, neutral);
+				return and(side(inputSide), minion, neutral);
 			case CardIds.MummyMagic:
-				return and(or(inDeck, inHand), minion, deathrattle);
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.NagaGiant:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.NaturalForceTavernBrawl:
-				return and(spell, nature, dealsDamage);
+				return and(side(inputSide), spell, nature, dealsDamage);
 			case CardIds.NerubianVizier:
-				return and(or(inDeck, inHand), minion, undead);
+				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.NzothGodOfTheDeep:
-				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.races?.length);
+				return and(side(inputSide), inGraveyard, minion, (input: SelectorInput) => !!input.card?.races?.length);
 			case CardIds.NzothTheCorruptor:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.OopsAllSpellsTavernBrawl:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.OpenTheDoorwaysTavernBrawl:
-				return and(discover);
+				return and(side(inputSide), discover);
 			case CardIds.OptimizedPolarityTavernBrawl:
-				return and(or(inDeck, inHand), mech, not(magnetic));
+				return and(side(inputSide), or(inDeck, inHand), mech, not(magnetic));
 			case CardIds.OracleOfElune:
-				return and(minion, effectiveCostLess(3));
+				return and(side(inputSide), minion, effectiveCostLess(3));
 			case CardIds.OrbOfRevelationTavernBrawl:
-				return and(or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
+				return and(side(inputSide), or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
 			case CardIds.OverlordSaurfang_BAR_334:
-				return and(minion, inGraveyard, frenzy);
+				return and(side(inputSide), minion, inGraveyard, frenzy);
 			case CardIds.OverseerFrigidaraCore_RLK_224:
 			case CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.PeacefulPiper:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.PetCollector:
-				return and(inDeck, minion, beast, effectiveCostLess(6));
+				return and(side(inputSide), inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.PileOnHeroic:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.PillageTheFallenTavernBrawl:
-				return and(weapon);
+				return and(side(inputSide), weapon);
 			case CardIds.PitCommander:
-				return and(inDeck, minion, demon);
+				return and(side(inputSide), inDeck, minion, demon);
 			case CardIds.PlaguebringerTavernBrawl:
-				return and(spell, effectiveCostMore(1));
+				return and(side(inputSide), spell, effectiveCostMore(1));
 			case CardIds.Plunder:
-				return and(inDeck, weapon);
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.PotionOfSparkingTavernBrawl:
-				return and(minion, rush);
+				return and(side(inputSide), minion, rush);
 			case CardIds.PredatoryInstincts:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.Prescience:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.PrimordialProtector_BAR_042:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.PrincessTavernBrawl:
-				return and(inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.PrivateEye:
-				return and(inDeck, secret);
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.ProvingGrounds:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.Psychopomp:
-				return and(inGraveyard, minion);
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.RaiseDead_SCH_514:
-				return and(inGraveyard, minion);
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.ImpendingCatastrophe:
-				return and(or(inDeck, inHand), minion, imp);
+				return and(side(inputSide), or(inDeck, inHand), minion, imp);
 			case CardIds.ImpKingRafaam_REV_789:
 			case CardIds.ImpKingRafaam_REV_835:
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
-				return and(or(inDeck, inHand, inGraveyard), minion, imp);
+				return and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp);
 			case CardIds.RaidBossOnyxia_ONY_004:
-				return and(or(inDeck, inHand), minion, whelp);
+				return and(side(inputSide), or(inDeck, inHand), minion, whelp);
 			case CardIds.RaidTheDocks:
-				return and(inDeck, weapon);
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.Rally:
-				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
+				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.RallyTheTroopsTavernBrawl:
-				return and(or(inDeck, inHand), battlecry);
+				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.RazormaneBattleguard:
-				return and(minion, taunt);
+				return and(side(inputSide), minion, taunt);
 			case CardIds.RecordScratcher:
-				return and(or(inHand, inDeck), combo);
+				return and(side(inputSide), or(inHand, inDeck), combo);
 			case CardIds.RedscaleDragontamer:
-				return and(inDeck, dragon);
+				return and(side(inputSide), inDeck, dragon);
 			case CardIds.RefreshingSpringWater:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.Resurrect_BRM_017:
-				return and(inGraveyard, minion);
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.RevivePet:
-				return and(inGraveyard, minion, beast);
+				return and(side(inputSide), inGraveyard, minion, beast);
 			case CardIds.Rewind_ETC_532:
-				return and(spellPlayedThisMatch);
+				return and(side(inputSide), spellPlayedThisMatch);
 			case CardIds.RhoninsScryingOrbTavernBrawl:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.RighteousReservesTavernBrawl:
-				return and(or(inDeck, inHand), minion, divineShield);
+				return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
 			case CardIds.RingmasterWhatley:
-				return and(inDeck, minion, or(dragon, mech, pirate));
+				return and(side(inputSide), inDeck, minion, or(dragon, mech, pirate));
 			case CardIds.RingOfPhaseshiftingTavernBrawl:
-				return and(or(inDeck, inHand), minion, legendary);
+				return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 			case CardIds.RingOfRefreshmentTavernBrawl:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.RivendareWarrider:
 				return and(
+					side(inputSide),
 					inGraveyard,
 					cardIs(
 						CardIds.RivendareWarrider,
@@ -828,60 +911,60 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					),
 				);
 			case CardIds.RobeOfTheApprenticeTavernBrawl:
-				return and(or(inDeck, inHand), spell, dealsDamage);
+				return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 			case CardIds.RobeOfTheMagi:
-				return and(or(inDeck, inHand), spell, dealsDamage);
+				return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 			case CardIds.RobesOfShrinkingTavernBrawl:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.RocketBackpacksTavernBrawl:
-				return and(or(inDeck, inHand), minion, not(rush));
+				return and(side(inputSide), or(inDeck, inHand), minion, not(rush));
 			case CardIds.RottenRodent:
-				return and(inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.RottingNecromancer:
-				return and(inDeck, minion, undead);
+				return and(side(inputSide), inDeck, minion, undead);
 			case CardIds.RoyalGreatswordTavernBrawlToken:
-				return and(inDeck, minion, legendary);
+				return and(side(inputSide), inDeck, minion, legendary);
 			case CardIds.RuneforgingCore:
-				return and(inDeck, weapon);
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.RunningWild:
 			case CardIds.RunningWild_RunningWild:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.RushTheStage:
-				return and(inDeck, minion, rush);
+				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.SalhetsPride:
-				return and(inDeck, minion, effectiveCostLess(2));
+				return and(side(inputSide), inDeck, minion, effectiveCostLess(2));
 			case CardIds.ScavengersIngenuity:
-				return and(inDeck, beast);
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.ScepterOfSummoning:
-				return and(or(inDeck, inHand), minion, effectiveCostMore(5));
+				return and(side(inputSide), or(inDeck, inHand), minion, effectiveCostMore(5));
 			case CardIds.ScourgeIllusionist:
-				return and(inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.ScrapShot:
-				return and(inDeck, beast);
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.ScrollSavvy:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.SenseDemonsLegacy_EX1_317:
 			case CardIds.SenseDemonsVanilla_VAN_EX1_317:
-				return and(inDeck, minion, demon);
+				return and(side(inputSide), inDeck, minion, demon);
 			case CardIds.SesselieOfTheFaeCourt_REV_319:
 			case CardIds.SesselieOfTheFaeCourt_REV_782:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.SecretStudiesTavernBrawl:
-				return and(inDeck, secret);
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.SelectiveBreederCore:
-				return and(inDeck, beast);
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.ServiceBell:
-				return and(inDeck, not(neutral));
+				return and(side(inputSide), inDeck, not(neutral));
 			case CardIds.Shadowborn:
-				return and(or(inDeck, inHand), spell, shadow);
+				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Shadowcasting101TavernBrawl:
-				return and(or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.ShadowVisions:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.SheldrasMoontree:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.ShipsCannon:
-				return and(or(inDeck, inHand), minion, pirate);
+				return and(side(inputSide), or(inDeck, inHand), minion, pirate);
 			case CardIds.Si7Assassin:
 			case CardIds.Si7Informant:
 			case CardIds.Si7Smuggler:
@@ -889,47 +972,50 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FindTheImposter_LearnTheTruthToken:
 			case CardIds.FindTheImposter_MarkedATraitorToken:
 			case CardIds.JalTheSharpshot:
-				return and(or(inDeck, inHand), minion, isSi7);
+				return and(side(inputSide), or(inDeck, inHand), minion, isSi7);
 			case CardIds.ShroudOfConcealment:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.Shudderwock:
-				return and(cardsPlayedThisMatch, minion, battlecry);
+				return and(side(inputSide), cardsPlayedThisMatch, minion, battlecry);
 			case CardIds.SketchyInformation:
-				return and(inDeck, deathrattle, effectiveCostLess(5));
+				return and(side(inputSide), inDeck, deathrattle, effectiveCostLess(5));
 			case CardIds.SkulkingGeist_CORE_ICC_701:
 			case CardIds.SkulkingGeist_ICC_701:
-				return and(or(inDeck, inHand), spell, baseCostEqual(1));
+				return and(side(inputSide), or(inDeck, inHand), spell, baseCostEqual(1));
 			case CardIds.Smokescreen:
-				return and(inDeck, deathrattle);
+				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.Snapdragon:
-				return and(inDeck, minion, battlecry);
+				return and(side(inputSide), inDeck, minion, battlecry);
 			case CardIds.SouleatersScythe_BoundSoulToken:
 				return and(inOther, minion, lastAffectedByCardId(CardIds.SouleatersScythe));
 			case CardIds.SowTheSeedsTavernBrawl:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.SpecialDeliveryTavernBrawl:
-				return and(or(inDeck, inHand), minion, rush);
+				return and(side(inputSide), or(inDeck, inHand), minion, rush);
 			case CardIds.SpectralTrainee:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.SpiritGuide:
-				return and(inDeck, spell, or(shadow, holy));
+				return and(side(inputSide), inDeck, spell, or(shadow, holy));
 			case CardIds.SpreadingSaplingsTavernBrawl:
-				return and(or(inDeck, inHand), spell, nature);
+				return and(side(inputSide), or(inDeck, inHand), spell, nature);
 			case CardIds.SpringTheTrap:
-				return and(inDeck, secret);
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.SrExcavatorTavernBrawl:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.SrTombDiver:
 			case CardIds.JrTombDiver:
 			case CardIds.JrTombDiverTavernBrawl:
 			case CardIds.SrTombDiverTavernBrawl:
-				return or(and(or(inDeck, inHand), spell, secret), and(inOther, cardsPlayedThisMatch, spell, secret));
+				return and(
+					side(inputSide),
+					or(and(or(inDeck, inHand), spell, secret), and(inOther, cardsPlayedThisMatch, spell, secret)),
+				);
 			case CardIds.StaffOfPainTavernBrawl:
-				return and(or(inDeck, inHand), spell, shadow);
+				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.StaffOfRenewal:
 			case CardIds.StaffOfRenewalTavernBrawl:
-				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
-					const deadMinions = [...deckState.otherZone]
+				return (input: SelectorInput): boolean => {
+					const deadMinions = [...input.deckState.otherZone]
 						.filter((c) => this.allCards.getCard(c.cardId).type === 'Minion')
 						.filter((c) => c.zone === 'GRAVEYARD');
 					if (!deadMinions.length) {
@@ -942,36 +1028,38 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 						.slice(0, numberToResurrect);
 					const lastMinion = mostExpensiveMinions[mostExpensiveMinions.length - 1];
 					return (
-						minion(handler) &&
-						inGraveyard(handler) &&
-						handler.deckCardProvider()?.getEffectiveManaCost() >= lastMinion.getEffectiveManaCost()
+						side(inputSide)(input) &&
+						minion(input) &&
+						inGraveyard(input) &&
+						input.deckCard?.getEffectiveManaCost() >= lastMinion.getEffectiveManaCost()
 					);
 				};
 			case CardIds.StageDive:
 			case CardIds.StageDive_StageDive:
-				return and(inDeck, minion, rush);
+				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.StakingAClaimTavernBrawl:
-				return and(or(inDeck, inHand), discover);
+				return and(side(inputSide), or(inDeck, inHand), discover);
 			case CardIds.StarlightGroove:
-				return and(or(inDeck, inHand), holy, spell);
+				return and(side(inputSide), or(inDeck, inHand), holy, spell);
 			case CardIds.StarvingTavernBrawl:
-				return and(minion, beast);
+				return and(side(inputSide), minion, beast);
 			case CardIds.StranglethornHeart:
-				return and(inGraveyard, beast, effectiveCostMore(4));
+				return and(side(inputSide), inGraveyard, beast, effectiveCostMore(4));
 			case CardIds.StickyFingersTavernBrawl:
-				return and(or(inDeck, inHand), notInInitialDeck);
+				return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 			case CardIds.StonehearthVindicator:
-				return and(inDeck, spell, effectiveCostLess(4));
+				return and(side(inputSide), inDeck, spell, effectiveCostLess(4));
 			case CardIds.StormpikeBattleRam:
-				return and(or(inDeck, inHand), minion, beast);
+				return and(side(inputSide), or(inDeck, inHand), minion, beast);
 			case CardIds.SummerFlowerchild:
-				return and(inDeck, effectiveCostMore(5));
+				return and(side(inputSide), inDeck, effectiveCostMore(5));
 			case CardIds.SunfuryChampion:
-				return and(or(inDeck, inHand), spell, fire);
+				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.SunstridersCrownTavernBrawl:
-				return and(or(inDeck, inHand), spell);
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.SwinetuskShank:
 				return and(
+					side(inputSide),
 					or(inDeck, inHand),
 					cardIs(
 						CardIds.DeadlyPoisonCore,
@@ -986,92 +1074,94 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					),
 				);
 			case CardIds.Switcheroo:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.Swordfish:
-				return and(inDeck, pirate);
+				return and(side(inputSide), inDeck, pirate);
 			case CardIds.SwordOfTheFallen:
-				return and(inDeck, spell, secret);
+				return and(side(inputSide), inDeck, spell, secret);
 			case CardIds.TamsinsPhylactery:
-				return and(minion, inGraveyard, deathrattle);
+				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.TangledWrath:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.TopiorTheShrubbagazzor:
-				return and(or(inDeck, inHand), spell, nature);
+				return and(side(inputSide), or(inDeck, inHand), spell, nature);
 			case CardIds.TerrorscaleStalker:
-				return and(or(inDeck, inHand), minion, deathrattle);
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.TessGreymane_GIL_598:
 			case CardIds.TessGreymaneCore:
-				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
+				return and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.TheCountess:
-				return and(inDeck, neutral);
+				return and(side(inputSide), inDeck, neutral);
 			case CardIds.ThePurator:
-				return and(inDeck, minion, not(tribeless));
+				return and(side(inputSide), inDeck, minion, not(tribeless));
 			case CardIds.TheUpperHand:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.Thoribelore:
-				return and(or(inDeck, inHand), spell, fire);
+				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.ThriveInTheShadowsCore:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.TimberTambourine:
-				return and(or(inDeck, inHand), effectiveCostMore(4));
+				return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(4));
 			case CardIds.Timewarden:
-				return and(or(inDeck, inHand), minion, dragon);
+				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 			case CardIds.TortollanPilgrim:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.TotemOfTheDead_LOOTA_845:
-				return and(deathrattle);
+				return and(side(inputSide), deathrattle);
 			case CardIds.TownCrier_GIL_580:
-				return and(inDeck, minion, rush);
+				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.Tuskpiercer:
-				return and(inDeck, deathrattle);
+				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.TwilightDeceptor:
-				return and(inDeck, spell, shadow);
+				return and(side(inputSide), inDeck, spell, shadow);
 			case CardIds.TwilightsCall:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.TwistedTether:
-				return and(inHand, undead);
+				return and(side(inputSide), inHand, undead);
 			case CardIds.UnlockedPotential:
-				return and(or(inDeck, inHand), minion, healthBiggerThanAttack);
+				return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 			case CardIds.UnendingSwarm:
-				return and(inGraveyard, minion, effectiveCostLess(3));
+				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
 			case CardIds.UnstableMagicTavernBrawl:
-				return and(or(inDeck, inHand), spell, arcane);
+				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 			case CardIds.VanndarStormpike_AV_223:
-				return !!card ? and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1)) : null;
+				return !!card
+					? and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1))
+					: null;
 			case CardIds.VarianKingOfStormwind:
-				return and(inDeck, or(rush, taunt, divineShield));
+				return and(side(inputSide), inDeck, or(rush, taunt, divineShield));
 			case CardIds.Vectus:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.VengefulSpirit_BAR_328:
-				return and(inDeck, deathrattle);
+				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.Vexallus:
-				return and(or(inDeck, inHand), spell, arcane);
+				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 			case CardIds.VitalitySurge:
-				return and(inDeck, minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.VolumeUp:
-				return and(inDeck, spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.WarCommandsTavernBrawl:
-				return and(inDeck, minion, neutral, effectiveCostLess(4));
+				return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
 			case CardIds.WarsongWrangler:
-				return and(inDeck, beast);
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.WarsongWrangler:
-				return and(inDeck, beast);
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.WeaponsExpert:
-				return and(inDeck, weapon);
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.WidowbloomSeedsman:
-				return and(inDeck, spell, nature);
+				return and(side(inputSide), inDeck, spell, nature);
 			case CardIds.WingCommanderIchman_AV_336:
-				return and(inDeck, minion, beast);
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.WitchingHour:
-				return and(inGraveyard, minion, beast);
+				return and(side(inputSide), inGraveyard, minion, beast);
 			case CardIds.WitherTheWeakTavernBrawl:
-				return and(or(inDeck, inHand), spell, fel);
+				return and(side(inputSide), or(inDeck, inHand), spell, fel);
 			case CardIds.WretchedExile:
-				return and(or(inDeck, inHand), outcast);
+				return and(side(inputSide), or(inDeck, inHand), outcast);
 			case CardIds.XyrellaTheDevout:
-				return and(inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.YshaarjTheDefiler:
-				return and(cardsPlayedThisMatch, corrupted);
+				return and(side(inputSide), cardsPlayedThisMatch, corrupted);
 		}
 	}
 }
@@ -1080,6 +1170,7 @@ export interface Handler {
 	readonly referenceCardProvider: () => ReferenceCard;
 	readonly deckCardProvider: () => VisualDeckCard;
 	readonly zoneProvider: () => DeckZone;
+	readonly side: () => 'player' | 'opponent' | 'duels';
 	readonly highlightCallback: () => void;
 	readonly unhighlightCallback: () => void;
 }
@@ -1089,3 +1180,14 @@ export interface SelectorOptions {
 	readonly skipGameState?: boolean;
 	readonly skipPrefs?: boolean;
 }
+
+export interface SelectorInput {
+	side: 'player' | 'opponent' | 'duels';
+	entityId: number;
+	cardId: string;
+	zone: string;
+	card: ReferenceCard;
+	deckState: DeckState;
+	deckCard: DeckCard;
+}
+export type Selector = (info: SelectorInput) => boolean;
