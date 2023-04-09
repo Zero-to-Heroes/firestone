@@ -63,11 +63,7 @@ import { uuid } from '../../../services/utils';
 				[bindTooltipToGameWindow]="true"
 			>
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_burned" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_burned.svg"></div>
 				</div>
 			</div>
 			<div
@@ -76,20 +72,12 @@ import { uuid } from '../../../services/utils';
 				[helpTooltip]="'decktracker.card-transformed' | owTranslate"
 			>
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_transformed" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_transformed.svg"></div>
 				</div>
 			</div>
 			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_gift_icon" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
 				</div>
 			</div>
 			<div
@@ -98,16 +86,12 @@ import { uuid } from '../../../services/utils';
 				[helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate"
 			>
 				<div class="inner-border">
-					<div class="icon" inlineSVG="assets/svg/dredged.svg"></div>
+					<div class="icon svg-container" inlineSVG="assets/svg/dredged.svg"></div>
 				</div>
 			</div>
 			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#legendary_star" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
 				</div>
 			</div>
 			<div
@@ -116,11 +100,7 @@ import { uuid } from '../../../services/utils';
 				[helpTooltip]="'decktracker.card-discarded' | owTranslate"
 			>
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_discarded" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_discarded.svg"></div>
 				</div>
 			</div>
 			<div
@@ -129,11 +109,7 @@ import { uuid } from '../../../services/utils';
 				[helpTooltip]="'decktracker.card-countered' | owTranslate"
 			>
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_burned" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_burned.svg"></div>
 				</div>
 			</div>
 			<div
@@ -142,11 +118,7 @@ import { uuid } from '../../../services/utils';
 				[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
 			>
 				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
-						</svg>
-					</i>
+					<div class="svg-container" inlineSVG="assets/svg/card_graveyard.svg"></div>
 				</div>
 			</div>
 			<!-- <div class="position-from-top" *ngIf="positionFromTop">

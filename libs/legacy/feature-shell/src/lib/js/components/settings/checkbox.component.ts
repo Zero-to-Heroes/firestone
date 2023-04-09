@@ -25,16 +25,8 @@ import { uuid } from '../../services/utils';
 				(keyup)="toggleValueKeyboard($event)"
 				[helpTooltip]="labelTooltip"
 			>
-				<i class="unselected" *ngIf="!value">
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
-					</svg>
-				</i>
-				<i class="checked" *ngIf="value">
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#checked_box" />
-					</svg>
-				</i>
+				<i class="unselected" *ngIf="!value" inlineSVG="assets/svg/unchecked_box.svg"> </i>
+				<i class="checked" *ngIf="value" inlineSVG="assets/svg/checked_box.svg"> </i>
 				<img class="icon" *ngIf="image" [src]="image" />
 				<p>{{ label }}</p>
 			</label>

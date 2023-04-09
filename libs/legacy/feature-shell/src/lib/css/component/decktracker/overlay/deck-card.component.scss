@@ -190,26 +190,29 @@
 			color: #9fb6d7;
 		}
 
-		i,
-		.icon {
+		.svg-container {
 			width: 13px;
 			height: 12px;
 		}
 
 		&.discard {
-			i,
-			.icon {
+			.svg-container {
 				width: 13px;
 				height: 17px;
 			}
 		}
 		&.graveyard {
-			i,
-			.icon {
+			.svg-container {
 				width: 13px;
 				height: 16px;
 			}
 		}
+	}
+
+	.svg-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	// .position-from-bottom {
