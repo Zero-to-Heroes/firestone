@@ -65,6 +65,7 @@ import {
 	neutral,
 	not,
 	notInInitialDeck,
+	opposingSide,
 	or,
 	outcast,
 	overload,
@@ -788,16 +789,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
 			case CardIds.MendingPoolsTavernBrawl:
 				return and(side(inputSide), spell, nature);
-			// case CardIds.Mixtape:
-			// 	return (handler: Handler, deckState?: DeckState, options?: SelectorOptions,
-			// 		gameState?: GameState,): boolean => {
-			// 		if (!gameState.opponentDeck?.cardsPlayedThisMatch) {
-			// 			return null;
-			// 		}
-			// 		return greg
-			// 		const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
-			// 		return inDeck(handler) && effectiveCostMore(lastDrawnCard?.getEffectiveManaCost() ?? 0)(handler);
-			// 	};
+			case CardIds.Mixtape:
+				return and(opposingSide(inputSide), cardsPlayedThisMatch);
 			case CardIds.MulchMadnessTavernBrawl:
 				return and(side(inputSide), minion, neutral);
 			case CardIds.MummyMagic:
