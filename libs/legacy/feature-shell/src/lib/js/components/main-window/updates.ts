@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.16',
+		version: '11.0.17',
 		force: false,
 		sections: [
 			// {
@@ -50,49 +50,36 @@ export const updates: readonly Update[] = [
 			// 	As usual, I'm open to feedback, so let me know what you think on Discord!
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `Firestone has been updated for 26.0. Images of the new cards will be uploaded in the coming days.`,
-							},
-						],
-					},
-				],
-			},
 			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
+			// 	type: 'main',
+			// 	header: 'Main updates',
 			// 	updates: [
 			// 		{
-			// 			category: 'battlegrounds',
+			// 			category: 'general',
 			// 			details: [
 			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a sim issue where Greybough's buddy would not apply its effect to minnions taunted by Sprout it Out, Greybough's hero power.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where premium users could not use the remote simulator anymore.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'duels',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where pasting a deck code for Drek'Thar / Vanndar in the deckbuilder would create the deck for its equivalent basic class.`,
+			// 					type: 'content',
+			// 					text: `Firestone has been updated for 26.0. Images of the new cards will be uploaded in the coming days.`,
 			// 				},
 			// 			],
 			// 		},
 			// 	],
 			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'misc',
+								text: `I have done a big internal refactoring in how card highlighting works. This should let me more easily handle more complex cases (like Mixtape) and should make it way easier to support showing related cards (like Tess and Contraband Stash) when not using the Modern Tracker UI.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
