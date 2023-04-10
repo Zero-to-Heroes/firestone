@@ -11,11 +11,7 @@ import { GameEvent } from '../../../../models/game-event';
 	],
 	template: `
 		<div class="control-bar">
-			<i class="logo">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#decktracker_logo" />
-				</svg>
-			</i>
+			<div class="logo" inlineSVG="assets/svg/decktracker_logo.svg"></div>
 			<div class="controls">
 				<control-bug></control-bug>
 				<control-settings [settingsApp]="'mercenaries'" [shouldMoveSettingsWindow]="false"> </control-settings>

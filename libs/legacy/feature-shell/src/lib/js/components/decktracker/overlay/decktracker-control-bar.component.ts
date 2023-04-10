@@ -10,11 +10,7 @@ import { GameEvent } from '../../../models/game-event';
 	],
 	template: `
 		<div class="control-bar">
-			<i class="logo">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#decktracker_logo" />
-				</svg>
-			</i>
+			<div class="logo" inlineSVG="assets/svg/decktracker_logo.svg"></div>
 			<div class="controls">
 				<control-bug></control-bug>
 				<control-settings
@@ -23,14 +19,7 @@ import { GameEvent } from '../../../models/game-event';
 					[shouldMoveSettingsWindow]="false"
 				>
 				</control-settings>
-				<button (mousedown)="minimize()">
-					<svg class="svg-icon-fill">
-						<use
-							xmlns:xlink="https://www.w3.org/1999/xlink"
-							xlink:href="assets/svg/sprite.svg#window-control_minimize"
-						></use>
-					</svg>
-				</button>
+				<button (mousedown)="minimize()" inlineSVG="assets/svg/control_minimize.svg"></button>
 				<control-close [eventProvider]="closeHandler" [askConfirmation]="true"></control-close>
 			</div>
 		</div>

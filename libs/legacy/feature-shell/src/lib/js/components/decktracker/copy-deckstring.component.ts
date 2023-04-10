@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import { allDuelsSignatureTreasures, CardClass, CardIds } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 declare let amplitude;
@@ -17,11 +16,8 @@ declare let amplitude;
 			(mousedown)="copyDeckstring()"
 			[helpTooltip]="showTooltip ? copyText : null"
 			[bindTooltipToGameWindow]="showTooltip ? true : null"
+			inlineSVG="assets/svg/copy.svg"
 		>
-			<svg class="svg-icon-fill">
-				<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
-			</svg>
-
 			<div class="message" *ngIf="!showTooltip || title">{{ copyText || title }}</div>
 		</div>
 	`,

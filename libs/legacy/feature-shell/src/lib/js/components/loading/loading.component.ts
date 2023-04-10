@@ -29,14 +29,11 @@ declare let amplitude: any;
 					<control-settings></control-settings>
 					<control-discord></control-discord>
 					<control-website></control-website>
-					<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
-						<svg class="svg-icon-fill">
-							<use
-								xmlns:xlink="https://www.w3.org/1999/xlink"
-								xlink:href="assets/svg/sprite.svg#window-control_minimize"
-							></use>
-						</svg>
-					</button>
+					<button
+						class="i-30 pink-button"
+						(mousedown)="minimizeWindow()"
+						inlineSVG="assets/svg/control_minimize.svg"
+					></button>
 					<button class="i-30 close-button" (mousedown)="closeWindow()">
 						<svg class="svg-icon-fill">
 							<use

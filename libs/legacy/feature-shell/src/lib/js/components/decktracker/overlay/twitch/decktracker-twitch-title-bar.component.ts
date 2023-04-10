@@ -9,33 +9,23 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 	],
 	template: `
 		<div class="control-bar">
-			<i class="logo">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#decktracker_logo" />
-				</svg>
-			</i>
-			<i
+			<div class="logo" inlineSVG="assets/svg/decktracker_logo.svg"></div>
+			<div
 				*ngIf="deckState?.deckstring"
 				class="copy-deckstring"
 				(mousedown)="copyDeckstring()"
 				(mouseenter)="onMouseEnter()"
 				(mouseleave)="onMouseLeave()"
 				helpTooltip="Copy the current deck code to the clipboard"
-			>
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
-				</svg>
-			</i>
+				inlineSVG="assets/svg/copy.svg"
+			></div>
 			<div class="copy-text" [ngClass]="{ copied: copied }">{{ copyText }}</div>
 			<button
 				class="i-30 close-button"
 				(mousedown)="closeWindow()"
 				helpTooltip="Minimize the tracker. You can reactivate it with the Extension Settings button at the bottom"
-			>
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#window-control_minimize"></use>
-				</svg>
-			</button>
+				inlineSVG="assets/svg/control_minimize.svg"
+			></button>
 		</div>
 		<textarea readonly class="deckstring-code" *ngIf="shouldShowDeckstring" (mousedown)="stopBubbling($event)"
 			>{{ this.deckState.deckstring }} 

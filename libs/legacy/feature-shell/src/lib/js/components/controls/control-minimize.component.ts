@@ -12,14 +12,11 @@ declare let amplitude;
 		`../../../css/component/controls/control-minimize.component.scss`,
 	],
 	template: `
-		<button (mousedown)="minimizeWindow()" [attr.aria-label]="'Minimize app'">
-			<svg class="svg-icon-fill">
-				<use
-					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="assets/svg/sprite.svg#window-control_minimize"
-				></use>
-			</svg>
-		</button>
+		<button
+			(mousedown)="minimizeWindow()"
+			[attr.aria-label]="'Minimize app'"
+			inlineSVG="assets/svg/control_minimize.svg"
+		></button>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
