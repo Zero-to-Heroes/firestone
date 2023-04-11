@@ -17,7 +17,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<label class="search-label">
 				<div
 					class="icon"
-					inlineSVG="assets/svg/sprite.svg#search"
+					inlineSVG="assets/svg/search.svg"
 					[helpTooltip]="'app.decktracker.filters.deck-search.tooltip' | owTranslate"
 				></div>
 				<input

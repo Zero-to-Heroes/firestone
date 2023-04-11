@@ -19,6 +19,7 @@ import { GameState } from '../../../../models/decktracker/game-state';
 import { Preferences } from '../../../../models/preferences';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
+import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 
@@ -221,7 +222,7 @@ export class DeckTrackerOverlayContainerComponent
 		// TODO: use prefs
 		await this.translate.use('enUS').toPromise();
 		this.gameState = fakeState as any;
-		// this.bgsState = fakeBgsState as any;
+		this.bgsState = fakeBgsState as any;
 		this.showDecktracker =
 			!!this.gameState &&
 			!this.bgsState?.inGame &&

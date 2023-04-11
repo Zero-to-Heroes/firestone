@@ -25,11 +25,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			(keyup)="onValidateSearch($event, value.searchString)"
 		>
 			<label class="search-label" [ngClass]="{ 'search-active': value.searchString }">
-				<i class="i-30" [helpTooltip]="tooltip">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#search" />
-					</svg>
-				</i>
+				<i class="i-30" [helpTooltip]="tooltip" inlineSVG="assets/svg/search.svg"> </i>
 				<input
 					[formControl]="searchForm"
 					(keypress)="filterKeyPress($event)"

@@ -19,11 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	template: `
 		<div class="mercenaries-hero-search">
 			<label class="search-label">
-				<i class="i-30">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#search" />
-					</svg>
-				</i>
+				<i class="i-30" inlineSVG="assets/svg/search.svg"> </i>
 				<input
 					[formControl]="searchForm"
 					(mousedown)="onMouseDown($event)"

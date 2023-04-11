@@ -32,13 +32,12 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 				>
 				</leaderboard-empty-card>
 				<div class="players-recap-icon" [ngClass]="{ inversed: magnifierIconOnTop$ | async }">
-					<svg
-						class="svg-icon-fill icon"
+					<div
+						class="icon"
 						(mouseenter)="toggleLiveInfo(true)"
 						(mouseleave)="toggleLiveInfo(false)"
-					>
-						<use xlink:href="assets/svg/sprite.svg#search" />
-					</svg>
+						inlineSVG="assets/svg/search.svg"
+					></div>
 				</div>
 			</ul>
 			<ul class="hero top-hero">

@@ -36,6 +36,11 @@ empty-card {
 		color: var(--color-2);
 		background-color: var(--color-5);
 		clip-path: circle(20px at 50% 50%);
+
+		::ng-deep svg {
+			width: 100%;
+			height: 100%;
+		}
 	}
 
 	&.inversed {
