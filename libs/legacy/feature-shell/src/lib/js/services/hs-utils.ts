@@ -599,7 +599,7 @@ const publicCardGiftCreators = [
 	CardIds.Paparazzi,
 	CardIds.PeacefulPiper,
 	CardIds.Peon_BAR_022,
-	CardIds.PhotographerFizzle,
+	// CardIds.PhotographerFizzle,
 	CardIds.PhotographerFizzle_FizzlesSnapshotToken,
 	CardIds.PilferLegacy,
 	CardIds.PlantedEvidence,
