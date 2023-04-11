@@ -10,6 +10,7 @@
 .related-cards-wrapper {
 	// min-width: 450px;
 	display: flex;
+	flex-shrink: 0;
 
 	&.left {
 		order: -1;
@@ -66,6 +67,7 @@
 	height: auto; // forcing height will wreak havoc if the card is not exactly at the right dimensions
 	min-height: 400px;
 	pointer-events: none;
+	flex-shrink: 0;
 
 	&:not(:first-child) {
 		margin-left: -35px;
