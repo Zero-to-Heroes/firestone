@@ -11,11 +11,11 @@ import {
 	Race,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { share, startWith } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
@@ -39,7 +39,8 @@ export const DEFAULT_CARD_HEIGHT = 221;
 				*ngIf="{
 					allowedCards: allowedCards$ | async,
 					activeCards: activeCards$ | async,
-					showRelatedCards: showRelatedCards$ | async
+					showRelatedCards: showRelatedCards$ | async,
+					deckstring: deckstring$ | async
 				} as value"
 			>
 				<div class="decklist-container">
@@ -60,7 +61,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							/>
 						</label>
 					</div>
-					<dk-runes [deckstring]="deckstring$ | async" (dkRunes)="onDkRunesChanged($event)"></dk-runes>
+					<dk-runes [deckstring]="value.deckstring" (dkRunes)="onDkRunesChanged($event)"></dk-runes>
 					<deck-list
 						class="deck-list"
 						[cards]="currentDeckCards$ | async"
@@ -72,16 +73,16 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						<copy-deckstring
 							class="copy-deckcode"
 							*ngIf="exportValue.valid"
-							[deckstring]="deckstring$ | async"
+							[deckstring]="value.deckstring"
 							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
 						>
 						</copy-deckstring>
-						<ng-container *ngIf="deckstring$ | async as deckstring">
+						<ng-container *ngIf="value.deckstring">
 							<button
 								class="save-deckcode"
 								*ngIf="exportValue.valid"
 								[helpTooltip]="'app.duels.deckbuilder.save-deckcode-button-tooltip' | owTranslate"
-								(click)="saveDeck(deckstring)"
+								(click)="saveDeck(value.deckstring)"
 							>
 								{{ saveDeckcodeButtonLabel }}
 							</button></ng-container
@@ -348,9 +349,9 @@ export class ConstructedDeckbuilderCardsComponent
 					heroes: [heroDbfId],
 				};
 				const deckstring = encode(deckDefinition);
+				console.debug('built deckstring', deckstring, deckDefinition, currentClass, heroDbfId);
 				return deckstring;
 			}),
-			share(),
 		);
 		this.ongoingText$ = combineLatest([this.currentDeckCards$, this.maxCardsInDeck$]).pipe(
 			this.mapData(([cards, maxCards]) =>

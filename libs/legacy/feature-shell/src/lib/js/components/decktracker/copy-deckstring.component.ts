@@ -16,8 +16,8 @@ declare let amplitude;
 			(mousedown)="copyDeckstring()"
 			[helpTooltip]="showTooltip ? copyText : null"
 			[bindTooltipToGameWindow]="showTooltip ? true : null"
-			inlineSVG="assets/svg/copy.svg"
 		>
+			<div class="icon" inlineSVG="assets/svg/copy.svg"></div>
 			<div class="message" *ngIf="!showTooltip || title">{{ copyText || title }}</div>
 		</div>
 	`,
@@ -31,11 +31,13 @@ export class CopyDesckstringComponent {
 
 	@Input() set deckstring(value: string) {
 		this._deckstring = value;
+		console.debug('set deckstring', value);
 		if (!!value) {
 			try {
 				const deckDefinition = decode(value);
 				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
 				this.normalizedDeckstring = encode(updatedDeckDefinition);
+				console.debug('deckDefinition', deckDefinition, updatedDeckDefinition, this.normalizedDeckstring);
 			} catch (e) {
 				console.error('could not decode deckstring', value, e);
 			}
