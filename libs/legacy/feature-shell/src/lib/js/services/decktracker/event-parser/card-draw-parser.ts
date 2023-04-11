@@ -1,4 +1,4 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -84,7 +84,7 @@ export class CardDrawParser implements EventParser {
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
 			gameEvent.additionalData?.lastInfluencedByCardId,
 		);
-		const isTradable = !!this.allCards.getCard(updatedCardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
+		// const isTradable = !!this.allCards.getCard(updatedCardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
 		// console.debug('drawing from deck', isTradable, this.allCards.getCard(updatedCardId));
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
@@ -109,17 +109,19 @@ export class CardDrawParser implements EventParser {
 			// (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
 			// This field is only used to flag "created by", so we should be fine even with tradeable cards
 			publicCardCreators.includes(lastInfluencedByCardId);
-		// console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic);
+		// console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic, isCreatorPublic);
 
+		// When the card should be known (created on top of deck) by we don't know the details (eg Merch Seller, or Dredge),
+		// we still want to surface the information we know
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
 		const cardWithCreator = card.update({
 			entityId: entityId,
-			creatorCardId: isCreatorPublic ? creatorCardId : undefined,
+			creatorCardId: isCreatorPublic ? creatorCardId ?? card.creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
-			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) : undefined,
-			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
-			manaCost: isCardInfoPublic ? card.manaCost : null,
-			rarity: isCardInfoPublic ? card.rarity : null,
+			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) ?? card?.cardName : undefined,
+			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId ?? card.lastAffectedByCardId : undefined,
+			manaCost: isCardInfoPublic ? card.manaCost ?? card.manaCost : null,
+			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 		} as DeckCard);
 		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;

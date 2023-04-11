@@ -1,6 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -38,6 +38,7 @@ export class CreateCardInDeckParser implements EventParser {
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
 		);
+		const positionFromTop = buildPositionFromTop(deck, gameEvent.additionalData.creatorCardId);
 		// console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
 		const creatorEntityId =
@@ -70,6 +71,7 @@ export class CreateCardInDeckParser implements EventParser {
 			creatorCardId: gameEvent.additionalData.creatorCardId,
 			mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 			positionFromBottom: positionFromBottom,
+			positionFromTop: positionFromTop,
 			createdByJoust: createdByJoust,
 		} as DeckCard);
 		// console.debug('[create-card-in-deck]', 'adding card', card);
@@ -124,6 +126,14 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
 		case CardIds.Bottomfeeder:
 			return DeckCard.deckIndexFromBottom++;
+	}
+	return undefined;
+};
+
+export const buildPositionFromTop = (deck: DeckState, creatorCardId: string): number => {
+	switch (creatorCardId) {
+		case CardIds.MerchSeller:
+			return 0;
 	}
 	return undefined;
 };
