@@ -7,4 +7,5 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.GrandMagisterRommath,
 	CardIds.HighCultistBasaleph,
 	CardIds.SouleatersScythe_BoundSoulToken,
+	CardIds.Mixtape,
 ];
