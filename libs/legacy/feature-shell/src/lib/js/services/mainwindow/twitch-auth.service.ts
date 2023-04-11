@@ -236,18 +236,18 @@ export class TwitchAuthService {
 		delete newCard.dormant;
 		delete newCard.rarity;
 		delete newCard.playTiming;
-		if (!newCard.relatedCardIds?.length) {
-			delete newCard.relatedCardIds;
-		}
-		if (!newCard.linkedEntityIds?.length) {
-			delete newCard.linkedEntityIds;
-		}
-		if (!newCard.creatorCardId?.length) {
-			delete newCard.creatorCardId;
-		}
-		if (!newCard.lastAffectedByCardId?.length) {
-			delete newCard.lastAffectedByCardId;
-		}
+		// if (!newCard.relatedCardIds?.length) {
+		// 	delete newCard.relatedCardIds;
+		// }
+		// if (!newCard.linkedEntityIds?.length) {
+		// 	delete newCard.linkedEntityIds;
+		// }
+		// if (!newCard.creatorCardId?.length) {
+		// 	delete newCard.creatorCardId;
+		// }
+		// if (!newCard.lastAffectedByCardId?.length) {
+		// 	delete newCard.lastAffectedByCardId;
+		// }
 
 		return newCard as DeckCard;
 	}

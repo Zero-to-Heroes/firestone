@@ -62,7 +62,7 @@ export class DeckTrackerOverlayStandaloneComponent
 {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
-	@Input('gameState') gameState: GameState;
+	@Input() gameState: GameState;
 
 	showRelatedCards$ = new Observable<boolean>();
 

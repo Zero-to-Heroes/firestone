@@ -11,10 +11,12 @@ import {
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
+import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-state';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { from, Observable } from 'rxjs';
+import { DeckCard } from '../../../../models/decktracker/deck-card';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Preferences } from '../../../../models/preferences';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
@@ -196,7 +198,7 @@ export class DeckTrackerOverlayContainerComponent
 		this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
 		this.streamerPrefs = event.streamerPrefs;
 		// console.log('bgsBattleState', this.bgsBattleState, this.bgsState);
-		this.gameState = event?.deck;
+		this.gameState = this.enrichGameState(event?.deck);
 		this.showDecktracker =
 			!!this.gameState &&
 			!this.bgsState?.inGame &&
@@ -210,6 +212,42 @@ export class DeckTrackerOverlayContainerComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private enrichGameState(gameState: GameState): GameState {
+		return GameState.create({
+			...gameState,
+			playerDeck: this.enrichDeck(gameState.playerDeck),
+			opponentDeck: this.enrichDeck(gameState.opponentDeck),
+		});
+	}
+
+	private enrichDeck(playerDeck: DeckState): DeckState {
+		return DeckState.create({
+			board: this.enrichCards(playerDeck.board),
+			deck: this.enrichCards(playerDeck.deck),
+			deckList: this.enrichCards(playerDeck.deckList),
+			hand: this.enrichCards(playerDeck.hand),
+			otherZone: this.enrichCards(playerDeck.otherZone),
+			heroPower: this.enrichCard(playerDeck.heroPower),
+			weapon: this.enrichCard(playerDeck.weapon),
+		});
+	}
+
+	private enrichCards(source: readonly DeckCard[]): readonly DeckCard[] {
+		return (source ?? []).map((c) => this.enrichCard(c));
+	}
+
+	private enrichCard(source: DeckCard): DeckCard {
+		if (!source) {
+			return null;
+		}
+		const card = !!source.cardId ? this.allCards.getCard(source.cardId) : null;
+		return DeckCard.create({
+			...source,
+			cardName: card?.name,
+			rarity: card?.rarity,
+		});
 	}
 
 	private async addDebugGameState() {

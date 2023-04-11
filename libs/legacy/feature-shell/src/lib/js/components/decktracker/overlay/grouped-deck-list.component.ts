@@ -162,6 +162,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		showBottomCardsSeparately: boolean,
 		showGiftsSeparately: boolean,
 	) {
+		console.debug('building zone', deckState);
 		if (!deckState) {
 			return null;
 		}
@@ -208,6 +209,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						sortingFunction: zone.sortingFunction,
 					} as DeckZoneSection),
 			);
+		console.debug('zone', sections);
 		return {
 			id: 'single-zone',
 			name: undefined,
@@ -255,39 +257,42 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 				// How to handle discarded cards? They should probably be handled in the same way as cards played in the "other" zone
 				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
 		];
+		console.debug('cardsToShowNotInDeck', cardsToShowNotInDeck);
 		const cardsToShow = [
 			...deck
 				// Remove "unknown cards"
 				.filter((c) => !!c.cardId || !!c.creatorCardId),
 			...cardsToShowNotInDeck,
 		];
+		console.debug('cardsToShow', cardsToShow);
 		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
+		console.debug('uniqueCardNames', uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
 				const refCard = cardsToShow.find((c) => c.cardName === cardName);
 				const cardsToShowWithName = cardsToShow.filter((c) => c.cardName === cardName);
 				const isInInitialDecklist = !!deckState.deckList.find((c) => c.cardName === cardName);
-				// console.debug(
-				// 	'isInInitialDecklist',
-				// 	cardName,
-				// 	isInInitialDecklist,
-				// 	deckState.deckList,
-				// 	refCard,
-				// 	this.allCards.getCard(refCard.cardId),
-				// );
+				console.debug(
+					'isInInitialDecklist',
+					cardName,
+					isInInitialDecklist,
+					deckState.deckList,
+					refCard,
+					this.allCards.getCard(refCard.cardId),
+				);
 				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
 				const creatorCardIds = cardsToShowWithName.map((c) => c.creatorCardId).filter((id) => !!id);
 				const shouldShowGiftLine = !hideGeneratedCardsInOtherZone && !!creatorCardIds.length;
 				const shouldShowDeckLine = isInInitialDecklist || quantityInDeck > 0;
 				const result: VisualDeckCard[] = [];
-				// console.debug(
-				// 	'lines to show',
-				// 	shouldShowDeckLine,
-				// 	shouldShowGiftLine,
-				// 	isInInitialDecklist,
-				// 	quantityInDeck,
-				// 	cardsToShowWithName.filter((c) => !c?.creatorCardId),
-				// );
+				console.debug(
+					'lines to show',
+					shouldShowDeckLine,
+					shouldShowGiftLine,
+					isInInitialDecklist,
+					quantityInDeck,
+					cardsToShowWithName.filter((c) => !c?.creatorCardId),
+				);
 
 				if (shouldShowDeckLine) {
 					const displayMode = !quantityInDeck ? 'dim' : null;
@@ -309,7 +314,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 							}),
 						),
 					);
-					// console.debug('after shouldShowDeckLine', result);
+					console.debug('after shouldShowDeckLine', result);
 				}
 				if (shouldShowGiftLine) {
 					const otherCreatorCardIds = cardsToShowNotInDeck

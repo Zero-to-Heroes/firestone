@@ -47,7 +47,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				<!-- <div class="list-background"></div> -->
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
-					[deckState]="_deckState"
+					[deckState]="deckState$ | async"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
 					[showUnknownCards]="showUnknownCards"
@@ -67,7 +67,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</deck-list-by-zone>
 				<grouped-deck-list
 					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
-					[deckState]="_deckState"
+					[deckState]="deckState$ | async"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
 					[showUnknownCards]="showUnknownCards"
@@ -95,6 +95,7 @@ export class DeckTrackerDeckListComponent
 	implements AfterContentInit, OnDestroy
 {
 	deckstring$: Observable<string>;
+	deckState$: Observable<DeckState>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
@@ -120,13 +121,14 @@ export class DeckTrackerDeckListComponent
 		this._tooltipPosition = value;
 	}
 	@Input() set deckState(deckState: DeckState) {
-		this._deckState = deckState;
+		// this._deckState = deckState;
 		this.deckState$$.next(deckState);
+		console.debug('setting deckstate', this.deckState$$.value);
 		this.refreshScroll();
 	}
 
 	_tooltipPosition: CardTooltipPositionType;
-	_deckState: DeckState;
+	// _deckState: DeckState;
 	isScroll: boolean;
 
 	private sub$$: Subscription;
@@ -146,6 +148,7 @@ export class DeckTrackerDeckListComponent
 			?.listenPrefs$((prefs) => prefs.decktrackerScale)
 			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => this.refreshScroll());
+		this.deckState$ = this.deckState$$.asObservable();
 		this.deckstring$ = this.deckState$$.asObservable().pipe(
 			this.mapData((deckState) => {
 				if (deckState.deckstring) {
