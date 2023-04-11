@@ -2,17 +2,10 @@ import { ReferenceSet } from '../../models/collection/reference-set';
 
 export const standardSets: readonly string[] = [
 	'core',
-	'wailing_caverns',
-	'the_barrens',
-	'stormwind',
-	'deadmines',
-	'alterac_valley',
-	'onyxias_lair',
 	'the_sunken_city',
 	'throne_of_tides',
 	'revendreth',
 	'maw_and_disorder',
-	'icecrown',
 	'return_of_the_lich_king',
 	'path_of_arthas',
 	'return_to_naxxramas',
