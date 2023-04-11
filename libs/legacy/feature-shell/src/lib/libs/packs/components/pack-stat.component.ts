@@ -10,6 +10,7 @@ import { PackStatTooltipComponent } from './pack-stat-tooltip.component';
 		<div
 			class="pack-stat"
 			[ngClass]="{ missing: !totalObtained }"
+			[attr.aria-label]="name"
 			componentTooltip
 			[componentType]="componentType"
 			[componentInput]="_pack"
