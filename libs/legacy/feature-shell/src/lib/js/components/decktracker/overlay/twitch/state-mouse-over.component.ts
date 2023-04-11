@@ -28,6 +28,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByLeaderboard"
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="currentTurn"
+					[config]="_bgsState.config"
 					[showLiveInfo]="showLiveInfo$ | async"
 				>
 				</leaderboard-empty-card>

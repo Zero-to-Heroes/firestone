@@ -14,6 +14,13 @@ export interface TwitchBgsState {
 	readonly currentBattle?: TwitchBgsCurrentBattle;
 	readonly availableRaces: readonly Race[];
 	readonly phase: 'recruit' | 'combat';
+	readonly config: TwitchBgsStateConfig;
+}
+
+export interface TwitchBgsStateConfig {
+	readonly hasBuddies: boolean;
+	readonly hasQuests: boolean;
+	readonly hasPrizes: boolean;
 }
 
 export interface TwitchBgsCurrentBattle {

@@ -38,6 +38,13 @@
 				position: relative;
 				top: 0.3vh;
 
+				&.buddy {
+					height: 6vh;
+					top: 0.4vh;
+					margin-right: -1vh;
+					width: 6vh;
+				}
+
 				&.tavern {
 					top: 0.8vh;
 				}

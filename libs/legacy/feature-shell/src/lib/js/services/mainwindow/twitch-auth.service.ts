@@ -170,6 +170,11 @@ export class TwitchAuthService {
 					gameEnded: bgsState.currentGame?.gameEnded,
 					availableRaces: bgsState.currentGame?.availableRaces,
 					phase: bgsState.currentGame?.phase,
+					config: {
+						hasBuddies: bgsState.currentGame?.hasBuddies,
+						hasPrizes: bgsState.currentGame?.hasPrizes,
+						hasQuests: bgsState.currentGame?.hasQuests,
+					},
 			  }
 			: null;
 

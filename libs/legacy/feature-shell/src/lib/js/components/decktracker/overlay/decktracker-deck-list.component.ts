@@ -123,7 +123,7 @@ export class DeckTrackerDeckListComponent
 	@Input() set deckState(deckState: DeckState) {
 		// this._deckState = deckState;
 		this.deckState$$.next(deckState);
-		console.debug('setting deckstate', this.deckState$$.value);
+		// console.debug('setting deckstate', this.deckState$$.value);
 		this.refreshScroll();
 	}
 

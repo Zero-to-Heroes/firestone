@@ -6,7 +6,7 @@ import { fromJS } from 'immutable';
 import { BgsPlayer, QuestReward } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { TwitchBgsHeroOverviewComponent } from './twitch-bgs-hero-overview.component';
-import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
+import { TwitchBgsBoard, TwitchBgsPlayer, TwitchBgsStateConfig } from './twitch-bgs-state';
 
 @Component({
 	selector: 'leaderboard-empty-card',
@@ -32,6 +32,9 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 				[tribeCount]="tribeCount"
 				[damage]="damage"
 				[questRewards]="questRewards"
+				[buddiesEnabled]="_config?.hasBuddies"
+				[buddyImage]="buddyImage"
+				[buddyClass]="buddyClass"
 			></bgs-hero-short-recap>
 		</div>
 	`,
@@ -62,15 +65,24 @@ export class LeaderboardEmptyCardComponent {
 		this.updateInfo();
 	}
 
+	@Input() set config(value: TwitchBgsStateConfig) {
+		this._config = value;
+		this.updateInfo();
+	}
+
 	_bgsPlayer: {
 		player: BgsPlayer;
 		currentTurn: number;
 		showLogo: boolean;
+		config: {
+			hasBuddies: boolean;
+		};
 	};
 
 	_previousPlayer: TwitchBgsPlayer | BgsPlayer;
 	_currentTurn: number;
 	_showLiveInfo: boolean;
+	_config: TwitchBgsStateConfig;
 	tavernTier: number;
 	triples: number;
 	winStreak: number;
@@ -78,6 +90,9 @@ export class LeaderboardEmptyCardComponent {
 	tribeCount: number;
 	damage: number;
 	questRewards: readonly QuestReward[];
+
+	buddyImage: string;
+	buddyClass: string;
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
@@ -99,6 +114,9 @@ export class LeaderboardEmptyCardComponent {
 				questRewards: this._previousPlayer.questRewards,
 				buddyTurns: this._previousPlayer.buddyTurns,
 			} as BgsPlayer),
+			config: {
+				hasBuddies: this._config?.hasBuddies,
+			},
 			currentTurn: this._currentTurn,
 			showLogo: false,
 		};
@@ -120,6 +138,13 @@ export class LeaderboardEmptyCardComponent {
 		if (this.winStreak === 0 && this.damage > 0) {
 			this.damage = -this.damage;
 		}
+
+		const buddyImageRoot = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images`;
+		this.buddyImage =
+			this._previousPlayer.buddyTurns.length > 1
+				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
+				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
+		this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
 	}
 
 	private extractBoardHistory(): readonly BgsBoard[] {

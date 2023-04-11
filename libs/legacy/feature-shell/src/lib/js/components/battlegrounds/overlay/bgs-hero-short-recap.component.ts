@@ -7,7 +7,7 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 	template: `
 		<div class="short-recap">
 			<tavern-level-icon [level]="tavernTier" class="element tavern" *ngIf="tavernTier"></tavern-level-icon>
-			<div class="buddy {{ buddyClass }}" *ngIf="buddiesEnabled">
+			<div class="element buddy {{ buddyClass }}" *ngIf="buddiesEnabled">
 				<img class="icon" [src]="buddyImage" />
 			</div>
 			<div class="element triples">
