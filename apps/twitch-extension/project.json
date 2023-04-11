@@ -22,6 +22,11 @@
 						"output": "./assets"
 					}
 				],
+				"sourceMap": {
+					"scripts": true,
+					"styles": true,
+					"vendor": true
+				},
 				"styles": ["apps/twitch-extension/src/styles.scss"],
 				"scripts": []
 			},
@@ -50,7 +55,7 @@
 					"namedChunks": true
 				}
 			},
-			"defaultConfiguration": "production"
+			"defaultConfiguration": "development"
 		},
 		"serve": {
 			"executor": "@angular-devkit/build-angular:dev-server",
