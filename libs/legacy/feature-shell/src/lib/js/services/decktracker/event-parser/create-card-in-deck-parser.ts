@@ -59,22 +59,27 @@ export class CreateCardInDeckParser implements EventParser {
 		// );
 		// Because of Tome Tampering
 		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
-		// console.debug('[create-card-in-deck]', 'card added', card);
+		console.debug('[create-card-in-deck]', 'card added', card);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		const newCardId = cardId ?? card?.cardId;
-		card = (card ?? DeckCard.create()).update({
-			cardId: newCardId,
-			entityId: entityId,
-			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
-			manaCost: cardData ? cardData.cost : undefined,
-			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
-			creatorCardId: gameEvent.additionalData.creatorCardId,
-			mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
-			positionFromBottom: positionFromBottom,
-			positionFromTop: positionFromTop,
-			createdByJoust: createdByJoust,
-		} as DeckCard);
-		// console.debug('[create-card-in-deck]', 'adding card', card);
+		card = (card ?? DeckCard.create())
+			.update({
+				cardId: newCardId,
+				entityId: entityId,
+				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
+				manaCost: cardData ? cardData.cost : undefined,
+				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+				creatorCardId: gameEvent.additionalData.creatorCardId,
+				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
+				positionFromBottom: positionFromBottom,
+				positionFromTop: positionFromTop,
+				createdByJoust: createdByJoust,
+			} as DeckCard)
+			.update({
+				relatedCardIds: this.buildRelatedCardIds(newCardId, deck, card?.relatedCardIds),
+			});
+
+		console.debug('[create-card-in-deck]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
@@ -93,6 +98,23 @@ export class CreateCardInDeckParser implements EventParser {
 
 	event(): string {
 		return GameEvent.CREATE_CARD_IN_DECK;
+	}
+
+	private buildRelatedCardIds(
+		cardId: string,
+		deck: DeckState,
+		existingCardIds: readonly string[],
+	): readonly string[] {
+		switch (cardId) {
+			case CardIds.PhotographerFizzle_FizzlesSnapshotToken:
+				console.debug(
+					'setting related card ids',
+					deck.hand.map((c) => c.cardId),
+				);
+				return deck.hand.map((c) => c.cardId);
+			default:
+				return existingCardIds ?? [];
+		}
 	}
 
 	private buildCardName(card: any, creatorCardId: string): string {
