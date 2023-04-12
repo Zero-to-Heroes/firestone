@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "11.0.18",
+	"version": "11.0.20",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",

@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.17',
+		version: '11.0.19',
 		force: false,
 		sections: [
 			// {
@@ -74,7 +74,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'content',
-								text: `The tracker has been updated to show you known information in the opponent's hand for various cards like Power Chord: Synchronize, Fight Over Me, Fizzle's Snapshot, Merch Seller`,
+								text: `The tracker has been updated to show you known information in the opponent's hand for various cards like Power Chord: Synchronize, Fight Over Me, Fizzle's Snapshot, Merch Seller, Kangor Dancing King, Inifitize the Maxitude.`,
 							},
 							{
 								type: 'content',
@@ -91,11 +91,20 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Ghastcoiler could never spawn tribeless minions like Leeroy.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `When building a deck, buckets now won't show cards that are not eligible (e.g. different class).`,
 							},
 						],
 					},
