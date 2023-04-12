@@ -532,6 +532,7 @@ const publicCardGiftCreators = [
 	CardIds.Kalecgos_DAL_609,
 	CardIds.Kalecgos_Story_07_Kalecgos,
 	CardIds.KalecgosCore,
+	CardIds.KangorDancingKing,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
 	CardIds.KingMukla_CORE_EX1_014,
