@@ -3,14 +3,13 @@ import { FormControl } from '@angular/forms';
 import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { DuelsBucketsData } from '@models/duels/duels-state';
 import { FeatureFlags } from '@services/feature-flags';
 import { dustToCraftFor, normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { groupByFunction, sortByProperties, sumOnArray } from '@services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
@@ -238,17 +237,25 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 			)
 			.pipe(
 				this.mapData(([buckets, currentClasses]) => {
-					const candidateBuckets: readonly DuelsBucketsData[] = buckets.filter(
-						(bucket) =>
-							bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
-							bucket.bucketClasses.includes(CardClass.DEATHKNIGHT) ||
-							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
-					);
-					return candidateBuckets.map((bucket) => {
-						const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
-						const bucketCards = bucket.cards
+					// const candidateBuckets: readonly DuelsBucketsData[] = buckets.filter(
+					// 	(bucket) =>
+					// 		bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
+					// 		bucket.bucketClasses.includes(CardClass.DEATHKNIGHT) ||
+					// 		(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
+					// );
+					return buckets.map((bucket) => {
+						const cardsForClass = bucket.cards.filter((card) => {
+							const refCard = this.allCards.getCard(card.cardId);
+							return (
+								refCard.cardClass === CardClass[CardClass.NEUTRAL] ||
+								!refCard.cardClass ||
+								currentClasses.some((c: CardClass) => c === CardClass[refCard.cardClass])
+							);
+						});
+						const totalCardsOffered = sumOnArray(cardsForClass, (card) => card.totalOffered);
+						const bucketCards = cardsForClass
 							.map((card) => {
-								const totalBuckets = candidateBuckets.filter((b) =>
+								const totalBuckets = buckets.filter((b) =>
 									b.cards.map((c) => c.cardId).includes(card.cardId),
 								).length;
 								const refCard = this.allCards.getCard(card.cardId);
