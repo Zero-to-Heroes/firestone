@@ -16,11 +16,14 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	styleUrls: [`../../../css/component/collection/sets.component.scss`],
 	template: `
 		<div class="sets">
-			<filter
-				[filterOptions]="filterOptions"
-				[activeFilter]="activeFilter$ | async"
-				[filterChangeFunction]="filterChangeFunction"
-			></filter>
+			<div class="filters">
+				<filter
+					[filterOptions]="filterOptions"
+					[activeFilter]="activeFilter$ | async"
+					[filterChangeFunction]="filterChangeFunction"
+				></filter>
+				<card-search></card-search>
+			</div>
 			<sets-container [sets]="sets$ | async"></sets-container>
 		</div>
 	`,

@@ -23,6 +23,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 				<card-rarity-filter></card-rarity-filter>
 				<card-class-filter></card-class-filter>
 				<card-owned-filter></card-owned-filter>
+				<card-search></card-search>
 			</div>
 
 			<ng-container *ngIf="{ highRes: highRes$ | async } as highRes">

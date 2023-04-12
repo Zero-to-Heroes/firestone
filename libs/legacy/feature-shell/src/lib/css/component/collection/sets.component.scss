@@ -6,9 +6,23 @@
 	display: flex;
 	flex-direction: column;
 
-	filter {
+	.filters {
+		display: flex;
 		margin-bottom: 10px;
+	}
+
+	filter {
 		max-width: 200px;
+		margin-right: 15px;
+
+		::ng-deep ng-select {
+			width: 155px;
+		}
+	}
+
+	card-search {
+		position: relative;
+		top: 0.5px;
 	}
 
 	sets-container {

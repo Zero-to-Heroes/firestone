@@ -49,6 +49,11 @@
 			}
 		}
 
+		card-search {
+			position: relative;
+			top: 0.5px;
+		}
+
 		card-owned-filter ::ng-deep ng-select select-dropdown .below {
 			width: 300px !important;
 		}

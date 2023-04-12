@@ -62,12 +62,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				</with-loading>
 			</section>
 			<section class="secondary" *ngIf="!(showAds$ | async)">
-				<card-search
-					*ngIf="
-						value.currentView !== 'packs' &&
-						!isSetDetails(value.currentView, value.selectedSet, value.searchString)
-					"
-				></card-search>
 				<card-history
 					[selectedCard]="value.selectedCard"
 					*ngIf="
