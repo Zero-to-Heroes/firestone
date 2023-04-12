@@ -55,7 +55,12 @@ export class CardDrawParser implements EventParser {
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
 		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide].includes(gameEvent.additionalData.drawnByCardId);
 		const useBottomOfDeckToIdentifyCard =
-			!isPlayer && deck.deck.some((c) => c.positionFromBottom != null) && cardDrawnFromBottom;
+			!isPlayer &&
+			deck.deck.some(
+				(c) =>
+					c.positionFromBottom != null && c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId,
+			) &&
+			cardDrawnFromBottom;
 		// console.debug(
 		// 	'useTopOfDeckToIdentifyCard',
 		// 	useTopOfDeckToIdentifyCard,
@@ -67,7 +72,11 @@ export class CardDrawParser implements EventParser {
 		const card = useTopOfDeckToIdentifyCard
 			? [...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: useBottomOfDeckToIdentifyCard
-			? [...deck.deck].filter((c) => c.positionFromBottom != null).sort((c) => c.positionFromBottom)[0]
+			? [...deck.deck]
+					.filter((c) => c.positionFromBottom != null)
+					// Because Finley puts the cards at the bottom before drawing
+					.filter((c) => c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId)
+					.sort((c) => c.positionFromBottom)[0]
 			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 		// console.debug(
