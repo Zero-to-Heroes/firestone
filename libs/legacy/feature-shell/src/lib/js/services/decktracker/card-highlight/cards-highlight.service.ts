@@ -37,7 +37,6 @@ import {
 	effectiveCostLess,
 	effectiveCostLessThanRemainingMana,
 	effectiveCostMore,
-	excludeEntityId,
 	fel,
 	fire,
 	freeze,
@@ -562,7 +561,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FlameWavesTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.FleshBehemoth_RLK_830:
-				return and(side(inputSide), inDeck, minion, undead, excludeEntityId(card?.entityId));
+			case CardIds.FleshBehemoth_RLK_Prologue_RLK_830:
+				return and(side(inputSide), inDeck, minion, undead, not(cardIs(CardIds.FleshBehemoth_RLK_830)));
 			case CardIds.Flowrider:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.FossilFanatic:

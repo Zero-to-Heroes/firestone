@@ -710,6 +710,7 @@ const publicCardGiftCreators = [
 	CardIds.TheCandlesquestion_TheCandlesquestion_DALA_714a,
 	CardIds.TheCandlesquestion_TheCandlesquestion_DALA_714b,
 	CardIds.TheCountess,
+	CardIds.TheDemonSeed_CompleteTheRitualToken,
 	CardIds.TheForestsAid_DAL_256,
 	CardIds.TheLichKing_ICC_314,
 	CardIds.TheLobotomizer,
