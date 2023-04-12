@@ -5,12 +5,7 @@ import { InternalCardBack } from './internal-card-back';
 	selector: 'card-back',
 	styleUrls: [`../../../css/component/collection/card-back.component.scss`],
 	template: `
-		<div
-			class="card-back"
-			*ngIf="_cardBack"
-			[ngClass]="{ 'missing': !_cardBack.owned }"
-			[helpTooltip]="_cardBack.name"
-		>
+		<div class="card-back" *ngIf="_cardBack" [ngClass]="{ missing: !_cardBack.owned }" [helpTooltip]="tooltip">
 			<div class="perspective-wrapper" rotateOnMouseOver>
 				<img [src]="_cardBack.image + ''" />
 				<!-- <video
@@ -41,6 +36,13 @@ export class CardBackComponent {
 
 	@Input() set cardBack(value: InternalCardBack) {
 		this._cardBack = value;
+		if (this._cardBack) {
+			this.tooltip = `${this._cardBack.name}<br/>${this._cardBack.text
+				.replace('<i>', '')
+				.replace('</i>', '')
+				.replace('<b>', '')
+				.replace('</b>', '')}`;
+		}
 		if (this._cardBack && this.videoPlayerElement) {
 			this.videoPlayerElement.nativeElement.src = this._cardBack.animatedImage;
 			this.videoPlayerElement.nativeElement.load();
@@ -51,6 +53,7 @@ export class CardBackComponent {
 	@Input() alwaysOn: boolean;
 
 	_cardBack: InternalCardBack;
+	tooltip: string;
 
 	private videoPlayerElement: ElementRef;
 
