@@ -50,21 +50,21 @@ export const updates: readonly Update[] = [
 			// 	As usual, I'm open to feedback, so let me know what you think on Discord!
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'general',
-			// 			details: [
-			// 				{
-			// 					type: 'content',
-			// 					text: `Firestone has been updated for 26.0. Images of the new cards will be uploaded in the coming days.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `Firestone has been updated for Festival of Legends. There are still a few of the new cards that need some additional support, so expect another update soon.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -73,8 +73,29 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'content',
+								text: `The tracker has been updated to show you known information in the opponent's hand for various cards like Power Chord: Synchronize, Fight Over Me, Fizzle's Snapshot, Merch Seller`,
+							},
+							{
+								type: 'content',
+								text: `Card highlights added for Fizzle's Snapshot (when you play it) and Mixtape.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "copy deck" button wouldn't work in the Constructed Deckbuilder`,
+							},
+							{
 								type: 'misc',
 								text: `I have done a big internal refactoring in how card highlighting works. This should let me more easily handle more complex cases (like Mixtape) and should make it way easier to support showing related cards (like Tess and Contraband Stash) when not using the Modern Tracker UI.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Ghastcoiler could never spawn tribeless minions like Leeroy.`,
 							},
 						],
 					},
