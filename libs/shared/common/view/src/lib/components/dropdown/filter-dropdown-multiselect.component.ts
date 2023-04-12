@@ -26,11 +26,7 @@ import { distinctUntilChanged, filter } from 'rxjs/operators';
 		<div class="filter-dropdown-multiselect" [ngClass]="{ showing: showing }" *ngIf="_visible">
 			<div class="value" (click)="toggle()">
 				<div class="text" [innerHTML]="valueText$ | async"></div>
-				<div class="caret i-30">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#arrow" />
-					</svg>
-				</div>
+				<div class="caret" inlineSVG="assets/svg/arrow.svg"></div>
 			</div>
 			<div
 				class="options"
@@ -175,13 +171,14 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			return;
 		}
 		const paths: Array<HTMLElement> = $e['path'];
-		if (!paths.some((p) => p === this.el.nativeElement)) {
+		if (paths?.length && !paths.some((p) => p === this.el.nativeElement)) {
 			this.toggle();
 		}
 	}
 
 	toggle() {
 		this.showing = !this.showing;
+		console.debug('toggle', this.showing);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

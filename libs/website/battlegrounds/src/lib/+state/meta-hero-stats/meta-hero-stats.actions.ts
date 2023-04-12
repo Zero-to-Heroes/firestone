@@ -11,6 +11,7 @@ export const loadBgsMetaHeroStatsSuccess = createAction(
 		stats: readonly BgsMetaHeroStatTierItem[];
 		lastUpdateDate: Date;
 		mmrPercentiles: readonly MmrPercentile[];
+		allTribes: readonly Race[];
 	}>(),
 );
 
@@ -34,7 +35,7 @@ export const changeMetaHeroStatsPercentileFilter = createAction(
 );
 
 export const changeMetaHeroStatsTribesFilter = createAction(
-	'[BGS Meta Hero Stats] Changed percentile filter',
+	'[BGS Meta Hero Stats] Changed tribes filter',
 	props<{
 		currentTribesSelection: readonly Race[];
 	}>(),

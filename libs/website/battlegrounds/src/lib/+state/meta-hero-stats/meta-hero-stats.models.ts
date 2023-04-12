@@ -9,6 +9,7 @@ export interface MetaHeroStatsState {
 	stats?: readonly BgsMetaHeroStatTierItem[];
 	lastUpdateDate?: Date;
 	mmrPercentiles?: readonly MmrPercentile[];
+	allTribes: readonly Race[];
 
 	// TODO: move this to a "preferences" object that can be persisted in the localStorage
 	currentPercentileSelection: MmrPercentile['percentile'];

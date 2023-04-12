@@ -160,8 +160,9 @@ export const buildHeroStats = (
 				!overlyDominentTribes.length ||
 				!tribes?.length ||
 				overlyDominentTribes.every((t) => tribes.includes(t.tribe));
-			if (!isIn) {
-				console.debug('not in', stat.heroCardId, overlyDominentTribes, stat);
+			const debug = stat.heroCardId === CardIds.SylvanasWindrunner_BG23_HERO_306;
+			if (debug) {
+				console.debug('isIn', isIn, stat.heroCardId, overlyDominentTribes, stat);
 			}
 			return isIn;
 		})

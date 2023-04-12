@@ -20,10 +20,12 @@
 		display: flex;
 		align-items: center;
 		padding-left: 10px;
+		height: 100%;
 
 		.text {
 			flex-grow: 1;
 			overflow: hidden;
+			flex-shrink: 0;
 
 			::ng-deep {
 				.selection-icons {
@@ -41,7 +43,18 @@
 		}
 
 		.caret {
-			transition: 0.15s;
+			width: 30px;
+			height: 30px;
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			::ng-deep svg {
+				width: 35%;
+				height: 35%;
+				fill: currentColor;
+			}
 		}
 	}
 
@@ -63,6 +76,31 @@
 			flex-direction: column;
 			max-height: 500px;
 			overflow: scroll;
+
+			&::-webkit-scrollbar {
+				width: 5px;
+				height: 0; // Always hide horizontal scrollbars
+			}
+
+			&::-webkit-scrollbar-track {
+				display: none;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: var(--fs-scrollbar-thumb-color);
+			}
+
+			&::-webkit-scrollbar-thumb:hover {
+				background: var(--on-fs-scrollbar-thumb-color);
+			}
+
+			&::-webkit-scrollbar-button {
+				display: none;
+			}
+
+			&::-webkit-scrollbar-track-piece {
+				display: none;
+			}
 		}
 
 		.option {

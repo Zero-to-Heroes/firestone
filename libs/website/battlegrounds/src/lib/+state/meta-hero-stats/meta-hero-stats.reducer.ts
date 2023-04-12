@@ -1,3 +1,4 @@
+import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { LocalStorageService } from '@firestone/shared/framework/core';
 import { WebsitePreferencesService } from '@firestone/website/core';
 import { Action, createReducer, on } from '@ngrx/store';
@@ -16,6 +17,7 @@ const localPrefs = localPrefsService.getPreferences();
 
 export const initialMetaHeroStatsState: MetaHeroStatsState = {
 	loaded: false,
+	allTribes: ALL_BG_RACES,
 	currentPercentileSelection: localPrefs?.bgsActiveRankFilter ?? 100,
 	currentTimePeriodSelection: localPrefs?.bgsActiveTimeFilter ?? 'last-patch',
 	currentTribesSelection: localPrefs?.bgsActiveTribesFilter ?? [],

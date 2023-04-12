@@ -19,6 +19,8 @@ export const getMmrPercentiles = createSelector(
 	(state: MetaHeroStatsState) => state.mmrPercentiles ?? [],
 );
 
+export const getAllTribes = createSelector(getMetaHeroStatsState, (state: MetaHeroStatsState) => state.allTribes);
+
 export const getCurrentTimerFilter = createSelector(
 	getMetaHeroStatsState,
 	(state: MetaHeroStatsState) => state.currentTimePeriodSelection,

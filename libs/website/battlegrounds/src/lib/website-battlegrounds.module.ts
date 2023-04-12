@@ -10,12 +10,14 @@ import { MetaHeroStatsEffects } from './+state/meta-hero-stats/meta-hero-stats.e
 import * as fromWebsiteBattlegrounds from './+state/meta-hero-stats/meta-hero-stats.reducer';
 import { WebsiteBattlegroundsRankFilterDropdownComponent } from './website-battlegrounds-rank-filter-dropdown.component';
 import { WebsiteBattlegroundsTimeFilterDropdownComponent } from './website-battlegrounds-time-filter-dropdown.component';
+import { WebsiteBattlegroundsTribesFilterDropdownComponent } from './website-battlegrounds-tribes-filter-dropdown.component';
 import { WebsiteBattlegroundsComponent } from './website-battlegrounds.component';
 
 const components = [
 	WebsiteBattlegroundsComponent,
 	WebsiteBattlegroundsRankFilterDropdownComponent,
 	WebsiteBattlegroundsTimeFilterDropdownComponent,
+	WebsiteBattlegroundsTribesFilterDropdownComponent,
 ];
 
 @NgModule({

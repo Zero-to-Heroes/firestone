@@ -15,6 +15,9 @@ import { getAllMetaHeroStats } from './+state/meta-hero-stats/meta-hero-stats.se
 			<div class="filters">
 				<website-battlegrounds-rank-filter-dropdown class="filter"></website-battlegrounds-rank-filter-dropdown>
 				<website-battlegrounds-time-filter-dropdown class="filter"></website-battlegrounds-time-filter-dropdown>
+				<website-battlegrounds-tribes-filter-dropdown
+					class="filter"
+				></website-battlegrounds-tribes-filter-dropdown>
 			</div>
 
 			<battlegrounds-meta-stats-heroes-view

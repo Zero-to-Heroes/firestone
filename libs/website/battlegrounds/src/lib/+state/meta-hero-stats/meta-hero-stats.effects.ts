@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
+import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import {
 	BgsMetaHeroStatsAccessService,
 	BgsMetaHeroStatTierItem,
@@ -9,7 +11,7 @@ import { WebsitePreferences, WebsitePreferencesService } from '@firestone/websit
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 
-import { switchMap, tap, withLatestFrom } from 'rxjs';
+import { switchMap, withLatestFrom } from 'rxjs';
 import * as MetaHeroStatsActions from './meta-hero-stats.actions';
 import { MetaHeroStatsState } from './meta-hero-stats.models';
 import { getCurrentPercentileFilter, getCurrentTimerFilter, getCurrentTribesFilter } from './meta-hero-stats.selectors';
@@ -27,22 +29,19 @@ export class MetaHeroStatsEffects {
 	) {}
 
 	init$ = createEffect(() => {
-		console.debug('create init effect');
 		return this.actions$.pipe(
-			tap((e) => console.debug('in tap', e)),
 			ofType(MetaHeroStatsActions.initBgsMetaHeroStats),
-			tap((e) => console.debug('in tap 2', e)),
 			withLatestFrom(
 				this.store.select(getCurrentPercentileFilter),
 				this.store.select(getCurrentTimerFilter),
 				this.store.select(getCurrentTribesFilter),
 			),
 			switchMap(async ([action, percentileFilter, timeFilter, tribesFilter]) => {
-				console.debug('initBgsMetaHeroStats', action, percentileFilter);
+				console.debug('initBgsMetaHeroStats', action, percentileFilter, timeFilter, tribesFilter);
 				const mmrPercentile = percentileFilter;
 				const tribes = tribesFilter;
 				const timePeriod = timeFilter;
-				const apiResult = await this.access.loadMetaHeroStats(timePeriod);
+				const apiResult: BgsHeroStatsV2 = await this.access.loadMetaHeroStats(timePeriod);
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					apiResult?.heroStats ?? [],
 					mmrPercentile,
@@ -50,10 +49,12 @@ export class MetaHeroStatsEffects {
 					true,
 					this.allCards,
 				);
+				console.debug('result', result);
 				return MetaHeroStatsActions.loadBgsMetaHeroStatsSuccess({
 					stats: result,
 					lastUpdateDate: apiResult.lastUpdateDate,
 					mmrPercentiles: apiResult.mmrPercentiles,
+					allTribes: ALL_BG_RACES,
 				});
 			}),
 		);
@@ -85,6 +86,7 @@ export class MetaHeroStatsEffects {
 					...existingPrefs,
 					bgsActiveRankFilter: action.currentPercentileSelection,
 				};
+				console.debug('changing percentile filter', action);
 				await this.prefs.savePreferences(newPrefs);
 				return MetaHeroStatsActions.initBgsMetaHeroStats();
 			}),
