@@ -6,8 +6,8 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { allDuelsHeroes, CardIds } from '@firestone-hs/reference-data';
+import { MultiselectOption } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -28,7 +28,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
-			(onOptionSelected)="onSelected($event)"
+			(optionSelected)="onSelected($event)"
 		></filter-dropdown-multiselect>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

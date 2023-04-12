@@ -10,17 +10,18 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import {
+	AbstractSubscriptionComponent,
+	arraysEqual,
+	removeFromReadonlyArray,
+} from '@firestone/shared/framework/common';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual, removeFromReadonlyArray } from '../services/utils';
-import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	selector: 'filter-dropdown-multiselect',
-	styleUrls: [`../../css/component/filter-dropdown-multiselect.component.scss`],
+	styleUrls: [`./filter-dropdown-multiselect.component.scss`],
 	template: `
 		<div class="filter-dropdown-multiselect" [ngClass]="{ showing: showing }" *ngIf="_visible">
 			<div class="value" (click)="toggle()">
@@ -55,19 +56,19 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					<div
 						class="button clear"
 						(click)="clearSelection()"
-						[owTranslate]="'app.global.controls.multiselect-clear-button'"
+						[fsTranslate]="'app.global.controls.multiselect-clear-button'"
 					></div>
 					<div
 						class="button reset"
 						(click)="resetSelection()"
-						[owTranslate]="'app.global.controls.multiselect-reset-button'"
+						[fsTranslate]="'app.global.controls.multiselect-reset-button'"
 					></div>
 					<div
 						class="button apply"
 						[ngClass]="{ disabled: !value.validSelection }"
 						[helpTooltip]="buttonTooltip(value.validSelection)"
 						(click)="confirmSelection(value.validSelection)"
-						[owTranslate]="'app.global.controls.multiselect-validation-button'"
+						[fsTranslate]="'app.global.controls.multiselect-validation-button'"
 					></div>
 				</div>
 			</div>
@@ -75,8 +76,8 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStoreComponent implements OnDestroy {
-	@Output() onOptionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
+export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
+	@Output() optionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
 	@Input() set options(value: readonly MultiselectOption[]) {
@@ -96,9 +97,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 	}
 
 	@Input() validSelectionNumber: number;
-	@Input() validationErrorTooltip = this.i18n.translateString(
-		'app.global.controls.multiselect-validation-error-tooltip',
-	);
+	@Input() validationErrorTooltip: string;
 
 	valueText$: Observable<string>;
 	workingOptions$: Observable<readonly InternalOption[]>;
@@ -115,13 +114,8 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 
 	private sub$$: Subscription;
 
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly el: ElementRef,
-		private readonly i18n: LocalizationFacadeService,
-	) {
-		super(store, cdr);
+	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
+		super(cdr);
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
 		// the first time (maybe because of "visible"?)
 		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
@@ -170,7 +164,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
 		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
@@ -229,7 +223,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStor
 			return;
 		}
 		const value = this.tempSelected$.value;
-		this.onOptionSelected.next(value);
+		this.optionSelected.next(value);
 		this.toggle();
 	}
 

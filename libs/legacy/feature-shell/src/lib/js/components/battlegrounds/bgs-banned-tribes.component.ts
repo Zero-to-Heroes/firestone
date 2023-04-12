@@ -6,10 +6,9 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
+import { getTribeName, Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';

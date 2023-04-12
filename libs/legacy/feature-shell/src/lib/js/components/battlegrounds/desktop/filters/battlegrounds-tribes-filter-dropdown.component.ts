@@ -6,12 +6,10 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { Race } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { getTribeIcon, getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -22,16 +20,14 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	selector: 'battlegrounds-tribes-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<filter-dropdown-multiselect
-			*ngIf="filter$ | async as value"
+		<battlegrounds-tribes-filter-dropdown-view
 			class="battlegrounds-tribes-filter-dropdown"
-			[options]="options$ | async"
-			[selected]="value.selected"
-			[placeholder]="value.placeholder"
-			[visible]="value.visible"
+			[allTribes]="allTribes$ | async"
+			[currentFilter]="currentFilter$ | async"
+			[visible]="visible$ | async"
 			[validationErrorTooltip]="validationErrorTooltip"
-			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown-multiselect>
+			(valueSelected)="onSelected($event)"
+		></battlegrounds-tribes-filter-dropdown-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,8 +35,9 @@ export class BattlegroundsTribesFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	options$: Observable<readonly MultiselectOption[]>;
-	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
+	allTribes$: Observable<readonly Race[]>;
+	currentFilter$: Observable<readonly Race[]>;
+	visible$: Observable<boolean>;
 
 	validationErrorTooltip = this.i18n.translateString('app.battlegrounds.filters.tribe.validation-error-tooltip');
 
@@ -56,63 +53,34 @@ export class BattlegroundsTribesFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.options$ = this.store
+		this.allTribes$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
-			.pipe(
-				filter(([allTribes]) => !!allTribes?.length),
-				this.mapData(([allTribes]) => {
-					const result = allTribes
-						.map(
-							(tribe) =>
-								({
-									value: '' + tribe,
-									label: getTribeName(tribe, this.i18n),
-									image: getTribeIcon(tribe),
-								} as MultiselectOption),
-						)
-						.sort((a, b) => (a.label < b.label ? -1 : 1));
-					console.debug('options', result);
-					return result;
-				}),
-			);
-		this.filter$ = combineLatest([
-			this.options$,
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
-				([main, nav, prefs]) => main.battlegrounds.globalStats.allTribes,
+			.pipe(this.mapData(([allTribes]) => allTribes));
+		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveTribesFilter);
+		this.visible$ = this.store
+			.listen$(
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
-			),
-		]).pipe(
-			filter(
-				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
-					!!tribesFilter && !!allTribes?.length && !!categoryId && !!currentView,
-			),
-			this.mapData(([options, [tribesFilter, allTribes, categoryId, currentView]]) => {
-				const result = {
-					selected: !!tribesFilter?.length
-						? tribesFilter.map((tribe) => '' + tribe)
-						: allTribes.map((tribe) => '' + tribe),
-					placeholder: this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes'),
-					visible:
+			)
+			.pipe(
+				filter(([categoryId, currentView]) => !!categoryId && !!currentView),
+				this.mapData(
+					([categoryId, currentView]) =>
 						!['categories', 'category'].includes(currentView) &&
 						![
 							'bgs-category-personal-stats',
 							'bgs-category-simulator',
 							'bgs-category-personal-rating',
 						].includes(categoryId),
-				};
-				console.debug('dropdown config', result);
-				return result;
-			}),
-		);
+				),
+			);
 	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	onSelected(values: readonly string[]) {
+	onSelected(values: readonly Race[]) {
 		this.stateUpdater.next(new BgsTribesFilterSelectedEvent((values ?? []).map((value) => +value as Race)));
 	}
 }

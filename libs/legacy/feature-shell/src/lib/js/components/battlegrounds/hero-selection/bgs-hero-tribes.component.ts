@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 
 @Component({
 	selector: 'bgs-hero-tribes',

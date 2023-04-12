@@ -7,14 +7,11 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { uuid } from '../../services/utils';
+import { uuid } from '@firestone/shared/framework/common';
 
 @Component({
 	selector: 'checkbox',
-	styleUrls: [
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/checkbox.component.scss`,
-	],
+	styleUrls: [`./checkbox.component.scss`],
 	template: `
 		<div class="checkbox" [ngClass]="{ disabled: disabled }">
 			<input type="checkbox" name="checkbox-{{ uniqueId }}" id="checkbox-{{ uniqueId }}" />

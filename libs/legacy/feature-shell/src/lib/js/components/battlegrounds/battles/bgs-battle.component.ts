@@ -19,6 +19,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { removeFromReadonlyArray } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -30,7 +31,7 @@ import { BgsBattlePositioningService } from '../../../services/battlegrounds/bgs
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { removeFromReadonlyArray, replaceInArray } from '../../../services/utils';
+import { replaceInArray } from '../../../services/utils';
 import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
 import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';

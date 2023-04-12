@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../../models/duels/run-step';
-import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
@@ -16,6 +16,7 @@ import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';
 
 declare let amplitude;
+
 @Component({
 	selector: 'replay-info-battlegrounds',
 	styleUrls: [

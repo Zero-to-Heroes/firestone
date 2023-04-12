@@ -89,6 +89,14 @@ export const capitalizeFirstLetter = (input: string): string | null => {
 	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
 };
 
+export const removeFromReadonlyArray = <T>(array: readonly T[], index: number): T[] => {
+	const ret = array.slice(0);
+	if (index > -1) {
+		ret.splice(index, 1);
+	}
+	return ret;
+};
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];

@@ -588,7 +588,6 @@ import { DeckTrackerWinrateRecapComponent } from './js/components/decktracker/ov
 import { GroupedDeckListComponent } from './js/components/decktracker/overlay/grouped-deck-list.component';
 import { LeaderboardEmptyCardComponent } from './js/components/decktracker/overlay/twitch/leaderboard-empty-card.component';
 import { TwitchBgsHeroOverviewComponent } from './js/components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
-import { FilterDropdownMultiselectComponent } from './js/components/filter-dropdown-multiselect.component';
 import { FilterComponent } from './js/components/filter.component';
 import { FsFilterDropdownComponent } from './js/components/fs-filter-dropdown.component';
 import { HotkeyComponent } from './js/components/hotkey.component';
@@ -598,7 +597,6 @@ import { SecondaryDefaultComponent } from './js/components/main-window/secondary
 import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
 import { ProgressBarComponent } from './js/components/progress-bar.component';
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
-import { CheckboxComponent } from './js/components/settings/checkbox.component';
 import { DropdownComponent } from './js/components/settings/dropdown.component';
 import { NumericInputComponent } from './js/components/settings/numeric-input.component';
 import { PreferenceDropdownComponent } from './js/components/settings/preference-dropdown.component';
@@ -909,7 +907,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
-		CheckboxComponent,
 		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
@@ -989,7 +986,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BasicBarChartComponent,
 		PieChartComponent,
 
-		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
 
 		StatCellComponent,
@@ -1040,7 +1036,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
-		CheckboxComponent,
 		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
@@ -1121,7 +1116,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BasicBarChartComponent,
 		PieChartComponent,
 
-		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
 
 		StatCellComponent,

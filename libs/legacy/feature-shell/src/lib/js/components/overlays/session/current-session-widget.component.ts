@@ -14,19 +14,12 @@ import {
 	buildMatchResultText,
 	KnownBoard,
 } from '@components/replays/replay-info/replay-info-battlegrounds.component';
-import { GameType } from '@firestone-hs/reference-data';
+import { GameType, getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Preferences } from '@models/preferences';
-import {
-	getReferenceTribeCardId,
-	getTribeIcon,
-	getTribeName,
-	isBattlegrounds,
-	isBattlegroundsScene,
-	normalizeHeroCardId,
-} from '@services/battlegrounds/bgs-utils';
+import { isBattlegrounds, isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';

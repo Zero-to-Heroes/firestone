@@ -9,6 +9,7 @@
 	"include": [
 		"**/*.ts",
 		"../../duels/data-access/src/lib/duels-meta-heroes.model.ts",
-		"src/lib/js/components/decktracker/overlay/twitch/abstract-subscription-twitch-resizable.component.ts"
+		"src/lib/js/components/decktracker/overlay/twitch/abstract-subscription-twitch-resizable.component.ts",
+		"../../shared/common/view/src/lib/components/input/checkbox.component.ts"
 	]
 }

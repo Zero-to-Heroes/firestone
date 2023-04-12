@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { MultiselectOption } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
@@ -7,7 +8,6 @@ import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/stor
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
-import { MultiselectOption } from '../../filter-dropdown-multiselect.component';
 
 @Component({
 	selector: 'replays-deckstring-filter-dropdown',
@@ -19,7 +19,7 @@ import { MultiselectOption } from '../../filter-dropdown-multiselect.component';
 			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
-			(onOptionSelected)="onSelected($event)"
+			(optionSelected)="onSelected($event)"
 		></filter-dropdown-multiselect>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
