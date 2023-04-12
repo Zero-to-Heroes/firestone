@@ -1111,10 +1111,12 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.TwistedTether:
 				return and(side(inputSide), inHand, undead);
-			case CardIds.UnlockedPotential:
-				return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
+			case CardIds.UndyingAllies:
+				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.UnendingSwarm:
 				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
+			case CardIds.UnlockedPotential:
+				return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 			case CardIds.UnstableMagicTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 			case CardIds.VanndarStormpike_AV_223:
