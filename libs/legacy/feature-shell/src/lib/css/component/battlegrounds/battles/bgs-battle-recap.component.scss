@@ -128,7 +128,8 @@
 				width: 140px;
 			}
 			::ng-deep .warning {
-				display: none;
+				// display: none;
+				margin: 0;
 			}
 		}
 	}
