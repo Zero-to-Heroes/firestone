@@ -4,6 +4,10 @@
 	font-style: normal;
 	font-weight: normal;
 	color: var(--color-1);
+	max-height: 100%;
+	overflow: hidden;
+	position: relative;
+	flex-shrink: 0;
 }
 
 .copy-deckstring {
@@ -13,7 +17,7 @@
 	--icon-color: var(--color-4);
 	--icon-color-secondary: var(--color-1);
 
-	svg {
+	::ng-deep svg {
 		height: 16px;
 		width: 13px;
 	}
