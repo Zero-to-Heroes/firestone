@@ -23,3 +23,15 @@ export interface DuelsCombinedHeroStat {
 	readonly globalWinrate: number;
 	readonly globalWinDistribution: readonly { winNumber: number; value: number }[];
 }
+
+export interface DuelsCombinedTreasureStat {
+	readonly periodStart: string | null;
+	readonly cardId: string;
+	readonly hero: string;
+	readonly heroPower: string;
+	readonly signatureTreasure: string;
+	readonly globalTotalMatches: number;
+	readonly globalPopularity: number;
+	readonly globalWinrate: number;
+	readonly globalWinDistribution: readonly { winNumber: number; value: number }[];
+}

@@ -8,6 +8,7 @@ import {
 	DuelsHeroFilterType,
 	DuelsStatTypeFilterType,
 	DuelsTimeFilterType,
+	getGroupingKeyForHeroStat as groupingKey,
 } from '@firestone/duels/data-access';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsTopDecksDustFilterType } from '@models/duels/duels-types';
@@ -16,22 +17,43 @@ import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat, DuelsHeroPlayerStat } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { PatchInfo } from '../../models/patches';
-import { groupByFunction, sumOnArray } from '../utils';
+import { sumOnArray } from '../utils';
 
 export const buildDuelsHeroPlayerStats = (
 	duelStats: readonly DuelsHeroStat[],
 	statType: DuelsStatTypeFilterType,
-	runs: readonly DuelsRun[] = [],
+	playerRuns: readonly DuelsRun[] = [],
 ): DuelsHeroPlayerStat[] => {
-	const combinedHeroStats = buildDuelsCombinedHeroStats(duelStats, statType);
+	const combinedHeroStats = buildDuelsCombinedHeroStats(duelStats, groupingKey(statType));
 	return combinedHeroStats.map((stat) => {
 		const key = getGroupingKeyForHeroStat(statType)(stat);
-		const validRuns = runs.filter((run) => isRelevantRunForHeroStat(run, statType, key));
+		const validRuns = playerRuns.filter((run) => isRelevantRunForHeroStat(run, statType, key));
 		return {
 			...stat,
 			// TODO: rename this to totalRuns
 			playerTotalMatches: validRuns.length,
-			playerPopularity: validRuns.length ? (100 * validRuns.length) / runs.length : null,
+			playerPopularity: validRuns.length ? (100 * validRuns.length) / playerRuns.length : null,
+			playerWinrate: validRuns.length
+				? (100 * validRuns.map((run) => run.wins).reduce((a, b) => a + b, 0)) /
+				  validRuns.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0)
+				: null,
+		};
+	});
+};
+
+export const buildDuelsHeroTreasurePlayerStats = (
+	duelStats: readonly DuelsTreasureStat[],
+	playerRuns: readonly DuelsRun[] = [],
+): readonly DuelsHeroPlayerStat[] => {
+	const combinedHeroStats = buildDuelsCombinedHeroStats(duelStats, (stat: DuelsTreasureStat) => stat.treasureCardId);
+	return combinedHeroStats.map((stat) => {
+		const key = stat.cardId;
+		const validRuns = playerRuns.filter((run) => isRelevantRun(run, key));
+		return {
+			...stat,
+			// TODO: rename this to totalRuns
+			playerTotalMatches: validRuns.length,
+			playerPopularity: validRuns.length ? (100 * validRuns.length) / playerRuns.length : null,
 			playerWinrate: validRuns.length
 				? (100 * validRuns.map((run) => run.wins).reduce((a, b) => a + b, 0)) /
 				  validRuns.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0)
@@ -92,45 +114,6 @@ export const filterDuelsRuns = (
 					: stat.signatureTreasureCardId === signatureTreasureFilter,
 			)
 	);
-};
-
-export const buildDuelsHeroTreasurePlayerStats = (
-	duelStats: readonly DuelsTreasureStat[],
-	playerRuns: readonly DuelsRun[] = [],
-): readonly DuelsHeroPlayerStat[] => {
-	const totalRuns = duelStats.map((stat) => stat.totalRuns).reduce((a, b) => a + b, 0);
-	const grouped: { [cardId: string]: readonly DuelsTreasureStat[] } = groupByFunction(
-		(stat: DuelsTreasureStat) => stat.treasureCardId,
-	)(duelStats);
-
-	return Object.keys(grouped).map((key) => {
-		const group = grouped[key];
-		const totalRunsForGroup = group.map((g) => g.totalRuns).reduce((a, b) => a + b, 0);
-		const totalMatchesForGroup = group.map((g) => g.totalMatches).reduce((a, b) => a + b, 0);
-		const winsDistribution: { winNumber: number; value: number }[] = [];
-		for (let i = 0; i <= 12; i++) {
-			const totalWinsForNumber = group.map((g) => g.winDistribution[i]).reduce((a, b) => a + b, 0);
-			winsDistribution.push({ winNumber: i, value: (100 * totalWinsForNumber) / totalRunsForGroup });
-		}
-		const validRuns = playerRuns.filter((run) => isRelevantRun(run, key));
-		return {
-			hero: group[0].hero,
-			periodStart: null,
-			cardId: key,
-			globalPopularity: (100 * totalRunsForGroup) / totalRuns,
-			// TODO: rename this to totalRuns
-			globalTotalMatches: totalRunsForGroup,
-			globalWinrate: (100 * group.map((g) => g.totalWins).reduce((a, b) => a + b, 0)) / totalMatchesForGroup,
-			globalWinDistribution: winsDistribution as readonly { winNumber: number; value: number }[],
-			// TODO: rename this to totalRuns
-			playerTotalMatches: validRuns.length,
-			playerPopularity: validRuns.length ? (100 * validRuns.length) / playerRuns.length : null,
-			playerWinrate: validRuns.length
-				? (100 * validRuns.map((run) => run.wins).reduce((a, b) => a + b, 0)) /
-				  validRuns.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0)
-				: null,
-		} as DuelsHeroPlayerStat;
-	});
 };
 
 // Because of the neutral heroes

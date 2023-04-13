@@ -9,16 +9,12 @@ import {
 	DuelsTreasureStatTypeFilterType,
 } from './duels-meta-heroes.model';
 
-export const buildDuelsCombinedHeroStats = (
-	duelStats: readonly DuelsHeroStat[],
-	statType: DuelsStatTypeFilterType,
+export const buildDuelsCombinedHeroStats = <T extends DuelsHeroStat | DuelsTreasureStat>(
+	duelStats: readonly T[],
+	groupingFunction: (stat: T) => string,
 ): DuelsCombinedHeroStat[] => {
 	const totalRuns = duelStats.map((stat) => stat.totalRuns).reduce((a, b) => a + b, 0);
-
-	const grouped: { [cardId: string]: readonly DuelsHeroStat[] } = groupByFunction(
-		getGroupingKeyForHeroStat(statType),
-	)(duelStats);
-
+	const grouped: { [cardId: string]: readonly T[] } = groupByFunction(groupingFunction)(duelStats);
 	return Object.keys(grouped).map((key) => {
 		const group = grouped[key];
 		const totalRunsForGroup = group.map((g) => g.totalRuns).reduce((a, b) => a + b, 0);
@@ -53,32 +49,6 @@ export const filterDuelsHeroStats = (
 	allCards: CardsFacadeService,
 	searchString: string | null = null,
 ): readonly DuelsHeroStat[] => {
-	console.debug(
-		'filtering hero stats',
-		(heroStats ?? [])
-			.filter((stat) =>
-				!heroesFilter?.length
-					? false
-					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
-			)
-			.filter((stat) =>
-				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
-				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-				heroPowerFilter === 'all' || statType !== 'signature-treasure'
-					? true
-					: stat.heroPowerCardId === heroPowerFilter,
-			)
-			.filter((stat) =>
-				// Similar
-				signatureTreasureFilter === 'all' || statType !== 'hero-power'
-					? true
-					: stat.signatureTreasureCardId === signatureTreasureFilter,
-			),
-		heroesFilter,
-		heroPowerFilter,
-		statType,
-		signatureTreasureFilter,
-	);
 	const result = (heroStats ?? [])
 		.filter((stat) =>
 			!heroesFilter?.length
