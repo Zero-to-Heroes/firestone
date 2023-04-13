@@ -260,6 +260,7 @@ export const buildHeroStats = (
 				averagePosition:
 					(useConservativeEstimate ? stat.conservativePositionEstimate : stat.averagePosition) +
 					tribesModifier,
+				tribesFilter: tribes,
 				positionTribesModifier: tribesModifier,
 				placementDistribution: placementDistribution,
 				placementDistributionImpact: placementDistributionImpact,

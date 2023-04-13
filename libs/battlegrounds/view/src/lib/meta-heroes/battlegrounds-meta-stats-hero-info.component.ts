@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
@@ -38,11 +38,18 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				<div class="global">{{ averagePosition }}</div>
 				<div
 					class="player"
-					*ngIf="playerAveragePosition"
+					*ngIf="playerAveragePosition !== null"
 					[helpTooltip]="'app.battlegrounds.tier-list.player-average-position-tooltip' | fsTranslate"
 				>
-					(<span class="value">{{ playerAveragePosition }}</span
-					>)
+					<span class="value">{{ playerAveragePosition }}</span>
+				</div>
+				<div
+					class="tribe-impact"
+					*ngIf="tribeImpactPosition !== null"
+					[ngClass]="{ positive: tribeImpactPosition < 0, negative: tribeImpactPosition > 0 }"
+					[helpTooltip]="'app.battlegrounds.tier-list.tribe-impact-position-tooltip' | fsTranslate"
+				>
+					<span class="value">{{ tribeImpactPosition.toFixed(2) }}</span>
 				</div>
 			</div>
 			<div class="placement">
@@ -54,6 +61,12 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 					[offsetValue]="1"
 				></basic-bar-chart-2>
 			</div>
+			<!-- <div class="tribes">
+				<div *ngFor="let tribe of tribes">
+					<img class="tribe-icon" [src]="tribe.icon" />
+					<div class="text">{{ tribe.value }}</div>
+				</div>
+			</div> -->
 			<div class="net-mmr">
 				<div
 					class="value"
@@ -78,6 +91,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	@Output() heroStatClick = new EventEmitter<string>();
 
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
+		console.debug('setting value', value.tribesFilter.length === ALL_BG_RACES.length, value);
 		this.heroCardId = value.id;
 		this.heroPowerCardId = value.heroPowerCardId;
 		this.heroName = this.allCards.getCard(value.id).name;
@@ -85,13 +99,18 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});
-		this.playerDataPoints = !!value.playerDataPoints
-			? this.i18n.translateString('app.battlegrounds.tier-list.player-data-points', {
-					value: value.playerDataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
-			  })
-			: null;
+
+		const showPlayerData = value.tribesFilter.length === ALL_BG_RACES.length;
+		this.playerDataPoints =
+			// Only show the player full data when not filtering by tribes
+			!!value.playerDataPoints && showPlayerData
+				? this.i18n.translateString('app.battlegrounds.tier-list.player-data-points', {
+						value: value.playerDataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
+				  })
+				: null;
 		this.averagePosition = value.averagePosition.toFixed(2);
-		this.playerAveragePosition = value.playerAveragePosition?.toFixed(2);
+		this.tribeImpactPosition = showPlayerData ? null : value.positionTribesModifier;
+		this.playerAveragePosition = showPlayerData ? value.playerAveragePosition?.toFixed(2) : null;
 
 		const globalPlacementChartData: SimpleBarChartData = {
 			data: value.placementDistribution.map((p) => ({
@@ -117,6 +136,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	playerDataPoints: string;
 	averagePosition: string;
 	playerAveragePosition: string;
+	tribeImpactPosition: number;
 	placementChartData: SimpleBarChartData[];
 	netMmr: number;
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };

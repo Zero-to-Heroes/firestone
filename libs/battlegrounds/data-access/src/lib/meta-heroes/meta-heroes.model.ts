@@ -1,3 +1,5 @@
+import { Race } from '@firestone-hs/reference-data';
+
 export interface BgsMetaHeroStatTier {
 	readonly id: BgsHeroTier;
 	readonly label: string;
@@ -9,6 +11,8 @@ export interface BgsMetaHeroStatTierItem {
 	readonly id: string;
 	readonly dataPoints: number;
 	readonly averagePosition: number;
+	readonly tribesFilter?: readonly Race[];
+
 	readonly positionTribesModifier: number;
 	readonly placementDistribution: readonly { rank: number; percentage: number }[];
 	readonly placementDistributionImpact: readonly { rank: number; percentage: number }[];

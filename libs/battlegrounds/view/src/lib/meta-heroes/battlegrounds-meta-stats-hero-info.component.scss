@@ -57,6 +57,31 @@
 				color: var(--default-title-color);
 			}
 		}
+
+		.tribe-impact {
+			margin-top: 0;
+			font-size: 12px;
+
+			.value {
+				color: var(--default-text-color);
+			}
+			&.positive {
+				.value {
+					color: #61ff47;
+					&::before {
+						content: '-';
+					}
+				}
+			}
+			&.negative {
+				.value {
+					color: #ff4747;
+					&::before {
+						content: '+';
+					}
+				}
+			}
+		}
 	}
 
 	.placement {
