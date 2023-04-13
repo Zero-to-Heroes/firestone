@@ -1,24 +1,34 @@
 .portrait {
 	width: 40px;
 	margin-right: 20px;
+	flex-shrink: 0;
 }
 
 .hero-details {
 	width: 215px;
+	flex-shrink: 0;
 }
 
 .position {
 	width: 120px;
+	flex-shrink: 0;
 }
 
 .placement {
 	width: 170px;
 	margin-left: 15px;
 	margin-right: 15px;
+	flex-shrink: 0;
+}
+
+.tribes {
+	width: 250px;
+	flex-shrink: 0;
 }
 
 .net-mmr {
 	width: 120px;
+	flex-shrink: 0;
 }
 
 // .winrate {

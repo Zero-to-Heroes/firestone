@@ -9,12 +9,14 @@ import { BattlegroundsTribesFilterDropdownViewComponent } from './filters/battle
 import { BattlegroundsMetaStatsHeroInfoComponent } from './meta-heroes/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from './meta-heroes/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesViewComponent } from './meta-heroes/battlegrounds-meta-stats-heroes-view.component';
+import { CircularProgressComponent } from './meta-heroes/circular-progress.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
 	BattlegroundsMetaStatsHeroTierComponent,
 	BattlegroundsMetaStatsHeroInfoComponent,
 	BgsHeroPortraitComponent,
+	CircularProgressComponent,
 
 	BattlegroundsRankFilterDropdownViewComponent,
 	BattlegroundsTimeFilterDropdownViewComponent,

@@ -34,6 +34,11 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 					[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
 				></div>
 				<div
+					class="tribes"
+					[fsTranslate]="'app.battlegrounds.tier-list.header-tribes'"
+					[helpTooltip]="'app.battlegrounds.tier-list.header-tribes-tooltip' | fsTranslate"
+				></div>
+				<div
 					class="net-mmr"
 					[fsTranslate]="'app.battlegrounds.tier-list.header-net-mmr'"
 					[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"

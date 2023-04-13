@@ -1,0 +1,35 @@
+.container {
+	position: relative;
+	height: 100%;
+}
+
+img {
+	object-fit: cover;
+	height: 100%;
+	clip-path: ellipse(35% 35% at 50% 50%);
+	position: relative;
+	transform-origin: center;
+	transform: scale(1.2);
+}
+
+svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+.circle-backdrop {
+	fill: none;
+	stroke: var(--color-5);
+	stroke-width: 12;
+}
+
+.circle-progress {
+	fill: none;
+	stroke: var(--color-1);
+	stroke-width: 14;
+	stroke-dashoffset: 0;
+	transform-origin: center;
+	transform: rotate(-90deg);
+}

@@ -10,11 +10,16 @@
 		display: flex;
 		font-size: 14px;
 		margin-bottom: 10px;
+		flex-wrap: wrap;
+		overflow: hidden;
+		height: 35px;
+		flex-shrink: 0;
 
 		& > * {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			height: 35px;
 		}
 	}
 

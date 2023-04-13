@@ -21,6 +21,11 @@ export interface BgsMetaHeroStatTierItem {
 	readonly warbandStats: readonly { turn: number; averageStats: number }[];
 	readonly warbandStatsImpact: readonly { turn: number; averageStats: number }[];
 
+	readonly tribeStats: readonly {
+		readonly tribe: Race;
+		readonly impactAveragePosition: number;
+	}[];
+
 	// Enhanced to make it easier to use
 	readonly name: string;
 	readonly baseCardId: string;

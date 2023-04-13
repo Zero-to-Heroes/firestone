@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ALL_BG_RACES, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, defaultStartingHp, GameType, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
@@ -61,12 +61,16 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 					[offsetValue]="1"
 				></basic-bar-chart-2>
 			</div>
-			<!-- <div class="tribes">
-				<div *ngFor="let tribe of tribes">
-					<img class="tribe-icon" [src]="tribe.icon" />
-					<div class="text">{{ tribe.value }}</div>
-				</div>
-			</div> -->
+			<div class="tribes">
+				<circular-progress
+					class="tribe"
+					*ngFor="let tribe of tribes"
+					[imageUrl]="tribe.icon"
+					[completionRate]="tribe.impactValue"
+					[helpTooltip]="tribe.tooltip"
+				>
+				</circular-progress>
+			</div>
 			<div class="net-mmr">
 				<div
 					class="value"
@@ -122,6 +126,21 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 
 		this.netMmr = value.playerNetMmr;
 
+		this.tribes = value.tribeStats
+			.map((stat) => {
+				return {
+					icon: getTribeIcon(stat.tribe),
+					value: stat.impactAveragePosition,
+					tooltip: this.i18n.translateString('app.battlegrounds.tier-list.tribe-info-tooltip', {
+						tribe: getTribeName(stat.tribe, this.i18n),
+						value: -stat.impactAveragePosition.toFixed(2),
+					}),
+					impactValue: Math.min(100, (100 * stat.impactAveragePosition) / 0.2),
+				};
+			})
+			.sort((a, b) => a.value - b.value)
+			.slice(0, 3);
+
 		// this.winrateContainer = {
 		// 	id: uuid(),
 		// 	combatWinrate: value.combatWinrate,
@@ -139,6 +158,8 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	tribeImpactPosition: number;
 	placementChartData: SimpleBarChartData[];
 	netMmr: number;
+
+	tribes: readonly TribeInfo[];
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
@@ -150,4 +171,11 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	seeDetailedHeroStats() {
 		this.heroStatClick.next(this.heroCardId);
 	}
+}
+
+interface TribeInfo {
+	readonly icon: string;
+	readonly value: number;
+	readonly tooltip: string;
+	readonly impactValue: number;
 }

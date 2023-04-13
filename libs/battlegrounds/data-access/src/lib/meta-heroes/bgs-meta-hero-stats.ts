@@ -173,7 +173,7 @@ export const buildHeroStats = (
 						.filter((t) => tribes.includes(t.tribe))
 						// Remove some incorrect data points
 						.filter((t) => t.dataPoints > stat.dataPoints / 20)
-				: [];
+				: stat.tribeStats;
 
 			const debug = stat.heroCardId === CardIds.SylvanasWindrunner_BG23_HERO_306;
 			const tribesModifier = useTribesModifier
@@ -268,6 +268,8 @@ export const buildHeroStats = (
 				combatWinrateImpact: combatWinrateImpact,
 				warbandStats: warbandStats,
 				warbandStatsImpact: warbandStatsImpact,
+
+				tribeStats: tribeStatsToUse,
 
 				name: allCards.getCard(stat.heroCardId)?.name,
 				baseCardId: normalizeHeroCardId(stat.heroCardId, allCards.getService()),

@@ -4,9 +4,15 @@
 	width: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
+	flex-wrap: wrap;
+	overflow: hidden;
 
 	&:hover {
 		background: rgba(255, 255, 255, 0.12);
+	}
+
+	& > * {
+		height: 100%;
 	}
 
 	.portrait {
@@ -98,6 +104,22 @@
 			::ng-deep .chart-container .bar-container:nth-child(n + 6) .bar {
 				opacity: 0.5;
 			}
+		}
+	}
+
+	.tribes {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+
+		.tribe {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			margin-right: 5px;
 		}
 	}
 
