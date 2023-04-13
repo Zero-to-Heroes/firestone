@@ -7,3 +7,4 @@ export * from './lib/meta-heroes/battlegrounds-meta-stats-hero-info.component';
 export * from './lib/meta-heroes/battlegrounds-meta-stats-hero-tier.component';
 export * from './lib/meta-heroes/battlegrounds-meta-stats-heroes-view.component';
 export * from './lib/meta-heroes/bgs-hero-sort-filter.type';
+export * from './lib/meta-heroes/circular-progress.component';

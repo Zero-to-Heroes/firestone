@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
+// TODO: this should be moved to a more common module
 @Component({
 	selector: 'circular-progress',
 	styleUrls: [`./circular-progress.component.scss`],
