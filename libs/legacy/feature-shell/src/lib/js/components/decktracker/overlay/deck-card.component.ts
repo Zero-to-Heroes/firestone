@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	EventEmitter,
 	HostListener,
 	Input,
@@ -17,7 +18,10 @@ import { CardsHighlightFacadeService } from '@services/decktracker/card-highligh
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { Handler } from '../../../services/decktracker/card-highlight/cards-highlight.service';
-import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS } from '../../../services/decktracker/card-highlight/merged-highlights';
+import {
+	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS,
+	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
+} from '../../../services/decktracker/card-highlight/merged-highlights';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { uuid } from '../../../services/utils';
 
@@ -251,11 +255,16 @@ export class DeckCardComponent implements OnDestroy {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
+		private readonly el: ElementRef,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	registerHighlight() {
+		if (!this._side) {
+			return;
+		}
+
 		this._uniqueId = uuid();
 		this.cardsHighlightService?.register(
 			this._uniqueId,
@@ -270,17 +279,19 @@ export class DeckCardComponent implements OnDestroy {
 			} as Handler,
 			this._side,
 		);
+		// console.debug('registering highlight', this._card?.cardId, this.el.nativeElement);
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		// console.debug('unregistering highlight', this._card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
 	}
 
 	doHighlight() {
 		this.isLinkedCardHighlight = true;
-		console.debug('highlighting', this, this.isLinkedCardHighlight);
+		// console.debug('highlighting', this._card?.cardName, this.isLinkedCardHighlight, this.el.nativeElement);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -304,6 +315,9 @@ export class DeckCardComponent implements OnDestroy {
 				}))
 				.sort((a, b) => a.timing - b.timing)
 				.map((info) => info.cardId);
+			if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES.includes(this.cardId as CardIds)) {
+				this.relatedCardIds = [...new Set(this.relatedCardIds)];
+			}
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

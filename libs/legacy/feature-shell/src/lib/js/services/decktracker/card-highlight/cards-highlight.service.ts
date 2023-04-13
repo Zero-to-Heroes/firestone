@@ -160,7 +160,12 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					(!card.entityId || card.entityId === h.deckCardProvider()?.entityId),
 			);
 			if (!!handler) {
-				console.debug('DO HIGHLGIHT', handler, handler.highlightCallback);
+				console.debug(
+					'DO HIGHLGIHT',
+					handler.referenceCardProvider()?.name,
+					handler,
+					handler.highlightCallback,
+				);
 				handler.highlightCallback();
 			}
 		}
