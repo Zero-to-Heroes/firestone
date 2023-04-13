@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.19',
+		version: '11.0.21',
 		force: false,
 		sections: [
 			// {
@@ -58,8 +58,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'content',
-								text: `Firestone has been updated for Festival of Legends. There are still a few of the new cards that need some additional support, so expect another update soon.`,
+								type: 'feature',
+								text: `(PREMIUM) The firestoneapp.gg website has been updated with some Duels stats. I'm still working on adding all the missing filters in Duels and BG there, and will start adding new features afterwards.`,
 							},
 						],
 					},
@@ -73,20 +73,16 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'content',
-								text: `The tracker has been updated to show you known information in the opponent's hand for various cards like Power Chord: Synchronize, Fight Over Me, Fizzle's Snapshot, Merch Seller, Kangor Dancing King, Inifitize the Maxitude.`,
-							},
-							{
-								type: 'content',
-								text: `Card highlights added for Fizzle's Snapshot (when you play it) and Mixtape.`,
+								type: 'bug',
+								text: `Fix an info leak that would reveal when your opponent drew a Symphony of Sins' movement.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the "copy deck" button wouldn't work in the Constructed Deckbuilder`,
+								text: `Fix an issue where cards would sometimes not be highlighted properly.`,
 							},
 							{
-								type: 'misc',
-								text: `I have done a big internal refactoring in how card highlighting works. This should let me more easily handle more complex cases (like Mixtape) and should make it way easier to support showing related cards (like Tess and Contraband Stash) when not using the Modern Tracker UI.`,
+								type: 'bug',
+								text: `Tried to fix an issue where cards drawn by Finley would sometimes get icons (like Finley's icon, or the Coin).`,
 							},
 						],
 					},
@@ -94,8 +90,8 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix a sim issue where Ghastcoiler could never spawn tribeless minions like Leeroy.`,
+								type: 'feature',
+								text: `Add the "Warning" icon in the Simulator tab of the BG window when some boards are not supported (it was already showing on the overlay widget).`,
 							},
 						],
 					},
@@ -103,8 +99,21 @@ export const updates: readonly Update[] = [
 						category: 'duels',
 						details: [
 							{
+								type: 'bug',
+								text: `Fix an issue where the rank filter had disappeared from the High-Wins deck tab.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
 								type: 'feature',
-								text: `When building a deck, buckets now won't show cards that are not eligible (e.g. different class).`,
+								text: `Also add the card back description when mousing over card backs in the Collection tab (not localized yet).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Search field had become a premium-exclusive feature.`,
 							},
 						],
 					},
