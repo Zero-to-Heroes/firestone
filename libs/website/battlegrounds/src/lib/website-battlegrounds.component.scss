@@ -12,11 +12,12 @@ battlegrounds-meta-stats-heroes-view {
 			.heroes-list {
 				overflow: auto;
 			}
-			.net-mmr.net-mmr.net-mmr {
-				display: none;
+
+			.hero-details.hero-details.hero-details {
+				width: 200px;
 			}
 			.placement.placement.placement.placement {
-				flex-grow: 1;
+				width: 200px;
 				display: flex;
 				align-content: center;
 				justify-content: center;
@@ -24,6 +25,12 @@ battlegrounds-meta-stats-heroes-view {
 				.placement-distribution {
 					width: 200px;
 				}
+			}
+			.tribes.tribes.tribes {
+				width: 200px;
+			}
+			.net-mmr.net-mmr.net-mmr {
+				display: none;
 			}
 		}
 
