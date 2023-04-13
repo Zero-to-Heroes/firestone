@@ -70,7 +70,7 @@ export class DuelsRankFilterDropdownViewComponent extends AbstractSubscriptionCo
 			),
 		);
 		this.filter$ = combineLatest([this.options$, this.currentFilter$$, this.visible$$]).pipe(
-			filter(([options, currentFilter, visible]) => !!currentFilter),
+			filter(([options, currentFilter, visible]) => !!currentFilter && !!options?.length),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([options, currentFilter, visible]) => ({
 				filter: '' + currentFilter,
