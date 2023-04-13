@@ -706,7 +706,7 @@ const publicCardGiftCreators = [
 	CardIds.SwampDragonEgg,
 	CardIds.Swashburglar,
 	CardIds.SwashburglarCore,
-	CardIds.SymphonyOfSins,
+	// CardIds.SymphonyOfSins, // Otherwise the info leaks when the opponent draws the card
 	CardIds.Synthesize,
 	CardIds.TamsinRoame_BAR_918,
 	CardIds.TanglefurMystic,
