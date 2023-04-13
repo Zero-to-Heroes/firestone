@@ -1,7 +1,13 @@
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { SharedFrameworkCommonModule, Store, translationFileVersion } from '@firestone/shared/framework/common';
+import {
+	CdkOverlayContainer,
+	SharedFrameworkCommonModule,
+	Store,
+	translationFileVersion,
+} from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
@@ -66,6 +72,7 @@ const components = [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: WebsiteLocalizationService },
 		{ provide: Store, useExisting: WebsiteStoreService },
+		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 
 		WebsiteBootstrapService,
 		WebsitePreferencesService,

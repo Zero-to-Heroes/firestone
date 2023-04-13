@@ -493,7 +493,7 @@ import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsViewModule } from '@firestone/duels/view';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
-import { Store, translationFileVersion } from '@firestone/shared/framework/common';
+import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
@@ -560,7 +560,6 @@ import { BgsPostMatchStatsTabsComponent } from './js/components/battlegrounds/po
 import { BgsPostMatchStatsComponent } from './js/components/battlegrounds/post-match/bgs-post-match-stats.component';
 import { BgsWinrateChartComponent } from './js/components/battlegrounds/post-match/bgs-winrate-chart.component';
 import { StatCellComponent } from './js/components/battlegrounds/post-match/stat-cell.component';
-import { CdkOverlayContainer } from './js/components/cdk-overlay-container.component';
 import { CardComponent } from './js/components/collection/card.component';
 import { BasicBarChartComponent } from './js/components/common/chart/basic-bar-chart.component';
 import { ControlBugComponent } from './js/components/controls/control-bug.component';

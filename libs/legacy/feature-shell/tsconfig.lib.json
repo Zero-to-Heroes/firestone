@@ -10,6 +10,7 @@
 		"**/*.ts",
 		"../../duels/data-access/src/lib/duels-meta-heroes.model.ts",
 		"src/lib/js/components/decktracker/overlay/twitch/abstract-subscription-twitch-resizable.component.ts",
-		"../../shared/common/view/src/lib/components/input/checkbox.component.ts"
+		"../../shared/common/view/src/lib/components/input/checkbox.component.ts",
+		"../../shared/framework/common/src/lib/services/cdk-overlay-container.service.ts"
 	]
 }

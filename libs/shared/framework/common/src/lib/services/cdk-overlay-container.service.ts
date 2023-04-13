@@ -10,15 +10,15 @@ export class CdkOverlayContainer extends OverlayContainer implements OnDestroy {
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
 		super.ngOnDestroy();
 	}
 
 	getRootElement(): Element {
-		return this._document.querySelector('.overlay-container-parent');
+		return this._document.querySelector('.overlay-container-parent') as Element;
 	}
 
-	protected _createContainer(): void {
+	protected override _createContainer(): void {
 		super._createContainer();
 		this._appendToRootComponent();
 	}
