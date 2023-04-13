@@ -17,7 +17,8 @@ export const initialWebsiteDuelsState: WebsiteDuelsState = {
 	loaded: false,
 	currentPercentileSelection: localPrefs?.duelsActiveMmrFilter ?? 100,
 	currentTimePeriodSelection: localPrefs?.duelsActiveTimeFilter ?? 'last-patch',
-	// currentTribesSelection: localPrefs?.bgsActiveTribesFilter ?? [],
+	currentPassiveTreasureTypeSelection: 'passive-1',
+	currentActiveTreasureTypeSelection: 'treasure-1',
 };
 
 const reducer = createReducer(
@@ -54,6 +55,32 @@ const reducer = createReducer(
 		}),
 	),
 	on(WebsiteDuelsActions.loadDuelsMetaSignatureTreasureStatsFailure, (state, { error }) => ({ ...state, error })),
+
+	on(WebsiteDuelsActions.initDuelsMetaPassiveTreasureStats, (state) => ({ ...state, loaded: false, error: null })),
+	on(
+		WebsiteDuelsActions.loadDuelsMetaPassiveTreasureStatsSuccess,
+		(state, { stats, lastUpdateDate, mmrPercentiles }) => ({
+			...state,
+			passiveTreasureStats: stats,
+			lastUpdateDate: lastUpdateDate,
+			mmrPercentiles: mmrPercentiles,
+			loaded: true,
+		}),
+	),
+	on(WebsiteDuelsActions.loadDuelsMetaPassiveTreasureStatsFailure, (state, { error }) => ({ ...state, error })),
+
+	on(WebsiteDuelsActions.initDuelsMetaActiveTreasureStats, (state) => ({ ...state, loaded: false, error: null })),
+	on(
+		WebsiteDuelsActions.loadDuelsMetaActiveTreasureStatsSuccess,
+		(state, { stats, lastUpdateDate, mmrPercentiles }) => ({
+			...state,
+			activeTreasureStats: stats,
+			lastUpdateDate: lastUpdateDate,
+			mmrPercentiles: mmrPercentiles,
+			loaded: true,
+		}),
+	),
+	on(WebsiteDuelsActions.loadDuelsMetaActiveTreasureStatsFailure, (state, { error }) => ({ ...state, error })),
 
 	on(WebsiteDuelsActions.changeMetaHeroStatsPercentileFilter, (state, { currentPercentileSelection }) => ({
 		...state,

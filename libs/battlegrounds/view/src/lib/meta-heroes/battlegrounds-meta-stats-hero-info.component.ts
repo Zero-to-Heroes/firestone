@@ -95,7 +95,6 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	@Output() heroStatClick = new EventEmitter<string>();
 
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
-		console.debug('setting value', value.tribesFilter.length === ALL_BG_RACES.length, value);
 		this.heroCardId = value.id;
 		this.heroPowerCardId = value.heroPowerCardId;
 		this.heroName = this.allCards.getCard(value.id).name;

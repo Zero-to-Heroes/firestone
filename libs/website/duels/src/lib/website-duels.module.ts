@@ -8,8 +8,10 @@ import { WebsiteDuelsEffects } from './+state/website/duels.effects';
 import * as fromWebsiteDuels from './+state/website/duels.reducer';
 import { WebsiteDuelsRankFilterDropdownComponent } from './filters/website-duels-rank-filter-dropdown.component';
 import { WebsiteDuelsTimeFilterDropdownComponent } from './filters/website-duels-time-filter-dropdown.component';
+import { WebsiteDuelsActiveTreasuresComponent } from './website-duels-active-treasures.component';
 import { WebsiteDuelsHeroPowersComponent } from './website-duels-hero-powers.component';
 import { WebsiteDuelsHeroesComponent } from './website-duels-heroes.component';
+import { WebsiteDuelsPassiveTreasuresComponent } from './website-duels-passive-treasures.component';
 import { WebsiteDuelsSignatureTreasuresComponent } from './website-duels-signature-treasures.component';
 
 const components = [
@@ -18,6 +20,8 @@ const components = [
 	WebsiteDuelsSignatureTreasuresComponent,
 	WebsiteDuelsRankFilterDropdownComponent,
 	WebsiteDuelsTimeFilterDropdownComponent,
+	WebsiteDuelsPassiveTreasuresComponent,
+	WebsiteDuelsActiveTreasuresComponent,
 ];
 
 @NgModule({

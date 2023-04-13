@@ -45,6 +45,34 @@ export const loadDuelsMetaSignatureTreasureStatsFailure = createAction(
 	props<{ error: any }>(),
 );
 
+export const initDuelsMetaActiveTreasureStats = createAction('[DUELS Meta Active Treasure Stats Page] Init');
+export const loadDuelsMetaActiveTreasureStatsSuccess = createAction(
+	'[DUELS Meta Active Treasure Stats/API] Load Success',
+	props<{
+		stats: readonly DuelsMetaStats[];
+		lastUpdateDate: Date | undefined;
+		mmrPercentiles: readonly MmrPercentile[];
+	}>(),
+);
+export const loadDuelsMetaActiveTreasureStatsFailure = createAction(
+	'[DUELS Meta Active Treasure Stats/API] Load Failure',
+	props<{ error: any }>(),
+);
+
+export const initDuelsMetaPassiveTreasureStats = createAction('[DUELS Meta Passive Treasure Stats Page] Init');
+export const loadDuelsMetaPassiveTreasureStatsSuccess = createAction(
+	'[DUELS Meta Passive Treasure Stats/API] Load Success',
+	props<{
+		stats: readonly DuelsMetaStats[];
+		lastUpdateDate: Date | undefined;
+		mmrPercentiles: readonly MmrPercentile[];
+	}>(),
+);
+export const loadDuelsMetaPassiveTreasureStatsFailure = createAction(
+	'[DUELS Meta Passive Treasure Stats/API] Load Failure',
+	props<{ error: any }>(),
+);
+
 export const changeMetaHeroStatsPercentileFilter = createAction(
 	'[DUELS Meta Hero Stats] Changed percentile filter',
 	props<{

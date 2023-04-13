@@ -57,6 +57,16 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 					icon: 'assets/svg/signature-treasure.svg',
 					name: this.i18n.translateString('app.menu.duels-signature-treasure-header'),
 				},
+				{
+					id: 'duels/passive-treasure',
+					icon: 'assets/svg/passive-treasure.svg',
+					name: this.i18n.translateString('app.menu.duels-passive-treasure-header'),
+				},
+				{
+					id: 'duels/active-treasure',
+					icon: 'assets/svg/active-treasure.svg',
+					name: this.i18n.translateString('app.menu.duels-active-treasure-header'),
+				},
 			],
 		},
 	];

@@ -25,19 +25,19 @@ export class CardsFacadeStandaloneService {
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards
 	// is the first thing we do
 	public getCard(id: string | number): ReferenceCard {
-		return this.service.getCard(id);
+		return this.service?.getCard(id);
 	}
 
 	public getCardFromDbfId(dbfId: number): ReferenceCard {
-		return this.service.getCardFromDbfId(dbfId);
+		return this.service?.getCardFromDbfId(dbfId);
 	}
 
 	public getCardsFromDbfIds(dbfIds: number[]): ReferenceCard[] {
-		return this.service.getCardsFromDbfIds(dbfIds);
+		return this.service?.getCardsFromDbfIds(dbfIds);
 	}
 
 	public getCards(): ReferenceCard[] {
-		return this.service.getCards();
+		return this.service?.getCards();
 	}
 
 	public getService() {

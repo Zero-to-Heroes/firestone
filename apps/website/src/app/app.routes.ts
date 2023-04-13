@@ -2,10 +2,12 @@ import { Route } from '@angular/router';
 import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds';
 import { WebsiteAuthComponent, WebsitePremiumComponent } from '@firestone/website/core';
 import {
+	WebsiteDuelsActiveTreasuresComponent,
 	WebsiteDuelsHeroesComponent,
 	WebsiteDuelsHeroPowersComponent,
 	WebsiteDuelsSignatureTreasuresComponent,
 } from '@firestone/website/duels';
+import { WebsiteDuelsPassiveTreasuresComponent } from 'libs/website/duels/src/lib/website-duels-passive-treasures.component';
 import { AuthGuard } from './auth-guard.service';
 import { PremiumRedirectGuard } from './premium-redirect.service';
 
@@ -28,6 +30,16 @@ export const appRoutes: Route[] = [
 	{
 		path: 'duels/signature-treasure',
 		component: WebsiteDuelsSignatureTreasuresComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'duels/passive-treasure',
+		component: WebsiteDuelsPassiveTreasuresComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'duels/active-treasure',
+		component: WebsiteDuelsActiveTreasuresComponent,
 		canActivate: [AuthGuard],
 	},
 	{
