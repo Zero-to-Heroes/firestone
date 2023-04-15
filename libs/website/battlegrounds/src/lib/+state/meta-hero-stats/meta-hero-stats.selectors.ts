@@ -5,6 +5,8 @@ import { WEBSITE_BGS_META_HERO_STATS_FEATURE_KEY } from './meta-hero-stats.reduc
 // Lookup the feature state managed by NgRx
 export const getMetaHeroStatsState = createFeatureSelector<MetaHeroStatsState>(WEBSITE_BGS_META_HERO_STATS_FEATURE_KEY);
 
+export const getLoaded = createSelector(getMetaHeroStatsState, (state: MetaHeroStatsState) => state.loaded);
+
 export const getMetaHeroStatsLoaded = createSelector(
 	getMetaHeroStatsState,
 	(state: MetaHeroStatsState) => state.loaded,

@@ -1,3 +1,11 @@
+:host {
+	::ng-deep with-loading {
+		.loading-state .state-container {
+			margin-top: 10vh;
+		}
+	}
+}
+
 .filters {
 	display: flex;
 

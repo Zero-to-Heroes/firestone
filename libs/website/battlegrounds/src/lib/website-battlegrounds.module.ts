@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
+import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBootstrapModule } from '@firestone/website/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -31,6 +32,7 @@ const components = [
 
 		WebsiteBootstrapModule,
 		SharedFrameworkCommonModule,
+		SharedFrameworkCoreModule,
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
 	],
