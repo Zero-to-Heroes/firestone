@@ -6,6 +6,8 @@ import { WEBSITE_DUELS_FEATURE_KEY } from './duels.reducer';
 // Lookup the 'WebsiteDuels' feature state managed by NgRx
 export const getWebsiteDuelsState = createFeatureSelector<WebsiteDuelsState>(WEBSITE_DUELS_FEATURE_KEY);
 
+export const getLoaded = createSelector(getWebsiteDuelsState, (state: WebsiteDuelsState) => state.loaded);
+
 export const getAllMetaHeroStats = createSelector(
 	getWebsiteDuelsState,
 	(state: WebsiteDuelsState) => state.heroStats as readonly DuelsMetaStats[],

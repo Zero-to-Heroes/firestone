@@ -79,13 +79,14 @@ export const changeMetaHeroStatsPercentileFilter = createAction(
 		currentPercentileSelection: MmrPercentile['percentile'];
 	}>(),
 );
-
 export const changeMetaHeroStatsTimeFilter = createAction(
 	'[DUELS Meta Hero Stats] Changed time filter',
 	props<{
 		currentTimePeriodSelection: DuelsTimeFilterType;
 	}>(),
 );
+
+export const prefsUpdateSuccess = createAction('[DUELS Prefs Update] Success');
 
 // export const changeMetaHeroStatsPercentileFilter = createAction(
 // 	'[DUELS Meta Hero Stats] Changed percentile filter',

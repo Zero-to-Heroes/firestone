@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsViewModule } from '@firestone/duels/view';
+import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { WebsiteDuelsEffects } from './+state/website/duels.effects';
@@ -29,6 +30,8 @@ const components = [
 		CommonModule,
 		StoreModule.forFeature(fromWebsiteDuels.WEBSITE_DUELS_FEATURE_KEY, fromWebsiteDuels.websiteDuelsReducer),
 		EffectsModule.forFeature([WebsiteDuelsEffects]),
+
+		SharedFrameworkCoreModule,
 
 		DuelsViewModule,
 		DuelsDataAccessModule,

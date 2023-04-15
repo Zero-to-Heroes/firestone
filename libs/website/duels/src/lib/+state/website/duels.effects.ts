@@ -39,11 +39,16 @@ export class WebsiteDuelsEffects {
 		private readonly store: Store<WebsiteDuelsState>,
 	) {}
 
-	metaHeroes$ = createEffect(() =>
-		this.actions$.pipe(
-			ofType(WebsiteDuelsActions.initDuelsMetaHeroStats),
-			withLatestFrom(this.store.select(getCurrentPercentileFilter), this.store.select(getCurrentTimerFilter)),
-			switchMap(async ([action, percentileFiler, timeFilter]) => {
+	metaHeroes$ = createEffect(() => {
+		const params$ = combineLatest([
+			this.store.select(getCurrentPercentileFilter),
+			this.store.select(getCurrentTimerFilter),
+		]);
+		const merged$ = merge(this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroStats)), params$);
+		return merged$.pipe(
+			withLatestFrom(params$),
+			filter(([action, params]) => !!action || !!params),
+			switchMap(async ([action, [percentileFiler, timeFilter]]) => {
 				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'hero');
 				return WebsiteDuelsActions.loadDuelsMetaHeroStatsSuccess({
 					stats: stats.stats,
@@ -51,14 +56,19 @@ export class WebsiteDuelsEffects {
 					mmrPercentiles: stats?.mmrPercentiles ?? [],
 				});
 			}),
-		),
-	);
+		);
+	});
 
-	metaHeroPowers$ = createEffect(() =>
-		this.actions$.pipe(
-			ofType(WebsiteDuelsActions.initDuelsMetaHeroPowerStats),
-			withLatestFrom(this.store.select(getCurrentPercentileFilter), this.store.select(getCurrentTimerFilter)),
-			switchMap(async ([action, percentileFiler, timeFilter]) => {
+	metaHeroPowers$ = createEffect(() => {
+		const params$ = combineLatest([
+			this.store.select(getCurrentPercentileFilter),
+			this.store.select(getCurrentTimerFilter),
+		]);
+		const merged$ = merge(this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroPowerStats)), params$);
+		return merged$.pipe(
+			withLatestFrom(params$),
+			filter(([action, params]) => !!action || !!params),
+			switchMap(async ([action, [percentileFiler, timeFilter]]) => {
 				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'hero-power');
 				return WebsiteDuelsActions.loadDuelsMetaHeroPowerStatsSuccess({
 					stats: stats.stats,
@@ -66,14 +76,22 @@ export class WebsiteDuelsEffects {
 					mmrPercentiles: stats?.mmrPercentiles ?? [],
 				});
 			}),
-		),
-	);
+		);
+	});
 
-	metaSignatures$ = createEffect(() =>
-		this.actions$.pipe(
-			ofType(WebsiteDuelsActions.initDuelsMetaSignatureTreasureStats),
-			withLatestFrom(this.store.select(getCurrentPercentileFilter), this.store.select(getCurrentTimerFilter)),
-			switchMap(async ([action, percentileFiler, timeFilter]) => {
+	metaSignatures$ = createEffect(() => {
+		const params$ = combineLatest([
+			this.store.select(getCurrentPercentileFilter),
+			this.store.select(getCurrentTimerFilter),
+		]);
+		const merged$ = merge(
+			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaSignatureTreasureStats)),
+			params$,
+		);
+		return merged$.pipe(
+			withLatestFrom(params$),
+			filter(([action, params]) => !!action || !!params),
+			switchMap(async ([action, [percentileFiler, timeFilter]]) => {
 				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'signature-treasure');
 				return WebsiteDuelsActions.loadDuelsMetaSignatureTreasureStatsSuccess({
 					stats: stats.stats,
@@ -81,27 +99,22 @@ export class WebsiteDuelsEffects {
 					mmrPercentiles: stats?.mmrPercentiles ?? [],
 				});
 			}),
-		),
-	);
+		);
+	});
 
 	// TODO: only trigger the effect if we are on the relevant page?
 	metaActives$ = createEffect(() => {
-		// Combine the latest values from the observables into a single array
 		const params$ = combineLatest([
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
 			this.store.select(getActiveTreasureSelection),
 		]);
-
-		// Listen to initDuelsMetaPassiveTreasureStats action and combined observables
 		const merged$ = merge(
 			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaActiveTreasureStats)),
 			params$,
 		);
-
 		return merged$.pipe(
 			withLatestFrom(params$),
-			// Only trigger the effect if action data or any of the combined observables data has changed
 			filter(([action, params]) => !!action || !!params),
 			switchMap(async ([action, [percentileFiler, timeFilter, statType]]) => {
 				const stats = await this.buildTreasureStats(percentileFiler, timeFilter, statType);
@@ -116,22 +129,17 @@ export class WebsiteDuelsEffects {
 	});
 
 	metaPassives$ = createEffect(() => {
-		// Combine the latest values from the observables into a single array
 		const params$ = combineLatest([
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
 			this.store.select(getPassiveTreasureSelection),
 		]);
-
-		// Listen to initDuelsMetaPassiveTreasureStats action and combined observables
 		const merged$ = merge(
 			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaPassiveTreasureStats)),
 			params$,
 		);
-
 		return merged$.pipe(
 			withLatestFrom(params$),
-			// Only trigger the effect if action data or any of the combined observables data has changed
 			filter(([action, params]) => !!action || !!params),
 			switchMap(async ([action, [percentileFiler, timeFilter, statType]]) => {
 				const stats = await this.buildTreasureStats(percentileFiler, timeFilter, statType);
@@ -156,7 +164,7 @@ export class WebsiteDuelsEffects {
 					duelsActiveMmrFilter: action.currentPercentileSelection,
 				};
 				await this.prefs.savePreferences(newPrefs);
-				return WebsiteDuelsActions.initDuelsMetaHeroStats();
+				return WebsiteDuelsActions.prefsUpdateSuccess();
 			}),
 		),
 	);
@@ -172,7 +180,7 @@ export class WebsiteDuelsEffects {
 					duelsActiveTimeFilter: action.currentTimePeriodSelection,
 				};
 				await this.prefs.savePreferences(newPrefs);
-				return WebsiteDuelsActions.initDuelsMetaHeroStats();
+				return WebsiteDuelsActions.prefsUpdateSuccess();
 			}),
 		),
 	);

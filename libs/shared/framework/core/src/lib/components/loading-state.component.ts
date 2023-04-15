@@ -7,11 +7,11 @@ import {
 	OnDestroy,
 	ViewEncapsulation,
 } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ILocalizationService } from '../localization/localization.service';
 
 @Component({
 	selector: 'loading-state',
-	styleUrls: [`../../css/component/loading-state.component.scss`],
+	styleUrls: [`./loading-state.component.scss`],
 	template: `
 		<div class="loading-state {{ className }}">
 			<div class="state-container">
@@ -40,7 +40,7 @@ export class LoadingStateComponent implements OnDestroy {
 
 	private interval;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {

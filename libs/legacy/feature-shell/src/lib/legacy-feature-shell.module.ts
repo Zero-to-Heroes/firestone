@@ -494,7 +494,7 @@ import { DuelsViewModule } from '@firestone/duels/view';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
@@ -591,7 +591,6 @@ import { FilterComponent } from './js/components/filter.component';
 import { FsFilterDropdownComponent } from './js/components/fs-filter-dropdown.component';
 import { HotkeyComponent } from './js/components/hotkey.component';
 import { InfiniteScrollComponent } from './js/components/infinite-scroll.component';
-import { LoadingStateComponent } from './js/components/loading-state.component';
 import { SecondaryDefaultComponent } from './js/components/main-window/secondary-default.component';
 import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
 import { ProgressBarComponent } from './js/components/progress-bar.component';
@@ -615,7 +614,6 @@ import { TwitterShareModalComponent } from './js/components/sharing/twitter/twit
 import { ConfirmationComponent } from './js/components/tooltip/confirmation.component';
 import { VersionComponent } from './js/components/version.component';
 import { WindowWrapperComponent } from './js/components/window-wrapper.component';
-import { WithLoadingComponent } from './js/components/with-loading.component';
 import { ActiveThemeDirective } from './js/directives/active-theme.directive';
 import { AskConfirmationDirective } from './js/directives/ask-confirmation.directive';
 import { BindCssVariableDirective } from './js/directives/bind-css-variable-directive';
@@ -840,6 +838,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReactiveFormsModule,
 
 		SharedCommonViewModule,
+		SharedFrameworkCoreModule,
 		ReplayColiseumModule,
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
@@ -900,9 +899,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
 		OwTranslateDirective,
-
-		LoadingStateComponent,
-		WithLoadingComponent,
 
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
@@ -1029,9 +1025,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
 		OwTranslateDirective,
-
-		LoadingStateComponent,
-		WithLoadingComponent,
 
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,

@@ -1,13 +1,12 @@
-@import '../global/variables';
-@import '../global/fonts';
-
 :host {
 	height: 100%;
 	display: flex;
 }
 
 .loading-state {
-	@extend %empty-state;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 13px;
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
@@ -27,7 +26,8 @@
 		// --icon-color: var(--default-title-color);
 
 		.title {
-			@extend %empty-state-title;
+			font-weight: 600;
+			font-size: 14px;
 			margin-top: 50px;
 			margin-bottom: 15px;
 			color: var(--default-title-color);

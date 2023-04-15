@@ -1,10 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ILocalizationService } from '../localization/localization.service';
 
 @Component({
 	selector: 'with-loading',
-	styleUrls: [`../../css/component/with-loading.component.scss`],
+	styleUrls: [`./with-loading.component.scss`],
 	template: `
 		<ng-container class="with-loading">
 			<ng-container *ngIf="!isLoading">
@@ -34,11 +34,11 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 	],
 })
 export class WithLoadingComponent {
-	@Input() isLoading: boolean;
+	@Input() isLoading: boolean | null;
 	@Input() mainTitle = this.i18n.translateString('app.loading.title');
 	@Input() subtitle = this.i18n.translateString('app.loading.subtitle');
 	@Input() hint: boolean;
 	@Input() svgName: string;
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }

@@ -23,6 +23,8 @@ export const initialWebsiteDuelsState: WebsiteDuelsState = {
 
 const reducer = createReducer(
 	initialWebsiteDuelsState,
+	on(WebsiteDuelsActions.prefsUpdateSuccess, (state) => ({ ...state, loaded: false, error: null })),
+
 	on(WebsiteDuelsActions.initDuelsMetaHeroStats, (state) => ({ ...state, loaded: false, error: null })),
 	on(WebsiteDuelsActions.loadDuelsMetaHeroStatsSuccess, (state, { stats, lastUpdateDate, mmrPercentiles }) => ({
 		...state,
