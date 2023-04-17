@@ -1,6 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
@@ -32,11 +31,9 @@ export class DuelsHeroFilterDropdownComponent extends AbstractSubscriptionStoreC
 	extractor: (conf: typeof duelsHeroConfigs[0]) => readonly CardIds[] = (conf) => [conf.hero];
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}

@@ -5,7 +5,7 @@ export class DuelsHeroPowerFilterSelectedEvent implements MainWindowStoreEvent {
 		return 'DuelsHeroPowerFilterSelectedEvent';
 	}
 
-	constructor(public readonly value: string) {}
+	constructor(public readonly value: readonly string[]) {}
 
 	public eventName(): string {
 		return 'DuelsHeroPowerFilterSelectedEvent';

@@ -92,8 +92,8 @@ export class DuelsOutOfCombatHeroSelectionComponent
 							deck,
 							trueMmrFilter,
 							allDuelsHeroes,
-							'all',
-							'all',
+							[],
+							[],
 							'last-patch',
 							dustFilter,
 							null,
@@ -149,8 +149,8 @@ export class DuelsOutOfCombatHeroSelectionComponent
 					null,
 					patch,
 					0,
-					'all',
-					'all',
+					[],
+					[],
 					'hero',
 				);
 				return duelsRuns.filter((run) =>

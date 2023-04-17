@@ -26,20 +26,22 @@ export class DuelsHeroFilterSelectedProcessor implements Processor {
 		const configForSelectedHeroes = duelsHeroConfigs.filter((config) =>
 			uniqueNormalizedHeroes.includes(normalizeDuelsHeroCardId(config.hero) as CardIds),
 		);
-		if (prefs.duelsActiveHeroPowerFilter !== 'all') {
+
+		// If the HP / signature fiters don't return anything, we reset them to their default values
+		if (!!prefs.duelsActiveHeroPowerFilter2?.length) {
 			const conf = configForSelectedHeroes.find((conf) =>
-				conf.heroPowers.includes(prefs.duelsActiveHeroPowerFilter as CardIds),
+				prefs.duelsActiveHeroPowerFilter2.some((f) => conf.heroPowers.includes(f as CardIds)),
 			);
 			if (!conf) {
-				await this.prefs.updateDuelsHeroPowerFilter('all');
+				await this.prefs.updateDuelsHeroPowerFilter([]);
 			}
 		}
-		if (prefs.duelsActiveSignatureTreasureFilter !== 'all') {
+		if (!!prefs.duelsActiveSignatureTreasureFilter2?.length) {
 			const conf = configForSelectedHeroes.find((conf) =>
-				conf.signatureTreasures.includes(prefs.duelsActiveSignatureTreasureFilter as CardIds),
+				prefs.duelsActiveSignatureTreasureFilter2.some((f) => conf.signatureTreasures.includes(f as CardIds)),
 			);
 			if (!conf) {
-				await this.prefs.updateDuelsSignatureTreasureFilter('all');
+				await this.prefs.updateDuelsSignatureTreasureFilter([]);
 			}
 		}
 		return [null, null];

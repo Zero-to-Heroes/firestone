@@ -13,7 +13,7 @@ export class DuelsSignatureTreasureFilterSelectedProcessor implements Processor 
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		await this.prefs.updateDuelsSignatureTreasureFilter(event.value);
+		await this.prefs.updateDuelsSignatureTreasureFilter(event.values);
 		return [null, null];
 	}
 }

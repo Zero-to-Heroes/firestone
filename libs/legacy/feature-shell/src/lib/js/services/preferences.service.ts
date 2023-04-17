@@ -526,15 +526,15 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateDuelsHeroPowerFilter(value: string) {
+	public async updateDuelsHeroPowerFilter(value: readonly string[]) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveHeroPowerFilter: value };
+		const newPrefs: Preferences = { ...prefs, duelsActiveHeroPowerFilter2: value };
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateDuelsSignatureTreasureFilter(value: string) {
+	public async updateDuelsSignatureTreasureFilter(value: readonly string[]) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveSignatureTreasureFilter: value };
+		const newPrefs: Preferences = { ...prefs, duelsActiveSignatureTreasureFilter2: value };
 		await this.savePreferences(newPrefs);
 	}
 

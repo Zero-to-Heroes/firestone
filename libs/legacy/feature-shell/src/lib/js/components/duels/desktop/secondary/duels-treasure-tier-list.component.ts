@@ -48,8 +48,8 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionStoreCom
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
-				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
+				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 			)

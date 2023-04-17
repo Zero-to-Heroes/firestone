@@ -42,8 +42,8 @@ export const buildDuelsCombinedHeroStats = <T extends DuelsHeroStat | DuelsTreas
 export const filterDuelsHeroStats = (
 	heroStats: readonly DuelsHeroStat[] | null,
 	heroesFilter: DuelsHeroFilterType,
-	heroPowerFilter: 'all' | string,
-	signatureTreasureFilter: 'all' | string,
+	heroPowerFilter: readonly string[],
+	signatureTreasureFilter: readonly string[],
 	// timeFilter: DuelsTimeFilterType, // The stats fed in input are already filtered (we only download the ones for a specific time period)
 	statType: DuelsStatTypeFilterType,
 	allCards: CardsFacadeService,
@@ -58,15 +58,15 @@ export const filterDuelsHeroStats = (
 		.filter((stat) =>
 			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-			heroPowerFilter === 'all' || statType !== 'signature-treasure'
+			!heroPowerFilter?.length || statType !== 'signature-treasure'
 				? true
-				: stat.heroPowerCardId === heroPowerFilter,
+				: heroPowerFilter.includes(stat.heroPowerCardId),
 		)
 		.filter((stat) =>
 			// Similar
-			signatureTreasureFilter === 'all' || statType !== 'hero-power'
+			!signatureTreasureFilter?.length || statType !== 'hero-power'
 				? true
-				: stat.signatureTreasureCardId === signatureTreasureFilter,
+				: signatureTreasureFilter.includes(stat.signatureTreasureCardId),
 		)
 		// TODO: update for Vanndar
 		.filter((stat) => {
@@ -92,8 +92,8 @@ export const filterDuelsHeroStats = (
 export const filterDuelsTreasureStats = (
 	treasures: readonly DuelsTreasureStat[],
 	heroesFilter: DuelsHeroFilterType,
-	heroPowerFilter: 'all' | string,
-	sigTreasureFilter: 'all' | string,
+	heroPowerFilter: readonly string[],
+	sigTreasureFilter: readonly string[],
 	// timeFilter: DuelsTimeFilterType,
 	statType: DuelsTreasureStatTypeFilterType,
 	allCards: CardsFacadeService,
@@ -109,11 +109,17 @@ export const filterDuelsTreasureStats = (
 		.filter((stat) => !(+stat.treasureCardId > 0))
 		.filter((stat) =>
 			!heroesFilter?.length
-				? false
+				? true
 				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
 		)
-		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
-		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
+		.filter((stat) =>
+			!heroPowerFilter?.length ? true : heroPowerFilter.some((filter) => stat.heroPowerCardId === filter),
+		)
+		.filter((stat) =>
+			!sigTreasureFilter?.length
+				? true
+				: sigTreasureFilter.some((filter) => stat.signatureTreasureCardId === filter),
+		)
 		.filter((stat) => isCorrectType(stat, statType, allCards))
 		.filter(
 			(stat) =>

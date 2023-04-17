@@ -5,7 +5,7 @@ export class DuelsSignatureTreasureFilterSelectedEvent implements MainWindowStor
 		return 'DuelsSignatureTreasureFilterSelectedEvent';
 	}
 
-	constructor(public readonly value: string) {}
+	constructor(public readonly values: readonly string[]) {}
 
 	public eventName(): string {
 		return 'DuelsSignatureTreasureFilterSelectedEvent';

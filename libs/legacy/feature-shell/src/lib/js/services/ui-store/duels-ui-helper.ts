@@ -70,8 +70,8 @@ export const filterDuelsRuns = (
 	duelsDeckDeletes: { [deckstring: string]: readonly number[] },
 	patch: PatchInfo,
 	mmrFilter: number,
-	heroPowerFilter: 'all' | string = 'all',
-	signatureTreasureFilter: 'all' | string = 'all',
+	heroPowerFilter: readonly string[] = [],
+	signatureTreasureFilter: readonly string[] = [],
 	statType: DuelsStatTypeFilterType = null,
 ) => {
 	if (!runs?.length) {
@@ -103,15 +103,15 @@ export const filterDuelsRuns = (
 			.filter((stat) =>
 				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-				heroPowerFilter === 'all' || statType !== 'signature-treasure'
+				!heroPowerFilter?.length || statType !== 'signature-treasure'
 					? true
-					: stat.heroPowerCardId === heroPowerFilter,
+					: heroPowerFilter.includes(stat.heroPowerCardId),
 			)
 			.filter((stat) =>
 				// Similar
-				signatureTreasureFilter === 'all' || statType !== 'hero-power'
+				!signatureTreasureFilter?.length || statType !== 'hero-power'
 					? true
-					: stat.signatureTreasureCardId === signatureTreasureFilter,
+					: signatureTreasureFilter.includes(stat.signatureTreasureCardId),
 			)
 	);
 };
@@ -302,8 +302,8 @@ export const topDeckApplyFilters = (
 	grouped: DuelsGroupedDecks,
 	mmrFilter: number,
 	heroFilter: DuelsHeroFilterType,
-	heroPowerFilter: 'all' | string,
-	sigTreasureFilter: 'all' | string,
+	heroPowerFilter: readonly string[],
+	sigTreasureFilter: readonly string[],
 	timeFilter: DuelsTimeFilterType,
 	dustFilter: DuelsTopDecksDustFilterType,
 	passivesFilter: readonly string[],
@@ -336,12 +336,12 @@ const topDeckHeroFilter = (deck: DuelsDeckStat, heroesFilter: DuelsHeroFilterTyp
 		: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
 };
 
-const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {
-	return !filter || filter === 'all' || deck.heroPowerCardId === filter;
+const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filters: readonly string[]): boolean => {
+	return !filters?.length || filters.some((filter) => deck.heroPowerCardId === filter);
 };
 
-const topDeckSigTreasureFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {
-	return !filter || filter === 'all' || deck.signatureTreasureCardId === filter;
+const topDeckSigTreasureFilter = (deck: DuelsDeckStat, filters: readonly string[]): boolean => {
+	return !filters?.length || filters.some((filter) => deck.signatureTreasureCardId === filter);
 };
 
 const topDeckDustFilter = (deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean => {
