@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardClass } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -155,9 +155,37 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 			startWith(null),
 			this.mapData((data: string) => data?.trim()?.toLowerCase(), null, 50),
 		);
-		this.buckets$ = combineLatest(allBuckets$, this.activeClassFilters.asObservable(), this.searchString$).pipe(
-			this.mapData(([buckets, activeClassFilters, searchString]) =>
-				buckets
+		this.buckets$ = combineLatest([allBuckets$, this.activeClassFilters.asObservable(), this.searchString$]).pipe(
+			this.mapData(([buckets, activeClassFilters, searchString]) => {
+				return buckets
+					.map((bucket) => {
+						const cardsForClass = bucket.bucketCards.filter((card) => {
+							const refCard = this.allCards.getCard(card.cardId);
+							return (
+								refCard.cardClass === CardClass[CardClass.NEUTRAL] ||
+								!refCard.cardClass ||
+								activeClassFilters.some(
+									(c: string) => CardClass[c.toUpperCase()] === CardClass[refCard.cardClass],
+								)
+							);
+						});
+						if (!cardsForClass) {
+							return null;
+						}
+						const totalOfferingRate = sumOnArray(cardsForClass, (card) => card.offeringRate);
+						const bucketCards = cardsForClass.map((card) => {
+							const bucketCard: BucketCard = {
+								...card,
+								offeringRate: card.offeringRate / totalOfferingRate,
+							};
+							return bucketCard;
+						});
+						return {
+							...bucket,
+							bucketCards: bucketCards,
+						};
+					})
+					.filter((bucket) => !!bucket)
 					.filter(
 						(bucket) =>
 							!activeClassFilters.length ||
@@ -168,8 +196,8 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 					.map((bucket) =>
 						!searchString?.length ? bucket : this.highlightCardsInBucket(bucket, searchString),
 					)
-					.filter((bucket) => !!bucket),
-			),
+					.filter((bucket) => !!bucket);
+			}),
 		);
 	}
 
