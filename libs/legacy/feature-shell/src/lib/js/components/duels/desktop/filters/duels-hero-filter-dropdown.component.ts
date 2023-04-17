@@ -1,19 +1,9 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-} from '@angular/core';
-import { allDuelsHeroes, CardIds } from '@firestone-hs/reference-data';
-import { MultiselectOption } from '@firestone/shared/common/view';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
@@ -21,26 +11,25 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	selector: 'duels-hero-filter-dropdown',
 	styleUrls: [`../../../../../css/component/duels/desktop/filters/duels-hero-filter-dropdown.component.scss`],
 	template: `
-		<filter-dropdown-multiselect
-			*ngIf="filter$ | async as value"
+		<duels-main-filter-multiselect-dropdown-view
 			class="duels-hero-filter-dropdown"
-			[options]="options"
-			[selected]="value.selected"
-			[placeholder]="value.placeholder"
-			[visible]="value.visible"
+			[allValuesLabel]="allValuesLabel"
+			[referenceCards]="referenceCards"
+			[extractor]="extractor"
+			[currentFilter]="currentFilter$ | async"
+			[visible]="visible$ | async"
 			(optionSelected)="onSelected($event)"
-		></filter-dropdown-multiselect>
+		></duels-main-filter-multiselect-dropdown-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
-	options: MultiselectOption[];
-	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
+export class DuelsHeroFilterDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	currentFilter$: Observable<readonly string[]>;
+	visible$: Observable<boolean>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	allValuesLabel = this.i18n.translateString('app.duels.filters.hero.all') as string;
+	referenceCards = duelsHeroConfigs.flatMap((conf) => conf.hero);
+	extractor: (conf: typeof duelsHeroConfigs[0]) => readonly CardIds[] = (conf) => [conf.hero];
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -53,41 +42,23 @@ export class DuelsHeroFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.options = allDuelsHeroes.map((value) => {
-			return {
-				value: value,
-				label: this.i18n.getCardName(value),
-				image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`,
-			};
-		});
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-				([main, nav]) => nav.navigationDuels.selectedCategoryId,
-			)
+		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroesFilter2);
+		this.visible$ = this.store
+			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
 			.pipe(
-				filter(([filter, selectedCategoryId]) => !!selectedCategoryId),
-				this.mapData(([filter, selectedCategoryId]) => ({
-					selected: filter ?? allDuelsHeroes,
-					placeholder: this.i18n.translateString('app.duels.filters.hero.all'),
-					visible: [
+				this.mapData(([selectedCategoryId]) =>
+					[
 						'duels-stats',
 						'duels-runs',
 						'duels-treasures',
 						'duels-personal-decks',
 						'duels-top-decks',
 					].includes(selectedCategoryId),
-				})),
-			) as any;
+				),
+			);
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	onSelected(option: readonly string[]) {
-		this.stateUpdater.next(
-			new DuelsTopDecksHeroFilterSelectedEvent(option.filter((o) => !!o).map((o) => o as CardIds)),
-		);
+	onSelected(options: readonly string[]) {
+		this.store.send(new DuelsTopDecksHeroFilterSelectedEvent(options.filter((o) => !!o).map((o) => o as CardIds)));
 	}
 }

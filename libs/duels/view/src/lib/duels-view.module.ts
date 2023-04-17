@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { DuelsMainFilterMultiselectDropdownViewComponent } from './filters/duels-main-filter-multiselect-dropdown-view';
 import { DuelsRankFilterDropdownViewComponent } from './filters/duels-rank-filter-dropdown-view.component';
 import { DuelsTimeFilterDropdownViewComponent } from './filters/duels-time-filter-dropdown-view.component';
 import { DuelsMetaStatsTierCardInfoComponent } from './stats/duels-meta-stats-tier-card-info.component';
@@ -15,6 +16,7 @@ const components = [
 	DuelsMetaStatsTierCardInfoComponent,
 	DuelsRankFilterDropdownViewComponent,
 	DuelsTimeFilterDropdownViewComponent,
+	DuelsMainFilterMultiselectDropdownViewComponent,
 ];
 
 @NgModule({

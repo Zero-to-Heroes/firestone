@@ -13,7 +13,6 @@ import { getAllMetaHeroStats, getLoaded } from './+state/meta-hero-stats/meta-he
 	template: `
 		<with-loading [isLoading]="isLoading$ | async">
 			<section class="section">
-				<!-- (Work in progress) Time: last patch, Rank: all, Tribes: all -->
 				<div class="filters">
 					<website-battlegrounds-rank-filter-dropdown
 						class="filter"

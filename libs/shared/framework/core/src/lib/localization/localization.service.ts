@@ -23,6 +23,9 @@ export interface ImageLocalizationOptions {
 	readonly isHeroSkin?: boolean;
 }
 
-export const formatClass = (playerClass: string, i18n: { translateString: (string) => string }): string => {
+export const formatClass = (
+	playerClass: string,
+	i18n: { translateString: (string) => string | null },
+): string | null => {
 	return i18n.translateString(`global.class.${playerClass?.toLowerCase()}`);
 };

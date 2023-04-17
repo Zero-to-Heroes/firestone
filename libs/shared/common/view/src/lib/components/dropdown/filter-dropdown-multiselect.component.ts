@@ -76,7 +76,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	@Output() optionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
-	@Input() set options(value: readonly MultiselectOption[]) {
+	@Input() set options(value: readonly MultiselectOption[] | null) {
 		this.options$.next(value?.filter((option) => !!option) ?? []);
 	}
 
