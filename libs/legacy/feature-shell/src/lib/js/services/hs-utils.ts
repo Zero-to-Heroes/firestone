@@ -353,6 +353,7 @@ const publicCardGiftCreators = [
 	CardIds.BazaarMugger,
 	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
 	CardIds.BeOurGuestTavernBrawl,
+	CardIds.BlastWave,
 	CardIds.BlessedGoods,
 	CardIds.BlessingOfTheAncients_DAL_351,
 	CardIds.BloodsailFlybooter,
