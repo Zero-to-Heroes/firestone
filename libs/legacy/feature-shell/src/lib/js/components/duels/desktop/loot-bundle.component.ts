@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { uuid } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -37,7 +38,8 @@ export class LootBundleComponent {
 						cardId: cardId,
 						cardName: this.i18n.getCardName(card.id),
 						manaCost: card.cost,
-				  } as VisualDeckCard);
+						internalEntityIds: [uuid()],
+				  });
 		});
 	}
 

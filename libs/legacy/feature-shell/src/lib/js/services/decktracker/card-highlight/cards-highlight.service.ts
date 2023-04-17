@@ -116,6 +116,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	public async init(options?: SelectorOptions) {
 		this.options = options;
+		console.debug('init done', this.options, options);
 	}
 
 	// public shutDown() {
@@ -154,30 +155,35 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			playerDeckProvider,
 			opponentDeckProvider,
 		);
-		// console.debug(
-		// 	'cardsToHighlight',
-		// 	cardsToHighlight,
-		// 	cardId,
-		// 	side,
-		// 	card,
-		// 	playerDeckProvider(),
-		// 	this.options,
-		// 	this.gameState,
-		// );
+		console.debug(
+			'cardsToHighlight',
+			cardsToHighlight,
+			cardId,
+			side,
+			card,
+			playerDeckProvider(),
+			this.options,
+			this.gameState,
+		);
+		console.debug(
+			'handlers',
+			Object.values(this.handlers).map((h) => h.deckCardProvider()),
+			Object.values(this.handlers)
+				.filter((h) => !h.deckCardProvider())
+				.map((h) => h.referenceCardProvider()),
+		);
 		for (const card of cardsToHighlight) {
-			const handler = Object.values(this.handlers).find(
-				(h) =>
-					h.side() === card.side &&
-					h.deckCardProvider()?.cardId === card.cardId &&
-					(!card.entityId || card.entityId === h.deckCardProvider()?.entityId),
+			const handler = Object.values(this.handlers).find((h) =>
+				// Discovers don't have deck card providers
+				h.deckCardProvider()?.internalEntityIds?.includes(card.internalEntityId),
 			);
 			if (!!handler) {
-				// console.debug(
-				// 	'DO HIGHLGIHT',
-				// 	handler.referenceCardProvider()?.name,
-				// 	handler,
-				// 	handler.highlightCallback,
-				// );
+				console.debug(
+					'DO HIGHLGIHT',
+					handler.referenceCardProvider()?.name,
+					handler,
+					handler.highlightCallback,
+				);
 				handler.highlightCallback();
 			}
 		}
@@ -260,6 +266,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			result.push({
 				cardId: card.cardId,
 				entityId: card.entityId,
+				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: 'deck',
 				side: side,
@@ -271,6 +278,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			result.push({
 				cardId: card.cardId,
 				entityId: card.entityId,
+				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: 'hand',
 				side: side,
@@ -282,6 +290,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			result.push({
 				cardId: card.cardId,
 				entityId: card.entityId,
+				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: 'other',
 				side: side,
@@ -293,6 +302,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			result.push({
 				cardId: card.cardId,
 				entityId: card.entityId,
+				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: card.zone === 'GRAVEYARD' ? 'graveyard' : 'other',
 				side: side,
@@ -448,7 +458,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ClassActionLawyer:
 				return and(side(inputSide), inDeck, neutral);
 			case CardIds.ClickClocker:
-				return and(side(inputSide), inDeck, minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.ClockworkAssistant_GILA_907:
 			case CardIds.ClockworkAssistant_ONY_005ta11:
 			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48:
@@ -585,7 +595,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FossilFanatic:
 				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.FrequencyOscillator:
-				return and(side(inputSide), inDeck, minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.FrizzKindleroost:
 				return and(side(inputSide), inDeck, dragon);
 			case CardIds.FrontLines_TID_949:
@@ -596,7 +606,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FungalFortunes:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.GaiaTheTechtonic_TSC_029:
-				return and(side(inputSide), inDeck, minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.GatherYourParty:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.GhoulishAlchemist:
@@ -626,7 +636,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), spell, frost);
 			case CardIds.GorillabotA3:
 			case CardIds.GorillabotA3Core:
-				return and(side(inputSide), inDeck, minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.GorlocRavager:
 				return and(side(inputSide), inDeck, murloc);
 			case CardIds.GrandMagisterRommath:
@@ -810,7 +820,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.MeatGrinder_RLK_120:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.MechaShark_TSC_054:
-				return and(side(inputSide), inDeck, minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.MeekMasteryTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
 			case CardIds.MendingPoolsTavernBrawl:
@@ -965,7 +975,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.SeafloorGateway_TSC_055:
 				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.SecurityAutomaton_TSC_928:
-				return and(side(inputSide), inDeck, minion, mech);
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.SenseDemonsLegacy_EX1_317:
 			case CardIds.SenseDemonsVanilla_VAN_EX1_317:
 				return and(side(inputSide), inDeck, minion, demon);
@@ -1192,8 +1202,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		}
 
 		// Mechanic-specific highlights
-		if (this.allCards.getCard(cardId).mechanics.includes(GameTag[GameTag.MODULAR])) {
-			return and(side(inputSide), inDeck, minion, mech);
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.MODULAR])) {
+			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		}
 	}
 }
@@ -1216,6 +1226,7 @@ export interface SelectorOptions {
 export interface SelectorInput {
 	side: 'player' | 'opponent' | 'duels';
 	entityId: number;
+	internalEntityId: string;
 	cardId: string;
 	zone: string;
 	card: ReferenceCard;

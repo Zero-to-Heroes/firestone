@@ -269,7 +269,8 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		// console.debug('uniqueCardNames', uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
-				const refCard = cardsToShow.find((c) => c.cardName === cardName);
+				const matchingCards = cardsToShow.filter((c) => c.cardName === cardName);
+				const refCard = matchingCards.find((c) => c.cardName === cardName);
 				const cardsToShowWithName = cardsToShow.filter((c) => c.cardName === cardName);
 				const isInInitialDecklist = !!deckState.deckList.find((c) => c.cardName === cardName);
 				// console.debug(
@@ -311,6 +312,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								creatorCardIds: [],
 								// creatorCardIds: deckCreatorCardIds,
 								highlight: displayMode,
+								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 							}),
 						),
 					);
@@ -332,6 +334,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 								creatorCardIds: otherCreatorCardIds,
 								highlight: 'dim',
+								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 							}),
 						),
 					);
@@ -375,7 +378,8 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
-				const refCard = cardsToShow.find((c) => c.cardName === cardName);
+				const matchingCards = cardsToShow.filter((c) => c.cardName === cardName);
+				const refCard = matchingCards.find((c) => c.cardName === cardName);
 				const cardsToShowWithName = cardsToShow.filter((c) => c.cardName === cardName);
 				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
 				const shouldShowDeckLine =
@@ -409,6 +413,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 										this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 									creatorCardIds: [],
 									highlight: null,
+									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 								}),
 							),
 						);
@@ -427,6 +432,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 									actualManaCost:
 										this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 									highlight: 'dim',
+									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 								}),
 							),
 						);
@@ -449,6 +455,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 								creatorCardIds: otherCreatorCardIds,
 								highlight: 'dim',
+								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 							}),
 						),
 					);

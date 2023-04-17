@@ -1,15 +1,16 @@
-import { NonFunctionProperties } from '@services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { DeckCard } from './deck-card';
 
 export class VisualDeckCard extends DeckCard {
 	readonly highlight: 'dim' | 'normal' | 'in-hand';
+	readonly internalEntityIds: readonly string[];
 	readonly cardClass?: string;
 	readonly totalQuantity: number;
 	readonly creatorCardIds?: readonly string[] = [];
 	readonly lastAffectedByCardIds?: readonly string[] = [];
 	readonly isMissing?: boolean;
 
-	constructor() {
+	protected constructor() {
 		super();
 	}
 
@@ -18,5 +19,9 @@ export class VisualDeckCard extends DeckCard {
 		// 	console.warn('creating deck card without name', base, new Error().stack);
 		// }
 		return Object.assign(new VisualDeckCard(), base);
+	}
+
+	public update(base: Partial<NonFunctionProperties<VisualDeckCard>>): VisualDeckCard {
+		return Object.assign(new VisualDeckCard(), this, base);
 	}
 }

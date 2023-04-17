@@ -13,6 +13,7 @@ import {
 	IPreferences,
 	NonFunctionProperties,
 	Store,
+	uuid,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
@@ -110,6 +111,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				const card = this.allCards.getCard(cardDbfId);
 				const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
 				const sideboard = this.buildSideboard(sideboardFromList);
+				const internalEntityId = uuid();
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
@@ -117,6 +119,8 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 					rarity: card.rarity,
 					totalQuantity: quantity,
 					sideboard: sideboard,
+					internalEntityId: internalEntityId,
+					internalEntityIds: [internalEntityId],
 				});
 			})
 			.sort((a, b) => a.manaCost - b.manaCost);
@@ -132,12 +136,15 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				const cardDbfId = pair[0];
 				const quantity = pair[1];
 				const card = this.allCards.getCard(cardDbfId);
+				const internalEntityId = uuid();
 				return VisualDeckCard.create({
 					cardId: card.id,
 					cardName: card.name,
 					manaCost: card.cost,
 					rarity: card.rarity,
 					totalQuantity: quantity,
+					internalEntityId: internalEntityId,
+					internalEntityIds: [internalEntityId],
 				});
 			})
 			.sort((a, b) => a.manaCost - b.manaCost);

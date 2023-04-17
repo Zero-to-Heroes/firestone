@@ -1,11 +1,12 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { NonFunctionProperties } from '@services/utils';
+import { NonFunctionProperties, uuid } from '@firestone/shared/framework/common';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
 	public static deckIndexFromBottom = 0;
 
 	readonly cardId: string;
+	readonly internalEntityId: string;
 	readonly entityId: number;
 	readonly cardName: string;
 	readonly manaCost: number;
@@ -64,7 +65,13 @@ export class DeckCard {
 		// if (base.cardId && !base.cardName) {
 		// console.warn('creating deck card without name', base, new Error().stack);
 		// }
-		return Object.assign(new DeckCard(), base);
+		return Object.assign(
+			new DeckCard(),
+			{
+				internalEntityId: uuid(),
+			},
+			base,
+		);
 	}
 
 	protected constructor() {
@@ -72,14 +79,6 @@ export class DeckCard {
 	}
 
 	public update(newCard: Partial<NonFunctionProperties<DeckCard>>): DeckCard {
-		if (!newCard) {
-			return this;
-		}
-
-		// Don't log anything, as this can cause some huge lag on new releases, when the cards are not updated yet
-		if (newCard?.cardId && !newCard?.cardName) {
-			// console.warn('updating deck card without name', newCard, newCard?.cardId, new Error().stack);
-		}
 		return Object.assign(new DeckCard(), this, newCard);
 	}
 

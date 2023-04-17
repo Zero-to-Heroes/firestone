@@ -257,12 +257,12 @@ export class DeckListByZoneComponent implements OnDestroy {
 				{
 					header: null,
 					cards: zone.cards.map((card) =>
-						Object.assign(new VisualDeckCard(), card, {
+						VisualDeckCard.create(card).update({
 							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
 							lastAffectedByCardIds: (card.lastAffectedByCardId
 								? [card.lastAffectedByCardId]
 								: []) as readonly string[],
-						} as VisualDeckCard),
+						}),
 					),
 					sortingFunction: sortingFunction,
 				},
@@ -287,13 +287,13 @@ export class DeckListByZoneComponent implements OnDestroy {
 				header: null,
 				cards: cards
 					.map((card) =>
-						Object.assign(new VisualDeckCard(), card, {
+						VisualDeckCard.create(card).update({
 							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
 							lastAffectedByCardIds: (card.lastAffectedByCardId
 								? [card.lastAffectedByCardId]
 								: []) as readonly string[],
-							highlight: highlight,
-						} as VisualDeckCard),
+							highlight: highlight as any,
+						}),
 					)
 					.filter((card) => !filterFunction || filterFunction(card)),
 				sortingFunction: sortingFunction,
@@ -303,13 +303,13 @@ export class DeckListByZoneComponent implements OnDestroy {
 				header: zone.header,
 				cards: zone.cards
 					.map((card) =>
-						Object.assign(new VisualDeckCard(), card, {
+						VisualDeckCard.create(card).update({
 							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
 							lastAffectedByCardIds: (card.lastAffectedByCardId
 								? [card.lastAffectedByCardId]
 								: []) as readonly string[],
-							highlight: highlight,
-						} as VisualDeckCard),
+							highlight: highlight as any,
+						}),
 					)
 					.filter((card) => !filterFunction || filterFunction(card)),
 				sortingFunction: zone.sortingFunction,

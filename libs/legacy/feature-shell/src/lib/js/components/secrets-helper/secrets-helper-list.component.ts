@@ -7,6 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { uuid } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BoardSecret } from '../../models/decktracker/board-secret';
@@ -123,7 +124,8 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
 					highlight: refOption.isValidOption ? 'normal' : 'dim',
 					cardClass: dbCard.cardClass,
-				} as VisualDeckCard);
+					internalEntityIds: [uuid()],
+				});
 			});
 
 		return reducedOptions.map((c) => VisualDeckCard.create(c));

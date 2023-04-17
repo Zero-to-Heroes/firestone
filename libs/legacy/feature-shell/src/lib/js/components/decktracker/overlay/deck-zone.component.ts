@@ -245,11 +245,12 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 						),
 					];
 
-					const result = Object.assign(new VisualDeckCard(), cards[0], {
+					const result = VisualDeckCard.create(cards[0]).update({
 						totalQuantity: cards.length,
 						creatorCardIds: creatorCardIds,
 						isMissing: groupingKey.includes('missing'),
-					} as VisualDeckCard);
+						internalEntityIds: cards.map((card) => card.internalEntityId),
+					});
 					return result;
 				})
 				.sort((a, b) => this.compare(a, b, showUpdatedCost));
