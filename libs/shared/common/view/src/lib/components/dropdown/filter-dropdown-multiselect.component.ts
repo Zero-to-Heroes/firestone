@@ -178,7 +178,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	toggle() {
 		this.showing = !this.showing;
-		console.debug('toggle', this.showing);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

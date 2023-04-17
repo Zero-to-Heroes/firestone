@@ -1,3 +1,4 @@
+import { duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { LocalStorageService } from '@firestone/shared/framework/core';
 import { WebsitePreferencesService } from '@firestone/website/core';
 import { Action, createReducer, on } from '@ngrx/store';
@@ -19,6 +20,9 @@ export const initialWebsiteDuelsState: WebsiteDuelsState = {
 	currentTimePeriodSelection: localPrefs?.duelsActiveTimeFilter ?? 'last-patch',
 	currentPassiveTreasureTypeSelection: 'passive-1',
 	currentActiveTreasureTypeSelection: 'treasure-1',
+	currentHeroSelection: localPrefs?.duelsActiveHeroesFilter2 ?? duelsHeroConfigs.map((conf) => conf.hero),
+	currentHeroPowerSelection: localPrefs?.duelsActiveHeroPowerFilter2 ?? [],
+	currentSignatureTreasureSelection: localPrefs?.duelsActiveSignatureTreasureFilter2 ?? [],
 };
 
 const reducer = createReducer(
@@ -93,6 +97,24 @@ const reducer = createReducer(
 	on(WebsiteDuelsActions.changeMetaHeroStatsTimeFilter, (state, { currentTimePeriodSelection }) => ({
 		...state,
 		currentTimePeriodSelection: currentTimePeriodSelection,
+		loaded: false,
+		error: null,
+	})),
+	on(WebsiteDuelsActions.changeHeroFilter, (state, { currentHeroSelection }) => ({
+		...state,
+		currentHeroSelection: currentHeroSelection,
+		loaded: false,
+		error: null,
+	})),
+	on(WebsiteDuelsActions.changeHeroPowerFilter, (state, { currentHeroPowerSelection }) => ({
+		...state,
+		currentHeroPowerSelection: currentHeroPowerSelection,
+		loaded: false,
+		error: null,
+	})),
+	on(WebsiteDuelsActions.changeSignatureTreasureFilter, (state, { currentSignatureSelection }) => ({
+		...state,
+		currentSignatureTreasureSelection: currentSignatureSelection,
 		loaded: false,
 		error: null,
 	})),

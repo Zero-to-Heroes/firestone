@@ -48,6 +48,21 @@ export const getCurrentTimerFilter = createSelector(
 	(state: WebsiteDuelsState) => state.currentTimePeriodSelection,
 );
 
+export const getCurrentHeroFilter = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.currentHeroSelection,
+);
+
+export const getCurrentHeroPowerFilter = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.currentHeroPowerSelection,
+);
+
+export const getCurrentSignatureFilter = createSelector(
+	getWebsiteDuelsState,
+	(state: WebsiteDuelsState) => state.currentSignatureTreasureSelection,
+);
+
 export const getActiveTreasureSelection = createSelector(
 	getWebsiteDuelsState,
 	(state: WebsiteDuelsState) => state.currentActiveTreasureTypeSelection,

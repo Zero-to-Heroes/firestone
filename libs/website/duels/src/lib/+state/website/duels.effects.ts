@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DuelsStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
-import { duelsHeroConfigs } from '@firestone-hs/reference-data';
 import {
 	buildDuelsCombinedHeroStats,
 	DuelsCombinedHeroStat,
+	DuelsHeroFilterType,
 	DuelsMetaHeroStatsAccessService,
 	DuelsStatTypeFilterType,
 	DuelsTimeFilterType,
@@ -17,13 +17,16 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { WebsitePreferences, WebsitePreferencesService } from '@firestone/website/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, merge, switchMap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, merge, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import * as WebsiteDuelsActions from './duels.actions';
 import { WebsiteDuelsState } from './duels.models';
 import {
 	getActiveTreasureSelection,
+	getCurrentHeroFilter,
+	getCurrentHeroPowerFilter,
 	getCurrentPercentileFilter,
+	getCurrentSignatureFilter,
 	getCurrentTimerFilter,
 	getPassiveTreasureSelection,
 } from './duels.selectors';
@@ -43,13 +46,14 @@ export class WebsiteDuelsEffects {
 		const params$ = combineLatest([
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
+			this.store.select(getCurrentHeroFilter),
 		]);
 		const merged$ = merge(this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroStats)), params$);
 		return merged$.pipe(
 			withLatestFrom(params$),
 			filter(([action, params]) => !!action || !!params),
-			switchMap(async ([action, [percentileFiler, timeFilter]]) => {
-				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'hero');
+			switchMap(async ([action, [percentileFiler, timeFilter, heroFilter]]) => {
+				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'hero', heroFilter, [], []);
 				return WebsiteDuelsActions.loadDuelsMetaHeroStatsSuccess({
 					stats: stats.stats,
 					lastUpdateDate: stats?.lastUpdateDate,
@@ -63,13 +67,26 @@ export class WebsiteDuelsEffects {
 		const params$ = combineLatest([
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
-		]);
-		const merged$ = merge(this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroPowerStats)), params$);
+			this.store.select(getCurrentHeroFilter),
+			this.store.select(getCurrentSignatureFilter),
+		]).pipe(tap((info) => console.debug('params$', info)));
+		const merged$ = merge(
+			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroPowerStats)),
+			params$,
+		).pipe(tap((info) => console.debug('merged$', info)));
 		return merged$.pipe(
 			withLatestFrom(params$),
-			filter(([action, params]) => !!action || !!params),
-			switchMap(async ([action, [percentileFiler, timeFilter]]) => {
-				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'hero-power');
+			// filter(([action, params]) => !!action || !!params),
+			switchMap(async ([action, [percentileFiler, timeFilter, heroFilter, signatureTreasureFilter]]) => {
+				console.debug('building HP stats', signatureTreasureFilter);
+				const stats = await this.buildHeroStats(
+					percentileFiler,
+					timeFilter,
+					'hero-power',
+					heroFilter,
+					[],
+					signatureTreasureFilter,
+				);
 				return WebsiteDuelsActions.loadDuelsMetaHeroPowerStatsSuccess({
 					stats: stats.stats,
 					lastUpdateDate: stats?.lastUpdateDate,
@@ -83,6 +100,8 @@ export class WebsiteDuelsEffects {
 		const params$ = combineLatest([
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
+			this.store.select(getCurrentHeroFilter),
+			this.store.select(getCurrentHeroPowerFilter),
 		]);
 		const merged$ = merge(
 			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaSignatureTreasureStats)),
@@ -91,8 +110,15 @@ export class WebsiteDuelsEffects {
 		return merged$.pipe(
 			withLatestFrom(params$),
 			filter(([action, params]) => !!action || !!params),
-			switchMap(async ([action, [percentileFiler, timeFilter]]) => {
-				const stats = await this.buildHeroStats(percentileFiler, timeFilter, 'signature-treasure');
+			switchMap(async ([action, [percentileFiler, timeFilter, heroFilter, heroPowerFilter]]) => {
+				const stats = await this.buildHeroStats(
+					percentileFiler,
+					timeFilter,
+					'signature-treasure',
+					heroFilter,
+					heroPowerFilter,
+					[],
+				);
 				return WebsiteDuelsActions.loadDuelsMetaSignatureTreasureStatsSuccess({
 					stats: stats.stats,
 					lastUpdateDate: stats?.lastUpdateDate,
@@ -108,6 +134,9 @@ export class WebsiteDuelsEffects {
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
 			this.store.select(getActiveTreasureSelection),
+			this.store.select(getCurrentHeroFilter),
+			this.store.select(getCurrentHeroPowerFilter),
+			this.store.select(getCurrentSignatureFilter),
 		]);
 		const merged$ = merge(
 			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaActiveTreasureStats)),
@@ -116,15 +145,27 @@ export class WebsiteDuelsEffects {
 		return merged$.pipe(
 			withLatestFrom(params$),
 			filter(([action, params]) => !!action || !!params),
-			switchMap(async ([action, [percentileFiler, timeFilter, statType]]) => {
-				const stats = await this.buildTreasureStats(percentileFiler, timeFilter, statType);
-				console.debug('built actives', stats, percentileFiler, timeFilter, statType);
-				return WebsiteDuelsActions.loadDuelsMetaActiveTreasureStatsSuccess({
-					stats: stats.stats,
-					lastUpdateDate: stats?.lastUpdateDate,
-					mmrPercentiles: stats?.mmrPercentiles ?? [],
-				});
-			}),
+			switchMap(
+				async ([
+					action,
+					[percentileFiler, timeFilter, statType, heroFilter, heroPowerFilter, signatureFilter],
+				]) => {
+					const stats = await this.buildTreasureStats(
+						percentileFiler,
+						timeFilter,
+						statType,
+						heroFilter,
+						heroPowerFilter,
+						signatureFilter,
+					);
+					console.debug('built actives', stats, percentileFiler, timeFilter, statType);
+					return WebsiteDuelsActions.loadDuelsMetaActiveTreasureStatsSuccess({
+						stats: stats.stats,
+						lastUpdateDate: stats?.lastUpdateDate,
+						mmrPercentiles: stats?.mmrPercentiles ?? [],
+					});
+				},
+			),
 		);
 	});
 
@@ -133,6 +174,9 @@ export class WebsiteDuelsEffects {
 			this.store.select(getCurrentPercentileFilter),
 			this.store.select(getCurrentTimerFilter),
 			this.store.select(getPassiveTreasureSelection),
+			this.store.select(getCurrentHeroFilter),
+			this.store.select(getCurrentHeroPowerFilter),
+			this.store.select(getCurrentSignatureFilter),
 		]);
 		const merged$ = merge(
 			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaPassiveTreasureStats)),
@@ -141,15 +185,27 @@ export class WebsiteDuelsEffects {
 		return merged$.pipe(
 			withLatestFrom(params$),
 			filter(([action, params]) => !!action || !!params),
-			switchMap(async ([action, [percentileFiler, timeFilter, statType]]) => {
-				const stats = await this.buildTreasureStats(percentileFiler, timeFilter, statType);
-				console.debug('built passives', stats, percentileFiler, timeFilter, statType);
-				return WebsiteDuelsActions.loadDuelsMetaPassiveTreasureStatsSuccess({
-					stats: stats.stats,
-					lastUpdateDate: stats?.lastUpdateDate,
-					mmrPercentiles: stats?.mmrPercentiles ?? [],
-				});
-			}),
+			switchMap(
+				async ([
+					action,
+					[percentileFiler, timeFilter, statType, heroFilter, heroPowerFilter, signatureFilter],
+				]) => {
+					const stats = await this.buildTreasureStats(
+						percentileFiler,
+						timeFilter,
+						statType,
+						heroFilter,
+						heroPowerFilter,
+						signatureFilter,
+					);
+					console.debug('built passives', stats, percentileFiler, timeFilter, statType);
+					return WebsiteDuelsActions.loadDuelsMetaPassiveTreasureStatsSuccess({
+						stats: stats.stats,
+						lastUpdateDate: stats?.lastUpdateDate,
+						mmrPercentiles: stats?.mmrPercentiles ?? [],
+					});
+				},
+			),
 		);
 	});
 
@@ -185,10 +241,62 @@ export class WebsiteDuelsEffects {
 		),
 	);
 
+	changeHeroFilter$ = createEffect(() =>
+		this.actions$.pipe(
+			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
+			ofType(WebsiteDuelsActions.changeHeroFilter),
+			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					duelsActiveHeroesFilter2: action.currentHeroSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
+				return WebsiteDuelsActions.prefsUpdateSuccess();
+			}),
+		),
+	);
+
+	changeHeroPowerFilter$ = createEffect(() =>
+		this.actions$.pipe(
+			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
+			ofType(WebsiteDuelsActions.changeHeroPowerFilter),
+			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					duelsActiveHeroPowerFilter2: action.currentHeroPowerSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
+				return WebsiteDuelsActions.prefsUpdateSuccess();
+			}),
+		),
+	);
+
+	changeSignatureFilter$ = createEffect(() =>
+		this.actions$.pipe(
+			// Effects seem to always be called after reducers, so the data in the state should have the proper value here
+			ofType(WebsiteDuelsActions.changeSignatureTreasureFilter),
+			switchMap(async (action) => {
+				const existingPrefs = await this.prefs.getPreferences();
+				const newPrefs: WebsitePreferences = {
+					...existingPrefs,
+					duelsActiveSignatureTreasureFilter2: action.currentSignatureSelection,
+				};
+				await this.prefs.savePreferences(newPrefs);
+				console.debug('updated signature filter', action.currentSignatureSelection);
+				return WebsiteDuelsActions.prefsUpdateSuccess();
+			}),
+		),
+	);
+
 	private async buildHeroStats(
 		percentileFilter,
 		timeFilter: DuelsTimeFilterType,
 		statType: DuelsStatTypeFilterType,
+		heroFilter: DuelsHeroFilterType,
+		heroPowerFilter: readonly string[],
+		sigTreasureFilter: readonly string[],
 	): Promise<{
 		stats: readonly DuelsMetaStats[];
 		lastUpdateDate?: Date;
@@ -199,9 +307,6 @@ export class WebsiteDuelsEffects {
 				stats: [],
 			};
 		}
-		const heroFilter = duelsHeroConfigs.map((conf) => conf.hero);
-		const heroPowerFilter = 'all';
-		const sigTreasureFilter = 'all';
 		const hideLowData = true;
 		const heroSearchString = null;
 		console.debug('loading duels stats', percentileFilter, timeFilter);
@@ -257,6 +362,9 @@ export class WebsiteDuelsEffects {
 		percentileFilter,
 		timeFilter: DuelsTimeFilterType,
 		statType: DuelsTreasureStatTypeFilterType,
+		heroFilter: DuelsHeroFilterType,
+		heroPowerFilter: readonly string[],
+		sigTreasureFilter: readonly string[],
 	): Promise<{
 		stats: readonly DuelsMetaStats[];
 		lastUpdateDate?: Date;
@@ -267,9 +375,6 @@ export class WebsiteDuelsEffects {
 				stats: [],
 			};
 		}
-		const heroFilter = duelsHeroConfigs.map((conf) => conf.hero);
-		const heroPowerFilter = 'all';
-		const sigTreasureFilter = 'all';
 		const hideLowData = true;
 		const heroSearchString = null;
 		console.debug('loading duels stats', percentileFilter, timeFilter);

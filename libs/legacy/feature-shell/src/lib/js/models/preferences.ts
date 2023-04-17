@@ -563,10 +563,10 @@ export class Preferences implements IPreferences {
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
-	readonly duelsActiveHeroesFilter2: DuelsHeroFilterType = allDuelsHeroes;
 	readonly duelsActivePassiveTreasuresFilter: readonly string[] = [];
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
+	readonly duelsActiveHeroesFilter2: DuelsHeroFilterType = allDuelsHeroes;
 	readonly duelsActiveHeroPowerFilter2: readonly string[] = [];
 	readonly duelsActiveSignatureTreasureFilter2: readonly string[] = [];
 	readonly duelsActiveLeaderboardModeFilter: 'paid-duels' | 'duels' = 'paid-duels';

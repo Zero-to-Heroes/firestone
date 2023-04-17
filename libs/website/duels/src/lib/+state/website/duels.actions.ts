@@ -1,5 +1,5 @@
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsTimeFilterType } from '@firestone/duels/data-access';
+import { DuelsHeroFilterType, DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { DuelsMetaStats } from '@firestone/duels/view';
 import { createAction, props } from '@ngrx/store';
 
@@ -83,6 +83,24 @@ export const changeMetaHeroStatsTimeFilter = createAction(
 	'[DUELS Meta Hero Stats] Changed time filter',
 	props<{
 		currentTimePeriodSelection: DuelsTimeFilterType;
+	}>(),
+);
+export const changeHeroFilter = createAction(
+	'[DUELS Meta Hero Stats] Change hero filter',
+	props<{
+		currentHeroSelection: DuelsHeroFilterType;
+	}>(),
+);
+export const changeHeroPowerFilter = createAction(
+	'[DUELS Meta Hero Stats] Change hero power filter',
+	props<{
+		currentHeroPowerSelection: readonly string[];
+	}>(),
+);
+export const changeSignatureTreasureFilter = createAction(
+	'[DUELS Meta Hero Stats] Change signature filter',
+	props<{
+		currentSignatureSelection: readonly string[];
 	}>(),
 );
 

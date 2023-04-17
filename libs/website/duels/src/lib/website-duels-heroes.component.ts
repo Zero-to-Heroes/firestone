@@ -16,6 +16,7 @@ import { getAllMetaHeroStats, getLoaded } from './+state/website/duels.selectors
 				<div class="filters">
 					<website-duels-rank-filter-dropdown class="filter"></website-duels-rank-filter-dropdown>
 					<website-duels-time-filter-dropdown class="filter"></website-duels-time-filter-dropdown>
+					<website-duels-hero-filter-dropdown class="filter"></website-duels-hero-filter-dropdown>
 				</div>
 
 				<duels-meta-stats-view

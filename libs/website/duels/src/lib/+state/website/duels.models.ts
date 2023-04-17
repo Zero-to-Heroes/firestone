@@ -1,5 +1,9 @@
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsTimeFilterType, DuelsTreasureStatTypeFilterType } from '@firestone/duels/data-access';
+import {
+	DuelsHeroFilterType,
+	DuelsTimeFilterType,
+	DuelsTreasureStatTypeFilterType,
+} from '@firestone/duels/data-access';
 import { DuelsMetaStats } from '@firestone/duels/view';
 
 export interface WebsiteDuelsState {
@@ -18,4 +22,7 @@ export interface WebsiteDuelsState {
 	currentActiveTreasureTypeSelection: DuelsTreasureStatTypeFilterType;
 	currentPercentileSelection: MmrPercentile['percentile'];
 	currentTimePeriodSelection: DuelsTimeFilterType;
+	currentHeroSelection: DuelsHeroFilterType;
+	currentHeroPowerSelection: readonly string[];
+	currentSignatureTreasureSelection: readonly string[];
 }

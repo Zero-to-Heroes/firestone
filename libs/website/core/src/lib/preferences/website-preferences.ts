@@ -1,6 +1,6 @@
-import { Race } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, Race } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
-import { DuelsTimeFilterType } from '@firestone/duels/data-access';
+import { DuelsHeroFilterType, DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { IPreferences } from '@firestone/shared/framework/common';
 
 export class WebsitePreferences implements IPreferences {
@@ -14,6 +14,9 @@ export class WebsitePreferences implements IPreferences {
 
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
+	readonly duelsActiveHeroesFilter2: DuelsHeroFilterType = allDuelsHeroes;
+	readonly duelsActiveHeroPowerFilter2: readonly string[] = [];
+	readonly duelsActiveSignatureTreasureFilter2: readonly string[] = [];
 
 	// website-exclusive
 	readonly premium: PremiumInfo;

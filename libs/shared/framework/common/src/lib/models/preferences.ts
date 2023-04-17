@@ -11,4 +11,7 @@ export interface IPreferences {
 
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1;
 	readonly duelsActiveTimeFilter: 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
+	readonly duelsActiveHeroesFilter2: readonly string[] /*DuelsHeroFilterType;*/;
+	readonly duelsActiveHeroPowerFilter2: readonly string[];
+	readonly duelsActiveSignatureTreasureFilter2: readonly string[];
 }

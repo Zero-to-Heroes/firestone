@@ -7,7 +7,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { WebsiteDuelsEffects } from './+state/website/duels.effects';
 import * as fromWebsiteDuels from './+state/website/duels.reducer';
+import { WebsiteDuelsHeroFilterDropdownComponent } from './filters/website-duels-hero-filter-dropdown.component';
+import { WebsiteDuelsHeroPowerFilterDropdownComponent } from './filters/website-duels-hero-power-filter-dropdown.component';
 import { WebsiteDuelsRankFilterDropdownComponent } from './filters/website-duels-rank-filter-dropdown.component';
+import { WebsiteDuelsSignatureFilterDropdownComponent } from './filters/website-duels-signature-filter-dropdown.component';
 import { WebsiteDuelsTimeFilterDropdownComponent } from './filters/website-duels-time-filter-dropdown.component';
 import { WebsiteDuelsActiveTreasuresComponent } from './website-duels-active-treasures.component';
 import { WebsiteDuelsHeroPowersComponent } from './website-duels-hero-powers.component';
@@ -21,6 +24,9 @@ const components = [
 	WebsiteDuelsSignatureTreasuresComponent,
 	WebsiteDuelsRankFilterDropdownComponent,
 	WebsiteDuelsTimeFilterDropdownComponent,
+	WebsiteDuelsHeroFilterDropdownComponent,
+	WebsiteDuelsHeroPowerFilterDropdownComponent,
+	WebsiteDuelsSignatureFilterDropdownComponent,
 	WebsiteDuelsPassiveTreasuresComponent,
 	WebsiteDuelsActiveTreasuresComponent,
 ];

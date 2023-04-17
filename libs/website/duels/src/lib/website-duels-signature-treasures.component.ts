@@ -16,6 +16,8 @@ import { getAllMetaSignatureTreasureStats, getLoaded } from './+state/website/du
 				<div class="filters">
 					<website-duels-rank-filter-dropdown class="filter"></website-duels-rank-filter-dropdown>
 					<website-duels-time-filter-dropdown class="filter"></website-duels-time-filter-dropdown>
+					<website-duels-hero-filter-dropdown class="filter"></website-duels-hero-filter-dropdown>
+					<website-duels-hero-power-filter-dropdown class="filter"></website-duels-hero-power-filter-dropdown>
 				</div>
 
 				<duels-meta-stats-view

@@ -12,6 +12,12 @@
 	.filter {
 		margin-right: 10px;
 	}
+
+	::ng-deep filter-dropdown-multiselect {
+		.filter-dropdown-multiselect {
+			margin-right: 0;
+		}
+	}
 }
 
 duels-meta-stats-view {
