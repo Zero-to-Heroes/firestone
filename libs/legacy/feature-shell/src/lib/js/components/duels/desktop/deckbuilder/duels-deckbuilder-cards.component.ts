@@ -32,7 +32,8 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					activeCards: activeCards$ | async,
 					buckets: possibleBuckets$ | async,
 					showRelatedCards: showRelatedCards$ | async,
-					showBuckets: showBuckets$ | async
+					showBuckets: showBuckets$ | async,
+					deckstring: deckstring$ | async
 				} as value"
 			>
 				<div class="decklist-container">
@@ -52,27 +53,27 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							/>
 						</label>
 					</div>
-					<deck-list
+					<deck-list-static
 						class="deck-list"
-						[cards]="currentDeckCards$ | async"
-						(cardClicked)="onDecklistCardClicked($event)"
+						[deckstring]="value.deckstring"
 						[collection]="collection$ | async"
+						(cardClicked)="onDecklistCardClicked($event)"
 					>
-					</deck-list>
+					</deck-list-static>
 					<div class="export-deck" *ngIf="{ valid: deckValid$ | async } as exportValue">
 						<copy-deckstring
 							class="copy-deckcode"
 							*ngIf="exportValue.valid"
-							[deckstring]="deckstring$ | async"
+							[deckstring]="value.deckstring"
 							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
 						>
 						</copy-deckstring>
-						<ng-container *ngIf="deckstring$ | async as deckstring">
+						<ng-container *ngIf="value.deckstring">
 							<button
 								class="save-deckcode"
 								*ngIf="exportValue.valid"
 								[helpTooltip]="'app.duels.deckbuilder.save-deckcode-button-tooltip' | owTranslate"
-								(click)="saveDeck(deckstring)"
+								(click)="saveDeck(value.deckstring)"
 							>
 								{{ saveDeckcodeButtonLabel }}
 							</button></ng-container

@@ -7,9 +7,12 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
+import { GameFormat } from '@firestone-hs/reference-data';
+import { groupByFunction } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -23,11 +26,11 @@ import { filter } from 'rxjs/operators';
 		<div class="root active" [activeTheme]="'decktracker'">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
-				<ng-container *ngIf="cards$ | async as cards">
+				<ng-container *ngIf="deckstring$ | async as deckstring">
 					<div class="decktracker-container">
-						<div class="decktracker" *ngIf="!!cards">
+						<div class="decktracker" *ngIf="!!deckstring">
 							<div class="background"></div>
-							<deck-list class="played-cards" [cards]="cards" [side]="'duels'"> </deck-list>
+							<deck-list-static class="played-cards" [deckstring]="deckstring"> </deck-list-static>
 							<!-- <div class="backdrop" *ngIf="showBackdrop"></div> -->
 						</div>
 					</div>
@@ -41,8 +44,7 @@ export class DuelsDecktrackerOocComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
-	// deck$: Observable<DeckState>;
-	cards$: Observable<readonly string[]>;
+	deckstring$: Observable<string>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -54,11 +56,22 @@ export class DuelsDecktrackerOocComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.cards$ = this.store
+		this.deckstring$ = this.store
 			.listen$(([main, nav]) => main.duels.currentDuelsDeck)
 			.pipe(
 				filter(([deck]) => !!deck),
-				this.mapData(([deck]) => deck.DeckList as readonly string[]),
+				this.mapData(([deck]) => {
+					const cardIds = deck.DeckList as readonly string[];
+					const deckDefinition: DeckDefinition = {
+						format: GameFormat.FT_WILD,
+						cards: Object.values(groupByFunction((cardId: string) => cardId)(cardIds)).map((cardIds) => [
+							this.allCards.getCard(cardIds[0]).dbfId,
+							cardIds.length,
+						]),
+						heroes: [this.allCards.getCard(deck.HeroCardId).dbfId],
+					};
+					return encode(deckDefinition);
+				}),
 			);
 		this.cardsHighlight.initForDuels();
 	}

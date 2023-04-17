@@ -62,13 +62,13 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						</label>
 					</div>
 					<dk-runes [deckstring]="value.deckstring" (dkRunes)="onDkRunesChanged($event)"></dk-runes>
-					<deck-list
+					<deck-list-static
 						class="deck-list"
-						[cards]="currentDeckCards$ | async"
-						(cardClicked)="onDecklistCardClicked($event)"
+						[deckstring]="value.deckstring"
 						[collection]="collection$ | async"
+						(cardClicked)="onDecklistCardClicked($event)"
 					>
-					</deck-list>
+					</deck-list-static>
 					<div class="export-deck" *ngIf="{ valid: deckValid$ | async } as exportValue">
 						<copy-deckstring
 							class="copy-deckcode"

@@ -64,11 +64,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
 				>
 				</copy-deckstring>
-				<deck-list
+				<deck-list-static
 					class="deck-list"
 					[deckstring]="decklist$ | async"
 					[collection]="collection$ | async"
-				></deck-list>
+				></deck-list-static>
 			</div>
 			<div class="stats" scrollable *ngIf="deck.personal">
 				<div

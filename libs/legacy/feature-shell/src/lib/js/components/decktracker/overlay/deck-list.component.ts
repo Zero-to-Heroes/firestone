@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
@@ -31,7 +31,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class DeckListComponent {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
-	@Input() side: 'player' | 'opponent' | 'duels';
+	@Input() side: 'player' | 'opponent' | 'duels' = 'player';
 
 	@Input() set deckstring(value: string) {
 		const decklist = this.deckHandler.buildDeckList(value);

@@ -58,10 +58,11 @@ declare let amplitude;
 						0
 					</div>
 				</div>
-				<deck-list class="deck-list" [deckstring]="initialDecklist" [collection]="collection"> </deck-list>
+				<deck-list-static class="deck-list" [deckstring]="initialDecklist" [collection]="collection">
+				</deck-list-static>
 			</div>
 			<div class="deck-list-container final-list">
-				<deck-list class="deck-list" [deckstring]="finalDecklist"> </deck-list>
+				<deck-list-static class="deck-list" [deckstring]="finalDecklist"> </deck-list-static>
 			</div>
 		</div>
 	`,

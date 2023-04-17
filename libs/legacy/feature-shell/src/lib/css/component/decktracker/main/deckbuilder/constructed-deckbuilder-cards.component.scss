@@ -47,17 +47,6 @@
 			margin-top: 15px;
 			padding-right: 20px;
 			margin-bottom: 10px;
-
-			::ng-deep decktracker-deck-list {
-				min-height: 418px;
-				background: rgba(255, 255, 255, 0.08);
-				// Can't use % because otherwise it would use the container's size, instead of the full column height
-				max-height: calc(100vh - 233px);
-
-				.ps-content {
-					padding-bottom: 0;
-				}
-			}
 		}
 
 		.export-deck {
