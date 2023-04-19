@@ -99,6 +99,8 @@ export class OpponentCardInfoIdComponent {
 			case CardIds.SecretPassage_SecretExitEnchantment:
 			case CardIds.SecretPassage_SecretPassagePlayerEnchantment:
 				return CardIds.SecretPassage;
+			case CardIds.CloakOfEmeraldDreams_CloakOfEmeraldDreamsTavernBrawlEnchantment:
+				return CardIds.CloakOfEmeraldDreamsTavernBrawl;
 		}
 
 		// The base case
