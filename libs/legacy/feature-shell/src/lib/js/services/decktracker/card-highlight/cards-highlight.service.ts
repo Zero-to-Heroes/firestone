@@ -82,7 +82,7 @@ import {
 	tribeless,
 	undead,
 	weapon,
-	whelp,
+	whelp
 } from './selectors';
 
 @Injectable()
@@ -686,6 +686,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.Hadronox_CORE_ICC_835:
 			case CardIds.Hadronox_ICC_835:
 				return and(side(inputSide), inGraveyard, minion, taunt);
+			case CardIds.HarbingerOfWinterCore_RLK_511:
+				return and(side(inputSide), inDeck, spell, frost);
 			case CardIds.HarborScamp:
 				return and(side(inputSide), inDeck, pirate);
 			case CardIds.HarnessTheElementsTavernBrawl:
