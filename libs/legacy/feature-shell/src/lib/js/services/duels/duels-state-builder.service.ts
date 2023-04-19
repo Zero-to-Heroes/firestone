@@ -395,8 +395,8 @@ export class DuelsStateBuilderService {
 	}
 
 	private buildDustCost(deck: DeckDefinition, collectionState: BinderState): number {
-		return deck.cards
-			.map((cards) => cards[0])
+		const allCards = [...deck.cards.map((cards) => cards[0]), ...(deck.sideboards ?? [])];
+		return allCards
 			.map((cardDbfId) => this.allCards.getCardFromDbfId(+cardDbfId))
 			.filter((card) => card)
 			.map((card) => {

@@ -9,7 +9,7 @@ import {
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST
 } from '@firestone-hs/reference-data';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -350,7 +350,7 @@ export class DeckParserService {
 		return currentDeck;
 	}
 
-	private normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
+	public normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
 		return decklist.map((cardId) => this.allCards.getCard(cardId)?.dbfId);
 	}
 
@@ -459,7 +459,7 @@ export class DeckParserService {
 		);
 	}
 
-	private explodeDecklist(initialDecklist: readonly number[]): any[] {
+	public explodeDecklist(initialDecklist: readonly number[]): any[] {
 		console.log('[deck-parser] decklist with dbfids', initialDecklist);
 		const groupedById = groupByFunction((cardId) => '' + cardId)(initialDecklist);
 
