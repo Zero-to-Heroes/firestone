@@ -136,6 +136,7 @@ export const startOfGameGlobalEffectCards = [
 
 export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
+	...startOfGameGlobalEffectCards,
 	CardIds.BlackrockNRoll,
 	CardIds.CelestialAlignment,
 	CardIds.DeckOfChaos,
