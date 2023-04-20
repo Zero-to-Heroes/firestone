@@ -37,6 +37,7 @@ import {
 	effectiveCostLess,
 	effectiveCostLessThanRemainingMana,
 	effectiveCostMore,
+	elemental,
 	fel,
 	fire,
 	freeze,
@@ -155,35 +156,35 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			playerDeckProvider,
 			opponentDeckProvider,
 		);
-		console.debug(
-			'cardsToHighlight',
-			cardsToHighlight,
-			cardId,
-			side,
-			card,
-			playerDeckProvider(),
-			this.options,
-			this.gameState,
-		);
-		console.debug(
-			'handlers',
-			Object.values(this.handlers).map((h) => h.deckCardProvider()),
-			Object.values(this.handlers)
-				.filter((h) => !h.deckCardProvider())
-				.map((h) => h.referenceCardProvider()),
-		);
+		// console.debug(
+		// 	'cardsToHighlight',
+		// 	cardsToHighlight,
+		// 	cardId,
+		// 	side,
+		// 	card,
+		// 	playerDeckProvider(),
+		// 	this.options,
+		// 	this.gameState,
+		// );
+		// console.debug(
+		// 	'handlers',
+		// 	Object.values(this.handlers).map((h) => h.deckCardProvider()),
+		// 	Object.values(this.handlers)
+		// 		.filter((h) => !h.deckCardProvider())
+		// 		.map((h) => h.referenceCardProvider()),
+		// );
 		for (const card of cardsToHighlight) {
 			const handler = Object.values(this.handlers).find((h) =>
 				// Discovers don't have deck card providers
 				h.deckCardProvider()?.internalEntityIds?.includes(card.internalEntityId),
 			);
 			if (!!handler) {
-				console.debug(
-					'DO HIGHLGIHT',
-					handler.referenceCardProvider()?.name,
-					handler,
-					handler.highlightCallback,
-				);
+				// console.debug(
+				// 	'DO HIGHLGIHT',
+				// 	handler.referenceCardProvider()?.name,
+				// 	handler,
+				// 	handler.highlightCallback,
+				// );
 				handler.highlightCallback();
 			}
 		}
@@ -880,6 +881,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.Prescience:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.PrimalDungeoneer:
+				return and(side(inputSide), inDeck, or(spell, elemental));
 			case CardIds.PrimordialProtector_BAR_042:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.PrincessTavernBrawl:

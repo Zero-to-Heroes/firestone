@@ -7,7 +7,7 @@ import {
 	Locale,
 	Race,
 	RarityTYpe,
-	SpellSchool,
+	SpellSchool
 } from '@firestone-hs/reference-data';
 import { Selector, SelectorInput } from './cards-highlight.service';
 
@@ -35,14 +35,12 @@ export const inGraveyard = inZoneName('graveyard');
 export const side =
 	(side: 'player' | 'opponent' | 'duels') =>
 	(input: SelectorInput): boolean => {
-		console.debug('checking side', input, side);
 		return input.side === side;
 	};
 
 export const opposingSide =
 	(side: 'player' | 'opponent' | 'duels') =>
 	(input: SelectorInput): boolean => {
-		console.debug('checking side', input, side);
 		return side === 'player'
 			? input.side === 'opponent'
 			: side === 'opponent'
@@ -189,6 +187,7 @@ export const race =
 export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
+export const elemental = race(Race.ELEMENTAL);
 export const mech = race(Race.MECH);
 export const murloc = race(Race.MURLOC);
 export const naga = race(Race.NAGA);
