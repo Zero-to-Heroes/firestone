@@ -30,6 +30,11 @@
 		}
 	}
 
+	game-replay {
+		min-height: 0;
+		flex-grow: 1;
+	}
+
 	::ng-deep bgs-post-match-stats {
 		flex-grow: 1;
 		min-height: 0;

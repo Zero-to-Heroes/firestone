@@ -11,8 +11,8 @@ const REPLAY_API = 'https://xml.firestoneapp.com/';
 	selector: 'game-replay',
 	styleUrls: [`../../../css/component/replays/game-replay.component.scss`],
 	template: `
-		<div>
-			<fs-coliseum [replayXml]="_replayXml" [reviewId]="reviewId"></fs-coliseum>
+		<div class="coliseum-container">
+			<fs-coliseum class="external-player" [replayXml]="_replayXml" [reviewId]="reviewId"></fs-coliseum>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

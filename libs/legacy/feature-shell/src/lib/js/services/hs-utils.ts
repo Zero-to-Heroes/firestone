@@ -873,6 +873,7 @@ export const cardTutors = [
 	CardIds.JepettoJoybuzz,
 	CardIds.JuicyPsychmelon,
 	CardIds.KnightOfAnointment,
+	CardIds.LastStand,
 	CardIds.LunarVisions,
 	CardIds.MarkOfScorn,
 	CardIds.MoonlitGuidance_DED_002, // falls in both cases
