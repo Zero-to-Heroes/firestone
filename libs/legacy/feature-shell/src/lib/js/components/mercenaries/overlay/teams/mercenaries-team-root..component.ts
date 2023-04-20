@@ -10,7 +10,7 @@ import {
 	OnDestroy,
 	Output,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@firestone-hs/deckstrings';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
@@ -150,8 +150,8 @@ export class MercenariesTeamRootComponent
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
 			.pipe(
-				// One turn is logged between each phase (order selection and combat)
-				this.mapData(([currentTurn]) => Math.ceil((isNaN(+currentTurn) ? 0 : +currentTurn) / 2)),
+				// Initial hero selection counts as a turn
+				this.mapData(([currentTurn]) => Math.max(1, currentTurn - 1)),
 			);
 		this.totalMapTurns$ = combineLatest(
 			this.currentBattleTurn$,
