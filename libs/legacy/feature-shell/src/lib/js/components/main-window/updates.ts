@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.0.21',
+		version: '11.0.22',
 		force: false,
 		sections: [
 			// {
@@ -59,7 +59,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `(PREMIUM) The firestoneapp.gg website has been updated with some Duels stats. I'm still working on adding all the missing filters in Duels and BG there, and will start adding new features afterwards.`,
+								text: `(PREMIUM) The firestoneapp.gg website has been updated with momre Duels stats and filters. The Battlegrounds section now shows which tribes have the best impact on each hero's average position.`,
 							},
 						],
 					},
@@ -84,11 +84,23 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Tried to fix an issue where cards drawn by Finley would sometimes get icons (like Finley's icon, or the Coin).`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Start of Game global effects (e.g. Renathal) would not appear in the tracker anymore.`,
+							},
+							{
+								type: 'content',
+								text: `The opponent's hero power damage counter (aka Mordresh Counter) does not show up automatically when facing a Mage opponent in Standard anymore.`,
+							},
 						],
 					},
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `The heroes tier list now shows which tribes are best for each hero.`,
+							},
 							{
 								type: 'feature',
 								text: `Add the "Warning" icon in the Simulator tab of the BG window when some boards are not supported (it was already showing on the overlay widget).`,
@@ -99,8 +111,34 @@ export const updates: readonly Update[] = [
 						category: 'duels',
 						details: [
 							{
+								type: 'feature',
+								text: `Add support for ETC Band Manager's sideboard.`,
+							},
+							{
+								type: 'feature',
+								text: `Hide cards from other classes when building a deck / browsing the buckets and a class is selected.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where the rank filter had disappeared from the High-Wins deck tab.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the Battle Turn Counter would show an incorrect value.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the replay controls would not be visible anymore.`,
 							},
 						],
 					},
