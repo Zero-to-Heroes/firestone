@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { RarityTYpe } from '@firestone-hs/reference-data';
 import { Set } from '../../models/set';
 
 @Component({
@@ -21,6 +22,6 @@ import { Set } from '../../models/set';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RarityComponent {
-	@Input() rarity: string;
+	@Input() rarity: RarityTYpe;
 	@Input() cardSet: Set;
 }
