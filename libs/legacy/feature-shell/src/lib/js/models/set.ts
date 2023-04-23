@@ -1,4 +1,6 @@
+import { RarityTYpe } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '../services/utils';
+import { CollectionCardType } from './collection/collection-card-type.type';
 
 export class Set {
 	readonly allCards: readonly SetCard[] = [];
@@ -47,9 +49,14 @@ export class Set {
 		return totalCards;
 	}
 
-	ownedForRarity(rarity: string): number {
-		return this.allCards
-			.filter((card) => card.rarity?.toLowerCase() === rarity)
+	getCardsForPremium(premium: CollectionCardType) {
+		return this.allCards.filter((card) => card.getMaxOwnedForPremium(premium) > 0);
+	}
+
+	ownedForRarity(rarity: RarityTYpe, premium?: CollectionCardType): number {
+		const baseCards = !!premium ? this.getCardsForPremium(premium) : this.allCards
+		return baseCards
+			.filter((card) => card.rarity?.toUpperCase() === rarity?.toUpperCase())
 			.map((card: SetCard) => card.getNumberCollected())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
@@ -99,6 +106,23 @@ export class SetCard {
 		this.ownedPremium = ownedPremium || 0;
 		this.ownedDiamond = ownedDiamond || 0;
 		this.ownedSignature = ownedSignature || 0;
+	}
+
+	public getOwnedForPremium(premium: CollectionCardType) {
+		switch (premium) {
+			case 'NORMAL':
+				return this.ownedNonPremium;
+			case 'GOLDEN':
+				return this.ownedPremium;
+			case 'DIAMOND':
+				return this.ownedDiamond;
+			case 'SIGNATURE':
+				return this.ownedSignature;
+		}
+	}
+	public getMaxOwnedForPremium(premium: CollectionCardType) {
+		const totalOwned = this.getOwnedForPremium(premium);
+		return Math.min(totalOwned, this.getMaxCollectible());
 	}
 
 	getRegularDustCost(): any {
