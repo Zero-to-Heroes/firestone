@@ -1,0 +1,23 @@
+<svg width="164" height="153" viewBox="0 0 164 153" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<g class="oscillate">
+		<circle cx="82" cy="47" r="20" stroke="var(--icon-color, #FFB948)" stroke-width="2"/>
+		<path d="M43.5 113C43.5 90.5 61.5 74 82 74C102.5 74 120.5 90.5 120.5 113" stroke="var(--icon-color, #FFB948)" stroke-width="2"/>
+		<path d="M43.5 113C43.5 90.5 61.5 74 82 74C102.5 74 120.5 90.5 120.5 113" stroke="var(--icon-secondary-color, #8E5B23)" stroke-width="2" stroke-dasharray="4 4"/>
+	</g>
+	<g class="star">
+		<rect x="33.1577" y="5" width="1.57895" height="7.83784" rx="0.789474" fill="var(--icon-color, #FFB948)"/>
+		<rect x="37.8945" y="8.13513" width="1.56757" height="7.89474" rx="0.783784" transform="rotate(90 37.8945 8.13513)" fill="var(--icon-color, #FFB948)"/>
+	</g>
+	<g class="star" opacity="0.4">
+		<rect x="18.5796" y="19" width="1.57895" height="4.7027" rx="0.789474" fill="var(--icon-color, #FFB948)"/>
+		<rect x="21.7373" y="20.5676" width="1.56757" height="4.73684" rx="0.783784" transform="rotate(90 21.7373 20.5676)" fill="var(--icon-color, #FFB948)"/>
+	</g>
+	<g class="star" opacity="0.4">
+		<rect x="27.5791" y="61" width="1.57895" height="4.7027" rx="0.789474" fill="var(--icon-color, #FFB948)"/>
+		<rect x="30.7368" y="62.5676" width="1.56757" height="4.73684" rx="0.783784" transform="rotate(90 30.7368 62.5676)" fill="var(--icon-color, #FFB948)"/>
+	</g>
+	<g class="star">
+		<rect x="17.1577" y="40" width="1.57895" height="7.83784" rx="0.789474" fill="var(--icon-color, #FFB948)"/>
+		<rect x="21.8945" y="43.1351" width="1.56757" height="7.89474" rx="0.783784" transform="rotate(90 21.8945 43.1351)" fill="var(--icon-color, #FFB948)"/>
+	</g>
+</svg>

@@ -105,7 +105,7 @@
 		"@nrwl/nx-cloud": "latest",
 		"@nrwl/workspace": "15.2.1",
 		"@overwolf/ow-cli": "0.0.5-0",
-		"@overwolf/types": "^3.23.1",
+		"@overwolf/types": "^3.22.0",
 		"@swc-node/register": "^1.4.2",
 		"@swc/cli": "~0.1.55",
 		"@swc/core": "^1.2.173",
