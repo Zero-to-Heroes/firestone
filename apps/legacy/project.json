@@ -1,129 +1,141 @@
 {
-	"name": "firestone",
-	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"projectType": "application",
-	"sourceRoot": "apps/legacy/src",
-	"prefix": "firestone",
-	"targets": {
-		"build": {
-			"executor": "@angular-devkit/build-angular:browser",
-			"outputs": ["{options.outputPath}"],
-			"options": {
-				"outputPath": "dist/apps/legacy/Files",
-				"index": "apps/legacy/src/index.html",
-				"main": "apps/legacy/src/main.ts",
-				"polyfills": ["zone.js", "apps/legacy/src/polyfills.ts"],
-				"tsConfig": "apps/legacy/tsconfig.app.json",
-				"inlineStyleLanguage": "scss",
-				"assets": [
-					{
-						"glob": "**/*",
-						"input": "libs/shared/assets/src/assets",
-						"output": "./assets"
-					},
-					{
-						"glob": "**/*",
-						"input": "dependencies",
-						"output": "./"
-					},
-					{
-						"glob": "sentry.properties",
-						"input": "./",
-						"output": "./"
-					},
-					{
-						"glob": "**/*",
-						"input": "overwolf-plugins",
-						"output": "./plugins"
-					},
-					{
-						"glob": "*",
-						"input": "overwolf",
-						"output": "./.."
-					}
-				],
-				"sourceMap": {
-					"scripts": true,
-					"styles": true,
-					"vendor": true
-				},
-				"styles": ["apps/legacy/src/styles.scss"],
-				"scripts": [],
-				"webWorkerTsConfig": "apps/legacy/tsconfig.worker.json",
-				"allowedCommonJsDependencies": [
-					"@firestone-hs/build-global-stats/dist/stats-builder",
-					"@firestone-hs/hs-replay-xml-parser/dist/public-api",
-					"@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off",
-					"@firestone-hs/reference-data",
-					"@firestone-hs/simulate-bgs-battle",
-					"@tweenjs/tween.js",
-					"bezier-easing",
-					"deep-equal",
-					"deepmerge",
-					"jszip",
-					"localforage",
-					"pako"
-				]
-			},
-			"configurations": {
-				"production": {
-					"budgets": [
-						{
-							"type": "initial",
-							"maximumWarning": "500kb",
-							"maximumError": "20mb"
-						},
-						{
-							"type": "anyComponentStyle",
-							"maximumWarning": "2kb",
-							"maximumError": "20mb"
-						}
-					],
-					"outputHashing": "all"
-				},
-				"development": {
-					"buildOptimizer": false,
-					"optimization": false,
-					"vendorChunk": true,
-					"extractLicenses": false,
-					"namedChunks": true
-				}
-			},
-			"defaultConfiguration": "development"
-		},
-		"serve": {
-			"executor": "@angular-devkit/build-angular:dev-server",
-			"configurations": {
-				"production": {
-					"browserTarget": "firestone:build:production"
-				},
-				"development": {
-					"browserTarget": "firestone:build:development"
-				}
-			},
-			"defaultConfiguration": "development"
-		},
-		"extract-i18n": {
-			"executor": "@angular-devkit/build-angular:extract-i18n",
-			"options": {
-				"browserTarget": "firestone:build"
-			}
-		},
-		"lint": {
-			"executor": "@nrwl/linter:eslint",
-			"options": {
-				"lintFilePatterns": ["apps/legacy/**/*.ts", "apps/legacy/**/*.html"]
-			}
-		},
-		"test": {
-			"executor": "@nrwl/jest:jest",
-			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-			"options": {
-				"jestConfig": "apps/legacy/jest.config.ts",
-				"passWithNoTests": true,
-				"webWorkerTsConfig": "apps/legacy/tsconfig.worker.json"
-			}
-		}
-	},
-	"tags": []
+  "name": "firestone",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/legacy/src",
+  "prefix": "firestone",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/legacy/Files",
+        "index": "apps/legacy/src/index.html",
+        "main": "apps/legacy/src/main.ts",
+        "polyfills": [
+          "zone.js",
+          "apps/legacy/src/polyfills.ts"
+        ],
+        "tsConfig": "apps/legacy/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/src/assets",
+            "output": "./assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "dependencies",
+            "output": "./"
+          },
+          {
+            "glob": "sentry.properties",
+            "input": "./",
+            "output": "./"
+          },
+          {
+            "glob": "**/*",
+            "input": "overwolf-plugins",
+            "output": "./plugins"
+          },
+          {
+            "glob": "*",
+            "input": "overwolf",
+            "output": "./.."
+          }
+        ],
+        "sourceMap": {
+          "scripts": true,
+          "styles": true,
+          "vendor": true
+        },
+        "styles": [
+          "apps/legacy/src/styles.scss"
+        ],
+        "scripts": [],
+        "webWorkerTsConfig": "apps/legacy/tsconfig.worker.json",
+        "allowedCommonJsDependencies": [
+          "@firestone-hs/build-global-stats/dist/stats-builder",
+          "@firestone-hs/hs-replay-xml-parser/dist/public-api",
+          "@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off",
+          "@firestone-hs/reference-data",
+          "@firestone-hs/simulate-bgs-battle",
+          "@tweenjs/tween.js",
+          "bezier-easing",
+          "deep-equal",
+          "deepmerge",
+          "jszip",
+          "localforage",
+          "pako"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "20mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "20mb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "firestone:build:production"
+        },
+        "development": {
+          "browserTarget": "firestone:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "firestone:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/legacy/**/*.ts",
+          "apps/legacy/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/legacy/jest.config.ts",
+        "passWithNoTests": true,
+        "webWorkerTsConfig": "apps/legacy/tsconfig.worker.json"
+      }
+    }
+  },
+  "tags": []
 }
