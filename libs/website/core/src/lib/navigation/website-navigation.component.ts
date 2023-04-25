@@ -69,6 +69,18 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 				},
 			],
 		},
+		{
+			id: 'profile',
+			icon: 'assets/svg/profile.svg',
+			name: this.i18n.translateString('app.menu.profile-header'),
+			nodes: [
+				{
+					id: 'profile/collection',
+					icon: 'assets/svg/whatsnew/collection.svg',
+					name: this.i18n.translateString('app.menu.collection-header'),
+				},
+			],
+		},
 	];
 
 	selectedModule = this.navigationNodes[0].id;

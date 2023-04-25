@@ -3,10 +3,11 @@ import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds'
 import { WebsiteAuthComponent, WebsitePremiumComponent } from '@firestone/website/core';
 import {
 	WebsiteDuelsActiveTreasuresComponent,
-	WebsiteDuelsHeroesComponent,
 	WebsiteDuelsHeroPowersComponent,
+	WebsiteDuelsHeroesComponent,
 	WebsiteDuelsSignatureTreasuresComponent,
 } from '@firestone/website/duels';
+import { WebsiteProfileCollectionComponent } from '@firestone/website/profile';
 import { WebsiteDuelsPassiveTreasuresComponent } from 'libs/website/duels/src/lib/website-duels-passive-treasures.component';
 import { AuthGuard } from './auth-guard.service';
 import { PremiumRedirectGuard } from './premium-redirect.service';
@@ -45,6 +46,16 @@ export const appRoutes: Route[] = [
 	{
 		path: 'duels',
 		redirectTo: '/duels/hero',
+		pathMatch: 'full',
+	},
+	{
+		path: 'profile/collection',
+		component: WebsiteProfileCollectionComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile',
+		redirectTo: '/profile/collection',
 		pathMatch: 'full',
 	},
 	{

@@ -1,57 +1,125 @@
 {
-	"compileOnSave": false,
-	"compilerOptions": {
-		"rootDir": ".",
-		"sourceMap": true,
-		"declaration": false,
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"importHelpers": true,
-		"target": "ES2022",
-		"module": "esnext",
-		"lib": ["ES2022", "dom"],
-		"typeRoots": ["node_modules/@types", "node_modules/@overwolf/types"],
-		"types": ["@overwolf/types"],
-		"skipLibCheck": true,
-		"skipDefaultLibCheck": true,
-		"baseUrl": ".",
-		"paths": {
-			"@components/*": ["libs/legacy/feature-shell/src/lib/js/components/*"],
-			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
-			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
-			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
-			"@firestone/duels/data-access": ["libs/duels/data-access/src/index.ts"],
-			"@firestone/duels/view": ["libs/duels/view/src/index.ts"],
-			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
-			"@firestone/replay/coliseum": ["libs/replay/coliseum/src/index.ts"],
-			"@firestone/shared/assets": ["libs/shared/assets/src/index.ts"],
-			"@firestone/shared/common/view": ["libs/shared/common/view/src/index.ts"],
-			"@firestone/shared/framework/common": ["libs/shared/framework/common/src/index.ts"],
-			"@firestone/shared/framework/core": ["libs/shared/framework/core/src/index.ts"],
-			"@firestone/shared/styles": ["libs/shared/styles/src/index.ts"],
-			"@firestone/stats/data-access": ["libs/stats/data-access/src/index.ts"],
-			"@firestone/twitch/common": ["libs/twitch/common/src/index.ts"],
-			"@firestone/website/battlegrounds": ["libs/website/battlegrounds/src/index.ts"],
-			"@firestone/website/core": ["libs/website/core/src/index.ts"],
-			"@firestone/website/duels": ["libs/website/duels/src/index.ts"],
-			"@legacy-import/*": ["libs/legacy/feature-shell/*"],
-			"@mails/*": ["libs/legacy/feature-shell/src/lib/libs/mails/*"],
-			"@models/*": ["libs/legacy/feature-shell/src/lib/js/models/*"],
-			"@mods": ["libs/legacy/feature-shell/src/lib/libs/mods"],
-			"@packs/*": ["libs/legacy/feature-shell/src/lib/libs/packs/*"],
-			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
-			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
-			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
-			"stream": ["./node_modules/stream-browserify"]
-		},
-		"strict": false,
-		"noImplicitAny": false,
-		"noImplicitOverride": false,
-		"strictPropertyInitialization": false,
-		"resolveJsonModule": true,
-		"allowSyntheticDefaultImports": true,
-		"noPropertyAccessFromIndexSignature": false
-	},
-	"exclude": ["node_modules", "tmp"]
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "esnext",
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/@overwolf/types"
+    ],
+    "types": [
+      "@overwolf/types"
+    ],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "libs/legacy/feature-shell/src/lib/js/components/*"
+      ],
+      "@directives/*": [
+        "libs/legacy/feature-shell/src/lib/js/directives/*"
+      ],
+      "@firestone/battlegrounds/data-access": [
+        "libs/battlegrounds/data-access/src/index.ts"
+      ],
+      "@firestone/battlegrounds/view": [
+        "libs/battlegrounds/view/src/index.ts"
+      ],
+      "@firestone/duels/data-access": [
+        "libs/duels/data-access/src/index.ts"
+      ],
+      "@firestone/duels/view": [
+        "libs/duels/view/src/index.ts"
+      ],
+      "@firestone/legacy/feature-shell": [
+        "libs/legacy/feature-shell/src/index.ts"
+      ],
+      "@firestone/replay/coliseum": [
+        "libs/replay/coliseum/src/index.ts"
+      ],
+      "@firestone/shared/assets": [
+        "libs/shared/assets/src/index.ts"
+      ],
+      "@firestone/shared/common/view": [
+        "libs/shared/common/view/src/index.ts"
+      ],
+      "@firestone/shared/framework/common": [
+        "libs/shared/framework/common/src/index.ts"
+      ],
+      "@firestone/shared/framework/core": [
+        "libs/shared/framework/core/src/index.ts"
+      ],
+      "@firestone/shared/styles": [
+        "libs/shared/styles/src/index.ts"
+      ],
+      "@firestone/stats/data-access": [
+        "libs/stats/data-access/src/index.ts"
+      ],
+      "@firestone/twitch/common": [
+        "libs/twitch/common/src/index.ts"
+      ],
+      "@firestone/website/battlegrounds": [
+        "libs/website/battlegrounds/src/index.ts"
+      ],
+      "@firestone/website/core": [
+        "libs/website/core/src/index.ts"
+      ],
+      "@firestone/website/duels": [
+        "libs/website/duels/src/index.ts"
+      ],
+      "@firestone/website/profile": [
+        "libs/website/profile/src/index.ts"
+      ],
+      "@legacy-import/*": [
+        "libs/legacy/feature-shell/*"
+      ],
+      "@mails/*": [
+        "libs/legacy/feature-shell/src/lib/libs/mails/*"
+      ],
+      "@models/*": [
+        "libs/legacy/feature-shell/src/lib/js/models/*"
+      ],
+      "@mods": [
+        "libs/legacy/feature-shell/src/lib/libs/mods"
+      ],
+      "@packs/*": [
+        "libs/legacy/feature-shell/src/lib/libs/packs/*"
+      ],
+      "@pipes/*": [
+        "libs/legacy/feature-shell/src/lib/js/pipes/*"
+      ],
+      "@services/*": [
+        "libs/legacy/feature-shell/src/lib/js/services/*"
+      ],
+      "@tavern-brawl/*": [
+        "libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"
+      ],
+      "stream": [
+        "./node_modules/stream-browserify"
+      ]
+    },
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitOverride": false,
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "noPropertyAccessFromIndexSignature": false
+  },
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }
