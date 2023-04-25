@@ -9,7 +9,7 @@ import { Set } from '../../models/set';
 			<div class="category-container">
 				<ol>
 					<li *ngFor="let set of _sets; trackBy: trackById">
-						<set-view [cardSet]="set"></set-view>
+						<set [cardSet]="set"></set>
 					</li>
 				</ol>
 			</div>

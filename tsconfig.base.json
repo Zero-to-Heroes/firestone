@@ -37,6 +37,9 @@
       "@firestone/battlegrounds/view": [
         "libs/battlegrounds/view/src/index.ts"
       ],
+      "@firestone/collection/view": [
+        "libs/collection/view/src/index.ts"
+      ],
       "@firestone/duels/data-access": [
         "libs/duels/data-access/src/index.ts"
       ],

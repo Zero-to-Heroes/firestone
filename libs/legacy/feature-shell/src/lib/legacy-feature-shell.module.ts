@@ -10,7 +10,7 @@ import { PieChartComponent } from '@components/common/chart/pie-chart.component'
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
-import { captureException, init, Integrations } from '@sentry/browser';
+import { Integrations, captureException, init } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -34,9 +34,9 @@ import { ArenaDesktopComponent } from './js/components/arena/desktop/arena-deskt
 import { ArenaEmptyStateComponent } from './js/components/arena/desktop/arena-empty-state.component';
 import { ArenaRunComponent } from './js/components/arena/desktop/arena-run.component';
 import { ArenaRunsListComponent } from './js/components/arena/desktop/arena-runs-list.component';
+import { ArenaFiltersComponent } from './js/components/arena/desktop/filters/_arena-filters.component';
 import { ArenaClassFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-class-filter-dropdown.component';
 import { ArenaTimeFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-time-filter-dropdown.component';
-import { ArenaFiltersComponent } from './js/components/arena/desktop/filters/_arena-filters.component';
 import { BattlegroundsContentComponent } from './js/components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from './js/components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from './js/components/battlegrounds/battlegrounds.component';
@@ -67,13 +67,13 @@ import { BgsLastWarbandsComponent } from './js/components/battlegrounds/desktop/
 import { BgsMmrEvolutionForHeroComponent } from './js/components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
 import { BgsWarbandStatsForHeroComponent } from './js/components/battlegrounds/desktop/categories/hero-details/bgs-warband-stats-for-hero.component';
 import { BgsWinrateStatsForHeroComponent } from './js/components/battlegrounds/desktop/categories/hero-details/bgs-winrate-stats-for-hero.component';
+import { BattlegroundsFiltersComponent } from './js/components/battlegrounds/desktop/filters/_battlegrounds-filters.component';
 import { BattlegroundsHeroFilterDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-hero-filter-dropdown.component';
 import { BattlegroundsHeroSortDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-hero-sort-dropdown.component';
 import { BattlegroundsRankFilterDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-rank-filter-dropdown.component';
 import { BattlegroundsRankGroupDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-rank-group-dropdown.component';
 import { BattlegroundsTimeFilterDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-time-filter-dropdown.component';
 import { BattlegroundsTribesFilterDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-tribes-filter-dropdown.component';
-import { BattlegroundsFiltersComponent } from './js/components/battlegrounds/desktop/filters/_battlegrounds-filters.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
 import { BattlegroundsQuestsTierListComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-quests-tier-list.component';
@@ -140,6 +140,7 @@ import { DecktrackerLadderStatsComponent } from './js/components/decktracker/mai
 import { DecktrackerRatingGraphComponent } from './js/components/decktracker/main/decktracker-rating-graph.component';
 import { DecktrackerReplaysRecapComponent } from './js/components/decktracker/main/decktracker-replays-recap.component';
 import { DecktrackerStatsForReplaysComponent } from './js/components/decktracker/main/decktracker-stats-for-replays.component';
+import { DecktrackerFiltersComponent } from './js/components/decktracker/main/filters/_decktracker-filters.component';
 import { ConstructedFormatFilterDropdownComponent } from './js/components/decktracker/main/filters/constructed-format-filter-dropdown.component';
 import { ConstructedMyDecksSearchComponent } from './js/components/decktracker/main/filters/constructed-my-decks-search.component';
 import { ConstructedRankFilterDropdownComponent } from './js/components/decktracker/main/filters/constructed-rank-filter-dropdown.component';
@@ -150,7 +151,6 @@ import { DecktrackerRankCategoryDropdownComponent } from './js/components/decktr
 import { DecktrackerRankFilterDropdownComponent } from './js/components/decktracker/main/filters/decktracker-rank-filter-dropdown.component';
 import { DecktrackerRankGroupDropdownComponent } from './js/components/decktracker/main/filters/decktracker-rank-group-dropdown.component';
 import { DecktrackerTimeFilterDropdownComponent } from './js/components/decktracker/main/filters/decktracker-time-filter-dropdown.component';
-import { DecktrackerFiltersComponent } from './js/components/decktracker/main/filters/_decktracker-filters.component';
 import { MenuSelectionDecktrackerComponent } from './js/components/decktracker/main/menu-selection-decktracker.component';
 import { DeckTrackerOverlayOpponentComponent } from './js/components/decktracker/overlay/decktracker-overlay-opponent.component';
 import { DeckTrackerOverlayPlayerComponent } from './js/components/decktracker/overlay/decktracker-overlay-player.component';
@@ -181,6 +181,7 @@ import { DuelsRunComponent } from './js/components/duels/desktop/duels-run.compo
 import { DuelsRunsListComponent } from './js/components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from './js/components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatsComponent } from './js/components/duels/desktop/duels-treasure-stat.component';
+import { DuelsFiltersComponent } from './js/components/duels/desktop/filters/_duels-filters.component';
 import { DuelsDeckSortDropdownComponent } from './js/components/duels/desktop/filters/duels-deck-sort-dropdown.component';
 import { DuelsDustFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-dust-filter-dropdown.component';
 import { DuelsGameModeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
@@ -195,7 +196,6 @@ import { DuelsStatTypeFilterDropdownComponent } from './js/components/duels/desk
 import { DuelsTimeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-time-filter-dropdown.component';
 import { DuelsTreasurePassiveTypeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-treasure-passive-type-filter-dropdown.component';
 import { DuelsTreasuresSortDropdownComponent } from './js/components/duels/desktop/filters/duels-treasures-sort-dropdown.component';
-import { DuelsFiltersComponent } from './js/components/duels/desktop/filters/_duels-filters.component';
 import { LootBundleComponent } from './js/components/duels/desktop/loot-bundle.component';
 import {
 	DuelsClassesRecapComponent,
@@ -217,6 +217,7 @@ import { FtueComponent } from './js/components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from './js/components/main-window/global-header.component';
 import { NewVersionNotificationComponent } from './js/components/main-window/new-version-notification.component';
 import { MenuSelectionComponent } from './js/components/menu-selection.component';
+import { MercenariesFiltersComponent } from './js/components/mercenaries/desktop/filters/_mercenaries-filters.component';
 import { MercenariesFullyUpgradedFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-fully-upgraded-filter-dropdown.component';
 import { MercenariesHeroLevelFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-level-filter-dropdown.component';
 import { MercenariesModeFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-mode-filter-dropdown.component';
@@ -225,7 +226,6 @@ import { MercenariesPveDifficultyFilterDropdownComponent } from './js/components
 import { MercenariesPvpMmrFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-pvp-mmr-filter-dropdown.component';
 import { MercenariesRoleFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-role-filter-dropdown.component';
 import { MercenariesStarterFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-starter-filter-dropdown.component';
-import { MercenariesFiltersComponent } from './js/components/mercenaries/desktop/filters/_mercenaries-filters.component';
 import { MercenariesCompositionStatComponent } from './js/components/mercenaries/desktop/mercenaries-composition-stat.component';
 import { MercenariesCompositionsStatsComponent } from './js/components/mercenaries/desktop/mercenaries-compositions-stats.component';
 import { MercenariesDesktopComponent } from './js/components/mercenaries/desktop/mercenaries-desktop.component';
@@ -258,6 +258,8 @@ import {
 } from './js/components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from './js/components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from './js/components/notifications.component';
+import { FullScreenOverlaysClickthroughComponent } from './js/components/overlays/_full-screen-overlays-clickthrough.component';
+import { FullScreenOverlaysComponent } from './js/components/overlays/_full-screen-overlays.component';
 import { BgsBannedTribesWidgetWrapperComponent } from './js/components/overlays/bgs-banned-tribes-widget-wrapper.component';
 import { BgsBattleSimulationWidgetWrapperComponent } from './js/components/overlays/bgs-battle-simulation-widget-wrapper.component';
 import { BgsBoardWidgetWrapperComponent } from './js/components/overlays/bgs-board-widget-wrapper.component';
@@ -365,8 +367,6 @@ import {
 	TurnTimerPlayerComponent,
 	TurnTimerWidgetComponent
 } from './js/components/overlays/turntimer/turn-timer-widget.component';
-import { FullScreenOverlaysClickthroughComponent } from './js/components/overlays/_full-screen-overlays-clickthrough.component';
-import { FullScreenOverlaysComponent } from './js/components/overlays/_full-screen-overlays.component';
 import { RegionFilterDropdownComponent } from './js/components/replays/filters/region-filter-dropdown.component';
 import { ReplaysBgHeroFilterDropdownComponent } from './js/components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from './js/components/replays/filters/replays-deckstring-filter-dropdown.component';
@@ -377,15 +377,15 @@ import { GameReplayComponent } from './js/components/replays/game-replay.compone
 import { GroupedReplaysComponent } from './js/components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from './js/components/replays/match-details.component';
 import { RankImageComponent } from './js/components/replays/rank-image.component';
+import { ReplayInfoComponent } from './js/components/replays/replay-info/_replay-info.component';
 import { ReplayInfoBattlegroundsComponent } from './js/components/replays/replay-info/replay-info-battlegrounds.component';
 import { ReplayInfoDuelsComponent } from './js/components/replays/replay-info/replay-info-duels.component';
 import { ReplayInfoGenericComponent } from './js/components/replays/replay-info/replay-info-generic.component';
 import {
-	ReplayInfoMercenariesComponent,
-	ReplayInfoMercPlayerComponent
+	ReplayInfoMercPlayerComponent,
+	ReplayInfoMercenariesComponent
 } from './js/components/replays/replay-info/replay-info-mercenaries.component';
 import { ReplayInfoRankedComponent } from './js/components/replays/replay-info/replay-info-ranked.component';
-import { ReplayInfoComponent } from './js/components/replays/replay-info/_replay-info.component';
 import { ReplayIconToggleComponent } from './js/components/replays/replays-icon-toggle.component';
 import { ReplaysListViewComponent } from './js/components/replays/replays-list-view.component';
 import { ReplaysListComponent } from './js/components/replays/replays-list.component';
@@ -439,8 +439,8 @@ import { SettingsReplaysComponent } from './js/components/settings/replays/setti
 import { SettingsAdvancedToggleComponent } from './js/components/settings/settings-advanced-toggle.component';
 import { SettingsAppSelectionComponent } from './js/components/settings/settings-app-selection.component';
 import { SettingsComponent } from './js/components/settings/settings.component';
-import { StatsXpSeasonFilterDropdownComponent } from './js/components/stats/desktop/filters/stats-xp-season-filter-dropdown.component';
 import { StatsFiltersComponent } from './js/components/stats/desktop/filters/_stats-filters.component';
+import { StatsXpSeasonFilterDropdownComponent } from './js/components/stats/desktop/filters/stats-xp-season-filter-dropdown.component';
 import { StatsDesktopComponent } from './js/components/stats/desktop/stats-desktop.component';
 import { StatsXpGraphComponent } from './js/components/stats/desktop/stats-xp-graph.component';
 import {
@@ -489,6 +489,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
+import { CollectionViewModule } from '@firestone/collection/view';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsViewModule } from '@firestone/duels/view';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
@@ -846,6 +847,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		StatsDataAccessModule,
 		DuelsViewModule,
 		DuelsDataAccessModule,
+		CollectionViewModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
