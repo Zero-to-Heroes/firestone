@@ -1,0 +1,162 @@
+
+.set {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	position: relative;
+	background: rgba(255, 255, 255, 0.08);
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+
+	&.has-hover:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	&.coming-soon {
+		.set-view,
+		.set-view:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+		.coming-soon-info {
+			font-size: 13px;
+			color: var(--color-1);
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			top: -25px;
+			align-items: center;
+			justify-content: center;
+
+			i {
+				width: 62px;
+				height: 22px;
+				--icon-color: #d9c3ab;
+			}
+
+			p {
+				margin-top: 5px;
+			}
+		}
+	}
+
+	.logo-container {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: calc(100% - 50px);
+		align-items: center;
+	}
+
+	.set-logo {
+		margin-top: 15px;
+		width: 112px;
+	}
+
+	.set-name {
+		color: var(--default-title-color);
+		text-align: center;
+		position: relative;
+		top: -16px;
+	}
+
+	.cards-collected {
+		font-size: 13px;
+		color: var(--color-1);
+
+		&.premium {
+			color: var(--default-title-color);
+		}
+	}
+
+	.frame {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		pointer-events: none;
+
+		&.complete-simple {
+			border: 1px solid var(--color-1);
+
+			.corner {
+				position: absolute;
+
+				&.bottom-left {
+					bottom: 0;
+					left: 0;
+					transform: rotate(0);
+				}
+
+				&.top-left {
+					top: 0;
+					left: 0;
+					transform: rotate(90deg);
+				}
+
+				&.top-right {
+					top: 0;
+					right: 0;
+					transform: rotate(180deg);
+				}
+
+				&.bottom-right {
+					bottom: 0;
+					right: 0;
+					transform: rotate(270deg);
+				}
+			}
+		}
+
+		&.complete-premium {
+			border: 1px solid var(--default-title-color);
+
+			.outer-border {
+				position: absolute;
+				top: -5px;
+				right: -5px;
+				bottom: -5px;
+				left: -5px;
+				border: 2px solid var(--default-title-color);
+			}
+
+			.corner {
+				position: absolute;
+
+				&.bottom-left {
+					bottom: 0;
+					left: 0;
+					transform: rotate(0);
+				}
+
+				&.top-left {
+					top: 0;
+					left: 0;
+					transform: rotate(0) scale(1, -1);
+				}
+
+				&.top-right {
+					top: 0;
+					right: 0;
+					transform: rotate(180deg);
+				}
+
+				&.bottom-right {
+					bottom: 0;
+					right: 0;
+					transform: rotate(180deg) scale(1, -1);
+				}
+			}
+
+			.crown {
+				position: absolute;
+				top: -15px;
+				width: 100%;
+				display: flex;
+				justify-content: center;
+			}
+		}
+	}
+}
