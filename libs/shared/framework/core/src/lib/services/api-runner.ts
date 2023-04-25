@@ -1,9 +1,30 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class ApiRunner {
-	constructor(private readonly http: HttpClient) {}
+	constructor(private readonly http: HttpClient, private readonly ow: OverwolfService) {}
+
+	/** Only for logged-in users */
+	public async callPostApiSecure<T>(
+		url: string,
+		input: any,
+		options?: {
+			contentType?: string;
+			bearerToken?: string;
+		},
+	): Promise<T | null> {
+		// TODO: cache the token if it's costly to generate
+		const start = Date.now();
+		const userToken = await this.ow.generateSessionToken();
+		console.debug('[api] generated token took', Date.now() - start);
+		input = {
+			...input,
+			jwt: userToken,
+		};
+		return this.callPostApi(url, input, options);
+	}
 
 	public async callPostApi<T>(
 		url: string,

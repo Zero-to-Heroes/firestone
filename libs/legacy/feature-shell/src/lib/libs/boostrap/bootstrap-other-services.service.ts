@@ -35,6 +35,7 @@ import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-prese
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
 import { MercenariesMemoryUpdateService } from '../../js/services/mercenaries/mercenaries-memory-updates.service';
 import { PreferencesService } from '../../js/services/preferences.service';
+import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
 import { QuestsService } from '../../js/services/quests.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
 import { ReviewIdService } from '../../js/services/review-id.service';
@@ -96,6 +97,7 @@ export class BootstrapOtherServicesService {
 		private readonly translate: TranslateService,
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
+		private readonly init_ProfileUploaderService: ProfileUploaderService
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

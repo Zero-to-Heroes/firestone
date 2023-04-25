@@ -268,6 +268,17 @@ export class OverwolfService {
 		});
 	}
 
+	public async generateSessionToken(): Promise<string> {
+		return new Promise<string>((resolve) => {
+			overwolf.profile.generateUserSessionToken((result) => {
+				if (!result.success) {
+					console.error('could not generate user session token', result.error);
+				}
+				resolve(result.token);
+			});
+		});
+	}
+
 	public openLoginDialog() {
 		overwolf.profile.openLoginDialog();
 	}
@@ -994,23 +1005,6 @@ export interface Flair {
 	readonly text: string;
 	readonly mod_only: boolean;
 	readonly allowable_content: string;
-}
-
-interface CheckForUpdateResult {
-	readonly success: boolean;
-	readonly error: string;
-	readonly state: ExtensionUpdateState;
-	readonly updateVersion: string;
-}
-
-type ExtensionUpdateState = 'UpToDate' | 'UpdateAvailable' | 'PendingRestart';
-
-interface UpdateExtensionResult {
-	readonly success: boolean;
-	readonly error: string;
-	readonly state: string;
-	readonly info: string;
-	readonly version: string;
 }
 
 export interface ExtendedWindowInfo extends overwolf.windows.WindowInfo {
