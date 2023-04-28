@@ -30,6 +30,7 @@ export class WebsiteCoreEffects {
 
 				return WebsiteCoreActions.afterAuthentication({
 					userName: action.userName,
+					nickName: action.nickName,
 					isLoggedIn: true,
 					isPremium: action.isPremium,
 				});

@@ -1,8 +1,8 @@
 {
-  "name": "collection/view",
+  "name": "profile-data-access",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/collection/view/src",
+  "sourceRoot": "libs/profile/data-access/src",
   "prefix": "firestone",
   "targets": {
     "build": {
@@ -11,14 +11,14 @@
         "{workspaceRoot}/dist/{projectRoot}"
       ],
       "options": {
-        "project": "libs/collection/view/ng-package.json"
+        "project": "libs/profile/data-access/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/collection/view/tsconfig.lib.prod.json"
+          "tsConfig": "libs/profile/data-access/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/collection/view/tsconfig.lib.json"
+          "tsConfig": "libs/profile/data-access/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
@@ -29,7 +29,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "libs/collection/view/jest.config.ts",
+        "jestConfig": "libs/profile/data-access/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -37,8 +37,8 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/collection/view/**/*.ts",
-          "libs/collection/view/**/*.html"
+          "libs/profile/data-access/**/*.ts",
+          "libs/profile/data-access/**/*.html"
         ]
       }
     }

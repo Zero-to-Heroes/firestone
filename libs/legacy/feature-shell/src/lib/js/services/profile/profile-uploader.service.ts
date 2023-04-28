@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CardsForSet, Profile } from '@firestone-hs/api-user-profile';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, filter, map } from 'rxjs';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
@@ -21,7 +22,7 @@ export class ProfileUploaderService {
 		await this.store.initComplete();
 
 		const isPremium$ = this.store.isPremiumUser$();
-		
+
 		// TODO: don't upload if the collection didn't change since last upload
 		const setsToUpload$ = combineLatest([isPremium$, this.store.listen$(([main, _]) => main.binder.allSets)]).pipe(
 			filter(([premium, [sets]]) => premium),
@@ -43,7 +44,7 @@ export class ProfileUploaderService {
 		);
 		setsToUpload$.pipe(filter((sets) => !!sets?.length)).subscribe(async (sets) => {
 			console.debug('[profile] will upload sets', sets);
-			const payload: any /*UserProfileUpdateInput*/ = {
+			const payload: Profile = {
 				sets: sets,
 			};
 			console.debug('[profile] updating profile with payload', payload);
@@ -51,7 +52,7 @@ export class ProfileUploaderService {
 		});
 	}
 
-	private buildCardsSetForPremium(set: Set, premium: CollectionCardType): /*CardsForSet*/ any {
+	private buildCardsSetForPremium(set: Set, premium: CollectionCardType): CardsForSet {
 		return {
 			common: set.ownedForRarity('Common', premium),
 			rare: set.ownedForRarity('Rare', premium),

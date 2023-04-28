@@ -4,4 +4,6 @@ export interface WebsiteCoreState {
 
 	isLoggedIn?: boolean;
 	isPremium?: boolean;
+	userName?: string;
+	nickName?: string;
 }

@@ -1,47 +1,80 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { sets as allSets, standardSets } from '@firestone-hs/reference-data';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import { WebsiteCoreState, getPremium } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
+import { Observable, filter, tap } from 'rxjs';
+import { initOwnProfileData } from '../+state/website/pofile.actions';
+import { ExtendedProfileSet, WebsiteProfileState } from '../+state/website/profile.models';
+import { getLoaded, getSets } from '../+state/website/profile.selectors';
 
 @Component({
 	selector: 'website-profile-collection',
-	// styleUrls: [``],
+	styleUrls: [`./website-profile-collection.component.scss`],
 	template: `
-		Collection is here
-		<!-- <with-loading [isLoading]="isLoading$ | async">
-			<section class="section">
-				<div class="filters">
-					<website-duels-rank-filter-dropdown class="filter"></website-duels-rank-filter-dropdown>
-					<website-duels-time-filter-dropdown class="filter"></website-duels-time-filter-dropdown>
-					<website-duels-hero-filter-dropdown class="filter"></website-duels-hero-filter-dropdown>
-				</div>
-
-				<duels-meta-stats-view
-					[stats]="stats$ | async"
-					[sort]="sort$ | async"
-					[hideLowData]="hideLowData$ | async"
-				></duels-meta-stats-view>
+		<with-loading [isLoading]="isLoading$ | async">
+			<section class="sets">
+				<website-profile-sets [sets]="standardSets$ | async" [header]="'Standard'"></website-profile-sets>
+				<website-profile-sets [sets]="wildSets$ | async" [header]="'Wild'"></website-profile-sets>
 			</section>
-		</with-loading> -->
+		</with-loading>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteProfileCollectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	// isLoading$: Observable<boolean>;
-	// stats$: Observable<readonly DuelsMetaStats[]>;
-	// sort$: Observable<DuelsHeroSortFilterType>;
-	// hideLowData$: Observable<boolean>;
+	isLoading$: Observable<boolean>;
+	standardSets$: Observable<readonly ExtendedProfileSet[]>;
+	wildSets$: Observable<readonly ExtendedProfileSet[]>;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly store: Store) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly store: Store<WebsiteProfileState>,
+		private readonly coreStore: Store<WebsiteCoreState>,
+	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
-		// this.isLoading$ = this.store.select(getLoaded).pipe(this.mapData((loaded) => !loaded));
-		// this.stats$ = this.store.select(getAllMetaHeroStats);
-		// // console.debug('dispatching creation');
-		// const action = initDuelsMetaHeroStats();
-		// // console.debug('after action creation', action);
-		// this.store.dispatch(action);
+		console.debug('after content init', 'ggaaaaa');
+		this.isLoading$ = this.store.select(getLoaded).pipe(this.mapData((loaded) => !loaded));
+		const sets$ = this.store.select(getSets);
+		const allSetsSorted = [...allSets].sort(sortByProperties((s) => [-s.launchDate]));
+		this.standardSets$ = sets$.pipe(
+			tap((info) => console.debug('profile sets', info)),
+			this.mapData(
+				(sets) =>
+					allSetsSorted
+						.filter((set) => standardSets.includes(set.id))
+						.map((ref) => sets.find((s) => s.id === ref.id))
+						.filter((s) => !!s) as readonly ExtendedProfileSet[],
+			),
+			tap((info) => console.debug('standard sets', info)),
+		);
+		this.wildSets$ = sets$.pipe(
+			this.mapData(
+				(sets) =>
+					allSetsSorted
+						.filter((set) => !standardSets.includes(set.id))
+						.map((ref) => sets.find((s) => s.id === ref.id))
+						.filter((s) => !!s) as readonly ExtendedProfileSet[],
+			),
+		);
+		console.debug('core premium', this.coreStore, this.coreStore.select(getPremium));
+		// TODO: return the nickname in the endpoint
+		this.coreStore
+			.select(getPremium)
+			.pipe(
+				tap((premium) => console.debug('retrieved premiummm', premium)),
+				filter((premium) => !!premium),
+				this.mapData((premium) => premium),
+			)
+			.subscribe((premium) => {
+				// TODO: pass the current jwt token as well?
+				console.debug('will init profile data');
+				const action = initOwnProfileData();
+				this.store.dispatch(action);
+			});
+
 		return;
 	}
 }

@@ -37,11 +37,14 @@ export class AuthenticationService {
 		valid: boolean;
 		premium: boolean;
 	}> {
-		// validate the info with a back-end call + get premium status
+		// TODO:
+		// - expose the return type in the lambda function
+		// - return a token that can be used for subsequent authentication (e.g. to retrieve the current logged in user's profile)
 		const authInfo: {
 			readonly valid: boolean;
 			readonly premium: boolean;
 			readonly userName: string;
+			readonly nickName: string;
 			readonly issuedAt: number;
 			readonly expiration: number;
 		} | null = await this.api.callPostApi(AUTH_TOKEN_VALIDATION_URL, {
@@ -54,6 +57,7 @@ export class AuthenticationService {
 		this.store.dispatch(
 			authenticationSuccess({
 				userName: authInfo?.userName ?? null,
+				nickName: authInfo?.nickName ?? null,
 				isLoggedIn: authInfo?.valid ?? false,
 				isPremium: authInfo?.premium ?? false,
 				issuedAt: authInfo?.issuedAt,
@@ -70,6 +74,7 @@ export class AuthenticationService {
 		this.store.dispatch(
 			authenticationSuccess({
 				userName: null,
+				nickName: null,
 				isLoggedIn: false,
 				isPremium: false,
 				issuedAt: undefined,

@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BoosterType } from '@firestone-hs/reference-data';
+import { BoosterType, sets } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
-import { sets } from '../../../js/services/collection/sets.ref';
 import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
