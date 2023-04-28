@@ -7,3 +7,5 @@ console.log('getting corestate');
 export const getWebsiteCoreState = createFeatureSelector<WebsiteCoreState>(WEBSITE_CORE_FEATURE_KEY);
 
 export const getPremium = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.isPremium);
+export const getUsername = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.userName);
+export const getNickname = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.nickName);

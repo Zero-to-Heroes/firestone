@@ -4,6 +4,7 @@ export const afterAuthentication = createAction(
 	'[WebsiteCore/API] Start authentication',
 	props<{
 		userName: string | null;
+		nickName: string | null;
 		isLoggedIn: boolean;
 		isPremium: boolean;
 	}>(),
@@ -13,6 +14,7 @@ export const authenticationSuccess = createAction(
 	'[WebsiteCore/API] Authentication success',
 	props<{
 		userName: string | null;
+		nickName: string | null;
 		isLoggedIn: boolean;
 		isPremium: boolean;
 		issuedAt?: number;

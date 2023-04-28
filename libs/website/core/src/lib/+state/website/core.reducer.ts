@@ -35,11 +35,12 @@ export const initialWebsiteCoreState: WebsiteCoreState = {
 const reducer = createReducer(
 	initialWebsiteCoreState,
 	// on(CoreActions.initAuthentication, (state, { }))
-	on(CoreActions.afterAuthentication, (state, { userName, isLoggedIn, isPremium }) => ({
+	on(CoreActions.afterAuthentication, (state, { userName, isLoggedIn, isPremium, nickName }) => ({
 		...state,
 		isPremium: isPremium,
 		isLoggedIn: isLoggedIn,
-		userName: userName,
+		userName: userName as string,
+		nickName: nickName as string,
 	})),
 );
 

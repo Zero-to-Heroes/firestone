@@ -49,6 +49,9 @@
       "@firestone/legacy/feature-shell": [
         "libs/legacy/feature-shell/src/index.ts"
       ],
+      "@firestone/profile/data-access": [
+        "libs/profile/data-access/src/index.ts"
+      ],
       "@firestone/replay/coliseum": [
         "libs/replay/coliseum/src/index.ts"
       ],
