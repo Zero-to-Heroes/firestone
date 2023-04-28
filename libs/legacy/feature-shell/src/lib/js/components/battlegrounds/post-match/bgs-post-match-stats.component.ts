@@ -18,8 +18,8 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
-import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
@@ -62,7 +62,7 @@ import { normalizeCardId } from './card-utils';
 						<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
 					</div>
 				</bgs-player-capsule>
-				<div class="tabs-container multi-{{ selectedTabs.length }}">
+				<div class="tabs-container multi-{{ selectedTabs?.length }}">
 					<bgs-post-match-stats-tabs
 						*ngFor="let selectedTab of selectedTabs; let i = index"
 						class="tab tab-{{ i + 1 }}"

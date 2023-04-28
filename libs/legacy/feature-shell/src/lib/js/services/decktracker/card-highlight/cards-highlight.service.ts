@@ -223,7 +223,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return !!h.deckCardProvider()
 					? h.deckCardProvider()
 					: DeckCard.create({
-							cardId: h.referenceCardProvider().id,
+							cardId: h.referenceCardProvider()?.id,
 					  });
 			}),
 		});
