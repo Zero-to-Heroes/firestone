@@ -516,7 +516,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.DefenseAttorneyNathanos:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DevoutBlessingsTavernBrawlToken:
-				return and(side(inputSide), inGraveyard, minion, deathrattle);
+				return and(side(inputSide), inGraveyard, minion, deathrattle, minionsDeadSinceLastTurn);
 			case CardIds.DinnerPerformer:
 				return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
 			case CardIds.DirgeOfDespair:
