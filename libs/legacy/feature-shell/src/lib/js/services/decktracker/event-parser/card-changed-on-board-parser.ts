@@ -28,7 +28,7 @@ export class CardChangedOnBoardParser implements EventParser {
 		// We don't pass the cardId because we know it has changed
 		const card = this.helper.findCardInZone(deck.board, null, entityId);
 		if (!card) {
-			console.warn('[card-changed-on-board] could not find card change on board', entityId, deck.board);
+			// console.warn('[card-changed-on-board] could not find card change on board', entityId, deck.board);
 			return currentState;
 		}
 		const boardWithRemovedCard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(

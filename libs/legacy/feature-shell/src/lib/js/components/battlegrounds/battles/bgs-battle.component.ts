@@ -776,7 +776,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				currentTurn: 0,
 			},
 		};
-		console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
+		console.log('[bgs-simulation-desktop] battle simulation request prepared');
+		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
 		console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
 		this.newBattle = BgsFaceOffWithSimulation.create({
