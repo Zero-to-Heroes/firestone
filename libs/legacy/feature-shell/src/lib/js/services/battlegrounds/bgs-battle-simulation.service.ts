@@ -13,8 +13,8 @@ import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 import { normalizeHeroCardId } from './bgs-utils';
-import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
+import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
 
 const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://o5gz4ktmfl.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://bmphmnu4gk.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
@@ -80,7 +80,7 @@ export class BgsBattleSimulationService {
 				currentTurn: currentTurn,
 			},
 		};
-		console.log(
+		console.debug(
 			'no-format',
 			'[bgs-simulation] battle simulation request prepared',
 			battleInfo,

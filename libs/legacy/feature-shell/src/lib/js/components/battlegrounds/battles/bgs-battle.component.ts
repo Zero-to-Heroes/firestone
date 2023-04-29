@@ -14,7 +14,7 @@ import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
-import { defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
+import { GameTag, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -772,7 +772,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				currentTurn: 0,
 			},
 		};
-		console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
+		console.log('[bgs-simulation-desktop] battle simulation request prepared');
+		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
 		console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
 		this.newBattle = BgsFaceOffWithSimulation.create({
