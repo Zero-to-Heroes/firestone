@@ -7,17 +7,18 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { decode, Sideboard } from '@firestone-hs/deckstrings';
+import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import {
 	AbstractSubscriptionStoreComponent,
 	IPreferences,
 	NonFunctionProperties,
 	Store,
+	sortByProperties,
 	uuid,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { BehaviorSubject, filter, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { SetCard } from '../../../models/set';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 
@@ -123,7 +124,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 					internalEntityIds: [internalEntityId],
 				});
 			})
-			.sort((a, b) => a.manaCost - b.manaCost);
+			.sort(sortByProperties((c: CardWithSideboard) => [c.manaCost, c.cardName]));
 	}
 
 	private buildSideboard(sideboardFromList: Sideboard): readonly VisualDeckCard[] {
