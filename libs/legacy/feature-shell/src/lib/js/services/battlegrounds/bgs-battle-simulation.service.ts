@@ -16,7 +16,7 @@ import { normalizeHeroCardId } from './bgs-utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
 
-const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://o5gz4ktmfl.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://664abby5durcmapfl2wc6cqlaq0xkkcm.lambda-url.us-west-2.on.aws/';
 const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://bmphmnu4gk.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 
 @Injectable()
