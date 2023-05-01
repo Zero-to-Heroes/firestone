@@ -30,6 +30,11 @@ const localPrefs = localPrefsService.getPreferences();
 export const initialWebsiteCoreState: WebsiteCoreState = {
 	loaded: true,
 	isPremium: isValidPremium(localPrefs.premium),
+	nickName: localPrefs.premium?.nickName,
+	userName: localPrefs.premium?.userName,
+	isLoggedIn: localPrefs.premium?.isPremium,
+	picture: localPrefs.premium?.picture,
+	fsToken: localPrefs.premium?.fsToken,
 };
 
 const reducer = createReducer(

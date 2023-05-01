@@ -5,6 +5,8 @@ export const afterAuthentication = createAction(
 	props<{
 		userName: string | null;
 		nickName: string | null;
+		picture: string | null;
+		fsToken: string | null;
 		isLoggedIn: boolean;
 		isPremium: boolean;
 	}>(),
@@ -15,9 +17,11 @@ export const authenticationSuccess = createAction(
 	props<{
 		userName: string | null;
 		nickName: string | null;
+		picture: string | null;
 		isLoggedIn: boolean;
 		isPremium: boolean;
 		issuedAt?: number;
 		expiration?: number;
+		fsToken: string | null;
 	}>(),
 );
