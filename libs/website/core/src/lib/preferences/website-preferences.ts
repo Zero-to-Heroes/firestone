@@ -25,4 +25,8 @@ export class WebsitePreferences implements IPreferences {
 export interface PremiumInfo {
 	expires?: number;
 	isPremium: boolean;
+	fsToken: string | null;
+	picture: string | null;
+	userName: string | null;
+	nickName: string | null;
 }

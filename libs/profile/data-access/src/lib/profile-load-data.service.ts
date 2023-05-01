@@ -18,7 +18,7 @@ export class ProfileLoadDataService {
 		return result != null ? result : null;
 	}
 
-	public async loadOwnProfileData(token: string): Promise<Profile | null> {
+	public async loadOwnProfileData(token: string | null | undefined): Promise<Profile | null> {
 		if (!token?.length) {
 			return null;
 		}

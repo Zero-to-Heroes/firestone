@@ -9,3 +9,4 @@ export const getWebsiteCoreState = createFeatureSelector<WebsiteCoreState>(WEBSI
 export const getPremium = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.isPremium);
 export const getUsername = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.userName);
 export const getNickname = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.nickName);
+export const getFsToken = createSelector(getWebsiteCoreState, (state: WebsiteCoreState) => state.fsToken);

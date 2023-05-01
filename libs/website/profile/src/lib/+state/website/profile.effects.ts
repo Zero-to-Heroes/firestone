@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { combineLatest, filter, from, merge, switchMap, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, merge, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { WebsiteCoreState, getFsToken } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
 import { ProfileLoadDataService } from 'libs/profile/data-access/src/lib/profile-load-data.service';
 import * as WebsiteProfileActions from './pofile.actions';
@@ -17,13 +18,12 @@ export class WebsiteProfileEffects {
 		private readonly actions$: Actions,
 		private readonly access: ProfileLoadDataService,
 		private readonly store: Store<WebsiteProfileState>,
+		private readonly coreStore: Store<WebsiteCoreState>,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
 	ownProfile$ = createEffect(() => {
-		const params$ = combineLatest([
-			from([1]), // Not used, just to avoid having to redo everyth
-		]);
+		const params$ = combineLatest([this.coreStore.select(getFsToken)]);
 		const merged$ = merge(this.actions$.pipe(ofType(WebsiteProfileActions.initOwnProfileData)), params$);
 		return merged$.pipe(
 			tap((info) => console.debug('ownProfile info', info)),
@@ -31,13 +31,14 @@ export class WebsiteProfileEffects {
 			tap((info) => console.debug('ownProfile info 2', info)),
 			filter(([action, params]) => !!action || !!params),
 			tap((info) => console.debug('ownProfile info 3', info)),
-			switchMap(async ([action]) => {
+			switchMap(async ([action, [fsToken]]) => {
 				// TODO: get the current user token and pass it
 				console.debug('will load own profile data', action);
-				const profile = await this.access.loadOwnProfileData('fake');
-				console.debug('loaded own profile data', profile);
+
+				const profile = await this.access.loadOwnProfileData(fsToken);
+				console.debug('loaded own profile data', profile, this.allCards);
 				if (!this.collectibleCards?.length) {
-					this.collectibleCards = await this.allCards.getCards().filter((c) => c.collectible);
+					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
 				const sets: readonly ExtendedProfileSet[] =
 					profile?.sets?.map((set) => {

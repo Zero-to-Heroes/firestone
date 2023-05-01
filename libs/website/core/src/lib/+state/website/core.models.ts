@@ -4,6 +4,8 @@ export interface WebsiteCoreState {
 
 	isLoggedIn?: boolean;
 	isPremium?: boolean;
-	userName?: string;
-	nickName?: string;
+	userName?: string | null;
+	nickName?: string | null;
+	fsToken?: string | null;
+	picture?: string | null;
 }

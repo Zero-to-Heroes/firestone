@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AuthInfo } from '@firestone-hs/api-auth';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { Store } from '@ngrx/store';
 import { authenticationSuccess } from '../+state/website/core.actions';
@@ -37,17 +38,7 @@ export class AuthenticationService {
 		valid: boolean;
 		premium: boolean;
 	}> {
-		// TODO:
-		// - expose the return type in the lambda function
-		// - return a token that can be used for subsequent authentication (e.g. to retrieve the current logged in user's profile)
-		const authInfo: {
-			readonly valid: boolean;
-			readonly premium: boolean;
-			readonly userName: string;
-			readonly nickName: string;
-			readonly issuedAt: number;
-			readonly expiration: number;
-		} | null = await this.api.callPostApi(AUTH_TOKEN_VALIDATION_URL, {
+		const authInfo: AuthInfo | null = await this.api.callPostApi(AUTH_TOKEN_VALIDATION_URL, {
 			authCode,
 			dev: process.env['NODE_ENV'] !== 'production',
 		});
@@ -57,11 +48,13 @@ export class AuthenticationService {
 		this.store.dispatch(
 			authenticationSuccess({
 				userName: authInfo?.userName ?? null,
-				nickName: authInfo?.nickName ?? null,
+				nickName: authInfo?.nickname ?? null,
+				picture: authInfo?.picture ?? null,
 				isLoggedIn: authInfo?.valid ?? false,
 				isPremium: authInfo?.premium ?? false,
 				issuedAt: authInfo?.issuedAt,
 				expiration: authInfo?.expiration,
+				fsToken: authInfo?.fsToken ?? null,
 			}),
 		);
 		return {
@@ -75,10 +68,12 @@ export class AuthenticationService {
 			authenticationSuccess({
 				userName: null,
 				nickName: null,
+				picture: null,
 				isLoggedIn: false,
 				isPremium: false,
 				issuedAt: undefined,
 				expiration: undefined,
+				fsToken: null,
 			}),
 		);
 	}

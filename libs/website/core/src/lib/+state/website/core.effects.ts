@@ -23,6 +23,10 @@ export class WebsiteCoreEffects {
 					premium: {
 						expires: action.expiration,
 						isPremium: action.isLoggedIn && action.isPremium,
+						fsToken: action.fsToken,
+						picture: action.picture,
+						userName: action.userName,
+						nickName: action.nickName,
 					},
 				};
 				console.debug('updated prefs', newPrefs);
@@ -31,6 +35,8 @@ export class WebsiteCoreEffects {
 				return WebsiteCoreActions.afterAuthentication({
 					userName: action.userName,
 					nickName: action.nickName,
+					picture: action.picture,
+					fsToken: action.fsToken,
 					isLoggedIn: true,
 					isPremium: action.isPremium,
 				});
