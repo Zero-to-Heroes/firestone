@@ -546,6 +546,8 @@ const publicCardGiftCreators = [
 	CardIds.KingMuklaLegacy,
 	CardIds.KingMuklaVanilla,
 	CardIds.Kingsbane_LOOT_542,
+	CardIds.KiriChosenOfElune_CORE_DMF_733,
+	CardIds.KiriChosenOfElune_DMF_733,
 	CardIds.KoboldTaskmaster,
 	CardIds.LadyDeathwhisper_RLK_713,
 	CardIds.LargeWaxyGiftTavernBrawl,
