@@ -574,7 +574,7 @@ const publicCardGiftCreators = [
 	CardIds.MarkedShotCore,
 	CardIds.Marshspawn_BT_115,
 	CardIds.MarvelousMyceliumTavernBrawlToken,
-	CardIds.Melomania,
+	CardIds.Melomania_MelomaniaEnchantment,
 	CardIds.UniteTheMurlocs_MegafinToken,
 	CardIds.MeetingStone,
 	CardIds.MenacingNimbus,
