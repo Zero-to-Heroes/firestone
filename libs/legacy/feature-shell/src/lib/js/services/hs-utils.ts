@@ -588,6 +588,7 @@ const publicCardGiftCreators = [
 	CardIds.MindVisionVanilla,
 	CardIds.MisterMukla,
 	CardIds.Mixtape,
+	CardIds.MoonbeastTavernBrawlToken,
 	CardIds.MuckbornServant,
 	CardIds.MurlocHolmes_REV_022,
 	CardIds.MurlocHolmes_REV_770,
