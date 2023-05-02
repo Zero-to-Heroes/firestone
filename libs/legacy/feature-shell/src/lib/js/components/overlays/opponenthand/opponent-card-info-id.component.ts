@@ -46,7 +46,7 @@ export class OpponentCardInfoIdComponent {
 
 	@Input() set card(value: DeckCard) {
 		// Keep the || to handle empty card id
-		const realCardId = this.normalizeEnchantment(value.cardId || value.lastAffectedByCardId);
+		const realCardId = this.normalizeEnchantment(value.cardId || value.lastAffectedByCardId || value.creatorCardId);
 		// const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
 		this.createdBy =
 			!value.cardId && !!value.creatorCardId && publicCardCreators.includes(value.creatorCardId as CardIds);
@@ -104,7 +104,7 @@ export class OpponentCardInfoIdComponent {
 		}
 
 		// The base case
-		const match = /(.*)e\d+?/.exec(cardId);
+		const match = /(.*)e\d*$/.exec(cardId);
 		if (!!match) {
 			const rootCardId = match[1];
 			return rootCardId;
