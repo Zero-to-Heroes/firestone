@@ -5,9 +5,9 @@
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
 
-	// &:hover {
-	// 	background: rgba(255, 255, 255, 0.12);
-	// }
+	&.hover-effect:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
 
 	.portrait {
 		height: 100%;

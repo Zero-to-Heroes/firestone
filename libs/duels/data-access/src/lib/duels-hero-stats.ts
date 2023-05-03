@@ -49,10 +49,18 @@ export const filterDuelsHeroStats = (
 	allCards: CardsFacadeService,
 	searchString: string | null = null,
 ): readonly DuelsHeroStat[] => {
+	console.debug(
+		'filtering duels hero stats',
+		heroStats?.length,
+		heroesFilter,
+		heroesFilter.map((h) => normalizeDuelsHeroCardId(h)),
+		heroPowerFilter,
+		signatureTreasureFilter,
+	);
 	const result = (heroStats ?? [])
 		.filter((stat) =>
 			!heroesFilter?.length
-				? false
+				? true
 				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
 		)
 		.filter((stat) =>
@@ -83,6 +91,7 @@ export const filterDuelsHeroStats = (
 			const refCard = allCards.getCard(cardId);
 			return refCard?.name.toLowerCase().includes(searchString.toLowerCase());
 		});
+	console.debug('filtered duels hero stats', result?.length, result);
 	return result;
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats

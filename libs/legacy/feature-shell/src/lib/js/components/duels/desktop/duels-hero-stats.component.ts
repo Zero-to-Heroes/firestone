@@ -1,7 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
+import { DuelsExploreDecksEvent } from '../../../services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -14,6 +16,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[stats]="stats"
 				[sort]="sort$ | async"
 				[hideLowData]="hideLowData$ | async"
+				[hoverEffect]="true"
+				(statsClicked)="onStatsClicked($event)"
 			></duels-meta-stats-view>
 		</div>
 		<ng-template #emptyState>
@@ -27,6 +31,8 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 	sort$: Observable<DuelsHeroSortFilterType>;
 	hideLowData$: Observable<boolean>;
 
+	private currentType: DuelsStatTypeFilterType;
+
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
@@ -36,6 +42,9 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 	}
 
 	ngAfterContentInit() {
+		this.listenForBasicPref$((prefs) => prefs.duelsActiveStatTypeFilter).subscribe((type) => {
+			this.currentType = type;
+		});
 		this.stats$ = this.store.duelsHeroStats$().pipe(
 			this.mapData((stats) => {
 				const tieredStats = stats.map((stat) => {
@@ -62,5 +71,13 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 		);
 		this.sort$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroSortFilter);
 		this.hideLowData$ = this.listenForBasicPref$((prefs) => prefs.duelsHideStatsBelowThreshold);
+	}
+
+	onStatsClicked(stat: DuelsMetaStats) {
+		console.debug('stats clicked', stat);
+		const heroCardId = this.currentType === 'hero' ? stat.cardId : null;
+		const heroPowerCardId = this.currentType === 'hero-power' ? stat.cardId : null;
+		const signatureTreasureCardId = this.currentType === 'signature-treasure' ? stat.cardId : null;
+		this.store.send(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 }

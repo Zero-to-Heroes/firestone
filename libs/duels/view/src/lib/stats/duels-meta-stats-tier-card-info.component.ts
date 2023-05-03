@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
@@ -10,7 +10,7 @@ import { DuelsMetaStats } from './duels-meta-stats-tier';
 	selector: 'duels-meta-stats-tier-card-info',
 	styleUrls: [`./duels-meta-stats-view-columns.scss`, `./duels-meta-stats-tier-card-info.component.scss`],
 	template: `
-		<div class="info">
+		<div class="info" [ngClass]="{ 'hover-effect': hoverEffect }" (click)="onClick()">
 			<div class="portrait">
 				<img [src]="icon" class="portrait-icon" [cardTooltip]="cardId" />
 				<img [src]="secondaryClassIcon" class="secondary-class-icon" *ngIf="secondaryClassIcon" />
@@ -54,7 +54,10 @@ import { DuelsMetaStats } from './duels-meta-stats-tier';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsMetaStatsTierCardInfoComponent {
+	@Output() statsClicked = new EventEmitter<DuelsMetaStats>();
+
 	@Input() set stat(value: DuelsMetaStats) {
+		this._stat = value;
 		const card = this.allCards.getCard(value.cardId);
 		this.cardId = value.cardId;
 		const isNeutralHero =
@@ -85,6 +88,7 @@ export class DuelsMetaStatsTierCardInfoComponent {
 		};
 		this.placementChartData = [globalPlacementChartData];
 	}
+	@Input() hoverEffect = false;
 
 	cardId: string;
 	secondaryClassIcon: string | null;
@@ -96,9 +100,15 @@ export class DuelsMetaStatsTierCardInfoComponent {
 	playerWinrate: string | undefined;
 	placementChartData: SimpleBarChartData[];
 
+	_stat: DuelsMetaStats;
+
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 
 	buildValue(value: number): string {
 		return value == null ? '-' : value === 0 ? '0' : value.toFixed(0);
+	}
+
+	onClick() {
+		this.statsClicked.next(this._stat);
 	}
 }

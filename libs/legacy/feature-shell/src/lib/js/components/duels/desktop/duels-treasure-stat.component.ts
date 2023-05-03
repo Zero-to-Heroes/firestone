@@ -3,8 +3,7 @@ import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { filterDuelsTreasureStats } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
-import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
+import { Observable, combineLatest } from 'rxjs';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildDuelsHeroTreasurePlayerStats, filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
@@ -128,14 +127,8 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 		this.hideLowData$ = this.listenForBasicPref$((prefs) => prefs.duelsHideStatsBelowThreshold);
 	}
 
-	private sortBy(heroSorting: DuelsHeroSortFilterType): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {
-		switch (heroSorting) {
-			case 'games-played':
-				return (a, b) => b.playerTotalMatches - a.playerTotalMatches;
-			case 'global-winrate':
-				return (a, b) => b.globalWinrate - a.globalWinrate;
-			case 'player-winrate':
-				return (a, b) => b.playerWinrate - a.playerWinrate;
-		}
+	onStatsClicked(stat: DuelsMetaStats) {
+		console.debug('stats clicked', stat);
+		// this.store.send(new DuelsExploreDecksEvent(null, null, stat.cardId));
 	}
 }
