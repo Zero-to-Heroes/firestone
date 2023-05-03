@@ -187,11 +187,11 @@ export class GameStatsLoaderService {
 	}
 
 	private async saveLocalStats(gameStats: readonly GameStat[]) {
-		await this.diskCache.storeItem(DiskCacheService.USER_MATCH_HISTORY, gameStats);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY, gameStats);
 	}
 
 	private async loadLocalGameStats(): Promise<readonly GameStat[]> {
-		return await this.diskCache.getItem(DiskCacheService.USER_MATCH_HISTORY);
+		return await this.diskCache.getItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY);
 	}
 }
 

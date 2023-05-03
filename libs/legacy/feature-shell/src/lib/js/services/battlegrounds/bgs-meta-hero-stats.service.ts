@@ -22,13 +22,15 @@ export class BgsMetaHeroStatsService {
 			.pipe(distinctUntilChanged())
 			.subscribe(async ([timeFilter]) => {
 				const stats = await this.access.loadMetaHeroStats(timeFilter);
-				this.diskCache.storeItem(DiskCacheService.BATTLEGROUNDS_META_HERO_STATS, stats);
+				this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_META_HERO_STATS, stats);
 				this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(stats));
 			});
 	}
 
 	public async loadInitialMetaHeroStats() {
-		const localStats = await this.diskCache.getItem<BgsHeroStatsV2>(DiskCacheService.BATTLEGROUNDS_META_HERO_STATS);
+		const localStats = await this.diskCache.getItem<BgsHeroStatsV2>(
+			DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_META_HERO_STATS,
+		);
 		console.debug('[bgs-meta-hero] localStats', localStats);
 		if (!!localStats?.heroStats?.length) {
 			this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(localStats));

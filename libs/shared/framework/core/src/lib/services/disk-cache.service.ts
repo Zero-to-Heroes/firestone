@@ -1,26 +1,47 @@
 import { Injectable } from '@angular/core';
+import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { OverwolfService } from './overwolf.service';
 
 // Only move items that are too big for localstorage
 @Injectable()
 export class DiskCacheService {
-	public static IN_GAME_ACHIEVEMENTS = 'in-game-achievements.json';
-	public static ACHIEVEMENTS_HISTORY = 'achievements-history.json';
-	public static COLLECTION = 'collection.json';
-	public static COLLECTION_PACK_STATS = 'collection-pack-stats.json';
-	public static CARDS_HISTORY = 'cards-history.json';
-	public static ADVENTURES_INFO = 'adventures-info.json';
-	public static USER_MATCH_HISTORY = 'user-match-history.json';
-	public static BATTLEGROUNDS_PERFECT_GAMES = 'battlegrounds-perfect-games.json';
-	public static BATTLEGROUNDS_META_HERO_STATS = 'battlegrounds-meta-hero-stats.json';
-	public static MERCENARIES_COLLECTION = 'mercenaries-memory-collection-info.json';
-	public static MERCENARIES_REFERENCE_DATA = 'mercenaries-reference-data.json';
+	public static DISK_CACHE_KEYS = {
+		ACHIEVEMENTS_HISTORY: 'achievements-history.json',
+		COLLECTION: 'collection.json',
+		COLLECTION_PACK_STATS: 'collection-pack-stats.json',
+		CARDS_HISTORY: 'cards-history.json',
+		ADVENTURES_INFO: 'adventures-info.json',
+		USER_MATCH_HISTORY: 'user-match-history.json',
+		BATTLEGROUNDS_PERFECT_GAMES: 'battlegrounds-perfect-games.json',
+		BATTLEGROUNDS_META_HERO_STATS: 'battlegrounds-meta-hero-stats.json',
+		MERCENARIES_COLLECTION: 'mercenaries-memory-collection-info.json',
+		MERCENARIES_REFERENCE_DATA: 'mercenaries-reference-data.json',
+	};
 
-	constructor(private readonly ow: OverwolfService) {}
-
+	private cacheDisabled = false;
 	private savingFiles: { [fileKey: string]: boolean } = {};
 
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		this.init();
+	}
+
+	private async init() {
+		this.store
+			.listenPrefs$((prefs) => prefs.disableLocalCache)
+			.subscribe(([disableLocalCache]) => {
+				this.cacheDisabled = disableLocalCache;
+			});
+	}
+
+	public async clearCache() {
+		console.debug('clearing cache');
+		await this.ow.deleteAppFile('./');
+	}
+
 	public async storeItem(key: string, value: any) {
+		if (this.cacheDisabled) {
+			return;
+		}
 		return this.storeItemInternal(key, value).withTimeout(5000, key);
 	}
 
@@ -45,6 +66,9 @@ export class DiskCacheService {
 	}
 
 	public async getItem<T>(key: string): Promise<T | null> {
+		if (this.cacheDisabled) {
+			return null;
+		}
 		return this.getItemInternal<T>(key).withTimeout(5000, key);
 	}
 

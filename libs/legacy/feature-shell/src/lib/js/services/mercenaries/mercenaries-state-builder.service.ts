@@ -61,7 +61,7 @@ export class MercenariesStateBuilderService {
 
 	public async loadReferenceData(locale?: string) {
 		const localInfo = await this.diskCache.getItem<MercenariesReferenceData>(
-			DiskCacheService.MERCENARIES_REFERENCE_DATA,
+			DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA,
 		);
 		if (!!localInfo?.mercenaries?.length) {
 			console.log('loaded local mercenaries ref data');
@@ -72,7 +72,7 @@ export class MercenariesStateBuilderService {
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
 			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
-		await this.diskCache.storeItem(DiskCacheService.MERCENARIES_REFERENCE_DATA, referenceData);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA, referenceData);
 		console.log('loaded remote mercenaries ref data');
 		this.store.send(new MercenariesReferenceDataLoadedEvent(referenceData));
 		return referenceData;
