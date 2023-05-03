@@ -473,6 +473,7 @@ import { LocalizationStandaloneService } from '@components/decktracker/overlay/t
 import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
@@ -1364,6 +1365,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsTierComponent,
 		DuelsTreasureSearchComponent,
 		DuelsHeroSearchComponent,
+		DuelsTopDecksSearchComponent,
 		DuelsLeaderboardComponent,
 		DuelsDeckbuilderComponent,
 		DuelsDeckbuilderBreadcrumbsComponent,

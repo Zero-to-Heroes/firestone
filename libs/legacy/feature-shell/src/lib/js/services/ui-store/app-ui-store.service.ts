@@ -423,6 +423,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.listen$(
 			([main, nav]) => main.duels.topDecks,
 			([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+			([main, nav]) => main.duels.decksSearchString,
 			([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 			([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
@@ -438,6 +439,7 @@ export class AppUiStoreService extends Store<Preferences> {
 					([
 						topDecks,
 						mmrPercentiles,
+						searchString,
 						mmrFilter,
 						classFilter,
 						heroPowerFilter,
@@ -460,6 +462,7 @@ export class AppUiStoreService extends Store<Preferences> {
 									dustFilter,
 									passivesFilter,
 									patch,
+									searchString,
 								),
 							)
 							.filter((group) => group.decks.length > 0);

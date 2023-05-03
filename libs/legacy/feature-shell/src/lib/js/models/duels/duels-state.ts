@@ -41,6 +41,7 @@ export class DuelsState {
 	readonly heroPowerOptions: readonly MemoryDuelsHeroPowerOption[];
 	readonly signatureTreasureOptions: readonly MemoryDuelsHeroPowerOption[];
 	readonly adventuresInfo: AdventuresInfo;
+	readonly decksSearchString: string;
 
 	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);

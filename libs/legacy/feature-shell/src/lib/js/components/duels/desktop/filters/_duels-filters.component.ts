@@ -48,6 +48,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<duels-passive-filter-dropdown class="filter dust-filter"></duels-passive-filter-dropdown>
 			<duels-hero-sort-dropdown class="filter hero-sort"></duels-hero-sort-dropdown>
 			<duels-deck-sort-dropdown class="filter deck-sort"></duels-deck-sort-dropdown>
+			<duels-top-decks-search
+				class="filter deck-search"
+				*ngIf="showTopDecksSearch$ | async"
+			></duels-top-decks-search>
 
 			<preference-toggle
 				class="show-hidden-decks-link"
@@ -77,6 +81,7 @@ export class DuelsFiltersComponent
 	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
 	showHideBelowThresholdLink$: Observable<boolean>;
+	showTopDecksSearch$: Observable<boolean>;
 
 	helpTooltip = this.i18n.translateString('settings.duels.hide-stats-below-threshold-tooltip', {
 		value: this.threshold,
@@ -122,6 +127,9 @@ export class DuelsFiltersComponent
 			.pipe(
 				this.mapData(([selectedCategoryId]) => ['duels-stats', 'duels-treasures'].includes(selectedCategoryId)),
 			);
+		this.showTopDecksSearch$ = this.store
+			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
+			.pipe(this.mapData(([selectedCategoryId]) => ['duels-top-decks'].includes(selectedCategoryId)));
 	}
 
 	ngAfterViewInit() {

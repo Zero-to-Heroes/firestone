@@ -39,4 +39,5 @@ export interface DuelsDeckStat extends DeckStat {
 	readonly heroCardId: string;
 	readonly dustCost: number;
 	readonly steps: readonly (GameStat | DuelsRunInfo)[];
+	readonly allCardNames: readonly string[];
 }

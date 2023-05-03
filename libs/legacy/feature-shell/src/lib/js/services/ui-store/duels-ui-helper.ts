@@ -2,12 +2,12 @@ import { DuelsHeroStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/d
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import {
-	buildDuelsCombinedHeroStats,
 	DuelsCombinedHeroStat,
 	DuelsGameModeFilterType,
 	DuelsHeroFilterType,
 	DuelsStatTypeFilterType,
 	DuelsTimeFilterType,
+	buildDuelsCombinedHeroStats,
 	getGroupingKeyForHeroStat as groupingKey,
 } from '@firestone/duels/data-access';
 import { GameStat } from '@firestone/stats/data-access';
@@ -308,10 +308,12 @@ export const topDeckApplyFilters = (
 	dustFilter: DuelsTopDecksDustFilterType,
 	passivesFilter: readonly string[],
 	patch: PatchInfo,
+	searchString: string = null,
 ): DuelsGroupedDecks => {
 	return {
 		...grouped,
 		decks: grouped.decks
+			.filter((deck) => topDeckStringFilter(deck, searchString))
 			.filter((deck) => topDeckMmrFilter(deck, mmrFilter))
 			.filter((deck) => topDeckHeroFilter(deck, heroFilter))
 			.filter((deck) => topDeckHeroPowerFilter(deck, heroPowerFilter))
@@ -320,6 +322,13 @@ export const topDeckApplyFilters = (
 			.filter((deck) => topDeckDustFilter(deck, dustFilter))
 			.filter((deck) => topDeckPassivesFilter(deck, passivesFilter)),
 	};
+};
+
+const topDeckStringFilter = (deck: DuelsDeckStat, searchString: string): boolean => {
+	if (!searchString) {
+		return true;
+	}
+	return deck.allCardNames?.some((n) => n.toLowerCase().includes(searchString.toLowerCase()));
 };
 
 const topDeckPassivesFilter = (deck: DuelsDeckStat, filter: readonly string[]): boolean => {
