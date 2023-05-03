@@ -660,6 +660,7 @@ import { BattlegroundsQuestsService } from './js/services/battlegrounds/bgs-ques
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
+import { BugReportService } from './js/services/bug/bug-report.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardHistoryStorageService } from './js/services/collection/card-history-storage.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
@@ -1652,6 +1653,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferencesService,
 		S3FileUploadService,
 		SimpleIOService,
+		BugReportService,
 
 		ModsBootstrapService,
 		ModsManagerService,

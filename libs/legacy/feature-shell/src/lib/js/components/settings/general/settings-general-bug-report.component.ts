@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { BugReportService } from '../../../services/bug/bug-report.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LogsUploaderService } from '../../../services/logs-uploader.service';
 import { PreferencesService } from '../../../services/preferences.service';
-
-const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazonaws.com/Prod/feedback';
 
 @Component({
 	selector: 'settings-general-bug-report',
@@ -77,6 +76,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 		private readonly http: HttpClient,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly bugService: BugReportService,
 	) {}
 
 	ngAfterViewInit() {
@@ -100,24 +100,15 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 		try {
-			const [appLogs, gameLogs, currentUser] = await Promise.all([
-				this.logService.uploadAppLogs(),
-				this.logService.uploadGameLogs(),
-				this.ow.getCurrentUser(),
-			]);
-			const submission = {
-				email: this.email,
-				version: process.env.APP_VERSION,
-				message: this.body,
-				user: currentUser ? currentUser.username || currentUser.userId || currentUser.machineId : undefined,
-				appLogsKey: appLogs,
-				gameLogsKey: gameLogs,
-			};
 			this.status = this.i18n.translateString('settings.general.bug-report.status-sending-feedback');
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-			await this.http.post(FEEDBACK_ENDPOINT_POST, submission).toPromise();
+
+			await this.bugService.submitReport({
+				email: this.email,
+				message: this.body,
+			});
 
 			this.prefs.setContactEmail(this.email);
 
