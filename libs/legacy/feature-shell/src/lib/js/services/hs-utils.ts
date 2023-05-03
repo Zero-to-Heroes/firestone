@@ -122,7 +122,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.TheStonewright,
 	CardIds.ValdrisFelgorge,
-	CardIds.VampiricBlood_RLK_051,
+	// CardIds.VampiricBlood_RLK_051,
 	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
 ];
@@ -190,6 +190,14 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'ReuseFX_Holy_BuffImpact_Heal_Small_Super',
 		cardId: CardIds.HopeOfQuelthalas,
+	},
+	{
+		effectPrefab: 'ReuseFX_Blood_DeathKnight_BuffImpact_GainHealth_Medium_ConsumeCorpse_Super_SourceHero',
+		cardId: CardIds.VampiricBlood_RLK_051,
+	},
+	{
+		effectPrefab: 'ReuseFX_Blood_DeathKnight_BuffImpact_GainHealth_Small_Super_SourceHero',
+		cardId: CardIds.VampiricBlood_RLK_051,
 	},
 ];
 

@@ -25,15 +25,22 @@ export class GlobalMinionEffectParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer] = gameEvent.parse();
+		const [inputCardId, controllerId, localPlayer] = gameEvent.parse();
 
+		let cardId = inputCardId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const effectTrigger = globalEffectTriggers.find((e) => e.cardId === cardId);
+
+		let effectTrigger = globalEffectTriggers.find((e) => e.cardId === cardId);
 		if (effectTrigger?.cardId !== cardId) {
-			console.warn('trying to apply global effect trigger to wrong card', cardId, effectTrigger);
-			return currentState;
+			cardId = gameEvent.additionalData?.parentCardId;
+			effectTrigger = globalEffectTriggers.find((e) => e.cardId === cardId);
+			if (effectTrigger?.cardId !== cardId) {
+				console.warn('trying to apply global effect trigger to wrong card', cardId, inputCardId, effectTrigger);
+				return currentState;
+			}
 		}
+		// console.debug('effectTrigger', effectTrigger, cardId, globalEffectTriggers, gameEvent);
 
 		const refCard = this.allCards.getCard(cardId);
 		const card = DeckCard.create({
@@ -45,6 +52,7 @@ export class GlobalMinionEffectParser implements EventParser {
 			zone: null,
 		} as DeckCard);
 		const newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
+		// console.debug('newGlobalEffects', newGlobalEffects, cardId, card, deck.globalEffects);
 		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
 			cardId,
 			deck,
