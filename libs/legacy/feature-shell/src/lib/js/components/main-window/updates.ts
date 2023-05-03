@@ -104,11 +104,6 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the "Buddies" tier was shown in the minions list even when Buddies were not in the game.`,
 							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
 							{
 								type: 'bug',
 								text: `Fix an issue where the turn counter would start getting out of sync when mercenaries abilities made you choose multiple mercs from your hand in a row (like Eudora + Brightwing).`,
