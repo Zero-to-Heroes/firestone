@@ -12,8 +12,8 @@ import { PatchInfo } from '../../models/patches';
 import { Events } from '../events.service';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
+import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 
 const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json';
 
@@ -42,7 +42,7 @@ export class BgsInitService {
 
 	public async loadInitialPerfectGames() {
 		const localPercectGames = await this.diskCache.getItem<readonly GameStat[]>(
-			DiskCacheService.BATTLEGROUNDS_PERFECT_GAMES,
+			DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_PERFECT_GAMES,
 		);
 		if (!!localPercectGames?.length) {
 			this.store.send(new BattlegroundsPerfectGamesLoadedEvent(localPercectGames));
@@ -60,7 +60,7 @@ export class BgsInitService {
 				} as GameStat),
 			)
 			.filter((stat) => stat.playerRank);
-		this.diskCache.storeItem(DiskCacheService.BATTLEGROUNDS_PERFECT_GAMES, remotePerfectGames);
+		this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_PERFECT_GAMES, remotePerfectGames);
 		this.store.send(new BattlegroundsPerfectGamesLoadedEvent(remotePerfectGames));
 	}
 

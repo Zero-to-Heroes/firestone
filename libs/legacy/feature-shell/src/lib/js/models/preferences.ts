@@ -68,6 +68,7 @@ export class Preferences implements IPreferences {
 	readonly gameInstallPath: string;
 
 	readonly modsEnabled: boolean;
+	readonly disableLocalCache: boolean;
 
 	readonly launchAppOnGameStart: boolean = true;
 	readonly showSessionRecapOnExit: boolean = true;

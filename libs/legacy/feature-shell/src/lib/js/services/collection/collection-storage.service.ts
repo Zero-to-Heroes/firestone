@@ -16,7 +16,7 @@ export class CollectionStorageService {
 	) {}
 
 	public async saveCollection(collection: readonly Card[]): Promise<readonly Card[]> {
-		await this.diskCache.storeItem(DiskCacheService.COLLECTION, collection);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION, collection);
 		return collection;
 	}
 
@@ -45,7 +45,7 @@ export class CollectionStorageService {
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
-		const fromStorage = await this.diskCache.getItem<readonly Card[]>(DiskCacheService.COLLECTION);
+		const fromStorage = await this.diskCache.getItem<readonly Card[]>(DiskCacheService.DISK_CACHE_KEYS.COLLECTION);
 		return fromStorage ?? [];
 	}
 
@@ -69,15 +69,17 @@ export class CollectionStorageService {
 	}
 
 	public async saveCardHistory(history: CardHistory): Promise<CardHistory> {
-		const fromStorage = await this.diskCache.getItem<readonly CardHistory[]>(DiskCacheService.CARDS_HISTORY);
+		const fromStorage = await this.diskCache.getItem<readonly CardHistory[]>(
+			DiskCacheService.DISK_CACHE_KEYS.CARDS_HISTORY,
+		);
 		const historyList: readonly CardHistory[] = fromStorage ?? [];
 		const newHistory = [history, ...historyList];
-		await this.diskCache.storeItem(DiskCacheService.CARDS_HISTORY, newHistory);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.CARDS_HISTORY, newHistory);
 		return history;
 	}
 
 	public async saveFullCardHistory(history: readonly CardHistory[]): Promise<readonly CardHistory[]> {
-		await this.diskCache.storeItem(DiskCacheService.CARDS_HISTORY, history);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.CARDS_HISTORY, history);
 		return history ?? [];
 	}
 
@@ -87,7 +89,9 @@ export class CollectionStorageService {
 	}
 
 	public async getAllCardHistory(limit: number): Promise<readonly CardHistory[]> {
-		const fromStorage = await this.diskCache.getItem<readonly CardHistory[]>(DiskCacheService.CARDS_HISTORY);
+		const fromStorage = await this.diskCache.getItem<readonly CardHistory[]>(
+			DiskCacheService.DISK_CACHE_KEYS.CARDS_HISTORY,
+		);
 		if (!!fromStorage) {
 			const result: readonly CardHistory[] = fromStorage ?? [];
 			return result.slice(0, limit);

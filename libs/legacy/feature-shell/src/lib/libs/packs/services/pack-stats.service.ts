@@ -28,7 +28,9 @@ export class PackStatsService {
 	public async getPackStats(): Promise<readonly PackResult[]> {
 		// Ideally this would be fully reactive, but there are too many processes that depend on it,
 		// so for now I will just use a local cache
-		const localPackResult = await this.diskCache.getItem<LocalPackStats>(DiskCacheService.COLLECTION_PACK_STATS);
+		const localPackResult = await this.diskCache.getItem<LocalPackStats>(
+			DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS,
+		);
 		// Cache the local results for one hour
 		if (localPackResult && Date.now() - new Date(localPackResult.lastUpdateDate).getTime() <= 60 * 60 * 1000) {
 			return localPackResult.packs;
@@ -57,7 +59,7 @@ export class PackStatsService {
 			lastUpdateDate: new Date(),
 			packs: packs,
 		};
-		await this.diskCache.storeItem(DiskCacheService.COLLECTION_PACK_STATS, newPackResults);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
 		return newPackResults.packs;
 	}
 
@@ -77,7 +79,7 @@ export class PackStatsService {
 			lastUpdateDate: new Date(),
 			packs: packs,
 		};
-		await this.diskCache.storeItem(DiskCacheService.COLLECTION_PACK_STATS, newPackResults);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
 		this.store.send(new CollectionPacksUpdatedEvent(newPackResults.packs));
 	}
 
@@ -109,7 +111,9 @@ export class PackStatsService {
 	}
 
 	private async updateLocalPackStats(boosterId: BoosterType, setId: string, cards: readonly InternalCardInfo[]) {
-		const localPackResult = await this.diskCache.getItem<LocalPackStats>(DiskCacheService.COLLECTION_PACK_STATS);
+		const localPackResult = await this.diskCache.getItem<LocalPackStats>(
+			DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS,
+		);
 		if (!localPackResult) {
 			console.error('Empty local packs');
 			return;
@@ -141,7 +145,7 @@ export class PackStatsService {
 			lastUpdateDate: new Date(localPackResult.lastUpdateDate),
 			packs: [...localPackResult.packs, newPack],
 		};
-		await this.diskCache.storeItem(DiskCacheService.COLLECTION_PACK_STATS, newPackResults);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
 	}
 
 	private isPackAllGalakronds(pack: PackResult): boolean {
