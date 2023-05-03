@@ -63,6 +63,7 @@ import { ConstructedAchievementsProgressionParser } from './event-parser/constru
 import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
 import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CopiedFromEntityIdParser } from './event-parser/copied-from-entity-id-parser';
+import { CorpsesSpentThisGameParser } from './event-parser/corpses-spent-this-game-parser';
 import { CostChangedParser } from './event-parser/cost-changed-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
@@ -413,7 +414,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -591,6 +592,7 @@ export class GameStateService {
 			new ChoosingOptionsParser(),
 			new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper),
 			new AttackParser(this.allCards),
+			new CorpsesSpentThisGameParser(),
 			new OverloadParser(),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),

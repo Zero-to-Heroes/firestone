@@ -61,7 +61,7 @@ import { BattlegroundsSimulatorComponent } from './js/components/battlegrounds/d
 import { BattlegroundsStatsQuestVignetteComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-stats-quest-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent
+	BgsHeroDetailedStatsComponent,
 } from './js/components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from './js/components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from './js/components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -132,7 +132,7 @@ import { DecktrackerDeckRecapComponent } from './js/components/decktracker/main/
 import { DecktrackerDeckSummaryComponent } from './js/components/decktracker/main/decktracker-deck-summary.component';
 import {
 	DecktrackerDeckDragTemplateComponent,
-	DecktrackerDecksComponent
+	DecktrackerDecksComponent,
 } from './js/components/decktracker/main/decktracker-decks.component';
 import { DecktrackerLadderStatsMatchupsComponent } from './js/components/decktracker/main/decktracker-ladder-stats-matchups.component';
 import { DecktrackerLadderStatsOverviewComponent } from './js/components/decktracker/main/decktracker-ladder-stats-overview.component';
@@ -169,7 +169,7 @@ import { DuelsEmptyStateComponent } from './js/components/duels/desktop/duels-em
 import { DuelsGroupedTopDecksComponent } from './js/components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent
+	DuelsHeroStatVignetteComponent,
 } from './js/components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from './js/components/duels/desktop/duels-hero-stats.component';
 import { DuelsLeaderboardComponent } from './js/components/duels/desktop/duels-leaderboard.component';
@@ -199,7 +199,7 @@ import { DuelsTreasuresSortDropdownComponent } from './js/components/duels/deskt
 import { LootBundleComponent } from './js/components/duels/desktop/loot-bundle.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent
+	DuelsStatCellComponent,
 } from './js/components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from './js/components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from './js/components/duels/desktop/secondary/duels-hero-search.component';
@@ -237,7 +237,7 @@ import { MercenariesMyTeamsComponent } from './js/components/mercenaries/desktop
 import { MercenariesPersonalHeroStatComponent } from './js/components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
 import {
 	MercenariesPersonalHeroStatsComponent,
-	SortableLabelComponent
+	SortableLabelComponent,
 } from './js/components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { MercenariesPersonalTeamSummaryComponent } from './js/components/mercenaries/desktop/mercenaries-personal-team-summary.component';
 import { MercenariesHeroSearchComponent } from './js/components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
@@ -254,7 +254,7 @@ import { MercenariesTeamListComponent } from './js/components/mercenaries/overla
 import { MercenariesTeamMercenaryComponent } from './js/components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
 import {
 	MercenariesTeamRootComponent,
-	MercsTasksListComponent
+	MercsTasksListComponent,
 } from './js/components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from './js/components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from './js/components/notifications.component';
@@ -272,7 +272,7 @@ import { HeroPowerOverlayComponent } from './js/components/overlays/board/hero-p
 import { MinionOnBoardOverlayComponent } from './js/components/overlays/board/minion-on-board-overlay.component';
 import {
 	ChoosingCardOptionComponent,
-	ChoosingCardWidgetWrapperComponent
+	ChoosingCardWidgetWrapperComponent,
 } from './js/components/overlays/card-choice/choosing-card-widget-wrapper.component';
 import { ConstructedBoardWidgetWrapperComponent } from './js/components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from './js/components/overlays/counters/abstract-counter-widget-wrapper.component';
@@ -357,7 +357,7 @@ import { HsQuestsWidgetComponent } from './js/components/overlays/quests/hs-ques
 import { MercsQuestsWidgetComponent } from './js/components/overlays/quests/mercs-quests-widget.component';
 import {
 	HsQuestsListWidgetComponent,
-	QuestsWidgetViewComponent
+	QuestsWidgetViewComponent,
 } from './js/components/overlays/quests/quests-widget-view.component';
 import { SecretsHelperWidgetWrapperComponent } from './js/components/overlays/secrets-helper-widget-wrapper.component';
 import { CurrentSessionBgsBoardTooltipComponent } from './js/components/overlays/session/current-session-bgs-board-tooltip.component';
@@ -365,7 +365,7 @@ import { CurrentSessionWidgetComponent } from './js/components/overlays/session/
 import { TurnTimerWidgetWrapperComponent } from './js/components/overlays/turn-timer-widget-wrapper.component';
 import {
 	TurnTimerPlayerComponent,
-	TurnTimerWidgetComponent
+	TurnTimerWidgetComponent,
 } from './js/components/overlays/turntimer/turn-timer-widget.component';
 import { RegionFilterDropdownComponent } from './js/components/replays/filters/region-filter-dropdown.component';
 import { ReplaysBgHeroFilterDropdownComponent } from './js/components/replays/filters/replays-bg-hero-filter-dropdown.component';
@@ -383,7 +383,7 @@ import { ReplayInfoDuelsComponent } from './js/components/replays/replay-info/re
 import { ReplayInfoGenericComponent } from './js/components/replays/replay-info/replay-info-generic.component';
 import {
 	ReplayInfoMercPlayerComponent,
-	ReplayInfoMercenariesComponent
+	ReplayInfoMercenariesComponent,
 } from './js/components/replays/replay-info/replay-info-mercenaries.component';
 import { ReplayInfoRankedComponent } from './js/components/replays/replay-info/replay-info-ranked.component';
 import { ReplayIconToggleComponent } from './js/components/replays/replays-icon-toggle.component';
@@ -445,7 +445,7 @@ import { StatsDesktopComponent } from './js/components/stats/desktop/stats-deskt
 import { StatsXpGraphComponent } from './js/components/stats/desktop/stats-xp-graph.component';
 import {
 	LiveStreamInfoComponent,
-	StreamHeroInfosComponent
+	StreamHeroInfosComponent,
 } from './js/components/streams/desktop/live-stream-info.component';
 import { LiveStreamsComponent } from './js/components/streams/desktop/live-streams.component';
 import { StreamsDesktopComponent } from './js/components/streams/desktop/streams-desktop.component';
@@ -480,6 +480,7 @@ import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/cou
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
+import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
@@ -1525,6 +1526,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerCorpseSpentWidgetWrapperComponent,
 		PlayerOverdraftWidgetWrapperComponent,
 		PlayerAsvedonWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,

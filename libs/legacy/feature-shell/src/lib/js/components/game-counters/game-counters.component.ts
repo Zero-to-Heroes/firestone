@@ -9,7 +9,7 @@ import { CoralKeeperCounterDefinition } from '@components/game-counters/definiti
 import { GreySageParrotCounterDefinition } from '@components/game-counters/definitions/grey-sage-parrot-counter';
 import { ShockspitterCounterDefinition } from '@components/game-counters/definitions/shockspitter-counter';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
@@ -17,11 +17,13 @@ import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
+import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
@@ -45,7 +47,6 @@ import { SpellCounterDefinition } from './definitions/spell-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
-import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 
 @Component({
 	selector: 'game-counters',
@@ -153,6 +154,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'corpseSpent':
+				return CorpseSpentCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'overdraft':
 				return OverdraftCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'asvedon':

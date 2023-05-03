@@ -14,7 +14,7 @@ import {
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
@@ -90,6 +90,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-corpse-spent-widget-wrapper></player-corpse-spent-widget-wrapper>
 			<player-overdraft-widget-wrapper></player-overdraft-widget-wrapper>
 			<player-asvedon-widget-wrapper></player-asvedon-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
