@@ -1,7 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, filter, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
 import { DuelsHeroSortFilterType, DuelsMetaStats, DuelsMetaStatsTier } from './duels-meta-stats-tier';
 import { buildMonoTier, buildTiers } from './tier-utils';
 
@@ -25,6 +33,8 @@ import { buildMonoTier, buildTiers } from './tier-utils';
 					*ngFor="let tier of value.tiers; trackBy: trackByFn"
 					role="listitem"
 					[tier]="tier"
+					[hoverEffect]="true"
+					(statsClicked)="onStatsClicked($event)"
 				></duels-meta-stats-tier>
 			</div>
 		</section>
@@ -34,6 +44,8 @@ import { buildMonoTier, buildTiers } from './tier-utils';
 export class DuelsMetaStatsViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	// TODO: move this outside of the view?
 	public static STATS_THRESHOLD = 40;
+
+	@Output() statsClicked = new EventEmitter<DuelsMetaStats>();
 
 	tiers$: Observable<readonly DuelsMetaStatsTier[]>;
 
@@ -53,6 +65,7 @@ export class DuelsMetaStatsViewComponent extends AbstractSubscriptionComponent i
 	@Input() set showPlayerGamesPlayed(value: boolean) {
 		this.showPlayerGamesPlayed$$.next(value);
 	}
+	@Input() hoverEffect = false;
 
 	private stats$$ = new BehaviorSubject<readonly DuelsMetaStats[]>([]);
 	private sort$$ = new BehaviorSubject<DuelsHeroSortFilterType>('global-winrate');
@@ -91,5 +104,9 @@ export class DuelsMetaStatsViewComponent extends AbstractSubscriptionComponent i
 
 	trackByFn(index: number, stat: DuelsMetaStatsTier) {
 		return stat.id;
+	}
+
+	onStatsClicked(stat: DuelsMetaStats) {
+		this.statsClicked.next(stat);
 	}
 }

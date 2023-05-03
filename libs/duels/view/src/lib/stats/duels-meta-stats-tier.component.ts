@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DuelsMetaStatsTier } from './duels-meta-stats-tier';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { DuelsMetaStats, DuelsMetaStatsTier } from './duels-meta-stats-tier';
 
 @Component({
 	selector: 'duels-meta-stats-tier',
@@ -15,7 +15,13 @@ import { DuelsMetaStatsTier } from './duels-meta-stats-tier';
 				{{ tier.label }}
 			</div>
 			<div class="items">
-				<duels-meta-stats-tier-card-info class="item-container" *ngFor="let item of tier.items" [stat]="item">
+				<duels-meta-stats-tier-card-info
+					class="item-container"
+					*ngFor="let item of tier.items"
+					[stat]="item"
+					[hoverEffect]="true"
+					(statsClicked)="onStatsClicked($event)"
+				>
 				</duels-meta-stats-tier-card-info>
 			</div>
 		</div>
@@ -23,5 +29,12 @@ import { DuelsMetaStatsTier } from './duels-meta-stats-tier';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsMetaStatsTierTierComponent {
+	@Output() statsClicked = new EventEmitter<DuelsMetaStats>();
+
 	@Input() tier: DuelsMetaStatsTier;
+	@Input() hoverEffect = false;
+
+	onStatsClicked(stat: DuelsMetaStats) {
+		this.statsClicked.next(stat);
+	}
 }

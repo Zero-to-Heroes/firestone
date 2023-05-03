@@ -97,7 +97,7 @@ export const filterDuelsRuns = (
 			.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
 			.filter((run) =>
 				!heroesFilter?.length
-					? false
+					? true
 					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(run.heroCardId) === heroFilter),
 			)
 			.filter((stat) =>
@@ -339,10 +339,8 @@ const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {
 	return !filter || (filter as any) === 'all' || deck.rating >= filter;
 };
 
-const topDeckHeroFilter = (deck: DuelsDeckStat, heroesFilter: DuelsHeroFilterType): boolean => {
-	return !heroesFilter?.length
-		? false
-		: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
+const topDeckHeroFilter = (deck: DuelsDeckStat, filters: DuelsHeroFilterType): boolean => {
+	return !filters?.length || filters.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
 };
 
 const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filters: readonly string[]): boolean => {

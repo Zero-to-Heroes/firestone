@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
@@ -18,10 +18,11 @@ export class DuelsExploreDecksParser implements Processor {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			duelsActiveHeroesFilter2: [event.heroCardId as CardIds].filter((option) => !!option),
-			duelsActiveHeroPowerFilter2: [event.heroPowerCardId],
-			duelsActiveSignatureTreasureFilter2: [event.signatureTreasureCardId],
+			duelsActiveHeroesFilter2: !!event.heroCardId ? [normalizeDuelsHeroCardId(event.heroCardId) as CardIds] : [],
+			duelsActiveHeroPowerFilter2: !!event.heroPowerCardId ? [event.heroPowerCardId] : [],
+			duelsActiveSignatureTreasureFilter2: !!event.signatureTreasureCardId ? [event.signatureTreasureCardId] : [],
 		};
+		console.debug('newPrefs', newPrefs);
 		await this.prefs.savePreferences(newPrefs);
 		return [
 			null,
