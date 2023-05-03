@@ -140,6 +140,7 @@ import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { DuelsDeckbuilderImportDeckEvent } from './events/duels/duels-deckbuilder-import-deck-event';
+import { DuelsDecksSearchEvent } from './events/duels/duels-decks-search-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
 import { DuelsHeroPowerFilterSelectedEvent } from './events/duels/duels-hero-power-filter-selected-event';
 import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
@@ -296,6 +297,7 @@ import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { DuelsDeckbuilderImportDeckProcessor } from './processors/duels/duels-deckbuilder-import-deck-processor';
+import { DuelsDecksSearchProcessor } from './processors/duels/duels-decks-search-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
 import { DuelsHeroPowerFilterSelectedProcessor } from './processors/duels/duels-hero-power-filter-selected-processor';
 import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
@@ -893,6 +895,7 @@ export class MainWindowStoreService {
 			[DuelsToggleExpandedRunEvent.eventName(), new DuelsToggleExpandedRunProcessor()],
 			[DuelsTreasureSearchEvent.eventName(), new DuelsTreasureSearchProcessor()],
 			[DuelsHeroSearchEvent.eventName(), new DuelsHeroSearchProcessor()],
+			[DuelsDecksSearchEvent.eventName(), new DuelsDecksSearchProcessor()],
 			[
 				DuelsRequestNewGlobalStatsLoadEvent.eventName(),
 				new DuelsRequestNewGlobalStatsLoadProcessor(this.duelsAccess, this.prefs),
