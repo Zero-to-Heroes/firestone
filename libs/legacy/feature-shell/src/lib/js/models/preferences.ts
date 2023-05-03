@@ -1,5 +1,5 @@
 import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
-import { allDuelsHeroes, BnetRegion, Race } from '@firestone-hs/reference-data';
+import { BnetRegion, Race, allDuelsHeroes } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import {
@@ -392,6 +392,10 @@ export class Preferences implements IPreferences {
 	readonly playerVanessaVanCleefCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerCorpseSpentCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerCorpseSpentCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerOverdraftCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

@@ -74,6 +74,7 @@ export class DeckState {
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
 	readonly overloadedCrystals: number = 0;
+	readonly corpsesSpent: number = 0;
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
