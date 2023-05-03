@@ -734,6 +734,7 @@ const publicCardGiftCreators = [
 	CardIds.ThistleTea,
 	CardIds.ThoughtstealLegacy,
 	CardIds.ThoughtstealVanilla,
+	CardIds.TidestoneOfGolganneth,
 	CardIds.TinyThimbleTavernBrawl,
 	CardIds.TombPillager_LOE_012,
 	CardIds.TombPillager_CORE_LOE_012,
