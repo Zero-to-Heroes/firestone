@@ -816,6 +816,10 @@ export class OverwolfService {
 		return this.listFilesInDirectory(`${overwolf.io.paths.localAppData}/overwolf/Log/Apps/${appName}`);
 	}
 
+	public async listFilesInOverwolfDirectory(): Promise<overwolf.io.DirResult & { path?: string }> {
+		return this.listFilesInDirectory(`${overwolf.io.paths.localAppData}/overwolf/Log`);
+	}
+
 	public async listFilesInDirectory(directory: string): Promise<overwolf.io.DirResult & { path?: string }> {
 		return new Promise<overwolf.io.DirResult & { path?: string }>((resolve) => {
 			overwolf.io.dir(directory, (res) => {
