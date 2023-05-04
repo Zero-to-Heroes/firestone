@@ -8,7 +8,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';

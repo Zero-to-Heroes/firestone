@@ -13,7 +13,7 @@ import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -468,6 +468,7 @@ export class BgsSimulatorMinionSelectionComponent
 							cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
 					  }))
 					: []),
+				...(this._entity.enchantments ?? []),
 			].filter((e) => !!e),
 		} as BoardEntity);
 	}
