@@ -53,16 +53,16 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 	private async report(status: string, game: BgsGame) {
 		// const user = await this.ow.getCurrentUser();
 		const isSupported = isSupportedScenario(this.battleInfo).isSupported;
-		console.warn(
-			'no-format',
-			'[bgs-simulation] Impossible battle ' + status,
-			game.reviewId,
-			game.currentTurn,
-			isSupported,
-			this.battleInfo,
-			this.battleResult,
-		);
 		if (isSupported) {
+			console.warn(
+				'no-format',
+				'[bgs-simulation] Impossible battle ' + status,
+				game.reviewId,
+				game.currentTurn,
+				isSupported,
+				this.battleInfo,
+				this.battleResult,
+			);
 			captureEvent({
 				message: 'Impossible battle ' + status,
 				extra: {
