@@ -890,7 +890,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private buildBoard(entities: readonly Entity[]): BoardEntity[] {
-		return (entities ?? []).map((entity) => this.buildEntity(entity));
+		const result = (entities ?? []).map((entity) => this.buildEntity(entity));
+		return result;
 	}
 
 	private buildEntity(entity: Entity): BoardEntity {

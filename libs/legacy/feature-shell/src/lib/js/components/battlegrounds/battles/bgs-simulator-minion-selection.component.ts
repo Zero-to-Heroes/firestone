@@ -462,6 +462,7 @@ export class BgsSimulatorMinionSelectionComponent
 							cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
 					  }))
 					: []),
+				...(this._entity.enchantments ?? []),
 			].filter((e) => !!e),
 		} as BoardEntity);
 	}
