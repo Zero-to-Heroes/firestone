@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
+import { LocalStorageService } from './local-storage';
 import { OverwolfService } from './overwolf.service';
 
 // Only move items that are too big for localstorage
@@ -21,11 +22,17 @@ export class DiskCacheService {
 	private cacheDisabled = false;
 	private savingFiles: { [fileKey: string]: boolean } = {};
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly localStorage: LocalStorageService,
+	) {
 		this.init();
 	}
 
 	private async init() {
+		await this.store.initComplete();
+
 		this.store
 			.listenPrefs$((prefs) => prefs.disableLocalCache)
 			.subscribe(([disableLocalCache]) => {
@@ -34,21 +41,29 @@ export class DiskCacheService {
 	}
 
 	public async clearCache() {
-		console.debug('clearing cache');
+		console.debug('[disk-cache] sclearing cache');
 		await this.ow.deleteAppFile('./');
 	}
 
 	public async storeItem(key: string, value: any) {
 		if (this.cacheDisabled) {
-			return;
+			return true;
 		}
-		return this.storeItemInternal(key, value).withTimeout(5000, key);
+		const saved = await this.storeItemInternal(key, value).withTimeout(5000, key);
+		if (!saved) {
+			console.warn('[disk-cache] Could not saveitem on disk', key);
+			const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
+			saveInfo[key] = true;
+			this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
+			console.log('[disk-cache] updated disk cache status', saveInfo);
+		}
+		return saved;
 	}
 
-	private async storeItemInternal(key: string, value: any): Promise<void> {
+	private async storeItemInternal(key: string, value: any): Promise<boolean> {
 		try {
 			if (this.savingFiles[key]) {
-				return;
+				return true;
 			}
 
 			const start = Date.now();
@@ -57,11 +72,13 @@ export class DiskCacheService {
 			this.savingFiles[key] = true;
 			await this.ow.deleteAppFile(key);
 			// console.debug('[disk-cache] deleted file', key);
-			await this.ow.storeAppFile(key, stringified);
+			const saved = await this.ow.storeAppFile(key, stringified);
 			this.savingFiles[key] = false;
 			console.log('[disk-cache] stored value', key, Date.now() - start);
+			return saved;
 		} catch (e) {
 			console.error('[disk-cache] error while storing info on local disk', key);
+			return false;
 		}
 	}
 
@@ -69,7 +86,16 @@ export class DiskCacheService {
 		if (this.cacheDisabled) {
 			return null;
 		}
-		return this.getItemInternal<T>(key).withTimeout(5000, key);
+		const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
+		const shouldSkipDisk = saveInfo[key];
+		if (shouldSkipDisk) {
+			console.log('[disk-cache] skipping disk cache for', key);
+			return null;
+		}
+		const result = this.getItemInternal<T>(key).withTimeout(5000, key);
+		saveInfo[key] = false;
+		this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
+		return result;
 	}
 
 	private async getItemInternal<T>(key: string): Promise<T | null> {
