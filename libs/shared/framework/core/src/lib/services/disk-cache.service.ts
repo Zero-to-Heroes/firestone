@@ -41,7 +41,6 @@ export class DiskCacheService {
 	}
 
 	public async clearCache() {
-		console.debug('[disk-cache] sclearing cache');
 		await this.ow.deleteAppFile('./');
 	}
 
