@@ -33,6 +33,7 @@ import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damag
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
+import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
@@ -154,6 +155,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'menagerie':
+				return MenagerieCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'corpseSpent':
 				return CorpseSpentCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'overdraft':

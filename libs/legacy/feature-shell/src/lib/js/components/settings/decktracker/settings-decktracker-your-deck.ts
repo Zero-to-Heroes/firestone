@@ -278,6 +278,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
 		},
 		{
+			id: 'menagerie',
+			field: 'playerMenagerieCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-tooltip'),
+		},
+		{
 			id: 'corpse-spent',
 			field: 'playerCorpseSpentCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),

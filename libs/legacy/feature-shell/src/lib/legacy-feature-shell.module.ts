@@ -482,6 +482,7 @@ import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counte
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
+import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overlays/counters/player-menagerie-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
@@ -1529,6 +1530,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerMenagerieCounterWidgetWrapperComponent,
 		PlayerCorpseSpentWidgetWrapperComponent,
 		PlayerOverdraftWidgetWrapperComponent,
 		PlayerAsvedonWidgetWrapperComponent,
