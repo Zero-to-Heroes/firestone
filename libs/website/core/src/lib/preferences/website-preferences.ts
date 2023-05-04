@@ -8,6 +8,8 @@ export class WebsitePreferences implements IPreferences {
 	readonly collectionUseHighResImages: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
 
+	readonly disableLocalCache: boolean = false;
+
 	readonly bgsActiveRankFilter: 100 | 50 | 25 | 10 | 1;
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveTribesFilter: readonly Race[] = [];
