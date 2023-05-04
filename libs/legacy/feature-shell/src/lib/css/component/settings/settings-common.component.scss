@@ -139,6 +139,11 @@ input[type='range'] {
 	font-style: normal;
 	font-weight: normal;
 	font-size: 13px;
+
+	&.disabled {
+		pointer-events: none;
+		opacity: 0.5;
+	}
 }
 
 .info {

@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { DiskCacheService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -17,13 +18,20 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		`../../../../css/component/settings/settings-common.component.scss`,
 		`../../../../css/component/settings/general/settings-general-data.component.scss`,
 	],
+	// TODO: disable settings in Data if local cache is disabled
 	template: `
 		<div class="settings-group general-data">
 			<h2 class="remote-data" [owTranslate]="'settings.general.data.remote-title'"></h2>
 			<p [owTranslate]="'settings.general.data.remote-intro-text'"></p>
+			<preference-toggle
+				field="disableLocalCache"
+				[label]="'settings.general.data.disable-local-cache' | owTranslate"
+				[tooltip]="'settings.general.data.disable-local-cache-tooltip' | owTranslate"
+				[toggleFunction]="changeDisableLocalCache"
+			></preference-toggle>
 		</div>
 
-		<div class="settings-group general-data">
+		<div class="settings-group general-data" [ngClass]="{ disabled: disableLocalCache$ | async }">
 			<h3 class="remote-data" [owTranslate]="'settings.general.data.games-title'"></h3>
 			<div class="games-synced">{{ gamesSynced$ | async }}</div>
 			<preferences-dropdown
@@ -49,7 +57,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			</div>
 		</div>
 
-		<div class="settings-group general-data">
+		<div class="settings-group general-data" [ngClass]="{ disabled: disableLocalCache$ | async }">
 			<h3 class="remote-data" [owTranslate]="'settings.general.data.other-title'"></h3>
 			<div class="resync packs">
 				<div class="label" [owTranslate]="'settings.general.data.packs'"></div>
@@ -83,6 +91,7 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 	isRefreshingPacks$: Observable<boolean>;
 	refreshAchievementsLabel$: Observable<string>;
 	isRefreshingAchievements$: Observable<boolean>;
+	disableLocalCache$: Observable<boolean>;
 
 	gamesSynced$: Observable<string>;
 
@@ -102,11 +111,13 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly diskCache: DiskCacheService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
+		this.disableLocalCache$ = this.listenForBasicPref$((prefs) => prefs.disableLocalCache);
 		this.isRefreshingGames$ = this.isRefreshingGames.asObservable();
 		this.refreshGamesLabel$ = this.isRefreshingGames$.pipe(
 			this.mapData((flag) => {
@@ -171,6 +182,12 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 				),
 			);
 	}
+
+	changeDisableLocalCache = (disableCache: boolean) => {
+		if (disableCache) {
+			this.diskCache.clearCache();
+		}
+	};
 
 	refreshGames() {
 		this.isRefreshingGames.next(true);
