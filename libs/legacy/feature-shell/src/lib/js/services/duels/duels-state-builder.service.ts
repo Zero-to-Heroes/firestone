@@ -127,7 +127,7 @@ export class DuelsStateBuilderService {
 		await runLoop(async () => {
 			const duelsInfo = await this.memory.getDuelsInfo();
 			console.debug('[duels-run] get duelsInfo', duelsInfo);
-			if (!!duelsInfo?.Rating) {
+			if (duelsInfo?.Rating != null) {
 				this.duelsInfo$$.next({
 					...duelsInfo,
 					// Give priority to the cardIds, as this is what we get when reading the duels deck
@@ -361,10 +361,15 @@ export class DuelsStateBuilderService {
 			.map((stat) => {
 				const deck = decode(stat.decklist);
 				const dustCost = this.buildDustCost(deck, collectionState);
+				const allCardNames: readonly string[] = deck.cards
+					.map((pair) => pair[0])
+					.map((dbfId) => this.allCards.getCard(dbfId)?.name)
+					.filter((name) => !!name);
 				return {
 					...stat,
 					heroCardId: stat.heroCardId,
 					dustCost: dustCost,
+					allCardNames: allCardNames,
 				} as DuelsDeckStat;
 			})
 			.sort((a, b) => new Date(b.periodStart).getTime() - new Date(a.periodStart).getTime());
