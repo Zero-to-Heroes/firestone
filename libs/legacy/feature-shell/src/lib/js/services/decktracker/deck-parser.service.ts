@@ -3,13 +3,14 @@ import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import {
 	ARENAS,
 	CardClass,
+	CardIds,
 	GameFormat,
 	GameType,
 	PRACTICE_ALL,
-	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
+	ScenarioId,
 	SceneMode,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST
 } from '@firestone-hs/reference-data';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -17,6 +18,7 @@ import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MemoryUpdate } from '../../models/memory/memory-update';
+import { BugReportService } from '../bug/bug-report.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
@@ -51,6 +53,7 @@ export class DeckParserService {
 		private readonly handler: DeckHandlerService,
 		private readonly api: ApiRunner,
 		private readonly duelsService: DuelsStateBuilderService,
+		private readonly bugReportService: BugReportService,
 	) {
 		this.init();
 		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
@@ -163,8 +166,7 @@ export class DeckParserService {
 			console.warn('[deck-parser] could not read any deck from memory');
 			deckInfo = null;
 		}
-		this.currentDeck = deckInfo;
-		console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
+		this.setCurrentDeck(deckInfo);
 		return this.currentDeck;
 	}
 
@@ -179,9 +181,9 @@ export class DeckParserService {
 		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
-			this.currentDeck = this.updateDeckFromMemory(deck, scenarioId, gameType);
+			this.setCurrentDeck(this.updateDeckFromMemory(deck, scenarioId, gameType));
 		} else {
-			this.currentDeck = null;
+			this.setCurrentDeck(null);
 		}
 		return this.currentDeck;
 	}
@@ -191,7 +193,7 @@ export class DeckParserService {
 			if (event.type === GameEvent.SPECTATING) {
 				console.log('[deck-parser] spectating, resetting deck', event.additionalData);
 				this.spectating = event.additionalData.spectating;
-				this.currentDeck = {} as DeckInfo;
+				this.setCurrentDeck({} as DeckInfo);
 			} else if (event.type === GameEvent.GAME_END) {
 				if (
 					this.currentDeck?.gameType !== GameType.GT_VS_AI ||
@@ -202,7 +204,7 @@ export class DeckParserService {
 						this.currentDeck?.gameType,
 						this.currentDeck?.scenarioId,
 					);
-					this.currentDeck = {} as DeckInfo;
+					this.setCurrentDeck({} as DeckInfo);
 					// In some cases, the "selected deck" memory event is not fired when switching decks (I don't know why though)
 					// So it's probably safer to reset the selected deck id, since normally the event is also fired when the
 					// deck is not changed
@@ -233,7 +235,7 @@ export class DeckParserService {
 				);
 				if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 					console.log('[deck-parser] updating active deck after ID selection', activeDeck, this.currentDeck);
-					this.currentDeck = this.updateDeckFromMemory(activeDeck, null, null);
+					this.setCurrentDeck(this.updateDeckFromMemory(activeDeck, null, null));
 				}
 			}
 			// Resetting the selectedDeckId if empty means that if a memory update reset occurs while on
@@ -256,7 +258,7 @@ export class DeckParserService {
 					) {
 						this.selectedDeckId = null;
 						// Reset the cached deck, as it should only be used when restarting the match
-						this.currentDeck = null;
+						this.setCurrentDeck(null);
 					}
 				}
 			}
@@ -286,17 +288,28 @@ export class DeckParserService {
 		this.selectedDeckId = await this.memory.getSelectedDeckId();
 	}
 
-	// private isDuelsInfo(activeDeck: DeckInfoFromMemory | DuelsInfo): activeDeck is DuelsInfo {
-	// 	return (activeDeck as DuelsInfo)?.Wins !== undefined;
-	// }
+	private setCurrentDeck(deck: DeckInfo) {
+		this.currentDeck = deck;
+		if (this.currentDeck) {
+			console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
+			this.validateDeck(this.currentDeck);
+		}
+	}
 
-	// private async getDuelsInfo(): Promise<DuelsInfo> {
-	// 	let result = await this.memory.getDuelsInfo(false, 3);
-	// 	if (!result) {
-	// 		result = await this.memory.getDuelsInfo(true, 3);
-	// 	}
-	// 	return result;
-	// }
+	private sentReports: { [type: string]: boolean } = {};
+	private validateDeck(deck: DeckInfo) {
+		const etcDbfId = this.allCards.getCard(CardIds.ETCBandManager_ETC_080).dbfId;
+		if (deck.deck?.cards.map((pair) => pair[0]).includes(etcDbfId) && !deck.deck.sideboards?.length) {
+			console.warn('invalid deck', deck);
+			if (!this.sentReports['invalid-etc-deck']) {
+				this.bugReportService.submitAutomatedReport({
+					type: 'invalid-etc-deck',
+					info: JSON.stringify(deck),
+				});
+				this.sentReports['invalid-etc-deck'] = true;
+			}
+		}
+	}
 
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number, gameType: GameType) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
@@ -467,17 +480,6 @@ export class DeckParserService {
 		console.log('[deck-parser] exploding decklist result', result);
 		return result;
 	}
-
-	// By doing this we make sure we don't get a leftover deckstring caused by
-	// a game mode that doesn't interact with the Decks.log
-	// public reset(shouldStorePreviousDeck: boolean) {
-	// 	// Keeping the previous deck is useful for modes where you can just restart, eg practice
-	// 	if (shouldStorePreviousDeck && this.currentDeck?.deck) {
-	// 		this.previousDeck = this.currentDeck;
-	// 	}
-	// 	this.currentDeck = {} as DeckInfo;
-	// 	console.log('[deck-parser] resetting deck', shouldStorePreviousDeck, this.currentDeck, this.previousDeck);
-	// }
 }
 
 export interface DeckInfo {
