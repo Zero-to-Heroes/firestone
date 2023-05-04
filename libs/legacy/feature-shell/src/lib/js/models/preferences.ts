@@ -394,6 +394,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerMenagerieCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerMenagerieCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerCorpseSpentCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCorpseSpentCounterWidgetPosition: { left: number; top: number };
