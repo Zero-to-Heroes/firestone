@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
+import { IPreferences, Store } from '@firestone/shared/framework/common';
 import { LocalStorageService } from './local-storage';
 import { OverwolfService } from './overwolf.service';
 
@@ -24,7 +24,7 @@ export class DiskCacheService {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly store: Store<IPreferences>,
 		private readonly localStorage: LocalStorageService,
 	) {
 		this.init();
