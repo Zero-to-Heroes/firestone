@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.1.0',
+		version: '11.1.1',
 		force: false,
 		sections: [
 			// {
@@ -73,6 +73,18 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Add a Menagerie counter that tells you what tribes you've played this game.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a Corpse Spent counter.`,
+							},
+							{
+								type: 'feature',
+								text: `Track all activations of Vampiric blood in global effects.`,
+							},
+							{
 								type: 'content',
 								text: `Add new oracles and card highlights.`,
 							},
@@ -93,11 +105,44 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue where Leapfrogger could not buff itself when triggered by Macaw.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Dr. Kaboombox would always target minions to the left of its position, if any.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Lady Sinestra's buff would not disappear upon her dying.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue in the simulator where updating a minion would remove its enchantments.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now click on a hero / hero power / signature treasure in the tier list to see the High-win Decks for that card.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a way to search for High-win Decks containing a specific card.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where E.T.C. Band's Manager would often be missing its sideboard.`,
+							},
 						],
 					},
 					{
 						category: 'general',
 						details: [
+							{
+								type: 'feature',
+								text: `Add an option to disable the local cache, and always retrieve data from the cloud.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the decklists shown in the app would not have the cards ordered alphabetically for a given mana cost.`,
