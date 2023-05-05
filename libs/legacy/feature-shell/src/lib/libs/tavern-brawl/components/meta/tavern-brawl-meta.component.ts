@@ -2,11 +2,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../../../js/models/card';
 
 @Component({
@@ -44,6 +44,7 @@ export class TavernBrawlMetaComponent
 		this.brawlInfo$ = this.store.tavernBrawl$().pipe(
 			map((state) => state.getCurrentStats()),
 			this.mapData((stats) => {
+				console.debug('[tavern-brawl-meta] stats', stats);
 				if (!stats?.info) {
 					return null;
 				}
