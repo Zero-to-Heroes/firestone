@@ -18,7 +18,7 @@ export class ApiRunner {
 		// TODO: cache the token if it's costly to generate
 		const start = Date.now();
 		const userToken = await this.ow.generateSessionToken();
-		console.debug('[api] generated token took', Date.now() - start);
+		// console.debug('[api] generated token took', Date.now() - start);
 		input = {
 			...input,
 			jwt: userToken,
@@ -43,7 +43,7 @@ export class ApiRunner {
 			}
 			this.http.post(url, input, { headers: headers }).subscribe(
 				(result: any) => {
-					console.log('retrieved POST call', url);
+					// console.log('retrieved POST call', url);
 					resolve(result);
 				},
 				(error) => {
@@ -63,7 +63,7 @@ export class ApiRunner {
 		return new Promise<T | null>((resolve, reject) => {
 			this.http.get(url).subscribe(
 				(result: any) => {
-					console.log('retrieved GET call', url);
+					// console.log('retrieved GET call', url);
 					resolve(result);
 				},
 				(error) => {
