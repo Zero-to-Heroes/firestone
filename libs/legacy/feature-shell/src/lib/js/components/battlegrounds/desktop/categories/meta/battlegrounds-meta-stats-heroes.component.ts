@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
@@ -32,10 +32,7 @@ export class BattlegroundsMetaStatsHeroesComponent
 	}
 
 	ngAfterContentInit() {
-		this.stats$ = this.store.bgsMetaStatsHero$().pipe(
-			this.mapData((stats) => stats),
-			tap((info) => console.debug('stats', info)),
-		);
+		this.stats$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => stats));
 		this.heroSort$ = this.store
 			.listenPrefs$((prefs) => prefs.bgsActiveHeroSortFilter)
 			.pipe(this.mapData(([pref]) => pref));

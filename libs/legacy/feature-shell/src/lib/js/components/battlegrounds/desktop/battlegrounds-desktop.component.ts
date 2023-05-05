@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -123,10 +123,7 @@ export class BattlegroundsDesktopComponent
 			.pipe(this.mapData(([currentView]) => currentView));
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.categories)
-			.pipe(
-				tap((info) => console.debug('categories', info)),
-				this.mapData(([categories]) => categories ?? []),
-			);
+			.pipe(this.mapData(([categories]) => categories ?? []));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 

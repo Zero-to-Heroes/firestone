@@ -10,7 +10,7 @@ import {
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, filter, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
@@ -87,7 +87,6 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 
 	ngAfterContentInit() {
 		this.tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
-			tap((info) => console.debug('heroes info', info)),
 			filter(([stats, heroSort]) => !!stats && !!heroSort),
 			this.mapData(([stats, heroSort]) => {
 				switch (heroSort) {

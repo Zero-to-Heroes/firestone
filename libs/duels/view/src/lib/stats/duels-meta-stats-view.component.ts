@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { DuelsHeroSortFilterType, DuelsMetaStats, DuelsMetaStatsTier } from './duels-meta-stats-tier';
 import { buildMonoTier, buildTiers } from './tier-utils';
 
@@ -78,7 +78,6 @@ export class DuelsMetaStatsViewComponent extends AbstractSubscriptionComponent i
 
 	ngAfterContentInit() {
 		this.tiers$ = combineLatest([this.stats$$, this.sort$$, this.hideLowData$$]).pipe(
-			tap((info) => console.debug('heroes info', info)),
 			filter(([stats, heroSort]) => !!stats && !!heroSort),
 			this.mapData(([stats, heroSort, hideLowData]) => {
 				const filteredStats = stats.filter((stat) =>
