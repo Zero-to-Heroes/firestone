@@ -15,7 +15,7 @@ import { buildDuelsHeroPlayerStats, filterDuelsRuns } from '@services/ui-store/d
 
 import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -67,15 +67,14 @@ export class AppUiStoreService extends Store<Preferences> {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 	private modsConfig: BehaviorSubject<ModsConfig>;
 
-	private bgsMetaStatsHero = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
-	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
-	// private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
-	private gameStats = new BehaviorSubject<readonly GameStat[]>(null);
-	private decks = new BehaviorSubject<readonly DeckSummary[]>(null);
-	private duelsRuns = new BehaviorSubject<readonly DuelsRun[]>(null);
-	private duelsDecks = new BehaviorSubject<readonly DuelsDeckSummary[]>(null);
-	private mails = new BehaviorSubject<MailState>(null);
-	private tavernBrawl = new BehaviorSubject<TavernBrawlState>(null);
+	private bgsMetaStatsHero: Observable<readonly BgsMetaHeroStatTierItem[]>;
+	private duelsHeroStats: Observable<readonly DuelsHeroPlayerStat[]>;
+	private gameStats: Observable<readonly GameStat[]>;
+	private decks: Observable<readonly DeckSummary[]>;
+	private duelsRuns: Observable<readonly DuelsRun[]>;
+	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
+	private mails: Observable<MailState>;
+	private tavernBrawl: Observable<TavernBrawlState>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -99,16 +98,15 @@ export class AppUiStoreService extends Store<Preferences> {
 				mercenariesStore: this.mercenariesStore.observers,
 				mercenariesOutOfCombatStore: this.mercenariesOutOfCombatStore.observers,
 				mercenariesSynergiesStore: this.mercenariesSynergiesStore.observers,
-				// bgsHeroStats: this.bgsHeroStats.observers,
-				bgsMetaStatsHero: this.bgsMetaStatsHero.observers,
-				duelsHeroStats: this.duelsHeroStats.observers,
-				// duelsTopDecks: this.duelsTopDecks.observers,
-				gameStats: this.gameStats.observers,
-				decks: this.decks.observers,
-				duelsRuns: this.duelsRuns.observers,
-				duelsDecks: this.duelsDecks.observers,
-				mails: this.mails.observers,
-				tavernBrawl: this.tavernBrawl.observers,
+				// bgsMetaStatsHero: this.bgsMetaStatsHero,
+				// bgsMetaStatsHero: this.bgsMetaStatsHero.observers,
+				// duelsHeroStats: this.duelsHeroStats.observers,
+				// gameStats: this.gameStats.observers,
+				// decks: this.decks.observers,
+				// duelsRuns: this.duelsRuns.observers,
+				// duelsDecks: this.duelsDecks.observers,
+				// mails: this.mails.observers,
+				// tavernBrawl: this.tavernBrawl.observers,
 			};
 			showLog && console.debug(snapshot);
 			return snapshot;
@@ -300,18 +298,13 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
 		this.debugCall('bgHeroStats$');
-		return this.bgsMetaStatsHero.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.bgsMetaStatsHero;
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
 		this.debugCall('duelsHeroStats$');
 		return this.duelsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
-
-	// public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-	// 	this.debugCall('duelsTopDecks$');
-	// 	return this.duelsTopDecks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
-	// }
 
 	public gameStats$(): Observable<readonly GameStat[]> {
 		this.debugCall('gameStats$');
@@ -361,9 +354,10 @@ export class AppUiStoreService extends Store<Preferences> {
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
 	private init() {
+		// Has to be first, since other observables depend on it
+		this.initGameStats();
 		this.initBgsMetaStatsHero();
 		this.initDuelsHeroStats();
-		this.initGameStats();
 		this.initDecks();
 		this.initDuelsRuns();
 		this.initDuelsDecks();
@@ -373,48 +367,41 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initTavernBrawl() {
-		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (
-			this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService
-		).tavernBrawl$;
-		tavernBrawl.subscribe(this.tavernBrawl);
+		this.tavernBrawl = (this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService).tavernBrawl$.pipe(
+			shareReplay(1),
+		);
+		// tavernBrawl.subscribe(this.tavernBrawl);
 	}
 
 	private initMails() {
-		const mails: BehaviorSubject<MailState> = (this.ow.getMainWindow().mailsProvider as MailsService).mails$;
-		mails.subscribe(this.mails);
+		this.mails = (this.ow.getMainWindow().mailsProvider as MailsService).mails$.pipe(shareReplay(1));
 	}
 
 	private initDuelsDecks() {
-		const duelsDecks: BehaviorSubject<readonly DuelsDeckSummary[]> = (
-			this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService
-		).duelsDecks$;
-		duelsDecks.subscribe(this.duelsDecks);
+		this.duelsDecks = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsDecks$.pipe(
+			shareReplay(1),
+		);
 	}
 
 	private initDuelsRuns() {
-		const duelsRuns: BehaviorSubject<readonly DuelsRun[]> = (
-			this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService
-		).duelsRuns$;
-		duelsRuns.subscribe(this.duelsRuns);
+		this.duelsRuns = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsRuns$.pipe(
+			shareReplay(1),
+		);
 	}
 
 	private initDecks() {
-		const decks$: BehaviorSubject<readonly DeckSummary[]> = (
-			this.ow.getMainWindow().decksProvider as DecksProviderService
-		).decks$;
-		decks$.subscribe(this.decks);
+		this.decks = (this.ow.getMainWindow().decksProvider as DecksProviderService).decks$.pipe(shareReplay(1));
 	}
 
 	private initGameStats() {
-		const gameStats$: BehaviorSubject<readonly GameStat[]> = (
-			this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService
-		).gameStats$;
-		gameStats$.subscribe(this.gameStats);
+		this.gameStats = (this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService).gameStats$.pipe(
+			shareReplay(1),
+		);
 	}
 
 	private initDuelsHeroStats() {
-		combineLatest(
-			this.duelsRuns$(),
+		this.duelsHeroStats = combineLatest([
+			this.duelsRuns,
 			this.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
 				([main, nav]) => nav.navigationDuels.heroSearchString,
@@ -426,58 +413,58 @@ export class AppUiStoreService extends Store<Preferences> {
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
-		)
-			.pipe(
-				filter(([duelsRuns, [heroes, other]]) => !!heroes?.length),
-				map(
-					([
-						runs,
-						[
+		]).pipe(
+			filter(([duelsRuns, [heroes, other]]) => !!heroes?.length),
+			map(
+				([
+					runs,
+					[
+						duelStats,
+						heroSearchString,
+						statType,
+						gameMode,
+						timeFilter,
+						heroFilter,
+						heroPowerFilter,
+						sigTreasureFilter,
+						patch,
+					],
+				]) =>
+					[
+						filterDuelsHeroStats(
 							duelStats,
-							heroSearchString,
-							statType,
-							gameMode,
-							timeFilter,
 							heroFilter,
 							heroPowerFilter,
 							sigTreasureFilter,
-							patch,
-						],
-					]) =>
-						[
-							filterDuelsHeroStats(
-								duelStats,
-								heroFilter,
-								heroPowerFilter,
-								sigTreasureFilter,
-								statType,
-								this.allCards,
-								heroSearchString,
-							),
-							filterDuelsRuns(
-								runs,
-								timeFilter,
-								heroFilter,
-								gameMode,
-								null,
-								patch,
-								0,
-								heroPowerFilter,
-								sigTreasureFilter,
-								statType,
-							),
 							statType,
-						] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
-			)
-			.subscribe((stats) => this.duelsHeroStats.next(stats));
+							this.allCards,
+							heroSearchString,
+						),
+						filterDuelsRuns(
+							runs,
+							timeFilter,
+							heroFilter,
+							gameMode,
+							null,
+							patch,
+							0,
+							heroPowerFilter,
+							sigTreasureFilter,
+							statType,
+						),
+						statType,
+					] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
+			tap((info) => console.debug('[duels-store] emitting new hero stats', info)),
+			shareReplay(1),
+		);
 	}
 
 	private initBgsMetaStatsHero() {
 		const statsWithOnlyGlobalData$ = combineLatest([
-			this.listen$(([main]) => main.battlegrounds.getMetaHeroStats()),
+			this.listen$(([main]) => main.battlegrounds.getMetaHeroStats() ?? null),
 			this.listenPrefs$(
 				(prefs) => prefs.bgsActiveRankFilter,
 				(prefs) => prefs.bgsActiveTribesFilter,
@@ -485,17 +472,18 @@ export class AppUiStoreService extends Store<Preferences> {
 			),
 		]).pipe(
 			debounceTime(200),
+			distinctUntilChanged(),
 			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter, bgsHeroesUseConservativeEstimate]]) => {
-				// console.debug(
-				// 	'[bgs] rebuilding meta hero stats',
-				// 	stats,
-				// 	'rankFilter',
-				// 	bgsActiveRankFilter,
-				// 	'tribesFilter',
-				// 	bgsActiveTribesFilter,
-				// 	'bgsHeroesUseConservativeEstimate',
-				// 	bgsHeroesUseConservativeEstimate,
-				// );
+				console.debug(
+					'[bgs-1] rebuilding meta hero stats',
+					stats,
+					'rankFilter',
+					bgsActiveRankFilter,
+					'tribesFilter',
+					bgsActiveTribesFilter,
+					'bgsHeroesUseConservativeEstimate',
+					bgsHeroesUseConservativeEstimate,
+				);
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					stats?.heroStats,
 					bgsActiveRankFilter,
@@ -505,10 +493,11 @@ export class AppUiStoreService extends Store<Preferences> {
 				);
 				return result;
 			}),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 
 		const playerBgGames$ = combineLatest([
-			this.gameStats$(),
+			this.gameStats,
 			this.listen$(
 				([main]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles ?? [],
 				([main]) => main.battlegrounds.currentBattlegroundsMetaPatch,
@@ -519,8 +508,9 @@ export class AppUiStoreService extends Store<Preferences> {
 				(prefs) => prefs.bgsActiveTimeFilter,
 			),
 		]).pipe(
-			distinctUntilChanged(),
+			// distinctUntilChanged(),
 			map(([games, [mmrPercentiles, patchInfo], [rankFilter, tribesFilter, timeFilter]]) => {
+				console.debug('[bgs-1] rebuilding meta hero stats 2');
 				const targetRank: number =
 					!mmrPercentiles?.length || !rankFilter
 						? 0
@@ -536,14 +526,20 @@ export class AppUiStoreService extends Store<Preferences> {
 				const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
 				return afterFilter;
 			}),
-			distinctUntilChanged(),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 
 		const enhancedStats$ = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
-			map(([stats, playerBgGames]) => stats.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards))),
+			tap((info) => console.debug('[bgs-1] rebuilding meta hero stats 3', info)),
+			map(
+				([stats, playerBgGames]) =>
+					stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards)) ?? [],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		);
 
-		enhancedStats$.subscribe(this.bgsMetaStatsHero);
+		this.bgsMetaStatsHero = enhancedStats$;
 	}
 
 	private debugCall(...args) {
