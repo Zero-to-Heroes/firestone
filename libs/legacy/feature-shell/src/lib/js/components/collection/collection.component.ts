@@ -130,10 +130,7 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 			.pipe(
 				this.mapData(([allSets, selectedCardId]) =>
 					selectedCardId
-						? allSets
-								.map((set) => set.allCards)
-								.reduce((a, b) => a.concat(b), [])
-								.find((card) => card.id === selectedCardId) ??
+						? allSets.map((set) => set.getCard(selectedCardId)).find((card) => !!card) ??
 						  // This is the case when it's not a collectible card for instance
 						  this.allCards.getCard(selectedCardId)
 						: null,

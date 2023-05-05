@@ -172,9 +172,7 @@ export class NavigationBackProcessor implements Processor {
 				} as NavigationState);
 			case 'card-details':
 				const selectedSet = dataState.binder.allSets.find(
-					(set) =>
-						set.allCards.find((card) => card.id === navigationState.navigationCollection.selectedCardId) !=
-						null,
+					(set) => set.getCard(navigationState.navigationCollection.selectedCardId) != null,
 				);
 				console.log('selected set', selectedSet?.id);
 				return navigationState.update({

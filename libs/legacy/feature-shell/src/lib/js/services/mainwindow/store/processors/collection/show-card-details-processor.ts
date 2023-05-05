@@ -39,7 +39,7 @@ export class ShowCardDetailsProcessor implements Processor {
 	}
 
 	private pickSet(allSets: readonly Set[], cardId: string): Set {
-		let set = allSets.find((set) => set.allCards.some((card) => card.id === cardId));
+		let set = allSets.find((set) => !!set.getCard(cardId));
 		// Happens when cardId is not collectible
 		if (!set) {
 			const card = this.cards.getCard(cardId);
