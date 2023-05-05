@@ -268,12 +268,6 @@ export class StoreBootstrapService {
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			patchConfig: patchConfig,
-			streams: windowStateForFtue.streams.update({
-				initComplete: true,
-			}),
-			quests: windowStateForFtue.quests.update({
-				initComplete: true,
-			}),
 			initComplete: true,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));

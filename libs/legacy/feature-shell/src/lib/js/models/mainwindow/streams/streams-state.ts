@@ -9,8 +9,6 @@ export class StreamsState {
 
 	readonly liveStreamsData: PresenceResult = undefined;
 
-	readonly initComplete: boolean = false;
-
 	public static create(base: Partial<NonFunctionProperties<StreamsState>>): StreamsState {
 		return Object.assign(new StreamsState(), base);
 	}
@@ -20,9 +18,6 @@ export class StreamsState {
 	}
 
 	public getLiveStreamsData(): PresenceResult {
-		if (!this.initComplete) {
-			return this.liveStreamsData;
-		}
 		if (this.liveStreamsData === undefined) {
 			console.log('liveStreamsData not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
