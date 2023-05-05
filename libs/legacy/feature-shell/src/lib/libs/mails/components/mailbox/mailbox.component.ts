@@ -10,14 +10,19 @@ import { MailboxMarkMessageReadEvent } from '../../services/mailbox-mark-message
 	styleUrls: [`./mailbox.component.scss`],
 	template: `
 		<div class="mailbox">
-			<ul class="message-list" scrollable>
+			<ul class="message-list" scrollable *ngIf="messages$ | async as messages; else emptyState">
 				<mailbox-message
 					class="message"
-					*ngFor="let message of messages$ | async; trackBy: trackByFn"
+					*ngFor="let message of messages; trackBy: trackByFn"
 					[message]="message"
 					(click)="markMessageRead(message)"
 				></mailbox-message>
 			</ul>
+
+			<ng-template #emptyState>
+				No messages available. You will find here messages about important game updates that are not documented
+				inside the game client, as well as other Hearthstone-related news that we think you should not miss.
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,7 +35,11 @@ export class MailboxComponent extends AbstractSubscriptionStoreComponent impleme
 	}
 
 	ngAfterContentInit() {
-		this.messages$ = this.store.mails$().pipe(this.mapData((state) => state.mails));
+		this.messages$ = this.store.mails$().pipe(
+			this.mapData((state) => {
+				return !!state.mails.length ? state.mails : null;
+			}),
+		);
 	}
 
 	markMessageRead(message: Mail) {
