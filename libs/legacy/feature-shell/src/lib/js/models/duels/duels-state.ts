@@ -7,6 +7,9 @@ import { DuelsConfig } from '@models/duels/duels-config';
 import { DuelsDeckbuilder } from '@models/duels/duels-deckbuilder';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
 import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
+import { AppInjector } from '../../services/app-injector';
+import { ExtendedDuelsStatDecks } from '../../services/duels/duels-state-builder.service';
+import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
@@ -20,7 +23,7 @@ export class DuelsState {
 	readonly duelsRunInfos: readonly DuelsRunInfo[];
 	readonly duelsRewardsInfo: readonly DuelsRewardsInfo[];
 	readonly globalStats: DuelsStat;
-	readonly topDecks: readonly DuelsGroupedDecks[] = [];
+	readonly globalStatsDecks: ExtendedDuelsStatDecks;
 	readonly bucketsData: readonly DuelsBucketsData[] = [];
 	readonly leaderboard: DuelsLeaderboard;
 	// Used to store additional deck data loaded during the course of the app's use,
@@ -43,12 +46,30 @@ export class DuelsState {
 	readonly adventuresInfo: AdventuresInfo;
 	readonly decksSearchString: string;
 
+	readonly initComplete: boolean;
+
+	readonly topDecks: readonly DuelsGroupedDecks[] = undefined;
+
 	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);
 	}
 
 	public update(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), this, base);
+	}
+
+	public getTopDecks(): readonly DuelsGroupedDecks[] {
+		if (!this.initComplete) {
+			return this.topDecks;
+		}
+		if (this.topDecks === undefined) {
+			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+			if (service) {
+				(this.topDecks as readonly DuelsGroupedDecks[]) = [];
+				service.requestLoad('duels-top-decks');
+			}
+		}
+		return this.topDecks;
 	}
 
 	public findCategory(categoryId: string) {

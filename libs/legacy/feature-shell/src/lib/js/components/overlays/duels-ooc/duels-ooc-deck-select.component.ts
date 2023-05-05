@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
-import { allDuelsSignatureTreasures, CardIds, isPassive } from '@firestone-hs/reference-data';
+import { CardIds, allDuelsSignatureTreasures, isPassive } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -15,7 +15,7 @@ import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -100,7 +100,7 @@ export class DuelsOutOfCombatDeckSelectComponent
 		this.decks$ = combineLatest(
 			this.store.duelsRuns$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.tempDuelsDeck,
 				([main, nav]) => main.duels.currentDuelsMetaPatch,
 			),
@@ -108,7 +108,10 @@ export class DuelsOutOfCombatDeckSelectComponent
 		).pipe(
 			filter(
 				([runs, [groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) =>
-					tempDuelsDeck?.HeroCardId && tempDuelsDeck?.HeroPowerCardId && !!tempDuelsDeck?.Decklist?.length,
+					tempDuelsDeck?.HeroCardId &&
+					tempDuelsDeck?.HeroPowerCardId &&
+					!!tempDuelsDeck?.Decklist?.length &&
+					!!groupedTopDecks?.length,
 			),
 			this.mapData(([runs, [groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) => {
 				const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(tempDuelsDeck);

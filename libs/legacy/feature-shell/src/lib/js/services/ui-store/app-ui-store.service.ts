@@ -421,7 +421,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initDuelsTopDecks() {
 		this.listen$(
-			([main, nav]) => main.duels.topDecks,
+			([main, nav]) => main.duels.getTopDecks(),
 			([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 			([main, nav]) => main.duels.decksSearchString,
 			([main, nav, prefs]) => prefs.duelsActiveMmrFilter,

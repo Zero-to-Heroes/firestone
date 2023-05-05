@@ -1,5 +1,5 @@
 import { PackResult } from '@firestone-hs/user-packs';
-import { NonFunctionProperties } from '../../services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { Card } from '../card';
 import { CardBack } from '../card-back';
 import { CardHistory } from '../card-history';
@@ -18,6 +18,10 @@ export class BinderState {
 	readonly cardHistory: readonly CardHistory[] = [];
 	readonly totalHistoryLength: number;
 	readonly isLoading: boolean = true;
+
+	public static create(base: Partial<NonFunctionProperties<BinderState>>): BinderState {
+		return Object.assign(new BinderState(), base);
+	}
 
 	public update(base: Partial<NonFunctionProperties<BinderState>>): BinderState {
 		return Object.assign(new BinderState(), this, base);

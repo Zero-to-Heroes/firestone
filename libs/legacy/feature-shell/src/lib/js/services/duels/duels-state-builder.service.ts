@@ -20,22 +20,18 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { BehaviorSubject } from 'rxjs';
-import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
-import { DuelsDeckStatInfo } from '../../models/duels/duels-personal-deck';
+import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
-import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsBucketsData, DuelsState } from '../../models/duels/duels-state';
-import { BinderState } from '../../models/mainwindow/binder-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { PatchInfo } from '../../models/patches';
 import { Events } from '../events.service';
 import { HsGameMetaData, runLoop } from '../game-mode-data.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
+import { DuelsTopDecksUpdateEvent } from '../mainwindow/store/events/duels/duels-top-decks-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { PreferencesService } from '../preferences.service';
-import { groupByFunction } from '../utils';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json';
@@ -56,17 +52,26 @@ export class DuelsStateBuilderService {
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
+		// private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
 		private readonly events: Events,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly memory: MemoryInspectionService,
 		private readonly duelsMemoryCeche: DuelsMemoryCacheService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
 	}
 
 	private async init() {
+		await this.store.initComplete();
+
+		// When the cards are updated, refresh the top decks
+		this.store
+			.listen$(([main, nav, prefs]) => main.binder?.allSets)
+			.pipe(debounceTime(10000), distinctUntilChanged())
+			.subscribe(async (collectionState) => this.updateTopDecks());
+
 		this.initDuelsInfoObservable();
 
 		this.events
@@ -191,10 +196,23 @@ export class DuelsStateBuilderService {
 		return [stepResults, rewardsResults];
 	}
 
-	public async loadTopDecks(): Promise<DuelsStatDecks> {
+	public async loadTopDecks(): Promise<ExtendedDuelsStatDecks> {
 		const result: DuelsStatDecks = await this.api.callGetApi(DUELS_GLOBAL_STATS_DECKS);
 		console.log('[duels-state-builder] loaded global stats deck', result?.decks?.length);
-		return result;
+		return {
+			lastUpdateDate: result.lastUpdateDate,
+			decks: result.decks.map((d) => {
+				const deckDefinition = decode(d.decklist);
+				return {
+					...d,
+					deckDefinition: deckDefinition,
+					allCardNames: deckDefinition.cards
+						.map((pair) => pair[0])
+						.map((dbfId) => this.allCards.getCard(dbfId)?.name)
+						.filter((name) => !!name),
+				};
+			}),
+		};
 	}
 
 	public async loadConfig(): Promise<DuelsConfig> {
@@ -203,29 +221,31 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
+	public async updateTopDecks() {
+		await this.store.initComplete();
+		this.store.send(new DuelsTopDecksUpdateEvent());
+	}
+
 	public initState(
 		initialState: DuelsState,
 		globalStats: DuelsStat,
-		globalStatsDecks: DuelsStatDecks,
+		globalStatsDecks: ExtendedDuelsStatDecks,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		duelsConfig: DuelsConfig,
 		leaderboard: DuelsLeaderboard,
 		bucketsData: readonly DuelsBucketsData[],
-		collectionState: BinderState,
+		// collectionState: BinderState,
 		adventuresInfo: AdventuresInfo,
 		currentDuelsMetaPatch?: PatchInfo,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
-		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
-			globalStatsDecks?.decks ?? [],
-			collectionState,
-		);
 		return initialState.update({
 			categories: categories,
 			globalStats: globalStats,
 			config: duelsConfig,
-			topDecks: topDecks,
+			globalStatsDecks: globalStatsDecks,
+			// topDecks: topDecks,
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,
 			bucketsData: bucketsData,
@@ -233,6 +253,7 @@ export class DuelsStateBuilderService {
 			adventuresInfo: adventuresInfo,
 			currentDuelsMetaPatch: currentDuelsMetaPatch,
 			loading: false,
+			initComplete: true,
 		});
 	}
 
@@ -324,100 +345,31 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
-	private buildDeckStatInfo(runs: readonly DuelsRun[]): DuelsDeckStatInfo {
-		const totalMatchesPlayed = runs.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0);
-		return {
-			totalRunsPlayed: runs.length,
-			totalMatchesPlayed: totalMatchesPlayed,
-			winrate: (100 * runs.map((run) => run.wins).reduce((a, b) => a + b, 0)) / totalMatchesPlayed,
-			averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
-			winsDistribution: this.buildWinDistributionForRun(runs),
-			netRating: runs
-				.filter((run) => run.ratingAtEnd != null && run.ratingAtStart != null)
-				.map((run) => +run.ratingAtEnd - +run.ratingAtStart)
-				.reduce((a, b) => a + b, 0),
-		} as DuelsDeckStatInfo;
-	}
+	// private buildDeckStatInfo(runs: readonly DuelsRun[]): DuelsDeckStatInfo {
+	// 	const totalMatchesPlayed = runs.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0);
+	// 	return {
+	// 		totalRunsPlayed: runs.length,
+	// 		totalMatchesPlayed: totalMatchesPlayed,
+	// 		winrate: (100 * runs.map((run) => run.wins).reduce((a, b) => a + b, 0)) / totalMatchesPlayed,
+	// 		averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
+	// 		winsDistribution: this.buildWinDistributionForRun(runs),
+	// 		netRating: runs
+	// 			.filter((run) => run.ratingAtEnd != null && run.ratingAtStart != null)
+	// 			.map((run) => +run.ratingAtEnd - +run.ratingAtStart)
+	// 			.reduce((a, b) => a + b, 0),
+	// 	} as DuelsDeckStatInfo;
+	// }
 
-	private buildWinDistributionForRun(runs: readonly DuelsRun[]): readonly { winNumber: number; value: number }[] {
-		const result: { winNumber: number; value: number }[] = [];
-		for (let i = 0; i <= 12; i++) {
-			result.push({
-				winNumber: i,
-				value: runs.filter((run) => run.wins === i).length,
-			});
-		}
-		return result;
-	}
-
-	private buildTopDeckStats(
-		deckStats: readonly DeckStat[],
-		collectionState: BinderState,
-	): readonly DuelsGroupedDecks[] {
-		const decks = deckStats
-			// This should already be filtered out by the API
-			.filter((stat) => stat.decklist)
-			// Same here
-			.slice(0, 1000)
-			.map((stat) => {
-				const deck = decode(stat.decklist);
-				const dustCost = this.buildDustCost(deck, collectionState);
-				const allCardNames: readonly string[] = deck.cards
-					.map((pair) => pair[0])
-					.map((dbfId) => this.allCards.getCard(dbfId)?.name)
-					.filter((name) => !!name);
-				return {
-					...stat,
-					heroCardId: stat.heroCardId,
-					dustCost: dustCost,
-					allCardNames: allCardNames,
-				} as DuelsDeckStat;
-			})
-			.sort((a, b) => new Date(b.periodStart).getTime() - new Date(a.periodStart).getTime());
-		console.log('[duels-state-builder] top decks', decks?.length);
-		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks)];
-		return groupedDecks;
-	}
-
-	private groupDecks(decks: readonly DuelsDeckStat[]): readonly DuelsGroupedDecks[] {
-		const groupingFunction = (deck: DuelsDeckStat) => {
-			const date = new Date(deck.periodStart);
-			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-				month: 'short',
-				day: '2-digit',
-				year: 'numeric',
-			});
-		};
-		const groupByDate = groupByFunction(groupingFunction);
-		const decksByDate = groupByDate(decks);
-		return Object.keys(decksByDate).map((date) => this.buildGroupedDecks(date, decksByDate[date]));
-	}
-
-	private buildGroupedDecks(date: string, decks: readonly DuelsDeckStat[]): DuelsGroupedDecks {
-		return DuelsGroupedDecks.create({
-			header: date,
-			decks: decks,
-		} as DuelsGroupedDecks);
-	}
-
-	private buildDustCost(deck: DeckDefinition, collectionState: BinderState): number {
-		const allCards = [...deck.cards.map((cards) => cards[0]), ...(deck.sideboards ?? [])];
-		return allCards
-			.map((cardDbfId) => this.allCards.getCardFromDbfId(+cardDbfId))
-			.filter((card) => card)
-			.map((card) => {
-				const out = collectionState.getCard(card.id);
-				if (!out && !!this.allCards.getCards()?.length) {
-					// console.warn('[duels-state-builder] Could not find card for', card.id, deck);
-				}
-				return out;
-				// ?? new SetCard(card.id, card.name, card.playerClass, card.rarity, card.cost, 0, 0, 0);
-			})
-			.filter((card) => card)
-			.filter((card) => card.getNumberCollected() === 0)
-			.map((card) => card.getRegularDustCost())
-			.reduce((a, b) => a + b, 0);
-	}
+	// private buildWinDistributionForRun(runs: readonly DuelsRun[]): readonly { winNumber: number; value: number }[] {
+	// 	const result: { winNumber: number; value: number }[] = [];
+	// 	for (let i = 0; i <= 12; i++) {
+	// 		result.push({
+	// 			winNumber: i,
+	// 			value: runs.filter((run) => run.wins === i).length,
+	// 		});
+	// 	}
+	// 	return result;
+	// }
 
 	private initDuelsInfoObservable() {
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
@@ -440,4 +392,13 @@ export class DuelsStateBuilderService {
 			});
 		}
 	}
+}
+
+export interface ExtendedDuelsStatDecks extends DuelsStatDecks {
+	decks: readonly ExtendedDeckStat[];
+}
+
+export interface ExtendedDeckStat extends DeckStat {
+	readonly deckDefinition: DeckDefinition;
+	readonly allCardNames: readonly string[];
 }

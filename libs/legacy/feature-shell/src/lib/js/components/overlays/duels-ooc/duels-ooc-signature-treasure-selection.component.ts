@@ -2,11 +2,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import {
-	allDuelsHeroes,
 	CardIds,
+	ReferenceCard,
+	allDuelsHeroes,
 	duelsHeroConfigs,
 	normalizeDuelsHeroCardId,
-	ReferenceCard,
 } from '@firestone-hs/reference-data';
 import { filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -20,7 +20,7 @@ import {
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, uuid } from '@services/utils';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -88,7 +88,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 			this.store.duelsRuns$(),
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
@@ -140,7 +140,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 							}
 
 							const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
-							const topDecks = duelsTopDecks
+							const topDecks = (duelsTopDecks ?? [])
 								.map((deck) =>
 									topDeckApplyFilters(
 										deck,

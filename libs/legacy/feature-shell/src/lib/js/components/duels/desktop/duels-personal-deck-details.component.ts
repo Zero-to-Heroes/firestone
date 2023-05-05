@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { SetCard } from '../../../models/set';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -121,7 +121,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 		this.deck$ = combineLatest(
 			this.store.duelsDecks$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,

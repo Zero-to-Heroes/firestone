@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
