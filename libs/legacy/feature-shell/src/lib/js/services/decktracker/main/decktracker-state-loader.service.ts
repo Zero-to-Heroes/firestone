@@ -38,11 +38,12 @@ export class DecktrackerStateLoaderService {
 			rankingCategory: existingFilters.rankingCategory ?? 'leagues',
 		};
 		patch = patch || currentState.patch;
-		return Object.assign(new DecktrackerState(), currentState, {
+		return currentState.update({
 			filters: filters,
 			isLoading: false,
 			patch: patch,
 			config: config ?? currentState.config,
-		} as DecktrackerState);
+			initComplete: true,
+		});
 	}
 }

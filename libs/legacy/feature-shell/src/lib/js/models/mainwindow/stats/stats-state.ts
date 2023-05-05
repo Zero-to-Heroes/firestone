@@ -20,6 +20,8 @@ export class StatsState {
 
 	readonly bestBgsUserStats: readonly BgsBestStat[] = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public static create(base: Partial<NonFunctionProperties<StatsState>>): StatsState {
 		return Object.assign(new StatsState(), base);
 	}
@@ -29,6 +31,9 @@ export class StatsState {
 	}
 
 	public getBestBgsUserStats(): readonly BgsBestStat[] {
+		if (!this.initComplete) {
+			return this.bestBgsUserStats;
+		}
 		if (this.bestBgsUserStats === undefined) {
 			console.log('bestBgsUserStats not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);

@@ -547,16 +547,16 @@ export class AppUiStoreService extends Store<Preferences> {
 		]).pipe(
 			debounceTime(200),
 			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter, bgsHeroesUseConservativeEstimate]]) => {
-				console.debug(
-					'[bgs] rebuilding meta hero stats',
-					stats,
-					'rankFilter',
-					bgsActiveRankFilter,
-					'tribesFilter',
-					bgsActiveTribesFilter,
-					'bgsHeroesUseConservativeEstimate',
-					bgsHeroesUseConservativeEstimate,
-				);
+				// console.debug(
+				// 	'[bgs] rebuilding meta hero stats',
+				// 	stats,
+				// 	'rankFilter',
+				// 	bgsActiveRankFilter,
+				// 	'tribesFilter',
+				// 	bgsActiveTribesFilter,
+				// 	'bgsHeroesUseConservativeEstimate',
+				// 	bgsHeroesUseConservativeEstimate,
+				// );
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					stats?.heroStats,
 					bgsActiveRankFilter,
@@ -564,7 +564,6 @@ export class AppUiStoreService extends Store<Preferences> {
 					bgsHeroesUseConservativeEstimate,
 					this.allCards,
 				);
-				console.debug('[bgs] built global stats', result, bgsActiveRankFilter, bgsActiveTribesFilter);
 				return result;
 			}),
 		);

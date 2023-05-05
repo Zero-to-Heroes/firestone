@@ -21,13 +21,13 @@ export class CollectionBootstrapService {
 		private readonly cards: SetsService,
 		private readonly ow: OverwolfService,
 	) {
-		this.events.on(Events.START_POPULATE_COLLECTION_STATE).subscribe((event) => this.initCollectionState());
+		// this.events.on(Events.START_POPULATE_COLLECTION_STATE).subscribe((event) => this.initCollectionState());
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
 	}
 
-	public async initCollectionState(): Promise<BinderState> {
+	public async initCollectionState(initialState: BinderState): Promise<BinderState> {
 		console.log('initializing collection state');
 		const [collection, ownedBgsHeroSkins, packs] = await Promise.all([
 			this.collectionManager.getCollection(),
@@ -42,7 +42,7 @@ export class CollectionBootstrapService {
 			this.collectionManager.getPackStats(),
 		]);
 		const sets = await this.collectionManager.buildSets(collection);
-		const newState = Object.assign(new BinderState(), {
+		const newState = initialState.update({
 			collection: collection as readonly Card[],
 			ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
 			packsFromMemory: packs as readonly PackInfo[],
@@ -53,7 +53,7 @@ export class CollectionBootstrapService {
 			cardHistory: cardHistory,
 			totalHistoryLength: totalHistoryLength,
 			isLoading: false,
-		} as BinderState);
+		});
 		console.log('collection loading card history');
 		this.stateUpdater.next(new CollectionInitEvent(newState));
 		return newState;

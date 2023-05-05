@@ -40,6 +40,8 @@ export class MainWindowState {
 	// See decktracker-state.ts for more info
 	readonly globalStats: GlobalStats = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public static create(base: Partial<NonFunctionProperties<MainWindowState>>): MainWindowState {
 		return Object.assign(new MainWindowState(), base);
 	}
@@ -58,6 +60,9 @@ export class MainWindowState {
 	}
 
 	public getGlobalStats(): GlobalStats {
+		if (!this.initComplete) {
+			return this.globalStats;
+		}
 		if (this.globalStats === undefined) {
 			console.log('globalStats not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);

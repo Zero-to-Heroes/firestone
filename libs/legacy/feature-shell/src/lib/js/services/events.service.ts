@@ -45,7 +45,7 @@ export class Events {
 	public static readonly SHOW_MODAL = 'show-modal';
 	public static readonly HIDE_MODAL = 'hide-modal';
 
-	public static readonly START_POPULATE_COLLECTION_STATE = 'start-populate-collection-state';
+	// public static readonly START_POPULATE_COLLECTION_STATE = 'start-populate-collection-state';
 	public static readonly START_BGS_RUN_STATS = 'start-bgs-run-stats';
 	public static readonly POPULATE_HERO_DETAILS_FOR_BG = 'POPULATE_HERO_DETAILS_FOR_BG';
 

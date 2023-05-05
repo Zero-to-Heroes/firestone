@@ -21,6 +21,8 @@ export class MercenariesState {
 	readonly referenceData: MercenariesReferenceData = undefined;
 	readonly globalStats: MercenariesGlobalStats = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public static create(base: MercenariesState): MercenariesState {
 		return Object.assign(new MercenariesState(), base);
 	}
@@ -30,6 +32,9 @@ export class MercenariesState {
 	}
 
 	public getGlobalStats(): MercenariesGlobalStats {
+		if (!this.initComplete) {
+			return this.globalStats;
+		}
 		if (this.globalStats === undefined) {
 			console.log('mercs global stats not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
@@ -42,6 +47,9 @@ export class MercenariesState {
 	}
 
 	public getReferenceData(): MercenariesReferenceData {
+		if (!this.initComplete) {
+			return this.referenceData;
+		}
 		if (this.referenceData === undefined) {
 			console.log('[merc-ref] mercs referenceData not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);

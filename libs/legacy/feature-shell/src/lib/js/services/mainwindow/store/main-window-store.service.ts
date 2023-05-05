@@ -444,18 +444,18 @@ export class MainWindowStoreService {
 			this.processingQueue.enqueue(event);
 		});
 
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (this.ow.gameLaunched(res)) {
-				// Do both so that it's hidden right away
-				// const prefs = await this.prefs.getPreferences();
-				// this.ow.hideCollectionWindow(prefs);
-				// this.stateUpdater.next(new CloseMainWindowEvent());
-				// Give a bit of time for memory info to be there?
-				setTimeout(() => {
-					this.populateStore(true);
-				}, 2000);
-			}
-		});
+		// this.ow.addGameInfoUpdatedListener(async (res: any) => {
+		// 	if (this.ow.gameLaunched(res)) {
+		// 		// Do both so that it's hidden right away
+		// 		// const prefs = await this.prefs.getPreferences();
+		// 		// this.ow.hideCollectionWindow(prefs);
+		// 		// this.stateUpdater.next(new CloseMainWindowEvent());
+		// 		// Give a bit of time for memory info to be there?
+		// 		setTimeout(() => {
+		// 			this.populateStore(true);
+		// 		}, 2000);
+		// 	}
+		// });
 
 		// this.populateStore();
 		this.listenForSocialAccountLoginUpdates();
@@ -940,12 +940,12 @@ export class MainWindowStoreService {
 	}
 
 	public populateStore(onlyGameData = false) {
-		if (!onlyGameData) {
-			console.log('sending populate store event');
-			this.storeBootstrap.initStore(this.state);
-		} else {
-			this.events.broadcast(Events.START_POPULATE_COLLECTION_STATE);
-		}
+		// if (!onlyGameData) {
+		console.log('sending populate store event');
+		this.storeBootstrap.initStore(this.state);
+		// } else {
+		// 	this.events.broadcast(Events.START_POPULATE_COLLECTION_STATE);
+		// }
 		// Launch events to start gathering data for the store
 		// this.stateUpdater.next(new PopulateStoreEvent());
 		// this.stateUpdater.next(new TriggerPopulateStoreEvent(onlyGameData));

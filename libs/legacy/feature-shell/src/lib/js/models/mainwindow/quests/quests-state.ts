@@ -10,6 +10,8 @@ export class QuestsState {
 
 	readonly referenceQuests: QuestsInfo = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public static create(base: Partial<NonFunctionProperties<QuestsState>>): QuestsState {
 		return Object.assign(new QuestsState(), base);
 	}
@@ -19,6 +21,9 @@ export class QuestsState {
 	}
 
 	public getReferenceQuests(): QuestsInfo {
+		if (!this.initComplete) {
+			return this.referenceQuests;
+		}
 		if (this.referenceQuests === undefined) {
 			console.log('referenceQuests not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);

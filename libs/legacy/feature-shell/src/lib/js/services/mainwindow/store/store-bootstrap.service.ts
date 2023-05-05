@@ -7,7 +7,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
-import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
@@ -99,7 +98,6 @@ export class StoreBootstrapService {
 
 		// First update the prefs, for local installs
 		const prefsFromRemote = await this.prefs.loadRemotePrefs();
-
 		const mergedPrefs = await this.mergePrefs(prefs, prefsFromRemote);
 
 		// Load all the initial data
@@ -134,7 +132,7 @@ export class StoreBootstrapService {
 				this.userService.getCurrentUser(),
 				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
-				this.collectionBootstrap.initCollectionState(),
+				this.collectionBootstrap.initCollectionState(windowStateForFtue.binder),
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
@@ -171,11 +169,13 @@ export class StoreBootstrapService {
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
 			: null;
 		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(
+			windowStateForFtue.battlegrounds,
 			bgsGlobalStats,
 			currentBattlegroundsMetaPatch,
 		);
 
 		const newStatsState = this.stats.initState(
+			windowStateForFtue.stats,
 			prefs,
 			matchStats,
 			//archetypesConfig, archetypesStats
@@ -184,13 +184,16 @@ export class StoreBootstrapService {
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
 			: null;
 		const decktracker = this.decktrackerStateLoader.buildState(
-			new DecktrackerState(),
+			windowStateForFtue.decktracker,
 			newStatsState,
 			constructedConfig,
 			currentRankedMetaPatch,
 			mergedPrefs,
 		);
-		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(new ReplaysState(), newStatsState);
+		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
+			windowStateForFtue.replays,
+			newStatsState,
+		);
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
 		const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);
@@ -199,12 +202,12 @@ export class StoreBootstrapService {
 		);
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
-		const newAchievementState = Object.assign(new AchievementsState(), {
+		const newAchievementState = windowStateForFtue.achievements.update({
 			categories: achievementTopCategories,
 			achievementHistory: achievementHistory,
 			isLoading: false,
 			filters: AchievementsState.buildFilterOptions(this.i18n),
-		} as AchievementsState);
+		});
 
 		this.arenaService.setLastArenaMatch(
 			newStatsState.gameStats?.stats?.filter((stat) => stat.gameMode === 'arena'),
@@ -214,6 +217,7 @@ export class StoreBootstrapService {
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
 			: null;
 		const duelsStats: DuelsState = this.duels.initState(
+			windowStateForFtue.duels,
 			duelsGlobalStats,
 			duelsGlobalStatsDecks,
 			duelsRunInfo,
@@ -229,7 +233,11 @@ export class StoreBootstrapService {
 		const currentArenaMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
 			: null;
-		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch, arenaRewards);
+		const arenaState: ArenaState = await this.arena.initState(
+			windowStateForFtue.arena,
+			currentArenaMetaPatch,
+			arenaRewards,
+		);
 
 		const mercenariesState: MercenariesState = this.mercenariesService.initState(
 			windowStateForFtue.mercenaries,
@@ -238,6 +246,12 @@ export class StoreBootstrapService {
 			mercenariesCollection,
 		);
 
+		// FIXME: this causes some issues: partial states are init, data is resquested on these partials states,
+		// which triggers async services. Once these services complete, events are emitted and the current state is
+		// updated.
+		// However, if this happens before this completes, we will override the data retrieved by the services, because
+		// the skeleton state has been created before
+		// So actually we should get rid of this big bootstrap thing, and only handle async store updates
 		const initialWindowState = windowStateForFtue.update({
 			currentScene: currentScene,
 			lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
@@ -254,6 +268,13 @@ export class StoreBootstrapService {
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			patchConfig: patchConfig,
+			streams: windowStateForFtue.streams.update({
+				initComplete: true,
+			}),
+			quests: windowStateForFtue.quests.update({
+				initComplete: true,
+			}),
+			initComplete: true,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}

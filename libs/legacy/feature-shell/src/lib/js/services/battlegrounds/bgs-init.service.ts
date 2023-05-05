@@ -65,6 +65,7 @@ export class BgsInitService {
 	}
 
 	public async initBattlegoundsAppState(
+		initialState: BattlegroundsAppState,
 		bgsGlobalStats: BgsStats,
 		// perfectGames: readonly GameStat[],
 		patch: PatchInfo,
@@ -97,13 +98,14 @@ export class BgsInitService {
 				name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
 			}),
 		];
-		return BattlegroundsAppState.create({
+		return initialState.update({
 			categories: categories,
 			globalStats: bgsGlobalStats,
 			// perfectGames: perfectGames,
 			loading: false,
 			currentBattlegroundsMetaPatch: patch,
-		} as BattlegroundsAppState);
+			initComplete: true,
+		});
 	}
 
 	// private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {

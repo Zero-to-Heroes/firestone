@@ -204,6 +204,7 @@ export class DuelsStateBuilderService {
 	}
 
 	public initState(
+		initialState: DuelsState,
 		globalStats: DuelsStat,
 		globalStatsDecks: DuelsStatDecks,
 		duelsRunInfo: readonly DuelsRunInfo[],
@@ -220,7 +221,7 @@ export class DuelsStateBuilderService {
 			globalStatsDecks?.decks ?? [],
 			collectionState,
 		);
-		return DuelsState.create({
+		return initialState.update({
 			categories: categories,
 			globalStats: globalStats,
 			config: duelsConfig,
@@ -232,7 +233,7 @@ export class DuelsStateBuilderService {
 			adventuresInfo: adventuresInfo,
 			currentDuelsMetaPatch: currentDuelsMetaPatch,
 			loading: false,
-		} as DuelsState);
+		});
 	}
 
 	private async loadTopDeckRunDetails(runId: string, deckId: number) {
