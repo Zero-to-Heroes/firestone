@@ -34,7 +34,7 @@ export class OutOfCardsCallbackComponent implements AfterViewInit {
 			window.close();
 		} else {
 			window.location.replace(
-				`https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`,
+				`https://outof.games/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`,
 			);
 		}
 	}

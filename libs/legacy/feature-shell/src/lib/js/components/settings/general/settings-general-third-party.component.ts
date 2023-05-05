@@ -106,7 +106,7 @@ export class SettingsGeneralThirdPartyComponent
 	implements AfterContentInit, OnDestroy
 {
 	oocLoggedIn$: Observable<boolean>;
-	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
+	oocLoginUrl = `https://outof.games/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 
 	vs = {
 		title: 'Vicious Syndicate',
@@ -120,10 +120,10 @@ export class SettingsGeneralThirdPartyComponent
 		toggleLabel: this.i18n.translateString('settings.general.third-party.vs.toggle-label'),
 	};
 	ooc = {
-		title: 'Out of Cards',
+		title: 'Out of Games',
 		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/out-of-cards.png',
 		pitch: this.i18n.translateString('settings.general.third-party.ooc.pitch', {
-			websiteLink: `<a href="https://outof.cards/hearthstone/" target="_blank">${this.i18n.translateString(
+			websiteLink: `<a href="https://outof.games/hearthstone/" target="_blank">${this.i18n.translateString(
 				'settings.general.third-party.ooc.website-link',
 			)}</a>`,
 		}),
