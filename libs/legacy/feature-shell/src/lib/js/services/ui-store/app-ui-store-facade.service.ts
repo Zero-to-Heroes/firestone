@@ -4,7 +4,6 @@ import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
-import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable, Subscription } from 'rxjs';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
@@ -118,11 +117,6 @@ export class AppUiStoreFacadeService {
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
 		this.debugCall('duelsHeroStats$');
 		return this.debugObservable(this.store.duelsHeroStats$());
-	}
-
-	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-		this.debugCall('duelsTopDecks$');
-		return this.debugObservable(this.store.duelsTopDecks$());
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
