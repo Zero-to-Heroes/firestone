@@ -9,15 +9,9 @@ import { GameStat } from '@firestone/stats/data-access';
 import { ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
-import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
-import {
-	buildDuelsHeroPlayerStats,
-	filterDuelsRuns,
-	getDuelsMmrFilterNumber,
-	topDeckApplyFilters,
-} from '@services/ui-store/duels-ui-helper';
+import { buildDuelsHeroPlayerStats, filterDuelsRuns } from '@services/ui-store/duels-ui-helper';
 
 import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -75,7 +69,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private bgsMetaStatsHero = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
 	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
-	private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
+	// private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
 	private gameStats = new BehaviorSubject<readonly GameStat[]>(null);
 	private decks = new BehaviorSubject<readonly DeckSummary[]>(null);
 	private duelsRuns = new BehaviorSubject<readonly DuelsRun[]>(null);
@@ -108,7 +102,7 @@ export class AppUiStoreService extends Store<Preferences> {
 				// bgsHeroStats: this.bgsHeroStats.observers,
 				bgsMetaStatsHero: this.bgsMetaStatsHero.observers,
 				duelsHeroStats: this.duelsHeroStats.observers,
-				duelsTopDecks: this.duelsTopDecks.observers,
+				// duelsTopDecks: this.duelsTopDecks.observers,
 				gameStats: this.gameStats.observers,
 				decks: this.decks.observers,
 				duelsRuns: this.duelsRuns.observers,
@@ -314,10 +308,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.duelsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
-	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-		this.debugCall('duelsTopDecks$');
-		return this.duelsTopDecks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
-	}
+	// public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+	// 	this.debugCall('duelsTopDecks$');
+	// 	return this.duelsTopDecks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	// }
 
 	public gameStats$(): Observable<readonly GameStat[]> {
 		this.debugCall('gameStats$');
@@ -369,7 +363,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private init() {
 		this.initBgsMetaStatsHero();
 		this.initDuelsHeroStats();
-		this.initDuelsTopDecks();
 		this.initGameStats();
 		this.initDecks();
 		this.initDuelsRuns();
@@ -417,60 +410,6 @@ export class AppUiStoreService extends Store<Preferences> {
 			this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService
 		).gameStats$;
 		gameStats$.subscribe(this.gameStats);
-	}
-
-	private initDuelsTopDecks() {
-		this.listen$(
-			([main, nav]) => main.duels.getTopDecks(),
-			([main, nav]) => main.duels.globalStats?.mmrPercentiles,
-			([main, nav]) => main.duels.decksSearchString,
-			([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-			([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
-			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
-			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-			([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-			([main, nav, prefs]) => prefs.duelsActivePassiveTreasuresFilter,
-			([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-		)
-			.pipe(
-				filter(([topDecks, mmrPercentiles]) => !!topDecks?.length && !!mmrPercentiles?.length),
-				map(
-					([
-						topDecks,
-						mmrPercentiles,
-						searchString,
-						mmrFilter,
-						classFilter,
-						heroPowerFilter,
-						sigTreasureFilter,
-						timeFilter,
-						dustFilter,
-						passivesFilter,
-						patch,
-					]) => {
-						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
-						const result = topDecks
-							.map((deck) =>
-								topDeckApplyFilters(
-									deck,
-									trueMmrFilter,
-									classFilter,
-									heroPowerFilter,
-									sigTreasureFilter,
-									timeFilter,
-									dustFilter,
-									passivesFilter,
-									patch,
-									searchString,
-								),
-							)
-							.filter((group) => group.decks.length > 0);
-						return result;
-					},
-				),
-			)
-			.subscribe((stats) => this.duelsTopDecks.next(stats));
 	}
 
 	private initDuelsHeroStats() {

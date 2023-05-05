@@ -8,9 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { getDuelsMmrFilterNumber, topDeckApplyFilters } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -44,8 +45,56 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 
 	ngAfterContentInit(): void {
 		this.sub$$ = this.store
-			.duelsTopDecks$()
-			.pipe(takeUntil(this.destroyed$))
+			.listen$(
+				([main, nav]) => main.duels.getTopDecks(),
+				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+				([main, nav]) => main.duels.decksSearchString,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
+				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
+				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+				([main, nav, prefs]) => prefs.duelsActivePassiveTreasuresFilter,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+			)
+			.pipe(
+				filter(([topDecks, mmrPercentiles]) => !!topDecks?.length && !!mmrPercentiles?.length),
+				this.mapData(
+					([
+						topDecks,
+						mmrPercentiles,
+						searchString,
+						mmrFilter,
+						classFilter,
+						heroPowerFilter,
+						sigTreasureFilter,
+						timeFilter,
+						dustFilter,
+						passivesFilter,
+						patch,
+					]) => {
+						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+						const result = topDecks
+							.map((deck) =>
+								topDeckApplyFilters(
+									deck,
+									trueMmrFilter,
+									classFilter,
+									heroPowerFilter,
+									sigTreasureFilter,
+									timeFilter,
+									dustFilter,
+									passivesFilter,
+									patch,
+									searchString,
+								),
+							)
+							.filter((group) => group.decks.length > 0);
+						return result;
+					},
+				),
+			)
 			.subscribe((topDecks) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call
 				setTimeout(() => {
