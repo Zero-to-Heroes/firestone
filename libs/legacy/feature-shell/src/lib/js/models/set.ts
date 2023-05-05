@@ -4,6 +4,7 @@ import { CollectionCardType } from './collection/collection-card-type.type';
 
 export class Set {
 	readonly allCards: readonly SetCard[] = [];
+	readonly cardsCache = new Map<string, SetCard>();
 
 	readonly ownedLimitCollectibleCards: number = 0;
 	readonly ownedLimitCollectiblePremiumCards: number = 0;
@@ -20,6 +21,7 @@ export class Set {
 		this.allCards = allCards ? [...allCards] : [];
 		this.ownedLimitCollectibleCards = ownedLimitCollectibleCards || 0;
 		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
+		this.allCards.forEach((card) => this.cardsCache.set(card.id, card));
 	}
 
 	public update(base: Set): Set {
@@ -38,7 +40,7 @@ export class Set {
 	}
 
 	public getCard(cardId: string): SetCard {
-		return this.allCards.find((card) => card.id === cardId);
+		return this.cardsCache.get(cardId);
 	}
 
 	numberOfLimitCollectibleCards(): number {
@@ -54,7 +56,7 @@ export class Set {
 	}
 
 	ownedForRarity(rarity: RarityTYpe, premium?: CollectionCardType): number {
-		const baseCards = !!premium ? this.getCardsForPremium(premium) : this.allCards
+		const baseCards = !!premium ? this.getCardsForPremium(premium) : this.allCards;
 		return baseCards
 			.filter((card) => card.rarity?.toUpperCase() === rarity?.toUpperCase())
 			.map((card: SetCard) => card.getNumberCollected())

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui-helper';
@@ -64,7 +64,7 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 		this.deckInfo$ = combineLatest(
 			this.store.duelsDecks$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,

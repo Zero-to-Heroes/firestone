@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { allDuelsHeroes, CardIds, duelsHeroConfigs, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard, allDuelsHeroes, duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
@@ -14,7 +14,7 @@ import {
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, uuid } from '@services/utils';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -68,7 +68,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 			this.heroPowers$,
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
@@ -117,7 +117,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 							}
 
 							const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
-							const topDecks = duelsTopDecks
+							const topDecks = (duelsTopDecks ?? [])
 								.map((deck) =>
 									topDeckApplyFilters(
 										deck,

@@ -161,6 +161,7 @@ import { DuelsToggleShowHiddenPersonalDecksEvent } from './events/duels/duels-to
 import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
 import { DuelsTopDecksHeroFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
+import { DuelsTopDecksUpdateEvent } from './events/duels/duels-top-decks-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSearchEvent } from './events/duels/duels-treasure-search-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
@@ -318,6 +319,7 @@ import { DuelsToggleShowHiddenPersonalDecksProcessor } from './processors/duels/
 import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
 import { DuelsHeroFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
 import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
+import { DuelsTopDecksUpdateProcessor } from './processors/duels/duels-top-decks-update-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSearchProcessor } from './processors/duels/duels-treasure-search-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
@@ -816,11 +818,9 @@ export class MainWindowStoreService {
 				MercenariesRemoveMercToBackupTeamEvent.eventName(),
 				new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 			],
-			[
-				// Duels
-				DuelsStateUpdatedEvent.eventName(),
-				new DuelsStateUpdatedProcessor(),
-			],
+			// Duels
+			[DuelsStateUpdatedEvent.eventName(), new DuelsStateUpdatedProcessor()],
+			[DuelsTopDecksUpdateEvent.eventName(), new DuelsTopDecksUpdateProcessor(this.cards, this.i18n)],
 			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor()],
 			[DuelsSelectCategoryEvent.eventName(), new DuelsSelectCategoryProcessor()],
 			[

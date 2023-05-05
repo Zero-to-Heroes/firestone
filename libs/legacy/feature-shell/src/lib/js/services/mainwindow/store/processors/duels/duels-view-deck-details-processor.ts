@@ -16,8 +16,9 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const deck = currentState.duels.topDecks
-			.map((grouped) => grouped.decks)
+		const deck = currentState.duels
+			.getTopDecks()
+			?.map((grouped) => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
 			.find((deck) => deck.id === event.deckId);
 		if (!currentState.duels.additionalDeckDetails.map((stat) => stat.runId).includes(deck?.runId)) {
@@ -41,7 +42,8 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 	}
 
 	private getDeckName(currentState: MainWindowState, deckId: number): string {
-		const deck = currentState?.duels?.topDecks
+		const deck = currentState?.duels
+			?.getTopDecks()
 			?.map((grouped) => grouped.decks)
 			?.reduce((a, b) => a.concat(b), [])
 			?.find((deck) => deck.id === deckId);

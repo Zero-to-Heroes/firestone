@@ -3,6 +3,7 @@ import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
 	readonly ShouldReset: boolean;
+	readonly CollectionInit: boolean;
 	readonly DisplayingAchievementToast: boolean;
 	readonly CurrentScene: SceneMode;
 	readonly XpChanges: readonly XpChange[];

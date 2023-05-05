@@ -1,33 +1,40 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Card } from '../../../models/card';
 import { PackInfo } from '../../../models/collection/pack-info';
 import { BinderState } from '../../../models/mainwindow/binder-state';
+import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
-import { SetsService } from '../../collection/sets-service.service';
 import { Events } from '../../events.service';
+import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
-import { MainWindowStoreEvent } from './events/main-window-store-event';
 
 @Injectable()
 export class CollectionBootstrapService {
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		private readonly events: Events,
 		private readonly cardHistoryStorage: CardHistoryStorageService,
 		private readonly collectionManager: CollectionManager,
-		private readonly cards: SetsService,
 		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
-		// this.events.on(Events.START_POPULATE_COLLECTION_STATE).subscribe((event) => this.initCollectionState());
-		setTimeout(() => {
-			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		});
+		this.init();
 	}
 
-	public async initCollectionState(initialState: BinderState): Promise<BinderState> {
+	private async init() {
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.CollectionInit) {
+				this.initCollectionState();
+			}
+		});
+
+		await this.store.initComplete();
+		this.initCollectionState();
+	}
+
+	private async initCollectionState(): Promise<void> {
 		console.log('initializing collection state');
 		const [collection, ownedBgsHeroSkins, packs] = await Promise.all([
 			this.collectionManager.getCollection(),
@@ -42,7 +49,7 @@ export class CollectionBootstrapService {
 			this.collectionManager.getPackStats(),
 		]);
 		const sets = await this.collectionManager.buildSets(collection);
-		const newState = initialState.update({
+		const newState = BinderState.create({
 			collection: collection as readonly Card[],
 			ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
 			packsFromMemory: packs as readonly PackInfo[],
@@ -55,7 +62,6 @@ export class CollectionBootstrapService {
 			isLoading: false,
 		});
 		console.log('collection loading card history');
-		this.stateUpdater.next(new CollectionInitEvent(newState));
-		return newState;
+		this.store.send(new CollectionInitEvent(newState));
 	}
 }

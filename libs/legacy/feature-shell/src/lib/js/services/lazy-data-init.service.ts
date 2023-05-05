@@ -6,6 +6,7 @@ import { BgsMetaHeroStatsService } from './battlegrounds/bgs-meta-hero-stats.ser
 import { BgsMetaHeroStrategiesService } from './battlegrounds/bgs-meta-hero-strategies.service';
 import { BattlegroundsQuestsService } from './battlegrounds/bgs-quests.service';
 import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
+import { DuelsStateBuilderService } from './duels/duels-state-builder.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { LiveStreamsService } from './mainwindow/live-streams.service';
 import { MercenariesStateBuilderService } from './mercenaries/mercenaries-state-builder.service';
@@ -18,8 +19,9 @@ export class LazyDataInitService {
 	constructor(
 		private readonly constructedMetaDecksStateBuilder: ConstructedMetaDecksStateBuilderService,
 		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
-		private readonly bgsPerfectGamesStateBuilder: BgsInitService,
 		private readonly globalStatsService: GlobalStatsService,
+		private readonly duelsService: DuelsStateBuilderService,
+		private readonly bgsPerfectGamesStateBuilder: BgsInitService,
 		private readonly bgsBestStatsService: BgsBestUserStatsService,
 		private readonly bgsMetaHeroStatsStateBuilder: BgsMetaHeroStatsService,
 		private readonly bgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
@@ -45,6 +47,8 @@ export class LazyDataInitService {
 				return this.bgsMetaHeroStrategiesService.loadMetaHeroStrategies();
 			case 'bgs-quest-stats':
 				return this.bgsQuestsService.loadInitialReferenceData();
+			case 'duels-top-decks':
+				return this.duelsService.updateTopDecks();
 			case 'user-global-stats':
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'user-bgs-best-stats':
@@ -66,6 +70,7 @@ export type StateDataType =
 	| 'user-global-stats'
 	| 'user-bgs-best-stats'
 	| 'reference-quests'
+	| 'duels-top-decks'
 	| 'bgs-meta-hero-stats'
 	| 'bgs-meta-hero-strategies'
 	| 'bgs-quest-stats'
