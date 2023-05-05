@@ -12,8 +12,6 @@ export class TavernBrawlState {
 	readonly selectedCategoryId: TavernBrawlCategoryType = 'meta';
 	readonly menuDisplayType: 'menu' | 'breadcrumbs' = 'menu';
 
-	readonly initComplete: boolean = false;
-
 	public static create(base: Partial<NonFunctionProperties<TavernBrawlState>>): TavernBrawlState {
 		return Object.assign(new TavernBrawlState(), base);
 	}
@@ -23,9 +21,6 @@ export class TavernBrawlState {
 	}
 
 	public getCurrentStats(): TavernBrawlStats {
-		if (!this.initComplete) {
-			return this.currentStats;
-		}
 		if (this.currentStats === undefined) {
 			console.log('currentStats not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
