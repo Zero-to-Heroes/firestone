@@ -78,7 +78,7 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		console.log('building parent duels state', navigationState.navigationDuels.selectedCategoryId);
+		// console.log('building parent duels state', navigationState.navigationDuels.selectedCategoryId);
 		switch (navigationState.navigationDuels.selectedCategoryId) {
 			default:
 				return null;
@@ -93,7 +93,7 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		console.log('building parent mercenaries state', navigationState.navigationMercenaries.selectedCategoryId);
+		// console.log('building parent mercenaries state', navigationState.navigationMercenaries.selectedCategoryId);
 		switch (navigationState.navigationMercenaries.selectedCategoryId) {
 			default:
 				return null;
@@ -108,7 +108,7 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		console.log('building parent arena state', navigationState.navigationArena.selectedCategoryId);
+		// console.log('building parent arena state', navigationState.navigationArena.selectedCategoryId);
 		switch (navigationState.navigationArena.selectedCategoryId) {
 			default:
 				return null;
@@ -123,7 +123,7 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		console.log('building parent battelgrounds state', navigationState.navigationBattlegrounds.currentView);
+		// console.log('building parent battelgrounds state', navigationState.navigationBattlegrounds.currentView);
 		switch (navigationState.navigationBattlegrounds.currentView) {
 			case 'categories':
 				return null;
