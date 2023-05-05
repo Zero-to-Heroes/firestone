@@ -12,6 +12,8 @@ export class BgsStats {
 
 	readonly questStats: readonly BgsGlobalHeroStat2[] = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public static create(result: Partial<NonFunctionProperties<BgsStats>>) {
 		return Object.assign(new BgsStats(), result);
 	}
@@ -21,6 +23,9 @@ export class BgsStats {
 	}
 
 	public getQuestStats(): readonly BgsGlobalHeroStat2[] {
+		if (!this.initComplete) {
+			return this.questStats;
+		}
 		if (this.questStats === undefined) {
 			console.log('bgs quest stats not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);

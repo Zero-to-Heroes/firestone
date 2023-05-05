@@ -30,6 +30,7 @@ export class BgsGlobalStatsService {
 			heroStats: result?.heroStats ?? [],
 			lastUpdateDate: result?.lastUpdateDate,
 			mmrPercentiles: result?.mmrPercentiles ?? [],
+			initComplete: true,
 		} as BgsStats);
 		if (!globalStats?.heroStats?.length) {
 			console.error('could not load bgs global stats', url, tribes, result);

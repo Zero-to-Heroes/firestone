@@ -1,3 +1,4 @@
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Achievement } from '../achievement';
 import { AchievementHistory } from '../achievement/achievement-history';
@@ -12,7 +13,7 @@ export class AchievementsState {
 	readonly achievementHistory: readonly AchievementHistory[] = [];
 	readonly isLoading: boolean = true;
 
-	public update(base: AchievementsState): AchievementsState {
+	public update(base: Partial<NonFunctionProperties<AchievementsState>>): AchievementsState {
 		return Object.assign(new AchievementsState(), this, base);
 	}
 

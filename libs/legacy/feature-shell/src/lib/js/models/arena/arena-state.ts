@@ -1,4 +1,5 @@
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { ArenaCategory } from '../mainwindow/arena/arena-category';
 import { PatchInfo } from '../patches';
 import { ArenaClassFilterType } from './arena-class-filter.type';
@@ -17,7 +18,7 @@ export class ArenaState {
 		return Object.assign(new ArenaState(), base);
 	}
 
-	public update(base: ArenaState): ArenaState {
+	public update(base: Partial<NonFunctionProperties<ArenaState>>): ArenaState {
 		return Object.assign(new ArenaState(), this, base);
 	}
 

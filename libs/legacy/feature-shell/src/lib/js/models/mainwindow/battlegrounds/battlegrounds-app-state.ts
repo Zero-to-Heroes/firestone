@@ -25,6 +25,8 @@ export class BattlegroundsAppState {
 	readonly metaHeroStats: BgsHeroStatsV2 = undefined;
 	readonly metaHeroStrategies: BgsHeroStrategies = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
 	}
@@ -34,8 +36,10 @@ export class BattlegroundsAppState {
 	}
 
 	public getPerfectGames(): readonly GameStat[] {
+		if (!this.initComplete) {
+			return this.perfectGames;
+		}
 		if (this.perfectGames === undefined) {
-			console.log('perfectGames not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
 			if (service) {
 				(this.perfectGames as readonly GameStat[]) = [];
@@ -46,8 +50,11 @@ export class BattlegroundsAppState {
 	}
 
 	public getMetaHeroStats(): BgsHeroStatsV2 {
+		// Hack, see store-bootstrap.service.ts
+		if (!this.initComplete) {
+			return this.metaHeroStats;
+		}
 		if (this.metaHeroStats === undefined) {
-			console.log('metaHeroStats not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
 			if (service) {
 				(this.metaHeroStats as BgsHeroStatsV2) = null;
@@ -58,8 +65,10 @@ export class BattlegroundsAppState {
 	}
 
 	public getMetaHeroStrategies(): BgsHeroStrategies {
+		if (!this.initComplete) {
+			return this.metaHeroStrategies;
+		}
 		if (this.metaHeroStrategies === undefined) {
-			console.log('metaHeroStrategies not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
 			if (service) {
 				(this.metaHeroStrategies as BgsHeroStrategies) = null;

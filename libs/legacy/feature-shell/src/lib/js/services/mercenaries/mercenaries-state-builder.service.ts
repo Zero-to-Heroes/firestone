@@ -97,6 +97,7 @@ export class MercenariesStateBuilderService {
 			collectionInfo: mercenariesCollection,
 			categoryIds: categoryIds,
 			loading: false,
+			initComplete: true,
 		} as MercenariesState);
 	}
 }

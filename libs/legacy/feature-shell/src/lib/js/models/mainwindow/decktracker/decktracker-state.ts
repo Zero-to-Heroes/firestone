@@ -21,11 +21,16 @@ export class DecktrackerState {
 	// Important to assign it to undefined, so that we only call the LazyInit once
 	readonly metaDecks: readonly DeckStat[] = undefined;
 
+	readonly initComplete: boolean = false;
+
 	public update(base: Partial<NonFunctionProperties<DecktrackerState>>): DecktrackerState {
 		return Object.assign(new DecktrackerState(), this, base);
 	}
 
 	public getMetaDecks(): readonly DeckStat[] {
+		if (!this.initComplete) {
+			return this.metaDecks;
+		}
 		if (this.metaDecks === undefined) {
 			console.log('meta decks not initialized yet');
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);

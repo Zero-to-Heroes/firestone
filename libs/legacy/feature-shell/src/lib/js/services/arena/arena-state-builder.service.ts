@@ -35,9 +35,13 @@ export class ArenaStateBuilderService {
 		return result;
 	}
 
-	public async initState(currentArenaMetaPatch: PatchInfo, rewards: readonly ArenaRewardInfo[]): Promise<ArenaState> {
+	public async initState(
+		initialState: ArenaState,
+		currentArenaMetaPatch: PatchInfo,
+		rewards: readonly ArenaRewardInfo[],
+	): Promise<ArenaState> {
 		const prefs = await this.prefs.getPreferences();
-		return ArenaState.create({
+		return initialState.update({
 			categories: [
 				ArenaCategory.create({
 					id: 'arena-runs',
@@ -52,6 +56,6 @@ export class ArenaStateBuilderService {
 			activeTimeFilter: prefs.arenaActiveTimeFilter,
 			currentArenaMetaPatch: currentArenaMetaPatch,
 			rewards: rewards,
-		} as ArenaState);
+		});
 	}
 }

@@ -11,12 +11,13 @@ export class StatsStateBuilderService {
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	public initState(
+		initialState: StatsState,
 		prefs: Preferences,
 		matchStats: GameStats,
 		// archetypesConfig: readonly ArchetypeConfig[],
 		// archetypesStats: ArchetypeStats,
 	) {
-		return StatsState.create({
+		return initialState.update({
 			categories: [
 				StatsCategory.create({
 					id: 'xp-graph',
@@ -33,6 +34,7 @@ export class StatsStateBuilderService {
 			filters: {
 				xpGraphSeasonFilter: prefs.statsXpGraphSeasonFilter,
 			},
-		} as StatsState);
+			initComplete: true,
+		});
 	}
 }
