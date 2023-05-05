@@ -10,7 +10,7 @@ import { OwNotificationsService } from '../notifications.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 
-const COLLECTION_UPLOAD = `https://outof.cards/api/hearthstone/collection/import/`;
+const COLLECTION_UPLOAD = `https://outof.games/api/hearthstone/collection/import/`;
 const REFRESH_DEBOUNCE_MS = 30 * 1000;
 
 @Injectable()
@@ -71,7 +71,7 @@ export class OutOfCardsService {
 
 	public async generateToken(code: string): Promise<OutOfCardsToken> {
 		const requestString = `code=${code}&grant_type=authorization_code&redirect_uri=https://www.firestoneapp.com/ooc-login.html&client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC`;
-		const token: OutOfCardsToken = await this.api.callPostApi('https://outof.cards/oauth/token/', requestString, {
+		const token: OutOfCardsToken = await this.api.callPostApi('https://outof.games/oauth/token/', requestString, {
 			contentType: 'application/x-www-form-urlencoded',
 		});
 		if (!token) {
@@ -161,7 +161,7 @@ export class OutOfCardsService {
 
 	private async refreshToken(refresh_token: string): Promise<OutOfCardsToken> {
 		const requestString = `grant_type=refresh_token&refresh_token=${refresh_token}&client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&scope=hearthcollection`;
-		const token: OutOfCardsToken = await this.api.callPostApi('https://outof.cards/oauth/token/', requestString, {
+		const token: OutOfCardsToken = await this.api.callPostApi('https://outof.games/oauth/token/', requestString, {
 			contentType: 'application/x-www-form-urlencoded',
 		});
 		if (!token) {
