@@ -9,7 +9,7 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
@@ -66,10 +66,8 @@ export class GlobalHeaderComponent
 		this.text$ = this.store
 			.listen$(([main, nav]) => nav.text)
 			.pipe(
-				tap((info) => console.debug('updating text key for global', info)),
 				filter(([text]) => !!text),
 				this.mapData(([text]) => this.i18n.translateString(text)),
-				tap((info) => console.debug('after updating text key for global', info)),
 			);
 		this.image$ = this.store
 			.listen$(([main, nav]) => nav.image)

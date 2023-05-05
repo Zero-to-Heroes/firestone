@@ -31,13 +31,10 @@ export class ModsBootstrapService {
 			.listenDeckState$((state) => state)
 			.pipe(
 				filter(() => this.ws?.readyState === this.ws?.OPEN),
-				// tap((state) => console.debug('[mods-boostrap] received new state', state)),
 				debounceTime(1000),
 				distinctUntilChanged(),
-				// tap((state) => console.debug('[mods-boostrap] updated state in mods service', state)),
 				map(([state]) => JSON.stringify(state)),
 				distinctUntilChanged(),
-				// tap((state) => console.debug('[mods-boostrap] will send stringified state')),
 			)
 			.subscribe((state) => {
 				this.sendToWs(state);

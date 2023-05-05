@@ -2,8 +2,8 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { GameStat } from '@firestone/stats/data-access';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { StatsXpGraphSeasonFilterType } from '../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
 	computeXpFromLevel,
@@ -44,7 +44,6 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 			this.store.gameStats$(),
 			this.store.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter),
 		).pipe(
-			tap((info) => console.debug('info', info)),
 			filter(([stats, seasonFilter]) => !!seasonFilter),
 			this.mapData(([stats, [seasonFilter]]) =>
 				this.buildValue(

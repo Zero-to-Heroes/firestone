@@ -13,7 +13,7 @@ import { ModsConfigService } from '@legacy-import/src/lib/libs/mods/services/mod
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { filter, Observable, tap } from 'rxjs';
+import { Observable, filter } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
 import { GameStatusService } from '../../../services/game-status.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -185,10 +185,7 @@ export class SettingsGeneralModsComponent
 	async ngAfterContentInit() {
 		this.modsManager = this.ow.getMainWindow().modsManager;
 
-		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(
-			tap((info) => console.debug('mods in game?', info)),
-			this.mapData((info) => info),
-		);
+		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(this.mapData((info) => info));
 		this.modsManager.modsData$$
 			.asObservable()
 			.pipe(

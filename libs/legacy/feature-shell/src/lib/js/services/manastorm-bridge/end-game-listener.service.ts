@@ -46,13 +46,11 @@ export class EndGameListenerService {
 			filter((event) => event.type === GameEvent.MATCH_METADATA),
 			map((event) => event.additionalData.metaData as HsGameMetaData),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] metaData', info)),
 		);
 		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_INFO),
 			map((event) => event.additionalData.matchInfo as MatchInfo),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] matchInfo', info)),
 		);
 		const playerDeck$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
@@ -60,41 +58,25 @@ export class EndGameListenerService {
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
 		);
-		const duelsInfo$ = this.duelsState.duelsInfo$$
-			.asObservable()
-			.pipe
-			// tap((info) => console.debug('[manastorm-bridge] duelsInfo', info))
-			();
-		const duelsRunId$ = this.duelsRunIdService.duelsRunId$
-			.pipe
-			// tap((info) => console.debug('[manastorm-bridge] duelsRunId', info)),
-			();
+		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe();
+		const duelsRunId$ = this.duelsRunIdService.duelsRunId$.pipe();
 		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.ARENA_INFO),
 			map((event) => event.additionalData.arenaInfo as ArenaInfo),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] arenaInfo', info)),
 		);
-		const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$.pipe(
-			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] mercsInfo', info)),
-		);
-		const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$.pipe(
-			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] mercsCollectionInfo', info)),
-		);
+		const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$.pipe(startWith(null));
+		const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$.pipe(startWith(null));
 		const bgInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.BATTLEGROUNDS_INFO),
 			map((event) => event.additionalData.bgInfo as BattlegroundsInfo),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] bgInfo', info)),
 		);
 		const gameSettings$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.GAME_SETTINGS),
 			map((event) => event as GameSettingsEvent),
 			map((event) => event.additionalData),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] gameSettings', info)),
 		);
 		// This is triggered really early: as soon as the GameState match is over (no need to wait for
 		// the final combat animations)
@@ -104,7 +86,6 @@ export class EndGameListenerService {
 			map((changes) => changes.BattlegroundsNewRating),
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
-			// share(), // This prevents the trigger of other observables?
 		);
 		const reviewId$ = this.reviewIdService.reviewId$;
 		// Doesn't work, reviewId arrives earlier
@@ -145,7 +126,6 @@ export class EndGameListenerService {
 				}
 			}),
 			startWith({ ended: false, spectating: false, game: null, replayXml: null }),
-			// tap((info) => console.debug('[manastorm-bridge] gameEnded', info)),
 		);
 
 		// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible
@@ -221,7 +201,6 @@ export class EndGameListenerService {
 					// console.debug('[manastorm-bridge] comparing', a, b);
 					return a?.reviewId === b?.reviewId && a?.gameEnded?.ended === b?.gameEnded?.ended;
 				}),
-				// tap((info) => console.debug('[manastorm-bridge] triggering end game pipes')),
 				filter((info) => !!info.reviewId && info.gameEnded.ended),
 				tap((info) =>
 					console.log('[manastorm-bridge] end game, uploading? spectating=', info.gameEnded.spectating),
@@ -230,8 +209,6 @@ export class EndGameListenerService {
 				tap((info) =>
 					console.log('[manastorm-bridge] not a spectate game, continuing', info.metadata, info.playerDeck),
 				),
-				// tap((info) => console.debug('[manastorm-bridge] will prepare for upload', info)),
-				// map(info => )
 			)
 			.subscribe((info) => {
 				this.prepareUpload(info);

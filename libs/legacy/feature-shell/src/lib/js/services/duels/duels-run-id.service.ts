@@ -3,7 +3,7 @@ import { isSignatureTreasure } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
@@ -100,7 +100,6 @@ export class DuelsRunIdService {
 				}),
 				startWith(uuid()),
 				distinctUntilChanged(),
-				tap((info) => console.debug('[duels-run] emitting runId', info)),
 			)
 			.subscribe(this.duelsRunId$);
 	}

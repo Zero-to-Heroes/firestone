@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable, tap } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedEjectDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-eject-deck-version-event';
@@ -119,7 +119,6 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreCo
 						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
 				),
 			),
-			tap((info) => console.debug('deck info', info)),
 		);
 		this.selectedVersion$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.selectedVersionDeckstring)

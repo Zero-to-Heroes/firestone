@@ -7,7 +7,7 @@ import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/share
 import { Events } from '@legacy-import/src/lib/js/services/events.service';
 import { GameForUpload } from '@legacy-import/src/lib/js/services/manastorm-bridge/game-for-upload';
 import { combineLatest } from 'rxjs';
-import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -46,14 +46,12 @@ export class DuelsLootParserService {
 		// - only send the info when it is "ready", i.e. the memory has been populated with the info we need
 		const memoryReadyToEmit$ = this.duelsState.duelsInfo$$.pipe(
 			filter((info) => !!info),
-			tap((info) => console.debug('[duels-loot] memory info updated', info)),
 			map((duelsInfo) => {
 				const signatureTreasure = findSignatureTreasure(duelsInfo.DeckList, this.allCards);
 				console.debug('[duels-loot] signatureTreasure from decklist', signatureTreasure, duelsInfo.DeckList);
 				// It is important to only send the data once we have everything
 				return !!signatureTreasure && (!!duelsInfo?.StartingHeroPower || !!duelsInfo?.StartingHeroPowerCardId);
 			}),
-			tap((info) => console.debug('[duels-loot] memory ready, we can emit the next event?', info)),
 		);
 
 		combineLatest([this.gameEvents.allEvents, memoryReadyToEmit$])
