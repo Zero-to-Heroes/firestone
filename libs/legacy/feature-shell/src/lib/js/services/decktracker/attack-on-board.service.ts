@@ -73,10 +73,11 @@ export class AttackOnBoardService {
 		if (hasTag(entity, GameTag.SILENCED)) {
 			return 1;
 		}
-		if (hasTag(entity, GameTag.MEGA_WINDFURY) || hasTag(entity, GameTag.WINDFURY, 3)) {
-			return 4;
-		}
-		if (hasTag(entity, GameTag.WINDFURY)) {
+		if (
+			hasTag(entity, GameTag.MEGA_WINDFURY) ||
+			hasTag(entity, GameTag.WINDFURY, 3) ||
+			hasTag(entity, GameTag.WINDFURY)
+		) {
 			return 2;
 		}
 		return 1;

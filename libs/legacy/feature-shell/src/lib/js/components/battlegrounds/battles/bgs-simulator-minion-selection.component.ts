@@ -13,7 +13,7 @@ import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -101,11 +101,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								[label]="'global.hs-terms.windfury' | owTranslate"
 								[value]="windfury"
 								(valueChanged)="onWindfuryChanged($event)"
-							></checkbox>
-							<checkbox
-								[label]="'global.hs-terms.mega-windfury' | owTranslate"
-								[value]="megaWindfury"
-								(valueChanged)="onMegaWindfuryChanged($event)"
 							></checkbox>
 							<checkbox
 								[label]="'battlegrounds.sim.summon-mechs' | owTranslate"
@@ -208,7 +203,6 @@ export class BgsSimulatorMinionSelectionComponent
 	health: number;
 	stealth: boolean;
 	windfury: boolean;
-	megaWindfury: boolean;
 	summonMechs: boolean;
 	summonPlants: boolean;
 	sneeds = 0;
@@ -367,13 +361,6 @@ export class BgsSimulatorMinionSelectionComponent
 		}
 	}
 
-	onMegaWindfuryChanged(value: boolean) {
-		this.megaWindfury = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	onSummonMechsChanged(value: boolean) {
 		this.summonMechs = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -435,8 +422,9 @@ export class BgsSimulatorMinionSelectionComponent
 		this.reborn = this.ref.mechanics?.includes(GameTag[GameTag.REBORN]);
 		this.taunt = this.ref.mechanics?.includes(GameTag[GameTag.TAUNT]);
 		this.stealth = this.ref.mechanics?.includes(GameTag[GameTag.STEALTH]);
-		this.windfury = this.ref.mechanics?.includes(GameTag[GameTag.WINDFURY]);
-		this.megaWindfury = this.ref.mechanics?.includes(GameTag[GameTag.MEGA_WINDFURY]);
+		this.windfury =
+			this.ref.mechanics?.includes(GameTag[GameTag.WINDFURY]) ||
+			this.ref.mechanics?.includes(GameTag[GameTag.MEGA_WINDFURY]);
 		// The cards that summon 1/1s as part of their normal abilities are already handled in the sim
 		this.updateCard();
 	}
@@ -457,7 +445,6 @@ export class BgsSimulatorMinionSelectionComponent
 			reborn: this.reborn,
 			stealth: this.stealth,
 			windfury: this.windfury,
-			megaWindfury: this.megaWindfury,
 			enchantments: [
 				this.summonMechs
 					? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e }
@@ -499,7 +486,6 @@ export class BgsSimulatorMinionSelectionComponent
 		this.taunt = this._entity.taunt;
 		this.stealth = this._entity.stealth;
 		this.windfury = this._entity.windfury;
-		this.megaWindfury = this._entity.megaWindfury;
 		this.summonMechs = this._entity.enchantments
 			.map((e) => e.cardId)
 			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e);

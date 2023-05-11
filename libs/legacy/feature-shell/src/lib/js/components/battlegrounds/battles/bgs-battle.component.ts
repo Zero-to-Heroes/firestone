@@ -14,7 +14,7 @@ import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
-import { defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
+import { GameTag, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -896,8 +896,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			health: entity.getTag(GameTag.HEALTH),
 			divineShield: entity.getTag(GameTag.DIVINE_SHIELD) === 1,
 			friendly: true,
-			megaWindfury: entity.getTag(GameTag.MEGA_WINDFURY) === 1,
-			windfury: entity.getTag(GameTag.WINDFURY) === 1,
+			windfury: entity.getTag(GameTag.WINDFURY) === 1 || entity.getTag(GameTag.MEGA_WINDFURY) === 1,
 			stealth: entity.getTag(GameTag.STEALTH) === 1,
 			poisonous: entity.getTag(GameTag.POISONOUS) === 1,
 			reborn: entity.getTag(GameTag.REBORN) === 1,

@@ -4,7 +4,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, map } from 'rxjs/operators';
 import {
 	TwitchBgsBoard,
@@ -365,7 +365,6 @@ export class TwitchAuthService {
 			GameTag.EXHAUSTED,
 			GameTag.HEALTH,
 			GameTag.LIFESTEAL,
-			GameTag.MEGA_WINDFURY,
 			GameTag.POISONOUS,
 			GameTag.PREMIUM,
 			GameTag.REBORN,

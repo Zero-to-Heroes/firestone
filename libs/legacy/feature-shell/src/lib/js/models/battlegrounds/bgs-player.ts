@@ -1,4 +1,4 @@
-import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
@@ -138,8 +138,8 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		taunt: logEntity.Tags.find((tag) => tag.Name === GameTag.TAUNT)?.Value === 1,
 		cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
 		stealth: logEntity.Tags.find((tag) => tag.Name === GameTag.STEALTH)?.Value === 1,
-		windfury: logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 1,
-		megaWindfury:
+		windfury:
+			logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 1 ||
 			logEntity.Tags.find((tag) => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
 			logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
 		friendly: true,
