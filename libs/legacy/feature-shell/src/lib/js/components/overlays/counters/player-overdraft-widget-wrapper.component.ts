@@ -39,7 +39,7 @@ export class PlayerOverdraftWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerOverdraftCounter;
 		this.deckStateExtractor = (state) =>
-			!!state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.Overdraft_CORE_SW_114, CardIds.Overdraft_SW_114]);
+			!!state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.OverdraftCore, CardIds.Overdraft]);
 		super.ngAfterContentInit();
 	}
 }

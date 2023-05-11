@@ -409,6 +409,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 464;
 		case CardIds.ETCBandManager_BG25_HERO_105:
 			return 478;
+		case CardIds.RockMasterVoone_BG26_HERO_104:
+			return 481;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);
@@ -670,6 +672,21 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'piloted-whirl-o-tron',
 			};
+		} else if (hasMinions(boardInfo, [CardIds.RylakMetalhead, CardIds.RylakMetalheadBattlegrounds])) {
+			return {
+				isSupported: false,
+				reason: 'rylak',
+			};
+		} else if (hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
+			return {
+				isSupported: false,
+				reason: 'bassgill',
+			};
+		} else if (hasMinions(boardInfo, [CardIds.ChoralMrrrglr, CardIds.ChoralMrrrglrBattlegrounds])) {
+			return {
+				isSupported: false,
+				reason: 'choral-mrrrglr',
+			};
 		} else if (boardInfo?.secrets?.length > 0) {
 			return {
 				isSupported: false,
@@ -693,6 +710,10 @@ const isSupportedScenarioForPlayer = (
 	}
 };
 
+const hasMinions = (boardInfo: BgsBoardInfo, cardIds: readonly CardIds[]) => {
+	return cardIds.some((cardId) => hasMinionOnBoard(boardInfo, cardId));
+};
+
 const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	return (
 		hasMinionOnBoard(boardInfo, CardIds.Scallywag) || hasMinionOnBoard(boardInfo, CardIds.ScallywagBattlegrounds)
@@ -703,6 +724,13 @@ const hasPilotedWhirlOTron = (boardInfo: BgsBoardInfo) => {
 	return (
 		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron) ||
 		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTronBattlegrounds)
+	);
+};
+
+const hasRylak = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead) ||
+		hasMinionOnBoard(boardInfo, CardIds.RylakMetalheadBattlegrounds)
 	);
 };
 
@@ -747,8 +775,10 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 			[GameTag[GameTag.STEALTH]]: minion.stealth ? 1 : 0,
 			[GameTag[GameTag.DIVINE_SHIELD]]: minion.divineShield ? 1 : 0,
 			[GameTag[GameTag.POISONOUS]]: minion.poisonous ? 1 : 0,
+			[GameTag[GameTag.VENOMOUS]]: minion.venomous ? 1 : 0,
 			[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,
-			[GameTag[GameTag.WINDFURY]]: minion.windfury || minion.megaWindfury ? 1 : 0,
+			[GameTag[GameTag.WINDFURY]]: minion.windfury ? 1 : 0,
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]]: minion.scriptDataNum1,
 			[GameTag[GameTag.PREMIUM]]: allCards.getCard(minion.cardId)?.battlegroundsNormalDbfId ? 1 : 0,
 		},
 		// This probably won't work with positioning auras, but I don't think there are many

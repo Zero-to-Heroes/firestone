@@ -28,8 +28,8 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.FreezingTrapCore,
 		CardIds.FreezingTrapVanilla,
 		CardIds.VenomstrikeTrap_ICC_200,
-		CardIds.WanderingMonster_CORE_LOOT_079,
-		CardIds.WanderingMonster_LOOT_079,
+		CardIds.WanderingMonsterCore,
+		CardIds.WanderingMonster,
 		CardIds.FlameWard,
 		CardIds.IceBarrierLegacy,
 		CardIds.IceBarrierCore,
@@ -177,8 +177,8 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy_EX1_610);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapVanilla);
-			secretsWeCantRuleOut.push(CardIds.WanderingMonster_CORE_LOOT_079);
-			secretsWeCantRuleOut.push(CardIds.WanderingMonster_LOOT_079);
+			secretsWeCantRuleOut.push(CardIds.WanderingMonsterCore);
+			secretsWeCantRuleOut.push(CardIds.WanderingMonster);
 			secretsWeCantRuleOut.push(CardIds.FlameWard);
 			secretsWeCantRuleOut.push(CardIds.IceBarrierLegacy);
 			secretsWeCantRuleOut.push(CardIds.IceBarrierCore);

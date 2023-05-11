@@ -5,8 +5,8 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import {
-	battlecryGlobalEffectCards,
 	COUNTERSPELLS,
+	battlecryGlobalEffectCards,
 	globalEffectCards,
 	startOfGameGlobalEffectCards,
 } from '../../hs-utils';
@@ -133,7 +133,9 @@ export class CardPlayedFromHandParser implements EventParser {
 			if (
 				battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
 				deck.board.some((c) =>
-					[CardIds.BrannBronzebeardCore, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
+					[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(
+						c.cardId as CardIds,
+					),
 				)
 			) {
 				numberOfGlobalEffectsToAdd = 2;

@@ -9,7 +9,8 @@ export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {
 export interface PlayerBoard {
 	readonly heroCardId: string;
 	readonly board: readonly PlayerBoardEntity[];
-	readonly secrets: readonly any[];
+	readonly hand: readonly PlayerBoardEntity[];
+	readonly secrets: readonly PlayerBoardEntity[];
 	readonly hero: PlayerBoardHeroEntity;
 	readonly heroPowerCardId: string;
 	readonly heroPowerUsed: boolean;

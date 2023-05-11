@@ -78,9 +78,9 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								(valueChanged)="onDivineShieldChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.poisonous' | owTranslate"
-								[value]="poisonous"
-								(valueChanged)="onPoisonousChanged($event)"
+								[label]="'global.hs-terms.venomous' | owTranslate"
+								[value]="venomous"
+								(valueChanged)="onVenomousChanged($event)"
 							></checkbox>
 							<checkbox
 								[label]="'global.hs-terms.reborn' | owTranslate"
@@ -196,7 +196,7 @@ export class BgsSimulatorMinionSelectionComponent
 	cardId: string;
 	premium: boolean;
 	divineShield: boolean;
-	poisonous: boolean;
+	venomous: boolean;
 	reborn: boolean;
 	taunt: boolean;
 	attack: number;
@@ -206,6 +206,7 @@ export class BgsSimulatorMinionSelectionComponent
 	summonMechs: boolean;
 	summonPlants: boolean;
 	sneeds = 0;
+	scriptDataNum1: number;
 
 	searchString = new BehaviorSubject<string>(null);
 
@@ -375,8 +376,8 @@ export class BgsSimulatorMinionSelectionComponent
 		}
 	}
 
-	onPoisonousChanged(value: boolean) {
-		this.poisonous = value;
+	onVenomousChanged(value: boolean) {
+		this.venomous = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -411,6 +412,11 @@ export class BgsSimulatorMinionSelectionComponent
 		this.updateCard();
 	}
 
+	onDataScript1Changed(value: number) {
+		this.scriptDataNum1 = value;
+		this.updateCard();
+	}
+
 	selectMinion(minion: Minion) {
 		this.cardId = minion.id;
 		this.ref = this.allCards.getCard(this.cardId);
@@ -418,7 +424,7 @@ export class BgsSimulatorMinionSelectionComponent
 		this.attack = this.ref.attack;
 		this.health = this.ref.health;
 		this.divineShield = this.ref.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
-		this.poisonous = this.ref.mechanics?.includes(GameTag[GameTag.POISONOUS]);
+		this.venomous = this.ref.mechanics?.includes(GameTag[GameTag.VENOMOUS]);
 		this.reborn = this.ref.mechanics?.includes(GameTag[GameTag.REBORN]);
 		this.taunt = this.ref.mechanics?.includes(GameTag[GameTag.TAUNT]);
 		this.stealth = this.ref.mechanics?.includes(GameTag[GameTag.STEALTH]);
@@ -440,7 +446,8 @@ export class BgsSimulatorMinionSelectionComponent
 			attack: this.attack,
 			health: this.health,
 			divineShield: this.divineShield,
-			poisonous: this.poisonous,
+			venomous: this.venomous,
+			scriptDataNum1: this.scriptDataNum1,
 			taunt: this.taunt,
 			reborn: this.reborn,
 			stealth: this.stealth,
@@ -481,7 +488,8 @@ export class BgsSimulatorMinionSelectionComponent
 		this.attack = this._entity.attack;
 		this.health = this._entity.health;
 		this.divineShield = this._entity.divineShield;
-		this.poisonous = this._entity.poisonous;
+		this.venomous = this._entity.venomous;
+		this.scriptDataNum1 = this._entity.scriptDataNum1;
 		this.reborn = this._entity.reborn;
 		this.taunt = this._entity.taunt;
 		this.stealth = this._entity.stealth;

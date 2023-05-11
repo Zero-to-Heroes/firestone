@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -194,9 +195,31 @@ export class BgsBattleStatusComponent {
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',
 					{
-						value: this.i18n.translateString(
-							'battlegrounds.battle.composition-not-supported.reason-piloted-whirl-o-tron',
-						),
+						value: this.allCards.getCard(CardIds.PilotedWhirlOTron).name,
+					},
+				);
+				break;
+			case 'rylak':
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.allCards.getCard(CardIds.RylakMetalhead).name,
+					},
+				);
+				break;
+			case 'choral-mrrrglr':
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.allCards.getCard(CardIds.ChoralMrrrglr).name,
+					},
+				);
+				break;
+			case 'bassgill':
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.allCards.getCard(CardIds.Bassgill).name,
 					},
 				);
 				break;
@@ -284,6 +307,7 @@ export class BgsBattleStatusComponent {
 		private readonly i18n: LocalizationFacadeService,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly bgsSim: BgsBattleSimulationService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {

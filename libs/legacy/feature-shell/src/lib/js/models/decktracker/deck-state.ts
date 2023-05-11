@@ -349,7 +349,8 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
-					card.cardId === CardIds.MurozondTheInfinite || card.cardId === CardIds.MurozondTheInfiniteCore,
+					card.cardId === CardIds.MurozondTheInfinite_DRG_090 ||
+					card.cardId === CardIds.MurozondTheInfinite_CORE_DRG_090,
 			);
 	}
 

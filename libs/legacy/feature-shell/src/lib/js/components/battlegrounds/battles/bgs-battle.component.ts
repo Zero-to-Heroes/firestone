@@ -899,6 +899,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			windfury: entity.getTag(GameTag.WINDFURY) === 1 || entity.getTag(GameTag.MEGA_WINDFURY) === 1,
 			stealth: entity.getTag(GameTag.STEALTH) === 1,
 			poisonous: entity.getTag(GameTag.POISONOUS) === 1,
+			venomous: entity.getTag(GameTag.VENOMOUS) === 1,
 			reborn: entity.getTag(GameTag.REBORN) === 1,
 			taunt: entity.getTag(GameTag.TAUNT) === 1,
 			enchantments: entity['enchantments'],

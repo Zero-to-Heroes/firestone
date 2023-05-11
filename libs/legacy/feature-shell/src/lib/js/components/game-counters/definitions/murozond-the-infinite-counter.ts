@@ -30,7 +30,7 @@ export class MurozondTheInfiniteCounterDefinition implements CounterDefinition {
 		return {
 			type: 'murozondTheInfinite',
 			value: null,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MurozondTheInfinite}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MurozondTheInfinite_DRG_090}.jpg`,
 			cssClass: 'murozond-counter',
 			tooltip: null,
 			cardTooltips: cardsPlayedLastTurn,

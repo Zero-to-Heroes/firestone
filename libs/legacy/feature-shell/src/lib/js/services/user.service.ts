@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, filter } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
 import { AdService } from './ad.service';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
@@ -29,7 +29,10 @@ export class UserService {
 
 	public async init(store: MainWindowStoreService) {
 		combineLatest([this.ads.isPremium$$, this.user$$])
-			.pipe(filter(([premium, user]) => !!user))
+			.pipe(
+				debounceTime(500),
+				filter(([premium, user]) => !!user),
+			)
 			.subscribe(([premium, user]) => {
 				console.log('[user-service] info', premium, user);
 				this.sendCurrentUser(user, premium);
@@ -48,9 +51,9 @@ export class UserService {
 
 	private async retrieveUserInfo() {
 		let user = await this.ow.getCurrentUser();
-		console.log('[user-service] retrieved user info', user);
+		// console.log('[user-service] retrieved user info', user);
 		while (user?.username && !user.avatar) {
-			console.log('[user-service] no avatar yet', user);
+			// console.log('[user-service] no avatar yet', user);
 			user = await this.ow.getCurrentUser();
 			await sleep(500);
 		}
@@ -64,7 +67,7 @@ export class UserService {
 			return;
 		}
 
-		console.log('[user-service] sending current user', user, isPremium);
+		// console.log('[user-service] sending current user', user, isPremium);
 		this.store.stateUpdater.next(new CurrentUserEvent(user));
 		if (!!user.username) {
 			await this.api.callPostApi(USER_MAPPING_UPDATE_URL, {

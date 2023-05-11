@@ -10,7 +10,7 @@ export class CurrentUserProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('assigning current user', event.currentUser);
+		// console.log('assigning current user', event.currentUser);
 		return [
 			currentState.update({
 				currentUser: event.currentUser,

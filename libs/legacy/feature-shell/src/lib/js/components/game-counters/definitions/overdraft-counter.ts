@@ -28,7 +28,7 @@ export class OverdraftCounterDefinition implements CounterDefinition {
 			type: 'overdraft',
 			value: currentOverloaded,
 			valueImg: null,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Overdraft_SW_114}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Overdraft}.jpg`,
 			cssClass: 'overdraft-counter',
 			tooltip: tooltip,
 			standardCounter: true,

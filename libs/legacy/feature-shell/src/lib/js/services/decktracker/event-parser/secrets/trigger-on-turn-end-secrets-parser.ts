@@ -7,11 +7,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnEndSecretsParser implements EventParser {
-	private secretsTriggeringOnTurnEnd = [
-		CardIds.RiggedFaireGame,
-		CardIds.Plagiarize_CORE_SCH_706,
-		CardIds.Plagiarize_SCH_706,
-	];
+	private secretsTriggeringOnTurnEnd = [CardIds.RiggedFaireGame, CardIds.PlagiarizeCore, CardIds.Plagiarize];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
@@ -37,15 +33,15 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
-			secretsWeCantRuleOut.push(CardIds.Plagiarize_CORE_SCH_706);
-			secretsWeCantRuleOut.push(CardIds.Plagiarize_SCH_706);
+			secretsWeCantRuleOut.push(CardIds.PlagiarizeCore);
+			secretsWeCantRuleOut.push(CardIds.Plagiarize);
 		}
 
 		const hasOpponentPlayedCards = playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn.length > 0;
 
 		if (!hasOpponentPlayedCards) {
-			secretsWeCantRuleOut.push(CardIds.Plagiarize_CORE_SCH_706);
-			secretsWeCantRuleOut.push(CardIds.Plagiarize_SCH_706);
+			secretsWeCantRuleOut.push(CardIds.PlagiarizeCore);
+			secretsWeCantRuleOut.push(CardIds.Plagiarize);
 		}
 
 		const hasHeroTakenDamage = deckWithSecretToCheck.damageTakenThisTurn > 0;

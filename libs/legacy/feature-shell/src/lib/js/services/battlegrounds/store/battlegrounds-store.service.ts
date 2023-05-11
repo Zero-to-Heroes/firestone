@@ -30,6 +30,7 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../bgs-best-user-stats.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { isBattlegrounds } from '../bgs-utils';
+import { EventParser } from './event-parsers/_event-parser';
 import { BgsArmorChangedParser } from './event-parsers/bgs-armor-changed-parser';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
@@ -72,7 +73,7 @@ import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
-import { EventParser } from './event-parsers/_event-parser';
+import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BgsArmorChangedEvent } from './events/bgs-armor-changed-event';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
@@ -100,7 +101,6 @@ import { BgsToggleOverlayWindowEvent } from './events/bgs-toggle-overlay-window-
 import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
 import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
 import { NoBgsMatchEvent } from './events/no-bgs-match-event';
-import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 import { RealTimeStatsState } from './real-time-stats/real-time-stats';
@@ -310,6 +310,7 @@ export class BattlegroundsStoreService {
 							heroCardId: gameEvent.additionalData.playerBoard.cardId,
 							board: gameEvent.additionalData.playerBoard.board,
 							secrets: gameEvent.additionalData.playerBoard.secrets,
+							hand: gameEvent.additionalData.playerBoard.hand,
 							hero: gameEvent.additionalData.playerBoard.hero,
 							heroPowerCardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
 							heroPowerUsed: gameEvent.additionalData.playerBoard.heroPowerUsed,
@@ -321,6 +322,7 @@ export class BattlegroundsStoreService {
 							heroCardId: gameEvent.additionalData.opponentBoard.cardId,
 							board: gameEvent.additionalData.opponentBoard.board,
 							secrets: gameEvent.additionalData.opponentBoard.secrets,
+							hand: gameEvent.additionalData.opponentBoard.hand,
 							hero: gameEvent.additionalData.opponentBoard.hero,
 							heroPowerCardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
 							heroPowerUsed: gameEvent.additionalData.opponentBoard.heroPowerUsed,

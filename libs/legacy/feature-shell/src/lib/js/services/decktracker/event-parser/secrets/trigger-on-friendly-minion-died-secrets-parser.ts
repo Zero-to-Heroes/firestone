@@ -16,8 +16,8 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.RedemptionVanilla,
 		CardIds.Avenge_FP1_020,
 		CardIds.Avenge_CORE_FP1_020,
-		CardIds.CheatDeath_CORE_LOOT_204,
-		CardIds.CheatDeath_LOOT_204,
+		CardIds.CheatDeathCore,
+		CardIds.CheatDeath,
 		CardIds.EmergencyManeuvers,
 		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
 	];
@@ -48,8 +48,8 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		if (isHandFull) {
 			secretsWeCantRuleOut.push(CardIds.Duplicate);
 			secretsWeCantRuleOut.push(CardIds.GetawayKodo);
-			secretsWeCantRuleOut.push(CardIds.CheatDeath_CORE_LOOT_204);
-			secretsWeCantRuleOut.push(CardIds.CheatDeath_LOOT_204);
+			secretsWeCantRuleOut.push(CardIds.CheatDeathCore);
+			secretsWeCantRuleOut.push(CardIds.CheatDeath);
 		}
 
 		// If it's the only minion on board, we trigger nothing

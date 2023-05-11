@@ -19,8 +19,8 @@ import {
 	battlecry,
 	beast,
 	cardIs,
-	cardsPlayedThisMatch,
 	cardType,
+	cardsPlayedThisMatch,
 	chooseOne,
 	combo,
 	corrupt,
@@ -83,7 +83,7 @@ import {
 	tribeless,
 	undead,
 	weapon,
-	whelp
+	whelp,
 } from './selectors';
 
 @Injectable()
@@ -449,8 +449,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.CastleKennels_REV_362:
 			case CardIds.CastleKennels_REV_790:
 				return and(side(inputSide), inDeck, minion, beast);
-			case CardIds.CatrinaMuerte_CORE_DAL_721:
-			case CardIds.CatrinaMuerte_DAL_721:
+			case CardIds.CatrinaMuerteCore:
+			case CardIds.CatrinaMuerte:
 				return and(side(inputSide), inGraveyard, undead, minion);
 			case CardIds.ChattyBartender:
 				return and(side(inputSide), inDeck, secret);
@@ -571,8 +571,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minion, deathrattle);
 			case CardIds.FaithfulCompanions:
 				return and(side(inputSide), inDeck, minion, beast);
-			case CardIds.FandralStaghelm:
-			case CardIds.FandralStaghelmCore:
+			case CardIds.FandralStaghelm_CORE_OG_044:
+			case CardIds.FandralStaghelm_OG_044:
 				return and(side(inputSide), inDeck, chooseOne);
 			case CardIds.FeldoreiWarband:
 				return and(side(inputSide), inDeck, minion);

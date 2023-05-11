@@ -10,8 +10,8 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnSpellPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnSpellPlayed = [
-		CardIds.CatTrick_CORE_KAR_004,
-		CardIds.CatTrick_KAR_004,
+		CardIds.CatTrickCore,
+		CardIds.CatTrick,
 		CardIds.IceTrap,
 		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 		CardIds.PressurePlate,
@@ -112,8 +112,8 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
-			secretsWeCantRuleOut.push(CardIds.CatTrick_CORE_KAR_004);
-			secretsWeCantRuleOut.push(CardIds.CatTrick_KAR_004);
+			secretsWeCantRuleOut.push(CardIds.CatTrickCore);
+			secretsWeCantRuleOut.push(CardIds.CatTrick);
 			secretsWeCantRuleOut.push(CardIds.NetherwindPortal);
 			secretsWeCantRuleOut.push(CardIds.StickySituation);
 		}

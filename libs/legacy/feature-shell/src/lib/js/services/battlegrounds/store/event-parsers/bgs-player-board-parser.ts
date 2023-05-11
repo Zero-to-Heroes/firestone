@@ -15,8 +15,8 @@ import { GameEvents } from '../../../game-events.service';
 import { LogsUploaderService } from '../../../logs-uploader.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
-import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
 import { EventParser } from './_event-parser';
 
 export class BgsPlayerBoardParser implements EventParser {
@@ -152,6 +152,7 @@ export class BgsPlayerBoardParser implements EventParser {
 	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board, this.allCards);
 		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets, this.allCards);
+		const hand: BoardEntity[] = player.buildBgsEntities(playerBoard.hand, this.allCards);
 		let tavernTier =
 			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
 			player.getCurrentTavernTier();
@@ -180,6 +181,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,
 				questRewards: playerBoard.questRewards,
+				hand: hand,
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 					UndeadAttackBonus: playerBoard.globalInfo?.UndeadAttackBonus ?? 0,
