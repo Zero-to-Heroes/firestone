@@ -17,6 +17,9 @@ const GAME_CONNECTOR_MOD_URL =
 	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/latest/download/GameEventsConnector.dll';
 const GAME_CONNECTOR_FLECK_URL =
 	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/download/0.0.1/Fleck.dll';
+const UNSTRIPPED_LIBS_BASE_URL =
+	'https://github.com/Zero-to-Heroes/firestone-melon-mods-manager/releases/download/0.0.2/';
+const UNSTRIPPED_LIBS = ['mscorlib.dll', 'Mono.Security.dll', 'System.Core.dll', 'System.dll', 'UniTask.dll'];
 
 // TODO: most likely, this whole class should be incorporated into mods-manager
 @Injectable()
@@ -107,6 +110,14 @@ export class ModsUtilsService {
 
 		// Copy the Managed libs
 		this.currentModsStatus$$.next('settings.general.mods.refreshing-engine');
+		for (const lib of UNSTRIPPED_LIBS) {
+			await this.io.downloadFileTo(
+				`${UNSTRIPPED_LIBS_BASE_URL}/${lib}`,
+				`${installPath}/MelonLoader/Managed`,
+				lib,
+			);
+		}
+
 		const result = await this.refreshEngine(installPath);
 		if (result === 'installed') {
 			this.currentModsStatus$$.next('settings.general.mods.mods-ready');
@@ -174,7 +185,12 @@ export class ModsUtilsService {
 			console.warn('Cannot refresh if mods are not enabled', installPath);
 			return 'not-installed';
 		}
-		await this.io.copyFiles(`${installPath}\\MelonLoader\\Managed`, `${installPath}\\Hearthstone_Data\\Managed`);
+		for (const lib of UNSTRIPPED_LIBS) {
+			await this.io.copyFile(
+				`${installPath}\\MelonLoader\\Managed\\${lib}`,
+				`${installPath}\\Hearthstone_Data\\Managed`,
+			);
+		}
 		return 'installed';
 	}
 

@@ -80,6 +80,22 @@ export class OwUtilsService {
 		});
 	}
 
+	public async copyFile(sourcePath: string, destinationDirectory: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.log('[ow-utils] copyFile', sourcePath, destinationDirectory);
+			const plugin = await this.get();
+			try {
+				plugin.copyFile(sourcePath, destinationDirectory, () => {
+					console.log('[ow-utils] copyFiled', sourcePath, destinationDirectory);
+					resolve();
+				});
+			} catch (e) {
+				console.warn('[ow-utils] could not copyFile', sourcePath, destinationDirectory, e);
+				resolve();
+			}
+		});
+	}
+
 	public async copyFiles(sourceDirectory: string, destinationDirectory: string): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			console.log('[ow-utils] copyFiles', sourceDirectory, destinationDirectory);
@@ -98,16 +114,16 @@ export class OwUtilsService {
 
 	public async downloadAndUnzipFile(fileUrl: string, path: string): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
-			console.log('[ow-utils] downloadAndUnzipFile-ing', path);
+			console.log('[ow-utils] downloadAndUnzipFile-ing', fileUrl, path);
 			const plugin = await this.get();
 			try {
 				plugin.downloadAndUnzipFile(fileUrl, path, (status, message) => {
 					if (status) {
 						console.log('[ow-utils] downloadAndUnzipFiled', path);
-						resolve();
 					} else {
 						console.log('[ow-utils] downloadAndUnzipFile message', message);
 					}
+					resolve();
 				});
 			} catch (e) {
 				console.warn('[ow-utils] could not downloadAndUnzipFile', fileUrl, path, e);
