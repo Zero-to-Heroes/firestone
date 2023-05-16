@@ -13,12 +13,12 @@ import {
 	CardIds,
 	GameTag,
 	NON_DISCOVERABLE_BUDDIES,
-	normalizeHeroCardId,
 	Race,
 	ReferenceCard,
+	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { getAllCardsInGame, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -117,6 +117,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						races,
 						normalizedCardId,
 						allPlayerCardIds,
+						hasBuddies,
 					);
 					return result;
 				},
@@ -157,6 +158,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		availableTribes: readonly Race[],
 		playerCardId: string,
 		allPlayerCardIds: readonly string[],
+		hasBuddies: boolean,
 	): readonly Tier[] {
 		if (!cardsInGame?.length) {
 			return [];
@@ -179,7 +181,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			type: 'standard',
 		}));
 		const mechanicsTiers = showMechanicsTiers
-			? this.buildMechanicsTiers(cardsInGame, playerCardId, availableTribes, allPlayerCardIds)
+			? this.buildMechanicsTiers(cardsInGame, playerCardId, availableTribes, hasBuddies, allPlayerCardIds)
 			: [];
 		return [...standardTiers, ...mechanicsTiers];
 	}
@@ -188,6 +190,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		cardsInGame: readonly ReferenceCard[],
 		playerCardId: string,
 		availableTribes: readonly Race[],
+		hasBuddies: boolean,
 		allPlayerCardIds: readonly string[],
 	): readonly Tier[] {
 		const mechanicalTiers: Tier[] = [
@@ -252,13 +255,13 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			},
 		];
 		// Add a tier with all the buddies
-		if (
-			[
-				CardIds.ETCBandManager_BG25_HERO_105,
-				CardIds.TessGreymaneBattlegrounds,
-				CardIds.ScabbsCutterbutter_BG21_HERO_010,
-			].includes(playerCardId as CardIds)
-		) {
+		const showBuddiesTier =
+			playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
+			(hasBuddies &&
+				[CardIds.TessGreymaneBattlegrounds, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+					playerCardId as CardIds,
+				));
+		if (showBuddiesTier) {
 			const allBuddies = this.allCards
 				.getCards()
 				.filter((c) => !!c.techLevel)
