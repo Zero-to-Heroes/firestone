@@ -1,5 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import {
@@ -9,7 +10,7 @@ import {
 	BgsHeroStratAuthor,
 	BgsHeroStratTip,
 } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-strategies.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -94,7 +95,7 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreCompone
 				const stratsForHero: readonly BgsHeroStratTip[] =
 					strats.heroes.find((h) => h.id === heroId)?.tips ?? [];
 
-				return stratsForHero.map((strat) => {
+				return [...stratsForHero].sort(sortByProperties((s) => [-s.patch])).map((strat) => {
 					const author: BgsHeroStratAuthor = strats.authors.find((a) => a.id === strat.author);
 					const patch: PatchInfo = patchConfig?.patches?.find((p) => p.number === strat.patch);
 					const result: Strategy = {
