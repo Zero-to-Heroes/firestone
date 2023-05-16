@@ -16,14 +16,22 @@ export class NewTurnParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const numericTurn = currentState.playerDeck.isFirstPlayer
-			? Math.floor(gameEvent.additionalData.turnNumber / 2)
-			: Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
+		const gameTurnNumber = gameEvent.additionalData.turnNumber;
+		const numericTurn = Math.ceil(gameTurnNumber / 2);
+		// console.debug(
+		// 	'[turn-start] numericTurn',
+		// 	numericTurn,
+		// 	gameTurnNumber,
+		// 	currentState.playerDeck.isFirstPlayer,
+		// 	currentState,
+		// );
 
 		const currentTurn = currentState.mulliganOver || numericTurn >= 2 ? numericTurn : 'mulligan';
+		// console.debug('[turn-start] currentTurn', currentTurn, currentState.mulliganOver, numericTurn);
 		const isPlayerActive = currentState.playerDeck.isFirstPlayer
-			? gameEvent.additionalData.turnNumber % 2 === 1
-			: gameEvent.additionalData.turnNumber % 2 === 0;
+			? gameTurnNumber % 2 === 1
+			: gameTurnNumber % 2 === 0;
+		// console.debug('[turn-start] isPlayerActive', isPlayerActive, currentState.playerDeck.isFirstPlayer);
 		if (
 			isPlayerActive &&
 			!isBattlegrounds(currentState.metadata.gameType) &&
@@ -70,7 +78,7 @@ export class NewTurnParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			currentTurn: currentTurn,
-			gameTagTurnNumber: gameEvent.additionalData.turnNumber,
+			gameTagTurnNumber: gameTurnNumber,
 			playerDeck: playerDeck,
 			opponentDeck: opponentDeck,
 			mulliganOver: currentState.mulliganOver || numericTurn >= 2,
