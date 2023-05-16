@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
@@ -135,13 +135,16 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 			const matches: readonly GameStat[] = matchesGroupedByRun[runId];
 			const rewards = rewardsGroupedByRun[runId];
 			const firstMatch = matches[0];
+			const sortedMatches = [...matches].sort((a, b) => a.creationTimestamp - b.creationTimestamp);
+			const [wins, losses] = this.extractWins(sortedMatches);
+			console.debug('extracted wins', wins, losses, sortedMatches);
 			return ArenaRun.create({
 				id: firstMatch.runId,
 				creationTimestamp: firstMatch.creationTimestamp,
 				heroCardId: firstMatch.playerCardId,
 				initialDeckList: firstMatch.playerDecklist,
-				wins: matches.filter((match) => match.result === 'won').length,
-				losses: matches.filter((match) => match.result === 'lost').length,
+				wins: wins,
+				losses: losses,
 				steps: matches,
 				rewards: rewards,
 			} as ArenaRun);
@@ -163,6 +166,22 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 			header: date,
 			runs: runsByDate[date],
 		}));
+	}
+
+	private extractWins(sortedMatches: readonly GameStat[]): [number, number] {
+		if (sortedMatches.length === 0) {
+			return [null, null];
+		}
+		const lastMatch = sortedMatches[sortedMatches.length - 1];
+		if (!lastMatch.additionalResult || lastMatch.additionalResult.indexOf('-') === -1) {
+			return [
+				sortedMatches.filter((m) => m.result === 'won').length,
+				sortedMatches.filter((m) => m.result === 'lost').length,
+			];
+		}
+		const [wins, losses] = lastMatch.additionalResult.split('-').map((info) => parseInt(info));
+
+		return lastMatch.result === 'won' ? [wins + 1, losses] : [wins, losses + 1];
 	}
 }
 

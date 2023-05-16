@@ -363,7 +363,10 @@ export class DuelsDecksProviderService {
 		}
 		const lastMatch = sortedMatches[sortedMatches.length - 1];
 		if (!lastMatch.additionalResult || lastMatch.additionalResult.indexOf('-') === -1) {
-			return [null, null];
+			return [
+				sortedMatches.filter((m) => m.result === 'won').length,
+				sortedMatches.filter((m) => m.result === 'lost').length,
+			];
 		}
 		const [wins, losses] = lastMatch.additionalResult.split('-').map((info) => parseInt(info));
 

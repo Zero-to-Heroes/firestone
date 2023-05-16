@@ -927,6 +927,7 @@ export class OverwolfService {
 	public updateExtension(): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.extensions.updateExtension((res: any) => {
+				console.log('[app-update] update result', res);
 				resolve(!res.error);
 			});
 		});
