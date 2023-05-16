@@ -8,7 +8,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
@@ -235,6 +235,7 @@ export class BgsBattleSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
+		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));

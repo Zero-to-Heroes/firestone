@@ -185,6 +185,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 					UndeadAttackBonus: playerBoard.globalInfo?.UndeadAttackBonus ?? 0,
+					FrostlingBonus: playerBoard.globalInfo?.FrostlingBonus ?? 0,
 				},
 				debugArmor: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value,
 				debugHealth: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value,

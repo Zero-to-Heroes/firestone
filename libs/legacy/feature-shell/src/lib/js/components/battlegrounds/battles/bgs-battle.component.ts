@@ -231,6 +231,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 										?.EternalKnightsDeadThisGame,
 								UndeadAttackBonus:
 									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.UndeadAttackBonus,
+								FrostlingBonus:
+									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.FrostlingBonus,
 							},
 						},
 					},
@@ -250,6 +252,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 										?.EternalKnightsDeadThisGame,
 								UndeadAttackBonus:
 									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.UndeadAttackBonus,
+								FrostlingBonus:
+									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.FrostlingBonus,
 							},
 						},
 					},

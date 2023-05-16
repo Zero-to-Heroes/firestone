@@ -41,6 +41,7 @@ export class BgsCustomSimulationState {
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
 							UndeadAttackBonus: 0,
+							FrostlingBonus: 0,
 						},
 						questRewards: [] as readonly string[],
 					},
@@ -57,6 +58,7 @@ export class BgsCustomSimulationState {
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
 							UndeadAttackBonus: 0,
+							FrostlingBonus: 0,
 						},
 						questRewards: [] as readonly string[],
 					},
