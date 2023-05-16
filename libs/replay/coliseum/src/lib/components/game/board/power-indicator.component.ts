@@ -20,7 +20,7 @@ export class PowerIndicatorComponent {
 		// console.debug('[power-indicator] setting entity', value);
 		let image = '';
 		this.effect = undefined;
-		if (value.getTag(GameTag.POISONOUS) === 1) {
+		if (value.getTag(GameTag.POISONOUS) === 1 || value.getTag(GameTag.VENOMOUS) === 1) {
 			this.effect = 'poisonous';
 			image = 'icon_poisonous';
 		} else if (value.getTag(GameTag.LIFESTEAL) === 1) {

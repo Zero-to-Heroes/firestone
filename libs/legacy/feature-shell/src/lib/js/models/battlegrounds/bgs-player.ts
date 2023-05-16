@@ -134,6 +134,7 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		entityId: logEntity.Entity,
 		health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
 		poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
+		venomous: logEntity.Tags.find((tag) => tag.Name === GameTag.VENOMOUS)?.Value === 1,
 		reborn: logEntity.Tags.find((tag) => tag.Name === GameTag.REBORN)?.Value === 1,
 		taunt: logEntity.Tags.find((tag) => tag.Name === GameTag.TAUNT)?.Value === 1,
 		cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator

@@ -373,6 +373,7 @@ export class TwitchAuthService {
 			GameTag.TAG_SCRIPT_DATA_NUM_2,
 			GameTag.TAUNT,
 			GameTag.TECH_LEVEL,
+			GameTag.VENOMOUS,
 			GameTag.WINDFURY,
 			GameTag.ZONE_POSITION,
 		];
