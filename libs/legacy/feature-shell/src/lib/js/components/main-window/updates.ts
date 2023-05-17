@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.1.5',
+		version: '11.1.6',
 		force: true,
 		sections: [
 			// {
@@ -67,14 +67,38 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where decks with ETC Band Manager would sometimes not track properly.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where discarded cards were grouped with cards on board in the Other zone.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the turn counter would give incorrect results when going second.`,
+							},
 						],
 					},
 					{
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Sort the strategy tips to put the most recent (so hopefully the most relevant ones) first.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Venomous minions not being registered as Venomous if they were part of the initial board.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Flourishing Frostling and Scourfin were not implemented.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue the simulator would sometime not return anything.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "Buddies" tier was shown in the minions list even when Buddies were not in the game.`,
 							},
 						],
 					},
@@ -84,6 +108,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where signature cards would not always appear in the deck list.`,
+							},
+							{
+								type: 'bug',
+								text: `Improve detection of the total wins/losses of a run when some games are not tracked by the app.`,
 							},
 						],
 					},
