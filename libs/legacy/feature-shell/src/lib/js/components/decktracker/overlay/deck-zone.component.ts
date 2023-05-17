@@ -9,7 +9,7 @@ import {
 	Output,
 } from '@angular/core';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
@@ -299,7 +299,8 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			? keyWithBottom + 'top-' + (card.positionFromTop ?? '')
 			: keyWithBottom;
 		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
-		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
+		const keyWithDiscard = card.zone === 'DISCARD' ? keyWithGraveyard + '-discard' : keyWithGraveyard;
+		const keyWithCost = keyWithDiscard + '-' + card.getEffectiveManaCost();
 		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
 		const keyWithRelatedCards = keyWithCost + '-' + relatedCardIds;
 		if (!collection?.length) {
