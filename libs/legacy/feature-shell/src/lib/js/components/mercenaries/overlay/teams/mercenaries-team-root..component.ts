@@ -10,14 +10,14 @@ import {
 	OnDestroy,
 	Output,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
-import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@firestone-hs/deckstrings';
+import { MercenariesTeamDefinition, MercenaryDefinition, encodeMercs } from '@firestone-hs/deckstrings';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -149,10 +149,7 @@ export class MercenariesTeamRootComponent
 			.pipe(this.mapData(([gameMode]) => !isMercenariesPvP(gameMode)));
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
-			.pipe(
-				// Initial hero selection counts as a turn
-				this.mapData(([currentTurn]) => Math.max(1, currentTurn - 1)),
-			);
+			.pipe(this.mapData(([currentTurn]) => currentTurn));
 		this.totalMapTurns$ = combineLatest(
 			this.currentBattleTurn$,
 			this.store.listen$(([main, nav]) => main.mercenaries.mapInfo?.Map?.TurnsTaken),

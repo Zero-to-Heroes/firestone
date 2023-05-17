@@ -8,6 +8,7 @@ export class MercenariesTurnStartParser implements MercenariesParser {
 	public applies = (battleState: MercenariesBattleState) => !!battleState;
 
 	public async parse(battleState: MercenariesBattleState, event: GameEvent): Promise<MercenariesBattleState> {
+		console.debug('[merc-turn-start-parser] new turn', event);
 		return battleState.update({
 			currentTurn: event.additionalData.turnNumber,
 			actionQueue: [],
