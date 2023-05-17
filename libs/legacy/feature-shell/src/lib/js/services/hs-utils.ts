@@ -742,6 +742,7 @@ const publicCardGiftCreators = [
 	CardIds.UmbralGeist,
 	CardIds.UmbralSkulker,
 	CardIds.UnderbellyAngler,
+	CardIds.UndercityHuckster_OG_330,
 	CardIds.UnholyEmbraceTavernBrawl,
 	CardIds.UnleashTheBeast_DAL_378,
 	CardIds.UniteTheMurlocs,
