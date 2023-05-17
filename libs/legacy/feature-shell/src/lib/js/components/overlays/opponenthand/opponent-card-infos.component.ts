@@ -49,6 +49,8 @@ export class OpponentCardInfosComponent {
 		return card.entityId;
 	}
 
+	// TODO: it might be better to compute a function that matches the curve of the cards, and place
+	// the numbers equidistantly on that curve
 	private buildHandAdjustment(): Map<number, Adjustment> {
 		return Map([
 			[
@@ -89,7 +91,7 @@ export class OpponentCardInfosComponent {
 			[
 				6,
 				{
-					positionLeft: Map.of(0, -103, 1, -75, 2, -45, 3, -15, 4, 15, 5, 45),
+					positionLeft: Map.of(0, -103, 1, -75, 2, -45, 3, -15, 4, 17, 5, 45),
 					positionTop: Map.of(0, 10, 1, 21, 2, 27, 3, 31, 4, 29, 5, 23),
 				} as Adjustment,
 			],
@@ -103,7 +105,7 @@ export class OpponentCardInfosComponent {
 			[
 				8,
 				{
-					positionLeft: Map.of(0, -108, 1, -88, 2, -62, 3, -40, 4, -17, 5, 4, 6, 24, 7, 48),
+					positionLeft: Map.of(0, -104, 1, -84, 2, -62, 3, -40, 4, -17, 5, 6, 6, 28, 7, 48),
 					positionTop: Map.of(0, 9, 1, 19, 2, 25, 3, 29, 4, 31, 5, 30, 6, 26, 7, 19),
 				} as Adjustment,
 			],
