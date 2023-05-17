@@ -33,8 +33,8 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.1.6',
-		force: true,
+		version: '11.1.7',
+		force: false,
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -87,6 +87,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue with Venomous minions not being registered as Venomous if they were part of the initial board.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the cards in hand were not properly taken into account.`,
 							},
 							{
 								type: 'bug',
