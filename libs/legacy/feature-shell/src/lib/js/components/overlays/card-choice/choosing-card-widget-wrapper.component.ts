@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -134,6 +134,24 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
 									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
 							);
+						console.debug(
+							'[murloc-holmes] mulligan help',
+							option,
+							isInStartingHand,
+							state.opponentDeck
+								.getAllCardsInDeck()
+								.filter((c) => !!(c as DeckCard).metaInfo)
+								.filter(
+									(c) =>
+										(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
+										(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
+								)
+								.map((c) => ({
+									cardId: c.cardId,
+									turnAtWhichCardEnteredHand: (c as DeckCard).metaInfo.turnAtWhichCardEnteredHand,
+									metaInfo: (c as DeckCard).metaInfo,
+								})),
+						);
 						return isInStartingHand ? 'flag' : null;
 					case 2:
 						const isInHand = !!state.opponentDeck.hand.filter((c) => c.cardId === option.cardId).length;
