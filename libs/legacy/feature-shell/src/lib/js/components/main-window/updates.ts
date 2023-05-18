@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.0',
+		version: '11.2.1',
 		force: false,
 		sections: [
 			// {
@@ -91,6 +91,18 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where updating a minion in the simulator would remove its enchantments.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue when Dragons are buffed during battle.`,
+							},
+							{
+								type: 'content',
+								text: `Don't show the "unsupported composition" warning when Bassgil is on the active player's board.`,
+							},
+							{
+								type: 'content',
+								text: `Improve CPU consumption when playing BG. This will mostly manifest in long games.`,
 							},
 						],
 					},
