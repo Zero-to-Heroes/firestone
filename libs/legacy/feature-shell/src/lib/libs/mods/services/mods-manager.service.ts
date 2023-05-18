@@ -74,7 +74,7 @@ export class ModsManagerService {
 						modName: modData.Name ?? newConf[modData.AssemblyName].modName,
 						downloadLink: modData.DownloadLink ?? newConf[modData.AssemblyName].downloadLink,
 						lastKnownVersion:
-							toModVersion(modData.Version) ?? newConf[modData.AssemblyName].lastKnownVersion,
+							toModVersion(modData.Version) ?? newConf[modData.AssemblyName]?.lastKnownVersion,
 					};
 
 					if (conf[modData.AssemblyName]?.modName !== newConf[modData.AssemblyName].modName) {
@@ -84,8 +84,8 @@ export class ModsManagerService {
 						modsDirty = true;
 					}
 					if (
-						toVersionString(conf[modData.AssemblyName].lastKnownVersion) !==
-						toVersionString(newConf[modData.AssemblyName].lastKnownVersion)
+						toVersionString(conf[modData.AssemblyName]?.lastKnownVersion) !==
+						toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion)
 					) {
 						modsDirty = true;
 					}
@@ -109,7 +109,7 @@ export class ModsManagerService {
 							({
 								...modData,
 								Registered: newConf[modData.AssemblyName].enabled,
-								Version: toVersionString(newConf[modData.AssemblyName].lastKnownVersion),
+								Version: toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion),
 								DownloadLink: newConf[modData.AssemblyName].downloadLink,
 								updateAvailableVersion: toVersionString(
 									newConf[modData.AssemblyName].updateAvailableVersion,
