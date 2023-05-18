@@ -16,13 +16,8 @@ import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-eve
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { RealTimeStatsState } from './store/real-time-stats/real-time-stats';
 
-// const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-// const BGS_RETRIEVE_RUN_STATS_ENDPOINT = ' https://pbd6q0rx4h.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-
-const POST_MATCH_STATS_UPDATE_URL =
-	'https://api.firestoneapp.com/userBgsPostMatchStats/save/userBgsPostMatchStats/{proxy+}';
-const POST_MATCH_STATS_RETRIEVE_URL =
-	'https://api.firestoneapp.com/userBgsPostMatchStats/get/userBgsPostMatchStats/{proxy+}';
+const POST_MATCH_STATS_UPDATE_URL = 'https://bvs52e46c6yaqlt4o257eagbpu0iqfog.lambda-url.us-west-2.on.aws/';
+const POST_MATCH_STATS_RETRIEVE_URL = 'https://4nsgpj3i3anf6qc3c7zugsdjvm0sadln.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class BgsRunStatsService {
