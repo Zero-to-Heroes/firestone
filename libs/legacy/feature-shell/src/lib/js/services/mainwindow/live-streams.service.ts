@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { LiveStreamsDataLoadedEvent } from './store/events/streams/live-streams-data-loaded-event';
 
-const LIVE_STREAMS_URL = 'https://api.firestoneapp.com/twitch-presence';
+const LIVE_STREAMS_URL = 'https://omqtnjt75toehuhll2ybdnfmd40jlelu.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class LiveStreamsService {

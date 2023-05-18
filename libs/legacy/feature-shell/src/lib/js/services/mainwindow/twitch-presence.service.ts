@@ -19,7 +19,7 @@ import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
 
-const UPDATE_URL = 'https://api.firestoneapp.com/twitch-presence';
+const UPDATE_URL = 'https://7c53s3nacfjcv5yyqueduh3vxa0sycat.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class TwitchPresenceService {
