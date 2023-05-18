@@ -45,6 +45,7 @@ export class DiskCacheService {
 	}
 
 	public async storeItem(key: string, value: any) {
+		console.debug('[disk-cache] storing item', key, this.cacheDisabled);
 		if (this.cacheDisabled) {
 			return true;
 		}
@@ -82,6 +83,7 @@ export class DiskCacheService {
 	}
 
 	public async getItem<T>(key: string): Promise<T | null> {
+		console.debug('[disk-cache] getting item', key, this.cacheDisabled);
 		if (this.cacheDisabled) {
 			return null;
 		}
