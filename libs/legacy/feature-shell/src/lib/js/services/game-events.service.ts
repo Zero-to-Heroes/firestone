@@ -1031,7 +1031,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_COMBAT_START':
-				console.log(gameEvent.Type + ' event');
+				// console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
@@ -1043,7 +1043,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_RECRUIT_PHASE':
-				console.log(gameEvent.Type + ' event');
+				// console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,
@@ -1068,7 +1068,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
@@ -1080,7 +1080,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_OPPONENT_REVEALED':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED,
@@ -1152,7 +1152,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TAVERN_UPGRADE':
-				console.log('BATTLEGROUNDS_TAVERN_UPGRADE', gameEvent.Value.CardId, gameEvent.Value.TavernLevel);
+				// console.log('BATTLEGROUNDS_TAVERN_UPGRADE', gameEvent.Value.CardId, gameEvent.Value.TavernLevel);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,

@@ -21,7 +21,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 		event: RecomputeGameStatsEvent,
 		currentState: MainWindowState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('[recompute-game-stats-processor] starting process');
+		// console.log('[recompute-game-stats-processor] starting process');
 		const newGameStats: GameStats = currentState.stats.gameStats.update({
 			stats: [event.gameStat, ...currentState.stats.gameStats.stats] as readonly GameStat[],
 		} as GameStats);

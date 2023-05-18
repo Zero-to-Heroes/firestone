@@ -9,8 +9,8 @@ import { BgsBattleHistory } from '../../../../models/battlegrounds/in-game/bgs-b
 import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { normalizeHeroCardId } from '../../bgs-utils';
-import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
 import { EventParser } from './_event-parser';
 
 export class BgsGlobalInfoUpdatedParser implements EventParser {
@@ -28,7 +28,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		const playersFromMemory = game?.Players;
 		if (!playersFromMemory || playersFromMemory.length === 0) {
-			console.log('no players, returning');
+			console.debug('no players, returning');
 			return currentState;
 		}
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players

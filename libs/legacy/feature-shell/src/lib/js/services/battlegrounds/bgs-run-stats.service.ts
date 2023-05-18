@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BgsBestStat, buildNewStats, Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
+import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
@@ -12,8 +12,8 @@ import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-mat
 import { GameForUpload } from '../manastorm-bridge/game-for-upload';
 import { UserService } from '../user.service';
 import { sleep } from '../utils';
-import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
+import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { RealTimeStatsState } from './store/real-time-stats/real-time-stats';
 
 // const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
@@ -115,7 +115,7 @@ export class BgsRunStatsService {
 		};
 
 		const [postMatchStats, newBestValues] = this.populateObject(liveStats, input, bestBgsUserStats || []);
-		console.log('[bgs-run-stats] newBestVaues');
+		console.debug('[bgs-run-stats] newBestVaues');
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
@@ -127,11 +127,11 @@ export class BgsRunStatsService {
 	}
 
 	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<void> {
-		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId);
+		console.debug('[bgs-run-stats] preparing to build stats remotely', input.reviewId);
 		// Because it takes some time for the review to be processed, and we don't want to
 		// use a lambda simply to wait, as it costs money :)
 		await sleep(5000);
-		console.log('[bgs-run-stats] contacting remote endpoint', input.reviewId);
+		console.debug('[bgs-run-stats] contacting remote endpoint', input.reviewId);
 		try {
 			await this.apiRunner.callPostApi(POST_MATCH_STATS_UPDATE_URL, input);
 			return;

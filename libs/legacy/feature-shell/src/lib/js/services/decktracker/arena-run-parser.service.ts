@@ -53,7 +53,7 @@ export class ArenaRunParserService {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA && !event.additionalData.spectating && !this.spectating) {
 				this.currentGameType = event.additionalData.metaData.GameType;
-				this.log(
+				this.debug(
 					'retrieved match meta data',
 					this.currentGameType,
 					[GameType.GT_ARENA].includes(this.currentGameType),
@@ -66,11 +66,11 @@ export class ArenaRunParserService {
 			}
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
-			this.log('Received new review id event', event);
+			this.debug('Received new review id event', event);
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;
-				this.log('set reviewId');
+				this.debug('set reviewId');
 				// this.sendLootInfo();
 			}
 		});
@@ -91,7 +91,7 @@ export class ArenaRunParserService {
 
 	private async handleRewards(rewards: readonly Reward[]) {
 		if (this.rewardsInput?.runId === this.currentArenaRunId) {
-			this.log('already sent rewards for run', this.rewardsInput);
+			this.debug('already sent rewards for run', this.rewardsInput);
 			return;
 		}
 		if (!this.arenaInfo) {
@@ -126,18 +126,18 @@ export class ArenaRunParserService {
 		}
 
 		if (stats[0].gameMode === 'arena') {
-			this.log(
+			this.debug(
 				'setting last arena match, trying to see if it is the last match in run',
 				stats[0].additionalResult,
 				stats[0].result,
 			);
 			if (this.isMatchInRun(stats[0].additionalResult, stats[0].result)) {
-				this.log('setting last arena', stats[0]);
+				this.debug('setting last arena', stats[0]);
 				this.lastArenaMatch = stats[0];
 				this.currentArenaRunId = this.lastArenaMatch.runId;
-				this.log('set currentArenaRunId', this.currentArenaRunId);
+				this.debug('set currentArenaRunId', this.currentArenaRunId);
 			} else {
-				this.log('last match is not in run, resetting last arena run info');
+				this.debug('last match is not in run, resetting last arena run info');
 				this.reset();
 			}
 		}
@@ -145,7 +145,7 @@ export class ArenaRunParserService {
 
 	public async handleBlur(logLine: string) {
 		if (this.spectating) {
-			this.log('spectating, not handling blur');
+			this.debug('spectating, not handling blur');
 			return;
 		}
 

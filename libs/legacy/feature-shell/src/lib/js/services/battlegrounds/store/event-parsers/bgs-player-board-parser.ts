@@ -213,7 +213,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			}
 			return null;
 		}
-		console.log(
+		console.debug(
 			'found player board to update',
 			playerToUpdate.cardId,
 			playerToUpdate.damageTaken,
@@ -232,7 +232,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const newPlayer: BgsPlayer = playerToUpdate.update({
 			boardHistory: newHistory,
 		});
-		console.log(
+		console.debug(
 			'update board for player',
 			newPlayer.cardId,
 			newPlayer.getLastKnownBoardState()?.map((entity) => entity.cardID),

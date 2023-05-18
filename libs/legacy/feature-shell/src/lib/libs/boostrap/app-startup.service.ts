@@ -249,7 +249,7 @@ export class AppStartupService {
 	// }
 
 	private async showCollectionWindow() {
-		console.log('[startup] reading to show collection window');
+		// console.log('showing collection window');
 		// We do both store and direct restore to keep things snappier
 		const prefs = await this.prefs.getPreferences();
 		const window = await this.ow.getCollectionWindow(prefs);

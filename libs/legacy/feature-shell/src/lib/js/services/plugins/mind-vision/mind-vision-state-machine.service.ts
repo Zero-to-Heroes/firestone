@@ -6,13 +6,13 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { OwNotificationsService } from '@services/notifications.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
+import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';
 import { MindVisionStateActive } from '@services/plugins/mind-vision/states/mind-vision-state-active';
 import { MindVisionStateIdle } from '@services/plugins/mind-vision/states/mind-vision-state-idle';
 import { MindVisionStateInit } from '@services/plugins/mind-vision/states/mind-vision-state-init';
 import { MindVisionStateListening } from '@services/plugins/mind-vision/states/mind-vision-state-listening';
 import { MindVisionStateReset } from '@services/plugins/mind-vision/states/mind-vision-state-reset';
 import { MindVisionStateTearDown } from '@services/plugins/mind-vision/states/mind-vision-state-tear-down';
-import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class MindVisionStateMachineService {
 	private currentState: MindVisionState;
 
 	private memoryUpdateListener = async (changes: string | 'reset') => {
-		console.log('[mind-vision] memory update', CurrentState[this.currentState?.stateId()], changes);
+		console.debug('[mind-vision] memory update', CurrentState[this.currentState?.stateId()], changes);
 		const changesToBroadcast: MemoryUpdate | 'reset' = changes === 'reset' ? changes : JSON.parse(changes);
 		// Happens when the plugin is reset, we need to resubscribe
 		if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {

@@ -7,8 +7,8 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsOpponentOverview } from '../../../../models/battlegrounds/in-game/bgs-opponent-overview';
-import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { EventParser } from './_event-parser';
 
 export class BgsNextOpponentParser implements EventParser {
@@ -19,7 +19,7 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
-		console.log('[bgs-next-opponent] parsing next opponent', event.cardId);
+		console.debug('[bgs-next-opponent] parsing next opponent', event.cardId);
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(currentState, event.cardId);
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();

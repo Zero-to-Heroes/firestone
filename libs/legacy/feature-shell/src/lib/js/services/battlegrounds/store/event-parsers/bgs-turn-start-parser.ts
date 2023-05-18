@@ -6,8 +6,8 @@ import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/i
 import { GameState } from '../../../../models/decktracker/game-state';
 import { LogsUploaderService } from '../../../logs-uploader.service';
 import { isBattlegrounds } from '../../bgs-utils';
-import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTurnStartParser implements EventParser {
@@ -32,7 +32,7 @@ export class BgsTurnStartParser implements EventParser {
 		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
-		console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
+		// console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
 		if (
 			currentState.currentGame.players.length !== 8 &&
 			isBattlegrounds(gameState?.metadata?.gameType) &&
@@ -62,9 +62,11 @@ export class BgsTurnStartParser implements EventParser {
 		currentState: BattlegroundsState,
 		newCurrentTurn: number,
 	): BgsNextOpponentOverviewPanel {
-		return (currentState.panels.find(
-			(panel) => panel.id === 'bgs-next-opponent-overview',
-		) as BgsNextOpponentOverviewPanel).update({
+		return (
+			currentState.panels.find(
+				(panel) => panel.id === 'bgs-next-opponent-overview',
+			) as BgsNextOpponentOverviewPanel
+		).update({
 			name: this.i18n.translateString('battlegrounds.in-game.opponents.next-opponent-title', {
 				turn: newCurrentTurn,
 			}),

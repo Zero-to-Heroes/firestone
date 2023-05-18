@@ -5,8 +5,8 @@ import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { Season6 } from '../stats/xp/xp-tables/season-6';
 import { Season } from '../stats/xp/xp-tables/_season';
+import { Season6 } from '../stats/xp/xp-tables/season-6';
 import { sleep } from '../utils';
 
 @Injectable()
@@ -97,7 +97,7 @@ export class RewardMonitorService {
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
 			if (changes?.XpChanges?.length) {
-				console.log('[rewards-monitor] received xp changes', changes.XpChanges);
+				console.debug('[rewards-monitor] received xp changes', changes.XpChanges);
 				// If there are multiple causes for XP changes, like game end + quest, we
 				// receive several items.
 				// The first item seems to always be about the current match itself

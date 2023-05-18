@@ -54,7 +54,7 @@ export class DiskCacheService {
 			const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
 			saveInfo[key] = true;
 			this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
-			console.log('[disk-cache] updated disk cache status', saveInfo);
+			console.debug('[disk-cache] updated disk cache status', saveInfo);
 		}
 		return saved;
 	}
@@ -73,7 +73,7 @@ export class DiskCacheService {
 			// console.debug('[disk-cache] deleted file', key);
 			const saved = await this.ow.storeAppFile(key, stringified);
 			this.savingFiles[key] = false;
-			console.log('[disk-cache] stored value', key, Date.now() - start);
+			console.debug('[disk-cache] stored value', key, Date.now() - start);
 			return saved;
 		} catch (e) {
 			console.error('[disk-cache] error while storing info on local disk', key);
@@ -88,7 +88,7 @@ export class DiskCacheService {
 		const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
 		const shouldSkipDisk = saveInfo[key];
 		if (shouldSkipDisk) {
-			console.log('[disk-cache] skipping disk cache for', key);
+			console.debug('[disk-cache] skipping disk cache for', key);
 			return null;
 		}
 		const result = this.getItemInternal<T>(key).withTimeout(5000, key);
@@ -104,7 +104,7 @@ export class DiskCacheService {
 			const strResult = await this.ow.readAppFile(key);
 			// console.debug('[disk-cache] string value', key, strResult);
 			const result = !!strResult?.length ? JSON.parse(strResult) : null;
-			console.log('[disk-cache] read value', key, Date.now() - start);
+			console.debug('[disk-cache] read value', key, Date.now() - start);
 			return result;
 		} catch (e) {
 			console.error('[disk-cache] could not read value from disk', key);

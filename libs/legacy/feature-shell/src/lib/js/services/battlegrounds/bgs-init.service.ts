@@ -32,7 +32,7 @@ export class BgsInitService {
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
-			console.log('[bgs-init] match stats updated');
+			console.debug('[bgs-init] match stats updated');
 			this.bgsStateUpdater?.next(new BgsStatUpdateEvent(newGameStats));
 		});
 		setTimeout(() => {

@@ -20,7 +20,7 @@ export class UpdateGameStatsProcessor implements Processor {
 		event: UpdateGameStatsEvent,
 		currentState: MainWindowState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('[recompute-game-stats-processor] starting process');
+		console.debug('[recompute-game-stats-processor] starting process');
 		const newGameStats: GameStats = currentState.stats.gameStats.update({
 			stats: event.stats,
 		} as GameStats);

@@ -4,8 +4,8 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
-import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBattleResultParser implements EventParser {
@@ -58,7 +58,7 @@ export class BgsBattleResultParser implements EventParser {
 			lastOpponentCardId: event.opponentCardId,
 		} as BgsGame);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, newGame);
-		console.log('[bgs-simulation] updating with result and resetting battle info');
+		console.debug('[bgs-simulation] updating with result and resetting battle info');
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

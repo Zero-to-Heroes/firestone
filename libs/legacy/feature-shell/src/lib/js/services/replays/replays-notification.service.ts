@@ -30,7 +30,7 @@ export class ReplaysNotificationService {
 	}
 
 	private async showNewMatchEndNotification(gameStats: GameStats) {
-		console.log('[replays-notification] received new game, preparing notification?');
+		console.debug('[replays-notification] received new game, preparing notification?');
 		const gameStat = gameStats.stats[0];
 		const prefs = await this.prefs.getPreferences();
 		if (isBattlegrounds(gameStat.gameMode) && prefs.bgsShowEndGameNotif) {
@@ -38,7 +38,7 @@ export class ReplaysNotificationService {
 		}
 
 		if (!prefs.showXpRecapAtGameEnd) {
-			console.log('[replays-notification] preference is turned off, not showing replay notification');
+			console.debug('[replays-notification] preference is turned off, not showing replay notification');
 			return;
 		}
 
@@ -47,7 +47,7 @@ export class ReplaysNotificationService {
 			return;
 		}
 
-		console.log('[replays-notification] preparing new game stat notification', gameStat);
+		console.debug('[replays-notification] preparing new game stat notification', gameStat);
 
 		this.notificationService.emitNewNotification({
 			notificationId: `replay-${gameStat.reviewId}`,

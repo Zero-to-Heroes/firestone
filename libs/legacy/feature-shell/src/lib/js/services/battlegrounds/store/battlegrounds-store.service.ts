@@ -204,7 +204,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private async handleHotkeyPressed(force = false) {
-		console.log('[bgs-store] pressed hotkey', force);
+		// console.log('[bgs-store] pressed hotkey', force);
 		if (this.overlayHandlers) {
 			await Promise.all(this.overlayHandlers.map((handler) => handler.handleHotkeyPressed(this.state, force)));
 		}
@@ -381,7 +381,7 @@ export class BattlegroundsStoreService {
 
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			const info: ManastormInfo = event.data[0];
-			console.log(
+			console.debug(
 				'[bgs-store] Replay created, received info',
 				info.type,
 				this.state?.inGame,
@@ -391,7 +391,7 @@ export class BattlegroundsStoreService {
 			// could be already reset when it arrives
 			if (info && info.type === 'new-review' && this.state?.inGame && !!this.state.currentGame) {
 				const currentGame = this.state.currentGame;
-				console.log('[bgs-store] will trigger START_BGS_RUN_STATS');
+				console.debug('[bgs-store] will trigger START_BGS_RUN_STATS');
 				const bestBgsUserStats = await this.bgsUserStatsService.loadBgsBestUserStats();
 				this.events.broadcast(
 					Events.START_BGS_RUN_STATS,

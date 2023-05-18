@@ -22,7 +22,7 @@ export class BgsBestUserStatsService {
 			!!localInfo?.stats?.length &&
 			Date.now() - new Date(localInfo.lastUpdateDate).getTime() <= 7 * 24 * 60 * 60 * 1000
 		) {
-			console.log('loaded local bestBgsStats');
+			console.debug('loaded local bestBgsStats');
 			this.store.send(new BgsBestStatsLoadedEvent(localInfo.stats));
 		}
 
@@ -36,7 +36,7 @@ export class BgsBestUserStatsService {
 			stats: remoteData,
 		};
 		this.localStorage.setItem(LocalStorageService.USER_BGS_BEST_STATS, newInfo);
-		console.log('loaded remote bestBgsStats');
+		console.debug('loaded remote bestBgsStats');
 		this.store.send(new BgsBestStatsLoadedEvent(newInfo.stats));
 		return remoteData;
 	}

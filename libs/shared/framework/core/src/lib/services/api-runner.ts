@@ -43,7 +43,7 @@ export class ApiRunner {
 			}
 			this.http.post(url, input, { headers: headers }).subscribe(
 				(result: any) => {
-					// console.log('retrieved POST call', url);
+					console.debug('retrieved POST call', url);
 					resolve(result);
 				},
 				(error) => {
@@ -63,7 +63,7 @@ export class ApiRunner {
 		return new Promise<T | null>((resolve, reject) => {
 			this.http.get(url).subscribe(
 				(result: any) => {
-					// console.log('retrieved GET call', url);
+					console.debug('retrieved GET call', url);
 					resolve(result);
 				},
 				(error) => {

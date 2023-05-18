@@ -41,7 +41,7 @@ export class EndGameListenerService {
 	}
 
 	private init(): void {
-		console.log('[manastorm-bridge] stgarting end-game-listener init');
+		console.debug('[manastorm-bridge] stgarting end-game-listener init');
 		const metadata$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_METADATA),
 			map((event) => event.additionalData.metaData as HsGameMetaData),
@@ -94,7 +94,7 @@ export class EndGameListenerService {
 			this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_START)),
 			this.uploadStarted$$,
 		).pipe(
-			tap((info) => console.debug('[manastorm-bridge] game ended', info)),
+			tap((info) => console.log('[manastorm-bridge] game ended', info)),
 			map((event) => {
 				// The uploadStarted subject fired, we reset the "ended" flag so that a new review id
 				// won't trigger a new upload
@@ -139,23 +139,20 @@ export class EndGameListenerService {
 			tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
 		);
 
-		combineLatest(
-			// Groups of 6 max to have type inferrence
-			[
-				reviewId$,
-				metadata$,
-				gameEnded$,
-				gameSettings$,
-				mercsInfo$,
-				mercsCollectionInfo$,
-				duelsRunId$,
-				duelsInfo$,
-				matchInfo$,
-				playerDeck$,
-				arenaInfo$,
-				bgInfo$,
-			],
-		)
+		combineLatest([
+			reviewId$,
+			metadata$,
+			gameEnded$,
+			gameSettings$,
+			mercsInfo$,
+			mercsCollectionInfo$,
+			duelsRunId$,
+			duelsInfo$,
+			matchInfo$,
+			playerDeck$,
+			arenaInfo$,
+			bgInfo$,
+		])
 			.pipe(
 				withLatestFrom(bgMemoryInfo$, bgNewRating$),
 				map(

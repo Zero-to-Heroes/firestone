@@ -14,8 +14,8 @@ import { BgsRankFilterSelectedEvent } from '../../../mainwindow/store/events/bat
 import { BgsTribesFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { PreferencesService } from '../../../preferences.service';
-import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { EventParser } from './_event-parser';
 
 // TODO: coins wasted doesn't take into account hero powers that let you have more coins (Bel'ial)
@@ -53,7 +53,7 @@ export class BgsGameEndParser implements EventParser {
 		stateUpdater.next(new BgsTribesFilterSelectedEvent(savedPrefs.bgsActiveTribesFilter));
 		stateUpdater.next(new BgsRankFilterSelectedEvent(savedPrefs.bgsActiveRankFilter));
 
-		console.log('will build post-match info', prefs.bgsForceShowPostMatchStats2);
+		console.debug('will build post-match info', prefs.bgsForceShowPostMatchStats2);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
 		const newPostMatchStatsStage: BgsPostMatchStatsPanel = this.buildPostMatchPanel(
 			currentState,
@@ -98,7 +98,7 @@ export class BgsGameEndParser implements EventParser {
 	): BgsPostMatchStatsPanel {
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
 		const finalPosition = player?.leaderboardPlace;
-		console.log('post match stats');
+		console.debug('post match stats');
 		return BgsPostMatchStatsPanel.create({
 			stats: postMatchStats,
 			newBestUserStats: newBestUserStats,
