@@ -17,7 +17,7 @@ import { isDuels } from '../duels/duels-utils';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { arraysEqual } from '../utils';
+import { arraysEqual, deepEqual } from '../utils';
 
 const UPDATE_URL = 'https://api.firestoneapp.com/twitch-presence';
 
@@ -57,7 +57,7 @@ export class TwitchPresenceService {
 		);
 
 		// "Normal" Hearthstone mode infos
-		const hearthstoneInfo$ = combineLatest(
+		const hearthstoneInfo$ = combineLatest([
 			this.store.listenDeckState$(
 				(state) => state?.playerDeck?.hero?.cardId,
 				(state) => state?.playerDeck?.hero?.playerClass,
@@ -67,8 +67,8 @@ export class TwitchPresenceService {
 				(state) => state?.gameStarted,
 			),
 			this.store.listenPrefs$((prefs) => prefs.appearOnLiveStreams),
-		).pipe(
-			debounceTime(200),
+		]).pipe(
+			debounceTime(1000),
 			filter(
 				([
 					[playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
@@ -100,8 +100,9 @@ export class TwitchPresenceService {
 			),
 		);
 
-		combineLatest(hearthstoneInfo$, duelsInfo$, arenaInfo$, matchInfo$)
+		combineLatest([hearthstoneInfo$, duelsInfo$, arenaInfo$, matchInfo$])
 			.pipe(
+				debounceTime(1000),
 				filter(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
 					if (!hearthstoneInfo.gameStarted) {
 						return false;
@@ -117,29 +118,39 @@ export class TwitchPresenceService {
 					}
 					return true;
 				}),
+				map(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
+					return {
+						playerRank: buildRankInfo(hearthstoneInfo.metadata, duelsInfo, arenaInfo, matchInfo),
+						metaData: hearthstoneInfo.metadata,
+						playerCardId: hearthstoneInfo.playerCardId,
+						playerClass: hearthstoneInfo.playerClass,
+						opponentCardId: hearthstoneInfo.opponentCardId,
+						opponentClass: hearthstoneInfo.opponentClass,
+					};
+				}),
+				distinctUntilChanged(deepEqual),
 			)
-			.subscribe(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
-				const playerRank = buildRankInfo(hearthstoneInfo.metadata, duelsInfo, arenaInfo, matchInfo);
+			.subscribe((event) => {
 				this.sendNewGameEvent(
-					playerRank,
-					hearthstoneInfo.metadata,
-					hearthstoneInfo.playerCardId,
-					hearthstoneInfo.playerClass,
-					hearthstoneInfo.opponentCardId,
-					hearthstoneInfo.opponentClass,
+					event.playerRank,
+					event.metaData,
+					event.playerCardId,
+					event.playerClass,
+					event.opponentCardId,
+					event.opponentClass,
 				);
 			});
 
-		combineLatest(
+		combineLatest([
 			this.store.listenDeckState$((state) => state?.metadata),
 			this.store.listenBattlegrounds$(
 				([state]) => state.currentGame?.mmrAtStart,
 				([state]) => state.currentGame?.gameEnded,
 				([state]) => state.currentGame?.getMainPlayer()?.cardId,
 			),
-		)
+		])
 			.pipe(
-				debounceTime(200),
+				debounceTime(1000),
 				filter(
 					([[metadata], [mmrAtStart, gameEnded, playerCardId]]) =>
 						!!metadata?.gameType &&
@@ -150,20 +161,29 @@ export class TwitchPresenceService {
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				debounceTime(200),
+				map(([[metadata], [mmrAtStart, gameEnded, playerCardId]]) => {
+					return {
+						metadata: metadata,
+						mmrAtStart: mmrAtStart,
+						gameEnded: gameEnded,
+						playerCardId: playerCardId,
+					};
+				}),
+				distinctUntilChanged(deepEqual),
 			)
-			.subscribe(([[metadata], [mmrAtStart, gameEnded, playerCardId]]) => {
-				this.sendNewBgsGameEvent(metadata, mmrAtStart, playerCardId);
+			.subscribe((event) => {
+				this.sendNewBgsGameEvent(event.metadata, event.mmrAtStart, event.playerCardId);
 			});
 
-		combineLatest(
+		combineLatest([
 			this.store.listenMercenaries$(
 				([state]) => state?.gameMode,
 				([state]) => state?.playerTeam?.mercenaries,
 			),
 			mercsInfo$,
-		)
+		])
 			.pipe(
-				debounceTime(500),
+				debounceTime(1000),
 				filter(
 					([[gameMode, mercenaries], mercsInfo]) =>
 						!!gameMode &&
@@ -171,9 +191,17 @@ export class TwitchPresenceService {
 						(gameMode !== GameType.GT_MERCENARIES_PVP || !!mercsInfo?.PvpRating),
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				map(([[gameMode, mercenaries], mercsInfo]) => {
+					return {
+						gameMode: gameMode,
+						mercenaries: mercenaries,
+						rating: mercsInfo?.PvpRating,
+					};
+				}),
+				distinctUntilChanged(deepEqual),
 			)
-			.subscribe(([[gameMode, mercenaries], mercsInfo]) => {
-				this.sendNewMercsGameEvent(gameMode, mercenaries, mercsInfo?.PvpRating);
+			.subscribe((event) => {
+				this.sendNewMercsGameEvent(event.gameMode, event.mercenaries, event.PvpRating);
 			});
 		this.store
 			.listenDeckState$(
@@ -181,7 +209,7 @@ export class TwitchPresenceService {
 				(state) => state?.gameStarted,
 			)
 			.pipe(
-				debounceTime(200),
+				debounceTime(1000),
 				// distinctUntilChanged(),
 			)
 			.subscribe(([gameEnded, gameStarted]) => {
