@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.1.8',
+		version: '11.2.0',
 		force: false,
 		sections: [
 			// {
@@ -64,16 +64,24 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where decks with ETC Band Manager would sometimes not track properly.`,
+								type: 'feature',
+								text: `Add a Menagerie counter.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a Corpse spent counter.`,
+							},
+							{
+								type: 'feature',
+								text: `Track all activations of Vampiric Blood in the Global Effects.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where discarded cards were grouped with cards on board in the Other zone.`,
+								text: `Fix oracle for Melomania.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where the turn counter would give incorrect results when going second.`,
+								type: 'content',
+								text: `Add oracles for Tidestone of Golganneth, Kiri Chosen of Elune and Moonbeast.`,
 							},
 						],
 					},
@@ -81,45 +89,21 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Sort the strategy tips to put the most recent (so hopefully the most relevant ones) first.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix a sim issue with Venomous minions not being registered as Venomous if they were part of the initial board.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where the cards in hand were not properly taken into account.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Flourishing Frostling and Scourfin were not implemented.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue the simulator would sometime not return anything.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the "Buddies" tier was shown in the minions list even when Buddies were not in the game.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the turn counter would start getting out of sync when mercenaries abilities made you choose multiple mercs from your hand in a row (like Eudora + Brightwing).`,
+								text: `Fix an issue where updating a minion in the simulator would remove its enchantments.`,
 							},
 						],
 					},
 					{
-						category: 'arena',
+						category: 'duels',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where signature cards would not always appear in the deck list.`,
+								text: `Add the ability to click on a hero / hero power / signature in the tier list to see the top decks with this card.`,
 							},
 							{
 								type: 'bug',
-								text: `Improve detection of the total wins/losses of a run when some games are not tracked by the app.`,
+								text: `Add a way to search for top decks containing a given card.`,
 							},
 						],
 					},
@@ -127,8 +111,16 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
+								type: 'feature',
+								text: `Add an option to disable the local cache.`,
+							},
+							{
 								type: 'bug',
-								text: `(Beta version only): Mods are once again operational. However, I've noticed that the game regularly crashes when all mods are enabled, so I suspect that at least one of them is causing this. If you experience crashes, please disable all mods and re-enable them one by one to find the culprit, and let me know on Discord so that I can fix it. Thanks!`,
+								text: `Add a (non-localized, for now) error when there are no messages in the inbox.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the decklists would not order cards alphabetically within a given mana cost.`,
 							},
 						],
 					},
