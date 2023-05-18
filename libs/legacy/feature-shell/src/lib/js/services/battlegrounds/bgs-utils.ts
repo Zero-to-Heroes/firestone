@@ -640,8 +640,8 @@ export const isSupportedScenario = (
 	isSupported: boolean;
 	reason?: BattleInfoMessage;
 } => {
-	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard);
-	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard);
+	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard, true);
+	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard, false);
 	const result = {
 		isSupported: playerSupport.isSupported && oppSupport.isSupported,
 		reason: playerSupport.reason ?? oppSupport.reason,
@@ -657,6 +657,7 @@ export const isSupportedScenario = (
 
 const isSupportedScenarioForPlayer = (
 	boardInfo: BgsBoardInfo,
+	isPlayer: boolean,
 ): {
 	isSupported: boolean;
 	reason?: BattleInfoMessage;
@@ -677,7 +678,7 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'rylak',
 			};
-		} else if (hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
+		} else if (!isPlayer && hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
 			return {
 				isSupported: false,
 				reason: 'bassgill',
