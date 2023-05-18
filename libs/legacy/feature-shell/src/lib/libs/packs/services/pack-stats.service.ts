@@ -9,9 +9,7 @@ import { Events } from '../../../js/services/events.service';
 import { CollectionPacksUpdatedEvent } from '../../../js/services/mainwindow/store/events/collection/colection-packs-updated-event';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
-// const PACKS_UPDATE_URL = 'https://api.firestoneapp.com/packs/save/packs/{proxy+}';
 const PACKS_UPDATE_URL = 'https://uuglyygz3fyixbjbmquk3kcj540acpze.lambda-url.us-west-2.on.aws/';
-// const PACKS_RETRIEVE_URL = 'https://api.firestoneapp.com/packs/get/packs/{proxy+}';
 const PACKS_RETRIEVE_URL = 'https://reycp2lobj5voigcqandjgyvoy0vsmyf.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
