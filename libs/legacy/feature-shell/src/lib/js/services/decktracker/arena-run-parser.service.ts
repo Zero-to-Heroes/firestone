@@ -16,7 +16,7 @@ import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
 
-const UPDATE_URL = 'https://api.firestoneapp.com/userArenaRewards/post/arenaRewards/{proxy+}';
+const UPDATE_URL = 'https://5ko26odaiczaspuvispnw3iv3e0kthll.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class ArenaRunParserService {

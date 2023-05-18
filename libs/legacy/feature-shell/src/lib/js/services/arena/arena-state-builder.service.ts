@@ -9,7 +9,7 @@ import { PatchInfo } from '../../models/patches';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { PreferencesService } from '../preferences.service';
 
-const REWARDS_RETRIEVE_URL = 'https://api.firestoneapp.com/userArenaRewards/get/arenaRewards/{proxy+}';
+const REWARDS_RETRIEVE_URL = 'https://b763ob2h6h3ewimg7ztsl72p240qvfyr.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class ArenaStateBuilderService {
