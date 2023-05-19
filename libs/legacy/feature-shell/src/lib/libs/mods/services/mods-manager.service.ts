@@ -90,8 +90,8 @@ export class ModsManagerService {
 						modsDirty = true;
 					}
 					if (
-						toVersionString(conf[modData.AssemblyName].updateAvailableVersion) !==
-						toVersionString(newConf[modData.AssemblyName].updateAvailableVersion)
+						toVersionString(conf[modData.AssemblyName]?.updateAvailableVersion) !==
+						toVersionString(newConf[modData.AssemblyName]?.updateAvailableVersion)
 					) {
 						modsDirty = true;
 					}
@@ -112,7 +112,7 @@ export class ModsManagerService {
 								Version: toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion),
 								DownloadLink: newConf[modData.AssemblyName].downloadLink,
 								updateAvailableVersion: toVersionString(
-									newConf[modData.AssemblyName].updateAvailableVersion,
+									newConf[modData.AssemblyName]?.updateAvailableVersion,
 								),
 							} as ModData),
 					)
