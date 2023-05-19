@@ -144,9 +144,9 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.OrgozoaTheTender:
 		case CardIds.OrgozoaTheTenderBattlegrounds:
 			return [Race.NAGA, ...cardRaces];
-		case CardIds.SindoreiStraightShot:
-		case CardIds.SindoreiStraightShotBattlegrounds:
-			return [Race.UNDEAD, ...cardRaces];
+		// case CardIds.SindoreiStraightShot:
+		// case CardIds.SindoreiStraightShotBattlegrounds:
+		// 	return [Race.UNDEAD, ...cardRaces];
 		default:
 			return getEffectiveTribesEnum(card);
 	}
