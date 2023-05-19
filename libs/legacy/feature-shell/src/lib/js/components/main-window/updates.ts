@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.1',
+		version: '11.2.2',
 		force: false,
 		sections: [
 			// {
@@ -110,11 +110,11 @@ export const updates: readonly Update[] = [
 						category: 'duels',
 						details: [
 							{
-								type: 'bug',
+								type: 'feature',
 								text: `Add the ability to click on a hero / hero power / signature in the tier list to see the top decks with this card.`,
 							},
 							{
-								type: 'bug',
+								type: 'feature',
 								text: `Add a way to search for top decks containing a given card.`,
 							},
 						],
@@ -127,7 +127,7 @@ export const updates: readonly Update[] = [
 								text: `Add an option to disable the local cache.`,
 							},
 							{
-								type: 'bug',
+								type: 'content',
 								text: `Add a (non-localized, for now) error when there are no messages in the inbox.`,
 							},
 							{
