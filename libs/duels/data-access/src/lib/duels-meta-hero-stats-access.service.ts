@@ -15,9 +15,12 @@ export class DuelsMetaHeroStatsAccessService {
 		timeFilter: DuelsTimeFilterType,
 	): Promise<DuelsStat | null> {
 		const mmrForBackwardCompability = (mmr as any) === 'all' ? 100 : mmr;
-		const result: DuelsStat | null = await this.api.callGetApi(
-			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + mmrForBackwardCompability).replace('%date%', timeFilter),
+		const url = DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + mmrForBackwardCompability).replace(
+			'%date%',
+			timeFilter,
 		);
+		const result: DuelsStat | null = await this.api.callGetApi(url);
+		console.debug('[duels-state-builder] loaded global stats', result, url, mmrForBackwardCompability, timeFilter);
 		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
 		return result;
 	}

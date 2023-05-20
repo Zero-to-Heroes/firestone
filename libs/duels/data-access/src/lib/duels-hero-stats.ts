@@ -13,8 +13,9 @@ export const buildDuelsCombinedHeroStats = <T extends DuelsHeroStat | DuelsTreas
 	duelStats: readonly T[],
 	groupingFunction: (stat: T) => string,
 ): DuelsCombinedHeroStat[] => {
-	const totalRuns = duelStats.map((stat) => stat.totalRuns).reduce((a, b) => a + b, 0);
-	const grouped: { [cardId: string]: readonly T[] } = groupByFunction(groupingFunction)(duelStats);
+	const inputStats = duelStats ?? [];
+	const totalRuns = inputStats.map((stat) => stat.totalRuns).reduce((a, b) => a + b, 0);
+	const grouped: { [cardId: string]: readonly T[] } = groupByFunction(groupingFunction)(inputStats);
 	return Object.keys(grouped).map((key) => {
 		const group = grouped[key];
 		const totalRunsForGroup = group.map((g) => g.totalRuns).reduce((a, b) => a + b, 0);

@@ -47,7 +47,8 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 		});
 		this.stats$ = this.store.duelsHeroStats$().pipe(
 			this.mapData((stats) => {
-				const tieredStats = stats.map((stat) => {
+				console.debug('[duels-hero-stats] received stats', stats);
+				const tieredStats = stats?.map((stat) => {
 					const card = this.allCards.getCard(stat.cardId);
 					const result: DuelsMetaStats = {
 						cardId: stat.cardId,
@@ -65,8 +66,8 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 					};
 					return result;
 				});
-				console.debug('tieredStats', tieredStats);
-				return tieredStats;
+				console.debug('[duels-hero-stats] tieredStats', tieredStats);
+				return tieredStats?.length > 0 ? tieredStats : null;
 			}),
 		);
 		this.sort$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroSortFilter);
