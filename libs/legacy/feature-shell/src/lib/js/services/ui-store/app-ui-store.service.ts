@@ -356,10 +356,12 @@ export class AppUiStoreService extends Store<Preferences> {
 	private init() {
 		// Has to be first, since other observables depend on it
 		this.initGameStats();
+		// Needs to be before duels stuff
+		this.initDuelsRuns();
+		// The rest
 		this.initBgsMetaStatsHero();
 		this.initDuelsHeroStats();
 		this.initDecks();
-		this.initDuelsRuns();
 		this.initDuelsDecks();
 		this.initMails();
 		this.initTavernBrawl();
@@ -456,7 +458,6 @@ export class AppUiStoreService extends Store<Preferences> {
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
-			tap((info) => console.debug('[duels-store] emitting new hero stats', info)),
 			shareReplay(1),
 		);
 	}
