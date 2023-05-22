@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 import { GlobalStatsLoadedEvent } from '../mainwindow/store/events/stats/global/global-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
-const GLOBAL_STATS_ENDPOINT = 'https://dozgz6y7pf.execute-api.us-west-2.amazonaws.com/Prod/globalStats';
+const GLOBAL_STATS_ENDPOINT = 'https://quoneyok3sw7yewueok67w7cju0pzmeb.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class GlobalStatsService {
