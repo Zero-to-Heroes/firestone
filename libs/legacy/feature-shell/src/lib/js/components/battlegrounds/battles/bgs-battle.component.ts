@@ -697,7 +697,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			if (!boardId) {
 				return;
 			}
-			const url = `https://static-api.firestoneapp.com/retrieveBgsSimulationSample/${boardId}`;
+			const url = `https://h7h6lfnlmd7vstumpqiz74xqoq0vhsnm.lambda-url.us-west-2.on.aws/${boardId}`;
 			const code = await this.api.get(url);
 			const faceOffStr = atob(code);
 			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
