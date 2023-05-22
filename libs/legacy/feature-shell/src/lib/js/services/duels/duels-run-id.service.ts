@@ -69,8 +69,7 @@ export class DuelsRunIdService {
 					a.PaidRating === b.PaidRating &&
 					a.Wins === b.Wins &&
 					a.Losses === b.Losses &&
-					a.StartingHeroPower === b.StartingHeroPower &&
-					a.StartingHeroPowerCardId === b.StartingHeroPowerCardId &&
+					a.HeroPowerCardId === b.HeroPowerCardId &&
 					a.PlayerClass === b.PlayerClass
 				);
 			}),
@@ -156,7 +155,7 @@ const isNewRun = (
 
 	if (
 		currentRun.heroPowerCardId &&
-		allCards.getCard(currentRun.heroPowerCardId).dbfId !== duelsInfo.StartingHeroPower
+		allCards.getCard(currentRun.heroPowerCardId).dbfId !== duelsInfo.HeroPowerCardId
 	) {
 		console.log('[duels-run] different hero power, starting new run', duelsInfo, currentRun.heroPowerCardId);
 		console.debug(
@@ -171,7 +170,9 @@ const isNewRun = (
 		console.log('[duels-run] rating changed, starting new run', duelsInfo.LastRatingChange);
 		return true;
 	}
-	const signatureTreasure: string = findSignatureTreasure(duelsInfo.DeckList, allCards);
+	const signatureTreasure: string = duelsInfo.SignatureTreasureCardId
+		? allCards.getCard(duelsInfo.SignatureTreasureCardId).id
+		: findSignatureTreasure(duelsInfo.DuelsDeck?.DeckList, allCards);
 	if (currentRun.signatureTreasureCardId && signatureTreasure !== currentRun.signatureTreasureCardId) {
 		console.log(
 			'[duels-run] different signature treasure, starting new run',
@@ -182,7 +183,7 @@ const isNewRun = (
 };
 
 export const findSignatureTreasure = (deckList: readonly (string | number)[], allCards: CardsFacadeService): string => {
-	return deckList.map((cardId) => allCards.getCard(cardId)).find((card) => isSignatureTreasure(card?.id))?.id;
+	return deckList?.map((cardId) => allCards.getCard(cardId)).find((card) => isSignatureTreasure(card?.id))?.id;
 };
 
 const isMatchInRun = (additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean => {

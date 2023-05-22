@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
-	OnDestroy
+	OnDestroy,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
@@ -15,7 +15,7 @@ import { CardsHighlightFacadeService } from '@services/decktracker/card-highligh
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DeckParserService } from '../../../services/decktracker/deck-parser.service';
+import { explodeDecklist, normalizeWithDbfIds } from '../../../services/decktracker/deck-parser.service';
 
 @Component({
 	selector: 'duels-decktracker-ooc',
@@ -52,7 +52,6 @@ export class DuelsDecktrackerOocComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly cardsHighlight: CardsHighlightFacadeService,
 		private readonly allCards: CardsFacadeService,
-		private readonly deckParser: DeckParserService,
 	) {
 		super(store, cdr);
 	}
@@ -76,10 +75,11 @@ export class DuelsDecktrackerOocComponent
 							: deck.Sideboards.map((sideboard) => {
 									return {
 										keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
-										cards: this.deckParser.explodeDecklist(this.deckParser.normalizeWithDbfIds(sideboard.Cards)),
+										cards: explodeDecklist(normalizeWithDbfIds(sideboard.Cards, this.allCards)),
 									};
 							  }),
 					};
+					console.debug('[duels-decktracker-ooc] encoding', deckDefinition, deck);
 					return encode(deckDefinition);
 				}),
 			);

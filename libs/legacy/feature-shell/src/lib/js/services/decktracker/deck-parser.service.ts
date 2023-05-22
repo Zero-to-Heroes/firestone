@@ -12,6 +12,7 @@ import {
 	ScenarioId,
 	SceneMode,
 } from '@firestone-hs/reference-data';
+import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
 import { Metadata } from '../../models/decktracker/metadata';
@@ -23,7 +24,6 @@ import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { groupByFunction } from '../utils';
 import { DeckHandlerService } from './deck-handler.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json`;
@@ -217,9 +217,9 @@ export class DeckParserService {
 				}
 			}
 		});
-		this.duelsService.duelsInfo$$.subscribe((deck) => {
-			console.debug('[duels] got deck', deck);
-			this.duelsDeck = deck;
+		this.duelsService.duelsInfo$$.subscribe((duelsInfo) => {
+			console.debug('[duels] got deck', duelsInfo);
+			this.duelsDeck = duelsInfo?.DuelsDeck;
 		});
 
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
@@ -323,11 +323,11 @@ export class DeckParserService {
 			return;
 		}
 
-		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
+		const decklist: readonly number[] = normalizeWithDbfIds(deckFromMemory.DeckList, this.allCards);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		const deckDefinition: DeckDefinition = {
 			format: deckFromMemory.FormatType || GameFormat.FT_WILD,
-			cards: this.explodeDecklist(decklist),
+			cards: explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
 				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, this.allCards)]
@@ -339,7 +339,7 @@ export class DeckParserService {
 				: deckFromMemory.Sideboards.map((sideboard) => {
 						return {
 							keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
-							cards: this.explodeDecklist(this.normalizeWithDbfIds(sideboard.Cards)),
+							cards: explodeDecklist(normalizeWithDbfIds(sideboard.Cards, this.allCards)),
 						};
 				  }),
 		};
@@ -366,10 +366,6 @@ export class DeckParserService {
 		};
 		console.log('[deck-parser] built deck info', currentDeck);
 		return currentDeck;
-	}
-
-	public normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
-		return decklist.map((cardId) => this.allCards.getCard(cardId)?.dbfId);
 	}
 
 	private isDeckLogged(scenarioId: number): boolean {
@@ -476,16 +472,23 @@ export class DeckParserService {
 			(this.currentScene === SceneMode.GAMEPLAY && [GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(gameType))
 		);
 	}
-
-	public explodeDecklist(initialDecklist: readonly number[]): any[] {
-		console.log('[deck-parser] decklist with dbfids', initialDecklist);
-		const groupedById = groupByFunction((cardId) => '' + cardId)(initialDecklist);
-
-		const result = Object.keys(groupedById).map((id) => [+id, groupedById[id].length]);
-		console.log('[deck-parser] exploding decklist result', result);
-		return result;
-	}
 }
+
+export const explodeDecklist = (initialDecklist: readonly number[]): any[] => {
+	console.log('[deck-parser] decklist with dbfids', initialDecklist);
+	const groupedById = groupByFunction((cardId) => '' + cardId)(initialDecklist);
+
+	const result = Object.keys(groupedById).map((id) => [+id, groupedById[id].length]);
+	console.log('[deck-parser] exploding decklist result', result);
+	return result;
+};
+
+export const normalizeWithDbfIds = (
+	decklist: readonly (number | string)[],
+	allCards: CardsFacadeService,
+): readonly number[] => {
+	return decklist.map((cardId) => allCards.getCard(cardId)?.dbfId);
+};
 
 export interface DeckInfo {
 	scenarioId: number;

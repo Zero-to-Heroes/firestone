@@ -10,6 +10,7 @@ export class DuelsIsOnMainScreenProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.debug('[duels-is-on-main-screen-processor] setting isOnDuelsMainScreen', event.value);
 		return [
 			currentState.update({
 				duels: currentState.duels.update({

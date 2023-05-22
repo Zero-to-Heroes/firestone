@@ -15,11 +15,7 @@ import { buildDuelsHeroPlayerStats, filterDuelsRuns } from '@services/ui-store/d
 
 import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-<<<<<<< HEAD
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
-=======
-import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
->>>>>>> 9864352ec (BUG (duels): don't crash when no stats are available)
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';

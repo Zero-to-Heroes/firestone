@@ -47,10 +47,12 @@ export class DuelsLootParserService {
 		const memoryReadyToEmit$ = this.duelsState.duelsInfo$$.pipe(
 			filter((info) => !!info),
 			map((duelsInfo) => {
-				const signatureTreasure = findSignatureTreasure(duelsInfo.DeckList, this.allCards);
-				console.debug('[duels-loot] signatureTreasure from decklist', signatureTreasure, duelsInfo.DeckList);
+				const signatureTreasure = duelsInfo.SignatureTreasureCardId
+					? this.allCards.getCard(duelsInfo.SignatureTreasureCardId).id
+					: findSignatureTreasure(duelsInfo.DuelsDeck?.DeckList, this.allCards);
+				console.debug('[duels-loot] signatureTreasure from decklist', signatureTreasure, duelsInfo);
 				// It is important to only send the data once we have everything
-				return !!signatureTreasure && (!!duelsInfo?.StartingHeroPower || !!duelsInfo?.StartingHeroPowerCardId);
+				return !!signatureTreasure && !!duelsInfo?.HeroPowerCardId;
 			}),
 		);
 
@@ -125,7 +127,9 @@ export class DuelsLootParserService {
 		const treasures: readonly string[] = !!duelsInfo?.TreasureOption
 			? duelsInfo.TreasureOption.map((option) => this.allCards.getCard(+option)?.id || '' + option)
 			: [];
-		const signatureTreasure: string = findSignatureTreasure(duelsInfo.DeckList, this.allCards);
+		const signatureTreasure: string = duelsInfo.SignatureTreasureCardId
+			? this.allCards.getCard(duelsInfo.SignatureTreasureCardId).id
+			: findSignatureTreasure(duelsInfo.DuelsDeck?.DeckList, this.allCards);
 		const input: Input = {
 			type: metaData.GameType === GameType.GT_PVPDR ? 'duels' : 'paid-duels',
 			reviewId: reviewId,
@@ -133,9 +137,7 @@ export class DuelsLootParserService {
 			userId: user.userId,
 			userName: user.username,
 			// Keep it in case the basic data has not been sent yet (typically during the transition phase)
-			startingHeroPower:
-				this.allCards.getCard(duelsInfo.StartingHeroPower ?? duelsInfo.StartingHeroPowerCardId)?.id ||
-				'' + (duelsInfo.StartingHeroPower ?? duelsInfo.StartingHeroPowerCardId),
+			startingHeroPower: this.allCards.getCard(duelsInfo.HeroPowerCardId)?.id,
 			signatureTreasure: signatureTreasure,
 			lootBundles: duelsInfo.LootOptionBundles
 				? duelsInfo.LootOptionBundles.filter((bundle) => bundle).map((bundle) => ({

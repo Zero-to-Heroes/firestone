@@ -6,6 +6,7 @@ export interface DeckInfoFromMemory {
 	readonly Name: string;
 	readonly DeckList: readonly (string | number)[];
 	readonly HeroCardId: string;
+	readonly HeroPowerCardId?: string;
 	readonly HeroClass?: number;
 	readonly FormatType: GameFormat;
 	readonly Sideboards?: readonly DeckSideboardFromMemory[];

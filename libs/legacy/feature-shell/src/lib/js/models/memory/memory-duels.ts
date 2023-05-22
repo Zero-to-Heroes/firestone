@@ -1,30 +1,36 @@
-import { GameFormat } from '@firestone-hs/reference-data';
+import { DeckInfoFromMemory } from '../mainwindow/decktracker/deck-info-from-memory';
 
 export interface DuelsInfo {
+	readonly HeroCardId: string;
+	readonly PlayerClass: number;
+	readonly HeroPowerCardId: string | number;
+	readonly SignatureTreasureCardId: string | number;
+
+	readonly DuelsDeck: DeckInfoFromMemory;
 	readonly Wins: number;
 	readonly Losses: number;
 	readonly Rating: number;
 	readonly PaidRating: number;
 	readonly LastRatingChange: number;
-	readonly DeckList: readonly (string | number)[];
-	// Use that in priority
-	readonly DeckListWithCardIds: readonly string[];
-	readonly ChosenLoot: number;
-	readonly ChosenTreasure: number;
-	readonly LootOptionBundles: readonly OptionBundle[];
-	readonly TreasureOption: readonly number[];
-	readonly StartingHeroPower: number;
-	// Use that in priority
-	readonly StartingHeroPowerCardId: number;
-	readonly PlayerClass: number;
 
-	// Not read from memory, just there for compatiblity with standard decklists
-	/** @deprecated */
-	readonly FormatType: GameFormat;
-	/** @deprecated */
-	readonly Name: string;
-	/** @deprecated */
-	readonly HeroCardId: string;
+	readonly LootOptionBundles: readonly OptionBundle[];
+	readonly ChosenLoot: number;
+	readonly TreasureOption: readonly number[];
+	readonly ChosenTreasure: number;
+
+	// Use that in priority
+	// readonly DeckList: readonly (string | number)[];
+	// // readonly DeckListWithCardIds: readonly string[];
+	// readonly StartingHeroPower: number;
+	// // Use that in priority
+	// readonly StartingHeroPowerCardId: number;
+
+	// // Not read from memory, just there for compatiblity with standard decklists
+	// /** @deprecated */
+	// readonly FormatType: GameFormat;
+	// /** @deprecated */
+	// readonly Name: string;
+	// /** @deprecated */
 }
 
 export interface OptionBundle {

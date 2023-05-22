@@ -107,10 +107,11 @@ export class DuelsStateBuilderService {
 		setTimeout(() => {
 			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
-			this.duelsInfo$$.asObservable().subscribe((deck) => {
-				this.mainWindowStateUpdater.next(new DuelsCurrentDeckEvent(deck));
+			this.duelsInfo$$.subscribe((duelsInfo) => {
+				this.mainWindowStateUpdater.next(new DuelsCurrentDeckEvent(duelsInfo?.DuelsDeck));
 			});
-			this.isOnMainScreen.asObservable().subscribe((deck) => {
+			this.isOnMainScreen.subscribe((deck) => {
+				console.debug('[duels-state-builder] isOnMainScreen', deck);
 				this.mainWindowStateUpdater.next(new DuelsIsOnMainScreenEvent(deck));
 			});
 		});
@@ -133,12 +134,7 @@ export class DuelsStateBuilderService {
 			const duelsInfo = await this.memory.getDuelsInfo();
 			console.debug('[duels-run] get duelsInfo', duelsInfo);
 			if (duelsInfo?.Rating != null) {
-				this.duelsInfo$$.next({
-					...duelsInfo,
-					// Give priority to the cardIds, as this is what we get when reading the duels deck
-					// from the main Duels manager, instead of the dungeon run scene
-					DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-				});
+				this.duelsInfo$$.next(duelsInfo);
 				return true;
 			}
 			return false;
@@ -384,12 +380,7 @@ export class DuelsStateBuilderService {
 	private async updateDuelsInfo() {
 		const duelsInfo = await this.memory.getDuelsInfo();
 		if (duelsInfo) {
-			this.duelsInfo$$.next({
-				...duelsInfo,
-				// Give priority to the cardIds, as this is what we get when reading the duels deck
-				// from the main Duels manager, instead of the dungeon run scene
-				DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-			});
+			this.duelsInfo$$.next(duelsInfo);
 		}
 	}
 }

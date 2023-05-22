@@ -29,7 +29,8 @@ export class LazyDataInitService {
 		private readonly questsService: QuestsService,
 		private readonly streamsService: LiveStreamsService,
 		private readonly tavernBrawlService: TavernBrawlService,
-	) {}
+	) {
+	}
 
 	public async requestLoad(dataType: StateDataType) {
 		switch (dataType) {
