@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.2',
+		version: '11.2.3',
 		force: false,
 		sections: [
 			// {
@@ -116,6 +116,18 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add a way to search for top decks containing a given card.`,
+							},
+							{
+								type: 'content',
+								text: `Rework how memory reading is handled in Duels. This should improve the reliability of runs detection, and should reduce slightly the resources consumptions of the app while playing Duels.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where ETC Band Manager would not always be properly handled, especially in the first matches of a run.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the meta stats would not appear anymore.`,
 							},
 						],
 					},
