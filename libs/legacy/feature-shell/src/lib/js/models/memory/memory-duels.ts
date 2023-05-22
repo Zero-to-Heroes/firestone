@@ -3,8 +3,8 @@ import { DeckInfoFromMemory } from '../mainwindow/decktracker/deck-info-from-mem
 export interface DuelsInfo {
 	readonly HeroCardId: string;
 	readonly PlayerClass: number;
-	readonly HeroPowerCardId: string | number;
-	readonly SignatureTreasureCardId: string | number;
+	readonly HeroPowerCardDbfId: string | number;
+	readonly SignatureTreasureCardDbfId: string | number;
 
 	readonly DuelsDeck: DeckInfoFromMemory;
 	readonly Wins: number;

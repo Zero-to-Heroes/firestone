@@ -69,7 +69,7 @@ export class DuelsRunIdService {
 					a.PaidRating === b.PaidRating &&
 					a.Wins === b.Wins &&
 					a.Losses === b.Losses &&
-					a.HeroPowerCardId === b.HeroPowerCardId &&
+					a.HeroPowerCardDbfId === b.HeroPowerCardDbfId &&
 					a.PlayerClass === b.PlayerClass
 				);
 			}),
@@ -155,7 +155,7 @@ const isNewRun = (
 
 	if (
 		currentRun.heroPowerCardId &&
-		allCards.getCard(currentRun.heroPowerCardId).dbfId !== duelsInfo.HeroPowerCardId
+		allCards.getCard(currentRun.heroPowerCardId).dbfId !== duelsInfo.HeroPowerCardDbfId
 	) {
 		console.log('[duels-run] different hero power, starting new run', duelsInfo, currentRun.heroPowerCardId);
 		console.debug(
@@ -170,8 +170,8 @@ const isNewRun = (
 		console.log('[duels-run] rating changed, starting new run', duelsInfo.LastRatingChange);
 		return true;
 	}
-	const signatureTreasure: string = duelsInfo.SignatureTreasureCardId
-		? allCards.getCard(duelsInfo.SignatureTreasureCardId).id
+	const signatureTreasure: string = duelsInfo.SignatureTreasureCardDbfId
+		? allCards.getCard(duelsInfo.SignatureTreasureCardDbfId).id
 		: findSignatureTreasure(duelsInfo.DuelsDeck?.DeckList, allCards);
 	if (currentRun.signatureTreasureCardId && signatureTreasure !== currentRun.signatureTreasureCardId) {
 		console.log(
