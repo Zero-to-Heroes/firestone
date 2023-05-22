@@ -11,9 +11,8 @@ import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/du
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ReviewIdService } from '../review-id.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { DUNGEON_LOOT_INFO_URL } from './duels-loot-parser.service';
 import { DuelsRunIdService } from './duels-run-id.service';
-
-const DUNGEON_LOOT_INFO_URL = 'https://e4rso1a869.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 
 @Injectable()
 export class DuelsRewardsService {
