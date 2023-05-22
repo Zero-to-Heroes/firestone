@@ -4,7 +4,7 @@ import { ApiRunner, LocalStorageService, OverwolfService } from '@firestone/shar
 import { BgsBestStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-best-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
-const BGS_BEST_USER_STATS_ENDPOINT = 'https://0u2t28wmwe.execute-api.us-west-2.amazonaws.com/Prod';
+const BGS_BEST_USER_STATS_ENDPOINT = 'https://ituxwmzobarpdbza5ayj2emdgq0nyhzp.lambda-url.us-west-2.on.aws';
 
 @Injectable()
 export class BgsBestUserStatsService {
