@@ -5,6 +5,7 @@ import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
 declare let amplitude;
 
+const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 const REPLAY_API = 'https://xml.firestoneapp.com/';
 
 @Component({
@@ -54,9 +55,7 @@ export class GameReplayComponent {
 		// window['coliseum'].zone.run(() => {
 		// 	window['coliseum'].component.updateStatus('Downloading replay file');
 		// });
-		const review: any = await this.http
-			.get(`https://static-api.firestoneapp.com/retrieveReview/${reviewId}`)
-			.toPromise();
+		const review: any = await this.http.get(`${RETRIEVE_REVIEW_URL}/${reviewId}`).toPromise();
 		if (!review) {
 			return null;
 		}
