@@ -6,8 +6,7 @@ import { AdService } from './ad.service';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 
-// const USER_MAPPING_URL = 'https://08fe814cde.execute-api.us-west-2.amazonaws.com/Prod/userMapping';
-const USER_MAPPING_UPDATE_URL = 'https://api.firestoneapp.com/usermapping/save/usermapping/{proxy+}';
+const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class UserService {
