@@ -744,7 +744,6 @@ import { SimpleIOService } from './js/services/plugins/simple-io.service';
 import { PreferencesService } from './js/services/preferences.service';
 import { ProfileUploaderService } from './js/services/profile/profile-uploader.service';
 import { QuestsService } from './js/services/quests.service';
-import { RealTimeNotificationService } from './js/services/real-time-notifications.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
 import { ReviewIdService } from './js/services/review-id.service';
 import { RewardMonitorService } from './js/services/rewards/rewards-monitor';
@@ -1688,7 +1687,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BootstrapOtherServicesService,
 		AppStartupService,
 
-		RealTimeNotificationService,
 		AdService,
 		TipService,
 		MainWindowStoreService,

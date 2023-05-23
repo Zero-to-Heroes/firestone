@@ -1,20 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
-const BUG_ENDPOINT = 'https://vzbzzymjob.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-
 @Injectable()
 export class LogsUploaderService {
-	constructor(
-		private io: SimpleIOService,
-		private ow: OverwolfService,
-		private s3: S3FileUploadService,
-		private http: HttpClient,
-	) {}
+	constructor(private io: SimpleIOService, private ow: OverwolfService, private s3: S3FileUploadService) {}
 
 	public async uploadGameLogs(): Promise<string> {
 		try {
@@ -56,17 +48,5 @@ export class LogsUploaderService {
 			console.warn('Exception while uploading logs for troubleshooting', e);
 			return null;
 		}
-	}
-
-	public async reportSpecificBug(type: string) {
-		const [appLogs, currentUser] = await Promise.all([this.uploadAppLogs(), this.ow.getCurrentUser()]);
-		const submission = {
-			version: process.env.APP_VERSION,
-			type: type,
-			user: currentUser ? currentUser.username || currentUser.userId || currentUser.machineId : undefined,
-			appLogsKey: appLogs,
-		};
-		await this.http.post(BUG_ENDPOINT, submission).toPromise();
-		console.log('sent automated bug report');
 	}
 }
