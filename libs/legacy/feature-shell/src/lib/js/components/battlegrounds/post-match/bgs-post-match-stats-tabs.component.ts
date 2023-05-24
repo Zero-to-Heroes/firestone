@@ -10,13 +10,14 @@ import {
 } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
+import { isSupportedScenario } from '../../../services/battlegrounds/bgs-utils';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -109,10 +110,13 @@ export class BgsPostMatchStatsTabsComponent
 				const battle = value.stats?.battleResultHistory?.find(
 					(battleResult) => battleResult.turn === faceOff.turn,
 				);
+				const isSupported = isSupportedScenario((battle as any)?.battleInfo);
+				const battleMessage = isSupported?.reason;
 				return {
 					...faceOff,
 					battleInfo: (battle as any)?.battleInfo,
 					battleResult: battle?.simulationResult,
+					battleInfoMesage: battleMessage,
 				} as BgsFaceOffWithSimulation;
 			})
 			.reverse();
