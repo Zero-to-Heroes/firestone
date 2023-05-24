@@ -522,6 +522,7 @@ const publicCardGiftCreators = [
 	CardIds.Hipster,
 	CardIds.HuntersPack,
 	CardIds.Hydrologist,
+	CardIds.TheHandOfRafaam,
 	CardIds.TheHarvesterOfEnvy,
 	CardIds.IdentityTheft,
 	CardIds.IllidariStudiesCore,
