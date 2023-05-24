@@ -233,6 +233,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.UndeadAttackBonus,
 								FrostlingBonus:
 									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.FrostlingBonus,
+								BloodGemAttackBonus:
+									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.BloodGemAttackBonus,
+								BloodGemHealthBonus:
+									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.BloodGemHealthBonus,
 							},
 						},
 					},
@@ -254,6 +258,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.UndeadAttackBonus,
 								FrostlingBonus:
 									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.FrostlingBonus,
+								BloodGemAttackBonus:
+									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.BloodGemAttackBonus,
+								BloodGemHealthBonus:
+									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.BloodGemHealthBonus,
 							},
 						},
 					},
