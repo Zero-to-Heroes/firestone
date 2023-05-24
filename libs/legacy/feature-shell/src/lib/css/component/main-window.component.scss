@@ -63,7 +63,8 @@
 	position: relative;
 	width: 100%;
 	height: 30px;
-	z-index: 400;
+	// So that dropdowns are on top of everything
+    z-index: 9999999999;
 	flex-shrink: 0;
 	border: none;
 	// This is needed because otherwise it interferes with the navigation

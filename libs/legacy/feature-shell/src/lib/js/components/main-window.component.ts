@@ -274,7 +274,7 @@ export class MainWindowComponent
 
 	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
 		return (copyToCliboard: boolean) => {
-			return this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
+			return this.owUtils.captureWindow('Firestone - Main', copyToCliboard);
 		};
 	}
 
