@@ -3,31 +3,31 @@ import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
-import { BehaviorSubject, debounceTime, filter, map } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
 import { CoinInfo } from '../../models/memory/coin-info';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Set, SetCard } from '../../models/set';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
+import { CardBacksInternalService } from './details/card-backs';
+import { CardsInternalService } from './details/cards';
 import { SetsService } from './sets-service.service';
-
-const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json';
 
 @Injectable()
 export class CollectionManager {
 	public static EPIC_PITY_TIMER = 10;
 	public static LEGENDARY_PITY_TIMER = 40;
 
-	private referenceCardBacks: readonly CardBack[];
+	public collection$$: BehaviorSubject<readonly Card[]>;
+	public cardBacks$$: BehaviorSubject<readonly CardBack[]>;
 
-	public collection$$ = new BehaviorSubject<readonly Card[]>([]);
-	public cardBacks$$ = new BehaviorSubject<readonly CardBack[]>([]);
+	private cardsIS: CardsInternalService;
+	private cardBacksIS: CardBacksInternalService;
 
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
@@ -39,6 +39,11 @@ export class CollectionManager {
 		private readonly packStatsService: PackStatsService,
 		private readonly events: Events,
 	) {
+		this.cardsIS = new CardsInternalService(memoryReading, db, events);
+		this.cardBacksIS = new CardBacksInternalService(memoryReading, db, api, events);
+
+		this.collection$$ = this.cardsIS.collection$$;
+		this.cardBacks$$ = this.cardBacksIS.cardBacks$$;
 		window['collectionManager'] = this;
 		this.init();
 	}
@@ -47,86 +52,14 @@ export class CollectionManager {
 		this.gameStatus.onGameStart(async () => {
 			await Promise.all([this.getPacks()]);
 		});
-
-		this.initCollection();
-		this.initCardBacks();
-	}
-
-	private async initCollection() {
-		const collectionUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-			filter((event) => event.data[0].CollectionCardsCount != null),
-			map((event) => {
-				const changes: MemoryUpdate = event.data[0];
-				console.debug(
-					'[collection-manager] [cards] cards count changed',
-					changes.CollectionCardsCount,
-					changes,
-				);
-				return changes.CollectionCardBacksCount;
-			}),
-		);
-		collectionUpdate$.pipe(debounceTime(5000)).subscribe(async () => {
-			const collection = await this.memoryReading.getCollection();
-			if (!!collection?.length) {
-				console.debug('[collection-manager] [cards] updating collection', collection.length);
-				this.collection$$.next(collection);
-			}
-		});
-		this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
-			console.debug('[collection-manager] [cards] updating collection in db', collection.length);
-			await this.db.saveCollection(collection);
-		});
-		const collectionFromDb = await this.db.getCollection();
-		if (collectionFromDb?.length) {
-			console.debug('[collection-manager] [cards] init collection from db', collectionFromDb.length);
-			this.collection$$.next(collectionFromDb);
-		}
-	}
-
-	private async initCardBacks() {
-		this.referenceCardBacks = (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
-		const cardBacksUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-			filter((event) => event.data[0].CollectionCardBacksCount != null),
-			map((event) => {
-				const changes: MemoryUpdate = event.data[0];
-				console.debug(
-					'[collection-manager] [card-backs] card-backs count changed',
-					changes.CollectionCardBacksCount,
-					changes,
-				);
-				return changes.CollectionCardBacksCount;
-			}),
-		);
-		cardBacksUpdate$.pipe(debounceTime(5000)).subscribe(async () => {
-			const collection = await this.memoryReading.getCardBacks();
-			if (!!collection?.length) {
-				const merged = this.mergeCardBacksData(this.referenceCardBacks, collection);
-				console.debug(
-					'[collection-manager] [card-backs] updating collection',
-					collection.length,
-					merged.length,
-				);
-				this.cardBacks$$.next(merged);
-			}
-		});
-		this.cardBacks$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
-			console.debug('[collection-manager] [card-backs] updating collection in db', collection.length);
-			await this.db.saveCardBacks(collection);
-		});
-		const cardBacksFromDb = await this.db.getCardBacks();
-		if (cardBacksFromDb?.length) {
-			console.debug('[collection-manager] [card-backs] init collection from db', cardBacksFromDb.length);
-			this.cardBacks$$.next(cardBacksFromDb);
-		}
 	}
 
 	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
-		return this.collection$$.getValue();
+		return this.cardsIS.getCollection();
 	}
 
-	// TODO: sets$ observable, and move it outside of the main state?
 	public async getCardBacks(): Promise<readonly CardBack[]> {
-		return this.cardBacks$$.getValue();
+		return this.cardBacksIS.getCardBacks();
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
@@ -194,21 +127,6 @@ export class CollectionManager {
 			const saved = await this.db.saveCoins(coins);
 			return saved;
 		}
-	}
-
-	private mergeCardBacksData(
-		referenceCardBacks: readonly CardBack[],
-		ownedCardBacks: readonly CardBack[],
-	): readonly CardBack[] {
-		return referenceCardBacks.map((cardBack) => {
-			const owned = ownedCardBacks.find((cb) => cb.id === cardBack.id);
-			return owned?.owned
-				? ({
-						...cardBack,
-						owned: true,
-				  } as CardBack)
-				: cardBack;
-		});
 	}
 
 	// type is NORMAL or GOLDEN
