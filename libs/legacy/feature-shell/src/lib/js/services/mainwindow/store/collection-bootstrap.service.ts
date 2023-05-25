@@ -35,9 +35,9 @@ export class CollectionBootstrapService {
 
 	private async initCollectionState(): Promise<void> {
 		console.log('initializing collection state');
-		const [collection, ownedBgsHeroSkins] = await Promise.all([
+		const [collection] = await Promise.all([
 			this.collectionManager.getCollection(),
-			this.collectionManager.getBattlegroundsOwnedHeroSkinDbfIds(),
+			// this.collectionManager.getBattlegroundsOwnedHeroSkinDbfIds(),
 		]);
 		const [cardHistory, totalHistoryLength, packStats] = await Promise.all([
 			this.cardHistoryStorage.loadAll(100),
@@ -49,7 +49,7 @@ export class CollectionBootstrapService {
 		// const sets = await this.collectionManager.buildSets(collection);
 		const newState = BinderState.create({
 			collection: collection as readonly Card[],
-			ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
+			// ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
 			// packsFromMemory: packs as readonly PackInfo[],
 			packStats: packStats,
 			// allSets: sets,

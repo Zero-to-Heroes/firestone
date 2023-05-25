@@ -84,6 +84,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
 	private coins: Observable<readonly Coin[]>;
+	private bgHeroSkins: Observable<readonly number[]>;
 	private sets: Observable<readonly Set[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -347,6 +348,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.coins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public bgHeroSkins$(): Observable<readonly number[]> {
+		this.debugCall('bgHeroSkins$');
+		return this.bgHeroSkins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public sets$(): Observable<readonly Set[]> {
 		this.debugCall('sets$');
 		return this.sets.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -396,6 +402,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initMails();
 		this.initCardBacks();
 		this.initCoins();
+		this.initBgHeroSkins();
 		this.initSets();
 		this.initAllTimeBoosters();
 		this.initTavernBrawl();
@@ -417,6 +424,12 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initSets() {
 		this.sets = (this.ow.getMainWindow().setsManager as SetsManagerService).sets$$.pipe(shareReplay(1));
+	}
+
+	private initBgHeroSkins() {
+		this.bgHeroSkins = (this.ow.getMainWindow().collectionManager as CollectionManager).bgHeroSkins$$.pipe(
+			shareReplay(1),
+		);
 	}
 
 	private initCoins() {

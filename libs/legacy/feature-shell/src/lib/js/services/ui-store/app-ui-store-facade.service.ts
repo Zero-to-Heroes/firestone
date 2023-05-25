@@ -154,6 +154,11 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.sets$());
 	}
 
+	public bgHeroSkins$(): Observable<readonly number[]> {
+		this.debugCall('bgHeroSkins$');
+		return this.debugObservable(this.store.bgHeroSkins$());
+	}
+
 	public coins$(): Observable<readonly Coin[]> {
 		this.debugCall('coins$');
 		return this.debugObservable(this.store.coins$());

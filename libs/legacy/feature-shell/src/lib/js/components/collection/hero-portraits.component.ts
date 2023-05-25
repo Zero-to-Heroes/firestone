@@ -7,9 +7,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { Observable, combineLatest } from 'rxjs';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
@@ -103,17 +102,17 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		const mercenariesReferenceData$ = this.store
 			.listen$(([main, nav, prefs]) => main.mercenaries.getReferenceData())
 			.pipe(this.mapData(([mercs]) => mercs?.mercenaries));
-		const relevantHeroes$ = combineLatest(
+		const relevantHeroes$ = combineLatest([
+			this.store.bgHeroSkins$(),
 			this.store.listen$(
 				([main, nav, prefs]) => main.binder.collection,
-				([main, nav, prefs]) => main.binder.ownedBgsHeroSkins,
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries,
 			),
 			mercenariesReferenceData$,
 			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[collection, ownedBgsHeroSkins, mercenariesCollection], mercenariesReferenceData, category]) => {
+				([ownedBgsHeroSkins, [collection, mercenariesCollection], mercenariesReferenceData, category]) => {
 					switch (category) {
 						case 'collectible':
 							return this.buildCollectibleHeroPortraits(collection, this.allCards.getCards());

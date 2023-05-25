@@ -5,7 +5,7 @@ import { CardHistory } from '../card-history';
 
 export class BinderState {
 	readonly collection: readonly Card[] = [];
-	readonly ownedBgsHeroSkins: readonly number[] = [];
+	// readonly ownedBgsHeroSkins: readonly number[] = [];
 	// readonly packsFromMemory: readonly PackInfo[] = [];
 	readonly packStats: readonly PackResult[] = [];
 	// readonly allSets: readonly Set[] = [];
