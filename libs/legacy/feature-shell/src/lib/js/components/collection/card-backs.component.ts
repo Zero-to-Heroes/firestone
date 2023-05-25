@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -69,9 +69,7 @@ export class CardBacksComponent extends AbstractSubscriptionStoreComponent imple
 					this.cdr.detectChanges();
 				}
 			});
-		const cardBacks$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.cardBacks)
-			.pipe(this.mapData(([cardBacks]) => cardBacks));
+		const cardBacks$ = this.store.cardBacks$().pipe(this.mapData((cardBacks) => cardBacks));
 		this.total$ = cardBacks$.pipe(this.mapData((cardBacks) => cardBacks?.length ?? 0));
 		this.unlocked$ = cardBacks$.pipe(
 			this.mapData((cardBacks) => cardBacks?.filter((item) => item.owned).length ?? 0),

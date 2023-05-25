@@ -1,7 +1,6 @@
 import { PackResult } from '@firestone-hs/user-packs';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { Card } from '../card';
-import { CardBack } from '../card-back';
 import { CardHistory } from '../card-history';
 import { Coin } from '../coin';
 import { PackInfo } from '../collection/pack-info';
@@ -13,7 +12,7 @@ export class BinderState {
 	readonly packsFromMemory: readonly PackInfo[] = [];
 	readonly packStats: readonly PackResult[] = [];
 	readonly allSets: readonly Set[] = [];
-	readonly cardBacks: readonly CardBack[] = [];
+	// readonly cardBacks: readonly CardBack[] = [];
 	readonly coins: readonly Coin[] = [];
 	readonly cardHistory: readonly CardHistory[] = [];
 	readonly totalHistoryLength: number;

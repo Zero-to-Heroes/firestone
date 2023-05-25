@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { Set, SetCard } from '../../models/set';
@@ -136,16 +136,14 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 						: null,
 				),
 			);
-		this.selectedCardBack$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.binder.cardBacks,
-				([main, nav, prefs]) => nav.navigationCollection.selectedCardBackId,
-			)
-			.pipe(
-				this.mapData(([cardBacks, selectedCardBackId]) =>
-					cardBacks.find((cardBack) => cardBack.id === selectedCardBackId),
-				),
-			);
+		this.selectedCardBack$ = combineLatest([
+			this.store.cardBacks$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedCardBackId),
+		]).pipe(
+			this.mapData(([cardBacks, [selectedCardBackId]]) =>
+				cardBacks.find((cardBack) => cardBack.id === selectedCardBackId),
+			),
+		);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 }

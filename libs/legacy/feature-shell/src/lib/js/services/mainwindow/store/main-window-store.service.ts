@@ -603,7 +603,7 @@ export class MainWindowStoreService {
 			[LoadMoreCardHistoryEvent.eventName(), new LoadMoreCardHistoryProcessor(this.cardHistoryStorage)],
 			[SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor()],
 			[ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards)],
-			[ShowCardBackDetailsEvent.eventName(), new ShowCardBackDetailsProcessor()],
+			[ShowCardBackDetailsEvent.eventName(), new ShowCardBackDetailsProcessor(this.collectionManager)],
 			[
 				UpdateCardSearchResultsEvent.eventName(),
 				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),

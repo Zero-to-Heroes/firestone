@@ -3,7 +3,7 @@ import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
-import { BehaviorSubject, filter } from 'rxjs';
+import { BehaviorSubject, debounceTime, filter, map } from 'rxjs';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
@@ -27,6 +27,7 @@ export class CollectionManager {
 	private referenceCardBacks: readonly CardBack[];
 
 	public collection$$ = new BehaviorSubject<readonly Card[]>([]);
+	public cardBacks$$ = new BehaviorSubject<readonly CardBack[]>([]);
 
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
@@ -38,35 +39,43 @@ export class CollectionManager {
 		private readonly packStatsService: PackStatsService,
 		private readonly events: Events,
 	) {
+		window['collectionManager'] = this;
 		this.init();
 	}
 
 	private async init() {
 		this.gameStatus.onGameStart(async () => {
-			await Promise.all([this.getCardBacks(), this.getPacks()]);
+			await Promise.all([this.getPacks()]);
 		});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
-			const changes: MemoryUpdate = event.data[0];
-			if (changes.CollectionCardsCount != null) {
+		this.initCollection();
+		this.initCardBacks();
+	}
+
+	private async initCollection() {
+		const collectionUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
+			filter((event) => event.data[0].CollectionCardsCount != null),
+			map((event) => {
+				const changes: MemoryUpdate = event.data[0];
 				console.debug(
 					'[collection-manager] [cards] cards count changed',
 					changes.CollectionCardsCount,
 					changes,
 				);
-				const collection = await this.memoryReading.getCollection();
-				if (!!collection?.length) {
-					console.debug('[collection-manager] [cards] updating collection', collection.length);
-					this.collection$$.next(collection);
-				}
+				return changes.CollectionCardBacksCount;
+			}),
+		);
+		collectionUpdate$.pipe(debounceTime(5000)).subscribe(async () => {
+			const collection = await this.memoryReading.getCollection();
+			if (!!collection?.length) {
+				console.debug('[collection-manager] [cards] updating collection', collection.length);
+				this.collection$$.next(collection);
 			}
 		});
-
 		this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
 			console.debug('[collection-manager] [cards] updating collection in db', collection.length);
 			await this.db.saveCollection(collection);
 		});
-
 		const collectionFromDb = await this.db.getCollection();
 		if (collectionFromDb?.length) {
 			console.debug('[collection-manager] [cards] init collection from db', collectionFromDb.length);
@@ -74,8 +83,54 @@ export class CollectionManager {
 		}
 	}
 
+	private async initCardBacks() {
+		this.referenceCardBacks = (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
+		const cardBacksUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
+			filter((event) => event.data[0].CollectionCardBacksCount != null),
+			map((event) => {
+				const changes: MemoryUpdate = event.data[0];
+				console.debug(
+					'[collection-manager] [card-backs] card-backs count changed',
+					changes.CollectionCardBacksCount,
+					changes,
+				);
+				return changes.CollectionCardBacksCount;
+			}),
+		);
+		cardBacksUpdate$.pipe(debounceTime(5000)).subscribe(async () => {
+			const collection = await this.memoryReading.getCardBacks();
+			if (!!collection?.length) {
+				const merged = this.mergeCardBacksData(this.referenceCardBacks, collection);
+				console.debug(
+					'[collection-manager] [card-backs] updating collection',
+					collection.length,
+					merged.length,
+				);
+				this.cardBacks$$.next(merged);
+			}
+		});
+		this.cardBacks$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
+			console.debug('[collection-manager] [card-backs] updating collection in db', collection.length);
+			await this.db.saveCardBacks(collection);
+		});
+		const cardBacksFromDb = await this.db.getCardBacks();
+		if (cardBacksFromDb?.length) {
+			console.debug('[collection-manager] [card-backs] init collection from db', cardBacksFromDb.length);
+			this.cardBacks$$.next(cardBacksFromDb);
+		}
+	}
+
 	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
 		return this.collection$$.getValue();
+	}
+
+	// TODO: sets$ observable, and move it outside of the main state?
+	public async getCardBacks(): Promise<readonly CardBack[]> {
+		return this.cardBacks$$.getValue();
+	}
+
+	public async getPackStats(): Promise<readonly PackResult[]> {
+		return this.packStatsService.getPackStats();
 	}
 
 	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
@@ -116,31 +171,6 @@ export class CollectionManager {
 					console.warn('[collection-manager] missing pack type in enum', p.packType, p.totalObtained);
 				}
 			});
-			return saved;
-		}
-	}
-
-	public async getPackStats(): Promise<readonly PackResult[]> {
-		return this.packStatsService.getPackStats();
-	}
-
-	public async getCardBacks(): Promise<readonly CardBack[]> {
-		console.log('[collection-manager] getting reference card backs');
-		this.referenceCardBacks = this.referenceCardBacks ?? (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
-		console.log('[collection-manager] getting card backs', this.referenceCardBacks?.length);
-		const cardBacks = await this.memoryReading.getCardBacks();
-		console.log('[collection-manager] retrieved card backs from MindVision', cardBacks?.length);
-		if (!cardBacks || cardBacks.length === 0) {
-			console.log('[collection-manager] retrieving card backs from db');
-			const cardBacksFromDb = await this.db.getCardBacks();
-			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb?.length);
-			// We do this so that if we update the reference, we still see them until the info
-			// has been refreshed from the in-game memory
-			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacksFromDb);
-			return merged;
-		} else {
-			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
-			const saved = await this.db.saveCardBacks(merged);
 			return saved;
 		}
 	}

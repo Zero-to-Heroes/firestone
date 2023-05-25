@@ -19,6 +19,7 @@ import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } fro
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { CardBack } from '../../models/card-back';
 import { GameState } from '../../models/decktracker/game-state';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
@@ -30,6 +31,7 @@ import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-com
 import { Preferences } from '../../models/preferences';
 import { AdService } from '../ad.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
+import { CollectionManager } from '../collection/collection-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { GameNativeState } from '../game/game-native-state';
@@ -75,6 +77,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	private mails: Observable<MailState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
+	private cardBacks: Observable<readonly CardBack[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -327,6 +330,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.mails.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public cardBacks$(): Observable<readonly CardBack[]> {
+		this.debugCall('mails$');
+		return this.cardBacks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public tavernBrawl$(): Observable<TavernBrawlState> {
 		this.debugCall('tavernBrawl$');
 		return this.tavernBrawl.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -364,6 +372,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initDecks();
 		this.initDuelsDecks();
 		this.initMails();
+		this.initCardBacks();
 		this.initTavernBrawl();
 		this.initialized = true;
 	}
@@ -373,6 +382,12 @@ export class AppUiStoreService extends Store<Preferences> {
 			shareReplay(1),
 		);
 		// tavernBrawl.subscribe(this.tavernBrawl);
+	}
+
+	private initCardBacks() {
+		this.cardBacks = (this.ow.getMainWindow().collectionManager as CollectionManager).cardBacks$$.pipe(
+			shareReplay(1),
+		);
 	}
 
 	private initMails() {

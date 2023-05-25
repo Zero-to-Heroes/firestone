@@ -5,6 +5,7 @@ export interface MemoryUpdate {
 	readonly ShouldReset: boolean;
 	readonly CollectionInit: boolean;
 	readonly CollectionCardsCount: number;
+	readonly CollectionCardBacksCount: number;
 	readonly DisplayingAchievementToast: boolean;
 	readonly CurrentScene: SceneMode;
 	readonly XpChanges: readonly XpChange[];
