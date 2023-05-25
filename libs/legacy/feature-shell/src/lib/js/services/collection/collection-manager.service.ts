@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { BehaviorSubject } from 'rxjs';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
@@ -36,22 +35,21 @@ export class CollectionManager {
 	private allTimeBoostersIS: AllTimeBoostersInternalService;
 
 	constructor(
+		readonly events: Events,
+		readonly api: ApiRunner,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
-		private readonly gameStatus: GameStatusService,
-		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
 		private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
-		private readonly events: Events,
 	) {
-		this.cardsIS = new CardsInternalService(memoryReading, db, events);
-		this.cardBacksIS = new CardBacksInternalService(memoryReading, db, api, events);
-		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(memoryReading, db, events);
-		this.allTimeBoostersIS = new AllTimeBoostersInternalService(memoryReading, db, events);
+		this.cardsIS = new CardsInternalService(events, memoryReading, db);
+		this.cardBacksIS = new CardBacksInternalService(events, memoryReading, db, api);
+		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, memoryReading, db);
+		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, memoryReading, db);
 
 		this.collection$$ = this.cardsIS.collection$$;
-		this.cardBacks$$ = this.cardBacksIS.cardBacks$$;
+		this.cardBacks$$ = this.cardBacksIS.collection$$;
 		this.bgHeroSkins$$ = this.bgHeroSkinsIS.collection$$;
 		this.allTimeBoosters$$ = this.allTimeBoostersIS.collection$$;
 		window['collectionManager'] = this;
@@ -62,7 +60,7 @@ export class CollectionManager {
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
-		return this.cardBacksIS.getCardBacks();
+		return this.cardBacksIS.getCollection();
 	}
 
 	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {

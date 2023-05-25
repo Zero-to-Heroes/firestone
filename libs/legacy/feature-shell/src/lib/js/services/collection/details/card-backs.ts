@@ -1,65 +1,37 @@
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { CardBack } from '../../../models/card-back';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { CollectionStorageService } from '../collection-storage.service';
+import { AbstractCollectionInternalService } from './base-is';
 
 const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json';
 
-export class CardBacksInternalService {
+export class CardBacksInternalService extends AbstractCollectionInternalService<CardBack> {
 	private referenceCardBacks: readonly CardBack[];
-	public cardBacks$$ = new BehaviorSubject<readonly CardBack[]>([]);
+
+	protected type = () => 'card-backs';
+	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionCardBacksCount;
+	protected memoryReadingOperation = () => this.memoryReading.getCardBacks();
+	protected localDbRetrieveOperation = () => this.db.getCardBacks();
+	protected localDbSaveOperation = (collection: readonly CardBack[]) => this.db.saveCardBacks(collection);
 
 	constructor(
+		protected readonly events: Events,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly api: ApiRunner,
-		private readonly events: Events,
 	) {
-		this.init();
+		super(events);
 	}
 
-	private async init() {
+	protected async preInit(): Promise<void> {
 		this.referenceCardBacks = (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
-		const cardBacksUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-			filter((event) => event.data[0].CollectionCardBacksCount != null),
-			map((event) => {
-				const changes: MemoryUpdate = event.data[0];
-				// console.debug(
-				// 	'[collection-manager] [card-backs] card-backs count changed',
-				// 	changes.CollectionCardBacksCount,
-				// );
-				return changes.CollectionCardBacksCount;
-			}),
-		);
-		cardBacksUpdate$.pipe(debounceTime(5000), distinctUntilChanged()).subscribe(async (newCount) => {
-			const collection = await this.memoryReading.getCardBacks();
-			if (!!collection?.length) {
-				const merged = this.mergeCardBacksData(this.referenceCardBacks, collection);
-				console.debug(
-					'[collection-manager] [card-backs] updating collection',
-					newCount,
-					collection.length,
-					merged.length,
-				);
-				this.cardBacks$$.next(merged);
-			}
-		});
-		this.cardBacks$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
-			console.debug('[collection-manager] [card-backs] updating collection in db', collection.length);
-			await this.db.saveCardBacks(collection);
-		});
-		const cardBacksFromDb = await this.db.getCardBacks();
-		if (cardBacksFromDb?.length) {
-			console.debug('[collection-manager] [card-backs] init collection from db', cardBacksFromDb.length);
-			this.cardBacks$$.next(cardBacksFromDb);
-		}
 	}
 
-	public async getCardBacks(): Promise<readonly CardBack[]> {
-		return this.cardBacks$$.getValue();
+	protected override updateMemoryInfo(collection: readonly CardBack[]): readonly CardBack[] {
+		return this.mergeCardBacksData(this.referenceCardBacks, collection);
 	}
 
 	private mergeCardBacksData(
