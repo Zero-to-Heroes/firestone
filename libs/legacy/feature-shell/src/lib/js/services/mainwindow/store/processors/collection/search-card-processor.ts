@@ -24,7 +24,7 @@ export class SearchCardProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const collection = await this.collectionManager.getCollection();
+		const collection = this.collectionManager.collection$$.getValue();
 		const searchResults: readonly SetCard[] = this.cards.searchCards(event.searchString, collection).map((card) => {
 			const collectionCard: Card = this.findCollectionCard(collection, card);
 			return new SetCard(

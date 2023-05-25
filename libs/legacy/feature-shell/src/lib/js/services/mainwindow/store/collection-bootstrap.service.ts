@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Card } from '../../../models/card';
 import { BinderState } from '../../../models/mainwindow/binder-state';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
@@ -35,10 +34,10 @@ export class CollectionBootstrapService {
 
 	private async initCollectionState(): Promise<void> {
 		console.log('initializing collection state');
-		const [collection] = await Promise.all([
-			this.collectionManager.getCollection(),
-			// this.collectionManager.getBattlegroundsOwnedHeroSkinDbfIds(),
-		]);
+		// const [collection] = await Promise.all([
+		// 	this.collectionManager.getCollection(),
+		// 	// this.collectionManager.getBattlegroundsOwnedHeroSkinDbfIds(),
+		// ]);
 		const [cardHistory, totalHistoryLength, packStats] = await Promise.all([
 			this.cardHistoryStorage.loadAll(100),
 			this.cardHistoryStorage.countHistory(),
@@ -48,7 +47,7 @@ export class CollectionBootstrapService {
 		]);
 		// const sets = await this.collectionManager.buildSets(collection);
 		const newState = BinderState.create({
-			collection: collection as readonly Card[],
+			// collection: collection as readonly Card[],
 			// ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
 			// packsFromMemory: packs as readonly PackInfo[],
 			packStats: packStats,

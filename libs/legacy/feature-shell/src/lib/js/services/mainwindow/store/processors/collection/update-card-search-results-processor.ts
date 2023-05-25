@@ -16,7 +16,7 @@ export class UpdateCardSearchResultsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const searchResults: readonly string[] = this.cards
-			.searchCards(event.searchString, currentState.binder.collection)
+			.searchCards(event.searchString, this.collectionManager.collection$$.getValue())
 			.map((card) => card.id);
 		const newCollection = navigationState.navigationCollection.update({
 			searchResults: searchResults,

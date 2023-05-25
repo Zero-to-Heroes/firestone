@@ -1,10 +1,9 @@
 import { PackResult } from '@firestone-hs/user-packs';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { Card } from '../card';
 import { CardHistory } from '../card-history';
 
 export class BinderState {
-	readonly collection: readonly Card[] = [];
+	// readonly collection: readonly Card[] = [];
 	// readonly ownedBgsHeroSkins: readonly number[] = [];
 	// readonly packsFromMemory: readonly PackInfo[] = [];
 	readonly packStats: readonly PackResult[] = [];

@@ -7,6 +7,7 @@ import { MailState } from '@mails/mail-state';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable, Subscription } from 'rxjs';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
+import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
@@ -157,6 +158,11 @@ export class AppUiStoreFacadeService {
 	public bgHeroSkins$(): Observable<readonly number[]> {
 		this.debugCall('bgHeroSkins$');
 		return this.debugObservable(this.store.bgHeroSkins$());
+	}
+
+	public collection$(): Observable<readonly Card[]> {
+		this.debugCall('collection$');
+		return this.debugObservable(this.store.collection$());
 	}
 
 	public coins$(): Observable<readonly Coin[]> {

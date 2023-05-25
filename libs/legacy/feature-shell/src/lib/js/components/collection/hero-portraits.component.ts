@@ -104,15 +104,13 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 			.pipe(this.mapData(([mercs]) => mercs?.mercenaries));
 		const relevantHeroes$ = combineLatest([
 			this.store.bgHeroSkins$(),
-			this.store.listen$(
-				([main, nav, prefs]) => main.binder.collection,
-				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries,
-			),
+			this.store.collection$(),
+			this.store.listen$(([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries),
 			mercenariesReferenceData$,
 			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
 		]).pipe(
 			this.mapData(
-				([ownedBgsHeroSkins, [collection, mercenariesCollection], mercenariesReferenceData, category]) => {
+				([ownedBgsHeroSkins, collection, [mercenariesCollection], mercenariesReferenceData, category]) => {
 					switch (category) {
 						case 'collectible':
 							return this.buildCollectibleHeroPortraits(collection, this.allCards.getCards());

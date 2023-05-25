@@ -56,7 +56,7 @@ export class CollectionManager {
 		window['collectionManager'] = this;
 	}
 
-	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
+	public async getCollection(): Promise<readonly Card[]> {
 		return this.cardsIS.getCollection();
 	}
 
@@ -64,7 +64,7 @@ export class CollectionManager {
 		return this.cardBacksIS.getCollection();
 	}
 
-	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
+	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
 		return this.bgHeroSkinsIS.getCollection();
 	}
 

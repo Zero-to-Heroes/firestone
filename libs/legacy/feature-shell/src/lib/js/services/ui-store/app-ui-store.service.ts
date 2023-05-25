@@ -19,6 +19,7 @@ import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } fro
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
@@ -84,6 +85,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
 	private coins: Observable<readonly Coin[]>;
+	private collection: Observable<readonly Card[]>;
 	private bgHeroSkins: Observable<readonly number[]>;
 	private sets: Observable<readonly Set[]>;
 
@@ -343,6 +345,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.cardBacks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public collection$(): Observable<readonly Card[]> {
+		this.debugCall('collection$');
+		return this.collection.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public coins$(): Observable<readonly Coin[]> {
 		this.debugCall('coins$');
 		return this.coins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -402,6 +409,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initMails();
 		this.initCardBacks();
 		this.initCoins();
+		this.initCollection();
 		this.initBgHeroSkins();
 		this.initSets();
 		this.initAllTimeBoosters();
@@ -428,6 +436,12 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initBgHeroSkins() {
 		this.bgHeroSkins = (this.ow.getMainWindow().collectionManager as CollectionManager).bgHeroSkins$$.pipe(
+			shareReplay(1),
+		);
+	}
+
+	private initCollection() {
+		this.collection = (this.ow.getMainWindow().collectionManager as CollectionManager).collection$$.pipe(
 			shareReplay(1),
 		);
 	}

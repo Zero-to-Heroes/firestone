@@ -67,11 +67,8 @@ export class TavernBrawlMetaComponent
 				};
 			}),
 		);
-		this.stats$ = combineLatest(
-			this.store.tavernBrawl$(),
-			this.store.listen$(([main, nav]) => main.binder.collection),
-		).pipe(
-			map(([state, [collection]]) => ({ stats: state.getCurrentStats(), collection: collection })),
+		this.stats$ = combineLatest([this.store.tavernBrawl$(), this.store.collection$()]).pipe(
+			map(([state, collection]) => ({ stats: state.getCurrentStats(), collection: collection })),
 			this.mapData((info) => {
 				return (
 					info.stats?.stats

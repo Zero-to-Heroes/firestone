@@ -611,10 +611,7 @@ export class MainWindowStoreService {
 				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
 			],
 			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionManager, this.cards)],
-			[
-				NewCardEvent.eventName(),
-				new NewCardProcessor(this.collectionDb, this.collectionManager, this.cardHistoryStorage),
-			],
+			[NewCardEvent.eventName(), new NewCardProcessor(this.cardHistoryStorage)],
 			[
 				// Achievements
 				AchievementsInitEvent.eventName(),
