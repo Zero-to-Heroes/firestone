@@ -16,7 +16,7 @@ import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 import { share, startWith } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
@@ -250,15 +250,12 @@ export class ConstructedDeckbuilderCardsComponent
 			}),
 			share(),
 		);
-		this.collection$ = this.store
-			.listen$(([main, nav]) => main.binder.allSets)
-			.pipe(
-				this.mapData(
-					([allSets]) =>
-						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
-				),
-				share(),
-			);
+		this.collection$ = this.store.sets$().pipe(
+			this.mapData(
+				(allSets) => allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
+			),
+			share(),
+		);
 
 		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),

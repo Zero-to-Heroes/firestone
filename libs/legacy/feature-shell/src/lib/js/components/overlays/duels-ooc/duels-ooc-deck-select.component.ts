@@ -79,10 +79,10 @@ export class DuelsOutOfCombatDeckSelectComponent
 
 	ngAfterContentInit() {
 		this.collection$ = this.store
-			.listen$(([main, nav]) => main.binder.allSets)
+			.sets$()
 			.pipe(
 				this.mapData(
-					([allSets]) =>
+					(allSets) =>
 						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
 				),
 			);

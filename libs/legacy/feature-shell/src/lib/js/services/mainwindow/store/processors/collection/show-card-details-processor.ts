@@ -3,11 +3,12 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Set } from '../../../../../models/set';
+import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
 import { Processor } from '../processor';
 
 export class ShowCardDetailsProcessor implements Processor {
-	constructor(private cards: CardsFacadeService) {}
+	constructor(private readonly cards: CardsFacadeService, private readonly setsManager: SetsManagerService) {}
 
 	public async process(
 		event: ShowCardDetailsEvent,
@@ -15,7 +16,7 @@ export class ShowCardDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedSet: Set = this.pickSet(currentState.binder.allSets, event.cardId);
+		const selectedSet: Set = this.pickSet(this.setsManager.sets$$.getValue(), event.cardId);
 		const referenceCard = this.cards.getCard(event.cardId);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'card-details',

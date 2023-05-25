@@ -49,6 +49,7 @@ import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { CollectionStorageService } from '../../collection/collection-storage.service';
+import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
@@ -434,6 +435,7 @@ export class MainWindowStoreService {
 		private readonly packsService: PackStatsService,
 		private readonly streamsService: LiveStreamsService,
 		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
+		private readonly setsManager: SetsManagerService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -552,7 +554,7 @@ export class MainWindowStoreService {
 				this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1].state
 					.currentApp === navigationState.currentApp) ||
 			// We allow a "back" to the parent in case there is no back history
-			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
+			NavigationBackProcessor.buildParentState(navigationState, dataState, this.setsManager) != null;
 
 		// 	'isBackArrowEnabled?',
 		// 	backArrowEnabled,
@@ -576,7 +578,7 @@ export class MainWindowStoreService {
 		const processors: readonly [string, Processor][] = [
 			[StoreInitEvent.eventName(), new StoreInitProcessor(this.events, this.prefs, this.i18n)],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
-			[NavigationBackEvent.eventName(), new NavigationBackProcessor()],
+			[NavigationBackEvent.eventName(), new NavigationBackProcessor(this.setsManager)],
 			[NavigationNextEvent.eventName(), new NavigationNextProcessor()],
 			[ChangeVisibleApplicationEvent.eventName(), new ChangeVisibleApplicationProcessor(this.prefs, this.i18n)],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
@@ -601,8 +603,8 @@ export class MainWindowStoreService {
 			[CollectionSelectCurrentTabEvent.eventName(), new CollectionSelectCurrentTabProcessor()],
 			[SearchCardsEvent.eventName(), new SearchCardProcessor(this.collectionManager, this.sets, this.i18n)],
 			[LoadMoreCardHistoryEvent.eventName(), new LoadMoreCardHistoryProcessor(this.cardHistoryStorage)],
-			[SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor()],
-			[ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards)],
+			[SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor(this.setsManager)],
+			[ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards, this.setsManager)],
 			[ShowCardBackDetailsEvent.eventName(), new ShowCardBackDetailsProcessor(this.collectionManager)],
 			[
 				UpdateCardSearchResultsEvent.eventName(),
@@ -820,7 +822,10 @@ export class MainWindowStoreService {
 			],
 			// Duels
 			[DuelsStateUpdatedEvent.eventName(), new DuelsStateUpdatedProcessor()],
-			[DuelsTopDecksUpdateEvent.eventName(), new DuelsTopDecksUpdateProcessor(this.cards, this.i18n)],
+			[
+				DuelsTopDecksUpdateEvent.eventName(),
+				new DuelsTopDecksUpdateProcessor(this.cards, this.i18n, this.setsManager),
+			],
 			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor()],
 			[DuelsSelectCategoryEvent.eventName(), new DuelsSelectCategoryProcessor()],
 			[

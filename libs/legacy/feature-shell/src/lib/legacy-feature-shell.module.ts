@@ -669,6 +669,7 @@ import { CardNotificationsService } from './js/services/collection/card-notifica
 import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
 import { CollectionManager } from './js/services/collection/collection-manager.service';
 import { CollectionStorageService } from './js/services/collection/collection-storage.service';
+import { SetsManagerService } from './js/services/collection/sets-manager.service';
 import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
 import { AiDeckService } from './js/services/decktracker/ai-deck-service.service';
@@ -1672,6 +1673,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckHandlerService,
 		CardHistoryStorageService,
 		CollectionManager,
+		SetsManagerService,
 		CollectionStorageService,
 		MindVisionFacadeService,
 		MindVisionStateMachineService,

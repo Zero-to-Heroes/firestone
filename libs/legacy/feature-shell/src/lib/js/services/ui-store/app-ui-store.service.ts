@@ -31,9 +31,11 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../models/preferences';
+import { Set } from '../../models/set';
 import { AdService } from '../ad.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
+import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { GameNativeState } from '../game/game-native-state';
@@ -82,6 +84,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
 	private coins: Observable<readonly Coin[]>;
+	private sets: Observable<readonly Set[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -344,6 +347,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.coins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public sets$(): Observable<readonly Set[]> {
+		this.debugCall('sets$');
+		return this.sets.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
 		this.debugCall('mails$');
 		return this.allTimeBoosters.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -388,6 +396,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initMails();
 		this.initCardBacks();
 		this.initCoins();
+		this.initSets();
 		this.initAllTimeBoosters();
 		this.initTavernBrawl();
 		this.initialized = true;
@@ -404,6 +413,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.allTimeBoosters = (this.ow.getMainWindow().collectionManager as CollectionManager).allTimeBoosters$$.pipe(
 			shareReplay(1),
 		);
+	}
+
+	private initSets() {
+		this.sets = (this.ow.getMainWindow().setsManager as SetsManagerService).sets$$.pipe(shareReplay(1));
 	}
 
 	private initCoins() {

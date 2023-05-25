@@ -68,7 +68,7 @@ export class DuelsStateBuilderService {
 
 		// When the cards are updated, refresh the top decks
 		this.store
-			.listen$(([main, nav, prefs]) => main.binder?.allSets)
+			.sets$()
 			.pipe(debounceTime(10000), distinctUntilChanged())
 			.subscribe(async (collectionState) => this.updateTopDecks());
 

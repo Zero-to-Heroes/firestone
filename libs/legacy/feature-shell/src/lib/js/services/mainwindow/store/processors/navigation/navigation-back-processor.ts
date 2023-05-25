@@ -4,11 +4,14 @@ import { NavigationBattlegrounds } from '../../../../../models/mainwindow/naviga
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { NavigationBackEvent } from '../../events/navigation/navigation-back-event';
 import { NavigationHistory } from '../../navigation-history';
 import { Processor } from '../processor';
 
 export class NavigationBackProcessor implements Processor {
+	constructor(private readonly setsManager: SetsManagerService) {}
+
 	public async process(
 		event: NavigationBackEvent,
 		currentState: MainWindowState,
@@ -18,7 +21,8 @@ export class NavigationBackProcessor implements Processor {
 		const newState =
 			(history.currentIndexInHistory > 0
 				? history.stateHistory[history.currentIndexInHistory - 1].state
-				: NavigationBackProcessor.buildParentState(navigationState, currentState)) ?? navigationState;
+				: NavigationBackProcessor.buildParentState(navigationState, currentState, this.setsManager)) ??
+			navigationState;
 		if (!newState?.isVisible) {
 			if (history.currentIndexInHistory !== 1) {
 				// When the first event is the store init, this behavior is normal
@@ -29,12 +33,16 @@ export class NavigationBackProcessor implements Processor {
 		return [null, newState];
 	}
 
-	public static buildParentState(navigationState: NavigationState, dataState: MainWindowState): NavigationState {
+	public static buildParentState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+		setsManager: SetsManagerService,
+	): NavigationState {
 		switch (navigationState.currentApp) {
 			case 'achievements':
 				return NavigationBackProcessor.buildParentAchievementsState(navigationState, dataState);
 			case 'collection':
-				return NavigationBackProcessor.buildParentCollectionState(navigationState, dataState);
+				return NavigationBackProcessor.buildParentCollectionState(navigationState, setsManager);
 			case 'decktracker':
 				return NavigationBackProcessor.buildParentDecktrackerState(navigationState, dataState);
 			case 'replays':
@@ -155,11 +163,8 @@ export class NavigationBackProcessor implements Processor {
 
 	private static buildParentCollectionState(
 		navigationState: NavigationState,
-		dataState: MainWindowState,
+		setsManager: SetsManagerService,
 	): NavigationState {
-		if (!dataState) {
-			return null;
-		}
 		switch (navigationState.navigationCollection.currentView) {
 			case 'sets':
 				return null;
@@ -171,9 +176,9 @@ export class NavigationBackProcessor implements Processor {
 					text: null,
 				} as NavigationState);
 			case 'card-details':
-				const selectedSet = dataState.binder.allSets.find(
-					(set) => set.getCard(navigationState.navigationCollection.selectedCardId) != null,
-				);
+				const selectedSet = setsManager.sets$$
+					.getValue()
+					.find((set) => set.getCard(navigationState.navigationCollection.selectedCardId) != null);
 				console.log('selected set', selectedSet?.id);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({

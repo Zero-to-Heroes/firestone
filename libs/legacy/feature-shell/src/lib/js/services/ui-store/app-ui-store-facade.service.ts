@@ -14,6 +14,7 @@ import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { Preferences } from '../../models/preferences';
+import { Set } from '../../models/set';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
 	AppUiStoreService,
@@ -148,8 +149,13 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.mails$());
 	}
 
+	public sets$(): Observable<readonly Set[]> {
+		this.debugCall('sets$');
+		return this.debugObservable(this.store.sets$());
+	}
+
 	public coins$(): Observable<readonly Coin[]> {
-		this.debugCall('mails$');
+		this.debugCall('coins$');
 		return this.debugObservable(this.store.coins$());
 	}
 

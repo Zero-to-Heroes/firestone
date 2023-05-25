@@ -33,9 +33,7 @@ export class CardSearchComponent extends AbstractSubscriptionStoreComponent impl
 	}
 
 	ngAfterContentInit() {
-		this.cards$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.allSets)
-			.pipe(this.mapData(([sets]) => sets.flatMap((set) => set.allCards)));
+		this.cards$ = this.store.sets$().pipe(this.mapData((sets) => sets.flatMap((set) => set.allCards)));
 	}
 
 	onValidateSearch(searchString: string) {

@@ -2,17 +2,20 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Set } from '../../../../../models/set';
+import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { SelectCollectionSetEvent } from '../../events/collection/select-collection-set-event';
 import { Processor } from '../processor';
 
 export class SelectCollectionSetProcessor implements Processor {
+	constructor(private readonly setsManager: SetsManagerService) {}
+
 	public async process(
 		event: SelectCollectionSetEvent,
 		currentState: MainWindowState,
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedSet: Set = currentState.binder.allSets.find((set) => set.id === event.setId);
+		const selectedSet: Set = this.setsManager.sets$$.getValue().find((set) => set.id === event.setId);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',

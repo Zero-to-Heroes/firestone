@@ -116,26 +116,22 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 		this.searchString$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationCollection.searchString)
 			.pipe(this.mapData(([searchString]) => searchString));
-		this.selectedSet$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.binder.allSets,
-				([main, nav, prefs]) => nav.navigationCollection.selectedSetId,
-			)
-			.pipe(this.mapData(([allSets, selectedSetId]) => allSets.find((set) => set.id === selectedSetId)));
-		this.selectedCard$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.binder.allSets,
-				([main, nav, prefs]) => nav.navigationCollection.selectedCardId,
-			)
-			.pipe(
-				this.mapData(([allSets, selectedCardId]) =>
-					selectedCardId
-						? allSets.map((set) => set.getCard(selectedCardId)).find((card) => !!card) ??
-						  // This is the case when it's not a collectible card for instance
-						  this.allCards.getCard(selectedCardId)
-						: null,
-				),
-			);
+		this.selectedSet$ = combineLatest([
+			this.store.sets$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedSetId),
+		]).pipe(this.mapData(([allSets, [selectedSetId]]) => allSets.find((set) => set.id === selectedSetId)));
+		this.selectedCard$ = combineLatest([
+			this.store.sets$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedCardId),
+		]).pipe(
+			this.mapData(([allSets, [selectedCardId]]) =>
+				selectedCardId
+					? allSets.map((set) => set.getCard(selectedCardId)).find((card) => !!card) ??
+					  // This is the case when it's not a collectible card for instance
+					  this.allCards.getCard(selectedCardId)
+					: null,
+			),
+		);
 		this.selectedCardBack$ = combineLatest([
 			this.store.cardBacks$(),
 			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedCardBackId),

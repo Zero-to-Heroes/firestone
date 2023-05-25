@@ -24,11 +24,11 @@ export class ProfileUploaderService {
 		const isPremium$ = this.store.isPremiumUser$();
 
 		// TODO: don't upload if the collection didn't change since last upload
-		const setsToUpload$ = combineLatest([isPremium$, this.store.listen$(([main, _]) => main.binder.allSets)]).pipe(
-			filter(([premium, [sets]]) => premium),
+		const setsToUpload$ = combineLatest([isPremium$, this.store.sets$()]).pipe(
+			filter(([premium, sets]) => premium),
 			// So that we don't spam the server when the user is opening packs
 			debounceTime(10000),
-			map(([premium, [sets]]) => {
+			map(([premium, sets]) => {
 				console.debug('[profile] sets', sets);
 				return sets.map((set) => {
 					return {

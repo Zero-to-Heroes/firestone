@@ -4,16 +4,21 @@ import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DuelsGroupedDecks } from '@legacy-import/src/lib/js/models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '@legacy-import/src/lib/js/models/duels/duels-player-stats';
-import { BinderState } from '@legacy-import/src/lib/js/models/mainwindow/binder-state';
+import { Set } from '@legacy-import/src/lib/js/models/set';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { SetsManagerService, getCard } from '../../../../collection/sets-manager.service';
 import { ExtendedDeckStat } from '../../../../duels/duels-state-builder.service';
 import { LocalizationService } from '../../../../localization.service';
 import { DuelsTopDecksUpdateEvent } from '../../events/duels/duels-top-decks-event';
 import { Processor } from '../processor';
 
 export class DuelsTopDecksUpdateProcessor implements Processor {
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationService,
+		private readonly setsManager: SetsManagerService,
+	) {}
 
 	// TODO: why is this computed when I have not accessed the top decks yet?
 	public async process(
@@ -24,7 +29,7 @@ export class DuelsTopDecksUpdateProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
 			currentState.duels.globalStatsDecks?.decks ?? [],
-			currentState.binder,
+			this.setsManager.sets$$?.getValue() ?? [],
 		);
 		return [
 			currentState.update({
@@ -38,7 +43,7 @@ export class DuelsTopDecksUpdateProcessor implements Processor {
 
 	private buildTopDeckStats(
 		deckStats: readonly ExtendedDeckStat[],
-		collectionState: BinderState,
+		sets: readonly Set[],
 	): readonly DuelsGroupedDecks[] {
 		const decks = deckStats
 			// This should already be filtered out by the API
@@ -47,7 +52,7 @@ export class DuelsTopDecksUpdateProcessor implements Processor {
 			.slice(0, 1000)
 			.map((stat) => {
 				const start = Date.now();
-				const dustCost = this.buildDustCost(stat.deckDefinition, collectionState);
+				const dustCost = this.buildDustCost(stat.deckDefinition, sets);
 				const result = {
 					...(stat as DeckStat),
 					heroCardId: stat.heroCardId,
@@ -77,14 +82,14 @@ export class DuelsTopDecksUpdateProcessor implements Processor {
 		return Object.keys(decksByDate).map((date) => this.buildGroupedDecks(date, decksByDate[date]));
 	}
 
-	private buildDustCost(deck: DeckDefinition, collectionState: BinderState): number {
+	private buildDustCost(deck: DeckDefinition, sets: readonly Set[]): number {
 		const start = Date.now();
 		const allCards = [...deck.cards.map((cards) => cards[0]), ...(deck.sideboards ?? [])];
 		// console.debug('[duels-top-decks-update-processor] built all cards in', Date.now() - start, 'ms');
 		const result = allCards
 			.map((cardDbfId) => this.allCards.getCardFromDbfId(+cardDbfId))
 			.filter((card) => card)
-			.map((card) => collectionState.getCard(card.id))
+			.map((card) => getCard(sets, card.id))
 			.filter((card) => card)
 			.filter((card) => card.getNumberCollected() === 0)
 			.map((card) => card.getRegularDustCost())

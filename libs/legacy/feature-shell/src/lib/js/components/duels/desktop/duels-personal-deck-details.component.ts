@@ -108,11 +108,8 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(this.mapData(([runIds]) => runIds));
-		this.collection$ = combineLatest(
-			this.currentDeck.asObservable(),
-			this.store.listen$(([main, nav]) => main.binder.allSets),
-		).pipe(
-			this.mapData(([currentDeck, [allSets]]) =>
+		this.collection$ = combineLatest([this.currentDeck.asObservable(), this.store.sets$()]).pipe(
+			this.mapData(([currentDeck, allSets]) =>
 				currentDeck === 'final'
 					? null
 					: (allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[]),

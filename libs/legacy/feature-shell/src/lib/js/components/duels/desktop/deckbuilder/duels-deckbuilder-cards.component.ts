@@ -10,7 +10,7 @@ import { dustToCraftFor, normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { groupByFunction, sortByProperties, sumOnArray } from '@services/utils';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -351,10 +351,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 			}),
 		);
 		this.collection$ = this.store
-			.listen$(([main, nav]) => main.binder.allSets)
+			.sets$()
 			.pipe(
 				this.mapData(
-					([allSets]) =>
+					(allSets) =>
 						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
 				),
 			);

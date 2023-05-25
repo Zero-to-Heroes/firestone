@@ -7,7 +7,6 @@ import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
-import { Set, SetCard } from '../../models/set';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
@@ -16,7 +15,6 @@ import { BgHeroSkinsInternalService } from './details/bg-hero-skins';
 import { CardBacksInternalService } from './details/card-backs';
 import { CardsInternalService } from './details/cards';
 import { CoinsInternalService } from './details/coins';
-import { SetsService } from './sets-service.service';
 
 @Injectable()
 export class CollectionManager {
@@ -41,7 +39,7 @@ export class CollectionManager {
 		readonly allCards: CardsFacadeService,
 		readonly memoryReading: MemoryInspectionService,
 		readonly db: CollectionStorageService,
-		private readonly setsService: SetsService,
+		// private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
 	) {
 		this.cardsIS = new CardsInternalService(events, memoryReading, db);
@@ -92,54 +90,54 @@ export class CollectionManager {
 		return null;
 	}
 
-	public async buildSets(collection: readonly Card[]): Promise<readonly Set[]> {
-		return this.buildSetsFromCollection(collection);
-	}
+	// public async buildSets(collection: readonly Card[]): Promise<readonly Set[]> {
+	// 	return this.buildSetsFromCollection(collection);
+	// }
 
-	private async buildSetsFromCollection(collection: readonly Card[]): Promise<readonly Set[]> {
-		return this.setsService
-			.getAllSets()
-			.map((set) => ({ set: set }))
-			.map((set) => this.mergeSet(collection, set.set));
-	}
+	// private async buildSetsFromCollection(collection: readonly Card[]): Promise<readonly Set[]> {
+	// 	return this.setsService
+	// 		.getAllSets()
+	// 		.map((set) => ({ set: set }))
+	// 		.map((set) => this.mergeSet(collection, set.set));
+	// }
 
-	private mergeSet(collection: readonly Card[], set: Set): Set {
-		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
-		const ownedLimitCollectibleCards = updatedCards
-			.map((card: SetCard) => card.getNumberCollected())
-			.reduce((c1, c2) => c1 + c2, 0);
-		const ownedLimitCollectiblePremiumCards = updatedCards
-			.map((card: SetCard) => card.getNumberCollectedPremium())
-			.reduce((c1, c2) => c1 + c2, 0);
-		return new Set(
-			set.id,
-			set.name,
-			set.launchDate,
-			set.standard,
-			updatedCards,
-			ownedLimitCollectibleCards,
-			ownedLimitCollectiblePremiumCards,
-		);
-	}
+	// private mergeSet(collection: readonly Card[], set: Set): Set {
+	// 	const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
+	// 	const ownedLimitCollectibleCards = updatedCards
+	// 		.map((card: SetCard) => card.getNumberCollected())
+	// 		.reduce((c1, c2) => c1 + c2, 0);
+	// 	const ownedLimitCollectiblePremiumCards = updatedCards
+	// 		.map((card: SetCard) => card.getNumberCollectedPremium())
+	// 		.reduce((c1, c2) => c1 + c2, 0);
+	// 	return new Set(
+	// 		set.id,
+	// 		set.name,
+	// 		set.launchDate,
+	// 		set.standard,
+	// 		updatedCards,
+	// 		ownedLimitCollectibleCards,
+	// 		ownedLimitCollectiblePremiumCards,
+	// 	);
+	// }
 
-	private mergeFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
-		return setCards.map((card: SetCard) => {
-			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
-			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
-			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
-			const ownedDiamond = collectionCard ? collectionCard.diamondCount : 0;
-			const ownedSignature = collectionCard ? collectionCard.signatureCount : 0;
-			return new SetCard(
-				card.id,
-				card.name,
-				card.cardClass,
-				card.rarity,
-				card.cost,
-				ownedNonPremium,
-				ownedPremium,
-				ownedDiamond,
-				ownedSignature,
-			);
-		});
-	}
+	// private mergeFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
+	// 	return setCards.map((card: SetCard) => {
+	// 		const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
+	// 		const ownedNonPremium = collectionCard ? collectionCard.count : 0;
+	// 		const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
+	// 		const ownedDiamond = collectionCard ? collectionCard.diamondCount : 0;
+	// 		const ownedSignature = collectionCard ? collectionCard.signatureCount : 0;
+	// 		return new SetCard(
+	// 			card.id,
+	// 			card.name,
+	// 			card.cardClass,
+	// 			card.rarity,
+	// 			card.cost,
+	// 			ownedNonPremium,
+	// 			ownedPremium,
+	// 			ownedDiamond,
+	// 			ownedSignature,
+	// 		);
+	// 	});
+	// }
 }

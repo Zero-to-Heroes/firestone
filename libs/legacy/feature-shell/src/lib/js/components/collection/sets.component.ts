@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
@@ -67,13 +67,10 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 		this.activeFilter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
 			.pipe(this.mapData(([pref]) => pref));
-		this.allSets$ = this.store
-			// TOOD: the allSets are fully recomputed whenever a new card is received, so this might cause a bit too many refreshes
-			.listen$(([main, nav, prefs]) => main.binder.allSets)
-			.pipe(
-				debounceTime(1000),
-				this.mapData(([pref]) => pref),
-			);
+		this.allSets$ = this.store.sets$().pipe(
+			debounceTime(1000),
+			this.mapData((sets) => sets),
+		);
 		this.sets$ = combineLatest(this.activeFilter$, this.allSets$).pipe(
 			this.mapData(([activeFilter, allSets]) => {
 				const sets =
