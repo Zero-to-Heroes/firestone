@@ -1,9 +1,8 @@
 import { EventEmitter, Injectable, Optional } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Card } from '../../models/card';
-import { GameEvent } from '../../models/game-event';
+import { CollectionManager } from '../collection/collection-manager.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
@@ -11,13 +10,10 @@ import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 
 const COLLECTION_UPLOAD = `https://outof.cards/api/hearthstone/collection/import/`;
-const REFRESH_DEBOUNCE_MS = 30 * 1000;
 
 @Injectable()
 export class OutOfCardsService {
 	public stateUpdater = new EventEmitter<any>();
-
-	private refreshTimer;
 
 	constructor(
 		private prefs: PreferencesService,
@@ -30,6 +26,7 @@ export class OutOfCardsService {
 		@Optional() private ow: OverwolfService,
 		@Optional() private gameEvents: GameEventsEmitterService,
 		@Optional() private notifs: OwNotificationsService,
+		@Optional() private collectionManager: CollectionManager,
 	) {
 		window['outOfCardsAuthUpdater'] = this.stateUpdater;
 		this.stateUpdater.subscribe((token: OutOfCardsToken) => {
@@ -37,34 +34,14 @@ export class OutOfCardsService {
 			this.handleToken(token);
 		});
 
-		this.initCollectionRefreshListeners();
+		this.initCollectionListener();
 	}
 
-	private async initCollectionRefreshListeners() {
-		if (this.events) {
-			this.events.on(Events.NEW_PACK).subscribe((event) => this.queueCollectionRefresh(REFRESH_DEBOUNCE_MS));
-		}
-
-		if (this.gameEvents) {
-			this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-				if (event.type === GameEvent.SCENE_CHANGED_MINDVISION) {
-					const newScene: SceneMode = event.additionalData.scene;
-					if (newScene === SceneMode.COLLECTIONMANAGER || newScene === SceneMode.BACON_COLLECTION) {
-						this.queueCollectionRefresh();
-					}
-				}
+	private async initCollectionListener() {
+		if (this.collectionManager) {
+			this.collectionManager.collection$$.subscribe((collection) => {
+				this.uploadCollection(collection);
 			});
-		}
-
-		if (this.ow) {
-			this.ow.addGameInfoUpdatedListener(async (res: any) => {
-				if ((await this.ow.inGame()) && res.gameChanged) {
-					this.queueCollectionRefresh(REFRESH_DEBOUNCE_MS);
-				}
-			});
-			if (await this.ow.inGame()) {
-				this.queueCollectionRefresh();
-			}
 		}
 		console.log('[ooc-auth] handler init done');
 	}
@@ -90,16 +67,7 @@ export class OutOfCardsService {
 		this.uploadCollection();
 	}
 
-	private async queueCollectionRefresh(debounceTime = 0) {
-		if (this.refreshTimer) {
-			clearTimeout(this.refreshTimer);
-		}
-		this.refreshTimer = setTimeout(() => {
-			this.uploadCollection();
-		}, debounceTime);
-	}
-
-	private async uploadCollection() {
+	private async uploadCollection(collection: readonly Card[] = null) {
 		const token: OutOfCardsToken = await this.getToken();
 		if (!token) {
 			return;
@@ -107,7 +75,7 @@ export class OutOfCardsService {
 
 		console.log('[ooc-auth] starting collection sync');
 		// Read the memory, as if we can't access it we're not really interested in uploading a new version
-		const collection = await this.memory.getCollection();
+		collection = collection ?? this.collectionManager?.collection$$.getValue();
 		if (!collection?.length) {
 			console.log('[ooc-auth] collection from memory is empty, not synchronizing it');
 			return;

@@ -3,13 +3,16 @@ import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
+import { BehaviorSubject, filter } from 'rxjs';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
 import { CoinInfo } from '../../models/memory/coin-info';
+import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Set, SetCard } from '../../models/set';
+import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
 import { SetsService } from './sets-service.service';
@@ -23,6 +26,8 @@ export class CollectionManager {
 
 	private referenceCardBacks: readonly CardBack[];
 
+	public collection$$ = new BehaviorSubject<readonly Card[]>([]);
+
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
@@ -31,36 +36,46 @@ export class CollectionManager {
 		private readonly allCards: CardsFacadeService,
 		private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
+		private readonly events: Events,
 	) {
 		this.init();
 	}
 
-	private lastCollectionRetrieveTimestamp = 0;
-	private DEBOUNCE_COLLECTION_RETRIEVE_MS = 5000;
+	private async init() {
+		this.gameStatus.onGameStart(async () => {
+			await Promise.all([this.getCardBacks(), this.getPacks()]);
+		});
+
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.CollectionCardsCount != null) {
+				console.debug(
+					'[collection-manager] [cards] cards count changed',
+					changes.CollectionCardsCount,
+					changes,
+				);
+				const collection = await this.memoryReading.getCollection();
+				if (!!collection?.length) {
+					console.debug('[collection-manager] [cards] updating collection', collection.length);
+					this.collection$$.next(collection);
+				}
+			}
+		});
+
+		this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
+			console.debug('[collection-manager] [cards] updating collection in db', collection.length);
+			await this.db.saveCollection(collection);
+		});
+
+		const collectionFromDb = await this.db.getCollection();
+		if (collectionFromDb?.length) {
+			console.debug('[collection-manager] [cards] init collection from db', collectionFromDb.length);
+			this.collection$$.next(collectionFromDb);
+		}
+	}
 
 	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
-		console.log(
-			'[collection-manager] getting collection',
-			skipMemoryReading,
-			Date.now() - this.lastCollectionRetrieveTimestamp,
-		);
-		// So that we don't spam the memory reading when opening packs (where you can 5 new card events pretty quickly)
-		skipMemoryReading =
-			skipMemoryReading ||
-			Date.now() - this.lastCollectionRetrieveTimestamp < this.DEBOUNCE_COLLECTION_RETRIEVE_MS;
-		console.log('[collection-manager] skipMemoryReading', skipMemoryReading);
-		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
-		if (!collection || collection.length === 0) {
-			console.log('[collection-manager] retrieving collection from db');
-			const collectionFromDb = await this.db.getCollection();
-			console.log('[collection-manager] retrieved collection from db', collectionFromDb?.length);
-			return collectionFromDb;
-		} else {
-			console.log('[collection-manager] retrieved collection from MindVision, updating collection in db');
-			const savedCollection = await this.db.saveCollection(collection);
-			this.lastCollectionRetrieveTimestamp = Date.now();
-			return savedCollection;
-		}
+		return this.collection$$.getValue();
 	}
 
 	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
@@ -224,12 +239,6 @@ export class CollectionManager {
 				ownedDiamond,
 				ownedSignature,
 			);
-		});
-	}
-
-	private init() {
-		this.gameStatus.onGameStart(async () => {
-			await Promise.all([this.getCollection(), this.getCardBacks(), this.getPacks()]);
 		});
 	}
 }
