@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.3',
+		version: '11.2.5',
 		force: false,
 		sections: [
 			// {
@@ -81,13 +81,21 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'content',
-								text: `Add oracles for Tidestone of Golganneth, Kiri Chosen of Elune and Moonbeast.`,
+								text: `Add oracles for Tidestone of Golganneth, Kiri Chosen of Elune, The Hand of Rafaam (duels) and Moonbeast.`,
 							},
 						],
 					},
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `Bassgill is now properly supported in simulations, both on the player's and opponent's side. There might still be some slight mistakes if the opponent buffs their hand while in combat, but it should be roughly correct.`,
+							},
+							{
+								type: 'feature',
+								text: `Blood gem buffs are now properly supported in the simulator.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where updating a minion in the simulator would remove its enchantments.`,
@@ -97,8 +105,16 @@ export const updates: readonly Update[] = [
 								text: `Fix a sim issue when Dragons are buffed during battle.`,
 							},
 							{
-								type: 'content',
-								text: `Don't show the "unsupported composition" warning when Bassgil is on the active player's board.`,
+								type: 'bug',
+								text: `Fix a sim issue where Incorporeal Corporal would not die immediately.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue when the opponent uses Teron's hero power.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where minions highlight would sometimes get broken between fights.`,
 							},
 							{
 								type: 'content',
@@ -132,6 +148,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `Add warning icons when the boards are not fully supported when viewing past replay stats.`,
+							},
+						],
+					},
+					{
 						category: 'general',
 						details: [
 							{
@@ -145,6 +170,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where the decklists would not order cards alphabetically within a given mana cost.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix the Share -> Copy to clipboard button not working.`,
 							},
 						],
 					},
