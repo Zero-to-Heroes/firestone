@@ -20,6 +20,7 @@ import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-b
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { CardBack } from '../../models/card-back';
+import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
 import { GameState } from '../../models/decktracker/game-state';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
@@ -80,6 +81,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
+	private coins: Observable<readonly Coin[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -337,6 +339,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.cardBacks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public coins$(): Observable<readonly Coin[]> {
+		this.debugCall('coins$');
+		return this.coins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
 		this.debugCall('mails$');
 		return this.allTimeBoosters.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -380,6 +387,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initDuelsDecks();
 		this.initMails();
 		this.initCardBacks();
+		this.initCoins();
 		this.initAllTimeBoosters();
 		this.initTavernBrawl();
 		this.initialized = true;
@@ -396,6 +404,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.allTimeBoosters = (this.ow.getMainWindow().collectionManager as CollectionManager).allTimeBoosters$$.pipe(
 			shareReplay(1),
 		);
+	}
+
+	private initCoins() {
+		this.coins = (this.ow.getMainWindow().collectionManager as CollectionManager).coins$$.pipe(shareReplay(1));
 	}
 
 	private initCardBacks() {

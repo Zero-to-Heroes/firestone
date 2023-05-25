@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { IOption } from 'ng-select';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { IOption } from 'ng-select';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Coin } from '../../models/coin';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -74,9 +74,7 @@ export class TheCoinsComponent extends AbstractSubscriptionStoreComponent implem
 					this.cdr.detectChanges();
 				}
 			});
-		const coins$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.coins)
-			.pipe(this.mapData(([coins]) => this.buildCoins(coins)));
+		const coins$ = this.store.coins$().pipe(this.mapData((coins) => this.buildCoins(coins)));
 		this.total$ = coins$.pipe(this.mapData((coins) => coins.length));
 		this.unlocked$ = coins$.pipe(this.mapData((coins) => coins.filter((item) => item.numberOwned > 0).length));
 		this.shownCards$ = combineLatest(this.cardsOwnedActiveFilter$$.asObservable(), coins$).pipe(

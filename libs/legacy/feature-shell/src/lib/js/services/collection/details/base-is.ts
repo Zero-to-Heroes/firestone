@@ -3,12 +3,12 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map } from
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 
-export abstract class AbstractCollectionInternalService<T> {
+export abstract class AbstractCollectionInternalService<T, U = T> {
 	public collection$$ = new BehaviorSubject<readonly T[]>([]);
 
 	protected abstract type: () => string;
 	protected abstract memoryInfoCountExtractor: (update: MemoryUpdate) => number;
-	protected abstract memoryReadingOperation: () => Promise<readonly T[]>;
+	protected abstract memoryReadingOperation: () => Promise<readonly U[]>;
 	protected abstract localDbRetrieveOperation: () => Promise<readonly T[]>;
 	protected abstract localDbSaveOperation: (collection: readonly T[]) => Promise<any>;
 
@@ -23,8 +23,8 @@ export abstract class AbstractCollectionInternalService<T> {
 		// Do nothing
 	}
 
-	protected updateMemoryInfo(collection: readonly T[]): readonly T[] {
-		return collection;
+	protected updateMemoryInfo(collection: readonly U[]): readonly T[] {
+		return collection as any;
 	}
 
 	private async init() {

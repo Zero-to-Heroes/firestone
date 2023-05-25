@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
@@ -8,7 +7,6 @@ import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
-import { CoinInfo } from '../../models/memory/coin-info';
 import { Set, SetCard } from '../../models/set';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -17,6 +15,7 @@ import { AllTimeBoostersInternalService } from './details/all-time-boosters';
 import { BgHeroSkinsInternalService } from './details/bg-hero-skins';
 import { CardBacksInternalService } from './details/card-backs';
 import { CardsInternalService } from './details/cards';
+import { CoinsInternalService } from './details/coins';
 import { SetsService } from './sets-service.service';
 
 @Injectable()
@@ -28,18 +27,20 @@ export class CollectionManager {
 	public cardBacks$$: BehaviorSubject<readonly CardBack[]>;
 	public bgHeroSkins$$: BehaviorSubject<readonly number[]>;
 	public allTimeBoosters$$: BehaviorSubject<readonly PackInfo[]>;
+	public coins$$: BehaviorSubject<readonly Coin[]>;
 
 	private cardsIS: CardsInternalService;
 	private cardBacksIS: CardBacksInternalService;
 	private bgHeroSkinsIS: BgHeroSkinsInternalService;
 	private allTimeBoostersIS: AllTimeBoostersInternalService;
+	private coinsIS: CoinsInternalService;
 
 	constructor(
 		readonly events: Events,
 		readonly api: ApiRunner,
-		private readonly memoryReading: MemoryInspectionService,
-		private readonly db: CollectionStorageService,
-		private readonly allCards: CardsFacadeService,
+		readonly allCards: CardsFacadeService,
+		readonly memoryReading: MemoryInspectionService,
+		readonly db: CollectionStorageService,
 		private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
 	) {
@@ -47,11 +48,13 @@ export class CollectionManager {
 		this.cardBacksIS = new CardBacksInternalService(events, memoryReading, db, api);
 		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, memoryReading, db);
 		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, memoryReading, db);
+		this.coinsIS = new CoinsInternalService(events, memoryReading, db, this.allCards);
 
 		this.collection$$ = this.cardsIS.collection$$;
 		this.cardBacks$$ = this.cardBacksIS.collection$$;
 		this.bgHeroSkins$$ = this.bgHeroSkinsIS.collection$$;
 		this.allTimeBoosters$$ = this.allTimeBoostersIS.collection$$;
+		this.coins$$ = this.coinsIS.collection$$;
 		window['collectionManager'] = this;
 	}
 
@@ -71,29 +74,12 @@ export class CollectionManager {
 		return this.allTimeBoostersIS.getCollection();
 	}
 
-	public async getPackStats(): Promise<readonly PackResult[]> {
-		return this.packStatsService.getPackStats();
+	public async getCoins(): Promise<readonly Coin[]> {
+		return this.coinsIS.getCollection();
 	}
 
-	public async getCoins(): Promise<readonly Coin[]> {
-		console.log('[collection-manager] getting coin');
-		const memoryCoins: readonly CoinInfo[] = await this.memoryReading.getCoins();
-		if (!memoryCoins || memoryCoins.length === 0) {
-			console.log('[collection-manager] retrieving coins from db');
-			const coinsFromDb = await this.db.getCoins();
-			console.log('[collection-manager] retrieved coins from db', coinsFromDb?.length);
-			return coinsFromDb;
-		} else {
-			const refCoins = this.allCards.getCards().filter((card) => COIN_IDS.includes(card.id as CardIds));
-			const coins: readonly Coin[] = refCoins.map((coin) => ({
-				cardId: coin.id,
-				owned: memoryCoins.find((c) => c.CoinId === coin.dbfId) != null,
-				cardDbfId: coin.dbfId,
-			}));
-			console.log('[collection-manager] updating coins in db');
-			const saved = await this.db.saveCoins(coins);
-			return saved;
-		}
+	public async getPackStats(): Promise<readonly PackResult[]> {
+		return this.packStatsService.getPackStats();
 	}
 
 	// type is NORMAL or GOLDEN
