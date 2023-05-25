@@ -678,12 +678,14 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'rylak',
 			};
-		} else if (!isPlayer && hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
-			return {
-				isSupported: false,
-				reason: 'bassgill',
-			};
-		} else if (hasMinions(boardInfo, [CardIds.ChoralMrrrglr, CardIds.ChoralMrrrglrBattlegrounds])) {
+		}
+		// else if (!isPlayer && hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
+		// 	return {
+		// 		isSupported: false,
+		// 		reason: 'bassgill',
+		// 	};
+		// }
+		else if (hasMinions(boardInfo, [CardIds.ChoralMrrrglr, CardIds.ChoralMrrrglrBattlegrounds])) {
 			return {
 				isSupported: false,
 				reason: 'choral-mrrrglr',

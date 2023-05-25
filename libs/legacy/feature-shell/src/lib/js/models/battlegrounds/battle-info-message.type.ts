@@ -3,7 +3,7 @@ export type BattleInfoMessage =
 	| 'piloted-whirl-o-tron'
 	| 'rylak'
 	| 'choral-mrrrglr'
-	| 'bassgill'
+	// | 'bassgill'
 	| 'secret'
 	| 'error'
 	| undefined;

@@ -215,14 +215,14 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
-			case 'bassgill':
-				this._simulationMessage = this.i18n.translateString(
-					'battlegrounds.battle.composition-not-supported.general',
-					{
-						value: this.allCards.getCard(CardIds.Bassgill).name,
-					},
-				);
-				break;
+			// case 'bassgill':
+			// 	this._simulationMessage = this.i18n.translateString(
+			// 		'battlegrounds.battle.composition-not-supported.general',
+			// 		{
+			// 			value: this.allCards.getCard(CardIds.Bassgill).name,
+			// 		},
+			// 	);
+			// 	break;
 			case 'secret':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',
