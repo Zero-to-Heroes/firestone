@@ -6,6 +6,7 @@ export interface MemoryUpdate {
 	readonly CollectionInit: boolean;
 	readonly CollectionCardsCount: number;
 	readonly CollectionCardBacksCount: number;
+	readonly CollectionBgHeroSkinsCount: number;
 	readonly DisplayingAchievementToast: boolean;
 	readonly CurrentScene: SceneMode;
 	readonly XpChanges: readonly XpChange[];

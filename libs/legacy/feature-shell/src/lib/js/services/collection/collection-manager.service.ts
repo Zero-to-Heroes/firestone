@@ -14,6 +14,7 @@ import { Set, SetCard } from '../../models/set';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
+import { BgHeroSkinsInternalService } from './details/bg-hero-skins';
 import { CardBacksInternalService } from './details/card-backs';
 import { CardsInternalService } from './details/cards';
 import { SetsService } from './sets-service.service';
@@ -25,9 +26,11 @@ export class CollectionManager {
 
 	public collection$$: BehaviorSubject<readonly Card[]>;
 	public cardBacks$$: BehaviorSubject<readonly CardBack[]>;
+	public bgHeroSkins$$: BehaviorSubject<readonly number[]>;
 
 	private cardsIS: CardsInternalService;
 	private cardBacksIS: CardBacksInternalService;
+	private bgHeroSkinsIS: BgHeroSkinsInternalService;
 
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
@@ -41,9 +44,11 @@ export class CollectionManager {
 	) {
 		this.cardsIS = new CardsInternalService(memoryReading, db, events);
 		this.cardBacksIS = new CardBacksInternalService(memoryReading, db, api, events);
+		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(memoryReading, db, events);
 
 		this.collection$$ = this.cardsIS.collection$$;
 		this.cardBacks$$ = this.cardBacksIS.cardBacks$$;
+		this.bgHeroSkins$$ = this.bgHeroSkinsIS.collection$$;
 		window['collectionManager'] = this;
 		this.init();
 	}
@@ -62,28 +67,12 @@ export class CollectionManager {
 		return this.cardBacksIS.getCardBacks();
 	}
 
-	public async getPackStats(): Promise<readonly PackResult[]> {
-		return this.packStatsService.getPackStats();
+	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
+		return this.bgHeroSkinsIS.getCollection();
 	}
 
-	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
-		console.log('[collection-manager] getBattlegroundsOwnedHeroSkinDbfIds', skipMemoryReading);
-		const collection = !skipMemoryReading ? await this.memoryReading.getBattlegroundsOwnedHeroSkinDbfIds() : null;
-		if (!collection || collection.length === 0) {
-			console.log('[collection-manager] retrieving getBattlegroundsOwnedHeroSkinDbfIds from db');
-			const collectionFromDb = await this.db.getBattlegroundsOwnedHeroSkinDbfIds();
-			console.log(
-				'[collection-manager] retrieved getBattlegroundsOwnedHeroSkinDbfIds from db',
-				collectionFromDb?.length,
-			);
-			return collectionFromDb;
-		} else {
-			console.log(
-				'[collection-manager] retrieved getBattlegroundsOwnedHeroSkinDbfIds from MindVision, updating collection in db',
-			);
-			const savedCollection = await this.db.saveBattlegroundsOwnedHeroSkinDbfIds(collection);
-			return savedCollection;
-		}
+	public async getPackStats(): Promise<readonly PackResult[]> {
+		return this.packStatsService.getPackStats();
 	}
 
 	public async getPacks(): Promise<readonly PackInfo[]> {
