@@ -8,6 +8,7 @@ import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable, Subscription } from 'rxjs';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { CardBack } from '../../models/card-back';
+import { PackInfo } from '../../models/collection/pack-info';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
@@ -149,6 +150,11 @@ export class AppUiStoreFacadeService {
 	public cardBacks$(): Observable<readonly CardBack[]> {
 		this.debugCall('mails$');
 		return this.debugObservable(this.store.cardBacks$());
+	}
+
+	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
+		this.debugCall('mails$');
+		return this.debugObservable(this.store.allTimeBoosters$());
 	}
 
 	public tavernBrawl$(): Observable<TavernBrawlState> {

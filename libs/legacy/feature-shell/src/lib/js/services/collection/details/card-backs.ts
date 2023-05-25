@@ -1,5 +1,5 @@
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { BehaviorSubject, debounceTime, filter, map } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { CardBack } from '../../../models/card-back';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
@@ -27,20 +27,20 @@ export class CardBacksInternalService {
 			filter((event) => event.data[0].CollectionCardBacksCount != null),
 			map((event) => {
 				const changes: MemoryUpdate = event.data[0];
-				console.debug(
-					'[collection-manager] [card-backs] card-backs count changed',
-					changes.CollectionCardBacksCount,
-					changes,
-				);
+				// console.debug(
+				// 	'[collection-manager] [card-backs] card-backs count changed',
+				// 	changes.CollectionCardBacksCount,
+				// );
 				return changes.CollectionCardBacksCount;
 			}),
 		);
-		cardBacksUpdate$.pipe(debounceTime(5000)).subscribe(async () => {
+		cardBacksUpdate$.pipe(debounceTime(5000), distinctUntilChanged()).subscribe(async (newCount) => {
 			const collection = await this.memoryReading.getCardBacks();
 			if (!!collection?.length) {
 				const merged = this.mergeCardBacksData(this.referenceCardBacks, collection);
 				console.debug(
 					'[collection-manager] [card-backs] updating collection',
+					newCount,
 					collection.length,
 					merged.length,
 				);

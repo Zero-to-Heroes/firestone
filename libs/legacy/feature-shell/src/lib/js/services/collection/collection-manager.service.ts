@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
+import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
@@ -14,6 +14,7 @@ import { Set, SetCard } from '../../models/set';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
+import { AllTimeBoostersInternalService } from './details/all-time-boosters';
 import { BgHeroSkinsInternalService } from './details/bg-hero-skins';
 import { CardBacksInternalService } from './details/card-backs';
 import { CardsInternalService } from './details/cards';
@@ -27,10 +28,12 @@ export class CollectionManager {
 	public collection$$: BehaviorSubject<readonly Card[]>;
 	public cardBacks$$: BehaviorSubject<readonly CardBack[]>;
 	public bgHeroSkins$$: BehaviorSubject<readonly number[]>;
+	public allTimeBoosters$$: BehaviorSubject<readonly PackInfo[]>;
 
 	private cardsIS: CardsInternalService;
 	private cardBacksIS: CardBacksInternalService;
 	private bgHeroSkinsIS: BgHeroSkinsInternalService;
+	private allTimeBoostersIS: AllTimeBoostersInternalService;
 
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
@@ -45,18 +48,13 @@ export class CollectionManager {
 		this.cardsIS = new CardsInternalService(memoryReading, db, events);
 		this.cardBacksIS = new CardBacksInternalService(memoryReading, db, api, events);
 		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(memoryReading, db, events);
+		this.allTimeBoostersIS = new AllTimeBoostersInternalService(memoryReading, db, events);
 
 		this.collection$$ = this.cardsIS.collection$$;
 		this.cardBacks$$ = this.cardBacksIS.cardBacks$$;
 		this.bgHeroSkins$$ = this.bgHeroSkinsIS.collection$$;
+		this.allTimeBoosters$$ = this.allTimeBoostersIS.collection$$;
 		window['collectionManager'] = this;
-		this.init();
-	}
-
-	private async init() {
-		this.gameStatus.onGameStart(async () => {
-			await Promise.all([this.getPacks()]);
-		});
 	}
 
 	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
@@ -71,30 +69,12 @@ export class CollectionManager {
 		return this.bgHeroSkinsIS.getCollection();
 	}
 
-	public async getPackStats(): Promise<readonly PackResult[]> {
-		return this.packStatsService.getPackStats();
+	public async getPacks(): Promise<readonly PackInfo[]> {
+		return this.allTimeBoostersIS.getCollection();
 	}
 
-	public async getPacks(): Promise<readonly PackInfo[]> {
-		console.log('[collection-manager] getting pack info');
-		const packInfo = (await this.memoryReading.getBoostersInfo()) ?? [];
-		console.log('[collection-manager] retrieved pack info from memory', packInfo?.length);
-		if (!packInfo || packInfo.length === 0) {
-			console.log('[collection-manager] retrieving pack info from db');
-			const packsFromDb = await this.db.getPackInfos();
-			console.log('[collection-manager] retrieved pack info from db', packsFromDb?.length);
-			return packsFromDb;
-		} else {
-			const saved = await this.db.savePackInfos(packInfo);
-			// Checking for non-implemented booster IDs
-			packInfo.forEach((p) => {
-				const existingType = BoosterType[p.packType];
-				if (!existingType) {
-					console.warn('[collection-manager] missing pack type in enum', p.packType, p.totalObtained);
-				}
-			});
-			return saved;
-		}
+	public async getPackStats(): Promise<readonly PackResult[]> {
+		return this.packStatsService.getPackStats();
 	}
 
 	public async getCoins(): Promise<readonly Coin[]> {

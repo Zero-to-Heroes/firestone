@@ -30,7 +30,7 @@ export class CollectionStorageService {
 		return cardBacks;
 	}
 
-	public async savePackInfos(packInfos: readonly PackInfo[]): Promise<readonly PackInfo[]> {
+	public async saveAllTimeBoosters(packInfos: readonly PackInfo[]): Promise<readonly PackInfo[]> {
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_PACK_INFOS, packInfos);
 		return packInfos;
 	}
@@ -56,7 +56,7 @@ export class CollectionStorageService {
 		return fromStorage ?? [];
 	}
 
-	public async getPackInfos(): Promise<readonly PackInfo[]> {
+	public async getAllTimeBoosters(): Promise<readonly PackInfo[]> {
 		const fromStorage = this.localStorageService.getItem<readonly PackInfo[]>(
 			LocalStorageService.LOCAL_STORAGE_PACK_INFOS,
 		);

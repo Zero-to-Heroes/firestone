@@ -81,13 +81,11 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 	async ngAfterContentInit() {
 		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
 		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest([
-			this.store.listen$(
-				([main, nav]) => main.binder.packsFromMemory,
-				([main, nav]) => main.binder.packStats,
-			),
+			this.store.allTimeBoosters$(),
+			this.store.listen$(([main, nav]) => main.binder.packStats),
 			this.store.listenPrefs$((prefs) => prefs.collectionPityTimerResets),
 		]).pipe(
-			this.mapData(([[packsFromMemory, packStats], [collectionPityTimerResets]]) =>
+			this.mapData(([packsFromMemory, [packStats], [collectionPityTimerResets]]) =>
 				Object.values(BoosterType)
 					.filter((boosterId: BoosterType) => !isNaN(boosterId))
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))

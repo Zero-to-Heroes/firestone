@@ -3,13 +3,12 @@ import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { Card } from '../card';
 import { CardHistory } from '../card-history';
 import { Coin } from '../coin';
-import { PackInfo } from '../collection/pack-info';
 import { Set, SetCard } from '../set';
 
 export class BinderState {
 	readonly collection: readonly Card[] = [];
 	readonly ownedBgsHeroSkins: readonly number[] = [];
-	readonly packsFromMemory: readonly PackInfo[] = [];
+	// readonly packsFromMemory: readonly PackInfo[] = [];
 	readonly packStats: readonly PackResult[] = [];
 	readonly allSets: readonly Set[] = [];
 	// readonly cardBacks: readonly CardBack[] = [];

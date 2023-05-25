@@ -1,4 +1,4 @@
-import { BehaviorSubject, debounceTime, filter, map } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { Card } from '../../../models/card';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
@@ -21,18 +21,14 @@ export class CardsInternalService {
 			filter((event) => event.data[0].CollectionCardsCount != null),
 			map((event) => {
 				const changes: MemoryUpdate = event.data[0];
-				console.debug(
-					'[collection-manager] [cards] cards count changed',
-					changes.CollectionCardsCount,
-					changes,
-				);
+				// console.debug('[collection-manager] [cards] cards count changed', changes.CollectionCardsCount);
 				return changes.CollectionCardBacksCount;
 			}),
 		);
-		collectionUpdate$.pipe(debounceTime(5000)).subscribe(async () => {
+		collectionUpdate$.pipe(debounceTime(5000), distinctUntilChanged()).subscribe(async (newCount) => {
 			const collection = await this.memoryReading.getCollection();
 			if (!!collection?.length) {
-				console.debug('[collection-manager] [cards] updating collection', collection.length);
+				console.debug('[collection-manager] [cards] updating collection', newCount, collection.length);
 				this.collection$$.next(collection);
 			}
 		});
