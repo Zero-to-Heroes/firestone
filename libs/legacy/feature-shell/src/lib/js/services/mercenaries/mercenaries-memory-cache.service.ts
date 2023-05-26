@@ -65,7 +65,6 @@ export class MercenariesMemoryCacheService {
 				if (newScene === SceneMode.LETTUCE_MAP) {
 					await sleep(2000);
 				}
-			} else if (changes.IsMercenariesTasksUpdated) {
 			} else {
 				return;
 			}
