@@ -233,6 +233,17 @@ export class TwitchAuthService {
 			delete newCard.creatorCardId;
 			// delete newCard.zone;
 			delete newCard.playTiming;
+			delete newCard.stolenFromOpponent;
+			delete newCard.manaCost;
+			delete newCard.actualManaCost;
+			delete newCard.putIntoPlay;
+			delete newCard.internalEntityId;
+		}
+		if (!newCard.linkedEntityIds?.length) {
+			delete newCard.linkedEntityIds;
+		}
+		if (!newCard.relatedCardIds?.length) {
+			delete newCard.relatedCardIds;
 		}
 
 		delete newCard.cardName;
