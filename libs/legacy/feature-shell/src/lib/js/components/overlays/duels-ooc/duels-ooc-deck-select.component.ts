@@ -16,7 +16,7 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
@@ -93,11 +93,11 @@ export class DuelsOutOfCombatDeckSelectComponent
 					([tempDuelsDeck]) =>
 						tempDuelsDeck?.HeroCardId &&
 						tempDuelsDeck?.HeroPowerCardId &&
-						!!tempDuelsDeck?.Decklist?.length,
+						!!tempDuelsDeck?.DeckList?.length,
 				),
 				this.mapData(([tempDuelsDeck]) => tempDuelsDeck),
 			);
-		this.decks$ = combineLatest(
+		this.decks$ = combineLatest([
 			this.store.duelsRuns$(),
 			this.store.listen$(
 				([main, nav]) => main.duels.getTopDecks(),
@@ -105,12 +105,12 @@ export class DuelsOutOfCombatDeckSelectComponent
 				([main, nav]) => main.duels.currentDuelsMetaPatch,
 			),
 			this.store.listenPrefs$((prefs) => prefs.duelsActiveMmrFilter),
-		).pipe(
+		]).pipe(
 			filter(
 				([runs, [groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) =>
 					tempDuelsDeck?.HeroCardId &&
 					tempDuelsDeck?.HeroPowerCardId &&
-					!!tempDuelsDeck?.Decklist?.length &&
+					!!tempDuelsDeck?.DeckList?.length &&
 					!!groupedTopDecks?.length,
 			),
 			this.mapData(([runs, [groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) => {
@@ -177,7 +177,7 @@ export class DuelsOutOfCombatDeckSelectComponent
 	} {
 		const heroCardId = tempDuelsDeck.HeroCardId;
 		const heroPowerCardId = tempDuelsDeck.HeroPowerCardId;
-		const signatureTreasureCardId = tempDuelsDeck.Decklist.find((cardId) =>
+		const signatureTreasureCardId = tempDuelsDeck.DeckList.find((cardId) =>
 			allDuelsSignatureTreasures.includes(cardId as CardIds),
 		);
 		return {

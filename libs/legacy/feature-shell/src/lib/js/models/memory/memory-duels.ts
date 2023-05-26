@@ -69,5 +69,5 @@ export interface AdventureTreasure {
 export interface DuelsDeck {
 	readonly HeroCardId: string;
 	readonly HeroPowerCardId: string;
-	readonly Decklist: readonly string[];
+	readonly DeckList: readonly string[];
 }
