@@ -1150,6 +1150,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.TrenchSurveyor_TSC_642:
 				return and(side(inputSide), inDeck, minion, mech);
+			case CardIds.TrinketTracker:
+				return and(side(inputSide), inDeck, spell, effectiveCostEqual(1));
 			case CardIds.Tuskpiercer:
 				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.TwilightDeceptor:
