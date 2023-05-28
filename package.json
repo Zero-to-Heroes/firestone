@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "11.2.6",
+	"version": "11.2.7",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
@@ -114,6 +114,7 @@
 		"@types/jest": "28.1.1",
 		"@types/mime-types": "^2.1.1",
 		"@types/node": "16.11.7",
+		"@types/pako": "^1.0.1",
 		"@typescript-eslint/eslint-plugin": "^5.36.1",
 		"@typescript-eslint/parser": "^5.36.1",
 		"cypress": "^11.0.0",

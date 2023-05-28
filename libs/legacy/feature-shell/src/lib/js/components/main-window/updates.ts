@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.6',
+		version: '11.2.7',
 		force: false,
 		sections: [
 			// {
@@ -50,7 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'misc',
-								text: `I have improved the performance resource usage of the module that the app is using to read information directly from the game client's memory. It should remove all the stuttering and occasional lag that you could experience when navigating between screens, as well as overall making the experience smoother while in-game. Let me know if you notice any difference!`,
+								text: `I have improved the performance of the module that the app is using to read information directly from the game client's memory. It should remove all the stuttering and occasional lag that you could experience when navigating between screens, as well as overall making the experience smoother while in-game. Let me know if you notice any difference!`,
 							},
 						],
 					},
