@@ -4,6 +4,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { deflate, inflate } from 'pako';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, map } from 'rxjs/operators';
 import {
@@ -57,6 +58,12 @@ export class TwitchAuthService {
 		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
+		window['deflate'] = (input, options) => {
+			return deflate(input, options);
+		};
+		window['inflate'] = (input, options) => {
+			return inflate(input, options);
+		};
 	}
 
 	private async init() {
@@ -236,7 +243,6 @@ export class TwitchAuthService {
 			delete newCard.stolenFromOpponent;
 			delete newCard.manaCost;
 			delete newCard.actualManaCost;
-			delete newCard.putIntoPlay;
 			delete newCard.internalEntityId;
 		}
 		if (!newCard.linkedEntityIds?.length) {
@@ -252,20 +258,20 @@ export class TwitchAuthService {
 		delete newCard.dormant;
 		delete newCard.rarity;
 		delete newCard.playTiming;
-		// if (!newCard.relatedCardIds?.length) {
-		// 	delete newCard.relatedCardIds;
-		// }
-		// if (!newCard.linkedEntityIds?.length) {
-		// 	delete newCard.linkedEntityIds;
-		// }
-		// if (!newCard.creatorCardId?.length) {
-		// 	delete newCard.creatorCardId;
-		// }
-		// if (!newCard.lastAffectedByCardId?.length) {
-		// 	delete newCard.lastAffectedByCardId;
-		// }
+		delete newCard.putIntoPlay;
+
+		this.removeFalsyProperties(newCard);
 
 		return newCard as DeckCard;
+	}
+
+	private removeFalsyProperties(obj: { [key: string]: any }): void {
+		for (const key in obj) {
+			if (!obj[key]) {
+				// Don't remove empty arrays, as the code isn't robust enough
+				delete obj[key];
+			}
+		}
 	}
 
 	private hasLoggedInfoOnce = false;
@@ -286,6 +292,12 @@ export class TwitchAuthService {
 				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
 					this.hasLoggedInfoOnce = true;
 					console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
+					console.debug(
+						'[twitch] message debug',
+						Buffer.byteLength(deflate(JSON.stringify(newEvent), { to: 'string' }), 'utf8'),
+						Buffer.byteLength(deflate(JSON.stringify(newEvent)), 'utf8'),
+						JSON.stringify(newEvent),
+					);
 					console.error(
 						'no-format',
 						'[twitch] Message sent to Twitch is too large',
