@@ -75,6 +75,11 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 			name: this.i18n.translateString('app.menu.profile-header'),
 			nodes: [
 				{
+					id: 'profile/overview',
+					icon: 'assets/svg/profile_overview.svg',
+					name: this.i18n.translateString('app.menu.profile-overview-header'),
+				},
+				{
 					id: 'profile/collection',
 					icon: 'assets/svg/whatsnew/collection.svg',
 					name: this.i18n.translateString('app.menu.collection-header'),

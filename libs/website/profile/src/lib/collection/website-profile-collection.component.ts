@@ -13,6 +13,22 @@ import { getLoaded, getSets } from '../+state/website/profile.selectors';
 	styleUrls: [`./website-profile-collection.component.scss`],
 	template: `
 		<with-loading [isLoading]="isLoading$ | async">
+			<div class="overview">
+				<div class="mode standard">
+					<div class="title">Standard</div>
+					<div class="progress-container">
+						<div class="progress normal">{{ progressNormal(standardSets$ | async) }}</div>
+						<div class="progress golden">{{ progressGolden(standardSets$ | async) }}</div>
+					</div>
+				</div>
+				<div class="mode wild">
+					<div class="title">Wild</div>
+					<div class="progress-container">
+						<div class="progress normal">{{ progressNormal(wildSets$ | async) }}</div>
+						<div class="progress golden">{{ progressGolden(wildSets$ | async) }}</div>
+					</div>
+				</div>
+			</div>
 			<section class="sets">
 				<website-profile-sets [sets]="standardSets$ | async" [header]="'Standard'"></website-profile-sets>
 				<website-profile-sets [sets]="wildSets$ | async" [header]="'Wild'"></website-profile-sets>
@@ -76,5 +92,23 @@ export class WebsiteProfileCollectionComponent extends AbstractSubscriptionCompo
 			});
 
 		return;
+	}
+
+	progressNormal(sets: readonly ExtendedProfileSet[] | null): string {
+		const totalCollected =
+			sets
+				?.map((set) => set.vanilla.common + set.vanilla.rare + set.vanilla.epic + set.vanilla.legendary)
+				.reduce((a, b) => a + b, 0) ?? 0;
+		const totalCollectible = sets?.map((set) => set.totalCollectibleCards).reduce((a, b) => a + b, 0) ?? 0;
+		return `${totalCollected}/${totalCollectible}`;
+	}
+
+	progressGolden(sets: readonly ExtendedProfileSet[] | null): string {
+		const totalCollected =
+			sets
+				?.map((set) => set.golden.common + set.golden.rare + set.golden.epic + set.golden.legendary)
+				.reduce((a, b) => a + b, 0) ?? 0;
+		const totalCollectible = sets?.map((set) => set.totalCollectibleCards).reduce((a, b) => a + b, 0) ?? 0;
+		return `${totalCollected}/${totalCollectible}`;
 	}
 }

@@ -10,8 +10,9 @@ import { WebsiteProfileEffects } from './+state/website/profile.effects';
 import * as fromWebsiteProfile from './+state/website/profile.reducer';
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
+import { WebsiteProfileOverviewComponent } from './overview/website-profile-overview.component';
 
-const components = [WebsiteProfileCollectionComponent, WebsiteProfileSetsComponent];
+const components = [WebsiteProfileCollectionComponent, WebsiteProfileSetsComponent, WebsiteProfileOverviewComponent];
 
 @NgModule({
 	imports: [
