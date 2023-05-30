@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { combineLatest, filter, merge, switchMap, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { ProfileLoadDataService } from 'libs/profile/data-access/src/lib/profile-load-data.service';
 import * as WebsiteProfileActions from './pofile.actions';
 import { ExtendedProfileSet, WebsiteProfileState } from './profile.models';
+import { getSets } from './profile.selectors';
 
 @Injectable()
 export class WebsiteProfileEffects {
@@ -24,12 +25,14 @@ export class WebsiteProfileEffects {
 
 	ownProfile$ = createEffect(() => {
 		const params$ = combineLatest([this.coreStore.select(getFsToken)]);
+		const hasInfo$ = combineLatest([this.store.select(getSets)]).pipe(map(([sets]) => !!sets?.length));
 		const merged$ = merge(this.actions$.pipe(ofType(WebsiteProfileActions.initOwnProfileData)), params$);
 		return merged$.pipe(
 			tap((info) => console.debug('ownProfile info', info)),
-			withLatestFrom(params$),
+			withLatestFrom(params$, hasInfo$),
 			tap((info) => console.debug('ownProfile info 2', info)),
-			filter(([action, params]) => !!action || !!params),
+			filter(([action, params, hasInfo]) => !hasInfo),
+			filter(([action, params, hasInfo]) => !!action || !!params),
 			tap((info) => console.debug('ownProfile info 3', info)),
 			switchMap(async ([action, [fsToken]]) => {
 				// TODO: get the current user token and pass it

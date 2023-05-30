@@ -9,7 +9,6 @@ export interface WebsiteProfilePartialState {
 	readonly [WEBSITE_PROFILE_FEATURE_KEY]: WebsiteProfileState;
 }
 
-
 export const initialWebsiteDuelsState: WebsiteProfileState = {
 	loaded: false,
 };
@@ -18,7 +17,10 @@ const reducer = createReducer(
 	initialWebsiteDuelsState,
 
 	on(WebsiteProfileActions.initProfileData, (state) => ({ ...state, loaded: false, error: null })),
-	on(WebsiteProfileActions.initOwnProfileData, (state) => ({ ...state, loaded: false, error: null })),
+	// Only load once
+	on(WebsiteProfileActions.initOwnProfileData, (state) =>
+		!!state.sets?.length ? state : { ...state, loaded: false, error: null },
+	),
 	on(WebsiteProfileActions.loadProfileDataSuccess, (state, { sets }) => ({
 		...state,
 		sets: sets,
