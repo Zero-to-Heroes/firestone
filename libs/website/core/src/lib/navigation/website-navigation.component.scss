@@ -48,6 +48,12 @@
 	.menu-name {
 		margin-left: 10px;
 	}
+
+	&.profile {
+		.icon {
+			opacity: 0.6;
+		}
+	}
 }
 
 .depth-1 .icon {

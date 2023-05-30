@@ -114,7 +114,7 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 		<button
 			[attr.tabindex]="0"
 			type="button"
-			class="menu-item depth-{{ depth }}"
+			class="menu-item depth-{{ depth }} {{ cssClass() }}"
 			[attr.aria-label]="node.name"
 			[ngClass]="{ selected: isSelected() }"
 			(click)="selectModule(node.id)"
@@ -151,6 +151,10 @@ export class WebsiteNavigationNodeComponent {
 		const selected = this.selectedModule.startsWith(this.node.id + '/') || this.selectedModule === this.node.id;
 		console.debug('[nav] selected', this.node.id, selected, this.selectedModule, this.node);
 		return selected;
+	}
+
+	cssClass(): string {
+		return this.node.id.replace('/', '-');
 	}
 }
 
