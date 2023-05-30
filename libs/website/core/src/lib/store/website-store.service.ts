@@ -10,6 +10,10 @@ export class WebsiteStoreService extends Store<WebsitePreferences> {
 		super();
 	}
 
+	public async initComplete(): Promise<void> {
+		return;
+	}
+
 	listenPrefs$<S extends PrefsSelector<WebsitePreferences, any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<WebsitePreferences, infer T> ? T : never }> {
