@@ -11,38 +11,7 @@
 	margin-bottom: 50px;
 
 	.mode {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-
-		background: rgba(255, 255, 255, 0.08);
-		border-radius: 15px;
-		padding: 20px;
 		width: 250px;
-
-		.title {
-			font-size: 24px;
-		}
-
-		.progress-container {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-
-		}
-
-		.progress {
-			&.normal {
-				color: var(--color-1);
-			}
-
-			&.golden {
-				color: var(--default-title-color);
-
-			}
-		}
 	}
 
 	.mode:first-child {

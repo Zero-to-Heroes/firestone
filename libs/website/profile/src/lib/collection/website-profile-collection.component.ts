@@ -14,20 +14,14 @@ import { getLoaded, getSets } from '../+state/website/profile.selectors';
 	template: `
 		<with-loading [isLoading]="isLoading$ | async">
 			<div class="overview">
-				<div class="mode standard">
-					<div class="title">Standard</div>
-					<div class="progress-container">
-						<div class="progress normal">{{ progressNormal(standardSets$ | async) }}</div>
-						<div class="progress golden">{{ progressGolden(standardSets$ | async) }}</div>
-					</div>
-				</div>
-				<div class="mode wild">
-					<div class="title">Wild</div>
-					<div class="progress-container">
-						<div class="progress normal">{{ progressNormal(wildSets$ | async) }}</div>
-						<div class="progress golden">{{ progressGolden(wildSets$ | async) }}</div>
-					</div>
-				</div>
+				<website-profile-collection-overview
+					class="mode standard"
+					[title]="'Standard'"
+					[sets]="standardSets$ | async"
+				>
+				</website-profile-collection-overview>
+				<website-profile-collection-overview class="mode wild" [title]="'Wild'" [sets]="wildSets$ | async">
+				</website-profile-collection-overview>
 			</div>
 			<section class="sets">
 				<website-profile-sets [sets]="standardSets$ | async" [header]="'Standard'"></website-profile-sets>
