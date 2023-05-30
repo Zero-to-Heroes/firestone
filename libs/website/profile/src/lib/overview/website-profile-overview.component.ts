@@ -1,18 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { sets as allSets, standardSets } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
-import { WebsiteCoreState, getPremium } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
-import { Observable, filter, tap } from 'rxjs';
-import { initOwnProfileData } from '../+state/website/pofile.actions';
+import { Observable, tap } from 'rxjs';
 import { ExtendedProfileSet, WebsiteProfileState } from '../+state/website/profile.models';
-import { getLoaded, getSets } from '../+state/website/profile.selectors';
+import { getSets } from '../+state/website/profile.selectors';
 
 @Component({
 	selector: 'website-profile-overview',
 	styleUrls: [`./website-profile-overview.component.scss`],
 	template: `
-		<with-loading [isLoading]="isLoading$ | async">
+		<website-profile>
 			<div class="overview">
 				<div class="card collection standard">
 					<website-profile-collection-overview
@@ -27,26 +25,22 @@ import { getLoaded, getSets } from '../+state/website/profile.selectors';
 					</website-profile-collection-overview>
 				</div>
 			</div>
-		</with-loading>
+		</website-profile>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteProfileOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	isLoading$: Observable<boolean>;
 	standardSets$: Observable<readonly ExtendedProfileSet[]>;
 	wildSets$: Observable<readonly ExtendedProfileSet[]>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly store: Store<WebsiteProfileState>,
-		private readonly coreStore: Store<WebsiteCoreState>,
 	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
-		console.debug('after content init', 'ggaaaaa');
-		this.isLoading$ = this.store.select(getLoaded).pipe(this.mapData((loaded) => !loaded));
 		const sets$ = this.store.select(getSets);
 		const allSetsSorted = [...allSets].sort(sortByProperties((s) => [-s.launchDate]));
 		this.standardSets$ = sets$.pipe(
@@ -69,22 +63,5 @@ export class WebsiteProfileOverviewComponent extends AbstractSubscriptionCompone
 						.filter((s) => !!s) as readonly ExtendedProfileSet[],
 			),
 		);
-		console.debug('core premium', this.coreStore, this.coreStore.select(getPremium));
-		// TODO: return the nickname in the endpoint
-		this.coreStore
-			.select(getPremium)
-			.pipe(
-				tap((premium) => console.debug('retrieved premiummm', premium)),
-				filter((premium) => !!premium),
-				this.mapData((premium) => premium),
-			)
-			.subscribe((premium) => {
-				// TODO: pass the current jwt token as well?
-				console.debug('will init profile data');
-				const action = initOwnProfileData();
-				this.store.dispatch(action);
-			});
-
-		return;
 	}
 }
