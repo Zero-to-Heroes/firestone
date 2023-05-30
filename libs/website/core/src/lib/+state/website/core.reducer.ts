@@ -27,6 +27,7 @@ export interface WebsiteCorePartialState {
 
 const localPrefsService = new WebsitePreferencesService(new LocalStorageService());
 const localPrefs = localPrefsService.getPreferences();
+console.debug('localPrefs', localPrefs, localPrefs.premium?.fsToken);
 export const initialWebsiteCoreState: WebsiteCoreState = {
 	loaded: true,
 	isPremium: isValidPremium(localPrefs.premium),
