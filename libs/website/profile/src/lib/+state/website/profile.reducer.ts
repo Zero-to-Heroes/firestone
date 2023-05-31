@@ -29,18 +29,18 @@ const reducer = createReducer(
 	// Only load once
 
 	on(WebsiteProfileActions.initOwnProfileData, (state) =>
-		!!state.sets?.length ? state : { ...state, loaded: false, error: null },
+		!!state.profile ? state : { ...state, loaded: false, error: null },
 	),
-	on(WebsiteProfileActions.loadProfileDataSuccess, (state, { sets, shareAlias }) => ({
+	on(WebsiteProfileActions.loadProfileDataSuccess, (state, { profile, shareAlias }) => ({
 		...state,
-		sets: sets,
+		profile: profile,
 		shareAlias: shareAlias,
 		loaded: true,
 	})),
 	on(WebsiteProfileActions.loadProfileDataFailure, (state, { error }) => ({ ...state, error })),
 
 	on(WebsiteProfileActions.initOtherProfileData, (state, { shareAlias }) =>
-		!!state.sets?.length
+		!!state.profile
 			? state
 			: {
 					...state,
@@ -49,14 +49,14 @@ const reducer = createReducer(
 					error: null,
 			  },
 	),
-	on(WebsiteProfileActions.loadOtherProfileDataSuccess, (state, { sets }) => ({
+	on(WebsiteProfileActions.loadOtherProfileDataSuccess, (state, { profile }) => ({
 		...state,
-		sets: sets,
+		profile: profile,
 		loaded: true,
 	})),
 	on(WebsiteProfileActions.stopWatchingOtherProfile, (state) => ({
 		...state,
-		sets: undefined,
+		profile: undefined,
 		loaded: false,
 		watchingOtherPlayer: undefined,
 	})),

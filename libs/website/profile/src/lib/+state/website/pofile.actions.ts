@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ExtendedProfileSet } from './profile.models';
+import { ExtendedProfile } from './profile.models';
 
 export const initProfileData = createAction(
 	'[Profile Data] Init',
@@ -11,7 +11,7 @@ export const initOwnProfileData = createAction('[Profile Own Data] Init');
 export const loadProfileDataSuccess = createAction(
 	'[Profile Data] Load Success',
 	props<{
-		sets: readonly ExtendedProfileSet[];
+		profile: ExtendedProfile;
 		shareAlias: string | null;
 	}>(),
 );
@@ -21,7 +21,7 @@ export const initOtherProfileData = createAction('[Profile Other Data] Init', pr
 export const loadOtherProfileDataSuccess = createAction(
 	'[Profile Other Data] Load Success',
 	props<{
-		sets: readonly ExtendedProfileSet[];
+		profile: ExtendedProfile;
 	}>(),
 );
 export const stopWatchingOtherProfile = createAction('[Profile Other Data] Stop');

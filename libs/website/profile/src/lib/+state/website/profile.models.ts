@@ -1,10 +1,10 @@
-import { CardsForSet, ProfileSet } from '@firestone-hs/api-user-profile';
+import { CardsForSet, Profile, ProfileSet } from '@firestone-hs/api-user-profile';
 
 export interface WebsiteProfileState {
 	loaded: boolean;
 	error?: string | null;
 
-	sets?: readonly ExtendedProfileSet[];
+	profile?: ExtendedProfile;
 	showingShareDialog?: boolean;
 	shareStatusMessage?: ShareStatusMessageType;
 	shareAlias?: string | null;
@@ -13,6 +13,9 @@ export interface WebsiteProfileState {
 
 export type ShareStatusMessageType = 'sharing' | 'existing-alias' | 'success' | 'error';
 
+export interface ExtendedProfile extends Profile {
+	readonly sets?: readonly ExtendedProfileSet[];
+}
 export interface ExtendedProfileSet extends ProfileSet {
 	readonly totalCollectibleCards: number;
 	readonly global: ExtendedCardsForSet;

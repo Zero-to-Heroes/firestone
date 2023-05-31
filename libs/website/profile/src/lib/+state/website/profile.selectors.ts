@@ -19,4 +19,7 @@ export const getWatchingOtherPlayer = createSelector(
 	(state: WebsiteProfileState) => state.watchingOtherPlayer,
 );
 
-export const getSets = createSelector(getWebsiteProfileState, (state: WebsiteProfileState) => state.sets ?? []);
+export const getSets = createSelector(
+	getWebsiteProfileState,
+	(state: WebsiteProfileState) => state.profile?.sets ?? [],
+);

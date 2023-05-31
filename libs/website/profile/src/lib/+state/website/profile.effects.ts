@@ -9,7 +9,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { WebsiteCoreState, WebsitePreferences, WebsitePreferencesService, getFsToken } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
 import * as WebsiteProfileActions from './pofile.actions';
-import { ExtendedProfileSet, WebsiteProfileState } from './profile.models';
+import { ExtendedProfile, ExtendedProfileSet, WebsiteProfileState } from './profile.models';
 import { getSets } from './profile.selectors';
 
 @Injectable()
@@ -60,8 +60,12 @@ export class WebsiteProfileEffects {
 							},
 						};
 					}) ?? [];
-				return WebsiteProfileActions.loadProfileDataSuccess({
+				const extendedProfile: ExtendedProfile = {
+					...profile,
 					sets: sets,
+				};
+				return WebsiteProfileActions.loadProfileDataSuccess({
+					profile: extendedProfile,
 					shareAlias: profile?.shareAlias ?? null,
 				});
 			}),
@@ -99,8 +103,12 @@ export class WebsiteProfileEffects {
 							},
 						};
 					}) ?? [];
-				return WebsiteProfileActions.loadOtherProfileDataSuccess({
+				const extendedProfile: ExtendedProfile = {
+					...profile,
 					sets: sets,
+				};
+				return WebsiteProfileActions.loadOtherProfileDataSuccess({
+					profile: extendedProfile,
 				});
 			}),
 		);
