@@ -33,6 +33,7 @@ export class ApiRunner {
 			contentType?: string;
 			bearerToken?: string;
 		},
+		returnStatusCode = false,
 	): Promise<T | null> {
 		return new Promise<T | null>((resolve, reject) => {
 			let headers = new HttpHeaders({
@@ -52,7 +53,11 @@ export class ApiRunner {
 					} else {
 						console.error('Could not execute POST call', url, input, error);
 					}
-					resolve(null);
+					if (returnStatusCode) {
+						reject(error.status);
+					} else {
+						resolve(null);
+					}
 				},
 			);
 		});

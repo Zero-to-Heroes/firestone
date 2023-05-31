@@ -1,9 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { WebsiteCoreState, getPremium } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
-import { Observable, filter, tap } from 'rxjs';
-import { initOwnProfileData } from './+state/website/pofile.actions';
+import { Observable, tap } from 'rxjs';
+import { initOtherProfileData, initOwnProfileData } from './+state/website/pofile.actions';
 import { WebsiteProfileState } from './+state/website/profile.models';
 import { getLoaded } from './+state/website/profile.selectors';
 
@@ -13,16 +14,19 @@ import { getLoaded } from './+state/website/profile.selectors';
 	template: `
 		<with-loading [isLoading]="isLoading$ | async">
 			<ng-content></ng-content>
+			<website-profile-share-modal></website-profile-share-modal>
 		</with-loading>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebsiteProfileComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	isLoading$: Observable<boolean>;
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly store: Store<WebsiteProfileState>,
 		private readonly coreStore: Store<WebsiteCoreState>,
+		private readonly route: ActivatedRoute,
 	) {
 		super(cdr);
 	}
@@ -34,14 +38,19 @@ export class WebsiteProfileComponent extends AbstractSubscriptionComponent imple
 			.select(getPremium)
 			.pipe(
 				tap((premium) => console.debug('retrieved premiummm', premium)),
-				filter((premium) => !!premium),
 				this.mapData((premium) => premium),
 			)
 			.subscribe((premium) => {
-				// TODO: pass the current jwt token as well?
+				const shareAlias = this.route.snapshot.paramMap.get('shareAlias');
 				console.debug('will init profile data');
-				const action = initOwnProfileData();
-				this.store.dispatch(action);
+				const action = shareAlias
+					? initOtherProfileData({ shareAlias: shareAlias })
+					: premium
+					? initOwnProfileData()
+					: null;
+				if (!!action) {
+					this.store.dispatch(action);
+				}
 			});
 
 		return;

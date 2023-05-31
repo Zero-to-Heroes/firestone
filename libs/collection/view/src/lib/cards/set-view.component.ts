@@ -104,7 +104,6 @@ export class SetViewComponent {
 		this._setId = value;
 		this.logoUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/sets/${value}.png`;
 		this.setName = `global.set.${value}`;
-		console.debug('setting setId', value, this.setName, this._displayName, this.logoUrl);
 		if (['classic', 'core', 'legacy', 'demon_hunter_initiate'].includes(value)) {
 			this._displayName = true;
 		}
@@ -130,7 +129,6 @@ export class SetViewComponent {
 	}
 
 	browseSet() {
-		console.debug('clicked', this.released, this._setId);
 		if (!this.released) {
 			return;
 		}

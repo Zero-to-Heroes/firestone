@@ -1,5 +1,7 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+import { LocalStorageService } from '@firestone/shared/framework/core';
+import { WebsitePreferences } from '@firestone/website/core';
 import { Action, createReducer, on } from '@ngrx/store';
-
 import * as WebsiteProfileActions from './pofile.actions';
 import { WebsiteProfileState } from './profile.models';
 
@@ -9,15 +11,23 @@ export interface WebsiteProfilePartialState {
 	readonly [WEBSITE_PROFILE_FEATURE_KEY]: WebsiteProfileState;
 }
 
-export const initialWebsiteDuelsState: WebsiteProfileState = {
-	loaded: false,
+// Using the WebsitePreferencesService wrapper here causes an exception on init,
+// though I don't understand why
+const localPrefs: WebsitePreferences = new LocalStorageService().getItem(
+	LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES,
+);
+console.debug('localPrefs', localPrefs?.shareAlias);
+export const initialState: WebsiteProfileState = {
+	loaded: true,
+	shareAlias: localPrefs?.shareAlias,
 };
 
 const reducer = createReducer(
-	initialWebsiteDuelsState,
+	initialState,
 
 	on(WebsiteProfileActions.initProfileData, (state) => ({ ...state, loaded: false, error: null })),
 	// Only load once
+
 	on(WebsiteProfileActions.initOwnProfileData, (state) =>
 		!!state.sets?.length ? state : { ...state, loaded: false, error: null },
 	),
@@ -27,6 +37,46 @@ const reducer = createReducer(
 		loaded: true,
 	})),
 	on(WebsiteProfileActions.loadProfileDataFailure, (state, { error }) => ({ ...state, error })),
+
+	on(WebsiteProfileActions.initOtherProfileData, (state, { shareAlias }) =>
+		!!state.sets?.length
+			? state
+			: {
+					...state,
+					watchingOtherPlayer: shareAlias,
+					loaded: false,
+					error: null,
+			  },
+	),
+	on(WebsiteProfileActions.loadOtherProfileDataSuccess, (state, { sets }) => ({
+		...state,
+		sets: sets,
+		loaded: true,
+	})),
+	on(WebsiteProfileActions.stopWatchingOtherProfile, (state) => ({
+		...state,
+		sets: undefined,
+		loaded: false,
+		watchingOtherPlayer: undefined,
+	})),
+
+	on(WebsiteProfileActions.startProfileShare, (state) => ({ ...state, showingShareDialog: true })),
+	on(WebsiteProfileActions.stopProfileShare, (state) => ({ ...state, showingShareDialog: false })),
+	on(WebsiteProfileActions.shareProfile, (state) => ({ ...state, shareStatusMessage: 'sharing' })),
+	on(WebsiteProfileActions.shareProfileSuccess, (state, { shareAlias }) => ({
+		...state,
+		shareStatusMessage: 'success',
+		shareAlias: shareAlias,
+	})),
+	on(WebsiteProfileActions.shareProfileFailure, (state, { errorCode }) => ({
+		...state,
+		shareStatusMessage: errorCode === 409 ? 'existing-alias' : 'error',
+	})),
+	on(WebsiteProfileActions.unshareProfileSuccess, (state) => ({
+		...state,
+		shareStatusMessage: undefined,
+		shareAlias: null,
+	})),
 );
 
 export function websiteDuelsReducer(state: WebsiteProfileState | undefined, action: Action) {

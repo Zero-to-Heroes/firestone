@@ -22,6 +22,7 @@ export class WebsitePreferences implements IPreferences {
 
 	// website-exclusive
 	readonly premium: PremiumInfo;
+	readonly shareAlias: string | null;
 }
 
 export interface PremiumInfo {

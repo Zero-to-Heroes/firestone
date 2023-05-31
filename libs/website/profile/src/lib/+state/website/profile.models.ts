@@ -5,7 +5,13 @@ export interface WebsiteProfileState {
 	error?: string | null;
 
 	sets?: readonly ExtendedProfileSet[];
+	showingShareDialog?: boolean;
+	shareStatusMessage?: ShareStatusMessageType;
+	shareAlias?: string | null;
+	watchingOtherPlayer?: string | null;
 }
+
+export type ShareStatusMessageType = 'sharing' | 'existing-alias' | 'success' | 'error';
 
 export interface ExtendedProfileSet extends ProfileSet {
 	readonly totalCollectibleCards: number;

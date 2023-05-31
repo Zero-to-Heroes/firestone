@@ -54,6 +54,29 @@
 			opacity: 0.6;
 		}
 	}
+
+	&.profile-share-button {
+		border: 1px solid var(--default-title-color);
+		width: 100px;
+		height: 35px;
+		margin: auto;
+		color: var(--default-title-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		margin-top: 5px;
+		margin-bottom: 5px;
+
+		&:hover {
+			background: var(--default-title-color);
+			color: var(--color-7);
+		}
+
+		.menu-name {
+			margin: 0;
+		}
+	}
 }
 
 .depth-1 .icon {
