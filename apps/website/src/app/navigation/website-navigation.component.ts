@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { startProfileShare, startProfileUnshare } from 'libs/website/profile/src/lib/+state/website/pofile.actions';
 import { WebsiteProfileState } from 'libs/website/profile/src/lib/+state/website/profile.models';
 import { getShareAlias, getWatchingOtherPlayer } from 'libs/website/profile/src/lib/+state/website/profile.selectors';
-import { BehaviorSubject, Observable, combineLatest, filter, map } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 
 @Component({
 	selector: 'website-navigation',
@@ -53,6 +53,9 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 		this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
 			this.selectedModule = (event as NavigationEnd).urlAfterRedirects?.replace('/', '');
 			console.debug('[nav] selected module', this.selectedModule, event);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
 		});
 		// this.router.events.pipe().subscribe((event) => {
 		// 	console.debug('[nav] all-events', event);
@@ -64,7 +67,7 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 			this.profileStore.select(getShareAlias),
 			this.profileStore.select(getWatchingOtherPlayer),
 		]).pipe(
-			map(([alias, watchingOtherPlayer]) => {
+			this.mapData(([alias, watchingOtherPlayer]) => {
 				const battlegroundsNode = !!watchingOtherPlayer?.length
 					? null
 					: {

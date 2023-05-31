@@ -31,9 +31,10 @@ const reducer = createReducer(
 	on(WebsiteProfileActions.initOwnProfileData, (state) =>
 		!!state.sets?.length ? state : { ...state, loaded: false, error: null },
 	),
-	on(WebsiteProfileActions.loadProfileDataSuccess, (state, { sets }) => ({
+	on(WebsiteProfileActions.loadProfileDataSuccess, (state, { sets, shareAlias }) => ({
 		...state,
 		sets: sets,
+		shareAlias: shareAlias,
 		loaded: true,
 	})),
 	on(WebsiteProfileActions.loadProfileDataFailure, (state, { error }) => ({ ...state, error })),

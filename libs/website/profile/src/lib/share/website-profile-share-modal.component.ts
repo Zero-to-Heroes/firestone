@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { WebsiteCoreState } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { shareProfile, stopProfileShare } from '../+state/website/pofile.actions';
 import { ShareStatusMessageType, WebsiteProfileState } from '../+state/website/profile.models';
 import { getShareAlias, getShareStatusMessage, isShowingShareModal } from '../+state/website/profile.selectors';
@@ -72,9 +72,10 @@ export class WebsiteProfileShareModalComponent extends AbstractSubscriptionCompo
 		console.debug('after content init', 'ggaaaaa');
 		this.baseShareUrl = `${document.location.protocol}//${document.location.hostname}/profile/`;
 		this.showing$ = this.store.select(isShowingShareModal).pipe(this.mapData((showing) => !!showing));
-		this.shareAlias$ = this.store
-			.select(getShareAlias)
-			.pipe(this.mapData((alias) => (!!alias?.length ? alias : '')));
+		this.shareAlias$ = this.store.select(getShareAlias).pipe(
+			tap((info) => console.debug('share alias', info)),
+			this.mapData((alias) => (!!alias?.length ? alias : '')),
+		);
 		this.shareStatusMessage$ = this.coreStore.select(getShareStatusMessage).pipe(this.mapData((info) => info));
 	}
 
