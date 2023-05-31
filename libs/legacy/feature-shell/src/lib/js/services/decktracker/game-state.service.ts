@@ -115,6 +115,7 @@ import { QuestPlayedFromDeckParser } from './event-parser/quest-played-from-deck
 import { QuestPlayedFromHandParser } from './event-parser/quest-played-from-hand-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { ReconnectOverParser } from './event-parser/reconnect-over-parser';
+import { ResourcesParser } from './event-parser/resources-parser';
 import { SecretCreatedInGameParser } from './event-parser/secret-created-in-game-parser';
 import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
@@ -594,6 +595,7 @@ export class GameStateService {
 			new AttackParser(this.allCards),
 			new CorpsesSpentThisGameParser(),
 			new OverloadParser(),
+			new ResourcesParser(),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

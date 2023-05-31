@@ -8,9 +8,7 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return (
-			gameEvent.type === GameEvent.RESOURCES_THIS_TURN || gameEvent.type === GameEvent.RESOURCES_USED_THIS_TURN
-		);
+		return gameEvent.type === GameEvent.RESOURCES_UPDATED;
 	}
 
 	parse(
@@ -22,12 +20,9 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 			return currentState;
 		}
 
-		const resources = gameEvent.additionalData.resources;
-		const resourcesThisTurn =
-			gameEvent.type === GameEvent.RESOURCES_THIS_TURN ? resources : currentState.resourcesAvailableThisTurn;
-		const resourcesUsedThisTurn =
-			gameEvent.type === GameEvent.RESOURCES_USED_THIS_TURN ? resources : currentState.resourcesUsedThisTurn;
-		const resourcesWastedThisTurn = resourcesThisTurn - resourcesUsedThisTurn;
+		const resourcesAvailable = gameEvent.additionalData.resourcesTotal;
+		const resourcesUsedThisTurn = gameEvent.additionalData.resourcesUsed;
+		const resourcesWastedThisTurn = resourcesAvailable - resourcesUsedThisTurn;
 		const resourcesWastedPerTurn: readonly NumericTurnInfo[] = [
 			...currentState.coinsWastedOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
@@ -37,7 +32,7 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 		];
 
 		return currentState.update({
-			resourcesAvailableThisTurn: resourcesThisTurn,
+			resourcesAvailableThisTurn: resourcesAvailable,
 			resourcesUsedThisTurn: resourcesUsedThisTurn,
 			coinsWastedOverTurn: resourcesWastedPerTurn,
 		} as RealTimeStatsState);

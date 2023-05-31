@@ -12,7 +12,7 @@ export class TriggerOnResourcesUsedSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.gameState && gameEvent.type === GameEvent.RESOURCES_USED_THIS_TURN;
+		return state && gameEvent.gameState && gameEvent.type === GameEvent.RESOURCES_UPDATED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

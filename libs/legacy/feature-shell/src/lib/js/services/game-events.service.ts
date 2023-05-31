@@ -856,10 +856,11 @@ export class GameEvents {
 					}),
 				);
 				break;
-			case 'RESOURCES_USED_THIS_TURN':
+			case 'RESOURCES_UPDATED':
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.RESOURCES_USED_THIS_TURN, gameEvent, {
-						resources: gameEvent.Value.AdditionalProps.Resources,
+					GameEvent.build(GameEvent.RESOURCES_UPDATED, gameEvent, {
+						resourcesTotal: gameEvent.Value.AdditionalProps.ResourcesTotal,
+						resourcesUsed: gameEvent.Value.AdditionalProps.ResourcesUsed,
 						resourcesLeft: gameEvent.Value.AdditionalProps.ResourcesLeft,
 					}),
 				);
