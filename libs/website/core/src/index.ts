@@ -1,5 +1,3 @@
-export * from '../../../../apps/website/src/app/navigation/website-navigation.component';
-export * from '../../../../apps/website/src/app/navigation/website-top-bar.component';
 export * from './lib/+state/website/core.actions';
 export * from './lib/+state/website/core.models';
 export * from './lib/+state/website/core.reducer';

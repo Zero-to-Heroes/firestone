@@ -9,7 +9,7 @@ export class PremiumRedirectGuard implements CanActivate {
 
 	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
 		if (this.auth.isPremium()) {
-			this.router.navigate(['/battlegrounds']);
+			this.router.navigate(['/profile']);
 			return true;
 		}
 

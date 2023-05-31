@@ -11,7 +11,6 @@ import { getSets } from '../+state/website/profile.selectors';
 	styleUrls: [`./website-profile-overview.component.scss`],
 	template: `
 		<website-profile>
-			<!-- TODO: add a banner with a X when viewing someone else's profile -->
 			<div class="overview">
 				<div class="card collection standard">
 					<website-profile-collection-overview

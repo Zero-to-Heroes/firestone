@@ -50,16 +50,15 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 	}
 
 	ngAfterContentInit(): void {
-		console.debug('[nav] router', this.router, this.router.routerState?.snapshot?.url);
 		this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
 			this.selectedModule = (event as NavigationEnd).urlAfterRedirects?.replace('/', '');
 			console.debug('[nav] selected module', this.selectedModule, event);
 		});
-		this.router.events.pipe().subscribe((event) => {
-			console.debug('[nav] all-events', event);
-		});
+		// this.router.events.pipe().subscribe((event) => {
+		// 	console.debug('[nav] all-events', event);
+		// });
 		this.selectedModule = this.router.routerState?.snapshot?.url?.replace('/', '');
-		console.debug('[nav] selected module', this.selectedModule);
+		// console.debug('[nav] selected module', this.selectedModule);
 
 		this.navigationNodes$ = combineLatest([
 			this.profileStore.select(getShareAlias),
@@ -218,7 +217,7 @@ export class WebsiteNavigationNodeComponent extends AbstractSubscriptionComponen
 			.subscribe(([node, selectedModule]) => {
 				const selected = selectedModule.startsWith(node.id + '/') || selectedModule === node.id;
 				this.isSelected = selected;
-				console.debug('[nav] selected', node.id, this.isSelected, selected, selectedModule, node);
+				// console.debug('[nav] selected', node.id, this.isSelected, selected, selectedModule, node);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -226,7 +225,7 @@ export class WebsiteNavigationNodeComponent extends AbstractSubscriptionComponen
 	}
 
 	selectModule(target: string) {
-		console.debug('[nav] selecting', target, this._node);
+		// console.debug('[nav] selecting', target, this._node);
 		if (this._node.click) {
 			this._node.click();
 		} else {

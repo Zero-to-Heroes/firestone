@@ -17,6 +17,7 @@ export class ProfileLoadDataService {
 		}
 
 		const result = await this.api.callPostApi(PROFILE_LOAD_OWN_URL, { token: token });
+		// console.debug('loaded own profile data', result, token);
 		return result != null ? result : null;
 	}
 
@@ -26,7 +27,7 @@ export class ProfileLoadDataService {
 		}
 
 		const result = await this.api.callPostApi(PROFILE_LOAD_OTHER_URL, { shareAlias: shareAlias });
-		console.debug('other profile data', result);
+		// console.debug('other profile data', result);
 		return result != null ? result : null;
 	}
 
@@ -41,7 +42,7 @@ export class ProfileLoadDataService {
 			undefined,
 			true,
 		);
-		console.debug('profile share result', result);
+		// console.debug('profile share result', result);
 		return result?.shareAlias ?? null;
 	}
 
@@ -51,7 +52,7 @@ export class ProfileLoadDataService {
 		}
 
 		const result: { shareAlias: string } | null = await this.api.callPostApi(PROFILE_UNSHARE_URL, { token: token });
-		console.debug('profile unshare result', result);
+		// console.debug('profile unshare result', result);
 		return null;
 	}
 }

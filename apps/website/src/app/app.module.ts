@@ -5,12 +5,7 @@ import { RouterModule } from '@angular/router';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBattlegroundsModule } from '@firestone/website/battlegrounds';
-import {
-	WebsiteBootstrapModule,
-	WebsiteNavigationComponent,
-	WebsiteNavigationNodeComponent,
-	WebsiteTopBarComponent,
-} from '@firestone/website/core';
+import { WebsiteBootstrapModule } from '@firestone/website/core';
 import { WebsiteDuelsModule } from '@firestone/website/duels';
 import { WebsiteProfileModule } from '@firestone/website/profile';
 import { EffectsModule } from '@ngrx/effects';
@@ -21,6 +16,8 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { AuthGuard } from './auth-guard.service';
+import { WebsiteNavigationComponent, WebsiteNavigationNodeComponent } from './navigation/website-navigation.component';
+import { WebsiteTopBarComponent } from './navigation/website-top-bar.component';
 import { PremiumRedirectGuard } from './premium-redirect.service';
 
 const components = [AppComponent, WebsiteNavigationComponent, WebsiteNavigationNodeComponent, WebsiteTopBarComponent];

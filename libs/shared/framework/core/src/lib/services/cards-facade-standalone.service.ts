@@ -5,10 +5,6 @@ import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
 export class CardsFacadeStandaloneService {
 	private service: AllCardsService;
 
-	constructor() {
-		console.debug('init standalone service');
-	}
-
 	public async init(service: AllCardsService, locale: string) {
 		this.service = service;
 		await this.setLocale(locale);

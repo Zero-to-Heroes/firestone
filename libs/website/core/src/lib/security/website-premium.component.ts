@@ -24,8 +24,5 @@ import { loginUrl } from './authentication.service';
 export class WebsitePremiumComponent {
 	login() {
 		window.open(loginUrl, '_blank')?.focus();
-		// const action = initAuthentication({ userName: 'fakeUserName' });
-		// this.store.dispatch(action);
-		// this.router.navigate(['/battlegrounds']);
 	}
 }

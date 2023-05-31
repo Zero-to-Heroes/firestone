@@ -5,19 +5,10 @@ import { WebsitePreferencesService } from '../../preferences/website-preferences
 import * as CoreActions from './core.actions';
 import { WebsiteCoreState } from './core.models';
 
-console.log('creating feature key');
 export const WEBSITE_CORE_FEATURE_KEY = 'websiteCore';
 
 // TODO: move this?
 const isValidPremium = (premium: PremiumInfo): boolean => {
-	console.log(
-		'isValidPremium?',
-		premium,
-		premium?.isPremium,
-		premium?.expires,
-		Date.now() - (premium?.expires ?? 0) * 1000,
-		window.location,
-	);
 	return premium?.isPremium && !!premium.expires && Date.now() - premium.expires * 1000 < 7 * 24 * 3600 * 1000;
 };
 
@@ -27,7 +18,6 @@ export interface WebsiteCorePartialState {
 
 const localPrefsService = new WebsitePreferencesService(new LocalStorageService());
 const localPrefs = localPrefsService.getPreferences();
-console.debug('localPrefs', localPrefs, localPrefs.premium?.fsToken);
 export const initialWebsiteCoreState: WebsiteCoreState = {
 	loaded: true,
 	isPremium: isValidPremium(localPrefs.premium),
@@ -41,12 +31,14 @@ export const initialWebsiteCoreState: WebsiteCoreState = {
 const reducer = createReducer(
 	initialWebsiteCoreState,
 	// on(CoreActions.initAuthentication, (state, { }))
-	on(CoreActions.afterAuthentication, (state, { userName, isLoggedIn, isPremium, nickName }) => ({
+	on(CoreActions.afterAuthentication, (state, { userName, isLoggedIn, isPremium, nickName, fsToken, picture }) => ({
 		...state,
 		isPremium: isPremium,
 		isLoggedIn: isLoggedIn,
 		userName: userName as string,
 		nickName: nickName as string,
+		fsToken: fsToken,
+		picture: picture,
 	})),
 );
 

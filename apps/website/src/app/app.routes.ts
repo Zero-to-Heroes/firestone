@@ -59,7 +59,6 @@ export const appRoutes: Route[] = [
 		component: WebsiteProfileCollectionComponent,
 		canActivate: [AuthGuard],
 	},
-	// Watching another player's profile
 	{
 		path: 'profile/:shareAlias/overview',
 		component: WebsiteProfileOverviewComponent,
@@ -68,7 +67,21 @@ export const appRoutes: Route[] = [
 		path: 'profile/:shareAlias/collection',
 		component: WebsiteProfileCollectionComponent,
 	},
-	// End watching
+	{
+		path: 'profile/overview',
+		component: WebsiteProfileOverviewComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile/collection',
+		component: WebsiteProfileCollectionComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile/:shareAlias',
+		redirectTo: '/profile/:shareAlias/overview',
+		pathMatch: 'full',
+	},
 	{
 		path: 'profile',
 		redirectTo: '/profile/overview',
@@ -87,7 +100,7 @@ export const appRoutes: Route[] = [
 	},
 	{
 		path: '',
-		redirectTo: '/profile',
+		redirectTo: '/profile/overview',
 		pathMatch: 'prefix',
 	},
 	{

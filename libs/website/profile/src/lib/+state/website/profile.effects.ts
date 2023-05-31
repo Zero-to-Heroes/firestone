@@ -4,10 +4,10 @@ import { combineLatest, filter, ignoreElements, map, merge, switchMap, tap, with
 
 import { Router } from '@angular/router';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { ProfileLoadDataService } from '@firestone/profile/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { WebsiteCoreState, WebsitePreferences, WebsitePreferencesService, getFsToken } from '@firestone/website/core';
 import { Store } from '@ngrx/store';
-import { ProfileLoadDataService } from 'libs/profile/data-access/src/lib/profile-load-data.service';
 import * as WebsiteProfileActions from './pofile.actions';
 import { ExtendedProfileSet, WebsiteProfileState } from './profile.models';
 import { getSets } from './profile.selectors';
@@ -35,6 +35,7 @@ export class WebsiteProfileEffects {
 			filter(([action, params, hasInfo]) => !hasInfo),
 			filter(([action, params, hasInfo]) => !!action || !!params),
 			switchMap(async ([action, [fsToken]]) => {
+				// console.debug('loading profile data', fsToken, action);
 				const profile = await this.access.loadOwnProfileData(fsToken);
 				if (!this.collectibleCards?.length) {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
@@ -108,7 +109,7 @@ export class WebsiteProfileEffects {
 	stopWatching$ = createEffect(() => {
 		return this.actions$.pipe(
 			ofType(WebsiteProfileActions.stopWatchingOtherProfile),
-			tap(() => this.router.navigate(['profile'])),
+			tap(() => this.router.navigate(['/profile'])),
 			ignoreElements(),
 			map(() => null as any),
 		);

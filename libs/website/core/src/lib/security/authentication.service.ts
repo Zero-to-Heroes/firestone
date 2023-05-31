@@ -30,7 +30,6 @@ export class AuthenticationService {
 	}
 
 	public isPremium(): boolean {
-		console.log('isPrmieum?');
 		return this.premium;
 	}
 

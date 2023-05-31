@@ -42,8 +42,8 @@ export class WebsiteProfileComponent extends AbstractSubscriptionComponent imple
 			)
 			.subscribe((premium) => {
 				const shareAlias = this.route.snapshot.paramMap.get('shareAlias');
-				console.debug('will init profile data');
-				const action = shareAlias
+				console.debug('will init profile data', premium, shareAlias);
+				const action = !!shareAlias?.length
 					? initOtherProfileData({ shareAlias: shareAlias })
 					: premium
 					? initOwnProfileData()

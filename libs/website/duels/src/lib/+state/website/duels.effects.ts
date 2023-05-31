@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { DuelsStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import {
-	buildDuelsCombinedHeroStats,
 	DuelsCombinedHeroStat,
 	DuelsHeroFilterType,
 	DuelsMetaHeroStatsAccessService,
 	DuelsStatTypeFilterType,
 	DuelsTimeFilterType,
 	DuelsTreasureStatTypeFilterType,
+	buildDuelsCombinedHeroStats,
 	filterDuelsHeroStats,
 	filterDuelsTreasureStats,
 	getGroupingKeyForHeroStat,
@@ -17,7 +17,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { WebsitePreferences, WebsitePreferencesService } from '@firestone/website/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, merge, switchMap, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, merge, switchMap, withLatestFrom } from 'rxjs';
 
 import * as WebsiteDuelsActions from './duels.actions';
 import { WebsiteDuelsState } from './duels.models';
@@ -69,16 +69,12 @@ export class WebsiteDuelsEffects {
 			this.store.select(getCurrentTimerFilter),
 			this.store.select(getCurrentHeroFilter),
 			this.store.select(getCurrentSignatureFilter),
-		]).pipe(tap((info) => console.debug('params$', info)));
-		const merged$ = merge(
-			this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroPowerStats)),
-			params$,
-		).pipe(tap((info) => console.debug('merged$', info)));
+		]);
+		const merged$ = merge(this.actions$.pipe(ofType(WebsiteDuelsActions.initDuelsMetaHeroPowerStats)), params$);
 		return merged$.pipe(
 			withLatestFrom(params$),
 			// filter(([action, params]) => !!action || !!params),
 			switchMap(async ([action, [percentileFiler, timeFilter, heroFilter, signatureTreasureFilter]]) => {
-				console.debug('building HP stats', signatureTreasureFilter);
 				const stats = await this.buildHeroStats(
 					percentileFiler,
 					timeFilter,
@@ -158,7 +154,6 @@ export class WebsiteDuelsEffects {
 						heroPowerFilter,
 						signatureFilter,
 					);
-					console.debug('built actives', stats, percentileFiler, timeFilter, statType);
 					return WebsiteDuelsActions.loadDuelsMetaActiveTreasureStatsSuccess({
 						stats: stats.stats,
 						lastUpdateDate: stats?.lastUpdateDate,
@@ -198,7 +193,6 @@ export class WebsiteDuelsEffects {
 						heroPowerFilter,
 						signatureFilter,
 					);
-					console.debug('built passives', stats, percentileFiler, timeFilter, statType);
 					return WebsiteDuelsActions.loadDuelsMetaPassiveTreasureStatsSuccess({
 						stats: stats.stats,
 						lastUpdateDate: stats?.lastUpdateDate,
@@ -284,7 +278,6 @@ export class WebsiteDuelsEffects {
 					duelsActiveSignatureTreasureFilter2: action.currentSignatureSelection,
 				};
 				await this.prefs.savePreferences(newPrefs);
-				console.debug('updated signature filter', action.currentSignatureSelection);
 				return WebsiteDuelsActions.prefsUpdateSuccess();
 			}),
 		),
@@ -309,7 +302,6 @@ export class WebsiteDuelsEffects {
 		}
 		const hideLowData = true;
 		const heroSearchString = null;
-		console.debug('loading duels stats', percentileFilter, timeFilter);
 		// TODO: cache this somehow?
 		const apiResult: DuelsStat | null = await this.access.loadMetaHeroes(percentileFilter, timeFilter);
 		const filteredStats = filterDuelsHeroStats(
@@ -321,7 +313,6 @@ export class WebsiteDuelsEffects {
 			this.allCards,
 			heroSearchString,
 		);
-		console.debug('duels filtered stats', filteredStats, apiResult);
 		const result: readonly DuelsCombinedHeroStat[] = buildDuelsCombinedHeroStats(
 			filteredStats,
 			getGroupingKeyForHeroStat(statType),
@@ -377,7 +368,6 @@ export class WebsiteDuelsEffects {
 		}
 		const hideLowData = true;
 		const heroSearchString = null;
-		console.debug('loading duels stats', percentileFilter, timeFilter);
 		// TODO: cache this somehow?
 		const apiResult: DuelsStat | null = await this.access.loadMetaHeroes(percentileFilter, timeFilter);
 		const filteredStats = filterDuelsTreasureStats(
@@ -389,7 +379,6 @@ export class WebsiteDuelsEffects {
 			this.allCards,
 			heroSearchString,
 		);
-		console.debug('duels filtered stats', filteredStats, apiResult);
 		const result: readonly DuelsCombinedHeroStat[] = buildDuelsCombinedHeroStats(
 			filteredStats,
 			(stat: DuelsTreasureStat) => stat.treasureCardId,
