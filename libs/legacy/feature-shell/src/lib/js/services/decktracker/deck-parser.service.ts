@@ -23,6 +23,7 @@ import { BugReportService } from '../bug/bug-report.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
+import { getLogsDir } from '../log-listener.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { DeckHandlerService } from './deck-handler.service';
 
@@ -443,7 +444,8 @@ export class DeckParserService {
 		if (!this.ow.gameRunning(gameInfo)) {
 			return [];
 		}
-		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + fileName;
+		const logsDir = await getLogsDir(this.ow, gameInfo);
+		const logsLocation = `${logsDir}\\${fileName}`;
 		const logsContents = await this.ow.readTextFile(logsLocation);
 		if (!logsContents) {
 			return [];

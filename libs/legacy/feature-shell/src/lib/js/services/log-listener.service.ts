@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
 import { Subject } from 'rxjs';
 import { Events } from './events.service';
+import { GameStatusService } from './game-status.service';
 
 @Injectable()
 export class LogListenerService {
@@ -11,11 +12,11 @@ export class LogListenerService {
 	private callback: (input: string) => void;
 
 	private monitoring: boolean;
-	private fileInitiallyPresent: boolean;
+	// private fileInitiallyPresent: boolean;
 	private logsLocation: string;
 	private existingLineHandler: (input: string) => void;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService, private gameStatus: GameStatusService) {}
 
 	public configure(
 		logFile: string,
@@ -23,11 +24,11 @@ export class LogListenerService {
 		existingLineHandler: (input: string) => void = null,
 	): LogListenerService {
 		this.logFile = logFile;
-		this.callback = newLineHandler;
 		console.log('[log-listener] [' + this.logFile + '] initializing', this.logFile);
-		this.monitoring = false;
-		this.fileInitiallyPresent = true;
+		this.callback = newLineHandler;
 		this.existingLineHandler = existingLineHandler;
+		this.monitoring = false;
+		// this.fileInitiallyPresent = true;
 		if (existingLineHandler) {
 			console.log('[log-listener] [' + this.logFile + '] will read from start of file');
 		}
@@ -44,28 +45,52 @@ export class LogListenerService {
 	}
 
 	async configureLogListeners() {
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (!res?.gameInfo) {
-				return;
-			}
+		this.gameStatus.onGameStart(() => this.startLogRegister());
+		this.gameStatus.onGameExit(() => this.stopLogRegister());
+		this.startLogRegister();
+		// this.ow.addGameInfoUpdatedListener(async (res: overwolf.games.GameInfoUpdatedEvent) => {
+		// 	if (!res?.gameInfo) {
+		// 		return;
+		// 	}
 
-			this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
-			if (this.ow.gameLaunched(res)) {
-				this.registerLogMonitor();
-			} else if (!(await this.ow.inGame())) {
-				console.log('[log-listener] [' + this.logFile + '] Left the game, cleaning log file');
-				await this.ow.writeFileContents(this.logsLocation, '');
-				console.log('[log-listener] [' + this.logFile + '] Cleaned log file');
-			}
-		});
+		// 	const logsDir = await this.getLogsDir(res?.gameInfo);
+		// 	this.logsLocation = `${logsDir}\\${this.logFile}`;
+		// 	if (this.ow.gameLaunched(res)) {
+		// 		this.registerLogMonitor();
+		// 	} else if (!(await this.ow.inGame())) {
+		// 		console.log('[log-listener] [' + this.logFile + '] Left the game');
+		// 		// await this.ow.writeFileContents(this.logsLocation, '');
+		// 		// console.log('[log-listener] [' + this.logFile + '] Cleaned log file');
+		// 	}
+		// });
+		// const gameInfo = await this.ow.getRunningGameInfo();
+		// if (this.ow.gameRunning(gameInfo)) {
+		// 	console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
+		// 	const logsDir = await this.getLogsDir(gameInfo);
+		// 	console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
+		// 	this.logsLocation = `${logsDir}\\${this.logFile}`;
+		// 	this.registerLogMonitor();
+		// } else {
+		// 	console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', gameInfo);
+		// }
+	}
+
+	private async startLogRegister() {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (this.ow.gameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
-			this.logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
+			const logsDir = await getLogsDir(this.ow, gameInfo);
+			console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
+			this.logsLocation = `${logsDir}\\${this.logFile}`;
 			this.registerLogMonitor();
 		} else {
 			console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', gameInfo);
 		}
+	}
+
+	private async stopLogRegister() {
+		this.monitoring = false;
+		this.ow.stopFileListener(this.logFile);
 	}
 
 	registerLogMonitor() {
@@ -79,12 +104,12 @@ export class LogListenerService {
 		this.listenOnFile(this.logsLocation);
 	}
 
-	listenOnFile(logsLocation: string): void {
+	private listenOnFile(logsLocation: string): void {
 		this.subject.next(Events.START_LOG_FILE_DETECTION);
 		this.listenOnFileCreation(logsLocation);
 	}
 
-	async listenOnFileCreation(logsLocation: string) {
+	private async listenOnFileCreation(logsLocation: string) {
 		const fileExists = await this.ow.fileExists(logsLocation);
 		if (!fileExists) {
 			await this.ow.writeFileContents(logsLocation, '');
@@ -92,7 +117,7 @@ export class LogListenerService {
 		this.listenOnFileUpdate(logsLocation);
 	}
 
-	async listenOnFileUpdate(logsLocation: string) {
+	private async listenOnFileUpdate(logsLocation: string) {
 		const fileIdentifier = this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] preparing to listen on file update', logsLocation);
 
@@ -100,7 +125,7 @@ export class LogListenerService {
 			let hasFileBeenInitiallyRead = false;
 
 			const existingLines: string[] = [];
-			const skipToEnd = true; // this.fileInitiallyPresent && !this.existingLineHandler;
+			const skipToEnd = true; // Handled separately, below in the code
 			const options = {
 				skipToEnd: skipToEnd,
 			};
@@ -158,3 +183,44 @@ export class LogListenerService {
 		}
 	}
 }
+
+export const getLogsDir = async (
+	ow: OverwolfService,
+	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
+): Promise<string> => {
+	const logsBaseDir = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\';
+	const filesInLogsDir = (await ow.listFilesInDirectory(logsBaseDir))?.data ?? [];
+
+	let latestDir: string | undefined;
+	let latestTimestamp: number | undefined;
+
+	for (const file of filesInLogsDir) {
+		if (file.type === 'dir') {
+			const dirName = file.name;
+			const timestampRegex = /(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})/;
+			const match = dirName.match(timestampRegex);
+
+			if (match) {
+				const year = parseInt(match[1]);
+				const month = parseInt(match[2]) - 1; // Months are 0-based in JavaScript
+				const day = parseInt(match[3]);
+				const hours = parseInt(match[4]);
+				const minutes = parseInt(match[5]);
+				const seconds = parseInt(match[6]);
+
+				const timestamp = new Date(year, month, day, hours, minutes, seconds).getTime();
+
+				if (!latestTimestamp || timestamp > latestTimestamp) {
+					latestTimestamp = timestamp;
+					latestDir = dirName;
+				}
+			}
+		}
+	}
+
+	if (latestDir) {
+		return `${logsBaseDir}\\${latestDir}`;
+	} else {
+		return `${logsBaseDir}`;
+	}
+};

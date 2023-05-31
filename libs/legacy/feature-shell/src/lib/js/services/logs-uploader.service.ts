@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
+import { getLogsDir } from './log-listener.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
@@ -15,7 +16,8 @@ export class LogsUploaderService {
 			if (!res) {
 				return null;
 			}
-			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+			const logsDir = await getLogsDir(this.ow, res);
+			const logsLocation = `${logsDir}\\Power.log`;
 
 			const logLines = await this.ow.readTextFile(logsLocation);
 
