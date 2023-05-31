@@ -840,8 +840,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		OverlayModule,
 		SelectModule,
-		FormsModule,
-		ReactiveFormsModule,
 
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,

@@ -132,7 +132,7 @@ export class DuelsStateBuilderService {
 		console.debug('[duels-run] triggerDuelsMatchInfoRetrieve', metadata);
 		await runLoop(async () => {
 			const duelsInfo = await this.memory.getDuelsInfo();
-			console.debug('[duels-run] get duelsInfo', duelsInfo);
+			console.log('[duels-run] get duelsInfo', duelsInfo);
 			if (duelsInfo?.Rating != null) {
 				this.duelsInfo$$.next(duelsInfo);
 				return true;
