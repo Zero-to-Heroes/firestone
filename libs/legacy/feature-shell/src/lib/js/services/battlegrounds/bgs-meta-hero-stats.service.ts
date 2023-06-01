@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsAccessService } from '@firestone/battlegrounds/data-access';
 import { DiskCacheService } from '@firestone/shared/framework/core';
-import { distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class BgsMetaHeroStatsService {
+	private requestLoad$$ = new BehaviorSubject<boolean>(true);
+
 	constructor(
 		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
@@ -17,10 +19,9 @@ export class BgsMetaHeroStatsService {
 	}
 
 	private init() {
-		this.store
-			.listenPrefs$((prefs) => prefs.bgsActiveTimeFilter)
+		combineLatest([this.store.listenPrefs$((prefs) => prefs.bgsActiveTimeFilter), this.requestLoad$$])
 			.pipe(distinctUntilChanged())
-			.subscribe(async ([timeFilter]) => {
+			.subscribe(async ([[timeFilter], requestLoad]) => {
 				const stats = await this.access.loadMetaHeroStats(timeFilter);
 				this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_META_HERO_STATS, stats);
 				this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(stats));
@@ -36,9 +37,6 @@ export class BgsMetaHeroStatsService {
 			this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(localStats));
 		}
 
-		// Not necessary, as this will be triggered by the bgsActiveTimeFilter listener
-		// const prefs = await this.prefs.getPreferences();
-		// const timeFilter = prefs.bgsActiveTimeFilter;
-		// this.loadMetaHeroStats(timeFilter);
+		this.requestLoad$$.next(!this.requestLoad$$.getValue());
 	}
 }

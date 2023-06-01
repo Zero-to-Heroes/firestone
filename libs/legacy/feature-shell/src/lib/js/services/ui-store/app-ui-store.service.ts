@@ -311,7 +311,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
 		this.debugCall('bgHeroStats$');
-		return this.bgsMetaStatsHero;
+		return this.bgsMetaStatsHero.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
@@ -556,7 +556,7 @@ export class AppUiStoreService extends Store<Preferences> {
 			distinctUntilChanged(),
 			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter, bgsHeroesUseConservativeEstimate]]) => {
 				console.debug(
-					'[bgs-1] rebuilding meta hero stats',
+					'[bgs-1] rebuilding meta hero stats 1',
 					stats,
 					'rankFilter',
 					bgsActiveRankFilter,

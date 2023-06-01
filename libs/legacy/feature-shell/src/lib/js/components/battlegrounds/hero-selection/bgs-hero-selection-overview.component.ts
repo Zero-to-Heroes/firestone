@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
@@ -44,7 +44,10 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 	}
 
 	ngAfterContentInit(): void {
-		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
+		const tiers$ = this.store.bgsMetaStatsHero$().pipe(
+			tap((stats) => console.debug('[bgs-hero-selection-overview] received stats', stats)),
+			this.mapData((stats) => buildTiers(stats, this.i18n)),
+		);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((showAds) => showAds));
 
 		this.heroOverviews$ = combineLatest([
