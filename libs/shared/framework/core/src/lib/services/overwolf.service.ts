@@ -464,6 +464,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async getGameDbInfo() {
+		return new Promise<overwolf.games.GetGameDBInfoResult>((resolve) => {
+			overwolf.games.getGameDBInfo(HEARTHSTONE_GAME_ID, (info: overwolf.games.GetGameDBInfoResult) => {
+				resolve(info);
+			});
+		});
+	}
+
 	public async setGameEventsRequiredFeatures(features) {
 		return new Promise<any>((resolve) => {
 			overwolf.games.events.setRequiredFeatures(features, (info) => {

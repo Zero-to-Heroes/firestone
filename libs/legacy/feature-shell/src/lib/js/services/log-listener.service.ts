@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
 import { Subject } from 'rxjs';
+import { Preferences } from '../models/preferences';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
+import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class LogListenerService {
@@ -16,7 +18,11 @@ export class LogListenerService {
 	private logsLocation: string;
 	private existingLineHandler: (input: string) => void;
 
-	constructor(private ow: OverwolfService, private gameStatus: GameStatusService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	public configure(
 		logFile: string,
@@ -48,44 +54,18 @@ export class LogListenerService {
 		this.gameStatus.onGameStart(() => this.startLogRegister());
 		this.gameStatus.onGameExit(() => this.stopLogRegister());
 		this.startLogRegister();
-		// this.ow.addGameInfoUpdatedListener(async (res: overwolf.games.GameInfoUpdatedEvent) => {
-		// 	if (!res?.gameInfo) {
-		// 		return;
-		// 	}
-
-		// 	const logsDir = await this.getLogsDir(res?.gameInfo);
-		// 	this.logsLocation = `${logsDir}\\${this.logFile}`;
-		// 	if (this.ow.gameLaunched(res)) {
-		// 		this.registerLogMonitor();
-		// 	} else if (!(await this.ow.inGame())) {
-		// 		console.log('[log-listener] [' + this.logFile + '] Left the game');
-		// 		// await this.ow.writeFileContents(this.logsLocation, '');
-		// 		// console.log('[log-listener] [' + this.logFile + '] Cleaned log file');
-		// 	}
-		// });
-		// const gameInfo = await this.ow.getRunningGameInfo();
-		// if (this.ow.gameRunning(gameInfo)) {
-		// 	console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
-		// 	const logsDir = await this.getLogsDir(gameInfo);
-		// 	console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
-		// 	this.logsLocation = `${logsDir}\\${this.logFile}`;
-		// 	this.registerLogMonitor();
-		// } else {
-		// 	console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', gameInfo);
-		// }
 	}
 
 	private async startLogRegister() {
 		const gameInfo = await this.ow.getRunningGameInfo();
+		const prefs = await this.prefs.getPreferences();
+		const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
+		console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
+		this.logsLocation = `${logsDir}\\${this.logFile}`;
+		console.debug('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
 		if (this.ow.gameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
-			const logsDir = await getLogsDir(this.ow, gameInfo);
-			console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
-			this.logsLocation = `${logsDir}\\${this.logFile}`;
-			console.debug('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
 			this.registerLogMonitor();
-		} else {
-			console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', gameInfo);
 		}
 	}
 
@@ -188,8 +168,10 @@ export class LogListenerService {
 export const getLogsDir = async (
 	ow: OverwolfService,
 	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
+	prefs: Preferences,
 ): Promise<string> => {
-	const logsBaseDir = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs';
+	const gameBaseDir = await getGameBaseDir(ow, gameInfo, prefs);
+	const logsBaseDir = gameBaseDir + 'Logs';
 	const filesInLogsDir = (await ow.listFilesInDirectory(logsBaseDir))?.data ?? [];
 
 	let latestDir: string | undefined;
@@ -224,4 +206,31 @@ export const getLogsDir = async (
 	} else {
 		return `${logsBaseDir}`;
 	}
+};
+
+export const getGameBaseDir = async (
+	ow: OverwolfService,
+	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
+	prefs: Preferences,
+): Promise<string> => {
+	gameInfo = gameInfo ?? (await ow.getRunningGameInfo());
+	let baseDir: string = extractBaseDirFromPath(gameInfo?.executionPath);
+	if (!baseDir?.length) {
+		const gameDbInfo = await ow.getGameDbInfo();
+		baseDir = extractBaseDirFromPath(gameDbInfo?.installedGameInfo?.LauncherPath);
+	}
+	if (!baseDir?.length) {
+		baseDir = extractBaseDirFromPath(prefs?.gameInstallPath);
+	}
+	// Use a default
+	if (!baseDir?.length) {
+		baseDir = 'C:\\Program Files (x86)\\Hearthstone\\';
+	}
+	return baseDir;
+};
+
+const extractBaseDirFromPath = (path: string): string => {
+	return path?.includes('Hearthstone Beta Launcher')
+		? path?.split('Hearthstone Beta Launcher.exe')[0]
+		: path?.split('Hearthstone.exe')[0];
 };

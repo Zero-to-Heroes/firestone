@@ -25,6 +25,7 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { getLogsDir } from '../log-listener.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { PreferencesService } from '../preferences.service';
 import { DeckHandlerService } from './deck-handler.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json`;
@@ -55,6 +56,7 @@ export class DeckParserService {
 		private readonly api: ApiRunner,
 		private readonly duelsService: DuelsStateBuilderService,
 		private readonly bugReportService: BugReportService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
@@ -441,10 +443,8 @@ export class DeckParserService {
 	private async readAllLogLines(): Promise<readonly string[]> {
 		const fileName = 'Decks.log';
 		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!this.ow.gameRunning(gameInfo)) {
-			return [];
-		}
-		const logsDir = await getLogsDir(this.ow, gameInfo);
+		const prefs = await this.prefs.getPreferences();
+		const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
 		const logsLocation = `${logsDir}\\${fileName}`;
 		const logsContents = await this.ow.readTextFile(logsLocation);
 		if (!logsContents) {

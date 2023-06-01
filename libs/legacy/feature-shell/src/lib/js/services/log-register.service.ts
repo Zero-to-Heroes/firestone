@@ -5,6 +5,7 @@ import { CardsMonitorService } from './collection/cards-monitor.service';
 import { GameEvents } from './game-events.service';
 import { GameStatusService } from './game-status.service';
 import { LogListenerService } from './log-listener.service';
+import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class LogRegisterService {
@@ -15,11 +16,12 @@ export class LogRegisterService {
 	retriesLeft = 20;
 
 	constructor(
-		private events: Events,
-		private cardsMonitor: CardsMonitorService,
-		private ow: OverwolfService,
-		private gameEvents: GameEvents,
-		private gameStatus: GameStatusService,
+		private readonly events: Events,
+		private readonly cardsMonitor: CardsMonitorService,
+		private readonly ow: OverwolfService,
+		private readonly gameEvents: GameEvents,
+		private readonly gameStatus: GameStatusService,
+		private readonly prefs: PreferencesService,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
 		// the app from starting to parse the game logs while in an uninitialized state, which in
@@ -32,7 +34,7 @@ export class LogRegisterService {
 	private init(): void {
 		console.log('[log-register] initiating log registerservice');
 
-		new LogListenerService(this.ow, this.gameStatus)
+		new LogListenerService(this.ow, this.gameStatus, this.prefs)
 			.configure(
 				'Net.log',
 				(data) => this.cardsMonitor.receiveLogLine(data),
@@ -49,7 +51,7 @@ export class LogRegisterService {
 				this.events.broadcast(status, 'Net.log');
 			})
 			.start();
-		new LogListenerService(this.ow, this.gameStatus)
+		new LogListenerService(this.ow, this.gameStatus, this.prefs)
 			.configure(
 				'Power.log',
 				(data) => this.gameEvents.receiveLogLine(data),
