@@ -328,6 +328,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
 		switch (cardId) {
+			case CardIds.AbyssalBassist:
+				return and(side(inputSide), or(inDeck, inHand), weapon);
 			case CardIds.AbyssalDepths:
 				return (input: SelectorInput): boolean => {
 					const cheapestMinions = [...input.deckState.deck]
@@ -398,6 +400,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.AzsharanScavenger_SunkenScavengerToken:
 				return and(side(inputSide), minion, murloc);
+			case CardIds.BabaNaga:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.BalindaStonehearth:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.BandOfBeesTavernBrawl:
@@ -481,6 +485,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.CosmicKeyboard:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.CostumedSinger:
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.CorruptedFelstoneTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fel);
 			case CardIds.CountessAshmore:
@@ -648,6 +654,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.GreySageParrot:
 				return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(4));
+			case CardIds.GrimtotemBuzzkill:
+				return and(side(inputSide), or(inDeck, inHand), weapon);
 			case CardIds.GrommashsArmguardsTavernBrawl:
 				return and(side(inputSide), weapon);
 			case CardIds.GuardianAnimals:
@@ -1015,6 +1023,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.Shudderwock:
 				return and(side(inputSide), cardsPlayedThisMatch, minion, battlecry);
+			case CardIds.SilvermoonFarstrider_RLK_826:
+				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 			case CardIds.SketchyInformation:
 				return and(side(inputSide), inDeck, deathrattle, effectiveCostLess(5));
 			case CardIds.SkulkingGeist_CORE_ICC_701:

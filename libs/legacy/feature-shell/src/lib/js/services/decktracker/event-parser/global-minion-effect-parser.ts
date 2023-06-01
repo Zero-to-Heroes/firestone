@@ -36,7 +36,13 @@ export class GlobalMinionEffectParser implements EventParser {
 			cardId = gameEvent.additionalData?.parentCardId;
 			effectTrigger = globalEffectTriggers.find((e) => e.cardId === cardId);
 			if (effectTrigger?.cardId !== cardId) {
-				console.warn('trying to apply global effect trigger to wrong card', cardId, inputCardId, effectTrigger);
+				console.warn(
+					'trying to apply global effect trigger to wrong card',
+					cardId,
+					inputCardId,
+					effectTrigger,
+					gameEvent.additionalData?.prefabId,
+				);
 				return currentState;
 			}
 		}

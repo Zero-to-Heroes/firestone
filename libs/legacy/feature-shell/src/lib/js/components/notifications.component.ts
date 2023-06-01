@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
+import { Notification, NotificationType, NotificationsService } from 'angular2-notifications';
 import { Observable, Subscription } from 'rxjs';
 import { concatMap, filter, map, tap } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
@@ -82,6 +82,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					// Don't await them because we don't want to block the main thread
 					const toast = this.buildToastNotification(message);
 					toast.theClass = message.theClass;
+					console.debug('handling new notification', message, toast);
 					return { message, toast };
 				}),
 				concatMap(({ message, toast }) =>

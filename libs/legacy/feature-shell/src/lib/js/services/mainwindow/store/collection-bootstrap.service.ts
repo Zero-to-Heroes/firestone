@@ -56,7 +56,7 @@ export class CollectionBootstrapService {
 			// coins: coins,
 			cardHistory: cardHistory,
 			totalHistoryLength: totalHistoryLength,
-			isLoading: false,
+			// isLoading: false,
 		});
 		console.log('collection loading card history');
 		this.store.send(new CollectionInitEvent(newState));

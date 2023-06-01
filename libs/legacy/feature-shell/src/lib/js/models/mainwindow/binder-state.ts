@@ -12,7 +12,7 @@ export class BinderState {
 	// readonly coins: readonly Coin[] = [];
 	readonly cardHistory: readonly CardHistory[] = [];
 	readonly totalHistoryLength: number;
-	readonly isLoading: boolean = true;
+	readonly isLoading: boolean = false;
 
 	public static create(base: Partial<NonFunctionProperties<BinderState>>): BinderState {
 		return Object.assign(new BinderState(), base);

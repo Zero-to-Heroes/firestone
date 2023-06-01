@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
@@ -22,9 +22,7 @@ export class OwNotificationsService {
 		this.startNotificationsWindow();
 
 		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
-			withLatestFrom(this.prefs.getPreferences()),
-			filter(([message, preferences]) => preferences.setAllNotifications),
-			map(([message]) => message),
+			tap((message) => console.debug('[notifications] emitting new message', message)),
 		);
 
 		this.init();
@@ -36,14 +34,18 @@ export class OwNotificationsService {
 		this.isBeta = settings?.settings?.channel === 'beta';
 	}
 
-	public addNotification(htmlMessage: Message): void {
+	public async addNotification(htmlMessage: Message) {
+		if (!(await this.prefs.getPreferences()).setAllNotifications) {
+			console.log('not showing any notification');
+			return;
+		}
 		this.stateEmitter.next(htmlMessage);
 	}
 
 	// This directly share JS objects, without stringifying them, so it lets us do some
 	// fancy stuff
-	public async emitNewNotification(htmlMessage: Message) {
-		if (!(await this.prefs.getPreferences()).setAllNotifications) {
+	public async emitNewNotification(htmlMessage: Message, bypassPrefs = false) {
+		if (!bypassPrefs && !(await this.prefs.getPreferences()).setAllNotifications) {
 			console.log('not showing any notification');
 			return;
 		}
@@ -58,6 +60,7 @@ export class OwNotificationsService {
 				return;
 			}
 		}
+		console.debug('emitting new notification', htmlMessage);
 		this.stateEmitter.next(htmlMessage);
 	}
 
@@ -90,7 +93,7 @@ export class OwNotificationsService {
 		});
 	}
 
-	public notifyError(title: string, text: string, code: string) {
+	public notifyInfo(title: string, text: string, code: string) {
 		this.emitNewNotification({
 			content: `
 				<div class="general-message-container general-theme">
@@ -113,6 +116,35 @@ export class OwNotificationsService {
 				</div>`,
 			notificationId: `${code}`,
 		});
+	}
+
+	public notifyError(title: string, text: string, code: string) {
+		this.emitNewNotification(
+			{
+				content: `
+				<div class="general-message-container general-theme">
+					<div class="firestone-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+						</svg>
+					</div>
+					<div class="message">
+						<div class="title">
+							<span>${title}</span>
+						</div>
+						<span class="text">${text}</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`,
+				timeout: 60000,
+				notificationId: `${code}`,
+			},
+			true,
+		);
 	}
 
 	private async startNotificationsWindow() {

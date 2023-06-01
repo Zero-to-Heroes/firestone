@@ -82,6 +82,7 @@ export class LogListenerService {
 			const logsDir = await getLogsDir(this.ow, gameInfo);
 			console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
 			this.logsLocation = `${logsDir}\\${this.logFile}`;
+			console.debug('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
 			this.registerLogMonitor();
 		} else {
 			console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', gameInfo);
@@ -188,7 +189,7 @@ export const getLogsDir = async (
 	ow: OverwolfService,
 	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
 ): Promise<string> => {
-	const logsBaseDir = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\';
+	const logsBaseDir = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs';
 	const filesInLogsDir = (await ow.listFilesInDirectory(logsBaseDir))?.data ?? [];
 
 	let latestDir: string | undefined;
@@ -219,7 +220,7 @@ export const getLogsDir = async (
 	}
 
 	if (latestDir) {
-		return `${logsBaseDir}\\${latestDir}`;
+		return `${logsBaseDir}/${latestDir}`;
 	} else {
 		return `${logsBaseDir}`;
 	}

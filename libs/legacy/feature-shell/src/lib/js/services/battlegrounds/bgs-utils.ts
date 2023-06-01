@@ -93,8 +93,8 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 	const cardRaces = includeOwnTribe ? nativeRaces : [];
 	switch (card.id) {
 		// Some cases are only included when specific tribes are
-		case CardIds.BirdBuddy:
-		case CardIds.BirdBuddyBattlegrounds:
+		case CardIds.BirdBuddy_BG21_002:
+		case CardIds.BirdBuddy_BG21_002_G:
 		case CardIds.PackLeader:
 		case CardIds.PackLeaderBattlegrounds:
 		case CardIds.VirmenSensei:
@@ -104,15 +104,15 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.HoundmasterBattlegrounds:
 		case CardIds.Houndmaster:
 			return [Race.BEAST, ...cardRaces];
-		case CardIds.ImpatientDoomsayer:
-		case CardIds.ImpatientDoomsayerBattlegrounds:
+		case CardIds.ImpatientDoomsayer_BG21_007:
+		case CardIds.ImpatientDoomsayer_BG21_007_G:
 		case CardIds.SoulJuggler:
 		case CardIds.SoulJugglerBattlegrounds:
 		case CardIds.WrathWeaver:
 		case CardIds.WrathWeaverBattlegrounds:
 			return [Race.DEMON, ...cardRaces];
-		case CardIds.SeafoodSlinger:
-		case CardIds.SeafoodSlingerBattlegrounds:
+		case CardIds.SeafoodSlinger_BG21_011:
+		case CardIds.SeafoodSlinger_BG21_011_G:
 			return [Race.MURLOC, ...cardRaces];
 		case CardIds.NadinaTheRed:
 		case CardIds.NadinaTheRedBattlegrounds:
@@ -124,7 +124,7 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.MajordomoExecutus_BGS_105:
 		case CardIds.MajordomoExecutusBattlegrounds:
 		case CardIds.MasterOfRealities_BG21_036:
-		case CardIds.MasterOfRealitiesBattlegrounds:
+		case CardIds.MasterOfRealities_BG21_036_G:
 		case CardIds.NomiKitchenNightmare:
 		case CardIds.NomiKitchenNightmareBattlegrounds:
 			return [Race.ELEMENTAL, ...cardRaces];
@@ -136,8 +136,8 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.TheTideRazor:
 		case CardIds.TheTideRazorBattlegrounds:
 			return [Race.PIRATE, ...cardRaces];
-		case CardIds.AgamagganTheGreatBoar:
-		case CardIds.AgamagganTheGreatBoarBattlegrounds:
+		case CardIds.AgamagganTheGreatBoar_BG20_205:
+		case CardIds.AgamagganTheGreatBoar_BG20_205_G:
 		case CardIds.ProphetOfTheBoar:
 		case CardIds.ProphetOfTheBoarBattlegrounds:
 			return [Race.QUILBOAR, ...cardRaces];
@@ -411,6 +411,12 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 478;
 		case CardIds.RockMasterVoone_BG26_HERO_104:
 			return 481;
+		case CardIds.IngeTheIronHymn:
+			return 482;
+		case CardIds.CapnHoggarr_BG26_HERO_101:
+			return 483;
+		// case CardIds.Diablo:
+		// 	return;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

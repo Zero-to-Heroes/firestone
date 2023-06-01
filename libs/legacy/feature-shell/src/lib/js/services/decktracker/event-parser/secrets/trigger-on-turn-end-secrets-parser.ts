@@ -7,7 +7,12 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnEndSecretsParser implements EventParser {
-	private secretsTriggeringOnTurnEnd = [CardIds.RiggedFaireGame, CardIds.PlagiarizeCore, CardIds.Plagiarize];
+	private secretsTriggeringOnTurnEnd = [
+		CardIds.RiggedFaireGame,
+		CardIds.PlagiarizeCore,
+		CardIds.Plagiarize,
+		CardIds.HiddenMeaning,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
@@ -38,7 +43,6 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		}
 
 		const hasOpponentPlayedCards = playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn.length > 0;
-
 		if (!hasOpponentPlayedCards) {
 			secretsWeCantRuleOut.push(CardIds.PlagiarizeCore);
 			secretsWeCantRuleOut.push(CardIds.Plagiarize);
@@ -47,6 +51,11 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		const hasHeroTakenDamage = deckWithSecretToCheck.damageTakenThisTurn > 0;
 		if (hasHeroTakenDamage) {
 			secretsWeCantRuleOut.push(CardIds.RiggedFaireGame);
+		}
+
+		const areResourcesFullyUsed = playerWhoseCardsPlayedToCheck.manaLeft === 0;
+		if (!areResourcesFullyUsed) {
+			secretsWeCantRuleOut.push(CardIds.HiddenMeaning);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnEnd.filter(

@@ -709,6 +709,7 @@ import { GenericStorageService } from './js/services/generic-storage.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
+import { HsClientConfigService } from './js/services/hs-client-config.service';
 import { LazyDataInitService } from './js/services/lazy-data-init.service';
 import { LocalizationFacadeService } from './js/services/localization-facade.service';
 import { LocalizationService } from './js/services/localization.service';
@@ -1721,6 +1722,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LogListenerService,
 		CardsMonitorService,
 		LogRegisterService,
+		HsClientConfigService,
 		SettingsCommunicationService,
 		TwitchAuthService,
 		TwitchPresenceService,

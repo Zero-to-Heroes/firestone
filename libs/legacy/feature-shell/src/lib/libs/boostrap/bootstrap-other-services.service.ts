@@ -25,6 +25,7 @@ import { DuelsRunIdService } from '../../js/services/duels/duels-run-id.service'
 import { GameModeDataService } from '../../js/services/game-mode-data.service';
 import { GameStatusService } from '../../js/services/game-status.service';
 import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';
+import { HsClientConfigService } from '../../js/services/hs-client-config.service';
 import { LocalizationService } from '../../js/services/localization.service';
 import { LogRegisterService } from '../../js/services/log-register.service';
 import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
@@ -76,6 +77,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_CollectionBootstrapService: CollectionBootstrapService,
 		private readonly init_BgsInitService: BgsInitService,
 		private readonly init_BgsBestUserStatsService: BgsBestUserStatsService,
+		private readonly init_HsClientConfig: HsClientConfigService,
 		private readonly init_LogRegisterService: LogRegisterService,
 		private readonly init_RewardMonitorService: RewardMonitorService,
 		private readonly init_BgsRealTimeStatsService: RealTimeStatsService,
@@ -97,7 +99,7 @@ export class BootstrapOtherServicesService {
 		private readonly translate: TranslateService,
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
-		private readonly init_ProfileUploaderService: ProfileUploaderService
+		private readonly init_ProfileUploaderService: ProfileUploaderService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

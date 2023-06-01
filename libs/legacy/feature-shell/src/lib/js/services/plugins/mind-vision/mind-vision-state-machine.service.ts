@@ -223,7 +223,7 @@ export class MindVisionStateMachineService {
 			console.warn('[mind-vision] global event has root memory reading error');
 			await this.performAction(Action.RESET);
 		} else if (first === 'mindvision-instantiate-error') {
-			this.notifs.notifyError(
+			this.notifs.notifyInfo(
 				this.i18n.translateString('app.internal.memory.reading-error-title'),
 				this.i18n.translateString('app.internal.memory.reading-error-text'),
 				first,
