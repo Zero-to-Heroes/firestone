@@ -1,17 +1,19 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { AbstractSubscriptionComponent, arraysEqual, uuid } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';
-import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { multiGroupByFunction } from '../../../services/utils';
 import { Tier } from './battlegrounds-minions-tiers-view.component';
@@ -27,13 +29,14 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 		<div class="bgs-minions-list">
 			<bgs-minions-group
 				class="minion-group"
-				*ngFor="let group of groups"
+				*ngFor="let group of groups$ | async; trackBy: trackByGroup"
 				[group]="group"
-				[showTribesHighlight]="_showTribesHighlight"
-				[showBattlecryHighlight]="_showBattlecryHighlight"
-				[showGoldenCards]="_showGoldenCards"
+				[showTribesHighlight]="showTribesHighlight"
+				[showBattlecryHighlight]="showBattlecryHighlight"
+				[showGoldenCards]="showGoldenCards"
 			></bgs-minions-group>
-			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="_showTribesHighlight">
+
+			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight">
 				<div class="background-second-part"></div>
 				<div class="background-main-part"></div>
 				<div class="content">
@@ -45,71 +48,90 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsListComponent implements AfterViewInit {
+export class BattlegroundsMinionsListComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit
+{
+	groups$: Observable<readonly BgsMinionsGroup[]>;
+
 	@Input() set tier(value: Tier) {
-		this._cards = value.cards.filter((c) => !!c);
-		this._groupingFunction = value.groupingFunction;
-		this.updateInfos();
+		this.uuid = value.tavernTier + '-' + value.type;
+		this.cards$$.next(value.cards.filter((c) => !!c));
+		this.groupingFunction$$.next(value.groupingFunction);
 	}
 
 	@Input() set groupingFunction(value: (card: ReferenceCard) => readonly string[]) {
-		this._groupingFunction = value;
-		this.updateInfos();
+		this.groupingFunction$$.next(value);
 	}
 
 	@Input() set highlightedMinions(value: readonly string[]) {
-		this._highlightedMinions = value;
-		this.updateInfos();
+		this.highlightedMinions$$.next(value ?? []);
 	}
 
 	@Input() set highlightedTribes(value: readonly Race[]) {
-		this._highlightedTribes = value;
-		this.updateInfos();
+		this.highlightedTribes$$.next(value ?? []);
 	}
 
 	@Input() set highlightedMechanics(value: readonly GameTag[]) {
-		this._highlightedMechanics = value;
-		this.updateInfos();
+		this.highlightedMechanics$$.next(value ?? []);
 	}
 
-	@Input() set showTribesHighlight(value: boolean) {
-		this._showTribesHighlight = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	@Input() showTribesHighlight: boolean;
+	@Input() showBattlecryHighlight: boolean;
+	@Input() showGoldenCards: boolean;
 
-	@Input() set showBattlecryHighlight(value: boolean) {
-		this._showBattlecryHighlight = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@Input() set showGoldenCards(value: boolean) {
-		this._showGoldenCards = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	_cards: readonly ReferenceCard[];
-	_groupingFunction: (card: ReferenceCard) => readonly string[];
-	_highlightedMinions: readonly string[];
-	_highlightedTribes: readonly Race[];
-	_highlightedMechanics: readonly GameTag[];
-	_showTribesHighlight: boolean;
-	_showBattlecryHighlight: boolean;
-	_showGoldenCards: boolean;
-	groups: readonly BgsMinionsGroup[];
+	cards$$ = new BehaviorSubject<readonly ReferenceCard[]>([]);
+	groupingFunction$$ = new BehaviorSubject<(card: ReferenceCard) => readonly string[]>(null);
+	highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
+	highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
+	highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
+	private uuid = uuid();
+
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) {
+		super(cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.groups$ = combineLatest([
+			this.cards$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
+			this.groupingFunction$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
+			this.highlightedMinions$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
+			this.highlightedTribes$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
+			this.highlightedMechanics$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
+		]).pipe(
+			filter(
+				([cards, groupingFunction, highlightedMinions, highlightedTribes, highlightedMechanics]) =>
+					!!cards && !!groupingFunction,
+			),
+			debounceTime(50),
+			this.mapData(([cards, groupingFunction, highlightedMinions, highlightedTribes, highlightedMechanics]) => {
+				const groupedByTribe = multiGroupByFunction(groupingFunction)(cards);
+				return Object.keys(groupedByTribe)
+					.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
+					.map((tribeString) => {
+						return {
+							tribe: isNaN(+tribeString) ? Race[tribeString] : null,
+							title: isNaN(+tribeString)
+								? this.i18n.translateString(`global.tribe.${tribeString.toLowerCase()}`)
+								: this.i18n.translateString(`app.battlegrounds.filters.tier.tier`, {
+										value: tribeString,
+								  }),
+							minions: groupedByTribe[tribeString],
+							highlightedMinions: highlightedMinions || [],
+							highlightedTribes: highlightedTribes || [],
+							highlightedMechanics: highlightedMechanics || [],
+						};
+					});
+			}),
+		);
+	}
 
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
@@ -119,28 +141,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 		this.battlegroundsUpdater.next(new BgsResetHighlightsEvent());
 	}
 
-	private updateInfos() {
-		if (!this._cards) {
-			return;
-		}
-
-		const groupedByTribe = multiGroupByFunction(this._groupingFunction)(this._cards);
-		this.groups = Object.keys(groupedByTribe)
-			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
-			.map((tribeString) => {
-				return {
-					tribe: isNaN(+tribeString) ? Race[tribeString] : null,
-					title: isNaN(+tribeString)
-						? this.i18n.translateString(`global.tribe.${tribeString.toLowerCase()}`)
-						: this.i18n.translateString(`app.battlegrounds.filters.tier.tier`, { value: tribeString }),
-					minions: groupedByTribe[tribeString],
-					highlightedMinions: this._highlightedMinions || [],
-					highlightedTribes: this._highlightedTribes || [],
-					highlightedMechanics: this._highlightedMechanics || [],
-				};
-			});
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+	trackByGroup(index, item: BgsMinionsGroup) {
+		return item.tribe;
 	}
 }
