@@ -96,24 +96,33 @@ export class CopiedFromEntityIdParser implements EventParser {
 				manaCost: isPlayer ? newCopy?.manaCost : null,
 				zone: undefined,
 			} as DeckCard);
-		// console.debug('[copied-from-entity] updatedCopiedCard', updatedCopiedCard);
+		const updatedCopiedCardWithPosition = updatedCopiedCard.update({
+			positionFromTop: newCopy?.creatorCardId === CardIds.Plagiarizarrr ? 0 : updatedCopiedCard.positionFromTop,
+		});
+		// console.debug(
+		// 	'[copied-from-entity] updatedCopiedCardWithPosition',
+		// 	updatedCopiedCardWithPosition,
+		// 	updatedCopiedCard,
+		// 	copiedCard,
+		// 	newCopy,
+		// );
 		const newCopiedDeck =
 			copiedCardZone === Zone.DECK
-				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCard, true, {
-						cost: updatedCopiedCard.manaCost,
+				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
+						cost: updatedCopiedCardWithPosition.manaCost,
 				  })
 				: copiedDeck.deck;
 		// console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);
 		const newCopiedPlayer =
 			copiedCardZone === Zone.DECK
 				? copiedDeck.update({ deck: newCopiedDeck })
-				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard, isCopiedPlayer);
+				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCardWithPosition, isCopiedPlayer);
 		// console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(
 			newCopiedPlayer,
-			updatedCopiedCard.cardId,
+			updatedCopiedCardWithPosition.cardId,
 			copiedCardEntityId,
 		);
 		// console.debug('[copied-from-entity] copiedDeckWithSecrets', copiedDeckWithSecrets);

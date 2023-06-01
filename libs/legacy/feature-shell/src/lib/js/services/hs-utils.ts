@@ -629,6 +629,7 @@ const publicCardGiftCreators = [
 	CardIds.PhotographerFizzle_FizzlesSnapshotToken,
 	CardIds.PilferLegacy,
 	CardIds.PiranhaPoacher,
+	CardIds.Plagiarizarrr,
 	CardIds.PlantedEvidence,
 	CardIds.PotionBelt,
 	CardIds.PotionmasterPutricide,
