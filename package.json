@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "11.2.9",
+	"version": "11.2.12",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
@@ -39,7 +39,7 @@
 		"@firestone-hs/duels-leaderboard": "^1.0.5",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.110",
 		"@firestone-hs/mailbox": "^1.0.29",
-		"@firestone-hs/reference-data": "^1.0.80",
+		"@firestone-hs/reference-data": "^1.0.81",
 		"@firestone-hs/replay-parser": "^1.2.9",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
@@ -142,7 +142,7 @@
 		"typescript": "^4.8.2"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^1.0.80",
+		"@firestone-hs/reference-data": "^1.0.81",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.110",
 		"@angular/common": "^15.0.0",
 		"@angular/core": "^15.0.0",
