@@ -80,16 +80,6 @@ export class GameState {
 			})
 			.pop()?.cardId;
 	}
-
-	public getSpellsPlayedForPlayer(allCards: CardsFacadeService, side: 'player' | 'opponent'): readonly string[] {
-		return this.cardsPlayedThisMatch
-			.filter((card) => card.side === side)
-			.filter((card) => {
-				const ref = allCards.getCard(card.cardId);
-				return ref.type?.toLowerCase() === 'spell';
-			})
-			.map((card) => card.cardId);
-	}
 }
 
 export interface ShortCard {

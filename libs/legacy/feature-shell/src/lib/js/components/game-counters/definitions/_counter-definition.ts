@@ -1,7 +1,6 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { GameState } from '../../../models/decktracker/game-state';
 
-export interface CounterDefinition<T> {
+export interface CounterDefinition<U, T> {
 	readonly type: CounterType;
 	readonly value: number | string;
 	readonly valueImg?: string;
@@ -11,8 +10,8 @@ export interface CounterDefinition<T> {
 	readonly cardTooltips?: readonly string[];
 	readonly standardCounter: boolean;
 
-	select(state: GameState): T;
-	update(info: T): NonFunctionProperties<CounterDefinition<T>>;
+	select(state: U): T;
+	emit(info: T): NonFunctionProperties<CounterDefinition<U, T>>;
 }
 
 // Use camelCase because it uses conventions to get the pref property names

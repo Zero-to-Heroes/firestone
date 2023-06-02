@@ -1,11 +1,22 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
-import { GameState } from '@models/decktracker/game-state';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameState } from '@models/decktracker/game-state';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { NumericTurnInfoWithCardIds } from '../../../services/battlegrounds/store/real-time-stats/real-time-stats';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class BgsSouthseaStrongarmCounterDefinition implements CounterDefinition {
+export class BgsSouthseaStrongarmCounterDefinition
+	implements
+		CounterDefinition<
+			{ deckState: GameState; bgState: BattlegroundsState },
+			{
+				minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[];
+				currentTurn: number;
+			}
+		>
+{
 	readonly type = 'bgsSouthsea';
 	readonly value: number;
 	readonly image: string;
@@ -13,18 +24,37 @@ export class BgsSouthseaStrongarmCounterDefinition implements CounterDefinition 
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(
-		gameState: BattlegroundsState,
-		side: string,
-		deckState: GameState,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
+		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): BgsSouthseaStrongarmCounterDefinition {
-		const boughtInfo = gameState.currentGame.liveStats.minionsBoughtOverTurn.find(
-			(info) => info.turn === gameState.currentGame.currentTurn,
-		);
+		return new BgsSouthseaStrongarmCounterDefinition(side, allCards, i18n);
+	}
+
+	public select(input: { deckState: GameState; bgState: BattlegroundsState }): {
+		minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[];
+		currentTurn: number;
+	} {
+		return {
+			minionsBoughtOverTurn: input.bgState.currentGame.liveStats.minionsBoughtOverTurn,
+			currentTurn: input.bgState.currentGame.currentTurn,
+		};
+	}
+
+	public emit(input: {
+		minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[];
+		currentTurn: number;
+	}): NonFunctionProperties<BgsSouthseaStrongarmCounterDefinition> {
+		const boughtInfo = input.minionsBoughtOverTurn.find((info) => info.turn === input.currentTurn);
 		const numberOfStrongarms = (boughtInfo?.cardIds ?? [])
-			.flatMap((cardId) => allCards.getCard(cardId).races ?? [])
+			.flatMap((cardId) => this.allCards.getCard(cardId).races ?? [])
 			.filter((race) =>
 				[Race.PIRATE, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
 			).length;
@@ -33,7 +63,7 @@ export class BgsSouthseaStrongarmCounterDefinition implements CounterDefinition 
 			value: numberOfStrongarms,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SouthseaStrongarm}.jpg`,
 			cssClass: 'southsea-counter',
-			tooltip: i18n.translateString(`counters.bgs-southsea.${side}`, { value: numberOfStrongarms }),
+			tooltip: this.i18n.translateString(`counters.bgs-southsea.${this.side}`, { value: numberOfStrongarms }),
 			standardCounter: true,
 		};
 	}

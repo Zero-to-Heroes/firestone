@@ -1,9 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class LibramCounterDefinition implements CounterDefinition {
+export class LibramCounterDefinition implements CounterDefinition<GameState, number> {
 	readonly type = 'libram';
 	readonly value: number;
 	readonly image: string;
@@ -11,19 +13,32 @@ export class LibramCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(gameState: GameState, side: string, i18n: LocalizationFacadeService): LibramCounterDefinition {
-		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		if (!deck) {
-			return null;
-		}
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
-		const cardsPlayed = deck.libramsPlayedThisMatch || 0;
+	public static create(
+		side: 'player' | 'opponent',
+		allCards: CardsFacadeService,
+		i18n: LocalizationFacadeService,
+	): LibramCounterDefinition {
+		return new LibramCounterDefinition(side, allCards, i18n);
+	}
+
+	public select(gameState: GameState): number {
+		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return deck.libramsPlayedThisMatch ?? 0;
+	}
+
+	public emit(libramsPlayedThisMatch: number): NonFunctionProperties<LibramCounterDefinition> {
 		return {
 			type: 'libram',
-			value: cardsPlayed,
+			value: libramsPlayedThisMatch,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.LibramOfWisdom_BT_025}.jpg`,
 			cssClass: 'watchpost',
-			tooltip: i18n.translateString(`counters.libram.${side}`, { value: cardsPlayed }),
+			tooltip: this.i18n.translateString(`counters.libram.${this.side}`, { value: libramsPlayedThisMatch }),
 			standardCounter: true,
 		};
 	}

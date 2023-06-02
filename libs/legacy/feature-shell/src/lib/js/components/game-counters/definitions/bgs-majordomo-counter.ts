@@ -1,11 +1,15 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
-import { GameState } from '@models/decktracker/game-state';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameState } from '@models/decktracker/game-state';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class BgsMajordomoCounterDefinition implements CounterDefinition {
+export class BgsMajordomoCounterDefinition
+	implements CounterDefinition<{ deckState: GameState; bgState: BattlegroundsState }, readonly DeckCard[]>
+{
 	readonly type = 'bgsMajordomo';
 	readonly value: number;
 	readonly image: string;
@@ -13,16 +17,28 @@ export class BgsMajordomoCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(
-		gameState: BattlegroundsState,
-		side: string,
-		deckState: GameState,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
+		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): BgsMajordomoCounterDefinition {
-		const deck = side === 'player' ? deckState.playerDeck : deckState.opponentDeck;
-		const value = deck.cardsPlayedThisTurn
-			.flatMap((card) => allCards.getCard(card.cardId).races ?? [])
+		return new BgsMajordomoCounterDefinition(side, allCards, i18n);
+	}
+
+	public select(input: { deckState: GameState; bgState: BattlegroundsState }): readonly DeckCard[] {
+		const deck = this.side === 'player' ? input.deckState.playerDeck : input.deckState.opponentDeck;
+		return deck.cardsPlayedThisTurn ?? [];
+	}
+
+	public emit(cardsPlayedThisTurn: readonly DeckCard[]): NonFunctionProperties<BgsMajordomoCounterDefinition> {
+		const value = cardsPlayedThisTurn
+			.flatMap((card) => this.allCards.getCard(card.cardId).races ?? [])
 			.filter((race) =>
 				[Race.ELEMENTAL, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
 			).length;
@@ -31,7 +47,7 @@ export class BgsMajordomoCounterDefinition implements CounterDefinition {
 			value: value,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MajordomoExecutus_BGS_105}.jpg`,
 			cssClass: 'majordomo-counter',
-			tooltip: i18n.translateString(`counters.bgs-majordomo.${side}`, { value: value }),
+			tooltip: this.i18n.translateString(`counters.bgs-majordomo.${this.side}`, { value: value }),
 			standardCounter: true,
 		};
 	}

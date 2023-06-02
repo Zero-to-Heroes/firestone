@@ -1,9 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class VolatileSkeletonCounterDefinition implements CounterDefinition {
+export class VolatileSkeletonCounterDefinition implements CounterDefinition<GameState, number> {
 	readonly type = 'volatileSkeleton';
 	readonly value: number;
 	readonly image: string;
@@ -11,23 +13,32 @@ export class VolatileSkeletonCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(
-		gameState: GameState,
-		side: string,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
+		side: 'player' | 'opponent',
+		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): VolatileSkeletonCounterDefinition {
-		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		if (!deck) {
-			return null;
-		}
+		return new VolatileSkeletonCounterDefinition(side, allCards, i18n);
+	}
 
-		const skeletonDeaths = deck.volatileSkeletonsDeadThisMatch || 0;
+	public select(gameState: GameState): number {
+		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return deck.volatileSkeletonsDeadThisMatch ?? 0;
+	}
+
+	public emit(skeletonDeaths: number): NonFunctionProperties<VolatileSkeletonCounterDefinition> {
 		return {
 			type: 'volatileSkeleton',
 			value: skeletonDeaths,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.VolatileSkeleton}.jpg`,
 			cssClass: 'volatile-skeleton-counter',
-			tooltip: i18n.translateString(`counters.volatile-skeleton.${side}`, { value: skeletonDeaths }),
+			tooltip: this.i18n.translateString(`counters.volatile-skeleton.${this.side}`, { value: skeletonDeaths }),
 			standardCounter: true,
 		};
 	}

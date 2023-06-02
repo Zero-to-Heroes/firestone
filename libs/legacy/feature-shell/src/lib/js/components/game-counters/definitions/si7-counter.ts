@@ -1,10 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class Si7CounterDefinition implements CounterDefinition {
+export class Si7CounterDefinition implements CounterDefinition<GameState, readonly ShortCard[]> {
 	readonly type = 'si7Counter';
 	readonly value: number;
 	readonly image: string;
@@ -12,27 +13,40 @@ export class Si7CounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(
-		gameState: GameState,
-		side: string,
+	private readonly correctSi7Locale: string;
+
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {
+		this.correctSi7Locale = getSi7Locale(i18n.formatCurrentLocale());
+	}
+
+	public static create(
+		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): Si7CounterDefinition {
-		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		if (!deck) {
-			return null;
-		}
+		return new Si7CounterDefinition(side, allCards, i18n);
+	}
 
-		const correctSi7Locale = getSi7Locale(i18n.formatCurrentLocale());
-		const si7CardsPlayed = gameState.cardsPlayedThisMatch
-			.filter((c) => c.side === side)
-			.filter((c) => allCards.getCard(c.cardId).name?.toLowerCase()?.includes(correctSi7Locale.toLowerCase()));
+	public select(gameState: GameState): readonly ShortCard[] {
+		return gameState.cardsPlayedThisMatch.filter((c) => c.side === this.side);
+	}
+
+	public emit(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<Si7CounterDefinition> {
+		const si7CardsPlayed = cardsPlayedThisMatch
+			.filter((c) => c.side === this.side)
+			.filter((c) =>
+				this.allCards.getCard(c.cardId).name?.toLowerCase()?.includes(this.correctSi7Locale.toLowerCase()),
+			);
 		return {
 			type: 'si7Counter',
 			value: si7CardsPlayed.length,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Si7Smuggler}.jpg`,
 			cssClass: 'si-7-counter',
-			tooltip: i18n.translateString(`counters.si-seven.${side}`, { value: si7CardsPlayed.length }),
+			tooltip: this.i18n.translateString(`counters.si-seven.${this.side}`, { value: si7CardsPlayed.length }),
 			standardCounter: true,
 		};
 	}

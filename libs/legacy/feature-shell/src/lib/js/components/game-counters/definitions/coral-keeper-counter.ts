@@ -1,10 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class CoralKeeperCounterDefinition implements CounterDefinition {
+export class CoralKeeperCounterDefinition implements CounterDefinition<GameState, readonly DeckCard[]> {
 	readonly type = 'coralKeeper';
 	readonly value: number | string;
 	readonly image: string;
@@ -12,30 +14,39 @@ export class CoralKeeperCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(
-		gameState: GameState,
-		side: string,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
+		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): CoralKeeperCounterDefinition {
-		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		if (!deck) {
-			return null;
-		}
+		return new CoralKeeperCounterDefinition(side, allCards, i18n);
+	}
 
+	public select(gameState: GameState): readonly DeckCard[] {
+		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return deck.spellsPlayedThisMatch ?? [];
+	}
+
+	public emit(spellsPlayedThisMatch: readonly DeckCard[]): NonFunctionProperties<CoralKeeperCounterDefinition> {
 		const uniqueSpellSchools = [
 			...new Set(
-				(deck.spellsPlayedThisMatch ?? [])
+				(spellsPlayedThisMatch ?? [])
 					.map((card) => card.cardId)
-					.map((cardId) => allCards.getCard(cardId).spellSchool)
+					.map((cardId) => this.allCards.getCard(cardId).spellSchool)
 					.filter((spellSchool) => !!spellSchool),
 			),
 		];
 		const totalSummons = uniqueSpellSchools?.length;
-		const tooltip = i18n.translateString(`counters.coral-keeper.${side}`, {
+		const tooltip = this.i18n.translateString(`counters.coral-keeper.${this.side}`, {
 			totalSummons: totalSummons,
 			schools: uniqueSpellSchools
-				?.map((spellSchool) => i18n.translateString('global.spellschool.' + spellSchool.toLowerCase()))
+				?.map((spellSchool) => this.i18n.translateString('global.spellschool.' + spellSchool.toLowerCase()))
 				?.join(', '),
 		});
 		return {

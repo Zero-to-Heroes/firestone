@@ -1,10 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class AsvedonCounterDefinition implements CounterDefinition {
+export class AsvedonCounterDefinition implements CounterDefinition<GameState, readonly DeckCard[]> {
 	readonly type = 'asvedon';
 	readonly value: number | string;
 	readonly valueImg: string;
@@ -14,25 +16,33 @@ export class AsvedonCounterDefinition implements CounterDefinition {
 	readonly cardTooltips?: readonly string[];
 	readonly standardCounter = true;
 
-	static create(
-		gameState: GameState,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
 		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): AsvedonCounterDefinition {
-		const counterOwnerDeck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const otherDeck = side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
-		if (!counterOwnerDeck || !otherDeck) {
-			return null;
-		}
+		return new AsvedonCounterDefinition(side, allCards, i18n);
+	}
 
-		const spells = otherDeck.spellsPlayedThisMatch;
+	public select(gameState: GameState): readonly DeckCard[] {
+		const otherDeck = this.side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
+		return otherDeck.spellsPlayedThisMatch;
+	}
+
+	public emit(spellsPlayedThisMatch: readonly DeckCard[]): NonFunctionProperties<AsvedonCounterDefinition> {
+		const spells = spellsPlayedThisMatch;
 		const lastPlayedSpell: string = !!spells?.length ? spells[spells.length - 1]?.cardId : null;
 		if (!lastPlayedSpell) {
 			return null;
 		}
-		const tooltip = i18n.translateString(`counters.asvedon.${side}`, {
-			value: allCards.getCard(lastPlayedSpell).name,
+		const tooltip = this.i18n.translateString(`counters.asvedon.${this.side}`, {
+			value: this.allCards.getCard(lastPlayedSpell).name,
 		});
 		return {
 			type: 'asvedon',

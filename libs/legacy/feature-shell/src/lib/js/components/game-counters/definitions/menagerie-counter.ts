@@ -5,7 +5,7 @@ import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class MenagerieCounterDefinition implements CounterDefinition<readonly ShortCard[]> {
+export class MenagerieCounterDefinition implements CounterDefinition<GameState, readonly ShortCard[]> {
 	readonly type = 'menagerie';
 	readonly value: number | string;
 	readonly image: string;
@@ -33,9 +33,9 @@ export class MenagerieCounterDefinition implements CounterDefinition<readonly Sh
 		return deck.cardsPlayedThisMatch ?? [];
 	}
 
-	public update(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<MenagerieCounterDefinition> {
+	public emit(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<MenagerieCounterDefinition> {
 		const allPlayedCards = cardsPlayedThisMatch.map((c) => this.allCards.getCard(c.cardId));
-		// console.debug('allPlayedCards', allPlayedCards, deck.cardsPlayedThisMatch);
+		console.debug('allPlayedCards', allPlayedCards, cardsPlayedThisMatch);
 
 		const minionsPlayedWithTribes = allPlayedCards
 			.filter((c) => c.type === 'Minion')

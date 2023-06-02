@@ -1,9 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class HeroPowerDamageCounterDefinition implements CounterDefinition {
+export class HeroPowerDamageCounterDefinition implements CounterDefinition<GameState, number> {
 	readonly type = 'heroPowerDamage';
 	readonly value: number;
 	readonly image: string;
@@ -11,23 +13,32 @@ export class HeroPowerDamageCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(
-		gameState: GameState,
-		side: string,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
+		side: 'player' | 'opponent',
+		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): HeroPowerDamageCounterDefinition {
-		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		if (!deck) {
-			return null;
-		}
+		return new HeroPowerDamageCounterDefinition(side, allCards, i18n);
+	}
 
-		const heroPowerDamage = deck.heroPowerDamageThisMatch ?? 0;
+	public select(gameState: GameState): number {
+		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return deck.heroPowerDamageThisMatch ?? 0;
+	}
+
+	public emit(heroPowerDamage: number): NonFunctionProperties<HeroPowerDamageCounterDefinition> {
 		return {
 			type: 'heroPowerDamage',
 			value: heroPowerDamage,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MordreshFireEye}.jpg`,
 			cssClass: 'hero-power-damage-counter',
-			tooltip: i18n.translateString(`counters.hero-power-damage.${side}`, { value: heroPowerDamage }),
+			tooltip: this.i18n.translateString(`counters.hero-power-damage.${this.side}`, { value: heroPowerDamage }),
 			standardCounter: true,
 		};
 	}
