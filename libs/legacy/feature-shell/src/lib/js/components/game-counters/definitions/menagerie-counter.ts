@@ -1,4 +1,4 @@
-import { CardIds, Race } from '@firestone-hs/reference-data';
+import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -21,18 +21,47 @@ export class MenagerieCounterDefinition implements CounterDefinition {
 	): MenagerieCounterDefinition {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const allPlayedCards = deck.cardsPlayedThisMatch.map((c) => allCards.getCard(c.cardId));
-		const allTribes: Race[] = allPlayedCards
+		// console.debug('allPlayedCards', allPlayedCards, deck.cardsPlayedThisMatch);
+
+		const minionsPlayedWithTribes = allPlayedCards
 			.filter((c) => c.type === 'Minion')
-			.filter((c) => !!c.races?.length)
-			.flatMap((c) => c.races)
-			.map((r) => Race[r]);
+			.filter((c) => !!c.races?.length);
+		let minionsToProcess: Mutable<ReferenceCard & { picked?: boolean }>[] = [
+			...minionsPlayedWithTribes
+				.filter((c) => !c.races.includes(Race[Race.ALL]))
+				.map((c) => ({ ...c, races: [...c.races] })),
+		];
+
 		const uniqueTribes: Race[] = [];
-		for (const tribe of allTribes) {
-			if (!uniqueTribes.includes(tribe) || tribe === Race.ALL) {
-				uniqueTribes.push(tribe);
+		const maxTribesPerMinion = 2;
+		for (let i = 1; i <= maxTribesPerMinion; i++) {
+			let dirty = true;
+			while (dirty) {
+				dirty = false;
+				for (const minion of minionsToProcess) {
+					// console.debug('considering minion', minion.name, minion.races);
+					if (minion.races.length === i) {
+						const raceToAdd = minion.races[0];
+						uniqueTribes.push(Race[raceToAdd]);
+						// console.debug('added', raceToAdd, uniqueTribes);
+						for (const m of minionsToProcess) {
+							m.races = m.races.filter((r) => r !== raceToAdd);
+							// console.debug('updates races', m.name, m.races, raceToAdd);
+						}
+						minion.picked = true;
+						dirty = true;
+					}
+				}
+				minionsToProcess = minionsToProcess.filter((c) => !c.picked);
 			}
 		}
 
+		uniqueTribes.push(
+			...minionsPlayedWithTribes
+				.filter((m) => m.races.includes(Race[Race.ALL]))
+				.flatMap((m) => m.races)
+				.map((r) => Race[r]),
+		);
 		const tribeText = uniqueTribes
 			.map((tribe) => i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`))
 			.sort()
@@ -50,3 +79,7 @@ export class MenagerieCounterDefinition implements CounterDefinition {
 		};
 	}
 }
+
+type Mutable<T> = {
+	-readonly [key in keyof T]: T[key];
+};

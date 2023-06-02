@@ -95,6 +95,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 
 	ngAfterContentInit() {
 		if (!this.activeCounter?.includes('bgs')) {
+			// TODO: have each definition define what it listens to, instead of recomputing
+			// everything each time
 			this.definition$ = this.store
 				.listenDeckState$((state) => state)
 				.pipe(
