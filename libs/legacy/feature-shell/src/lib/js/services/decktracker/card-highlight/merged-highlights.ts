@@ -10,4 +10,5 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.SouleatersScythe_BoundSoulToken,
 	CardIds.TessGreymaneCore,
 	CardIds.TessGreymane_GIL_598,
+	CardIds.StranglethornHeart,
 ];
