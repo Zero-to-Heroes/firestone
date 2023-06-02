@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
-import { Subject } from 'rxjs';
-import { Preferences } from '../models/preferences';
+import { Subject, distinctUntilChanged } from 'rxjs';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
+import { LogUtilsService, getLogsDir } from './log-utils.service';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
@@ -22,6 +23,7 @@ export class LogListenerService {
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
+		private readonly logUtils: LogUtilsService,
 	) {}
 
 	public configure(
@@ -51,9 +53,16 @@ export class LogListenerService {
 	}
 
 	async configureLogListeners() {
-		this.gameStatus.onGameStart(() => this.startLogRegister());
-		this.gameStatus.onGameExit(() => this.stopLogRegister());
-		this.startLogRegister();
+		// this.gameStatus.onGameStart(() => this.startLogRegister());
+		// this.gameStatus.onGameExit(() => this.stopLogRegister());
+		this.logUtils.logsDirRoot$$.pipe(distinctUntilChanged()).subscribe(async (logsDirRoot) => {
+			console.debug('[log-listener] [' + this.logFile + '] New logs dir root', logsDirRoot);
+			this.stopLogRegister();
+			this.callback('truncated');
+			await sleep(100);
+			this.startLogRegister();
+		});
+		// this.startLogRegister();
 	}
 
 	private async startLogRegister() {
@@ -164,73 +173,3 @@ export class LogListenerService {
 		}
 	}
 }
-
-export const getLogsDir = async (
-	ow: OverwolfService,
-	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
-	prefs: Preferences,
-): Promise<string> => {
-	const gameBaseDir = await getGameBaseDir(ow, gameInfo, prefs);
-	const logsBaseDir = gameBaseDir + 'Logs';
-	const filesInLogsDir = (await ow.listFilesInDirectory(logsBaseDir))?.data ?? [];
-
-	let latestDir: string | undefined;
-	let latestTimestamp: number | undefined;
-
-	for (const file of filesInLogsDir) {
-		if (file.type === 'dir') {
-			const dirName = file.name;
-			const timestampRegex = /(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})/;
-			const match = dirName.match(timestampRegex);
-
-			if (match) {
-				const year = parseInt(match[1]);
-				const month = parseInt(match[2]) - 1; // Months are 0-based in JavaScript
-				const day = parseInt(match[3]);
-				const hours = parseInt(match[4]);
-				const minutes = parseInt(match[5]);
-				const seconds = parseInt(match[6]);
-
-				const timestamp = new Date(year, month, day, hours, minutes, seconds).getTime();
-
-				if (!latestTimestamp || timestamp > latestTimestamp) {
-					latestTimestamp = timestamp;
-					latestDir = dirName;
-				}
-			}
-		}
-	}
-
-	if (latestDir) {
-		return `${logsBaseDir}/${latestDir}`;
-	} else {
-		return `${logsBaseDir}`;
-	}
-};
-
-export const getGameBaseDir = async (
-	ow: OverwolfService,
-	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
-	prefs: Preferences,
-): Promise<string> => {
-	gameInfo = gameInfo ?? (await ow.getRunningGameInfo());
-	let baseDir: string = extractBaseDirFromPath(gameInfo?.executionPath);
-	if (!baseDir?.length) {
-		const gameDbInfo = await ow.getGameDbInfo();
-		baseDir = extractBaseDirFromPath(gameDbInfo?.installedGameInfo?.LauncherPath);
-	}
-	if (!baseDir?.length) {
-		baseDir = extractBaseDirFromPath(prefs?.gameInstallPath);
-	}
-	// Use a default
-	if (!baseDir?.length) {
-		baseDir = 'C:\\Program Files (x86)\\Hearthstone\\';
-	}
-	return baseDir;
-};
-
-const extractBaseDirFromPath = (path: string): string => {
-	return path?.includes('Hearthstone Beta Launcher')
-		? path?.split('Hearthstone Beta Launcher.exe')[0]
-		: path?.split('Hearthstone.exe')[0];
-};

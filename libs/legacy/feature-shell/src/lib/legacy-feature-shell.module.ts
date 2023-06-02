@@ -716,6 +716,7 @@ import { LocalizationFacadeService } from './js/services/localization-facade.ser
 import { LocalizationService } from './js/services/localization.service';
 import { LogListenerService } from './js/services/log-listener.service';
 import { LogRegisterService } from './js/services/log-register.service';
+import { LogUtilsService } from './js/services/log-utils.service';
 import { LogsUploaderService } from './js/services/logs-uploader.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
@@ -1722,6 +1723,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		GameEventsPluginService,
 		GameModeDataService,
 		LogListenerService,
+		LogUtilsService,
 		CardsMonitorService,
 		LogRegisterService,
 		HsClientConfigService,

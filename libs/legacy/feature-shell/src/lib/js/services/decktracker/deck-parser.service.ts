@@ -23,7 +23,7 @@ import { BugReportService } from '../bug/bug-report.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
-import { getLogsDir } from '../log-listener.service';
+import { getLogsDir } from '../log-utils.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { DeckHandlerService } from './deck-handler.service';
