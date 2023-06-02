@@ -95,6 +95,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-overdraft-widget-wrapper></player-overdraft-widget-wrapper>
 			<player-asvedon-widget-wrapper></player-asvedon-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
+			<player-naga-giant-widget-wrapper></player-naga-giant-widget-wrapper>
 			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
 			<player-bonelord-frostwhisper-widget-wrapper></player-bonelord-frostwhisper-widget-wrapper>
 			<player-shockspitter-widget-wrapper></player-shockspitter-widget-wrapper>

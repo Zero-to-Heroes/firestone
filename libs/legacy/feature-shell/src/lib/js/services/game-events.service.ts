@@ -324,6 +324,7 @@ export class GameEvents {
 									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
 									immune: gameEvent.Value.AdditionalProps.Immune,
 									dormant: gameEvent.Value.AdditionalProps.Dormant,
+									cost: gameEvent.Value.AdditionalProps.Cost,
 							  }
 							: {},
 					),

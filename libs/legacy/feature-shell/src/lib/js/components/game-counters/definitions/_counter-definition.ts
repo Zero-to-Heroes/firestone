@@ -31,6 +31,7 @@ export type CounterType =
 	| 'overdraft'
 	| 'asvedon'
 	| 'murozondTheInfinite'
+	| 'nagaGiant'
 	| 'anachronos'
 	| 'bonelordFrostwhisper'
 	| 'parrotMascot'

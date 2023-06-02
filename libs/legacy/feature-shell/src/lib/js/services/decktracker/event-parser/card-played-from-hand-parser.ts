@@ -167,6 +167,12 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const isElemental = refCard?.type === 'Minion' && refCard?.races?.includes(Race[Race.ELEMENTAL]);
 
+		let manaSpentOnSpellsThisMatch = deck.manaSpentOnSpellsThisMatch;
+		if (refCard?.type === 'Spell') {
+			const manaCost = gameEvent.additionalData.cost ?? 0;
+			manaSpentOnSpellsThisMatch += manaCost;
+		}
+
 		const newPlayerDeck = deck.update({
 			hand: handAfterCardsLinks,
 			board: newBoard,
@@ -180,6 +186,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				!isCardCountered && refCard?.type === 'Spell'
 					? [...deck.spellsPlayedThisMatch, cardToAdd]
 					: deck.spellsPlayedThisMatch,
+			manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
 			watchpostsPlayedThisMatch:
 				deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
 			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),

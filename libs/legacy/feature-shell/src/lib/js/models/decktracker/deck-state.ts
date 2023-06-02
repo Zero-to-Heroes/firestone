@@ -82,6 +82,7 @@ export class DeckState {
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
+	readonly manaSpentOnSpellsThisMatch: number = 0;
 	readonly watchpostsPlayedThisMatch: number = 0;
 	readonly libramsPlayedThisMatch: number = 0;
 	readonly elementalsPlayedThisTurn: number = 0;

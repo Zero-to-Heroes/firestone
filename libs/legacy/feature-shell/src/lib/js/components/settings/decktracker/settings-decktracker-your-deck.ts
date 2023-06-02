@@ -308,6 +308,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-tooltip'),
 		},
 		{
+			id: 'nagaGiant',
+			field: 'playerNagaGiantCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.naga-giant-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.naga-giant-tooltip'),
+		},
+		{
 			id: 'anachronos',
 			field: 'playerAnachronosCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),

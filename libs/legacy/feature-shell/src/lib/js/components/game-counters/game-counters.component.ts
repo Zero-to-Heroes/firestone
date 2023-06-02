@@ -37,6 +37,7 @@ import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
+import { NagaGiantCounterDefinition } from './definitions/naga-giant-counter';
 import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
@@ -165,6 +166,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return AsvedonCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':
 				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'nagaGiant':
+				return NagaGiantCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'anachronos':
 				return AnachronosCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'bonelordFrostwhisper':
