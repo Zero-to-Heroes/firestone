@@ -33,14 +33,14 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.7',
+		version: '11.2.13',
 		force: false,
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `Firestone is now operational once again! There's still some work needed to support all the new content from 26.2, and that will arrive in the coming days. But the app is now usable again, and you can track your games, see your stats, and use the deck tracker in all game modes. Thanks for your patience!`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `The last patch has been more bumpy than I expected. If you find that the app doesn't track your games properly, please first try restarting Hearthstone, and see if the problem persists. Thanks again for your patience and support!`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -49,8 +49,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'misc',
-								text: `I have improved the performance of the module that the app is using to read information directly from the game client's memory. It should remove all the stuttering and occasional lag that you could experience when navigating between screens, as well as overall making the experience smoother while in-game. Let me know if you notice any difference!`,
+								type: 'feature',
+								text: `(PREMIUM) Premium users now have a Profile Page online (see mine at https://www.firestoneapp.gg/profile/daedin). For now it only includes a collection overview, but I will add more things in the coming weeks. Let me know what you would like to see there!`,
 							},
 						],
 					},
@@ -65,23 +65,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a Menagerie counter.`,
+								text: `Add a Naga Giant counter.`,
 							},
 							{
 								type: 'feature',
-								text: `Add a Corpse spent counter.`,
+								text: `You can now see the cards that will be resurrected by Stranglethorn Heart directly as related cards by mousing over it in the tracker. This means it will also work in the Legacy view of the tracker.`,
 							},
 							{
 								type: 'feature',
-								text: `Track all activations of Vampiric Blood in the Global Effects.`,
+								text: `Added a card Oracle for Plagiarizarrr.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix oracle for Melomania.`,
+								text: `Fix the card Oracle for Fight Over Me.`,
 							},
 							{
-								type: 'content',
-								text: `Add oracles for Tidestone of Golganneth, Kiri Chosen of Elune, The Hand of Rafaam (duels) and Moonbeast.`,
+								type: 'bug',
+								text: `Fix an issue where the correct deck would sometimes not be detected properly.`,
 							},
 						],
 					},
@@ -89,91 +89,12 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Bassgill is now properly supported in simulations, both on the player's and opponent's side. There might still be some slight mistakes if the opponent buffs their hand while in combat, but it should be roughly correct.`,
-							},
-							{
-								type: 'feature',
-								text: `Blood gem buffs are now properly supported in the simulator.`,
+								type: 'bug',
+								text: `Fix an issue where battles would stop registering in the "simulator" tab when facing the same opponents multiple times in row in the final 1 vs 1 showdown of a lobby.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where updating a minion in the simulator would remove its enchantments.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue when Dragons are buffed during battle.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Incorporeal Corporal would not die immediately.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue when the opponent uses Teron's hero power.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where minions highlight would sometimes get broken between fights.`,
-							},
-							{
-								type: 'content',
-								text: `Improve CPU consumption when playing BG. This will mostly manifest in long games.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `Add the ability to click on a hero / hero power / signature in the tier list to see the top decks with this card.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a way to search for top decks containing a given card.`,
-							},
-							{
-								type: 'content',
-								text: `Rework how memory reading is handled in Duels. This should improve the reliability of runs detection, and should reduce slightly the resources consumptions of the app while playing Duels.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where ETC Band Manager would not always be properly handled, especially in the first matches of a run.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the meta stats would not appear anymore.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'feature',
-								text: `Add warning icons when the boards are not fully supported when viewing past replay stats.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to disable the local cache.`,
-							},
-							{
-								type: 'content',
-								text: `Add a (non-localized, for now) error when there are no messages in the inbox.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the decklists would not order cards alphabetically within a given mana cost.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix the Share -> Copy to clipboard button not working.`,
+								text: `Fix an issue where hero stats would sometimes not load properly when starting a BG game.`,
 							},
 						],
 					},
