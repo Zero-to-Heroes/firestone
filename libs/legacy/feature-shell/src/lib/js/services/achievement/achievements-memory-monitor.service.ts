@@ -1,24 +1,18 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { PreferencesService } from '../preferences.service';
-import { HsAchievementsInfo } from './achievements-info';
+import { HsAchievementCategory, HsAchievementInfo } from './achievements-info';
 
 @Injectable()
 export class AchievementsMemoryMonitor {
-	public nativeAchievements$$ = new BehaviorSubject<HsAchievementsInfo>(null);
+	public nativeAchievements$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
+	public achievementCategories$$ = new BehaviorSubject<readonly HsAchievementCategory[]>([]);
 
 	private numberOfCompletedAchievements$$ = new BehaviorSubject<number>(0);
 
-	constructor(
-		private readonly events: Events,
-		private readonly memory: MemoryInspectionService,
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-	) {
+	constructor(private readonly events: Events, private readonly memory: MemoryInspectionService) {
 		this.init();
 	}
 
@@ -31,10 +25,34 @@ export class AchievementsMemoryMonitor {
 		});
 
 		this.numberOfCompletedAchievements$$
-			.pipe(distinctUntilChanged(), debounceTime(1000))
+			.pipe(
+				filter((value) => !!value),
+				distinctUntilChanged(),
+				debounceTime(1000),
+			)
 			.subscribe(async (numberOfCompletedAchievements) => {
 				const achievementsFromMemory = await this.memory.getAchievementsInfo();
-				this.nativeAchievements$$.next(achievementsFromMemory);
+				console.debug(
+					'[achievements-memory-monitor] updated achievements from memory',
+					numberOfCompletedAchievements,
+					achievementsFromMemory,
+				);
+				this.nativeAchievements$$.next(achievementsFromMemory.achievements);
+			});
+		this.numberOfCompletedAchievements$$
+			.pipe(
+				filter((value) => !!value),
+				distinctUntilChanged(),
+				debounceTime(1000),
+			)
+			.subscribe(async (numberOfCompletedAchievements) => {
+				const achievementCategories = await this.memory.getAchievementCategories();
+				console.debug(
+					'[achievements-memory-monitor] updated achievement categories',
+					numberOfCompletedAchievements,
+					achievementCategories,
+				);
+				this.achievementCategories$$.next(achievementCategories);
 			});
 	}
 }

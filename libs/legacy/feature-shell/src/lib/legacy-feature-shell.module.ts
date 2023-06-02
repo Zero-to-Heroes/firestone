@@ -636,6 +636,7 @@ import { ScrollableDirective } from './js/directives/scrollable.directive';
 import { SafeHtmlPipe } from './js/pipes/safe-html.pipe';
 import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
 import { AchievementsManager } from './js/services/achievement/achievements-manager.service';
+import { AchievementsMemoryMonitor } from './js/services/achievement/achievements-memory-monitor.service';
 import { AchievementsMonitor } from './js/services/achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './js/services/achievement/achievements-notification.service';
 import { AchievementsRepository } from './js/services/achievement/achievements-repository.service';
@@ -1739,6 +1740,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CardNotificationsService,
 
 		AchievementsMonitor,
+		AchievementsMemoryMonitor,
 		AchievementsNotificationService,
 		RemoteAchievementsService,
 		AchievementsManager,

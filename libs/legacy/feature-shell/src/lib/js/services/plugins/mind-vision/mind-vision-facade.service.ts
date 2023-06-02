@@ -9,6 +9,7 @@ import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenari
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { RewardsTrackInfos } from '@models/rewards-track-info';
+import { InternalHsAchievementsCategory } from './operations/get-achievements-categories-operation';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 import { MemoryQuestsLog } from './operations/get-active-quests-operation';
 
@@ -363,6 +364,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.warn('[mind-vision] could not get achievements info', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getAchievementCategories(forceReset = false): Promise<readonly InternalHsAchievementsCategory[]> {
+		return new Promise<readonly InternalHsAchievementsCategory[]>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getAchievementCategories(forceReset, (info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not getAchievementCategories', e);
 				resolve(null);
 			}
 		});

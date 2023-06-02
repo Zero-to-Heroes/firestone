@@ -23,9 +23,10 @@ import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-merc
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfos } from '../../models/rewards-track-info';
-import { HsAchievementsInfo } from '../achievement/achievements-info';
+import { HsAchievementCategory, HsAchievementsInfo } from '../achievement/achievements-info';
 import { SetsService } from '../collection/sets-service.service';
 import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
+import { GetAchievementCategoriesOperation } from './mind-vision/operations/get-achievements-categories-operation';
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';
 import { GetActiveQuestsOperation, MemoryQuestsLog } from './mind-vision/operations/get-active-quests-operation';
@@ -99,6 +100,7 @@ export class MemoryInspectionService {
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.ow);
 	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.ow);
 	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVisionFacade, this.ow);
+	private getAchievementCategoriesOperation = new GetAchievementCategoriesOperation(this.mindVisionFacade, this.ow);
 	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
 		this.mindVisionFacade,
 		this.ow,
@@ -256,6 +258,10 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() =>
 			this.getAchievementsInfoOperation.call(numberOfRetries, forceReset),
 		);
+	}
+
+	public async getAchievementCategories(): Promise<readonly HsAchievementCategory[]> {
+		return this.mindVision.callMindVision(() => this.getAchievementCategoriesOperation.call());
 	}
 
 	public async getBoostersInfo(): Promise<readonly PackInfo[]> {

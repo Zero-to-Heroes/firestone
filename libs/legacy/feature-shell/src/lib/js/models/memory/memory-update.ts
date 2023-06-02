@@ -4,7 +4,6 @@ import { CardPackInfo, PackInfo } from './pack-info';
 export interface MemoryUpdate {
 	readonly ShouldReset: boolean;
 
-	readonly DisplayingAchievementToast: boolean;
 	readonly CurrentScene: SceneMode;
 	readonly isFriendsListOpen: boolean;
 	readonly XpChanges: readonly XpChange[];
@@ -16,6 +15,9 @@ export interface MemoryUpdate {
 	readonly CollectionBgHeroSkinsCount: number;
 	readonly BoostersCount: number;
 	readonly IsOpeningPack: boolean;
+
+	readonly NumberOfAchievementsCompleted: number;
+	readonly DisplayingAchievementToast: boolean;
 
 	readonly SelectedDeckId: number;
 
