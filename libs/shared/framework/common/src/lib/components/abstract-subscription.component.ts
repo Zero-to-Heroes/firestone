@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, ViewRef } from '@angular/core';
-import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
+import { Observable, Subject, UnaryFunction, pipe } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { arraysEqual } from '../libs/utils';
 
@@ -24,7 +24,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 			debounceTime(debounceTimeMs),
 			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			map(extractor),
-			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
+			// distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			tap((filter) =>
 				setTimeout(() => {
 					if (!(this.cdr as ViewRef)?.destroyed) {

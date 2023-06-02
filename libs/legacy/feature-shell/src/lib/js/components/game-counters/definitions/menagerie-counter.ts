@@ -1,10 +1,11 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class MenagerieCounterDefinition implements CounterDefinition {
+export class MenagerieCounterDefinition implements CounterDefinition<readonly ShortCard[]> {
 	readonly type = 'menagerie';
 	readonly value: number | string;
 	readonly image: string;
@@ -13,14 +14,27 @@ export class MenagerieCounterDefinition implements CounterDefinition {
 	readonly cardTooltips?: readonly string[];
 	readonly standardCounter = true;
 
-	static create(
-		gameState: GameState,
+	constructor(
+		private readonly side: 'player' | 'opponent',
+		private readonly allCards,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
+
+	public static create(
 		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): MenagerieCounterDefinition {
-		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const allPlayedCards = deck.cardsPlayedThisMatch.map((c) => allCards.getCard(c.cardId));
+		return new MenagerieCounterDefinition(side, allCards, i18n);
+	}
+
+	public select(gameState: GameState): readonly ShortCard[] {
+		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return deck.cardsPlayedThisMatch ?? [];
+	}
+
+	public update(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<MenagerieCounterDefinition> {
+		const allPlayedCards = cardsPlayedThisMatch.map((c) => this.allCards.getCard(c.cardId));
 		// console.debug('allPlayedCards', allPlayedCards, deck.cardsPlayedThisMatch);
 
 		const minionsPlayedWithTribes = allPlayedCards
@@ -60,13 +74,13 @@ export class MenagerieCounterDefinition implements CounterDefinition {
 			...minionsPlayedWithTribes
 				.filter((m) => m.races.includes(Race[Race.ALL]))
 				.flatMap((m) => m.races)
-				.map((r) => Race[r]),
+				.map((r: string) => Race[r]),
 		);
 		const tribeText = uniqueTribes
-			.map((tribe) => i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`))
+			.map((tribe) => this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`))
 			.sort()
 			.join(', ');
-		const tooltip = i18n.translateString(`counters.menagerie.${side}`, {
+		const tooltip = this.i18n.translateString(`counters.menagerie.${this.side}`, {
 			value: tribeText,
 		});
 		return {
