@@ -129,15 +129,6 @@ export class DeckParserService {
 		const activeDeck =
 			(this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ??
 			deckFromMemory;
-		// console.log('[deck-parser] active deck after duels', activeDeck, this.currentNonGamePlayScene);
-		// if (this.isDuelsInfo(activeDeck)) {
-		// 	activeDeck = {
-		// 		...activeDeck,
-		// 		// Give priority to the cardIds, as this is what we get when reading the duels deck
-		// 		// from the main Duels manager, instead of the dungeon run scene
-		// 		DeckList: activeDeck.DeckListWithCardIds ?? activeDeck.DeckList,
-		// 	};
-		// }
 
 		console.log(
 			'[deck-parser] active deck',
@@ -305,13 +296,16 @@ export class DeckParserService {
 	}
 
 	private sentReports: { [type: string]: boolean } = {};
-	private validateDeck(deck: DeckInfo) {
+	private async validateDeck(deck: DeckInfo) {
 		const etcDbfId = this.allCards.getCard(CardIds.ETCBandManager_ETC_080).dbfId;
 		if (deck.deck?.cards.map((pair) => pair[0]).includes(etcDbfId) && !deck.deck.sideboards?.length) {
-			console.warn('invalid deck', deck);
+			console.warn('invalid deck', deck?.deck?.cards?.length, deck);
+			const duelsDeckFromCollection = await this.memory.getDuelsDeckFromCollection();
+			const duelsDeck = await this.memory.getDuelsDeck();
+			console.log('no-format', 'more duels deck info', duelsDeckFromCollection, duelsDeck);
 			if (!this.sentReports['invalid-etc-deck']) {
 				this.bugReportService.submitAutomatedReport({
-					type: 'invalid-etc-deck',
+					type: 'invalid-etc-deck-2',
 					info: JSON.stringify(deck),
 				});
 				this.sentReports['invalid-etc-deck'] = true;

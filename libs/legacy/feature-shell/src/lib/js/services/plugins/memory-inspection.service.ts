@@ -40,6 +40,7 @@ import { GetCardBacksOperation } from './mind-vision/operations/get-card-backs-o
 import { GetCoinsOperation } from './mind-vision/operations/get-coins-operation';
 import { GetCollectionOperation } from './mind-vision/operations/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/operations/get-current-scene-operation';
+import { GetDuelsDeckFromCollectionOperation } from './mind-vision/operations/get-duels-deck-from-collection-operation';
 import { GetDuelsInfoOperation } from './mind-vision/operations/get-duels-info-operation';
 import { GetDuelsRewardsInfoOperation } from './mind-vision/operations/get-duels-rewards-info-operation';
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-operation';
@@ -85,6 +86,10 @@ export class MemoryInspectionService {
 	private getAdventuresInfoOperation = new GetAdventuresInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsDeckOperation = new GetDuelsDeckOperation(this.mindVisionFacade, this.ow);
+	private getDuelsDeckFromCollectionOperation = new GetDuelsDeckFromCollectionOperation(
+		this.mindVisionFacade,
+		this.ow,
+	);
 	private getDuelsHeroOptionsOperation = new GetDuelsHeroOptionsOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsHeroPowerOptionsOperation = new GetDuelsHeroPowerOptionsOperation(
 		this.mindVisionFacade,
@@ -224,6 +229,10 @@ export class MemoryInspectionService {
 
 	public async getDuelsDeck(): Promise<DuelsDeck> {
 		return this.mindVision.callMindVision(() => this.getDuelsDeckOperation.call());
+	}
+
+	public async getDuelsDeckFromCollection(): Promise<DeckInfoFromMemory> {
+		return this.mindVision.callMindVision(() => this.getDuelsDeckFromCollectionOperation.call());
 	}
 
 	public async getDuelsHeroOptions(forceReset = false, numberOfRetries = 1): Promise<readonly number[]> {

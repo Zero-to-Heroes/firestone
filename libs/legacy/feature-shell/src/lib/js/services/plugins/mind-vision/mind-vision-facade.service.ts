@@ -9,6 +9,7 @@ import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenari
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { RewardsTrackInfos } from '@models/rewards-track-info';
+import { DeckInfoFromMemory } from '../../../models/mainwindow/decktracker/deck-info-from-memory';
 import { InternalHsAchievementsCategory } from './operations/get-achievements-categories-operation';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 import { MemoryQuestsLog } from './operations/get-active-quests-operation';
@@ -180,6 +181,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.warn('[mind-vision] could not parse getDuelsDeck', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getDuelsDeckFromCollection(): Promise<DeckInfoFromMemory> {
+		return new Promise<DeckInfoFromMemory>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getDuelsDeckFromCollection((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getDuelsDeckFromCollection', e);
 				resolve(null);
 			}
 		});
