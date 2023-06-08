@@ -10,6 +10,7 @@ import { FilterDropdownMultiselectComponent } from './components/dropdown/filter
 import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
 import { CheckboxComponent } from './components/input/checkbox.component';
 import { NumericInputWithArrowsComponent } from './components/input/numeric-input-with-arrows.component';
+import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
 import { CardTooltipComponent } from './components/tooltip/card-tooltip.component';
@@ -32,6 +33,8 @@ const components = [
 
 	BasicBarChart2Component,
 
+	ProgressBarComponent,
+
 	ToggleViewComponent,
 ];
 
@@ -39,8 +42,10 @@ const components = [
 	imports: [
 		CommonModule,
 		FormsModule,
+
 		InlineSVGModule.forRoot(),
 		SelectModule,
+
 		SharedFrameworkCommonModule,
 		SharedFrameworkCoreModule,
 	],

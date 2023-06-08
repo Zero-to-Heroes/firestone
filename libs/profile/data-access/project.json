@@ -1,47 +1,40 @@
 {
-  "name": "profile-data-access",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "library",
-  "sourceRoot": "libs/profile/data-access/src",
-  "prefix": "firestone",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": [
-        "{workspaceRoot}/dist/{projectRoot}"
-      ],
-      "options": {
-        "project": "libs/profile/data-access/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "libs/profile/data-access/tsconfig.lib.prod.json"
-        },
-        "development": {
-          "tsConfig": "libs/profile/data-access/tsconfig.lib.json"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
-      "options": {
-        "jestConfig": "libs/profile/data-access/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/profile/data-access/**/*.ts",
-          "libs/profile/data-access/**/*.html"
-        ]
-      }
-    }
-  },
-  "tags": []
+	"name": "profile-data-access",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "libs/profile/data-access/src",
+	"prefix": "firestone",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/angular:ng-packagr-lite",
+			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+			"options": {
+				"project": "libs/profile/data-access/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/profile/data-access/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/profile/data-access/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/profile/data-access/jest.config.ts",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/profile/data-access/**/*.ts", "libs/profile/data-access/**/*.html"]
+			}
+		}
+	},
+	"tags": []
 }

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'achievement-category-view',
-	styleUrls: [`../../../css/component/achievements/achievement-category-view.component.scss`],
+	styleUrls: [`./achievement-category-view.component.scss`],
 	template: `
 		<div class="achievement-set" [ngClass]="{ empty: empty }">
 			<div class="frame complete-simple" *ngIf="complete">

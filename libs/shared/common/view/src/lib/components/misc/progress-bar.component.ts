@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 
 @Component({
 	selector: 'progress-bar',
-	styleUrls: [`../../css/component/progress-bar.component.scss`],
+	styleUrls: [`./progress-bar.component.scss`],
 	template: `
 		<div class="progress-bar">
 			<span class="current" *ngIf="total > 0 && (!fullTotalLabel || current !== total)"
@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 				[helpTooltip]="fullTotalTooltip"
 				>{{ fullTotalLabel }}</span
 			>
-			<span class="current" *ngIf="total == 0 && !fullTotalLabel">Coming soon!</span>
+			<span class="current" *ngIf="total === 0 && !fullTotalLabel">Coming soon!</span>
 			<div class="progress-bar-content">
 				<div class="progress" [style.width.%]="(100.0 * current) / total"></div>
 			</div>

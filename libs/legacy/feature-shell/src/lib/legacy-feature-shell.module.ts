@@ -453,7 +453,6 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
-import { AchievementCategoryViewComponent } from '@components/achievements/achievement-category-view.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
@@ -492,6 +491,7 @@ import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.co
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AchievementsViewModule } from '@firestone/achievements/view';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
@@ -599,7 +599,6 @@ import { HotkeyComponent } from './js/components/hotkey.component';
 import { InfiniteScrollComponent } from './js/components/infinite-scroll.component';
 import { SecondaryDefaultComponent } from './js/components/main-window/secondary-default.component';
 import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
-import { ProgressBarComponent } from './js/components/progress-bar.component';
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
 import { DropdownComponent } from './js/components/settings/dropdown.component';
 import { NumericInputComponent } from './js/components/settings/numeric-input.component';
@@ -855,6 +854,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsViewModule,
 		DuelsDataAccessModule,
 		CollectionViewModule,
+		AchievementsViewModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -994,7 +994,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		FsFilterDropdownComponent,
 
 		StatCellComponent,
-		ProgressBarComponent,
 
 		DeckTrackerOverlayRootComponent,
 		DeckTrackerDeckNameComponent,
@@ -1121,7 +1120,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		FsFilterDropdownComponent,
 
 		StatCellComponent,
-		ProgressBarComponent,
 
 		// Only for the app
 		DaemonComponent,
@@ -1243,7 +1241,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementImageComponent,
 		AchievementsListComponent,
 		AchievementCategoryComponent,
-		AchievementCategoryViewComponent,
 		AchievementProgressBarComponent,
 		AchievementViewComponent,
 		AchievementsFilterComponent,

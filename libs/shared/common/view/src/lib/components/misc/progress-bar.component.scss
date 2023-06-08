@@ -1,16 +1,14 @@
-@import '../global/variables';
-@import '../global/fonts';
-
 .progress-bar {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 
 	.current {
-		@extend %achievements-number-achieved;
 		flex-grow: 0;
 		flex-shrink: 0;
 		margin-bottom: 3px;
+		color: var(--default-text-color);
+		font-size: 12px;
 	}
 
 	.progress-bar-content {
@@ -23,7 +21,7 @@
 		align-items: flex-start;
 
 		.progress {
-			background: #ffb948;
+			background: var(--default-title-color);
 			height: 100%;
 		}
 	}
