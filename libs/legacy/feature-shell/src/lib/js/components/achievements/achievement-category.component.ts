@@ -5,33 +5,15 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 	selector: 'achievement-category',
 	styleUrls: [`../../../css/component/achievements/achievement-category.component.scss`],
 	template: `
-		<div class="achievement-set" [ngClass]="{ empty: empty }">
-			<div class="frame complete-simple" *ngIf="complete">
-				<i class="i-25 pale-gold-theme corner bottom-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
-					</svg>
-				</i>
-				<i class="i-25 pale-gold-theme corner top-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
-					</svg>
-				</i>
-				<i class="i-25 pale-gold-theme corner top-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
-					</svg>
-				</i>
-				<i class="i-25 pale-gold-theme corner bottom-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
-					</svg>
-				</i>
-			</div>
-			<span class="text set-name" [helpTooltip]="displayName">{{ displayName }}</span>
-			<i class="logo" [inlineSVG]="categoryIcon"> </i>
-			<achievement-progress-bar [achieved]="achieved" [total]="totalAchievements"></achievement-progress-bar>
-		</div>
+		<achievement-category-view
+			[empty]="empty"
+			[complete]="complete"
+			[displayName]="displayName"
+			[categoryIcon]="categoryIcon"
+			[achieved]="achieved"
+			[totalAchievements]="totalAchievements"
+		>
+		</achievement-category-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
