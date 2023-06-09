@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AchievementsRefLoaderService, HsRefAchiementsData, HsRefAchievement } from '@firestone/achievements/data-access';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { Achievement } from '../../models/achievement';
-import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameStateService } from '../decktracker/game-state.service';
 import { AchievementsFullUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-full-updated-event';
@@ -13,8 +13,6 @@ import { AchievementsStorageService } from './achievements-storage.service';
 
 const ACHIEVEMENTS_UPDATE_URL = 'https://yl2slri7psjvyzqscikel2cfgi0hlesx.lambda-url.us-west-2.on.aws/';
 const ACHIEVEMENTS_RETRIEVE_URL = 'https://v4sa2mtlxy5y5suuwwmj6p2i6e0epbqt.lambda-url.us-west-2.on.aws/';
-
-const RAW_HS_ACHIEVEMENTS_RETRIEVE_URL = 'https://static.zerotoheroes.com/hearthstone/jsoncards/hs-achievements.json';
 
 @Injectable()
 export class RemoteAchievementsService {
@@ -29,6 +27,7 @@ export class RemoteAchievementsService {
 		private prefs: PreferencesService,
 		private readonly localStorage: LocalStorageService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly refLoaderService: AchievementsRefLoaderService
 	) {}
 
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
@@ -146,8 +145,8 @@ export class RemoteAchievementsService {
 
 	// TODO: this is only used to get the quotas, so maybe expose a specific endpoint
 	// for this to reduce the data transfer?
-	public async loadHsRawAchievements(): Promise<readonly HsRawAchievement[]> {
-		const raw: any = await this.api.callGetApi(RAW_HS_ACHIEVEMENTS_RETRIEVE_URL);
+	public async loadHsRawAchievements(): Promise<readonly HsRefAchievement[]> {
+		const raw: HsRefAchiementsData = await this.refLoaderService.loadRefData();
 		return raw?.achievements || [];
 	}
 

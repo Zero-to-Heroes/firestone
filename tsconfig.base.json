@@ -19,6 +19,7 @@
 		"paths": {
 			"@components/*": ["libs/legacy/feature-shell/src/lib/js/components/*"],
 			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
+			"@firestone/achievements/data-access": ["libs/achievements/data-access/src/index.ts"],
 			"@firestone/achievements/view": ["libs/achievements/view/src/index.ts"],
 			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],

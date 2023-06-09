@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { HsRefAchievement } from '@firestone/achievements/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Achievement } from '../../models/achievement';
-import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -92,7 +92,7 @@ export class AchievementsMonitor {
 			return;
 		}
 
-		const rawAchievements: readonly HsRawAchievement[] = await this.remoteAchievements.loadHsRawAchievements();
+		const rawAchievements: readonly HsRefAchievement[] = await this.remoteAchievements.loadHsRawAchievements();
 		this.achievementQuotas = {};
 		for (const ach of rawAchievements) {
 			this.achievementQuotas[ach.id] = ach.quota;

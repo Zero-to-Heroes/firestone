@@ -491,6 +491,7 @@ import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.co
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
@@ -855,6 +856,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsDataAccessModule,
 		CollectionViewModule,
 		AchievementsViewModule,
+		AchievementsDataAccessModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
