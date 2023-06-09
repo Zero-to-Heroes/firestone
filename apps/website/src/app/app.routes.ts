@@ -59,6 +59,11 @@ export const appRoutes: Route[] = [
 		component: WebsiteProfileCollectionComponent,
 		canActivate: [AuthGuard],
 	},
+	// {
+	// 	path: 'profile/achievements',
+	// 	component: WebsiteProfileAchievementsComponent,
+	// 	canActivate: [AuthGuard],
+	// },
 	{
 		path: 'profile/:shareAlias/overview',
 		component: WebsiteProfileOverviewComponent,
@@ -67,16 +72,10 @@ export const appRoutes: Route[] = [
 		path: 'profile/:shareAlias/collection',
 		component: WebsiteProfileCollectionComponent,
 	},
-	{
-		path: 'profile/overview',
-		component: WebsiteProfileOverviewComponent,
-		canActivate: [AuthGuard],
-	},
-	{
-		path: 'profile/collection',
-		component: WebsiteProfileCollectionComponent,
-		canActivate: [AuthGuard],
-	},
+	// {
+	// 	path: 'profile/:shareAlias/achievements',
+	// 	component: WebsiteProfileAchievementsComponent,
+	// },
 	{
 		path: 'profile/:shareAlias',
 		redirectTo: '/profile/:shareAlias/overview',

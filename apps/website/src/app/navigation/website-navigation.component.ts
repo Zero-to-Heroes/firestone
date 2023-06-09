@@ -140,6 +140,11 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 								icon: 'assets/svg/whatsnew/collection.svg',
 								name: this.i18n.translateString('app.menu.collection-header'),
 							},
+							// {
+							// 	id: `profile${profileWatchFragment}/collection`,
+							// 	icon: 'assets/svg/whatsnew/achievements.svg',
+							// 	name: this.i18n.translateString('app.menu.achievements-header'),
+							// },
 							!!watchingOtherPlayer?.length
 								? null
 								: {

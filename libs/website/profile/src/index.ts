@@ -1,3 +1,5 @@
+export * from './lib/achievements/website-profile-achievements-overview.component';
+export * from './lib/achievements/website-profile-achievements.component';
 export * from './lib/collection/website-profile-collection-overview.component';
 export * from './lib/collection/website-profile-collection.component';
 export * from './lib/collection/website-profile-sets.component';

@@ -24,6 +24,7 @@ import { getSets } from '../+state/website/profile.selectors';
 					<website-profile-collection-overview class="mode wild" [title]="'Wild'" [sets]="wildSets$ | async">
 					</website-profile-collection-overview>
 				</div>
+				<website-profile-achievements-overview></website-profile-achievements-overview>
 			</div>
 		</website-profile>
 	`,

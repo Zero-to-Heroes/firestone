@@ -1,15 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { combineLatest, filter, ignoreElements, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
-
 import { Router } from '@angular/router';
+import { Profile } from '@firestone-hs/api-user-profile';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { AchievementsRefLoaderService, HsRefAchiementsData } from '@firestone/achievements/data-access';
 import { ProfileLoadDataService } from '@firestone/profile/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { WebsiteCoreState, WebsitePreferences, WebsitePreferencesService, getFsToken } from '@firestone/website/core';
+import {
+	WebsiteCoreState,
+	WebsiteLocalizationService,
+	WebsitePreferences,
+	WebsitePreferencesService,
+	getFsToken,
+} from '@firestone/website/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { combineLatest, filter, ignoreElements, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as WebsiteProfileActions from './pofile.actions';
-import { ExtendedProfile, ExtendedProfileSet, WebsiteProfileState } from './profile.models';
+import {
+	ExtendedProfile,
+	ExtendedProfileAchievementCategory,
+	ExtendedProfileSet,
+	WebsiteProfileState,
+} from './profile.models';
 import { getSets } from './profile.selectors';
 
 @Injectable()
@@ -24,6 +36,8 @@ export class WebsiteProfileEffects {
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: WebsitePreferencesService,
 		private readonly router: Router,
+		private readonly refAchievements: AchievementsRefLoaderService,
+		private readonly i18n: WebsiteLocalizationService,
 	) {}
 
 	ownProfile$ = createEffect(() => {
@@ -36,34 +50,15 @@ export class WebsiteProfileEffects {
 			filter(([action, params, hasInfo]) => !!action || !!params),
 			switchMap(async ([action, [fsToken]]) => {
 				// console.debug('loading profile data', fsToken, action);
-				const profile = await this.access.loadOwnProfileData(fsToken);
 				if (!this.collectibleCards?.length) {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
-				const sets: readonly ExtendedProfileSet[] =
-					profile?.sets?.map((set) => {
-						return {
-							...set,
-							totalCollectibleCards: this.collectibleCards
-								.filter((c) => c.set?.toLowerCase() === set.id)
-								.map((c) => (c.rarity === 'Legendary' ? 1 : 2))
-								.reduce((a, b) => a + b, 0),
-							global: {
-								...set.global,
-								totalCollectedCards:
-									set.global.common + set.global.epic + set.global.legendary + set.global.rare,
-							},
-							golden: {
-								...set.golden,
-								totalCollectedCards:
-									set.golden.common + set.golden.epic + set.golden.legendary + set.golden.rare,
-							},
-						};
-					}) ?? [];
-				const extendedProfile: ExtendedProfile = {
-					...profile,
-					sets: sets,
-				};
+
+				const [profile, achievementsRefData] = await Promise.all([
+					this.access.loadOwnProfileData(fsToken),
+					this.refAchievements.loadRefData(),
+				]);
+				const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
 				return WebsiteProfileActions.loadProfileDataSuccess({
 					profile: extendedProfile,
 					shareAlias: profile?.shareAlias ?? null,
@@ -79,34 +74,15 @@ export class WebsiteProfileEffects {
 			filter(([action, hasInfo]) => !hasInfo),
 			filter(([action, hasInfo]) => !!action),
 			switchMap(async ([action]) => {
-				const profile = await this.access.loadOtherProfileData(action.shareAlias);
 				if (!this.collectibleCards?.length) {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
-				const sets: readonly ExtendedProfileSet[] =
-					profile?.sets?.map((set) => {
-						return {
-							...set,
-							totalCollectibleCards: this.collectibleCards
-								.filter((c) => c.set?.toLowerCase() === set.id)
-								.map((c) => (c.rarity === 'Legendary' ? 1 : 2))
-								.reduce((a, b) => a + b, 0),
-							global: {
-								...set.global,
-								totalCollectedCards:
-									set.global.common + set.global.epic + set.global.legendary + set.global.rare,
-							},
-							golden: {
-								...set.golden,
-								totalCollectedCards:
-									set.golden.common + set.golden.epic + set.golden.legendary + set.golden.rare,
-							},
-						};
-					}) ?? [];
-				const extendedProfile: ExtendedProfile = {
-					...profile,
-					sets: sets,
-				};
+
+				const [profile, achievementsRefData] = await Promise.all([
+					this.access.loadOtherProfileData(action.shareAlias),
+					this.refAchievements.loadRefData(),
+				]);
+				const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
 				return WebsiteProfileActions.loadOtherProfileDataSuccess({
 					profile: extendedProfile,
 				});
@@ -159,20 +135,49 @@ export class WebsiteProfileEffects {
 		);
 	});
 
-	// profile$ = createEffect(() => {
-	// 	const params$ = combineLatest([
-	// 		from([1]), // Not used, just to avoid having to redo everyth
-	// 	]);
-	// 	const merged$ = merge(this.actions$.pipe(ofType(WebsiteProfileActions.initProfileData)), params$);
-	// 	return merged$.pipe(
-	// 		withLatestFrom(params$),
-	// 		filter(([action, params]) => !!action || !!params),
-	// 		switchMap(async ([action, params]) => {
-	// 			const profile = await this.access.loadProfileData(action.userName);
-	// 			return WebsiteProfileActions.loadProfileDataSuccess({
-	// 				profile: profile,
-	// 			});
-	// 		}),
-	// 	);
-	// });
+	private buildExtendedProfile(
+		profile: Profile | null,
+		achievementsRefData: HsRefAchiementsData | null,
+	): ExtendedProfile {
+		const sets: readonly ExtendedProfileSet[] =
+			profile?.sets?.map((set) => {
+				return {
+					...set,
+					totalCollectibleCards: this.collectibleCards
+						.filter((c) => c.set?.toLowerCase() === set.id)
+						.map((c) => (c.rarity === 'Legendary' ? 1 : 2))
+						.reduce((a, b) => a + b, 0),
+					global: {
+						...set.global,
+						totalCollectedCards:
+							set.global.common + set.global.epic + set.global.legendary + set.global.rare,
+					},
+					golden: {
+						...set.golden,
+						totalCollectedCards:
+							set.golden.common + set.golden.epic + set.golden.legendary + set.golden.rare,
+					},
+				};
+			}) ?? [];
+		const achievementCategories: ExtendedProfileAchievementCategory[] =
+			profile?.achievementCategories?.map((category) => {
+				const refCategory = achievementsRefData?.categories?.find((ref) => ref.id === category.id);
+				return {
+					...category,
+					empty: category.totalAchievements === 0,
+					complete: category.completedAchievements === category.totalAchievements,
+					displayName:
+						refCategory?.locales?.find((loc) => loc.locale === this.i18n.locale)?.name ??
+						refCategory?.name ??
+						'',
+					categoryIcon: '',
+				};
+			}) ?? [];
+		const extendedProfile: ExtendedProfile = {
+			...(profile ?? {}),
+			sets: sets,
+			achievementCategories: achievementCategories,
+		};
+		return extendedProfile;
+	}
 }

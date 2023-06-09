@@ -23,3 +23,8 @@ export const getSets = createSelector(
 	getWebsiteProfileState,
 	(state: WebsiteProfileState) => state.profile?.sets ?? [],
 );
+
+export const getAchievementCategories = createSelector(
+	getWebsiteProfileState,
+	(state: WebsiteProfileState) => state.profile?.achievementCategories ?? [],
+);
