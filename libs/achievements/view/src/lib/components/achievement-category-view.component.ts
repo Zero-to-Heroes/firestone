@@ -28,7 +28,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				</i>
 			</div>
 			<span class="text set-name" [helpTooltip]="displayName">{{ displayName }}</span>
-			<i class="logo" [inlineSVG]="categoryIcon"> </i>
+			<i class="logo"*ngIf="categoryIcon" [inlineSVG]="categoryIcon"> </i>
+			<img class="logo"*ngIf="categoryImage" [src]="categoryImage" />
 			<progress-bar [current]="achieved" [total]="totalAchievements"></progress-bar>
 		</div>
 	`,
@@ -39,6 +40,7 @@ export class AchievementCategoryViewComponent {
 	@Input() complete: boolean;
 	@Input() displayName: string;
 	@Input() categoryIcon: string;
+	@Input() categoryImage: string;
 	@Input() achieved: number;
 	@Input() totalAchievements: number;
 }

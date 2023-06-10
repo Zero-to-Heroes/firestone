@@ -170,7 +170,7 @@ export class WebsiteProfileEffects {
 						refCategory?.locales?.find((loc) => loc.locale === this.i18n.locale)?.name ??
 						refCategory?.name ??
 						'',
-					categoryIcon: '',
+					categoryImage: this.buildAchievementCategoryImage(category.id),
 				};
 			}) ?? [];
 		const extendedProfile: ExtendedProfile = {
@@ -179,5 +179,28 @@ export class WebsiteProfileEffects {
 			achievementCategories: achievementCategories,
 		};
 		return extendedProfile;
+	}
+
+	private buildAchievementCategoryImage(id: number): string {
+		const imageName = this.buildAchievementCategoryImageName(id);
+		return !!imageName?.length
+			? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/achievements/${imageName}.webp`
+			: '';
+	}
+	buildAchievementCategoryImageName(id: number): string | null {
+		switch (id) {
+			case 1:
+				return 'AchievementPin_Progression';
+			case 2:
+				return 'AchievementPin_Gameplay';
+			case 3:
+				return 'AchievementPin_Collection';
+			case 4:
+				return 'AchievementPin_Adventures';
+			case 6:
+				return 'AchievementPin_GameModes1';
+			default:
+				return null;
+		}
 	}
 }

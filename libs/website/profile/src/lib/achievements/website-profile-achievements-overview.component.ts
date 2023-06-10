@@ -14,7 +14,7 @@ import { getAchievementCategories } from '../+state/website/profile.selectors';
 				[empty]="category.empty"
 				[complete]="category.complete"
 				[displayName]="category.displayName"
-				[categoryIcon]="category.categoryIcon"
+				[categoryImage]="category.categoryImage"
 				[achieved]="category.completedAchievements"
 				[totalAchievements]="category.totalAchievements"
 			>

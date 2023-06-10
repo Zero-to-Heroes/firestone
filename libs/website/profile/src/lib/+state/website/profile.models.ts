@@ -32,5 +32,5 @@ export interface ExtendedProfileAchievementCategory extends ProfileAchievementCa
 	readonly empty: boolean;
 	readonly complete: boolean;
 	readonly displayName: string;
-	readonly categoryIcon: string;
+	readonly categoryImage: string;
 }
