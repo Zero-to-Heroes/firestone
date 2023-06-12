@@ -825,6 +825,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, not(minion));
 			case CardIds.MaskedReveler:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.MassResurrection_DAL_724:
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.MastersCall:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.MasterJouster:

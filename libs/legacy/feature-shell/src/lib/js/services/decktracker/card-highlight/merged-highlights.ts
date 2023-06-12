@@ -11,4 +11,5 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.TessGreymaneCore,
 	CardIds.TessGreymane_GIL_598,
 	CardIds.StranglethornHeart,
+	CardIds.MassResurrection_DAL_724,
 ];
