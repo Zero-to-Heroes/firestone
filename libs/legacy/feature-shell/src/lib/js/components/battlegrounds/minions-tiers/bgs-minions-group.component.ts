@@ -29,7 +29,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 		<ng-container *ngIf="{ tribe: tribe$ | async } as value">
 			<div class="bgs-minions-group">
 				<div class="header">
-					<div>{{ title$ | async }}</div>
+					<div class="header-text">{{ title$ | async }}</div>
 					<div
 						class="highlight-button"
 						*ngIf="value.tribe"

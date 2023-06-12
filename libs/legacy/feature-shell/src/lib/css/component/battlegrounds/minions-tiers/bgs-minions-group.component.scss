@@ -15,6 +15,10 @@
 		justify-content: center;
 		margin-bottom: 2px;
 
+		.header-text {
+			font-size: 15px;
+		}
+
 		.highlight-button {
 			--icon-color: var(--color-2);
 			--icon-secondary-color: var(--color-7);
