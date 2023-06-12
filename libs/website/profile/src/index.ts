@@ -1,5 +1,7 @@
 export * from './lib/achievements/website-profile-achievements-overview.component';
 export * from './lib/achievements/website-profile-achievements.component';
+export * from './lib/battlegrounds/website-profile-battlegrounds-hero-stat-vignette.component';
+export * from './lib/battlegrounds/website-profile-battlegrounds.component';
 export * from './lib/collection/website-profile-collection-overview.component';
 export * from './lib/collection/website-profile-collection.component';
 export * from './lib/collection/website-profile-sets.component';

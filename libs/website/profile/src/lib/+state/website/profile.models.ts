@@ -1,4 +1,10 @@
-import { CardsForSet, Profile, ProfileAchievementCategory, ProfileSet } from '@firestone-hs/api-user-profile';
+import {
+	CardsForSet,
+	Profile,
+	ProfileAchievementCategory,
+	ProfileBgHeroStat,
+	ProfileSet,
+} from '@firestone-hs/api-user-profile';
 
 export interface WebsiteProfileState {
 	loaded: boolean;
@@ -16,6 +22,7 @@ export type ShareStatusMessageType = 'sharing' | 'existing-alias' | 'success' | 
 export interface ExtendedProfile extends Profile {
 	readonly sets?: readonly ExtendedProfileSet[];
 	readonly achievementCategories?: readonly ExtendedProfileAchievementCategory[];
+	readonly bgFullTimeStatsByHero?: readonly ExtendedProfileBgHeroStat[];
 }
 
 export interface ExtendedProfileSet extends ProfileSet {
@@ -33,4 +40,8 @@ export interface ExtendedProfileAchievementCategory extends ProfileAchievementCa
 	readonly complete: boolean;
 	readonly displayName: string;
 	readonly categoryImage: string;
+}
+
+export interface ExtendedProfileBgHeroStat extends ProfileBgHeroStat {
+	readonly heroName: string;
 }

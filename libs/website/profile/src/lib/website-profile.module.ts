@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
+import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { ProfileDataAccessModule } from '@firestone/profile/data-access';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -16,6 +17,8 @@ import { WebsiteProfileEffects } from './+state/website/profile.effects';
 import * as fromWebsiteProfile from './+state/website/profile.reducer';
 import { WebsiteProfileAchievementsOverviewComponent } from './achievements/website-profile-achievements-overview.component';
 import { WebsiteProfileAchievementsComponent } from './achievements/website-profile-achievements.component';
+import { WebsiteProfileBattlegroundsHeroStatVignetteComponent } from './battlegrounds/website-profile-battlegrounds-hero-stat-vignette.component';
+import { WebsiteProfileBattlegroundsComponent } from './battlegrounds/website-profile-battlegrounds.component';
 import { WebsiteProfileCollectionOverviewComponent } from './collection/website-profile-collection-overview.component';
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
@@ -32,6 +35,8 @@ const components = [
 	WebsiteProfileShareModalComponent,
 	WebsiteProfileAchievementsComponent,
 	WebsiteProfileAchievementsOverviewComponent,
+	WebsiteProfileBattlegroundsComponent,
+	WebsiteProfileBattlegroundsHeroStatVignetteComponent,
 ];
 
 @NgModule({
@@ -53,6 +58,7 @@ const components = [
 		CollectionViewModule,
 		AchievementsViewModule,
 		AchievementsDataAccessModule,
+		BattlegroundsViewModule,
 	],
 	declarations: components,
 	exports: components,

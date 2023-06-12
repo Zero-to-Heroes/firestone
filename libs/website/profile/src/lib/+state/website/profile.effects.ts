@@ -20,6 +20,7 @@ import * as WebsiteProfileActions from './pofile.actions';
 import {
 	ExtendedProfile,
 	ExtendedProfileAchievementCategory,
+	ExtendedProfileBgHeroStat,
 	ExtendedProfileSet,
 	WebsiteProfileState,
 } from './profile.models';
@@ -196,6 +197,13 @@ export class WebsiteProfileEffects {
 			...(profile ?? {}),
 			sets: sets,
 			achievementCategories: achievementCategories,
+			bgFullTimeStatsByHero: profile?.bgFullTimeStatsByHero?.map(
+				(stat) =>
+					({
+						...stat,
+						heroName: this.allCards.getCard(stat.heroCardId)?.name,
+					} as ExtendedProfileBgHeroStat),
+			),
 		};
 		return extendedProfile;
 	}

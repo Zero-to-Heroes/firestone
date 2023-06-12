@@ -1,0 +1,60 @@
+.card {
+	border-radius: 15px;
+	background-color: rgba(255, 255, 255, 0.08);
+}
+
+.vignette {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+
+	.name {
+		color: var(--default-title-color);
+		text-align: center;
+		position: relative;
+		margin: auto;
+		flex-grow: 0;
+		flex-shrink: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 100%;
+	}
+
+	.portrait {
+		height: 100px;
+		width: 101px;
+		margin-top: 20px;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 5px;
+		color: var(--default-title-color);
+		--icon-color: var(--default-title-color);
+	}
+
+	.stats {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-top: 20px;
+
+		.stat {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			.label {
+				margin-right: 10px;
+				font-size: 14px;
+			}
+
+			.value {
+				font-size: 14px;
+				color: var(--default-title-color);
+			}
+		}
+	}
+}

@@ -28,3 +28,8 @@ export const getAchievementCategories = createSelector(
 	getWebsiteProfileState,
 	(state: WebsiteProfileState) => state.profile?.achievementCategories ?? [],
 );
+
+export const getBgsHeroStats = createSelector(
+	getWebsiteProfileState,
+	(state: WebsiteProfileState) => state.profile?.bgFullTimeStatsByHero ?? [],
+);
