@@ -401,6 +401,9 @@ export class Preferences implements IPreferences {
 	readonly playerCorpseSpentCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCorpseSpentCounterWidgetPosition: { left: number; top: number };
+	readonly opponentCorpseSpentCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentCorpseSpentCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerOverdraftCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
