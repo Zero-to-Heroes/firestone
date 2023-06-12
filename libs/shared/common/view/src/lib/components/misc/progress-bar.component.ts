@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 	template: `
 		<div class="progress-bar">
 			<span class="current" *ngIf="total > 0 && (!fullTotalLabel || current !== total)"
-				>{{ current }}/{{ total }}</span
+				>{{ current ?? 0 }}/{{ total }}</span
 			>
 			<span
 				class="current"
@@ -16,7 +16,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 			>
 			<span class="current" *ngIf="total === 0 && !fullTotalLabel">Coming soon!</span>
 			<div class="progress-bar-content">
-				<div class="progress" [style.width.%]="(100.0 * current) / total"></div>
+				<div class="progress" [style.width.%]="(100.0 * (current ?? 0)) / total"></div>
 			</div>
 		</div>
 	`,
@@ -25,8 +25,8 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressBarComponent {
-	@Input() current: number;
-	@Input() total: number;
+	@Input() current: number | null;
+	@Input() total: number | null;
 	@Input() fullTotalLabel: string;
 	@Input() fullTotalTooltip: string;
 }

@@ -6,6 +6,7 @@ import { AchievementsDataAccessModule } from '@firestone/achievements/data-acces
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { ProfileDataAccessModule } from '@firestone/profile/data-access';
+import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBootstrapModule } from '@firestone/website/core';
 import { EffectsModule } from '@ngrx/effects';
@@ -45,9 +46,10 @@ const components = [
 		StoreModule.forFeature(fromWebsiteProfile.WEBSITE_PROFILE_FEATURE_KEY, fromWebsiteProfile.websiteDuelsReducer),
 		EffectsModule.forFeature([WebsiteProfileEffects]),
 
+		SharedFrameworkCoreModule,
+		SharedCommonViewModule,
 		WebsiteBootstrapModule,
 		ProfileDataAccessModule,
-		SharedFrameworkCoreModule,
 		CollectionViewModule,
 		AchievementsViewModule,
 		AchievementsDataAccessModule,

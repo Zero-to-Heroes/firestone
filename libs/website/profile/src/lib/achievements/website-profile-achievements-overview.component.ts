@@ -9,6 +9,14 @@ import { getAchievementCategories } from '../+state/website/profile.selectors';
 	selector: 'website-profile-achievements-overview',
 	styleUrls: [`./website-profile-achievements-overview.component.scss`],
 	template: `
+		<div class="card achievement-points">
+			<div class="title">Achievement points</div>
+			<img
+				class="icon"
+				src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/achievements/achievement_points.webp?v=3"
+			/>
+			<progress-bar [current]="pointsGained$ | async" [total]="totalPoints$ | async"></progress-bar>
+		</div>
 		<div class="card achievement" *ngFor="let category of categories$ | async">
 			<achievement-category-view
 				[empty]="category.empty"
@@ -28,6 +36,8 @@ export class WebsiteProfileAchievementsOverviewComponent
 	implements AfterContentInit
 {
 	categories$: Observable<readonly ExtendedProfileAchievementCategory[]>;
+	pointsGained$: Observable<number>;
+	totalPoints$: Observable<number>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -38,5 +48,11 @@ export class WebsiteProfileAchievementsOverviewComponent
 
 	ngAfterContentInit(): void {
 		this.categories$ = this.store.select(getAchievementCategories);
+		this.pointsGained$ = this.categories$.pipe(
+			this.mapData((categories) => categories?.map((c) => c.points).reduce((a, b) => a + b, 0) ?? 0),
+		);
+		this.totalPoints$ = this.categories$.pipe(
+			this.mapData((categories) => categories?.map((c) => c.availablePoints).reduce((a, b) => a + b, 0) ?? 0),
+		);
 	}
 }
