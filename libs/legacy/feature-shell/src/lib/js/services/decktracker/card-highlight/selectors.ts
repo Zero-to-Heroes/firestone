@@ -7,7 +7,7 @@ import {
 	Locale,
 	Race,
 	RarityTYpe,
-	SpellSchool
+	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { Selector, SelectorInput } from './cards-highlight.service';
 
@@ -188,12 +188,13 @@ export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
 export const elemental = race(Race.ELEMENTAL);
+export const imp = hasMechanic(GameTag.IMP);
 export const mech = race(Race.MECH);
 export const murloc = race(Race.MURLOC);
 export const naga = race(Race.NAGA);
 export const pirate = race(Race.PIRATE);
+export const totem = race(Race.TOTEM);
 export const undead = race(Race.UNDEAD);
-export const imp = hasMechanic(GameTag.IMP);
 export const whelp = hasMechanic(GameTag.WHELP);
 export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;

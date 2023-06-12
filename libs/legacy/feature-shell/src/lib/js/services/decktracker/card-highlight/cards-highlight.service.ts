@@ -80,6 +80,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	taunt,
+	totem,
 	tribeless,
 	undead,
 	weapon,
@@ -1154,6 +1155,10 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 			case CardIds.TortollanPilgrim:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.TotemicMightLegacy:
+			case CardIds.TotemicMightVanilla:
+			case CardIds.TotemicSurge:
+				return and(side(inputSide), or(inDeck, inHand), minion, totem);
 			case CardIds.TotemOfTheDead_LOOTA_845:
 				return and(side(inputSide), deathrattle);
 			case CardIds.TownCrier_GIL_580:
