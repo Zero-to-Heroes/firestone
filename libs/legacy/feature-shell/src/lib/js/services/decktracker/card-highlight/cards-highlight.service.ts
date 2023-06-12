@@ -1194,7 +1194,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.Vectus:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.VengefulSpirit_BAR_328:
-				return and(side(inputSide), inDeck, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.Vexallus:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 			case CardIds.VitalitySurge:
