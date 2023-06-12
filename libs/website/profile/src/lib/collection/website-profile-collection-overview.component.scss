@@ -12,7 +12,28 @@
 	padding: 20px;
 
 	.title {
-		font-size: 24px;
+		color: var(--default-title-color);
+		text-align: center;
+		position: relative;
+		margin: auto;
+		flex-grow: 0;
+		flex-shrink: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin-right: 20px;
+		margin-left: 20px;
+		max-width: calc(100% - 40px);
+	}
+
+	.icon {
+		height: 100px;
+		width: 101px;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 5px;
+		color: var(--default-title-color);
+		--icon-color: var(--default-title-color);
 	}
 
 	.progress-container {
@@ -20,7 +41,6 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-
 	}
 
 	.progress {
@@ -30,7 +50,6 @@
 
 		&.golden {
 			color: var(--default-title-color);
-
 		}
 	}
 }

@@ -7,6 +7,7 @@ import { ExtendedProfileSet } from '../+state/website/profile.models';
 	template: `
 		<div class="mode standard">
 			<div class="title">{{ title }}</div>
+			<img class="icon" [src]="setIcon" />
 			<div class="progress-container">
 				<div class="progress normal">{{ progressNormal() }}</div>
 				<div class="progress golden">{{ progressGolden() }}</div>
@@ -18,6 +19,10 @@ import { ExtendedProfileSet } from '../+state/website/profile.models';
 export class WebsiteProfileCollectionOverviewComponent {
 	@Input() sets: readonly ExtendedProfileSet[] | null;
 	@Input() title: string;
+	@Input() set mode(value: 'standard' | 'wild') {
+		this.setIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/collection/collection_${value}.webp`;
+	}
+	setIcon: string;
 
 	progressNormal(): string {
 		const totalCollected =

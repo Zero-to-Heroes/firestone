@@ -45,11 +45,11 @@ const components = [
 		StoreModule.forFeature(fromWebsiteProfile.WEBSITE_PROFILE_FEATURE_KEY, fromWebsiteProfile.websiteDuelsReducer),
 		EffectsModule.forFeature([WebsiteProfileEffects]),
 
-		ProfileDataAccessModule,
 		WebsiteBootstrapModule,
+		ProfileDataAccessModule,
 		SharedFrameworkCoreModule,
 		CollectionViewModule,
-		AchievementsViewModule	,
+		AchievementsViewModule,
 		AchievementsDataAccessModule,
 	],
 	declarations: components,

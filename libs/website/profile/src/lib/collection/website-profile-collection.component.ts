@@ -14,11 +14,17 @@ import { getSets } from '../+state/website/profile.selectors';
 			<div class="overview">
 				<website-profile-collection-overview
 					class="mode standard"
+					[mode]="'standard'"
 					[title]="'Standard'"
 					[sets]="standardSets$ | async"
 				>
 				</website-profile-collection-overview>
-				<website-profile-collection-overview class="mode wild" [title]="'Wild'" [sets]="wildSets$ | async">
+				<website-profile-collection-overview
+					class="mode wild"
+					[mode]="'wild'"
+					[title]="'Wild'"
+					[sets]="wildSets$ | async"
+				>
 				</website-profile-collection-overview>
 			</div>
 			<section class="sets">
