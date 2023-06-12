@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.2.14',
+		version: '11.2.18',
 		force: false,
 		sections: [
 			// {
@@ -64,8 +64,34 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'misc',
-								text: `Counters have been reworked internally to reduce their CPU usage. Let me know if you see anything weird!`,
+								type: 'feature',
+								text: `The Corpse Counter can now be displayed if the opponent is a Deathknight that played one of each runes.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Vengeful Spirit would highlight deathrattles from weapons in the deck.`,
+							},
+							{
+								type: 'content',
+								text: `Add card highlights for Mass Resurrection, Totemic Might and Totemic Surge.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'ui',
+								text: `Fix the font on the session recap widget (for some reason it was set to the default Times New Roman).`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'content',
+								text: `Don't show the pity timers for Merc packs.`,
 							},
 						],
 					},
