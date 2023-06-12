@@ -836,7 +836,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.MechaShark_TSC_054:
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.MeekMasteryTavernBrawl:
-				return and(side(inputSide), or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
+				return and(side(inputSide), or(inDeck, inHand), minion, neutral);
 			case CardIds.MendingPoolsTavernBrawl:
 				return and(side(inputSide), spell, nature);
 			case CardIds.Mixtape:
