@@ -5,7 +5,6 @@ import {
 	HsRefAchievement,
 } from '@firestone/achievements/data-access';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
-import { lastValueFrom } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameStateService } from '../decktracker/game-state.service';
@@ -151,8 +150,7 @@ export class RemoteAchievementsService {
 	// TODO: this is only used to get the quotas, so maybe expose a specific endpoint
 	// for this to reduce the data transfer?
 	public async loadHsRawAchievements(): Promise<readonly HsRefAchievement[]> {
-		this.refLoaderService.loadRefData();
-		const raw: HsRefAchiementsData = await lastValueFrom(this.refLoaderService.refData$$);
+		const raw: HsRefAchiementsData = await this.refLoaderService.getLatestRefData();
 		return raw?.achievements || [];
 	}
 

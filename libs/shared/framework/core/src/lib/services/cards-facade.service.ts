@@ -11,6 +11,23 @@ export class CardsFacadeService {
 		this.init();
 	}
 
+	public async waitForReady(): Promise<void> {
+		// eslint-disable-next-line no-async-promise-executor
+		return new Promise<void>(async (resolve, reject) => {
+			let retriesLeft = 50;
+			while (!this.service?.getCards()?.length && retriesLeft >= 0) {
+				await sleep(500);
+				retriesLeft--;
+			}
+			if (!this.service?.getCards()?.length) {
+				console.error('[cards] cards service should have been initialized', new Error().stack);
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	}
+
 	private async init() {
 		// eslint-disable-next-line no-async-promise-executor
 		return new Promise<void>(async (resolve, reject) => {

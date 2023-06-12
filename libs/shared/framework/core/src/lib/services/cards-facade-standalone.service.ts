@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
+import { sleep } from '@firestone/shared/framework/common';
 
 @Injectable()
 export class CardsFacadeStandaloneService {
@@ -8,6 +9,23 @@ export class CardsFacadeStandaloneService {
 	public async init(service: AllCardsService, locale: string) {
 		this.service = service;
 		await this.setLocale(locale);
+	}
+
+	public async waitForReady(): Promise<void> {
+		// eslint-disable-next-line no-async-promise-executor
+		return new Promise<void>(async (resolve, reject) => {
+			let retriesLeft = 50;
+			while (!this.service?.getCards()?.length && retriesLeft >= 0) {
+				await sleep(500);
+				retriesLeft--;
+			}
+			if (!this.service?.getCards()?.length) {
+				console.error('[cards] cards service should have been initialized', new Error().stack);
+				reject();
+			} else {
+				resolve();
+			}
+		});
 	}
 
 	public async setLocale(locale: string) {

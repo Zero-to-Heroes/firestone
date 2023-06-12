@@ -15,7 +15,7 @@ import {
 } from '@firestone/website/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, ignoreElements, lastValueFrom, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, ignoreElements, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as WebsiteProfileActions from './pofile.actions';
 import {
 	ExtendedProfile,
@@ -51,16 +51,18 @@ export class WebsiteProfileEffects {
 			filter(([action, params, hasInfo]) => !hasInfo),
 			filter(([action, params, hasInfo]) => !!action || !!params),
 			switchMap(async ([action, [fsToken]]) => {
+				if (!this.allCards.getCards()?.length) {
+					await this.allCards.waitForReady();
+				}
 				// console.debug('loading profile data', fsToken, action);
 				if (!this.collectibleCards?.length) {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
 
 				try {
-					this.refAchievements.loadRefData();
 					const [profile, achievementsRefData] = await Promise.all([
 						this.access.loadOwnProfileData(fsToken),
-						lastValueFrom(this.refAchievements.refData$$),
+						this.refAchievements.getLatestRefData(),
 					]);
 					console.debug('loaded profile data', profile, achievementsRefData);
 					const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
@@ -88,14 +90,16 @@ export class WebsiteProfileEffects {
 			filter(([action, hasInfo]) => !hasInfo),
 			filter(([action, hasInfo]) => !!action),
 			switchMap(async ([action]) => {
+				if (!this.allCards.getCards()?.length) {
+					await this.allCards.waitForReady();
+				}
 				if (!this.collectibleCards?.length) {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
 
-				this.refAchievements.loadRefData();
 				const [profile, achievementsRefData] = await Promise.all([
 					this.access.loadOtherProfileData(action.shareAlias),
-					lastValueFrom(this.refAchievements.refData$$),
+					this.refAchievements.getLatestRefData(),
 				]);
 				const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
 				return WebsiteProfileActions.loadOtherProfileDataSuccess({

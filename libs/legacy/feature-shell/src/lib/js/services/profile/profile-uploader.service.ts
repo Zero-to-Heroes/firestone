@@ -4,7 +4,16 @@ import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	from,
+	map,
+} from 'rxjs';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { Set as CollectionSet } from '../../models/set';
 import { AchievementsMemoryMonitor } from '../achievement/achievements-memory-monitor.service';
@@ -32,8 +41,6 @@ export class ProfileUploaderService {
 
 	private async init() {
 		await this.store.initComplete();
-		this.achievementsRefLoader.loadRefData();
-
 		this.initCollection();
 		this.initAchievements();
 		this.initBattlegrounds();
@@ -117,7 +124,7 @@ export class ProfileUploaderService {
 					.map((c) => normalizeHeroCardId(c.id, this.allCards)),
 			),
 		];
-		const achievementsData$ = this.achievementsRefLoader.refData$$.pipe(
+		const achievementsData$ = from(this.achievementsRefLoader.getLatestRefData()).pipe(
 			filter((refData) => !!refData?.achievements?.length),
 			map((refData) => {
 				return this.uniqueBgHeroes
