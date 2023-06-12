@@ -21,7 +21,7 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 	template: `
 		<div class="pack-stat-tooltip">
 			<div class="packs-recap">{{ packsRecapText }}</div>
-			<div class="pity-timers-container">
+			<div class="pity-timers-container" *ngIf="hasPityTimers">
 				<div class="title">
 					<i class="i-15 pale-theme">
 						<svg class="svg-icon-fill">
@@ -57,7 +57,7 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 					</div>
 				</div>
 			</div>
-			<div class="title pity-timers-reset-container">
+			<div class="title pity-timers-reset-container" *ngIf="hasPityTimers">
 				<button
 					[owTranslate]="'app.collection.sets.pity-timer-reset-button'"
 					[helpTooltip]="'app.collection.sets.pity-timer-reset-tooltip' | owTranslate"
@@ -77,6 +77,7 @@ export class PackStatTooltipComponent {
 			totalPacks: value.totalObtained,
 			packName: value.name,
 		});
+		this.hasPityTimers = ![BoosterType.MERCENARIES].includes(value.packType);
 		this.epicTimer = value.nextEpic || EPIC_PITY_TIMER;
 		this.epicFill = ((EPIC_PITY_TIMER - this.epicTimer) / 10) * 100;
 		const legendaryPityTimer = value.totalObtained - value.unopened < 10 ? 10 : LEGENDARY_PITY_TIMER;
@@ -89,6 +90,7 @@ export class PackStatTooltipComponent {
 
 	packsRecapText: string;
 
+	hasPityTimers: boolean;
 	epicTimer: number;
 	epicFill: number;
 	legendaryTimer: number;
