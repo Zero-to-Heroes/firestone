@@ -10,11 +10,13 @@
 	justify-content: center;
 	margin-bottom: 50px;
 
-	.item {
-		width: 250px;
-	}
+	::ng-deep {
+		.item {
+			width: 250px;
+		}
 
-	.item:not(:last-child) {
-		margin-right: 20px;
+		.item:not(:last-child) {
+			margin-right: 20px;
+		}
 	}
 }

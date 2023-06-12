@@ -2,6 +2,7 @@
 	display: grid;
 	grid-template-columns: 25% 25% 25% 25%;
 	grid-gap: 5px;
+	grid-auto-rows: 1fr;
 
 	& > .card {
 		aspect-ratio: 1;

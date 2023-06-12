@@ -31,6 +31,7 @@ import { getSets } from '../+state/website/profile.selectors';
 					</website-profile-collection-overview>
 				</div>
 				<website-profile-achievements-overview></website-profile-achievements-overview>
+				<website-profile-battlegrounds-overviews></website-profile-battlegrounds-overviews>
 			</div>
 		</website-profile>
 	`,

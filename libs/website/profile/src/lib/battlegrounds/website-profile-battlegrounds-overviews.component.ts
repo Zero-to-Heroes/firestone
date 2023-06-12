@@ -2,27 +2,30 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { ExtendedProfileBgHeroStat, WebsiteProfileState } from '../+state/website/profile.models';
+import { WebsiteProfileState } from '../+state/website/profile.models';
 import { getBgsHeroStats } from '../+state/website/profile.selectors';
 
 @Component({
-	selector: 'website-profile-battlegrounds',
-	styleUrls: [`./website-profile-battlegrounds.component.scss`],
+	selector: 'website-profile-battlegrounds-overviews',
+	styleUrls: [`./website-profile-battlegrounds-overviews.component.scss`],
 	template: `
-		<website-profile>
-			<div class="overview">
-				<website-profile-battlegrounds-overviews></website-profile-battlegrounds-overviews>
-			</div>
-			<section class="hero-stats">
-				<website-profile-battlegrounds-hero-stat-vignette *ngFor="let stat of heroStats$ | async" [stat]="stat">
-				</website-profile-battlegrounds-hero-stat-vignette>
-			</section>
-		</website-profile>
+		<website-profile-battlegrounds-overview class="card item" [mode]="'top-1'" [value]="top1$ | async">
+		</website-profile-battlegrounds-overview>
+		<website-profile-battlegrounds-overview class="card item" [mode]="'top-4'" [value]="top4$ | async">
+		</website-profile-battlegrounds-overview>
+		<website-profile-battlegrounds-overview
+			class="card item"
+			[mode]="'games-played'"
+			[value]="gamesPlayed$ | async"
+		>
+		</website-profile-battlegrounds-overview>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WebsiteProfileBattlegroundsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	heroStats$: Observable<readonly ExtendedProfileBgHeroStat[]>;
+export class WebsiteProfileBattlegroundsOverviewsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit
+{
 	gamesPlayed$: Observable<number>;
 	top4$: Observable<number>;
 	top1$: Observable<number>;
@@ -35,16 +38,16 @@ export class WebsiteProfileBattlegroundsComponent extends AbstractSubscriptionCo
 	}
 
 	ngAfterContentInit(): void {
-		this.heroStats$ = this.store
+		const heroStats$ = this.store
 			.select(getBgsHeroStats)
 			.pipe(this.mapData((stats) => [...stats].sort(sortByProperties((stat) => [-stat.gamesPlayed]))));
-		this.gamesPlayed$ = this.heroStats$.pipe(
+		this.gamesPlayed$ = heroStats$.pipe(
 			this.mapData((stats) => stats.map((stat) => stat.gamesPlayed).reduce((a, b) => a + b, 0)),
 		);
-		this.top4$ = this.heroStats$.pipe(
+		this.top4$ = heroStats$.pipe(
 			this.mapData((stats) => stats.map((stat) => stat.top4).reduce((a, b) => a + b, 0)),
 		);
-		this.top1$ = this.heroStats$.pipe(
+		this.top1$ = heroStats$.pipe(
 			this.mapData((stats) => stats.map((stat) => stat.top1).reduce((a, b) => a + b, 0)),
 		);
 	}

@@ -19,6 +19,7 @@ import { WebsiteProfileAchievementsOverviewComponent } from './achievements/webs
 import { WebsiteProfileAchievementsComponent } from './achievements/website-profile-achievements.component';
 import { WebsiteProfileBattlegroundsHeroStatVignetteComponent } from './battlegrounds/website-profile-battlegrounds-hero-stat-vignette.component';
 import { WebsiteProfileBattlegroundsOverviewComponent } from './battlegrounds/website-profile-battlegrounds-overview.component';
+import { WebsiteProfileBattlegroundsOverviewsComponent } from './battlegrounds/website-profile-battlegrounds-overviews.component';
 import { WebsiteProfileBattlegroundsComponent } from './battlegrounds/website-profile-battlegrounds.component';
 import { WebsiteProfileCollectionOverviewComponent } from './collection/website-profile-collection-overview.component';
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
@@ -39,6 +40,7 @@ const components = [
 	WebsiteProfileBattlegroundsComponent,
 	WebsiteProfileBattlegroundsHeroStatVignetteComponent,
 	WebsiteProfileBattlegroundsOverviewComponent,
+	WebsiteProfileBattlegroundsOverviewsComponent,
 ];
 
 @NgModule({
