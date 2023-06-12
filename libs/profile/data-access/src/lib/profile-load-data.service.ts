@@ -16,7 +16,7 @@ export class ProfileLoadDataService {
 			return null;
 		}
 
-		const result = await this.api.callPostApi(PROFILE_LOAD_OWN_URL, { token: token });
+		const result = await this.api.callPostApi(PROFILE_LOAD_OWN_URL, { token: token }, undefined, true);
 		console.debug('loaded own profile data', result, token);
 		return result != null ? result : null;
 	}

@@ -6,6 +6,7 @@ import { AchievementsRefLoaderService, HsRefAchiementsData } from '@firestone/ac
 import { ProfileLoadDataService } from '@firestone/profile/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import {
+	AuthenticationService,
 	WebsiteCoreState,
 	WebsiteLocalizationService,
 	WebsitePreferences,
@@ -38,6 +39,7 @@ export class WebsiteProfileEffects {
 		private readonly router: Router,
 		private readonly refAchievements: AchievementsRefLoaderService,
 		private readonly i18n: WebsiteLocalizationService,
+		private readonly authService: AuthenticationService,
 	) {}
 
 	ownProfile$ = createEffect(() => {
@@ -54,15 +56,26 @@ export class WebsiteProfileEffects {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
 
-				const [profile, achievementsRefData] = await Promise.all([
-					this.access.loadOwnProfileData(fsToken),
-					this.refAchievements.loadRefData(),
-				]);
-				const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
-				return WebsiteProfileActions.loadProfileDataSuccess({
-					profile: extendedProfile,
-					shareAlias: profile?.shareAlias ?? null,
-				});
+				try {
+					const [profile, achievementsRefData] = await Promise.all([
+						this.access.loadOwnProfileData(fsToken),
+						this.refAchievements.loadRefData(),
+					]);
+					console.debug('loaded profile data', profile, achievementsRefData);
+					const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
+					return WebsiteProfileActions.loadProfileDataSuccess({
+						profile: extendedProfile,
+						shareAlias: profile?.shareAlias ?? null,
+					});
+				} catch (e) {
+					console.error('loaded profile data error', e);
+					if (e === 403) {
+						this.authService.logout();
+					}
+					return WebsiteProfileActions.loadProfileDataFailure({
+						error: e,
+					});
+				}
 			}),
 		);
 	});

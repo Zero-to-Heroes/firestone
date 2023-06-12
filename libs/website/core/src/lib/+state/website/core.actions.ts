@@ -25,3 +25,5 @@ export const authenticationSuccess = createAction(
 		fsToken: string | null;
 	}>(),
 );
+
+export const authenticationFailure = createAction('[WebsiteCore/API] Authentication success');

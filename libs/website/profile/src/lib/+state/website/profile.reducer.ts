@@ -37,7 +37,7 @@ const reducer = createReducer(
 		shareAlias: shareAlias,
 		loaded: true,
 	})),
-	on(WebsiteProfileActions.loadProfileDataFailure, (state, { error }) => ({ ...state, error })),
+	on(WebsiteProfileActions.loadProfileDataFailure, (state, { error }) => ({ ...state, error, loaded: true })),
 
 	on(WebsiteProfileActions.initOtherProfileData, (state, { shareAlias }) =>
 		!!state.profile
