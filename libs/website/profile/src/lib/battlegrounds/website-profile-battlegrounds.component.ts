@@ -31,6 +31,6 @@ export class WebsiteProfileBattlegroundsComponent extends AbstractSubscriptionCo
 	ngAfterContentInit(): void {
 		this.heroStats$ = this.store
 			.select(getBgsHeroStats)
-			.pipe(this.mapData((stats) => [...stats].sort(sortByProperties((stat) => [stat.heroName]))));
+			.pipe(this.mapData((stats) => [...stats].sort(sortByProperties((stat) => [-stat.gamesPlayed]))));
 	}
 }
