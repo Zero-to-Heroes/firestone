@@ -16,7 +16,7 @@ import { getSets } from '../+state/website/profile.selectors';
 					<website-profile-collection-overview
 						class="mode standard"
 						[mode]="'standard'"
-						[title]="'Standard'"
+						[title]="'Standard cards'"
 						[sets]="standardSets$ | async"
 					>
 					</website-profile-collection-overview>
@@ -25,7 +25,7 @@ import { getSets } from '../+state/website/profile.selectors';
 					<website-profile-collection-overview
 						class="mode wild"
 						[mode]="'wild'"
-						[title]="'Wild'"
+						[title]="'Wild cards'"
 						[sets]="wildSets$ | async"
 					>
 					</website-profile-collection-overview>
