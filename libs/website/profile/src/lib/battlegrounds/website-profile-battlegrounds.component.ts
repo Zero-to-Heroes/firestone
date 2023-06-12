@@ -10,6 +10,18 @@ import { getBgsHeroStats } from '../+state/website/profile.selectors';
 	styleUrls: [`./website-profile-battlegrounds.component.scss`],
 	template: `
 		<website-profile>
+			<div class="overview">
+				<website-profile-battlegrounds-overview class="item" [mode]="'top-1'" [value]="top1$ | async">
+				</website-profile-battlegrounds-overview>
+				<website-profile-battlegrounds-overview class="item" [mode]="'top-4'" [value]="top4$ | async">
+				</website-profile-battlegrounds-overview>
+				<website-profile-battlegrounds-overview
+					class="item"
+					[mode]="'games-played'"
+					[value]="gamesPlayed$ | async"
+				>
+				</website-profile-battlegrounds-overview>
+			</div>
 			<section class="hero-stats">
 				<website-profile-battlegrounds-hero-stat-vignette *ngFor="let stat of heroStats$ | async" [stat]="stat">
 				</website-profile-battlegrounds-hero-stat-vignette>
@@ -20,6 +32,9 @@ import { getBgsHeroStats } from '../+state/website/profile.selectors';
 })
 export class WebsiteProfileBattlegroundsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroStats$: Observable<readonly ExtendedProfileBgHeroStat[]>;
+	gamesPlayed$: Observable<number>;
+	top4$: Observable<number>;
+	top1$: Observable<number>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -32,5 +47,14 @@ export class WebsiteProfileBattlegroundsComponent extends AbstractSubscriptionCo
 		this.heroStats$ = this.store
 			.select(getBgsHeroStats)
 			.pipe(this.mapData((stats) => [...stats].sort(sortByProperties((stat) => [-stat.gamesPlayed]))));
+		this.gamesPlayed$ = this.heroStats$.pipe(
+			this.mapData((stats) => stats.map((stat) => stat.gamesPlayed).reduce((a, b) => a + b, 0)),
+		);
+		this.top4$ = this.heroStats$.pipe(
+			this.mapData((stats) => stats.map((stat) => stat.top4).reduce((a, b) => a + b, 0)),
+		);
+		this.top1$ = this.heroStats$.pipe(
+			this.mapData((stats) => stats.map((stat) => stat.top1).reduce((a, b) => a + b, 0)),
+		);
 	}
 }

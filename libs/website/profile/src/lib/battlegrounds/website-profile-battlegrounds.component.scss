@@ -3,3 +3,18 @@
 	grid-template-columns: 25% 25% 25% 25%;
 	grid-gap: 5px;
 }
+
+.overview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 50px;
+
+	.item {
+		width: 250px;
+	}
+
+	.item:not(:last-child) {
+		margin-right: 20px;
+	}
+}
