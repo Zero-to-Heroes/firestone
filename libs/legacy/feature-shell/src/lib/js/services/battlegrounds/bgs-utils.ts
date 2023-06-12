@@ -202,7 +202,7 @@ export const getAchievementsForHero = (
 ): readonly VisualAchievement[] => {
 	const dbHero = allCards.getCard(heroCardId);
 	const heroName = formatHeroNameForAchievements(dbHero);
-	const sectionId = getAchievementSectionIdFromHeroCardId(heroCardId, heroName);
+	const sectionId = getAchievementSectionIdFromHeroCardId(heroCardId);
 	if (!!sectionId) {
 		return (heroAchievements ?? []).filter((ach) => ach.hsSectionId === sectionId);
 	}
@@ -220,7 +220,7 @@ export const getAchievementsForHero = (
 	return result;
 };
 
-const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: string): number => {
+export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): number => {
 	switch (heroCardId) {
 		case CardIds.EdwinVancleefBattlegrounds:
 			return 227;

@@ -15,7 +15,7 @@ import {
 } from '@firestone/website/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, ignoreElements, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, ignoreElements, lastValueFrom, map, merge, switchMap, tap, withLatestFrom } from 'rxjs';
 import * as WebsiteProfileActions from './pofile.actions';
 import {
 	ExtendedProfile,
@@ -57,9 +57,10 @@ export class WebsiteProfileEffects {
 				}
 
 				try {
+					this.refAchievements.loadRefData();
 					const [profile, achievementsRefData] = await Promise.all([
 						this.access.loadOwnProfileData(fsToken),
-						this.refAchievements.loadRefData(),
+						lastValueFrom(this.refAchievements.refData$$),
 					]);
 					console.debug('loaded profile data', profile, achievementsRefData);
 					const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
@@ -91,9 +92,10 @@ export class WebsiteProfileEffects {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
 
+				this.refAchievements.loadRefData();
 				const [profile, achievementsRefData] = await Promise.all([
 					this.access.loadOtherProfileData(action.shareAlias),
-					this.refAchievements.loadRefData(),
+					lastValueFrom(this.refAchievements.refData$$),
 				]);
 				const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
 				return WebsiteProfileActions.loadOtherProfileDataSuccess({
