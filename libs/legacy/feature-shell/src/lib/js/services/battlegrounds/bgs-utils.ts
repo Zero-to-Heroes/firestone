@@ -691,12 +691,13 @@ const isSupportedScenarioForPlayer = (
 		// 		reason: 'bassgill',
 		// 	};
 		// }
-		else if (hasMinions(boardInfo, [CardIds.ChoralMrrrglr, CardIds.ChoralMrrrglrBattlegrounds])) {
-			return {
-				isSupported: false,
-				reason: 'choral-mrrrglr',
-			};
-		} else if (boardInfo?.secrets?.length > 0) {
+		// else if (hasMinions(boardInfo, [CardIds.ChoralMrrrglr, CardIds.ChoralMrrrglrBattlegrounds])) {
+		// 	return {
+		// 		isSupported: false,
+		// 		reason: 'choral-mrrrglr',
+		// 	};
+		// }
+		else if (boardInfo?.secrets?.length > 0) {
 			return {
 				isSupported: false,
 				reason: 'secret',

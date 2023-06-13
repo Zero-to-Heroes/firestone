@@ -41,6 +41,8 @@ export class BgsCustomSimulationState {
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
 							UndeadAttackBonus: 0,
+							ChoralAttackBuff: 0,
+							ChoralHealthBuff: 0,
 							FrostlingBonus: 0,
 							BloodGemAttackBonus: 0,
 							BloodGemHealthBonus: 0,
@@ -60,6 +62,8 @@ export class BgsCustomSimulationState {
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
 							UndeadAttackBonus: 0,
+							ChoralAttackBuff: 0,
+							ChoralHealthBuff: 0,
 							FrostlingBonus: 0,
 							BloodGemAttackBonus: 0,
 							BloodGemHealthBonus: 0,

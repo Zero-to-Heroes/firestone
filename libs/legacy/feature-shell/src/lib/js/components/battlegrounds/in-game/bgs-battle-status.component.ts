@@ -207,14 +207,14 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
-			case 'choral-mrrrglr':
-				this._simulationMessage = this.i18n.translateString(
-					'battlegrounds.battle.composition-not-supported.general',
-					{
-						value: this.allCards.getCard(CardIds.ChoralMrrrglr).name,
-					},
-				);
-				break;
+			// case 'choral-mrrrglr':
+			// 	this._simulationMessage = this.i18n.translateString(
+			// 		'battlegrounds.battle.composition-not-supported.general',
+			// 		{
+			// 			value: this.allCards.getCard(CardIds.ChoralMrrrglr).name,
+			// 		},
+			// 	);
+			// 	break;
 			// case 'bassgill':
 			// 	this._simulationMessage = this.i18n.translateString(
 			// 		'battlegrounds.battle.composition-not-supported.general',
