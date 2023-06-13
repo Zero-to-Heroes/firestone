@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -9,12 +9,23 @@ import { getBgsHeroStats } from '../+state/website/profile.selectors';
 	selector: 'website-profile-battlegrounds-overviews',
 	styleUrls: [`./website-profile-battlegrounds-overviews.component.scss`],
 	template: `
-		<website-profile-battlegrounds-overview class="card item" [mode]="'top-1'" [value]="top1$ | async">
-		</website-profile-battlegrounds-overview>
-		<website-profile-battlegrounds-overview class="card item" [mode]="'top-4'" [value]="top4$ | async">
+		<website-profile-battlegrounds-overview
+			class="card item"
+			[showBgTitle]="showBgTitle"
+			[mode]="'top-1'"
+			[value]="top1$ | async"
+		>
 		</website-profile-battlegrounds-overview>
 		<website-profile-battlegrounds-overview
 			class="card item"
+			[showBgTitle]="showBgTitle"
+			[mode]="'top-4'"
+			[value]="top4$ | async"
+		>
+		</website-profile-battlegrounds-overview>
+		<website-profile-battlegrounds-overview
+			class="card item"
+			[showBgTitle]="showBgTitle"
 			[mode]="'games-played'"
 			[value]="gamesPlayed$ | async"
 		>
@@ -29,6 +40,8 @@ export class WebsiteProfileBattlegroundsOverviewsComponent
 	gamesPlayed$: Observable<number>;
 	top4$: Observable<number>;
 	top1$: Observable<number>;
+
+	@Input() showBgTitle: boolean;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
