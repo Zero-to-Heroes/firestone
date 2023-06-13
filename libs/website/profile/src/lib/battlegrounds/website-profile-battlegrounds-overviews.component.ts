@@ -12,8 +12,8 @@ import { getBgsHeroStats } from '../+state/website/profile.selectors';
 		<website-profile-battlegrounds-overview
 			class="card item"
 			[showBgTitle]="showBgTitle"
-			[mode]="'top-1'"
-			[value]="top1$ | async"
+			[mode]="'games-played'"
+			[value]="gamesPlayed$ | async"
 		>
 		</website-profile-battlegrounds-overview>
 		<website-profile-battlegrounds-overview
@@ -26,8 +26,8 @@ import { getBgsHeroStats } from '../+state/website/profile.selectors';
 		<website-profile-battlegrounds-overview
 			class="card item"
 			[showBgTitle]="showBgTitle"
-			[mode]="'games-played'"
-			[value]="gamesPlayed$ | async"
+			[mode]="'top-1'"
+			[value]="top1$ | async"
 		>
 		</website-profile-battlegrounds-overview>
 	`,
