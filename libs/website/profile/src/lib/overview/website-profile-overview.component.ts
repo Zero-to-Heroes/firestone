@@ -30,9 +30,9 @@ import { getSets } from '../+state/website/profile.selectors';
 					>
 					</website-profile-collection-overview>
 				</div>
+				<website-profile-packs-overview class="card overview"></website-profile-packs-overview>
 				<website-profile-achievements-overview></website-profile-achievements-overview>
 				<website-profile-battlegrounds-overviews [showBgTitle]="true"></website-profile-battlegrounds-overviews>
-				<website-profile-packs-overview class="card overview"></website-profile-packs-overview>
 			</div>
 		</website-profile>
 	`,
