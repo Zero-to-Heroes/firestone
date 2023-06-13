@@ -25,6 +25,7 @@ import { WebsiteProfileCollectionOverviewComponent } from './collection/website-
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
 import { WebsiteProfileOverviewComponent } from './overview/website-profile-overview.component';
+import { WebsiteProfilePacksComponent } from './packs/website-profile-packs.component';
 import { WebsiteProfileShareModalComponent } from './share/website-profile-share-modal.component';
 import { WebsiteProfileComponent } from './website-profile.component';
 
@@ -34,6 +35,7 @@ const components = [
 	WebsiteProfileSetsComponent,
 	WebsiteProfileOverviewComponent,
 	WebsiteProfileCollectionOverviewComponent,
+	WebsiteProfilePacksComponent,
 	WebsiteProfileShareModalComponent,
 	WebsiteProfileAchievementsComponent,
 	WebsiteProfileAchievementsOverviewComponent,

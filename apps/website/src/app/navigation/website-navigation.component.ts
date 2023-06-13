@@ -137,8 +137,13 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 							},
 							{
 								id: `profile${profileWatchFragment}/collection`,
-								icon: 'assets/svg/whatsnew/collection.svg',
+								icon: 'assets/svg/whatsnew/decktracker.svg', // because it show cards
 								name: this.i18n.translateString('app.menu.collection-header'),
+							},
+							{
+								id: `profile${profileWatchFragment}/packs`,
+								icon: 'assets/svg/whatsnew/collection.svg',
+								name: this.i18n.translateString('app.collection.menu.packs-header'),
 							},
 							{
 								id: `profile${profileWatchFragment}/battlegrounds`,

@@ -7,7 +7,11 @@ import {
 	WebsiteDuelsHeroesComponent,
 	WebsiteDuelsSignatureTreasuresComponent,
 } from '@firestone/website/duels';
-import { WebsiteProfileBattlegroundsComponent, WebsiteProfileCollectionComponent } from '@firestone/website/profile';
+import {
+	WebsiteProfileBattlegroundsComponent,
+	WebsiteProfileCollectionComponent,
+	WebsiteProfilePacksComponent,
+} from '@firestone/website/profile';
 import { WebsiteDuelsPassiveTreasuresComponent } from 'libs/website/duels/src/lib/website-duels-passive-treasures.component';
 import { WebsiteProfileOverviewComponent } from 'libs/website/profile/src/lib/overview/website-profile-overview.component';
 import { AuthGuard } from './auth-guard.service';
@@ -60,6 +64,10 @@ export const appRoutes: Route[] = [
 		canActivate: [AuthGuard],
 	},
 	{
+		path: 'profile/packs',
+		component: WebsiteProfilePacksComponent,
+	},
+	{
 		path: 'profile/battlegrounds',
 		component: WebsiteProfileBattlegroundsComponent,
 		canActivate: [AuthGuard],
@@ -76,6 +84,10 @@ export const appRoutes: Route[] = [
 	{
 		path: 'profile/:shareAlias/collection',
 		component: WebsiteProfileCollectionComponent,
+	},
+	{
+		path: 'profile/:shareAlias/packs',
+		component: WebsiteProfilePacksComponent,
 	},
 	{
 		path: 'profile/:shareAlias/battlegrounds',
