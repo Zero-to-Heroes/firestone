@@ -1,3 +1,14 @@
+.overview-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 30px;
+
+	.overview {
+		width: 250px;
+	}
+}
+
 .pack-groups {
 	display: flex;
 	flex-direction: column;

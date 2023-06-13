@@ -25,6 +25,9 @@ import { getPacks } from '../+state/website/profile.selectors';
 	styleUrls: [`./website-profile-packs.component.scss`],
 	template: `
 		<website-profile>
+			<div class="overview-container">
+				<website-profile-packs-overview class="card overview"></website-profile-packs-overview>
+			</div>
 			<div class="pack-groups">
 				<div class="pack-group" *ngFor="let group of packGroups$ | async">
 					<div class="group-name">{{ group.name }}</div>
