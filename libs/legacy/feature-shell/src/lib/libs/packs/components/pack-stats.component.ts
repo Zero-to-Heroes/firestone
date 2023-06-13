@@ -1,13 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BoosterType, sets } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { InternalPackInfo } from '@firestone/collection/view';
 import { Observable, combineLatest } from 'rxjs';
 import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
 import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
-import { InternalPackInfo } from './pack-stat.component';
 
 @Component({
 	selector: 'pack-stats',

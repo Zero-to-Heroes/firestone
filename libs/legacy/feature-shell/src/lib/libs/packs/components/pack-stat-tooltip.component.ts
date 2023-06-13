@@ -9,10 +9,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
+import { InternalPackInfo } from '@firestone/collection/view';
 import { GenericPreferencesUpdateEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
-import { InternalPackInfo } from './pack-stat.component';
 import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 
 @Component({

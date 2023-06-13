@@ -6,11 +6,12 @@ import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable, Subscription } from 'rxjs';
+
+import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
-import { PackInfo } from '../../models/collection/pack-info';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';

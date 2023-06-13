@@ -1,0 +1,31 @@
+.pack-stat {
+	position: relative;
+
+	.icon-container {
+		position: relative;
+	}
+
+	.icon {
+		width: 100%;
+		height: 100%;
+	}
+
+	.value {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		top: -5px;
+	}
+
+	.next-legendary-soon {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 20px;
+	}
+
+	&.missing {
+		opacity: 0.4;
+	}
+}

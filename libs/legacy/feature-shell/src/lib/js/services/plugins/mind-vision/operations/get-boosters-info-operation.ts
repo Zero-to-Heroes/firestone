@@ -1,9 +1,8 @@
+import { PackInfo } from '@firestone/collection/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { PackInfo } from '@models/collection/pack-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
-
 export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly PackInfo[]> {
 	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
 		super(

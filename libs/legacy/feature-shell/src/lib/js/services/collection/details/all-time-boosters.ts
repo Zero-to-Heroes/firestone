@@ -1,4 +1,4 @@
-import { PackInfo } from '../../../models/collection/pack-info';
+import { PackInfo } from '@firestone/collection/view';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
