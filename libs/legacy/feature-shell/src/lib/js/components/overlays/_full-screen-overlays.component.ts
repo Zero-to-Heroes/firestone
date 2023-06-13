@@ -90,6 +90,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-lightray-widget-wrapper></player-lightray-widget-wrapper>
 			<player-menagerie-widget-wrapper></player-menagerie-widget-wrapper>
 			<player-corpse-spent-widget-wrapper></player-corpse-spent-widget-wrapper>
 			<player-overdraft-widget-wrapper></player-overdraft-widget-wrapper>

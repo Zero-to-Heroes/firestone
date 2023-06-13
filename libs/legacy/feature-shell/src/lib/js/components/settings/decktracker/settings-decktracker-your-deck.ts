@@ -278,6 +278,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
 		},
 		{
+			id: 'lightray',
+			field: 'playerLightrayCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.lightray-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.lightray-tooltip'),
+		},
+		{
 			id: 'menagerie',
 			field: 'playerMenagerieCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-label'),
