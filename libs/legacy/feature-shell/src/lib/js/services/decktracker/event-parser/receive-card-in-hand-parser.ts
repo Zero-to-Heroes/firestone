@@ -262,6 +262,10 @@ export const addAdditionalAttribues = (
 					allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
 				].filter((id) => !!id),
 			});
+		case CardIds.EliteTaurenChampion_MoltenPickOfRockToken:
+			return card.update({
+				mainAttributeChange: gameEvent.additionalData.dataNum1 - 8,
+			});
 	}
 	return card;
 };

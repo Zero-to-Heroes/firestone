@@ -442,6 +442,8 @@ const publicCardGiftCreators = [
 	CardIds.EerieStoneTavernBrawl,
 	CardIds.EliteTaurenChieftainLegacy,
 	CardIds.EliteTaurenChieftainVanilla,
+	CardIds.EliteTaurenChampion,
+	CardIds.EliteTaurenChampion_MoltenPickOfRockToken,
 	CardIds.EmeraldExplorer_DRG_313,
 	CardIds.EncumberedPackMule,
 	CardIds.EnergyShaper,
