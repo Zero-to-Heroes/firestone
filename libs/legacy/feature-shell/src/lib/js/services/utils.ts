@@ -113,6 +113,7 @@ export const arraysEqual = (a: readonly any[] | any, b: readonly any[] | any): b
 	);
 };
 
+/** @deprecated */
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
 	return array?.map((item) => prop(item)).reduce((a, b) => a + b, 0) ?? 0;
 };

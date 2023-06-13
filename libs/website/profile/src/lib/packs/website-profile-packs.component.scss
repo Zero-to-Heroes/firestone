@@ -1,20 +1,46 @@
-.sets {
-	website-profile-sets {
-		margin-bottom: 30px;
-	}
-}
-
-.overview {
+.pack-groups {
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-bottom: 50px;
+	flex-direction: column;
+	min-width: 0;
+	max-width: 100%;
+	min-height: 0;
+	overflow: auto;
+	flex-shrink: 0;
+	opacity: 1;
+	transition: opacity 0.2s ease-in-out;
 
-	.mode {
-		width: 250px;
-	}
+	.pack-group {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 40px;
 
-	.mode:first-child {
-		margin-right: 20px;
+		.group-name {
+			font-size: 20px;
+			margin-bottom: 15px;
+		}
+
+		.packs-container {
+			display: grid;
+			grid-template-columns: repeat(6, 1fr);
+			grid-gap: 5px;
+			grid-auto-rows: 1fr;
+			min-width: 0;
+			max-width: 100%;
+			flex-wrap: wrap;
+			min-height: 0;
+			overflow: auto;
+			flex-shrink: 0;
+			opacity: 1;
+			overflow: hidden;
+
+			&.empty {
+				opacity: 0;
+			}
+
+			.pack-stat {
+				margin-right: 0;
+				margin-bottom: 10px;
+			}
+		}
 	}
 }

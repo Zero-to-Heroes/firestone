@@ -143,7 +143,7 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 							{
 								id: `profile${profileWatchFragment}/packs`,
 								icon: 'assets/svg/whatsnew/collection.svg',
-								name: this.i18n.translateString('app.collection.menu.packs-header'),
+								name: this.i18n.translateString('app.collection.menu.packs'),
 							},
 							{
 								id: `profile${profileWatchFragment}/battlegrounds`,

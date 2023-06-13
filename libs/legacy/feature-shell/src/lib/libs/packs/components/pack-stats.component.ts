@@ -1,10 +1,17 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BoosterType, sets } from '@firestone-hs/reference-data';
+import { BoosterType, boosterIdToBoosterName, boosterIdToSetId, sets } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { InternalPackInfo } from '@firestone/collection/view';
+import {
+	CLASS_PACKS,
+	EXCLUDED_BOOSTER_IDS,
+	GOLDEN_SET_PACKS,
+	InternalPackInfo,
+	NON_BUYABLE_BOOSTER_IDS,
+	YEAR_PACKS,
+} from '@firestone/collection/view';
 import { Observable, combineLatest } from 'rxjs';
 import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
-import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../../js/services/hs-utils';
+import { getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
@@ -200,53 +207,6 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 		return item.packType;
 	}
 }
-
-const EXCLUDED_BOOSTER_IDS = [
-	BoosterType.INVALID,
-	BoosterType.SIGNUP_INCENTIVE,
-	BoosterType.FIRST_PURCHASE,
-	BoosterType.FIRST_PURCHASE_OLD,
-	BoosterType.MAMMOTH_BUNDLE,
-	BoosterType.WAILING_CAVERNS,
-	BoosterType.PATH_OF_ARTHAS,
-];
-
-const GOLDEN_SET_PACKS = [
-	BoosterType.GOLDEN_SCHOLOMANCE,
-	BoosterType.GOLDEN_DARKMOON_FAIRE,
-	BoosterType.GOLDEN_THE_BARRENS,
-	BoosterType.STORMWIND_GOLDEN,
-	BoosterType.GOLDEN_THE_SUNKEN_CITY,
-	BoosterType.ALTERAC_VALLEY_GOLDEN,
-	BoosterType.GOLDEN_REVENDRETH,
-	BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING,
-	BoosterType.GOLDEN_BATTLE_OF_THE_BANDS,
-];
-
-const CLASS_PACKS = [
-	BoosterType.STANDARD_DEATHKNIGHT,
-	BoosterType.STANDARD_DEMONHUNTER,
-	BoosterType.STANDARD_DRUID,
-	BoosterType.STANDARD_HUNTER,
-	BoosterType.STANDARD_MAGE,
-	BoosterType.STANDARD_PALADIN,
-	BoosterType.STANDARD_PRIEST,
-	BoosterType.STANDARD_ROGUE,
-	BoosterType.STANDARD_SHAMAN,
-	BoosterType.STANDARD_WARRIOR,
-	BoosterType.STANDARD_WARLOCK,
-];
-
-const YEAR_PACKS = [BoosterType.YEAR_OF_DRAGON, BoosterType.YEAR_OF_PHOENIX];
-
-const NON_BUYABLE_BOOSTER_IDS = [
-	...GOLDEN_SET_PACKS,
-	...CLASS_PACKS,
-	...YEAR_PACKS,
-	BoosterType.GOLDEN_CLASSIC_PACK,
-	BoosterType.GOLDEN_STANDARD_PACK,
-	BoosterType.GOLDEN_WILD_PACK,
-];
 
 interface InternalPackGroup {
 	readonly name: string;

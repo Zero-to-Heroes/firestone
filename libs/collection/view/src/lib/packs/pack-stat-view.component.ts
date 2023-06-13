@@ -45,6 +45,6 @@ export class PackStatViewComponent {
 export interface InternalPackInfo extends PackInfo {
 	readonly name: string;
 	readonly setId: string;
-	readonly nextLegendary: number;
-	readonly nextEpic: number;
+	readonly nextLegendary?: number;
+	readonly nextEpic?: number;
 }

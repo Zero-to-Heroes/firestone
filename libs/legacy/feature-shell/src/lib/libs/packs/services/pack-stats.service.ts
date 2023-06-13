@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BoosterType, CardIds } from '@firestone-hs/reference-data';
+import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
-import { getDefaultBoosterIdForSetId } from '@legacy-import/src/lib/js/services/hs-utils';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
 import { Events } from '../../../js/services/events.service';

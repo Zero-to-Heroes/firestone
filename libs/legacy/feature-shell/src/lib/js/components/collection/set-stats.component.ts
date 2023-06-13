@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { boosterIdToSetId } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Set } from '../../models/set';
 import {
-	boosterIdToSetId,
 	dustFor,
 	dustForPremium,
 	dustToCraftFor,

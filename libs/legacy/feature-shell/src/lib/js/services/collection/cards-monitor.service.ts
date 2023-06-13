@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BoosterType } from '@firestone-hs/reference-data';
+import { BoosterType, boosterIdToSetId } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
@@ -11,7 +11,7 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
 import { Events } from '../events.service';
-import { boosterIdToSetId, dustFor, dustForPremium } from '../hs-utils';
+import { dustFor, dustForPremium } from '../hs-utils';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
