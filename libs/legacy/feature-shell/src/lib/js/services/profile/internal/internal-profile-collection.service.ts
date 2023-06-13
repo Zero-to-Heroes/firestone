@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsForSet, Profile } from '@firestone-hs/api-user-profile';
+import { CardsForSet, Profile, ProfilePackStat } from '@firestone-hs/api-user-profile';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { CollectionCardType } from '../../../models/collection/collection-card-type.type';
@@ -17,6 +17,7 @@ export class InternalProfileCollectionService {
 	private async init() {
 		await this.store.initComplete();
 		this.initSets();
+		this.initBoosters();
 	}
 
 	private initSets() {
@@ -61,5 +62,34 @@ export class InternalProfileCollectionService {
 			epic: set.ownedForRarity('Epic', premium),
 			legendary: set.ownedForRarity('Legendary', premium),
 		};
+	}
+
+	private initBoosters() {
+		const boostersToUpload$ = combineLatest([this.store.isPremiumUser$(), this.store.allTimeBoosters$()]).pipe(
+			filter(([premium, sets]) => premium),
+			debounceTime(10000),
+			map(([premium, boosters]) => {
+				console.debug('[profile] boosters', boosters);
+				return boosters.map((booster) => {
+					return {
+						id: booster.packType,
+						totalObtained: booster.totalObtained,
+					} as ProfilePackStat;
+				});
+			}),
+		);
+		boostersToUpload$
+			.pipe(
+				filter((boosters) => !!boosters?.length),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+			)
+			.subscribe(async (boosters) => {
+				console.debug('[profile] will upload boosters', boosters);
+				const payload: Profile = {
+					packsAllTime: boosters,
+				};
+				console.debug('[profile] updating profile with payload', payload);
+				this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+			});
 	}
 }
