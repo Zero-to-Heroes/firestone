@@ -691,6 +691,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.HabeasCorpses:
 				return and(side(inputSide), inGraveyard, minion);
+			case CardIds.HagathasEmbrace:
+			case CardIds.HagathasEmbraceTavernBrawl:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.HalduronBrightwing:
 				return and(side(inputSide), inDeck, spell, arcane);
 			case CardIds.Hadronox_CORE_ICC_835:

@@ -274,6 +274,9 @@ export class GameStateService {
 				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter((event) => event);
+			if (stateUpdateEvents.length > 0) {
+				console.debug('[game-state] processing state update events', stateUpdateEvents, eventsToProcess);
+			}
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				if (eventsToProcess[i] instanceof GameEvent) {
 					await this.processEvent(eventsToProcess[i] as GameEvent);
