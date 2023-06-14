@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Profile } from '@firestone-hs/api-user-profile';
 import { Mutable } from '@firestone/shared/framework/common';
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { GameStatusService } from '../game-status.service';
 import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './internal/internal-profile-battlegrounds.service';
@@ -17,22 +18,27 @@ export class ProfileUploaderService {
 		private readonly internalAchievements: InternalProfileAchievementsService,
 		private readonly internalBattlegrounds: InternalProfileBattlegroundsService,
 		private readonly api: ApiRunner,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
 
 	private init() {
 		combineLatest([
+			this.gameStatus.inGame$$,
 			this.internalAchievements.achievementCategories$$,
 			this.internalBattlegrounds.bgFullTimeStatsByHero$$,
 			this.internalCollection.sets$$,
 			this.internalCollection.packsAllTime$$,
 		])
 			.pipe(
+				// If we are not in game, we can't get new information from the game memory, so there
+				// is no reason to update the profile
+				filter(([inGame, _]) => inGame),
 				debounceTime(10000),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			)
-			.subscribe(async ([achievementCategories, bgFullTimeStatsByHero, sets, packsAllTime]) => {
+			.subscribe(async ([inGame, achievementCategories, bgFullTimeStatsByHero, sets, packsAllTime]) => {
 				const payload: Mutable<Profile> = {};
 				if (!!achievementCategories?.length) {
 					payload.achievementCategories = achievementCategories;
