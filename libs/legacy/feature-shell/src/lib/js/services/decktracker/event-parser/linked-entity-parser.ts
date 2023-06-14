@@ -58,6 +58,7 @@ export class LinkedEntityParser implements EventParser {
 		// console.debug(
 		// 	'[linked-entity-parser] originalCard',
 		// 	originalCard,
+		// 	newCard,
 		// 	gameEvent.additionalData.linkedEntityId,
 		// 	deckInWhichToFindTheCard,
 		// );
@@ -72,6 +73,7 @@ export class LinkedEntityParser implements EventParser {
 				// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
 				// even ones who already had a position previously
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
+				temporaryCard: undefined,
 			} as DeckCard);
 			// console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard, isPlayerForAdd, true);
@@ -90,6 +92,7 @@ export class LinkedEntityParser implements EventParser {
 				// flag the card in)
 				entityId: isPlayerForAdd ? gameEvent.additionalData.linkedEntityId : null,
 				zone: undefined,
+				temporaryCard: undefined,
 			} as DeckCard);
 			// console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
