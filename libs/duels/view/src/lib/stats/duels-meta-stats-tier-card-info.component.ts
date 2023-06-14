@@ -63,9 +63,10 @@ export class DuelsMetaStatsTierCardInfoComponent {
 		const isNeutralHero =
 			value.cardId.startsWith(CardIds.VanndarStormpikeTavernBrawl) ||
 			value.cardId.startsWith(CardIds.DrektharTavernBrawl);
-		this.secondaryClassIcon = isNeutralHero
-			? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png`
-			: null;
+		this.secondaryClassIcon =
+			isNeutralHero && !!card?.classes?.length
+				? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card.classes[0].toLowerCase()}.png`
+				: null;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 
 		this.heroName = card.name;

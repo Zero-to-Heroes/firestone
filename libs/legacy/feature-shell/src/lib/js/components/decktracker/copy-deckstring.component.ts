@@ -91,9 +91,9 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 		.filter((card) => !!card);
 	const duelsClass: CardClass = !duelsSignatureTreasures?.length
 		? null
-		: duelsSignatureTreasures[0].classes?.length > 1
+		: duelsSignatureTreasures[0].classes?.length !== 1
 		? null
-		: CardClass[duelsSignatureTreasures[0].playerClass?.toUpperCase()];
+		: CardClass[duelsSignatureTreasures[0].classes[0]?.toUpperCase()];
 	const deckClass = deckDefinition.cards
 		.map(([dbfId, quantity]) => allCards.getCardFromDbfId(dbfId))
 		.flatMap((card) => card?.classes ?? [])

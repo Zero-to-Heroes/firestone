@@ -52,8 +52,9 @@ export class ConstructedMetaDeckSummaryComponent {
 	@Input() set deck(value: DeckStat) {
 		const deckDefinition = decode(value.deckstring);
 		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
-		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
-		this.classTooltip = this.i18n.translateString(`global.class.${heroCard.playerClass?.toLowerCase()}`);
+		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
+		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCardClass}.png`;
+		this.classTooltip = this.i18n.translateString(`global.class.${heroCardClass}`);
 		this.deckName = this.i18n.translateString('decktracker.deck-name.unnamed-deck');
 		const deckCards = deckDefinition.cards.map((pair) => ({
 			quantity: pair[1],

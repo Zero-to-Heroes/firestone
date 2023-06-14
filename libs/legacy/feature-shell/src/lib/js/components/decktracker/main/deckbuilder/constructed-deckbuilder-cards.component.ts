@@ -494,7 +494,7 @@ export class ConstructedDeckbuilderCardsComponent
 			return true;
 		}
 
-		if (searchFilters.class && !card.playerClass?.toLowerCase().includes(searchFilters.class)) {
+		if (searchFilters.class && !card.classes?.includes(searchFilters.class?.toUpperCase())) {
 			return false;
 		}
 

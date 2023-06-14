@@ -12,7 +12,7 @@ import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
@@ -115,7 +115,7 @@ export class DuelsMainFilterMultiselectDropdownViewComponent
 			this.mapData((cardIds) =>
 				cardIds
 					.map((cardId) => this.allCards.getCard(cardId))
-					.sort(sortByProperties((c) => [c.name, c.playerClass]))
+					.sort(sortByProperties((c) => [c.name, ...(c.classes ?? [])]))
 					.map((card) => {
 						return {
 							value: card.id,

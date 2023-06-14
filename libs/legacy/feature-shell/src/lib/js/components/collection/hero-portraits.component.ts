@@ -6,7 +6,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Card } from '../../models/card';
@@ -192,7 +192,8 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 	private buildGroupingFunction(category: CollectionPortraitCategoryFilter): (portrait: ReferenceCard) => string {
 		switch (category) {
 			case 'collectible':
-				return (portrait: ReferenceCard) => portrait.playerClass?.toLowerCase();
+				return (portrait: ReferenceCard) =>
+					!portrait.classes?.length ? 'neutral' : portrait.classes[0].toLowerCase();
 			case 'battlegrounds':
 				return (portrait: ReferenceCard) => normalizeHeroCardId(portrait.id, this.allCards);
 			case 'mercenaries':
@@ -217,7 +218,10 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 	private buildGroupTitle(category: CollectionPortraitCategoryFilter, refPortrait: ReferenceCard): string {
 		switch (category) {
 			case 'collectible':
-				return formatClass(refPortrait.playerClass, this.i18n);
+				return formatClass(
+					!!refPortrait.classes?.length ? refPortrait.classes[0] : CardClass[CardClass.NEUTRAL],
+					this.i18n,
+				);
 			case 'battlegrounds':
 			case 'mercenaries':
 				return refPortrait.name;
@@ -359,7 +363,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 						numberOwned: 0,
 				  } as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
-		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.playerClass, card.id]));
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [...(card.classes ?? []), card.id]));
 		return sortedHeroes;
 	}
 

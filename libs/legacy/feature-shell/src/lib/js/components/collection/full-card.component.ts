@@ -179,11 +179,7 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 					!!this.card.ownedNonPremium ||
 					!!this.card.ownedDiamond ||
 					!!this.card.ownedSignature;
-				this.class = card.classes?.length
-					? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
-					: card.playerClass != null
-					? formatClass(card.playerClass, this.i18n)
-					: null;
+				this.class = card.classes?.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ');
 
 				this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
 				this.set = this.i18n.translateString(`global.set.${card.set?.toLowerCase()}`);

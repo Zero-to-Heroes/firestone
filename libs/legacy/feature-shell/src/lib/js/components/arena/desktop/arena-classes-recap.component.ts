@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CardClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
@@ -164,7 +165,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 		sortFunction: (a: readonly ArenaRun[], b: readonly ArenaRun[]) => number,
 	): readonly MostPlayedClass[] {
 		const groupedByPlayedClass: { [playerClass: string]: readonly ArenaRun[] } = groupByFunction(
-			(run: ArenaRun) => this.allCards.getCard(run.heroCardId)?.playerClass,
+			(run: ArenaRun) => this.allCards.getCard(run.heroCardId)?.classes?.[0] ?? CardClass[CardClass.NEUTRAL],
 		)(runs);
 		const mostPlayedClasses = Object.values(groupedByPlayedClass).sort(sortFunction).slice(0, 3);
 		return mostPlayedClasses.map((runsForClass) => {
@@ -176,7 +177,10 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 			const totalMatches = matches.length;
 			const wins = matches.filter((match) => match.result === 'won').length;
 			const winrate = (100 * wins) / totalMatches;
-			const playerClass = formatClass(this.allCards.getCard(runsForClass[0].heroCardId)?.playerClass, this.i18n);
+			const playerClass = formatClass(
+				this.allCards.getCard(runsForClass[0].heroCardId)?.classes?.[0]?.toLowerCase(),
+				this.i18n,
+			);
 			return {
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${runsForClass[0].heroCardId}.jpg`,
 				totalRuns: runsForClass.length,

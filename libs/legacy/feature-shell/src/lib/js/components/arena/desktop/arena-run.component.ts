@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, formatClass } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -120,7 +120,10 @@ export class ArenaRunComponent {
 			: null;
 		this.playerCardId = this._run.heroCardId;
 		const heroCard = this._run.heroCardId ? this.allCards.getCard(this._run.heroCardId) : null;
-		this.playerClassTooltip = heroCard ? `${heroCard.name} (${heroCard.playerClass})` : null;
+		this.playerClassTooltip =
+			heroCard && !!heroCard?.classes?.length
+				? `${heroCard.name} (${formatClass(heroCard.classes[0], this.i18n)})`
+				: null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
