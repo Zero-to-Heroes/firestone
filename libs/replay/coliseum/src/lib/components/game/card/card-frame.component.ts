@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CardClass, CardType } from '@firestone-hs/reference-data';
+import { CardClass, CardType, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
@@ -40,11 +40,10 @@ export class CardFrameComponent {
 		this.image = `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/card/${frame}.png?v=3`;
 	}
 
-	private buildPlayerClass(originalCard): CardClass {
-		const cardClass: CardClass =
-			originalCard && originalCard.playerClass
-				? CardClass[originalCard.playerClass.toUpperCase() as string]
-				: CardClass.NEUTRAL;
+	private buildPlayerClass(originalCard: ReferenceCard): CardClass {
+		const cardClass: CardClass = originalCard?.classes?.length
+			? CardClass[originalCard.classes[0]]
+			: CardClass.NEUTRAL;
 		// Ysera
 		return cardClass === CardClass.DREAM ? CardClass.HUNTER : cardClass;
 	}

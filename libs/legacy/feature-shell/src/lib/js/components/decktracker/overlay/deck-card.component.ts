@@ -11,7 +11,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -365,7 +365,7 @@ export class DeckCardComponent implements OnDestroy {
 		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
 		this._isMissing = this._card.isMissing;
 
-		this.cardClass = this._card.cardClass ? this._card.cardClass.toLowerCase() : null;
+		this.cardClass = !!this._card.classes?.length ? CardClass[this._card.classes[0]].toLowerCase() : null;
 
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {

@@ -55,7 +55,7 @@ export class SetsManagerService {
 			return new SetCard(
 				card.id,
 				card.name,
-				card.cardClass,
+				card.classes,
 				card.rarity,
 				card.cost,
 				ownedNonPremium,

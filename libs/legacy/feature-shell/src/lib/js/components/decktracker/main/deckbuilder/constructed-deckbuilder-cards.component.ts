@@ -217,11 +217,7 @@ export class ConstructedDeckbuilderCardsComponent
 							CardClass[currentClass.toUpperCase()],
 							CardClass.NEUTRAL,
 						];
-						const cardCardClasses: readonly CardClass[] = card.classes
-							? card.classes.map((c) => CardClass[c])
-							: !!card.cardClass
-							? [CardClass[card.cardClass]]
-							: [];
+						const cardCardClasses: readonly CardClass[] = card.classes?.map((c) => CardClass[c]) ?? [];
 						return searchCardClasses.some((c) => cardCardClasses.includes(c));
 					})
 					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase());
@@ -286,7 +282,7 @@ export class ConstructedDeckbuilderCardsComponent
 						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
-								this.sorterForCardClass(card.cardClass),
+								this.sorterForCardClass(card.classes),
 								card.cost,
 								card.name,
 							]),
@@ -484,14 +480,13 @@ export class ConstructedDeckbuilderCardsComponent
 		return false;
 	}
 
-	private sorterForCardClass(cardClass: string): number {
-		const cardClassAsEnum: CardClass = CardClass[cardClass];
-		switch (cardClassAsEnum) {
-			case CardClass.NEUTRAL:
-				return 99;
-			default:
-				return cardClass.charCodeAt(0);
+	private sorterForCardClass(classes: readonly string[]): number {
+		const classesAsEnum: readonly CardClass[] = classes?.map((c) => CardClass[c]) ?? [];
+		const classAsEnum = classesAsEnum[0];
+		if (!classAsEnum || classAsEnum === CardClass.NEUTRAL) {
+			return 99;
 		}
+		return CardClass[classAsEnum].charCodeAt(0);
 	}
 
 	private doesCardMatchSearchFilters(card: ReferenceCard, searchFilters: SearchFilters): boolean {

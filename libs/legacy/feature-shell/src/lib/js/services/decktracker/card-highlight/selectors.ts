@@ -200,12 +200,12 @@ export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
 
 export const currentClass = (input: SelectorInput): boolean =>
-	input.card?.cardClass === input.deckState?.hero?.playerClass?.toUpperCase();
+	input.card?.classes?.includes(input.deckState?.hero?.playerClass?.toUpperCase());
 
 export const cardClass =
 	(cardClass: CardClass) =>
 	(input: SelectorInput): boolean =>
-		input.card?.cardClass === CardClass[cardClass];
+		input.card?.classes?.includes(CardClass[cardClass]);
 export const neutral = cardClass(CardClass.NEUTRAL);
 export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);

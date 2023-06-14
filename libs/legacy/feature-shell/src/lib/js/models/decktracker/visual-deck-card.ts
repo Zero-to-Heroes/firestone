@@ -1,10 +1,11 @@
+import { CardClass } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { DeckCard } from './deck-card';
 
 export class VisualDeckCard extends DeckCard {
 	readonly highlight: 'dim' | 'normal' | 'in-hand';
 	readonly internalEntityIds: readonly string[];
-	readonly cardClass?: string;
+	readonly classes?: readonly CardClass[];
 	readonly totalQuantity: number;
 	readonly creatorCardIds?: readonly string[] = [];
 	readonly lastAffectedByCardIds?: readonly string[] = [];

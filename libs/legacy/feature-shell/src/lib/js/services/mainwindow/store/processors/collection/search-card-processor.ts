@@ -30,7 +30,7 @@ export class SearchCardProcessor implements Processor {
 			return new SetCard(
 				card.id,
 				card.name,
-				card.cardClass,
+				card.classes,
 				card.rarity,
 				card.cost,
 				collectionCard ? collectionCard.count : 0,

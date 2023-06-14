@@ -1,10 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardClass } from '@firestone-hs/reference-data';
 import {
 	CollectionCardClassFilterType,
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 } from '@models/collection/filter-types';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -122,11 +123,15 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 	}
 
 	private filterClass(card: SetCard, filter: CollectionCardClassFilterType): boolean {
+		if (!filter?.length) {
+			return true;
+		}
+
 		switch (filter) {
 			case 'all':
 				return true;
 			default:
-				return card.cardClass && card.cardClass?.toLowerCase() === filter;
+				return card.classes?.includes(CardClass[filter.toUpperCase()]);
 		}
 	}
 

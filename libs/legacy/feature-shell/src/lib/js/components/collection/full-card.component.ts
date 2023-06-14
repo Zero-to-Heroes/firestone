@@ -9,9 +9,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
-import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
+import { CardClass, ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
@@ -155,7 +155,7 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 				this.isHero = card.type === 'Hero';
 				this.card = SetCard.create({
 					id: card.id,
-					cardClass: card.cardClass?.toLowerCase(),
+					classes: card.classes?.map((c) => CardClass[c]) ?? [],
 					collectible: card.collectible,
 					cost: card.cost,
 					name: card.name,

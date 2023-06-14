@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { CardClass, DkruneTypes } from '@firestone-hs/reference-data';
-import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, share } from 'rxjs';
+import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
+import { BehaviorSubject, Observable, combineLatest, share } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -77,8 +77,8 @@ export class DkRunesComponent extends AbstractSubscriptionStoreComponent impleme
 
 				const result =
 					showRunes &&
-					deckDefinition.heroes.some(
-						(h) => this.allCards.getCard(h).cardClass === CardClass[CardClass.DEATHKNIGHT],
+					deckDefinition.heroes.some((h) =>
+						this.allCards.getCard(h).classes?.includes(CardClass[CardClass.DEATHKNIGHT]),
 					);
 				return result;
 			}),

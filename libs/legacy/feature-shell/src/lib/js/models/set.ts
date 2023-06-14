@@ -1,4 +1,4 @@
-import { RarityTYpe } from '@firestone-hs/reference-data';
+import { CardClass, RarityTYpe } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '../services/utils';
 import { CollectionCardType } from './collection/collection-card-type.type';
 
@@ -74,7 +74,7 @@ export class Set {
 export class SetCard {
 	readonly id: string;
 	readonly name: string;
-	readonly cardClass: string;
+	readonly classes: readonly CardClass[];
 	readonly rarity: string; // it's all lowercase
 	readonly cost: number;
 	readonly ownedNonPremium: number = 0;
@@ -91,7 +91,7 @@ export class SetCard {
 	constructor(
 		id?: string,
 		name?: string,
-		cardClass?: string,
+		classes?: readonly CardClass[],
 		rarity?: string,
 		cost?: number,
 		ownedNonPremium?: number,
@@ -101,7 +101,7 @@ export class SetCard {
 	) {
 		this.id = id;
 		this.name = name;
-		this.cardClass = cardClass ? cardClass.toLowerCase() : cardClass;
+		this.classes = classes;
 		this.rarity = rarity?.toLowerCase();
 		this.cost = cost;
 		this.ownedNonPremium = ownedNonPremium || 0;

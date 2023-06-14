@@ -34,8 +34,14 @@ export class SecretComponent {
 				this.markImage = this.buildMark(playerClass, isSidequest);
 			} else if (value.cardID) {
 				const card = this.cards.getCard(value.cardID);
-				this.image = this.buildImage(CardClass[card.cardClass], isSidequest);
-				this.markImage = this.buildMark(CardClass[card.cardClass], isSidequest);
+				this.image = this.buildImage(
+					card.classes?.length ? CardClass[card.classes[0]] : CardClass.NEUTRAL,
+					isSidequest,
+				);
+				this.markImage = this.buildMark(
+					card.classes?.length ? CardClass[card.classes[0]] : CardClass.NEUTRAL,
+					isSidequest,
+				);
 			} else {
 				console.error('[secret] Could not assign player class', value, value.tags.toJS());
 			}

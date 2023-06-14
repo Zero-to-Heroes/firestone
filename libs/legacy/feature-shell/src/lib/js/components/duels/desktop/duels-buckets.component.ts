@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormControl } from '@angular/forms';
 import { CardClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -162,11 +162,9 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 						const cardsForClass = bucket.bucketCards.filter((card) => {
 							const refCard = this.allCards.getCard(card.cardId);
 							return (
-								refCard.cardClass === CardClass[CardClass.NEUTRAL] ||
-								!refCard.cardClass ||
-								activeClassFilters.some(
-									(c: string) => CardClass[c.toUpperCase()] === CardClass[refCard.cardClass],
-								)
+								!refCard.classes?.length ||
+								refCard.classes.includes(CardClass[CardClass.NEUTRAL]) ||
+								activeClassFilters.some((c: string) => refCard.classes.includes(c.toUpperCase()))
 							);
 						});
 						if (!cardsForClass) {

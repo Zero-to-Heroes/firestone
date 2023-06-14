@@ -31,7 +31,7 @@ export class SecretRevealedComponent {
 				classString = this.getClassString(playerClass);
 			} else if (value.cardID) {
 				const card = this.cards.getCard(value.cardID);
-				classString = this.getClassStringFromDb(card.cardClass);
+				classString = this.getClassStringFromDb(card.classes?.length ? card.classes[0] : null);
 			}
 
 			if (!!classString) {
@@ -59,7 +59,7 @@ export class SecretRevealedComponent {
 		}
 	}
 
-	private getClassStringFromDb(playerClass: string): string {
+	private getClassStringFromDb(playerClass: string | null): string {
 		switch (playerClass) {
 			case 'HUNTER':
 				return 'hunter';

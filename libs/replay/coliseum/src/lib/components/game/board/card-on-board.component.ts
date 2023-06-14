@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CardClass, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 
 @Component({
@@ -59,7 +59,7 @@ export class CardOnBoardComponent {
 	cardId: string;
 	cardType: CardType;
 	cardClass: CardClass;
-	originalCard: any;
+	originalCard: ReferenceCard;
 	premium: boolean;
 	attack: number | undefined;
 	health: number | undefined;
@@ -89,10 +89,7 @@ export class CardOnBoardComponent {
 			this.originalCard && this.originalCard.type
 				? CardType[this.originalCard.type.toUpperCase() as string]
 				: undefined;
-		this.cardClass =
-			this.originalCard && this.originalCard.playerClass
-				? CardClass[this.originalCard.playerClass.toUpperCase() as string]
-				: undefined;
+		this.cardClass = this.originalCard?.classes?.length ? CardClass[this.originalCard.classes[0]] : undefined;
 
 		this.premium = entity.getTag(GameTag.PREMIUM) === 1;
 		this.attack = entity.getTag(GameTag.ATK);

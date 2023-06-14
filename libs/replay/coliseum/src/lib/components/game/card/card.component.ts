@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CardClass, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { GameConfService } from '../../../services/game-conf.service';
 
@@ -57,7 +57,7 @@ export class CardComponent {
 	cardId: string | undefined;
 	cardType: CardType | undefined;
 	cardClass: CardClass | undefined;
-	originalCard: any | undefined;
+	originalCard: ReferenceCard | undefined;
 	premium: boolean | undefined;
 	attack: number | undefined;
 	health: number | undefined;
@@ -157,10 +157,7 @@ export class CardComponent {
 				this.originalCard && this.originalCard.type
 					? CardType[this.originalCard.type.toUpperCase() as string]
 					: undefined;
-			this.cardClass =
-				this.originalCard && this.originalCard.playerClass
-					? CardClass[this.originalCard.playerClass.toUpperCase() as string]
-					: undefined;
+			this.cardClass = this.originalCard?.classes?.length ? CardClass[this.originalCard.classes[0]] : undefined;
 			this.tavernTier = this.conf.isBattlegrounds() ? this._entity.getTag(GameTag.TECH_LEVEL) : 0;
 		}
 	}

@@ -248,9 +248,9 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						const cardsForClass = bucket.cards.filter((card) => {
 							const refCard = this.allCards.getCard(card.cardId);
 							return (
-								refCard.cardClass === CardClass[CardClass.NEUTRAL] ||
-								!refCard.cardClass ||
-								currentClasses.some((c: CardClass) => c === CardClass[refCard.cardClass])
+								!refCard.classes?.length ||
+								refCard.classes.includes(CardClass[CardClass.NEUTRAL]) ||
+								currentClasses.some((c: CardClass) => refCard.classes.includes(CardClass[c]))
 							);
 						});
 						const totalCardsOffered = sumOnArray(cardsForClass, (card) => card.totalOffered);
@@ -313,11 +313,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						const searchCardClasses: readonly CardClass[] = !!currentClasses?.length
 							? [...currentClasses, CardClass.NEUTRAL]
 							: [CardClass.NEUTRAL];
-						const cardCardClasses: readonly CardClass[] = card.classes
-							? card.classes.map((c) => CardClass[c])
-							: !!card.cardClass
-							? [CardClass[card.cardClass]]
-							: [];
+						const cardCardClasses: readonly CardClass[] = card.classes?.map((c) => CardClass[c]) ?? [];
 						return searchCardClasses.some((c) => cardCardClasses.includes(c));
 					})
 					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase());
@@ -426,7 +422,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						)
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
-								this.sorterForCardClass(card.cardClass),
+								this.sorterForCardClass(card.classes),
 								card.cost,
 								card.name,
 							]),
@@ -510,7 +506,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						?.map((cardId) => this.allCards.getCard(cardId).dbfId)
 						.map((dbfId) => [dbfId, 1] as [number, number]) ?? [];
 				const treasureCard = this.allCards.getCard(currentSignatureTreasureCardId);
-				const defaultTreasureCardClass = treasureCard.cardClass?.toUpperCase() ?? CardClass[CardClass.NEUTRAL];
+				const defaultTreasureCardClass =
+					!!treasureCard.classes?.length && !!treasureCard.classes[0]?.length
+						? treasureCard.classes[0]?.toUpperCase()
+						: CardClass[CardClass.NEUTRAL];
 				const duelsClass: CardClass =
 					treasureCard.classes?.length > 1 ? null : CardClass[defaultTreasureCardClass];
 				const heroDbfId = normalizeDeckHeroDbfId(this.allCards.getCard(hero).dbfId, this.allCards, duelsClass);
@@ -649,14 +648,13 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 		event.stopPropagation();
 	}
 
-	private sorterForCardClass(cardClass: string): number {
-		const cardClassAsEnum: CardClass = CardClass[cardClass];
-		switch (cardClassAsEnum) {
-			case CardClass.NEUTRAL:
-				return 99;
-			default:
-				return cardClass.charCodeAt(0);
+	private sorterForCardClass(classes: readonly string[]): number {
+		const classesAsEnum: readonly CardClass[] = classes?.map((c) => CardClass[c]) ?? [];
+		const classAsEnum = classesAsEnum[0];
+		if (!classAsEnum || classAsEnum === CardClass.NEUTRAL) {
+			return 99;
 		}
+		return CardClass[classAsEnum].charCodeAt(0);
 	}
 
 	private doesCardMatchSearchFilters(

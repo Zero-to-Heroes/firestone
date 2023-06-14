@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
-import { allDuelsSignatureTreasures, CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -96,10 +96,9 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 		: CardClass[duelsSignatureTreasures[0].playerClass?.toUpperCase()];
 	const deckClass = deckDefinition.cards
 		.map(([dbfId, quantity]) => allCards.getCardFromDbfId(dbfId))
-		.map((card) => card?.cardClass)
-		.filter((cardClass) => !!cardClass)
-		.map((cardClass) => CardClass[cardClass.toUpperCase()] as CardClass)
-		.filter((cardClass: CardClass) => cardClass !== CardClass.NEUTRAL)[0];
+		.flatMap((card) => card?.classes ?? [])
+		.map((c) => CardClass[c.toUpperCase()] as CardClass)
+		.filter((c: CardClass) => c !== CardClass.NEUTRAL)[0];
 	deckDefinition.heroes = deckDefinition.heroes.map((hero) => {
 		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
 		const result = normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass) ?? 7;

@@ -13,7 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { GameFormat } from '@firestone-hs/reference-data';
+import { CardClass, GameFormat } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -174,8 +174,8 @@ export class DeckTrackerDeckListComponent
 				let heroCardId = !!deckState?.hero?.cardId ? this.allCards.getCard(deckState?.hero?.cardId).dbfId : 7;
 				if (!heroCardId) {
 					const classCards = cardsFromInitialDeck
-						.map((c) => this.allCards.getCard(c.cardId).cardClass)
-						.filter((c) => !!c);
+						.flatMap((c) => this.allCards.getCard(c.cardId).classes ?? [])
+						.filter((c) => !!c && CardClass[c] !== CardClass.NEUTRAL);
 					heroCardId = getDefaultHeroDbfIdForClass(classCards[0]);
 				}
 				const groupedCards = groupByFunction((c: DeckCard) => c.cardId)(cardsFromInitialDeck);

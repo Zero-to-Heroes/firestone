@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Race, ReferenceCard, ReferenceSet, sets, standardSets } from '@firestone-hs/reference-data';
+import { CardClass, Race, ReferenceCard, ReferenceSet, sets, standardSets } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -242,6 +242,15 @@ export class SetsService {
 			.filter((card) => card.set)
 			.filter((card) => !this.NON_COLLECTIBLE_HEROES.includes(card.id))
 			.filter((card) => setId === card.set?.toLowerCase())
-			.map((card) => new SetCard(card.id, card.name, card.playerClass, card.rarity?.toLowerCase(), card.cost));
+			.map(
+				(card) =>
+					new SetCard(
+						card.id,
+						card.name,
+						card.classes?.map((c) => CardClass[c]) ?? [],
+						card.rarity?.toLowerCase(),
+						card.cost,
+					),
+			);
 	}
 }
