@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			</settings-general-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-general-launch *ngSwitchCase="'launch'"></settings-general-launch>
+				<settings-general-premium *ngSwitchCase="'premium'"></settings-general-premium>
 				<settings-general-localization *ngSwitchCase="'localization'"></settings-general-localization>
 				<settings-general-third-party *ngSwitchCase="'third-party'"></settings-general-third-party>
 				<settings-general-bug-report *ngSwitchCase="'bugreport'"></settings-general-bug-report>

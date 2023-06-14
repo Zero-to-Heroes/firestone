@@ -144,6 +144,7 @@ export class BgsLeaderboardEmptyCardComponent
 		});
 
 		this.store.isPremiumUser$().subscribe((premium) => {
+			console.debug('isPremiumUser', premium);
 			this.isPremiumUser = premium;
 		});
 		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(this.mapData((info) => info));

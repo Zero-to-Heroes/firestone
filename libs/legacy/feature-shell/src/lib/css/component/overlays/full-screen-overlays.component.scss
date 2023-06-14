@@ -18,4 +18,10 @@
 	mercs-opponent-team-widget-wrapper {
 		z-index: 2;
 	}
+
+	.overlay-ad {
+		position: absolute;
+		bottom: 6vh; // Don't hide friends list
+		left: 0;
+	}
 }

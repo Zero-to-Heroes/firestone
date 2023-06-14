@@ -1,27 +1,52 @@
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
+
+declare let amplitude;
 
 @Injectable()
 export class AdService {
 	public showAds$$ = new BehaviorSubject<boolean>(true);
 	public isPremium$$ = new BehaviorSubject<boolean>(false);
 
-	constructor(private ow: OverwolfService) {
+	private premiumFeatures$$ = new BehaviorSubject<boolean>(false);
+
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.init();
 	}
 
 	private async init() {
 		this.ow.onSubscriptionChanged(async (event) => {
 			const showAds = await this.shouldDisplayAds();
-			const isPremium = await this.enablePremiumFeatures();
 			this.showAds$$.next(showAds);
-			this.isPremium$$.next(isPremium);
+		});
+		this.ow.onSubscriptionChanged(async (event) => {
+			const isPremium = await this.enablePremiumFeatures();
+			this.premiumFeatures$$.next(isPremium);
+		});
+		const betaChannel$$ = new BehaviorSubject<boolean>(false);
+		overwolf.settings.getExtensionSettings((settingsResult) => {
+			betaChannel$$.next(
+				settingsResult?.settings?.channel === 'beta' || process.env['NODE_ENV'] !== 'production',
+			);
+			console.debug('beta channel?', betaChannel$$.value, settingsResult);
 		});
 		const showAds = await this.shouldDisplayAds();
 		const isPremium = await this.enablePremiumFeatures();
 		this.showAds$$.next(showAds);
-		this.isPremium$$.next(isPremium);
+		this.premiumFeatures$$.next(isPremium);
+
+		await this.store.initComplete();
+		combineLatest([
+			this.premiumFeatures$$,
+			this.store.listenPrefs$((prefs) => prefs.showOverlayAd),
+			betaChannel$$,
+		]).subscribe(([isPremium, [showOverlayAd], betaChannel]) => {
+			amplitude.getInstance().logEvent('overlay-ads', { enabled: showOverlayAd });
+			console.debug('show ads?', isPremium, showOverlayAd, betaChannel);
+			this.isPremium$$.next(betaChannel && (isPremium || showOverlayAd));
+		});
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
@@ -55,7 +80,7 @@ export class AdService {
 	public async enablePremiumFeatures(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('not display in dev');
-			return true;
+			return false;
 		}
 		const shouldDisplayAds = await this.shouldDisplayAds();
 		return !shouldDisplayAds;

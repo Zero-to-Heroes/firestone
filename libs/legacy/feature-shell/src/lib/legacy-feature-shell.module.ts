@@ -490,6 +490,7 @@ import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/c
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
+import { SettingsGeneralPremiumComponent } from '@components/settings/general/settings-general-premium.component';
 import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
@@ -1584,6 +1585,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralComponent,
 		SettingsGeneralMenuComponent,
 		SettingsGeneralLaunchComponent,
+		SettingsGeneralPremiumComponent,
 		SettingsGeneralLocalizationComponent,
 		SettingsGeneralBugReportComponent,
 		SettingsGeneralThirdPartyComponent,

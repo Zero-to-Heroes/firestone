@@ -18,7 +18,7 @@ declare let OwAd: any;
 	selector: 'single-ad',
 	styleUrls: [`../../../css/component/ads/single-ad.component.scss`],
 	template: `
-		<div class="ad-container">
+		<div class="ad-container" [ngClass]="{ 'overlay-ad': overlayAd }">
 			<div class="no-ads-placeholder">
 				<i class="i-117X33 gold-theme logo">
 					<svg class="svg-icon-fill">
@@ -36,6 +36,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	@Input() tip: string;
 	@Input() adId: string;
 	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
+	@Input() overlayAd = false;
 
 	private adRef;
 	private adInit = false;

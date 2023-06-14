@@ -42,4 +42,15 @@
 		position: absolute;
 		z-index: 999999999999999;
 	}
+
+	&.overlay-ad {
+		.no-ads-placeholder {
+			opacity: 0;
+		}
+
+		.ads {
+			top: auto;
+			bottom: 0;
+		}
+	}
 }
