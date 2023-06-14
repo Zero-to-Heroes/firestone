@@ -38,6 +38,22 @@
 				height: 200px;
 				margin-right: 15px;
 				margin-bottom: 15px;
+
+				::ng-deep set-view .frame {
+					&.complete-premium {
+						margin: 5px;
+						.crown {
+							display: none;
+						}
+					}
+
+					&.complete-simple {
+						.corner {
+							width: 25px;
+							height: 25px;
+						}
+					}
+				}
 			}
 		}
 	}
