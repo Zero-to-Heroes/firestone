@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Profile, ProfileBgHeroStat } from '@firestone-hs/api-user-profile';
+import { ProfileBgHeroStat } from '@firestone-hs/api-user-profile';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { groupByFunction } from '@firestone/shared/framework/common';
-import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
-import { PROFILE_UPDATE_URL } from '../profile-uploader.service';
 
 @Injectable()
 export class InternalProfileBattlegroundsService {
+	public bgFullTimeStatsByHero$$ = new BehaviorSubject<readonly ProfileBgHeroStat[]>([]);
+
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
-		private readonly api: ApiRunner,
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly allCards: CardsFacadeService,
@@ -76,7 +76,7 @@ export class InternalProfileBattlegroundsService {
 				([achievementsData, premium, nativeAchievements]) =>
 					premium && !!achievementsData?.length && !!nativeAchievements?.length,
 			),
-			debounceTime(10000),
+			debounceTime(2000),
 			map(([achievementsData, premium, nativeAchievements]) => {
 				return achievementsData.map((data) => {
 					return {
@@ -92,12 +92,8 @@ export class InternalProfileBattlegroundsService {
 		bgFullTimeStatsByHero$
 			.pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
 			.subscribe(async (bgFullTimeStatsByHero) => {
-				console.debug('[profile] will upload bgFullTimeStatsByHero', bgFullTimeStatsByHero);
-				const payload: Profile = {
-					bgFullTimeStatsByHero: bgFullTimeStatsByHero,
-				};
-				console.debug('[profile] updating profile with payload', payload);
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+				console.debug('[profile] bgFullTimeStatsByHero', bgFullTimeStatsByHero);
+				this.bgFullTimeStatsByHero$$.next(bgFullTimeStatsByHero);
 			});
 	}
 }

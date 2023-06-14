@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { CardsForSet, Profile, ProfilePackStat } from '@firestone-hs/api-user-profile';
-import { ApiRunner } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { CardsForSet, ProfilePackStat, ProfileSet } from '@firestone-hs/api-user-profile';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { CollectionCardType } from '../../../models/collection/collection-card-type.type';
 import { Set as CollectionSet } from '../../../models/set';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
-import { PROFILE_UPDATE_URL } from '../profile-uploader.service';
 
 @Injectable()
 export class InternalProfileCollectionService {
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly api: ApiRunner) {
+	public sets$$ = new BehaviorSubject<readonly ProfileSet[]>([]);
+	public packsAllTime$$ = new BehaviorSubject<readonly ProfilePackStat[]>([]);
+
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.init();
 	}
 
@@ -27,7 +28,6 @@ export class InternalProfileCollectionService {
 			// So that we don't spam the server when the user is opening packs
 			debounceTime(10000),
 			map(([premium, sets]) => {
-				console.debug('[profile] sets', sets);
 				return sets.map((set) => {
 					return {
 						id: set.id,
@@ -46,12 +46,8 @@ export class InternalProfileCollectionService {
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			)
 			.subscribe(async (sets) => {
-				console.debug('[profile] will upload sets', sets);
-				const payload: Profile = {
-					sets: sets,
-				};
-				console.debug('[profile] updating profile with payload', payload);
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+				console.debug('[profile] sets', sets);
+				this.sets$$.next(sets);
 			});
 	}
 
@@ -67,9 +63,8 @@ export class InternalProfileCollectionService {
 	private initBoosters() {
 		const boostersToUpload$ = combineLatest([this.store.isPremiumUser$(), this.store.allTimeBoosters$()]).pipe(
 			filter(([premium, sets]) => premium),
-			debounceTime(10000),
+			debounceTime(2000),
 			map(([premium, boosters]) => {
-				console.debug('[profile] boosters', boosters);
 				return boosters.map((booster) => {
 					return {
 						id: booster.packType,
@@ -84,12 +79,8 @@ export class InternalProfileCollectionService {
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			)
 			.subscribe(async (boosters) => {
-				console.debug('[profile] will upload boosters', boosters);
-				const payload: Profile = {
-					packsAllTime: boosters,
-				};
-				console.debug('[profile] updating profile with payload', payload);
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+				console.debug('[profile] packsAllTime', boosters);
+				this.packsAllTime$$.next(boosters);
 			});
 	}
 }
