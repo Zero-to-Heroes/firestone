@@ -29,12 +29,10 @@ export class AttackCounterDefinition implements CounterDefinition<GameState, num
 	public select(gameState: GameState): number {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const totalAttackOnBoard = (deck.totalAttackOnBoard?.board || 0) + (deck.totalAttackOnBoard?.hero || 0);
-		console.debug('[attack-counter] totalAttackOnBoard', this.side, totalAttackOnBoard);
 		return totalAttackOnBoard;
 	}
 
 	public emit(totalAttackOnBoard: number): NonFunctionProperties<AttackCounterDefinition> {
-		console.debug('[attack-counter] emitting', this.side, totalAttackOnBoard);
 		return {
 			type: 'attack',
 			value: totalAttackOnBoard,
