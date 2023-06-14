@@ -1,5 +1,5 @@
 import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
-import { duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { CardClass, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
@@ -35,7 +35,7 @@ export class DuelsDeckbuilderImportDeckProcessor implements Processor {
 					this.allCards.getCard(inputHeroCardId).playerClass,
 			);
 		const heroCardId = config?.hero;
-		const classes = config?.heroClasses;
+		const classes: CardClass[] = this.allCards.getCard(config.hero)?.classes?.map((c) => CardClass[c]) ?? [];
 		const cards = deckDefinition.cards.flatMap((card) =>
 			new Array(card[1]).fill(this.allCards.getCardFromDbfId(card[0]).id),
 		);

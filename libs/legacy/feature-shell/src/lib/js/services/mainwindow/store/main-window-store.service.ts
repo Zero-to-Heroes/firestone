@@ -916,7 +916,7 @@ export class MainWindowStoreService {
 			[DuelsExploreDecksEvent.eventName(), new DuelsExploreDecksParser(this.prefs)],
 			[DuelsBuildDeckEvent.eventName(), new DuelsBuildDeckParser(this.cards)],
 			[DuelsDeckbuilderGoBackEvent.eventName(), new DuelsDeckbuilderGoBackProcessor()],
-			[DuelsDeckbuilderHeroSelectedEvent.eventName(), new DuelsDeckbuilderHeroSelectedProcessor()],
+			[DuelsDeckbuilderHeroSelectedEvent.eventName(), new DuelsDeckbuilderHeroSelectedProcessor(this.cards)],
 			[DuelsDeckbuilderHeroPowerSelectedEvent.eventName(), new DuelsDeckbuilderHeroPowerSelectedProcessor()],
 			[
 				DuelsDeckbuilderSignatureTreasureSelectedEvent.eventName(),

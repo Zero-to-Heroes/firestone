@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardClass, duelsHeroConfigs } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
@@ -47,11 +47,13 @@ export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionStoreComp
 
 	ngAfterContentInit() {
 		this.heroOptions = duelsHeroConfigs.map((config) => {
+			const classes: readonly CardClass[] =
+				this.allCards.getCard(config.hero)?.classes?.map((c) => CardClass[c]) ?? [];
 			return {
 				cardId: config.hero,
 				cardImage: this.i18n.getCardImage(config.hero, { isHeroSkin: true }),
 				name: this.allCards.getCard(config.hero).name,
-				classes: (config.heroClasses ?? []).map((c) => ({
+				classes: classes.map((c) => ({
 					cardClass: c,
 					name: this.i18n.translateString(`global.class.${CardClass[c].toLowerCase()}`),
 					image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${CardClass[

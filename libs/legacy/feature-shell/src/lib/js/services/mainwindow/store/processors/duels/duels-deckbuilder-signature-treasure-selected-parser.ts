@@ -1,9 +1,9 @@
 import { CardClass, CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 const NEUTRAL_HEROES = [CardIds.VanndarStormpikeTavernBrawl, CardIds.DrektharTavernBrawl];
 
@@ -52,18 +52,18 @@ export const extractDuelsClasses = (
 	allCards: CardsFacadeService,
 ): CardClass[] => {
 	const heroCard = allCards.getCard(heroCardId);
-	if (heroCard?.cardClass !== CardClass[CardClass.NEUTRAL]) {
-		return [CardClass[heroCard.cardClass]];
+	if (!!heroCard?.classes?.length && !heroCard.classes.includes(CardClass[CardClass.NEUTRAL])) {
+		return heroCard?.classes?.map((cls) => CardClass[cls]);
 	}
 
 	const heroPowerCard = allCards.getCard(heroPowerCardId);
-	if (heroPowerCard?.cardClass !== CardClass[CardClass.NEUTRAL]) {
-		return [CardClass[heroPowerCard.cardClass]];
+	if (!!heroPowerCard?.classes?.length && !heroPowerCard.classes.includes(CardClass[CardClass.NEUTRAL])) {
+		return heroPowerCard.classes?.map((cls) => CardClass[cls]);
 	}
 
 	const sigTreasureCard = allCards.getCard(signatureTreasureCardId);
-	if (sigTreasureCard?.cardClass !== CardClass[CardClass.NEUTRAL]) {
-		return [CardClass[sigTreasureCard.cardClass]];
+	if (!!sigTreasureCard?.classes?.length && !sigTreasureCard.classes.includes(CardClass[CardClass.NEUTRAL])) {
+		return sigTreasureCard.classes?.map((cls) => CardClass[cls]);
 	}
 	return [];
 };
