@@ -37,6 +37,7 @@ export class GameForUpload {
 	availableTribes: readonly Race[];
 	bannedTribes: readonly Race[];
 	hasBgsPrizes: boolean;
+	bgBattleOdds: readonly { turn: number; wonPercent: number }[];
 
 	mercsBountyId: number;
 

@@ -9,6 +9,7 @@ import { MatchInfo } from '../../models/match-info';
 import { DuelsInfo } from '../../models/memory/memory-duels';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
+import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsRunIdService } from '../duels/duels-run-id.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
@@ -36,6 +37,7 @@ export class EndGameListenerService {
 		private readonly duelsState: DuelsStateBuilderService,
 		private readonly reviewIdService: ReviewIdService,
 		private readonly duelsRunIdService: DuelsRunIdService,
+		private readonly bgStore: BattlegroundsStoreService,
 	) {
 		this.init();
 	}
@@ -184,11 +186,11 @@ export class EndGameListenerService {
 							arenaInfo: arenaInfo,
 							mercsInfo: mercsInfo,
 							mercsCollectionInfo: mercsCollectionInfo,
-							bgInfo: bgInfo,
-							gameSettings: gameSettings,
 							duelsRunId: duelsRunId,
+							bgInfo: bgInfo,
 							bgNewRating: bgNewRating,
 							battlegroundsInfoAfterGameOver: bgMemoryInfo,
+							gameSettings: gameSettings,
 						} as UploadInfo),
 				),
 				tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
@@ -263,11 +265,16 @@ export class EndGameListenerService {
 		]);
 		console.log('[manastorm-bridge] read memory info');
 
+		const battleOdds = this.bgStore?.state?.currentGame?.faceOffs?.map((f) => ({
+			turn: f.turn,
+			wonPercent: f.battleResult?.wonPercent,
+		}));
 		const augmentedInfo: UploadInfo = {
 			...info,
 			battlegroundsInfoAfterGameOver: newBgInfoWithRating,
 			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
+			bgBattleOdds: battleOdds,
 		};
 		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 		await this.endGameUploader.upload2(augmentedInfo);

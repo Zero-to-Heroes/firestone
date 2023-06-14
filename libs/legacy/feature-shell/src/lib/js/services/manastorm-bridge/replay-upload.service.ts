@@ -87,6 +87,7 @@ export class ReplayUploadService {
 			// better name ourselves
 			'force-opponent-name': encodeURIComponent(game.forceOpponentName),
 			'allow-game-share': '' + prefs.allowGamesShare,
+			'bg-battle-odds': !!game.bgBattleOdds?.length ? JSON.stringify(game.bgBattleOdds) : '',
 		};
 		const params = {
 			Bucket: BUCKET,

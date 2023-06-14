@@ -161,6 +161,7 @@ export class EndGameUploaderService {
 			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 			game.hasBgsPrizes = info.gameSettings?.battlegroundsPrizes;
+			game.bgBattleOdds = info.bgBattleOdds;
 		} else if (isMercenaries(game.gameMode)) {
 			// Looks like we can assume the mapId is unique for a given player
 			game.runId = isMercenariesPvE(game.gameMode)
@@ -467,4 +468,5 @@ export interface UploadInfo {
 	duelsPlayerRankAfterGameOver?: number;
 	xpForGame?: XpForGameInfo;
 	bgNewRating: number;
+	bgBattleOdds?: readonly { turn: number; wonPercent: number }[];
 }
