@@ -654,7 +654,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.GreedyGainsTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.GreySageParrot:
-				return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(4));
+				return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(5));
 			case CardIds.GrimtotemBuzzkill:
 				return and(side(inputSide), or(inDeck, inHand), weapon);
 			case CardIds.GrommashsArmguardsTavernBrawl:
