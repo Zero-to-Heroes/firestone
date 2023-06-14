@@ -82,6 +82,7 @@ export class LinkedEntityParser implements EventParser {
 				return currentState;
 			}
 			// We don't add the initial cards in the deck, so if no card is found, we create it
+			// ^ this is false, as copied-from-entity-id creates a card in the deck
 			const updatedCard = DeckCard.create({
 				...newCard,
 				// Avoid info leak where we add a card in the opponent's deck and link it to the entity id
@@ -90,7 +91,7 @@ export class LinkedEntityParser implements EventParser {
 				entityId: isPlayerForAdd ? gameEvent.additionalData.linkedEntityId : null,
 				zone: undefined,
 			} as DeckCard);
-			// console.debug('[linked-entity-parser] adding card', updatedCard);
+			// console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToAddTheCard.deck,
 				updatedCard.cardId,

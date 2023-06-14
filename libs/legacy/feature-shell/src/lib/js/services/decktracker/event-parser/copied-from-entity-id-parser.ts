@@ -6,7 +6,6 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
-import { forcedHiddenCardCreators, hideInfoWhenPlayerPlaysIt } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -33,7 +32,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		const newCopy: DeckCard = deck.findCard(entityId)?.card;
 		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
-		console.debug('copiedCard', isPlayer, copiedCard, newCopy, copiedDeck, copiedCardEntityId, gameEvent, deck);
+		// console.debug('copiedCard', isPlayer, copiedCard, newCopy, copiedDeck, copiedCardEntityId, gameEvent, deck);
 
 		// Cards like Masked Reveler summon a copy of a card from the deck. Because we don't store the entityId of
 		// unknown cards in deck (to avoid info leaks), we can't find the right card from the event info, and so
@@ -47,14 +46,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// }
 
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
+		// const effectiveCreatorCardId =
+		// 	(newCopy?.lastAffectedByCardId as CardIds) || (newCopy?.creatorCardId as CardIds);
 		// See receive-card-in-hand-parser
-		const shouldObfuscate =
-			(isPlayer &&
-				(forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
-					forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds))) ||
-			(!isPlayer &&
-				(hideInfoWhenPlayerPlaysIt.includes(newCopy?.lastAffectedByCardId as CardIds) ||
-					hideInfoWhenPlayerPlaysIt.includes(newCopy?.creatorCardId as CardIds)));
+		// const isSpecialCasePublic =
+		// 	(!isCopiedPlayer &&
+		// 		!forcedHiddenCardCreators.includes(effectiveCreatorCardId as CardIds) &&
+		// 		copiedCardZone !== Zone.HAND) ||
+		// 	(isCopiedPlayer && !hideInfoWhenPlayerPlaysIt.includes(effectiveCreatorCardId as CardIds));
+		const shouldObfuscate = !isCopiedPlayer && copiedCardZone === Zone.HAND;
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
 		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
@@ -72,52 +72,55 @@ export class CopiedFromEntityIdParser implements EventParser {
 			shouldObfuscate
 				? copiedCard?.cardId
 				: updatedCardId;
-		console.debug(
-			'[copied-from-entity] obfuscatedCardId',
-			obfuscatedCardId,
-			isPlayer,
-			newCopy?.creatorCardId,
-			newCopy,
-			copiedCard,
-		);
+		// console.debug(
+		// 	'[copied-from-entity] obfuscatedCardId',
+		// 	obfuscatedCardId,
+		// 	shouldObfuscate,
+		// 	isPlayer,
+		// 	newCopy?.creatorCardId,
+		// 	newCopy,
+		// 	copiedCard,
+		// );
 		// We don't add the initial cards in the deck, so if no card is found, we create it
 		const updatedCopiedCard =
 			copiedCard?.update({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardName),
 				manaCost: newCopy?.manaCost ?? copiedCard.manaCost,
+				// Always set the entityId to null when it's the opponent's deck to avoid info leaks
+				entityId: isCopiedPlayer || copiedCardZone === Zone.DECK ? copiedCardEntityId : null,
 			} as DeckCard) ??
 			DeckCard.create({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId),
-				entityId: isPlayer ? copiedCardEntityId : null,
+				entityId: isCopiedPlayer ? copiedCardEntityId : null,
 				// This was introduced so that discovering cards from deck would update the info of the card in deck
 				// with the updated info from the Discover (initially for Lady Prestor)
-				manaCost: isPlayer ? newCopy?.manaCost : null,
+				manaCost: isCopiedPlayer ? newCopy?.manaCost : null,
 				zone: undefined,
 			} as DeckCard);
 		const updatedCopiedCardWithPosition = updatedCopiedCard.update({
 			positionFromTop: newCopy?.creatorCardId === CardIds.Plagiarizarrr ? 0 : updatedCopiedCard.positionFromTop,
 		});
-		console.debug(
-			'[copied-from-entity] updatedCopiedCardWithPosition',
-			updatedCopiedCardWithPosition,
-			updatedCopiedCard,
-			copiedCard,
-			newCopy,
-		);
+		// console.debug(
+		// 	'[copied-from-entity] updatedCopiedCardWithPosition',
+		// 	updatedCopiedCardWithPosition,
+		// 	updatedCopiedCard,
+		// 	copiedCard,
+		// 	newCopy,
+		// );
 		const newCopiedDeck =
 			copiedCardZone === Zone.DECK
 				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
 						cost: updatedCopiedCardWithPosition.manaCost,
 				  })
 				: copiedDeck.deck;
-		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);
+		// console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);
 		const newCopiedPlayer =
 			copiedCardZone === Zone.DECK
 				? copiedDeck.update({ deck: newCopiedDeck })
 				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCardWithPosition, isCopiedPlayer);
-		console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
+		// console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(

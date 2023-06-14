@@ -8,7 +8,6 @@ import {
 	cardsConsideredPublic,
 	cardsRevealedWhenDrawn,
 	forcedHiddenCardCreators,
-	hideInfoWhenPlayerPlaysIt,
 	publicCardCreators,
 	specialCasePublicCardCreators,
 } from '../../hs-utils';
@@ -45,7 +44,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			gameEvent.additionalData?.lastInfluencedByCardId ?? gameEvent.additionalData?.creatorCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
-		const isSpecialCasePublic =
+		const isSpecialCasePublicWhenOpponentDraws =
 			// This is starting to become one of the worst tangle of special cases in the app
 			//The idea is this:
 			// - Some cards let you discover cards from the opponent's hand
@@ -54,8 +53,10 @@ export class ReceiveCardInHandParser implements EventParser {
 			// - To prevent that, we add some exception for these cards to hide the info
 			// - However, when the opponent plays the cards, we still want to be able to flag them as "created by"
 			// in their hand
-			((!isPlayer && !forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds)) ||
-				(isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))) &&
+			!forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds) &&
+			// Not sure why we would want to hide some info when the player plays the card and we're looking at
+			// cards added to the player's hand
+			// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))
 			(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
 				publicCardCreators.includes(lastInfluencedByCardId) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
@@ -67,7 +68,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// There might be some edge cases where we don't want that, but for now it's a good approximation
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
-			isSpecialCasePublic;
+			isSpecialCasePublicWhenOpponentDraws;
 		// console.debug(
 		// 	'[receive-card-in-hand] isCardInfoPublic',
 		// 	isCardInfoPublic,

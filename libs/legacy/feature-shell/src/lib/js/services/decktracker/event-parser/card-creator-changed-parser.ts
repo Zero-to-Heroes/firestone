@@ -4,7 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { forcedHiddenCardCreators, hideInfoWhenPlayerPlaysIt } from '../../hs-utils';
+import { forcedHiddenCardCreators } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -27,8 +27,8 @@ export class CardCreatorChangedParser implements EventParser {
 
 		// See receive-card-in-hand-parser
 		const isSpecialCasePublic =
-			(!isPlayer && !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId as CardIds)) ||
-			(isPlayer && !hideInfoWhenPlayerPlaysIt.includes(gameEvent.additionalData.creatorCardId as CardIds));
+			!isPlayer && !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId as CardIds);
+		// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(gameEvent.additionalData.creatorCardId as CardIds));
 		const isCardInfoPublic = isPlayer || isSpecialCasePublic;
 		const newCardInHand = cardInHand
 			? cardInHand.update({
