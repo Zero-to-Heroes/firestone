@@ -239,16 +239,31 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	): readonly SelectorInput[] {
 		const result: SelectorInput[] = [];
 		const selector: Selector = this.buildSelector(cardId, card, side);
-		for (const card of this.getAllCards(!!playerDeckProvider ? playerDeckProvider() : null, side)) {
+		// console.debug('selector', selector, cardId, card, side);
+
+		const allPlayerCards = this.getAllCards(
+			!!playerDeckProvider ? playerDeckProvider() : null,
+			side === 'duels' ? side : 'player',
+		);
+		// console.debug('allPlayerCards', allPlayerCards);
+		for (const card of allPlayerCards) {
+			// console.debug('\t', 'considering card to highlight', card);
 			if (selector(card)) {
+				// console.debug('\t', 'will highlight', card);
 				result.push(card);
 			}
 		}
-		for (const card of this.getAllCards(
+
+		// const otherSideToCheck = side === 'player' ? 'opponent' : side === 'opponent' ? 'player' : side;
+		const allOpponentCards = this.getAllCards(
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
-			side === 'player' ? 'opponent' : side === 'opponent' ? 'player' : side,
-		)) {
+			side === 'duels' ? side : 'opponent',
+		);
+		// console.debug('allOpponentCards', allOpponentCards);
+		for (const card of allOpponentCards) {
+			// console.debug('\t', 'considering card to highlight', card);
 			if (selector(card)) {
+				// console.debug('\t', 'will highlight', card);
 				result.push(card);
 			}
 		}
