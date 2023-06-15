@@ -77,11 +77,19 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'content',
-								text: `Add card highlights and oracles for Jade Stash (the split version of Jade Idol), Revive Pet, Hagatha's Embrace, Meek Mastery.`,
+								text: `Add card highlights and oracles for Jade Stash (the split version of Jade Idol), Revive Pet, Hagatha's Embrace, Meek Mastery, Ghastly Gravedigger.`,
 							},
 							{
 								type: 'bug',
 								text: `Fix some issues where known cards would not be flagged correctly in the opponent's hand, and miscellaneous smaller issues that would happen when revealing some cards in the opponent's hand or deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Grey Sage Parrot now properly highlights the cards costing 6 or more.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where card highlight was not working on the opponent's deck.`,
 							},
 						],
 					},
