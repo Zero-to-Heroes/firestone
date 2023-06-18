@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { WebsiteBootstrapService } from '@firestone/website/core';
-import { from, Observable, startWith } from 'rxjs';
+import Plausible from 'plausible-tracker';
+import { Observable, from, startWith } from 'rxjs';
 
 @Component({
 	selector: 'website-root',
@@ -19,6 +20,13 @@ export class AppComponent extends AbstractSubscriptionComponent implements After
 	}
 
 	ngAfterContentInit(): void {
+		const plausible = Plausible({
+			domain: 'firestoneapp.gg',
+			trackLocalhost: true,
+			apiHost: 'https://apps.zerotoheroes.com',
+		});
+		plausible.trackPageview();
+
 		this.initComplete$ = from(this.bootstrap.init()).pipe(
 			startWith(false),
 			this.mapData((initComplete) => initComplete),

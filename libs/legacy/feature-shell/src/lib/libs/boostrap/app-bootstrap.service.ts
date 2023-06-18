@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { BootstrapEssentialServicesService } from './bootstrap-essential-services.service';
 import { AppStartupService } from './app-startup.service';
+import { BootstrapEssentialServicesService } from './bootstrap-essential-services.service';
 import { BootstrapOtherServicesService } from './bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './bootstrap-store-services.service';
 

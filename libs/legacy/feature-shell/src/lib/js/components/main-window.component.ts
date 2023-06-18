@@ -10,6 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import Plausible from 'plausible-tracker';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
@@ -212,6 +213,12 @@ export class MainWindowComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+		
+		const plausible = Plausible({
+			domain: 'firestoneapp.gg-app',
+			trackLocalhost: true,
+			apiHost: 'https://apps.zerotoheroes.com',
+		});
 	}
 
 	@HostListener('window:keydown', ['$event'])
