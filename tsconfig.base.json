@@ -48,6 +48,7 @@
 			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
+			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"]
 		},
 		"strict": false,

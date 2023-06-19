@@ -1,10 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { JwtPayload, decode } from 'jsonwebtoken';
+import { LocalStorageService } from './local-storage';
 import { OverwolfService } from './overwolf.service';
 
+const FIRESTONE_TOKEN_URL = 'https://xuzigy2zcqg6qxrdztvg42suae0skqkr.lambda-url.us-west-2.on.aws/';
 @Injectable()
 export class ApiRunner {
-	constructor(private readonly http: HttpClient, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly http: HttpClient,
+		private readonly ow: OverwolfService,
+		private readonly localStorage: LocalStorageService,
+	) {}
 
 	/** Only for logged-in users */
 	public async callPostApiSecure<T>(
@@ -15,13 +22,11 @@ export class ApiRunner {
 			bearerToken?: string;
 		},
 	): Promise<T | null> {
-		// TODO: cache the token if it's costly to generate
-		const start = Date.now();
-		const userToken = await this.ow.generateSessionToken();
-		// console.debug('[api] generated token took', Date.now() - start);
+		const userToken = await this.secureUserToken();
 		input = {
 			...input,
 			jwt: userToken,
+			isFirestoneToken: true,
 		};
 		return this.callPostApi(url, input, options);
 	}
@@ -88,5 +93,33 @@ export class ApiRunner {
 				responseType: 'text',
 			})
 			.toPromise();
+	}
+
+	private async secureUserToken(): Promise<string> {
+		let firestoneToken: string | null = this.localStorage.getItem<string>(
+			LocalStorageService.FIRESTONE_SESSION_TOKEN,
+		);
+		console.debug('checking firestoneToken', firestoneToken);
+		// If the token is valid, we can use it
+		if (!!firestoneToken?.length) {
+			const decoded: JwtPayload = decode(firestoneToken) as JwtPayload;
+			console.debug('decoded', decoded);
+			// Check if JWT token is expired
+			if ((decoded.exp ?? 0) * 1000 < Date.now()) {
+				firestoneToken = null;
+			}
+		}
+		if (!firestoneToken) {
+			firestoneToken = await this.generateNewToken();
+			this.localStorage.setItem(LocalStorageService.FIRESTONE_SESSION_TOKEN, firestoneToken);
+		}
+		return firestoneToken as string;
+	}
+
+	private async generateNewToken(): Promise<string | null> {
+		const owToken = await this.ow.generateSessionToken();
+		const fsToken: { fsToken: string } | null = await this.callPostApi(FIRESTONE_TOKEN_URL, { owToken: owToken });
+		console.debug('fsToken', fsToken, !fsToken?.fsToken ? 'no decode' : decode(fsToken?.fsToken));
+		return fsToken?.fsToken ?? null;
 	}
 }
