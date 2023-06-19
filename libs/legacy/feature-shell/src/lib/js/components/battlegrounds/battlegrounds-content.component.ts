@@ -8,7 +8,8 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import Plausible from 'plausible-tracker';
+import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, startWith } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
@@ -75,12 +76,22 @@ export class BattlegroundsContentComponent
 	}
 
 	ngAfterContentInit() {
+		const plausible = Plausible({
+			domain: 'firestoneapp.gg-app',
+			trackLocalhost: true,
+			apiHost: 'https://apps.zerotoheroes.com',
+		});
 		this.currentPanelId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
 			.pipe(
 				filter(([currentPanelId]) => !!currentPanelId),
 				this.mapData(([currentPanelId]) => currentPanelId),
 			);
+		this.currentPanelId$.subscribe((currentApp) => {
+			plausible.trackPageview({
+				url: currentApp,
+			});
+		});
 		this.currentPanel$ = this.store
 			.listenBattlegrounds$(
 				([state]) => state.panels,

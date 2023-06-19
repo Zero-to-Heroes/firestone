@@ -141,6 +141,11 @@ export class MainWindowComponent
 	}
 
 	ngAfterContentInit() {
+		const plausible = Plausible({
+			domain: 'firestoneapp.gg-app',
+			trackLocalhost: true,
+			apiHost: 'https://apps.zerotoheroes.com',
+		});
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
@@ -148,6 +153,11 @@ export class MainWindowComponent
 		this.currentApp$ = this.store
 			.listen$(([main, nav, prefs]) => nav.currentApp)
 			.pipe(this.mapData(([currentApp]) => currentApp));
+		this.currentApp$.subscribe((currentApp) => {
+			plausible.trackPageview({
+				url: currentApp,
+			});
+		});
 		this.activeTheme$ = combineLatest(
 			this.showFtue$,
 			this.store.listen$(([main, nav, prefs]) => nav.currentApp),
@@ -213,12 +223,6 @@ export class MainWindowComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		
-		const plausible = Plausible({
-			domain: 'firestoneapp.gg-app',
-			trackLocalhost: true,
-			apiHost: 'https://apps.zerotoheroes.com',
-		});
 	}
 
 	@HostListener('window:keydown', ['$event'])
