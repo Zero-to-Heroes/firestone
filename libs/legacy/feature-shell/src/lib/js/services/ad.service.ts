@@ -41,11 +41,11 @@ export class AdService {
 		combineLatest([
 			this.premiumFeatures$$,
 			this.store.listenPrefs$((prefs) => prefs.showOverlayAd),
-			betaChannel$$,
-		]).subscribe(([isPremium, [showOverlayAd], betaChannel]) => {
+			// betaChannel$$,
+		]).subscribe(([isPremium, [showOverlayAd]]) => {
 			amplitude.getInstance().logEvent('overlay-ads', { enabled: showOverlayAd });
-			console.debug('show ads?', isPremium, showOverlayAd, betaChannel);
-			this.isPremium$$.next(betaChannel && (isPremium || showOverlayAd));
+			console.debug('show ads?', isPremium, showOverlayAd);
+			this.isPremium$$.next(isPremium || showOverlayAd);
 		});
 	}
 
