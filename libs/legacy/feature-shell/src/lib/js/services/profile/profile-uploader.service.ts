@@ -45,20 +45,27 @@ export class ProfileUploaderService {
 			.subscribe(
 				async ([inGame, isPremiumUser, achievementCategories, bgFullTimeStatsByHero, sets, packsAllTime]) => {
 					const payload: Mutable<Profile> = {};
+					let dirty = false;
 					if (!!achievementCategories?.length) {
 						payload.achievementCategories = achievementCategories;
+						dirty = true;
 					}
 					if (!!bgFullTimeStatsByHero?.length) {
 						payload.bgFullTimeStatsByHero = bgFullTimeStatsByHero;
+						dirty = true;
 					}
 					if (!!sets?.length) {
 						payload.sets = sets;
+						dirty = true;
 					}
 					if (!!packsAllTime?.length) {
 						payload.packsAllTime = packsAllTime;
+						dirty = true;
 					}
-					console.debug('[profile] updating profile with payload', payload);
-					this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+					if (dirty) {
+						console.debug('[profile] updating profile with payload', payload);
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+					}
 				},
 			);
 	}
