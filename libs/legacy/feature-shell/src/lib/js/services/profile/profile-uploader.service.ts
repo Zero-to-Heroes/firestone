@@ -4,6 +4,7 @@ import { Mutable } from '@firestone/shared/framework/common';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { GameStatusService } from '../game-status.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './internal/internal-profile-battlegrounds.service';
@@ -19,13 +20,16 @@ export class ProfileUploaderService {
 		private readonly internalBattlegrounds: InternalProfileBattlegroundsService,
 		private readonly api: ApiRunner,
 		private readonly gameStatus: GameStatusService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
 	}
 
-	private init() {
+	private async init() {
+		await this.store.initComplete();
 		combineLatest([
 			this.gameStatus.inGame$$,
+			this.store.isPremiumUser$(),
 			this.internalAchievements.achievementCategories$$,
 			this.internalBattlegrounds.bgFullTimeStatsByHero$$,
 			this.internalCollection.sets$$,
@@ -34,26 +38,28 @@ export class ProfileUploaderService {
 			.pipe(
 				// If we are not in game, we can't get new information from the game memory, so there
 				// is no reason to update the profile
-				filter(([inGame, _]) => inGame),
-				debounceTime(10000),
+				filter(([inGame, isPremiumUser, _]) => inGame && isPremiumUser),
+				debounceTime(20000),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			)
-			.subscribe(async ([inGame, achievementCategories, bgFullTimeStatsByHero, sets, packsAllTime]) => {
-				const payload: Mutable<Profile> = {};
-				if (!!achievementCategories?.length) {
-					payload.achievementCategories = achievementCategories;
-				}
-				if (!!bgFullTimeStatsByHero?.length) {
-					payload.bgFullTimeStatsByHero = bgFullTimeStatsByHero;
-				}
-				if (!!sets?.length) {
-					payload.sets = sets;
-				}
-				if (!!packsAllTime?.length) {
-					payload.packsAllTime = packsAllTime;
-				}
-				console.debug('[profile] updating profile with payload', payload);
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
-			});
+			.subscribe(
+				async ([inGame, isPremiumUser, achievementCategories, bgFullTimeStatsByHero, sets, packsAllTime]) => {
+					const payload: Mutable<Profile> = {};
+					if (!!achievementCategories?.length) {
+						payload.achievementCategories = achievementCategories;
+					}
+					if (!!bgFullTimeStatsByHero?.length) {
+						payload.bgFullTimeStatsByHero = bgFullTimeStatsByHero;
+					}
+					if (!!sets?.length) {
+						payload.sets = sets;
+					}
+					if (!!packsAllTime?.length) {
+						payload.packsAllTime = packsAllTime;
+					}
+					console.debug('[profile] updating profile with payload', payload);
+					this.api.callPostApiSecure(PROFILE_UPDATE_URL, payload);
+				},
+			);
 	}
 }
