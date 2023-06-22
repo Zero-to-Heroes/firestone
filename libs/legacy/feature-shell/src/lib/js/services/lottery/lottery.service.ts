@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -11,6 +11,8 @@ import { LotteryResourcesUpdateProcessor } from './events/lottery-resources-upda
 import { LotteryTurnStartProcessor } from './events/lottery-turn-start-processor';
 import { LotteryVisibilityProcessor } from './events/lottery-visibility-processor';
 import { LotteryState } from './lottery.model';
+
+const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
 
 @Injectable()
 export class LotteryService {
@@ -29,6 +31,7 @@ export class LotteryService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly api: ApiRunner,
 	) {
 		window['lotteryProvider'] = this;
 		this.init();
@@ -77,7 +80,7 @@ export class LotteryService {
 			}
 
 			if (event.type === GameEvent.GAME_END) {
-				this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, this.lottery$$.value);
+				this.confirmLotteryPoints();
 			}
 		});
 
@@ -100,6 +103,20 @@ export class LotteryService {
 			.subscribe((showLottery) => {
 				this.eventsQueue$$.next({ type: 'UPDATE_VISIBILITY', additionalData: { visible: showLottery } } as any);
 			});
+	}
+
+	private confirmLotteryPoints() {
+		this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, this.lottery$$.value);
+
+		// Get the current month in YYYY-MM format
+		const lotterySeason = new Date().toISOString().slice(0, 7);
+		const lotteryPoints = this.lottery$$.value.currentPoints();
+
+		// Send the data
+		this.api.callPostApiSecure(LOTTERY_UPDATE_ENDPOINT, {
+			season: lotterySeason,
+			points: lotteryPoints,
+		});
 	}
 }
 

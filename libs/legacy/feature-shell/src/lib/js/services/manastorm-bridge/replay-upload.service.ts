@@ -54,8 +54,6 @@ export class ReplayUploadService {
 		}/${today.getDate()}/${uuid()}.xml.zip`;
 		const prefs = await this.prefs.getPreferences();
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
-		// Get the current month in YYYY-MM format
-		const currentMonth = new Date().toISOString().slice(0, 7);
 		const metadata = {
 			'review-id': reviewId,
 			'replay-key': replayKey,
@@ -90,8 +88,6 @@ export class ReplayUploadService {
 			'force-opponent-name': encodeURIComponent(game.forceOpponentName),
 			'allow-game-share': '' + prefs.allowGamesShare,
 			'bg-battle-odds': !!game.bgBattleOdds?.length ? JSON.stringify(game.bgBattleOdds) : '',
-			'lottery-season': currentMonth,
-			'lottery-points': '' + (game.lotteryPoints ?? -1),
 		};
 		const params = {
 			Bucket: BUCKET,
