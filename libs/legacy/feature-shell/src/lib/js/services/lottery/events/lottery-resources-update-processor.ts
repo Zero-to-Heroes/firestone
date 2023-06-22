@@ -10,13 +10,6 @@ export class LotteryResourcesUpdateProcessor implements LotteryProcessor {
 
 		const [, controllerId, localPlayer] = event.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
-		console.debug(
-			'[lottery] resources used this turn',
-			isPlayer,
-			event.additionalData.resourcesUsed,
-			event,
-			currentState,
-		);
 		if (!isPlayer) {
 			return currentState;
 		}

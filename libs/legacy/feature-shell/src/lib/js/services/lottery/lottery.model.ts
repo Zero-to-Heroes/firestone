@@ -5,6 +5,8 @@ export class LotteryState {
 	readonly lastUpdateDate: string;
 	readonly resourcesUsedThisTurn: number = 0;
 	readonly totalResourcesUsed: number = 0;
+	readonly quilboardsPlayed: number = 0;
+	readonly spellsPlayed: number = 0;
 
 	public static create(base: Partial<NonFunctionProperties<LotteryState>>): LotteryState {
 		return Object.assign(new LotteryState(), base);
@@ -15,6 +17,8 @@ export class LotteryState {
 	}
 
 	public currentPoints(): number {
-		return Math.floor((this.totalResourcesUsed + this.resourcesUsedThisTurn) / 10);
+		return Math.floor(
+			(this.totalResourcesUsed + this.resourcesUsedThisTurn) / 10 + this.quilboardsPlayed + this.spellsPlayed,
+		);
 	}
 }

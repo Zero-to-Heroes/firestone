@@ -1,0 +1,29 @@
+import { Race } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameEvent } from '../../../models/game-event';
+import { LotteryState } from '../lottery.model';
+import { LotteryProcessor } from './_processor';
+
+export class LotteryCardPlayedProcessor implements LotteryProcessor {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
+	process(currentState: LotteryState, event: GameEvent): LotteryState {
+		if (!currentState.visible) {
+			return currentState;
+		}
+
+		const [cardId, controllerId, localPlayer] = event.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		if (!isPlayer) {
+			return currentState;
+		}
+
+		const isQuilboar = this.allCards.getCard(cardId).races?.includes(Race[Race.QUILBOAR]);
+		const isSpell = this.allCards.getCard(cardId).type === 'Spell';
+
+		return currentState.update({
+			quilboardsPlayed: isQuilboar ? currentState.quilboardsPlayed + 1 : currentState.quilboardsPlayed,
+			spellsPlayed: isSpell ? currentState.spellsPlayed + 1 : currentState.spellsPlayed,
+		});
+	}
+}

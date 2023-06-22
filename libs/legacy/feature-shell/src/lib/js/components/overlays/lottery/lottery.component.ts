@@ -42,6 +42,22 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 						></div>
 						<div class="value">{{ resources$ | async }}</div>
 					</div>
+					<div class="stat">
+						<div
+							class="label"
+							[owTranslate]="'app.lottery.quilboars'"
+							[helpTooltip]="'app.lottery.quilboars-tooltip' | translate"
+						></div>
+						<div class="value">{{ quilboars$ | async }}</div>
+					</div>
+					<div class="stat">
+						<div
+							class="label"
+							[owTranslate]="'app.lottery.spells'"
+							[helpTooltip]="'app.lottery.spells-tooltip' | translate"
+						></div>
+						<div class="value">{{ spells$ | async }}</div>
+					</div>
 				</div>
 				<single-ad class="ad" [adId]="'bottom'" *ngIf="displayAd$ | async"></single-ad>
 			</div>
@@ -50,9 +66,11 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LotteryWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	displayAd$: Observable<boolean>;
 	totalPoints$: Observable<string>;
 	resources$: Observable<string>;
-	displayAd$: Observable<boolean>;
+	quilboars$: Observable<string>;
+	spells$: Observable<string>;
 
 	closeConfirmationText: string;
 	closeConfirmationCancelText: string;
@@ -80,6 +98,12 @@ export class LotteryWidgetComponent extends AbstractSubscriptionStoreComponent i
 					),
 				),
 			);
+		this.quilboars$ = this.store
+			.lottery$()
+			.pipe(this.mapData((lottery) => lottery.quilboardsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
+		this.spells$ = this.store
+			.lottery$()
+			.pipe(this.mapData((lottery) => lottery.spellsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
 		this.displayAd$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => !hasPremium));
 		this.closeConfirmationText = `
 			<div>${this.i18n.translateString('app.lottery.close-confirmation-text-1')}</div>

@@ -41,9 +41,15 @@
 
 		.stat {
 			display: flex;
+			height: 20px;
 
 			.label {
 				width: 200px;
+			}
+
+			.value {
+				width: 75px;
+				text-align: right;
 			}
 		}
 	}

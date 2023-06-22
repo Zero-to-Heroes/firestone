@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { LotteryProcessor } from './events/_processor';
+import { LotteryCardPlayedProcessor } from './events/lottery-card-played-processor';
 import { LotteryResourcesUpdateProcessor } from './events/lottery-resources-update-processor';
 import { LotteryTurnStartProcessor } from './events/lottery-turn-start-processor';
 import { LotteryVisibilityProcessor } from './events/lottery-visibility-processor';
@@ -22,6 +23,7 @@ export class LotteryService {
 		[GameEvent.RESOURCES_UPDATED]: new LotteryResourcesUpdateProcessor(),
 		[GameEvent.TURN_START]: new LotteryTurnStartProcessor(),
 		UPDATE_VISIBILITY: new LotteryVisibilityProcessor(),
+		[GameEvent.CARD_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
 	};
 
 	private eventsQueue$$ = new BehaviorSubject<GameEvent | null>(null);
@@ -32,6 +34,7 @@ export class LotteryService {
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
+		private readonly allCards: CardsFacadeService,
 	) {
 		window['lotteryProvider'] = this;
 		this.init();
