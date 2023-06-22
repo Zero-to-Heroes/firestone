@@ -37,7 +37,7 @@ export class PremiumSettingDirective
 
 	ngAfterContentInit() {
 		this.store
-			.isPremiumUser$()
+			.enablePremiumFeatures$()
 			.pipe(this.mapData((premium) => premium))
 			.subscribe((value) => this.setPremium(value));
 	}

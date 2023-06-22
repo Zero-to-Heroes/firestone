@@ -366,6 +366,8 @@ export class EndGameUploaderService {
 			game.runId = this.arenaService.currentArenaRunId;
 		}
 
+		game.lotteryPoints = info.lotteryPoints;
+
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
 		return game;
 	}
@@ -469,4 +471,5 @@ export interface UploadInfo {
 	xpForGame?: XpForGameInfo;
 	bgNewRating: number;
 	bgBattleOdds?: readonly { turn: number; wonPercent: number }[];
+	lotteryPoints?: number;
 }

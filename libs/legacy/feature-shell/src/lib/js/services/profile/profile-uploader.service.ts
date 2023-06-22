@@ -29,7 +29,7 @@ export class ProfileUploaderService {
 		await this.store.initComplete();
 		combineLatest([
 			this.gameStatus.inGame$$,
-			this.store.isPremiumUser$(),
+			this.store.enablePremiumFeatures$(),
 			this.internalAchievements.achievementCategories$$,
 			this.internalBattlegrounds.bgFullTimeStatsByHero$$,
 			this.internalCollection.sets$$,

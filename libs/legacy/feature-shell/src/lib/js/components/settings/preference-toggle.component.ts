@@ -70,6 +70,7 @@ export class PreferenceToggleComponent
 	@Input() valueToDisplayMessageOn: string | boolean | number;
 	@Input() toggleFunction: (newValue: boolean) => void;
 	@Input() callbackOnLoad: (newValue: boolean) => void;
+	@Input() valueExtractor: (valkue: boolean) => Promise<boolean> = async (value) => value;
 
 	value: boolean;
 	toggled = false;
@@ -93,8 +94,8 @@ export class PreferenceToggleComponent
 		this.sub$$ = this.store
 			.listenPrefs$((prefs) => prefs[this.field])
 			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				this.value = value;
+			.subscribe(async (value) => {
+				this.value = await this.valueExtractor(value);
 				this.cdr?.detectChanges();
 			});
 	}
@@ -129,7 +130,7 @@ export class PreferenceToggleComponent
 
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
-		this.value = prefs[this.field];
+		this.value = await this.valueExtractor(prefs[this.field]);
 		this.toggled = false;
 		if (this.callbackOnLoad) {
 			this.callbackOnLoad(this.value);

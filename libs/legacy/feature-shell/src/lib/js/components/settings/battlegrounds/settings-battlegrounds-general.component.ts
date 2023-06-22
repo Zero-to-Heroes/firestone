@@ -1,7 +1,7 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
@@ -182,7 +182,7 @@ export class SettingsBattlegroundsGeneralComponent
 	}
 
 	ngAfterContentInit() {
-		const premium$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => premium));
+		const premium$ = this.store.enablePremiumFeatures$().pipe(this.mapData((premium) => premium));
 		this.useLocalSimulator$ = combineLatest([
 			premium$,
 			this.store.listenPrefs$((prefs) => prefs.bgsUseLocalSimulator),

@@ -15,26 +15,32 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
-	selector: 'bgs-hero-tips-widget-wrapper',
+	selector: 'lottery-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
-		<bgs-hero-tips
+		<lottery
 			class="widget"
 			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
-		></bgs-hero-tips>
+		></lottery>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroTipsWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => (2 * gameWidth) / 3;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 200;
-	protected positionUpdater = (left: number, top: number) => this.prefs.updateBgsHeroTipsPosition(left, top);
-	protected positionExtractor = async (prefs: Preferences) => prefs.bgsHeroTipsWidgetPosition;
+export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => 200;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 400;
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateLotteryPosition(left, top);
+	protected positionExtractor = async (prefs: Preferences) => prefs.lotteryPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected bounds = {
+		left: 0,
+		top: -20,
+		right: 0,
+		bottom: 0,
+	};
 
 	showWidget$: Observable<boolean>;
 
@@ -47,28 +53,20 @@ export class BgsHeroTipsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
+		this.forceKeepInBounds = true;
 	}
 
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest([
+			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.store.listenPrefs$((prefs) => prefs.showLottery),
 			this.store.enablePremiumFeatures$(),
-			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				// Show from prefs
-				([main, nav, prefs]) => prefs.bgsShowHeroTipsOverlay && prefs.bgsFullToggle,
-			),
-			this.store.listenBattlegrounds$(
-				([state, prefs]) => state?.inGame,
-				([state, prefs]) => state?.currentGame,
-			),
 		]).pipe(
-			this.mapData(([premium, [currentScene, displayFromPrefs], [inGame, currentGame]]) => {
+			this.mapData(([[currentScene], [showLottery], isPremium]) => {
 				return (
-					premium &&
-					inGame &&
-					currentGame?.getMainPlayer()?.cardId &&
-					displayFromPrefs &&
-					currentScene === SceneMode.GAMEPLAY
+					currentScene === SceneMode.GAMEPLAY &&
+					// Check for null so that by default it doesn't show up for premium users
+					((!isPremium && showLottery === null) || (isPremium && showLottery === true))
 				);
 			}),
 			this.handleReposition(),

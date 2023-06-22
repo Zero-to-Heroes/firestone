@@ -113,7 +113,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 			this.prefs.setContactEmail(this.email);
 
 			this.status = this.i18n.translateString('settings.general.bug-report.status-done', {
-				discordLink: `<a href="https://discord.gg/v2a4uR7" target="_blank">Discord</a>`,
+				discordLink: `<a href="https://discord.gg/vKeB3gnKTy" target="_blank">Discord</a>`,
 				twitterLink: `<a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a>`,
 			});
 			this.buttonDisabled = false;

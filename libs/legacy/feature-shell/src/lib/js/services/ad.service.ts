@@ -8,9 +8,8 @@ declare let amplitude;
 @Injectable()
 export class AdService {
 	public showAds$$ = new BehaviorSubject<boolean>(true);
-	public isPremium$$ = new BehaviorSubject<boolean>(false);
-
-	private premiumFeatures$$ = new BehaviorSubject<boolean>(false);
+	public enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
+	public hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.init();
@@ -22,31 +21,22 @@ export class AdService {
 			this.showAds$$.next(showAds);
 		});
 		this.ow.onSubscriptionChanged(async (event) => {
-			const isPremium = await this.enablePremiumFeatures();
-			this.premiumFeatures$$.next(isPremium);
-		});
-		const betaChannel$$ = new BehaviorSubject<boolean>(false);
-		overwolf.settings.getExtensionSettings((settingsResult) => {
-			betaChannel$$.next(
-				settingsResult?.settings?.channel === 'beta' || process.env['NODE_ENV'] !== 'production',
-			);
-			console.debug('beta channel?', betaChannel$$.value, settingsResult);
+			const isPremium = await this.hasPremiumSub();
+			this.hasPremiumSub$$.next(isPremium);
 		});
 		const showAds = await this.shouldDisplayAds();
-		const isPremium = await this.enablePremiumFeatures();
+		const isPremium = await this.hasPremiumSub();
 		this.showAds$$.next(showAds);
-		this.premiumFeatures$$.next(isPremium);
+		this.hasPremiumSub$$.next(isPremium);
 
 		await this.store.initComplete();
-		combineLatest([
-			this.premiumFeatures$$,
-			this.store.listenPrefs$((prefs) => prefs.showOverlayAd),
-			// betaChannel$$,
-		]).subscribe(([isPremium, [showOverlayAd]]) => {
-			amplitude.getInstance().logEvent('overlay-ads', { enabled: showOverlayAd });
-			console.debug('show ads?', isPremium, showOverlayAd);
-			this.isPremium$$.next(isPremium || showOverlayAd);
-		});
+		combineLatest([this.hasPremiumSub$$, this.store.listenPrefs$((prefs) => prefs.showLottery)]).subscribe(
+			([isPremium, [showLottery]]) => {
+				amplitude.getInstance().logEvent('overlay-ads', { enabled: showLottery });
+				console.debug('show ads?', isPremium, showLottery);
+				this.enablePremiumFeatures$$.next(isPremium || showLottery);
+			},
+		);
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
@@ -77,7 +67,7 @@ export class AdService {
 		});
 	}
 
-	public async enablePremiumFeatures(): Promise<boolean> {
+	public async hasPremiumSub(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('not display in dev');
 			return false;

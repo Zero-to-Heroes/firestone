@@ -460,6 +460,8 @@ import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strate
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
+import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
+import { ControlCloseComponent } from '@components/controls/control-close.component';
 import { ControlWebsiteComponent } from '@components/controls/control-website.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
@@ -487,6 +489,8 @@ import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overla
 import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
+import { LotteryWidgetWrapperComponent } from '@components/overlays/lottery/lottery-widget-wrapper.component';
+import { LotteryWidgetComponent } from '@components/overlays/lottery/lottery.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
@@ -572,7 +576,6 @@ import { StatCellComponent } from './js/components/battlegrounds/post-match/stat
 import { CardComponent } from './js/components/collection/card.component';
 import { BasicBarChartComponent } from './js/components/common/chart/basic-bar-chart.component';
 import { ControlBugComponent } from './js/components/controls/control-bug.component';
-import { ControlCloseComponent } from './js/components/controls/control-close.component';
 import { ControlDiscordComponent } from './js/components/controls/control-discord.component';
 import { ControlHelpComponent } from './js/components/controls/control-help.component';
 import { ControlMaximizeComponent } from './js/components/controls/control-maximize.component';
@@ -722,6 +725,7 @@ import { LogListenerService } from './js/services/log-listener.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { LogUtilsService } from './js/services/log-utils.service';
 import { LogsUploaderService } from './js/services/logs-uploader.service';
+import { LotteryService } from './js/services/lottery/lottery.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { CollaboratorsService } from './js/services/mainwindow/store/collaborators.service';
@@ -892,6 +896,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ControlMinimizeComponent,
 		ControlMaximizeComponent,
 		ControlCloseComponent,
+		ControlCloseSimpleComponent,
 		ControlSettingsComponent,
 		ControlDiscordComponent,
 		ControlWebsiteComponent,
@@ -1014,14 +1019,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		WindowWrapperComponent,
 		SecondaryDefaultComponent,
-
-		ControlHelpComponent,
-		ControlMinimizeComponent,
-		ControlMaximizeComponent,
-		ControlCloseComponent,
-		ControlSettingsComponent,
-		ControlBugComponent,
-		ControlShareComponent,
 
 		HotkeyComponent,
 		VersionComponent,
@@ -1503,6 +1500,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsOutOfCombatDeckSelectComponent,
 		DuelsDeckWidgetComponent,
 
+		LotteryWidgetWrapperComponent,
+		LotteryWidgetComponent,
+
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,
 		BgsBannedTribesWidgetWrapperComponent,
@@ -1834,6 +1834,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		InternalProfileCollectionService,
 		InternalProfileAchievementsService,
 		InternalProfileBattlegroundsService,
+
+		LotteryService,
 
 		// Twitch
 		LocalizationStandaloneService,

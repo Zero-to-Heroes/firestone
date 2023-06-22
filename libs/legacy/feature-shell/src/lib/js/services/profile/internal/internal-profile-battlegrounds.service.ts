@@ -69,7 +69,7 @@ export class InternalProfileBattlegroundsService {
 		);
 		const bgFullTimeStatsByHero$ = combineLatest([
 			achievementsData$,
-			this.store.isPremiumUser$(),
+			this.store.enablePremiumFeatures$(),
 			this.achievementsMonitor.nativeAchievements$$,
 		]).pipe(
 			filter(

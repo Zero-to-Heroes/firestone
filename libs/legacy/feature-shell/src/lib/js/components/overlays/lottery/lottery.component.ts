@@ -1,0 +1,96 @@
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { Observable } from 'rxjs';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+
+@Component({
+	selector: 'lottery',
+	styleUrls: ['../../../../css/component/overlays/lottery/lottery.component.scss'],
+	template: `
+		<div class="lottery-container">
+			<div class="title-bar">
+				<div class="controls">
+					<div
+						class="control info"
+						inlineSVG="assets/svg/info.svg"
+						[helpTooltip]="'app.lottery.info-text' | owTranslate"
+					></div>
+					<control-close-simple
+						class="control"
+						(requestClose)="close()"
+						[requestConfirmation]="true"
+						[confirmationText]="closeConfirmationText"
+						[confirmationCancel]="closeConfirmationCancelText"
+						[confirmationOk]="closeConfirmationOkText"
+					></control-close-simple>
+				</div>
+			</div>
+
+			<div class="lottery-content">
+				<div class="title">
+					<div class="text" [owTranslate]="'app.lottery.title'"></div>
+					<div class="value">{{ totalPoints$ | async }}</div>
+				</div>
+				<div class="stats">
+					<div class="stat">
+						<div
+							class="label"
+							[owTranslate]="'app.lottery.resources'"
+							[helpTooltip]="'app.lottery.resources-tooltip' | translate"
+						></div>
+						<div class="value">{{ resources$ | async }}</div>
+					</div>
+				</div>
+				<single-ad class="ad" [adId]="'bottom'" *ngIf="displayAd$ | async"></single-ad>
+			</div>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LotteryWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	totalPoints$: Observable<string>;
+	resources$: Observable<string>;
+	displayAd$: Observable<boolean>;
+
+	closeConfirmationText: string;
+	closeConfirmationCancelText: string;
+	closeConfirmationOkText: string;
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.totalPoints$ = this.store
+			.lottery$()
+			.pipe(this.mapData((lottery) => lottery.currentPoints().toLocaleString(this.i18n.formatCurrentLocale())));
+		this.resources$ = this.store
+			.lottery$()
+			.pipe(
+				this.mapData((lottery) =>
+					(lottery.totalResourcesUsed + lottery.resourcesUsedThisTurn).toLocaleString(
+						this.i18n.formatCurrentLocale(),
+					),
+				),
+			);
+		this.displayAd$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => !hasPremium));
+		this.closeConfirmationText = `
+			<div>${this.i18n.translateString('app.lottery.close-confirmation-text-1')}</div>
+			<div style="font-weight: bold">${this.i18n.translateString('app.lottery.close-confirmation-text-2')}</div>
+		`;
+		this.closeConfirmationCancelText = this.i18n.translateString('app.lottery.close-confirmation-button-cancel');
+		this.closeConfirmationOkText = this.i18n.translateString('app.lottery.close-confirmation-button-ok');
+	}
+
+	async close() {
+		const prefs = await this.prefs.getPreferences();
+		await this.prefs.savePreferences({ ...prefs, showLottery: false });
+	}
+}

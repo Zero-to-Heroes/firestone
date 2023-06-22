@@ -143,7 +143,7 @@ export class BgsLeaderboardEmptyCardComponent
 			this.updateInfo();
 		});
 
-		this.store.isPremiumUser$().subscribe((premium) => {
+		this.store.enablePremiumFeatures$().subscribe((premium) => {
 			console.debug('isPremiumUser', premium);
 			this.isPremiumUser = premium;
 		});

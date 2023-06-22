@@ -1,0 +1,56 @@
+.lottery-container {
+	background: var(--color-7);
+	color: var(--color-1);
+	font-size: 14px;
+	position: relative;
+
+	.title-bar {
+		display: flex;
+		height: 30px;
+	}
+
+	.controls {
+		display: flex;
+		margin-left: auto;
+
+		.control {
+			margin-left: 5px;
+		}
+
+		.info {
+			padding: 5px;
+		}
+	}
+
+	.title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		font-size: 20px;
+	}
+
+	.lottery-content {
+		padding: 10px;
+	}
+
+	.stats {
+		margin-top: 10px;
+		margin-bottom: 10px;
+
+		.stat {
+			display: flex;
+
+			.label {
+				width: 200px;
+			}
+		}
+	}
+
+	.ad {
+		display: flex;
+		width: 400px;
+		height: 300px;
+	}
+}

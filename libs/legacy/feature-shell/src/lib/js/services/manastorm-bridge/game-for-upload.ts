@@ -41,6 +41,8 @@ export class GameForUpload {
 
 	mercsBountyId: number;
 
+	lotteryPoints?: number;
+
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
 	uncompressedXmlReplay: string;

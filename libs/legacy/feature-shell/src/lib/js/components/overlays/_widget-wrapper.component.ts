@@ -2,7 +2,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
-import { Observable, pipe, UnaryFunction } from 'rxjs';
+import { Observable, UnaryFunction, pipe } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
@@ -26,6 +26,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		right: -20,
 		bottom: -20,
 	};
+	protected forceKeepInBounds = false;
 
 	protected debug = false;
 
@@ -82,7 +83,9 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 		// Then make sure it fits inside the bounds
 		// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
-		this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+		if (this.forceKeepInBounds) {
+			this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+		}
 
 		if (cleanup) {
 			cleanup();
@@ -97,7 +100,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		gameHeight: number,
 		positionFromPrefs: { left: number; top: number },
 	): Promise<{ left: number; top: number }> {
-		return;
+		// return;
 		let widgetRect = this.getRect();
 		while (!(widgetRect = this.getRect())?.width) {
 			await sleep(500);

@@ -25,6 +25,7 @@ export class LocalStorageService {
 	public static CONSTRUCTED_META_DECKS = 'constructed-meta-decks';
 	public static LOCAL_DISK_CACHE_SHOULD_REBUILD = 'local-disk-cache-should-rebuild';
 	public static FIRESTONE_SESSION_TOKEN = 'firestone-session-token';
+	public static LOTTERY_STATE = 'lottery-state';
 
 	private cache = {};
 

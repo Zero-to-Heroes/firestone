@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -52,11 +52,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 
 	ngAfterContentInit() {
 		this.heroTooltipActive$ = combineLatest([
-			this.store.isPremiumUser$(),
+			this.store.enablePremiumFeatures$(),
 			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTooltip),
 		]).pipe(this.mapData(([premium, [bgsShowHeroSelectionTooltip]]) => premium && bgsShowHeroSelectionTooltip));
 		this.showTierOverlay$ = combineLatest([
-			this.store.isPremiumUser$(),
+			this.store.enablePremiumFeatures$(),
 			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTiers),
 		]).pipe(this.mapData(([premium, [bgsShowHeroSelectionTiers]]) => premium && bgsShowHeroSelectionTiers));
 

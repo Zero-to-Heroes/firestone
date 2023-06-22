@@ -23,7 +23,7 @@ export class InternalProfileCollectionService {
 
 	private initSets() {
 		// TODO: don't upload if the collection didn't change since last upload
-		const setsToUpload$ = combineLatest([this.store.isPremiumUser$(), this.store.sets$()]).pipe(
+		const setsToUpload$ = combineLatest([this.store.enablePremiumFeatures$(), this.store.sets$()]).pipe(
 			filter(([premium, sets]) => premium),
 			// So that we don't spam the server when the user is opening packs
 			debounceTime(10000),
@@ -61,7 +61,10 @@ export class InternalProfileCollectionService {
 	}
 
 	private initBoosters() {
-		const boostersToUpload$ = combineLatest([this.store.isPremiumUser$(), this.store.allTimeBoosters$()]).pipe(
+		const boostersToUpload$ = combineLatest([
+			this.store.enablePremiumFeatures$(),
+			this.store.allTimeBoosters$(),
+		]).pipe(
 			filter(([premium, sets]) => premium),
 			debounceTime(2000),
 			map(([premium, boosters]) => {

@@ -53,7 +53,7 @@ export class BgsBattleSimulationService {
 			console.log('CPU count', this.cpuCount);
 		}
 		await this.store.initComplete();
-		this.store.isPremiumUser$().subscribe((premium) => {
+		this.store.enablePremiumFeatures$().subscribe((premium) => {
 			this.isPremium = premium;
 		});
 	}

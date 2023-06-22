@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
@@ -284,7 +284,7 @@ export class MenuSelectionComponent
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
 		this.enableMailboxTab$ = this.listenForBasicPref$((prefs) => prefs.enableMailbox);
-		this.showGoPremium$ = this.store.isPremiumUser$().pipe(this.mapData((premium) => !premium));
+		this.showGoPremium$ = this.store.enablePremiumFeatures$().pipe(this.mapData((premium) => !premium));
 		const enableMailboxUnread$ = this.listenForBasicPref$((prefs) => prefs.enableMailboxUnread);
 		this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
 			this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),

@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	],
 	template: `
 		<a
-			href="https://discord.gg/H4Hj7bC"
+			href="https://discord.gg/vKeB3gnKTy"
 			target="_blank"
 			(mousedown)="preventMiddleClick($event)"
 			(click)="preventMiddleClick($event)"

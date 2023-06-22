@@ -23,7 +23,7 @@ export class InternalProfileAchievementsService {
 
 	private initAchievements() {
 		const achievementsToUpload$: Observable<readonly ProfileAchievementCategory[]> = combineLatest([
-			this.store.isPremiumUser$(),
+			this.store.enablePremiumFeatures$(),
 			this.achievementsMonitor.achievementCategories$$,
 		]).pipe(
 			filter(([premium, achievementCategories]) => premium),

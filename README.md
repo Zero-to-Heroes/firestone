@@ -14,6 +14,6 @@ More information [here](https://github.com/Zero-to-Heroes/firestone/edit/master/
 # Links
 
 -   The app can be downloaded from here: https://www.overwolf.com/app/sebastien_tromp-firestone
--   If you want to come and say hi on Discord: https://discord.gg/uEh9gvJ
+-   If you want to come and say hi on Discord: https://discord.gg/vKeB3gnKTy
 -   Stay up-to-date with what we're doing and bugs found on Twitter: https://twitter.com/ZerotoHeroes_HS
 -   An imgur album with more screenshots: https://imgur.com/a/hLz4ORp

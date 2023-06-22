@@ -16,6 +16,7 @@ import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
+import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ReviewIdService } from '../review-id.service';
@@ -38,6 +39,7 @@ export class EndGameListenerService {
 		private readonly reviewIdService: ReviewIdService,
 		private readonly duelsRunIdService: DuelsRunIdService,
 		private readonly bgStore: BattlegroundsStoreService,
+		private readonly lottery: LotteryService,
 	) {
 		this.init();
 	}
@@ -275,6 +277,7 @@ export class EndGameListenerService {
 			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
 			bgBattleOdds: battleOdds,
+			lotteryPoints: this.lottery.lottery$$.value?.currentPoints(),
 		};
 		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 		await this.endGameUploader.upload2(augmentedInfo);

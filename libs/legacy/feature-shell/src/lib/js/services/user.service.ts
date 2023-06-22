@@ -27,7 +27,7 @@ export class UserService {
 	}
 
 	public async init(store: MainWindowStoreService) {
-		combineLatest([this.ads.isPremium$$, this.user$$])
+		combineLatest([this.ads.enablePremiumFeatures$$, this.user$$])
 			.pipe(
 				debounceTime(500),
 				filter(([premium, user]) => !!user),

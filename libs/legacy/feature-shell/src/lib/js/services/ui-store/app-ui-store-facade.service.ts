@@ -17,6 +17,7 @@ import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
+import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
 	AppUiStoreService,
@@ -191,9 +192,16 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.showAds$());
 	}
 
-	public isPremiumUser$(): Observable<boolean> {
-		this.debugCall('isPremiumUser$');
-		return this.debugObservable(this.store.isPremiumUser$());
+	public enablePremiumFeatures$(): Observable<boolean> {
+		return this.debugObservable(this.store.enablePremiumFeatures$());
+	}
+
+	public hasPremiumSub$(): Observable<boolean> {
+		return this.debugObservable(this.store.hasPremiumSub$());
+	}
+
+	public lottery$(): Observable<LotteryState> {
+		return this.debugObservable(this.store.lottery$());
 	}
 
 	public send(event: MainWindowStoreEvent) {

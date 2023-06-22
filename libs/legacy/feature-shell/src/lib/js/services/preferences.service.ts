@@ -218,6 +218,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateLotteryPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, lotteryPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateHsQuestsWidgetPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, hsQuestsWidgetPosition: { left, top } };

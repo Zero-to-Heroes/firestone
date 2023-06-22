@@ -133,13 +133,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 
-			<!-- Overlay ads -->
-			<single-ad
-				class="overlay-ad"
-				[adId]="'bottom'"
-				*ngIf="displayOverlayAds$ | async"
-				[overlayAd]="true"
-			></single-ad>
+			<lottery-widget-wrapper></lottery-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -152,7 +146,6 @@ export class FullScreenOverlaysComponent
 	@ViewChild('container', { static: false }) container: ElementRef;
 
 	activeTheme$: Observable<CurrentAppType>;
-	displayOverlayAds$: Observable<boolean>;
 
 	windowId: string;
 
@@ -198,16 +191,6 @@ export class FullScreenOverlaysComponent
 						return 'decktracker';
 				}
 			}),
-		);
-
-		this.displayOverlayAds$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.showOverlayAd),
-			this.store.showAds$(),
-			this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
-		]).pipe(
-			this.mapData(
-				([[showOverlayAd], showAds, [isFriendsListOpen]]) => showAds && showOverlayAd && !isFriendsListOpen,
-			),
 		);
 
 		this.ow.addKeyDownListener(async (info) => {

@@ -41,6 +41,8 @@ import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { GameNativeState } from '../game/game-native-state';
+import { LotteryState } from '../lottery/lottery.model';
+import { LotteryService } from '../lottery/lottery.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
@@ -82,6 +84,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	private mails: Observable<MailState>;
+	private lottery: Observable<LotteryState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
@@ -386,9 +389,16 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.ads.showAds$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
-	public isPremiumUser$(): Observable<boolean> {
-		this.debugCall('isPremiumUser$');
-		return this.ads.isPremium$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	public enablePremiumFeatures$(): Observable<boolean> {
+		return this.ads.enablePremiumFeatures$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
+	public hasPremiumSub$(): Observable<boolean> {
+		return this.ads.hasPremiumSub$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
+	public lottery$(): Observable<LotteryState> {
+		return this.lottery.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public send(event: MainWindowStoreEvent) {
@@ -415,6 +425,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initSets();
 		this.initAllTimeBoosters();
 		this.initTavernBrawl();
+		this.initLottery();
 		this.initialized = true;
 	}
 
@@ -459,6 +470,10 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initMails() {
 		this.mails = (this.ow.getMainWindow().mailsProvider as MailsService).mails$.pipe(shareReplay(1));
+	}
+
+	private initLottery() {
+		this.lottery = (this.ow.getMainWindow().lotteryProvider as LotteryService).lottery$$.pipe(shareReplay(1));
 	}
 
 	private initDuelsDecks() {

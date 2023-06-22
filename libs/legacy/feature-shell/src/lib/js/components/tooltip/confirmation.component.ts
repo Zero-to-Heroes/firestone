@@ -18,10 +18,8 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	styleUrls: [`../../../css/component/tooltip/confirmation.component.scss`],
 	template: `
 		<div class="confirmation">
-			<div class="title">{{ confirmationTitle$ | async }}</div>
-			<div class="text">
-				{{ confirmationText$ | async }}
-			</div>
+			<div class="title" *ngIf="confirmationTitle$ | async as title" [innerHTML]="title"></div>
+			<div class="text" [innerHTML]="confirmationText$ | async"></div>
 			<div class="buttons">
 				<button class="ok" (click)="ok()" *ngIf="showOk$ | async">{{ validButtonText$ | async }}</button>
 				<button class="cancel" (click)="cancel()">{{ cancelButtonText$ | async }}</button>
