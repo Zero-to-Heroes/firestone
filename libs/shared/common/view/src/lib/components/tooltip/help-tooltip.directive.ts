@@ -43,6 +43,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input() stayOpenOnClick = false;
 	@Input() helpTooltipVisibleBeforeHover = false;
 	@Input() helpTooltipClasses: string;
+	@Input() helpTooltipWidth: number;
 	@Input('helpTooltipShowArrow') showArrow = false;
 
 	@Input('helpTooltipOnlyShowOnClick') onlyShowOnClick = false;
@@ -175,6 +176,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		this.tooltipRef.instance.text = this._text;
 		this.tooltipRef.instance.showArrow = this.showArrow;
 		this.tooltipRef.instance.classes = this.helpTooltipClasses;
+		this.tooltipRef.instance.width = this.helpTooltipWidth;
 		this.tooltipRef.instance.setTarget(this.target);
 
 		this.positionStrategy.apply();

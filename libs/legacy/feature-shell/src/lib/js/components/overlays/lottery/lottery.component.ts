@@ -16,6 +16,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 						class="control info"
 						inlineSVG="assets/svg/info.svg"
 						[helpTooltip]="'app.lottery.info-text' | owTranslate"
+						[helpTooltipWidth]="300"
 					></div>
 					<control-close-simple
 						class="control"
