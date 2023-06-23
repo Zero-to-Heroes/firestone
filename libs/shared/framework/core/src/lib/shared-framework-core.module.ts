@@ -7,6 +7,7 @@ import { LoadingStateComponent } from './components/loading-state.component';
 import { WithLoadingComponent } from './components/with-loading.component';
 import { FsTranslateDirective } from './localization/fs-translate.directive';
 import { FsTranslatePipe } from './localization/fs-translate.pipe';
+import { AnalyticsService } from './services/analytics/analytics.service';
 import { ApiRunner } from './services/api-runner';
 import { CardsFacadeStandaloneService } from './services/cards-facade-standalone.service';
 import { CardsFacadeService } from './services/cards-facade.service';
@@ -19,6 +20,7 @@ const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent,
 @NgModule({
 	imports: [CommonModule, BrowserAnimationsModule, InlineSVGModule.forRoot(), SharedFrameworkCommonModule],
 	providers: [
+		AnalyticsService,
 		ApiRunner,
 		OverwolfService,
 		CardsFacadeService,
