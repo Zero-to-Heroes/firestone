@@ -1,5 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -66,7 +67,10 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LotteryWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class LotteryWidgetComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	displayAd$: Observable<boolean>;
 	totalPoints$: Observable<string>;
 	resources$: Observable<string>;
@@ -82,6 +86,7 @@ export class LotteryWidgetComponent extends AbstractSubscriptionStoreComponent i
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
@@ -114,8 +119,13 @@ export class LotteryWidgetComponent extends AbstractSubscriptionStoreComponent i
 		this.closeConfirmationOkText = this.i18n.translateString('app.lottery.close-confirmation-button-ok');
 	}
 
+	ngAfterViewInit() {
+		this.analytics.trackEvent('lottery-show');
+	}
+
 	async close() {
 		const prefs = await this.prefs.getPreferences();
 		await this.prefs.savePreferences({ ...prefs, showLottery: false });
+		this.analytics.trackEvent('lottery-close');
 	}
 }

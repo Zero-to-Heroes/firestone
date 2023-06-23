@@ -32,12 +32,15 @@
 	}
 
 	.lottery-content {
-		padding: 10px;
+		// padding: 10px;
+		padding: 0;
 	}
 
 	.stats {
-		margin-top: 10px;
-		margin-bottom: 10px;
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 
 		.stat {
 			display: flex;
