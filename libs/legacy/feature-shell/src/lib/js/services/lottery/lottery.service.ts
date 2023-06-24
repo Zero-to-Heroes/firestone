@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
 import { ApiRunner, CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { PreferencesService } from '../preferences.service';
@@ -9,8 +8,9 @@ import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service
 import { LotteryProcessor } from './events/_processor';
 import { LotteryCardPlayedProcessor } from './events/lottery-card-played-processor';
 import { LotteryResourcesUpdateProcessor } from './events/lottery-resources-update-processor';
+import { LotteryShouldTrackProcessor } from './events/lottery-should-track-processor';
 import { LotteryTurnStartProcessor } from './events/lottery-turn-start-processor';
-import { LotteryVisibilityProcessor } from './events/lottery-visibility-processor';
+import { LotteryWidgetControllerService } from './lottery-widget-controller.service';
 import { LotteryState } from './lottery.model';
 
 const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
@@ -22,7 +22,7 @@ export class LotteryService {
 	private parsers: { [eventName: string]: LotteryProcessor } = {
 		[GameEvent.RESOURCES_UPDATED]: new LotteryResourcesUpdateProcessor(),
 		[GameEvent.TURN_START]: new LotteryTurnStartProcessor(),
-		UPDATE_VISIBILITY: new LotteryVisibilityProcessor(),
+		UPDATE_SHOULD_TRACK: new LotteryShouldTrackProcessor(),
 		[GameEvent.CARD_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
 	};
 
@@ -35,6 +35,7 @@ export class LotteryService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
+		private readonly widgetController: LotteryWidgetControllerService,
 	) {
 		window['lotteryProvider'] = this;
 		this.init();
@@ -47,13 +48,14 @@ export class LotteryService {
 			this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, currentLottery);
 		}
 		currentLottery = LotteryState.create(currentLottery);
+		this.lottery$$.next(currentLottery);
 
-		const prefs = await this.prefs.getPreferences();
-		console.debug('[lottery] current lottery', currentLottery, prefs.showLottery);
-		const updatedLottery = currentLottery.update({
-			visible: prefs.showLottery,
-		});
-		this.lottery$$.next(updatedLottery);
+		// const prefs = await this.prefs.getPreferences();
+		// console.debug('[lottery] current lottery', currentLottery, prefs.showLottery);
+		// const updatedLottery = currentLottery.update({
+		// 	shouldTrack: prefs.showLottery,
+		// });
+		// this.lottery$$.next(updatedLottery);
 
 		this.listenToGameEvents();
 	}
@@ -61,6 +63,13 @@ export class LotteryService {
 	private async listenToGameEvents() {
 		this.gameEvents.allEvents.subscribe((event) => {
 			this.eventsQueue$$.next(event);
+		});
+
+		this.widgetController.shouldTrack$$.subscribe((shouldTrack) => {
+			this.eventsQueue$$.next({
+				type: 'UPDATE_SHOULD_TRACK',
+				additionalData: { shuoldTrack: shouldTrack },
+			} as any);
 		});
 
 		this.eventsQueue$$.subscribe((event) => {
@@ -87,25 +96,28 @@ export class LotteryService {
 			}
 		});
 
-		await this.store.initComplete();
-		combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
-			this.store.listenPrefs$((prefs) => prefs.showLottery),
-			this.store.enablePremiumFeatures$(),
-		])
-			.pipe(
-				map(([[currentScene], [showLottery], isPremium]) => {
-					const visible =
-						currentScene === SceneMode.GAMEPLAY &&
-						// Check for null so that by default it doesn't show up for premium users
-						((!isPremium && showLottery === null) || (isPremium && showLottery === true));
-					return visible;
-				}),
-				distinctUntilChanged(),
-			)
-			.subscribe((showLottery) => {
-				this.eventsQueue$$.next({ type: 'UPDATE_VISIBILITY', additionalData: { visible: showLottery } } as any);
-			});
+		// await this.store.initComplete();
+		// combineLatest([
+		// 	this.store.listen$(([main, nav, prefs]) => main.currentScene),
+		// 	this.store.listenPrefs$((prefs) => prefs.showLottery),
+		// 	this.store.enablePremiumFeatures$(),
+		// ])
+		// 	.pipe(
+		// 		map(([[currentScene], [showLottery], isPremium]) => {
+		// 			const visible =
+		// 				currentScene === SceneMode.GAMEPLAY &&
+		// 				// Check for null so that by default it doesn't show up for premium users
+		// 				((!isPremium && showLottery === null) || (isPremium && showLottery === true));
+		// 			return visible;
+		// 		}),
+		// 		distinctUntilChanged(),
+		// 	)
+		// 	.subscribe((showLottery) => {
+		// 		this.eventsQueue$$.next({
+		// 			type: 'UPDATE_SHOULD_TRACK',
+		// 			additionalData: { visible: showLottery },
+		// 		} as any);
+		// 	});
 	}
 
 	private confirmLotteryPoints() {

@@ -173,6 +173,23 @@
 				"popup_blocker": true,
 				"mute": true
 			},
+			"LotteryWindow": {
+				"file": "Files/index.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": true,
+				"native_window": true,
+				"use_os_windowing": true,
+				"desktop_only": true,
+				"topmost": true,
+				"disable_hardware_acceleration": true,
+				"size": { "width": 402, "height": 465 },
+				"min_size": { "width": 402, "height": 465 },
+				"max_size": { "width": 402, "height": 465 },
+				"block_top_window_navigation": true,
+				"popup_blocker": true,
+				"mute": true
+			},
 
 			"OutOfCardsAuthWindow": {
 				"file": "Files/index.html",

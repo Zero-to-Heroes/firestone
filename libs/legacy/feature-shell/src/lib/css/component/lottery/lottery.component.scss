@@ -3,6 +3,7 @@
 	color: var(--color-1);
 	font-size: 14px;
 	position: relative;
+	z-index: 1; // So that tooltips show up above the ad
 
 	.title-bar {
 		display: flex;

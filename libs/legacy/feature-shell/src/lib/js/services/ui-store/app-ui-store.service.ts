@@ -67,6 +67,8 @@ export type MercenariesHighlightsSelector<T> = (
 
 @Injectable()
 export class AppUiStoreService extends Store<Preferences> {
+	public eventBus$$ = new BehaviorSubject<StoreEvent>(null);
+
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private gameNativeState: BehaviorSubject<GameNativeState>;
 	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
@@ -656,3 +658,10 @@ export const cdLog = (...args) => {
 		// console.debug('[cd]', ...args);
 	}
 };
+
+export interface StoreEvent {
+	readonly name: StoreEventName;
+	readonly data: any;
+}
+
+export type StoreEventName = 'lottery-visibility-changed';

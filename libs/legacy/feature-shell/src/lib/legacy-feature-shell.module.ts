@@ -476,6 +476,8 @@ import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
+import { LotteryWindowComponent } from '@components/lottery/lottery-window.component';
+import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
@@ -489,8 +491,6 @@ import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overla
 import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
-import { LotteryWidgetWrapperComponent } from '@components/overlays/lottery/lottery-widget-wrapper.component';
-import { LotteryWidgetComponent } from '@components/overlays/lottery/lottery.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
@@ -725,6 +725,7 @@ import { LogListenerService } from './js/services/log-listener.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { LogUtilsService } from './js/services/log-utils.service';
 import { LogsUploaderService } from './js/services/logs-uploader.service';
+import { LotteryWidgetControllerService } from './js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from './js/services/lottery/lottery.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
@@ -1500,8 +1501,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsOutOfCombatDeckSelectComponent,
 		DuelsDeckWidgetComponent,
 
-		LotteryWidgetWrapperComponent,
+		// LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,
+		LotteryWindowComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,
@@ -1836,6 +1838,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		InternalProfileBattlegroundsService,
 
 		LotteryService,
+		LotteryWidgetControllerService,
 
 		// Twitch
 		LocalizationStandaloneService,
@@ -1859,6 +1862,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OutOfCardsCallbackComponent,
 		FullScreenOverlaysComponent,
 		FullScreenOverlaysClickthroughComponent,
+		LotteryWindowComponent,
 
 		DeckTrackerOverlayContainerComponent,
 	],

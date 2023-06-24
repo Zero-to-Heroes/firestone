@@ -8,7 +8,7 @@ export class LotteryCardPlayedProcessor implements LotteryProcessor {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	process(currentState: LotteryState, event: GameEvent): LotteryState {
-		if (!currentState.visible) {
+		if (!currentState.shouldTrack) {
 			return currentState;
 		}
 

@@ -11,7 +11,7 @@ import { Title } from '@angular/platform-browser';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
-import { from, Observable, Subject } from 'rxjs';
+import { Observable, Subject, from } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -30,6 +30,7 @@ import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 			<full-screen-overlays-clickthrough
 				*ngSwitchCase="'FullScreenOverlaysClickthroughWindow'"
 			></full-screen-overlays-clickthrough>
+			<lottery-window *ngSwitchCase="'LotteryWindow'"></lottery-window>
 		</ng-container>
 	</ng-container>`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

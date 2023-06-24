@@ -5,7 +5,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
@@ -19,6 +19,7 @@ import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { sleep } from '../utils';
 import {
 	AppUiStoreService,
 	BattlegroundsStateSelector,
@@ -29,11 +30,14 @@ import {
 	ModsConfigSelector,
 	NativeGameStateSelector,
 	Selector,
+	StoreEvent,
 } from './app-ui-store.service';
 
 // To be used in the UI, so that we only have a single service instantiated
 @Injectable()
 export class AppUiStoreFacadeService {
+	public eventBus$$ = new BehaviorSubject<StoreEvent>(null);
+
 	private store: AppUiStoreService;
 
 	constructor(private readonly ow: OverwolfService) {
@@ -42,10 +46,12 @@ export class AppUiStoreFacadeService {
 
 	private async init() {
 		this.store = this.ow.getMainWindow()?.appStore;
-		if (!this.store) {
+		while (!this.store) {
 			console.warn('could not retrieve store from main window');
-			setTimeout(() => this.init(), 200);
+			await sleep(200);
+			this.store = this.ow.getMainWindow()?.appStore;
 		}
+		this.eventBus$$ = this.store.eventBus$$;
 	}
 
 	public async initComplete(): Promise<void> {

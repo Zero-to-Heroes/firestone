@@ -2,13 +2,13 @@ import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { PreferencesService } from '../../../services/preferences.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'lottery',
-	styleUrls: ['../../../../css/component/overlays/lottery/lottery.component.scss'],
+	styleUrls: ['../../../css/component/lottery/lottery.component.scss'],
 	template: `
 		<div class="lottery-container">
 			<div class="title-bar">

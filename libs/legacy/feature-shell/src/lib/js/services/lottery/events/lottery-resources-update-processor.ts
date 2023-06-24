@@ -4,7 +4,7 @@ import { LotteryProcessor } from './_processor';
 
 export class LotteryResourcesUpdateProcessor implements LotteryProcessor {
 	process(currentState: LotteryState, event: GameEvent): LotteryState {
-		if (!currentState.visible) {
+		if (!currentState.shouldTrack) {
 			return currentState;
 		}
 

@@ -5,6 +5,7 @@ import { DecksProviderService } from '../../js/services/decktracker/main/decks-p
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
 import { DuelsDecksProviderService } from '../../js/services/duels/duels-decks-provider.service';
 import { GameNativeStateStoreService } from '../../js/services/game/game-native-state-store.service';
+import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
@@ -41,6 +42,7 @@ export class BootstrapStoreServicesService {
 		private readonly ini_LotterService: LotteryService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
+		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

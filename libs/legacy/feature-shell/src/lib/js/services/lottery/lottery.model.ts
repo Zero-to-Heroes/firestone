@@ -1,7 +1,7 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 
 export class LotteryState {
-	readonly visible: boolean = true;
+	readonly shouldTrack: boolean = true;
 	readonly lastUpdateDate: string;
 	readonly resourcesUsedThisTurn: number = 0;
 	readonly totalResourcesUsed: number = 0;
