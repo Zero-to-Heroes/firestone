@@ -205,6 +205,8 @@ export class DecksProviderService {
 			matchupStats: matchupStats,
 			format: versions.some((v) => v.format === 'classic')
 				? 'classic'
+				: versions.some((v) => v.format === 'twist')
+				? 'twist'
 				: versions.some((v) => v.format === 'wild')
 				? 'wild'
 				: 'standard',
@@ -264,6 +266,9 @@ export class DecksProviderService {
 						),
 						...DecksProviderService.replaysForSeason(
 							statsWithReset.filter((stat) => stat.gameFormat === 'classic'),
+						),
+						...DecksProviderService.replaysForSeason(
+							statsWithReset.filter((stat) => stat.gameFormat === 'twist'),
 						),
 				  ]
 				: statsWithReset;
@@ -421,9 +426,11 @@ export class DecksProviderService {
 		switch (deckInfo.format) {
 			case GameFormat.FT_CLASSIC:
 				return 'classic';
+			case GameFormat.FT_TWIST:
+				return 'twist';
 			case GameFormat.FT_WILD:
 				return 'wild';
-			case GameFormat.FT_CLASSIC:
+			case GameFormat.FT_STANDARD:
 			default:
 				return 'standard';
 		}

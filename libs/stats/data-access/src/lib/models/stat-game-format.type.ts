@@ -1,10 +1,12 @@
 import { GameFormat } from '@firestone-hs/reference-data';
 
-export type StatGameFormatType = 'unknown' | 'all' | 'standard' | 'wild' | 'classic';
+export type StatGameFormatType = 'unknown' | 'all' | 'standard' | 'wild' | 'classic' | 'twist';
 export const gameFormatToStatGameFormatType = (source: GameFormat): StatGameFormatType => {
 	switch (source) {
 		case GameFormat.FT_CLASSIC:
 			return 'classic';
+		case GameFormat.FT_TWIST:
+			return 'twist';
 		case GameFormat.FT_STANDARD:
 			return 'standard';
 		case GameFormat.FT_UNKNOWN:
@@ -26,6 +28,8 @@ export const toFormatType = (formatType: GameFormat): StatGameFormatType => {
 			return 'standard';
 		case GameFormat.FT_CLASSIC:
 			return 'classic';
+		case GameFormat.FT_TWIST:
+			return 'twist';
 		default:
 			console.warn('unsupported format type', formatType);
 			return 'unknown';

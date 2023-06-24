@@ -279,6 +279,20 @@ export class EndGameUploaderService {
 					);
 					playerRank = null;
 				}
+			} else if (playerInfo && game.gameFormat === 'twist') {
+				if (playerInfo.twist?.legendRank > 0) {
+					playerRank = `legend-${playerInfo.twist.legendRank}`;
+				} else if (playerInfo.twist.leagueId >= 0 && playerInfo.twist.rankValue >= 0) {
+					playerRank = `${playerInfo.twist.leagueId}-${playerInfo.twist.rankValue}`;
+				} else {
+					console.warn(
+						'[manastorm-bridge]',
+						currentReviewId,
+						'Could not extract twist player rank',
+						playerInfo.twist,
+					);
+					playerRank = null;
+				}
 			}
 		}
 		let opponentRank;

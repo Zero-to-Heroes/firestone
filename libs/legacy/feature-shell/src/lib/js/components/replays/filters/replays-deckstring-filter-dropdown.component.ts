@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { formatClass } from '../../../services/hs-utils';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -86,7 +86,9 @@ export class ReplaysDeckstringFilterDropdownComponent
 					placeholder: this.i18n.translateString('app.replays.filters.deck.all'),
 					visible:
 						(currentApp === 'replays' &&
-							['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) ||
+							['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(
+								gameModeFilter,
+							)) ||
 						(currentApp === 'decktracker' && currentView === 'ladder-stats'),
 				};
 			}),

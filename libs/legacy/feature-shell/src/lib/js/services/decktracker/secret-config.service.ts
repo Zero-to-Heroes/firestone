@@ -112,6 +112,8 @@ export class SecretConfigService {
 				return 'standard';
 			} else if (metadata.formatType === GameFormat.FT_CLASSIC) {
 				return 'classic';
+			} else if (metadata.formatType === GameFormat.FT_TWIST) {
+				return 'twist';
 			}
 			return 'wild';
 		}

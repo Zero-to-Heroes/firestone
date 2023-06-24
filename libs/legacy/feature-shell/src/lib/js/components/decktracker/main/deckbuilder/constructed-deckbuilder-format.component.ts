@@ -41,7 +41,7 @@ export class ConstructedDeckbuilderFormatComponent
 	}
 
 	ngAfterContentInit() {
-		this.formatOptions = ['standard', 'wild', 'classic'].map((format) => {
+		this.formatOptions = ['standard', 'wild', 'classic', 'twist'].map((format) => {
 			return {
 				id: format as GameFormatString,
 				name: this.i18n.translateString(`global.format.${format}`),

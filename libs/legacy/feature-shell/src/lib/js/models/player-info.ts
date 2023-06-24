@@ -4,6 +4,7 @@ export interface PlayerInfo {
 	readonly standard: Rank;
 	readonly wild: Rank;
 	readonly classic: Rank;
+	readonly twist: Rank;
 }
 
 export interface Rank {

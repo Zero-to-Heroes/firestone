@@ -176,6 +176,8 @@ export class GameStat {
 		switch (gameFormat) {
 			case 'classic':
 				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Classic.png`;
+			case 'twist':
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Twist.png`;
 			case 'wild':
 				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Wild.png`;
 			default:

@@ -343,6 +343,8 @@ const buildRankedRankInfo = (metadata: Metadata, matchInfo: MatchInfo): string =
 			return extractRankInfo(matchInfo?.localPlayer?.wild);
 		case GameFormat.FT_CLASSIC:
 			return extractRankInfo(matchInfo?.localPlayer?.classic);
+		case GameFormat.FT_TWIST:
+			return extractRankInfo(matchInfo?.localPlayer?.twist);
 		default:
 			return extractRankInfo(matchInfo?.localPlayer?.standard);
 	}

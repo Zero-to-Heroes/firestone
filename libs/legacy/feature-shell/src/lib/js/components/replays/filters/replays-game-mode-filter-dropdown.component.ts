@@ -46,6 +46,7 @@ export class ReplaysGameModeFilterDropdownComponent
 			'ranked-standard',
 			'ranked-wild',
 			'ranked-classic',
+			'ranked-twist',
 			'both-duels',
 			'duels',
 			'paid-duels',

@@ -208,6 +208,8 @@ export class ConstructedDeckbuilderCardsComponent
 						? config.vanillaSets
 						: currentFormat === 'standard'
 						? config.standardSets
+						: currentFormat === 'twist'
+						? config.twistSets
 						: config.wildSets;
 				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
@@ -337,6 +339,8 @@ export class ConstructedDeckbuilderCardsComponent
 							? GameFormat.FT_CLASSIC
 							: currentFormat === 'standard'
 							? GameFormat.FT_STANDARD
+							: currentFormat === 'twist'
+							? GameFormat.FT_TWIST
 							: GameFormat.FT_WILD,
 					cards: cardDbfIds,
 					heroes: [heroDbfId],

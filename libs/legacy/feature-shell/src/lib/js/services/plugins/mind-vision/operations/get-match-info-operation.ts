@@ -47,6 +47,11 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 				rankValue: matchPlayer.Classic?.RankValue,
 				legendRank: matchPlayer.Classic?.LegendRank,
 			},
+			twist: {
+				leagueId: matchPlayer.Twist?.LeagueId,
+				rankValue: matchPlayer.Twist?.RankValue,
+				legendRank: matchPlayer.Twist?.LegendRank,
+			},
 		} as PlayerInfo;
 	}
 }
@@ -68,6 +73,7 @@ interface InternalPlayer {
 	readonly Standard: InternalRank;
 	readonly Wild: InternalRank;
 	readonly Classic: InternalRank;
+	readonly Twist: InternalRank;
 	readonly CardBackId: number;
 	readonly Account: InternalAccount;
 	readonly BattleTag: InternalBattleTag;

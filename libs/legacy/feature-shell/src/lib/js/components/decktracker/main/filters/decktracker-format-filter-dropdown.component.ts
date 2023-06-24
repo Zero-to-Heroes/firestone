@@ -75,6 +75,10 @@ export class DecktrackerFormatFilterDropdownComponent
 							value: 'classic',
 							label: this.i18n.translateString('app.decktracker.filters.format-filter.classic'),
 						} as FormatFilterOption,
+						{
+							value: 'twist',
+							label: this.i18n.translateString('app.decktracker.filters.format-filter.twist'),
+						} as FormatFilterOption,
 					];
 					return {
 						filter: filter,

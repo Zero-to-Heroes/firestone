@@ -3,7 +3,7 @@ import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-da
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -137,7 +137,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private playerClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
-		if (!['ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(gameModeFilter)) {
 			return true;
 		}
 		if (stat.gameMode !== 'ranked') {
@@ -148,7 +148,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private opponentClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
-		if (!['ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(gameModeFilter)) {
 			return true;
 		}
 		if (stat.gameMode !== 'ranked') {
@@ -159,7 +159,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private deckstringFilter(stat: GameStat, filter: readonly string[], gameModeFilter: string): boolean {
-		if (!['ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(gameModeFilter)) {
 			return true;
 		}
 
@@ -196,6 +196,8 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 				return gameMode === 'ranked' && format === 'wild';
 			case 'ranked-classic':
 				return gameMode === 'ranked' && format === 'classic';
+			case 'ranked-twist':
+				return gameMode === 'ranked' && format === 'twist';
 			case 'mercenaries-all':
 				return isMercenaries(gameMode);
 			case 'mercenaries-pve':
