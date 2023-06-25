@@ -3,9 +3,11 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
+	Output,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -44,13 +46,19 @@ declare let amplitude: any;
 			</div>
 
 			<div class="ad-container bottom-ads">
-				<single-ad [adId]="'bottom'" [tip]="tip$ | async"></single-ad>
+				<single-ad
+					[adId]="'bottom'"
+					[tip]="tip$ | async"
+					(adVisibility)="onAdVisibilityChanged($event)"
+				></single-ad>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
+
 	tip$: Observable<string>;
 
 	@Input() showTopAd = false;
@@ -92,5 +100,9 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 
 	showFeatures() {
 		this.ow.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads');
+	}
+
+	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {
+		this.adVisibility.next(visible);
 	}
 }

@@ -476,6 +476,7 @@ import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
+import { LotteryWidgetWrapperComponent } from '@components/lottery/lottery-widget-wrapper.component';
 import { LotteryWindowComponent } from '@components/lottery/lottery-window.component';
 import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
@@ -1501,7 +1502,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsOutOfCombatDeckSelectComponent,
 		DuelsDeckWidgetComponent,
 
-		// LotteryWidgetWrapperComponent,
+		LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,
 		LotteryWindowComponent,
 

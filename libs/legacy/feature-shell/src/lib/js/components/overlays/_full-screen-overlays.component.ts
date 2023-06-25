@@ -133,7 +133,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 
-			<!-- <lottery-widget-wrapper></lottery-widget-wrapper> -->
+			<lottery-widget-wrapper></lottery-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

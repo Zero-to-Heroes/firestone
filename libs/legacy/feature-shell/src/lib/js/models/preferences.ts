@@ -71,6 +71,7 @@ export class Preferences implements IPreferences {
 	readonly disableLocalCache: boolean;
 
 	readonly showLottery: boolean = null;
+	readonly lotteryOverlay: boolean = false;
 	readonly lotteryPosition: { left: number; top: number };
 
 	readonly launchAppOnGameStart: boolean = true;

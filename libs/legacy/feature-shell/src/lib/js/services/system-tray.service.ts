@@ -72,6 +72,7 @@ export class SystemTrayService {
 			OverwolfService.SETTINGS_WINDOW,
 			OverwolfService.LOADING_WINDOW,
 			OverwolfService.BATTLEGROUNDS_WINDOW,
+			OverwolfService.LOTTERY_WINDOW,
 		];
 		for (const w of windows) {
 			const cWindow = await this.ow.obtainDeclaredWindow(w);

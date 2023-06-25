@@ -8,6 +8,23 @@
 	.title-bar {
 		display: flex;
 		height: 30px;
+		margin-bottom: 10px;
+	}
+
+	preference-toggle {
+		margin-right: 15px;
+	}
+
+	::ng-deep preference-toggle {
+		.toggle .settings-p {
+			color: currentColor;
+			width: auto;
+			margin-right: 10px;
+
+			.info {
+				--icon-color: currentColor;
+			}
+		}
 	}
 
 	.controls {

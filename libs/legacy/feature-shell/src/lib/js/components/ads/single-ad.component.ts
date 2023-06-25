@@ -3,9 +3,11 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
+	Output,
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -33,6 +35,8 @@ declare let OwAd: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SingleAdComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
+
 	@Input() tip: string;
 	@Input() adId: string;
 	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
@@ -45,12 +49,13 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	private displayAdLoadedListener: (message: any) => void;
 	private adsReadyListener: (message: any) => void;
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private ow: OverwolfService) {
+	constructor(protected readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {
 		super(cdr);
 	}
 
 	async ngAfterViewInit() {
 		this.initializeAds();
+		this.initializeVisibilityCheck();
 	}
 
 	@HostListener('window:beforeunload')
@@ -136,5 +141,12 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				this.initializeAds();
 			}, 10000);
 		}
+	}
+
+	private async initializeVisibilityCheck() {
+		setInterval(async () => {
+			const visibility = await this.ow.isWindowVisibleToUser();
+			this.adVisibility.next(visibility);
+		}, 500);
 	}
 }

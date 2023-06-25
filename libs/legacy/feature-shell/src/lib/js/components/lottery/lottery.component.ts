@@ -13,6 +13,11 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 		<div class="lottery-container">
 			<div class="title-bar">
 				<div class="controls">
+					<preference-toggle
+						field="lotteryOverlay"
+						[label]="'app.lottery.overlay-toggle-label' | owTranslate"
+						[helpTooltip]="'app.lottery.overlay-toggle-tooltip' | owTranslate"
+					></preference-toggle>
 					<div
 						class="control info"
 						inlineSVG="assets/svg/info.svg"
@@ -61,7 +66,12 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						<div class="value">{{ spells$ | async }}</div>
 					</div>
 				</div>
-				<single-ad class="ad" [adId]="'bottom'" *ngIf="displayAd$ | async"></single-ad>
+				<single-ad
+					class="ad"
+					[adId]="'bottom'"
+					*ngIf="displayAd$ | async"
+					(adVisibility)="onAdVisibilityChanged($event)"
+				></single-ad>
 			</div>
 		</div>
 	`,
@@ -127,5 +137,9 @@ export class LotteryWidgetComponent
 		const prefs = await this.prefs.getPreferences();
 		await this.prefs.savePreferences({ ...prefs, showLottery: false });
 		this.analytics.trackEvent('lottery-close');
+	}
+
+	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {
+		this.store.eventBus$$.next({ name: 'lottery-visibility-changed', data: { visible } });
 	}
 }
