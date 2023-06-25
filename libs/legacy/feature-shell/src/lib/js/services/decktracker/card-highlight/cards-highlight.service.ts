@@ -450,6 +450,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.BloodreaverGuldan_CORE_ICC_831:
 			case CardIds.BloodreaverGuldan_ICC_831:
 				return and(side(inputSide), inGraveyard, minion, demon);
+			case CardIds.Bolster:
+				return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 			case CardIds.Bonecaller:
 				return and(side(inputSide), inGraveyard, minion, undead);
 			case CardIds.Boneshredder:
@@ -462,6 +464,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.CagematchCustodian:
 				return and(side(inputSide), inDeck, cardType(CardType.WEAPON));
+			case CardIds.CannonBarrage:
+				return and(side(inputSide), or(inDeck, inHand), pirate);
 			case CardIds.CapturedFlag:
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.CariaFelsoul:
@@ -604,6 +608,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.FirekeepersIdolTavernBrawl:
 				return and(side(inputSide), spell, fire);
+			case CardIds.FirePlumesHeart:
+				return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 			case CardIds.FiremancerFlurgl:
 				return and(side(inputSide), race(Race.MURLOC), or(inDeck, inHand));
 			case CardIds.FlamesOfTheKirinTorTavernBrawl:
@@ -756,7 +762,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.InspiringPresenceTavernBrawl:
 				return and(side(inputSide), minion, legendary);
 			case CardIds.InstrumentTech:
-				return and(side(inputSide), minion, weapon);
+				return and(side(inputSide), weapon);
+			case CardIds.IntoTheFray:
+				return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 			case CardIds.InvestmentOpportunity:
 				return and(side(inputSide), inDeck, overload);
 			case CardIds.InvigoratingLightTavernBrawl:
@@ -1163,6 +1171,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.TheCountess:
 				return and(side(inputSide), inDeck, neutral);
+			case CardIds.TheCurator:
+				return and(side(inputSide), inDeck, minion, or(beast, dragon, murloc));
 			case CardIds.ThePurator:
 				return and(side(inputSide), inDeck, minion, not(tribeless));
 			case CardIds.TheUpperHand:
