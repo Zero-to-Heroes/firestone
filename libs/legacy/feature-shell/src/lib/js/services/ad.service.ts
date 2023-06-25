@@ -30,11 +30,11 @@ export class AdService {
 		this.hasPremiumSub$$.next(isPremium);
 
 		await this.store.initComplete();
-		combineLatest([this.hasPremiumSub$$, this.store.listenPrefs$((prefs) => prefs.showLottery)]).subscribe(
-			([isPremium, [showLottery]]) => {
-				amplitude.getInstance().logEvent('overlay-ads', { enabled: showLottery });
-				console.debug('show ads?', isPremium, showLottery);
-				this.enablePremiumFeatures$$.next(isPremium || showLottery);
+		combineLatest([this.hasPremiumSub$$, this.store.shouldTrackLottery$()]).subscribe(
+			([isPremium, shouldTrack]) => {
+				amplitude.getInstance().logEvent('overlay-ads', { enabled: shouldTrack });
+				console.debug('show ads?', isPremium, shouldTrack);
+				this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
 			},
 		);
 	}

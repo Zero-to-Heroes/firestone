@@ -158,6 +158,10 @@ export class AppUiStoreFacadeService {
 		return this.debugObservable(this.store.mails$());
 	}
 
+	public shouldTrackLottery$(): Observable<boolean> {
+		return this.debugObservable(this.store.shouldTrackLottery$());
+	}
+
 	public sets$(): Observable<readonly Set[]> {
 		this.debugCall('sets$');
 		return this.debugObservable(this.store.sets$());

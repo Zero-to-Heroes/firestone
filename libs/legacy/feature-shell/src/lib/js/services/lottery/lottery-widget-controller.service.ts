@@ -9,6 +9,7 @@ export class LotteryWidgetControllerService {
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly ow: OverwolfService) {
 		this.init();
+		window['lotteryWidgetController'] = this;
 	}
 
 	private async init() {

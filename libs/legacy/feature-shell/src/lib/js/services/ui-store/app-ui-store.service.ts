@@ -41,6 +41,7 @@ import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { GameNativeState } from '../game/game-native-state';
+import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { LotteryService } from '../lottery/lottery.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -94,6 +95,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private collection: Observable<readonly Card[]>;
 	private bgHeroSkins: Observable<readonly number[]>;
 	private sets: Observable<readonly Set[]>;
+	private shouldTrackLottery: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -346,8 +348,11 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.mails.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public shouldTrackLottery$(): Observable<boolean> {
+		return this.shouldTrackLottery.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public cardBacks$(): Observable<readonly CardBack[]> {
-		this.debugCall('mails$');
 		return this.cardBacks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
@@ -372,7 +377,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
-		this.debugCall('mails$');
 		return this.allTimeBoosters.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
@@ -420,6 +424,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initDecks();
 		this.initDuelsDecks();
 		this.initMails();
+		this.initShouldTrackLottery();
 		this.initCardBacks();
 		this.initCoins();
 		this.initCollection();
@@ -472,6 +477,12 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initMails() {
 		this.mails = (this.ow.getMainWindow().mailsProvider as MailsService).mails$.pipe(shareReplay(1));
+	}
+
+	private initShouldTrackLottery() {
+		this.shouldTrackLottery = (
+			this.ow.getMainWindow().lotteryWidgetController as LotteryWidgetControllerService
+		).shouldTrack$$.pipe(shareReplay(1));
 	}
 
 	private initLottery() {
