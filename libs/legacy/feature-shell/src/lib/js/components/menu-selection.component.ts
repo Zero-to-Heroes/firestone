@@ -154,7 +154,7 @@ declare let amplitude;
 				</div>
 			</button>
 			<li class="main-menu-separator"></li>
-			<button
+			<!-- <button
 				*ngIf="enableMailboxTab$ | async"
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
@@ -175,7 +175,7 @@ declare let amplitude;
 					></div>
 				</div>
 			</button>
-			<li class="main-menu-separator"></li>
+			<li class="main-menu-separator"></li> -->
 			<button
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
