@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -16,30 +17,31 @@ export class LotteryWidgetControllerService {
 		await this.store.initComplete();
 		const displayWidgetFromData$ = combineLatest([
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
-			this.store.listenPrefs$(
-				(prefs) => prefs.showLottery,
-				(prefs) => prefs.lotteryOverlay,
-			),
+			this.store.listenPrefs$((prefs) => prefs.showLottery),
 			this.store.hasPremiumSub$(),
 		]).pipe(
 			// tap((info) => console.debug('[lottery-widget] should track 0?', info)),
-			map(([[currentScene], [showLottery, lotteryOverlay], isPremium]) => {
+			map(([[currentScene], [showLottery], isPremium]) => {
 				return (
-					!lotteryOverlay &&
 					// currentScene === SceneMode.GAMEPLAY &&
 					// Check for null so that by default it doesn't show up for premium users
-					(showLottery === true || (!isPremium && showLottery === null))
+					showLottery === true || (!isPremium && showLottery === null)
 				);
 			}),
 		);
-		displayWidgetFromData$
+		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
 			.pipe(
-				// tap((info) => console.debug('[lottery-widget] should track?', info)),
-				distinctUntilChanged(),
+				tap((info) => console.debug('[lottery-widget] should show window?', info)),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			)
-			.subscribe(async (visible) => {
+			.subscribe(async ([[lotteryOverlay], visible]) => {
 				// console.debug('[lottery-widget] setting visibility', visible);
 				const lotteryWindow = await this.ow.obtainDeclaredWindow(OverwolfService.LOTTERY_WINDOW);
+				if (lotteryOverlay) {
+					this.ow.closeWindow(lotteryWindow.id);
+					return;
+				}
+
 				if (visible) {
 					this.ow.restoreWindow(lotteryWindow.id);
 					this.ow.bringToFront(lotteryWindow.id);
@@ -58,6 +60,7 @@ export class LotteryWidgetControllerService {
 		);
 
 		combineLatest([displayWidgetFromData$, adVisible$]).subscribe(([displayWidget, adVisible]) => {
+			console.debug('[lottery-widget] should track?', displayWidget, adVisible);
 			this.shouldTrack$$.next(displayWidget && adVisible);
 		});
 	}

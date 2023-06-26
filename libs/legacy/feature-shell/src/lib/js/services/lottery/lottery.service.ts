@@ -24,6 +24,8 @@ export class LotteryService {
 		[GameEvent.TURN_START]: new LotteryTurnStartProcessor(),
 		UPDATE_SHOULD_TRACK: new LotteryShouldTrackProcessor(),
 		[GameEvent.CARD_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
+		[GameEvent.SECRET_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
+		[GameEvent.QUEST_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
 	};
 
 	private eventsQueue$$ = new BehaviorSubject<GameEvent | null>(null);
@@ -68,7 +70,7 @@ export class LotteryService {
 		this.widgetController.shouldTrack$$.subscribe((shouldTrack) => {
 			this.eventsQueue$$.next({
 				type: 'UPDATE_SHOULD_TRACK',
-				additionalData: { shuoldTrack: shouldTrack },
+				additionalData: { shouldTrack: shouldTrack },
 			} as any);
 		});
 
@@ -80,13 +82,8 @@ export class LotteryService {
 			const processor = this.parsers[event.type];
 			if (processor) {
 				const newLottery = processor.process(this.lottery$$.value, event);
-				console.debug(
-					'[lottery] new lottery state',
-					event.type,
-					newLottery !== this.lottery$$.value,
-					newLottery,
-				);
 				if (newLottery !== this.lottery$$.value) {
+					console.debug('[lottery] new lottery state', event.type, newLottery, event);
 					this.lottery$$.next(newLottery);
 				}
 			}
