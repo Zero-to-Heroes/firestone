@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.4.0',
+		version: '11.4.3',
 		force: false,
 		sections: [
 			// {
@@ -57,6 +57,10 @@ export const updates: readonly Update[] = [
 								Also, you will get some of the Premium perks while taking part to the lottery, like the Overlay features, as a thanks for having an ad run on-screen. <br/><br/>
 								
 								Let me know what you think!`,
+							},
+							{
+								type: 'misc',
+								text: `I'm sad to say that I will have to remove the Mailbox tab from Firestone for the time being. Changes to the Twitter API now requires a pretty expensive subscription to be able to build the messages you used to find in there. Let me know if this feature is something you'd like to see come back in the future!`,
 							},
 						],
 					},
