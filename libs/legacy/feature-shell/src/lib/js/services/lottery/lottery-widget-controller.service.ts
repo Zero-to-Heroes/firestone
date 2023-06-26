@@ -53,7 +53,7 @@ export class LotteryWidgetControllerService {
 			map((event) => event.data.visible as 'hidden' | 'partial' | 'full'),
 			distinctUntilChanged(),
 			tap((info) => console.debug('[lottery-widget] ad visible?', info)),
-			map((visible) => visible === 'full'),
+			map((visible) => visible === 'full' || visible === 'partial'),
 			startWith(true),
 		);
 
