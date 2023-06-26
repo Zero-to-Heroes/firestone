@@ -158,6 +158,13 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
+		for (const handler of messageObject.handlers ?? []) {
+			if ((<HTMLElement>event.target).className.indexOf(handler.selector) > -1) {
+				this.notificationService.remove(toastId);
+				handler.action();
+			}
+		}
+
 		if (messageObject.cardId) {
 			const isAchievement = messageObject.app === 'achievement';
 			if (isAchievement) {

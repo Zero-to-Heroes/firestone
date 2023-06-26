@@ -72,6 +72,7 @@ export class Preferences implements IPreferences {
 
 	readonly showLottery: boolean = null;
 	readonly lotteryOverlay: boolean = false;
+	readonly lotteryShowHiddenWindowNotification: boolean = true;
 	readonly lotteryPosition: { left: number; top: number };
 
 	readonly launchAppOnGameStart: boolean = true;

@@ -2,13 +2,21 @@ import { Injectable } from '@angular/core';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs';
+import { Preferences } from '../../models/preferences';
+import { OwNotificationsService } from '../notifications.service';
+import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class LotteryWidgetControllerService {
 	public shouldTrack$$ = new BehaviorSubject<boolean>(true);
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly ow: OverwolfService) {
+	constructor(
+		private readonly store: AppUiStoreFacadeService,
+		private readonly ow: OverwolfService,
+		private readonly notifications: OwNotificationsService,
+		private readonly prefs: PreferencesService,
+	) {
 		this.init();
 		window['lotteryWidgetController'] = this;
 	}
@@ -63,5 +71,61 @@ export class LotteryWidgetControllerService {
 			console.debug('[lottery-widget] should track?', displayWidget, adVisible);
 			this.shouldTrack$$.next(displayWidget && adVisible);
 		});
+
+		combineLatest([adVisible$, this.store.listenPrefs$((prefs) => prefs.lotteryShowHiddenWindowNotification)])
+			.pipe(
+				distinctUntilChanged(),
+				filter(([adVisible, [showNotification]]) => !adVisible && showNotification),
+			)
+			.subscribe(() => {
+				const title = 'Lottery window hidden';
+				const msg = 'Lottery points and premium features are paused while the lottery window is hidden';
+				const dontShowAgain = `Don't show again`;
+				const ok = `OK`;
+				this.notifications.emitNewNotification({
+					notificationId: 'lottery-hidden-window',
+					content: `
+						<div class="message-container general-message-container general-theme">
+							<div class="firestone-icon">
+								<svg class="svg-icon-fill">
+									<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+								</svg>
+							</div>
+							<div class="message">
+								<div class="title">
+									<span>${title}</span>
+								</div>
+								<span class="text">${msg}</span>
+								<div class="buttons">
+									<button class="dont-show-again secondary">${dontShowAgain}</button>
+									<button class="ok primary">${ok}</button>
+								</div>
+							</div>
+							<button class="i-30 close-button">
+								<svg class="svg-icon-fill">
+									<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+								</svg>
+							</button>
+						</div>`,
+					handlers: [
+						{
+							selector: 'dont-show-again',
+							action: async () => {
+								console.debug('clicked on dont-show-again');
+								const prefs = await this.prefs.getPreferences();
+								const newPrefs: Preferences = { ...prefs, lotteryShowHiddenWindowNotification: false };
+								await this.prefs.savePreferences(newPrefs);
+							},
+						},
+						{
+							selector: 'ok',
+							action: () => {
+								console.debug('clicked on ok, do nothing (except close the notif)');
+							},
+						},
+					],
+					timeout: 9999999,
+				});
+			});
 	}
 }

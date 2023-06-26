@@ -174,4 +174,8 @@ export interface Message {
 	theClass?: string;
 	clickToClose?: boolean;
 	eventToSendOnClick?: () => void;
+	handlers?: readonly {
+		selector: string;
+		action: () => void | Promise<void>;
+	}[];
 }

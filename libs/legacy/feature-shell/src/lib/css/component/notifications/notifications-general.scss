@@ -10,6 +10,7 @@
 	outline: 1px solid #472406;
 	width: 350px;
 	height: 80px;
+	height: fit-content;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
 	padding: 15px;
 
@@ -68,5 +69,22 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+
+	.buttons {
+		--icon-color: #d9c3ab;
+		--button-hover-color: #190505;
+
+		button {
+			font-size: 13px;
+
+			&.secondary {
+				color: #a89782;
+
+				&:hover {
+					color: var(--button-hover-color);
+				}
+			}
+		}
 	}
 }

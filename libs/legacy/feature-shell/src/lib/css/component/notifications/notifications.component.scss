@@ -194,6 +194,29 @@ body {
 			background: #cb9fd7;
 		}
 	}
+
+	.buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 10px;
+		color: var(--icon-color);
+
+		button {
+			border: 1px solid var(--icon-color);
+			padding: 5px 10px;
+
+			&.secondary {
+				border: none;
+				margin-right: 10px;
+			}
+
+			&:hover {
+				background: var(--icon-color);
+				color: var(--button-hover-color);
+			}
+		}
+	}
 }
 
 .message-container-app {
