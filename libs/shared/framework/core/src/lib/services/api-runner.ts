@@ -23,6 +23,11 @@ export class ApiRunner {
 		},
 	): Promise<T | null> {
 		const userToken = await this.secureUserToken();
+		if (!userToken) {
+			console.warn('Cannot call secure API without a valid token', url);
+			return null;
+		}
+
 		input = {
 			...input,
 			jwt: userToken,
@@ -117,6 +122,11 @@ export class ApiRunner {
 	}
 
 	private async generateNewToken(): Promise<string | null> {
+		const currentUser = await this.ow.getCurrentUser();
+		if (!currentUser?.username?.length) {
+			return null;
+		}
+
 		const owToken = await this.ow.generateSessionToken();
 		const fsToken: { fsToken: string } | null = await this.callPostApi(FIRESTONE_TOKEN_URL, { owToken: owToken });
 		console.debug('fsToken', fsToken, !fsToken?.fsToken ? 'no decode' : decode(fsToken?.fsToken));
