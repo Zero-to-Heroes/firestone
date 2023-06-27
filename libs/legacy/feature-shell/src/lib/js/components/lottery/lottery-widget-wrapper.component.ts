@@ -7,7 +7,6 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { AbstractWidgetWrapperComponent } from '@components/overlays/_widget-wrapper.component';
-import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
@@ -58,21 +57,10 @@ export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponen
 
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
-			this.store.listenPrefs$(
-				(prefs) => prefs.showLottery,
-				(prefs) => prefs.lotteryOverlay,
-			),
-			this.store.enablePremiumFeatures$(),
+			this.store.shouldTrackLottery$(),
+			this.store.listenPrefs$((prefs) => prefs.lotteryOverlay),
 		]).pipe(
-			this.mapData(([[currentScene], [showLottery, lotteryOverlay], isPremium]) => {
-				return (
-					lotteryOverlay &&
-					currentScene === SceneMode.GAMEPLAY &&
-					// Check for null so that by default it doesn't show up for premium users
-					(showLottery === true || (!isPremium && showLottery === null))
-				);
-			}),
+			this.mapData(([shouldTrack, [overlay]]) => shouldTrack && overlay),
 			this.handleReposition(),
 		);
 	}

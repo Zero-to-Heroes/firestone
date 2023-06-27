@@ -24,6 +24,19 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						[helpTooltip]="'app.lottery.info-text' | owTranslate"
 						[helpTooltipWidth]="300"
 					></div>
+					<div
+						class="control opt-out"
+						inlineSVG="assets/svg/delete.svg"
+						[helpTooltip]="'app.lottery.opt-out-tooltip' | owTranslate"
+						[helpTooltipWidth]="300"
+						confirmationTooltip
+						[askConfirmation]="true"
+						[confirmationText]="'app.lottery.opt-out-confirmation-text' | owTranslate"
+						[validButtonText]="'app.lottery.opt-out-button-ok' | owTranslate"
+						[cancelButtonText]="'app.lottery.opt-out-button-cancel' | owTranslate"
+						[confirmationPosition]="'right'"
+						(onConfirm)="optOut()"
+					></div>
 					<control-close-simple
 						class="control"
 						(requestClose)="close()"
@@ -122,7 +135,6 @@ export class LotteryWidgetComponent
 			.pipe(this.mapData((lottery) => lottery.spellsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
 		this.displayAd$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => !hasPremium));
 		this.closeConfirmationText = `
-			<div>${this.i18n.translateString('app.lottery.close-confirmation-text-1')}</div>
 			<div style="font-weight: bold">${this.i18n.translateString('app.lottery.close-confirmation-text-2')}</div>
 		`;
 		this.closeConfirmationCancelText = this.i18n.translateString('app.lottery.close-confirmation-button-cancel');
@@ -134,9 +146,14 @@ export class LotteryWidgetComponent
 	}
 
 	async close() {
+		this.store.eventBus$$.next({ name: 'lottery-closed' });
+		this.analytics.trackEvent('lottery-close');
+	}
+
+	async optOut() {
 		const prefs = await this.prefs.getPreferences();
 		await this.prefs.savePreferences({ ...prefs, showLottery: false });
-		this.analytics.trackEvent('lottery-close');
+		this.analytics.trackEvent('lottery-opt-out');
 	}
 
 	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {

@@ -11,6 +11,8 @@ import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service
 export class LotteryWidgetControllerService {
 	public shouldTrack$$ = new BehaviorSubject<boolean>(true);
 
+	private closedByUser$$ = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
 		private readonly ow: OverwolfService,
@@ -24,16 +26,19 @@ export class LotteryWidgetControllerService {
 	private async init() {
 		await this.store.initComplete();
 		const displayWidgetFromData$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
 			this.store.listenPrefs$((prefs) => prefs.showLottery),
 			this.store.hasPremiumSub$(),
+			this.closedByUser$$,
 		]).pipe(
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			// tap((info) => console.debug('[lottery-widget] should track 0?', info)),
-			map(([[currentScene], [showLottery], isPremium]) => {
+			map(([[showLottery], isPremium, closedByUser]) => {
 				return (
-					// currentScene === SceneMode.GAMEPLAY &&
-					// Check for null so that by default it doesn't show up for premium users
-					showLottery === true || (!isPremium && showLottery === null)
+					(!closedByUser &&
+						// currentScene === SceneMode.GAMEPLAY &&
+						// Check for null so that by default it doesn't show up for premium users
+						showLottery === true) ||
+					(!isPremium && showLottery === null)
 				);
 			}),
 		);
@@ -66,6 +71,14 @@ export class LotteryWidgetControllerService {
 			map((visible) => visible === 'full' || visible === 'partial'),
 			startWith(true),
 		);
+
+		this.store.eventBus$$
+			.pipe(
+				filter((event) => event?.name === 'lottery-closed'),
+				distinctUntilChanged(),
+				tap((info) => console.debug('[lottery-widget] closing', info)),
+			)
+			.subscribe(() => this.closedByUser$$.next(true));
 
 		combineLatest([displayWidgetFromData$, adVisible$]).subscribe(([displayWidget, adVisible]) => {
 			console.debug('[lottery-widget] should track?', displayWidget, adVisible);

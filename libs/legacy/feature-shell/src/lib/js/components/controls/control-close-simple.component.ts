@@ -33,10 +33,17 @@ export class ControlCloseSimpleComponent {
 
 	@Input() requestConfirmation: boolean;
 	@Input() confirmationText: string;
+	@Input() confirmationButtons: readonly ConfirmationButton[];
+
 	@Input() confirmationCancel: string;
 	@Input() confirmationOk: string;
 
 	async closeWindow() {
 		this.requestClose.next();
 	}
+}
+
+export interface ConfirmationButton {
+	readonly text: string;
+	readonly status: string;
 }

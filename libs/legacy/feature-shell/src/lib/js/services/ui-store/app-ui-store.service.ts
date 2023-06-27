@@ -672,7 +672,7 @@ export const cdLog = (...args) => {
 
 export interface StoreEvent {
 	readonly name: StoreEventName;
-	readonly data: any;
+	readonly data?: any;
 }
 
-export type StoreEventName = 'lottery-visibility-changed';
+export type StoreEventName = 'lottery-visibility-changed' | 'lottery-closed';

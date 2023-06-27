@@ -7,7 +7,9 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 		`../../../css/themes/decktracker-theme.scss`,
 		'../../../css/component/lottery/lottery-window.component.scss',
 	],
-	template: `<div class="overlay-container-parent decktracker-theme"><lottery class="widget  "></lottery></div> `,
+	template: `<div class="overlay-container-parent decktracker-theme">
+		<lottery class="widget"></lottery>
+	</div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LotteryWindowComponent implements AfterViewInit {
