@@ -277,12 +277,9 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getBoostersInfoOperation.call());
 	}
 
-	public async getInGameAchievementsProgressInfo(
-		forceReset = false,
-		numberOfRetries = 2,
-	): Promise<HsAchievementsInfo> {
+	public async getInGameAchievementsProgressInfo(achievementIds: readonly number[]): Promise<HsAchievementsInfo> {
 		return this.mindVision.callMindVision(() =>
-			this.getInGameAchievementsProgressInfoOperation.call(numberOfRetries, forceReset),
+			this.getInGameAchievementsProgressInfoOperation.call(1, false, achievementIds),
 		);
 	}
 

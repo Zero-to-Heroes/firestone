@@ -126,6 +126,8 @@ export class Preferences implements IPreferences {
 	readonly achievementsDisplayNotifications2 = false;
 	readonly achievementsCompletedActiveFilter: AchievementsCompletedFilterType = 'ALL_ACHIEVEMENTS';
 	readonly resetAchievementsOnAppStart = false;
+	// internal HS achievement ids
+	readonly pinnedAchievementIds: readonly number[] = [];
 
 	// TODO: both should be removed
 	readonly dontConfirmVideoReplayDeletion: boolean;

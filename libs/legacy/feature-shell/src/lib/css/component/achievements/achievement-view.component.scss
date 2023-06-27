@@ -127,4 +127,26 @@
 			}
 		}
 	}
+
+	.buttons {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		display: flex;
+		flex-direction: column;
+
+		.pin-button {
+			--icon-color: var(--color-2);
+			--icon-secondary-color: transparent;
+			width: 22px;
+
+			&.pinned {
+				--icon-color: var(--default-title-color);
+			}
+
+			&:hover {
+				--icon-color: var(--color-1);
+			}
+		}
+	}
 }

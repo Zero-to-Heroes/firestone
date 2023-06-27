@@ -644,6 +644,7 @@ import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over
 import { ScrollableDirective } from './js/directives/scrollable.directive';
 import { SafeHtmlPipe } from './js/pipes/safe-html.pipe';
 import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
+import { AchievementsFirestoneChallengeService } from './js/services/achievement/achievements-firestone-challenges.service';
 import { AchievementsManager } from './js/services/achievement/achievements-manager.service';
 import { AchievementsMemoryMonitor } from './js/services/achievement/achievements-memory-monitor.service';
 import { AchievementsMonitor } from './js/services/achievement/achievements-monitor.service';
@@ -1755,6 +1756,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CardNotificationsService,
 
 		AchievementsMonitor,
+		AchievementsFirestoneChallengeService,
 		AchievementsMemoryMonitor,
 		AchievementsNotificationService,
 		RemoteAchievementsService,

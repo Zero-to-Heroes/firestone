@@ -7,7 +7,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { findAchievements } from '../../models/mainwindow/achievements-state';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -22,7 +22,8 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			class="achievements-container"
 			*ngIf="{
 				totalAchievements: totalAchievements$ | async,
-				activeAchievements: activeAchievements$ | async
+				activeAchievements: activeAchievements$ | async,
+				pinnedAchievements: pinnedAchievements$ | async
 			} as value"
 			scrollable
 		>
@@ -36,6 +37,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					<achievement-view
 						[attr.data-achievement-id]="achievement.id?.toLowerCase()"
 						[achievement]="achievement"
+						[pinnedAchievements]="value.pinnedAchievements"
 					>
 					</achievement-view>
 				</li>
@@ -58,6 +60,7 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 	emptyStateSvgTemplate$: Observable<SafeHtml>;
 	emptyStateTitle$: Observable<string>;
 	emptyStateText$: Observable<string>;
+	pinnedAchievements$: Observable<readonly number[]>;
 
 	constructor(
 		private readonly el: ElementRef,
@@ -120,6 +123,9 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 					});
 				}
 			});
+		this.pinnedAchievements$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.pinnedAchievementIds)
+			.pipe(this.mapData(([pinnedAchievementIds]) => pinnedAchievementIds));
 	}
 
 	trackByAchievementId(index: number, achievement: VisualAchievement) {

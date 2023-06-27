@@ -9,7 +9,8 @@ export class GetInGameAchievementsProgressInfoOperation extends MindVisionOperat
 		super(
 			ow,
 			'getInGameAchievementsProgressInfo',
-			() => mindVision.getInGameAchievementsProgressInfo(),
+			(forceReset?: boolean, achievementIds?: readonly number[]) =>
+				mindVision.getInGameAchievementsProgressInfo(achievementIds ?? []),
 			(info: InternalHsAchievementsInfo) => !info?.Achievements?.length,
 			(info: InternalHsAchievementsInfo) =>
 				({

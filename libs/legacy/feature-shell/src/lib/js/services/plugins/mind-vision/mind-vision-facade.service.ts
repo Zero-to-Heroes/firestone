@@ -398,11 +398,13 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getInGameAchievementsProgressInfo(forceReset = false): Promise<InternalHsAchievementsInfo> {
+	public async getInGameAchievementsProgressInfo(
+		achievementIds: readonly number[],
+	): Promise<InternalHsAchievementsInfo> {
 		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getInGameAchievementsProgressInfo(forceReset, (info) => {
+				plugin.getInGameAchievementsProgressInfo(achievementIds, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {

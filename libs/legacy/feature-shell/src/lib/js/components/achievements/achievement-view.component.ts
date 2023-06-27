@@ -2,9 +2,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
 import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
+import { FeatureFlags } from '../../services/feature-flags';
+import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -32,16 +34,31 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</div>
 				</div>
 			</div>
+			<div class="buttons" *ngIf="achievementPins">
+				<div
+					class="pin-button"
+					*ngIf="canPin$ | async"
+					[ngClass]="{ pinned: isPinned$ | async }"
+					(click)="togglePin(achievement.hsAchievementId)"
+					inlineSVG="assets/svg/pinned.svg"
+					[helpTooltip]="'app.achievements.pin-achievement-tooltip' | owTranslate"
+				></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	achievementPins = FeatureFlags.ACHIEVEMENT_PINS;
+
 	achievement$: Observable<VisualAchievement>;
 	achievementStatus$: Observable<AchievementStatus>;
 	achievementText$: Observable<string>;
+	canPin$: Observable<boolean>;
+	isPinned$: Observable<boolean>;
 
-	achievement$$ = new BehaviorSubject<VisualAchievement>(null);
+	private achievement$$ = new BehaviorSubject<VisualAchievement>(null);
+	private pinnedAchievements$$ = new BehaviorSubject<readonly number[]>([]);
 
 	private placeholderRegex = new RegExp('.*(%%globalStats\\.(.*)\\.(.*)%%).*');
 
@@ -49,7 +66,15 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 		this.achievement$$.next(achievement);
 	}
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	@Input() set pinnedAchievements(value: readonly number[]) {
+		this.pinnedAchievements$$.next(value ?? []);
+	}
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
@@ -58,14 +83,29 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 		this.achievementStatus$ = this.achievement$.pipe(
 			this.mapData((achievement) => achievement.achievementStatus()),
 		);
-		this.achievementText$ = combineLatest(
+		this.achievementText$ = combineLatest([
 			this.achievement$,
 			this.store.listen$(([main, nav, prefs]) => main.getGlobalStats()),
-		).pipe(
+		]).pipe(
 			this.mapData(([achievement, [globalStats]]) =>
 				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
 			),
 		);
+		this.canPin$ = this.achievement$.pipe(this.mapData((achievement) => !achievement.isFullyCompleted()));
+		this.isPinned$ = combineLatest([this.achievement$, this.pinnedAchievements$$]).pipe(
+			this.mapData(([achievement, pinnedAchievements]) =>
+				pinnedAchievements.includes(achievement.hsAchievementId),
+			),
+		);
+	}
+
+	async togglePin(achievementId: number) {
+		const prefs = await this.prefs.getPreferences();
+		const currentPinned = prefs.pinnedAchievementIds ?? [];
+		const newPinned = currentPinned.includes(achievementId)
+			? currentPinned.filter((id) => id !== achievementId)
+			: [...currentPinned, achievementId];
+		await this.prefs.savePreferences({ ...prefs, pinnedAchievementIds: newPinned });
 	}
 
 	trackByFn(index: number, item: CompletionStep) {
