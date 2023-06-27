@@ -178,7 +178,6 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-				"native_window": true,
 				"use_os_windowing": true,
 				"desktop_only": true,
 				"topmost": true,
