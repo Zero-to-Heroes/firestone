@@ -55,12 +55,12 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 			{
 				id: 'lottery',
 				icon: 'assets/svg/lottery.svg',
-				tooltip: this.i18n.translateString('app.lottery.navigation.lottery-tooltip'),
+				tooltip: this.i18n.translateString('app.lottery.navigation.lottery'),
 			},
 			// {
 			// 	id: 'achievements',
 			// 	icon: 'assets/svg/whatsnew/achievements.svg',
-			// 	tooltip: this.i18n.translateString('app.lottery.navigation.achievements-tooltip'),
+			// 	tooltip: this.i18n.translateString('app.lottery.navigation.achievements'),
 			// },
 		];
 		this.selectedModule$ = this.selectedModule$$.asObservable();
