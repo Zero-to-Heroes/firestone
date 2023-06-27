@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
@@ -88,6 +88,7 @@ export class LotteryWidgetControllerService {
 		combineLatest([adVisible$, this.store.listenPrefs$((prefs) => prefs.lotteryShowHiddenWindowNotification)])
 			.pipe(
 				distinctUntilChanged(),
+				debounceTime(2000),
 				filter(([adVisible, [showNotification]]) => !adVisible && showNotification),
 			)
 			.subscribe(() => {
