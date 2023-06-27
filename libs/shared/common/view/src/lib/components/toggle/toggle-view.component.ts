@@ -11,12 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
 	selector: 'fs-toggle-view',
-	styleUrls: [
-		`../label.scss`,
-		`./toggle.scss`,
-		// `../../../../css/component/settings/settings-common.component.scss`,
-		`./toggle-view.component.scss`,
-	],
+	styleUrls: [`../label.scss`, `./toggle.scss`, `./toggle-view.component.scss`],
 	template: `
 		<div class="toggle-view" *ngIf="{ value: value$ | async } as value" [ngClass]="{ 'toggled-on': value.value }">
 			<input
