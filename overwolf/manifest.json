@@ -182,9 +182,9 @@
 				"desktop_only": true,
 				"topmost": true,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 402, "height": 465 },
-				"min_size": { "width": 402, "height": 465 },
-				"max_size": { "width": 402, "height": 465 },
+				"size": { "width": 402, "height": 720 },
+				"min_size": { "width": 402, "height": 720 },
+				"max_size": { "width": 402, "height": 720 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true

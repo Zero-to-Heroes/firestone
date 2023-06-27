@@ -48,38 +48,18 @@
 		}
 	}
 
-	.title {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		font-weight: bold;
-		font-size: 20px;
-	}
-
 	.lottery-content {
-		// padding: 10px;
 		padding: 0;
-	}
-
-	.stats {
-		padding: 10px;
 		display: flex;
-		flex-direction: column;
-		align-items: center;
 
-		.stat {
-			display: flex;
-			height: 20px;
+		& > * {
+			flex-grow: 1;
+		}
 
-			.label {
-				width: 200px;
-			}
-
-			.value {
-				width: 75px;
-				text-align: right;
-			}
+		.navigation {
+			width: 70px;
+			flex-shrink: 0;
+			flex-grow: 0;
 		}
 	}
 

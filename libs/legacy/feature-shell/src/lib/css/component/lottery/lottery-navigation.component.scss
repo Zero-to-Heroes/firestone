@@ -1,0 +1,25 @@
+.navigation {
+	display: flex;
+	flex-direction: column;
+
+	.menu-item {
+		width: 100%;
+		/* aspect-ratio: 60/45; */
+		height: auto;
+		display: flex;
+		height: 45px;
+		position: relative;
+
+		&.selected,
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+			border-right: 1px solid var(--default-title-color);
+		}
+
+		.icon {
+			height: 100%;
+			display: flex;
+			width: 100%;
+		}
+	}
+}
