@@ -83,7 +83,11 @@ export class SecretPlayedFromHandParser implements EventParser {
 						BoardSecret.create(
 							entityId,
 							cardId,
-							this.secretConfig.getValidSecrets(currentState.metadata, secretClass, creatorCardId),
+							this.secretConfig.getValidSecrets(
+								currentState.metadata,
+								secretClass,
+								creatorCardId || card.creatorCardId,
+							),
 						),
 				  ] as readonly BoardSecret[]),
 			cardsPlayedThisTurn:

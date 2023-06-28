@@ -22,21 +22,8 @@ export class SecretConfigService {
 			return null;
 		}
 
-		// if ([CardIds.BeaststalkerTavish].includes(creatorCardId as CardIds)) {
-		// 	const allTavishSecrets = [
-		// 		CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
-		// 		CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
-		// 		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
-		// 		CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
-		// 		CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
-		// 		CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
-		// 		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
-		// 	];
-		// 	return allTavishSecrets.filter((secret) =>
-		// 		config.sets.includes(this.allCards.getCard(secret).set?.toLowerCase()),
-		// 	);
-		// }
-
+		const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
+		const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
 		const result = config.secrets
 			.filter((secret) => secret.playerClass === playerClass)
 			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
@@ -44,8 +31,6 @@ export class SecretConfigService {
 				if (creatorCardId !== CardIds.TearReality) {
 					return true;
 				}
-				const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
-				const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
 				if (standardSecretCardIds.includes(secret.cardId)) {
 					return false;
 				}
