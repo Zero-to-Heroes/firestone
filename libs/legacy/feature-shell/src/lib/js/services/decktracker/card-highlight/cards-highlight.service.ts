@@ -743,6 +743,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minionsDeadSinceLastTurn, undead);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(side(inputSide), taunt);
+			case CardIds.HopeOfQuelthalas:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.Hullbreaker:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.IcebloodTower:
@@ -1179,6 +1181,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.Thoribelore:
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
+			case CardIds.ThornmantleMusician:
+				return and(side(inputSide), or(inDeck, inHand), beast);
 			case CardIds.ThriveInTheShadowsCore:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.TimberTambourine:
@@ -1227,6 +1231,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.Vexallus:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
+			case CardIds.ViciousSlitherspear_TSC_827:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.VitalitySurge:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.VolumeUp:
