@@ -369,7 +369,7 @@ const publicCardGiftCreators = [
 	CardIds.BloodsailFlybooter,
 	CardIds.BolnerHammerbeak, // In case a repeated battlecry draws / creates something
 	CardIds.BookOfWonders,
-	CardIds.BoomSquad,
+	CardIds.BoomSquad_YOD_023,
 	CardIds.Bottomfeeder,
 	CardIds.BounceAroundFtGarona,
 	CardIds.SouleatersScythe_BoundSoulToken,

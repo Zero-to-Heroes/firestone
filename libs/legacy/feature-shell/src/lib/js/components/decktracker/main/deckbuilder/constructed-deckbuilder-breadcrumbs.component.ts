@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { ConstructedDeckbuilderGoBackEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-go-back-event';
 import { ConstructedDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-import-deck-event';
@@ -91,7 +90,7 @@ export class ConstructedDeckbuilderBreadcrumbsComponent
 						? {
 								cardId: null,
 								name: this.i18n.translateString(`global.format.${format}`),
-								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/format/${format}.png`,
+								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/format/${format}.webp`,
 						  }
 						: null;
 				}),

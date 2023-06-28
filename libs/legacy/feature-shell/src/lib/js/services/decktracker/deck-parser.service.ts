@@ -371,6 +371,7 @@ export class DeckParserService {
 			...ARENAS,
 			...SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 			ScenarioId.STANDARD_1_VS_1_GAME,
+			ScenarioId.TWIST___NEW_AGE,
 			ScenarioId.WIZARD_DUELS,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY_HEROES,

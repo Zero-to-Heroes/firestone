@@ -228,11 +228,11 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 231;
 		case CardIds.IllidanStormrageBattlegrounds:
 			return 234;
-		case CardIds.RagnarosTheFirelordBattlegrounds:
+		case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
 			return 254;
 		case CardIds.TheRatKingBattlegrounds:
 			return 266;
-		case CardIds.QueenWagtoggleBattlegrounds:
+		case CardIds.QueenWagtoggleBattlegrounds_TB_BaconShop_HERO_14:
 			return 253;
 		case CardIds.GeorgeTheFallenBattlegrounds:
 			return 232;
@@ -244,13 +244,13 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 250;
 		case CardIds.TheGreatAkazamzarakBattlegrounds:
 			return 264;
-		case CardIds.TheLichKingBattlegrounds:
+		case CardIds.TheLichKingBattlegrounds_TB_BaconShop_HERO_22:
 			return 265;
 		case CardIds.ShudderwockBattlegrounds:
 			return 257;
 		case CardIds.LichBazhialBattlegrounds:
 			return 238;
-		case CardIds.SindragosaBattlegrounds:
+		case CardIds.SindragosaBattlegrounds_TB_BaconShop_HERO_27:
 			return 259;
 		case CardIds.InfiniteTokiBattlegrounds:
 			return 235;
@@ -258,11 +258,11 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 263;
 		case CardIds.PatchwerkBattlegrounds:
 			return 251;
-		case CardIds.YoggSaronHopesEndBattlegrounds:
+		case CardIds.YoggSaronHopesEndBattlegrounds_TB_BaconShop_HERO_35:
 			return 269;
 		case CardIds.DancinDerylBattlegrounds:
 			return 225;
-		case CardIds.LordJaraxxusBattlegrounds:
+		case CardIds.LordJaraxxusBattlegrounds_TB_BaconShop_HERO_37:
 			return 240;
 		case CardIds.KingMuklaBattlegrounds:
 			return 246;
@@ -351,7 +351,7 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 307;
 		case CardIds.Galewing:
 			return 321;
-		case CardIds.TradePrinceGallywixBattlegrounds:
+		case CardIds.TradePrinceGallywixBattlegrounds_TB_BaconShop_HERO_10:
 			return 308;
 		case CardIds.MasterNguyen:
 			return 326;
@@ -496,7 +496,7 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.UnearthedUnderlingBattlegrounds_TB_BaconShop_HERO_25_Buddy;
 		case CardIds.LordBarovBattlegrounds:
 			return CardIds.BarovsApprenticeBattlegrounds_TB_BaconShop_HERO_72_Buddy;
-		case CardIds.LordJaraxxusBattlegrounds:
+		case CardIds.LordJaraxxusBattlegrounds_TB_BaconShop_HERO_37:
 			return CardIds.KilrekBattlegrounds_TB_BaconShop_HERO_37_Buddy;
 		case CardIds.MaievShadowsongBattlegrounds:
 			return CardIds.ShadowWardenBattlegrounds_TB_BaconShop_HERO_62_Buddy;
@@ -524,9 +524,9 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.WeebominationBattlegrounds_TB_BaconShop_HERO_34_Buddy;
 		case CardIds.PyramadBattlegrounds:
 			return CardIds.TitanicGuardianBattlegrounds_TB_BaconShop_HERO_39_Buddy;
-		case CardIds.QueenWagtoggleBattlegrounds:
+		case CardIds.QueenWagtoggleBattlegrounds_TB_BaconShop_HERO_14:
 			return CardIds.ElderTaggawagBattlegrounds_TB_BaconShop_HERO_14_Buddy;
-		case CardIds.RagnarosTheFirelordBattlegrounds:
+		case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
 			return CardIds.LucifronBattlegrounds_TB_BaconShop_HERO_11_Buddy;
 		case CardIds.RakanishuBattlegrounds:
 			return CardIds.LanternTenderBattlegrounds_TB_BaconShop_HERO_75_Buddy;
@@ -538,7 +538,7 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.MuckslingerBattlegrounds_TB_BaconShop_HERO_23_Buddy;
 		case CardIds.SilasDarkmoonBattlegrounds:
 			return CardIds.BurthBattlegrounds_TB_BaconShop_HERO_90_Buddy;
-		case CardIds.SindragosaBattlegrounds:
+		case CardIds.SindragosaBattlegrounds_TB_BaconShop_HERO_27:
 			return CardIds.ThawedChampionBattlegrounds_TB_BaconShop_HERO_27_Buddy;
 		case CardIds.SirFinleyMrrggltonBattlegrounds:
 			return CardIds.MaxwellMightySteedBattlegrounds_TB_BaconShop_HERO_40_Buddy;
@@ -556,13 +556,13 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.MishmashBattlegrounds_TB_BaconShop_HERO_33_Buddy;
 		case CardIds.TheGreatAkazamzarakBattlegrounds:
 			return CardIds.StreetMagicianBattlegrounds_TB_BaconShop_HERO_21_Buddy;
-		case CardIds.TheLichKingBattlegrounds:
+		case CardIds.TheLichKingBattlegrounds_TB_BaconShop_HERO_22:
 			return CardIds.ArfusBattlegrounds_TB_BaconShop_HERO_22_Buddy;
 		case CardIds.TheRatKingBattlegrounds:
 			return CardIds.PigeonLordBattlegrounds_TB_BaconShop_HERO_12_Buddy;
 		case CardIds.TickatusBattlegrounds:
 			return CardIds.TicketCollectorBattlegrounds_TB_BaconShop_HERO_94_Buddy;
-		case CardIds.TradePrinceGallywixBattlegrounds:
+		case CardIds.TradePrinceGallywixBattlegrounds_TB_BaconShop_HERO_10:
 			return CardIds.BilgewaterMogulBattlegrounds_TB_BaconShop_HERO_10_Buddy;
 		case CardIds.VanndarStormpike_BG22_HERO_003:
 			return CardIds.StormpikeLieutenant;
@@ -570,7 +570,7 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.MasterGadrin;
 		case CardIds.Xyrella_BG20_HERO_101:
 			return CardIds.BabyElekk_BG20_HERO_101_Buddy;
-		case CardIds.YoggSaronHopesEndBattlegrounds:
+		case CardIds.YoggSaronHopesEndBattlegrounds_TB_BaconShop_HERO_35:
 			return CardIds.AcolyteOfYoggSaronBattlegrounds_TB_BaconShop_HERO_35_Buddy;
 		case CardIds.YseraBattlegrounds:
 			return CardIds.ValithriaDreamwalkerBattlegrounds_TB_BaconShop_HERO_53_Buddy;
@@ -631,7 +631,7 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 			return 'Brann';
 		case CardIds.ArannaStarseekerBattlegrounds:
 			return 'Aranna';
-		case CardIds.RagnarosTheFirelordBattlegrounds:
+		case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
 			return 'Ragnaros';
 		case CardIds.AFKayBattlegrounds:
 			return 'A.F.Kay'; // No whitespace

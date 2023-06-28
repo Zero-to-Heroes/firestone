@@ -214,6 +214,9 @@ export class ConstructedDeckbuilderCardsComponent
 				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
 					.filter((card) => validSets.includes(card.set?.toLowerCase()))
+					.filter((card) =>
+						currentFormat === 'twist' ? !card.classes.includes(CardClass[CardClass.NEUTRAL]) : true,
+					)
 					.filter((card) => {
 						const searchCardClasses: readonly CardClass[] = [
 							CardClass[currentClass.toUpperCase()],

@@ -45,7 +45,7 @@ export class ConstructedDeckbuilderFormatComponent
 			return {
 				id: format as GameFormatString,
 				name: this.i18n.translateString(`global.format.${format}`),
-				image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/format/${format}.png`,
+				image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/format/${format}.webp`,
 			};
 		});
 	}
