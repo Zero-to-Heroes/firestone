@@ -7,6 +7,7 @@ import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-
 import { BgsShowPostMatchStatsEvent } from '../battlegrounds/store/events/bgs-show-post-match-stats-event';
 import { Events } from '../events.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { RewardMonitorService, XpForGameInfo } from '../rewards/rewards-monitor';
@@ -24,9 +25,15 @@ export class ReplaysNotificationService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly bgsStore: BattlegroundsStoreService,
+		private readonly mainWindowState: MainWindowStoreService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((data) => this.showNewMatchEndNotification(data.data[0]));
 		console.log('[replays-notification] listening for replay completion events');
+		window['showReplay'] = () => {
+			const stat = this.mainWindowState.state.stats.gameStats.stats[0];
+			console.debug('using stat', stat, this.mainWindowState.state.stats.gameStats);
+			this.showBgsMatchEndNotification(stat);
+		};
 	}
 
 	private async showNewMatchEndNotification(gameStats: GameStats) {
