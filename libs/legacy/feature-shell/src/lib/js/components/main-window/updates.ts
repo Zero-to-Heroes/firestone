@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.4.3',
+		version: '11.4.7',
 		force: false,
 		sections: [
 			// {
@@ -48,6 +48,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'general',
 						details: [
+							{
+								type: 'content',
+								text: `Firestone has been updated for patch 26.6. There are still a few minors update to work on, so expect a new version in the coming days.`,
+							},
 							{
 								type: 'feature',
 								text: `You can now display a "lottery" window while playing a game. <br />
