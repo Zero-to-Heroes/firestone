@@ -9,7 +9,7 @@ And [the screenshots](https://imgur.com/a/9mYoN05) for battlegrounds personal st
 
 # Contributing
 
-More information [here](https://github.com/Zero-to-Heroes/firestone/edit/master/CONTRIBUTING.md)
+More information [here](https://github.com/Zero-to-Heroes/firestone/blob/master/CONTRIBUTING.md)
 
 # Links
 
