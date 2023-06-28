@@ -7,6 +7,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { findAchievements } from '../../models/mainwindow/achievements-state';
 import { VisualAchievement } from '../../models/visual-achievement';
@@ -107,7 +108,11 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 			),
 		);
 		this.activeAchievements$ = combineLatest(achievements$, filterOption$).pipe(
-			this.mapData(([achievements, option]) => achievements.filter(option.filterFunction)),
+			this.mapData(([achievements, option]) =>
+				achievements
+					.filter(option.filterFunction)
+					.sort(sortByProperties((a) => [a.isFullyCompleted(), a.name])),
+			),
 		);
 		this.store
 			.listen$(([main, nav, prefs]) => nav.navigationAchievements.selectedAchievementId)
