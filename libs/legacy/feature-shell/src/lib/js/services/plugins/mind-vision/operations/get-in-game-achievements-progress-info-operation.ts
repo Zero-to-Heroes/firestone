@@ -18,6 +18,7 @@ export class GetInGameAchievementsProgressInfoOperation extends MindVisionOperat
 						id: ach.AchievementId,
 						progress: ach.Progress,
 						completed: undefined,
+						index: ach.Index,
 					})),
 				} as HsAchievementsInfo),
 			2,

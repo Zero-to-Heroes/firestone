@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HsRefAchievement } from '@firestone/achievements/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../utils';
+import { arraysEqual, deepEqual } from '../utils';
 import { AchievementsFirestoneChallengeService } from './achievements-firestone-challenges.service';
-import { HsAchievementInfo } from './achievements-info';
+import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
 import { AchievementsManager } from './achievements-manager.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
 
@@ -19,10 +19,11 @@ export class AchievementsMonitor {
 	public achievementsProgressTracking$$ = new BehaviorSubject<readonly AchievementsProgressTracking[]>([]);
 
 	private achievementQuotas: { [achievementId: number]: number };
-	private achievementsOnGameStart: readonly HsAchievementInfo[];
-	private rawAchievements: readonly HsRefAchievement[];
+	private refAchievements: readonly HsRefAchievement[];
 
-	private currentAchievementsProgress$$ = new BehaviorSubject<readonly HsAchievementInfo[]>(null);
+	private achievementIdsToTrack: readonly number[] = [];
+	private achievementsOnGameStart$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
+	private currentAchievementsProgress$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
@@ -45,22 +46,64 @@ export class AchievementsMonitor {
 		await this.store.initComplete();
 		await this.initQuotas();
 		await this.initAchievementsOnGameStart();
-		setInterval(() => this.detectAchievementsProgress(), 500);
-		this.currentAchievementsProgress$$
-			.pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-			.subscribe((progress) => {
-				const finalAchievements = this.buildAchievementsProgressTracking(
-					this.achievementsOnGameStart,
-					progress,
-				);
+
+		const achievementsOnGameStart$ = this.achievementsOnGameStart$$.pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		);
+		const currentAchievementProgress$ = this.currentAchievementsProgress$$.pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		);
+
+		combineLatest([currentAchievementProgress$, achievementsOnGameStart$])
+			// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
+			.subscribe(([progress, achievementsOnGameStart]) => {
+				const finalAchievements = this.buildAchievementsProgressTracking(achievementsOnGameStart, progress);
 				console.debug(
 					'[achievements-monitor] emitting achievements progress',
 					finalAchievements,
-					this.achievementsOnGameStart,
+					achievementsOnGameStart,
 					progress,
 				);
 				this.achievementsProgressTracking$$.next(finalAchievements);
 			});
+
+		// TODO: refresh this when an achievement gets completed
+		combineLatest([this.store.listenPrefs$((prefs) => prefs.pinnedAchievementIds), this.achievementsOnGameStart$$])
+			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
+			.subscribe(async ([[pinnedAchievementIds], achievementsOnGameStart]) => {
+				console.debug(
+					'[achievements-monitor] pinnedAchievementIds',
+					pinnedAchievementIds,
+					achievementsOnGameStart,
+				);
+				// When pinning an achievement, we get the first step of the achievements chain
+				// We actually want to pin the most recent uncompleted step
+				this.achievementIdsToTrack = pinnedAchievementIds
+					.map((id) => {
+						const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
+						// console.debug('[achievements-monitor] achievementToTrack', achievementToTrack, id);
+						return achievementToTrack?.id ?? id;
+					})
+					.filter((id) => !isNaN(id));
+			});
+
+		setInterval(() => this.detectAchievementsProgress(), 1500);
+	}
+
+	private findFirstUncompletedStep(
+		id: number,
+		achievementsOnGameStart: readonly HsAchievementInfo[],
+	): HsRefAchievement {
+		let currentAchievement = this.refAchievements.find((a) => a.id === id);
+		let currentCompletion = achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0;
+		// console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
+		while (currentCompletion > 0 && currentCompletion >= currentAchievement.quota) {
+			const nextStepId = currentAchievement.nextTierId;
+			currentAchievement = this.refAchievements.find((a) => a.id === nextStepId);
+			currentCompletion = achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0;
+			// console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
+		}
+		return currentAchievement;
 	}
 
 	private buildAchievementsProgressTracking(
@@ -70,7 +113,7 @@ export class AchievementsMonitor {
 		return (
 			progress?.map((p) => {
 				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === p.id);
-				const refAchievement = this.rawAchievements.find((a) => a.id === p.id);
+				const refAchievement = this.refAchievements.find((a) => a.id === p.id);
 				const result: AchievementsProgressTracking = {
 					id: p.id,
 					name: refAchievement?.name ?? 'Unknown achievement',
@@ -84,14 +127,51 @@ export class AchievementsMonitor {
 	}
 
 	private async detectAchievementsProgress() {
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs.pinnedAchievementIds?.length) {
+		if (!this.achievementIdsToTrack?.length) {
 			return;
 		}
 
-		const currentAchievementProgress = await this.memory.getInGameAchievementsProgressInfo(
-			prefs.pinnedAchievementIds,
-		);
+		// const currentAchievementProgress2 = await this.memory.getInGameAchievementsProgressInfo(
+		// 	this.achievementIdsToTrack,
+		// );
+		// this.currentAchievementsProgress$$.next(currentAchievementProgress2?.achievements ?? []);
+		// return;
+
+		const startTime = performance.now();
+		const currentProgressIds = this.currentAchievementsProgress$$.value.map((a) => a.id) ?? [];
+		let currentAchievementProgress: HsAchievementsInfo = null;
+		const useIndexDetection = this.achievementIdsToTrack.every((id) => currentProgressIds.includes(id));
+		// console.debug(
+		// 	'[achievements-monitor] using index detection?',
+		// 	useIndexDetection,
+		// 	this.achievementIdsToTrack,
+		// 	currentProgressIds,
+		// 	this.currentAchievementsProgress$$.value,
+		// );
+		if (!useIndexDetection) {
+			currentAchievementProgress = await this.memory.getInGameAchievementsProgressInfo(
+				this.achievementIdsToTrack,
+			);
+		} else {
+			const indexes = this.currentAchievementsProgress$$.value.map((a) => a.index);
+			currentAchievementProgress = await this.memory.getInGameAchievementsProgressInfoByIndex(indexes);
+			// Check if we got the right achievements
+			// This means that the achievements returned have the same ids as the achievementIdsToTrack
+			// const currentProgressIds = currentAchievementProgress?.achievements?.map((a) => a.id);
+			// if (!arraysEqual([...currentProgressIds].sort(), [...this.achievementIdsToTrack])) {
+			// 	console.warn(
+			// 		'[achievements-monitor] wrong achievements returned, falling back to non-index detection',
+			// 		currentAchievementProgress,
+			// 		this.achievementIdsToTrack,
+			// 	);
+			// 	currentAchievementProgress = await this.memory.getInGameAchievementsProgressInfo(
+			// 		this.achievementIdsToTrack,
+			// 	);
+			// }
+		}
+
+		const endTime = performance.now();
+		// console.debug('[achievements-monitor] got achievements progress', endTime - startTime, 'ms\n');
 		this.currentAchievementsProgress$$.next(currentAchievementProgress?.achievements ?? []);
 	}
 
@@ -101,23 +181,23 @@ export class AchievementsMonitor {
 			return;
 		}
 
-		this.rawAchievements = await this.remoteAchievements.loadHsRawAchievements();
+		this.refAchievements = await this.remoteAchievements.loadHsRawAchievements();
 		this.achievementQuotas = {};
-		for (const ach of this.rawAchievements) {
+		for (const ach of this.refAchievements) {
 			this.achievementQuotas[ach.id] = ach.quota;
 		}
 	}
 
 	private async initAchievementsOnGameStart() {
 		if (await this.ow.inGame()) {
-			this.assignAchievementsOnGameStart();
+			await this.assignAchievementsOnGameStart();
 		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res)) {
-				this.achievementsOnGameStart = null;
+				this.achievementsOnGameStart$$.next([]);
 			} else if ((await this.ow.inGame()) && res.gameChanged) {
-				if (!this.achievementsOnGameStart) {
-					this.assignAchievementsOnGameStart();
+				if (!this.achievementsOnGameStart$$.value.length) {
+					await this.assignAchievementsOnGameStart();
 				}
 			}
 		});
@@ -135,7 +215,7 @@ export class AchievementsMonitor {
 		}
 
 		console.log('[achievements-monitor] assigning previous achievements', existingAchievements.length);
-		this.achievementsOnGameStart = existingAchievements;
+		this.achievementsOnGameStart$$.next(existingAchievements);
 	}
 }
 

@@ -6,7 +6,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DECK_VERSIONS = true;
 	public static readonly ENABLE_MAILBOX_TAB = true;
 
-	public static readonly ACHIEVEMENT_PINS = false;
+	public static readonly ACHIEVEMENT_PINS = true;
 
 	// Shelved for now
 	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;

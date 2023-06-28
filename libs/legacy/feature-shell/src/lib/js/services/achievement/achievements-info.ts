@@ -5,6 +5,7 @@ export interface HsAchievementsInfo {
 export interface HsAchievementInfo {
 	readonly id: number;
 	readonly progress: number;
+	readonly index?: number;
 	readonly completed: boolean;
 }
 

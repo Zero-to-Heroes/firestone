@@ -1,36 +1,28 @@
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { HsAchievementsInfo } from '@services/achievement/achievements-info';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
+import { HsAchievementsInfo } from '../../../achievement/achievements-info';
+import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
 
-export class GetAchievementsInfoOperation extends MindVisionOperationFacade<HsAchievementsInfo> {
+export class GetInGameAchievementsProgressInfoByIndexOperation extends MindVisionOperationFacade<HsAchievementsInfo> {
 	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
 		super(
 			ow,
-			'getAchievementsInfo',
-			() => mindVision.getAchievementsInfo(),
+			'getInGameAchievementsProgressInfo',
+			(forceReset?: boolean, achievementIds?: readonly number[]) =>
+				mindVision.getInGameAchievementsProgressInfoByIndex(achievementIds ?? []),
 			(info: InternalHsAchievementsInfo) => !info?.Achievements?.length,
 			(info: InternalHsAchievementsInfo) =>
 				({
 					achievements: info.Achievements.map((ach) => ({
 						id: ach.AchievementId,
 						progress: ach.Progress,
-						completed: [2, 4].includes(ach.Status),
+						completed: undefined,
+						index: ach.Index,
 					})),
 				} as HsAchievementsInfo),
-			5,
-			3000,
+			2,
+			1000,
 		);
 	}
-}
-
-export interface InternalHsAchievementsInfo {
-	readonly Achievements: readonly InternalHsAchievementInfo[];
-}
-
-export interface InternalHsAchievementInfo {
-	readonly AchievementId: number;
-	readonly Progress: number;
-	readonly Index: number;
-	readonly Status: number;
 }

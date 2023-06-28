@@ -404,7 +404,35 @@ export class MindVisionFacadeService {
 		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
+				// console.debug(
+				// 	'getting in game achievements progress info',
+				// 	achievementIds,
+				// 	plugin,
+				// 	plugin.getInGameAchievementsProgressInfo,
+				// );
 				plugin.getInGameAchievementsProgressInfo(achievementIds, (info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not get achievements info', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getInGameAchievementsProgressInfoByIndex(
+		achievementIds: readonly number[],
+	): Promise<InternalHsAchievementsInfo> {
+		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				// console.debug(
+				// 	'getting in game achievements progress info',
+				// 	achievementIds,
+				// 	plugin,
+				// 	plugin.getInGameAchievementsProgressInfo,
+				// );
+				plugin.getInGameAchievementsProgressInfoByIndex(achievementIds, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {

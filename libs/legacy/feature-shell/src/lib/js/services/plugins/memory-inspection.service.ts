@@ -43,6 +43,7 @@ import { GetCurrentSceneOperation } from './mind-vision/operations/get-current-s
 import { GetDuelsDeckFromCollectionOperation } from './mind-vision/operations/get-duels-deck-from-collection-operation';
 import { GetDuelsInfoOperation } from './mind-vision/operations/get-duels-info-operation';
 import { GetDuelsRewardsInfoOperation } from './mind-vision/operations/get-duels-rewards-info-operation';
+import { GetInGameAchievementsProgressInfoByIndexOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-by-index-operation';
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/operations/get-match-info-operation';
 import { GetMemoryChangesOperation } from './mind-vision/operations/get-memory-changes-operation';
@@ -107,6 +108,10 @@ export class MemoryInspectionService {
 	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVisionFacade, this.ow);
 	private getAchievementCategoriesOperation = new GetAchievementCategoriesOperation(this.mindVisionFacade, this.ow);
 	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
+		this.mindVisionFacade,
+		this.ow,
+	);
+	private getInGameAchievementsProgressInfoByIndexOperation = new GetInGameAchievementsProgressInfoByIndexOperation(
 		this.mindVisionFacade,
 		this.ow,
 	);
@@ -280,6 +285,14 @@ export class MemoryInspectionService {
 	public async getInGameAchievementsProgressInfo(achievementIds: readonly number[]): Promise<HsAchievementsInfo> {
 		return this.mindVision.callMindVision(() =>
 			this.getInGameAchievementsProgressInfoOperation.call(1, false, achievementIds),
+		);
+	}
+
+	public async getInGameAchievementsProgressInfoByIndex(
+		achievementIds: readonly number[],
+	): Promise<HsAchievementsInfo> {
+		return this.mindVision.callMindVision(() =>
+			this.getInGameAchievementsProgressInfoByIndexOperation.call(1, false, achievementIds),
 		);
 	}
 
