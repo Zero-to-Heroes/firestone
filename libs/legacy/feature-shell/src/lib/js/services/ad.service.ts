@@ -17,10 +17,10 @@ export class AdService {
 
 	private async init() {
 		this.ow.onSubscriptionChanged(async (event) => {
+			console.log('[ads] subscription changed', event);
 			const showAds = await this.shouldDisplayAds();
 			this.showAds$$.next(showAds);
-		});
-		this.ow.onSubscriptionChanged(async (event) => {
+
 			const isPremium = await this.hasPremiumSub();
 			this.hasPremiumSub$$.next(isPremium);
 		});
@@ -33,7 +33,7 @@ export class AdService {
 		combineLatest([this.hasPremiumSub$$, this.store.shouldTrackLottery$()]).subscribe(
 			([isPremium, shouldTrack]) => {
 				amplitude.getInstance().logEvent('overlay-ads', { enabled: shouldTrack });
-				console.debug('show ads?', isPremium, shouldTrack);
+				console.debug('[ads] show ads?', isPremium, shouldTrack);
 				this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
 			},
 		);
@@ -41,15 +41,15 @@ export class AdService {
 
 	public async shouldDisplayAds(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
-			console.warn('not display in dev');
+			console.warn('[ads] not display in dev');
 			return true;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
 			const [showAds, user] = await Promise.all([this.ow.shouldShowAds(), this.ow.getCurrentUser()]);
-			console.log('should show ads', showAds);
+			console.log('[ads] should show ads', showAds);
 			if (!showAds) {
-				console.log('User has a no-ad subscription, not showing ads', showAds);
+				console.log('[ads] User has a no-ad subscription, not showing ads', showAds);
 				resolve(false);
 				return;
 			}
@@ -59,7 +59,7 @@ export class AdService {
 			}
 			const username = user.username;
 			if (!username) {
-				console.log('user not logged in', user);
+				console.log('[ads] user not logged in', user);
 				resolve(true);
 				return;
 			}
@@ -69,7 +69,7 @@ export class AdService {
 
 	public async hasPremiumSub(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
-			console.warn('not display in dev');
+			console.warn('[ads] not display in dev');
 			return false;
 		}
 		const shouldDisplayAds = await this.shouldDisplayAds();
