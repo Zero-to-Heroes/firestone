@@ -11,13 +11,12 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Notification, NotificationType, NotificationsService } from 'angular2-notifications';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { concatMap, filter, map, tap } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
 import { Message } from '../services/notifications.service';
-import { PreferencesService } from '../services/preferences.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 
 @Component({
@@ -33,7 +32,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="notifications">
-			<simple-notifications [options]="toastOptions" (onCreate)="created($event)" (onDestroy)="destroyed($event)">
+			<simple-notifications [options]="toastOptions" (create)="created($event)" (destroy)="destroyed($event)">
 			</simple-notifications>
 		</div>
 	`,
@@ -58,12 +57,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private notifications$: Observable<Message>;
 
 	constructor(
-		private notificationService: NotificationsService,
-		private cdr: ChangeDetectorRef,
-		private debugService: DebugService,
-		private ow: OverwolfService,
-		private elRef: ElementRef,
-		private prefs: PreferencesService,
+		private readonly notificationService: NotificationsService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly debugService: DebugService,
+		private readonly ow: OverwolfService,
+		private readonly elRef: ElementRef,
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
@@ -79,12 +77,16 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			.pipe(
 				filter((message) => !!message),
 				map((message) => {
+					console.debug('handling new notification', message);
 					// Don't await them because we don't want to block the main thread
 					const toast = this.buildToastNotification(message);
+					if (!toast) {
+						return null;
+					}
 					toast.theClass = message.theClass;
-					console.debug('handling new notification', message, toast);
 					return { message, toast };
 				}),
+				filter((toast) => !!toast),
 				concatMap(({ message, toast }) =>
 					toast.click.pipe(
 						tap((clickEvent: MouseEvent) => this.handleToastClick(clickEvent, message, toast.id)),
@@ -115,17 +117,26 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	destroyed(event) {
 		console.log('notif destroyed', event.id);
-		const deletedNotifications = this.activeNotifications.filter((notif) => notif.toast.id === event.id);
-		deletedNotifications.forEach((notif) => notif.subscription.unsubscribe());
+		// const deletedNotifications = this.activeNotifications.filter((notif) => notif.toast.id === event.id);
+		// deletedNotifications.forEach((notif) => notif.subscription.unsubscribe());
 		this.activeNotifications = this.activeNotifications.filter((notif) => notif.toast.id !== event.id);
 	}
 
 	private buildToastNotification(message: Message): Notification {
+		if (this.activeNotifications.some((n) => n.notificationId === message.notificationId)) {
+			return null;
+		}
+
 		const override: any = {
 			timeOut: message.timeout || this.timeout,
 			clickToClose: message.clickToClose === false ? false : true,
 		};
-		return this.notificationService.html(message.content, NotificationType.Success, override);
+		const result = this.notificationService.html(message.content, NotificationType.Success, override);
+		this.activeNotifications.push({
+			notificationId: message.notificationId,
+			toast: result,
+		});
+		return result;
 	}
 
 	private isUnclickable(event: MouseEvent): boolean {
@@ -223,7 +234,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 interface ActiveNotification {
 	readonly toast: Notification;
-	readonly subscription: Subscription;
+	// readonly subscription: Subscription;
 	readonly notificationId: string;
-	readonly type?: string;
+	// readonly type?: string;
 }
