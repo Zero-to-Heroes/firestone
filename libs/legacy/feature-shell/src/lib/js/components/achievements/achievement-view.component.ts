@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { FeatureFlags } from '../../services/feature-flags';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -36,12 +37,18 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			</div>
 			<div class="buttons" *ngIf="achievementPins">
 				<div
-					class="pin-button"
 					*ngIf="canPin$ | async"
+					class="pin-button"
 					[ngClass]="{ pinned: isPinned$ | async }"
-					(click)="togglePin(achievement.hsAchievementId)"
 					inlineSVG="assets/svg/pinned.svg"
 					[helpTooltip]="'app.achievements.pin-achievement-tooltip' | owTranslate"
+					confirmationTooltip
+					[askConfirmation]="liveTrackingDisabled$ | async"
+					[confirmationText]="liveTrackingConfirmation"
+					[validButtonText]="cancelPin"
+					[cancelButtonText]="enableLiveTracking"
+					[switchButtonStyles]="true"
+					(onConfirm)="togglePin(achievement.hsAchievementId)"
 				></div>
 			</div>
 		</div>
@@ -56,6 +63,12 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 	achievementText$: Observable<string>;
 	canPin$: Observable<boolean>;
 	isPinned$: Observable<boolean>;
+
+	liveTrackingDisabled$: Observable<boolean>;
+
+	liveTrackingConfirmation = this.i18n.translateString('app.achievements.pin-without-tracking-confirmation-text');
+	enableLiveTracking = this.i18n.translateString('app.achievements.enable-live-tracking');
+	cancelPin = this.i18n.translateString('app.achievements.cancel-pin');
 
 	private achievement$$ = new BehaviorSubject<VisualAchievement>(null);
 	private pinnedAchievements$$ = new BehaviorSubject<readonly number[]>([]);
@@ -74,6 +87,7 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -97,6 +111,9 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 				pinnedAchievements.includes(achievement.hsAchievementId),
 			),
 		);
+		this.liveTrackingDisabled$ = this.store
+			.listenPrefs$((prefs) => prefs.showLottery)
+			.pipe(this.mapData(([showLottery]) => !showLottery));
 	}
 
 	async togglePin(achievementId: number) {
@@ -105,7 +122,7 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 		const newPinned = currentPinned.includes(achievementId)
 			? currentPinned.filter((id) => id !== achievementId)
 			: [...currentPinned, achievementId];
-		await this.prefs.savePreferences({ ...prefs, pinnedAchievementIds: newPinned });
+		await this.prefs.savePreferences({ ...prefs, pinnedAchievementIds: newPinned, showLottery: true });
 	}
 
 	trackByFn(index: number, item: CompletionStep) {

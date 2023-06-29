@@ -79,6 +79,8 @@ export class ConfirmationComponent extends AbstractSubscriptionStoreComponent im
 	@Input() set showOk(value: boolean) {
 		this.showOk$$.next(value);
 	}
+	@Input() switchButtonStyles: boolean;
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		protected readonly store: AppUiStoreFacadeService,
@@ -102,10 +104,10 @@ export class ConfirmationComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	ok() {
-		this.onConfirm.next(true);
+		this.switchButtonStyles ? this.onCancel.next(true) : this.onConfirm.next(true);
 	}
 
 	cancel() {
-		this.onCancel.next(true);
+		this.switchButtonStyles ? this.onConfirm.next(true) : this.onCancel.next(true);
 	}
 }

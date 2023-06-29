@@ -28,6 +28,7 @@ export class AskConfirmationDirective implements OnDestroy {
 	@Input() validButtonText: string;
 	@Input() cancelButtonText: string;
 	@Input() showOk = true;
+	@Input() switchButtonStyles = false;
 
 	@Input() set confirmationPosition(value: CardTooltipPositionType) {
 		if (value === this._confirmationPosition || value === 'none') {
@@ -145,6 +146,8 @@ export class AskConfirmationDirective implements OnDestroy {
 		tooltipRef.instance.cancelButtonText =
 			this.cancelButtonText ?? this.i18n.translateString('app.global.controls.default-cancel-button');
 		tooltipRef.instance.showOk = this.showOk;
+		tooltipRef.instance.switchButtonStyles = this.switchButtonStyles;
+
 		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
 		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
 
