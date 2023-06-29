@@ -24,6 +24,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[tooltip]="'settings.achievements.notifications.achievements-enabled-tooltip' | owTranslate"
 			></preference-toggle>
 			<preference-toggle
+				field="showLottery"
+				[label]="'settings.achievements.notifications.achievements-live-tracking-text' | owTranslate"
+				[tooltip]="'settings.achievements.notifications.achievements-live-tracking-tooltip' | owTranslate"
+			></preference-toggle>
+			<preference-toggle
 				field="achievementsEnabled2"
 				[label]="'settings.achievements.notifications.firestone-achievements-text' | owTranslate"
 				[tooltip]="'settings.achievements.notifications.firestone-achievements-tooltip' | owTranslate"
