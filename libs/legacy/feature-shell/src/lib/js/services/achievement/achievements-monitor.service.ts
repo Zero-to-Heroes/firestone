@@ -20,7 +20,7 @@ export class AchievementsMonitor {
 	private achievementQuotas: { [achievementId: number]: number };
 	private refAchievements: readonly HsRefAchievement[];
 
-	private achievementIdsToTrack: readonly number[] = [];
+	private achievementIdsToTrack$$ = new BehaviorSubject<readonly number[]>([]);
 	private achievementsOnGameStart$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
 	private currentAchievementsProgress$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
 
@@ -64,19 +64,25 @@ export class AchievementsMonitor {
 				);
 				// When pinning an achievement, we get the first step of the achievements chain
 				// We actually want to pin the most recent uncompleted step
-				this.achievementIdsToTrack = pinnedAchievementIds
-					.map((id) => {
-						const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
-						// console.debug('[achievements-monitor] achievementToTrack', achievementToTrack, id);
-						return achievementToTrack?.id ?? id;
-					})
-					.filter((id) => !isNaN(id));
+				this.achievementIdsToTrack$$.next(
+					pinnedAchievementIds
+						.map((id) => {
+							const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
+							// console.debug('[achievements-monitor] achievementToTrack', achievementToTrack, id);
+							return achievementToTrack?.id ?? id;
+						})
+						.filter((id) => !isNaN(id)),
+				);
 			});
 
-		combineLatest([currentAchievementProgress$, achievementsOnGameStart$])
+		combineLatest([currentAchievementProgress$, achievementsOnGameStart$, this.achievementIdsToTrack$$])
 			// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-			.subscribe(([progress, achievementsOnGameStart]) => {
-				const finalAchievements = this.buildAchievementsProgressTracking(achievementsOnGameStart, progress);
+			.subscribe(([progress, achievementsOnGameStart, achievementIdsToTrack]) => {
+				const finalAchievements = this.buildAchievementsProgressTracking(
+					achievementsOnGameStart,
+					progress,
+					achievementIdsToTrack,
+				);
 				console.debug(
 					'[achievements-monitor] emitting achievements progress',
 					finalAchievements,
@@ -108,10 +114,11 @@ export class AchievementsMonitor {
 	private buildAchievementsProgressTracking(
 		achievementsOnGameStart: readonly HsAchievementInfo[],
 		progress: readonly HsAchievementInfo[],
+		achievementIdsToTrack: readonly number[],
 	): readonly AchievementsProgressTracking[] {
 		// Happens when we haven't yet started a match
 		if (!progress?.length) {
-			return this.achievementIdsToTrack.map((id) => {
+			return achievementIdsToTrack.map((id) => {
 				const refAchievement = this.refAchievements.find((a) => a.id === id);
 				const quota = this.achievementQuotas[id];
 				const result: AchievementsProgressTracking = {
@@ -144,7 +151,7 @@ export class AchievementsMonitor {
 	}
 
 	private async detectAchievementsProgress() {
-		if (!this.achievementIdsToTrack?.length) {
+		if (!this.achievementIdsToTrack$$.value?.length) {
 			return;
 		}
 
@@ -157,7 +164,7 @@ export class AchievementsMonitor {
 		const startTime = performance.now();
 		const currentProgressIds = this.currentAchievementsProgress$$.value.map((a) => a.id) ?? [];
 		let currentAchievementProgress: HsAchievementsInfo = null;
-		const useIndexDetection = this.achievementIdsToTrack.every((id) => currentProgressIds.includes(id));
+		const useIndexDetection = this.achievementIdsToTrack$$.value.every((id) => currentProgressIds.includes(id));
 		// console.debug(
 		// 	'[achievements-monitor] using index detection?',
 		// 	useIndexDetection,
@@ -167,7 +174,7 @@ export class AchievementsMonitor {
 		// );
 		if (!useIndexDetection) {
 			currentAchievementProgress = await this.memory.getInGameAchievementsProgressInfo(
-				this.achievementIdsToTrack,
+				this.achievementIdsToTrack$$.value,
 			);
 		} else {
 			const indexes = this.currentAchievementsProgress$$.value.map((a) => a.index);

@@ -2,7 +2,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable, tap } from 'rxjs';
+import { Preferences } from '../../models/preferences';
 import { AchievementsProgressTracking } from '../../services/achievement/achievements-monitor.service';
+import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
@@ -22,6 +24,14 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 					class="achievement"
 					[achievement]="achievement"
 				></lottery-achievement>
+				<div class="button-container">
+					<button
+						class="button reset"
+						[owTranslate]="'app.lottery.achievements-reset-button'"
+						[helpTooltip]="'app.lottery.achievements-reset-button-tooltip' | owTranslate"
+						(click)="resetAchievements()"
+					></button>
+				</div>
 			</div>
 			<ng-template #emptyState
 				><div class="empty-state" [owTranslate]="'app.lottery.achievements-empty-state'"></div>
@@ -33,7 +43,11 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	achievements$: Observable<readonly AchievementsProgressTracking[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
@@ -57,5 +71,11 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 
 	trackByFn(index, item: AchievementsProgressTracking) {
 		return item.id;
+	}
+
+	async resetAchievements() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = { ...prefs, pinnedAchievementIds: [] };
+		await this.prefs.savePreferences(newPrefs);
 	}
 }

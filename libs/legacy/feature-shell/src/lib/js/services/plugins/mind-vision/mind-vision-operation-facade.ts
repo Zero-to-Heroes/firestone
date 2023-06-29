@@ -123,7 +123,7 @@ export class MindVisionOperationFacade<T> {
 			} else {
 				// There are cases where not retrieving the info it totally valid,
 				// like trying to get the BattlegroundsInfo right after logging in
-				this.log('not getting any value', retriesLeft, forceReset, resultFromMemory);
+				// this.log('not getting any value', retriesLeft, forceReset, resultFromMemory);
 				callback(null, retriesLeft);
 				return;
 			}
