@@ -6,7 +6,10 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 
 @Component({
 	selector: 'lottery-lottery',
-	styleUrls: ['../../../css/component/lottery/lottery-lottery.component.scss'],
+	styleUrls: [
+		'../../../css/component/lottery/lottery-section.scss',
+		'../../../css/component/lottery/lottery-lottery.component.scss',
+	],
 	template: `
 		<div class="main-content">
 			<div class="title">

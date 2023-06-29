@@ -6,7 +6,6 @@ import { GameEvent } from '../../models/game-event';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
 import { AchievementsFirestoneChallengeService } from './achievements-firestone-challenges.service';
@@ -32,10 +31,10 @@ export class AchievementsMonitor {
 		private readonly achievementsManager: AchievementsManager,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
 		private readonly firestoneAchievements: AchievementsFirestoneChallengeService,
 	) {
 		this.init();
+		window['achievementsMonitor'] = this;
 	}
 
 	private async init() {
@@ -114,10 +113,12 @@ export class AchievementsMonitor {
 			progress?.map((p) => {
 				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === p.id);
 				const refAchievement = this.refAchievements.find((a) => a.id === p.id);
+				const quota = this.achievementQuotas[p.id];
 				const result: AchievementsProgressTracking = {
 					id: p.id,
 					name: refAchievement?.name ?? 'Unknown achievement',
-					quota: this.achievementQuotas[p.id],
+					text: refAchievement?.description?.replaceAll('$q', '' + quota),
+					quota: quota,
 					progressThisGame: p.progress - (previousAchievement?.progress ?? 0),
 					progressTotal: p.progress,
 				};
@@ -222,6 +223,7 @@ export class AchievementsMonitor {
 export interface AchievementsProgressTracking {
 	readonly id: number;
 	readonly name: string;
+	readonly text: string;
 	readonly quota: number;
 	readonly progressThisGame: number;
 	readonly progressTotal: number;

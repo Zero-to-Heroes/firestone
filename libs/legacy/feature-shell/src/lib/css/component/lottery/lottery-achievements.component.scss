@@ -1,0 +1,18 @@
+.main-content {
+	display: flex;
+	flex-direction: column;
+	padding-right: 20px;
+
+	.title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		font-size: 20px;
+	}
+
+	.achievement {
+		margin-bottom: 5px;
+	}
+}

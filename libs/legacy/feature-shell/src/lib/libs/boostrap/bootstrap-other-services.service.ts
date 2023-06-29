@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AchievementsMonitor } from '../../js/services/achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { AchievementsLoaderService } from '../../js/services/achievement/data/achievements-loader.service';
@@ -59,7 +58,6 @@ export class BootstrapOtherServicesService {
 		private readonly achievementsDb: AchievementsDb,
 		private readonly achievementsLoader: AchievementsLoaderService,
 		private readonly packMonitor: PackMonitor,
-		private readonly achievementsMonitor: AchievementsMonitor,
 		private readonly init_AchievementsNotifications: AchievementsNotificationService,
 		private readonly packStatsService: PackStatsService,
 		private readonly achievementStatsService: RemoteAchievementsService,

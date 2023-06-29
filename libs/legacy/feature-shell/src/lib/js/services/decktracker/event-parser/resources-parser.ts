@@ -15,7 +15,7 @@ export class ResourcesParser implements EventParser {
 			manaUsedThisTurn: gameEvent.additionalData.resourcesUsed,
 			manaLeft: gameEvent.additionalData.resourcesLeft,
 		});
-		console.debug('[resources-parser] resources', isPlayer, gameEvent.additionalData, newPlayerDeck);
+		// console.debug('[resources-parser] resources', isPlayer, gameEvent.additionalData, newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

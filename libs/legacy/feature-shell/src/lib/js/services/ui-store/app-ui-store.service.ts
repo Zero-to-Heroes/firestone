@@ -34,6 +34,7 @@ import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-bat
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
+import { AchievementsMonitor, AchievementsProgressTracking } from '../achievement/achievements-monitor.service';
 import { AdService } from '../ad.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
@@ -87,7 +88,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	private mails: Observable<MailState>;
-	private lottery: Observable<LotteryState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
@@ -96,6 +96,8 @@ export class AppUiStoreService extends Store<Preferences> {
 	private bgHeroSkins: Observable<readonly number[]>;
 	private sets: Observable<readonly Set[]>;
 	private shouldTrackLottery: Observable<boolean>;
+	private lottery: Observable<LotteryState>;
+	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -407,6 +409,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.lottery.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
+		return this.achievementsProgressTracking.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -424,7 +430,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initDecks();
 		this.initDuelsDecks();
 		this.initMails();
-		this.initShouldTrackLottery();
 		this.initCardBacks();
 		this.initCoins();
 		this.initCollection();
@@ -432,7 +437,9 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initSets();
 		this.initAllTimeBoosters();
 		this.initTavernBrawl();
+		this.initShouldTrackLottery();
 		this.initLottery();
+		this.initAchievementsProgressTracking();
 		this.initialized = true;
 	}
 
@@ -487,6 +494,12 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initLottery() {
 		this.lottery = (this.ow.getMainWindow().lotteryProvider as LotteryService).lottery$$.pipe(shareReplay(1));
+	}
+
+	private initAchievementsProgressTracking() {
+		this.achievementsProgressTracking = (
+			this.ow.getMainWindow().achievementsMonitor as AchievementsMonitor
+		).achievementsProgressTracking$$.pipe(shareReplay(1));
 	}
 
 	private initDuelsDecks() {

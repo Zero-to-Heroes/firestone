@@ -1,0 +1,27 @@
+.achievement {
+	display: flex;
+	align-items: center;
+
+	.name {
+		width: 120px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin-right: 10px;
+	}
+
+	.progress-bar {
+		background: var(--color-5);
+		display: flex;
+		flex-grow: 1;
+		height: 10px;
+
+		.start {
+			background: var(--color-2);
+		}
+
+		.current {
+			background: var(--default-title-color);
+		}
+	}
+}

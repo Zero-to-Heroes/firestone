@@ -83,7 +83,7 @@ export class LotteryService {
 			if (processor) {
 				const newLottery = processor.process(this.lottery$$.value, event);
 				if (newLottery !== this.lottery$$.value) {
-					console.debug('[lottery] new lottery state', event.type, newLottery, event);
+					// console.debug('[lottery] new lottery state', event.type, newLottery, event);
 					this.lottery$$.next(newLottery);
 				}
 			}

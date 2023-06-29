@@ -53,6 +53,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 				<lottery-navigation class="navigation" (moduleSelected)="onModuleSelected($event)"></lottery-navigation>
 				<ng-container [ngSwitch]="selectedModule$ | async">
 					<lottery-lottery *ngSwitchCase="'lottery'"></lottery-lottery>
+					<lottery-achievements *ngSwitchCase="'achievements'"></lottery-achievements>
 				</ng-container>
 			</div>
 			<single-ad
