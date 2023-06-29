@@ -69,9 +69,9 @@ export class AchievementsMonitor {
 						.map((id) => {
 							const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
 							// console.debug('[achievements-monitor] achievementToTrack', achievementToTrack, id);
-							return achievementToTrack?.id ?? id;
+							return achievementToTrack?.id;
 						})
-						.filter((id) => !isNaN(id)),
+						.filter((id) => !!id && !isNaN(id)),
 				);
 			});
 
@@ -104,8 +104,10 @@ export class AchievementsMonitor {
 		// console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
 		while (currentCompletion > 0 && currentCompletion >= currentAchievement.quota) {
 			const nextStepId = currentAchievement.nextTierId;
-			currentAchievement = this.refAchievements.find((a) => a.id === nextStepId);
-			currentCompletion = achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0;
+			currentAchievement = !!nextStepId ? this.refAchievements.find((a) => a.id === nextStepId) : null;
+			currentCompletion = !!nextStepId
+				? achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0
+				: 0;
 			// console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
 		}
 		return currentAchievement;
