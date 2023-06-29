@@ -5,6 +5,7 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
@@ -62,17 +63,18 @@ export class AchievementsMonitor {
 					pinnedAchievementIds,
 					achievementsOnGameStart,
 				);
+				const mappedAchiements: readonly { id: number; achievement: HsRefAchievement }[] = pinnedAchievementIds
+					.map((id) => {
+						const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
+						return { id: id, achievement: achievementToTrack };
+					})
+					.filter((a) => !!a.id && !isNaN(a.id));
+				const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
+				this.store.send(new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)));
+
 				// When pinning an achievement, we get the first step of the achievements chain
 				// We actually want to pin the most recent uncompleted step
-				this.achievementIdsToTrack$$.next(
-					pinnedAchievementIds
-						.map((id) => {
-							const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
-							// console.debug('[achievements-monitor] achievementToTrack', achievementToTrack, id);
-							return achievementToTrack?.id;
-						})
-						.filter((id) => !!id && !isNaN(id)),
-				);
+				this.achievementIdsToTrack$$.next(mappedAchiements.map((a) => a.achievement?.id).filter((id) => !!id));
 			});
 
 		combineLatest([currentAchievementProgress$, achievementsOnGameStart$, this.achievementIdsToTrack$$])
