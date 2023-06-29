@@ -53,21 +53,8 @@ export class AchievementsMonitor {
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 		);
 
-		combineLatest([currentAchievementProgress$, achievementsOnGameStart$])
-			// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-			.subscribe(([progress, achievementsOnGameStart]) => {
-				const finalAchievements = this.buildAchievementsProgressTracking(achievementsOnGameStart, progress);
-				console.debug(
-					'[achievements-monitor] emitting achievements progress',
-					finalAchievements,
-					achievementsOnGameStart,
-					progress,
-				);
-				this.achievementsProgressTracking$$.next(finalAchievements);
-			});
-
 		// TODO: refresh this when an achievement gets completed
-		combineLatest([this.store.listenPrefs$((prefs) => prefs.pinnedAchievementIds), this.achievementsOnGameStart$$])
+		combineLatest([this.store.listenPrefs$((prefs) => prefs.pinnedAchievementIds), achievementsOnGameStart$])
 			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
 			.subscribe(async ([[pinnedAchievementIds], achievementsOnGameStart]) => {
 				console.debug(
@@ -84,6 +71,19 @@ export class AchievementsMonitor {
 						return achievementToTrack?.id ?? id;
 					})
 					.filter((id) => !isNaN(id));
+			});
+
+		combineLatest([currentAchievementProgress$, achievementsOnGameStart$])
+			// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
+			.subscribe(([progress, achievementsOnGameStart]) => {
+				const finalAchievements = this.buildAchievementsProgressTracking(achievementsOnGameStart, progress);
+				console.debug(
+					'[achievements-monitor] emitting achievements progress',
+					finalAchievements,
+					achievementsOnGameStart,
+					progress,
+				);
+				this.achievementsProgressTracking$$.next(finalAchievements);
 			});
 
 		setInterval(() => this.detectAchievementsProgress(), 1500);
@@ -109,6 +109,22 @@ export class AchievementsMonitor {
 		achievementsOnGameStart: readonly HsAchievementInfo[],
 		progress: readonly HsAchievementInfo[],
 	): readonly AchievementsProgressTracking[] {
+		// Happens when we haven't yet started a match
+		if (!progress?.length) {
+			return this.achievementIdsToTrack.map((id) => {
+				const refAchievement = this.refAchievements.find((a) => a.id === id);
+				const quota = this.achievementQuotas[id];
+				const result: AchievementsProgressTracking = {
+					id: id,
+					name: refAchievement?.name ?? 'Unknown achievement',
+					text: refAchievement?.description?.replaceAll('$q', '' + quota),
+					quota: quota,
+					progressThisGame: 0,
+					progressTotal: achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0,
+				};
+				return result;
+			});
+		}
 		return (
 			progress?.map((p) => {
 				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === p.id);

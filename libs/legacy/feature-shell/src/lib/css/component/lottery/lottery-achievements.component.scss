@@ -1,7 +1,13 @@
+:host {
+	display: flex;
+	width: 100%;
+}
+
 .main-content {
 	display: flex;
 	flex-direction: column;
 	padding-right: 20px;
+	width: 100%;
 
 	.title {
 		display: flex;
@@ -12,7 +18,19 @@
 		font-size: 20px;
 	}
 
+	.achievements {
+		min-height: 0;
+		overflow: scroll;
+	}
+
 	.achievement {
 		margin-bottom: 5px;
 	}
+}
+
+.empty-state {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 }

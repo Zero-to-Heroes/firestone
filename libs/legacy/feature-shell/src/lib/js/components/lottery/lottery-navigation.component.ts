@@ -9,6 +9,7 @@ import {
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { FeatureFlags } from '../../services/feature-flags';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -36,7 +37,7 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 	@Output() moduleSelected = new EventEmitter<LotteryTabType>();
 
 	selectedModule$: Observable<string>;
-	tabs: readonly LotteryTab[];
+	tabs: LotteryTab[];
 
 	private selectedModule$$ = new BehaviorSubject<LotteryTabType>(null);
 
@@ -57,12 +58,14 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 				icon: 'assets/svg/lottery.svg',
 				tooltip: this.i18n.translateString('app.lottery.navigation.lottery'),
 			},
-			{
+		];
+		if (FeatureFlags.ACHIEVEMENT_PINS) {
+			this.tabs.push({
 				id: 'achievements',
 				icon: 'assets/svg/whatsnew/achievements.svg',
 				tooltip: this.i18n.translateString('app.lottery.navigation.achievements'),
-			},
-		];
+			});
+		}
 		this.selectedModule$ = this.selectedModule$$.asObservable();
 		this.selectModule('lottery');
 	}
