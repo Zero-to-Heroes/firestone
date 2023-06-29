@@ -4,10 +4,11 @@
 	font-size: 14px;
 	position: relative;
 	z-index: 1; // So that tooltips show up above the ad
-	max-height: 480px;
 	display: flex;
 	flex-direction: column;
+	max-height: 485px;
 	max-width: 400px;
+	min-width: 400px;
 
 	.title-bar {
 		display: flex;

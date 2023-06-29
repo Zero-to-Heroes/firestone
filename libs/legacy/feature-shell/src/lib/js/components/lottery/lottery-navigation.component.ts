@@ -51,7 +51,7 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
 		this.tabs = [
 			{
 				id: 'lottery',
@@ -67,7 +67,8 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 			});
 		}
 		this.selectedModule$ = this.selectedModule$$.asObservable();
-		this.selectModule('lottery');
+		const prefs = await this.prefs.getPreferences();
+		this.selectModule(!!prefs.pinnedAchievementIds?.length ? 'achievements' : 'lottery');
 	}
 
 	selectModule(module: LotteryTabType) {
