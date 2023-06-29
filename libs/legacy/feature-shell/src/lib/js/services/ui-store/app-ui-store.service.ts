@@ -96,6 +96,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private bgHeroSkins: Observable<readonly number[]>;
 	private sets: Observable<readonly Set[]>;
 	private shouldTrackLottery: Observable<boolean>;
+	private shouldShowLotteryOverlay: Observable<boolean>;
 	private lottery: Observable<LotteryState>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
 
@@ -354,6 +355,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.shouldTrackLottery.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public shouldShowLotteryOverlay$(): Observable<boolean> {
+		return this.shouldShowLotteryOverlay.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public cardBacks$(): Observable<readonly CardBack[]> {
 		return this.cardBacks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
@@ -438,6 +443,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initAllTimeBoosters();
 		this.initTavernBrawl();
 		this.initShouldTrackLottery();
+		this.initShouldShowLotteryOverlay();
 		this.initLottery();
 		this.initAchievementsProgressTracking();
 		this.initialized = true;
@@ -490,6 +496,12 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.shouldTrackLottery = (
 			this.ow.getMainWindow().lotteryWidgetController as LotteryWidgetControllerService
 		).shouldTrack$$.pipe(shareReplay(1));
+	}
+
+	private initShouldShowLotteryOverlay() {
+		this.shouldShowLotteryOverlay = (
+			this.ow.getMainWindow().lotteryWidgetController as LotteryWidgetControllerService
+		).shouldShowOverlay$$.pipe(shareReplay(1));
 	}
 
 	private initLottery() {

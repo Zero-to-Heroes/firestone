@@ -26,28 +26,6 @@
 	.achievement {
 		margin-bottom: 5px;
 	}
-
-	.button-container {
-		display: flex;
-		justify-content: center;
-		margin-top: 10px;
-
-		.button {
-			padding: 5px 10px;
-			border: 1px solid var(--confirmation-text-color);
-			background: transparent;
-			color: var(--confirmation-text-color);
-			width: fit-content;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			&:hover {
-				background: var(--confirmation-text-color);
-				color: var(--confirmation-background-color);
-			}
-		}
-	}
 }
 
 .empty-state {
@@ -55,4 +33,26 @@
 	align-items: center;
 	justify-content: center;
 	text-align: center;
+}
+
+.button-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.button {
+	padding: 5px 10px;
+	border: 1px solid var(--confirmation-text-color);
+	background: transparent;
+	color: var(--confirmation-text-color);
+	width: fit-content;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover {
+		background: var(--confirmation-text-color);
+		color: var(--confirmation-background-color);
+	}
 }

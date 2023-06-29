@@ -41,6 +41,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
+import { AchievementsManager } from '../../achievement/achievements-manager.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
@@ -229,6 +230,14 @@ import { AchievementHistoryCreatedProcessor } from './processors/achievements/ac
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
 import { AchievementsFullUpdatedProcessor } from './processors/achievements/achievements-full-updated-processor';
 import { AchievementsInitProcessor } from './processors/achievements/achievements-init-processor';
+import {
+	AchievementsRemovePinnedAchievementsEvent,
+	AchievementsRemovePinnedAchievementsProcessor,
+} from './processors/achievements/achievements-remove-pinned-achievements';
+import {
+	AchievementsTrackRandomAchievementsEvent,
+	AchievementsTrackRandomAchievementsProcessor,
+} from './processors/achievements/achievements-track-random-achievements';
 import { AchievementsUpdatedProcessor } from './processors/achievements/achievements-updated-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
@@ -410,6 +419,7 @@ export class MainWindowStoreService {
 		private readonly cardHistoryStorage: CardHistoryStorageService,
 		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
 		private readonly achievementsLoader: AchievementsLoaderService,
+		private readonly achievementsManager: AchievementsManager,
 		private readonly remoteAchievements: RemoteAchievementsService,
 		private readonly collectionDb: CollectionStorageService,
 		private readonly gameStatsUpdater: GameStatsUpdaterService,
@@ -612,11 +622,9 @@ export class MainWindowStoreService {
 			],
 			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionManager, this.cards)],
 			[NewCardEvent.eventName(), new NewCardProcessor(this.cardHistoryStorage)],
-			[
-				// Achievements
-				AchievementsInitEvent.eventName(),
-				new AchievementsInitProcessor(),
-			],
+
+			// Achievements
+			[AchievementsInitEvent.eventName(), new AchievementsInitProcessor()],
 			[AchievementsFullRefreshEvent.eventName(), new AchievementsFullRefreshProcessor(this.remoteAchievements)],
 			[
 				AchievementsFullUpdatedEvent.eventName(),
@@ -633,12 +641,23 @@ export class MainWindowStoreService {
 			[AchievementsUpdatedEvent.eventName(), new AchievementsUpdatedProcessor()],
 			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistoryStorage)],
 			[FilterShownAchievementsEvent.eventName(), new FilterShownAchievementsProcessor()],
-			[GlobalStatsUpdatedEvent.eventName(), new GlobalStatsUpdatedProcessor(this.events)],
 			[
-				// Social
-				StartSocialSharingEvent.eventName(),
-				new StartSocialSharingProcessor(),
+				AchievementsRemovePinnedAchievementsEvent.eventName(),
+				new AchievementsRemovePinnedAchievementsProcessor(this.prefs),
 			],
+			[
+				AchievementsTrackRandomAchievementsEvent.eventName(),
+				new AchievementsTrackRandomAchievementsProcessor(
+					this.prefs,
+					this.achievementsManager,
+					this.remoteAchievements,
+				),
+			],
+
+			[GlobalStatsUpdatedEvent.eventName(), new GlobalStatsUpdatedProcessor(this.events)],
+
+			// Social
+			[StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor()],
 			[TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor()],
 			[UpdateTwitterSocialInfoEvent.eventName(), new UpdateTwitterSocialInfoProcessor(this.ow)],
 			[ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],

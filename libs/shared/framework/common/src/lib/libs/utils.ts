@@ -37,6 +37,19 @@ export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): n
 	return array?.map((item) => prop(item)).reduce((a, b) => a + b, 0) ?? 0;
 };
 
+export const shuffleArray = <T>(array: T[]): T[] => {
+	const shuffledArray = [...array]; // Create a copy of the original array
+
+	for (let i = shuffledArray.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1)); // Generate a random index
+
+		// Swap elements at indices i and j
+		[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+	}
+
+	return shuffledArray;
+};
+
 export const sleep = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };

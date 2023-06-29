@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { HsAchievementInfo } from './achievements-info';
 import { AchievementsStorageService } from './achievements-storage.service';
@@ -10,7 +9,6 @@ export class AchievementsManager {
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: AchievementsStorageService,
-		private readonly events: Events,
 	) {}
 
 	public async getAchievements(forceMemory = false, shouldLog = true): Promise<readonly HsAchievementInfo[]> {

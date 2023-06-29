@@ -4,6 +4,7 @@ import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable, tap } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { AchievementsProgressTracking } from '../../services/achievement/achievements-monitor.service';
+import { AchievementsTrackRandomAchievementsEvent } from '../../services/mainwindow/store/processors/achievements/achievements-track-random-achievements';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
@@ -26,15 +27,23 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 				></lottery-achievement>
 				<div class="button-container">
 					<button
-						class="button reset"
+						class="button"
 						[owTranslate]="'app.lottery.achievements-reset-button'"
 						[helpTooltip]="'app.lottery.achievements-reset-button-tooltip' | owTranslate"
 						(click)="resetAchievements()"
 					></button>
 				</div>
 			</div>
-			<ng-template #emptyState
-				><div class="empty-state" [owTranslate]="'app.lottery.achievements-empty-state'"></div>
+			<ng-template #emptyState>
+				<div class="empty-state" [owTranslate]="'app.lottery.achievements-empty-state'"></div>
+				<div class="button-container">
+					<button
+						class="button"
+						[owTranslate]="'app.lottery.achievements-pick-for-me-button'"
+						[helpTooltip]="'app.lottery.achievements-pick-for-me-button-tooltip' | owTranslate"
+						(click)="pickRandomAchievements()"
+					></button>
+				</div>
 			</ng-template>
 		</div>
 	`,
@@ -77,5 +86,10 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = { ...prefs, pinnedAchievementIds: [] };
 		await this.prefs.savePreferences(newPrefs);
+	}
+
+	pickRandomAchievements() {
+		console.debug('picking achievements');
+		this.store.send(new AchievementsTrackRandomAchievementsEvent());
 	}
 }
