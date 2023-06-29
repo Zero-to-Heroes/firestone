@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service
 @Injectable()
 export class LotteryWidgetControllerService {
 	public shouldTrack$$ = new BehaviorSubject<boolean>(true);
+	public shouldShowOverlay$$ = new BehaviorSubject<boolean>(true);
 
 	private closedByUser$$ = new BehaviorSubject<boolean>(false);
 
@@ -42,6 +43,15 @@ export class LotteryWidgetControllerService {
 				);
 			}),
 		);
+		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
+			.pipe(
+				tap((info) => console.debug('[lottery-widget] should show overlay?', info)),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			)
+			.subscribe(async ([[lotteryOverlay], visible]) => {
+				this.shouldShowOverlay$$.next(visible && lotteryOverlay);
+			});
+
 		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
 			.pipe(
 				tap((info) => console.debug('[lottery-widget] should show window?', info)),

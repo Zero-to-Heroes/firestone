@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { AbstractWidgetWrapperComponent } from '@components/overlays/_widget-wrapper.component';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -57,10 +57,13 @@ export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponen
 
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest([
-			this.store.shouldTrackLottery$(),
+			this.store.shouldShowLotteryOverlay$(),
 			this.store.listenPrefs$((prefs) => prefs.lotteryOverlay),
 		]).pipe(
-			this.mapData(([shouldTrack, [overlay]]) => shouldTrack && overlay),
+			tap(([shouldShowLotteryOverlay, [overlay]]) =>
+				console.log('[lottery-wrapper] should track?', shouldShowLotteryOverlay, overlay),
+			),
+			this.mapData(([shouldShowLotteryOverlay, [overlay]]) => shouldShowLotteryOverlay && overlay),
 			this.handleReposition(),
 		);
 	}
