@@ -584,6 +584,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), spell, shadow);
 			case CardIds.EerieStoneTavernBrawl:
 				return and(side(inputSide), spell, shadow);
+			case CardIds.ElementalEvocation:
+				return and(side(inputSide), or(inHand, inDeck), elemental);
 			case CardIds.ElitistSnob:
 				return and(side(inputSide), inHand, paladin);
 			case CardIds.ElixirOfVigorTavernBrawl:
@@ -627,6 +629,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.FrizzKindleroost:
 				return and(side(inputSide), inDeck, dragon);
+			case CardIds.FrostLichJaina_ICC_833:
+			case CardIds.FrostLichJaina_CORE_ICC_833:
+				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.FrontLines_TID_949:
 			case CardIds.FrontLines_Story_11_FrontLines:
 				return and(side(inputSide), inDeck, minion);
@@ -944,6 +949,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp);
 			case CardIds.RaidBossOnyxia_ONY_004:
 				return and(side(inputSide), or(inDeck, inHand), minion, whelp);
+			case CardIds.RaidingParty:
+				return and(side(inputSide), or(inDeck, inHand), or(pirate, weapon));
 			case CardIds.RaidTheDocks:
 				return and(side(inputSide), inDeck, weapon);
 			case CardIds.Rally:
