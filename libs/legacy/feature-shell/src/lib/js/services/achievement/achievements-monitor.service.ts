@@ -118,9 +118,10 @@ export class AchievementsMonitor {
 		progress: readonly HsAchievementInfo[],
 		achievementIdsToTrack: readonly number[],
 	): readonly AchievementsProgressTracking[] {
-		// Happens when we haven't yet started a match
-		if (!progress?.length) {
-			return achievementIdsToTrack.map((id) => {
+		return (
+			achievementIdsToTrack?.map((id) => {
+				const currentProgress = progress.find((a) => a.id === id);
+				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === id);
 				const refAchievement = this.refAchievements.find((a) => a.id === id);
 				const quota = this.achievementQuotas[id];
 				const result: AchievementsProgressTracking = {
@@ -128,24 +129,12 @@ export class AchievementsMonitor {
 					name: refAchievement?.name ?? 'Unknown achievement',
 					text: refAchievement?.description?.replaceAll('$q', '' + quota),
 					quota: quota,
-					progressThisGame: 0,
-					progressTotal: achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0,
-				};
-				return result;
-			});
-		}
-		return (
-			progress?.map((p) => {
-				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === p.id);
-				const refAchievement = this.refAchievements.find((a) => a.id === p.id);
-				const quota = this.achievementQuotas[p.id];
-				const result: AchievementsProgressTracking = {
-					id: p.id,
-					name: refAchievement?.name ?? 'Unknown achievement',
-					text: refAchievement?.description?.replaceAll('$q', '' + quota),
-					quota: quota,
-					progressThisGame: p.progress - (previousAchievement?.progress ?? 0),
-					progressTotal: p.progress,
+					progressThisGame: !!currentProgress
+						? currentProgress.progress - (previousAchievement?.progress ?? 0)
+						: 0,
+					progressTotal: !!currentProgress
+						? currentProgress.progress
+						: achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0,
 				};
 				return result;
 			}) ?? []
