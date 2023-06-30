@@ -460,6 +460,7 @@ import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strate
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
+import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
 import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
 import { ControlCloseComponent } from '@components/controls/control-close.component';
 import { ControlWebsiteComponent } from '@components/controls/control-website.component';
@@ -1211,6 +1212,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CardHistoryComponent,
 		CardHistoryItemComponent,
 		SetStatsComponent,
+		SetStatsSwitcherComponent,
 		SetStatCellComponent,
 		CardsComponent,
 		CardSearchComponent,

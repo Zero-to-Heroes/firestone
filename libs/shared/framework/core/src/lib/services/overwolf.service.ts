@@ -962,6 +962,7 @@ export class OverwolfService {
 	}
 
 	public relaunchApp() {
+		console.log('relauching/restarting app');
 		overwolf.extensions.relaunch();
 	}
 

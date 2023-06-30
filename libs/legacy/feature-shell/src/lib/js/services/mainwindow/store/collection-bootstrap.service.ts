@@ -39,7 +39,7 @@ export class CollectionBootstrapService {
 		// 	// this.collectionManager.getBattlegroundsOwnedHeroSkinDbfIds(),
 		// ]);
 		const [cardHistory, totalHistoryLength, packStats] = await Promise.all([
-			this.cardHistoryStorage.loadAll(100),
+			this.cardHistoryStorage.loadAll(0),
 			this.cardHistoryStorage.countHistory(),
 			// this.collectionManager.getCardBacks(),
 			// this.collectionManager.getCoins(),

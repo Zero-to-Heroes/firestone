@@ -154,6 +154,7 @@ export class Preferences implements IPreferences {
 	readonly collectionCardClassFilter: CollectionCardClassFilterType = 'all';
 	readonly collectionCardOwnedFilter: CollectionCardOwnedFilterType = 'all';
 	readonly collectionShowRelatedCards: boolean = true;
+	readonly collectionSetStatsTypeFilter: CollectionSetStatsTypeFilterType = 'cards-stats';
 
 	readonly collectionPityTimerResets: { [packId: string]: number } = {};
 
@@ -680,3 +681,5 @@ export class Preferences implements IPreferences {
 
 	readonly ftue: Ftue = new Ftue();
 }
+
+export type CollectionSetStatsTypeFilterType = 'cards-stats' | 'cards-history';

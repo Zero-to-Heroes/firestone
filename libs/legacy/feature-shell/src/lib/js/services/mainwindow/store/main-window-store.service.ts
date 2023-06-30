@@ -109,7 +109,6 @@ import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs
 import { CollectionRefreshPacksEvent } from './events/collection/colection-refresh-packs-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
-import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
 import { NewCardEvent } from './events/collection/new-card-event';
 import { NewPackEvent } from './events/collection/new-pack-event';
 import { SearchCardsEvent } from './events/collection/search-cards-event';
@@ -275,7 +274,6 @@ import { CollectionInitProcessor } from './processors/collection/collection-init
 import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
 import { CollectionRefreshPacksProcessor } from './processors/collection/collection-refresh-packs-processor';
 import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
-import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
 import { NewPackProcessor } from './processors/collection/new-pack-processor';
 import { SearchCardProcessor } from './processors/collection/search-card-processor';
@@ -612,7 +610,6 @@ export class MainWindowStoreService {
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
 			[CollectionSelectCurrentTabEvent.eventName(), new CollectionSelectCurrentTabProcessor()],
 			[SearchCardsEvent.eventName(), new SearchCardProcessor(this.collectionManager, this.sets, this.i18n)],
-			[LoadMoreCardHistoryEvent.eventName(), new LoadMoreCardHistoryProcessor(this.cardHistoryStorage)],
 			[SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor(this.setsManager)],
 			[ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards, this.setsManager)],
 			[ShowCardBackDetailsEvent.eventName(), new ShowCardBackDetailsProcessor(this.collectionManager)],

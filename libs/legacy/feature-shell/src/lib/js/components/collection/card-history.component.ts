@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
-import { SetCard } from '../../models/set';
-import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
+import { Preferences } from '../../models/preferences';
+import { Set } from '../../models/set';
+import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -18,7 +18,15 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		<div class="card-history">
 			<div class="history">
 				<div class="top-container">
-					<span class="title" [owTranslate]="'app.collection.card-history.title'"></span>
+					<div class="title-container">
+						<div
+							class="title"
+							[owTranslate]="'app.collection.card-history.title'"
+							[helpTooltip]="'app.collection.card-history.click-to-show-stats' | owTranslate"
+							(click)="toggleStatsView()"
+						></div>
+					</div>
+					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 					<section class="toggle-label">
 						<preference-toggle
 							field="collectionHistoryShowOnlyNewCards"
@@ -27,6 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</section>
 				</div>
 				<ul
+					class="history-list"
 					scrollable
 					*ngIf="{
 						cardHistory: cardHistory$ | async,
@@ -34,26 +43,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					} as value"
 				>
 					<li *ngFor="let historyItem of shownHistory$ | async; trackBy: trackById">
-						<card-history-item [historyItem]="historyItem" [active]="historyItem.active">
-						</card-history-item>
-					</li>
-					<li
-						*ngIf="value.cardHistory && value.cardHistory.length < value.totalHistoryLength"
-						class="more-data-container"
-					>
-						<span
-							class="more-data-text"
-							[owTranslate]="'app.collection.card-history.you-have-viewed'"
-							[translateParams]="{
-								numberOfCards: value.cardHistory.length,
-								totalCards: value.totalHistoryLength
-							}"
-						></span>
-						<button
-							class="load-more-button"
-							(mousedown)="loadMore()"
-							[owTranslate]="'app.collection.card-history.load-more-button'"
-						></button>
+						<card-history-item [historyItem]="historyItem"> </card-history-item>
 					</li>
 					<section *ngIf="!value.cardHistory || value.cardHistory.length === 0" class="empty-state">
 						<i class="i-60x78 pale-theme">
@@ -73,57 +63,61 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 export class CardHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
-	@Input() set selectedCard(selectedCard: SetCard | ReferenceCard) {
-		this.selectedCard$$.next(selectedCard);
-	}
-
 	showOnlyNewCards$: Observable<boolean>;
-	shownHistory$: Observable<readonly InternalCardHistory[]>;
+	shownHistory$: Observable<readonly CardHistory[]>;
 	cardHistory$: Observable<readonly CardHistory[]>;
 	totalHistoryLength$: Observable<number>;
 
-	selectedCard$$ = new BehaviorSubject<SetCard | ReferenceCard>(null);
+	@Input() set sets(value: readonly Set[]) {
+		this.sets$$.next(value);
+	}
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	private sets$$ = new BehaviorSubject<readonly Set[]>([]);
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
 		this.showOnlyNewCards$ = this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards);
-		this.cardHistory$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.cardHistory)
-			.pipe(this.mapData(([cardHistory]) => cardHistory));
+		this.cardHistory$ = combineLatest([
+			this.sets$$,
+			this.store.listen$(([main, nav, prefs]) => main.binder.cardHistory),
+		]).pipe(
+			this.mapData(([currentSets, [cardHistory]]) =>
+				cardHistory
+					.filter(
+						(card: CardHistory) =>
+							!currentSets?.length || currentSets.find((set) => set.getCard(card.cardId)),
+					)
+					.slice(0, this.MAX_RESULTS_DISPLAYED),
+			),
+		);
 		this.totalHistoryLength$ = this.store
 			.listen$(([main, nav, prefs]) => main.binder.totalHistoryLength)
 			.pipe(this.mapData(([totalHistoryLength]) => totalHistoryLength));
-		this.shownHistory$ = combineLatest(
-			this.showOnlyNewCards$,
-			this.selectedCard$$.asObservable(),
-			this.cardHistory$,
-		).pipe(
-			this.mapData(([showOnlyNewCards, selectedCard, cardHistory]) =>
-				cardHistory
-					.filter((card: CardHistory) => !showOnlyNewCards || card.isNewCard)
-					.map(
-						(history) =>
-							({
-								...history,
-								active: selectedCard && selectedCard.id === history.cardId,
-							} as InternalCardHistory),
-					),
+		this.shownHistory$ = combineLatest([this.showOnlyNewCards$, this.cardHistory$]).pipe(
+			this.mapData(([showOnlyNewCards, cardHistory]) =>
+				cardHistory.filter((card: CardHistory) => !showOnlyNewCards || card.isNewCard),
 			),
 		);
-	}
-
-	loadMore() {
-		this.store.send(new LoadMoreCardHistoryEvent(this.MAX_RESULTS_DISPLAYED));
 	}
 
 	trackById(index, history: CardHistory) {
 		return history.creationTimestamp;
 	}
-}
 
-interface InternalCardHistory extends CardHistory {
-	readonly active: boolean;
+	async toggleStatsView() {
+		const prefs = await this.prefs.getPreferences();
+		const newStatsView = prefs.collectionSetStatsTypeFilter === 'cards-stats' ? 'cards-history' : 'cards-stats';
+		const newPrefs: Preferences = {
+			...prefs,
+			collectionSetStatsTypeFilter: newStatsView,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
 }

@@ -31,6 +31,16 @@
 			}
 		}
 
+		.title-container {
+			display: flex;
+			align-items: center;
+
+			.caret {
+				--icon-color: var(--color-1);
+				margin-left: 10px;
+			}
+		}
+
 		.title {
 			@extend %sub-title;
 			display: flex;

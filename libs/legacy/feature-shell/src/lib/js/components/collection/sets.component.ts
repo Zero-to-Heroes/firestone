@@ -75,7 +75,7 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 			debounceTime(1000),
 			this.mapData((sets) => sets),
 		);
-		this.sets$ = combineLatest(this.activeFilter$, this.allSets$).pipe(
+		this.sets$ = combineLatest([this.activeFilter$, this.allSets$]).pipe(
 			this.mapData(([activeFilter, allSets]) => {
 				const sets =
 					activeFilter === 'all'

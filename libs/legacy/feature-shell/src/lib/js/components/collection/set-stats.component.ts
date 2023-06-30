@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { boosterIdToSetId } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import {
 	dustFor,
@@ -11,6 +12,7 @@ import {
 	getPackDustValue,
 } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -25,7 +27,15 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	template: `
 		<div class="set-stats">
 			<div class="top-container">
-				<div class="title" [owTranslate]="'app.collection.set-stats.title'"></div>
+				<div class="title-container">
+					<div
+						class="title"
+						[owTranslate]="'app.collection.set-stats.title'"
+						[helpTooltip]="'app.collection.set-stats.click-to-show-history' | owTranslate"
+						(click)="toggleStatsView()"
+					></div>
+					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
+				</div>
 				<section class="toggle-label">
 					<preference-toggle
 						field="collectionSetShowGoldenStats"
@@ -80,9 +90,10 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 	sets$$ = new BehaviorSubject<readonly Set[]>([]);
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
@@ -127,6 +138,16 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 		this.bestKnownPackDust$ = this.bestKnownPack$.pipe(
 			this.mapData((bestKnownPack) => (!!bestKnownPack ? getPackDustValue(bestKnownPack) : 0)),
 		);
+	}
+
+	async toggleStatsView() {
+		const prefs = await this.prefs.getPreferences();
+		const newStatsView = prefs.collectionSetStatsTypeFilter === 'cards-stats' ? 'cards-history' : 'cards-stats';
+		const newPrefs: Preferences = {
+			...prefs,
+			collectionSetStatsTypeFilter: newStatsView,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 
 	private buildPieChartData(sets: readonly Set[]): readonly InputPieChartData[] {
