@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
@@ -35,8 +35,15 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 						></preference-toggle>
 					</section>
 				</div>
-				<ul class="history-list" scrollable *ngIf="{ cardHistory: cardHistory$ | async } as value">
-					<li *ngFor="let historyItem of shownHistory$ | async; trackBy: trackById">
+				<virtual-scroller
+					#scroll
+					*ngIf="{ cardHistory: cardHistory$ | async, shownHistory: shownHistory$ | async } as value"
+					[items]="value.shownHistory"
+					[bufferAmount]="50"
+					class="history-list"
+					scrollable
+				>
+					<li *ngFor="let historyItem of scroll.viewPortItems; trackBy: trackById">
 						<card-history-item [historyItem]="historyItem"> </card-history-item>
 					</li>
 					<section *ngIf="!value.cardHistory || value.cardHistory.length === 0" class="empty-state">
@@ -48,7 +55,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 						<span [owTranslate]="'app.collection.card-history.empty-state-title'"></span>
 						<span [owTranslate]="'app.collection.card-history.empty-state-subtitle'"></span>
 					</section>
-				</ul>
+				</virtual-scroller>
 			</div>
 		</div>
 	`,
@@ -58,7 +65,7 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 	private readonly MAX_RESULTS_DISPLAYED = 300;
 
 	showOnlyNewCards$: Observable<boolean>;
-	shownHistory$: Observable<readonly CardHistory[]>;
+	shownHistory$: Observable<CardHistory[]>;
 	cardHistory$: Observable<readonly CardHistory[]>;
 
 	@Input() set sets(value: readonly Set[]) {
@@ -84,12 +91,10 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 		this.cardHistory$ = combineLatest([sets$, this.store.cardHistory$()]).pipe(
 			filter(([currentSets, cardHistory]) => !!currentSets?.length && !!cardHistory?.length),
 			this.mapData(([currentSets, cardHistory]) => {
-				return cardHistory
-					.filter(
-						(card: CardHistory) =>
-							!currentSets?.length || currentSets.find((set) => set.getCard(card.cardId)),
-					)
-					.slice(0, this.MAX_RESULTS_DISPLAYED);
+				return cardHistory.filter(
+					(card: CardHistory) => !currentSets?.length || currentSets.find((set) => set.getCard(card.cardId)),
+				);
+				// .slice(0, this.MAX_RESULTS_DISPLAYED);
 			}),
 		);
 		this.shownHistory$ = combineLatest([this.showOnlyNewCards$, this.cardHistory$]).pipe(
