@@ -113,7 +113,10 @@ export class CardPlayedFromHandParser implements EventParser {
 				  cardWithZone.update({
 						entityId: undefined,
 				  } as DeckCard)
-				: cardWithZone;
+				: cardWithZone.update({
+						relatedCardIds:
+							cardWithZone.cardId === CardIds.CommanderSivara_TSC_087 ? [] : cardWithZone.relatedCardIds,
+				  });
 
 		const newBoard: readonly DeckCard[] =
 			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardToAdd) : deck.board;
