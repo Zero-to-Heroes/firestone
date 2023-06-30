@@ -1,7 +1,7 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -14,6 +14,18 @@ import { LotteryTabType } from './lottery-navigation.component';
 		<div class="lottery-container">
 			<div class="title-bar">
 				<div class="controls">
+					<div
+						class="tracking-indicator"
+						*ngIf="{
+							trackingOngoing: trackingOngoing$ | async
+						} as value"
+						[helpTooltip]="trackingTooltip$ | async"
+					>
+						<div
+							class="light"
+							[ngClass]="{ tracking: value.trackingOngoing, 'not-tracking': !value.trackingOngoing }"
+						></div>
+					</div>
 					<preference-toggle
 						field="lotteryOverlay"
 						[label]="'app.lottery.overlay-toggle-label' | owTranslate"
@@ -72,6 +84,8 @@ export class LotteryWidgetComponent
 {
 	displayAd$: Observable<boolean>;
 	selectedModule$: Observable<LotteryTabType>;
+	trackingOngoing$: Observable<boolean>;
+	trackingTooltip$: Observable<string>;
 
 	closeConfirmationText: string;
 	closeConfirmationCancelText: string;
@@ -97,6 +111,17 @@ export class LotteryWidgetComponent
 		this.closeConfirmationCancelText = this.i18n.translateString('app.lottery.close-confirmation-button-cancel');
 		this.closeConfirmationOkText = this.i18n.translateString('app.lottery.close-confirmation-button-ok');
 		this.selectedModule$ = this.selectedModule$$.asObservable();
+		this.trackingOngoing$ = this.store.shouldTrackLottery$().pipe(
+			tap((info) => console.debug('should track lottery', info)),
+			this.mapData((shouldTrack) => shouldTrack),
+		);
+		this.trackingTooltip$ = this.trackingOngoing$.pipe(
+			this.mapData((trackingOngoing) =>
+				trackingOngoing
+					? this.i18n.translateString('app.lottery.tracking-ongoing-tooltip')
+					: this.i18n.translateString('app.lottery.tracking-not-ongoing-tooltip'),
+			),
+		);
 	}
 
 	ngAfterViewInit() {

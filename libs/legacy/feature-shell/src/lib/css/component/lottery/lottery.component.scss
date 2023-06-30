@@ -17,11 +17,34 @@
 		flex-shrink: 0;
 	}
 
+	.tracking-indicator {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 10px;
+
+		.light {
+			border-radius: 50%;
+			width: 10px;
+			height: 10px;
+
+			&.tracking {
+				background: #61ff47;
+			}
+			&.not-tracking {
+				background: #ff4747;
+			}
+		}
+	}
+
 	preference-toggle {
 		margin-right: 15px;
 	}
 
 	::ng-deep preference-toggle {
+		.preference-toggle {
+			margin-top: 0;
+		}
 		.toggle .settings-p {
 			color: currentColor;
 			width: auto;
