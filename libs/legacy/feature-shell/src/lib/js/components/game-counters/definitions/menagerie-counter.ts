@@ -37,45 +37,7 @@ export class MenagerieCounterDefinition implements CounterDefinition<GameState, 
 		const allPlayedCards = cardsPlayedThisMatch.map((c) => this.allCards.getCard(c.cardId));
 		console.debug('allPlayedCards', allPlayedCards, cardsPlayedThisMatch);
 
-		const minionsPlayedWithTribes = allPlayedCards
-			.filter((c) => c.type === 'Minion')
-			.filter((c) => !!c.races?.length);
-		let minionsToProcess: Mutable<ReferenceCard & { picked?: boolean }>[] = [
-			...minionsPlayedWithTribes
-				.filter((c) => !c.races.includes(Race[Race.ALL]))
-				.map((c) => ({ ...c, races: [...c.races] })),
-		];
-
-		const uniqueTribes: Race[] = [];
-		const maxTribesPerMinion = 2;
-		for (let i = 1; i <= maxTribesPerMinion; i++) {
-			let dirty = true;
-			while (dirty) {
-				dirty = false;
-				for (const minion of minionsToProcess) {
-					// console.debug('considering minion', minion.name, minion.races);
-					if (minion.races.length === i) {
-						const raceToAdd = minion.races[0];
-						uniqueTribes.push(Race[raceToAdd]);
-						// console.debug('added', raceToAdd, uniqueTribes);
-						for (const m of minionsToProcess) {
-							m.races = m.races.filter((r) => r !== raceToAdd);
-							// console.debug('updates races', m.name, m.races, raceToAdd);
-						}
-						minion.picked = true;
-						dirty = true;
-					}
-				}
-				minionsToProcess = minionsToProcess.filter((c) => !c.picked);
-			}
-		}
-
-		uniqueTribes.push(
-			...minionsPlayedWithTribes
-				.filter((m) => m.races.includes(Race[Race.ALL]))
-				.flatMap((m) => m.races)
-				.map((r: string) => Race[r]),
-		);
+		const uniqueTribes = extractUniqueTribes(allPlayedCards);
 		const tribeText = uniqueTribes
 			.map((tribe) => this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`))
 			.sort()
@@ -93,6 +55,50 @@ export class MenagerieCounterDefinition implements CounterDefinition<GameState, 
 		};
 	}
 }
+
+export const extractUniqueTribes = (allPlayedCards: readonly ReferenceCard[]) => {
+	const minionsPlayedWithTribes = allPlayedCards.filter((c) => c.type === 'Minion').filter((c) => !!c.races?.length);
+	const minionsToProcess: Mutable<ReferenceCard & { picked?: boolean }>[] = [
+		...minionsPlayedWithTribes
+			.filter((c) => !c.races.includes(Race[Race.ALL]))
+			.map((c) => ({ ...c, races: [...c.races] })),
+	];
+
+	const uniqueTribes: Race[] = [];
+	const maxTribesPerMinion = 2;
+	for (let i = 1; i <= maxTribesPerMinion; i++) {
+		let dirty = true;
+		while (dirty) {
+			dirty = false;
+			for (let j = 0; j < minionsToProcess.length; j++) {
+				const minion = minionsToProcess[j];
+				// console.debug('considering minion', minion.name, minion.races);
+				if (!minion.picked && minion.races.length > 0 && minion.races.length <= i) {
+					const raceToAdd = minion.races[0];
+					uniqueTribes.push(Race[raceToAdd]);
+					// console.debug('added', raceToAdd, uniqueTribes);
+					for (const m of minionsToProcess) {
+						m.races = m.races.filter((r) => r !== raceToAdd);
+						// console.debug('updates races', m.name, m.races, raceToAdd);
+					}
+					minion.picked = true;
+					dirty = true;
+					// Restart the loop, so we're not dependant on the order in which we process things
+					j = 0;
+				}
+			}
+			// minionsToProcess = minionsToProcess.filter((c) => !c.picked);
+		}
+	}
+
+	uniqueTribes.push(
+		...minionsPlayedWithTribes
+			.filter((m) => m.races.includes(Race[Race.ALL]))
+			.flatMap((m) => m.races)
+			.map((r: string) => Race[r]),
+	);
+	return uniqueTribes;
+};
 
 type Mutable<T> = {
 	-readonly [key in keyof T]: T[key];
