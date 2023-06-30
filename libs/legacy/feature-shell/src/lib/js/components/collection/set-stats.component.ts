@@ -70,11 +70,14 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 	bestKnownPackDust$: Observable<number>;
 	bestKnownPack$: Observable<PackResult>;
 
-	@Input() set set(value: Set) {
-		this.set$$.next(value);
+	@Input() set sets(value: readonly Set[]) {
+		if (value == null) {
+			return;
+		}
+		this.sets$$.next(value);
 	}
 
-	set$$ = new BehaviorSubject<Set>(null);
+	sets$$ = new BehaviorSubject<readonly Set[]>([]);
 
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
@@ -86,34 +89,35 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 
 	ngAfterContentInit() {
 		const showGoldenStats$ = this.listenForBasicPref$((prefs) => prefs.collectionSetShowGoldenStats);
-		this.stats$ = combineLatest(this.set$$.asObservable(), showGoldenStats$).pipe(
-			this.mapData(([set, showGoldenStats]) =>
-				showGoldenStats ? this.buildGoldenStats(set) : this.buildStats(set),
+		this.stats$ = combineLatest([this.sets$$.asObservable(), showGoldenStats$]).pipe(
+			this.mapData(([sets, showGoldenStats]) =>
+				showGoldenStats ? this.buildGoldenStats(sets) : this.buildStats(sets),
 			),
 		);
-		this.pieChartData$ = combineLatest(this.set$$.asObservable(), showGoldenStats$).pipe(
-			this.mapData(([set, showGoldenStats]) =>
-				showGoldenStats ? this.buildGoldenPieChartData(set) : this.buildPieChartData(set),
+		this.pieChartData$ = combineLatest([this.sets$$.asObservable(), showGoldenStats$]).pipe(
+			this.mapData(([sets, showGoldenStats]) =>
+				showGoldenStats ? this.buildGoldenPieChartData(sets) : this.buildPieChartData(sets),
 			),
 		);
-		this.packsReceived$ = combineLatest(
-			this.set$$.asObservable(),
+		this.packsReceived$ = combineLatest([
+			this.sets$$.asObservable(),
 			this.store.listen$(([main, nav, prefs]) => main.binder.packStats),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([set, [packs]]) => packs.filter((pack) => boosterIdToSetId(pack.boosterId) === set.id)?.length ?? 0,
+				([sets, [packs]]) =>
+					packs.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))?.length ?? 0,
 			),
 		);
-		this.bestKnownPack$ = combineLatest(
-			this.set$$.asObservable(),
+		this.bestKnownPack$ = combineLatest([
+			this.sets$$.asObservable(),
 			this.store.listen$(([main, nav, prefs]) => main.binder.packStats),
-		).pipe(
-			this.mapData(([set, [packStats]]) => {
-				const resultForSetId = [...packStats]
-					.filter((pack) => pack.setId === set.id)
+		]).pipe(
+			this.mapData(([sets, [packStats]]) => {
+				const resultForSetId = packStats
+					.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))
 					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))[0];
-				const resultForBoosterId = [...packStats]
-					.filter((pack) => boosterIdToSetId(pack.boosterId) === set.id)
+				const resultForBoosterId = packStats
+					.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))
 					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))[0];
 				// Needed for old data, from before the boosterId was supported
 				const finalResult = resultForBoosterId ?? resultForSetId;
@@ -125,104 +129,107 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 		);
 	}
 
-	private buildPieChartData(set: Set): readonly InputPieChartData[] {
+	private buildPieChartData(sets: readonly Set[]): readonly InputPieChartData[] {
 		return [
 			{
 				label: this.i18n.translateString('app.collection.set-stats.commons'),
-				data: this.getOwned(set, 'common'),
+				data: this.getOwned(sets, 'common'),
 				color: 'rgba(217, 195, 171, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.commons-missing'),
-				data: this.getTotal(set, 'common') - this.getOwned(set, 'common'),
+				data: this.getTotal(sets, 'common') - this.getOwned(sets, 'common'),
 				color: 'rgba(135, 121, 106, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.rares'),
-				data: this.getOwned(set, 'rare'),
+				data: this.getOwned(sets, 'rare'),
 				color: 'rgba(64, 78, 211, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.rares-missing'),
-				data: this.getTotal(set, 'rare') - this.getOwned(set, 'rare'),
+				data: this.getTotal(sets, 'rare') - this.getOwned(sets, 'rare'),
 				color: 'rgba(40, 49, 130, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.epics'),
-				data: this.getOwned(set, 'epic'),
+				data: this.getOwned(sets, 'epic'),
 				color: 'rgba(162, 118, 175, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.epics-missing'),
-				data: this.getTotal(set, 'epic') - this.getOwned(set, 'epic'),
+				data: this.getTotal(sets, 'epic') - this.getOwned(sets, 'epic'),
 				color: 'rgba(106, 78, 114, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.legendaries'),
-				data: this.getOwned(set, 'legendary'),
+				data: this.getOwned(sets, 'legendary'),
 				color: 'rgba(233, 169, 67, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.legendaries-missing'),
-				data: this.getTotal(set, 'legendary') - this.getOwned(set, 'legendary'),
+				data: this.getTotal(sets, 'legendary') - this.getOwned(sets, 'legendary'),
 				color: 'rgba(150, 107, 43, 1)',
 			},
 		];
 	}
 
-	private buildGoldenPieChartData(set: Set): readonly InputPieChartData[] {
+	private buildGoldenPieChartData(sets: readonly Set[]): readonly InputPieChartData[] {
 		return [
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-commons'),
-				data: this.getOwned(set, 'common', true),
+				data: this.getOwned(sets, 'common', true),
 				color: 'rgba(217, 195, 171, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-commons-missing'),
-				data: this.getTotal(set, 'common', true) - this.getOwned(set, 'common', true),
+				data: this.getTotal(sets, 'common', true) - this.getOwned(sets, 'common', true),
 				color: 'rgba(135, 121, 106, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-rares'),
-				data: this.getOwned(set, 'rare', true),
+				data: this.getOwned(sets, 'rare', true),
 				color: 'rgba(64, 78, 211, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-rares-missing'),
-				data: this.getTotal(set, 'rare', true) - this.getOwned(set, 'rare', true),
+				data: this.getTotal(sets, 'rare', true) - this.getOwned(sets, 'rare', true),
 				color: 'rgba(40, 49, 130, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-epics'),
-				data: this.getOwned(set, 'epic', true),
+				data: this.getOwned(sets, 'epic', true),
 				color: 'rgba(162, 118, 175, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-epics-missing'),
-				data: this.getTotal(set, 'epic', true) - this.getOwned(set, 'epic', true),
+				data: this.getTotal(sets, 'epic', true) - this.getOwned(sets, 'epic', true),
 				color: 'rgba(106, 78, 114, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-legendaries'),
-				data: this.getOwned(set, 'legendary', true),
+				data: this.getOwned(sets, 'legendary', true),
 				color: 'rgba(233, 169, 67, 1)',
 			},
 			{
 				label: this.i18n.translateString('app.collection.set-stats.golden-legendaries-missing'),
-				data: this.getTotal(set, 'legendary', true) - this.getOwned(set, 'legendary', true),
+				data: this.getTotal(sets, 'legendary', true) - this.getOwned(sets, 'legendary', true),
 				color: 'rgba(150, 107, 43, 1)',
 			},
 		];
 	}
 
-	private buildStats(set: Set): readonly Stat[] {
-		const currentDust = set.allCards
+	private buildStats(sets: readonly Set[]): readonly Stat[] {
+		const currentDust = sets
+			.flatMap((s) => s.allCards)
 			.map((card) => dustToCraftFor(card.rarity) * card.getNumberCollected())
 			.reduce((a, b) => a + b, 0);
-		const totalDust = set.allCards
+		const totalDust = sets
+			.flatMap((s) => s.allCards)
 			.map((card) => dustToCraftFor(card.rarity) * card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
-		const duplicateDust = set.allCards
+		const duplicateDust = sets
+			.flatMap((s) => s.allCards)
 			.map((card) => dustFor(card.rarity) * Math.max(0, card.ownedNonPremium - card.getMaxCollectible()))
 			.reduce((a, b) => a + b, 0);
 		return [
@@ -244,35 +251,38 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.commons'),
-				current: this.getOwned(set, 'common'),
-				total: this.getTotal(set, 'common'),
+				current: this.getOwned(sets, 'common'),
+				total: this.getTotal(sets, 'common'),
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.rares'),
-				current: this.getOwned(set, 'rare'),
-				total: this.getTotal(set, 'rare'),
+				current: this.getOwned(sets, 'rare'),
+				total: this.getTotal(sets, 'rare'),
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.epics'),
-				current: this.getOwned(set, 'epic'),
-				total: this.getTotal(set, 'epic'),
+				current: this.getOwned(sets, 'epic'),
+				total: this.getTotal(sets, 'epic'),
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.legendaries'),
-				current: this.getOwned(set, 'legendary'),
-				total: this.getTotal(set, 'legendary'),
+				current: this.getOwned(sets, 'legendary'),
+				total: this.getTotal(sets, 'legendary'),
 			},
 		];
 	}
 
-	private buildGoldenStats(set: Set): readonly Stat[] {
-		const currentDust = set.allCards
+	private buildGoldenStats(sets: readonly Set[]): readonly Stat[] {
+		const currentDust = sets
+			.flatMap((s) => s.allCards)
 			.map((card) => dustToCraftForPremium(card.rarity) * card.getNumberCollectedPremium())
 			.reduce((a, b) => a + b, 0);
-		const totalDust = set.allCards
+		const totalDust = sets
+			.flatMap((s) => s.allCards)
 			.map((card) => dustToCraftForPremium(card.rarity) * card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
-		const duplicateDust = set.allCards
+		const duplicateDust = sets
+			.flatMap((s) => s.allCards)
 			.map((card) => dustForPremium(card.rarity) * Math.max(0, card.ownedPremium - card.getMaxCollectible()))
 			.reduce((a, b) => a + b, 0);
 		return [
@@ -294,36 +304,38 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.golden-commons'),
-				current: this.getOwned(set, 'common', true),
-				total: this.getTotal(set, 'common', true),
+				current: this.getOwned(sets, 'common', true),
+				total: this.getTotal(sets, 'common', true),
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.golden-rares'),
-				current: this.getOwned(set, 'rare', true),
-				total: this.getTotal(set, 'rare', true),
+				current: this.getOwned(sets, 'rare', true),
+				total: this.getTotal(sets, 'rare', true),
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.golden-epics'),
-				current: this.getOwned(set, 'epic', true),
-				total: this.getTotal(set, 'epic', true),
+				current: this.getOwned(sets, 'epic', true),
+				total: this.getTotal(sets, 'epic', true),
 			},
 			{
 				text: this.i18n.translateString('app.collection.set-stats.golden-legendaries'),
-				current: this.getOwned(set, 'legendary', true),
-				total: this.getTotal(set, 'legendary', true),
+				current: this.getOwned(sets, 'legendary', true),
+				total: this.getTotal(sets, 'legendary', true),
 			},
 		];
 	}
 
-	private getOwned(set: Set, rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
-		return set.allCards
+	private getOwned(sets: readonly Set[], rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
+		return sets
+			.flatMap((s) => s.allCards)
 			.filter((card) => card.rarity === rarity)
 			.map((card) => (golden ? card.getNumberCollectedPremium() : card.getNumberCollected()))
 			.reduce((a, b) => a + b, 0);
 	}
 
-	private getTotal(set: Set, rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
-		return set.allCards
+	private getTotal(sets: readonly Set[], rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
+		return sets
+			.flatMap((s) => s.allCards)
 			.filter((card) => card.rarity === rarity)
 			.map((card) => card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);

@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, debounceTime } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { Set, SetCard } from '../../models/set';
@@ -66,16 +66,18 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					[selectedCard]="value.selectedCard"
 					*ngIf="
 						value.currentView !== 'packs' &&
+						value.currentView !== 'sets' &&
 						!isSetDetails(value.currentView, value.selectedSet, value.searchString)
 					"
 				>
 				</card-history>
 				<pack-history *ngIf="value.currentView === 'packs'"> </pack-history>
 				<set-stats
-					[set]="value.selectedSet"
+					[sets]="[value.selectedSet]"
 					*ngIf="isSetDetails(value.currentView, value.selectedSet, value.searchString)"
 				>
 				</set-stats>
+				<set-stats *ngIf="value.currentView === 'sets'" [sets]="displayedSets$ | async"> </set-stats>
 			</section>
 		</div>
 	`,
@@ -90,6 +92,7 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 	selectedCard$: Observable<SetCard | ReferenceCard>;
 	selectedCardBack$: Observable<CardBack>;
 	showAds$: Observable<boolean>;
+	displayedSets$: Observable<readonly Set[]>;
 
 	isSetDetails(currentView: CurrentView, selectedSet: Set, searchString: string): boolean {
 		return currentView === 'cards' && !!selectedSet && !searchString;
@@ -141,5 +144,25 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 			),
 		);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+
+		const activeFilter$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
+			.pipe(this.mapData(([pref]) => pref));
+		const allSets$ = this.store.sets$().pipe(
+			debounceTime(1000),
+			this.mapData((sets) => sets),
+		);
+		this.displayedSets$ = combineLatest([activeFilter$, allSets$]).pipe(
+			this.mapData(([activeFilter, allSets]) => {
+				const sets =
+					activeFilter === 'all'
+						? allSets
+						: activeFilter === 'standard'
+						? allSets.filter((set) => set.standard)
+						: allSets.filter((set) => !set.standard);
+				console.debug('visible sets', sets);
+				return sets;
+			}),
+		);
 	}
 }
