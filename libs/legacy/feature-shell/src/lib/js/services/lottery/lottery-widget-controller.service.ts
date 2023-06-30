@@ -43,6 +43,7 @@ export class LotteryWidgetControllerService {
 				);
 			}),
 		);
+		await this.setInitialOverlayValue();
 		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
 			.pipe(
 				tap((info) => console.debug('[lottery-widget] should show overlay?', info)),
@@ -160,5 +161,22 @@ export class LotteryWidgetControllerService {
 					timeout: 9999999,
 				});
 			});
+	}
+
+	private async setInitialOverlayValue() {
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.lotteryOverlay != null) {
+			return;
+		}
+
+		const monitors = await this.ow.getMonitorsList();
+		const initialLotteryOverlayPref = monitors?.displays?.length === 1;
+		console.log(
+			'[lottery-widget] setting initial overlay pref',
+			initialLotteryOverlayPref,
+			monitors?.displays?.length,
+		);
+		const newPrefs: Preferences = { ...prefs, lotteryOverlay: initialLotteryOverlayPref };
+		await this.prefs.savePreferences(newPrefs);
 	}
 }
