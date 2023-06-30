@@ -27,13 +27,12 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	template: `
 		<div class="set-stats">
 			<div class="top-container">
-				<div class="title-container">
-					<div
-						class="title"
-						[owTranslate]="'app.collection.set-stats.title'"
-						[helpTooltip]="'app.collection.set-stats.click-to-show-history' | owTranslate"
-						(click)="toggleStatsView()"
-					></div>
+				<div
+					class="title-container"
+					[helpTooltip]="'app.collection.set-stats.click-to-show-history' | owTranslate"
+					(click)="toggleStatsView()"
+				>
+					<div class="title" [owTranslate]="'app.collection.set-stats.title'"></div>
 					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 				</div>
 				<section class="toggle-label">

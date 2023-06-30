@@ -19,15 +19,14 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		<div class="card-history">
 			<div class="history">
 				<div class="top-container">
-					<div class="title-container">
-						<div
-							class="title"
-							[owTranslate]="'app.collection.card-history.title'"
-							[helpTooltip]="'app.collection.card-history.click-to-show-stats' | owTranslate"
-							(click)="toggleStatsView()"
-						></div>
+					<div
+						class="title-container"
+						[helpTooltip]="'app.collection.card-history.click-to-show-stats' | owTranslate"
+						(click)="toggleStatsView()"
+					>
+						<div class="title" [owTranslate]="'app.collection.card-history.title'"></div>
+						<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 					</div>
-					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 					<section class="toggle-label">
 						<preference-toggle
 							field="collectionHistoryShowOnlyNewCards"
