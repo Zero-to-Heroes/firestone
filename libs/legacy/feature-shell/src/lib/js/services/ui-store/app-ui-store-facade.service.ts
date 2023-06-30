@@ -12,6 +12,7 @@ import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
+import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
@@ -226,6 +227,10 @@ export class AppUiStoreFacadeService {
 
 	public packStats$(): Observable<readonly PackResult[]> {
 		return this.debugObservable(this.store.packStats$());
+	}
+
+	public cardHistory$(): Observable<readonly CardHistory[]> {
+		return this.debugObservable(this.store.cardHistory$());
 	}
 
 	public send(event: MainWindowStoreEvent) {

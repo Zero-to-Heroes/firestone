@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
 import { Preferences } from '../../models/preferences';
@@ -78,21 +77,12 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 
 	ngAfterContentInit() {
 		this.showOnlyNewCards$ = this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards);
-		const fullHistory$ = this.store.packStats$().pipe(
-			tap((info) => console.log('card history 0', info)),
-			distinctUntilChanged((a, b) => a?.length === b?.length && a[0]?.creationDate === b[0]?.creationDate),
-			tap((info) => console.log('card history 0 - 1', info)),
-			this.mapData((packStats) => this.buildHistory(packStats)),
-			tap((info) => console.log('card history 0 - 2', info)),
-		);
 		const sets$ = this.sets$$.asObservable().pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData((sets) => sets),
 		);
-		this.cardHistory$ = combineLatest([sets$, fullHistory$]).pipe(
-			tap((info) => console.log('card history', info)),
+		this.cardHistory$ = combineLatest([sets$, this.store.cardHistory$()]).pipe(
 			filter(([currentSets, cardHistory]) => !!currentSets?.length && !!cardHistory?.length),
-			tap((info) => console.log('card history 2', info)),
 			this.mapData(([currentSets, cardHistory]) => {
 				return cardHistory
 					.filter(
@@ -121,20 +111,5 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 			collectionSetStatsTypeFilter: newStatsView,
 		};
 		await this.prefs.savePreferences(newPrefs);
-	}
-
-	private buildHistory(packStats: readonly PackResult[]): readonly CardHistory[] {
-		return packStats.flatMap((pack) => pack.cards.map((card) => this.buildCardHistory(card, pack.creationDate)));
-	}
-
-	private buildCardHistory(card: CardPackResult, creationTimestamp: number): CardHistory {
-		const result: CardHistory = {
-			cardId: card.cardId,
-			isPremium: card.cardType === 'GOLDEN',
-			isNewCard: card.isNew || card.isSecondCopy,
-			relevantCount: card.isNew ? 1 : card.isSecondCopy ? 2 : -1,
-			creationTimestamp: creationTimestamp,
-		};
-		return result;
 	}
 }

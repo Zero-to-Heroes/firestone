@@ -24,6 +24,7 @@ import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state'
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
+import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { GameState } from '../../models/decktracker/game-state';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
@@ -102,6 +103,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private lottery: Observable<LotteryState>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
 	private packStats: Observable<readonly PackResult[]>;
+	private cardHistory: Observable<readonly CardHistory[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -425,6 +427,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.packStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public cardHistory$(): Observable<readonly CardHistory[]> {
+		return this.cardHistory.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -454,6 +460,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initLottery();
 		this.initAchievementsProgressTracking();
 		this.initPackStats();
+		this.initCardsHistory();
 		this.initialized = true;
 	}
 
@@ -524,6 +531,15 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initPackStats() {
 		this.packStats = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).packStats$$.pipe(
+			shareReplay(1),
+		);
+	}
+
+	private initCardsHistory() {
+		this.cardHistory = (
+			this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService
+		).cardHistory$$.pipe(
+			// distinctUntilChanged((a, b) => a == b || a?.[0]?.creationTimestamp === b?.[0]?.creationTimestamp),
 			shareReplay(1),
 		);
 	}

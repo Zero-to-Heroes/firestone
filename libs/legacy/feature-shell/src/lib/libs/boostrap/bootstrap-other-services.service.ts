@@ -29,7 +29,6 @@ import { LocalizationService } from '../../js/services/localization.service';
 import { LogRegisterService } from '../../js/services/log-register.service';
 import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
-import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
 import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
@@ -72,7 +71,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_endGameListenerService: EndGameListenerService,
 		private readonly init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private readonly init_ReplaysNotificationService: ReplaysNotificationService,
-		private readonly init_CollectionBootstrapService: CollectionBootstrapService,
 		private readonly init_BgsInitService: BgsInitService,
 		private readonly init_BgsBestUserStatsService: BgsBestUserStatsService,
 		private readonly init_HsClientConfig: HsClientConfigService,

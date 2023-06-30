@@ -8,6 +8,7 @@ import { DuelsDecksProviderService } from '../../js/services/duels/duels-decks-p
 import { GameNativeStateStoreService } from '../../js/services/game/game-native-state-store.service';
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
+import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
@@ -42,6 +43,7 @@ export class BootstrapStoreServicesService {
 		private readonly modsConfig: ModsConfigService,
 		private readonly ini_LotterService: LotteryService,
 		private readonly achievementsMonitor: AchievementsMonitor,
+		private readonly collectionBootstrapService: CollectionBootstrapService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
