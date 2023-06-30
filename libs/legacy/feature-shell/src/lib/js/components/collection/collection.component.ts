@@ -159,6 +159,8 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 						? allSets
 						: activeFilter === 'standard'
 						? allSets.filter((set) => set.standard)
+						: activeFilter === 'twist'
+						? allSets.filter((set) => set.twist)
 						: allSets.filter((set) => !set.standard);
 				console.debug('visible sets', sets);
 				return sets;

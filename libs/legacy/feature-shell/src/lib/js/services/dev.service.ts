@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
-import { allDuelsSignatureTreasures, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
@@ -176,7 +176,7 @@ export class DevService {
 		window['buildDeck'] = async (decklist, hero) => {
 			const cards = decklist.split('\n');
 			console.debug(cards);
-			const allCards = this.cards.getAllCards();
+			const allCards = this.allCards.getCards();
 			const cardArray = cards
 				.map((card) => {
 					const [name, count] = card.split('#');

@@ -1,42 +1,27 @@
 import { CardClass, RarityTYpe } from '@firestone-hs/reference-data';
-import { NonFunctionProperties } from '../services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CollectionCardType } from './collection/collection-card-type.type';
 
 export class Set {
-	readonly allCards: readonly SetCard[] = [];
-	readonly cardsCache = new Map<string, SetCard>();
+	public readonly id: string;
+	public readonly name: string;
+	public readonly launchDate: Date;
+	public readonly standard?: boolean;
+	public readonly twist?: boolean;
+	public readonly allCards: readonly SetCard[] = [];
+	public readonly cardsCache = new Map<string, SetCard>();
 
-	readonly ownedLimitCollectibleCards: number = 0;
-	readonly ownedLimitCollectiblePremiumCards: number = 0;
+	public readonly ownedLimitCollectibleCards: number = 0;
+	public readonly ownedLimitCollectiblePremiumCards: number = 0;
 
-	constructor(
-		public readonly id: string,
-		public readonly name: string,
-		public readonly launchDate: Date,
-		public readonly standard?: boolean,
-		allCards?: readonly SetCard[],
-		ownedLimitCollectibleCards?: number,
-		ownedLimitCollectiblePremiumCards?: number,
-	) {
-		this.allCards = allCards ? [...allCards] : [];
-		this.ownedLimitCollectibleCards = ownedLimitCollectibleCards || 0;
-		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
-		this.allCards.forEach((card) => this.cardsCache.set(card.id, card));
+	public static create(base: Partial<NonFunctionProperties<Set>>): Set {
+		const result = Object.assign(new Set(), base);
+		result.allCards.forEach((card) => result.cardsCache.set(card.id, card));
+		return result;
 	}
 
-	public update(base: Set): Set {
-		return Object.assign(
-			new Set(
-				this.id,
-				this.name,
-				this.launchDate,
-				this.standard,
-				this.allCards,
-				this.ownedLimitCollectibleCards,
-				this.ownedLimitCollectiblePremiumCards,
-			),
-			base,
-		);
+	public update(base: Partial<NonFunctionProperties<Set>>): Set {
+		return Object.assign(new Set(), this, base);
 	}
 
 	public getCard(cardId: string): SetCard {

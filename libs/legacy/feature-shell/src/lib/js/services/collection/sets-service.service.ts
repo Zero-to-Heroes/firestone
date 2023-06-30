@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardClass, Race, ReferenceCard, ReferenceSet, sets, standardSets } from '@firestone-hs/reference-data';
+import { CardClass, Race, ReferenceCard, sets, standardSets, twistSets } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -20,36 +20,16 @@ export class SetsService {
 		'HERO_10',
 	];
 
-	constructor(private allCards: CardsFacadeService) {
-		// We don't call it in the constructor because we want the app to be in control
-		// of how they load the cards, and for it to be aware of when cards have been loaded
-		// this.retrieveAllCards();
-	}
+	private cachedSets: readonly Set[];
 
-	public getSetIds(): string[] {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
+	public getSetIds(): readonly string[] {
 		return sets.map((set) => set.id);
 	}
 
-	public getStandardSets(): Set[] {
-		return this.getSets(
-			sets.filter((set) => standardSets.includes(set.id)),
-			true,
-		);
-	}
-
-	public getWildSets(): Set[] {
-		return this.getSets(
-			sets.filter((set) => !standardSets.includes(set.id)),
-			false,
-		);
-	}
-
-	public getAllSets(): Set[] {
-		return this.getStandardSets().concat(this.getWildSets());
-	}
-
-	public getAllCards(): ReferenceCard[] {
-		return this.allCards.getCards();
+	public getAllSets(): readonly Set[] {
+		return this.getSets();
 	}
 
 	public getRarities(setId: string): string[] {
@@ -196,26 +176,29 @@ export class SetsService {
 
 	public getSet(setId: string): Set {
 		setId = setId.toLowerCase();
-		for (const theSet of this.getStandardSets()) {
-			if (theSet.id === setId) {
-				return theSet;
-			}
-		}
-		for (const theSet of this.getWildSets()) {
-			if (theSet.id === setId) {
-				return theSet;
-			}
-		}
-		console.error('[sets-service] incorrect call to getSet', setId);
-		return new Set(setId, setId, new Date());
+		return (
+			this.getSets().find((s) => s.id === setId) ?? Set.create({ id: setId, name: setId, launchDate: new Date() })
+		);
 	}
 
-	private getSets(references: readonly ReferenceSet[], isStandard: boolean): Set[] {
-		const referenceSets: Set[] = references.map((set) => new Set(set.id, set.name, set.launchDate, isStandard));
-		return referenceSets.map((set) => {
+	private getSets(): readonly Set[] {
+		if (this.cachedSets?.length) {
+			return this.cachedSets;
+		}
+
+		const result: readonly Set[] = sets.map((set) => {
 			const setCards = this.getCollectibleSetCards(set.id);
-			return new Set(set.id, set.name, set.launchDate, set.standard, setCards);
+			return Set.create({
+				id: set.id,
+				name: set.name,
+				launchDate: set.launchDate,
+				allCards: setCards,
+				standard: standardSets.includes(set.id),
+				twist: twistSets.includes(set.id),
+			});
 		});
+		this.cachedSets = result;
+		return result;
 	}
 
 	// Used for pity timers mostly

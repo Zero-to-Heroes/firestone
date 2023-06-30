@@ -39,6 +39,10 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 			label: this.i18n.translateString('app.collection.filters.format.standard'),
 		} as IOption,
 		{
+			value: 'twist',
+			label: this.i18n.translateString('app.collection.filters.format.twist'),
+		} as IOption,
+		{
 			value: 'wild',
 			label: this.i18n.translateString('app.collection.filters.format.wild'),
 		} as IOption,
@@ -78,6 +82,8 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 						? allSets
 						: activeFilter === 'standard'
 						? allSets.filter((set) => set.standard)
+						: activeFilter === 'twist'
+						? allSets.filter((set) => set.twist)
 						: allSets.filter((set) => !set.standard);
 				return [...sets].sort(this.sortSets());
 			}),

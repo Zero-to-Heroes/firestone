@@ -34,15 +34,11 @@ export class SetsManagerService {
 		const ownedLimitCollectiblePremiumCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollectedPremium())
 			.reduce((c1, c2) => c1 + c2, 0);
-		return new Set(
-			set.id,
-			set.name,
-			set.launchDate,
-			set.standard,
-			updatedCards,
-			ownedLimitCollectibleCards,
-			ownedLimitCollectiblePremiumCards,
-		);
+		return set.update({
+			allCards: updatedCards,
+			ownedLimitCollectibleCards: ownedLimitCollectibleCards,
+			ownedLimitCollectiblePremiumCards: ownedLimitCollectiblePremiumCards,
+		});
 	}
 
 	private buildFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
