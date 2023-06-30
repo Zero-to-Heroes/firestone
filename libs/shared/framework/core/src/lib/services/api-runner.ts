@@ -128,6 +128,11 @@ export class ApiRunner {
 		}
 
 		const owToken = await this.ow.generateSessionToken();
+		if (!owToken) {
+			console.warn('could not generate ow token', owToken);
+			return null;
+		}
+
 		const fsToken: { fsToken: string } | null = await this.callPostApi(FIRESTONE_TOKEN_URL, { owToken: owToken });
 		console.debug('fsToken', fsToken, !fsToken?.fsToken ? 'no decode' : decode(fsToken?.fsToken));
 		return fsToken?.fsToken ?? null;
