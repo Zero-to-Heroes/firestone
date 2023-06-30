@@ -95,11 +95,20 @@ export class LotteryWidgetControllerService {
 			this.shouldTrack$$.next(displayWidget && adVisible);
 		});
 
-		combineLatest([adVisible$, this.store.listenPrefs$((prefs) => prefs.lotteryShowHiddenWindowNotification)])
+		combineLatest([
+			adVisible$,
+			this.store.listenPrefs$(
+				(prefs) => prefs.lotteryShowHiddenWindowNotification,
+				(prefs) => prefs.lotteryOverlay,
+			),
+		])
 			.pipe(
 				distinctUntilChanged(),
 				debounceTime(2000),
-				filter(([adVisible, [showNotification]]) => !adVisible && showNotification),
+				filter(
+					([adVisible, [showNotification, lotteryOverlay]]) =>
+						!adVisible && showNotification && !lotteryOverlay,
+				),
 			)
 			.subscribe(() => {
 				const title = 'Lottery window hidden';
