@@ -1,10 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { deepEqual } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
@@ -34,14 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 						></preference-toggle>
 					</section>
 				</div>
-				<ul
-					class="history-list"
-					scrollable
-					*ngIf="{
-						cardHistory: cardHistory$ | async,
-						totalHistoryLength: totalHistoryLength$ | async
-					} as value"
-				>
+				<ul class="history-list" scrollable *ngIf="{ cardHistory: cardHistory$ | async } as value">
 					<li *ngFor="let historyItem of shownHistory$ | async; trackBy: trackById">
 						<card-history-item [historyItem]="historyItem"> </card-history-item>
 					</li>
@@ -61,12 +56,11 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	private readonly MAX_RESULTS_DISPLAYED = 1000;
+	private readonly MAX_RESULTS_DISPLAYED = 300;
 
 	showOnlyNewCards$: Observable<boolean>;
 	shownHistory$: Observable<readonly CardHistory[]>;
 	cardHistory$: Observable<readonly CardHistory[]>;
-	totalHistoryLength$: Observable<number>;
 
 	@Input() set sets(value: readonly Set[]) {
 		this.sets$$.next(value);
@@ -84,22 +78,30 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 
 	ngAfterContentInit() {
 		this.showOnlyNewCards$ = this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards);
-		this.cardHistory$ = combineLatest([
-			this.sets$$,
-			this.store.listen$(([main, nav, prefs]) => main.binder.cardHistory),
-		]).pipe(
-			this.mapData(([currentSets, [cardHistory]]) =>
-				cardHistory
+		const fullHistory$ = this.store.packStats$().pipe(
+			tap((info) => console.log('card history 0', info)),
+			distinctUntilChanged((a, b) => a?.length === b?.length && a[0]?.creationDate === b[0]?.creationDate),
+			tap((info) => console.log('card history 0 - 1', info)),
+			this.mapData((packStats) => this.buildHistory(packStats)),
+			tap((info) => console.log('card history 0 - 2', info)),
+		);
+		const sets$ = this.sets$$.asObservable().pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			this.mapData((sets) => sets),
+		);
+		this.cardHistory$ = combineLatest([sets$, fullHistory$]).pipe(
+			tap((info) => console.log('card history', info)),
+			filter(([currentSets, cardHistory]) => !!currentSets?.length && !!cardHistory?.length),
+			tap((info) => console.log('card history 2', info)),
+			this.mapData(([currentSets, cardHistory]) => {
+				return cardHistory
 					.filter(
 						(card: CardHistory) =>
 							!currentSets?.length || currentSets.find((set) => set.getCard(card.cardId)),
 					)
-					.slice(0, this.MAX_RESULTS_DISPLAYED),
-			),
+					.slice(0, this.MAX_RESULTS_DISPLAYED);
+			}),
 		);
-		this.totalHistoryLength$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.totalHistoryLength)
-			.pipe(this.mapData(([totalHistoryLength]) => totalHistoryLength));
 		this.shownHistory$ = combineLatest([this.showOnlyNewCards$, this.cardHistory$]).pipe(
 			this.mapData(([showOnlyNewCards, cardHistory]) =>
 				cardHistory.filter((card: CardHistory) => !showOnlyNewCards || card.isNewCard),
@@ -119,5 +121,20 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 			collectionSetStatsTypeFilter: newStatsView,
 		};
 		await this.prefs.savePreferences(newPrefs);
+	}
+
+	private buildHistory(packStats: readonly PackResult[]): readonly CardHistory[] {
+		return packStats.flatMap((pack) => pack.cards.map((card) => this.buildCardHistory(card, pack.creationDate)));
+	}
+
+	private buildCardHistory(card: CardPackResult, creationTimestamp: number): CardHistory {
+		const result: CardHistory = {
+			cardId: card.cardId,
+			isPremium: card.cardType === 'GOLDEN',
+			isNewCard: card.isNew || card.isSecondCopy,
+			relevantCount: card.isNew ? 1 : card.isSecondCopy ? 2 : -1,
+			creationTimestamp: creationTimestamp,
+		};
+		return result;
 	}
 }

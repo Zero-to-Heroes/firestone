@@ -89,10 +89,10 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
 		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest([
 			this.store.allTimeBoosters$(),
-			this.store.listen$(([main, nav]) => main.binder.packStats),
+			this.store.packStats$(),
 			this.store.listenPrefs$((prefs) => prefs.collectionPityTimerResets),
 		]).pipe(
-			this.mapData(([packsFromMemory, [packStats], [collectionPityTimerResets]]) =>
+			this.mapData(([packsFromMemory, packStats, [collectionPityTimerResets]]) =>
 				Object.values(BoosterType)
 					.filter((boosterId: BoosterType) => !isNaN(boosterId))
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
@@ -195,9 +195,9 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 			),
 		);
 		this.bestPacks$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.packStats)
+			.packStats$()
 			.pipe(
-				this.mapData(([packStats]) =>
+				this.mapData((packStats) =>
 					[...packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a)).slice(0, 5),
 				),
 			);

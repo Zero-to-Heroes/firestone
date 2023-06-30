@@ -104,6 +104,8 @@ export class PackStatsService {
 				'free';
 			statEvent['card' + (i + 1) + 'CurrencyAmount'] = cards[i].currencyAmount;
 			statEvent['card' + (i + 1) + 'MercenaryCardId'] = cards[i].mercenaryCardId;
+			statEvent['card' + (i + 1) + 'IsNew'] = cards[i].isNew;
+			statEvent['card' + (i + 1) + 'IsSecondCopy'] = cards[i].isSecondCopy;
 		}
 		console.debug('[pack-stats] publishing pack stat', statEvent);
 		this.api.callPostApi(PACKS_UPDATE_URL, statEvent);
@@ -136,6 +138,8 @@ export class PackStatsService {
 					cardType: card.cardType as 'NORMAL' | 'GOLDEN',
 					currencyAmount: card.currencyAmount,
 					mercenaryCardId: card.mercenaryCardId,
+					isNew: card.isNew,
+					isSecondCopy: card.isSecondCopy,
 				};
 				return result;
 			}),

@@ -160,8 +160,8 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 				this.isClearingGames.next(false);
 			});
 		this.store
-			.listen$(([main, nav]) => main.binder.packStats)
-			.pipe(this.mapData(([packs]) => packs))
+			.packStats$()
+			.pipe(this.mapData((packs) => packs))
 			.subscribe((packs) => {
 				this.isRefreshingPacks.next(false);
 			});

@@ -12,7 +12,6 @@ import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
 import { Events } from '../events.service';
 import { dustFor, dustForPremium } from '../hs-utils';
-import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
@@ -244,7 +243,6 @@ export class CardsMonitorService {
 				this.notifications.createDustToast(dust, 1);
 			}
 		}
-		this.stateUpdater.next(new NewCardEvent(cardId, type, newCount, isDust));
 	}
 
 	private hasReachedMaxCollectibleOf(cardId: string, newCount: number): boolean {

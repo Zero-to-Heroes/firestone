@@ -47,7 +47,6 @@ import { AchievementsLoaderService } from '../../achievement/data/achievements-l
 import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
-import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { CollectionStorageService } from '../../collection/collection-storage.service';
 import { SetsManagerService } from '../../collection/sets-manager.service';
@@ -67,6 +66,7 @@ import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.servi
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { UserService } from '../../user.service';
 import { LiveStreamsService } from '../live-streams.service';
+import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
@@ -107,9 +107,7 @@ import { ChangeVisibleApplicationEvent } from './events/change-visible-applicati
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs-updated-event';
 import { CollectionRefreshPacksEvent } from './events/collection/colection-refresh-packs-event';
-import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
-import { NewCardEvent } from './events/collection/new-card-event';
 import { NewPackEvent } from './events/collection/new-pack-event';
 import { SearchCardsEvent } from './events/collection/search-cards-event';
 import { SelectCollectionSetEvent } from './events/collection/select-collection-set-event';
@@ -270,11 +268,9 @@ import { BgsSimulatorMinionTierFilterSelectedProcessor } from './processors/batt
 import { BgsSimulatorMinionTribeFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
-import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
 import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
 import { CollectionRefreshPacksProcessor } from './processors/collection/collection-refresh-packs-processor';
 import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
-import { NewCardProcessor } from './processors/collection/new-card-processor';
 import { NewPackProcessor } from './processors/collection/new-pack-processor';
 import { SearchCardProcessor } from './processors/collection/search-card-processor';
 import { SelectCollectionSetProcessor } from './processors/collection/select-collection-set-processor';
@@ -414,7 +410,6 @@ export class MainWindowStoreService {
 		private readonly sets: SetsService,
 		private readonly achievementsRepository: AchievementsRepository,
 		private readonly collectionManager: CollectionManager,
-		private readonly cardHistoryStorage: CardHistoryStorageService,
 		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
 		private readonly achievementsLoader: AchievementsLoaderService,
 		private readonly achievementsManager: AchievementsManager,
@@ -444,6 +439,7 @@ export class MainWindowStoreService {
 		private readonly streamsService: LiveStreamsService,
 		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 		private readonly setsManager: SetsManagerService,
+		private readonly collectionBootstrap: CollectionBootstrapService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -520,7 +516,7 @@ export class MainWindowStoreService {
 			} else {
 			}
 
-			// console.debug('emitting new merged state', event.eventName(), this.state, this.state.quests);
+			// console.debug('emitting new merged state', event.eventName(), this.state);
 			this.mergedEmitter.next([
 				this.state,
 				// Because some events don't emit a new navigationState, in which case the arrows
@@ -601,11 +597,7 @@ export class MainWindowStoreService {
 				new ReferenceQuestsLoadedProcessor(),
 			],
 			[ActiveQuestsUpdatedEvent.eventName(), new ActiveQuestsUpdatedProcessor(this.memoryReading)],
-			[
-				// Collection
-				CollectionInitEvent.eventName(),
-				new CollectionInitProcessor(),
-			],
+			// Collection
 			[CollectionRefreshPacksEvent.eventName(), new CollectionRefreshPacksProcessor(this.packsService)],
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
 			[CollectionSelectCurrentTabEvent.eventName(), new CollectionSelectCurrentTabProcessor()],
@@ -617,8 +609,7 @@ export class MainWindowStoreService {
 				UpdateCardSearchResultsEvent.eventName(),
 				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
 			],
-			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionManager, this.cards)],
-			[NewCardEvent.eventName(), new NewCardProcessor(this.cardHistoryStorage)],
+			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionBootstrap, this.cards)],
 
 			// Achievements
 			[AchievementsInitEvent.eventName(), new AchievementsInitProcessor()],

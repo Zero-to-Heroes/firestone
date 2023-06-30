@@ -10,13 +10,6 @@ export class CollectionPacksUpdatedProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		return [
-			currentState.update({
-				binder: currentState.binder.update({
-					packStats: event.packs,
-				}),
-			}),
-			null,
-		];
+		return [null, null];
 	}
 }

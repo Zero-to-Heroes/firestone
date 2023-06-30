@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
@@ -68,11 +68,9 @@ export class PackHistoryComponent extends AbstractSubscriptionStoreComponent imp
 
 	ngAfterContentInit() {
 		const filteredHistory$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.packStats)
+			.packStats$()
 			.pipe(
-				this.mapData(([packs]) =>
-					(packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof'),
-				),
+				this.mapData((packs) => (packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof')),
 			);
 		this.packHistory$ = combineLatest(filteredHistory$, this.displayedHistorySize.asObservable()).pipe(
 			this.mapData(([packs, displayedHistorySize]) => packs.slice(0, displayedHistorySize)),

@@ -110,20 +110,14 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 				showGoldenStats ? this.buildGoldenPieChartData(sets) : this.buildPieChartData(sets),
 			),
 		);
-		this.packsReceived$ = combineLatest([
-			this.sets$$.asObservable(),
-			this.store.listen$(([main, nav, prefs]) => main.binder.packStats),
-		]).pipe(
+		this.packsReceived$ = combineLatest([this.sets$$.asObservable(), this.store.packStats$()]).pipe(
 			this.mapData(
-				([sets, [packs]]) =>
+				([sets, packs]) =>
 					packs.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))?.length ?? 0,
 			),
 		);
-		this.bestKnownPack$ = combineLatest([
-			this.sets$$.asObservable(),
-			this.store.listen$(([main, nav, prefs]) => main.binder.packStats),
-		]).pipe(
-			this.mapData(([sets, [packStats]]) => {
+		this.bestKnownPack$ = combineLatest([this.sets$$.asObservable(), this.store.packStats$()]).pipe(
+			this.mapData(([sets, packStats]) => {
 				const resultForSetId = packStats
 					.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))
 					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))[0];

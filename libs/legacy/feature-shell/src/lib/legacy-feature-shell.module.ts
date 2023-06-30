@@ -679,7 +679,6 @@ import { BattlegroundsStoreService } from './js/services/battlegrounds/store/bat
 import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { BugReportService } from './js/services/bug/bug-report.service';
 import { CardsInitService } from './js/services/cards-init.service';
-import { CardHistoryStorageService } from './js/services/collection/card-history-storage.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
 import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
 import { CollectionManager } from './js/services/collection/collection-manager.service';
@@ -1696,7 +1695,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementsStorageService,
 
 		DeckHandlerService,
-		CardHistoryStorageService,
 		CollectionManager,
 		SetsManagerService,
 		CollectionStorageService,

@@ -17,6 +17,7 @@ import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 
+import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
@@ -45,6 +46,7 @@ import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { LotteryService } from '../lottery/lottery.service';
+import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
@@ -99,6 +101,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private shouldShowLotteryOverlay: Observable<boolean>;
 	private lottery: Observable<LotteryState>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
+	private packStats: Observable<readonly PackResult[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -418,6 +421,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.achievementsProgressTracking.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public packStats$(): Observable<readonly PackResult[]> {
+		return this.packStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -446,6 +453,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initShouldShowLotteryOverlay();
 		this.initLottery();
 		this.initAchievementsProgressTracking();
+		this.initPackStats();
 		this.initialized = true;
 	}
 
@@ -512,6 +520,12 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.achievementsProgressTracking = (
 			this.ow.getMainWindow().achievementsMonitor as AchievementsMonitor
 		).achievementsProgressTracking$$.pipe(shareReplay(1));
+	}
+
+	private initPackStats() {
+		this.packStats = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).packStats$$.pipe(
+			shareReplay(1),
+		);
 	}
 
 	private initDuelsDecks() {
