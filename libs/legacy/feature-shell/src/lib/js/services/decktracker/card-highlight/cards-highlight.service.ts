@@ -1254,6 +1254,21 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, weapon);
 			case CardIds.WidowbloomSeedsman:
 				return and(side(inputSide), inDeck, spell, nature);
+			case CardIds.WildSpirits:
+				return and(
+					side(inputSide),
+					or(inDeck, inHand),
+					cardIs(
+						CardIds.SpiritPoacher_FoxSpiritWildseedToken,
+						CardIds.SpiritPoacher_BearSpiritWildseedToken,
+						CardIds.SpiritPoacher_StagSpiritWildseedToken,
+						CardIds.SpiritPoacher,
+						CardIds.WildSpirits,
+						CardIds.Aralon_REV_363,
+						CardIds.Aralon_REV_780,
+						CardIds.StagCharge,
+					),
+				);
 			case CardIds.WingCommanderIchman_AV_336:
 				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.WitchingHour:
