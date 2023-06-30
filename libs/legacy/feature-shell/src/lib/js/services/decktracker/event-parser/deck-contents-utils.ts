@@ -44,6 +44,8 @@ export const modifyDecksForSpecialCards = (
 			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.LadyPrestor_SW_078:
 			return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
+		case CardIds.ArchVillainRafaam:
+			return [handleArchVillainRafaam(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.OopsAllSpellsTavernBrawl:
 			return [handleOoopsAllSpells(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.ScepterOfSummoning:
@@ -333,6 +335,29 @@ const handleLadyPrestor = (
 							: other.cost === card.getEffectiveManaCost();
 					return result;
 				},
+			} as DeckCard),
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleArchVillainRafaam = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => true,
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: i18n.getUnknownRaceName(i18n.translateString('global.legendary-minion')),
+				creatorCardId: CardIds.ArchVillainRafaam,
+				manaCost: undefined,
+				actualManaCost: undefined,
+				rarity: 'legendary',
+				cardType: 'Minion',
 			} as DeckCard),
 		deckState,
 		allCards,
