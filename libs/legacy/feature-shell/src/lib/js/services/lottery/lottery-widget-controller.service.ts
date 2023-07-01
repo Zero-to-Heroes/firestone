@@ -145,16 +145,17 @@ export class LotteryWidgetControllerService {
 						{
 							selector: 'dont-show-again',
 							action: async () => {
-								console.debug('clicked on dont-show-again');
+								console.debug('[lottery-widget] clicked on dont-show-again');
 								const prefs = await this.prefs.getPreferences();
 								const newPrefs: Preferences = { ...prefs, lotteryShowHiddenWindowNotification: false };
-								await this.prefs.savePreferences(newPrefs);
+								const updated = await this.prefs.savePreferences(newPrefs);
+								console.debug('[lottery-widget] updated prefs', updated);
 							},
 						},
 						{
 							selector: 'ok',
 							action: () => {
-								console.debug('clicked on ok, do nothing (except close the notif)');
+								console.debug('[lottery-widget] clicked on ok, do nothing (except close the notif)');
 							},
 						},
 					],

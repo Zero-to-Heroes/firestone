@@ -12,7 +12,7 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Notification, NotificationType, NotificationsService } from 'angular2-notifications';
 import { Observable } from 'rxjs';
-import { concatMap, filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
@@ -86,12 +86,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					toast.theClass = message.theClass;
 					return { message, toast };
 				}),
-				filter((toast) => !!toast),
-				concatMap(({ message, toast }) =>
-					toast.click.pipe(
-						tap((clickEvent: MouseEvent) => this.handleToastClick(clickEvent, message, toast.id)),
-					),
-				),
 			)
 			.subscribe();
 	}
@@ -117,8 +111,10 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	destroyed(event) {
 		console.log('notif destroyed', event.id);
-		// const deletedNotifications = this.activeNotifications.filter((notif) => notif.toast.id === event.id);
-		// deletedNotifications.forEach((notif) => notif.subscription.unsubscribe());
+		const deletedNotifications = this.activeNotifications.filter((notif) => notif.toast.id === event.id);
+		deletedNotifications.forEach((notif) => {
+			(notif.toast as any).subscription.unsubscribe();
+		});
 		this.activeNotifications = this.activeNotifications.filter((notif) => notif.toast.id !== event.id);
 	}
 
@@ -131,12 +127,16 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			timeOut: message.timeout || this.timeout,
 			clickToClose: message.clickToClose === false ? false : true,
 		};
-		const result = this.notificationService.html(message.content, NotificationType.Success, override);
+		const toast = this.notificationService.html(message.content, NotificationType.Success, override);
+		(toast as any).subscription = toast.click.subscribe((clickEvent: MouseEvent) =>
+			this.handleToastClick(clickEvent, message, toast.id),
+		);
+
 		this.activeNotifications.push({
 			notificationId: message.notificationId,
-			toast: result,
+			toast: toast,
 		});
-		return result;
+		return toast;
 	}
 
 	private isUnclickable(event: MouseEvent): boolean {
