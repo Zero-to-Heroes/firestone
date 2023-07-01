@@ -33,7 +33,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 					(click)="toggleStatsView()"
 				>
 					<div class="title" [owTranslate]="'app.collection.set-stats.title'"></div>
-					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
+					<div class="caret" inlineSVG="assets/svg/restore.svg"></div>
 				</div>
 				<section class="toggle-label">
 					<preference-toggle
