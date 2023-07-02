@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { sortByProperties } from '@firestone/shared/framework/common';
 import { AchievementHistory } from '../../../../models/achievement/achievement-history';
 import { AchievementHistoryStorageService } from '../../../achievement/achievement-history-storage.service';
 import { AchievementsLoaderService } from '../../../achievement/data/achievements-loader.service';
@@ -32,7 +33,7 @@ export class AchievementUpdateHelper {
 				})
 				.filter((history) => history)
 				// We want to have the most recent at the top
-				.reverse()
+				.sort(sortByProperties((a) => [-a.creationTimestamp]))
 		);
 	}
 }
