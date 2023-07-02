@@ -6,7 +6,7 @@
 	display: flex;
 	flex-direction: column;
 	color: var(--confirmation-text-color);
-	background: var(--confirmation-background-color);
+	background: var(--color-4);
 	min-width: 220px;
 	max-width: 350px;
 	position: relative;
@@ -46,7 +46,7 @@
 
 			&:hover {
 				background: var(--confirmation-text-color);
-				color: var(--confirmation-background-color);
+				color: var(--color-4);
 			}
 
 			&.ok {
