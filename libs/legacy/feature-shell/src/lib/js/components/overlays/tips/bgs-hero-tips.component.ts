@@ -21,6 +21,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			componentTooltip
 			[componentType]="componentType"
 			[componentInput]="currentHeroCardId$ | async"
+			[componentTooltipAutoHide]="false"
 		>
 			<img src="https://static.zerotoheroes.com/hearthstone/cardart/256x/BG24_Reward_313.jpg" />
 		</div>

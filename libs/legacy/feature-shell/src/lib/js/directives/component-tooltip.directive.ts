@@ -57,6 +57,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	@Input() componentTooltipAllowMouseOver = false;
+	@Input() componentTooltipAutoHide = true;
 
 	private _position:
 		| 'bottom'
@@ -163,7 +164,9 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
 		this.hideTimeout = setTimeout(() => {
-			this.onMouseLeave(null);
+			if (this.componentTooltipAutoHide) {
+				this.onMouseLeave(null);
+			}
 		}, 15_000);
 	}
 
