@@ -378,6 +378,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, pirate);
 			case CardIds.Anubrekhan_RLK_659:
 				return and(side(inputSide), or(inDeck, inHand), minion);
+			case CardIds.ArcaneArtificer:
+			case CardIds.ArcaneArtificerCore:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.ArcaneBrilliance:
 				return and(
 					side(inputSide),
@@ -437,6 +440,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), pirate);
 			case CardIds.BitterColdTavernBrawl:
 				return and(side(inputSide), frost, dealsDamage);
+			case CardIds.BlackrockNRoll:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.BlackwingCorruptor:
 				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.BladeOfQuickeningTavernBrawlToken:
