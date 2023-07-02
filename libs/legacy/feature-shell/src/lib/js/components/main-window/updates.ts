@@ -90,6 +90,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the "don't show me again" button on the lottery window notification wouldn't actually stop showing you notifications.`,
+							},
+						],
+					},
 				],
 			},
 			// {
