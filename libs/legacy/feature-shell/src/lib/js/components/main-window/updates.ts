@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.5.2',
+		version: '11.5.4',
 		force: false,
 		sections: [
 			// {
@@ -51,6 +51,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now track live progress of achievements during the game! Just find the achievements you want to track from Firestone's Achievements tab, ping them, and you're set! You can also let the app pick 3 achievements for you to try and complete.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fixed a bug where sometimes the lottery widget wouldn't close properly.`,
 							},
 						],
 					},
@@ -74,6 +83,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Bristleback Knight.`,
+							},
+						],
+					},
+					{
 						category: 'collection',
 						details: [
 							{
@@ -87,6 +105,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `(Premium) You can now view aggregated stats for standard/twist/wild/all sets.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where achievements would sometimes not be properly sorted by completion date.`,
 							},
 						],
 					},
