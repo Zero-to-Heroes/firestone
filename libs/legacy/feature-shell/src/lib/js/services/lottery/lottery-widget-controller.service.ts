@@ -35,11 +35,9 @@ export class LotteryWidgetControllerService {
 			// tap((info) => console.debug('[lottery-widget] should track 0?', info)),
 			map(([[showLottery], isPremium, closedByUser]) => {
 				return (
-					(!closedByUser &&
-						// currentScene === SceneMode.GAMEPLAY &&
-						// Check for null so that by default it doesn't show up for premium users
-						showLottery === true) ||
-					(!isPremium && showLottery === null)
+					!closedByUser &&
+					// Check for null so that by default it doesn't show up for premium users
+					(showLottery === true || (!isPremium && showLottery === null))
 				);
 			}),
 		);
@@ -86,8 +84,8 @@ export class LotteryWidgetControllerService {
 		this.store.eventBus$$
 			.pipe(
 				filter((event) => event?.name === 'lottery-closed'),
+				tap((info) => console.log('[lottery-widget] received close event', info)),
 				distinctUntilChanged(),
-				tap((info) => console.debug('[lottery-widget] closing', info)),
 			)
 			.subscribe(() => this.closedByUser$$.next(true));
 

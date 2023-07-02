@@ -148,6 +148,12 @@ export class AskConfirmationDirective implements OnDestroy {
 		tooltipRef.instance.showOk = this.showOk;
 		tooltipRef.instance.switchButtonStyles = this.switchButtonStyles;
 
+		console.log(
+			'[ask-confirmation] showing confirmation popup',
+			tooltipRef.instance.confirmationTitle,
+			tooltipRef.instance.confirmationText,
+		);
+
 		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
 		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
 
@@ -161,6 +167,7 @@ export class AskConfirmationDirective implements OnDestroy {
 	}
 
 	private confirm() {
+		console.log('[ask-confirmation] confirming', this.confirmationTitle, this.confirmationText);
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 		}
@@ -173,6 +180,7 @@ export class AskConfirmationDirective implements OnDestroy {
 	}
 
 	private cancel() {
+		console.log('[ask-confirmation] cancelling', this.confirmationTitle, this.confirmationText);
 		this.overlayRef.detach();
 		this.events.broadcast(Events.HIDE_MODAL);
 		// this.overlayRef.dispose();

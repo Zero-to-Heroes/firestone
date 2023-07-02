@@ -129,6 +129,7 @@ export class LotteryWidgetComponent
 	}
 
 	async close() {
+		console.log('[lottery] sending close event');
 		this.store.eventBus$$.next({ name: 'lottery-closed' });
 		this.analytics.trackEvent('lottery-close');
 	}

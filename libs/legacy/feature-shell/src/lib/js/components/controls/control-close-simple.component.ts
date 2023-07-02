@@ -39,6 +39,7 @@ export class ControlCloseSimpleComponent {
 	@Input() confirmationOk: string;
 
 	async closeWindow() {
+		console.log('[control-close-simple] closeWindow()');
 		this.requestClose.next();
 	}
 }
