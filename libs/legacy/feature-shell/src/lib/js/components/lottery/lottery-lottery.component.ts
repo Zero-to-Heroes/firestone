@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LotteryConfigResourceStatType } from '../../services/lottery/lottery.model';
@@ -17,6 +18,23 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 				<div class="points">
 					<div class="value">{{ totalPoints$ | async }}</div>
 					<div class="text" [owTranslate]="'app.lottery.lottery.points-text'"></div>
+				</div>
+				<div class="account">
+					<ng-container [ngSwitch]="loggedIn$ | async">
+						<div class="sign-in" *ngSwitchCase="false">
+							<button
+								class="button"
+								[owTranslate]="'app.lottery.lottery.sign-in-button-text'"
+								[helpTooltip]="'app.lottery.lottery.sign-in-button-tooltip' | owTranslate"
+								[helpTooltipClasses]="'general-theme'"
+								(click)="login()"
+							></button>
+						</div>
+						<div class="account-recap" *ngSwitchCase="true">
+							<img class="avatar" [src]="avatarUrl$ | async" />
+							<div class="name" [innerHTML]="userName$ | async"></div>
+						</div>
+					</ng-container>
 				</div>
 			</div>
 			<div class="stats">
@@ -53,6 +71,10 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	userName$: Observable<string>;
+	avatarUrl$: Observable<string>;
+	loggedIn$: Observable<boolean>;
+
 	totalPoints$: Observable<string>;
 
 	resourcesValue$: Observable<string>;
@@ -67,18 +89,24 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 	constructedLabel$: Observable<string>;
 	constructedTooltip$: Observable<string>;
 
-	quilboars$: Observable<string>;
-	spells$: Observable<string>;
-
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
+		this.userName$ = this.store
+			.listen$(([main, nav, prefs]) => main.currentUser)
+			.pipe(this.mapData(([currentUser]) => currentUser?.username));
+		this.loggedIn$ = this.userName$.pipe(this.mapData((userName) => !!userName));
+		this.avatarUrl$ = this.store
+			.listen$(([main, nav, prefs]) => main.currentUser)
+			.pipe(this.mapData(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'));
+
 		this.totalPoints$ = this.store
 			.lottery$()
 			.pipe(this.mapData((lottery) => lottery.currentPoints().toLocaleString(this.i18n.formatCurrentLocale())));
@@ -95,6 +123,10 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 		const constructedStatKey$ = this.store.lottery$().pipe(this.mapData((lottery) => lottery.constructedStatKey()));
 		[this.constructedValue$, this.constructedLabel$, this.constructedTooltip$] =
 			this.lotteryInfo(constructedStatKey$);
+	}
+
+	login() {
+		this.ow.openLoginDialog();
 	}
 
 	private lotteryInfo(

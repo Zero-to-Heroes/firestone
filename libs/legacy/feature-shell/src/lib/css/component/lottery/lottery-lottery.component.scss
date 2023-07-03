@@ -30,10 +30,44 @@
 				font-size: 16px;
 			}
 		}
+
+		.account {
+			margin-left: 10px;
+			border-radius: 50%;
+			flex-grow: 1;
+
+			.button {
+				padding: 5px 10px;
+				border: 1px solid var(--default-text-color);
+				background: transparent;
+				color: var(--default-text-color);
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				&:hover {
+					background: var(--default-text-color);
+					color: var(--color-5);
+				}
+			}
+
+			.account-recap {
+				display: flex;
+				align-items: center;
+
+				.avatar {
+					width: 35px;
+					clip-path: ellipse(50% 50% at 50% 50%);
+					margin-right: 10px;
+					border: 2px solid var(--default-text-color);
+					border-radius: 50%;
+				}
+			}
+		}
 	}
 
 	.stats {
-		padding-right: 10px;
 		display: flex;
 		flex-direction: column;
 
