@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.5.4',
+		version: '11.5.5',
 		force: false,
 		sections: [
 			// {
@@ -57,6 +57,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'general',
 						details: [
+							{
+								type: 'misc',
+								text: `A new Lottery season has started! Quilboars are now worth 10 points each. Results for the previous season have been posted on <a href="https://twitter.com/ZerotoHeroes_HS/status/1675769176424693772?s=20" target="_blank">Twitter</a> and <a href="https://discord.com/channels/187101197767933952/489517715376308244/1125327168076001341" target="_blank">Discord</a>. Good luck!`,
+							},
 							{
 								type: 'bug',
 								text: `Fixed a bug where sometimes the lottery widget wouldn't close properly.`,
