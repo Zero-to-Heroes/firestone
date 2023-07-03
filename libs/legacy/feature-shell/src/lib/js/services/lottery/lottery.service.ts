@@ -11,13 +11,14 @@ import { LotteryResourcesUpdateProcessor } from './events/lottery-resources-upda
 import { LotteryShouldTrackProcessor } from './events/lottery-should-track-processor';
 import { LotteryTurnStartProcessor } from './events/lottery-turn-start-processor';
 import { LotteryWidgetControllerService } from './lottery-widget-controller.service';
-import { LotteryState } from './lottery.model';
+import { LotteryConfig, LotterySeasonConfig, LotteryState } from './lottery.model';
 
 const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
+const LOTTERY_CONFIG_URL = `https://static.zerotoheroes.com/hearthstone/data/lottery-config.json`;
 
 @Injectable()
 export class LotteryService {
-	public lottery$$ = new BehaviorSubject<LotteryState>(null);
+	public lottery$$ = new BehaviorSubject<LotteryState | null>(null);
 
 	private parsers: { [eventName: string]: LotteryProcessor } = {
 		[GameEvent.RESOURCES_UPDATED]: new LotteryResourcesUpdateProcessor(),
@@ -29,6 +30,8 @@ export class LotteryService {
 	};
 
 	private eventsQueue$$ = new BehaviorSubject<GameEvent | null>(null);
+
+	private lotterySeason = new Date().toISOString().slice(0, 7);
 
 	constructor(
 		private readonly localStorage: LocalStorageService,
@@ -44,20 +47,15 @@ export class LotteryService {
 	}
 
 	private async init() {
+		const lotteryConfig: LotterySeasonConfig = await this.loadLotteryConfig();
+
 		let currentLottery = this.localStorage.getItem<LotteryState>(LocalStorageService.LOTTERY_STATE);
 		if (!currentLottery || isPreviousMonth(currentLottery.lastUpdateDate)) {
-			currentLottery = LotteryState.create({ lastUpdateDate: new Date().toISOString() });
+			currentLottery = LotteryState.create({ lastUpdateDate: new Date().toISOString() }, lotteryConfig);
 			this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, currentLottery);
 		}
-		currentLottery = LotteryState.create(currentLottery);
+		currentLottery = LotteryState.create(currentLottery, lotteryConfig);
 		this.lottery$$.next(currentLottery);
-
-		// const prefs = await this.prefs.getPreferences();
-		// console.debug('[lottery] current lottery', currentLottery, prefs.showLottery);
-		// const updatedLottery = currentLottery.update({
-		// 	shouldTrack: prefs.showLottery,
-		// });
-		// this.lottery$$.next(updatedLottery);
 
 		this.listenToGameEvents();
 	}
@@ -92,43 +90,27 @@ export class LotteryService {
 				this.confirmLotteryPoints();
 			}
 		});
-
-		// await this.store.initComplete();
-		// combineLatest([
-		// 	this.store.listen$(([main, nav, prefs]) => main.currentScene),
-		// 	this.store.listenPrefs$((prefs) => prefs.showLottery),
-		// 	this.store.enablePremiumFeatures$(),
-		// ])
-		// 	.pipe(
-		// 		map(([[currentScene], [showLottery], isPremium]) => {
-		// 			const visible =
-		// 				currentScene === SceneMode.GAMEPLAY &&
-		// 				// Check for null so that by default it doesn't show up for premium users
-		// 				((!isPremium && showLottery === null) || (isPremium && showLottery === true));
-		// 			return visible;
-		// 		}),
-		// 		distinctUntilChanged(),
-		// 	)
-		// 	.subscribe((showLottery) => {
-		// 		this.eventsQueue$$.next({
-		// 			type: 'UPDATE_SHOULD_TRACK',
-		// 			additionalData: { visible: showLottery },
-		// 		} as any);
-		// 	});
 	}
 
 	private confirmLotteryPoints() {
 		this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, this.lottery$$.value);
 
 		// Get the current month in YYYY-MM format
-		const lotterySeason = new Date().toISOString().slice(0, 7);
 		const lotteryPoints = this.lottery$$.value.currentPoints();
 
 		// Send the data
 		this.api.callPostApiSecure(LOTTERY_UPDATE_ENDPOINT, {
-			season: lotterySeason,
+			season: this.lotterySeason,
 			points: lotteryPoints,
 		});
+	}
+
+	private async loadLotteryConfig(): Promise<LotterySeasonConfig> {
+		const lotteryConfig = await this.api.callGetApi<LotteryConfig>(LOTTERY_CONFIG_URL);
+		console.debug('[lottery] loaded lottery config', lotteryConfig);
+		const seasonConfig = lotteryConfig[this.lotterySeason] ?? lotteryConfig['default'];
+		console.debug('[lottery] loaded lottery season config', seasonConfig);
+		return seasonConfig;
 	}
 }
 

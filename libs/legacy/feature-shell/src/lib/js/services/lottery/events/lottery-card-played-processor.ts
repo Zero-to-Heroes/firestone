@@ -23,7 +23,7 @@ export class LotteryCardPlayedProcessor implements LotteryProcessor {
 		const isSpell = this.allCards.getCard(cardId).type === 'Spell';
 
 		return currentState.update({
-			quilboardsPlayed: isQuilboar ? currentState.quilboardsPlayed + 1 : currentState.quilboardsPlayed,
+			quilboarsPlayed: isQuilboar ? currentState.quilboarsPlayed + 1 : currentState.quilboarsPlayed,
 			spellsPlayed: isSpell ? currentState.spellsPlayed + 1 : currentState.spellsPlayed,
 		});
 	}

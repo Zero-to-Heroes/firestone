@@ -75,7 +75,7 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 			);
 		this.quilboars$ = this.store
 			.lottery$()
-			.pipe(this.mapData((lottery) => lottery.quilboardsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
+			.pipe(this.mapData((lottery) => lottery.quilboarsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
 		this.spells$ = this.store
 			.lottery$()
 			.pipe(this.mapData((lottery) => lottery.spellsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
