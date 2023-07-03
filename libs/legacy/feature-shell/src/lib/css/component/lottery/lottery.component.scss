@@ -10,6 +10,14 @@
 	max-width: 400px;
 	min-width: 400px;
 
+	&.scalable {
+		transform: scale(1);
+		transform-origin: bottom left;
+		transition-property: transform, opacity;
+		transition-duration: 0.2s;
+		transition-timing-function: ease-out;
+	}
+
 	.title-bar {
 		display: flex;
 		height: 30px;

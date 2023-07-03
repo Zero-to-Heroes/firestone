@@ -1,4 +1,12 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Renderer2,
+} from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -11,7 +19,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 	selector: 'lottery',
 	styleUrls: ['../../../css/component/lottery/lottery.component.scss'],
 	template: `
-		<div class="lottery-container">
+		<div class="lottery-container scalable">
 			<div class="title-bar">
 				<div class="controls">
 					<div
@@ -99,6 +107,8 @@ export class LotteryWidgetComponent
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
+		private readonly renderer: Renderer2,
+		private readonly el: ElementRef,
 	) {
 		super(store, cdr);
 	}
@@ -122,6 +132,20 @@ export class LotteryWidgetComponent
 					: this.i18n.translateString('app.lottery.tracking-not-ongoing-tooltip'),
 			),
 		);
+
+		this.store
+			.listenPrefs$((prefs) => prefs.lotteryScale)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
+				// this.el.nativeElement.style.setProperty(
+				// 	'--decktracker-max-height',
+				// 	this.player === 'player' ? '90vh' : '70vh',
+				// );
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			});
 	}
 
 	ngAfterViewInit() {

@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-general-lottery',
@@ -24,10 +25,31 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[valueExtractor]="lotteryValueExtractor"
 			></preference-toggle>
 		</div>
+
+		<div
+			class="title"
+			[owTranslate]="'settings.general.menu.premium'"
+			[helpTooltip]="'settings.general.premium.lottery-premium-section-tooltip' | owTranslate"
+		></div>
+		<div class="settings-group" [ngClass]="{ disabled: !(isPremium$ | async) }">
+			<div class="header" [owTranslate]="'settings.general.premium.lottery-size-title'"></div>
+			<preference-slider
+				class="first-slider"
+				[field]="'lotteryScale'"
+				[enabled]="true"
+				[min]="30"
+				[max]="125"
+				[snapSensitivity]="5"
+				[knobs]="sizeKnobs"
+			>
+			</preference-slider>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralLotteryComponent extends AbstractSubscriptionStoreComponent {
+export class SettingsGeneralLotteryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+	isPremium$: Observable<boolean>;
+
 	lotteryText1 = this.i18n.translateString('settings.general.premium.lottery-block-text1', {
 		twitterLink: `<a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">${this.i18n.translateString(
 			'global.social.twitter',
@@ -36,6 +58,21 @@ export class SettingsGeneralLotteryComponent extends AbstractSubscriptionStoreCo
 			'global.social.discord',
 		)}</a>`,
 	});
+
+	sizeKnobs: readonly Knob[] = [
+		{
+			absoluteValue: 30,
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
+		},
+		{
+			absoluteValue: 100,
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
+		},
+		{
+			absoluteValue: 125,
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
+		},
+	];
 
 	lotteryValueExtractor = async (valueFromPrefs: boolean): Promise<boolean> => {
 		const hasPremiumSub = await firstValueFrom(this.store.hasPremiumSub$());
@@ -50,5 +87,9 @@ export class SettingsGeneralLotteryComponent extends AbstractSubscriptionStoreCo
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
+		this.isPremium$ = this.store.hasPremiumSub$();
 	}
 }
