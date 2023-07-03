@@ -22,6 +22,39 @@ export class LotteryState {
 		return Object.assign(new LotteryState(), this, base);
 	}
 
+	public resourceStatKey(): LotteryConfigResourceStatType {
+		return this.config.resourceStat.type;
+	}
+
+	public battlegroundsStatKey(): LotteryConfigResourceStatType {
+		return this.config.battlegroundsStat.type;
+	}
+
+	public constructedStatKey(): LotteryConfigResourceStatType {
+		return this.config.constructedStat.type;
+	}
+
+	public statValue(statKey: LotteryConfigResourceStatType): number {
+		switch (statKey) {
+			case 'totalResourcesUsed':
+				return this.totalResourcesUsed + this.resourcesUsedThisTurn;
+			case 'quilboarsPlayed':
+				return this.quilboarsPlayed;
+			case 'spellsPlayed':
+				return this.spellsPlayed;
+			default:
+				return 0;
+		}
+	}
+
+	public pointsGainedForStat(statKey: LotteryConfigResourceStatType): number {
+		return this.config.resourceStat.type === statKey
+			? this.config.resourceStat.points
+			: this.config.battlegroundsStat.type === statKey
+			? this.config.battlegroundsStat.points
+			: this.config.constructedStat.points;
+	}
+
 	public currentPoints(): number {
 		console.debug('[lottery] getting points', this);
 		return (
@@ -52,4 +85,5 @@ export interface LotteryConfigResourceStat {
 	readonly points: number;
 }
 
+// Don't fix the typo in Quilboars, as it would break backward compatibility
 export type LotteryConfigResourceStatType = 'totalResourcesUsed' | 'quilboarsPlayed' | 'spellsPlayed';

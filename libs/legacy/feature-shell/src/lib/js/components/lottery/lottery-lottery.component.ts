@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { LotteryConfigResourceStatType } from '../../services/lottery/lottery.model';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
@@ -20,26 +21,26 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 				<div class="stat">
 					<div
 						class="label"
-						[owTranslate]="'app.lottery.resources'"
-						[helpTooltip]="'app.lottery.resources-tooltip' | translate"
+						[innerHTML]="resourcesLabel$ | async"
+						[helpTooltip]="resourcesTooltip$ | async"
 					></div>
-					<div class="value">{{ resources$ | async }}</div>
+					<div class="value">{{ resourcesValue$ | async }}</div>
 				</div>
 				<div class="stat">
 					<div
 						class="label"
-						[owTranslate]="'app.lottery.quilboars'"
-						[helpTooltip]="'app.lottery.quilboars-tooltip' | translate"
+						[innerHTML]="battlegroundsLabel$ | async"
+						[helpTooltip]="battlegroundsTooltip$ | async"
 					></div>
-					<div class="value">{{ quilboars$ | async }}</div>
+					<div class="value">{{ battlegroundsValue$ | async }}</div>
 				</div>
 				<div class="stat">
 					<div
 						class="label"
-						[owTranslate]="'app.lottery.spells'"
-						[helpTooltip]="'app.lottery.spells-tooltip' | translate"
+						[innerHTML]="constructedLabel$ | async"
+						[helpTooltip]="constructedTooltip$ | async"
 					></div>
-					<div class="value">{{ spells$ | async }}</div>
+					<div class="value">{{ constructedValue$ | async }}</div>
 				</div>
 			</div>
 		</div>
@@ -48,7 +49,19 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 })
 export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	totalPoints$: Observable<string>;
-	resources$: Observable<string>;
+
+	resourcesValue$: Observable<string>;
+	resourcesLabel$: Observable<string>;
+	resourcesTooltip$: Observable<string>;
+
+	battlegroundsValue$: Observable<string>;
+	battlegroundsLabel$: Observable<string>;
+	battlegroundsTooltip$: Observable<string>;
+
+	constructedValue$: Observable<string>;
+	constructedLabel$: Observable<string>;
+	constructedTooltip$: Observable<string>;
+
 	quilboars$: Observable<string>;
 	spells$: Observable<string>;
 
@@ -64,20 +77,38 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 		this.totalPoints$ = this.store
 			.lottery$()
 			.pipe(this.mapData((lottery) => lottery.currentPoints().toLocaleString(this.i18n.formatCurrentLocale())));
-		this.resources$ = this.store
+
+		const resourceStatKey$ = this.store.lottery$().pipe(this.mapData((lottery) => lottery.resourceStatKey()));
+		[this.resourcesValue$, this.resourcesLabel$, this.resourcesTooltip$] = this.lotteryInfo(resourceStatKey$);
+
+		const battlegroundsStatsKey$ = this.store
 			.lottery$()
-			.pipe(
-				this.mapData((lottery) =>
-					(lottery.totalResourcesUsed + lottery.resourcesUsedThisTurn).toLocaleString(
-						this.i18n.formatCurrentLocale(),
-					),
+			.pipe(this.mapData((lottery) => lottery.battlegroundsStatKey()));
+		[this.battlegroundsValue$, this.battlegroundsLabel$, this.battlegroundsTooltip$] =
+			this.lotteryInfo(battlegroundsStatsKey$);
+
+		const constructedStatKey$ = this.store.lottery$().pipe(this.mapData((lottery) => lottery.constructedStatKey()));
+		[this.constructedValue$, this.constructedLabel$, this.constructedTooltip$] =
+			this.lotteryInfo(constructedStatKey$);
+	}
+
+	private lotteryInfo(
+		statKey$: Observable<LotteryConfigResourceStatType>,
+	): [Observable<string>, Observable<string>, Observable<string>] {
+		return [
+			combineLatest([statKey$, this.store.lottery$()]).pipe(
+				this.mapData(([statKey, lottery]) =>
+					lottery.statValue(statKey).toLocaleString(this.i18n.formatCurrentLocale()),
 				),
-			);
-		this.quilboars$ = this.store
-			.lottery$()
-			.pipe(this.mapData((lottery) => lottery.quilboarsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
-		this.spells$ = this.store
-			.lottery$()
-			.pipe(this.mapData((lottery) => lottery.spellsPlayed.toLocaleString(this.i18n.formatCurrentLocale())));
+			),
+			statKey$.pipe(this.mapData((key) => this.i18n.translateString(`app.lottery.stats.${key}-label`))),
+			combineLatest([statKey$, this.store.lottery$()]).pipe(
+				this.mapData(([key, lottery]) =>
+					this.i18n.translateString(`app.lottery.stats.${key}-tooltip`, {
+						pointsGained: lottery.pointsGainedForStat(key),
+					}),
+				),
+			),
+		];
 	}
 }
