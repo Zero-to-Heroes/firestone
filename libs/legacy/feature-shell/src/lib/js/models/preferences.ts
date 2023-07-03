@@ -1,3 +1,4 @@
+import { LotteryTabType } from '@components/lottery/lottery-navigation.component';
 import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
 import { BnetRegion, Race, allDuelsHeroes } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
@@ -72,6 +73,7 @@ export class Preferences implements IPreferences {
 
 	readonly showLottery: boolean = null;
 	readonly lotteryOverlay: boolean = null;
+	readonly lotteryCurrentModule: LotteryTabType = 'lottery';
 	readonly lotteryShowHiddenWindowNotification: boolean = true;
 	readonly lotteryPosition: { left: number; top: number };
 	readonly lotteryScale: number = 100;

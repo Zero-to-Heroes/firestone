@@ -1,12 +1,13 @@
 .lottery-container {
-	background: var(--color-7);
-	color: var(--color-1);
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	color: var(--default-text-color);
 	font-size: 14px;
 	position: relative;
 	z-index: 1; // So that tooltips show up above the ad
 	display: flex;
 	flex-direction: column;
-	max-height: 485px;
 	max-width: 400px;
 	min-width: 400px;
 
@@ -67,6 +68,7 @@
 	.controls {
 		display: flex;
 		justify-content: flex-end;
+		width: 100%;
 
 		.control {
 			margin-left: 5px;
@@ -85,8 +87,23 @@
 		}
 	}
 
-	.lottery-content {
-		padding: 0;
+	.content-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+
+		.tab-title {
+			font-size: 20px;
+		}
+
+		.info {
+			width: 17px;
+			margin-left: 15px;
+		}
+	}
+
+	.content-main {
+		padding: 0 10px;
 		display: flex;
 		min-height: 0;
 

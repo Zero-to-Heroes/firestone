@@ -6,8 +6,8 @@
 .main-content {
 	display: flex;
 	flex-direction: column;
-	padding-right: 20px;
 	width: 100%;
+	max-height: 200px;
 
 	.title {
 		display: flex;
@@ -43,16 +43,16 @@
 
 .button {
 	padding: 5px 10px;
-	border: 1px solid var(--confirmation-text-color);
+	border: 1px solid var(--default-text-color);
 	background: transparent;
-	color: var(--confirmation-text-color);
+	color: var(--default-text-color);
 	width: fit-content;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
 	&:hover {
-		background: var(--confirmation-text-color);
-		color: var(--color-4);
+		background: var(--default-text-color);
+		color: var(--color-5);
 	}
 }

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -17,9 +17,9 @@ import { LotteryTabType } from './lottery-navigation.component';
 
 @Component({
 	selector: 'lottery',
-	styleUrls: ['../../../css/component/lottery/lottery.component.scss'],
+	styleUrls: [`../../../css/themes/general-theme.scss`, '../../../css/component/lottery/lottery.component.scss'],
 	template: `
-		<div class="lottery-container scalable">
+		<div class="lottery-container scalable general-theme">
 			<div class="title-bar">
 				<div class="controls">
 					<div
@@ -28,6 +28,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 							trackingOngoing: trackingOngoing$ | async
 						} as value"
 						[helpTooltip]="trackingTooltip$ | async"
+						[helpTooltipClasses]="'general-theme'"
 					>
 						<div
 							class="light"
@@ -38,17 +39,13 @@ import { LotteryTabType } from './lottery-navigation.component';
 						field="lotteryOverlay"
 						[label]="'app.lottery.overlay-toggle-label' | owTranslate"
 						[helpTooltip]="'app.lottery.overlay-toggle-tooltip' | owTranslate"
+						[helpTooltipClasses]="'general-theme'"
 					></preference-toggle>
-					<div
-						class="control info"
-						inlineSVG="assets/svg/info.svg"
-						[helpTooltip]="'app.lottery.info-text' | owTranslate"
-						[helpTooltipWidth]="300"
-					></div>
 					<div
 						class="control opt-out"
 						inlineSVG="assets/svg/delete.svg"
 						[helpTooltip]="'app.lottery.opt-out-tooltip' | owTranslate"
+						[helpTooltipClasses]="'general-theme'"
 						[helpTooltipWidth]="300"
 						confirmationTooltip
 						[askConfirmation]="true"
@@ -69,13 +66,26 @@ import { LotteryTabType } from './lottery-navigation.component';
 				</div>
 			</div>
 
-			<div class="lottery-content">
-				<lottery-navigation class="navigation" (moduleSelected)="onModuleSelected($event)"></lottery-navigation>
+			<div class="content-header">
+				<lottery-navigation class="navigation"></lottery-navigation>
+				<div class="tab-title">{{ currentModuleName$ | async }}</div>
+				<div
+					*ngIf="(selectedModule$ | async) === 'lottery'"
+					class="control info"
+					inlineSVG="assets/svg/info.svg"
+					[helpTooltip]="'app.lottery.lottery.info-text' | owTranslate"
+					[helpTooltipClasses]="'general-theme'"
+					[helpTooltipWidth]="300"
+				></div>
+			</div>
+
+			<div class="content-main">
 				<ng-container [ngSwitch]="selectedModule$ | async">
 					<lottery-lottery *ngSwitchCase="'lottery'"></lottery-lottery>
 					<lottery-achievements *ngSwitchCase="'achievements'"></lottery-achievements>
 				</ng-container>
 			</div>
+
 			<single-ad
 				class="ad"
 				[adId]="'bottom'"
@@ -94,12 +104,11 @@ export class LotteryWidgetComponent
 	selectedModule$: Observable<LotteryTabType>;
 	trackingOngoing$: Observable<boolean>;
 	trackingTooltip$: Observable<string>;
+	currentModuleName$: Observable<string>;
 
 	closeConfirmationText: string;
 	closeConfirmationCancelText: string;
 	closeConfirmationOkText: string;
-
-	private selectedModule$$ = new BehaviorSubject<LotteryTabType>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -120,7 +129,13 @@ export class LotteryWidgetComponent
 		`;
 		this.closeConfirmationCancelText = this.i18n.translateString('app.lottery.close-confirmation-button-cancel');
 		this.closeConfirmationOkText = this.i18n.translateString('app.lottery.close-confirmation-button-ok');
-		this.selectedModule$ = this.selectedModule$$.asObservable();
+		this.selectedModule$ = this.store
+			.listenPrefs$((prefs) => prefs.lotteryCurrentModule)
+			.pipe(this.mapData(([module]) => module || 'lottery'));
+
+		this.currentModuleName$ = this.selectedModule$.pipe(
+			this.mapData((module) => this.i18n.translateString(`app.lottery.navigation.${module}`)),
+		);
 		this.trackingOngoing$ = this.store.shouldTrackLottery$().pipe(
 			tap((info) => console.debug('should track lottery', info)),
 			this.mapData((shouldTrack) => shouldTrack),
@@ -166,10 +181,5 @@ export class LotteryWidgetComponent
 
 	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {
 		this.store.eventBus$$.next({ name: 'lottery-visibility-changed', data: { visible } });
-	}
-
-	onModuleSelected(module: LotteryTabType) {
-		console.debug('selected module', module);
-		this.selectedModule$$.next(module);
 	}
 }

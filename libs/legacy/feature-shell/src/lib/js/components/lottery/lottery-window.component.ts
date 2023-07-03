@@ -4,10 +4,10 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 @Component({
 	selector: 'lottery-window',
 	styleUrls: [
-		`../../../css/themes/decktracker-theme.scss`,
+		`../../../css/themes/general-theme.scss`,
 		'../../../css/component/lottery/lottery-window.component.scss',
 	],
-	template: `<div class="overlay-container-parent decktracker-theme">
+	template: `<div class="overlay-container-parent general-theme">
 		<lottery class="widget"></lottery>
 	</div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,15 +1,8 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Output,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { FeatureFlags } from '../../services/feature-flags';
+import { Observable } from 'rxjs';
+import { Preferences } from '../../models/preferences';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -26,6 +19,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 				[ngClass]="{ selected: selectedModule === tab.id }"
 				(click)="selectModule(tab.id)"
 				[helpTooltip]="tab.tooltip"
+				[helpTooltipClasses]="'general-theme'"
 			>
 				<div class="icon" [inlineSVG]="tab.icon"></div>
 			</button>
@@ -34,12 +28,8 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LotteryNavigationComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	@Output() moduleSelected = new EventEmitter<LotteryTabType>();
-
 	selectedModule$: Observable<string>;
 	tabs: LotteryTab[];
-
-	private selectedModule$$ = new BehaviorSubject<LotteryTabType>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -58,22 +48,21 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 				icon: 'assets/svg/lottery.svg',
 				tooltip: this.i18n.translateString('app.lottery.navigation.lottery'),
 			},
-		];
-		if (FeatureFlags.ACHIEVEMENT_PINS) {
-			this.tabs.push({
+			{
 				id: 'achievements',
 				icon: 'assets/svg/whatsnew/achievements.svg',
 				tooltip: this.i18n.translateString('app.lottery.navigation.achievements'),
-			});
-		}
-		this.selectedModule$ = this.selectedModule$$.asObservable();
-		const prefs = await this.prefs.getPreferences();
-		this.selectModule(!!prefs.pinnedAchievementIds?.length ? 'achievements' : 'lottery');
+			},
+		];
+		this.selectedModule$ = this.store
+			.listenPrefs$((prefs) => prefs.lotteryCurrentModule)
+			.pipe(this.mapData(([module]) => module || 'lottery'));
 	}
 
-	selectModule(module: LotteryTabType) {
-		this.selectedModule$$.next(module);
-		this.moduleSelected.next(module);
+	async selectModule(module: LotteryTabType) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = { ...prefs, lotteryCurrentModule: module };
+		this.prefs.savePreferences(newPrefs);
 	}
 }
 

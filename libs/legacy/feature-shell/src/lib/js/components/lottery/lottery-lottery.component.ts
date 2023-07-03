@@ -13,9 +13,11 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	],
 	template: `
 		<div class="main-content">
-			<div class="title">
-				<div class="text" [owTranslate]="'app.lottery.title'"></div>
-				<div class="value">{{ totalPoints$ | async }}</div>
+			<div class="header">
+				<div class="points">
+					<div class="value">{{ totalPoints$ | async }}</div>
+					<div class="text" [owTranslate]="'app.lottery.lottery.points-text'"></div>
+				</div>
 			</div>
 			<div class="stats">
 				<div class="stat">
@@ -23,6 +25,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						class="label"
 						[innerHTML]="resourcesLabel$ | async"
 						[helpTooltip]="resourcesTooltip$ | async"
+						[helpTooltipClasses]="'general-theme'"
 					></div>
 					<div class="value">{{ resourcesValue$ | async }}</div>
 				</div>
@@ -31,6 +34,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						class="label"
 						[innerHTML]="battlegroundsLabel$ | async"
 						[helpTooltip]="battlegroundsTooltip$ | async"
+						[helpTooltipClasses]="'general-theme'"
 					></div>
 					<div class="value">{{ battlegroundsValue$ | async }}</div>
 				</div>
@@ -39,6 +43,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						class="label"
 						[innerHTML]="constructedLabel$ | async"
 						[helpTooltip]="constructedTooltip$ | async"
+						[helpTooltipClasses]="'general-theme'"
 					></div>
 					<div class="value">{{ constructedValue$ | async }}</div>
 				</div>
@@ -101,10 +106,10 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 					lottery.statValue(statKey).toLocaleString(this.i18n.formatCurrentLocale()),
 				),
 			),
-			statKey$.pipe(this.mapData((key) => this.i18n.translateString(`app.lottery.stats.${key}-label`))),
+			statKey$.pipe(this.mapData((key) => this.i18n.translateString(`app.lottery.lottery.stats.${key}-label`))),
 			combineLatest([statKey$, this.store.lottery$()]).pipe(
 				this.mapData(([key, lottery]) =>
-					this.i18n.translateString(`app.lottery.stats.${key}-tooltip`, {
+					this.i18n.translateString(`app.lottery.lottery.stats.${key}-tooltip`, {
 						pointsGained: lottery.pointsGainedForStat(key),
 					}),
 				),

@@ -7,8 +7,8 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 	styleUrls: ['../../../css/component/lottery/lottery-achievement.component.scss'],
 	template: `
 		<div class="achievement">
-			<div class="name" [helpTooltip]="description">{{ name }}</div>
-			<div class="progress-bar" [helpTooltip]="progressNumeric">
+			<div class="name" [helpTooltip]="description" [helpTooltipClasses]="'general-theme'">{{ name }}</div>
+			<div class="progress-bar" [helpTooltip]="progressNumeric" [helpTooltipClasses]="'general-theme'">
 				<div class="progress start" [style.width.%]="progressStartOfGameWidth"></div>
 				<div class="progress current" [style.width.%]="progressThisGameWidth"></div>
 			</div>
@@ -19,7 +19,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 export class LotteryAchievementComponent {
 	@Input() set achievement(value: AchievementsProgressTracking) {
 		this.name = value.name;
-		this.description = value.text;
+		this.description = `${value.name} - ${value.text}`;
 		this.progressStartOfGame = value.progressTotal - value.progressThisGame;
 		this.progressThisGame = value.progressThisGame;
 		this.progressTotal = value.progressTotal;

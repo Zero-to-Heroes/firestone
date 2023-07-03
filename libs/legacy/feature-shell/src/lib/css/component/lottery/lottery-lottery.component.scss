@@ -6,23 +6,51 @@
 		padding: 0;
 	}
 
+	.header {
+		height: 50px;
+		flex-shrink: 0;
+		display: flex;
+		margin-bottom: 10px;
+
+		.points {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 50%;
+			flex-shrink: 0;
+			border: 2px solid var(--default-title-color);
+			border-image: linear-gradient(90deg, #ffb948 0%, rgba(255, 185, 72, 0) 50%, #ffb948 100%) 1;
+
+			.value {
+				color: var(--default-title-color);
+				font-size: 16px;
+			}
+
+			.text {
+				font-size: 16px;
+			}
+		}
+	}
+
 	.stats {
 		padding-right: 10px;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 
 		.stat {
+			height: 30px;
+			background: rgba(255, 255, 255, 0.08);
+			margin-bottom: 5px;
 			display: flex;
-			height: 20px;
+			align-items: center;
+			padding: 10px;
 
 			.label {
 				width: 200px;
 			}
 
 			.value {
-				width: 75px;
-				text-align: right;
+				margin-left: auto;
 			}
 		}
 	}

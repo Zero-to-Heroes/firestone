@@ -16,9 +16,6 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	],
 	template: `
 		<div class="main-content">
-			<div class="title">
-				<div class="text" [owTranslate]="'app.lottery.achievements-title'"></div>
-			</div>
 			<div class="achievements" *ngIf="achievements$ | async as achievements; else emptyState">
 				<lottery-achievement
 					*ngFor="let achievement of achievements; trackBy: trackByFn"
@@ -30,6 +27,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						class="button"
 						[owTranslate]="'app.lottery.achievements-reset-button'"
 						[helpTooltip]="'app.lottery.achievements-reset-button-tooltip' | owTranslate"
+						[helpTooltipClasses]="'general-theme'"
 						(click)="resetAchievements()"
 					></button>
 				</div>
@@ -41,6 +39,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 						class="button"
 						[owTranslate]="'app.lottery.achievements-pick-for-me-button'"
 						[helpTooltip]="'app.lottery.achievements-pick-for-me-button-tooltip' | owTranslate"
+						[helpTooltipClasses]="'general-theme'"
 						(click)="pickRandomAchievements()"
 					></button>
 				</div>

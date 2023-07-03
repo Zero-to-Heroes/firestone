@@ -1,9 +1,13 @@
 .achievement {
 	display: flex;
 	align-items: center;
+	background: rgba(255, 255, 255, 0.08);
+	margin-bottom: 5px;
+	height: 30px;
+	padding: 10px;
 
 	.name {
-		width: 120px;
+		width: 180px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -17,7 +21,7 @@
 		height: 10px;
 
 		.start {
-			background: var(--color-2);
+			background: var(--color-4);
 		}
 
 		.current {
