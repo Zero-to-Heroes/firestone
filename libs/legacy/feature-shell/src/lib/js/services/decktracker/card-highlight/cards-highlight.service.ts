@@ -755,6 +755,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), taunt);
 			case CardIds.HopeOfQuelthalas:
 				return and(side(inputSide), or(inDeck, inHand), minion);
+			case CardIds.HotStreak:
+				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.Hullbreaker:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.IcebloodTower:
@@ -766,6 +768,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, spell, frost);
 			case CardIds.ImpCredibleTrousersTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fel);
+			case CardIds.IncantersFlow:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.InfantryReanimator:
 				return and(side(inputSide), inGraveyard, undead);
 			case CardIds.Insight:
