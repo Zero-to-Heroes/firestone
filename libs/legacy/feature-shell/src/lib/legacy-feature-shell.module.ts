@@ -499,6 +499,7 @@ import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/coun
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
+import { SettingsGeneralLotteryComponent } from '@components/settings/general/settings-general-lottery.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { SettingsGeneralPremiumComponent } from '@components/settings/general/settings-general-premium.component';
 import { PremiumSettingDirective } from '@components/settings/premium-setting.directive';
@@ -1599,6 +1600,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralMenuComponent,
 		SettingsGeneralLaunchComponent,
 		SettingsGeneralPremiumComponent,
+		SettingsGeneralLotteryComponent,
 		SettingsGeneralLocalizationComponent,
 		SettingsGeneralBugReportComponent,
 		SettingsGeneralThirdPartyComponent,

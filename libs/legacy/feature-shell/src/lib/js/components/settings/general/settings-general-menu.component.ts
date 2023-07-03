@@ -20,6 +20,9 @@ import {
 			<li [ngClass]="{ selected: selectedMenu === 'premium' }" (mousedown)="selectMenu('premium')">
 				<span [owTranslate]="'settings.general.menu.premium'"></span>
 			</li>
+			<li [ngClass]="{ selected: selectedMenu === 'lottery' }" (mousedown)="selectMenu('lottery')">
+				<span [owTranslate]="'settings.general.menu.lottery'"></span>
+			</li>
 			<li [ngClass]="{ selected: selectedMenu === 'localization' }" (mousedown)="selectMenu('localization')">
 				<span [owTranslate]="'settings.general.menu.localization'"></span>
 			</li>
