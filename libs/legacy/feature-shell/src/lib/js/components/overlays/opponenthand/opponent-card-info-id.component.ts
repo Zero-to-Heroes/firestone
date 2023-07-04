@@ -46,7 +46,7 @@ export class OpponentCardInfoIdComponent {
 
 	@Input() set card(value: DeckCard) {
 		// Keep the || to handle empty card id
-		const realCardId = this.normalizeEnchantment(value.cardId || value.lastAffectedByCardId || value.creatorCardId);
+		const realCardId = this.normalizeEnchantment(value.cardId, value.lastAffectedByCardId || value.creatorCardId);
 		// const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
 		this.createdBy =
 			!value.cardId && !!value.creatorCardId && publicCardCreators.includes(value.creatorCardId as CardIds);
@@ -85,14 +85,19 @@ export class OpponentCardInfoIdComponent {
 	// In some cases, it's an enchantment that creates the card. And while we want to keep that
 	// info in our internal model that reflects the actual game state, it's better to show the
 	// user the actual card
-	private normalizeEnchantment(cardId: string): string {
+	private normalizeEnchantment(cardId: string, creatorCardId: string): string {
+		if (!!cardId?.length) {
+			return cardId;
+		}
+
+		const mergedCardId = cardId || creatorCardId;
 		const card = this.allCards.getCard(cardId);
 		if (card.type !== 'Enchantment') {
 			return cardId;
 		}
 
 		// Manual exceptions
-		switch (cardId) {
+		switch (mergedCardId) {
 			case CardIds.DrawOffensivePlayTavernBrawlEnchantment:
 				return CardIds.OffensivePlayTavernBrawl;
 			case CardIds.SecretPassage_SecretEntranceEnchantment:
@@ -104,12 +109,12 @@ export class OpponentCardInfoIdComponent {
 		}
 
 		// The base case
-		const match = /(.*)e\d*$/.exec(cardId);
+		const match = /(.*)e\d*$/.exec(mergedCardId);
 		if (!!match) {
 			const rootCardId = match[1];
 			return rootCardId;
 		}
-		console.warn('unhandled enchantment', cardId);
-		return cardId;
+		console.warn('unhandled enchantment', mergedCardId);
+		return mergedCardId;
 	}
 }
