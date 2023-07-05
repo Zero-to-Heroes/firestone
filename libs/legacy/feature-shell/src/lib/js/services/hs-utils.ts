@@ -520,6 +520,7 @@ const publicCardGiftCreators = [
 	CardIds.GrimestreetInformant,
 	CardIds.Guidance_YOP_024,
 	CardIds.GuitarSoloist,
+	CardIds.HakkarTheSoulflayer_CorruptedBloodToken,
 	CardIds.HalazziTheLynx,
 	CardIds.Hallucination,
 	CardIds.YoggSaronMasterOfFate_HandOfFateToken,
