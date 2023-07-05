@@ -1,14 +1,16 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { COUNTERSPELLS } from '@services/hs-utils';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class QuestPlayedFromHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.QUEST_PLAYED;
@@ -48,6 +50,10 @@ export class QuestPlayedFromHandParser implements EventParser {
 		} as DeckCard);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
+		const handAfterCardsRemembered = isCardCountered
+			? newHand
+			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousOtherZone,
@@ -59,7 +65,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 				: cardWithZone,
 		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			hand: newHand,
+			hand: handAfterCardsRemembered,
 			otherZone: newOtherZone,
 			cardsPlayedThisTurn: isCardCountered
 				? deck.cardsPlayedThisTurn
