@@ -89,6 +89,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.FrizzKindleroost,
 	CardIds.FrostLichJaina_CORE_ICC_833,
 	CardIds.FrostLichJaina_ICC_833,
+	CardIds.UnearthedRaptor_GoldenMonkeyToken,
 	CardIds.GoruTheMightree,
 	CardIds.GraniteForgeborn,
 	CardIds.HalduronBrightwing,

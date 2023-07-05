@@ -45,6 +45,7 @@ export const modifyDecksForSpecialCards = (
 		case CardIds.LadyPrestor_SW_078:
 			return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.ArchVillainRafaam:
+		case CardIds.UnearthedRaptor_GoldenMonkeyToken:
 			return [handleArchVillainRafaam(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.OopsAllSpellsTavernBrawl:
 			return [handleOoopsAllSpells(deckState, allCards, i18n), opponentDeckState];
