@@ -41,7 +41,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
 		const lastInfluencedByCardId: CardIds =
-			gameEvent.additionalData?.lastInfluencedByCardId ?? gameEvent.additionalData?.creatorCardId;
+			gameEvent.additionalData?.creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isSpecialCasePublicWhenOpponentDraws =

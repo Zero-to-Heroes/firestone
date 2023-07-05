@@ -433,6 +433,8 @@ const publicCardGiftCreators = [
 	CardIds.DiscJockey,
 	CardIds.DispossessedSoul,
 	CardIds.DivineIlluminationTavernBrawl,
+	CardIds.Doomerang_CORE_ICC_233,
+	CardIds.Doomerang_ICC_233,
 	CardIds.DraconicLackey,
 	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
