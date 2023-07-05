@@ -31,6 +31,13 @@ export const inDeck = inZoneName('deck');
 export const inHand = inZoneName('hand');
 export const inOther = inZoneName('other');
 export const inGraveyard = inZoneName('graveyard');
+export const inPlay = (input: SelectorInput): boolean =>
+	input.deckCard.zone !== 'BURNED' &&
+	input.deckCard.zone !== 'REMOVEDFROMGAME' &&
+	input.deckCard.zone !== 'DISCARD' &&
+	input.deckCard.zone !== 'SETASIDE' &&
+	input.deckCard.zone !== 'TRANSFORMED_INTO_OTHER' &&
+	and(inOther, not(inGraveyard))(input);
 
 export const side =
 	(side: 'player' | 'opponent' | 'duels') =>

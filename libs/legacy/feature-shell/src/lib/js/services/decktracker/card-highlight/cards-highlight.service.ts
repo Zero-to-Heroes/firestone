@@ -51,6 +51,7 @@ import {
 	inGraveyard,
 	inHand,
 	inOther,
+	inPlay,
 	isSi7,
 	lastAffectedByCardId,
 	legendary,
@@ -754,7 +755,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(side(inputSide), taunt);
 			case CardIds.HopeOfQuelthalas:
-				return and(side(inputSide), or(inDeck, inHand), minion);
+				return and(side(inputSide), or(inDeck, inHand, inPlay), minion);
 			case CardIds.HotStreak:
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.Hullbreaker:
