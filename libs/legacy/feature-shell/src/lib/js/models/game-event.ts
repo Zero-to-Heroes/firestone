@@ -236,6 +236,7 @@ export interface EntityGameState {
 	readonly cardId: string;
 	readonly attack: number;
 	readonly health: number;
+	readonly durability: number;
 	readonly tags: readonly { Name: number; Value: number }[];
 	readonly enchantments: readonly EnchantmentGameState[];
 }
