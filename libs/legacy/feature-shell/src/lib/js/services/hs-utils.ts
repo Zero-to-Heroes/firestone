@@ -235,6 +235,7 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.FlyBy_KadoomBotToken,
 	CardIds.HakkarTheSoulflayer_CorruptedBloodToken,
 	CardIds.IronJuggernaut_BurrowingMineToken,
+	CardIds.PlaguedGrain_GrainCrateCoreToken,
 	CardIds.PortalKeeper_FelhoundPortalToken,
 	CardIds.SandTrap,
 	CardIds.SchoolSpirits_SoulFragmentToken,
