@@ -645,6 +645,7 @@ const publicCardGiftCreators = [
 	CardIds.PotionmasterPutricide,
 	CardIds.PotionOfIllusion,
 	CardIds.PowerChordSynchronize,
+	CardIds.PowerOfCreation,
 	CardIds.ForTheHorde_PowerOfTheHordeTavernBrawlToken,
 	CardIds.PozzikAudioEngineer,
 	CardIds.Prestidigitation,
