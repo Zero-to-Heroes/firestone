@@ -113,14 +113,14 @@ export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
 	const result =
 		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||
 		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
-	console.debug(
-		'cardPlayedThisMatch',
-		input.cardId,
-		input.entityId,
-		result,
-		input.deckState?.cardsPlayedThisMatch,
-		input,
-	);
+	// console.debug(
+	// 	'cardPlayedThisMatch',
+	// 	input.cardId,
+	// 	input.entityId,
+	// 	result,
+	// 	input.deckState?.cardsPlayedThisMatch,
+	// 	input,
+	// );
 	return result;
 };
 
