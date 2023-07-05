@@ -7,6 +7,7 @@ import { SecretOption } from '../../../models/decktracker/secret-option';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -109,8 +110,18 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// 	copiedCard,
 		// 	newCopy,
 		// );
+
+		// We don't want to create a new card when the card is simply moved around in the deck.
+		// This is the case when the opponent dredges in our deck - we don't know what they chose, so we can't use
+		// this information to simply update the card position. We don't want to create a new card though, as
+		// there is no new card.
+		const isCardMovedAroundInPlayerDeck =
+			isCopiedPlayer &&
+			!isPlayer &&
+			DREDGE_IN_OPPONENT_DECK_CARD_IDS.includes(newCopy?.lastAffectedByCardId as CardIds);
+
 		const newCopiedDeck =
-			copiedCardZone === Zone.DECK
+			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
 				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
 						cost: updatedCopiedCardWithPosition.manaCost,
 				  })

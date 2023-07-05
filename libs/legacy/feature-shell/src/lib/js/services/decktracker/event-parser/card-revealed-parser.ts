@@ -40,7 +40,7 @@ export class CardRevealedParser implements EventParser {
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
 			temporaryCard: true,
-			lastAffectedByCardId: gameEvent.additionalData.creatorCardId,
+			lastAffectedByCardId: gameEvent.additionalData.creatorCardId || gameEvent.additionalData.originEntityCardId,
 			positionFromBottom:
 				gameEvent.additionalData.revealedFromBlock === 'DREDGE'
 					? DeckCard.deckIndexFromBottom + 3 - gameEvent.additionalData.indexInBlock

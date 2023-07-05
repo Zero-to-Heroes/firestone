@@ -22,10 +22,18 @@ export class CardDredgedParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		// console.debug('[debug] card dredged', cardId, controllerId, localPlayer, entityId, gameEvent, currentState);
 
+		const isPlayerBeforeReverse = controllerId === localPlayer.PlayerId;
 		const isPlayer = reverseIfNeeded(
 			controllerId === localPlayer.PlayerId,
 			gameEvent.additionalData.lastInfluencedByCardId,
 		);
+		// Opponent dredges from your own deck, and supporting this is a nightmare.
+		// Moreover, you'll draw the card at the beginning of the next turn, so it's not super important to support
+		// this properly
+		if (isPlayer && DREDGE_IN_OPPONENT_DECK_CARD_IDS.includes(gameEvent.additionalData.lastInfluencedByCardId)) {
+			return currentState;
+		}
+
 		// Because of the way the info is in the logs, when we dredge for our opponent, the card itself
 		// is flagged as belonging to the player who dredged
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -103,12 +111,10 @@ export class CardDredgedParser implements EventParser {
 }
 
 export const reverseIfNeeded = (isPlayer: boolean, lastInfluencedByCardId: string): boolean => {
-	switch (lastInfluencedByCardId) {
-		case CardIds.DisarmingElemental:
-		case CardIds.FindTheImposter_SpyOMaticToken:
-			// case CardIds.Garrote:
-			return !isPlayer;
-		default:
-			return isPlayer;
+	if (DREDGE_IN_OPPONENT_DECK_CARD_IDS.includes(lastInfluencedByCardId as CardIds)) {
+		return !isPlayer;
 	}
+	return isPlayer;
 };
+
+export const DREDGE_IN_OPPONENT_DECK_CARD_IDS = [CardIds.DisarmingElemental, CardIds.FindTheImposter_SpyOMaticToken];

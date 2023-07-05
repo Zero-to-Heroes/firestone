@@ -70,15 +70,16 @@ export class CardDrawParser implements EventParser {
 		// 	deck,
 		// );
 		const card = useTopOfDeckToIdentifyCard
-			? [...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
+			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: useBottomOfDeckToIdentifyCard
-			? [...deck.deck]
+			? deck.deck
 					.filter((c) => c.positionFromBottom != null)
 					// Because Finley puts the cards at the bottom before drawing
 					.filter((c) => c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId)
 					.sort((c) => c.positionFromBottom)[0]
 			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
+
 		// console.debug(
 		// 	'drawing card',
 		// 	card,
@@ -132,10 +133,13 @@ export class CardDrawParser implements EventParser {
 			manaCost: isCardInfoPublic ? card.manaCost ?? card.manaCost : null,
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 		} as DeckCard);
-		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
+		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
 
-		const newDeck: readonly DeckCard[] = isCardInfoPublic
+		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
+		// This happens when the top card is not identified, eg when the opponent plays Disarming Elemental
+		const drawFromTop = !useTopOfDeckToIdentifyCard && previousDeck.filter((c) => c.positionFromTop != null);
+		let newDeck: readonly DeckCard[] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
 					previousDeck,
 					updatedCardId,
@@ -147,6 +151,17 @@ export class CardDrawParser implements EventParser {
 					},
 			  )[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
+		// console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck);
+
+		if (drawFromTop) {
+			const topCard = newDeck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0];
+			const isTopCardUnknown = !topCard?.cardId?.length;
+			// console.debug('removing top card from deck?', isTopCardUnknown, topCard, newDeck);
+			if (!!topCard && isTopCardUnknown) {
+				// console.debug('removing top card from deck', topCard, newDeck);
+				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
+			}
+		}
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
