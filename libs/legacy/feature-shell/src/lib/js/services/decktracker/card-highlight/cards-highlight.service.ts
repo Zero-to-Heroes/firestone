@@ -980,7 +980,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.RevivePet:
 				return and(side(inputSide), inGraveyard, minion, beast);
 			case CardIds.Rewind_ETC_532:
-				return and(side(inputSide), spellPlayedThisMatch);
+				return and(side(inputSide), spellPlayedThisMatch, not(cardIs(CardIds.Rewind_ETC_532)));
 			case CardIds.RhoninsScryingOrbTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.RighteousReservesTavernBrawl:
