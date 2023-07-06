@@ -568,7 +568,7 @@ export class GameStateService {
 			new QuestDestroyedParser(this.helper),
 			new QuestCompletedParser(this.helper),
 			new QuestPlayedFromDeckParser(this.helper),
-			new QuestPlayedFromHandParser(this.helper),
+			new QuestPlayedFromHandParser(this.helper, this.allCards),
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
