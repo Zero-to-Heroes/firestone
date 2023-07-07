@@ -10,6 +10,7 @@ import {
 	GameFormat,
 	Race,
 	ReferenceCard,
+	bannedTwistCards,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
@@ -215,7 +216,10 @@ export class ConstructedDeckbuilderCardsComponent
 					.filter((card) => card.collectible)
 					.filter((card) => validSets.includes(card.set?.toLowerCase()))
 					.filter((card) =>
-						currentFormat === 'twist' ? !card.classes.includes(CardClass[CardClass.NEUTRAL]) : true,
+						currentFormat === 'twist'
+							? !card.classes.includes(CardClass[CardClass.NEUTRAL]) &&
+							  !bannedTwistCards.includes(card.id as CardIds)
+							: true,
 					)
 					.filter((card) => {
 						const searchCardClasses: readonly CardClass[] = [
