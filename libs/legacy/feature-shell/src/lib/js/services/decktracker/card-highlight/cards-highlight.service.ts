@@ -369,6 +369,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
+			case CardIds.AmalgamOfTheDeep:
+				return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 			case CardIds.AmberWhelp:
 				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 			case CardIds.AmuletOfUndying:
@@ -379,6 +381,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, pirate);
 			case CardIds.Anubrekhan_RLK_659:
 				return and(side(inputSide), or(inDeck, inHand), minion);
+			case CardIds.ApexisBlast:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.ArcaneArtificer:
 			case CardIds.ArcaneArtificerCore:
 				return and(side(inputSide), or(inDeck, inHand), spell);
@@ -596,6 +600,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inHand, paladin);
 			case CardIds.ElixirOfVigorTavernBrawl:
 				return and(side(inputSide), minion);
+			case CardIds.Embiggen:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.EnduranceTrainingTavernBrawl:
 				return and(side(inputSide), minion, taunt);
 			case CardIds.EternalServitude_CORE_ICC_213:
@@ -668,8 +674,12 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 						CardIds.ContagionConcoctionTavernBrawl,
 					),
 				);
+			case CardIds.Gigantotem:
+				return and(side(inputSide), or(inDeck, inHand), totem);
 			case CardIds.Glaivetar:
 				return and(side(inputSide), inDeck, outcast);
+			case CardIds.GlowflySwarm:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.GluthSicleTavernBrawl:
 				return and(side(inputSide), inDeck, minion, undead);
 			case CardIds.GluthTavernBrawl_PVPDR_Sai_T1:
@@ -1094,6 +1104,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.SpiritGuide:
 				return and(side(inputSide), inDeck, spell, or(shadow, holy));
+			case CardIds.SplittingAxe:
+				return and(side(inputSide), or(inDeck, inHand), totem);
 			case CardIds.SpreadingSaplingsTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, nature);
 			case CardIds.SpringTheTrap:
@@ -1192,10 +1204,17 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, neutral);
 			case CardIds.TheCurator:
 				return and(side(inputSide), inDeck, minion, or(beast, dragon, murloc));
+			case CardIds.TheFistOfRaDen:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.ThePurator:
 				return and(side(inputSide), inDeck, minion, not(tribeless));
+			case CardIds.TheStonewright:
+				return and(side(inputSide), or(inDeck, inHand), totem);
 			case CardIds.TheUpperHand:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.ThingFromBelow:
+			case CardIds.ThingFromBelowCore:
+				return and(side(inputSide), or(inDeck, inHand), totem);
 			case CardIds.Thoribelore:
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.ThornmantleMusician:
