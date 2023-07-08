@@ -27,7 +27,7 @@ declare let OwAd: any;
 						<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 					</svg>
 				</i>
-				<div class="tip" *ngIf="tip" [innerHTML]="tip"></div>
+				<ad-tip class="tip" *ngIf="tip"></ad-tip>
 			</div>
 			<div class="ads" id="ads-div-{{ this.adId }}"></div>
 		</div>
@@ -37,7 +37,7 @@ declare let OwAd: any;
 export class SingleAdComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
-	@Input() tip: string;
+	@Input() tip: boolean;
 	@Input() adId: string;
 	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
 	@Input() overlayAd = false;

@@ -453,6 +453,7 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
@@ -1072,6 +1073,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		AdsComponent,
 		SingleAdComponent,
+		AdTipComponent,
 
 		DeckCardComponent,
 		DeckTrackerDeckListComponent,
