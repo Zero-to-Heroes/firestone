@@ -7,6 +7,7 @@ import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { LotteryProcessor } from './events/_processor';
 import { LotteryCardPlayedProcessor } from './events/lottery-card-played-processor';
+import { LotteryDamageWithSpellsProcessor } from './events/lottery-damage-with-spells-processor';
 import { LotteryResourcesUpdateProcessor } from './events/lottery-resources-update-processor';
 import { LotteryShouldTrackProcessor } from './events/lottery-should-track-processor';
 import { LotteryTurnStartProcessor } from './events/lottery-turn-start-processor';
@@ -27,6 +28,7 @@ export class LotteryService {
 		[GameEvent.CARD_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
 		[GameEvent.SECRET_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
 		[GameEvent.QUEST_PLAYED]: new LotteryCardPlayedProcessor(this.allCards),
+		[GameEvent.DAMAGE]: new LotteryDamageWithSpellsProcessor(this.allCards),
 	};
 
 	private eventsQueue$$ = new BehaviorSubject<GameEvent | null>(null);

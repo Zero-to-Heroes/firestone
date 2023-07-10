@@ -6,7 +6,10 @@ export class LotteryState {
 
 	readonly resourcesUsedThisTurn: number = 0;
 	readonly totalResourcesUsed: number = 0;
+
 	readonly spellsPlayed: number = 0;
+	readonly damageWithSpells: number = 0;
+
 	readonly quilboarsPlayed: number = 0;
 	readonly beastsPlayed: number = 0;
 	readonly demonsPlayed: number = 0;
