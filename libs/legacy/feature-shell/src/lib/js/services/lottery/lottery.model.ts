@@ -6,8 +6,17 @@ export class LotteryState {
 
 	readonly resourcesUsedThisTurn: number = 0;
 	readonly totalResourcesUsed: number = 0;
-	readonly quilboarsPlayed: number = 0;
 	readonly spellsPlayed: number = 0;
+	readonly quilboarsPlayed: number = 0;
+	readonly beastsPlayed: number = 0;
+	readonly demonsPlayed: number = 0;
+	readonly dragonsPlayed: number = 0;
+	readonly mechsPlayed: number = 0;
+	readonly murlocsPlayed: number = 0;
+	readonly piratesPlayed: number = 0;
+	readonly elementalsPlayed: number = 0;
+	readonly nagasPlayed: number = 0;
+	readonly undeadPlayed: number = 0;
 
 	private config: LotterySeasonConfig;
 
@@ -40,6 +49,24 @@ export class LotteryState {
 				return this.totalResourcesUsed + this.resourcesUsedThisTurn;
 			case 'quilboarsPlayed':
 				return this.quilboarsPlayed;
+			case 'beastsPlayed':
+				return this.beastsPlayed;
+			case 'demonsPlayed':
+				return this.demonsPlayed;
+			case 'dragonsPlayed':
+				return this.dragonsPlayed;
+			case 'mechsPlayed':
+				return this.mechsPlayed;
+			case 'murlocsPlayed':
+				return this.murlocsPlayed;
+			case 'piratesPlayed':
+				return this.piratesPlayed;
+			case 'elementalsPlayed':
+				return this.elementalsPlayed;
+			case 'nagasPlayed':
+				return this.nagasPlayed;
+			case 'undeadPlayed':
+				return this.undeadPlayed;
 			case 'spellsPlayed':
 				return this.spellsPlayed;
 			default:
@@ -85,5 +112,16 @@ export interface LotteryConfigResourceStat {
 	readonly points: number;
 }
 
-// Don't fix the typo in Quilboars, as it would break backward compatibility
-export type LotteryConfigResourceStatType = 'totalResourcesUsed' | 'quilboarsPlayed' | 'spellsPlayed';
+export type LotteryConfigResourceStatType =
+	| 'totalResourcesUsed'
+	| 'spellsPlayed'
+	| 'quilboarsPlayed'
+	| 'beastsPlayed'
+	| 'demonsPlayed'
+	| 'dragonsPlayed'
+	| 'mechsPlayed'
+	| 'murlocsPlayed'
+	| 'piratesPlayed'
+	| 'elementalsPlayed'
+	| 'nagasPlayed'
+	| 'undeadPlayed';

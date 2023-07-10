@@ -19,12 +19,25 @@ export class LotteryCardPlayedProcessor implements LotteryProcessor {
 			return currentState;
 		}
 
-		const isQuilboar = this.allCards.getCard(cardId).races?.includes(Race[Race.QUILBOAR]);
 		const isSpell = this.allCards.getCard(cardId).type === 'Spell';
+		const cardRaces = this.allCards.getCard(cardId).races;
 
 		return currentState.update({
-			quilboarsPlayed: isQuilboar ? currentState.quilboarsPlayed + 1 : currentState.quilboarsPlayed,
+			quilboarsPlayed: this.cardsPlayedForRace(cardRaces, Race.QUILBOAR, currentState.quilboarsPlayed),
+			beastsPlayed: this.cardsPlayedForRace(cardRaces, Race.BEAST, currentState.beastsPlayed),
+			demonsPlayed: this.cardsPlayedForRace(cardRaces, Race.DEMON, currentState.demonsPlayed),
+			dragonsPlayed: this.cardsPlayedForRace(cardRaces, Race.DRAGON, currentState.dragonsPlayed),
+			mechsPlayed: this.cardsPlayedForRace(cardRaces, Race.MECH, currentState.mechsPlayed),
+			murlocsPlayed: this.cardsPlayedForRace(cardRaces, Race.MURLOC, currentState.murlocsPlayed),
+			piratesPlayed: this.cardsPlayedForRace(cardRaces, Race.PIRATE, currentState.piratesPlayed),
+			elementalsPlayed: this.cardsPlayedForRace(cardRaces, Race.ELEMENTAL, currentState.elementalsPlayed),
+			nagasPlayed: this.cardsPlayedForRace(cardRaces, Race.NAGA, currentState.nagasPlayed),
+			undeadPlayed: this.cardsPlayedForRace(cardRaces, Race.UNDEAD, currentState.undeadPlayed),
 			spellsPlayed: isSpell ? currentState.spellsPlayed + 1 : currentState.spellsPlayed,
 		});
+	}
+
+	private cardsPlayedForRace(cardRaces: readonly string[], race: Race, field: number): number {
+		return cardRaces?.includes(Race[race]) ? field + 1 : field;
 	}
 }
