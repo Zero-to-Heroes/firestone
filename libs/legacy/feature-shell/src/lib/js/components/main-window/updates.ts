@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.5.9',
+		version: '11.5.10',
 		force: false,
 		sections: [
 			// {
@@ -50,20 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'misc',
-								text: `I have updated the visual design for the lottery widget. It looks much better now, and the information is easier to see`,
-							},
-							{
-								type: 'content',
-								text: `The app is now updated for 26.6.2`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where many cards were missing the "gift" icon in the opponent's hand.`,
+								text: `This lottery season will be a short one! Seasons are 2 week long from now on (with 2 winners for each), and should have a bit more varied tasks. I'm still working on adding new tasks, so if you have any interesting ideas, please hit me up :)`,
 							},
 						],
 					},
@@ -74,45 +61,15 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the current equipped weapon's durability was not taken into account when computing total damage on board (this is only relevant when the hero has Windfury).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Symphony of Sins token were not tracked properly (the logs do some pretty unusual stuff for these).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Commander Sivara would not remember the quests that you played.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the tracker would get lost when the opponent dredges from our deck (with Disarming Elemental or Spy-o-Matic).`,
-							},
-							{
-								type: 'content',
-								text: `Add several oracles and card highlights, and fix a few existing ones (Hope of Quel'Delar, Rewind, Doomerang, Flesh Behemoth).`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the total dust cost for high-wins decks was incorrect.`,
-							},
-						],
-					},
-					{
 						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `(Premium) Premium users can now rescale the lottery / achievements tracker widget to make it smaller.`,
+								text: `You can now change the opacity of the Lottery widget (apart from the ad space, which is always at 100%). Go to Settings > General > Lottery and change the opacity slider.`,
+							},
+							{
+								type: 'feature',
+								text: `You can now see the time left in the current season.`,
 							},
 						],
 					},
