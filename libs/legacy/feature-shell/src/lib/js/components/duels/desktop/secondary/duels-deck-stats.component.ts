@@ -61,10 +61,10 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 	}
 
 	ngAfterContentInit() {
-		this.deckInfo$ = combineLatest(
+		this.deckInfo$ = combineLatest([
 			this.store.duelsDecks$(),
+			this.store.duelsTopDecks$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,
@@ -74,25 +74,16 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
-		).pipe(
+		]).pipe(
 			filter(
-				([decks, [topDecks, deckDetails, deckstring, deckId]]) =>
+				([decks, topDecks, [deckDetails, deckstring, deckId]]) =>
 					(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 			),
 			this.mapData(
 				([
 					decks,
-					[
-						topDecks,
-						deckDetails,
-						deckstring,
-						deckId,
-						timeFilter,
-						classFilter,
-						gameMode,
-						duelsDeckDeletes,
-						patch,
-					],
+					topDecks,
+					[deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, duelsDeckDeletes, patch],
 				]) =>
 					getCurrentDeck(
 						decks,

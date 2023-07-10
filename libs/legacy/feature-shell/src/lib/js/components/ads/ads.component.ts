@@ -9,6 +9,7 @@ import {
 	Output,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { FeatureFlags } from '../../services/feature-flags';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -43,7 +44,11 @@ declare let amplitude: any;
 			</div>
 
 			<div class="ad-container bottom-ads">
-				<single-ad [adId]="'bottom'" [tip]="true" (adVisibility)="onAdVisibilityChanged($event)"></single-ad>
+				<single-ad
+					[adId]="'bottom'"
+					[tip]="showBottomTip"
+					(adVisibility)="onAdVisibilityChanged($event)"
+				></single-ad>
 			</div>
 		</div>
 	`,
@@ -53,6 +58,8 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
 	@Input() showTopAd = false;
+
+	showBottomTip = FeatureFlags.APP_TIPS;
 
 	topAdSize = { width: 300, height: 250 };
 

@@ -27,6 +27,7 @@ import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { GameState } from '../../models/decktracker/game-state';
+import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
@@ -43,6 +44,7 @@ import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
+import { DuelsTopDeckService } from '../duels/duels-top-decks.service';
 import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
@@ -51,7 +53,7 @@ import { CollectionBootstrapService } from '../mainwindow/store/collection-boots
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
-import { arraysEqual } from '../utils';
+import { arraysEqual, sleep } from '../utils';
 import { filterBgsMatchStats } from './bgs-ui-helper';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
@@ -85,11 +87,12 @@ export class AppUiStoreService extends Store<Preferences> {
 	private modsConfig: BehaviorSubject<ModsConfig>;
 
 	private bgsMetaStatsHero: Observable<readonly BgsMetaHeroStatTierItem[]>;
-	private duelsHeroStats: Observable<readonly DuelsHeroPlayerStat[]>;
 	private gameStats: Observable<readonly GameStat[]>;
 	private decks: Observable<readonly DeckSummary[]>;
+	private duelsHeroStats: Observable<readonly DuelsHeroPlayerStat[]>;
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
+	private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
 	private mails: Observable<MailState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
@@ -351,6 +354,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return result;
 	}
 
+	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+		return this.duelsTopDecks;
+	}
+
 	public mails$(): Observable<MailState> {
 		this.debugCall('mails$');
 		return this.mails.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
@@ -437,7 +444,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
-	private init() {
+	private async init() {
 		// Has to be first, since other observables depend on it
 		this.initGameStats();
 		// Needs to be before duels stuff
@@ -461,6 +468,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initAchievementsProgressTracking();
 		this.initPackStats();
 		this.initCardsHistory();
+		await this.initDuelsTopDecks();
 		this.initialized = true;
 	}
 
@@ -548,6 +556,13 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.duelsDecks = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsDecks$.pipe(
 			shareReplay(1),
 		);
+	}
+
+	private async initDuelsTopDecks() {
+		while (!this.duelsTopDecks) {
+			this.duelsTopDecks = (this.ow.getMainWindow().duelsTopDeckService as DuelsTopDeckService).topDeck$;
+			await sleep(50);
+		}
 	}
 
 	private initDuelsRuns() {

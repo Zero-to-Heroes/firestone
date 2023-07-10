@@ -7,13 +7,10 @@ import { DuelsConfig } from '@models/duels/duels-config';
 import { DuelsDeckbuilder } from '@models/duels/duels-deckbuilder';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
 import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
-import { AppInjector } from '../../services/app-injector';
 import { ExtendedDuelsStatDecks } from '../../services/duels/duels-state-builder.service';
-import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
-import { DuelsGroupedDecks } from './duels-grouped-decks';
 import { DuelsDeckStat } from './duels-player-stats';
 
 export class DuelsState {
@@ -48,7 +45,7 @@ export class DuelsState {
 
 	readonly initComplete: boolean;
 
-	readonly topDecks: readonly DuelsGroupedDecks[] = undefined;
+	// readonly topDecks: readonly DuelsGroupedDecks[] = undefined;
 
 	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);
@@ -58,19 +55,19 @@ export class DuelsState {
 		return Object.assign(new DuelsState(), this, base);
 	}
 
-	public getTopDecks(): readonly DuelsGroupedDecks[] {
-		if (!this.initComplete) {
-			return this.topDecks;
-		}
-		if (this.topDecks === undefined) {
-			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
-			if (service) {
-				(this.topDecks as readonly DuelsGroupedDecks[]) = [];
-				service.requestLoad('duels-top-decks');
-			}
-		}
-		return this.topDecks;
-	}
+	// public getTopDecks(): readonly DuelsGroupedDecks[] {
+	// 	if (!this.initComplete) {
+	// 		return this.topDecks;
+	// 	}
+	// 	if (this.topDecks === undefined) {
+	// 		const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
+	// 		if (service) {
+	// 			(this.topDecks as readonly DuelsGroupedDecks[]) = [];
+	// 			service.requestLoad('duels-top-decks');
+	// 		}
+	// 	}
+	// 	return this.topDecks;
+	// }
 
 	public findCategory(categoryId: string) {
 		const result = this.categories?.find((cat) => cat.id === categoryId);

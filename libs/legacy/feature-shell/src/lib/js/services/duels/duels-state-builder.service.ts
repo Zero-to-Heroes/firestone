@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
-import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
+import { DeckDefinition } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
@@ -20,7 +20,7 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
 import { DuelsBucketsData, DuelsState } from '../../models/duels/duels-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
@@ -29,13 +29,12 @@ import { Events } from '../events.service';
 import { HsGameMetaData, runLoop } from '../game-mode-data.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
-import { DuelsTopDecksUpdateEvent } from '../mainwindow/store/events/duels/duels-top-decks-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 // const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json';
-const DUELS_GLOBAL_STATS_DECKS =
-	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
+// const DUELS_GLOBAL_STATS_DECKS =
+// 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-buckets.gz.json';
 const DUELS_RUN_INFO_URL = 'https://cc3tc224po5orwembimzyaxqhy0khyij.lambda-url.us-west-2.on.aws/';
@@ -65,12 +64,6 @@ export class DuelsStateBuilderService {
 
 	private async init() {
 		await this.store.initComplete();
-
-		// When the cards are updated, refresh the top decks
-		this.store
-			.sets$()
-			.pipe(debounceTime(10000), distinctUntilChanged())
-			.subscribe(async (collectionState) => this.updateTopDecks());
 
 		this.initDuelsInfoObservable();
 
@@ -192,40 +185,15 @@ export class DuelsStateBuilderService {
 		return [stepResults, rewardsResults];
 	}
 
-	public async loadTopDecks(): Promise<ExtendedDuelsStatDecks> {
-		const result: DuelsStatDecks = await this.api.callGetApi(DUELS_GLOBAL_STATS_DECKS);
-		console.log('[duels-state-builder] loaded global stats deck', result?.decks?.length);
-		return {
-			lastUpdateDate: result.lastUpdateDate,
-			decks: result.decks.map((d) => {
-				const deckDefinition = decode(d.decklist);
-				return {
-					...d,
-					deckDefinition: deckDefinition,
-					allCardNames: deckDefinition.cards
-						.map((pair) => pair[0])
-						.map((dbfId) => this.allCards.getCard(dbfId)?.name)
-						.filter((name) => !!name),
-				};
-			}),
-		};
-	}
-
 	public async loadConfig(): Promise<DuelsConfig> {
 		const result: DuelsConfig = await this.api.callGetApi(DUELS_CONFIG_URL);
 		console.log('[duels-state-builder] loaded duels config');
 		return result;
 	}
 
-	public async updateTopDecks() {
-		await this.store.initComplete();
-		this.store.send(new DuelsTopDecksUpdateEvent());
-	}
-
 	public initState(
 		initialState: DuelsState,
 		globalStats: DuelsStat,
-		globalStatsDecks: ExtendedDuelsStatDecks,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		duelsConfig: DuelsConfig,
@@ -240,7 +208,6 @@ export class DuelsStateBuilderService {
 			categories: categories,
 			globalStats: globalStats,
 			config: duelsConfig,
-			globalStatsDecks: globalStatsDecks,
 			// topDecks: topDecks,
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,

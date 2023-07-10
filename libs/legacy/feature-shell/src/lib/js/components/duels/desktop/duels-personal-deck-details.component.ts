@@ -115,10 +115,10 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 					: (allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[]),
 			),
 		);
-		this.deck$ = combineLatest(
+		this.deck$ = combineLatest([
 			this.store.duelsDecks$(),
+			this.store.duelsTopDecks$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,
@@ -128,25 +128,16 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
-		).pipe(
+		]).pipe(
 			filter(
-				([decks, [topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]]) =>
+				([decks, topDecks, [deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]]) =>
 					(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 			),
 			this.mapData(
 				([
 					decks,
-					[
-						topDecks,
-						deckDetails,
-						deckstring,
-						deckId,
-						timeFilter,
-						heroesFilter,
-						gameMode,
-						duelsDeckDeletes,
-						patch,
-					],
+					topDecks,
+					[deckDetails, deckstring, deckId, timeFilter, heroesFilter, gameMode, duelsDeckDeletes, patch],
 				]) =>
 					getCurrentDeck(
 						decks,

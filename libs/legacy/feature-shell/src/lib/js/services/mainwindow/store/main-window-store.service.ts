@@ -56,6 +56,7 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
+import { DuelsTopDeckService } from '../../duels/duels-top-decks.service';
 import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
@@ -160,7 +161,6 @@ import { DuelsToggleShowHiddenPersonalDecksEvent } from './events/duels/duels-to
 import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
 import { DuelsTopDecksHeroFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
-import { DuelsTopDecksUpdateEvent } from './events/duels/duels-top-decks-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSearchEvent } from './events/duels/duels-treasure-search-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
@@ -323,7 +323,6 @@ import { DuelsToggleShowHiddenPersonalDecksProcessor } from './processors/duels/
 import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
 import { DuelsHeroFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
 import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
-import { DuelsTopDecksUpdateProcessor } from './processors/duels/duels-top-decks-update-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSearchProcessor } from './processors/duels/duels-treasure-search-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
@@ -440,6 +439,7 @@ export class MainWindowStoreService {
 		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 		private readonly setsManager: SetsManagerService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
+		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -826,10 +826,6 @@ export class MainWindowStoreService {
 			],
 			// Duels
 			[DuelsStateUpdatedEvent.eventName(), new DuelsStateUpdatedProcessor()],
-			[
-				DuelsTopDecksUpdateEvent.eventName(),
-				new DuelsTopDecksUpdateProcessor(this.cards, this.i18n, this.setsManager),
-			],
 			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor()],
 			[DuelsSelectCategoryEvent.eventName(), new DuelsSelectCategoryProcessor()],
 			[
@@ -882,7 +878,10 @@ export class MainWindowStoreService {
 				DuelsPersonalDeckRenameEvent.eventName(),
 				new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),
 			],
-			[DuelsViewDeckDetailsEvent.eventName(), new DuelsViewDeckDetailsProcessor(this.events, this.i18n)],
+			[
+				DuelsViewDeckDetailsEvent.eventName(),
+				new DuelsViewDeckDetailsProcessor(this.events, this.i18n, this.duelsTopDecks),
+			],
 			[
 				DuelsViewPersonalDeckDetailsEvent.eventName(),
 				new DuelsViewPersonalDeckDetailsProcessor(this.prefs, this.i18n, this.duelsDeckProvider),

@@ -7,7 +7,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -44,9 +44,9 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 	}
 
 	ngAfterContentInit(): void {
-		this.sub$$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.getTopDecks(),
+		this.sub$$ = combineLatest([
+			this.store.duelsTopDecks$(),
+			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.decksSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
@@ -57,22 +57,25 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActivePassiveTreasuresFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
+			),
+		])
 			.pipe(
-				filter(([topDecks, mmrPercentiles]) => !!topDecks?.length && !!mmrPercentiles?.length),
+				filter(([topDecks, [mmrPercentiles]]) => !!topDecks?.length && !!mmrPercentiles?.length),
 				this.mapData(
 					([
 						topDecks,
-						mmrPercentiles,
-						searchString,
-						mmrFilter,
-						classFilter,
-						heroPowerFilter,
-						sigTreasureFilter,
-						timeFilter,
-						dustFilter,
-						passivesFilter,
-						patch,
+						[
+							mmrPercentiles,
+							searchString,
+							mmrFilter,
+							classFilter,
+							heroPowerFilter,
+							sigTreasureFilter,
+							timeFilter,
+							dustFilter,
+							passivesFilter,
+							patch,
+						],
 					]) => {
 						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
 						const result = topDecks

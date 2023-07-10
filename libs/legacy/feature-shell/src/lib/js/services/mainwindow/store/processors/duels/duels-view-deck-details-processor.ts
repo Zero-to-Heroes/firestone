@@ -1,14 +1,20 @@
+import { DuelsDeckStat } from '@legacy-import/src/lib/js/models/duels/duels-player-stats';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { DuelsTopDeckService } from '../../../../duels/duels-top-decks.service';
 import { Events } from '../../../../events.service';
 import { formatClass } from '../../../../hs-utils';
 import { DuelsViewDeckDetailsEvent } from '../../events/duels/duels-view-deck-details-event';
 import { Processor } from '../processor';
 
 export class DuelsViewDeckDetailsProcessor implements Processor {
-	constructor(private readonly events: Events, private readonly i18n: LocalizationService) {}
+	constructor(
+		private readonly events: Events,
+		private readonly i18n: LocalizationService,
+		private readonly topDecks: DuelsTopDeckService,
+	) {}
 
 	public async process(
 		event: DuelsViewDeckDetailsEvent,
@@ -16,8 +22,8 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const deck = currentState.duels
-			.getTopDecks()
+		const topDecks = this.topDecks.replaySubject.getValue();
+		const deck = topDecks
 			?.map((grouped) => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
 			.find((deck) => deck.id === event.deckId);
@@ -36,17 +42,12 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 					treasureSearchString: null,
 					heroSearchString: null,
 				} as NavigationDuels),
-				text: this.getDeckName(currentState, event.deckId),
+				text: this.getDeckName(deck),
 			} as NavigationState),
 		];
 	}
 
-	private getDeckName(currentState: MainWindowState, deckId: number): string {
-		const deck = currentState?.duels
-			?.getTopDecks()
-			?.map((grouped) => grouped.decks)
-			?.reduce((a, b) => a.concat(b), [])
-			?.find((deck) => deck.id === deckId);
+	private getDeckName(deck: DuelsDeckStat): string {
 		if (!deck) {
 			return null;
 		}

@@ -29,8 +29,7 @@ export class LazyDataInitService {
 		private readonly questsService: QuestsService,
 		private readonly streamsService: LiveStreamsService,
 		private readonly tavernBrawlService: TavernBrawlService,
-	) {
-	}
+	) {}
 
 	public async requestLoad(dataType: StateDataType) {
 		switch (dataType) {
@@ -48,8 +47,6 @@ export class LazyDataInitService {
 				return this.bgsMetaHeroStrategiesService.loadMetaHeroStrategies();
 			case 'bgs-quest-stats':
 				return this.bgsQuestsService.loadInitialReferenceData();
-			case 'duels-top-decks':
-				return this.duelsService.updateTopDecks();
 			case 'user-global-stats':
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'user-bgs-best-stats':

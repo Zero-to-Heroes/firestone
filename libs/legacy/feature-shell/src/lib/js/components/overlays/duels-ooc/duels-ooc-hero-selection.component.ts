@@ -76,15 +76,15 @@ export class DuelsOutOfCombatHeroSelectionComponent
 
 		const topDecks$ = combineLatest([
 			allHeroCardIds$,
+			this.store.duelsTopDecks$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		]).pipe(
-			this.mapData(([allHeroCards, [duelsTopDecks, mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
+			this.mapData(([allHeroCards, duelsTopDecks, [mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
 				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
 				const topDecks = (duelsTopDecks ?? [])
 					.map((deck) =>

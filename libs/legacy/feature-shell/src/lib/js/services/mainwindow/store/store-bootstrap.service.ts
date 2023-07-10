@@ -118,7 +118,6 @@ export class StoreBootstrapService {
 			[
 				[duelsRunInfo, duelsRewardsInfo],
 				duelsGlobalStats,
-				duelsGlobalStatsDecks,
 				duelsConfig,
 				duelsLeaderboard,
 				duelsBucketsData,
@@ -144,7 +143,6 @@ export class StoreBootstrapService {
 			Promise.all([
 				this.duels.loadRuns(),
 				this.duelsAccess.loadMetaHeroes(mergedPrefs.duelsActiveMmrFilter, mergedPrefs.duelsActiveTimeFilter),
-				this.duels.loadTopDecks(),
 				this.duels.loadConfig(),
 				this.duels.loadLeaderboard(),
 				this.duels.loadBuckets(),
@@ -219,7 +217,6 @@ export class StoreBootstrapService {
 		const duelsStats: DuelsState = this.duels.initState(
 			windowStateForFtue.duels,
 			duelsGlobalStats,
-			duelsGlobalStatsDecks,
 			duelsRunInfo,
 			duelsRewardsInfo,
 			duelsConfig,

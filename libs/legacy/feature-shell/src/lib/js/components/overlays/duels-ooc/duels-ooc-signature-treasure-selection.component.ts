@@ -82,26 +82,27 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 					return refCard?.id;
 				}),
 			);
-		const allStats$ = combineLatest(
+		const allStats$ = combineLatest([
 			this.signatureTreasures$,
 			selectedHeroPower$,
 			this.store.duelsRuns$(),
+			this.store.duelsTopDecks$(),
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => main.duels.getTopDecks(),
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
-		).pipe(
+		]).pipe(
 			filter(([selectedHeroPower]) => !!selectedHeroPower),
 			this.mapData(
 				([
 					allSignatureTreasureCards,
 					selectedHeroPower,
 					runs,
-					[duelStats, duelsTopDecks, mmrPercentiles, dustFilter, mmrFilter, patch],
+					duelsTopDecks,
+					[duelStats, mmrPercentiles, dustFilter, mmrFilter, patch],
 				]) => {
 					return allSignatureTreasureCards
 						.map((card) => card.id)

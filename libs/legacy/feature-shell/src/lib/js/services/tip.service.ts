@@ -19,7 +19,7 @@ export class TipService {
 			premium: true,
 		},
 		{
-			file: 'lottery.jpg',
+			file: 'lottery.jpg?v=2',
 			type: 'image',
 			text: 'You can participate in monthly lottery to win premium Firestone subscriptions (enable it from the Settings > General > Lottery page)',
 			premium: false,
@@ -42,36 +42,42 @@ export class TipService {
 			text: 'Access your own profile page online, and share it with others to show off your achievements and stats',
 			premium: true,
 		},
-		// {
-		// 	file: '.webm',
-		// 	type: 'fizzle, sivara, basaleph',
-		// 	text: 'Mouse over certain cards in the tracker to have more info on how they will resolve',
-		// 	premium: false,
-		// },
+		{
+			file: 'contextual_related_cards_3.webm',
+			type: 'video',
+			text: 'Mouse over certain cards in the tracker to have more info on what they will do',
+			premium: false,
+		},
 		{
 			file: 'etc_buddies.jpg',
 			type: 'image',
 			text: 'When playing as E.T.C. Band Manager, you can see all the buddies in the Discover pool',
 			premium: false,
 		},
-		// {
-		// 	file: '.webm',
-		// 	type: '',
-		// 	text: 'Get advice from some of the best players in the game directly from the overlay and adopt their strategies',
-		// 	premium: true,
-		// },
-		// {
-		// 	file: '.webm',
-		// 	type: '',
-		// 	text: 'Press "Tab" to get a quick overview of the progress of all players in the lobby',
-		// 	premium: true,
-		// },
-		// {
-		// 	file: '.webm',
-		// 	type: 'guess the weight',
-		// 	text: 'Some cards have contextual help during Discovers',
-		// 	premium: false,
-		// },
+		{
+			file: 'bg_hero_select.webm',
+			type: 'video',
+			text: 'You can get stats for each hero, directly on the hero selection screen',
+			premium: false,
+		},
+		{
+			file: 'bg_tab_key.webm',
+			type: 'video',
+			text: 'You can get advice from some of the best players in the game directly from the overlay and adopt their strategies',
+			premium: true,
+		},
+		{
+			file: 'bg_tab_key.webm',
+			type: 'video',
+			text: 'Press "Tab" to get a quick overview of the progress of all players in the lobby',
+			premium: true,
+		},
+		{
+			file: 'guess_the_weight.webm',
+			type: 'video',
+			text: 'Some cards have contextual help during Discovers',
+			premium: false,
+		},
 		// {
 		// 	file: '.webm',
 		// 	type: '',
@@ -84,12 +90,12 @@ export class TipService {
 		// 	text: 'If the app feels slow or seems stuck, you can quickly restart it from the System Tray icon',
 		// 	premium: false,
 		// },
-		// {
-		// 	file: '.webm',
-		// 	type: '',
-		// 	text: 'Mousing over a card while Discovering highlights the relevant information in your deck',
-		// 	premium: false,
-		// },
+		{
+			file: 'guess_the_weight.webm',
+			type: 'video',
+			text: 'Mousing over a card while Discovering highlights the relevant information in your deck',
+			premium: false,
+		},
 		{
 			file: 'minion_play_order.jpg',
 			type: 'image',
@@ -102,6 +108,18 @@ export class TipService {
 			text: 'Mousing over a treasure in Mercs highilghts the synergies in your team',
 			premium: false,
 		},
+		// {
+		// 	file: '.webm',
+		// 	type: '',
+		// 	text: 'Know when your next guaranteed legendary or epic card is coming up in each pack',
+		// 	premium: false,
+		// },
+		// {
+		// 	file: '.webm',
+		// 	type: '',
+		// 	text: 'View latest release notes',
+		// 	premium: false,
+		// },
 	];
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}

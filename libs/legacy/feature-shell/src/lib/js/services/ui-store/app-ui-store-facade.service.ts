@@ -14,6 +14,7 @@ import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
+import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
@@ -143,6 +144,10 @@ export class AppUiStoreFacadeService {
 	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
 		this.debugCall('duelsDecks$');
 		return this.debugObservable(this.store.duelsDecks$());
+	}
+
+	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+		return this.store.duelsTopDecks$();
 	}
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
