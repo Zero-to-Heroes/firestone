@@ -15,7 +15,7 @@ import { LotteryWidgetControllerService } from './lottery-widget-controller.serv
 import { LotteryConfig, LotterySeasonConfig, LotteryState } from './lottery.model';
 
 const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
-const LOTTERY_CONFIG_URL = `https://static.zerotoheroes.com/hearthstone/data/lottery-config.json`;
+const LOTTERY_CONFIG_URL = `https://static.zerotoheroes.com/hearthstone/data/lottery-config.json?v=2`;
 
 @Injectable()
 export class LotteryService {
@@ -33,7 +33,7 @@ export class LotteryService {
 
 	private eventsQueue$$ = new BehaviorSubject<GameEvent | null>(null);
 
-	private lotterySeason = new Date().toISOString().slice(0, 7);
+	private lotterySeason: string = null;
 
 	constructor(
 		private readonly localStorage: LocalStorageService,
@@ -110,8 +110,17 @@ export class LotteryService {
 	private async loadLotteryConfig(): Promise<LotterySeasonConfig> {
 		const lotteryConfig = await this.api.callGetApi<LotteryConfig>(LOTTERY_CONFIG_URL);
 		console.debug('[lottery] loaded lottery config', lotteryConfig);
+		const allSeasons = Object.keys(lotteryConfig)
+			.filter((season) => season !== 'configuration')
+			.filter((season) => season !== 'default');
+		const seasonClosestToNow = allSeasons
+			.map((season) => ({ season, diff: new Date(season).getTime() - new Date().getTime() }))
+			// Keep only seasons that are in the past
+			.filter((season) => season.diff < 0)
+			.sort((a, b) => a.diff - b.diff)[0];
+		this.lotterySeason = seasonClosestToNow?.season;
 		const seasonConfig = lotteryConfig[this.lotterySeason] ?? lotteryConfig['default'];
-		console.debug('[lottery] loaded lottery season config', seasonConfig);
+		console.debug('[lottery] loaded lottery season config', seasonConfig, seasonClosestToNow);
 		return seasonConfig;
 	}
 }
