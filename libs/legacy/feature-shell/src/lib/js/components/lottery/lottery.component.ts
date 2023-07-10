@@ -19,8 +19,9 @@ import { LotteryTabType } from './lottery-navigation.component';
 	selector: 'lottery',
 	styleUrls: [`../../../css/themes/general-theme.scss`, '../../../css/component/lottery/lottery.component.scss'],
 	template: `
-		<div class="lottery-container scalable general-theme">
-			<div class="title-bar">
+		<div class="lottery-container scalable general-theme" *ngIf="{ opacity: opacity$ | async } as value">
+			<div class="background" [style.opacity]="value.opacity"></div>
+			<div class="title-bar" [style.opacity]="value.opacity">
 				<div class="controls">
 					<div
 						class="tracking-indicator"
@@ -66,7 +67,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 				</div>
 			</div>
 
-			<div class="content-header">
+			<div class="content-header" [style.opacity]="value.opacity">
 				<lottery-navigation class="navigation"></lottery-navigation>
 				<ng-container *ngIf="selectedModule$ | async as selectedModule">
 					<ng-container *ngIf="selectedModule === 'lottery'">
@@ -89,7 +90,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 				</ng-container>
 			</div>
 
-			<div class="content-main">
+			<div class="content-main" [style.opacity]="value.opacity">
 				<ng-container [ngSwitch]="selectedModule$ | async">
 					<lottery-lottery *ngSwitchCase="'lottery'"></lottery-lottery>
 					<lottery-achievements *ngSwitchCase="'achievements'"></lottery-achievements>
@@ -117,6 +118,7 @@ export class LotteryWidgetComponent
 	currentModuleName$: Observable<string>;
 	seasonStartDate$: Observable<string>;
 	seasonDurationEnd$: Observable<string>;
+	opacity$: Observable<number>;
 
 	closeConfirmationText: string;
 	closeConfirmationCancelText: string;
@@ -152,6 +154,9 @@ export class LotteryWidgetComponent
 			tap((info) => console.debug('should track lottery', info)),
 			this.mapData((shouldTrack) => shouldTrack),
 		);
+		this.opacity$ = this.store
+			.listenPrefs$((prefs) => prefs.lotteryOpacity)
+			.pipe(this.mapData(([opacity]) => opacity / 100));
 		this.trackingTooltip$ = this.trackingOngoing$.pipe(
 			this.mapData((trackingOngoing) =>
 				trackingOngoing

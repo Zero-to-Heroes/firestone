@@ -26,6 +26,19 @@ import { Knob } from '../preference-slider.component';
 			></preference-toggle>
 		</div>
 
+		<div class="title" [owTranslate]="'settings.general.premium.lottery-widget-settings-title'"></div>
+		<div class="settings-group">
+			<div class="header" [owTranslate]="'settings.general.premium.lottery-opacity-title'"></div>
+			<preference-slider
+				[field]="'lotteryOpacity'"
+				[enabled]="true"
+				[min]="0"
+				[max]="100"
+				[showCurrentValue]="true"
+			>
+			</preference-slider>
+		</div>
+
 		<div
 			class="title"
 			[owTranslate]="'settings.general.menu.premium'"
