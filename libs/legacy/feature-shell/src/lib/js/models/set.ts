@@ -9,23 +9,25 @@ export class Set {
 	public readonly standard?: boolean;
 	public readonly twist?: boolean;
 	public readonly allCards: readonly SetCard[] = [];
-	public readonly cardsCache = new Map<string, SetCard>();
+	public readonly cardsCache: { [cardId: string]: SetCard } = {};
 
 	public readonly ownedLimitCollectibleCards: number = 0;
 	public readonly ownedLimitCollectiblePremiumCards: number = 0;
 
 	public static create(base: Partial<NonFunctionProperties<Set>>): Set {
 		const result = Object.assign(new Set(), base);
-		result.allCards.forEach((card) => result.cardsCache.set(card.id, card));
+		result.allCards.forEach((card) => (result.cardsCache[card.id] = card));
 		return result;
 	}
 
 	public update(base: Partial<NonFunctionProperties<Set>>): Set {
-		return Object.assign(new Set(), this, base);
+		const result = Object.assign(new Set(), this, base);
+		result.allCards.forEach((card) => (result.cardsCache[card.id] = card));
+		return result;
 	}
 
 	public getCard(cardId: string): SetCard {
-		return this.cardsCache.get(cardId);
+		return this.cardsCache[cardId];
 	}
 
 	numberOfLimitCollectibleCards(): number {

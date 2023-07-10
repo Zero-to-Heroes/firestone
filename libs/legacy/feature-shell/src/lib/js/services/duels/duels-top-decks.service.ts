@@ -148,9 +148,10 @@ export class DuelsTopDeckService {
 	}
 
 	private buildDustCost(deck: DeckDefinition, sets: readonly Set[]): number {
-		const allCards = [...deck.cards.map((cards) => cards[0]), ...(deck.sideboards ?? [])];
-		const result = allCards
-			.map((cardDbfId) => this.allCards.getCardFromDbfId(+cardDbfId))
+		const allPairCardInDeck = [...(deck.cards ?? []), ...(deck.sideboards?.flatMap((s) => s.cards) ?? [])];
+		const allCardsInDeck = allPairCardInDeck.map((cards) => cards[0]) ?? [];
+		const result = allCardsInDeck
+			.map((cardDbfId) => this.allCards.getCard(cardDbfId))
 			.filter((card) => card)
 			.map((card) => getCard(sets, card.id))
 			.filter((card) => card)
