@@ -93,6 +93,11 @@
 		margin-bottom: 10px;
 		padding: 0 10px;
 
+		.tab-name {
+			display: flex;
+			flex-direction: column;
+		}
+
 		.tab-title {
 			font-size: 20px;
 		}

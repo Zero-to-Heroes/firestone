@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AnalyticsService } from '@firestone/shared/framework/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, combineLatest, interval, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -68,15 +68,25 @@ import { LotteryTabType } from './lottery-navigation.component';
 
 			<div class="content-header">
 				<lottery-navigation class="navigation"></lottery-navigation>
-				<div class="tab-title">{{ currentModuleName$ | async }}</div>
-				<div
-					*ngIf="(selectedModule$ | async) === 'lottery'"
-					class="control info"
-					inlineSVG="assets/svg/info.svg"
-					[helpTooltip]="'app.lottery.lottery.info-text' | owTranslate"
-					[helpTooltipClasses]="'general-theme'"
-					[helpTooltipWidth]="300"
-				></div>
+				<ng-container *ngIf="selectedModule$ | async as selectedModule">
+					<ng-container *ngIf="selectedModule === 'lottery'">
+						<div class="tab-name lottery">
+							<div class="tab-title">{{ currentModuleName$ | async }}</div>
+							<div class="season-duration" [helpTooltip]="seasonStartDate$ | async">
+								{{ seasonDurationEnd$ | async }}
+							</div>
+						</div>
+						<div
+							*ngIf="selectedModule === 'lottery'"
+							class="control info"
+							inlineSVG="assets/svg/info.svg"
+							[helpTooltip]="'app.lottery.lottery.info-text' | owTranslate"
+							[helpTooltipClasses]="'general-theme'"
+							[helpTooltipWidth]="300"
+						></div>
+					</ng-container>
+					<div class="tab-title" *ngIf="selectedModule !== 'lottery'">{{ currentModuleName$ | async }}</div>
+				</ng-container>
 			</div>
 
 			<div class="content-main">
@@ -105,6 +115,8 @@ export class LotteryWidgetComponent
 	trackingOngoing$: Observable<boolean>;
 	trackingTooltip$: Observable<string>;
 	currentModuleName$: Observable<string>;
+	seasonStartDate$: Observable<string>;
+	seasonDurationEnd$: Observable<string>;
 
 	closeConfirmationText: string;
 	closeConfirmationCancelText: string;
@@ -146,6 +158,35 @@ export class LotteryWidgetComponent
 					? this.i18n.translateString('app.lottery.tracking-ongoing-tooltip')
 					: this.i18n.translateString('app.lottery.tracking-not-ongoing-tooltip'),
 			),
+		);
+		this.seasonStartDate$ = this.store.lottery$().pipe(
+			this.mapData((lottery) =>
+				this.i18n.translateString('app.lottery.lottery.season-duration-end-tooltip', {
+					// Only show the date, not the time
+					startDate: lottery?.startDate().toLocaleString(this.i18n.formatCurrentLocale(), {
+						year: 'numeric',
+						month: 'numeric',
+						day: 'numeric',
+					}),
+				}),
+			),
+		);
+		this.seasonDurationEnd$ = combineLatest([interval(1000), this.store.lottery$()]).pipe(
+			this.mapData(([_, lottery]) => {
+				const endDate = lottery?.endDate();
+				const timeLeft = endDate ? endDate.getTime() - Date.now() : 0;
+				const timeLeftInSeconds = Math.round(timeLeft / 1000);
+				const days = Math.floor(timeLeftInSeconds / (3600 * 24));
+				const hours = Math.floor((timeLeftInSeconds % (3600 * 24)) / 3600);
+				const minutes = Math.floor((timeLeftInSeconds % 3600) / 60);
+				const seconds = Math.floor(timeLeftInSeconds % 60);
+				return this.i18n.translateString('app.lottery.lottery.season-duration-end', {
+					days: days,
+					hours: hours,
+					minutes: minutes,
+					seconds: seconds,
+				});
+			}),
 		);
 
 		this.store

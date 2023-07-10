@@ -12,10 +12,10 @@ import { LotteryResourcesUpdateProcessor } from './events/lottery-resources-upda
 import { LotteryShouldTrackProcessor } from './events/lottery-should-track-processor';
 import { LotteryTurnStartProcessor } from './events/lottery-turn-start-processor';
 import { LotteryWidgetControllerService } from './lottery-widget-controller.service';
-import { LotteryConfig, LotterySeasonConfig, LotteryState } from './lottery.model';
+import { LotterySeasonConfig, LotteryState } from './lottery.model';
 
 const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
-const LOTTERY_CONFIG_URL = `https://static.zerotoheroes.com/hearthstone/data/lottery-config.json?v=2`;
+const LOTTERY_SEASONS_URL = `https://static.zerotoheroes.com/hearthstone/data/lottery-seasons.json?v=7`;
 
 @Injectable()
 export class LotteryService {
@@ -108,18 +108,15 @@ export class LotteryService {
 	}
 
 	private async loadLotteryConfig(): Promise<LotterySeasonConfig> {
-		const lotteryConfig = await this.api.callGetApi<LotteryConfig>(LOTTERY_CONFIG_URL);
-		console.debug('[lottery] loaded lottery config', lotteryConfig);
-		const allSeasons = Object.keys(lotteryConfig)
-			.filter((season) => season !== 'configuration')
-			.filter((season) => season !== 'default');
+		const allSeasons = await this.api.callGetApi<readonly LotterySeasonConfig[]>(LOTTERY_SEASONS_URL);
+		console.debug('[lottery] loaded lottery seasons', allSeasons);
 		const seasonClosestToNow = allSeasons
-			.map((season) => ({ season, diff: new Date(season).getTime() - new Date().getTime() }))
+			.map((season) => ({ season: season, diff: new Date(season.startDate).getTime() - new Date().getTime() }))
 			// Keep only seasons that are in the past
 			.filter((season) => season.diff < 0)
 			.sort((a, b) => a.diff - b.diff)[0];
-		this.lotterySeason = seasonClosestToNow?.season;
-		const seasonConfig = lotteryConfig[this.lotterySeason] ?? lotteryConfig['default'];
+		this.lotterySeason = '' + seasonClosestToNow?.season?.id;
+		const seasonConfig = seasonClosestToNow?.season ?? allSeasons[0];
 		console.debug('[lottery] loaded lottery season config', seasonConfig, seasonClosestToNow);
 		return seasonConfig;
 	}

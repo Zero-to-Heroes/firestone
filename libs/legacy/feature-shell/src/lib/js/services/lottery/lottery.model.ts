@@ -34,6 +34,16 @@ export class LotteryState {
 		return Object.assign(new LotteryState(), this, base);
 	}
 
+	public startDate(): Date {
+		return new Date(this.config.startDate);
+	}
+
+	public endDate(): Date {
+		const startDate = new Date(this.config.startDate);
+		const endDate = new Date(startDate.getTime() + this.config.durationInDays * 24 * 60 * 60 * 1000);
+		return endDate;
+	}
+
 	public resourceStatKey(): LotteryConfigResourceStatType {
 		return this.config.resourceStat.type;
 	}
@@ -105,6 +115,10 @@ export interface LotteryConfig {
 }
 
 export interface LotterySeasonConfig {
+	readonly id: number;
+	readonly seasonName: string;
+	readonly startDate: string;
+	readonly durationInDays: number;
 	readonly resourceStat: LotteryConfigResourceStat;
 	readonly constructedStat: LotteryConfigResourceStat;
 	readonly battlegroundsStat: LotteryConfigResourceStat;
