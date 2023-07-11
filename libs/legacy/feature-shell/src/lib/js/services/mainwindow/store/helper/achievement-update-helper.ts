@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { AchievementHistory } from '../../../../models/achievement/achievement-history';
 import { AchievementHistoryStorageService } from '../../../achievement/achievement-history-storage.service';
-import { AchievementsLoaderService } from '../../../achievement/data/achievements-loader.service';
+import { RawAchievementsLoaderService } from '../../../achievement/data/raw-achievements-loader.service';
 
 @Injectable()
 export class AchievementUpdateHelper {
 	constructor(
 		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
-		private readonly achievementsLoader: AchievementsLoaderService,
+		private readonly achievementsLoader: RawAchievementsLoaderService,
 	) {}
 
 	public async buildAchievementHistory(): Promise<readonly AchievementHistory[]> {
 		const [history, achievements] = await Promise.all([
 			this.achievementHistoryStorage.loadAll(),
-			this.achievementsLoader.getAchievements(),
+			// TODO: use the state manager instead. Since the request will be cached by the browser it's not really an issue,
+			// but it should still be done in a cleaner way
+			this.achievementsLoader.loadRawAchievements(),
 		]);
 
 		return (

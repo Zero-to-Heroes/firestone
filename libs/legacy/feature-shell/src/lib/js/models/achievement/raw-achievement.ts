@@ -22,6 +22,7 @@ export interface RawAchievement {
 	readonly difficulty: string;
 	readonly maxNumberOfRecords: number;
 	readonly points: number;
+	readonly quota: number;
 	readonly requirements: readonly RawRequirement[];
 	readonly resetEvents: readonly string[];
 	readonly linkedAchievementIds?: readonly string[];

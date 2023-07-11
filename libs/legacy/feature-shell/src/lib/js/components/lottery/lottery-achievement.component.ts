@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AchievementsProgressTracking } from '../../services/achievement/achievements-monitor.service';
+import { AchievementsProgressTracking } from '../../services/achievement/achievements-live-progress-tracking.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({

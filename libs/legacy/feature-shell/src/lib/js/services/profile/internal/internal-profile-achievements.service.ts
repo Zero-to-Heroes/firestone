@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProfileAchievementCategory } from '@firestone-hs/api-user-profile';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
-import { AchievementsMemoryMonitor } from '../../achievement/achievements-memory-monitor.service';
+import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 

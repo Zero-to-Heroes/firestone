@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -41,10 +42,10 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
-import { AchievementsManager } from '../../achievement/achievements-manager.service';
-import { AchievementsRepository } from '../../achievement/achievements-repository.service';
-import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
-import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
+import { AchievementsStateManagerService } from '../../achievement/achievements-state-manager.service';
+import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
+import { FirestoneRemoteAchievementsLoaderService } from '../../achievement/data/firestone-remote-achievements-loader.service';
+import { RawAchievementsLoaderService } from '../../achievement/data/raw-achievements-loader.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
@@ -71,9 +72,6 @@ import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
-import { AchievementsFullUpdatedEvent } from './events/achievements/achievements-full-updated-event';
-import { AchievementsInitEvent } from './events/achievements/achievements-init-event';
-import { AchievementsUpdatedEvent } from './events/achievements/achievements-updated-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
@@ -225,8 +223,6 @@ import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
-import { AchievementsFullUpdatedProcessor } from './processors/achievements/achievements-full-updated-processor';
-import { AchievementsInitProcessor } from './processors/achievements/achievements-init-processor';
 import {
 	AchievementsRemovePinnedAchievementsEvent,
 	AchievementsRemovePinnedAchievementsProcessor,
@@ -235,7 +231,6 @@ import {
 	AchievementsTrackRandomAchievementsEvent,
 	AchievementsTrackRandomAchievementsProcessor,
 } from './processors/achievements/achievements-track-random-achievements';
-import { AchievementsUpdatedProcessor } from './processors/achievements/achievements-updated-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
@@ -407,12 +402,10 @@ export class MainWindowStoreService {
 	constructor(
 		private readonly cards: CardsFacadeService,
 		private readonly sets: SetsService,
-		private readonly achievementsRepository: AchievementsRepository,
 		private readonly collectionManager: CollectionManager,
 		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
-		private readonly achievementsLoader: AchievementsLoaderService,
-		private readonly achievementsManager: AchievementsManager,
-		private readonly remoteAchievements: RemoteAchievementsService,
+		private readonly achievementsLoader: RawAchievementsLoaderService,
+		private readonly firestoneRemoteAchievements: FirestoneRemoteAchievementsLoaderService,
 		private readonly collectionDb: CollectionStorageService,
 		private readonly gameStatsUpdater: GameStatsUpdaterService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
@@ -440,6 +433,9 @@ export class MainWindowStoreService {
 		private readonly setsManager: SetsManagerService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
 		private readonly duelsTopDecks: DuelsTopDeckService,
+		private readonly achievementsManager: AchievementsMemoryMonitor,
+		private readonly achievementsStateManager: AchievementsStateManagerService,
+		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -612,23 +608,35 @@ export class MainWindowStoreService {
 			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionBootstrap, this.cards)],
 
 			// Achievements
-			[AchievementsInitEvent.eventName(), new AchievementsInitProcessor()],
-			[AchievementsFullRefreshEvent.eventName(), new AchievementsFullRefreshProcessor(this.remoteAchievements)],
 			[
-				AchievementsFullUpdatedEvent.eventName(),
-				new AchievementsFullUpdatedProcessor(this.achievementsRepository),
+				AchievementsFullRefreshEvent.eventName(),
+				new AchievementsFullRefreshProcessor(this.firestoneRemoteAchievements),
 			],
 			[
 				AchievementHistoryCreatedEvent.eventName(),
 				new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
 			],
-			[ChangeVisibleAchievementEvent.eventName(), new ChangeVisibleAchievementProcessor()],
-			[SelectAchievementCategoryEvent.eventName(), new SelectAchievementCategoryProcessor()],
-			[SelectAchievementCategoryEvent.eventName(), new SelectAchievementCategoryProcessor()],
-			[ShowAchievementDetailsEvent.eventName(), new ShowAchievementDetailsProcessor()],
-			[AchievementsUpdatedEvent.eventName(), new AchievementsUpdatedProcessor()],
+			[
+				ChangeVisibleAchievementEvent.eventName(),
+				new ChangeVisibleAchievementProcessor(this.achievementsStateManager),
+			],
+			[
+				SelectAchievementCategoryEvent.eventName(),
+				new SelectAchievementCategoryProcessor(this.achievementsStateManager),
+			],
+			[
+				SelectAchievementCategoryEvent.eventName(),
+				new SelectAchievementCategoryProcessor(this.achievementsStateManager),
+			],
+			[
+				ShowAchievementDetailsEvent.eventName(),
+				new ShowAchievementDetailsProcessor(this.achievementsStateManager),
+			],
 			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistoryStorage)],
-			[FilterShownAchievementsEvent.eventName(), new FilterShownAchievementsProcessor()],
+			[
+				FilterShownAchievementsEvent.eventName(),
+				new FilterShownAchievementsProcessor(this.achievementsStateManager),
+			],
 			[
 				AchievementsRemovePinnedAchievementsEvent.eventName(),
 				new AchievementsRemovePinnedAchievementsProcessor(this.prefs),
@@ -638,7 +646,8 @@ export class MainWindowStoreService {
 				new AchievementsTrackRandomAchievementsProcessor(
 					this.prefs,
 					this.achievementsManager,
-					this.remoteAchievements,
+					this.achievementsStateManager,
+					this.achievementsRefLoader,
 				),
 			],
 

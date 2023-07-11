@@ -7,7 +7,7 @@ import { AchievementCompletedEvent } from '../../events/achievements/achievement
 import { Processor } from '../processor';
 
 export class AchievementCompletedProcessor implements Processor {
-	constructor(private historyStorage: AchievementHistoryStorageService) {}
+	constructor(private readonly historyStorage: AchievementHistoryStorageService) {}
 
 	public async process(
 		event: AchievementCompletedEvent,
@@ -26,12 +26,10 @@ export class AchievementCompletedProcessor implements Processor {
 		this.historyStorage.save(historyItem);
 		const newHistory = [historyItem, ...(currentState.achievements.achievementHistory || [])];
 
-		const newAchievementState: AchievementsState = currentState.achievements.updateAchievement(achievement);
-		console.log('[achievement-completed-processor] rebuilt achievement state');
-
-		const newState = Object.assign(new AchievementsState(), newAchievementState, {
+		const newState = currentState.achievements.update({
 			achievementHistory: newHistory as readonly AchievementHistory[],
 		} as AchievementsState);
+		console.log('[achievement-completed-processor] rebuilt achievement state');
 		// We store an history item every time, but we display only the first time an achievement is unlocked
 		return [
 			currentState.update({

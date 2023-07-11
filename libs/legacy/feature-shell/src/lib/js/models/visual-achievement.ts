@@ -1,4 +1,4 @@
-import { AchievementsRepository } from '../services/achievement/achievements-repository.service';
+import { buildCompletionSteps } from '../services/achievement/achievements-state-manager.service';
 import { Achievement } from './achievement';
 import { AchievementStatus } from './achievement/achievement-status.type';
 
@@ -29,11 +29,7 @@ export class VisualAchievement {
 		// 	'[ach] [visual-achievement] completionStepsWithNewCompletions',
 		// 	completionStepsWithNewCompletions,
 		// );
-		const [completionSteps, text] = AchievementsRepository.buildCompletionSteps(
-			completionStepsWithNewCompletions,
-			value,
-			this.text,
-		);
+		const [completionSteps, text] = buildCompletionSteps(completionStepsWithNewCompletions, value, this.text);
 
 		return Object.assign(new VisualAchievement(), this, {
 			completionSteps: completionSteps, //this.updateCompletionSteps(value),
@@ -74,6 +70,7 @@ export class VisualAchievement {
 
 export interface CompletionStep {
 	readonly id: string;
+	readonly hsAchievementId: number;
 	readonly numberOfCompletions: number;
 	readonly icon: string;
 	readonly completedText: string;

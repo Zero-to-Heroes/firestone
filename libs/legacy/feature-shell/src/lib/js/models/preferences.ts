@@ -129,7 +129,6 @@ export class Preferences implements IPreferences {
 	readonly achievementsLiveTracking2: boolean = false;
 	readonly achievementsDisplayNotifications2 = false;
 	readonly achievementsCompletedActiveFilter: AchievementsCompletedFilterType = 'ALL_ACHIEVEMENTS';
-	readonly resetAchievementsOnAppStart = false;
 	// internal HS achievement ids
 	readonly pinnedAchievementIds: readonly number[] = [];
 

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -32,18 +32,16 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionStoreCo
 	}
 
 	ngAfterContentInit() {
-		this.categories$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.achievements.categories,
-				([main, nav, prefs]) => nav.navigationAchievements.selectedCategoryId,
-			)
-			.pipe(
-				this.mapData(
-					([categories, selectedCategoryId]) =>
-						categories.map((cat) => cat.findCategory(selectedCategoryId)).filter((cat) => cat)[0]
-							?.categories ?? categories,
-				),
-			);
+		this.categories$ = combineLatest([
+			this.store.achievementCategories$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationAchievements.selectedCategoryId),
+		]).pipe(
+			this.mapData(
+				([categories, [selectedCategoryId]]) =>
+					categories.map((cat) => cat.findCategory(selectedCategoryId)).filter((cat) => cat)[0]?.categories ??
+					categories,
+			),
+		);
 	}
 
 	selectCategory(category: VisualAchievementCategory) {

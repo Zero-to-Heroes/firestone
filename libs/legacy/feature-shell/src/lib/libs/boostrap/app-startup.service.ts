@@ -2,7 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../../js/models/preferences';
-import { AchievementsLoaderService } from '../../js/services/achievement/data/achievements-loader.service';
+import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
+import { FirestoneAchievementsChallengeService } from '../../js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../../js/services/mainwindow/store/events/change-visible-application-event';
@@ -31,7 +32,8 @@ export class AppStartupService {
 		private readonly store: MainWindowStoreService,
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
-		private readonly achievementsLoader: AchievementsLoaderService,
+		private readonly achievementsLoader: RawAchievementsLoaderService,
+		private readonly firestoneChallenges: FirestoneAchievementsChallengeService,
 		private readonly prefs: PreferencesService,
 		private readonly twitchAuth: TwitchAuthService,
 		private readonly ads: AdService,
@@ -90,7 +92,7 @@ export class AppStartupService {
 				// Because Firestone can stay open between two game sessions, and if
 				// the game was forced-closed, some achievements didn't have the opportunity
 				// to reset, so we're forcing it here
-				(await this.achievementsLoader.getChallengeModules()).forEach((challenge) => challenge.resetState());
+				(await this.firestoneChallenges.getChallengeModules()).forEach((challenge) => challenge.resetState());
 				this.handleExitGame();
 			}
 		});

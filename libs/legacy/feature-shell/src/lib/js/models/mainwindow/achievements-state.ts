@@ -1,6 +1,5 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Achievement } from '../achievement';
 import { AchievementHistory } from '../achievement/achievement-history';
 import { FilterOption } from '../filter-option';
 import { VisualAchievement } from '../visual-achievement';
@@ -8,63 +7,13 @@ import { VisualAchievementCategory } from '../visual-achievement-category';
 
 export class AchievementsState {
 	readonly filters: readonly FilterOption[];
-	readonly categories: readonly VisualAchievementCategory[] = [];
+	// readonly categories: readonly VisualAchievementCategory[] = [];
 	// Holds the IDs of all the relevant achievements. The real data is somewhere in the achievements catergories
 	readonly achievementHistory: readonly AchievementHistory[] = [];
 	readonly isLoading: boolean = true;
 
 	public update(base: Partial<NonFunctionProperties<AchievementsState>>): AchievementsState {
 		return Object.assign(new AchievementsState(), this, base);
-	}
-
-	public updateAchievement(newAchievement: Achievement, categoryId?: string): AchievementsState {
-		return Object.assign(new AchievementsState(), this, {
-			categories: this.categories.map((cat) =>
-				categoryId && cat.id !== categoryId ? cat : cat.updateAchievement(newAchievement),
-			) as readonly VisualAchievementCategory[],
-		} as AchievementsState);
-	}
-
-	/* @deprecated because it forces us to keep a refrence to the state, wihch reduces the efficiency of distinctUntilChanged */
-	public findCategory(categoryId: string): VisualAchievementCategory {
-		return this.categories.map((cat) => cat.findCategory(categoryId)).filter((cat) => cat)[0];
-	}
-
-	/* @deprecated because it forces us to keep a refrence to the state, wihch reduces the efficiency of distinctUntilChanged */
-	public findAchievementHierarchy(achievementId: string): [VisualAchievementCategory[], VisualAchievement] {
-		if (!this.categories) {
-			return [null, null];
-		}
-
-		return this.categories
-			.map((cat) => cat.findAchievementHierarchy(achievementId))
-			.find((result) => result.length === 2 && result[1]);
-	}
-
-	/* @deprecated because it forces us to keep a refrence to the state, wihch reduces the efficiency of distinctUntilChanged */
-	public findCategoryHierarchy(categoryId: string): VisualAchievementCategory[] {
-		if (!this.categories) {
-			return null;
-		}
-
-		return this.categories
-			.map((cat) => cat.findCategoryHierarchy(categoryId))
-			.filter((cat) => cat)
-			.find((result) => result.length > 0);
-	}
-
-	/* @deprecated because it forces us to keep a refrence to the state, wihch reduces the efficiency of distinctUntilChanged */
-	public findAchievements(ids: readonly string[]): readonly VisualAchievement[] {
-		if (!ids?.length) {
-			return [];
-		}
-
-		return this.retrieveAllAchievements().filter((achv) => ids.indexOf(achv.id) !== -1);
-	}
-
-	/* @deprecated because it forces us to keep a refrence to the state, wihch reduces the efficiency of distinctUntilChanged */
-	public retrieveAllAchievements(): readonly VisualAchievement[] {
-		return [...this.categories.map((cat) => cat.retrieveAllAchievements()).reduce((a, b) => a.concat(b), [])];
 	}
 
 	public static buildFilterOptions(i18n: LocalizationFacadeService): readonly FilterOption[] {

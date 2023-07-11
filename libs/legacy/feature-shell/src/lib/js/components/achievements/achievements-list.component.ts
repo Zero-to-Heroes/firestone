@@ -73,16 +73,14 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 	}
 
 	ngAfterContentInit() {
-		const achievements$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.achievements.categories,
-				([main, nav, prefs]) => nav.navigationAchievements.displayedAchievementsList,
-			)
-			.pipe(
-				this.mapData(([categories, displayedAchievementsList]) =>
-					findAchievements(categories, displayedAchievementsList),
-				),
-			);
+		const achievements$ = combineLatest([
+			this.store.achievementCategories$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationAchievements.displayedAchievementsList),
+		]).pipe(
+			this.mapData(([categories, [displayedAchievementsList]]) =>
+				findAchievements(categories, displayedAchievementsList),
+			),
+		);
 		const flatCompletions$ = achievements$.pipe(
 			this.mapData((achievements) =>
 				achievements?.map((achievement) => achievement.completionSteps).reduce((a, b) => a.concat(b), []),

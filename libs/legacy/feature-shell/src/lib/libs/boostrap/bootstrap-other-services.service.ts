@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
-import { AchievementsLoaderService } from '../../js/services/achievement/data/achievements-loader.service';
-import { RemoteAchievementsService } from '../../js/services/achievement/remote-achievements.service';
+import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
+import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { BgsBestUserStatsService } from '../../js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from '../../js/services/battlegrounds/bgs-init.service';
 import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
@@ -55,11 +55,11 @@ export class BootstrapOtherServicesService {
 		private readonly init_OutOfCardsAuth: OutOfCardsService,
 		private readonly collectionDb: CollectionStorageService,
 		private readonly achievementsDb: AchievementsDb,
-		private readonly achievementsLoader: AchievementsLoaderService,
+		private readonly achievementsLoader: RawAchievementsLoaderService,
 		private readonly packMonitor: PackMonitor,
 		private readonly init_AchievementsNotifications: AchievementsNotificationService,
 		private readonly packStatsService: PackStatsService,
-		private readonly achievementStatsService: RemoteAchievementsService,
+		private readonly achievementStatsService: FirestoneRemoteAchievementsLoaderService,
 		private readonly collectionManager: CollectionManager,
 		private readonly deckParserService: DeckParserService,
 		private readonly init_dungeonLootParserService: DuelsLootParserService,

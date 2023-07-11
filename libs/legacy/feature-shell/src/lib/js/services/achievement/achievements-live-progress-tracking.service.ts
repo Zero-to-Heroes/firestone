@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HsRefAchievement } from '@firestone/achievements/data-access';
+import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
@@ -9,13 +9,12 @@ import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/p
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
-import { AchievementsFirestoneChallengeService } from './achievements-firestone-challenges.service';
 import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
-import { AchievementsManager } from './achievements-manager.service';
-import { RemoteAchievementsService } from './remote-achievements.service';
+import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
+import { FirestoneAchievementsChallengeService } from './firestone-achievements-challenges.service';
 
 @Injectable()
-export class AchievementsMonitor {
+export class AchievementsLiveProgressTrackingService {
 	public achievementsProgressTracking$$ = new BehaviorSubject<readonly AchievementsProgressTracking[]>([]);
 
 	private achievementQuotas: { [achievementId: number]: number };
@@ -28,11 +27,11 @@ export class AchievementsMonitor {
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly store: AppUiStoreFacadeService,
-		private readonly remoteAchievements: RemoteAchievementsService,
-		private readonly achievementsManager: AchievementsManager,
+		private readonly refLoaderService: AchievementsRefLoaderService,
+		private readonly achievementsMemoryMonitor: AchievementsMemoryMonitor,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,
-		private readonly firestoneAchievements: AchievementsFirestoneChallengeService,
+		private readonly firestoneAchievements: FirestoneAchievementsChallengeService,
 	) {
 		this.init();
 		window['achievementsMonitor'] = this;
@@ -198,7 +197,7 @@ export class AchievementsMonitor {
 			return;
 		}
 
-		this.refAchievements = await this.remoteAchievements.loadHsRawAchievements();
+		this.refAchievements = (await this.refLoaderService.getLatestRefData())?.achievements ?? [];
 		this.achievementQuotas = {};
 		for (const ach of this.refAchievements) {
 			this.achievementQuotas[ach.id] = ach.quota;
@@ -226,7 +225,7 @@ export class AchievementsMonitor {
 	}
 
 	private async assignAchievementsOnGameStart() {
-		const existingAchievements = await this.achievementsManager.getAchievements(true);
+		const existingAchievements = this.achievementsMemoryMonitor.nativeAchievements$$.value;
 		if (!existingAchievements) {
 			return;
 		}

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { filter } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
@@ -8,14 +9,18 @@ import { AchievementCompletedEvent } from '../mainwindow/store/events/achievemen
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { AchievementsStateManagerService } from './achievements-state-manager.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
-import { AchievementsLoaderService } from './data/achievements-loader.service';
-import { RemoteAchievementsService } from './remote-achievements.service';
+import { ChallengeBuilderService } from './achievements/challenges/challenge-builder.service';
+import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
+import { RawAchievementsLoaderService } from './data/raw-achievements-loader.service';
 
 @Injectable()
 // Everything linked to Firestone challenges, as opposed to HS native achievements
-export class AchievementsFirestoneChallengeService {
+export class FirestoneAchievementsChallengeService {
+	public challengeModules: readonly Challenge[];
+
 	private spectating: boolean;
 
 	private processingQueue = new ProcessingQueue<InternalEvent>(
@@ -27,11 +32,13 @@ export class AchievementsFirestoneChallengeService {
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly prefs: PreferencesService,
-		private readonly achievementLoader: AchievementsLoaderService,
+		private readonly achievementLoader: RawAchievementsLoaderService,
 		private readonly achievementsStorage: AchievementsStorageService,
-		private readonly remoteAchievements: RemoteAchievementsService,
+		private readonly remoteAchievements: FirestoneRemoteAchievementsLoaderService,
 		private readonly events: Events,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly achievementsStateManager: AchievementsStateManagerService,
+		private readonly challengeBuilder: ChallengeBuilderService,
 	) {
 		this.init();
 	}
@@ -45,6 +52,21 @@ export class AchievementsFirestoneChallengeService {
 				this.spectating = gameEvent.additionalData.spectating;
 			}
 		});
+		this.initChallenges();
+	}
+
+	private async initChallenges() {
+		this.achievementsStateManager.rawAchievements$$
+			.pipe(filter((achievements) => !!achievements?.length))
+			.subscribe((rawAchievements) => {
+				this.challengeModules = rawAchievements
+					.map((rawAchievement) => this.challengeBuilder.buildChallenge(rawAchievement))
+					.filter((challenge) => challenge);
+			});
+	}
+
+	public async getChallengeModules(): Promise<readonly Challenge[]> {
+		return this.challengeModules;
 	}
 
 	public async handleEvent(gameEvent: GameEvent) {
@@ -52,9 +74,7 @@ export class AchievementsFirestoneChallengeService {
 		if (this.spectating || !prefs.achievementsEnabled2) {
 			return;
 		}
-
-		// TODO: handle reconnects
-		for (const challenge of await this.achievementLoader.getChallengeModules()) {
+		for (const challenge of await this.getChallengeModules()) {
 			try {
 				challenge.detect(gameEvent, () => {
 					this.sendUnlockEvent(challenge);
@@ -66,7 +86,10 @@ export class AchievementsFirestoneChallengeService {
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
-		const achievement: Achievement = await this.achievementLoader.getAchievement(challenge.achievementId);
+		const achievement: Achievement = getAchievement(
+			this.achievementsStateManager.rawAchievements$$.value,
+			challenge.achievementId,
+		);
 		if (!achievement) {
 			console.warn('trying to send unlock event for empty achievement', challenge.achievementId);
 			return;
@@ -81,7 +104,8 @@ export class AchievementsFirestoneChallengeService {
 			return;
 		}
 
-		const autoGrantAchievements = await this.achievementLoader.getAchievementsById(
+		const autoGrantAchievements = getAchievements(
+			this.achievementsStateManager.rawAchievements$$.value,
 			achievement.linkedAchievementIds,
 		);
 		const allAchievements =
@@ -98,9 +122,10 @@ export class AchievementsFirestoneChallengeService {
 				existingAchievement.numberOfCompletions + 1,
 			);
 			console.log('[achievement-monitor] starting process of completed achievement', achievement.id);
-			const mergedAchievement = Object.assign(new Achievement(), achv, {
+			const mergedAchievement = {
+				...achv,
 				numberOfCompletions: completedAchievement.numberOfCompletions,
-			} as Achievement);
+			} as Achievement;
 
 			this.achievementsStorage.save(completedAchievement);
 			console.log('[achievement-monitor] saved achievement', achievement.id);
@@ -139,6 +164,17 @@ export class AchievementsFirestoneChallengeService {
 		this.store.send(new AchievementCompletedEvent(achievement));
 	}
 }
+
+const getAchievement = (achievements: readonly Achievement[], achievementId: string): Achievement => {
+	return achievements.find((ach) => ach.id === achievementId);
+};
+
+const getAchievements = (
+	achievements: readonly Achievement[],
+	achievementIds: readonly string[],
+): readonly Achievement[] => {
+	return achievements.filter((ach) => achievementIds.includes(ach.id));
+};
 
 interface InternalEvent {
 	readonly achievement: Achievement;

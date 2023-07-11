@@ -1,9 +1,9 @@
-import { HsRefAchievement } from '@firestone/achievements/data-access';
+import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { shuffleArray, sortByProperties } from '@firestone/shared/framework/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { AchievementsManager } from '../../../../achievement/achievements-manager.service';
-import { RemoteAchievementsService } from '../../../../achievement/remote-achievements.service';
+import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
+import { AchievementsMemoryMonitor } from '../../../../achievement/data/achievements-memory-monitor.service';
 import { PreferencesService } from '../../../../preferences.service';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 import { Processor } from '../processor';
@@ -33,8 +33,9 @@ const EXCLUDED_ACHIEVEMENTS = [
 export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly achievementsManager: AchievementsManager,
-		private readonly remoteAchievements: RemoteAchievementsService,
+		private readonly achievementsManager: AchievementsMemoryMonitor,
+		private readonly stateManager: AchievementsStateManagerService,
+		private readonly refLoaderService: AchievementsRefLoaderService,
 	) {}
 
 	public async process(
@@ -43,10 +44,25 @@ export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const currentProgress = await this.achievementsManager.getAchievements(true);
-		const refAchievements = await this.remoteAchievements.loadHsRawAchievements();
+		const currentProgress = await this.achievementsManager.getInGameAchievementsInfo();
+		const refAchievements = (await this.refLoaderService.getLatestRefData())?.achievements ?? [];
+
+		console.debug(
+			'[achievements-track-random-achievements] categories',
+			this.stateManager.groupedAchievements$$.value,
+		);
+		const hsCategory = this.stateManager.groupedAchievements$$.value.find((c) => c.id === 'hearthstone_game');
+		const validCategories = hsCategory.categories
+			// Progression
+			.filter((c) => c.id !== 'hearthstone_game_1')
+			// Collection
+			.filter((c) => c.id !== 'hearthstone_game_3');
+		const validAchievements = validCategories
+			.flatMap((c) => c.retrieveAllAchievements())
+			.map((a) => a.hsAchievementId);
 
 		const uncompleteAchievements = refAchievements
+			.filter((a) => validAchievements.includes(a.id))
 			.filter((a) => !EXCLUDED_ACHIEVEMENTS.some((exclude) => exclude(a)))
 			.map((a) => {
 				const progress = currentProgress.find((p) => p.id === a.id);

@@ -1,17 +1,32 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { builCategoryHierarchy } from '../../../../achievement/achievement-utils';
+import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
 import { Processor } from '../processor';
 
 export class SelectAchievementCategoryProcessor implements Processor {
+	constructor(private readonly stateManager: AchievementsStateManagerService) {}
+
 	public async process(
 		event: SelectAchievementCategoryEvent,
 		currentState: MainWindowState,
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const hierarchy = currentState.achievements.findCategoryHierarchy(event.categoryId);
+		const hierarchyResult = builCategoryHierarchy(event.categoryId, this.stateManager.groupedAchievements$$.value);
+		const hierarchy = hierarchyResult?.categories;
+		console.debug(
+			'[select-achievement-category] hierarchy',
+			hierarchy,
+			event.categoryId,
+			this.stateManager.groupedAchievements$$.value,
+		);
+		if (!hierarchy?.length) {
+			return [null, null];
+		}
+
 		const category = hierarchy[hierarchy.length - 1];
 		const shouldDisplayAchievements = category.achievements.length > 0;
 		const newAchievements = navigationState.navigationAchievements.update({

@@ -40,18 +40,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[tooltip]="'settings.achievements.notifications.show-notifications-tooltip' | owTranslate"
 				[ngClass]="{ disabled: !value.achievementsEnabled }"
 			></preference-toggle>
-			<preference-toggle
-				*ngIf="isDev"
-				field="resetAchievementsOnAppStart"
-				[label]="'settings.achievements.notifications.streamer-mode-text' | owTranslate"
-				[tooltip]="'settings.achievements.notifications.streamer-mode-tooltip' | owTranslate"
-				advancedSetting
-				[messageWhenToggleValue]="
-					'settings.achievements.notifications.streamer-mode-confirmation' | owTranslate
-				"
-				[valueToDisplayMessageOn]="true"
-				[ngClass]="{ disabled: !value.achievementsEnabled }"
-			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

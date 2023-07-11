@@ -12,7 +12,6 @@ import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
 import { MercenariesState } from '../../../models/mercenaries/mercenaries-state';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
-import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
@@ -45,7 +44,6 @@ export class StoreBootstrapService {
 
 	constructor(
 		private readonly cardsInit: CardsInitService,
-		private readonly achievementsRepository: AchievementsRepository,
 		private readonly achievementsHelper: AchievementUpdateHelper,
 		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
@@ -105,7 +103,6 @@ export class StoreBootstrapService {
 			[
 				socialShareUserInfo,
 				currentUser,
-				achievementTopCategories,
 				achievementHistory,
 				// collectionState,
 				currentScene,
@@ -129,7 +126,6 @@ export class StoreBootstrapService {
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
 				this.userService.getCurrentUser(),
-				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
 				// this.collectionBootstrap.initCollectionState(windowStateForFtue.binder),
 				this.memory.getCurrentSceneFromMindVision(),
@@ -201,7 +197,6 @@ export class StoreBootstrapService {
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
 		const newAchievementState = windowStateForFtue.achievements.update({
-			categories: achievementTopCategories,
 			achievementHistory: achievementHistory,
 			isLoading: false,
 			filters: AchievementsState.buildFilterOptions(this.i18n),

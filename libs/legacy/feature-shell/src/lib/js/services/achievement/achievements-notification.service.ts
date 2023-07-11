@@ -4,14 +4,12 @@ import { Events } from '../events.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
-import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 @Injectable()
 export class AchievementsNotificationService {
 	constructor(
 		private notificationService: OwNotificationsService,
 		private prefs: PreferencesService,
-		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 	) {
 		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.handleAchievementCompleted(data.data[0]));

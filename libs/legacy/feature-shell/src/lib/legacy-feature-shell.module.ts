@@ -649,17 +649,15 @@ import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over
 import { ScrollableDirective } from './js/directives/scrollable.directive';
 import { SafeHtmlPipe } from './js/pipes/safe-html.pipe';
 import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
-import { AchievementsFirestoneChallengeService } from './js/services/achievement/achievements-firestone-challenges.service';
-import { AchievementsManager } from './js/services/achievement/achievements-manager.service';
-import { AchievementsMemoryMonitor } from './js/services/achievement/achievements-memory-monitor.service';
-import { AchievementsMonitor } from './js/services/achievement/achievements-monitor.service';
+import { AchievementsLiveProgressTrackingService } from './js/services/achievement/achievements-live-progress-tracking.service';
 import { AchievementsNotificationService } from './js/services/achievement/achievements-notification.service';
-import { AchievementsRepository } from './js/services/achievement/achievements-repository.service';
+import { AchievementsStateManagerService } from './js/services/achievement/achievements-state-manager.service';
 import { AchievementsStorageService } from './js/services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from './js/services/achievement/achievements/challenges/challenge-builder.service';
-import { AchievementsLoaderService } from './js/services/achievement/data/achievements-loader.service';
-import { RemoteAchievementsService } from './js/services/achievement/remote-achievements.service';
-import { TemporaryResolutionOverrideService } from './js/services/achievement/temporary-resolution-override-service';
+import { AchievementsMemoryMonitor } from './js/services/achievement/data/achievements-memory-monitor.service';
+import { FirestoneRemoteAchievementsLoaderService } from './js/services/achievement/data/firestone-remote-achievements-loader.service';
+import { RawAchievementsLoaderService } from './js/services/achievement/data/raw-achievements-loader.service';
+import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { setAppInjector } from './js/services/app-injector';
 import { ArenaStateBuilderService } from './js/services/arena/arena-state-builder.service';
@@ -738,7 +736,6 @@ import { LotteryWidgetControllerService } from './js/services/lottery/lottery-wi
 import { LotteryService } from './js/services/lottery/lottery.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
-import { CollaboratorsService } from './js/services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from './js/services/mainwindow/store/collection-bootstrap.service';
 import { AchievementUpdateHelper } from './js/services/mainwindow/store/helper/achievement-update-helper';
 import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
@@ -1694,10 +1691,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ModsConfigService,
 
 		AchievementHistoryStorageService,
-		AchievementsRepository,
 		ChallengeBuilderService,
-		AchievementsLoaderService,
+		RawAchievementsLoaderService,
+		FirestoneRemoteAchievementsLoaderService,
 		AchievementsStorageService,
+		AchievementsStateManagerService,
 
 		DeckHandlerService,
 		CollectionManager,
@@ -1721,7 +1719,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		TipService,
 		MainWindowStoreService,
 		StoreBootstrapService,
-		CollaboratorsService,
 		UserService,
 		LazyDataInitService,
 		GameStatusService,
@@ -1764,12 +1761,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PackStatsService,
 		CardNotificationsService,
 
-		AchievementsMonitor,
-		AchievementsFirestoneChallengeService,
+		AchievementsLiveProgressTrackingService,
+		FirestoneAchievementsChallengeService,
 		AchievementsMemoryMonitor,
 		AchievementsNotificationService,
-		RemoteAchievementsService,
-		AchievementsManager,
+		FirestoneRemoteAchievementsLoaderService,
 		AchievementUpdateHelper,
 
 		DecktrackerStateLoaderService,
@@ -1843,8 +1839,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		ReplaysNotificationService,
 		RewardMonitorService,
-
-		TemporaryResolutionOverrideService,
 
 		TavernBrawlService,
 		MailsService,

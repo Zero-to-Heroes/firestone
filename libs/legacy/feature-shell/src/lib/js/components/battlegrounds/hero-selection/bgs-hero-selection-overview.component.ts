@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, tap } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
+import { findCategory } from '../../../services/achievement/achievement-utils';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -52,7 +53,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
-			this.store.listen$(([main, nav]) => main.achievements),
+			this.store.achievementCategories$(),
 			this.store.listenBattlegrounds$(
 				([main, prefs]) =>
 					// Filter here to avoid recomputing achievements info every time something changes in
@@ -63,8 +64,8 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		]).pipe(
-			this.mapData(([tiers, [achievements], [panel, showAchievements]]) => {
-				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
+			this.mapData(([tiers, achievements, [panel, showAchievements]]) => {
+				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
 				if (!panel || !heroesAchievementCategory) {
 					return [];
 				}

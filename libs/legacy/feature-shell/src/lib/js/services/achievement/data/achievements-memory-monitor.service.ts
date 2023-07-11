@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { MemoryUpdate } from '../../models/memory/memory-update';
-import { Events } from '../events.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { HsAchievementCategory, HsAchievementInfo } from './achievements-info';
+import { MemoryUpdate } from '../../../models/memory/memory-update';
+import { Events } from '../../events.service';
+import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
+import { HsAchievementCategory, HsAchievementInfo } from '../achievements-info';
+import { AchievementsStorageService } from '../achievements-storage.service';
 
 @Injectable()
 export class AchievementsMemoryMonitor {
@@ -12,8 +13,21 @@ export class AchievementsMemoryMonitor {
 
 	private numberOfCompletedAchievements$$ = new BehaviorSubject<number>(0);
 
-	constructor(private readonly events: Events, private readonly memory: MemoryInspectionService) {
+	// TODO: add local cache as well, in case the app is launched without the game running
+
+	constructor(
+		private readonly events: Events,
+		private readonly memory: MemoryInspectionService,
+		private readonly db: AchievementsStorageService,
+	) {
 		this.init();
+	}
+
+	public async getInGameAchievementsInfo(): Promise<readonly HsAchievementInfo[]> {
+		const achievementsFromMemory = await this.memory.getAchievementsInfo();
+		console.debug('[achievements-memory-monitor] updated achievements from memory 2', achievementsFromMemory);
+		this.nativeAchievements$$.next(achievementsFromMemory?.achievements);
+		return achievementsFromMemory?.achievements ?? [];
 	}
 
 	private async init() {
@@ -54,5 +68,18 @@ export class AchievementsMemoryMonitor {
 				);
 				this.achievementCategories$$.next(achievementCategories);
 			});
+
+		this.nativeAchievements$$
+			.pipe(filter((achievements) => !!achievements?.length))
+			.subscribe((nativeAchievements) => {
+				console.debug('[achievements-memory-monitor] saving achievements to db', nativeAchievements);
+				this.db.saveInGameAchievements({
+					achievements: nativeAchievements,
+				});
+			});
+		const achievementsFromDb = await this.db.retrieveInGameAchievements();
+		if (achievementsFromDb?.achievements?.length) {
+			this.nativeAchievements$$.next(achievementsFromDb.achievements);
+		}
 	}
 }

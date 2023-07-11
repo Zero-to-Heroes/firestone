@@ -5,7 +5,7 @@ import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achie
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
-import { AchievementsMemoryMonitor } from '../../achievement/achievements-memory-monitor.service';
+import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';

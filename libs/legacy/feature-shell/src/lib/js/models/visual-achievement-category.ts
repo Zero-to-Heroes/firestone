@@ -1,4 +1,3 @@
-import { Achievement } from './achievement';
 import { VisualAchievement } from './visual-achievement';
 
 export class VisualAchievementCategory {
@@ -16,12 +15,10 @@ export class VisualAchievementCategory {
 		if (!categoryId) {
 			return null;
 		}
-
 		if (categoryId === this.id) {
 			return this;
 		}
 		const matches = this.categories.map((cat) => cat.findCategory(categoryId)).filter((cat) => cat);
-
 		return matches.length > 0 ? matches[0] : null;
 	}
 
@@ -45,44 +42,37 @@ export class VisualAchievementCategory {
 		return [this, ...subHierarchy].filter((cat) => cat);
 	}
 
-	public findAchievementHierarchy(achievementId: string): [VisualAchievementCategory[], VisualAchievement] {
+	public findAchievementHierarchy(achievementId: string | number): {
+		categories: VisualAchievementCategory[];
+		achievement: VisualAchievement;
+	} {
 		const achievement = this.achievements.find(
-			(ach) => ach.id === achievementId || ach.completionSteps.some((step) => step.id === achievementId),
+			(ach) =>
+				ach.id === achievementId ||
+				ach.hsAchievementId === achievementId ||
+				ach.completionSteps.some((step) => step.id === achievementId || step.hsAchievementId === achievementId),
 		);
 		if (achievement) {
-			return [[this], achievement];
+			return {
+				categories: [this],
+				achievement: achievement,
+			};
 		}
 
 		const subHierarchy = this.categories
 			.map((cat) => cat.findAchievementHierarchy(achievementId))
-			.find((result) => result.length === 2 && result[1]);
+			.find((result) => result.achievement != null);
 		if (!subHierarchy) {
-			return [[this], null];
+			return {
+				categories: [this],
+				achievement: null,
+			};
 		}
 
-		return [[this, ...subHierarchy[0]], subHierarchy[1]];
-	}
-
-	public updateAchievement(newAchievement: Achievement): VisualAchievementCategory {
-		// Owned by this category
-		if (
-			this.achievements.find(
-				(ach) =>
-					ach.id === newAchievement.id || ach.completionSteps.some((step) => step.id === newAchievement.id),
-			)
-		) {
-			return Object.assign(new VisualAchievementCategory(), this, {
-				achievements: this.achievements.map((ach) =>
-					ach.update(newAchievement),
-				) as readonly VisualAchievement[],
-			} as VisualAchievementCategory);
-		}
-		// Owned by a category below
-		return Object.assign(new VisualAchievementCategory(), this, {
-			categories: this.categories.map((cat) =>
-				cat.updateAchievement(newAchievement),
-			) as readonly VisualAchievementCategory[],
-		} as VisualAchievementCategory);
+		return {
+			categories: [this, ...subHierarchy.categories],
+			achievement: subHierarchy.achievement,
+		};
 	}
 
 	public retrieveAllAchievements(): readonly VisualAchievement[] {

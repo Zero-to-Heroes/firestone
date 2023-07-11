@@ -20,7 +20,8 @@ import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
-import { AchievementsProgressTracking } from '../achievement/achievements-monitor.service';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { sleep } from '../utils';
@@ -228,6 +229,10 @@ export class AppUiStoreFacadeService {
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
 		return this.debugObservable(this.store.achievementsProgressTracking$());
+	}
+
+	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
+		return this.debugObservable(this.store.achievementCategories$());
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {

@@ -3,7 +3,7 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable, tap } from 'rxjs';
 import { Preferences } from '../../models/preferences';
-import { AchievementsProgressTracking } from '../../services/achievement/achievements-monitor.service';
+import { AchievementsProgressTracking } from '../../services/achievement/achievements-live-progress-tracking.service';
 import { AchievementsTrackRandomAchievementsEvent } from '../../services/mainwindow/store/processors/achievements/achievements-track-random-achievements';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

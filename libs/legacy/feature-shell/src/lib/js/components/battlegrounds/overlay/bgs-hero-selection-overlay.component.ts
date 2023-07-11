@@ -5,6 +5,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
+import { findCategory } from '../../../services/achievement/achievement-utils';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -64,7 +65,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
-			this.store.listen$(([main, nav]) => main.achievements),
+			this.store.achievementCategories$(),
 			this.store.listenBattlegrounds$(
 				([main, prefs]) =>
 					main.panels?.find(
@@ -73,8 +74,8 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		]).pipe(
-			this.mapData(([tiers, [achievements], [panel, showAchievements]]) => {
-				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
+			this.mapData(([tiers, achievements, [panel, showAchievements]]) => {
+				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
 				if (!panel || !heroesAchievementCategory) {
 					return [];
 				}

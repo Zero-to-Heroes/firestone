@@ -166,8 +166,8 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 				this.isRefreshingPacks.next(false);
 			});
 		this.store
-			.listen$(([main, nav]) => main.achievements.categories)
-			.pipe(this.mapData(([categories]) => categories))
+			.achievementCategories$()
+			.pipe(this.mapData((categories) => categories))
 			.subscribe((categories) => {
 				this.isRefreshingAchievements.next(false);
 			});

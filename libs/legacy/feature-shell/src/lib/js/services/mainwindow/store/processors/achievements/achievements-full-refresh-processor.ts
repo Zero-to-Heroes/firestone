@@ -1,11 +1,11 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { RemoteAchievementsService } from '../../../../achievement/remote-achievements.service';
+import { FirestoneRemoteAchievementsLoaderService } from '../../../../achievement/data/firestone-remote-achievements-loader.service';
 import { AchievementsFullRefreshEvent } from '../../events/achievements/achievements-full-refresh-event';
 import { Processor } from '../processor';
 
 export class AchievementsFullRefreshProcessor implements Processor {
-	constructor(private readonly remoteAchievements: RemoteAchievementsService) {}
+	constructor(private readonly remoteAchievements: FirestoneRemoteAchievementsLoaderService) {}
 
 	public async process(
 		event: AchievementsFullRefreshEvent,
@@ -13,7 +13,7 @@ export class AchievementsFullRefreshProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		this.remoteAchievements.loadRemoteAchievements(false, true);
+		this.remoteAchievements.loadAchievements();
 		return [null, null];
 	}
 }

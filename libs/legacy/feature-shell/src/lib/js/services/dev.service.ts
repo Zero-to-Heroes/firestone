@@ -10,10 +10,10 @@ import { DeckCard } from '../models/decktracker/deck-card';
 import { DeckState } from '../models/decktracker/deck-state';
 import { GameState } from '../models/decktracker/game-state';
 import { GameStats } from '../models/mainwindow/stats/game-stats';
-import { AchievementsMonitor } from './achievement/achievements-monitor.service';
+import { AchievementsLiveProgressTrackingService } from './achievement/achievements-live-progress-tracking.service';
 import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
-import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
+import { RawAchievementsLoaderService } from './achievement/data/raw-achievements-loader.service';
 import { CardNotificationsService } from './collection/card-notifications.service';
 import { SetsService } from './collection/sets-service.service';
 import { DeckHandlerService } from './decktracker/deck-handler.service';
@@ -41,8 +41,8 @@ export class DevService {
 		private helper: DeckManipulationHelper,
 		private store: MainWindowStoreService,
 		private challengeBuilder: ChallengeBuilderService,
-		private achievementLoader: AchievementsLoaderService,
-		private achievementsMonitor: AchievementsMonitor,
+		private achievementLoader: RawAchievementsLoaderService,
+		private achievementsMonitor: AchievementsLiveProgressTrackingService,
 		private memoryService: MemoryInspectionService,
 		private handler: DeckHandlerService,
 		private allCards: CardsFacadeService,
