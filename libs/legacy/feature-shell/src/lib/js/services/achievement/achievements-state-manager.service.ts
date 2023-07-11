@@ -21,10 +21,9 @@ export class AchievementsStateManagerService {
 
 	// The achievement definitions loaded from the config and reference files
 	public rawAchievements$$ = new BehaviorSubject<readonly Achievement[]>([]);
-
 	// The current in-game progress for each achievement
 	private achievementsInGameProgress$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
-
+	// The Firestone achievements that have been completed
 	private completedAchievements$$ = new BehaviorSubject<readonly CompletedAchievement[]>([]);
 
 	constructor(
@@ -65,6 +64,10 @@ export class AchievementsStateManagerService {
 		this.memoryMonitor.nativeAchievements$$
 			.pipe(filter((inGameAchievements) => !!inGameAchievements?.length))
 			.subscribe((inGameAchievements) => {
+				console.debug(
+					'[achievements-state] received in-game achievements',
+					inGameAchievements.find((a) => a.id === 488),
+				);
 				this.achievementsInGameProgress$$.next(inGameAchievements);
 			});
 
@@ -162,7 +165,11 @@ const addCompletionInfo = (
 		const achievementFromMemory = achievementsFromMemory?.find((ach) => ach.id === ref.hsAchievementId);
 		let numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
 		numberOfCompletions = numberOfCompletions > 0 ? numberOfCompletions : achievementFromMemory?.completed ? 1 : 0;
-		return { ...ref, numberOfCompletions: numberOfCompletions } as Achievement;
+		return {
+			...ref,
+			numberOfCompletions: numberOfCompletions,
+			progress: achievementFromMemory?.progress,
+		} as Achievement;
 	});
 	return achievementsWithCompletion;
 };

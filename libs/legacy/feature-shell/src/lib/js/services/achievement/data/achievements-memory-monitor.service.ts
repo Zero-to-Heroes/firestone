@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { GameEvent } from '../../../models/game-event';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
+import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { HsAchievementCategory, HsAchievementInfo } from '../achievements-info';
 import { AchievementsStorageService } from '../achievements-storage.service';
@@ -17,6 +19,7 @@ export class AchievementsMemoryMonitor {
 
 	constructor(
 		private readonly events: Events,
+		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
 		private readonly db: AchievementsStorageService,
 	) {
@@ -31,6 +34,15 @@ export class AchievementsMemoryMonitor {
 	}
 
 	private async init() {
+		const forceRetrigger$ = new BehaviorSubject<void>(null);
+		this.numberOfCompletedAchievements$$
+			.pipe(
+				filter((value) => !!value),
+				distinctUntilChanged(),
+				debounceTime(1000),
+			)
+			.subscribe(() => forceRetrigger$?.next(null));
+
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
 			const changes = event.data[0] as MemoryUpdate;
 			if (changes.NumberOfAchievementsCompleted) {
@@ -38,36 +50,21 @@ export class AchievementsMemoryMonitor {
 			}
 		});
 
-		this.numberOfCompletedAchievements$$
-			.pipe(
-				filter((value) => !!value),
-				distinctUntilChanged(),
-				debounceTime(1000),
-			)
-			.subscribe(async (numberOfCompletedAchievements) => {
-				const achievementsFromMemory = await this.memory.getAchievementsInfo();
-				console.debug(
-					'[achievements-memory-monitor] updated achievements from memory',
-					numberOfCompletedAchievements,
-					achievementsFromMemory,
-				);
-				this.nativeAchievements$$.next(achievementsFromMemory.achievements);
-			});
-		this.numberOfCompletedAchievements$$
-			.pipe(
-				filter((value) => !!value),
-				distinctUntilChanged(),
-				debounceTime(1000),
-			)
-			.subscribe(async (numberOfCompletedAchievements) => {
-				const achievementCategories = await this.memory.getAchievementCategories();
-				console.debug(
-					'[achievements-memory-monitor] updated achievement categories',
-					numberOfCompletedAchievements,
-					achievementCategories,
-				);
-				this.achievementCategories$$.next(achievementCategories);
-			});
+		// Also update the achievements (their progress) once a game ends
+		this.gameEvents.allEvents.pipe(filter((event) => event.type === GameEvent.GAME_END)).subscribe((event) => {
+			forceRetrigger$.next(null);
+		});
+
+		forceRetrigger$.subscribe(async () => {
+			const achievementsFromMemory = await this.memory.getAchievementsInfo();
+			console.debug('[achievements-memory-monitor] updated achievements from memory', achievementsFromMemory);
+			this.nativeAchievements$$.next(achievementsFromMemory.achievements);
+		});
+		forceRetrigger$.subscribe(async () => {
+			const achievementCategories = await this.memory.getAchievementCategories();
+			console.debug('[achievements-memory-monitor] updated achievement categories', achievementCategories);
+			this.achievementCategories$$.next(achievementCategories);
+		});
 
 		this.nativeAchievements$$
 			.pipe(filter((achievements) => !!achievements?.length))
