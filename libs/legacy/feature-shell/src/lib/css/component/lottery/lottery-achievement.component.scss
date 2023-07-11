@@ -4,7 +4,30 @@
 	background: rgba(255, 255, 255, 0.08);
 	margin-bottom: 5px;
 	height: 30px;
-	padding: 10px;
+	padding: 0 10px;
+	position: relative;
+
+	.xp {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		position: relative;
+		margin-right: 10px;
+
+		.xp-icon {
+			height: 70%;
+			margin-bottom: -15px;
+		}
+
+		.xp-value {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #61ff47;
+		}
+	}
 
 	.name {
 		width: 180px;
@@ -12,6 +35,9 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		margin-right: 10px;
+		height: 100%;
+		display: flex;
+		align-items: center;
 	}
 
 	.progress-bar {

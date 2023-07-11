@@ -9,7 +9,9 @@ import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/p
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
+import { buildAchievementHierarchy } from './achievement-utils';
 import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
+import { AchievementsStateManagerService } from './achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
 import { FirestoneAchievementsChallengeService } from './firestone-achievements-challenges.service';
 
@@ -29,6 +31,7 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly refLoaderService: AchievementsRefLoaderService,
 		private readonly achievementsMemoryMonitor: AchievementsMemoryMonitor,
+		private readonly stateManager: AchievementsStateManagerService,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,
 		private readonly firestoneAchievements: FirestoneAchievementsChallengeService,
@@ -136,6 +139,11 @@ export class AchievementsLiveProgressTrackingService {
 					progressTotal: !!currentProgress
 						? currentProgress.progress
 						: achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0,
+					rewardTrackXp: refAchievement?.rewardTrackXp,
+					hierarchy: buildAchievementHierarchy(
+						id,
+						this.stateManager.groupedAchievements$$.value,
+					)?.categories?.map((c) => c.name),
 				};
 				return result;
 			}) ?? []
@@ -242,4 +250,6 @@ export interface AchievementsProgressTracking {
 	readonly quota: number;
 	readonly progressThisGame: number;
 	readonly progressTotal: number;
+	readonly rewardTrackXp: number;
+	readonly hierarchy: readonly string[];
 }
