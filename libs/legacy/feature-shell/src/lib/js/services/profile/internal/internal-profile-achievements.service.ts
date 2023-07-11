@@ -29,15 +29,17 @@ export class InternalProfileAchievementsService {
 			filter(([premium, achievementCategories]) => premium),
 			debounceTime(2000),
 			map(([premium, achievementCategories]) => {
-				return achievementCategories.map((category) => {
-					return {
-						id: category.id,
-						availablePoints: category.availablePoints,
-						points: category.points,
-						totalAchievements: category.totalAchievements,
-						completedAchievements: category.completedAchievements,
-					} as ProfileAchievementCategory;
-				});
+				return (
+					achievementCategories?.map((category) => {
+						return {
+							id: category.id,
+							availablePoints: category.availablePoints,
+							points: category.points,
+							totalAchievements: category.totalAchievements,
+							completedAchievements: category.completedAchievements,
+						} as ProfileAchievementCategory;
+					}) ?? []
+				);
 			}),
 		);
 		achievementsToUpload$

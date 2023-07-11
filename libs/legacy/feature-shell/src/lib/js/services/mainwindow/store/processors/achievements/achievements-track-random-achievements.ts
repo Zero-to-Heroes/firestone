@@ -72,8 +72,15 @@ export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 				};
 			})
 			.filter((a) => a.progress < a.quota);
-		const onlyQuota1 = uncompleteAchievements.every((a) => a.quota === 1);
-		const candidates = uncompleteAchievements.filter((a) => (onlyQuota1 ? true : a.quota > 1));
+
+		let priorityAchievements = uncompleteAchievements.filter((a) => a.rewardTrackXp > 0);
+		console.debug('[achievements-track-random-achievements] priorityAchievements', priorityAchievements);
+		if (priorityAchievements.length === 0) {
+			priorityAchievements = uncompleteAchievements;
+		}
+
+		const onlyQuota1 = priorityAchievements.every((a) => a.quota === 1);
+		const candidates = priorityAchievements.filter((a) => (onlyQuota1 ? true : a.quota > 1));
 		const orderedCandidates = candidates.sort(sortByProperties((a) => [a.quota - a.progress]));
 		const shortList = orderedCandidates.slice(0, 10);
 		console.debug('[achievements-track-random-achievements] shortlist', shortList);
