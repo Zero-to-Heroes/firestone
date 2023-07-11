@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.5.10',
+		version: '11.5.12',
 		force: false,
 		sections: [
 			// {
@@ -45,6 +45,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'content',
+								text: `The app has been updated for Quests and patch 26.6.3. Enjoy!`,
+							},
+						],
+					},
 					{
 						category: 'general',
 						details: [
@@ -70,6 +79,23 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now see the time left in the current season.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'feature',
+								text: `Live tracking of achievements now contains the current Reward Track XP (if any), and tells you where in the achievements hierarchy you can find that achievement (which is useful for context when the name is not enough).`,
+							},
+							{
+								type: 'feature',
+								text: `The "Pick for Me" feature now excludes Collection and Progression achievements, and prioritizes achievements that grand Rewards Track XP.`,
+							},
+							{
+								type: 'feature',
+								text: `The current progress of achievements is now displayed when browsing achievements in Firestone, and is updated after each game.`,
 							},
 						],
 					},
