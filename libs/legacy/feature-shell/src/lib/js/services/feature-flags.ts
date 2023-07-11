@@ -7,7 +7,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_MAILBOX_TAB = true;
 	public static readonly ACHIEVEMENT_PINS = true;
 
-	public static readonly APP_TIPS = false;
+	public static readonly APP_TIPS = true;
 
 	// Shelved for now
 	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;

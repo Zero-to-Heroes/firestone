@@ -58,7 +58,7 @@ export class TipService {
 			file: 'bg_hero_select.webm',
 			type: 'video',
 			text: 'You can get stats for each hero, directly on the hero selection screen',
-			premium: false,
+			premium: true,
 		},
 		{
 			file: 'bg_tab_key.webm',
