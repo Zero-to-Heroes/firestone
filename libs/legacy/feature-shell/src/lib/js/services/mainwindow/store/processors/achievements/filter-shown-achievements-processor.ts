@@ -32,12 +32,12 @@ export class FilterShownAchievementsProcessor implements Processor {
 
 		const selectedCategory = findCategory(
 			navigationState.navigationAchievements.selectedCategoryId,
-			this.stateManager.groupedAchievements$$.value,
+			this.stateManager.groupedAchievements$$.getValue(),
 		);
 
 		const allAchievements: readonly VisualAchievement[] = selectedCategory
 			? selectedCategory.retrieveAllAchievements()
-			: retrieveAllAchievements(this.stateManager.groupedAchievements$$.value);
+			: retrieveAllAchievements(this.stateManager.groupedAchievements$$.getValue());
 		const displayedAchievementsList: readonly string[] =
 			searchString?.length && searchString.length > 2
 				? allAchievements

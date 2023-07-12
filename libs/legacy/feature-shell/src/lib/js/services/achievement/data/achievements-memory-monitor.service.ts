@@ -58,7 +58,7 @@ export class AchievementsMemoryMonitor {
 		forceRetrigger$.subscribe(async () => {
 			const achievementsFromMemory = await this.memory.getAchievementsInfo();
 			console.debug('[achievements-memory-monitor] updated achievements from memory', achievementsFromMemory);
-			this.nativeAchievements$$.next(achievementsFromMemory.achievements);
+			this.nativeAchievements$$.next(achievementsFromMemory?.achievements ?? []);
 		});
 		forceRetrigger$.subscribe(async () => {
 			const achievementCategories = await this.memory.getAchievementCategories();

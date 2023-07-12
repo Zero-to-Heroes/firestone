@@ -437,7 +437,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
-		return this.achievementCategories.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.achievementCategories;
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {
@@ -551,7 +551,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private initAchievementCategories() {
 		this.achievementCategories = (
 			this.ow.getMainWindow().achievementsStateManager as AchievementsStateManagerService
-		).groupedAchievements$$.pipe(shareReplay(1));
+		).groupedAchievements$$;
 	}
 
 	private initPackStats() {

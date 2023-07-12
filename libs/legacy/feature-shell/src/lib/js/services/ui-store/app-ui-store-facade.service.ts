@@ -232,7 +232,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
-		return this.debugObservable(this.store.achievementCategories$());
+		return this.store.achievementCategories$();
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {

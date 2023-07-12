@@ -142,7 +142,7 @@ export class AchievementsLiveProgressTrackingService {
 					rewardTrackXp: refAchievement?.rewardTrackXp,
 					hierarchy: buildAchievementHierarchy(
 						id,
-						this.stateManager.groupedAchievements$$.value,
+						this.stateManager.groupedAchievements$$.getValue(),
 					)?.categories?.map((c) => c.name),
 				};
 				return result;

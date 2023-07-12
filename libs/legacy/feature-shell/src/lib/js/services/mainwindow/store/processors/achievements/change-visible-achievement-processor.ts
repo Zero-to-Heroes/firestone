@@ -16,7 +16,10 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const hierarchy = buildAchievementHierarchy(event.achievementId, this.stateManager.groupedAchievements$$.value);
+		const hierarchy = buildAchievementHierarchy(
+			event.achievementId,
+			this.stateManager.groupedAchievements$$.getValue(),
+		);
 		if (!hierarchy?.categories?.length) {
 			console.warn('Could not get achievement hierarchy', event.achievementId);
 			return [currentState, navigationState];
