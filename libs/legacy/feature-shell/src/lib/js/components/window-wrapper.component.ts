@@ -1,7 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -12,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
 import { GameStatusService } from '../services/game-status.service';
@@ -65,10 +64,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class WindowWrapperComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
-{
+export class WindowWrapperComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	@Input() allowResize = false;
 	@Input() avoidGameOverlap = false;
 
@@ -86,6 +82,8 @@ export class WindowWrapperComponent
 	private zoom = 1;
 	private originalWidth = 0;
 	private originalHeight = 0;
+	private originalTop = 0;
+	private originalLeft = 0;
 
 	private sub$$: Subscription;
 	// private sub2$$: Subscription;
@@ -100,11 +98,15 @@ export class WindowWrapperComponent
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.sub$$ = combineLatest(
+	async ngAfterContentInit() {
+		const currentWindow = await this.ow.getCurrentWindow();
+		this.windowId.next(currentWindow.id);
+		console.log('windowId', this.windowId.value);
+
+		this.sub$$ = combineLatest([
 			this.windowId.asObservable(),
 			this.store.listen$(([main, nav, prefs]) => prefs.globalZoomLevel),
-		)
+		])
 			.pipe(
 				map(([windowId, [zoom]]) => ({
 					windowId,
@@ -118,15 +120,25 @@ export class WindowWrapperComponent
 				if (this.EXCLUDED_WINDOW_IDS.includes(windowId)) {
 					this.zoom = 0;
 				}
+				const currentWindow = await this.ow.getCurrentWindow();
 				if (!this.originalHeight || !this.originalWidth) {
-					const currentWindow = await this.ow.getCurrentWindow();
-					this.originalWidth = currentWindow.width / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
-					this.originalHeight = currentWindow.height / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
+					this.originalWidth =
+						currentWindow.logicalBounds.width / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
+					this.originalHeight =
+						currentWindow.logicalBounds.height / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
+					this.originalTop =
+						currentWindow.logicalBounds.top / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
+					this.originalLeft =
+						currentWindow.logicalBounds.left / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
 					console.log(
 						'setting originalWidth',
 						this.originalWidth,
 						'originalHeight',
 						this.originalHeight,
+						'originalTop',
+						this.originalTop,
+						'originalLeft',
+						this.originalLeft,
 						currentWindow,
 					);
 				}
@@ -135,13 +147,16 @@ export class WindowWrapperComponent
 				// If values are between 0 and 1, it looks like
 				this.ow.setZoom(this.zoom);
 				this.changeWindowSize();
-			});
-	}
 
-	async ngAfterViewInit() {
-		const currentWindow = await this.ow.getCurrentWindow();
-		this.windowId.next(currentWindow.id);
-		console.log('windowId', this.windowId.value);
+				const monitors = await this.ow.getMonitorsList();
+				const monitor = monitors?.displays?.find((monitor) => monitor.id === currentWindow.monitorId);
+				if (!!monitor && (this.originalTop < monitor.y || this.originalLeft < monitor.x)) {
+					const newX = Math.max(this.originalTop, monitor.y);
+					const newY = Math.max(this.originalLeft, monitor.x);
+					console.log('changing window position', newX, newY, monitors);
+					await this.ow.changeWindowPosition(currentWindow.id, newX, newY);
+				}
+			});
 
 		this.stateChangedListener = this.ow.addStateChangedListener(currentWindow.name, (message) => {
 			if (message.window_state_ex === 'maximized') {
@@ -169,40 +184,6 @@ export class WindowWrapperComponent
 				}
 			}, 200);
 		});
-
-		// this.sub2$$ = combineLatest([this.gameStatus.inGame$$])
-		// 	.pipe(
-		// 		distinctUntilChanged(),
-		// 		this.mapData(([inGame]) => {
-		// 			return inGame;
-		// 		}),
-		// 	)
-		// 	.subscribe(async (inGame) => {
-		// 		if (!this.avoidGameOverlap) {
-		// 			return;
-		// 		}
-
-		// 		const monitors = await this.ow.getMonitorsList();
-		// 		const theWindow = await this.ow.getCurrentWindow();
-		// 		console.debug('theWindow', theWindow, monitors, inGame);
-		// 		if (theWindow.type === 'Desktop' && inGame && monitors.displays.length > 1) {
-		// 			const gameInfo = await this.ow.getRunningGameInfo();
-		// 			const gameMonitorHandle = gameInfo.monitorHandle?.value;
-		// 			const gameMonitor = monitors.displays.find((m) => m.handle?.value === gameMonitorHandle);
-		// 			// console.debug('going in game', gameInfo, gameMonitorHandle, gameMonitor);
-		// 			// Game opens on the same screen as the window, so move it elsewhere
-		// 			if (theWindow.monitorId === gameMonitor?.id) {
-		// 				const possibleTargets = monitors.displays.filter((m) => m.handle?.value !== gameMonitorHandle);
-		// 				const target = possibleTargets[0];
-		// 				console.debug('moving window to', target);
-		// 				const newX = target.x;
-		// 				const newY = target.y;
-		// 				console.debug('changing position', newX, newY);
-		// 				await this.ow.changeWindowPosition(theWindow.id, newX, newY);
-		// 				await this.ow.restoreWindow(theWindow.id);
-		// 			}
-		// 		}
-		// 	});
 	}
 
 	async dragResize(event: MouseEvent, edge) {
@@ -216,6 +197,8 @@ export class WindowWrapperComponent
 		const window = await this.ow.getCurrentWindow();
 		this.originalWidth = window.width;
 		this.originalHeight = window.height;
+		this.originalLeft = window.left;
+		this.originalTop = window.top;
 		if (!this.originalHeight || !this.originalWidth || isNaN(this.originalHeight) || isNaN(this.originalWidth)) {
 			console.error('missing dimensions info', this.originalWidth, this.originalHeight, window);
 			return;
@@ -228,11 +211,6 @@ export class WindowWrapperComponent
 			return;
 		}
 		console.debug('changing window size', this.originalWidth, this.originalHeight, this.zoom);
-		// await this.ow.changeWindowSize(
-		// 	this.windowId.value,
-		// 	Math.max(this.originalWidth, this.zoom * this.originalWidth),
-		// 	Math.max(this.originalHeight, this.zoom * this.originalHeight),
-		// );
 		await this.ow.changeWindowSize2(
 			this.windowId.value,
 			Math.max(this.originalWidth, this.zoom * this.originalWidth),

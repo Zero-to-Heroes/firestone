@@ -1037,4 +1037,10 @@ export interface Flair {
 export interface ExtendedWindowInfo extends overwolf.windows.WindowInfo {
 	dpiScale: number;
 	type: 'Deskopt' | string;
+	logicalBounds: {
+		top: number;
+		left: number;
+		width: number;
+		height: number;
+	};
 }
