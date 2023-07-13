@@ -69,9 +69,12 @@ export class SystemTrayService {
 	private async resetWindowPositions() {
 		const windows = [
 			OverwolfService.COLLECTION_WINDOW,
+			OverwolfService.COLLECTION_WINDOW_OVERLAY,
 			OverwolfService.SETTINGS_WINDOW,
+			OverwolfService.SETTINGS_WINDOW_OVERLAY,
 			OverwolfService.LOADING_WINDOW,
 			OverwolfService.BATTLEGROUNDS_WINDOW,
+			OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY,
 			OverwolfService.LOTTERY_WINDOW,
 		];
 		for (const w of windows) {
@@ -88,7 +91,7 @@ export class SystemTrayService {
 		this.settingsEventBus.next([null, null]);
 
 		const prefs = await this.prefs.getPreferences();
-		const windowName = await this.ow.getSettingsWindowName(prefs);
+		const windowName = this.ow.getSettingsWindowName(prefs);
 		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);
 		await this.ow.restoreWindow(settingsWindow.id);
 		this.ow.bringToFront(settingsWindow.id);
