@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { Tip, TipService } from '../../services/tip.service';
 
 @Component({
@@ -15,7 +16,7 @@ import { Tip, TipService } from '../../services/tip.service';
 				<img *ngSwitchCase="'image'" class="tip-item image" [src]="tip.url" />
 			</ng-container>
 			<div class="text">
-				<div class="premium-banner" *ngIf="tip.premium">Premium</div>
+				<div class="premium-banner" *ngIf="tip.premium" [owTranslate]="'app.tips.ad-tip-premium'"></div>
 				{{ tip.text }}
 			</div>
 		</div>
@@ -27,7 +28,11 @@ export class AdTipComponent extends AbstractSubscriptionComponent implements Aft
 
 	private tip$$ = new BehaviorSubject<ExtendedTip | null>(null);
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly tipService: TipService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly tipService: TipService,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(cdr);
 	}
 
@@ -42,7 +47,9 @@ export class AdTipComponent extends AbstractSubscriptionComponent implements Aft
 			const extendedTip: ExtendedTip = {
 				...tip,
 				url: `https://static.firestoneapp.com/features/${tip.file}`,
-				text: `Did you know? ${tip.text}`,
+				text: this.i18n.translateString('app.tips.ad-tip-prefix', {
+					text: tip.text,
+				}),
 			};
 			this.tip$$.next(extendedTip);
 			// Show the tip for 30 seconds
