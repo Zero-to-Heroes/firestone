@@ -2,7 +2,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
@@ -162,7 +162,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	showStrategies() {
-		this.store.send(new BgsShowStrategiesEvent(this._hero.id));
+		this.store.send(new BgsShowStrategiesEvent(this._hero.baseCardId ?? this._hero.id));
 	}
 }
 

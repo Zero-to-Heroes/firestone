@@ -1,3 +1,4 @@
+import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@legacy-import/src/lib/js/models/mainwindow/main-window-state';
 import { NavigationState } from '@legacy-import/src/lib/js/models/mainwindow/navigation/navigation-state';
@@ -29,7 +30,7 @@ export class BgsShowStrategiesProcessor implements Processor {
 			}),
 		} as NavigationState);
 		return new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.allCards, this.i18n).process(
-			new BgsPersonalStatsSelectHeroDetailsEvent(event.heroId),
+			new BgsPersonalStatsSelectHeroDetailsEvent(normalizeHeroCardId(event.heroId, this.allCards)),
 			currentState,
 			stateHistory,
 			newNavState,
