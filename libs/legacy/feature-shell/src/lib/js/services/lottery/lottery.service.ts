@@ -15,7 +15,7 @@ import { LotteryWidgetControllerService } from './lottery-widget-controller.serv
 import { LotterySeasonConfig, LotteryState } from './lottery.model';
 
 const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
-const LOTTERY_SEASONS_URL = `https://static.zerotoheroes.com/hearthstone/data/lottery-seasons.json?v=7`;
+const LOTTERY_SEASONS_URL = `https://static.zerotoheroes.com/hearthstone/api/data/lottery-seasons.json`;
 
 @Injectable()
 export class LotteryService {
