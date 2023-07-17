@@ -8,7 +8,7 @@ export class LotteryDamageWithSpellsProcessor implements LotteryProcessor {
 
 	process(currentState: LotteryState, event: DamageGameEvent): LotteryState {
 		if (!currentState.shouldTrack) {
-			console.debug('[lottery] not tracking, ignoring event', event);
+			// console.debug('[lottery] not tracking, ignoring event', event);
 			return currentState;
 		}
 		const localPlayerId = event.localPlayer?.PlayerId;

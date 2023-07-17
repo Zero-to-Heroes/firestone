@@ -15,7 +15,7 @@ import { LotteryWidgetControllerService } from './lottery-widget-controller.serv
 import { LotterySeasonConfig, LotteryState } from './lottery.model';
 
 const LOTTERY_UPDATE_ENDPOINT = `https://6wdoeqq2zemtk7aqnmnhwue5eq0fopzf.lambda-url.us-west-2.on.aws/`;
-const LOTTERY_SEASONS_URL = `https://static.zerotoheroes.com/hearthstone/api/data/lottery-seasons.json`;
+const LOTTERY_SEASONS_URL = `https://static.zerotoheroes.com/api/lottery/lottery-seasons.json`;
 
 @Injectable()
 export class LotteryService {
@@ -114,10 +114,18 @@ export class LotteryService {
 			.map((season) => ({ season: season, diff: new Date(season.startDate).getTime() - new Date().getTime() }))
 			// Keep only seasons that are in the past
 			.filter((season) => season.diff < 0)
-			.sort((a, b) => a.diff - b.diff)[0];
+			.sort((a, b) => b.diff - a.diff)[0];
 		this.lotterySeason = '' + seasonClosestToNow?.season?.id;
 		const seasonConfig = seasonClosestToNow?.season ?? allSeasons[0];
-		console.debug('[lottery] loaded lottery season config', seasonConfig, seasonClosestToNow);
+		console.debug(
+			'[lottery] loaded lottery season config',
+			seasonConfig,
+			seasonClosestToNow,
+			allSeasons.map((season) => ({
+				season: season,
+				diff: new Date(season.startDate).getTime() - new Date().getTime(),
+			})),
+		);
 		return seasonConfig;
 	}
 }

@@ -5,7 +5,7 @@ import { LotteryProcessor } from './_processor';
 export class LotteryResourcesUpdateProcessor implements LotteryProcessor {
 	process(currentState: LotteryState, event: GameEvent): LotteryState {
 		if (!currentState.shouldTrack) {
-			console.debug('[lottery] not tracking, ignoring event', event);
+			// console.debug('[lottery] not tracking, ignoring event', event);
 			return currentState;
 		}
 
