@@ -67,14 +67,14 @@ export class DiskCacheService {
 			}
 
 			const start = Date.now();
-			// console.debug('[disk-cache] storing value', key);
+			key === 'user-match-history.json' && console.log('[disk-cache] storing value', key);
 			const stringified = JSON.stringify(value);
 			this.savingFiles[key] = true;
 			await this.ow.deleteAppFile(key);
-			// console.debug('[disk-cache] deleted file', key);
+			key === 'user-match-history.json' && console.log('[disk-cache] deleted file', key);
 			const saved = await this.ow.storeAppFile(key, stringified);
 			this.savingFiles[key] = false;
-			console.debug('[disk-cache] stored value', key, Date.now() - start);
+			key === 'user-match-history.json' && console.log('[disk-cache] stored value', key, Date.now() - start);
 			return saved;
 		} catch (e) {
 			console.error('[disk-cache] error while storing info on local disk', key);

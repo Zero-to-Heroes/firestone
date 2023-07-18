@@ -764,6 +764,7 @@ import { PreferencesService } from './js/services/preferences.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
+import { InternalProfileInfoService } from './js/services/profile/internal/internal-profile-info.service';
 import { ProfileUploaderService } from './js/services/profile/profile-uploader.service';
 import { QuestsService } from './js/services/quests.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
@@ -1847,6 +1848,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		InternalProfileCollectionService,
 		InternalProfileAchievementsService,
 		InternalProfileBattlegroundsService,
+		InternalProfileInfoService,
 
 		LotteryService,
 		LotteryWidgetControllerService,

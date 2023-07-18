@@ -13,6 +13,7 @@ import { DeckInfoFromMemory } from '../../../models/mainwindow/decktracker/deck-
 import { InternalHsAchievementsCategory } from './operations/get-achievements-categories-operation';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 import { MemoryQuestsLog } from './operations/get-active-quests-operation';
+import { MemoryPlayerProfileInfo } from './operations/get-profile-info-operation';
 
 declare let OverwolfPlugin: any;
 
@@ -479,6 +480,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.warn('[mind-vision] could not parse getActiveQuests', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getPlayerProfileInfo(): Promise<MemoryPlayerProfileInfo> {
+		return new Promise<MemoryPlayerProfileInfo>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getPlayerProfileInfo((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getPlayerProfileInfo', e);
 				resolve(null);
 			}
 		});

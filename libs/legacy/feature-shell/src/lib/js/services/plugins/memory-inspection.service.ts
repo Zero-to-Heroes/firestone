@@ -49,6 +49,10 @@ import { GetMatchInfoOperation } from './mind-vision/operations/get-match-info-o
 import { GetMemoryChangesOperation } from './mind-vision/operations/get-memory-changes-operation';
 import { GetMercenariesCollectionInfoOperation } from './mind-vision/operations/get-mercenaries-collection-info-operation';
 import { GetMercenariesInfoOperation } from './mind-vision/operations/get-mercenaries-info-operation';
+import {
+	GetPlayerProfileInfoOperation,
+	MemoryPlayerProfileInfo,
+} from './mind-vision/operations/get-profile-info-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/operations/get-rewards-track-info-operation';
 import { GetSelectedDeckIdOperation } from './mind-vision/operations/get-selected-deck-id-operation';
 import { GetWhizbangDeckOperation } from './mind-vision/operations/get-whizbang-deck-operation';
@@ -117,6 +121,7 @@ export class MemoryInspectionService {
 	);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.ow);
 	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.ow);
+	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.ow);
 	// private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
 	// 	this.mindVisionFacade,
 	// 	this.ow,
@@ -302,6 +307,10 @@ export class MemoryInspectionService {
 
 	public async getActiveQuests(): Promise<MemoryQuestsLog> {
 		return this.mindVision.callMindVision(() => this.getActiveQuestsOperation.call());
+	}
+
+	public async getProfileInfo(): Promise<MemoryPlayerProfileInfo> {
+		return this.mindVision.callMindVision(() => this.getProfileInfoOperation.call());
 	}
 
 	// public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
