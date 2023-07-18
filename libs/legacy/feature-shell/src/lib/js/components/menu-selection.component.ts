@@ -284,7 +284,7 @@ export class MenuSelectionComponent
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
 		this.enableMailboxTab$ = this.listenForBasicPref$((prefs) => prefs.enableMailbox);
-		this.showGoPremium$ = this.store.enablePremiumFeatures$().pipe(this.mapData((premium) => !premium));
+		this.showGoPremium$ = this.store.hasPremiumSub$().pipe(this.mapData((premium) => !premium));
 		const enableMailboxUnread$ = this.listenForBasicPref$((prefs) => prefs.enableMailboxUnread);
 		this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
 			this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),
