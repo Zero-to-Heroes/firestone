@@ -145,6 +145,11 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 								name: this.i18n.translateString('app.menu.profile-overview-header'),
 							},
 							{
+								id: `profile${profileWatchFragment}/battlegrounds`,
+								icon: 'assets/svg/whatsnew/battlegrounds.svg',
+								name: this.i18n.translateString('app.menu.battlegrounds-header'),
+							},
+							{
 								id: `profile${profileWatchFragment}/collection`,
 								icon: 'assets/svg/whatsnew/decktracker.svg', // because it show cards
 								name: this.i18n.translateString('app.menu.collection-header'),
@@ -153,11 +158,6 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 								id: `profile${profileWatchFragment}/packs`,
 								icon: 'assets/svg/whatsnew/collection.svg',
 								name: this.i18n.translateString('app.collection.menu.packs'),
-							},
-							{
-								id: `profile${profileWatchFragment}/battlegrounds`,
-								icon: 'assets/svg/whatsnew/battlegrounds.svg',
-								name: this.i18n.translateString('app.menu.battlegrounds-header'),
 							},
 							// {
 							// 	id: `profile${profileWatchFragment}/collection`,
