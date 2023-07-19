@@ -43,3 +43,8 @@ export const getStatsForModes = createSelector(
 	getWebsiteProfileState,
 	(state: WebsiteProfileState) => state.profile?.winsForModes ?? [],
 );
+
+export const getClassStats = createSelector(
+	getWebsiteProfileState,
+	(state: WebsiteProfileState) => state.profile?.classesProgress ?? [],
+);

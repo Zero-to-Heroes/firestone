@@ -1,0 +1,29 @@
+.hero-stats {
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	grid-gap: 5px;
+}
+
+.overview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 50px;
+
+	::ng-deep {
+		.item {
+			width: 250px;
+		}
+
+		.item:not(:last-child) {
+			margin-right: 20px;
+		}
+	}
+}
+
+.class-stats {
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	grid-gap: 5px;
+	grid-auto-rows: 1fr;
+}

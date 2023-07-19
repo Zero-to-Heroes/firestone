@@ -26,11 +26,14 @@ import { WebsiteProfileCollectionOverviewComponent } from './collection/website-
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
 import { WebsiteProfileDuelsOverviewsComponent } from './duels/website-profile-duels-overviews.component';
+import { WebsiteProfileClassStatComponent } from './modes/website-profile-class-stat.component';
+import { WebsiteProfileClassStatsComponent } from './modes/website-profile-class-stats.component';
 import { WebsiteProfileModeOverviewComponent } from './modes/website-profile-mode-overview.component';
 import { WebsiteProfileOverviewComponent } from './overview/website-profile-overview.component';
 import { WebsiteProfilePacksOverviewComponent } from './packs/website-profile-packs-overview.component';
 import { WebsiteProfilePacksComponent } from './packs/website-profile-packs.component';
 import { WebsiteProfileRankedOverviewsComponent } from './ranked/website-profile-ranked-overviews.component';
+import { WebsiteProfileRankedComponent } from './ranked/website-profile-ranked.component';
 import { WebsiteProfileShareModalComponent } from './share/website-profile-share-modal.component';
 import { WebsiteProfileComponent } from './website-profile.component';
 
@@ -50,9 +53,12 @@ const components = [
 	WebsiteProfileBattlegroundsOverviewComponent,
 	WebsiteProfileBattlegroundsOverviewsComponent,
 	WebsiteProfileModeOverviewComponent,
+	WebsiteProfileRankedComponent,
 	WebsiteProfileRankedOverviewsComponent,
 	WebsiteProfileDuelsOverviewsComponent,
 	WebsiteProfileArenaOverviewsComponent,
+	WebsiteProfileClassStatsComponent,
+	WebsiteProfileClassStatComponent,
 ];
 
 @NgModule({

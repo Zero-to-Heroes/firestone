@@ -145,13 +145,28 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 								name: this.i18n.translateString('app.menu.profile-overview-header'),
 							},
 							{
+								id: `profile${profileWatchFragment}/ranked`,
+								icon: 'assets/svg/whatsnew/decktracker.svg',
+								name: this.i18n.translateString('app.menu.ranked-header'),
+							},
+							{
 								id: `profile${profileWatchFragment}/battlegrounds`,
 								icon: 'assets/svg/whatsnew/battlegrounds.svg',
 								name: this.i18n.translateString('app.menu.battlegrounds-header'),
 							},
 							{
+								id: `profile${profileWatchFragment}/duels`,
+								icon: 'assets/svg/whatsnew/duels.svg',
+								name: this.i18n.translateString('app.menu.duels-header'),
+							},
+							{
+								id: `profile${profileWatchFragment}/arena`,
+								icon: 'assets/svg/whatsnew/arena.svg',
+								name: this.i18n.translateString('app.menu.arena-header'),
+							},
+							{
 								id: `profile${profileWatchFragment}/collection`,
-								icon: 'assets/svg/whatsnew/decktracker.svg', // because it show cards
+								icon: 'assets/svg/whatsnew/collection.svg', // because it show cards
 								name: this.i18n.translateString('app.menu.collection-header'),
 							},
 							{

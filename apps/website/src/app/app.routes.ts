@@ -11,6 +11,7 @@ import {
 	WebsiteProfileBattlegroundsComponent,
 	WebsiteProfileCollectionComponent,
 	WebsiteProfilePacksComponent,
+	WebsiteProfileRankedComponent,
 } from '@firestone/website/profile';
 import { WebsiteDuelsPassiveTreasuresComponent } from 'libs/website/duels/src/lib/website-duels-passive-treasures.component';
 import { WebsiteProfileOverviewComponent } from 'libs/website/profile/src/lib/overview/website-profile-overview.component';
@@ -72,6 +73,11 @@ export const appRoutes: Route[] = [
 		component: WebsiteProfileBattlegroundsComponent,
 		canActivate: [AuthGuard],
 	},
+	{
+		path: 'profile/ranked',
+		component: WebsiteProfileRankedComponent,
+		canActivate: [AuthGuard],
+	},
 	// {
 	// 	path: 'profile/achievements',
 	// 	component: WebsiteProfileAchievementsComponent,
@@ -92,6 +98,11 @@ export const appRoutes: Route[] = [
 	{
 		path: 'profile/:shareAlias/battlegrounds',
 		component: WebsiteProfileBattlegroundsComponent,
+	},
+	{
+		path: 'profile/:shareAlias/ranked',
+		component: WebsiteProfileRankedComponent,
+		canActivate: [AuthGuard],
 	},
 	// {
 	// 	path: 'profile/:shareAlias/achievements',

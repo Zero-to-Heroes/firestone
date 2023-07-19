@@ -14,6 +14,7 @@ export * from './lib/overview/website-profile-overview.component';
 export * from './lib/packs/website-profile-packs-overview.component';
 export * from './lib/packs/website-profile-packs.component';
 export * from './lib/ranked/website-profile-ranked-overviews.component';
+export * from './lib/ranked/website-profile-ranked.component';
 export * from './lib/share/website-profile-share-modal.component';
 export * from './lib/website-profile.component';
 export * from './lib/website-profile.module';
