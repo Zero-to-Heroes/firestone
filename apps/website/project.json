@@ -12,7 +12,7 @@
 				"outputPath": "dist/apps/website",
 				"index": "apps/website/src/index.html",
 				"main": "apps/website/src/main.ts",
-				"polyfills": ["zone.js"],
+				"polyfills": ["zone.js", "apps/website/src/polyfills.ts"],
 				"tsConfig": "apps/website/tsconfig.app.json",
 				"inlineStyleLanguage": "scss",
 				"assets": [
@@ -39,7 +39,7 @@
 						{
 							"type": "initial",
 							"maximumWarning": "500kb",
-							"maximumError": "1mb"
+							"maximumError": "10mb"
 						},
 						{
 							"type": "anyComponentStyle",

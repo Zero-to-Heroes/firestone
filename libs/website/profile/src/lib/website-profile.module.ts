@@ -17,6 +17,7 @@ import { WebsiteProfileEffects } from './+state/website/profile.effects';
 import * as fromWebsiteProfile from './+state/website/profile.reducer';
 import { WebsiteProfileAchievementsOverviewComponent } from './achievements/website-profile-achievements-overview.component';
 import { WebsiteProfileAchievementsComponent } from './achievements/website-profile-achievements.component';
+import { WebsiteProfileArenaOverviewsComponent } from './arena/website-profile-arena-overviews.component';
 import { WebsiteProfileBattlegroundsHeroStatVignetteComponent } from './battlegrounds/website-profile-battlegrounds-hero-stat-vignette.component';
 import { WebsiteProfileBattlegroundsOverviewComponent } from './battlegrounds/website-profile-battlegrounds-overview.component';
 import { WebsiteProfileBattlegroundsOverviewsComponent } from './battlegrounds/website-profile-battlegrounds-overviews.component';
@@ -24,9 +25,12 @@ import { WebsiteProfileBattlegroundsComponent } from './battlegrounds/website-pr
 import { WebsiteProfileCollectionOverviewComponent } from './collection/website-profile-collection-overview.component';
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
+import { WebsiteProfileDuelsOverviewsComponent } from './duels/website-profile-duels-overviews.component';
+import { WebsiteProfileModeOverviewComponent } from './modes/website-profile-mode-overview.component';
 import { WebsiteProfileOverviewComponent } from './overview/website-profile-overview.component';
 import { WebsiteProfilePacksOverviewComponent } from './packs/website-profile-packs-overview.component';
 import { WebsiteProfilePacksComponent } from './packs/website-profile-packs.component';
+import { WebsiteProfileRankedOverviewsComponent } from './ranked/website-profile-ranked-overviews.component';
 import { WebsiteProfileShareModalComponent } from './share/website-profile-share-modal.component';
 import { WebsiteProfileComponent } from './website-profile.component';
 
@@ -45,6 +49,10 @@ const components = [
 	WebsiteProfileBattlegroundsHeroStatVignetteComponent,
 	WebsiteProfileBattlegroundsOverviewComponent,
 	WebsiteProfileBattlegroundsOverviewsComponent,
+	WebsiteProfileModeOverviewComponent,
+	WebsiteProfileRankedOverviewsComponent,
+	WebsiteProfileDuelsOverviewsComponent,
+	WebsiteProfileArenaOverviewsComponent,
 ];
 
 @NgModule({

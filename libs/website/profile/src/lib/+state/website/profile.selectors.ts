@@ -38,3 +38,8 @@ export const getBgsHeroStats = createSelector(
 	getWebsiteProfileState,
 	(state: WebsiteProfileState) => state.profile?.bgFullTimeStatsByHero ?? [],
 );
+
+export const getStatsForModes = createSelector(
+	getWebsiteProfileState,
+	(state: WebsiteProfileState) => state.profile?.winsForModes ?? [],
+);

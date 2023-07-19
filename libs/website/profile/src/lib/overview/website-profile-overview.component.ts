@@ -12,6 +12,11 @@ import { getSets } from '../+state/website/profile.selectors';
 	template: `
 		<website-profile>
 			<div class="overview">
+				<website-profile-ranked-overviews></website-profile-ranked-overviews>
+				<website-profile-duels-overviews></website-profile-duels-overviews>
+				<website-profile-arena-overviews></website-profile-arena-overviews>
+				<website-profile-battlegrounds-overviews [showBgTitle]="true"></website-profile-battlegrounds-overviews>
+				<!-- <website-profile-class-recap></website-profile-class-recap> -->
 				<div class="card collection standard">
 					<website-profile-collection-overview
 						class="mode standard"
@@ -32,7 +37,6 @@ import { getSets } from '../+state/website/profile.selectors';
 				</div>
 				<website-profile-packs-overview class="card overview"></website-profile-packs-overview>
 				<website-profile-achievements-overview></website-profile-achievements-overview>
-				<website-profile-battlegrounds-overviews [showBgTitle]="true"></website-profile-battlegrounds-overviews>
 			</div>
 		</website-profile>
 	`,
