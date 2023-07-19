@@ -5,4 +5,5 @@ export interface ProfileClassStat {
 	readonly wins: number;
 	readonly losses: number;
 	readonly ties: number;
+	readonly gameMode: 'duels' | 'arena' | 'constructed';
 }

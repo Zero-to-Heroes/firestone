@@ -8,8 +8,10 @@ import {
 	WebsiteDuelsSignatureTreasuresComponent,
 } from '@firestone/website/duels';
 import {
+	WebsiteProfileArenaComponent,
 	WebsiteProfileBattlegroundsComponent,
 	WebsiteProfileCollectionComponent,
+	WebsiteProfileDuelsComponent,
 	WebsiteProfilePacksComponent,
 	WebsiteProfileRankedComponent,
 } from '@firestone/website/profile';
@@ -78,6 +80,16 @@ export const appRoutes: Route[] = [
 		component: WebsiteProfileRankedComponent,
 		canActivate: [AuthGuard],
 	},
+	{
+		path: 'profile/duels',
+		component: WebsiteProfileDuelsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile/arena',
+		component: WebsiteProfileArenaComponent,
+		canActivate: [AuthGuard],
+	},
 	// {
 	// 	path: 'profile/achievements',
 	// 	component: WebsiteProfileAchievementsComponent,
@@ -102,6 +114,16 @@ export const appRoutes: Route[] = [
 	{
 		path: 'profile/:shareAlias/ranked',
 		component: WebsiteProfileRankedComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile/:shareAlias/duels',
+		component: WebsiteProfileDuelsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile/:shareAlias/arena',
+		component: WebsiteProfileArenaComponent,
 		canActivate: [AuthGuard],
 	},
 	// {

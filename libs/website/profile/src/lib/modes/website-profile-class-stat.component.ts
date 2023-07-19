@@ -26,6 +26,10 @@ export class WebsiteProfileClassStatComponent extends AbstractSubscriptionCompon
 		this.icon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${lowerCaseClass}.png`;
 		this.wins = value.wins;
 		this.losses = value.losses;
+		this.tooltip = this.i18n.translateString(`website.player-class.tooltip-game-mode`, {
+			class: this.i18n.translateString(`global.class.${lowerCaseClass}`),
+			gameMode: this.i18n.translateString(`global.game-mode.${value.gameMode}`),
+		});
 	}
 
 	title: string;

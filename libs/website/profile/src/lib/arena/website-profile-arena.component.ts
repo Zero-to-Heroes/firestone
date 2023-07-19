@@ -7,12 +7,12 @@ import { getClassStats } from '../+state/website/profile.selectors';
 import { ProfileClassStat } from '../modes/profile-class-stat';
 
 @Component({
-	selector: 'website-profile-ranked',
-	styleUrls: [`./website-profile-ranked.component.scss`],
+	selector: 'website-profile-arena',
+	styleUrls: [`./website-profile-arena.component.scss`],
 	template: `
 		<website-profile>
 			<div class="overview">
-				<website-profile-ranked-overviews></website-profile-ranked-overviews>
+				<website-profile-arena-overviews></website-profile-arena-overviews>
 			</div>
 			<section class="class-stats">
 				<website-profile-class-stats [classStats]="classStats$ | async"></website-profile-class-stats>
@@ -21,7 +21,7 @@ import { ProfileClassStat } from '../modes/profile-class-stat';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WebsiteProfileRankedComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class WebsiteProfileArenaComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	classStats$: Observable<readonly ProfileClassStat[]>;
 
 	constructor(
@@ -35,9 +35,9 @@ export class WebsiteProfileRankedComponent extends AbstractSubscriptionComponent
 		this.classStats$ = this.store.select(getClassStats).pipe(
 			this.mapData((stats) =>
 				stats.map((stat) => {
-					const winsForMode = stat.winsForModes.find((s) => s.mode === 'constructed');
+					const winsForMode = stat.winsForModes.find((s) => s.mode === 'arena');
 					const result: ProfileClassStat = {
-						gameMode: 'constructed',
+						gameMode: 'arena',
 						playerClass: stat.playerClass,
 						wins: winsForMode?.wins ?? 0,
 						losses: winsForMode?.losses ?? 0,

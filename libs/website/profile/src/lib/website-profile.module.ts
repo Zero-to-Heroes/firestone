@@ -18,6 +18,7 @@ import * as fromWebsiteProfile from './+state/website/profile.reducer';
 import { WebsiteProfileAchievementsOverviewComponent } from './achievements/website-profile-achievements-overview.component';
 import { WebsiteProfileAchievementsComponent } from './achievements/website-profile-achievements.component';
 import { WebsiteProfileArenaOverviewsComponent } from './arena/website-profile-arena-overviews.component';
+import { WebsiteProfileArenaComponent } from './arena/website-profile-arena.component';
 import { WebsiteProfileBattlegroundsHeroStatVignetteComponent } from './battlegrounds/website-profile-battlegrounds-hero-stat-vignette.component';
 import { WebsiteProfileBattlegroundsOverviewComponent } from './battlegrounds/website-profile-battlegrounds-overview.component';
 import { WebsiteProfileBattlegroundsOverviewsComponent } from './battlegrounds/website-profile-battlegrounds-overviews.component';
@@ -26,6 +27,7 @@ import { WebsiteProfileCollectionOverviewComponent } from './collection/website-
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
 import { WebsiteProfileDuelsOverviewsComponent } from './duels/website-profile-duels-overviews.component';
+import { WebsiteProfileDuelsComponent } from './duels/website-profile-duels.component';
 import { WebsiteProfileClassStatComponent } from './modes/website-profile-class-stat.component';
 import { WebsiteProfileClassStatsComponent } from './modes/website-profile-class-stats.component';
 import { WebsiteProfileModeOverviewComponent } from './modes/website-profile-mode-overview.component';
@@ -55,7 +57,9 @@ const components = [
 	WebsiteProfileModeOverviewComponent,
 	WebsiteProfileRankedComponent,
 	WebsiteProfileRankedOverviewsComponent,
+	WebsiteProfileDuelsComponent,
 	WebsiteProfileDuelsOverviewsComponent,
+	WebsiteProfileArenaComponent,
 	WebsiteProfileArenaOverviewsComponent,
 	WebsiteProfileClassStatsComponent,
 	WebsiteProfileClassStatComponent,
