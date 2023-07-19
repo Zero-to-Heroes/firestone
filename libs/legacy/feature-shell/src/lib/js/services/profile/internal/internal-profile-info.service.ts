@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
-import { GameType, CardClass as TAG_CLASS } from '@firestone-hs/reference-data';
+import { CardClass, GameType, CardClass as TAG_CLASS, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { HsAchievementInfo } from '../../achievement/achievements-info';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
+import { MemoryPlayerRecord } from '../../plugins/mind-vision/operations/get-profile-info-operation';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../utils';
 
@@ -75,6 +77,7 @@ export class InternalProfileInfoService {
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -116,13 +119,35 @@ export class InternalProfileInfoService {
 	private async updateProfileInfo(classAchievements: readonly HsAchievementInfo[]) {
 		const profileInfo = await this.memory.getProfileInfo();
 		const classProgress: readonly ProfileClassProgress[] = profileInfo.PlayerClasses.map((playerClass) => {
-			const refAchievementForClass = ACHIEVEMENTS_FOR_HERO_CLASSES[playerClass.TagClass];
-			const golden500Win = classAchievements.find((ach) => ach.id === refAchievementForClass.Golden500Win);
-			const honored1kWin = classAchievements.find((ach) => ach.id === refAchievementForClass.Honored1kWin);
+			const playerRecordsForClass = profileInfo.PlayerRecords.filter((r) => r.Data > 0).filter((r) =>
+				this.allCards
+					.getCard(r.Data)
+					.classes.filter((c) => c !== CardClass[CardClass.NEUTRAL])
+					.map((c) => getDefaultHeroDbfIdForClass(c))
+					.includes(getDefaultHeroDbfIdForClass(CardClass[playerClass.TagClass])),
+			);
+			// console.debug(
+			// 	'playerRecordsForClass',
+			// 	CardClass[playerClass.TagClass],
+			// 	playerClass.TagClass,
+			// 	playerRecordsForClass,
+			// );
+			const recordsThatCount = playerRecordsForClass.filter((r) =>
+				[GameType.GT_ARENA, GameType.GT_RANKED, GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(
+					r.RecordType,
+				),
+			);
+			const winsForModes = this.buildWinsForModes(recordsThatCount);
+			// const refAchievementForClass = ACHIEVEMENTS_FOR_HERO_CLASSES[playerClass.TagClass];
+			// const golden500Win = classAchievements.find((ach) => ach.id === refAchievementForClass.Golden500Win);
+			// const honored1kWin = classAchievements.find((ach) => ach.id === refAchievementForClass.Honored1kWin);
 			const result: ProfileClassProgress = {
 				playerClass: playerClass.TagClass,
 				level: playerClass.Level,
-				wins: golden500Win.completed ? honored1kWin?.progress : golden500Win?.progress,
+				wins: recordsThatCount.map((r) => r.Wins).reduce((a, b) => a + b, 0),
+				losses: recordsThatCount.map((r) => r.Losses).reduce((a, b) => a + b, 0),
+				ties: recordsThatCount.map((r) => r.Ties).reduce((a, b) => a + b, 0),
+				winsForModes: winsForModes,
 			};
 			return result;
 		});
@@ -136,6 +161,11 @@ export class InternalProfileInfoService {
 					r.RecordType,
 				),
 			);
+		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords);
+		this.winsForMode$$.next(winsForMode);
+	}
+
+	private buildWinsForModes(playerRecords: MemoryPlayerRecord[]) {
 		const winsForMode: readonly ProfileWinsForMode[] = ['constructed', 'duels', 'arena'].map(
 			(mode: 'constructed' | 'duels' | 'arena') => {
 				const recordsForMode = playerRecords.filter((r) =>
@@ -154,6 +184,6 @@ export class InternalProfileInfoService {
 				return result;
 			},
 		);
-		this.winsForMode$$.next(winsForMode);
+		return winsForMode;
 	}
 }
