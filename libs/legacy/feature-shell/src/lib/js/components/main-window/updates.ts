@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.5.16',
+		version: '11.6.0',
 		force: false,
 		sections: [
 			// {
@@ -46,44 +46,35 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the app would not properly start a new Lottery season.`,
-							},
-						],
-					},
-				],
-			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix a sim issue with Bassgill.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue when trying to navigate to the Hero Strategies tab from the BG window when using a non-vanilla hero skin.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Try to fix an issue where sometimes some windows would become invisible, and could not be alt-tabbed to.`,
+								type: 'feature',
+								text: `First implementation of quest stats overlay.`,
 							},
 						],
 					},
 				],
 			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'battlegrounds',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix a sim issue with Bassgill.`,
+			// 				},
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue when trying to navigate to the Hero Strategies tab from the BG window when using a non-vanilla hero skin.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
