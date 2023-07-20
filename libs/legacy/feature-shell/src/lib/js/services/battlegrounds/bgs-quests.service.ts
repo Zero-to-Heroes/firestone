@@ -1,56 +1,48 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { BgsGlobalHeroStat2, BgsGlobalStats2 } from '@firestone-hs/bgs-global-stats';
+import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
-import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsQuestsDataLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-quests-data-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { fixInvalidTimeSuffix } from './bgs-global-stats.service';
 
-const BGS_STATS_RETRIEVE_URL = 'https://static.zerotoheroes.com/api/bgs/quests/bgs-global-stats-%timeSuffix%.gz.json';
+const BGS_QUESTS_URL = 'https://static.zerotoheroes.com/api/bgs/quests/bgs-quests-v2-%timeSuffix%.gz.json';
 
 @Injectable()
 export class BattlegroundsQuestsService {
-	private requestedInitialRefDataLoad = new BehaviorSubject<boolean>(false);
+	public questStats$$ = new SubscriberAwareBehaviorSubject<BgsQuestStats>(null);
 
-	constructor(
-		private readonly api: ApiRunner,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly localStorage: LocalStorageService,
-	) {
+	private triggerLoad$$ = new BehaviorSubject<boolean>(false);
+
+	constructor(private readonly api: ApiRunner, private readonly store: AppUiStoreFacadeService) {
+		window['bgsQuests'] = this;
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
-		combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.bgsActiveTimeFilter),
-			this.requestedInitialRefDataLoad.asObservable(),
-		)
-			.pipe(filter(([[timeFilter], load]) => load))
-			.subscribe(([[timeFilter], load]) => this.loadReferenceData(timeFilter));
+
+		this.questStats$$.onFirstSubscribe(async () => {
+			this.triggerLoad$$.next(true);
+		});
+
+		combineLatest([this.triggerLoad$$, this.store.listenPrefs$((prefs) => prefs.bgsActiveTimeFilter)])
+			.pipe(filter(([triggerLoad, [timeFilter]]) => triggerLoad && !!timeFilter))
+			.subscribe(async ([_, [timeFilter]]) => {
+				const quests = await this.loadQuests(timeFilter);
+				this.questStats$$.next(quests);
+			});
 	}
 
-	public loadInitialReferenceData() {
-		this.requestedInitialRefDataLoad.next(true);
-	}
-
-	public async loadReferenceData(timeFilter: BgsActiveTimeFilterType) {
-		const localInfo = this.localStorage.getItem<readonly BgsGlobalHeroStat2[]>(LocalStorageService.BGS_QUESTS_DATA);
-		if (!!localInfo?.length) {
-			console.log('loaded local bgs quests data');
-			this.store.send(new BgsQuestsDataLoadedEvent(localInfo));
-		}
-
-		const result = await this.api.callGetApi<BgsGlobalStats2>(
-			`${BGS_STATS_RETRIEVE_URL.replace('%timeSuffix%', fixInvalidTimeSuffix(timeFilter))}`,
+	private async loadQuests(timeFilter: BgsActiveTimeFilterType): Promise<BgsQuestStats> {
+		console.debug('[bgs-quests] loading quests', timeFilter);
+		const quests: BgsQuestStats = await this.api.callGetApi(
+			BGS_QUESTS_URL.replace('%timeSuffix%', fixInvalidTimeSuffix(timeFilter)),
 		);
-		const referenceData = result?.heroStats;
-		this.localStorage.setItem(LocalStorageService.BGS_QUESTS_DATA, referenceData);
-		console.log('loaded bgs-quests-data ref data');
-		this.store.send(new BgsQuestsDataLoadedEvent(referenceData));
-		return referenceData;
+		console.debug('[bgs-quests] loaded quests', quests);
+		return quests;
 	}
 }

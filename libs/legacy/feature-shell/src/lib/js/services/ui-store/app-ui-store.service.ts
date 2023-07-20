@@ -17,6 +17,7 @@ import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 
+import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
@@ -44,6 +45,7 @@ import {
 } from '../achievement/achievements-live-progress-tracking.service';
 import { AchievementsStateManagerService } from '../achievement/achievements-state-manager.service';
 import { AdService } from '../ad.service';
+import { BattlegroundsQuestsService } from '../battlegrounds/bgs-quests.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
@@ -92,6 +94,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private modsConfig: BehaviorSubject<ModsConfig>;
 
 	private bgsMetaStatsHero: Observable<readonly BgsMetaHeroStatTierItem[]>;
+	private bgsQuests: BehaviorSubject<BgsQuestStats>;
 	private gameStats: Observable<readonly GameStat[]>;
 	private decks: Observable<readonly DeckSummary[]>;
 	private duelsHeroStats: Observable<readonly DuelsHeroPlayerStat[]>;
@@ -436,6 +439,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.achievementsProgressTracking.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {
+		return this.bgsQuests;
+	}
+
 	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
 		return this.achievementCategories;
 	}
@@ -476,6 +483,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initShouldShowLotteryOverlay();
 		this.initLottery();
 		this.initAchievementsProgressTracking();
+		this.initBgsQuests();
 		this.initAchievementCategories();
 		this.initPackStats();
 		this.initCardsHistory();
@@ -552,6 +560,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.achievementCategories = (
 			this.ow.getMainWindow().achievementsStateManager as AchievementsStateManagerService
 		).groupedAchievements$$;
+	}
+
+	private initBgsQuests() {
+		this.bgsQuests = (this.ow.getMainWindow().bgsQuests as BattlegroundsQuestsService).questStats$$;
 	}
 
 	private initPackStats() {

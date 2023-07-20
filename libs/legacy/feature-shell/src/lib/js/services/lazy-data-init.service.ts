@@ -45,8 +45,6 @@ export class LazyDataInitService {
 				return this.bgsMetaHeroStatsStateBuilder.loadInitialMetaHeroStats();
 			case 'bgs-meta-hero-strategies':
 				return this.bgsMetaHeroStrategiesService.loadMetaHeroStrategies();
-			case 'bgs-quest-stats':
-				return this.bgsQuestsService.loadInitialReferenceData();
 			case 'user-global-stats':
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'user-bgs-best-stats':
@@ -71,7 +69,6 @@ export type StateDataType =
 	| 'duels-top-decks'
 	| 'bgs-meta-hero-stats'
 	| 'bgs-meta-hero-strategies'
-	| 'bgs-quest-stats'
 	| 'live-streams'
 	| 'tavern-brawl-stats'
 	| 'battlegrounds-perfect-games';

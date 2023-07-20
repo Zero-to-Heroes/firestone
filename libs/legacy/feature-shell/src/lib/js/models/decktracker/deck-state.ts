@@ -429,6 +429,7 @@ export interface CardOption {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly source: string;
+	readonly questDifficulty?: number;
 	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
 }
 

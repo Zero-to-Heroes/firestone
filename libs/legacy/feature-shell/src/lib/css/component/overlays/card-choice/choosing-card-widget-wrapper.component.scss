@@ -61,4 +61,8 @@
 			padding: 5px 20px;
 		}
 	}
+
+	&.tall-option .value-container {
+		bottom: -8vh;
+	}
 }

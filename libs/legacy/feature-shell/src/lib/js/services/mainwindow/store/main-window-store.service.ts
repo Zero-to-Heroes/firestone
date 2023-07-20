@@ -90,7 +90,6 @@ import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
-import { BgsQuestsDataLoadedEvent } from './events/battlegrounds/bgs-quests-data-loaded-event';
 import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsRequestNewGlobalStatsLoadEvent } from './events/battlegrounds/bgs-request-new-global-stats-load-event';
 import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategies-event';
@@ -249,7 +248,6 @@ import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegro
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
-import { BgsQuestsDataLoadedProcessor } from './processors/battlegrounds/bgs-quests-data-loaded-processor';
 import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsRequestNewGlobalStatsLoadProcessor } from './processors/battlegrounds/bgs-request-new-global-stats-load-processor';
 import { BgsShowStrategiesProcessor } from './processors/battlegrounds/bgs-show-strategies-processor';
@@ -784,7 +782,6 @@ export class MainWindowStoreService {
 				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),
 				new BattlegroundsMetaHeroStrategiesLoadedProcessor(),
 			],
-			[BgsQuestsDataLoadedEvent.eventName(), new BgsQuestsDataLoadedProcessor()],
 			[BgsShowStrategiesEvent.eventName(), new BgsShowStrategiesProcessor(this.events, this.cards, this.i18n)],
 
 			// Streams

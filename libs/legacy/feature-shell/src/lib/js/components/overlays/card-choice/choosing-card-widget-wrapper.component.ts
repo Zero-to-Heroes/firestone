@@ -9,9 +9,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -21,7 +23,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { uuid } from '../../../services/utils';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
-import { buildCardChoiceValue } from './card-choice-values';
+import { buildCardChoiceTooltip, buildCardChoiceValue } from './card-choice-values';
 
 @Component({
 	selector: 'choosing-card-widget-wrapper',
@@ -36,6 +38,7 @@ import { buildCardChoiceValue } from './card-choice-values';
 					class="option-container"
 					*ngFor="let option of value.options"
 					[option]="option"
+					[tallOption]="isTallOption$ | async"
 				></choosing-card-option>
 			</div>
 		</ng-container>
@@ -51,6 +54,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 	showWidget$: Observable<boolean>;
 	options$: Observable<readonly CardChoiceOption[]>;
+	isTallOption$: Observable<boolean>;
 
 	windowWidth: number;
 	windowHeight: number;
@@ -69,14 +73,14 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
 				([main, nav, prefs]) => prefs.overlayEnableDiscoverHelp,
 			),
 			this.store.listenDeckState$((deckState) => deckState?.playerDeck?.currentOptions),
-		).pipe(
+		]).pipe(
 			this.mapData(([[currentScene, displayFromPrefs], [currentOptions]]) => {
 				if (!displayFromPrefs) {
 					return false;
@@ -96,25 +100,50 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			}),
 			this.handleReposition(),
 		);
-		this.options$ = combineLatest(
-			this.store.listenDeckState$(
-				(state) => state.playerDeck?.currentOptions,
-				(state) => state,
-			),
-		).pipe(
-			this.mapData(([[options, state]]) => {
+
+		const bgsQuests$$ = new BehaviorSubject<BgsQuestStats>(null);
+
+		let subscribedToQuests = false;
+		const bgsState$$ = new BehaviorSubject<BattlegroundsState>(null);
+		this.store
+			.listenBattlegrounds$(([state]) => state)
+			.pipe(this.mapData(([state]) => state))
+			.subscribe((state) => {
+				if (state?.currentGame?.hasQuests && !subscribedToQuests) {
+					// Only subscribe to the quests if quests are active, so that we don't get data uselessly
+					this.store.bgsQuests$().subscribe((quests) => bgsQuests$$.next(quests));
+					subscribedToQuests = true;
+				}
+				bgsState$$.next(state);
+			});
+
+		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
+			this.mapData(([[state]]) => {
+				const options = state.playerDeck?.currentOptions;
+				console.debug('[choosing-card] options', options, state);
 				return (
 					options?.map((o) => {
 						return {
 							cardId: o.cardId,
 							entityId: o.entityId,
 							flag: this.buildFlag(o, state),
-							value: buildCardChoiceValue(o, state, this.allCards, this.i18n),
+							value: buildCardChoiceValue(
+								o,
+								state,
+								bgsState$$.getValue(),
+								bgsQuests$$.getValue(),
+								this.allCards,
+								this.i18n,
+							),
+							tooltip: buildCardChoiceTooltip(o, this.allCards, this.i18n),
 						};
 					}) ?? []
 				);
 			}),
 		);
+		this.isTallOption$ = this.store
+			.listenDeckState$((state) => state.playerDeck?.currentOptions)
+			.pipe(this.mapData(([options]) => options?.some((o) => o.source === CardIds.DiscoverQuestRewardDntToken)));
 	}
 
 	private buildFlag(option: CardOption, state: GameState): CardOptionFlag {
@@ -162,6 +191,9 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 						// Don't return a flag here, because we don't know if the card could be in their hand
 						return null;
 				}
+				break;
+			case CardIds.DiscoverQuestRewardDntToken:
+				return 'value';
 		}
 		return null;
 	}
@@ -184,7 +216,13 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	selector: 'choosing-card-option',
 	styleUrls: ['../../../../css/component/overlays/card-choice/choosing-card-widget-wrapper.component.scss'],
 	template: `
-		<div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
+		<div
+			class="option"
+			(mouseenter)="onMouseEnter($event)"
+			(mouseleave)="onMouseLeave($event)"
+			[helpTooltip]="tooltip"
+			[ngClass]="{ 'tall-option': tallOption }"
+		>
 			<div class="flag-container" *ngIf="showFlag">
 				<div class="flag" [inlineSVG]="'assets/svg/new_record.svg'"></div>
 			</div>
@@ -206,13 +244,17 @@ export class ChoosingCardOptionComponent {
 		this.showFlag = value?.flag === 'flag';
 		this.showValue = value?.flag === 'value';
 		this.value = value.value;
+		this.tooltip = value.tooltip;
 		this.registerHighlight();
 	}
+
+	@Input() tallOption: boolean;
 
 	_option: CardChoiceOption;
 	showFlag: boolean;
 	showValue: boolean;
 	value: string;
+	tooltip: string;
 
 	private _referenceCard: ReferenceCard;
 	private side: 'player' | 'opponent' = 'player';
@@ -267,6 +309,7 @@ export interface CardChoiceOption {
 	readonly entityId: number;
 	readonly flag?: CardOptionFlag;
 	readonly value?: string;
+	readonly tooltip?: string;
 }
 
 export type CardOptionFlag = 'flag' | 'value' | null;

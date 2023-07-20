@@ -1,5 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
@@ -93,7 +94,7 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreCompone
 			this.mapData(([heroId, [strats, patchConfig]]) => {
 				console.debug('strats', strats);
 				const stratsForHero: readonly BgsHeroStratTip[] =
-					strats.heroes.find((h) => h.id === heroId)?.tips ?? [];
+					strats.heroes.find((h) => h.id === normalizeHeroCardId(heroId, this.allCards))?.tips ?? [];
 
 				return [...stratsForHero].sort(sortByProperties((s) => [-s.patch])).map((strat) => {
 					const author: BgsHeroStratAuthor = strats.authors.find((a) => a.id === strat.author);

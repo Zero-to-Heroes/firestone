@@ -7,6 +7,7 @@ import { MailState } from '@mails/mail-state';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
+import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
@@ -233,6 +234,10 @@ export class AppUiStoreFacadeService {
 
 	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
 		return this.store.achievementCategories$();
+	}
+
+	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {
+		return this.store.bgsQuests$();
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {

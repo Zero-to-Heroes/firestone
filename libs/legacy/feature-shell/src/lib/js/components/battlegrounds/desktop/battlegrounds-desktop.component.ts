@@ -62,9 +62,9 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						category.value?.id === 'bgs-category-meta-heroes'
 					"
 				></battlegrounds-tier-list>
-				<battlegrounds-quests-tier-list
+				<!-- <battlegrounds-quests-tier-list
 					*ngIf="category.value?.id === 'bgs-category-personal-quests'"
-				></battlegrounds-quests-tier-list>
+				></battlegrounds-quests-tier-list> -->
 				<battlegrounds-heroes-records-broken
 					*ngIf="category.value?.id === 'bgs-category-personal-stats'"
 				></battlegrounds-heroes-records-broken>

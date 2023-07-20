@@ -1,3 +1,4 @@
+import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { ChoosingOptionsGameEvent } from '../../../models/mainwindow/game-events/choosing-options-game-event';
@@ -15,14 +16,17 @@ export class ChoosingOptionsParser implements EventParser {
 
 		const newDeck = deck.update({
 			currentOptions: gameEvent.additionalData.options.map((o) => {
-				return {
+				const result: CardOption = {
 					entityId: o.EntityId,
 					cardId: o.CardId,
 					source: cardId,
+					questDifficulty: o.QuestDifficulty,
 					context: gameEvent.additionalData.context,
 				};
+				return result;
 			}),
 		});
+		console.debug('[choosing-options] updating options', newDeck.currentOptions, gameEvent);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,

@@ -5,6 +5,7 @@ export class ChoosingOptionsGameEvent extends GameEvent {
 		readonly options: {
 			readonly EntityId: number;
 			readonly CardId: string;
+			readonly QuestDifficulty?: number;
 		}[];
 		readonly context: {
 			readonly DataNum1: number;
