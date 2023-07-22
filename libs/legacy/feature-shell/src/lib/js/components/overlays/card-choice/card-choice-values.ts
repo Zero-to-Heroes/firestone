@@ -57,7 +57,9 @@ const bgQuest = (
 	const turnsToComplete =
 		(statForHero?.dataPoints < 100 ? questStat?.averageTurnToComplete : statForHero?.averageTurnToComplete) +
 		turnsToCompleteImpact;
-	return turnsToComplete == null ? null : turnsToComplete.toFixed(1);
+	const currentTurn = bgsState.currentGame.currentTurn;
+	const turnsLeftToComplete = turnsToComplete == null ? null : turnsToComplete - currentTurn;
+	return turnsLeftToComplete == null ? null : turnsLeftToComplete.toFixed(1);
 };
 
 const guessTheWeight = (
