@@ -123,19 +123,20 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				console.debug('[choosing-card] options', options, state);
 				return (
 					options?.map((o) => {
+						const { value, details } = buildCardChoiceValue(
+							o,
+							state,
+							bgsState$$.getValue(),
+							bgsQuests$$.getValue(),
+							this.allCards,
+							this.i18n,
+						);
 						return {
 							cardId: o.cardId,
 							entityId: o.entityId,
 							flag: this.buildFlag(o, state),
-							value: buildCardChoiceValue(
-								o,
-								state,
-								bgsState$$.getValue(),
-								bgsQuests$$.getValue(),
-								this.allCards,
-								this.i18n,
-							),
-							tooltip: buildCardChoiceTooltip(o, this.allCards, this.i18n),
+							value: value,
+							tooltip: buildCardChoiceTooltip(o, details, this.allCards, this.i18n),
 						};
 					}) ?? []
 				);
