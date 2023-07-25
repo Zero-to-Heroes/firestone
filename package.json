@@ -30,7 +30,7 @@
 		"@firestone-hs/api-arena-rewards": "^1.0.2",
 		"@firestone-hs/api-auth": "^0.0.1",
 		"@firestone-hs/api-user-profile": "^0.0.7",
-		"@firestone-hs/bgs-global-stats": "^1.0.38",
+		"@firestone-hs/bgs-global-stats": "^1.0.39",
 		"@firestone-hs/build-global-stats": "^1.0.8",
 		"@firestone-hs/coliseum-components": "^0.0.24",
 		"@firestone-hs/deck-stats": "^1.0.4",

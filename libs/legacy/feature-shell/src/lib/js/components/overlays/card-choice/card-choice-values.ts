@@ -6,71 +6,72 @@ import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
-export const buildCardChoiceValue = (
+export const buildBasicCardChoiceValue = (
 	option: CardOption,
 	state: GameState,
-	bgsState: BattlegroundsState,
-	bgsQuests: BgsQuestStats,
-	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
-): { value: string; details?: any } => {
-	switch (option.source) {
-		case CardIds.GuessTheWeight:
-			return guessTheWeight(option, state, allCards, i18n);
-		case CardIds.DiscoverQuestRewardDntToken:
-			return bgQuest(option, bgsState, bgsQuests, allCards, i18n);
-	}
-};
-
-export const buildCardChoiceTooltip = (
-	option: CardOption,
-	details: any,
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
 ): string => {
 	switch (option.source) {
-		case CardIds.DiscoverQuestRewardDntToken:
-			return i18n.translateString('battlegrounds.in-game.quests.turn-to-complete-tooltip', {
-				averageTurnsToComplete: details?.averageTurnsToComplete?.toFixed(1),
-				turnsToCompleteForHero: details?.turnsToCompleteForHero?.toFixed(1),
-				turnsToCompleteImpact: details?.turnsToCompleteImpact?.toFixed(1),
-			});
-		default:
-			return null;
+		case CardIds.GuessTheWeight:
+			return guessTheWeight(option, state, allCards, i18n);
 	}
 };
 
-const bgQuest = (
+export const buildBgsQuestCardChoiceValue = (
 	option: CardOption,
 	bgsState: BattlegroundsState,
 	bgsQuests: BgsQuestStats,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
-): { value: string; details: any } => {
+): {
+	questCompletionTurns: number;
+	rewardAveragePosition: number;
+	rewardTier: string;
+	averageTurnsToComplete: number;
+	turnsToCompleteForHero: number;
+	turnsToCompleteImpact: number;
+} => {
 	const bgQuestCardId = option.cardId;
 	const mainPlayerCardId = bgsState?.currentGame?.getMainPlayer()?.cardId;
+
 	// TODO: handle difficulty, MMR, etc.
 	const questStat = bgsQuests.questStats.find((s) => s.questCardId === bgQuestCardId);
 	console.debug('questStat', questStat, bgsState?.currentGame?.getMainPlayer());
-	const statForHero = questStat?.heroStats.find(
+	if (!questStat) {
+		return null;
+	}
+
+	const questStatForHero = questStat?.heroStats.find(
 		(s) => s.heroCardId === normalizeHeroCardId(mainPlayerCardId, allCards),
 	);
-	console.debug('statForHero', statForHero);
+	console.debug('statForHero', questStatForHero, mainPlayerCardId, questStat.heroStats);
 	const statForDifficulty = questStat?.difficultyStats?.find((s) => s.difficulty === option.questDifficulty);
 	const turnsToCompleteImpact = statForDifficulty?.impactTurnToComplete ?? 0;
 	console.debug('turnsToCompleteImpact', turnsToCompleteImpact, statForDifficulty);
-	const turnsToComplete = statForHero == null ? null : statForHero.averageTurnToComplete + turnsToCompleteImpact;
-	const currentTurn = bgsState.currentGame.currentTurn;
-	const turnsLeftToComplete = turnsToComplete == null ? null : turnsToComplete - currentTurn;
+	const turnsToComplete =
+		(questStatForHero == null ? questStat.averageTurnToComplete : questStatForHero.averageTurnToComplete) +
+		turnsToCompleteImpact;
+	// Because what we count as "turn to complete" is the NUM_TURNS_IN_PLAY, which incremenets at every
+	// phase (recruit and combat)
+	const turnsLeftToComplete = turnsToComplete == null ? null : turnsToComplete / 2;
+	console.debug('turnsLeftToComplete', turnsLeftToComplete, turnsToComplete);
+
+	const rewardStat = bgsQuests.rewardStats.find((r) => r.rewardCardId === option.questReward?.CardId);
+	console.debug('rewardStat', rewardStat);
+	const rewardStatForHero = rewardStat?.heroStats.find(
+		(s) => s.heroCardId === normalizeHeroCardId(mainPlayerCardId, allCards),
+	);
+	console.debug('rewardStatForHero', rewardStatForHero);
+
 	return turnsLeftToComplete == null
 		? null
 		: {
-				value: turnsLeftToComplete.toFixed(1),
-				details: {
-					averageTurnsToComplete: questStat.averageTurnToComplete,
-					turnsToCompleteForHero: statForHero?.averageTurnToComplete,
-					turnsToCompleteImpact: turnsToCompleteImpact,
-				},
+				questCompletionTurns: turnsLeftToComplete,
+				rewardAveragePosition: rewardStatForHero?.averagePlacement,
+				rewardTier: '',
+				averageTurnsToComplete: questStat.averageTurnToComplete,
+				turnsToCompleteForHero: questStatForHero?.averageTurnToComplete,
+				turnsToCompleteImpact: turnsToCompleteImpact,
 		  };
 };
 
@@ -79,7 +80,7 @@ const guessTheWeight = (
 	state: GameState,
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
-): { value: string } => {
+): string => {
 	const lastDrawnCard = state.playerDeck.hand[state.playerDeck.hand.length - 1];
 	const costOfLastDrawnCard = lastDrawnCard?.getEffectiveManaCost();
 	if (costOfLastDrawnCard == null) {
@@ -97,12 +98,12 @@ const guessTheWeight = (
 			const cardsCostingLess = state.playerDeck.deck.filter(
 				(c) => c.getEffectiveManaCost() < costOfLastDrawnCard,
 			).length;
-			return { value: buildPercents((100 * cardsCostingLess) / state.playerDeck.deck.length) };
+			return buildPercents((100 * cardsCostingLess) / state.playerDeck.deck.length);
 		case CardIds.GuessTheWeight_More:
 			const cardsCostingMore = state.playerDeck.deck.filter(
 				(c) => c.getEffectiveManaCost() > costOfLastDrawnCard,
 			).length;
-			return { value: buildPercents((100 * cardsCostingMore) / state.playerDeck.deck.length) };
+			return buildPercents((100 * cardsCostingMore) / state.playerDeck.deck.length);
 	}
 	return null;
 };

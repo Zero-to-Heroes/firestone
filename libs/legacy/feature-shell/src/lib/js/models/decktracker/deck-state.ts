@@ -429,8 +429,12 @@ export interface CardOption {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly source: string;
-	readonly questDifficulty?: number;
 	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
+	readonly questDifficulty?: number;
+	readonly questReward?: {
+		readonly EntityId: number;
+		readonly CardId: string;
+	};
 }
 
 export interface DeckSideboard {

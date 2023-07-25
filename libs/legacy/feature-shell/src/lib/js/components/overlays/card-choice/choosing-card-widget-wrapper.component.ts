@@ -18,12 +18,13 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { uuid } from '../../../services/utils';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
-import { buildCardChoiceTooltip, buildCardChoiceValue } from './card-choice-values';
+import { buildBasicCardChoiceValue, buildBgsQuestCardChoiceValue } from './card-choice-values';
 
 @Component({
 	selector: 'choosing-card-widget-wrapper',
@@ -34,12 +35,22 @@ import { buildCardChoiceTooltip, buildCardChoiceValue } from './card-choice-valu
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
 			>
-				<choosing-card-option
-					class="option-container"
-					*ngFor="let option of value.options"
-					[option]="option"
-					[tallOption]="isTallOption$ | async"
-				></choosing-card-option>
+				<ng-container [ngSwitch]="widgetType$ | async">
+					<ng-container *ngSwitchCase="'normal'">
+						<choosing-card-option
+							class="option-container"
+							*ngFor="let option of value.options"
+							[option]="option"
+						></choosing-card-option>
+					</ng-container>
+					<ng-container *ngSwitchCase="'bgsQuest'">
+						<choosing-card-bgs-quest-option
+							class="option-container"
+							*ngFor="let option of value.options"
+							[option]="option"
+						></choosing-card-bgs-quest-option>
+					</ng-container>
+				</ng-container>
 			</div>
 		</ng-container>
 	`,
@@ -54,7 +65,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 	showWidget$: Observable<boolean>;
 	options$: Observable<readonly CardChoiceOption[]>;
-	isTallOption$: Observable<boolean>;
+	widgetType$: Observable<'normal' | 'bgsQuest'>;
 
 	windowWidth: number;
 	windowHeight: number;
@@ -122,29 +133,66 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				const options = state.playerDeck?.currentOptions;
 				console.debug('[choosing-card] options', options, state);
 				return (
-					options?.map((o) => {
-						const { value, details } = buildCardChoiceValue(
-							o,
-							state,
-							bgsState$$.getValue(),
-							bgsQuests$$.getValue(),
-							this.allCards,
-							this.i18n,
-						);
-						return {
-							cardId: o.cardId,
-							entityId: o.entityId,
-							flag: this.buildFlag(o, state),
-							value: value,
-							tooltip: buildCardChoiceTooltip(o, details, this.allCards, this.i18n),
-						};
-					}) ?? []
+					options
+						?.map((o) => {
+							const isBaseDiscover = o.source !== CardIds.DiscoverQuestRewardDntToken;
+							if (isBaseDiscover) {
+								const result: CardChoiceOption = {
+									cardId: o.cardId,
+									entityId: o.entityId,
+									flag: this.buildFlag(o, state),
+									value: buildBasicCardChoiceValue(o, state, this.allCards, this.i18n),
+								};
+								return result;
+							}
+
+							if (!FeatureFlags.ENABLE_BGS_QUESTS) {
+								return null;
+							}
+
+							const optionInfo = buildBgsQuestCardChoiceValue(
+								o,
+								bgsState$$.getValue(),
+								bgsQuests$$.getValue(),
+								this.allCards,
+							);
+							if (!optionInfo) {
+								console.warn('[choosing-card] could not find option info', o);
+								return null;
+							}
+
+							const result: BgsQuestCardChoiceOption = {
+								cardId: o.cardId,
+								entityId: o.entityId,
+								flag: this.buildFlag(o, state),
+								questCompletionTurns: optionInfo.questCompletionTurns.toFixed(1),
+								rewardAveragePosition: optionInfo.rewardAveragePosition.toFixed(2),
+								rewardTier: optionInfo.rewardTier,
+								questTooltip: this.i18n.translateString(
+									'battlegrounds.in-game.quests.turn-to-complete-tooltip',
+									{
+										averageTurnsToComplete: optionInfo.averageTurnsToComplete?.toFixed(1),
+										turnsToCompleteForHero: optionInfo.turnsToCompleteForHero?.toFixed(1),
+										turnsToCompleteImpact: optionInfo.turnsToCompleteImpact?.toFixed(1),
+									},
+								),
+								rewardTooltip: this.i18n.translateString(
+									'battlegrounds.in-game.quests.reward-position-tooltip',
+								),
+							};
+							return result;
+						})
+						.filter((o) => !!o) ?? []
 				);
 			}),
 		);
-		this.isTallOption$ = this.store
+		this.widgetType$ = this.store
 			.listenDeckState$((state) => state.playerDeck?.currentOptions)
-			.pipe(this.mapData(([options]) => options?.some((o) => o.source === CardIds.DiscoverQuestRewardDntToken)));
+			.pipe(
+				this.mapData(([options]) =>
+					options?.some((o) => o.source === CardIds.DiscoverQuestRewardDntToken) ? 'bgsQuest' : 'normal',
+				),
+			);
 	}
 
 	private buildFlag(option: CardOption, state: GameState): CardOptionFlag {
@@ -217,13 +265,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	selector: 'choosing-card-option',
 	styleUrls: ['../../../../css/component/overlays/card-choice/choosing-card-widget-wrapper.component.scss'],
 	template: `
-		<div
-			class="option"
-			(mouseenter)="onMouseEnter($event)"
-			(mouseleave)="onMouseLeave($event)"
-			[helpTooltip]="tooltip"
-			[ngClass]="{ 'tall-option': tallOption }"
-		>
+		<div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
 			<div class="flag-container" *ngIf="showFlag">
 				<div class="flag" [inlineSVG]="'assets/svg/new_record.svg'"></div>
 			</div>
@@ -245,7 +287,7 @@ export class ChoosingCardOptionComponent {
 		this.showFlag = value?.flag === 'flag';
 		this.showValue = value?.flag === 'value';
 		this.value = value.value;
-		this.tooltip = value.tooltip;
+		// this.tooltip = value.tooltip;
 		this.registerHighlight();
 	}
 
@@ -255,7 +297,7 @@ export class ChoosingCardOptionComponent {
 	showFlag: boolean;
 	showValue: boolean;
 	value: string;
-	tooltip: string;
+	// tooltip: string;
 
 	private _referenceCard: ReferenceCard;
 	private side: 'player' | 'opponent' = 'player';
@@ -302,6 +344,49 @@ export class ChoosingCardOptionComponent {
 	}
 }
 
+@Component({
+	selector: 'choosing-card-bgs-quest-option',
+	styleUrls: ['../../../../css/component/overlays/card-choice/choosing-card-widget-wrapper.component.scss'],
+	template: `
+		<div class="option tall-option">
+			<div class="flag-container value-container reward-tier" [helpTooltip]="rewardTooltip">
+				<!-- <div class="tier">
+					{{ rewardTier }}
+				</div> -->
+				<div class="average-position value">
+					{{ rewardAveragePosition }}
+				</div>
+			</div>
+			<div class="flag-container value-container quest-completion" [helpTooltip]="questTooltip">
+				<div class="value">
+					{{ questCompletionTurns }}
+				</div>
+			</div>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ChoosingCardBgsQuestOptionComponent {
+	@Input() set option(value: CardChoiceOption) {
+		const castValue: BgsQuestCardChoiceOption = value as BgsQuestCardChoiceOption;
+		this._option = castValue;
+		this.questCompletionTurns = castValue.questCompletionTurns;
+		this.rewardTier = castValue.rewardTier;
+		this.rewardAveragePosition = castValue.rewardAveragePosition;
+		this.questTooltip = castValue.questTooltip;
+		this.rewardTooltip = castValue.rewardTooltip;
+	}
+
+	_option: BgsQuestCardChoiceOption;
+	questCompletionTurns: string;
+	rewardAveragePosition: string;
+	rewardTier: string;
+	questTooltip: string;
+	rewardTooltip: string;
+
+	constructor(private readonly allCards: CardsFacadeService) {}
+}
+
 // For discovers for which knowing the effect on your deck isn't relevant
 const NO_HIGHLIGHT_CARD_IDS = [CardIds.MurlocHolmes_REV_022, CardIds.MurlocHolmes_REV_770];
 
@@ -310,7 +395,14 @@ export interface CardChoiceOption {
 	readonly entityId: number;
 	readonly flag?: CardOptionFlag;
 	readonly value?: string;
-	readonly tooltip?: string;
+}
+
+export interface BgsQuestCardChoiceOption extends CardChoiceOption {
+	readonly questCompletionTurns: string;
+	readonly rewardTier: string;
+	readonly rewardAveragePosition: string;
+	readonly questTooltip?: string;
+	readonly rewardTooltip?: string;
 }
 
 export type CardOptionFlag = 'flag' | 'value' | null;

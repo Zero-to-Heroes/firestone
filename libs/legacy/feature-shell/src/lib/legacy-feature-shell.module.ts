@@ -271,6 +271,7 @@ import { BgsWindowButtonWidgetWrapperComponent } from './js/components/overlays/
 import { HeroPowerOverlayComponent } from './js/components/overlays/board/hero-power-overlay.component';
 import { MinionOnBoardOverlayComponent } from './js/components/overlays/board/minion-on-board-overlay.component';
 import {
+	ChoosingCardBgsQuestOptionComponent,
 	ChoosingCardOptionComponent,
 	ChoosingCardWidgetWrapperComponent,
 } from './js/components/overlays/card-choice/choosing-card-widget-wrapper.component';
@@ -1491,6 +1492,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MercsQuestsWidgetWrapperComponent,
 		ChoosingCardWidgetWrapperComponent,
 		ChoosingCardOptionComponent,
+		ChoosingCardBgsQuestOptionComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,

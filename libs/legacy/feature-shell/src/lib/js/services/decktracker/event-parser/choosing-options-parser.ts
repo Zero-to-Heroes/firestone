@@ -20,8 +20,9 @@ export class ChoosingOptionsParser implements EventParser {
 					entityId: o.EntityId,
 					cardId: o.CardId,
 					source: cardId,
-					questDifficulty: o.QuestDifficulty,
 					context: gameEvent.additionalData.context,
+					questDifficulty: o.QuestDifficulty,
+					questReward: o.QuestReward,
 				};
 				return result;
 			}),

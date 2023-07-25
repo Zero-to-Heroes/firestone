@@ -54,6 +54,7 @@
 
 	.value-container {
 		bottom: -4vh;
+
 		.value {
 			background: var(--color-5);
 			color: var(--color-1);
@@ -64,5 +65,10 @@
 
 	&.tall-option .value-container {
 		bottom: -8vh;
+
+		&.reward-tier {
+			bottom: auto;
+			top: -8vh;
+		}
 	}
 }
