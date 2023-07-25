@@ -52,8 +52,10 @@ export const buildBgsQuestCardChoiceValue = (
 		(questStatForHero == null ? questStat.averageTurnToComplete : questStatForHero.averageTurnToComplete) +
 		turnsToCompleteImpact;
 	// Because what we count as "turn to complete" is the NUM_TURNS_IN_PLAY, which incremenets at every
-	// phase (recruit and combat)
-	const turnsLeftToComplete = turnsToComplete == null ? null : turnsToComplete / 2;
+	// phase (recruit and combat), we have to devide by 2
+	// And since the we play the quest on turn 0, and we want "1 turn" to mean "complete the turn you get it", we
+	// add 1
+	const turnsLeftToComplete = turnsToComplete == null ? null : turnsToComplete / 2 + 1;
 	console.debug('turnsLeftToComplete', turnsLeftToComplete, turnsToComplete);
 
 	const rewardStat = bgsQuests.rewardStats.find((r) => r.rewardCardId === option.questReward?.CardId);
