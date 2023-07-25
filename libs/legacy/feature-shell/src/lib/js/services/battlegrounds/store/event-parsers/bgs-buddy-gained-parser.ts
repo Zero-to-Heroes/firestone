@@ -22,7 +22,7 @@ export class BgsBuddyGainedParser implements EventParser {
 				normalizeHeroCardId(event.heroCardId, this.allCards.getService()),
 		);
 		if (!playerToUpdate) {
-			if (event.heroCardId !== CardIds.KelthuzadBattlegrounds) {
+			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 					console.error(
 						'No player found to update the buddy',

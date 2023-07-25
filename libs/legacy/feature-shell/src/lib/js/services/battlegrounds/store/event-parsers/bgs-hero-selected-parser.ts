@@ -7,11 +7,11 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
+import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsHeroSelectedEvent } from '../events/bgs-hero-selected-event';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
-import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
-import { BgsNextOpponentParser } from './bgs-next-opponent-parser';
 import { EventParser } from './_event-parser';
+import { BgsNextOpponentParser } from './bgs-next-opponent-parser';
 
 export class BgsHeroSelectedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
@@ -23,7 +23,7 @@ export class BgsHeroSelectedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectedEvent): Promise<BattlegroundsState> {
 		const existingMainPlayer = currentState.reconnectOngoing ? currentState.currentGame.getMainPlayer() : null;
 		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards.getService());
-		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
+		if (normalizedCardId === CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 			console.error('selecting KelThuzad in hero selection???');
 			return currentState;
 		}

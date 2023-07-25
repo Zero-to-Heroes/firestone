@@ -2,15 +2,15 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameEvent } from '../../../../models/game-event';
-import { BgsCardPlayedEvent } from '../events/bgs-card-played-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsCardPlayedEvent } from '../events/bgs-card-played-event';
 import { EventParser } from './_event-parser';
 
 export class BgsCardPlayedParser implements EventParser {
 	private static POGO_CARD_IDS = [
 		CardIds.PogoHopper_BOT_283,
 		CardIds.PogoHopper_BGS_028,
-		CardIds.PogoHopperBattlegrounds,
+		CardIds.PogoHopper_TB_BaconUps_077,
 	];
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {

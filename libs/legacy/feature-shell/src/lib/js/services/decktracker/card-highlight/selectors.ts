@@ -102,6 +102,10 @@ export const lastAffectedByCardId =
 
 export const healthBiggerThanAttack = (input: SelectorInput): boolean => input.card.health > input.card.attack;
 
+export const attackGreaterThan =
+	(attack: number) =>
+	(input: SelectorInput): boolean =>
+		input.card.attack != null && input.card.attack > attack;
 export const attackLessThan =
 	(attack: number) =>
 	(input: SelectorInput): boolean =>

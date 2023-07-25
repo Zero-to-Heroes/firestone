@@ -52,7 +52,6 @@ export type CounterType =
 	| 'elwynnBoar'
 	| 'volatileSkeleton'
 	| 'relic'
-	| 'coralKeeper'
 	| 'bgsPogo'
 	| 'bgsSouthsea'
 	| 'bgsMagmaloc'

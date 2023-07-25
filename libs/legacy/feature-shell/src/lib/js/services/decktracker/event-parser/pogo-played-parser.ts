@@ -8,7 +8,7 @@ export class PogoPlayedParser implements EventParser {
 	private static POGO_CARD_IDS = [
 		CardIds.PogoHopper_BOT_283,
 		CardIds.PogoHopper_BGS_028,
-		CardIds.PogoHopperBattlegrounds,
+		CardIds.PogoHopper_TB_BaconUps_077,
 	];
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

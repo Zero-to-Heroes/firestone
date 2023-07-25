@@ -44,7 +44,7 @@ export const modifyDecksForSpecialCards = (
 			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.LadyPrestor_SW_078:
 			return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.ArchVillainRafaam:
+		case CardIds.ArchVillainRafaam_DAL_422:
 		case CardIds.UnearthedRaptor_GoldenMonkeyToken:
 			return [handleArchVillainRafaam(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.OopsAllSpellsTavernBrawl:
@@ -354,7 +354,7 @@ const handleArchVillainRafaam = (
 			card.update({
 				cardId: undefined,
 				cardName: i18n.getUnknownRaceName(i18n.translateString('global.legendary-minion')),
-				creatorCardId: CardIds.ArchVillainRafaam,
+				creatorCardId: CardIds.ArchVillainRafaam_DAL_422,
 				manaCost: undefined,
 				actualManaCost: undefined,
 				rarity: 'legendary',

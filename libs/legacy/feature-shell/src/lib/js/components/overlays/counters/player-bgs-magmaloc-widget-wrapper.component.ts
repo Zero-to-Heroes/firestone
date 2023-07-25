@@ -60,6 +60,6 @@ export class PlayerBgsMagmalocWidgetWrapperComponent
 	private hasMagmaloc(zone: readonly DeckCard[]): boolean {
 		return zone
 			.filter((card) => card.cardId)
-			.some((card) => [CardIds.Magmaloc, CardIds.MagmalocBattlegrounds].includes(card.cardId as CardIds));
+			.some((card) => [CardIds.Magmaloc_BG25_046, CardIds.Magmaloc_BG25_046_G].includes(card.cardId as CardIds));
 	}
 }

@@ -61,7 +61,7 @@ export class BgsSouthseaStrongarmCounterDefinition
 		return {
 			type: 'bgsSouthsea',
 			value: numberOfStrongarms,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SouthseaStrongarm}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SouthseaStrongarm_BGS_048}.jpg`,
 			cssClass: 'southsea-counter',
 			tooltip: this.i18n.translateString(`counters.bgs-southsea.${this.side}`, { value: numberOfStrongarms }),
 			standardCounter: true,

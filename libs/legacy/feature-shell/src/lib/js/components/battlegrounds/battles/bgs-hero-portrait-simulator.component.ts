@@ -75,7 +75,7 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() set heroCardId(value: string) {
 		this._heroCardId = value;
-		this.defaultHero = value === CardIds.KelthuzadBattlegrounds;
+		this.defaultHero = value === CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad;
 	}
 
 	@Input() set tavernTier(value: number) {

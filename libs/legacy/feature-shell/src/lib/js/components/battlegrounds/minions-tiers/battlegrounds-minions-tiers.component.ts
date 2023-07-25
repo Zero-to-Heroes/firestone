@@ -216,7 +216,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				tavernTier: 'DS',
 				cards: [
 					...cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
-					cardsInGame.find((c) => c.id === CardIds.Glowscale),
+					cardsInGame.find((c) => c.id === CardIds.Glowscale_BG23_008),
 				],
 				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
@@ -258,7 +258,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const showBuddiesTier =
 			playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
 			(hasBuddies &&
-				[CardIds.TessGreymaneBattlegrounds, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+				[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
 					playerCardId as CardIds,
 				));
 		if (showBuddiesTier) {
@@ -279,7 +279,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 										BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe,
 									),
 							)
-					: [CardIds.TessGreymaneBattlegrounds, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+					: [CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
 							playerCardId as CardIds,
 					  )
 					? allPlayerCardIds

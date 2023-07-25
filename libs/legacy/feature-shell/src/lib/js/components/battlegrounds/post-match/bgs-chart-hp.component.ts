@@ -8,7 +8,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
@@ -438,7 +438,7 @@ export class BgsChartHpComponent {
 
 		// Fallback which uses the total health + armor instead of the leaderboard position
 		const turnAtWhichEachPlayerDies = Object.keys(hpOverTurn)
-			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
+			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroic)
 			.map((playerCardId) => {
 				const info = hpOverTurn[playerCardId];
 				return {

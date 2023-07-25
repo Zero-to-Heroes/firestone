@@ -296,7 +296,6 @@ import { PlayerBgsMajordomoWidgetWrapperComponent } from './js/components/overla
 import { PlayerBgsSouthseaWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
 import { PlayerBolnerWidgetWrapperComponent } from './js/components/overlays/counters/player-bolner-widget-wrapper.component';
 import { PlayerBrilliantMacawWidgetWrapperComponent } from './js/components/overlays/counters/player-brilliant-macaw-widget-wrapper.component';
-import { PlayerCoralKeeperWidgetWrapperComponent } from './js/components/overlays/counters/player-coral-keeper-widget-wrapper.component';
 import { PlayerCthunWidgetWrapperComponent } from './js/components/overlays/counters/player-cthun-widget-wrapper.component';
 import { PlayerElementalWidgetWrapperComponent } from './js/components/overlays/counters/player-elemental-widget-wrapper.component';
 import { PlayerElwynnBoarWidgetWrapperComponent } from './js/components/overlays/counters/player-elwynn-boar-widget-wrapper.component';
@@ -1571,7 +1570,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
-		PlayerCoralKeeperWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

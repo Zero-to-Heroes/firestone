@@ -69,7 +69,9 @@ export class PlayerBgsSouthseaWidgetWrapperComponent
 		return zone
 			.filter((card) => card.cardId)
 			.some((card) =>
-				[CardIds.SouthseaStrongarm, CardIds.SouthseaStrongarmBattlegrounds].includes(card.cardId as CardIds),
+				[CardIds.SouthseaStrongarm_BGS_048, CardIds.SouthseaStrongarm_TB_BaconUps_140].includes(
+					card.cardId as CardIds,
+				),
 			);
 	}
 }

@@ -7,8 +7,8 @@ import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-t
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 import { GameEvents } from '../../../game-events.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
-import { BgsTavernUpgradeEvent } from '../events/bgs-tavern-upgrade-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsTavernUpgradeEvent } from '../events/bgs-tavern-upgrade-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTavernUpgradeParser implements EventParser {
@@ -25,7 +25,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 				normalizeHeroCardId(event.heroCardId, this.allCards),
 		);
 		if (!playerToUpdate) {
-			if (event.heroCardId !== CardIds.KelthuzadBattlegrounds) {
+			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 					console.warn(
 						'No player found to update the history',

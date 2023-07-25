@@ -31,13 +31,13 @@ export class DeckState {
 	private static readonly POGO_CARD_IDS = [
 		CardIds.PogoHopper_BOT_283,
 		CardIds.PogoHopper_BGS_028,
-		CardIds.PogoHopperBattlegrounds,
+		CardIds.PogoHopper_TB_BaconUps_077,
 	];
 
 	private static readonly HERO_POWER_DAMAGE_CARD_IDS = [CardIds.MordreshFireEye, CardIds.JanalaiTheDragonhawk];
 
 	private static readonly SPELL_COUNTER_CARD_IDS = [
-		CardIds.YoggSaronHopesEnd,
+		CardIds.YoggSaronHopesEnd_OG_134,
 		CardIds.YoggSaronMasterOfFate,
 		CardIds.ArcaneGiant,
 	];

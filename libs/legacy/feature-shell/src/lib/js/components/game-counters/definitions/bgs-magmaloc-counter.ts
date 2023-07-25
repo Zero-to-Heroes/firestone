@@ -57,7 +57,7 @@ export class BgsMagmalocCounterDefinition
 		return {
 			type: 'bgsMagmaloc',
 			value: 1 + minionsPlayedThisTurn,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Magmaloc}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Magmaloc_BG25_046}.jpg`,
 			cssClass: 'magmaloc-counter',
 			tooltip: this.i18n.translateString(`counters.bgs-magmaloc.${this.side}`, {
 				value: 1 + minionsPlayedThisTurn,

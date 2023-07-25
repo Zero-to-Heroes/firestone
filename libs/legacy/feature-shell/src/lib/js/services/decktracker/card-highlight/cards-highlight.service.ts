@@ -14,6 +14,7 @@ import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.serv
 import {
 	and,
 	arcane,
+	attackGreaterThan,
 	attackLessThan,
 	baseCostEqual,
 	battlecry,
@@ -345,6 +346,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
 		switch (cardId) {
+			case CardIds.AbsorbentParasite:
+				return and(side(inputSide), or(inDeck, inHand), minion, or(mech, beast));
 			case CardIds.AbyssalBassist:
 				return and(side(inputSide), or(inDeck, inHand), weapon);
 			case CardIds.AbyssalDepths:
@@ -373,6 +376,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 			case CardIds.AmberWhelp:
 				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
+			case CardIds.AmitusThePeacekeeper_ReinforcedToken:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.AmuletOfUndying:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.AnimateDead:
@@ -383,6 +388,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.ApexisBlast:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.AquaArchivist:
+				return and(side(inputSide), inDeck, minion, elemental);
 			case CardIds.ArcaneArtificer:
 			case CardIds.ArcaneArtificerCore:
 				return and(side(inputSide), or(inDeck, inHand), spell);
@@ -486,6 +493,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.CatrinaMuerteCore:
 			case CardIds.CatrinaMuerte:
 				return and(side(inputSide), inGraveyard, undead, minion);
+			case CardIds.ChampionOfStorms:
+				return and(side(inputSide), or(inHand, inDeck), spell, nature);
 			case CardIds.ChattyBartender:
 				return and(side(inputSide), inDeck, secret);
 			case CardIds.ChorusRiff:
@@ -522,6 +531,11 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.CountessAshmore:
 				return and(side(inputSide), inDeck, or(rush, lifesteal, deathrattle));
 			case CardIds.CowardlyGrunt:
+				return and(side(inputSide), inDeck, minion);
+			case CardIds.CrashOfThunder:
+				return and(side(inputSide), or(inHand, inDeck), spell, nature);
+			case CardIds.CreationProtocol:
+			case CardIds.CreationProtocol_CreationProtocolToken:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.CrushclawEnforcer:
 				return and(side(inputSide), inDeck, naga);
@@ -792,6 +806,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), weapon);
 			case CardIds.IntoTheFray:
 				return and(side(inputSide), or(inDeck, inHand), minion, taunt);
+			case CardIds.InventorsAura:
+				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.InvestmentOpportunity:
 				return and(side(inputSide), inDeck, overload);
 			case CardIds.InvigoratingLightTavernBrawl:
@@ -937,6 +953,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), weapon);
 			case CardIds.PitCommander:
 				return and(side(inputSide), inDeck, minion, demon);
+			case CardIds.PitStop:
+				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.PlaguebringerTavernBrawl:
 				return and(side(inputSide), spell, effectiveCostMore(1));
 			case CardIds.Plunder:
@@ -1067,6 +1085,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.ShadowVisions:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.SharpEyedSeeker:
+				return and(side(inputSide), inDeck, notInInitialDeck);
 			case CardIds.SheldrasMoontree:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ShipsCannon:
@@ -1081,7 +1101,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, isSi7);
 			case CardIds.ShroudOfConcealment:
 				return and(side(inputSide), inDeck, minion);
-			case CardIds.Shudderwock:
+			case CardIds.Shudderwock_GIL_820:
 				return and(side(inputSide), cardsPlayedThisMatch, minion, battlecry);
 			case CardIds.SilvermoonFarstrider_RLK_826:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
@@ -1112,7 +1132,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, secret);
 			case CardIds.SrExcavatorTavernBrawl:
 				return and(side(inputSide), inDeck, minion);
-			case CardIds.SrTombDiver:
+			case CardIds.SrTombDiver_ULDA_021:
 			case CardIds.JrTombDiver:
 			case CardIds.JrTombDiverTavernBrawl:
 			case CardIds.SrTombDiverTavernBrawl:
@@ -1202,7 +1222,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.TheCountess:
 				return and(side(inputSide), inDeck, neutral);
-			case CardIds.TheCurator:
+			case CardIds.TheCurator_KAR_061:
 				return and(side(inputSide), inDeck, minion, or(beast, dragon, murloc));
 			case CardIds.TheFistOfRaDen:
 				return and(side(inputSide), or(inDeck, inHand), spell);
@@ -1235,10 +1255,17 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), deathrattle);
 			case CardIds.TownCrier_GIL_580:
 				return and(side(inputSide), inDeck, minion, rush);
+			case CardIds.TramOperator:
+				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.TrenchSurveyor_TSC_642:
 				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.TrinketTracker:
 				return and(side(inputSide), inDeck, spell, effectiveCostEqual(1));
+			case CardIds.Tyr:
+				return and(side(inputSide), inGraveyard, paladin, minion, attackGreaterThan(1), attackLessThan(5));
+			case CardIds.TyrsTears:
+			case CardIds.TyrsTears_TyrsTearsToken:
+				return and(side(inputSide), inGraveyard, paladin, minion);
 			case CardIds.Tuskpiercer:
 				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.TwilightDeceptor:

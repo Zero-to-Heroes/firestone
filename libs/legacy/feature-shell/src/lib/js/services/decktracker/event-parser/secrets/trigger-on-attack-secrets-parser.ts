@@ -47,6 +47,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.ShadowClone,
 		CardIds.SuddenBetrayal,
 		CardIds.VengefulVisage,
+		CardIds.BaitAndSwitch,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -154,6 +155,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.VengefulVisage);
 		}
 		if (!isDefenderMinion) {
+			secretsWeCantRuleOut.push(CardIds.BaitAndSwitch);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrap_CORE_EX1_554);

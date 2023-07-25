@@ -107,7 +107,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
 			<player-multicaster-widget-wrapper></player-multicaster-widget-wrapper>
-			<player-coral-keeper-widget-wrapper></player-coral-keeper-widget-wrapper>
 			<player-volatile-skeleton-widget-wrapper></player-volatile-skeleton-widget-wrapper>
 			<player-relic-widget-wrapper></player-relic-widget-wrapper>
 

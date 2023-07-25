@@ -95,54 +95,54 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		// Some cases are only included when specific tribes are
 		case CardIds.BirdBuddy_BG21_002:
 		case CardIds.BirdBuddy_BG21_002_G:
-		case CardIds.PackLeader:
-		case CardIds.PackLeaderBattlegrounds:
-		case CardIds.VirmenSensei:
-		case CardIds.VirmenSenseiBattlegrounds:
+		case CardIds.PackLeader_BGS_017:
+		case CardIds.PackLeader_TB_BaconUps_086:
+		case CardIds.VirmenSensei_CFM_816:
+		case CardIds.VirmenSensei_TB_BaconUps_074:
 		case CardIds.HoundmasterLegacy:
 		case CardIds.HoundmasterVanilla:
-		case CardIds.HoundmasterBattlegrounds:
-		case CardIds.Houndmaster:
+		case CardIds.Houndmaster_TB_BaconUps_068:
+		case CardIds.Houndmaster_BG_DS1_070:
 			return [Race.BEAST, ...cardRaces];
 		case CardIds.ImpatientDoomsayer_BG21_007:
 		case CardIds.ImpatientDoomsayer_BG21_007_G:
-		case CardIds.SoulJuggler:
-		case CardIds.SoulJugglerBattlegrounds:
-		case CardIds.WrathWeaver:
-		case CardIds.WrathWeaverBattlegrounds:
+		case CardIds.SoulJuggler_BGS_002:
+		case CardIds.SoulJuggler_TB_BaconUps_075:
+		case CardIds.WrathWeaver_BGS_004:
+		case CardIds.WrathWeaver_TB_BaconUps_079:
 			return [Race.DEMON, ...cardRaces];
 		case CardIds.SeafoodSlinger_BG21_011:
 		case CardIds.SeafoodSlinger_BG21_011_G:
 			return [Race.MURLOC, ...cardRaces];
-		case CardIds.NadinaTheRed:
-		case CardIds.NadinaTheRedBattlegrounds:
+		case CardIds.NadinaTheRed_BGS_040:
+		case CardIds.NadinaTheRed_TB_BaconUps_154:
 		case CardIds.WaxriderTogwaggle_BGS_035:
-		case CardIds.WaxriderTogwaggleBattlegrounds:
-		case CardIds.WhelpSmuggler:
-		case CardIds.WhelpSmugglerBattlegrounds:
+		case CardIds.WaxriderTogwaggle_TB_BaconUps_105:
+		case CardIds.WhelpSmuggler_BG21_013:
+		case CardIds.WhelpSmuggler_BG21_013_G:
 			return [Race.DRAGON, ...cardRaces];
 		case CardIds.MajordomoExecutus_BGS_105:
-		case CardIds.MajordomoExecutusBattlegrounds:
+		case CardIds.MajordomoExecutus_TB_BaconUps_207:
 		case CardIds.MasterOfRealities_BG21_036:
 		case CardIds.MasterOfRealities_BG21_036_G:
-		case CardIds.NomiKitchenNightmare:
-		case CardIds.NomiKitchenNightmareBattlegrounds:
+		case CardIds.NomiKitchenNightmare_BGS_104:
+		case CardIds.NomiKitchenNightmare_TB_BaconUps_201:
 			return [Race.ELEMENTAL, ...cardRaces];
-		case CardIds.KangorsApprentice:
-		case CardIds.KangorsApprenticeBattlegrounds:
+		case CardIds.KangorsApprentice_BGS_012:
+		case CardIds.KangorsApprentice_TB_BaconUps_087:
 			return [Race.MECH, ...cardRaces];
 		case CardIds.DefiantShipwright_BG21_018:
 		case CardIds.DefiantShipwright_BG21_018_G:
-		case CardIds.TheTideRazor:
-		case CardIds.TheTideRazorBattlegrounds:
+		case CardIds.TheTideRazor_BGS_079:
+		case CardIds.TheTideRazor_TB_BaconUps_137:
 			return [Race.PIRATE, ...cardRaces];
 		case CardIds.AgamagganTheGreatBoar_BG20_205:
 		case CardIds.AgamagganTheGreatBoar_BG20_205_G:
-		case CardIds.ProphetOfTheBoar:
-		case CardIds.ProphetOfTheBoarBattlegrounds:
+		case CardIds.ProphetOfTheBoar_BG20_203:
+		case CardIds.ProphetOfTheBoar_BG20_203_G:
 			return [Race.QUILBOAR, ...cardRaces];
-		case CardIds.OrgozoaTheTender:
-		case CardIds.OrgozoaTheTenderBattlegrounds:
+		case CardIds.OrgozoaTheTender_BG23_015:
+		case CardIds.OrgozoaTheTender_BG23_015_G:
 			return [Race.NAGA, ...cardRaces];
 		// case CardIds.SindoreiStraightShot:
 		// case CardIds.SindoreiStraightShotBattlegrounds:
@@ -222,118 +222,118 @@ export const getAchievementsForHero = (
 
 export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): number => {
 	switch (heroCardId) {
-		case CardIds.EdwinVancleefBattlegrounds:
+		case CardIds.EdwinVancleef_TB_BaconShop_HERO_01:
 			return 227;
-		case CardIds.GalakrondBattlegrounds:
+		case CardIds.Galakrond:
 			return 231;
-		case CardIds.IllidanStormrageBattlegrounds:
+		case CardIds.IllidanStormrage_TB_BaconShop_HERO_08:
 			return 234;
-		case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
+		case CardIds.RagnarosTheFirelord_TB_BaconShop_HERO_11:
 			return 254;
-		case CardIds.TheRatKingBattlegrounds:
+		case CardIds.TheRatKing_TB_BaconShop_HERO_12:
 			return 266;
-		case CardIds.QueenWagtoggleBattlegrounds_TB_BaconShop_HERO_14:
+		case CardIds.QueenWagtoggle_TB_BaconShop_HERO_14:
 			return 253;
-		case CardIds.GeorgeTheFallenBattlegrounds:
+		case CardIds.GeorgeTheFallen_TB_BaconShop_HERO_15:
 			return 232;
-		case CardIds.AFKayBattlegrounds:
+		case CardIds.AFKay_TB_BaconShop_HERO_16:
 			return 215;
-		case CardIds.MillificentManastormBattlegrounds:
+		case CardIds.MillificentManastorm:
 			return 244;
-		case CardIds.PatchesThePirateBattlegrounds:
+		case CardIds.PatchesThePirate_TB_BaconShop_HERO_18:
 			return 250;
-		case CardIds.TheGreatAkazamzarakBattlegrounds:
+		case CardIds.TheGreatAkazamzarak:
 			return 264;
-		case CardIds.TheLichKingBattlegrounds_TB_BaconShop_HERO_22:
+		case CardIds.TheLichKing_TB_BaconShop_HERO_22:
 			return 265;
-		case CardIds.ShudderwockBattlegrounds:
+		case CardIds.Shudderwock_TB_BaconShop_HERO_23:
 			return 257;
-		case CardIds.LichBazhialBattlegrounds:
+		case CardIds.LichBazhial:
 			return 238;
-		case CardIds.SindragosaBattlegrounds_TB_BaconShop_HERO_27:
+		case CardIds.Sindragosa_TB_BaconShop_HERO_27:
 			return 259;
-		case CardIds.InfiniteTokiBattlegrounds:
+		case CardIds.InfiniteToki:
 			return 235;
-		case CardIds.TheCuratorBattlegrounds:
+		case CardIds.TheCurator_TB_BaconShop_HERO_33:
 			return 263;
-		case CardIds.PatchwerkBattlegrounds:
+		case CardIds.Patchwerk_TB_BaconShop_HERO_34:
 			return 251;
-		case CardIds.YoggSaronHopesEndBattlegrounds_TB_BaconShop_HERO_35:
+		case CardIds.YoggSaronHopesEnd_TB_BaconShop_HERO_35:
 			return 269;
-		case CardIds.DancinDerylBattlegrounds:
+		case CardIds.DancinDeryl:
 			return 225;
-		case CardIds.LordJaraxxusBattlegrounds_TB_BaconShop_HERO_37:
+		case CardIds.LordJaraxxus_TB_BaconShop_HERO_37:
 			return 240;
-		case CardIds.KingMuklaBattlegrounds:
+		case CardIds.KingMukla_TB_BaconShop_HERO_38:
 			return 246;
-		case CardIds.PyramadBattlegrounds:
+		case CardIds.Pyramad:
 			return 252;
-		case CardIds.SirFinleyMrrggltonBattlegrounds:
+		case CardIds.SirFinleyMrrgglton_TB_BaconShop_HERO_40:
 			return 260;
-		case CardIds.RenoJacksonBattlegrounds:
+		case CardIds.RenoJackson_TB_BaconShop_HERO_41:
 			return 256;
-		case CardIds.EliseStarseekerBattlegrounds:
+		case CardIds.EliseStarseeker_TB_BaconShop_HERO_42:
 			return 228;
-		case CardIds.DinotamerBrannBattlegrounds:
+		case CardIds.DinotamerBrann_TB_BaconShop_HERO_43:
 			return 220;
-		case CardIds.ArchVillainRafaamBattlegrounds:
+		case CardIds.ArchVillainRafaam_TB_BaconShop_HERO_45:
 			return 219;
-		case CardIds.MillhouseManastormBattlegrounds:
+		case CardIds.MillhouseManastorm_TB_BaconShop_HERO_49:
 			return 243;
-		case CardIds.TessGreymaneBattlegrounds:
+		case CardIds.TessGreymane_TB_BaconShop_HERO_50:
 			return 262;
-		case CardIds.DeathwingBattlegrounds:
+		case CardIds.Deathwing_TB_BaconShop_HERO_52:
 			return 226;
-		case CardIds.YseraBattlegrounds:
+		case CardIds.Ysera_TB_BaconShop_HERO_53:
 			return 270;
-		case CardIds.FungalmancerFlurglBattlegrounds:
+		case CardIds.FungalmancerFlurgl:
 			return 230;
-		case CardIds.AlexstraszaBattlegrounds:
+		case CardIds.Alexstrasza_TB_BaconShop_HERO_56:
 			return 217;
-		case CardIds.NozdormuBattlegrounds:
+		case CardIds.Nozdormu_TB_BaconShop_HERO_57:
 			return 248;
-		case CardIds.MalygosBattlegrounds:
+		case CardIds.Malygos:
 			return 242;
-		case CardIds.ArannaStarseekerBattlegrounds:
-		case CardIds.ArannaStarseeker_ArannaUnleashedTokenBattlegrounds:
+		case CardIds.ArannaStarseeker_TB_BaconShop_HERO_59:
+		case CardIds.ArannaStarseeker_ArannaUnleashedToken:
 			return 218;
-		case CardIds.KaelthasSunstriderBattlegrounds:
+		case CardIds.KaelthasSunstrider_TB_BaconShop_HERO_60:
 			return 237;
-		case CardIds.MaievShadowsongBattlegrounds:
+		case CardIds.MaievShadowsong_TB_BaconShop_HERO_62:
 			return 241;
-		case CardIds.CaptainEudoraBattlegrounds:
+		case CardIds.CaptainEudora_TB_BaconShop_HERO_64:
 			return 222;
-		case CardIds.CaptainHooktuskBattlegrounds:
+		case CardIds.CaptainHooktusk_TB_BaconShop_HERO_67:
 			return 223;
-		case CardIds.SkycapnKraggBattlegrounds:
+		case CardIds.SkycapnKragg_TB_BaconShop_HERO_68:
 			return 261;
-		case CardIds.MrBigglesworthBattlegrounds:
+		case CardIds.MrBigglesworth_TB_BaconShop_HERO_70:
 			return 245;
-		case CardIds.JandiceBarovBattlegrounds:
+		case CardIds.JandiceBarov_TB_BaconShop_HERO_71:
 			return 236;
-		case CardIds.LordBarovBattlegrounds:
+		case CardIds.LordBarov_TB_BaconShop_HERO_72:
 			return 239;
-		case CardIds.ForestWardenOmuBattlegrounds:
+		case CardIds.ForestWardenOmu_TB_BaconShop_HERO_74:
 			return 229;
-		case CardIds.ChenvaalaBattlegrounds:
+		case CardIds.Chenvaala_TB_BaconShop_HERO_78:
 			return 224;
-		case CardIds.RakanishuBattlegrounds:
+		case CardIds.Rakanishu_TB_BaconShop_HERO_75:
 			return 255;
-		case CardIds.AlakirBattlegrounds:
+		case CardIds.Alakir:
 			return 216;
-		case CardIds.ZephrysTheGreatBattlegrounds:
+		case CardIds.ZephrysTheGreat_TB_BaconShop_HERO_91:
 			return 271;
-		case CardIds.SilasDarkmoonBattlegrounds:
+		case CardIds.SilasDarkmoon_TB_BaconShop_HERO_90:
 			return 258;
-		case CardIds.CthunBattlegrounds:
+		case CardIds.Cthun_TB_BaconShop_HERO_29:
 			return 221;
-		case CardIds.NzothBattlegrounds:
+		case CardIds.Nzoth:
 			return 247;
-		case CardIds.YshaarjBattlegrounds:
+		case CardIds.Yshaarj:
 			return 268;
-		case CardIds.TickatusBattlegrounds:
+		case CardIds.Tickatus_TB_BaconShop_HERO_94:
 			return 267;
-		case CardIds.GreyboughBattlegrounds:
+		case CardIds.Greybough_TB_BaconShop_HERO_95:
 			return 233;
 		case CardIds.OverlordSaurfang_BG20_HERO_102:
 			return 249;
@@ -351,7 +351,7 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 307;
 		case CardIds.Galewing:
 			return 321;
-		case CardIds.TradePrinceGallywixBattlegrounds_TB_BaconShop_HERO_10:
+		case CardIds.TradePrinceGallywix_TB_BaconShop_HERO_10:
 			return 308;
 		case CardIds.MasterNguyen:
 			return 326;
@@ -399,7 +399,7 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 427;
 		case CardIds.SylvanasWindrunner_BG23_HERO_306:
 			return 431;
-		case CardIds.TheJailerBattlegrounds:
+		case CardIds.TheJailer_TB_BaconShop_HERO_702:
 			return 459;
 		case CardIds.EnhanceOMechano_BG24_HERO_204:
 			return 462;
@@ -427,191 +427,191 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 
 export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): CardIds => {
 	switch (normalizeHeroCardId(heroCardId, allCards)) {
-		case CardIds.AFKayBattlegrounds:
-			return CardIds.SnackVendorBattlegrounds_TB_BaconShop_HERO_16_Buddy;
-		case CardIds.AlakirBattlegrounds:
-			return CardIds.SpiritOfAirBattlegrounds_TB_BaconShop_HERO_76_Buddy;
-		case CardIds.AlexstraszaBattlegrounds:
-			return CardIds.VaelastraszBattlegrounds_TB_BaconShop_HERO_56_Buddy;
-		case CardIds.ArannaStarseeker_ArannaUnleashedTokenBattlegrounds:
-		case CardIds.ArannaStarseekerBattlegrounds:
-			return CardIds.SklibbDemonHunterBattlegrounds_TB_BaconShop_HERO_59_Buddy;
-		case CardIds.ArchVillainRafaamBattlegrounds:
-			return CardIds.LoyalHenchmanBattlegrounds_TB_BaconShop_HERO_45_Buddy;
+		case CardIds.AFKay_TB_BaconShop_HERO_16:
+			return CardIds.SnackVendor_TB_BaconShop_HERO_16_Buddy;
+		case CardIds.Alakir:
+			return CardIds.SpiritOfAir_TB_BaconShop_HERO_76_Buddy;
+		case CardIds.Alexstrasza_TB_BaconShop_HERO_56:
+			return CardIds.Vaelastrasz_TB_BaconShop_HERO_56_Buddy;
+		case CardIds.ArannaStarseeker_ArannaUnleashedToken:
+		case CardIds.ArannaStarseeker_TB_BaconShop_HERO_59:
+			return CardIds.SklibbDemonHunter_TB_BaconShop_HERO_59_Buddy;
+		case CardIds.ArchVillainRafaam_TB_BaconShop_HERO_45:
+			return CardIds.LoyalHenchman_TB_BaconShop_HERO_45_Buddy;
 		case CardIds.Brukan_BG22_HERO_001:
-			return CardIds.SpiritRaptor;
-		case CardIds.CaptainEudoraBattlegrounds:
-			return CardIds.DagwikStickytoeBattlegrounds_TB_BaconShop_HERO_64_Buddy;
-		case CardIds.CaptainHooktuskBattlegrounds:
-			return CardIds.RagingContenderBattlegrounds_TB_BaconShop_HERO_67_Buddy;
+			return CardIds.SpiritRaptor_BG22_HERO_001_Buddy;
+		case CardIds.CaptainEudora_TB_BaconShop_HERO_64:
+			return CardIds.DagwikStickytoe_TB_BaconShop_HERO_64_Buddy;
+		case CardIds.CaptainHooktusk_TB_BaconShop_HERO_67:
+			return CardIds.RagingContender_TB_BaconShop_HERO_67_Buddy;
 		case CardIds.CarielRoame_BG21_HERO_000:
-			return CardIds.CaptainFairmount;
-		case CardIds.ChenvaalaBattlegrounds:
-			return CardIds.SnowElementalBattlegrounds_TB_BaconShop_HERO_78_Buddy;
+			return CardIds.CaptainFairmount_BG21_HERO_000_Buddy;
+		case CardIds.Chenvaala_TB_BaconShop_HERO_78:
+			return CardIds.SnowElemental_TB_BaconShop_HERO_78_Buddy;
 		case CardIds.CookieTheCook_BG21_HERO_020:
-			return CardIds.SousChef;
-		case CardIds.CthunBattlegrounds:
-			return CardIds.TentacleOfCthunBattlegrounds_TB_BaconShop_HERO_29_Buddy;
-		case CardIds.DancinDerylBattlegrounds:
-			return CardIds.AsherTheHaberdasherBattlegrounds_TB_BaconShop_HERO_36_Buddy;
+			return CardIds.SousChef_BG21_HERO_020_Buddy;
+		case CardIds.Cthun_TB_BaconShop_HERO_29:
+			return CardIds.TentacleOfCthun_TB_BaconShop_HERO_29_Buddy;
+		case CardIds.DancinDeryl:
+			return CardIds.AsherTheHaberdasher_TB_BaconShop_HERO_36_Buddy;
 		case CardIds.DeathSpeakerBlackthorn_BG20_HERO_103:
-			return CardIds.DeathsHeadSage;
-		case CardIds.DeathwingBattlegrounds:
-			return CardIds.LadySinestraBattlegrounds_TB_BaconShop_HERO_52_Buddy;
-		case CardIds.DinotamerBrannBattlegrounds:
-			return CardIds.BrannsEpicEggBattlegrounds_TB_BaconShop_HERO_43_Buddy;
+			return CardIds.DeathsHeadSage_BG20_HERO_103_Buddy;
+		case CardIds.Deathwing_TB_BaconShop_HERO_52:
+			return CardIds.LadySinestra_TB_BaconShop_HERO_52_Buddy;
+		case CardIds.DinotamerBrann_TB_BaconShop_HERO_43:
+			return CardIds.BrannsEpicEgg_TB_BaconShop_HERO_43_Buddy;
 		case CardIds.Drekthar_BG22_HERO_002:
-			return CardIds.FrostwolfLieutenant;
-		case CardIds.EdwinVancleefBattlegrounds:
-			return CardIds.Si7ScoutBattlegrounds_TB_BaconShop_HERO_01_Buddy;
-		case CardIds.EliseStarseekerBattlegrounds:
-			return CardIds.JrNavigatorBattlegrounds_TB_BaconShop_HERO_42_Buddy;
-		case CardIds.ForestWardenOmuBattlegrounds:
-			return CardIds.EvergreenBotaniBattlegrounds_TB_BaconShop_HERO_74_Buddy;
-		case CardIds.FungalmancerFlurglBattlegrounds:
-			return CardIds.SparkfinSoothsayerBattlegrounds_TB_BaconShop_HERO_55_Buddy;
-		case CardIds.GalakrondBattlegrounds:
-			return CardIds.ApostleOfGalakrondBattlegrounds_TB_BaconShop_HERO_02_Buddy;
+			return CardIds.FrostwolfLieutenant_BG22_HERO_002_Buddy;
+		case CardIds.EdwinVancleef_TB_BaconShop_HERO_01:
+			return CardIds.Si7Scout_TB_BaconShop_HERO_01_Buddy;
+		case CardIds.EliseStarseeker_TB_BaconShop_HERO_42:
+			return CardIds.JrNavigator_TB_BaconShop_HERO_42_Buddy;
+		case CardIds.ForestWardenOmu_TB_BaconShop_HERO_74:
+			return CardIds.EvergreenBotani_TB_BaconShop_HERO_74_Buddy;
+		case CardIds.FungalmancerFlurgl:
+			return CardIds.SparkfinSoothsayer_TB_BaconShop_HERO_55_Buddy;
+		case CardIds.Galakrond:
+			return CardIds.ApostleOfGalakrond_TB_BaconShop_HERO_02_Buddy;
 		case CardIds.Galewing:
-			return CardIds.FlightTrainer;
-		case CardIds.GeorgeTheFallenBattlegrounds:
-			return CardIds.KarlTheLostBattlegrounds_TB_BaconShop_HERO_15_Buddy;
-		case CardIds.GreyboughBattlegrounds:
-			return CardIds.WanderingTreantBattlegrounds_TB_BaconShop_HERO_95_Buddy;
+			return CardIds.FlightTrainer_BG20_HERO_283_Buddy;
+		case CardIds.GeorgeTheFallen_TB_BaconShop_HERO_15:
+			return CardIds.KarlTheLost_TB_BaconShop_HERO_15_Buddy;
+		case CardIds.Greybough_TB_BaconShop_HERO_95:
+			return CardIds.WanderingTreant_TB_BaconShop_HERO_95_Buddy;
 		case CardIds.GuffRunetotem_BG20_HERO_242:
-			return CardIds.BabyKodo;
-		case CardIds.IllidanStormrageBattlegrounds:
-			return CardIds.EclipsionIllidariBattlegrounds_TB_BaconShop_HERO_08_Buddy;
-		case CardIds.InfiniteTokiBattlegrounds:
-			return CardIds.ClockworkAssistantBattlegrounds_TB_BaconShop_HERO_28_Buddy;
-		case CardIds.JandiceBarovBattlegrounds:
-			return CardIds.JandicesApprenticeBattlegrounds_TB_BaconShop_HERO_71_Buddy;
-		case CardIds.KaelthasSunstriderBattlegrounds:
-			return CardIds.CrimsonHandCenturionBattlegrounds_TB_BaconShop_HERO_60_Buddy;
-		case CardIds.KingMuklaBattlegrounds:
-			return CardIds.CrazyMonkeyBattlegrounds_TB_BaconShop_HERO_38_Buddy;
+			return CardIds.BabyKodo_BG20_HERO_242_Buddy;
+		case CardIds.IllidanStormrage_TB_BaconShop_HERO_08:
+			return CardIds.EclipsionIllidari_TB_BaconShop_HERO_08_Buddy;
+		case CardIds.InfiniteToki:
+			return CardIds.ClockworkAssistant_TB_BaconShop_HERO_28_Buddy;
+		case CardIds.JandiceBarov_TB_BaconShop_HERO_71:
+			return CardIds.JandicesApprentice_TB_BaconShop_HERO_71_Buddy;
+		case CardIds.KaelthasSunstrider_TB_BaconShop_HERO_60:
+			return CardIds.CrimsonHandCenturion_TB_BaconShop_HERO_60_Buddy;
+		case CardIds.KingMukla_TB_BaconShop_HERO_38:
+			return CardIds.CrazyMonkey_TB_BaconShop_HERO_38_Buddy;
 		case CardIds.KurtrusAshfallen_BG20_HERO_280:
-			return CardIds.LivingNightmare;
-		case CardIds.LichBazhialBattlegrounds:
-			return CardIds.UnearthedUnderlingBattlegrounds_TB_BaconShop_HERO_25_Buddy;
-		case CardIds.LordBarovBattlegrounds:
-			return CardIds.BarovsApprenticeBattlegrounds_TB_BaconShop_HERO_72_Buddy;
-		case CardIds.LordJaraxxusBattlegrounds_TB_BaconShop_HERO_37:
-			return CardIds.KilrekBattlegrounds_TB_BaconShop_HERO_37_Buddy;
-		case CardIds.MaievShadowsongBattlegrounds:
-			return CardIds.ShadowWardenBattlegrounds_TB_BaconShop_HERO_62_Buddy;
-		case CardIds.MalygosBattlegrounds:
-			return CardIds.NexusLordBattlegrounds_TB_BaconShop_HERO_58_Buddy;
+			return CardIds.LivingNightmare_BG20_HERO_280_Buddy;
+		case CardIds.LichBazhial:
+			return CardIds.UnearthedUnderling_TB_BaconShop_HERO_25_Buddy;
+		case CardIds.LordBarov_TB_BaconShop_HERO_72:
+			return CardIds.BarovsApprentice_TB_BaconShop_HERO_72_Buddy;
+		case CardIds.LordJaraxxus_TB_BaconShop_HERO_37:
+			return CardIds.Kilrek_TB_BaconShop_HERO_37_Buddy;
+		case CardIds.MaievShadowsong_TB_BaconShop_HERO_62:
+			return CardIds.ShadowWarden_TB_BaconShop_HERO_62_Buddy;
+		case CardIds.Malygos:
+			return CardIds.NexusLord_TB_BaconShop_HERO_58_Buddy;
 		case CardIds.MasterNguyen:
 			return CardIds.LeiFlamepaw_BG20_HERO_202_Buddy;
-		case CardIds.MillhouseManastormBattlegrounds:
-			return CardIds.MagnusManastormBattlegrounds_TB_BaconShop_HERO_49_Buddy;
-		case CardIds.MillificentManastormBattlegrounds:
-			return CardIds.ElementiumSquirrelBombBattlegrounds_TB_BaconShop_HERO_17_Buddy;
-		case CardIds.MrBigglesworthBattlegrounds:
-			return CardIds.LilKTBattlegrounds_TB_BaconShop_HERO_70_Buddy;
+		case CardIds.MillhouseManastorm_TB_BaconShop_HERO_49:
+			return CardIds.MagnusManastorm_TB_BaconShop_HERO_49_Buddy;
+		case CardIds.MillificentManastorm:
+			return CardIds.ElementiumSquirrelBomb_TB_BaconShop_HERO_17_Buddy;
+		case CardIds.MrBigglesworth_TB_BaconShop_HERO_70:
+			return CardIds.LilKT_TB_BaconShop_HERO_70_Buddy;
 		case CardIds.MutanusTheDevourer_BG20_HERO_301:
-			return CardIds.NightmareEctoplasm;
-		case CardIds.NozdormuBattlegrounds:
-			return CardIds.ChromieBattlegrounds_TB_BaconShop_HERO_57_Buddy;
-		case CardIds.NzothBattlegrounds:
-			return CardIds.BabyNzothBattlegrounds_TB_BaconShop_HERO_93_Buddy;
+			return CardIds.NightmareEctoplasm_BG20_HERO_301_Buddy;
+		case CardIds.Nozdormu_TB_BaconShop_HERO_57:
+			return CardIds.Chromie_TB_BaconShop_HERO_57_Buddy;
+		case CardIds.Nzoth:
+			return CardIds.BabyNzoth_TB_BaconShop_HERO_93_Buddy;
 		case CardIds.OverlordSaurfang_BG20_HERO_102:
-			return CardIds.DranoshSaurfang;
-		case CardIds.PatchesThePirateBattlegrounds:
-			return CardIds.TuskarrRaiderBattlegrounds_TB_BaconShop_HERO_18_Buddy;
-		case CardIds.PatchwerkBattlegrounds:
-			return CardIds.WeebominationBattlegrounds_TB_BaconShop_HERO_34_Buddy;
-		case CardIds.PyramadBattlegrounds:
-			return CardIds.TitanicGuardianBattlegrounds_TB_BaconShop_HERO_39_Buddy;
-		case CardIds.QueenWagtoggleBattlegrounds_TB_BaconShop_HERO_14:
-			return CardIds.ElderTaggawagBattlegrounds_TB_BaconShop_HERO_14_Buddy;
-		case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
-			return CardIds.LucifronBattlegrounds_TB_BaconShop_HERO_11_Buddy;
-		case CardIds.RakanishuBattlegrounds:
-			return CardIds.LanternTenderBattlegrounds_TB_BaconShop_HERO_75_Buddy;
-		case CardIds.RenoJacksonBattlegrounds:
-			return CardIds.SrTombDiverBattlegrounds_TB_BaconShop_HERO_41_Buddy;
+			return CardIds.DranoshSaurfang_BG20_HERO_102_Buddy;
+		case CardIds.PatchesThePirate_TB_BaconShop_HERO_18:
+			return CardIds.TuskarrRaider_TB_BaconShop_HERO_18_Buddy;
+		case CardIds.Patchwerk_TB_BaconShop_HERO_34:
+			return CardIds.Weebomination_TB_BaconShop_HERO_34_Buddy;
+		case CardIds.Pyramad:
+			return CardIds.TitanicGuardian_TB_BaconShop_HERO_39_Buddy;
+		case CardIds.QueenWagtoggle_TB_BaconShop_HERO_14:
+			return CardIds.ElderTaggawag_TB_BaconShop_HERO_14_Buddy;
+		case CardIds.RagnarosTheFirelord_TB_BaconShop_HERO_11:
+			return CardIds.Lucifron_TB_BaconShop_HERO_11_Buddy;
+		case CardIds.Rakanishu_TB_BaconShop_HERO_75:
+			return CardIds.LanternTender_TB_BaconShop_HERO_75_Buddy;
+		case CardIds.RenoJackson_TB_BaconShop_HERO_41:
+			return CardIds.SrTombDiver_TB_BaconShop_HERO_41_Buddy;
 		case CardIds.ScabbsCutterbutter_BG21_HERO_010:
 			return CardIds.WardenThelwater_BG21_HERO_010_Buddy;
-		case CardIds.ShudderwockBattlegrounds:
-			return CardIds.MuckslingerBattlegrounds_TB_BaconShop_HERO_23_Buddy;
-		case CardIds.SilasDarkmoonBattlegrounds:
-			return CardIds.BurthBattlegrounds_TB_BaconShop_HERO_90_Buddy;
-		case CardIds.SindragosaBattlegrounds_TB_BaconShop_HERO_27:
-			return CardIds.ThawedChampionBattlegrounds_TB_BaconShop_HERO_27_Buddy;
-		case CardIds.SirFinleyMrrggltonBattlegrounds:
-			return CardIds.MaxwellMightySteedBattlegrounds_TB_BaconShop_HERO_40_Buddy;
-		case CardIds.SkycapnKraggBattlegrounds:
-			return CardIds.SharkbaitBattlegrounds_TB_BaconShop_HERO_68_Buddy;
+		case CardIds.Shudderwock_TB_BaconShop_HERO_23:
+			return CardIds.Muckslinger_TB_BaconShop_HERO_23_Buddy;
+		case CardIds.SilasDarkmoon_TB_BaconShop_HERO_90:
+			return CardIds.Burth_TB_BaconShop_HERO_90_Buddy;
+		case CardIds.Sindragosa_TB_BaconShop_HERO_27:
+			return CardIds.ThawedChampion_TB_BaconShop_HERO_27_Buddy;
+		case CardIds.SirFinleyMrrgglton_TB_BaconShop_HERO_40:
+			return CardIds.MaxwellMightySteed_TB_BaconShop_HERO_40_Buddy;
+		case CardIds.SkycapnKragg_TB_BaconShop_HERO_68:
+			return CardIds.Sharkbait_TB_BaconShop_HERO_68_Buddy;
 		case CardIds.Sneed_BG21_HERO_030:
-			return CardIds.PilotedWhirlOTron;
+			return CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy;
 		case CardIds.TamsinRoame_BG20_HERO_282:
-			return CardIds.Monstrosity;
+			return CardIds.Monstrosity_BG20_HERO_282_Buddy;
 		case CardIds.TavishStormpike_BG22_HERO_000:
 			return CardIds.Crabby_BG22_HERO_000_Buddy;
-		case CardIds.TessGreymaneBattlegrounds:
-			return CardIds.HunterOfOldBattlegrounds_TB_BaconShop_HERO_50_Buddy;
-		case CardIds.TheCuratorBattlegrounds:
-			return CardIds.MishmashBattlegrounds_TB_BaconShop_HERO_33_Buddy;
-		case CardIds.TheGreatAkazamzarakBattlegrounds:
-			return CardIds.StreetMagicianBattlegrounds_TB_BaconShop_HERO_21_Buddy;
-		case CardIds.TheLichKingBattlegrounds_TB_BaconShop_HERO_22:
-			return CardIds.ArfusBattlegrounds_TB_BaconShop_HERO_22_Buddy;
-		case CardIds.TheRatKingBattlegrounds:
-			return CardIds.PigeonLordBattlegrounds_TB_BaconShop_HERO_12_Buddy;
-		case CardIds.TickatusBattlegrounds:
-			return CardIds.TicketCollectorBattlegrounds_TB_BaconShop_HERO_94_Buddy;
-		case CardIds.TradePrinceGallywixBattlegrounds_TB_BaconShop_HERO_10:
-			return CardIds.BilgewaterMogulBattlegrounds_TB_BaconShop_HERO_10_Buddy;
+		case CardIds.TessGreymane_TB_BaconShop_HERO_50:
+			return CardIds.HunterOfOld_TB_BaconShop_HERO_50_Buddy;
+		case CardIds.TheCurator_TB_BaconShop_HERO_33:
+			return CardIds.Mishmash_TB_BaconShop_HERO_33_Buddy;
+		case CardIds.TheGreatAkazamzarak:
+			return CardIds.StreetMagician_TB_BaconShop_HERO_21_Buddy;
+		case CardIds.TheLichKing_TB_BaconShop_HERO_22:
+			return CardIds.Arfus_TB_BaconShop_HERO_22_Buddy;
+		case CardIds.TheRatKing_TB_BaconShop_HERO_12:
+			return CardIds.PigeonLord_TB_BaconShop_HERO_12_Buddy;
+		case CardIds.Tickatus_TB_BaconShop_HERO_94:
+			return CardIds.TicketCollector_TB_BaconShop_HERO_94_Buddy;
+		case CardIds.TradePrinceGallywix_TB_BaconShop_HERO_10:
+			return CardIds.BilgewaterMogul_TB_BaconShop_HERO_10_Buddy;
 		case CardIds.VanndarStormpike_BG22_HERO_003:
-			return CardIds.StormpikeLieutenant;
+			return CardIds.StormpikeLieutenant_BG22_HERO_003_Buddy;
 		case CardIds.Voljin_BG20_HERO_201:
-			return CardIds.MasterGadrin;
+			return CardIds.MasterGadrin_BG20_HERO_201_Buddy;
 		case CardIds.Xyrella_BG20_HERO_101:
 			return CardIds.BabyElekk_BG20_HERO_101_Buddy;
-		case CardIds.YoggSaronHopesEndBattlegrounds_TB_BaconShop_HERO_35:
-			return CardIds.AcolyteOfYoggSaronBattlegrounds_TB_BaconShop_HERO_35_Buddy;
-		case CardIds.YseraBattlegrounds:
-			return CardIds.ValithriaDreamwalkerBattlegrounds_TB_BaconShop_HERO_53_Buddy;
-		case CardIds.YshaarjBattlegrounds:
-			return CardIds.BabyYshaarjBattlegrounds_TB_BaconShop_HERO_92_Buddy;
-		case CardIds.ZephrysTheGreatBattlegrounds:
-			return CardIds.PhyreszBattlegrounds_TB_BaconShop_HERO_91_Buddy;
+		case CardIds.YoggSaronHopesEnd_TB_BaconShop_HERO_35:
+			return CardIds.AcolyteOfYoggSaron_TB_BaconShop_HERO_35_Buddy;
+		case CardIds.Ysera_TB_BaconShop_HERO_53:
+			return CardIds.ValithriaDreamwalker_TB_BaconShop_HERO_53_Buddy;
+		case CardIds.Yshaarj:
+			return CardIds.BabyYshaarj_TB_BaconShop_HERO_92_Buddy;
+		case CardIds.ZephrysTheGreat_TB_BaconShop_HERO_91:
+			return CardIds.Phyresz_TB_BaconShop_HERO_91_Buddy;
 		case CardIds.VardenDawngrasp_BG22_HERO_004:
-			return CardIds.VardensAquarrior;
+			return CardIds.VardensAquarrior_BG22_HERO_004_Buddy;
 		case CardIds.Rokara_BG20_HERO_100:
-			return CardIds.IcesnarlTheMighty;
+			return CardIds.IcesnarlTheMighty_BG20_HERO_100_Buddy;
 		case CardIds.Onyxia_BG22_HERO_305:
-			return CardIds.ManyWhelpsBattlegrounds;
+			return CardIds.ManyWhelps_BG22_HERO_305_Buddy;
 		case CardIds.AmbassadorFaelin_BG22_HERO_201:
-			return CardIds.SubmersibleChef;
+			return CardIds.SubmersibleChef_BG22_HERO_201_Buddy;
 		case CardIds.IniStormcoil_BG22_HERO_200:
-			return CardIds.SubScrubber;
+			return CardIds.SubScrubber_BG22_HERO_200_Buddy;
 		case CardIds.QueenAzshara_BG22_HERO_007:
-			return CardIds.ImperialDefender;
+			return CardIds.ImperialDefender_BG22_HERO_007_Buddy;
 		case CardIds.Ozumat_BG23_HERO_201:
-			return CardIds.Tamuzo;
+			return CardIds.Tamuzo_BG23_HERO_201_Buddy;
 		case CardIds.LadyVashj_BG23_HERO_304:
-			return CardIds.CoilfangElite;
+			return CardIds.CoilfangElite_BG23_HERO_304_Buddy;
 		case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
-			return CardIds.WaxadredTheDrippy;
+			return CardIds.WaxadredTheDrippy_BG23_HERO_305_Buddy;
 		case CardIds.SireDenathrius_BG24_HERO_100:
-			return CardIds.ShadyAristocrat;
+			return CardIds.ShadyAristocrat_BG24_HERO_100_Buddy;
 		case CardIds.SylvanasWindrunner_BG23_HERO_306:
 			return CardIds.NathanosBlightcaller_BG23_HERO_306_Buddy;
-		case CardIds.TheJailerBattlegrounds:
-			return CardIds.MawswornSoulkeeperBattlegrounds_TB_BaconShop_HERO_702_Buddy;
+		case CardIds.TheJailer_TB_BaconShop_HERO_702:
+			return CardIds.MawswornSoulkeeper_TB_BaconShop_HERO_702_Buddy;
 		case CardIds.EnhanceOMechano_BG24_HERO_204:
-			return CardIds.EnhanceOMedico;
+			return CardIds.EnhanceOMedico_BG24_HERO_204_Buddy;
 		case CardIds.ProfessorPutricide_BG25_HERO_100:
 			return CardIds.Festergut_BG25_HERO_100_Buddy;
 		case CardIds.TeronGorefiend_BG25_HERO_103:
-			return CardIds.ShadowyConstruct;
+			return CardIds.ShadowyConstruct_BG25_HERO_103_Buddy;
 		case CardIds.MurlocHolmes_BG23_HERO_303:
-			return CardIds.Watfin;
+			return CardIds.Watfin_BG23_HERO_303_Buddy;
 		case CardIds.ETCBandManager_BG25_HERO_105:
-			return CardIds.TalentScout;
+			return CardIds.TalentScout_BG25_HERO_105_Buddy;
 		default:
 			if (!!heroCardId) {
 				console.error('missing buddy section for ', heroCardId);
@@ -623,18 +623,18 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 // Because inconsistencies
 const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 	switch (hero?.id) {
-		case CardIds.MaievShadowsongBattlegrounds:
-			return 'Maiev';
-		case CardIds.KingMuklaBattlegrounds:
-			return 'Mukla';
-		case CardIds.DinotamerBrannBattlegrounds:
-			return 'Brann';
-		case CardIds.ArannaStarseekerBattlegrounds:
-			return 'Aranna';
-		case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
-			return 'Ragnaros';
-		case CardIds.AFKayBattlegrounds:
-			return 'A.F.Kay'; // No whitespace
+		// case CardIds.MaievShadowsongBattlegrounds:
+		// 	return 'Maiev';
+		// case CardIds.KingMuklaBattlegrounds:
+		// 	return 'Mukla';
+		// case CardIds.DinotamerBrannBattlegrounds:
+		// 	return 'Brann';
+		// case CardIds.ArannaStarseekerBattlegrounds:
+		// 	return 'Aranna';
+		// case CardIds.RagnarosTheFirelordBattlegrounds_TB_BaconShop_HERO_11:
+		// 	return 'Ragnaros';
+		// case CardIds.AFKayBattlegrounds:
+		// 	return 'A.F.Kay'; // No whitespace
 		default:
 			return hero?.name?.replace(/,/g, '');
 	}
@@ -653,8 +653,8 @@ export const isSupportedScenario = (
 		reason: playerSupport.reason ?? oppSupport.reason,
 	};
 	if (
-		battleInfo.playerBoard?.player?.heroPowerId === CardIds.PrestidigitationBattlegrounds ||
-		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.PrestidigitationBattlegrounds
+		battleInfo.playerBoard?.player?.heroPowerId === CardIds.Prestidigitation_TB_BaconShop_HP_020 ||
+		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.Prestidigitation_TB_BaconShop_HP_020
 	) {
 		console.log('[bgs-simulation] is supported?', result);
 	}
@@ -679,7 +679,7 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'piloted-whirl-o-tron',
 			};
-		} else if (hasMinions(boardInfo, [CardIds.RylakMetalhead, CardIds.RylakMetalheadBattlegrounds])) {
+		} else if (hasMinions(boardInfo, [CardIds.RylakMetalhead_BG26_801, CardIds.RylakMetalhead_BG26_801_G])) {
 			return {
 				isSupported: false,
 				reason: 'rylak',
@@ -726,42 +726,42 @@ const hasMinions = (boardInfo: BgsBoardInfo, cardIds: readonly CardIds[]) => {
 
 const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.Scallywag) || hasMinionOnBoard(boardInfo, CardIds.ScallywagBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.Scallywag_BGS_061) ||
+		hasMinionOnBoard(boardInfo, CardIds.Scallywag_TB_BaconUps_141)
 	);
 };
 
 const hasPilotedWhirlOTron = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron) ||
-		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTronBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy) ||
+		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy_G)
 	);
 };
 
 const hasRylak = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead) ||
-		hasMinionOnBoard(boardInfo, CardIds.RylakMetalheadBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801) ||
+		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801_G)
 	);
 };
 
 const hasBaron = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare_FP1_031) ||
-		hasMinionOnBoard(boardInfo, CardIds.BaronRivendareBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare_TB_BaconUps_055) ||
+		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare_BG_FP1_031)
 	);
 };
 
 const hasStreetMagician = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.StreetMagicianBattlegrounds_TB_BaconShop_HERO_21_Buddy) ||
-		hasMinionOnBoard(boardInfo, CardIds.StreetMagicianBattlegrounds_TB_BaconShop_HERO_21_Buddy_G)
+		hasMinionOnBoard(boardInfo, CardIds.StreetMagician_TB_BaconShop_HERO_21_Buddy) ||
+		hasMinionOnBoard(boardInfo, CardIds.StreetMagician_TB_BaconShop_HERO_21_Buddy_G)
 	);
 };
 
 const hasKhadgar = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.Khadgar_DAL_575) ||
-		hasMinionOnBoard(boardInfo, CardIds.KhadgarBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.Khadgar_DAL_575) || hasMinionOnBoard(boardInfo, CardIds.Khadgar_BG_DAL_575)
 	);
 };
 

@@ -21,7 +21,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 		// 	currentState?.currentGame?.players?.map((player) => player.cardId),
 		// );
 		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards.getService());
-		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
+		if (normalizedCardId === CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 			return currentState;
 		}
 

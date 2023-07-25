@@ -71,7 +71,7 @@ export class PlayerBgsMajordomoWidgetWrapperComponent
 		return zone
 			.filter((card) => card.cardId)
 			.some((card) =>
-				[CardIds.MajordomoExecutus_BGS_105, CardIds.MajordomoExecutusBattlegrounds].includes(
+				[CardIds.MajordomoExecutus_BGS_105, CardIds.MajordomoExecutus_TB_BaconUps_207].includes(
 					card.cardId as CardIds,
 				),
 			);

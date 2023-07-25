@@ -368,12 +368,6 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-tooltip'),
 		},
 		{
-			id: 'coral-keeper',
-			field: 'playerCoralKeeperCounter',
-			label: this.i18n.translateString('settings.decktracker.your-deck.counters.coral-keeper-label'),
-			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.coral-keeper-tooltip'),
-		},
-		{
 			id: 'bonelord-frostwhisper',
 			field: 'playerBonelordFrostwhisperCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),

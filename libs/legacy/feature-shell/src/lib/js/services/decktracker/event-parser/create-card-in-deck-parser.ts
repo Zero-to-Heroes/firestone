@@ -170,6 +170,9 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	if (creatorCard?.cardId === CardIds.Bottomfeeder || newCardId === CardIds.Bottomfeeder) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
+	if (creatorCard?.cardId === CardIds.StudentOfTheStars || newCardId === CardIds.StudentOfTheStars) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
+	}
 	if (creatorCard?.cardId === CardIds.SunscaleRaptor || newCardId === CardIds.SunscaleRaptor) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}

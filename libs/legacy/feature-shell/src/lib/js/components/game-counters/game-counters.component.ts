@@ -22,7 +22,6 @@ import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southse
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
-import { CoralKeeperCounterDefinition } from './definitions/coral-keeper-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
@@ -200,8 +199,6 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return GreySageParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'multicaster':
 				return MulticasterCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'coralKeeper':
-				return CoralKeeperCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'heroPowerDamage':
 				return HeroPowerDamageCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':

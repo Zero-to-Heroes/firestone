@@ -195,7 +195,7 @@ export class BgsBattleStatusComponent {
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',
 					{
-						value: this.allCards.getCard(CardIds.PilotedWhirlOTron).name,
+						value: this.allCards.getCard(CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy).name,
 					},
 				);
 				break;
@@ -203,7 +203,7 @@ export class BgsBattleStatusComponent {
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',
 					{
-						value: this.allCards.getCard(CardIds.RylakMetalhead).name,
+						value: this.allCards.getCard(CardIds.RylakMetalhead_BG26_801).name,
 					},
 				);
 				break;

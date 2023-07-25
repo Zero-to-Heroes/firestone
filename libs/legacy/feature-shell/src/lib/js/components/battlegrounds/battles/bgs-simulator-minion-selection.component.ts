@@ -531,12 +531,9 @@ interface Minion {
 	tier: number;
 }
 
-const TOKEN_CARD_IDS = [
-	CardIds.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
-	CardIds.Menagerist_AmalgamTokenBattlegrounds,
-];
+const TOKEN_CARD_IDS = [CardIds.AvatarOfNzoth_FishOfNzothToken, CardIds.Menagerist_AmalgamToken];
 
 const EXCLUDED_CARD_IDS = [
-	CardIds.CattlecarpOfNzothBattlegrounds_TB_BaconShop_HP_105t_SKIN_A,
-	CardIds.CattlecarpOfNzothBattlegrounds_TB_BaconShop_HP_105t_SKIN_A_G,
+	CardIds.CattlecarpOfNzoth_TB_BaconShop_HP_105t_SKIN_A,
+	CardIds.CattlecarpOfNzoth_TB_BaconShop_HP_105t_SKIN_A_G,
 ];

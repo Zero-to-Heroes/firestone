@@ -211,7 +211,7 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		if (this._stats.stats.damageToEnemyHeroOverTurn) {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
-				.filter((info) => info.value.enemyHeroCardId !== CardIds.KelthuzadBattlegrounds)
+				.filter((info) => info.value.enemyHeroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad)
 				.map((info) => (info.value.value != null ? info.value.value : (info.value as any as number))); // For backward compatibilitymap(info => info.value);
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
@@ -231,8 +231,7 @@ export class BgsPostMatchStatsRecapComponent {
 		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
-		this.rerolls =
-			this._stats.player.cardId === CardIds.InfiniteTokiBattlegrounds ? rerolls - this.heroPowers : rerolls;
+		this.rerolls = this._stats.player.cardId === CardIds.InfiniteToki ? rerolls - this.heroPowers : rerolls;
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
 		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
 		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter(
