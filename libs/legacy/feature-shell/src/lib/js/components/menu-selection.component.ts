@@ -52,22 +52,6 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.battlegrounds-header'"></div>
 				</div>
 			</button>
-
-			<button
-				[attr.tabindex]="tabIndex$ | async"
-				type="button"
-				class="menu-item"
-				[attr.aria-label]="'app.menu.mercenaries-header' | owTranslate"
-				[ngClass]="{ selected: selectedModule === 'mercenaries' }"
-				(click)="selectModule('mercenaries')"
-			>
-				<div class="icon" inlineSVG="assets/svg/whatsnew/mercenaries.svg"></div>
-				<div class="text">
-					<div class="text-background"></div>
-					<div class="menu-header" [owTranslate]="'app.menu.mercenaries-header'"></div>
-				</div>
-			</button>
-
 			<button
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
@@ -110,7 +94,23 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.tavern-brawl-header'"></div>
 				</div>
 			</button>
+			<button
+				[attr.tabindex]="tabIndex$ | async"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.mercenaries-header' | owTranslate"
+				[ngClass]="{ selected: selectedModule === 'mercenaries' }"
+				(click)="selectModule('mercenaries')"
+			>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/mercenaries.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.mercenaries-header'"></div>
+				</div>
+			</button>
+
 			<li class="main-menu-separator"></li>
+
 			<button
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
@@ -153,7 +153,9 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.collection-header'"></div>
 				</div>
 			</button>
+
 			<li class="main-menu-separator"></li>
+
 			<!-- <button
 				*ngIf="enableMailboxTab$ | async"
 				[attr.tabindex]="tabIndex$ | async"
