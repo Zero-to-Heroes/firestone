@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.6.0',
+		version: '11.6.1',
 		force: false,
 		sections: [
 			// {
@@ -46,11 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `First implementation of quest stats overlay.`,
+								type: 'content',
+								text: `Update app for Hearthstone patch 27.0.`,
 							},
 						],
 					},
