@@ -787,6 +787,8 @@ import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-ess
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { ModsConfigService } from './libs/mods/services/mods-config.service';
+import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
+import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 console.log('environment is ' + process.env['NODE_ENV'], process.env);
 
 try {
@@ -1539,6 +1541,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerWatchpostCounterWidgetWrapperComponent,
 		PlayerSpellWidgetWrapperComponent,
 		PlayerPogoWidgetWrapperComponent,
+		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerLibramWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,
@@ -1577,6 +1580,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentCounterWidgetWrapperComponent,
 		OpponentWatchpostCounterWidgetWrapperComponent,
 		OpponentPogoWidgetWrapperComponent,
+		OpponentAstralAutomatonWidgetWrapperComponent,
 		OpponentJadeWidgetWrapperComponent,
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,

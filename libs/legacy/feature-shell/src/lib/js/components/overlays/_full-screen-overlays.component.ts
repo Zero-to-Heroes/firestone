@@ -78,6 +78,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-watchpost-widget-wrapper></player-watchpost-widget-wrapper>
 			<player-spell-widget-wrapper></player-spell-widget-wrapper>
 			<player-pogo-widget-wrapper></player-pogo-widget-wrapper>
+			<player-astral-automaton-widget-wrapper></player-astral-automaton-widget-wrapper>
 			<player-libram-widget-wrapper></player-libram-widget-wrapper>
 			<player-jade-widget-wrapper></player-jade-widget-wrapper>
 			<player-galakrond-widget-wrapper></player-galakrond-widget-wrapper>
@@ -114,6 +115,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
 			<opponent-watchpost-widget-wrapper></opponent-watchpost-widget-wrapper>
 			<opponent-pogo-widget-wrapper></opponent-pogo-widget-wrapper>
+			<opponent-astral-automaton-widget-wrapper></opponent-astral-automaton-widget-wrapper>
 			<opponent-jade-widget-wrapper></opponent-jade-widget-wrapper>
 			<opponent-galakrond-widget-wrapper></opponent-galakrond-widget-wrapper>
 			<opponent-fatigue-widget-wrapper></opponent-fatigue-widget-wrapper>

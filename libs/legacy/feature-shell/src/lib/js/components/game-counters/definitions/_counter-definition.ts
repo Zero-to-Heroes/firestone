@@ -18,6 +18,7 @@ export interface CounterDefinition<U, T> {
 export type CounterType =
 	| 'galakrond'
 	| 'pogo'
+	| 'astralAutomaton'
 	| 'attack'
 	| 'jadeGolem'
 	| 'cthun'

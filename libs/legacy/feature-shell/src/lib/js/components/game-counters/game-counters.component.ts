@@ -51,6 +51,7 @@ import { SpellCounterDefinition } from './definitions/spell-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
+import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
 
 @Component({
 	selector: 'game-counters',
@@ -147,6 +148,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return AttackCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'pogo':
 				return PogoCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'astralAutomaton':
+				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'spells':
 				return SpellCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':

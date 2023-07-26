@@ -310,6 +310,13 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentPogoCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerAstralAutomatonCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerAstralAutomatonCounterWidgetPosition: { left: number; top: number };
+	readonly opponentAstralAutomatonCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentAstralAutomatonCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerJadeGolemCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerJadeGolemCounterWidgetPosition: { left: number; top: number };

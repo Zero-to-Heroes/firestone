@@ -132,6 +132,7 @@ import { ConstructedAchievementsProgressionEvent } from './event/constructed-ach
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
+import { AstralAutomatonPlayedParser } from './event-parser/astral-automaton-played-parser';
 
 @Injectable()
 export class GameStateService {
@@ -572,6 +573,7 @@ export class GameStateService {
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
+			new AstralAutomatonPlayedParser(),
 			new JadeGolemParser(),
 			new CthunParser(),
 			new CardBuffedInHandParser(this.helper),

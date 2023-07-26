@@ -176,6 +176,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.pogo-tooltip'),
 		},
 		{
+			id: 'astralAutomaton',
+			field: 'playerAstralAutomatonCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.astral-automaton-tooltip'),
+		},
+		{
 			id: 'jade',
 			field: 'playerJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
