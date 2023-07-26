@@ -1,4 +1,12 @@
-import { allDuelsHeroesExtended, BoosterType, CardClass, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
+import {
+	allDuelsHeroesExtended,
+	BoosterType,
+	CardClass,
+	CardIds,
+	COIN_IDS,
+	Race,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from './localization-facade.service';
@@ -1345,4 +1353,8 @@ const rankToLeague = (rank: number, i18n: LocalizationFacadeService): string => 
 		return i18n.translateString('global.ranks.constructed.diamond');
 	}
 	return i18n.translateString('global.ranks.constructed.legend');
+};
+
+export const hasRace = (card: ReferenceCard, race: Race): boolean => {
+	return card?.races?.includes(Race[race]) || card?.races?.includes(Race[Race.ALL]);
 };

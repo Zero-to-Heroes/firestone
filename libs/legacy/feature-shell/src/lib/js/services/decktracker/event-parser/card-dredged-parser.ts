@@ -3,6 +3,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -90,7 +91,7 @@ export class CardDredgedParser implements EventParser {
 					actualManaCost: card.manaCost - 1,
 				});
 			case CardIds.HarpoonGun:
-				return this.allCards.getCard(card.cardId).races?.includes(Race[Race.BEAST])
+				return hasRace(this.allCards.getCard(card.cardId), Race.BEAST)
 					? card.update({
 							actualManaCost: Math.max(0, card.manaCost - 3),
 					  })

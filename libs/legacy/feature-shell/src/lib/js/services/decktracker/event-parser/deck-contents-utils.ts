@@ -2,6 +2,7 @@ import { CardIds, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/referenc
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 
 export const modifyDecksForSpecialCards = (
@@ -174,7 +175,7 @@ const handleFrizzKindleroost = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => refCard?.races?.includes(Race[Race.DRAGON]) || refCard?.races?.includes(Race[Race.ALL]),
+		(card, refCard) => hasRace(refCard, Race.DRAGON),
 		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
 		deckState,
 		allCards,

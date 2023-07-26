@@ -8,6 +8,7 @@ import {
 	COUNTERSPELLS,
 	battlecryGlobalEffectCards,
 	globalEffectCards,
+	hasRace,
 	startOfGameGlobalEffectCards,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -168,7 +169,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			? handAfterCardsRemembered
 			: processCardLinks(cardToAdd, handAfterCardsRemembered, this.helper, this.allCards);
 
-		const isElemental = refCard?.type === 'Minion' && refCard?.races?.includes(Race[Race.ELEMENTAL]);
+		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
 		let manaSpentOnSpellsThisMatch = deck.manaSpentOnSpellsThisMatch;
 		if (refCard?.type === 'Spell') {
