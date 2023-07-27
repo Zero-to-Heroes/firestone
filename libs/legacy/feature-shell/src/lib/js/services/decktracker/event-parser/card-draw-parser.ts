@@ -5,8 +5,8 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import {
-	cardsRevealedWhenDrawn,
 	forceHideInfoWhenDrawnInfluencers,
+	isCastWhenDrawn,
 	publicCardCreators,
 	publicCardInfos,
 	supportedAdditionalData,
@@ -107,7 +107,7 @@ export class CardDrawParser implements EventParser {
 			isPlayer ||
 			useTopOfDeckToIdentifyCard ||
 			useBottomOfDeckToIdentifyCard ||
-			(!isCardDrawnBySecretPassage && cardsRevealedWhenDrawn.includes(updatedCardId as CardIds)) ||
+			(!isCardDrawnBySecretPassage && isCastWhenDrawn(updatedCardId, this.allCards)) ||
 			publicCardInfos.includes(lastInfluencedByCardId);
 		const isCreatorPublic =
 			isCardInfoPublic ||

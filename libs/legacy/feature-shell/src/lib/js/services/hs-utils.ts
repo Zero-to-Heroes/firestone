@@ -4,6 +4,7 @@ import {
 	CardClass,
 	CardIds,
 	COIN_IDS,
+	GameTag,
 	Race,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
@@ -1357,4 +1358,11 @@ const rankToLeague = (rank: number, i18n: LocalizationFacadeService): string => 
 
 export const hasRace = (card: ReferenceCard, race: Race): boolean => {
 	return card?.races?.includes(Race[race]) || card?.races?.includes(Race[Race.ALL]);
+};
+
+export const isCastWhenDrawn = (cardId: string, allCards: CardsFacadeService): boolean => {
+	return (
+		cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
+		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.TOPDECK])
+	);
 };

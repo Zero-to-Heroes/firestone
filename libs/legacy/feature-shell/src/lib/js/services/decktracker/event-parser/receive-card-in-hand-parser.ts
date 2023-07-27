@@ -6,8 +6,8 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import {
 	cardsConsideredPublic,
-	cardsRevealedWhenDrawn,
 	forcedHiddenCardCreators,
+	isCastWhenDrawn,
 	publicCardCreators,
 	specialCasePublicCardCreators,
 } from '../../hs-utils';
@@ -57,7 +57,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// Not sure why we would want to hide some info when the player plays the card and we're looking at
 			// cards added to the player's hand
 			// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))
-			(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
+			(isCastWhenDrawn(cardId, this.allCards) ||
 				publicCardCreators.includes(lastInfluencedByCardId) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
 		const isCardInfoPublic =
