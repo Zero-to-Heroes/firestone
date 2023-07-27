@@ -128,8 +128,11 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				bgsState$$.next(state);
 			});
 
-		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
-			this.mapData(([[state]]) => {
+		this.options$ = combineLatest([
+			this.store.listenDeckState$((state) => state),
+			this.store.enablePremiumFeatures$(),
+		]).pipe(
+			this.mapData(([[state], premium]) => {
 				const options = state.playerDeck?.currentOptions;
 				console.debug('[choosing-card] options', options, state);
 				return (
@@ -146,7 +149,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 								return result;
 							}
 
-							if (!FeatureFlags.ENABLE_BGS_QUESTS) {
+							if (!FeatureFlags.ENABLE_BGS_QUESTS || !premium) {
 								return null;
 							}
 
