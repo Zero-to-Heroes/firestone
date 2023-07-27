@@ -145,7 +145,6 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 			logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
 		scriptDataNum1: logEntity.Tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0,
 		friendly: true,
-		frenzyApplied: false,
 		definitelyDead: false,
 		immuneWhenAttackCharges: 0,
 		additionalCards: buildAdditionalCards(logEntity.CardId, logEntity.Tags, allCards),
