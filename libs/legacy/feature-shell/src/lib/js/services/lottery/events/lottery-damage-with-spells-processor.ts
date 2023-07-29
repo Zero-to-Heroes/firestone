@@ -13,12 +13,14 @@ export class LotteryDamageWithSpellsProcessor implements LotteryProcessor {
 		}
 		const localPlayerId = event.localPlayer?.PlayerId;
 		const damageSourceController = event.additionalData?.sourceControllerId;
+		console.debug('[lottery] damage with spells source controller', localPlayerId, damageSourceController);
 		if (localPlayerId && localPlayerId !== damageSourceController) {
 			return currentState;
 		}
 
 		const sourceCardId = event.additionalData.sourceCardId;
 		const sourceCard = this.allCards.getCard(sourceCardId);
+		console.debug('[lottery] damage with spells source card', sourceCardId, sourceCard.type, sourceCard);
 		if (!sourceCard?.id) {
 			return currentState;
 		}
@@ -30,6 +32,7 @@ export class LotteryDamageWithSpellsProcessor implements LotteryProcessor {
 		const damageDealt = Object.values(event.additionalData.targets)
 			.map((target) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
+		console.debug('[lottery] damage with spells damage dealt', damageDealt, currentState.damageWithSpells);
 
 		return currentState.update({
 			damageWithSpells: currentState.damageWithSpells + damageDealt,

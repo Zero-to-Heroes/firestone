@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LotteryConfigResourceStatType } from '../../services/lottery/lottery.model';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -120,7 +120,10 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 		[this.battlegroundsValue$, this.battlegroundsLabel$, this.battlegroundsTooltip$] =
 			this.lotteryInfo(battlegroundsStatsKey$);
 
-		const constructedStatKey$ = this.store.lottery$().pipe(this.mapData((lottery) => lottery.constructedStatKey()));
+		const constructedStatKey$ = this.store.lottery$().pipe(
+			tap((lottery) => console.debug('[lottery] data in lottery widget', lottery, lottery.constructedStatKey())),
+			this.mapData((lottery) => lottery.constructedStatKey()),
+		);
 		[this.constructedValue$, this.constructedLabel$, this.constructedTooltip$] =
 			this.lotteryInfo(constructedStatKey$);
 	}

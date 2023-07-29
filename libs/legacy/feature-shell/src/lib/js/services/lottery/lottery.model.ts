@@ -82,6 +82,8 @@ export class LotteryState {
 				return this.undeadPlayed;
 			case 'spellsPlayed':
 				return this.spellsPlayed;
+			case 'damageWithSpells':
+				return this.damageWithSpells;
 			default:
 				return 0;
 		}
@@ -141,4 +143,5 @@ export type LotteryConfigResourceStatType =
 	| 'piratesPlayed'
 	| 'elementalsPlayed'
 	| 'nagasPlayed'
+	| 'damageWithSpells'
 	| 'undeadPlayed';
