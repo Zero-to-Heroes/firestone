@@ -52,6 +52,7 @@ export class MercenariesMemoryCacheService {
 	}
 
 	private init() {
+		let processingUpdate = false;
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
 			const changes: MemoryUpdate = event.data[0];
 			const newScene = changes.CurrentScene;
@@ -69,6 +70,11 @@ export class MercenariesMemoryCacheService {
 				return;
 			}
 
+			if (processingUpdate) {
+				return;
+			}
+
+			processingUpdate = true;
 			const newMercenariesCollectionInfo = await this.getMercenariesMergedCollectionInfo(true);
 			// const newMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(5, true);
 			if (newMercenariesCollectionInfo) {
@@ -80,11 +86,13 @@ export class MercenariesMemoryCacheService {
 			while (!mapInfo?.Map?.PlayerTeam?.length && retiesLeft >= 0) {
 				await sleep(200);
 				mapInfo = await this.memoryService.getMercenariesInfo(1);
+				console.debug('[mercs] retrying to get mapInfo', mapInfo, retiesLeft);
 				retiesLeft--;
 			}
 
 			console.debug('[mercs] got mapInfo', mapInfo);
 			this.memoryMapInfo$.next(mapInfo);
+			processingUpdate = false;
 		});
 	}
 
