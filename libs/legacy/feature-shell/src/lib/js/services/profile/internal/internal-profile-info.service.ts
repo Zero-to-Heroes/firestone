@@ -118,7 +118,7 @@ export class InternalProfileInfoService {
 
 	private async updateProfileInfo(classAchievements: readonly HsAchievementInfo[]) {
 		const profileInfo = await this.memory.getProfileInfo();
-		const classProgress: readonly ProfileClassProgress[] = profileInfo.PlayerClasses.map((playerClass) => {
+		const classProgress: readonly ProfileClassProgress[] = profileInfo?.PlayerClasses.map((playerClass) => {
 			const playerRecordsForClass = profileInfo.PlayerRecords.filter((r) => r.Data > 0).filter((r) =>
 				this.allCards
 					.getCard(r.Data)
@@ -151,9 +151,11 @@ export class InternalProfileInfoService {
 			};
 			return result;
 		});
-		this.classesProgress$$.next(classProgress);
+		if (!!classProgress?.length) {
+			this.classesProgress$$.next(classProgress);
+		}
 
-		const playerRecords = profileInfo.PlayerRecords
+		const playerRecords = profileInfo?.PlayerRecords
 			// Don't know what the Data field is used yet, but that's how the HS client does it
 			.filter((r) => r.Data === 0)
 			.filter((r) =>
@@ -162,10 +164,16 @@ export class InternalProfileInfoService {
 				),
 			);
 		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords);
-		this.winsForMode$$.next(winsForMode);
+		if (!!winsForMode?.length) {
+			this.winsForMode$$.next(winsForMode);
+		}
 	}
 
 	private buildWinsForModes(playerRecords: MemoryPlayerRecord[]) {
+		if (!playerRecords?.length) {
+			return [];
+		}
+
 		const winsForMode: readonly ProfileWinsForMode[] = ['constructed', 'duels', 'arena'].map(
 			(mode: 'constructed' | 'duels' | 'arena') => {
 				const recordsForMode = playerRecords.filter((r) =>
