@@ -11,7 +11,7 @@ export class FeatureFlags {
 	// The stats don't look good
 	// Looking at BG24_Quest_126 (spend 45 gold) for Bigglesworth gives
 	// 3.8 turns to complete, which seems impossible
-	public static readonly ENABLE_BGS_QUESTS = false;
+	public static readonly ENABLE_BGS_QUESTS = true;
 
 	// Shelved for now
 	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;
