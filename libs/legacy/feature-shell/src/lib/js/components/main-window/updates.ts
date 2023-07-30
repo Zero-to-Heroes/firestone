@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.6.3',
+		version: '11.6.4',
 		force: false,
 		sections: [
 			// {
@@ -54,15 +54,24 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
-					// {
-					// 	category: 'battlegrounds',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `(PREMIUM) You can now see stats for quests and rewards in the overlay. This features shows you the average turn to complete a given quest, based on the quest difficulty, your hero and your MMR range, and shows the average final rank for players who picked this quest for your MMR range.<br/> A proper "Quests" tab will be availble soon to all users in the app, where you will be able to get a detailed view on all these stats.`,
-					// 		},
-					// 	],
-					// },
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `(PREMIUM) You can now see stats for quests and rewards in the overlay. This features shows you the average turn to complete a given quest, based on the quest difficulty, your hero and your MMR range, and shows the average final rank for players who picked this quest for your MMR range.<br/> A proper "Quests" tab will be availble soon to all users in the app, where you will be able to get a detailed view on all these stats.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a global issue where Firestone achievements would not be properly detected anymore.`,
+							},
+						],
+					},
 				],
 			},
 			{
