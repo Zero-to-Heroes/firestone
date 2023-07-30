@@ -16,6 +16,12 @@ import { TavernStatWithCollection } from '../meta/tavern-brawl-meta.component';
 			[growOnClick]="buildableDeck != null"
 			[growOnClickScale]="1.1"
 		>
+			<div
+				class="non-buildable-warning"
+				*ngIf="!hasBuildableDecks"
+				inlineSVG="assets/svg/attention.svg"
+				[helpTooltip]="'app.tavern-brawl.non-buildable-warning-tooltip' | owTranslate"
+			></div>
 			<div class="hero-portrait">
 				<img class="player-class" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
 			</div>
@@ -42,6 +48,7 @@ export class TavernBrawlStatComponent {
 		this.copyBuildableDeckTooltip = !!this.buildableDeck
 			? this.i18n.translateString('app.tavern-brawl.copy-deck-tooltip')
 			: null;
+		this.hasBuildableDecks = value.hasBuildableDecks;
 	}
 
 	playerClassImage: string;
@@ -50,6 +57,7 @@ export class TavernBrawlStatComponent {
 	matches: string;
 	buildableDeck: string;
 	copyBuildableDeckTooltip: string;
+	hasBuildableDecks: boolean;
 
 	constructor(private readonly i18n: LocalizationFacadeService, private readonly ow: OverwolfService) {}
 

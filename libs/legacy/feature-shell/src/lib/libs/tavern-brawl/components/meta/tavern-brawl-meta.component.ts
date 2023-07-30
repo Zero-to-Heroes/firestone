@@ -78,6 +78,7 @@ export class TavernBrawlMetaComponent
 							let buildableDecks: readonly DeckStat[] = stat.bestDecks.filter((decklist) =>
 								this.canBuild(decklist, info.collection),
 							);
+							const hasBuildableDecks = buildableDecks?.length > 0;
 							if (!buildableDecks?.length) {
 								buildableDecks = stat.bestDecks;
 							}
@@ -86,6 +87,7 @@ export class TavernBrawlMetaComponent
 							const buildableDeck: string = pickRandom(targetDecks)?.decklist;
 							return {
 								...stat,
+								hasBuildableDecks: hasBuildableDecks,
 								buildableDecklist: buildableDeck,
 							} as TavernStatWithCollection;
 						})
@@ -148,4 +150,5 @@ export interface ExtendedBrawlInfo extends BrawlInfo {
 
 export interface TavernStatWithCollection extends StatForClass {
 	readonly buildableDecklist: string;
+	readonly hasBuildableDecks: boolean;
 }
