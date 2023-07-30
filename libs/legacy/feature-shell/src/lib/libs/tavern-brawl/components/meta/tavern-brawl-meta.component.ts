@@ -3,6 +3,7 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable, combineLatest } from 'rxjs';
@@ -74,10 +75,15 @@ export class TavernBrawlMetaComponent
 					info.stats?.stats
 						.filter((stat) => !!stat.playerClass)
 						.map((stat) => {
-							const buildableDecks = stat.bestDecks.filter((decklist) =>
+							let buildableDecks: readonly DeckStat[] = stat.bestDecks.filter((decklist) =>
 								this.canBuild(decklist, info.collection),
 							);
-							const buildableDeck: string = buildableDecks[0]?.decklist;
+							if (!buildableDecks?.length) {
+								buildableDecks = stat.bestDecks;
+							}
+
+							const targetDecks = buildableDecks.slice(0, 3);
+							const buildableDeck: string = pickRandom(targetDecks)?.decklist;
 							return {
 								...stat,
 								buildableDecklist: buildableDeck,
@@ -112,6 +118,18 @@ export class TavernBrawlMetaComponent
 				).fill(card.id);
 			})
 			.sort();
+		// if (deckDefinition.heroes.includes(getDefaultHeroDbfIdForClass('druid'))) {
+		// 	console.debug(
+		// 		'[tavern-brawl-meta] deck',
+		// 		deckDefinition,
+		// 		flatDeckCardIds,
+		// 		deckDefinition.cards
+		// 			.flatMap((pair) => new Array(pair[1]).fill(pair[0]))
+		// 			.map((dbfId) => this.allCards.getCard(dbfId).name)
+		// 			.sort(),
+		// 		cardsInCollection,
+		// 	);
+		// }
 		if (flatDeckCardIds.length !== cardsInCollection.length) {
 			return false;
 		}
