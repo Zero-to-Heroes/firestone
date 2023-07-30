@@ -35,6 +35,7 @@ import { DeckHandlerService } from './deck-handler.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
+import { AstralAutomatonPlayedParser } from './event-parser/astral-automaton-played-parser';
 import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
 import { BgsRewardDestroyedParser } from './event-parser/bgs-reward-destroyed-parser';
 import { BgsRewardEquippedParser } from './event-parser/bgs-reward-equipped-parser';
@@ -132,7 +133,6 @@ import { ConstructedAchievementsProgressionEvent } from './event/constructed-ach
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
-import { AstralAutomatonPlayedParser } from './event-parser/astral-automaton-played-parser';
 
 @Injectable()
 export class GameStateService {
@@ -419,7 +419,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
