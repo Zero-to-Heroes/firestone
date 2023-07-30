@@ -5,6 +5,7 @@ import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { GameStatusService } from '../game-status.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
@@ -14,12 +15,11 @@ import { AchievementsStorageService } from './achievements-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievements/challenges/challenge-builder.service';
 import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
-import { RawAchievementsLoaderService } from './data/raw-achievements-loader.service';
 
 @Injectable()
 // Everything linked to Firestone challenges, as opposed to HS native achievements
 export class FirestoneAchievementsChallengeService {
-	public challengeModules: readonly Challenge[];
+	public challengeModules: readonly Challenge[] = [];
 
 	private spectating: boolean;
 
@@ -32,13 +32,13 @@ export class FirestoneAchievementsChallengeService {
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly prefs: PreferencesService,
-		private readonly achievementLoader: RawAchievementsLoaderService,
 		private readonly achievementsStorage: AchievementsStorageService,
 		private readonly remoteAchievements: FirestoneRemoteAchievementsLoaderService,
 		private readonly events: Events,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly challengeBuilder: ChallengeBuilderService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
@@ -52,7 +52,13 @@ export class FirestoneAchievementsChallengeService {
 				this.spectating = gameEvent.additionalData.spectating;
 			}
 		});
-		this.initChallenges();
+		await this.initChallenges();
+		this.gameStatus.onGameExit(() => {
+			// Because Firestone can stay open between two game sessions, and if
+			// the game was forced-closed, some achievements didn't have the opportunity
+			// to reset, so we're forcing it here
+			this.challengeModules.forEach((c) => c.resetState());
+		});
 	}
 
 	private async initChallenges() {
@@ -62,11 +68,8 @@ export class FirestoneAchievementsChallengeService {
 				this.challengeModules = rawAchievements
 					.map((rawAchievement) => this.challengeBuilder.buildChallenge(rawAchievement))
 					.filter((challenge) => challenge);
+				console.debug('[firestone-achievements] loaded challenges', this.challengeModules);
 			});
-	}
-
-	public async getChallengeModules(): Promise<readonly Challenge[]> {
-		return this.challengeModules;
 	}
 
 	public async handleEvent(gameEvent: GameEvent) {
@@ -74,24 +77,38 @@ export class FirestoneAchievementsChallengeService {
 		if (this.spectating || !prefs.achievementsEnabled2) {
 			return;
 		}
-		for (const challenge of await this.getChallengeModules()) {
+		for (const challenge of this.challengeModules) {
 			try {
 				challenge.detect(gameEvent, () => {
 					this.sendUnlockEvent(challenge);
 				});
 			} catch (e) {
-				console.error('Exception while trying to handle challenge', challenge.achievementId, e);
+				console.error(
+					'[firestone-achievements] Exception while trying to handle challenge',
+					challenge.achievementId,
+					e,
+				);
 			}
 		}
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
+		console.debug('[firestone-achievements] sending unlock event', challenge.achievementId);
 		const achievement: Achievement = getAchievement(
 			this.achievementsStateManager.rawAchievements$$.value,
 			challenge.achievementId,
 		);
+		console.debug(
+			'[firestone-achievements] sending unlock event 2',
+			challenge.achievementId,
+			achievement,
+			this.achievementsStateManager.rawAchievements$$.value,
+		);
 		if (!achievement) {
-			console.warn('trying to send unlock event for empty achievement', challenge.achievementId);
+			console.warn(
+				'[firestone-achievements] trying to send unlock event for empty achievement',
+				challenge.achievementId,
+			);
 			return;
 		}
 
@@ -100,7 +117,7 @@ export class FirestoneAchievementsChallengeService {
 
 	private async sendUnlockEventFromAchievement(achievement: Achievement) {
 		if (!achievement) {
-			console.warn('trying to send unlock event for empty achievement');
+			console.warn('[firestone-achievements] trying to send unlock event for empty achievement');
 			return;
 		}
 
@@ -121,16 +138,16 @@ export class FirestoneAchievementsChallengeService {
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 			);
-			console.log('[achievement-monitor] starting process of completed achievement', achievement.id);
+			console.log('[firestone-achievements] starting process of completed achievement', achievement.id);
 			const mergedAchievement = {
 				...achv,
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 			} as Achievement;
 
 			this.achievementsStorage.save(completedAchievement);
-			console.log('[achievement-monitor] saved achievement', achievement.id);
+			console.log('[firestone-achievements] saved achievement', achievement.id);
 			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
-			console.log('[achievement-monitor] broadcasting event completion event', achievement.id);
+			console.log('[firestone-achievements] broadcasting event completion event', achievement.id);
 
 			this.processingQueue.enqueue({ achievement: mergedAchievement } as InternalEvent);
 		}
@@ -173,7 +190,8 @@ const getAchievements = (
 	achievements: readonly Achievement[],
 	achievementIds: readonly string[],
 ): readonly Achievement[] => {
-	return achievements.filter((ach) => achievementIds.includes(ach.id));
+	console.debug('[firestone-achievements] getting achievements', achievementIds, achievements);
+	return achievements?.filter((ach) => achievementIds?.includes(ach.id)) ?? [];
 };
 
 interface InternalEvent {

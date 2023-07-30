@@ -89,10 +89,6 @@ export class AppStartupService {
 			} else if (res.runningChanged) {
 				this.loadingWindowShown = false;
 				this.closeLoadingScreen();
-				// Because Firestone can stay open between two game sessions, and if
-				// the game was forced-closed, some achievements didn't have the opportunity
-				// to reset, so we're forcing it here
-				(await this.firestoneChallenges.getChallengeModules()).forEach((challenge) => challenge.resetState());
 				this.handleExitGame();
 			}
 		});
