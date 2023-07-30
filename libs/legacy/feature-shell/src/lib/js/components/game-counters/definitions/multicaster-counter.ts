@@ -52,7 +52,7 @@ export class MulticasterCounterDefinition implements CounterDefinition<GameState
 		return {
 			type: 'multicaster',
 			value: `${totalCardsToDraw}`,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Multicaster}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.InquisitiveCreation}.jpg`,
 			cssClass: 'spell-counter',
 			tooltip: tooltip,
 			standardCounter: true,

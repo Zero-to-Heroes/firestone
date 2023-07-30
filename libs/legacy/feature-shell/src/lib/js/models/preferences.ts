@@ -363,6 +363,9 @@ export class Preferences implements IPreferences {
 	readonly playerMulticasterCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMulticasterCounterWidgetPosition: { left: number; top: number };
+	readonly opponentMulticasterCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentMulticasterCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerHeroPowerDamageCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

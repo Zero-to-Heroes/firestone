@@ -486,9 +486,12 @@ import { LotteryWidgetWrapperComponent } from '@components/lottery/lottery-widge
 import { LotteryWindowComponent } from '@components/lottery/lottery-window.component';
 import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
+import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
+import { OpponentMulticasterWidgetWrapperComponent } from '@components/overlays/counters/opponent-multicaster-widget-wrapper.component';
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
 import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
+import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
@@ -787,8 +790,6 @@ import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-ess
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { ModsConfigService } from './libs/mods/services/mods-config.service';
-import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
-import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 console.log('environment is ' + process.env['NODE_ENV'], process.env);
 
 try {
@@ -1594,6 +1595,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentAnachronosWidgetWrapperComponent,
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,
 		OpponentShockspitterWidgetWrapperComponent,
+		OpponentMulticasterWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

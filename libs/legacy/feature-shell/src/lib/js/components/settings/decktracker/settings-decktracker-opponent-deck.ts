@@ -275,6 +275,12 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-tooltip'),
 		},
 		{
+			id: 'multicaster',
+			field: 'opponentMulticasterCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.multicaster-tooltip'),
+		},
+		{
 			id: 'jade',
 			field: 'opponentJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
