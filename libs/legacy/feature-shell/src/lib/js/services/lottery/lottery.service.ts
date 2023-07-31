@@ -52,7 +52,7 @@ export class LotteryService {
 		const lotteryConfig: LotterySeasonConfig = await this.loadLotteryConfig();
 
 		let currentLottery = this.localStorage.getItem<LotteryState>(LocalStorageService.LOTTERY_STATE);
-		if (!currentLottery || isPreviousMonth(currentLottery.lastUpdateDate)) {
+		if (!currentLottery || isPreviousSeason(currentLottery.lastUpdateDate, lotteryConfig)) {
 			currentLottery = LotteryState.create({ lastUpdateDate: new Date().toISOString() }, lotteryConfig);
 			this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, currentLottery);
 		}
@@ -130,8 +130,8 @@ export class LotteryService {
 	}
 }
 
-const isPreviousMonth = (lastUpdateDate: string): boolean => {
+const isPreviousSeason = (lastUpdateDate: string, season: LotterySeasonConfig): boolean => {
 	const lastUpdate = new Date(lastUpdateDate);
-	const now = new Date();
-	return lastUpdate.getMonth() < now.getMonth() && lastUpdate.getFullYear() <= now.getFullYear();
+	const seasonStart = new Date(season.startDate);
+	return lastUpdate.getTime() < seasonStart.getTime();
 };
