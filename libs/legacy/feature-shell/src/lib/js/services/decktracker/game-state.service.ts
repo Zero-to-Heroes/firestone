@@ -35,7 +35,7 @@ import { DeckHandlerService } from './deck-handler.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
-import { AstralAutomatonPlayedParser } from './event-parser/astral-automaton-played-parser';
+import { AstralAutomatonSummonedParser } from './event-parser/astral-automaton-played-parser';
 import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
 import { BgsRewardDestroyedParser } from './event-parser/bgs-reward-destroyed-parser';
 import { BgsRewardEquippedParser } from './event-parser/bgs-reward-equipped-parser';
@@ -573,7 +573,7 @@ export class GameStateService {
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
-			new AstralAutomatonPlayedParser(),
+			new AstralAutomatonSummonedParser(),
 			new JadeGolemParser(),
 			new CthunParser(),
 			new CardBuffedInHandParser(this.helper),

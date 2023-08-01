@@ -4,14 +4,16 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
-export class AstralAutomatonPlayedParser implements EventParser {
+export class AstralAutomatonSummonedParser implements EventParser {
 	private static CARD_IDS = [CardIds.AstralAutomaton];
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
-			gameEvent.type === GameEvent.CARD_PLAYED &&
-			AstralAutomatonPlayedParser.CARD_IDS.includes(gameEvent.cardId as CardIds)
+			[GameEvent.CARD_PLAYED, GameEvent.MINION_SUMMONED, GameEvent.MINION_SUMMONED_FROM_HAND].includes(
+				gameEvent.type,
+			) &&
+			AstralAutomatonSummonedParser.CARD_IDS.includes(gameEvent.cardId as CardIds)
 		);
 	}
 
@@ -19,6 +21,7 @@ export class AstralAutomatonPlayedParser implements EventParser {
 		const [, controllerId, localPlayer] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			astralAutomatonSize: (deck.astralAutomatonSize || 0) + 1,
 		} as DeckState);
@@ -29,6 +32,6 @@ export class AstralAutomatonPlayedParser implements EventParser {
 	}
 
 	event(): string {
-		return 'ASTRAL_AUTOMATON_PLAYED';
+		return 'ASTRAL_AUTOMATON_SUMMONED';
 	}
 }
