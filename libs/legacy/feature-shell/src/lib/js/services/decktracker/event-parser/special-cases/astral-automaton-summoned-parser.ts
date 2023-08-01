@@ -1,8 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
-import { GameEvent } from '../../../models/game-event';
-import { EventParser } from './event-parser';
+import { DeckState } from '../../../../models/decktracker/deck-state';
+import { GameState } from '../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../models/game-event';
+import { EventParser } from '../event-parser';
 
 export class AstralAutomatonSummonedParser implements EventParser {
 	private static CARD_IDS = [CardIds.AstralAutomaton];

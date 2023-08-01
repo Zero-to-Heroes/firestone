@@ -1,7 +1,7 @@
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
-import { GameEvent } from '../../../models/game-event';
-import { EventParser } from './event-parser';
+import { DeckState } from '../../../../models/decktracker/deck-state';
+import { GameState } from '../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../models/game-event';
+import { EventParser } from '../event-parser';
 
 export class CthunParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
