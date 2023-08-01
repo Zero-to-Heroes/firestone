@@ -44,6 +44,7 @@ import {
 	freeze,
 	frenzy,
 	frost,
+	generatesPlague,
 	hasSpellSchool,
 	healthBiggerThanAttack,
 	holy,
@@ -494,6 +495,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.CatrinaMuerteCore:
 			case CardIds.CatrinaMuerte:
 				return and(side(inputSide), inGraveyard, undead, minion);
+			case CardIds.ChainedGuardian:
+				return and(side(inputSide), or(inHand, inDeck), generatesPlague);
 			case CardIds.ChampionOfStorms:
 				return and(side(inputSide), or(inHand, inDeck), spell, nature);
 			case CardIds.ChattyBartender:

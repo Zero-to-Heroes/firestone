@@ -172,6 +172,9 @@ const TREANT_DBF_IDS = [75686, 56371, 85655, 86213, 68188, 54541, 1803, 61465, 5
 export const summonsTreant = (input: SelectorInput): boolean =>
 	TREANT_DBF_IDS.some((treantDbfId) => input.card.relatedCardDbfIds?.includes(treantDbfId));
 
+const PLAGUE_GENERATORS = [CardIds.DistressedKvaldir, CardIds.DownWithTheShip, CardIds.Helya, CardIds.StaffOfThePrimus];
+export const generatesPlague = (input: SelectorInput): boolean => PLAGUE_GENERATORS.includes(input.cardId as CardIds);
+
 export const spellSchool =
 	(spellSchool: SpellSchool) =>
 	(input: SelectorInput): boolean =>
