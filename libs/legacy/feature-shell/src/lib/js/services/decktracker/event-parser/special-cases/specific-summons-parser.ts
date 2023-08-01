@@ -8,11 +8,29 @@ const PROCESSORS = [
 	{
 		cardIds: [CardIds.AstralAutomaton],
 		updater: (deck: DeckState): DeckState =>
-			deck.update({ astralAutomatonSize: (deck.astralAutomatonSize ?? 0) + 1 }),
+			deck.update({ astralAutomatonsSummoned: (deck.astralAutomatonsSummoned ?? 0) + 1 }),
 	},
 	{
 		cardIds: [CardIds.StoneheartKing_EarthenGolemToken],
-		updater: (deck: DeckState): DeckState => deck.update({ earthenGolemSize: (deck.earthenGolemSize ?? 0) + 1 }),
+		updater: (deck: DeckState): DeckState =>
+			deck.update({ earthenGolemsSummoned: (deck.earthenGolemsSummoned ?? 0) + 1 }),
+	},
+	{
+		cardIds: [
+			CardIds.PoisonTreantToken,
+			CardIds.Treenforcements_TreantToken,
+			CardIds.Move_AngryTreantToken,
+			CardIds.PlotOfSin_TreantToken,
+			CardIds.SowTheSoil_TreantToken,
+			CardIds.GardenGnome_TreantToken,
+			CardIds.PoisonSeeds_TreantToken,
+			CardIds.FaireArborist_TreantToken,
+			CardIds.TheForestsAid_TreantToken,
+			CardIds.LivingMana_ManaTreantToken,
+			CardIds.WitchwoodApple_TreantToken,
+			CardIds.ForestSeedlings_TreantToken,
+		],
+		updater: (deck: DeckState): DeckState => deck.update({ treantsSummoned: (deck.treantsSummoned ?? 0) + 1 }),
 	},
 ];
 const CARD_IDS = PROCESSORS.flatMap((p) => p.cardIds);

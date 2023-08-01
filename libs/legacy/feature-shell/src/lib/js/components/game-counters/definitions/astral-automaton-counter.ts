@@ -29,7 +29,7 @@ export class AstralAutomatonCounterDefinition implements CounterDefinition<GameS
 
 	public select(gameState: GameState): number {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.astralAutomatonSize ?? 0;
+		return deck.astralAutomatonsSummoned ?? 0;
 	}
 
 	public emit(astralAutomatonSize: number): NonFunctionProperties<AstralAutomatonCounterDefinition> {

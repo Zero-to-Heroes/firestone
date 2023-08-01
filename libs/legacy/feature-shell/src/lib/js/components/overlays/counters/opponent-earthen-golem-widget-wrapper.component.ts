@@ -44,7 +44,8 @@ export class OpponentEarthenGolemWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentEarthenGolemCounter;
 		this.deckStateExtractor = (state) =>
-			!!state.opponentDeck?.earthenGolemSize || state.opponentDeck?.hasAnyCardInHandAndDeck(EARTHEN_GOLEM_CARDS);
+			!!state.opponentDeck?.earthenGolemsSummoned ||
+			state.opponentDeck?.hasAnyCardInHandAndDeck(EARTHEN_GOLEM_CARDS);
 		super.ngAfterContentInit();
 	}
 }

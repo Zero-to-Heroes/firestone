@@ -50,6 +50,7 @@ import { ShockspitterCounterDefinition } from './definitions/shockspitter-counte
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
+import { TreantCounterDefinition } from './definitions/treant-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
@@ -153,6 +154,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'earthenGolem':
 				return EarthenGolemCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'treant':
+				return TreantCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'spells':
 				return SpellCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':

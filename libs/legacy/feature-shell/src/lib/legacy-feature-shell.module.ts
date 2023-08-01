@@ -503,6 +503,7 @@ import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overla
 import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
+import { PlayerTreantWidgetWrapperComponent } from '@components/overlays/counters/player-treant-widget-wrapper.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { SettingsGeneralLotteryComponent } from '@components/settings/general/settings-general-lottery.component';
@@ -1546,6 +1547,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerEarthenGolemWidgetWrapperComponent,
+		PlayerTreantWidgetWrapperComponent,
 		PlayerLibramWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,

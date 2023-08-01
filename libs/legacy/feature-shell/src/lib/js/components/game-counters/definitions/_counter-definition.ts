@@ -20,6 +20,7 @@ export type CounterType =
 	| 'pogo'
 	| 'astralAutomaton'
 	| 'earthenGolem'
+	| 'treant'
 	| 'attack'
 	| 'jadeGolem'
 	| 'cthun'

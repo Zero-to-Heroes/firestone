@@ -38,7 +38,7 @@ export class PlayerAstralAutomatonWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAstralAutomatonCounter;
 		this.deckStateExtractor = (state) =>
-			!!state.playerDeck?.astralAutomatonSize ||
+			!!state.playerDeck?.astralAutomatonsSummoned ||
 			state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.AstralAutomaton]);
 		super.ngAfterContentInit();
 	}

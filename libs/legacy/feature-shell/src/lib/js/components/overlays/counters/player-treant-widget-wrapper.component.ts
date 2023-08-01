@@ -13,12 +13,12 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 
 @Component({
-	selector: 'opponent-astral-automaton-widget-wrapper',
+	selector: 'player-treant-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: templateBase,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpponentAstralAutomatonWidgetWrapperComponent
+export class PlayerTreantWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
 	implements AfterContentInit
 {
@@ -31,15 +31,14 @@ export class OpponentAstralAutomatonWidgetWrapperComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
-		this.side = 'opponent';
-		this.activeCounter = 'astralAutomaton';
+		this.side = 'player';
+		this.activeCounter = 'treant';
 	}
 
 	ngAfterContentInit(): void {
-		this.prefExtractor = (prefs) => prefs.opponentAstralAutomatonCounter;
+		this.prefExtractor = (prefs) => prefs.playerTreantCounter;
 		this.deckStateExtractor = (state) =>
-			!!state.opponentDeck?.astralAutomatonsSummoned ||
-			state.opponentDeck?.hasAnyCardInHandAndDeck([CardIds.AstralAutomaton]);
+			!!state.playerDeck?.treantsSummoned || state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.Cultivation]);
 		super.ngAfterContentInit();
 	}
 }
