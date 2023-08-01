@@ -488,6 +488,7 @@ import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
+import { OpponentEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/opponent-earthen-golem-widget-wrapper.component';
 import { OpponentMulticasterWidgetWrapperComponent } from '@components/overlays/counters/opponent-multicaster-widget-wrapper.component';
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
 import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
@@ -496,6 +497,7 @@ import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counte
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
+import { PlayerEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/player-earthen-golem-widget-wrapper.component';
 import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
 import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overlays/counters/player-menagerie-widget-wrapper.component';
 import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
@@ -1543,6 +1545,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerSpellWidgetWrapperComponent,
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
+		PlayerEarthenGolemWidgetWrapperComponent,
 		PlayerLibramWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,
@@ -1582,6 +1585,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentWatchpostCounterWidgetWrapperComponent,
 		OpponentPogoWidgetWrapperComponent,
 		OpponentAstralAutomatonWidgetWrapperComponent,
+		OpponentEarthenGolemWidgetWrapperComponent,
 		OpponentJadeWidgetWrapperComponent,
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,

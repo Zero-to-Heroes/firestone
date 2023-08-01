@@ -118,12 +118,12 @@ import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-ha
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretWillTriggerParser } from './event-parser/secret-will-trigger-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
-import { AstralAutomatonSummonedParser } from './event-parser/special-cases/astral-automaton-summoned-parser';
 import { CthunParser } from './event-parser/special-cases/cthun-parser';
 import { CthunRevealedParser } from './event-parser/special-cases/cthun-revealed-parser';
 import { GalakrondInvokedParser } from './event-parser/special-cases/galakrond-invoked-parser';
 import { JadeGolemParser } from './event-parser/special-cases/jade-golem-parser';
 import { PogoPlayedParser } from './event-parser/special-cases/pogo-played-parser';
+import { SpecificSummonsParser } from './event-parser/special-cases/specific-summons-parser';
 import { StartOfGameEffectParser } from './event-parser/start-of-game-effect-parser';
 import { TurnDurationUpdatedParser } from './event-parser/turn-duration-updated-parser';
 import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
@@ -573,7 +573,7 @@ export class GameStateService {
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
-			new AstralAutomatonSummonedParser(),
+			new SpecificSummonsParser(),
 			new JadeGolemParser(),
 			new CthunParser(),
 			new CardBuffedInHandParser(this.helper),

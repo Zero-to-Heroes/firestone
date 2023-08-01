@@ -77,6 +77,7 @@ export class DeckState {
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
 	readonly astralAutomatonSize: number = 0;
+	readonly earthenGolemSize: number = 0;
 	readonly fatigue: number = 0;
 	readonly overloadedCrystals: number = 0;
 	readonly corpsesSpent: number = 0;

@@ -182,6 +182,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.astral-automaton-tooltip'),
 		},
 		{
+			id: 'earthenGolem',
+			field: 'playerEarthenGolemCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.earthen-golem-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.earthen-golem-tooltip'),
+		},
+		{
 			id: 'jade',
 			field: 'playerJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),

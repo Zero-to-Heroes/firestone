@@ -5,8 +5,8 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class AstralAutomatonCounterDefinition implements CounterDefinition<GameState, number> {
-	readonly type = 'astralAutomaton';
+export class EarthenGolemCounterDefinition implements CounterDefinition<GameState, number> {
+	readonly type = 'earthenGolem';
 	readonly value: number;
 	readonly image: string;
 	readonly cssClass: string;
@@ -15,7 +15,7 @@ export class AstralAutomatonCounterDefinition implements CounterDefinition<GameS
 
 	constructor(
 		private readonly side: 'player' | 'opponent',
-		private readonly allCards: CardsFacadeService,
+		private readonly allCards,
 		private readonly i18n: LocalizationFacadeService,
 	) {}
 
@@ -23,24 +23,24 @@ export class AstralAutomatonCounterDefinition implements CounterDefinition<GameS
 		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
-	): AstralAutomatonCounterDefinition {
-		return new AstralAutomatonCounterDefinition(side, allCards, i18n);
+	): EarthenGolemCounterDefinition {
+		return new EarthenGolemCounterDefinition(side, allCards, i18n);
 	}
 
 	public select(gameState: GameState): number {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.astralAutomatonSize ?? 0;
+		return deck.earthenGolemSize ?? 0;
 	}
 
-	public emit(astralAutomatonSize: number): NonFunctionProperties<AstralAutomatonCounterDefinition> {
+	public emit(earthenGolemSize: number): NonFunctionProperties<EarthenGolemCounterDefinition> {
 		return {
-			type: 'astralAutomaton',
-			value: astralAutomatonSize,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.AstralAutomaton}.jpg`,
+			type: 'earthenGolem',
+			value: earthenGolemSize,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.StoneheartKing_EarthenGolemToken}.jpg`,
 			cssClass: 'pogo-counter',
 			tooltip: this.i18n.translateString(`counters.specific-summons.${this.side}`, {
-				value: astralAutomatonSize,
-				cardName: this.allCards.getCard(CardIds.AstralAutomaton).name,
+				value: earthenGolemSize,
+				cardName: this.allCards.getCard(CardIds.StoneheartKing_EarthenGolemToken).name,
 			}),
 			standardCounter: true,
 		};
