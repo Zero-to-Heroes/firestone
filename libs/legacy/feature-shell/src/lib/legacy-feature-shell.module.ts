@@ -496,6 +496,7 @@ import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlay
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
+import { PlayerChainedGuardianWidgetWrapperComponent } from '@components/overlays/counters/player-chained-guardian-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
 import { PlayerEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/player-earthen-golem-widget-wrapper.component';
 import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
@@ -1546,6 +1547,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerSpellWidgetWrapperComponent,
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
+		PlayerChainedGuardianWidgetWrapperComponent,
 		PlayerEarthenGolemWidgetWrapperComponent,
 		PlayerTreantWidgetWrapperComponent,
 		PlayerLibramWidgetWrapperComponent,

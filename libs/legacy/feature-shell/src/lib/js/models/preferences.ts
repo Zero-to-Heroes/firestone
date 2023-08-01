@@ -328,6 +328,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerTreantCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerChainedGuardianCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerChainedGuardianCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerJadeGolemCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerJadeGolemCounterWidgetPosition: { left: number; top: number };

@@ -23,6 +23,7 @@ import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southse
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
+import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { EarthenGolemCounterDefinition } from './definitions/earthen-golem-counter';
@@ -152,6 +153,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return PogoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'astralAutomaton':
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'chainedGuardian':
+				return ChainedGuardianCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'earthenGolem':
 				return EarthenGolemCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'treant':

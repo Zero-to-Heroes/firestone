@@ -182,6 +182,12 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.astral-automaton-tooltip'),
 		},
 		{
+			id: 'chainedGuardian',
+			field: 'playerChainedGuardianCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.chained-guardian-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.chained-guardian-tooltip'),
+		},
+		{
 			id: 'earthenGolem',
 			field: 'playerEarthenGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.earthen-golem-label'),

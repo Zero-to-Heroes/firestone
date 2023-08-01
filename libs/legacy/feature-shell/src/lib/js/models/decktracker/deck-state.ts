@@ -99,6 +99,7 @@ export class DeckState {
 	readonly minionsDeadThisTurn: readonly ShortCard[] = [];
 	readonly anachronosTurnsPlayed: readonly number[] = [];
 	readonly bonelordFrostwhisperFirstTurnTrigger: number = null;
+	readonly plaguesShuffledIntoEnemyDeck: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

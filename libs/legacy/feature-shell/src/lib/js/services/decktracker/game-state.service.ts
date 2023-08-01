@@ -122,6 +122,7 @@ import { CthunParser } from './event-parser/special-cases/cthun-parser';
 import { CthunRevealedParser } from './event-parser/special-cases/cthun-revealed-parser';
 import { GalakrondInvokedParser } from './event-parser/special-cases/galakrond-invoked-parser';
 import { JadeGolemParser } from './event-parser/special-cases/jade-golem-parser';
+import { PlaguesParser } from './event-parser/special-cases/plagues-parser';
 import { PogoPlayedParser } from './event-parser/special-cases/pogo-played-parser';
 import { SpecificSummonsParser } from './event-parser/special-cases/specific-summons-parser';
 import { StartOfGameEffectParser } from './event-parser/start-of-game-effect-parser';
@@ -606,6 +607,7 @@ export class GameStateService {
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),
 			new SpecialCardPowerTriggeredParser(this.allCards, this.helper),
 			new SphereOfSapienceParser(this.helper),
+			new PlaguesParser(),
 
 			new ReconnectStartParser(),
 			new ReconnectOverParser(this.deckHandler),

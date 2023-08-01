@@ -19,6 +19,7 @@ export type CounterType =
 	| 'galakrond'
 	| 'pogo'
 	| 'astralAutomaton'
+	| 'chainedGuardian'
 	| 'earthenGolem'
 	| 'treant'
 	| 'attack'
