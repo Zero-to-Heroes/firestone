@@ -124,14 +124,16 @@ export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
 	const result =
 		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||
 		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
-	// console.debug(
-	// 	'cardPlayedThisMatch',
-	// 	input.cardId,
-	// 	input.entityId,
-	// 	result,
-	// 	input.deckState?.cardsPlayedThisMatch,
-	// 	input,
-	// );
+	return result;
+};
+
+export const minionPlayedThisMatch = (input: SelectorInput): boolean => {
+	const minionsPlayedThisMatch = input.deckState?.cardsPlayedThisMatch.filter(
+		(c) => input.allCards.getCard(c.cardId).type === 'Minion',
+	);
+	const result =
+		minionsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||
+		minionsPlayedThisMatch.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
 	return result;
 };
 

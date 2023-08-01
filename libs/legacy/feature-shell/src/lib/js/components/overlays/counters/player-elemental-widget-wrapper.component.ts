@@ -40,7 +40,12 @@ export class PlayerElementalWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerElementalCounter;
 		this.deckStateExtractor = (state) =>
-			this.containsCards(state?.playerDeck?.hand, [CardIds.ManaCyclone, CardIds.GrandFinale, CardIds.Ozruk]);
+			this.containsCards(state?.playerDeck?.hand, [
+				CardIds.ManaCyclone,
+				CardIds.GrandFinale,
+				CardIds.Ozruk,
+				CardIds.UnchainedGladiator,
+			]);
 		super.ngAfterContentInit();
 	}
 

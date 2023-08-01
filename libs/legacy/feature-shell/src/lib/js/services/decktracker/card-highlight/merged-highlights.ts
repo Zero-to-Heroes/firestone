@@ -13,4 +13,5 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.StranglethornHeart,
 	CardIds.MassResurrection_DAL_724,
 	CardIds.RevivePet,
+	CardIds.RaDen,
 ];

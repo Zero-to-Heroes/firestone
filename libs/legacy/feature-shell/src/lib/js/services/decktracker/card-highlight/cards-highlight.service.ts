@@ -61,6 +61,7 @@ import {
 	magnetic,
 	mech,
 	minion,
+	minionPlayedThisMatch,
 	minionsDeadSinceLastTurn,
 	murloc,
 	naga,
@@ -293,6 +294,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				side: side,
 				deckCard: card,
 				deckState: deckState,
+				allCards: this.allCards,
 			});
 		}
 		for (const card of [...deckState.hand]) {
@@ -305,6 +307,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				side: side,
 				deckCard: card,
 				deckState: deckState,
+				allCards: this.allCards,
 			});
 		}
 		for (const card of [...deckState.board]) {
@@ -317,6 +320,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				side: side,
 				deckCard: card,
 				deckState: deckState,
+				allCards: this.allCards,
 			});
 		}
 		for (const card of [...deckState.otherZone]) {
@@ -329,6 +333,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				side: side,
 				deckCard: card,
 				deckState: deckState,
+				allCards: this.allCards,
 			});
 		}
 		return result;
@@ -991,6 +996,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ImpKingRafaam_REV_835:
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
 				return and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp);
+			case CardIds.RaDen:
+				return and(side(inputSide), minionPlayedThisMatch, notInInitialDeck);
 			case CardIds.RaidBossOnyxia_ONY_004:
 				return and(side(inputSide), or(inDeck, inHand), minion, whelp);
 			case CardIds.RaidingParty:
@@ -1376,5 +1383,6 @@ export interface SelectorInput {
 	card: ReferenceCard;
 	deckState: DeckState;
 	deckCard: DeckCard;
+	allCards: CardsFacadeService;
 }
 export type Selector = (info: SelectorInput) => boolean;
