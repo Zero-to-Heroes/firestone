@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.6.4',
+		version: '11.6.6',
 		force: false,
 		sections: [
 			// {
@@ -88,6 +88,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add a spell school counter when facing Mage opponents.`,
+							},
+							{
+								type: 'content',
+								text: `Add several oracles and card highlights for the new Titan cards.`,
 							},
 							{
 								type: 'bug',
