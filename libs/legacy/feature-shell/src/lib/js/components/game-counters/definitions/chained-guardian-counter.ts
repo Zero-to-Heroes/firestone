@@ -38,7 +38,7 @@ export class ChainedGuardianCounterDefinition implements CounterDefinition<GameS
 			value: plaguesShuffledIntoEnemyDeck,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.ChainedGuardian}.jpg`,
 			cssClass: 'pogo-counter',
-			tooltip: this.i18n.translateString(`counters.plagues.${this.side}`, {
+			tooltip: this.i18n.translateString(`counters.chained-guardian.${this.side}`, {
 				value: plaguesShuffledIntoEnemyDeck,
 			}),
 			standardCounter: true,
