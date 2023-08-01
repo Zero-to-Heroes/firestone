@@ -168,6 +168,10 @@ export const isSi7 = (input: SelectorInput): boolean =>
 		.filter((loc) => loc !== Locale[Locale.UNKNOWN])
 		.some((locale: string) => input.card?.name?.includes(getSi7Locale(locale)));
 
+const TREANT_DBF_IDS = [75686, 56371, 85655, 86213, 68188, 54541, 1803, 61465, 53302, 41432, 48911, 99806];
+export const summonsTreant = (input: SelectorInput): boolean =>
+	TREANT_DBF_IDS.some((treantDbfId) => input.card.relatedCardDbfIds?.includes(treantDbfId));
+
 export const spellSchool =
 	(spellSchool: SpellSchool) =>
 	(input: SelectorInput): boolean =>

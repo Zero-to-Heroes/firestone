@@ -4,6 +4,21 @@ import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { EventParser } from '../event-parser';
 
+export const TREANT_CARD_IDS = [
+	CardIds.PoisonTreantToken,
+	CardIds.Treenforcements_TreantToken,
+	CardIds.Move_AngryTreantToken,
+	CardIds.PlotOfSin_TreantToken,
+	CardIds.SowTheSoil_TreantToken,
+	CardIds.GardenGnome_TreantToken,
+	CardIds.PoisonSeeds_TreantToken,
+	CardIds.FaireArborist_TreantToken,
+	CardIds.TheForestsAid_TreantToken,
+	CardIds.LivingMana_ManaTreantToken,
+	CardIds.WitchwoodApple_TreantToken,
+	CardIds.ForestSeedlings_TreantToken,
+];
+
 const PROCESSORS = [
 	{
 		cardIds: [CardIds.AstralAutomaton],
@@ -16,20 +31,7 @@ const PROCESSORS = [
 			deck.update({ earthenGolemsSummoned: (deck.earthenGolemsSummoned ?? 0) + 1 }),
 	},
 	{
-		cardIds: [
-			CardIds.PoisonTreantToken,
-			CardIds.Treenforcements_TreantToken,
-			CardIds.Move_AngryTreantToken,
-			CardIds.PlotOfSin_TreantToken,
-			CardIds.SowTheSoil_TreantToken,
-			CardIds.GardenGnome_TreantToken,
-			CardIds.PoisonSeeds_TreantToken,
-			CardIds.FaireArborist_TreantToken,
-			CardIds.TheForestsAid_TreantToken,
-			CardIds.LivingMana_ManaTreantToken,
-			CardIds.WitchwoodApple_TreantToken,
-			CardIds.ForestSeedlings_TreantToken,
-		],
+		cardIds: TREANT_CARD_IDS,
 		updater: (deck: DeckState): DeckState => deck.update({ treantsSummoned: (deck.treantsSummoned ?? 0) + 1 }),
 	},
 ];

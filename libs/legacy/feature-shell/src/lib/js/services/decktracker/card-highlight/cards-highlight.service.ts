@@ -81,6 +81,7 @@ import {
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
+	summonsTreant,
 	taunt,
 	totem,
 	tribeless,
@@ -543,6 +544,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Crystology:
 				return and(side(inputSide), inDeck, minion, attackLessThan(2));
+			case CardIds.Cultivation:
+				return and(side(inputSide), or(inDeck, inHand), summonsTreant);
 			case CardIds.CutlassCourier:
 				return and(side(inputSide), inDeck, pirate);
 			case CardIds.DaringDrake:
