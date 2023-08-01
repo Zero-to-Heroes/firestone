@@ -48,6 +48,7 @@ export class OpponentMulticasterWidgetWrapperComponent
 				CardIds.Sif,
 				CardIds.InquisitiveCreation,
 				CardIds.DiscoveryOfMagic,
+				CardIds.ElementalInspiration,
 			]);
 		super.ngAfterContentInit();
 	}
