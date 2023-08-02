@@ -20,6 +20,7 @@ export const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_REVENDRETH,
 	BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING,
 	BoosterType.GOLDEN_BATTLE_OF_THE_BANDS,
+	BoosterType.GOLDEN_TITANS,
 ];
 
 export const CLASS_PACKS = [
@@ -45,4 +46,5 @@ export const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.GOLDEN_CLASSIC_PACK,
 	BoosterType.GOLDEN_STANDARD_PACK,
 	BoosterType.GOLDEN_WILD_PACK,
+	BoosterType.GOLDEN_YEAR_OF_THE_PHOENIX,
 ];
