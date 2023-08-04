@@ -67,11 +67,22 @@ export class AchievementsLiveProgressTrackingService {
 				);
 				const mappedAchiements: readonly { id: number; achievement: HsRefAchievement }[] = pinnedAchievementIds
 					.map((id) => {
-						const achievementToTrack = this.findFirstUncompletedStep(id, achievementsOnGameStart);
+						const achievementToTrack = this.findFirstUncompletedStep(
+							id,
+							this.refAchievements,
+							achievementsOnGameStart,
+						);
 						return { id: id, achievement: achievementToTrack };
 					})
 					.filter((a) => !!a.id && !isNaN(a.id));
 				const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
+				console.debug(
+					'[achievements-monitor] completedAchievements',
+					completedAchievements,
+					mappedAchiements,
+					pinnedAchievementIds,
+					achievementsOnGameStart,
+				);
 				this.store.send(new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)));
 
 				// When pinning an achievement, we get the first step of the achievements chain
@@ -101,18 +112,19 @@ export class AchievementsLiveProgressTrackingService {
 
 	private findFirstUncompletedStep(
 		id: number,
+		refAchievements: readonly HsRefAchievement[],
 		achievementsOnGameStart: readonly HsAchievementInfo[],
 	): HsRefAchievement {
-		let currentAchievement = this.refAchievements.find((a) => a.id === id);
+		let currentAchievement = refAchievements.find((a) => a.id === id);
 		let currentCompletion = achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0;
-		// console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
+		//console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
 		while (currentCompletion > 0 && currentCompletion >= currentAchievement.quota) {
 			const nextStepId = currentAchievement.nextTierId;
-			currentAchievement = !!nextStepId ? this.refAchievements.find((a) => a.id === nextStepId) : null;
+			currentAchievement = !!nextStepId ? refAchievements.find((a) => a.id === nextStepId) : null;
 			currentCompletion = !!nextStepId
 				? achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0
 				: 0;
-			// console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
+			//console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
 		}
 		return currentAchievement;
 	}
@@ -205,7 +217,10 @@ export class AchievementsLiveProgressTrackingService {
 			return;
 		}
 
-		this.refAchievements = (await this.refLoaderService.getLatestRefData())?.achievements ?? [];
+		this.refLoaderService.refData$$.subscribe((refData) => {
+			this.refAchievements = refData?.achievements ?? [];
+		});
+		this.refLoaderService.getLatestRefData();
 		this.achievementQuotas = {};
 		for (const ach of this.refAchievements) {
 			this.achievementQuotas[ach.id] = ach.quota;

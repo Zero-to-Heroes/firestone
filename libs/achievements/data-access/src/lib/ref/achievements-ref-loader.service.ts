@@ -9,7 +9,7 @@ const REF_HS_ACHIEVEMENTS_RETRIEVE_URL = 'https://static.zerotoheroes.com/hearth
 @Injectable()
 export class AchievementsRefLoaderService {
 	// Do it this way so that concurrent calls to the API don't trigger multiple calls
-	private readonly refData$$ = new BehaviorSubject<HsRefAchiementsData | null>(null);
+	public readonly refData$$ = new BehaviorSubject<HsRefAchiementsData | null>(null);
 
 	private readonly internaleRefData$$ = new BehaviorSubject<HsRefAchiementsData | null>(null);
 	private readonly triggerRefDataLoad$$ = new BehaviorSubject<boolean>(false);

@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { sortByProperties } from '@firestone/shared/framework/common';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { AchievementsProgressTracking } from '../../services/achievement/achievements-live-progress-tracking.service';
 import { AchievementsTrackRandomAchievementsEvent } from '../../services/mainwindow/store/processors/achievements/achievements-track-random-achievements';
@@ -60,21 +60,22 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 	}
 
 	ngAfterContentInit(): void {
-		this.achievements$ = this.store.achievementsProgressTracking$().pipe(
-			this.mapData((tracking) =>
-				!tracking?.length
-					? null
-					: [...tracking].sort(
-							sortByProperties((a: AchievementsProgressTracking) => [
-								-a.progressThisGame,
-								a.quota - a.progressTotal,
-								-a.progressTotal,
-								a.name,
-							]),
-					  ),
-			),
-			tap((info) => console.debug('[lottery-achievements] info', info)),
-		);
+		this.achievements$ = this.store
+			.achievementsProgressTracking$()
+			.pipe(
+				this.mapData((tracking) =>
+					!tracking?.length
+						? null
+						: [...tracking].sort(
+								sortByProperties((a: AchievementsProgressTracking) => [
+									-a.progressThisGame,
+									a.quota - a.progressTotal,
+									-a.progressTotal,
+									a.name,
+								]),
+						  ),
+				),
+			);
 	}
 
 	trackByFn(index, item: AchievementsProgressTracking) {
@@ -84,11 +85,12 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 	async resetAchievements() {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = { ...prefs, pinnedAchievementIds: [] };
+		console.debug('[lottery-achievements] resetting achievements', newPrefs);
 		await this.prefs.savePreferences(newPrefs);
 	}
 
 	pickRandomAchievements() {
-		console.debug('picking achievements');
+		console.debug('[lottery-achievements] picking achievements');
 		this.store.send(new AchievementsTrackRandomAchievementsEvent());
 	}
 }
