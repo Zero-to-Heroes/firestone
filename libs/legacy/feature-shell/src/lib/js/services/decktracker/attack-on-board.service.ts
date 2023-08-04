@@ -8,6 +8,7 @@ import { EntityGameState, PlayerGameState } from '../../models/game-event';
 @Injectable()
 export class AttackOnBoardService {
 	public computeAttackOnBoard(deck: DeckState, playerFromTracker: PlayerGameState): AttackOnBoard {
+		// console.debug('[attack-on-board] computing attack on board', deck, playerFromTracker);
 		const numberOfVoidtouchedAttendants =
 			deck.board
 				.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant)
@@ -91,13 +92,19 @@ export class AttackOnBoardService {
 		// Here technically it's not totally correct, as you'd have to know if the
 		// frozen minion will unfreeze in the opponent's turn
 		const isFrozen = hasTag(entity, GameTag.FROZEN);
+		const canTitanAttack =
+			!hasTag(entity, GameTag.TITAN) ||
+			(hasTag(entity, GameTag.TITAN_ABILITY_USED_1) &&
+				hasTag(entity, GameTag.TITAN_ABILITY_USED_2) &&
+				hasTag(entity, GameTag.TITAN_ABILITY_USED_3));
 		const hasSummoningSickness =
 			isActivePlayer &&
-			(hasTag(entity, GameTag.EXHAUSTED) || hasTag(entity, GameTag.JUST_PLAYED)) &&
-			// Ignore rush minions in the attack counter
-			// !hasTag(entity, GameTag.ATTACKABLE_BY_RUSH) &&
+			(hasTag(entity, GameTag.EXHAUSTED) ||
+				hasTag(entity, GameTag.JUST_PLAYED) ||
+				// Ignore rush minions in the attack counter
+				hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) &&
 			!hasTag(entity, GameTag.CHARGE);
-		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack;
+		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack && canTitanAttack;
 	}
 }
 
