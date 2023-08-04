@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.6.6',
+		version: '11.6.8',
 		force: false,
 		sections: [
 			// {
@@ -45,33 +45,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a display issue where damage done with spells would not be properly shown, although the data was correctly computed.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `(PREMIUM) You can now see stats for quests and rewards in the overlay. This features shows you the average turn to complete a given quest, based on the quest difficulty, your hero and your MMR range, and shows the average final rank for players who picked this quest for your MMR range.<br/> A proper "Quests" tab will be availble soon to all users in the app, where you will be able to get a detailed view on all these stats.`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a global issue where Firestone achievements would not be properly detected anymore.`,
-							},
-						],
-					},
+					// {
+					// 	category: 'general',
+					// 	details: [
+					// 		{
+					// 			type: 'bug',
+					// 			text: `Fix a display issue where damage done with spells would not be properly shown, although the data was correctly computed.`,
+					// 		},
+					// 	],
+					// },
 				],
 			},
 			{
@@ -82,55 +64,38 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a counter for Astral Automaton. More counters and oracles will be coming in the following weeks, but I will wait for the extension to be available in friendly matches to make testing easier.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a spell school counter when facing Mage opponents.`,
-							},
-							{
 								type: 'content',
-								text: `Add several oracles and card highlights for the new Titan cards.`,
+								text: `Add card highlight for Embrace of Nature. `,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Plagues would not be removed from the opponent's deck when drawn.`,
+								text: `Fix an issue where the Plagues counter would increment when drawing Plagues.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where ALL minions were not counted in the Elemental counter.`,
+								text: `Fix an issue where the attack on board widget would count Titans' attack even if they hadn't used all of their abilities.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the attack on board widget would sometimes count the attack of Rush minions.`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'duels',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix the simulator for the updated behavior of golden Bristleback Knight.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Illidan's hero power.`,
+								text: `Fix an issue where cards you were missing when viewing high-wins decks would not be highlighted as missing. `,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'collection',
 						details: [
 							{
-								type: 'feature',
-								text: `If there are no top Tavern Brawls decks that you can build, you will now be offered to copy a deck for which you have missing copies, with a warning.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'misc',
-								text: `Due to the mode not being actively supported anymore, the Mercs icon has now been moved down, below Duels and Arena.`,
+								type: 'bug',
+								text: `Fix an issue where Golden Titans packs would not show up properly in the all-time stats. `,
 							},
 						],
 					},
