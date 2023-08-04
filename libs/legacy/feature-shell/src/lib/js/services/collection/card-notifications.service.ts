@@ -23,7 +23,7 @@ export class CardNotificationsService {
 
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.collectionEnableNotifications) {
-			console.log('[card-notification] notifs disabled, not showing any notif');
+			// console.log('[card-notification] notifs disabled, not showing any notif');
 			return;
 		}
 
@@ -44,7 +44,7 @@ export class CardNotificationsService {
 						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
 						: '',
 			  });
-		console.log('[card-notification] displaying new card toast notification for', cardName);
+		// console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
 		const clickText = this.i18n.translateString('app.collection.card-history.click-to-expand');
@@ -85,12 +85,12 @@ export class CardNotificationsService {
 	public async createDustToast(dust: number, numberOfCards: number) {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.collectionEnableNotifications) {
-			console.log('[card-notification] notifs disabled, not showing any notif');
+			// console.log('[card-notification] notifs disabled, not showing any notif');
 			return;
 		}
 
 		if (prefs.showDust) {
-			console.log('[card-notification] showing dust notification', dust, numberOfCards);
+			// console.log('[card-notification] showing dust notification', dust, numberOfCards);
 			const duplicateCardsText = this.i18n.translateString('app.collection.card-history.duplicate-cards', {
 				numberOfCards: numberOfCards,
 			});

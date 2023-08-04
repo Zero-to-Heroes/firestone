@@ -53,7 +53,7 @@ export class DuelsTopDeckService {
 		const sets$ = this.setsManager.sets$$.asObservable();
 		const debouncedSets$ = concat(sets$.pipe(take(1)), sets$.pipe(skip(1), debounceTime(2000))).pipe(
 			distinctUntilChanged(),
-			tap((sets) => console.log('[duels-top-deck] received sets', sets)),
+			// tap((sets) => console.log('[duels-top-deck] received sets', sets)),
 		);
 
 		this.topDeck$ = defer(() => {

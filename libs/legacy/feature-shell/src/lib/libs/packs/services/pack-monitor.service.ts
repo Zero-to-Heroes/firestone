@@ -1,8 +1,7 @@
 import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';
 import { Events } from '../../../js/services/events.service';
@@ -28,7 +27,7 @@ export class PackMonitor {
 		});
 
 		this.events.on(Events.NEW_PACK).subscribe(async (event) => {
-			console.log('[pack-monitor] resetting cards for new pack');
+			// console.log('[pack-monitor] resetting cards for new pack');
 			const packCards: readonly InternalCardInfo[] = event.data[1];
 			if (event.data[2] === BoosterType.MERCENARIES) {
 				return;
@@ -156,7 +155,7 @@ export class PackMonitor {
 			this.totalDuplicateCards = 0;
 		}
 		this.unrevealedCards = [];
-		console.log('[pack-monitor] reset done');
+		// console.log('[pack-monitor] reset done');
 	}
 }
 
