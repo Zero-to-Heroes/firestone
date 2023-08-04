@@ -627,6 +627,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minion);
 			case CardIds.Embiggen:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.EmbraceOfNature:
+			case CardIds.EmbraceOfNature_EmbraceOfNatureToken:
+				return and(side(inputSide), inDeck, chooseOne);
 			case CardIds.EnduranceTrainingTavernBrawl:
 				return and(side(inputSide), minion, taunt);
 			case CardIds.EternalServitude_CORE_ICC_213:
