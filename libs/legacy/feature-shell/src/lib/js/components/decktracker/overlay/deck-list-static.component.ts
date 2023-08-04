@@ -18,7 +18,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { BehaviorSubject, Observable, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { SetCard } from '../../../models/set';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 
@@ -70,12 +70,15 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	@Input() set deckstring(value: string) {
-		this.deckstring$.next(value);
+		this.deckstring$$.next(value);
 	}
 
-	@Input() collection: readonly SetCard[];
+	@Input() set collection(value: readonly SetCard[]) {
+		this.collection$$.next(value);
+	}
 
-	private deckstring$ = new BehaviorSubject<string>(null);
+	private deckstring$$ = new BehaviorSubject<string>(null);
+	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -93,9 +96,9 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 
 	ngAfterContentInit(): void {
 		this.colorManaCost$ = this.listenForBasicPref$((prefs) => prefs.overlayShowRarityColors);
-		this.cards$ = this.deckstring$.pipe(
-			filter((deckstring) => !!deckstring?.length),
-			this.mapData((deckstring) => this.buildCards(deckstring)),
+		this.cards$ = combineLatest([this.deckstring$$, this.collection$$]).pipe(
+			filter(([deckstring, collection]) => !!deckstring?.length),
+			this.mapData(([deckstring, collection]) => this.buildCards(deckstring, collection)),
 		);
 	}
 
@@ -103,7 +106,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		this.cardClicked.next(card);
 	}
 
-	private buildCards(deckstring: string): readonly VisualDeckCard[] {
+	private buildCards(deckstring: string, collection: readonly SetCard[]): readonly VisualDeckCard[] {
 		const decklist = decode(deckstring);
 		return decklist.cards
 			.map((pair) => {
@@ -113,6 +116,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
 				const sideboard = this.buildSideboard(sideboardFromList);
 				const internalEntityId = uuid();
+				const inCollection = collection.find((c) => c.id === card.id)?.getNumberCollected() >= quantity;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
@@ -120,6 +124,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 					rarity: card.rarity,
 					totalQuantity: quantity,
 					sideboard: sideboard,
+					isMissing: !inCollection,
 					internalEntityId: internalEntityId,
 					internalEntityIds: [internalEntityId],
 				});
