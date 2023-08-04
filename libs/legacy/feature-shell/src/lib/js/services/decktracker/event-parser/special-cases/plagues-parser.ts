@@ -13,8 +13,10 @@ export class PlaguesParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
-			[GameEvent.CREATE_CARD_IN_DECK, GameEvent.CARD_CHANGED_IN_DECK].includes(gameEvent.type) &&
-			PLAGUES.includes(gameEvent.cardId as CardIds)
+			PLAGUES.includes(gameEvent.cardId as CardIds) &&
+			((gameEvent.type === GameEvent.CARD_CHANGED_IN_DECK &&
+				gameEvent.additionalData.subSpell === 'ReuseFX_Generic_SpawnToDeck_NoFX_CardFromScript_Super') ||
+				gameEvent.type === GameEvent.CREATE_CARD_IN_DECK)
 		);
 	}
 
