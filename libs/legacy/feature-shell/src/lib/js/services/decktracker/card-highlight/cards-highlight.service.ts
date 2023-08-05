@@ -714,6 +714,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.GlacialDownpourTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, frost);
+			case CardIds.GolgannethTheThunderer:
+				return and(side(inputSide), or(inDeck, inHand), overload);
 			case CardIds.GorillabotA3:
 			case CardIds.GorillabotA3Core:
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
