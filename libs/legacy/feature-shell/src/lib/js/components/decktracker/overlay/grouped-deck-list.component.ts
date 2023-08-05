@@ -11,7 +11,7 @@ import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-li
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
@@ -209,7 +209,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						sortingFunction: zone.sortingFunction,
 					} as DeckZoneSection),
 			);
-		// console.debug('zone', sections);
+		//console.debug('zone', sections);
 		return {
 			id: 'single-zone',
 			name: undefined,
@@ -469,9 +469,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 
 	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean, showGiftsSeparately: boolean): number {
 		const isGift = !!card.creatorCardId?.length || !!card.creatorCardIds?.length;
-		if (showGiftsSeparately && isGift) {
-			return 4;
-		}
+		// if (showGiftsSeparately && isGift) {
+		// 	return 4;
+		// }
 
 		// Generated cards always go to the bottom
 		// if (cardsGoToBottom && isGift) {
@@ -479,6 +479,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		// }
 
 		if (cardsGoToBottom) {
+			//console.debug('sort order', card.cardName, card.highlight, isGift, card);
 			switch (card.highlight) {
 				case 'normal':
 					return 0;

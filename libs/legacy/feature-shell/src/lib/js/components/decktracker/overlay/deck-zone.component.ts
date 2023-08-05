@@ -289,9 +289,11 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		collection: readonly SetCard[],
 	): string {
 		const keyWithBonus = showStatsChange ? card.cardId + '_' + (card.mainAttributeChange || 0) : card.cardId;
+		// We never want cards that are played to be grouped with cards that are not played
+		const keyWithHighlights = keyWithBonus + '-' + card.highlight;
 		const keyWithGift = showGiftsSeparately
-			? keyWithBonus + 'creators-' + ((card.creatorCardIds || []).length > 0 ? 'yes' : 'no')
-			: keyWithBonus;
+			? keyWithHighlights + 'creators-' + ((card.creatorCardIds || []).length > 0 ? 'yes' : 'no')
+			: keyWithHighlights;
 		const keyWithBottom = showBottomCardsSeparately
 			? keyWithGift + 'bottom-' + (card.positionFromBottom ?? '')
 			: keyWithGift;
