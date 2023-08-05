@@ -116,7 +116,10 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
 				const sideboard = this.buildSideboard(sideboardFromList);
 				const internalEntityId = uuid();
-				const inCollection = collection.find((c) => c.id === card.id)?.getNumberCollected() >= quantity;
+				const inCollection =
+					collection == null
+						? true
+						: collection.find((c) => c.id === card.id)?.getNumberCollected() >= quantity;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
