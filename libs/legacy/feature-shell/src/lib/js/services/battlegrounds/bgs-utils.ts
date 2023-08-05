@@ -646,6 +646,11 @@ export const isSupportedScenario = (
 	isSupported: boolean;
 	reason?: BattleInfoMessage;
 } => {
+	if (!battleInfo) {
+		return {
+			isSupported: true,
+		};
+	}
 	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard, true);
 	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard, false);
 	const result = {

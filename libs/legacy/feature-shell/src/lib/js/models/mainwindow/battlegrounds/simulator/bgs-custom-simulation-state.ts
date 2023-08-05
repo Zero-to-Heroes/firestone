@@ -16,8 +16,8 @@ export class BgsCustomSimulationState {
 
 	public findEntity(side: string, minionIndex: number): BoardEntity {
 		const existingSide =
-			side === 'player' ? this.faceOff.battleInfo.playerBoard : this.faceOff.battleInfo.opponentBoard;
-		return existingSide.board[minionIndex];
+			side === 'player' ? this.faceOff.battleInfo?.playerBoard : this.faceOff.battleInfo?.opponentBoard;
+		return existingSide?.board[minionIndex];
 	}
 
 	public resetFaceOff(): BgsCustomSimulationState {

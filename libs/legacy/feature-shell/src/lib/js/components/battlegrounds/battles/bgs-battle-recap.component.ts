@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -102,7 +102,7 @@ export class BgsBattleRecapComponent {
 
 		this.selectable = true; // !!value.battleInfo;
 		if (value.battleInfo) {
-			this.playerEntities = value.battleInfo.playerBoard.board.map((minion) =>
+			this.playerEntities = value.battleInfo?.playerBoard.board.map((minion) =>
 				buildEntityFromBoardEntity(minion, this.allCards),
 			);
 			this.opponentEntities = value.battleInfo.opponentBoard.board.map((minion) =>

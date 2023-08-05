@@ -607,7 +607,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						battleInfo: {
 							playerBoard: {
 								board: [
-									...this._faceOff.battleInfo.playerBoard.board,
+									...this._faceOff.battleInfo?.playerBoard.board,
 									newEntity,
 								] as readonly BoardEntity[],
 							} as BgsBoardInfo,
@@ -640,7 +640,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			}
 		};
 		const existingSide =
-			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
+			side === 'player' ? this._faceOff.battleInfo?.playerBoard : this._faceOff.battleInfo.opponentBoard;
 		modalRef.instance.currentMinion = existingSide.board[event.index];
 		modalRef.instance.entityId = this._faceOff.getNextEntityId();
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
@@ -651,7 +651,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						battleInfo: {
 							playerBoard: {
 								board: replaceInArray(
-									this._faceOff.battleInfo.playerBoard.board,
+									this._faceOff.battleInfo?.playerBoard.board,
 									minionIndex,
 									newEntity,
 								),
@@ -678,14 +678,14 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	onMinionRemoveRequested(side: 'player' | 'opponent', event: { index: number }) {
 		const existingSide =
-			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
+			side === 'player' ? this._faceOff.battleInfo?.playerBoard : this._faceOff.battleInfo?.opponentBoard;
 		const minionIndex = event?.index ?? existingSide.board.length;
 		side === 'player'
 			? this.simulationUpdater(this._faceOff, {
 					battleInfo: {
 						playerBoard: {
 							board: [
-								...removeFromReadonlyArray(this._faceOff.battleInfo.playerBoard.board, minionIndex),
+								...removeFromReadonlyArray(this._faceOff.battleInfo?.playerBoard.board, minionIndex),
 							] as readonly BoardEntity[],
 						} as BgsBoardInfo,
 					},
@@ -935,8 +935,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		this.opponent = this._faceOff.battleInfo.opponentBoard;
-		this.player = this._faceOff.battleInfo.playerBoard;
+		this.opponent = this._faceOff.battleInfo?.opponentBoard;
+		this.player = this._faceOff.battleInfo?.playerBoard;
 		this.newBattle = this._faceOff;
 		this.turnNumber = this._faceOff.turn;
 		if (!(this.cdr as ViewRef)?.destroyed) {

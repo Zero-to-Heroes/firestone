@@ -86,12 +86,12 @@ export class BgsBattleSimulationService {
 			battleInfo,
 			prefs.bgsUseLocalSimulator,
 			{
-				hp: battleInfo.playerBoard.player.hpLeft,
+				hp: battleInfo?.playerBoard.player.hpLeft,
 				debugHealth: (
-					battleInfo.playerBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
+					battleInfo?.playerBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
 				).debugHealth,
 				debugArmor: (
-					battleInfo.playerBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
+					battleInfo?.playerBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
 				).debugArmor,
 			},
 			{
