@@ -516,6 +516,8 @@ const publicCardGiftCreators = [
 	CardIds.FishyFlyer,
 	CardIds.FleshBehemoth_RLK_830,
 	CardIds.FlameBehemoth,
+	CardIds.FlameGeyser,
+	CardIds.FlameGeyserCore,
 	CardIds.FlightOfTheBronze,
 	CardIds.FontOfPower_BT_021,
 	CardIds.Framester,
