@@ -11,6 +11,8 @@ export * from './lib/collection/website-profile-collection.component';
 export * from './lib/collection/website-profile-sets.component';
 export * from './lib/duels/website-profile-duels-overviews.component';
 export * from './lib/duels/website-profile-duels.component';
+export * from './lib/modes/website-profile-class-stat.component';
+export * from './lib/modes/website-profile-class-stats.component';
 export * from './lib/modes/website-profile-mode-overview.component';
 export * from './lib/overview/website-profile-overview.component';
 export * from './lib/packs/website-profile-packs-overview.component';
@@ -20,3 +22,4 @@ export * from './lib/ranked/website-profile-ranked.component';
 export * from './lib/share/website-profile-share-modal.component';
 export * from './lib/website-profile.component';
 export * from './lib/website-profile.module';
+
