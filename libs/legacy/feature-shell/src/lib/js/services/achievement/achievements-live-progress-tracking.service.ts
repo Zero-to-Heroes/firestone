@@ -157,6 +157,7 @@ export class AchievementsLiveProgressTrackingService {
 						this.stateManager.groupedAchievements$$.getValue(),
 					)?.categories?.map((c) => c.name),
 				};
+				console.debug('[achievements-monitor] built progress', result, quota, id, this.achievementQuotas);
 				return result;
 			}) ?? []
 		);
@@ -217,14 +218,14 @@ export class AchievementsLiveProgressTrackingService {
 			return;
 		}
 
+		this.achievementQuotas = {};
 		this.refLoaderService.refData$$.subscribe((refData) => {
 			this.refAchievements = refData?.achievements ?? [];
+			for (const ach of this.refAchievements) {
+				this.achievementQuotas[ach.id] = ach.quota;
+			}
 		});
 		this.refLoaderService.getLatestRefData();
-		this.achievementQuotas = {};
-		for (const ach of this.refAchievements) {
-			this.achievementQuotas[ach.id] = ach.quota;
-		}
 	}
 
 	private async initAchievementsOnGameStart() {
