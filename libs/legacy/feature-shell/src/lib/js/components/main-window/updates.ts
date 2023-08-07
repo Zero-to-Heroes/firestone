@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.6.8',
+		version: '11.6.11',
 		force: false,
 		sections: [
 			// {
@@ -41,21 +41,21 @@ export const updates: readonly Update[] = [
 			// 	header: 'Message from the dev',
 			// 	text: `The last patch has been more bumpy than I expected. If you find that the app doesn't track your games properly, please first try restarting Hearthstone, and see if the problem persists. Thanks again for your patience and support!`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					// {
-					// 	category: 'general',
-					// 	details: [
-					// 		{
-					// 			type: 'bug',
-					// 			text: `Fix a display issue where damage done with spells would not be properly shown, although the data was correctly computed.`,
-					// 		},
-					// 	],
-					// },
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		// {
+			// 		// 	category: 'general',
+			// 		// 	details: [
+			// 		// 		{
+			// 		// 			type: 'bug',
+			// 		// 			text: `Fix a display issue where damage done with spells would not be properly shown, although the data was correctly computed.`,
+			// 		// 		},
+			// 		// 	],
+			// 		// },
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -64,38 +64,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'content',
-								text: `Add card highlight for Embrace of Nature. `,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where the Plagues counter would increment when drawing Plagues.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the attack on board widget would count Titans' attack even if they hadn't used all of their abilities.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the attack on board widget would sometimes count the attack of Rush minions.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where cards you were missing when viewing high-wins decks would not be highlighted as missing. `,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where Golden Titans packs would not show up properly in the all-time stats. `,
+								text: `Fix an issue where counter widgets would hop around randomly.`,
 							},
 						],
 					},
