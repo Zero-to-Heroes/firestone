@@ -108,6 +108,12 @@ export class TipService {
 			text: this.i18n.translateString('app.tips.mercs_terasure_highlight'),
 			premium: false,
 		},
+		{
+			file: 'quest_stats.webm',
+			type: 'video',
+			text: this.i18n.translateString('app.tips.quest_stats'),
+			premium: true,
+		},
 		// {
 		// 	file: '.webm',
 		// 	type: '',
