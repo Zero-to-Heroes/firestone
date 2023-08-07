@@ -9,7 +9,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -41,8 +41,10 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	activeCounter: CounterType;
 	side: 'player' | 'opponent';
 
+	private defaultRandomLeft = Math.random();
+
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
-		gameWidth * 0.5 + 150 + Math.random() * 150;
+		gameWidth * 0.5 + 150 + this.defaultRandomLeft * 150;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) =>
 		this.side === 'player' ? gameHeight * 0.65 : gameHeight * 0.1;
 	protected positionUpdater = (left: number, top: number) =>
@@ -70,7 +72,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	ngAfterContentInit(): void {
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
@@ -85,7 +87,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 			),
 			this.store.listenBattlegrounds$(([gameState]) => gameState),
 			displayFromGameMode$,
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([
 					[currentScene, displayFromPrefs],
@@ -112,11 +114,13 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
 						return false;
+						1;
 					}
 
 					return !gameEnded;
 				},
 			),
+			distinctUntilChanged(),
 			this.handleReposition(),
 		);
 	}
