@@ -524,6 +524,7 @@ const publicCardGiftCreators = [
 	CardIds.FreshScent_YOD_005,
 	CardIds.FrightenedFlunkyCore,
 	CardIds.FrightenedFlunky,
+	CardIds.FromTheScrapheap,
 	CardIds.FrostShardsTavernBrawl,
 	CardIds.FrostStrike,
 	CardIds.FrostStrikeCore,
