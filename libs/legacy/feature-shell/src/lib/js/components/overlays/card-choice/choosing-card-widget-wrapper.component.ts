@@ -131,8 +131,9 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.options$ = combineLatest([
 			this.store.listenDeckState$((state) => state),
 			this.store.enablePremiumFeatures$(),
+			this.listenForBasicPref$((prefs) => prefs.bgsShowQuestStatsOverlay),
 		]).pipe(
-			this.mapData(([[state], premium]) => {
+			this.mapData(([[state], premium, bgsShowQuestStatsOverlay]) => {
 				const options = state.playerDeck?.currentOptions;
 				console.debug('[choosing-card] options', options, state);
 				return (
@@ -149,7 +150,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 								return result;
 							}
 
-							if (!FeatureFlags.ENABLE_BGS_QUESTS || !premium) {
+							if (!FeatureFlags.ENABLE_BGS_QUESTS || !premium || !bgsShowQuestStatsOverlay) {
 								return null;
 							}
 
