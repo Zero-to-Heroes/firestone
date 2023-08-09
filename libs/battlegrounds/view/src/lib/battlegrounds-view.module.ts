@@ -10,11 +10,17 @@ import { BattlegroundsMetaStatsHeroInfoComponent } from './meta-heroes/battlegro
 import { BattlegroundsMetaStatsHeroTierComponent } from './meta-heroes/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesViewComponent } from './meta-heroes/battlegrounds-meta-stats-heroes-view.component';
 import { CircularProgressComponent } from './meta-heroes/circular-progress.component';
+import { BattlegroundsMetaStatsQuestInfoComponent } from './meta-quests/battlegrounds-meta-stats-quest-info.component';
+import { BattlegroundsMetaStatsQuestTierComponent } from './meta-quests/battlegrounds-meta-stats-quest-tier.component';
+import { BattlegroundsMetaStatsQuestsViewComponent } from './meta-quests/battlegrounds-meta-stats-quests-view.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
 	BattlegroundsMetaStatsHeroTierComponent,
 	BattlegroundsMetaStatsHeroInfoComponent,
+	BattlegroundsMetaStatsQuestsViewComponent,
+	BattlegroundsMetaStatsQuestTierComponent,
+	BattlegroundsMetaStatsQuestInfoComponent,
 	BgsHeroPortraitComponent,
 	CircularProgressComponent,
 

@@ -77,10 +77,10 @@ export class BgsInitService {
 			// }),
 			// this.buildPersonalHeroesCategory(bgsGlobalStats),
 			this.buildMetaHeroesCategory(bgsGlobalStats),
-			// BattlegroundsCategory.create({
-			// 	id: 'bgs-category-personal-quests',
-			// 	name: this.i18n.translateString('app.battlegrounds.menu.quests'),
-			// }),
+			BattlegroundsCategory.create({
+				id: 'bgs-category-meta-quests',
+				name: this.i18n.translateString('app.battlegrounds.menu.quests'),
+			}),
 			BattlegroundsCategory.create({
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),

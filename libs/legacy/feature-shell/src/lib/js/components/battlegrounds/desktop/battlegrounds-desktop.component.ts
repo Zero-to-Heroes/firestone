@@ -47,7 +47,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								top:
 									category.value?.id !== 'bgs-category-personal-heroes' &&
 									category.value?.id !== 'bgs-category-meta-heroes' &&
-									category.value?.id !== 'bgs-category-personal-quests' &&
 									category.value?.id !== 'bgs-category-simulator'
 							}"
 						>

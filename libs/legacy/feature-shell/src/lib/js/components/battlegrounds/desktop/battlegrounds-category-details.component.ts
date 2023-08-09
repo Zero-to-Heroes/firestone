@@ -20,6 +20,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			</battlegrounds-desktop-overview>
 			<battlegrounds-meta-stats-heroes *ngIf="selectedCategoryId === 'bgs-category-meta-heroes'" role="region">
 			</battlegrounds-meta-stats-heroes>
+			<battlegrounds-meta-stats-quests *ngIf="selectedCategoryId === 'bgs-category-meta-quests'" role="region">
+			</battlegrounds-meta-stats-quests>
 			<!-- <battlegrounds-personal-stats-heroes
 				*ngIf="selectedCategoryId === 'bgs-category-personal-heroes'"
 				role="region"

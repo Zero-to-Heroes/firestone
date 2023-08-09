@@ -456,6 +456,7 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
+import { BattlegroundsMetaStatsQuestsComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-quests.component';
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
@@ -1331,6 +1332,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsMetaStatsHeroesComponent,
+		BattlegroundsMetaStatsQuestsComponent,
 		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsQuestVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,

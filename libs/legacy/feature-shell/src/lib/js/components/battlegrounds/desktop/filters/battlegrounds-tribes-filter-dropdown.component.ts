@@ -71,6 +71,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 							'bgs-category-personal-stats',
 							'bgs-category-simulator',
 							'bgs-category-personal-rating',
+							'bgs-category-meta-quests',
 						].includes(categoryId),
 				),
 			);

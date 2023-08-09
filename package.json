@@ -5,6 +5,7 @@
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc",
+		"clear-cache": "rm -rf node_modules/.cache/nx",
 		"dev": "nx build --source-map=true --watch",
 		"dev-web": "nx build website --source-map=true --watch",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
