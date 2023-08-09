@@ -587,6 +587,7 @@ export class Preferences implements IPreferences {
 	readonly bgsOpponentOverlayAtTop: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsOverlayButtonPosition: { left: number; top: number };
+	readonly bgsQuestsCollapsed: readonly string[] = [];
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 100;

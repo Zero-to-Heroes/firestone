@@ -1,4 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem, buildQuestTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
@@ -21,7 +29,7 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 				<div class="quest-details" [fsTranslate]="'app.battlegrounds.tier-list.header-quest-details'"></div>
 				<div
 					class="turns-to-complete"
-					[fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"
+					[fsTranslate]="'app.battlegrounds.tier-list.header-average-turns-to-complete'"
 				></div>
 			</div>
 			<div class="quests-list" role="list" scrollable>
@@ -29,6 +37,8 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 					*ngFor="let tier of value.tiers; trackBy: trackByFn"
 					role="listitem"
 					[tier]="tier"
+					[collapsedQuests]="collapsedQuests"
+					(statClicked)="onStatClicked($event)"
 				></battlegrounds-meta-stats-quest-tier>
 			</div>
 		</section>
@@ -39,11 +49,15 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
+	@Output() statClicked = new EventEmitter<BgsMetaQuestStatTierItem>();
+
 	tiers$: Observable<readonly BgsMetaQuestStatTier[]>;
 
 	@Input() set stats(value: readonly BgsMetaQuestStatTierItem[]) {
 		this.stats$$.next(value);
 	}
+
+	@Input() collapsedQuests: readonly string[];
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestStatTierItem[]>(null);
 
@@ -64,5 +78,9 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 				return result;
 			}),
 		);
+	}
+
+	onStatClicked(item: BgsMetaQuestStatTierItem) {
+		this.statClicked.next(item);
 	}
 }

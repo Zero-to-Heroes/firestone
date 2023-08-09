@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsMetaQuestStatTier } from '@firestone/battlegrounds/data-access';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-quest-tier',
@@ -19,6 +19,8 @@ import { BgsMetaQuestStatTier } from '@firestone/battlegrounds/data-access';
 					class="item-container"
 					*ngFor="let item of tier.items"
 					[stat]="item"
+					[collapsed]="isCollapsed(item)"
+					(statClicked)="onStatClicked($event)"
 				>
 				</battlegrounds-meta-stats-quest-info>
 			</div>
@@ -27,5 +29,16 @@ import { BgsMetaQuestStatTier } from '@firestone/battlegrounds/data-access';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMetaStatsQuestTierComponent {
+	@Output() statClicked = new EventEmitter<BgsMetaQuestStatTierItem>();
+
 	@Input() tier: BgsMetaQuestStatTier;
+	@Input() collapsedQuests: readonly string[];
+
+	onStatClicked(item: BgsMetaQuestStatTierItem) {
+		this.statClicked.next(item);
+	}
+
+	isCollapsed(item: BgsMetaQuestStatTierItem): boolean {
+		return this.collapsedQuests?.includes(item.cardId);
+	}
 }

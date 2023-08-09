@@ -1,5 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsMetaQuestStatTierItem, buildQuestStats } from '@firestone/battlegrounds/data-access';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
@@ -10,7 +12,11 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-quests.component.scss`,
 	],
 	template: `
-		<battlegrounds-meta-stats-quests-view [stats]="questStats$ | async"></battlegrounds-meta-stats-quests-view>
+		<battlegrounds-meta-stats-quests-view
+			[stats]="questStats$ | async"
+			[collapsedQuests]="collapsedQuests$ | async"
+			(statClicked)="onStatClicked($event)"
+		></battlegrounds-meta-stats-quests-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -19,8 +25,14 @@ export class BattlegroundsMetaStatsQuestsComponent
 	implements AfterContentInit
 {
 	questStats$: Observable<readonly BgsMetaQuestStatTierItem[]>;
+	collapsedQuests$: Observable<readonly string[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
@@ -28,6 +40,22 @@ export class BattlegroundsMetaStatsQuestsComponent
 		this.questStats$ = combineLatest([
 			this.store.bgsQuests$(),
 			this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter),
-		]).pipe(this.mapData(([stats, mmrFilter]) => buildQuestStats(stats?.questStats ?? [], mmrFilter)));
+		]).pipe(
+			this.mapData(([stats, mmrFilter]) => buildQuestStats(stats?.questStats ?? [], mmrFilter, this.allCards)),
+		);
+		this.collapsedQuests$ = this.listenForBasicPref$((prefs) => prefs.bgsQuestsCollapsed);
+	}
+
+	async onStatClicked(stat: BgsMetaQuestStatTierItem) {
+		const prefs = await this.prefs.getPreferences();
+		const currentCollapsed: readonly string[] = prefs.bgsQuestsCollapsed;
+		const newCollapsed = currentCollapsed.includes(stat.cardId)
+			? currentCollapsed.filter((label) => label !== stat.cardId)
+			: [...currentCollapsed, stat.cardId];
+		const newPrefs = {
+			...prefs,
+			bgsQuestsCollapsed: newCollapsed,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 }

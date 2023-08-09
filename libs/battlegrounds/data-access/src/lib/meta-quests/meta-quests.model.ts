@@ -8,9 +8,11 @@ export interface BgsMetaQuestStatTier {
 
 export interface BgsMetaQuestStatTierItem {
 	readonly cardId: string;
+	readonly name: string;
 	readonly dataPoints: number;
 	readonly averageTurnsToComplete: number;
-	readonly tier?: BgsQuestTier;
+	readonly difficulty?: number;
+	readonly difficultyItems?: readonly BgsMetaQuestStatTierItem[];
 }
 
 export type BgsQuestTier = 'S' | 'A' | 'B' | 'C' | 'D' | 'E';

@@ -2,19 +2,31 @@
 import { BgsGlobalQuestStat, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem, BgsQuestTier } from './meta-quests.model';
 
 export const buildQuestStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalQuestStat>[],
 	mmrFilter: MmrPercentile['percentile'],
+	allCards: CardsFacadeService,
 ): readonly BgsMetaQuestStatTierItem[] => {
 	return stats
 		.filter((s) => s.mmrPercentile === mmrFilter)
 		.map((s) => ({
 			cardId: s.questCardId,
+			name: allCards.getCard(s.questCardId).name,
 			dataPoints: s.dataPoints,
 			averageTurnsToComplete: s.averageTurnToComplete,
+			difficultyItems: s.difficultyStats.map(
+				(difficulty) =>
+					({
+						cardId: s.questCardId,
+						name: allCards.getCard(s.questCardId).name + ' - ' + difficulty.difficulty,
+						dataPoints: difficulty.dataPoints,
+						averageTurnsToComplete: difficulty.averageTurnToComplete,
+						difficulty: difficulty.difficulty,
+					} as BgsMetaQuestStatTierItem),
+			),
 		}));
 };
 
