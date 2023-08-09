@@ -65,7 +65,9 @@ export class CreateCardInDeckParser implements EventParser {
 		card = (card ?? DeckCard.create())
 			.update({
 				cardId: newCardId,
-				entityId: entityId,
+				// Don't store the entityId for the cards created in the opponent's deck, so that we don't know
+				// what they are
+				entityId: isPlayer ? entityId : null,
 				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
 				manaCost: cardData ? cardData.cost : undefined,
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,

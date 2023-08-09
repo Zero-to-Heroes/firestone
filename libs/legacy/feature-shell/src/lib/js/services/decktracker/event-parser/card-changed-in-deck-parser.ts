@@ -1,5 +1,5 @@
-import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -51,7 +51,7 @@ export class CardChangedInDeckParser implements EventParser {
 		// previous attributes
 		const newCard = theCard.update({
 			cardId: realCardId,
-			entityId: entityId ?? theCard.entityId,
+			entityId: isPlayer ? entityId ?? theCard.entityId : null,
 			cardName: this.i18n.getCardName(cardData.id),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
