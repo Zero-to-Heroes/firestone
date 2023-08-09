@@ -10,6 +10,7 @@ import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/cate
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
 import { Events } from '../events.service';
+import { FeatureFlags } from '../feature-flags';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -77,10 +78,12 @@ export class BgsInitService {
 			// }),
 			// this.buildPersonalHeroesCategory(bgsGlobalStats),
 			this.buildMetaHeroesCategory(bgsGlobalStats),
-			BattlegroundsCategory.create({
-				id: 'bgs-category-meta-quests',
-				name: this.i18n.translateString('app.battlegrounds.menu.quests'),
-			}),
+			FeatureFlags.ENABLE_BGS_QUESTS_IN_APP
+				? BattlegroundsCategory.create({
+						id: 'bgs-category-meta-quests',
+						name: this.i18n.translateString('app.battlegrounds.menu.quests'),
+				  })
+				: null,
 			BattlegroundsCategory.create({
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),
@@ -97,7 +100,7 @@ export class BgsInitService {
 				id: 'bgs-category-simulator',
 				name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
 			}),
-		];
+		].filter((c) => !!c);
 		return initialState.update({
 			categories: categories,
 			globalStats: bgsGlobalStats,
