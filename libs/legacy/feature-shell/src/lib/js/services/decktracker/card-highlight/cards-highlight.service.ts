@@ -41,6 +41,7 @@ import {
 	elemental,
 	fel,
 	fire,
+	forge,
 	freeze,
 	frenzy,
 	frost,
@@ -379,6 +380,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
+			case CardIds.AlwaysABiggerJormungar:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.AmalgamOfTheDeep:
 				return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 			case CardIds.AmberWhelp:
@@ -807,6 +810,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, murloc);
 			case CardIds.IceRevenant:
 				return and(side(inputSide), inDeck, spell, frost);
+			case CardIds.IgnisTheEternalFlame:
+				return and(side(inputSide), or(inDeck, inHand), forge);
 			case CardIds.ImpCredibleTrousersTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fel);
 			case CardIds.IncantersFlow:
@@ -898,6 +903,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
 				return and(side(inputSide), inDeck, beast);
+			case CardIds.LorthemarTheron_RLK_593:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.LoveEverlasting:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.MagisterDawngrasp_AV_200:
@@ -1191,14 +1198,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), holy, spell);
 			case CardIds.StarvingTavernBrawl:
 				return and(side(inputSide), minion, beast);
-			case CardIds.StranglethornHeart:
-				return and(side(inputSide), inGraveyard, beast, effectiveCostMore(4));
+			case CardIds.Steamcleaner:
+				return notInInitialDeck;
 			case CardIds.StickyFingersTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 			case CardIds.StonehearthVindicator:
 				return and(side(inputSide), inDeck, spell, effectiveCostLess(4));
 			case CardIds.StormpikeBattleRam:
 				return and(side(inputSide), or(inDeck, inHand), minion, beast);
+			case CardIds.StranglethornHeart:
+				return and(side(inputSide), inGraveyard, beast, effectiveCostMore(4));
 			case CardIds.SummerFlowerchild:
 				return and(side(inputSide), inDeck, effectiveCostMore(5));
 			case CardIds.SunfuryChampion:
@@ -1227,6 +1236,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, pirate);
 			case CardIds.SwordOfTheFallen:
 				return and(side(inputSide), inDeck, spell, secret);
+			case CardIds.TaelanFordringCore:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.TamsinsPhylactery:
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.TangledWrath:

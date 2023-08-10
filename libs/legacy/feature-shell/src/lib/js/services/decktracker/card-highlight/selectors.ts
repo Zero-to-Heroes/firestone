@@ -163,6 +163,8 @@ export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
 export const dredge = hasMechanic(GameTag.DREDGE);
+export const forge = hasMechanic(GameTag.FORGE);
+export const forged = hasMechanic(GameTag.FORGED);
 
 export const isSi7 = (input: SelectorInput): boolean =>
 	Object.values(Locale)
