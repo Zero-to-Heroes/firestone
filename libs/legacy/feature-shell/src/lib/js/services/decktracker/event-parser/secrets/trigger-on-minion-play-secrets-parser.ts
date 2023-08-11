@@ -29,6 +29,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.Ambush,
 		CardIds.Objection,
 		CardIds.Zombeeees,
+		CardIds.Zombeeees_ImprovedZombeeeesToken,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -100,6 +101,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Ambush);
 			secretsWeCantRuleOut.push(CardIds.Kidnap_REV_828);
 			secretsWeCantRuleOut.push(CardIds.Zombeeees);
+			secretsWeCantRuleOut.push(CardIds.Zombeeees_ImprovedZombeeeesToken);
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
