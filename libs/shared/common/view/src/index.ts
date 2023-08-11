@@ -4,6 +4,7 @@ export * from './lib/components/dropdown/filter-dropdown-multiselect.component';
 export * from './lib/components/dropdown/filter-dropdown.component';
 export * from './lib/components/input/checkbox.component';
 export * from './lib/components/input/numeric-input-with-arrows.component';
+export * from './lib/components/input/text-input.component';
 export * from './lib/components/misc/progress-bar.component';
 export * from './lib/components/toggle/toggle-view.component';
 export * from './lib/components/tooltip/buff-info.component';

@@ -1,0 +1,48 @@
+:host {
+	background: transparent;
+	flex-grow: 0 !important;
+}
+
+.text-input {
+	position: relative;
+	width: 100%;
+	color: var(--text-input-color, var(--color-2));
+
+	label {
+		width: 100%;
+		border: 1px solid currentColor;
+		display: flex;
+
+		&:focus-within,
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+
+	input {
+		width: 100%;
+		background: transparent;
+		border: none;
+		cursor: text;
+
+		&:focus {
+			outline: none;
+			color: var(--text-input-color-active, var(--color-1));
+		}
+	}
+
+	label.search-active {
+		input {
+			outline: none;
+			color: var(--text-input-color-active, var(--color-1));
+		}
+	}
+}
+
+::selection {
+	background-color: var(--color-4);
+}
+
+::-webkit-input-placeholder {
+	color: var(--text-input-color, var(--color-2));
+}

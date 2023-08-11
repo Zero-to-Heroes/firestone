@@ -84,6 +84,14 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 							<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 						</div>
 					</div>
+					<fs-text-input
+						class="search"
+						[value]="searchString"
+						[placeholder]="'app.battlegrounds.tier-list.quest-search-placeholder' | fsTranslate"
+						[debounceTime]="100"
+						(fsModelUpdate)="onSearchStringUpdated($event)"
+					>
+					</fs-text-input>
 				</div>
 			</div>
 			<div class="quests-list" role="list" scrollable>
@@ -122,9 +130,11 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	}
 
 	@Input() groupedByDifficulty: boolean;
+	@Input() searchString: string;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestStatTierItem[]>(null);
 	private collapsedQuests$$ = new BehaviorSubject<readonly string[]>([]);
+	private searchString$$ = new BehaviorSubject<string>(null);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
 		super(cdr);
@@ -135,10 +145,10 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = combineLatest([this.stats$$]).pipe(
-			filter(([stats]) => !!stats),
-			this.mapData(([stats]) => {
-				const result = buildQuestTiers(stats, this.i18n);
+		this.tiers$ = combineLatest([this.stats$$, this.searchString$$]).pipe(
+			filter(([stats, searchString]) => !!stats),
+			this.mapData(([stats, searchString]) => {
+				const result = buildQuestTiers(stats, searchString, this.i18n);
 				console.debug('built tiers', result);
 				return result;
 			}),
@@ -153,6 +163,10 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 				return collapsedQuests.length < numberOfQuests;
 			}),
 		);
+	}
+
+	onSearchStringUpdated(value: string) {
+		this.searchString$$.next(value);
 	}
 
 	onStatClicked(item: BgsMetaQuestStatTierItem) {

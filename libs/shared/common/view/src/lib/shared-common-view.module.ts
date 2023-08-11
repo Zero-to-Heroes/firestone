@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -10,6 +10,7 @@ import { FilterDropdownMultiselectComponent } from './components/dropdown/filter
 import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
 import { CheckboxComponent } from './components/input/checkbox.component';
 import { NumericInputWithArrowsComponent } from './components/input/numeric-input-with-arrows.component';
+import { TextInputComponent } from './components/input/text-input.component';
 import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
@@ -29,6 +30,7 @@ const components = [
 	FilterDropdownMultiselectComponent,
 
 	NumericInputWithArrowsComponent,
+	TextInputComponent,
 	CheckboxComponent,
 
 	BasicBarChart2Component,
@@ -42,6 +44,7 @@ const components = [
 	imports: [
 		CommonModule,
 		FormsModule,
+		ReactiveFormsModule,
 
 		InlineSVGModule.forRoot(),
 		SelectModule,

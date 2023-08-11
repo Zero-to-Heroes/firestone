@@ -38,6 +38,7 @@ export const buildQuestStats = (
 
 export const buildQuestTiers = (
 	stats: readonly BgsMetaQuestStatTierItem[],
+	searchString: string,
 	i18n: ILocalizationService,
 	localize = true,
 ): readonly BgsMetaQuestStatTier[] => {
@@ -56,37 +57,42 @@ export const buildQuestTiers = (
 			id: 'S' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'S' }) : 'S',
 			tooltip: i18n.translateString('app.duels.stats.tier-s-tooltip'),
-			items: filterQuestItems(questStats, 0, mean - 3 * standardDeviation),
+			items: filterQuestItems(questStats, 0, mean - 3 * standardDeviation, searchString),
 		},
 		{
 			id: 'A' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'A' }) : 'A',
 			tooltip: i18n.translateString('app.duels.stats.tier-a-tooltip'),
-			items: filterQuestItems(questStats, mean - 3 * standardDeviation, mean - 1.5 * standardDeviation),
+			items: filterQuestItems(
+				questStats,
+				mean - 3 * standardDeviation,
+				mean - 1.5 * standardDeviation,
+				searchString,
+			),
 		},
 		{
 			id: 'B' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'B' }) : 'B',
 			tooltip: i18n.translateString('app.duels.stats.tier-b-tooltip'),
-			items: filterQuestItems(questStats, mean - 1.5 * standardDeviation, mean),
+			items: filterQuestItems(questStats, mean - 1.5 * standardDeviation, mean, searchString),
 		},
 		{
 			id: 'C' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'C' }) : 'C',
 			tooltip: i18n.translateString('app.duels.stats.tier-c-tooltip'),
-			items: filterQuestItems(questStats, mean, mean + standardDeviation),
+			items: filterQuestItems(questStats, mean, mean + standardDeviation, searchString),
 		},
 		{
 			id: 'D' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'D' }) : 'D',
 			tooltip: i18n.translateString('app.duels.stats.tier-d-tooltip'),
-			items: filterQuestItems(questStats, mean + standardDeviation, mean + 2 * standardDeviation),
+			items: filterQuestItems(questStats, mean + standardDeviation, mean + 2 * standardDeviation, searchString),
 		},
 		{
 			id: 'E' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'E' }) : 'E',
 			tooltip: i18n.translateString('app.duels.stats.tier-e-tooltip'),
-			items: filterQuestItems(questStats, mean + 2 * standardDeviation, null),
+			items: filterQuestItems(questStats, mean + 2 * standardDeviation, null, searchString),
 		},
 	].filter((tier) => tier.items?.length);
 };
@@ -95,8 +101,10 @@ export const filterQuestItems = (
 	stats: readonly BgsMetaQuestStatTierItem[],
 	threshold: number,
 	upper: number,
+	searchString: string,
 ): readonly BgsMetaQuestStatTierItem[] => {
 	return stats
+		.filter((stat) => !searchString?.length || stat.name.toLowerCase().includes(searchString.toLowerCase()))
 		.filter((stat) => stat.averageTurnsToComplete)
 		.filter(
 			(stat) =>

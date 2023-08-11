@@ -30,6 +30,17 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 					[fsTranslate]="'app.battlegrounds.tier-list.header-quest-reward-details'"
 				></div>
 				<div class="position" [fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"></div>
+
+				<div class="button-groups">
+					<fs-text-input
+						class="search"
+						[value]="searchString"
+						[placeholder]="'app.battlegrounds.tier-list.reward-search-placeholder' | fsTranslate"
+						[debounceTime]="100"
+						(fsModelUpdate)="onSearchStringUpdated($event)"
+					>
+					</fs-text-input>
+				</div>
 			</div>
 			<div class="quests-list" role="list" scrollable>
 				<battlegrounds-meta-stats-quest-reward-tier
@@ -51,8 +62,10 @@ export class BattlegroundsMetaStatsQuestRewardsViewComponent
 	@Input() set stats(value: readonly BgsMetaQuestRewardStatTierItem[]) {
 		this.stats$$.next(value);
 	}
+	@Input() searchString: string;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestRewardStatTierItem[]>(null);
+	private searchString$$ = new BehaviorSubject<string>(null);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
 		super(cdr);
@@ -63,13 +76,17 @@ export class BattlegroundsMetaStatsQuestRewardsViewComponent
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = combineLatest([this.stats$$]).pipe(
-			filter(([stats]) => !!stats),
-			this.mapData(([stats]) => {
-				const result = buildQuestRewardTiers(stats, this.i18n);
+		this.tiers$ = combineLatest([this.stats$$, this.searchString$$]).pipe(
+			filter(([stats, searchString]) => !!stats),
+			this.mapData(([stats, searchString]) => {
+				const result = buildQuestRewardTiers(stats, searchString, this.i18n);
 				console.debug('built tiers', result);
 				return result;
 			}),
 		);
+	}
+
+	onSearchStringUpdated(value: string) {
+		this.searchString$$.next(value);
 	}
 }
