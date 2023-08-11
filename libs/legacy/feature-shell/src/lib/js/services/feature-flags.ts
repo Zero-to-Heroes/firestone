@@ -9,7 +9,7 @@ export class FeatureFlags {
 	public static readonly APP_TIPS = true;
 	public static readonly ENABLE_BGS_QUESTS = true;
 
-	public static readonly ENABLE_BGS_QUESTS_IN_APP = false;
+	public static readonly ENABLE_BGS_QUESTS_IN_APP = true;
 
 	// Shelved for now
 	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;

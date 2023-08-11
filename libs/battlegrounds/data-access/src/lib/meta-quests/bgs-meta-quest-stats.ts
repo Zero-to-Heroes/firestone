@@ -5,29 +5,35 @@ import { getStandardDeviation, sortByProperties } from '@firestone/shared/framew
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem, BgsQuestTier } from './meta-quests.model';
 
+const QUESTS_MINIMUM_DATA_POINTS = 100;
+
 export const buildQuestStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalQuestStat>[],
 	mmrFilter: MmrPercentile['percentile'],
+	groupQuestsByDifficulty: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaQuestStatTierItem[] => {
-	return stats
+	const mainStats = stats
 		.filter((s) => s.mmrPercentile === mmrFilter)
 		.map((s) => ({
 			cardId: s.questCardId,
 			name: allCards.getCard(s.questCardId).name,
 			dataPoints: s.dataPoints,
 			averageTurnsToComplete: s.averageTurnToComplete,
-			difficultyItems: s.difficultyStats.map(
-				(difficulty) =>
-					({
-						cardId: s.questCardId,
-						name: allCards.getCard(s.questCardId).name + ' - ' + difficulty.difficulty,
-						dataPoints: difficulty.dataPoints,
-						averageTurnsToComplete: difficulty.averageTurnToComplete,
-						difficulty: difficulty.difficulty,
-					} as BgsMetaQuestStatTierItem),
-			),
+			difficultyItems: s.difficultyStats
+				.map(
+					(difficulty) =>
+						({
+							cardId: s.questCardId,
+							name: allCards.getCard(s.questCardId).name + ' - ' + difficulty.difficulty,
+							dataPoints: difficulty.dataPoints,
+							averageTurnsToComplete: difficulty.averageTurnToComplete,
+							difficulty: difficulty.difficulty,
+						} as BgsMetaQuestStatTierItem),
+				)
+				.filter((s) => s.dataPoints > QUESTS_MINIMUM_DATA_POINTS),
 		}));
+	return groupQuestsByDifficulty ? mainStats : mainStats.flatMap((stat) => stat.difficultyItems);
 };
 
 export const buildQuestTiers = (

@@ -23,7 +23,10 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 		<section
 			class="battlegrounds-meta-stats-quests"
 			[attr.aria-label]="'Battlegrounds meta quest stats'"
-			*ngIf="{ tiers: tiers$ | async, showCollapseButton: showCollapseButton$ | async } as value"
+			*ngIf="{
+				tiers: tiers$ | async,
+				showCollapseButton: showCollapseButton$ | async
+			} as value"
 		>
 			<div class="header">
 				<div class="image"></div>
@@ -32,17 +35,54 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 					class="turns-to-complete"
 					[fsTranslate]="'app.battlegrounds.tier-list.header-average-turns-to-complete'"
 				></div>
-				<div class="collapse-buttons">
-					<div class="button collapse-button" *ngIf="value.showCollapseButton" (click)="onCollapseAll()">
-						<div
-							class="text"
-							[fsTranslate]="'app.battlegrounds.tier-list.header-collapse-all-button'"
-						></div>
-						<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+
+				<div class="button-groups">
+					<div class="collapse-buttons" *ngIf="groupedByDifficulty">
+						<div class="button collapse-button" *ngIf="value.showCollapseButton" (click)="onCollapseAll()">
+							<div
+								class="text"
+								[fsTranslate]="'app.battlegrounds.tier-list.header-collapse-all-button'"
+							></div>
+							<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+						</div>
+						<div class="button expand-button" *ngIf="!value.showCollapseButton" (click)="onExpandAll()">
+							<div
+								class="text"
+								[fsTranslate]="'app.battlegrounds.tier-list.header-expand-all-button'"
+							></div>
+							<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+						</div>
 					</div>
-					<div class="button expand-button" *ngIf="!value.showCollapseButton" (click)="onExpandAll()">
-						<div class="text" [fsTranslate]="'app.battlegrounds.tier-list.header-expand-all-button'"></div>
-						<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+
+					<div class="group-buttons">
+						<div
+							class="button group-button"
+							*ngIf="!groupedByDifficulty"
+							(click)="onGroupDifficulty()"
+							[helpTooltip]="
+								'app.battlegrounds.tier-list.header-group-difficulty-button-tooltip' | fsTranslate
+							"
+						>
+							<div
+								class="text"
+								[fsTranslate]="'app.battlegrounds.tier-list.header-group-difficulty-button'"
+							></div>
+							<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+						</div>
+						<div
+							class="button ungroup-button"
+							*ngIf="groupedByDifficulty"
+							(click)="onUngroupDifficulty()"
+							[helpTooltip]="
+								'app.battlegrounds.tier-list.header-ungroup-difficulty-button-tooltip' | fsTranslate
+							"
+						>
+							<div
+								class="text"
+								[fsTranslate]="'app.battlegrounds.tier-list.header-ungroup-difficulty-button'"
+							></div>
+							<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -66,6 +106,8 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	@Output() statClick = new EventEmitter<BgsMetaQuestStatTierItem>();
 	@Output() collapseAll = new EventEmitter<void>();
 	@Output() expandAll = new EventEmitter<void>();
+	@Output() groupDifficulty = new EventEmitter<void>();
+	@Output() ungroupDifficulty = new EventEmitter<void>();
 
 	tiers$: Observable<readonly BgsMetaQuestStatTier[]>;
 	collapsedQuests$: Observable<readonly string[]>;
@@ -78,6 +120,8 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	@Input() set collapsedQuests(value: readonly string[]) {
 		this.collapsedQuests$$.next(value);
 	}
+
+	@Input() groupedByDifficulty: boolean;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestStatTierItem[]>(null);
 	private collapsedQuests$$ = new BehaviorSubject<readonly string[]>([]);
@@ -121,5 +165,14 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 
 	onExpandAll() {
 		this.expandAll.next();
+	}
+
+	onGroupDifficulty() {
+		this.groupDifficulty.next();
+	}
+
+	onUngroupDifficulty() {
+		console.debug('ungrouping difficulty');
+		this.ungroupDifficulty.next();
 	}
 }

@@ -16,9 +16,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 			<battlegrounds-meta-stats-quests-view
 				[stats]="value.questStats"
 				[collapsedQuests]="collapsedQuests$ | async"
+				[groupedByDifficulty]="groupedByDifficulty$ | async"
 				(statClick)="onStatClicked($event)"
 				(collapseAll)="onCollapseAll(value.questStats)"
 				(expandAll)="onExpandAll()"
+				(groupDifficulty)="onGroupDifficulty()"
+				(ungroupDifficulty)="onUngroupDifficulty()"
 			></battlegrounds-meta-stats-quests-view>
 		</ng-container>
 	`,
@@ -30,6 +33,7 @@ export class BattlegroundsMetaStatsQuestsComponent
 {
 	questStats$: Observable<readonly BgsMetaQuestStatTierItem[]>;
 	collapsedQuests$: Observable<readonly string[]>;
+	groupedByDifficulty$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -41,11 +45,15 @@ export class BattlegroundsMetaStatsQuestsComponent
 	}
 
 	ngAfterContentInit() {
+		this.groupedByDifficulty$ = this.listenForBasicPref$((prefs) => prefs.bgsGroupQuestsByDifficulty);
 		this.questStats$ = combineLatest([
 			this.store.bgsQuests$(),
 			this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter),
+			this.groupedByDifficulty$,
 		]).pipe(
-			this.mapData(([stats, mmrFilter]) => buildQuestStats(stats?.questStats ?? [], mmrFilter, this.allCards)),
+			this.mapData(([stats, mmrFilter, bgsGroupQuestsByDifficulty]) =>
+				buildQuestStats(stats?.questStats ?? [], mmrFilter, bgsGroupQuestsByDifficulty, this.allCards),
+			),
 		);
 		this.collapsedQuests$ = this.listenForBasicPref$((prefs) => prefs.bgsQuestsCollapsed);
 	}
@@ -78,6 +86,24 @@ export class BattlegroundsMetaStatsQuestsComponent
 		const newPrefs = {
 			...prefs,
 			bgsQuestsCollapsed: [],
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
+
+	async onGroupDifficulty() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs = {
+			...prefs,
+			bgsGroupQuestsByDifficulty: true,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
+
+	async onUngroupDifficulty() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs = {
+			...prefs,
+			bgsGroupQuestsByDifficulty: false,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}
