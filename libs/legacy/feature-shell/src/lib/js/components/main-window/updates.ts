@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.7.0',
+		version: '11.7.1',
 		force: false,
 		sections: [
 			// {
@@ -51,6 +51,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now see the average Turns to Complete for each Quest in Battlegrounds from the main app's window. You can see stats grouped by quest, or split based on the quest's difficulty.`,
+							},
+							{
+								type: 'feature',
+								text: `You can now see the average final Placement for each Quest Reward in Battlegrounds from the main app's window.`,
 							},
 						],
 					},
