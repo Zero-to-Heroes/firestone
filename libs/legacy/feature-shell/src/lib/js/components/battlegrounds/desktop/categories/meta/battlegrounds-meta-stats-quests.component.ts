@@ -12,11 +12,15 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-quests.component.scss`,
 	],
 	template: `
-		<battlegrounds-meta-stats-quests-view
-			[stats]="questStats$ | async"
-			[collapsedQuests]="collapsedQuests$ | async"
-			(statClicked)="onStatClicked($event)"
-		></battlegrounds-meta-stats-quests-view>
+		<ng-container *ngIf="{ questStats: questStats$ | async } as value">
+			<battlegrounds-meta-stats-quests-view
+				[stats]="value.questStats"
+				[collapsedQuests]="collapsedQuests$ | async"
+				(statClick)="onStatClicked($event)"
+				(collapseAll)="onCollapseAll(value.questStats)"
+				(expandAll)="onExpandAll()"
+			></battlegrounds-meta-stats-quests-view>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,6 +59,25 @@ export class BattlegroundsMetaStatsQuestsComponent
 		const newPrefs = {
 			...prefs,
 			bgsQuestsCollapsed: newCollapsed,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
+
+	async onCollapseAll(stats: readonly BgsMetaQuestStatTierItem[]) {
+		const prefs = await this.prefs.getPreferences();
+		const newCollapsed = stats.map((s) => s.cardId);
+		const newPrefs = {
+			...prefs,
+			bgsQuestsCollapsed: newCollapsed,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
+
+	async onExpandAll() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs = {
+			...prefs,
+			bgsQuestsCollapsed: [],
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}

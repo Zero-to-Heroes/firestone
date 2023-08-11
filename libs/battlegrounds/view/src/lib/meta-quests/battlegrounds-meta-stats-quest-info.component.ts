@@ -42,7 +42,6 @@ export class BattlegroundsMetaStatsQuestInfoComponent {
 	@Output() statClicked: EventEmitter<BgsMetaQuestStatTierItem> = new EventEmitter<BgsMetaQuestStatTierItem>();
 
 	@Input() set stat(value: BgsMetaQuestStatTierItem) {
-		console.debug('setting stat', value);
 		this._stat = value;
 		this.questCardId = value.cardId;
 		this.questTooltip =

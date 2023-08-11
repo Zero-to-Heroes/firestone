@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/template/no-negated-async */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -22,7 +23,7 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 		<section
 			class="battlegrounds-meta-stats-quests"
 			[attr.aria-label]="'Battlegrounds meta quest stats'"
-			*ngIf="{ tiers: tiers$ | async } as value"
+			*ngIf="{ tiers: tiers$ | async, showCollapseButton: showCollapseButton$ | async } as value"
 		>
 			<div class="header">
 				<div class="image"></div>
@@ -31,13 +32,26 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 					class="turns-to-complete"
 					[fsTranslate]="'app.battlegrounds.tier-list.header-average-turns-to-complete'"
 				></div>
+				<div class="collapse-buttons">
+					<div class="button collapse-button" *ngIf="value.showCollapseButton" (click)="onCollapseAll()">
+						<div
+							class="text"
+							[fsTranslate]="'app.battlegrounds.tier-list.header-collapse-all-button'"
+						></div>
+						<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+					</div>
+					<div class="button expand-button" *ngIf="!value.showCollapseButton" (click)="onExpandAll()">
+						<div class="text" [fsTranslate]="'app.battlegrounds.tier-list.header-expand-all-button'"></div>
+						<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+					</div>
+				</div>
 			</div>
 			<div class="quests-list" role="list" scrollable>
 				<battlegrounds-meta-stats-quest-tier
 					*ngFor="let tier of value.tiers; trackBy: trackByFn"
 					role="listitem"
 					[tier]="tier"
-					[collapsedQuests]="collapsedQuests"
+					[collapsedQuests]="collapsedQuests$ | async"
 					(statClicked)="onStatClicked($event)"
 				></battlegrounds-meta-stats-quest-tier>
 			</div>
@@ -49,24 +63,31 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
-	@Output() statClicked = new EventEmitter<BgsMetaQuestStatTierItem>();
+	@Output() statClick = new EventEmitter<BgsMetaQuestStatTierItem>();
+	@Output() collapseAll = new EventEmitter<void>();
+	@Output() expandAll = new EventEmitter<void>();
 
 	tiers$: Observable<readonly BgsMetaQuestStatTier[]>;
+	collapsedQuests$: Observable<readonly string[]>;
+	showCollapseButton$: Observable<boolean>;
 
 	@Input() set stats(value: readonly BgsMetaQuestStatTierItem[]) {
 		this.stats$$.next(value);
 	}
 
-	@Input() collapsedQuests: readonly string[];
+	@Input() set collapsedQuests(value: readonly string[]) {
+		this.collapsedQuests$$.next(value);
+	}
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestStatTierItem[]>(null);
+	private collapsedQuests$$ = new BehaviorSubject<readonly string[]>([]);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
 		super(cdr);
 	}
 
 	trackByFn(index: number, stat: BgsMetaQuestStatTier) {
-		return stat.label;
+		return stat.id;
 	}
 
 	ngAfterContentInit() {
@@ -78,9 +99,27 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 				return result;
 			}),
 		);
+		this.collapsedQuests$ = this.collapsedQuests$$.asObservable();
+		const numberOfQuests$ = this.tiers$.pipe(
+			this.mapData((tiers) => tiers.map((tier) => tier.items.length).reduce((a, b) => a + b, 0)),
+		);
+		this.showCollapseButton$ = combineLatest([this.collapsedQuests$$, numberOfQuests$]).pipe(
+			this.mapData(([collapsedQuests, numberOfQuests]) => {
+				console.debug('show collapse button', collapsedQuests, numberOfQuests);
+				return collapsedQuests.length < numberOfQuests;
+			}),
+		);
 	}
 
 	onStatClicked(item: BgsMetaQuestStatTierItem) {
-		this.statClicked.next(item);
+		this.statClick.next(item);
+	}
+
+	onCollapseAll() {
+		this.collapseAll.next();
+	}
+
+	onExpandAll() {
+		this.expandAll.next();
 	}
 }

@@ -23,6 +23,29 @@
 		}
 	}
 
+	.collapse-buttons {
+		margin-left: auto;
+		margin-right: 20px;
+
+		.button {
+			display: flex;
+			color: var(--color-2);
+
+			.icon {
+				margin-left: 5px;
+				--icon-color: currentColor;
+			}
+
+			&.collapse-button .icon {
+				transform: rotate(180deg);
+			}
+
+			&:hover {
+				color: var(--color-1);
+			}
+		}
+	}
+
 	.quests-list {
 		overflow: scroll;
 		min-height: 0;

@@ -17,7 +17,7 @@ import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem } from '@firestone/battl
 			<div class="items">
 				<battlegrounds-meta-stats-quest-info
 					class="item-container"
-					*ngFor="let item of tier.items"
+					*ngFor="let item of tier.items; trackBy: trackByFn"
 					[stat]="item"
 					[collapsed]="isCollapsed(item)"
 					(statClicked)="onStatClicked($event)"
@@ -40,5 +40,9 @@ export class BattlegroundsMetaStatsQuestTierComponent {
 
 	isCollapsed(item: BgsMetaQuestStatTierItem): boolean {
 		return this.collapsedQuests?.includes(item.cardId);
+	}
+
+	trackByFn(index, item: BgsMetaQuestStatTierItem) {
+		return item.cardId;
 	}
 }
