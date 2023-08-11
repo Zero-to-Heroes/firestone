@@ -6,4 +6,6 @@ export type StatsXpGraphSeasonFilterType =
 	| 'season-4'
 	| 'season-5'
 	| 'season-6'
-	| 'season-7';
+	| 'season-7'
+	| 'season-8'
+	| 'season-9';

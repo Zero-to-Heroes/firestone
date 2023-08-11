@@ -154,6 +154,21 @@ declare let amplitude;
 				</div>
 			</button>
 
+			<button
+				tabindex="-1"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.profile-header' | owTranslate"
+				[ngClass]="{ selected: selectedModule === 'profile' }"
+				(click)="selectModule('profile')"
+			>
+				<div class="icon" inlineSVG="assets/svg/profile.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.profile-header'"></div>
+				</div>
+			</button>
+
 			<li class="main-menu-separator"></li>
 
 			<!-- <button
@@ -190,20 +205,6 @@ declare let amplitude;
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.streams-header'"></div>
-				</div>
-			</button>
-			<button
-				tabindex="-1"
-				type="button"
-				class="menu-item"
-				[attr.aria-label]="'app.menu.stats-header' | owTranslate"
-				[ngClass]="{ selected: selectedModule === 'stats' }"
-				(click)="selectModule('stats')"
-			>
-				<div class="icon" inlineSVG="assets/svg/whatsnew/stats.svg"></div>
-				<div class="text">
-					<div class="text-background"></div>
-					<div class="menu-header" [owTranslate]="'app.menu.stats-header'"></div>
 				</div>
 			</button>
 

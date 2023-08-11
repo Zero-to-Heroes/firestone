@@ -2,9 +2,9 @@ import { StatsXpGraphSeasonFilterType } from '@legacy-import/src/lib/js/models/m
 import { Map } from 'immutable';
 import { Season } from './_season';
 
-export class Season3 implements Season {
-	public readonly id: StatsXpGraphSeasonFilterType = 'season-3';
-	public readonly startDate: Date = new Date('2021-08-03');
+export class Season9 implements Season {
+	public readonly id: StatsXpGraphSeasonFilterType = 'season-9';
+	public readonly startDate: Date = new Date('2023-08-01');
 	public readonly bonusXp = 1500;
 	public readonly xpPerLevel: Map<number, number> = Map([
 		[1, 0],
@@ -140,9 +140,6 @@ export class Season3 implements Season {
 	]);
 
 	public getXpForLevel(level: number): number {
-		if (this.xpPerLevel.includes(level)) {
-			return this.xpPerLevel.get(level);
-		}
-		return this.bonusXp;
+		return this.xpPerLevel.get(level) ?? this.bonusXp;
 	}
 }

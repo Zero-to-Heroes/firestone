@@ -9,7 +9,7 @@ export type CurrentAppType =
 	| 'duels'
 	| 'arena'
 	| 'tavern-brawl'
-	| 'stats'
+	| 'profile'
 	| 'streams'
 	| 'mailbox'
 	| 'live';

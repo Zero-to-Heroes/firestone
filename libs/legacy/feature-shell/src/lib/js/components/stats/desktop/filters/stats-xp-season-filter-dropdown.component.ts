@@ -7,6 +7,8 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
+import { allSeasons } from '@legacy-import/src/lib/js/services/stats/xp/xp-tables/xp-computation';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -40,9 +42,10 @@ export class StatsXpSeasonFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -58,41 +61,15 @@ export class StatsXpSeasonFilterDropdownComponent
 							value: 'all-seasons',
 							label: 'All seasons',
 						},
-						{
-							value: 'season-1',
-							label: 'Season 1',
-							tooltip: 'Until 2021-03-30 ',
-						},
-						{
-							value: 'season-2',
-							label: 'Season 2',
-							tooltip: 'From 2021-04-01 to 2021-08-03',
-						},
-						{
-							value: 'season-3',
-							label: 'Season 3',
-							tooltip: 'From 2021-08-04',
-						},
-						{
-							value: 'season-4',
-							label: 'Season 4',
-							tooltip: 'From 2021-12-02',
-						},
-						{
-							value: 'season-5',
-							label: 'Season 5',
-							tooltip: 'From 2022-04-05',
-						},
-						{
-							value: 'season-6',
-							label: 'Season 6',
-							tooltip: 'From 2022-08-02',
-						},
-						{
-							value: 'season-7',
-							label: 'Season 7',
-							tooltip: 'From 2022-12-02',
-						},
+						...allSeasons.map((season) => ({
+							value: season.id,
+							label: this.i18n.translateString('app.profile.xp-seasons.season', {
+								seasonNumber: season.id.split('-')[1],
+							}),
+							tooltip: this.i18n.translateString('app.profile.xp-seasons.start-date', {
+								startDate: season.startDate.toLocaleDateString(this.i18n.formatCurrentLocale()),
+							}),
+						})),
 					] as FilterOption[];
 					return {
 						filter: filter,

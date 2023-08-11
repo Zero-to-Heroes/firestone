@@ -1,10 +1,10 @@
+import { StatsXpGraphSeasonFilterType } from '@legacy-import/src/lib/js/models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import { Map } from 'immutable';
 import { Season } from './_season';
 
 export class Season8 implements Season {
-	// January is month 0
-	public readonly startDate: Date = new Date(2022, 3, 15);
-	public readonly endDate: Date = new Date(2023, 7, 2);
+	public readonly id: StatsXpGraphSeasonFilterType = 'season-8';
+	public readonly startDate: Date = new Date('2023-04-11');
 	public readonly bonusXp = 1500;
 	public readonly xpPerLevel: Map<number, number> = Map([
 		[1, 0],

@@ -15,6 +15,8 @@ import {
 	xpSeason5,
 	xpSeason6,
 	xpSeason7,
+	xpSeason8,
+	xpSeason9,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -102,21 +104,27 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	private isValidDate(stat: GameStat, seasonFilter: StatsXpGraphSeasonFilterType): boolean {
+		const statSeason = getSeason(stat.creationTimestamp);
+		console.debug('stat season for', stat, 'is', statSeason);
 		switch (seasonFilter) {
 			case 'season-1':
-				return getSeason(stat.creationTimestamp) === xpSeason1;
+				return statSeason === xpSeason1;
 			case 'season-2':
-				return getSeason(stat.creationTimestamp) === xpSeason2;
+				return statSeason === xpSeason2;
 			case 'season-3':
-				return getSeason(stat.creationTimestamp) === xpSeason3;
+				return statSeason === xpSeason3;
 			case 'season-4':
-				return getSeason(stat.creationTimestamp) === xpSeason4;
+				return statSeason === xpSeason4;
 			case 'season-5':
-				return getSeason(stat.creationTimestamp) === xpSeason5;
+				return statSeason === xpSeason5;
 			case 'season-6':
-				return getSeason(stat.creationTimestamp) === xpSeason6;
+				return statSeason === xpSeason6;
 			case 'season-7':
-				return getSeason(stat.creationTimestamp) === xpSeason7;
+				return statSeason === xpSeason7;
+			case 'season-8':
+				return statSeason === xpSeason8;
+			case 'season-9':
+				return statSeason === xpSeason9;
 			case 'all-seasons':
 			default:
 				return true;
