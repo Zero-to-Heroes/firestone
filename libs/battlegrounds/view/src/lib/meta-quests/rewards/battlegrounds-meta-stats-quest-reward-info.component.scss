@@ -1,0 +1,141 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.info {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	padding: 5px;
+	background: rgba(255, 255, 255, 0.08);
+	flex-wrap: wrap;
+	overflow: hidden;
+	height: 50px;
+
+	&.clickable:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	& > * {
+		height: 100%;
+	}
+
+	.image {
+		height: 100%;
+		margin-right: 20px;
+
+		.icon {
+			height: 130%;
+			clip-path: ellipse(34% 34% at 50% 50%);
+			top: -13%;
+			position: relative;
+		}
+	}
+
+	.quest-details {
+		display: flex;
+		flex-direction: column;
+
+		.name {
+			color: var(--default-title-color);
+			font-size: 1em;
+		}
+
+		.data-points {
+			// font-size: 12px;
+			font-size: 0.75em;
+			display: flex;
+
+			.player {
+				margin-left: 5px;
+
+				.value {
+					color: var(--default-title-color);
+				}
+			}
+		}
+	}
+
+	.position {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		color: var(--color-1);
+		font-size: 1em;
+
+		// .player {
+		// 	margin-top: 0;
+		// 	font-size: 12px;
+
+		// 	.value {
+		// 		color: var(--default-title-color);
+		// 	}
+		// }
+
+		// .tribe-impact {
+		// 	margin-top: 0;
+		// 	font-size: 12px;
+
+		// 	.value {
+		// 		color: var(--default-text-color);
+		// 	}
+		// 	&.positive {
+		// 		.value {
+		// 			color: #61ff47;
+		// 			&::before {
+		// 				content: '-';
+		// 			}
+		// 		}
+		// 	}
+		// 	&.negative {
+		// 		.value {
+		// 			color: #ff4747;
+		// 			&::before {
+		// 				content: '+';
+		// 			}
+		// 		}
+		// 	}
+		// }
+	}
+}
+
+.items {
+	padding-left: 30px;
+	margin-top: 2px;
+
+	.item-container {
+		margin-bottom: 2px;
+		font-size: 13px;
+
+		::ng-deep .quest-details {
+			width: calc(215px - 30px);
+		}
+	}
+}
+
+@media (max-width: 720px) {
+	:host {
+		height: auto !important;
+	}
+
+	.info {
+		flex-wrap: wrap;
+		margin-bottom: 10px;
+
+		.hero-details {
+			align-items: center;
+			width: calc((100% - 60px) / 2);
+		}
+
+		.position {
+			width: calc((100% - 60px) / 2);
+		}
+
+		.placement {
+			width: 100%;
+			height: 50px;
+		}
+	}
+}

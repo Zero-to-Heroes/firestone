@@ -1,0 +1,43 @@
+.battlegrounds-meta-stats-quests {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-content: flex-start;
+	height: 100%;
+	padding-top: 15px;
+
+	.header {
+		display: flex;
+		font-size: 14px;
+		margin-bottom: 10px;
+		flex-wrap: wrap;
+		overflow: hidden;
+		height: 35px;
+		flex-shrink: 0;
+
+		& > * {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 35px;
+		}
+	}
+
+	.quests-list {
+		overflow: scroll;
+		min-height: 0;
+	}
+}
+
+@media (max-width: 720px) {
+	.battlegrounds-meta-stats-quests .header {
+		.hero-details,
+		.position {
+			width: calc((100% - 60px) / 2);
+		}
+
+		.placement.placement.placement.placement {
+			display: none;
+		}
+	}
+}

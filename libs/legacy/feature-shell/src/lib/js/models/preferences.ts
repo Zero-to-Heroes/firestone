@@ -28,7 +28,7 @@ import {
 } from './collection/filter-types';
 import { DuelsTopDecksDustFilterType } from './duels/duels-types';
 import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
-import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
+import { BgsQuestActiveTabType, BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
@@ -608,6 +608,7 @@ export class Preferences implements IPreferences {
 	readonly bgsSavedTribesFilter: readonly Race[] = [];
 	readonly bgsHeroesUseConservativeEstimate: boolean = true;
 	readonly bgsShowBuddiesInSimulatorSelection: boolean = false;
+	readonly bgsQuestsActiveTab: BgsQuestActiveTabType = 'quests';
 	readonly bgsGroupQuestsByDifficulty: boolean = false;
 
 	// readonly duelsRunUuid: string;

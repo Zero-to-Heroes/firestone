@@ -8,6 +8,7 @@ export class NavigationBattlegrounds {
 	readonly selectedCategoryId:
 		| 'bgs-category-personal-heroes'
 		| 'bgs-category-meta-heroes'
+		| 'bgs-category-meta-quests'
 		| 'bgs-category-personal-quests'
 		| 'bgs-category-personal-hero-details'
 		| 'bgs-category-personal-rating'

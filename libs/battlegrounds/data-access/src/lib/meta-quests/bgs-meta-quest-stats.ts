@@ -86,7 +86,7 @@ export const buildQuestTiers = (
 			id: 'E' as BgsQuestTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'E' }) : 'E',
 			tooltip: i18n.translateString('app.duels.stats.tier-e-tooltip'),
-			items: filterQuestItems(questStats, mean + 2 * standardDeviation, 8),
+			items: filterQuestItems(questStats, mean + 2 * standardDeviation, null),
 		},
 	].filter((tier) => tier.items?.length);
 };
@@ -98,5 +98,8 @@ export const filterQuestItems = (
 ): readonly BgsMetaQuestStatTierItem[] => {
 	return stats
 		.filter((stat) => stat.averageTurnsToComplete)
-		.filter((stat) => stat.averageTurnsToComplete >= threshold && stat.averageTurnsToComplete < upper);
+		.filter(
+			(stat) =>
+				stat.averageTurnsToComplete >= threshold && (upper === null || stat.averageTurnsToComplete < upper),
+		);
 };

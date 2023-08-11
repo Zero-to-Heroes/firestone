@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.6.11',
+		version: '11.7.0',
 		force: false,
 		sections: [
 			// {
@@ -41,21 +41,30 @@ export const updates: readonly Update[] = [
 			// 	header: 'Message from the dev',
 			// 	text: `The last patch has been more bumpy than I expected. If you find that the app doesn't track your games properly, please first try restarting Hearthstone, and see if the problem persists. Thanks again for your patience and support!`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		// {
-			// 		// 	category: 'general',
-			// 		// 	details: [
-			// 		// 		{
-			// 		// 			type: 'bug',
-			// 		// 			text: `Fix a display issue where damage done with spells would not be properly shown, although the data was correctly computed.`,
-			// 		// 		},
-			// 		// 	],
-			// 		// },
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now see the average Turns to Complete for each Quest in Battlegrounds from the main app's window. You can see stats grouped by quest, or split based on the quest's difficulty.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where cards put in hand by Finley, Sea Guide would sometimes be revealed in the opponent's hand.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -64,8 +73,17 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where counter widgets would hop around randomly.`,
+								type: 'content',
+								text: `Add multiple oracle and card highlights.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `(PREMIUM) Add a setting to turn off the Quests Stats overlay.`,
 							},
 						],
 					},

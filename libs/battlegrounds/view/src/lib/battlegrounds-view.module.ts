@@ -14,6 +14,9 @@ import { CircularProgressComponent } from './meta-heroes/circular-progress.compo
 import { BattlegroundsMetaStatsQuestInfoComponent } from './meta-quests/battlegrounds-meta-stats-quest-info.component';
 import { BattlegroundsMetaStatsQuestTierComponent } from './meta-quests/battlegrounds-meta-stats-quest-tier.component';
 import { BattlegroundsMetaStatsQuestsViewComponent } from './meta-quests/battlegrounds-meta-stats-quests-view.component';
+import { BattlegroundsMetaStatsQuestRewardInfoComponent } from './meta-quests/rewards/battlegrounds-meta-stats-quest-reward-info.component';
+import { BattlegroundsMetaStatsQuestRewardTierComponent } from './meta-quests/rewards/battlegrounds-meta-stats-quest-reward-tier.component';
+import { BattlegroundsMetaStatsQuestRewardsViewComponent } from './meta-quests/rewards/battlegrounds-meta-stats-quest-rewards-view.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
@@ -22,6 +25,9 @@ const components = [
 	BattlegroundsMetaStatsQuestsViewComponent,
 	BattlegroundsMetaStatsQuestTierComponent,
 	BattlegroundsMetaStatsQuestInfoComponent,
+	BattlegroundsMetaStatsQuestRewardsViewComponent,
+	BattlegroundsMetaStatsQuestRewardTierComponent,
+	BattlegroundsMetaStatsQuestRewardInfoComponent,
 	BgsHeroPortraitComponent,
 	CircularProgressComponent,
 

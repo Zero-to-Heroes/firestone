@@ -11,3 +11,6 @@ export * from './lib/meta-heroes/circular-progress.component';
 export * from './lib/meta-quests/battlegrounds-meta-stats-quest-info.component';
 export * from './lib/meta-quests/battlegrounds-meta-stats-quest-tier.component';
 export * from './lib/meta-quests/battlegrounds-meta-stats-quests-view.component';
+export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-reward-info.component';
+export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-reward-tier.component';
+export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-rewards-view.component';
