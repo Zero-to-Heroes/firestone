@@ -1,13 +1,9 @@
-import { StatsCategoryType } from './stats-category.type';
-
-export class StatsCategory {
+export interface StatsCategory {
 	readonly id: StatsCategoryType;
 	readonly name: string;
 	readonly icon: string;
 	readonly enabled: boolean;
 	readonly disabledTooltip?: string;
-
-	public static create(base: StatsCategory): StatsCategory {
-		return Object.assign(new StatsCategory(), base);
-	}
 }
+
+export type StatsCategoryType = 'xp-graph' | 'match-stats';

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '@firestone-hs/api-user-profile';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 import { GameStatusService } from '../game-status.service';
@@ -14,6 +15,8 @@ export const PROFILE_UPDATE_URL = 'https://7n2xgqrutsr3by2n2wncsi25ou0mttjp.lamb
 
 @Injectable()
 export class ProfileUploaderService {
+	public profile$$ = new SubscriberAwareBehaviorSubject<Profile>(null);
+
 	constructor(
 		private readonly internalCollection: InternalProfileCollectionService,
 		private readonly internalAchievements: InternalProfileAchievementsService,
@@ -24,6 +27,7 @@ export class ProfileUploaderService {
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
+		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
 	}
 
 	private async init() {

@@ -132,21 +132,21 @@ export class InternalProfileInfoService {
 			// 	playerClass.TagClass,
 			// 	playerRecordsForClass,
 			// );
-			const recordsThatCount = playerRecordsForClass.filter((r) =>
-				[GameType.GT_ARENA, GameType.GT_RANKED, GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(
-					r.RecordType,
-				),
-			);
-			const winsForModes = this.buildWinsForModes(recordsThatCount);
+			// const recordsThatCount = playerRecordsForClass.filter((r) =>
+			// 	[GameType.GT_ARENA, GameType.GT_RANKED, GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(
+			// 		r.RecordType,
+			// 	),
+			// );
+			const winsForModes = this.buildWinsForModes(playerRecordsForClass);
 			// const refAchievementForClass = ACHIEVEMENTS_FOR_HERO_CLASSES[playerClass.TagClass];
 			// const golden500Win = classAchievements.find((ach) => ach.id === refAchievementForClass.Golden500Win);
 			// const honored1kWin = classAchievements.find((ach) => ach.id === refAchievementForClass.Honored1kWin);
 			const result: ProfileClassProgress = {
 				playerClass: playerClass.TagClass,
 				level: playerClass.Level,
-				wins: recordsThatCount.map((r) => r.Wins).reduce((a, b) => a + b, 0),
-				losses: recordsThatCount.map((r) => r.Losses).reduce((a, b) => a + b, 0),
-				ties: recordsThatCount.map((r) => r.Ties).reduce((a, b) => a + b, 0),
+				wins: winsForModes.map((r) => r.wins).reduce((a, b) => a + b, 0),
+				losses: winsForModes.map((r) => r.losses).reduce((a, b) => a + b, 0),
+				ties: winsForModes.map((r) => r.ties).reduce((a, b) => a + b, 0),
 				winsForModes: winsForModes,
 			};
 			return result;

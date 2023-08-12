@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StatsCategory } from '../../../models/mainwindow/stats/stats-category';
-import { StatsCategoryType } from '../../../models/mainwindow/stats/stats-category.type';
+import { StatsCategory, StatsCategoryType } from '../../../models/mainwindow/stats/stats-category';
+import { ProfileSelectCategoryEvent } from '../../../services/mainwindow/store/processors/stats/profile-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -29,6 +29,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						</ul>
 						<stats-filters> </stats-filters>
 						<stats-xp-graph *ngIf="category.value?.id === 'xp-graph'"></stats-xp-graph>
+						<!-- <profile-match-stats *ngIf="category.value?.id === 'match-stats'"></profile-match-stats> -->
 					</div>
 				</with-loading>
 			</section>
@@ -68,7 +69,6 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	selectCategory(categoryId: StatsCategoryType) {
-		// Only one category for now
-		// this.stateUpdater.next(new StatsSelectCategoryEvent(categoryId));
+		this.store.send(new ProfileSelectCategoryEvent(categoryId));
 	}
 }

@@ -17,6 +17,7 @@ import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 
+import { ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
@@ -116,6 +117,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private achievementCategories: Observable<readonly VisualAchievementCategory[]>;
 	private packStats: Observable<readonly PackResult[]>;
 	private cardHistory: Observable<readonly CardHistory[]>;
+	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -439,6 +441,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.achievementsProgressTracking.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {
+		return this.profileClassesProgress;
+	}
+
 	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {
 		return this.bgsQuests;
 	}
@@ -483,6 +489,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initShouldShowLotteryOverlay();
 		this.initLottery();
 		this.initAchievementsProgressTracking();
+		this.initProfileClassProgress();
 		this.initBgsQuests();
 		this.initAchievementCategories();
 		this.initPackStats();
@@ -554,6 +561,12 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.achievementsProgressTracking = (
 			this.ow.getMainWindow().achievementsMonitor as AchievementsLiveProgressTrackingService
 		).achievementsProgressTracking$$.pipe(shareReplay(1));
+	}
+
+	private initProfileClassProgress() {
+		this.profileClassesProgress = this.ow.getMainWindow().profileClassesProgress as BehaviorSubject<
+			readonly ProfileClassProgress[]
+		>;
 	}
 
 	private initAchievementCategories() {

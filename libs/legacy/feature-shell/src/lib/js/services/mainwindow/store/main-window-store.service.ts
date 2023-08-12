@@ -370,6 +370,7 @@ import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-
 import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
 import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-stats-loaded-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
+import { ProfileSelectCategoryEvent, ProfileSelectCategoryProcessor } from './processors/stats/profile-select-category';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
 import { UpdateGameStatsProcessor } from './processors/stats/update-game-stats-processor';
@@ -943,11 +944,9 @@ export class MainWindowStoreService {
 			],
 			[ArenaClassFilterSelectedEvent.eventName(), new ArenaClassFilterSelectedProcessor(this.prefs)],
 			[ArenaRewardsUpdatedEvent.eventName(), new ArenaRewardsUpdatedProcessor()],
-			[
-				// Stats
-				StatsXpGraphFilterSelectedEvent.eventName(),
-				new StatsXpGraphFilterSelectedProcessor(this.prefs),
-			],
+			// Stats
+			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
+			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],
 		];
 
 		return Map(processors);

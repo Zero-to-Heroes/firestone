@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
-import { StatsCategory } from '../../models/mainwindow/stats/stats-category';
 import { StatsState } from '../../models/mainwindow/stats/stats-state';
 import { Preferences } from '../../models/preferences';
 
@@ -19,14 +18,19 @@ export class StatsStateBuilderService {
 	) {
 		return initialState.update({
 			categories: [
-				StatsCategory.create({
+				{
+					id: 'match-stats',
+					name: this.i18n.translateString('app.profile.match-stats-title'),
+					enabled: true,
+					icon: undefined,
+				},
+				{
 					id: 'xp-graph',
 					name: this.i18n.translateString('app.stats.xp-graph-title'),
 					enabled: true,
 					icon: undefined,
-					categories: null,
-				} as StatsCategory),
-			] as readonly StatsCategory[],
+				},
+			],
 			loading: false,
 			gameStats: matchStats,
 			// archetypesConfig: archetypesConfig,
