@@ -303,13 +303,13 @@ export class DeckParserService {
 			const duelsDeckFromCollection = await this.memory.getDuelsDeckFromCollection();
 			const duelsDeck = await this.memory.getDuelsDeck();
 			console.log('no-format', 'more duels deck info', duelsDeckFromCollection, duelsDeck);
-			if (!this.sentReports['invalid-etc-deck']) {
-				this.bugReportService.submitAutomatedReport({
-					type: 'invalid-etc-deck-3',
-					info: JSON.stringify(deck),
-				});
-				this.sentReports['invalid-etc-deck'] = true;
-			}
+			// if (!this.sentReports['invalid-etc-deck']) {
+			// 	this.bugReportService.submitAutomatedReport({
+			// 		type: 'invalid-etc-deck-3',
+			// 		info: JSON.stringify(deck),
+			// 	});
+			// 	this.sentReports['invalid-etc-deck'] = true;
+			// }
 		}
 	}
 
