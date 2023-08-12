@@ -815,7 +815,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ImpCredibleTrousersTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fel);
 			case CardIds.IncantersFlow:
-				return and(side(inputSide), or(inDeck, inHand), spell);
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.InfantryReanimator:
 				return and(side(inputSide), inGraveyard, undead);
 			case CardIds.Insight:
@@ -1237,7 +1237,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.SwordOfTheFallen:
 				return and(side(inputSide), inDeck, spell, secret);
 			case CardIds.TaelanFordringCore:
-				return and(side(inputSide), or(inDeck, inHand), minion);
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.TamsinsPhylactery:
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.TangledWrath:
