@@ -105,7 +105,7 @@ export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent im
 
 	private isValidDate(stat: GameStat, seasonFilter: StatsXpGraphSeasonFilterType): boolean {
 		const statSeason = getSeason(stat.creationTimestamp);
-		console.debug('stat season for', stat, 'is', statSeason);
+		// console.debug('stat season for', stat, 'is', statSeason);
 		switch (seasonFilter) {
 			case 'season-1':
 				return statSeason === xpSeason1;

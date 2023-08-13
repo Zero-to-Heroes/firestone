@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
 import { CardClass, GameType, CardClass as TAG_CLASS, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { HsAchievementInfo } from '../../achievement/achievements-info';
@@ -78,13 +78,31 @@ export class InternalProfileInfoService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
 		private readonly allCards: CardsFacadeService,
+		private readonly localStorage: LocalStorageService,
 	) {
+		window['internalProfileInfoService'] = this;
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
 		this.initProfileInfo();
+		this.initLocalCache();
+	}
+
+	private initLocalCache() {
+		this.classesProgress$$.subscribe((classProgress) => {
+			console.debug('[profile-info] will update local cache', classProgress);
+			if (!!cachedClassProgress?.length) {
+				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_CLASSES_PROCESS, classProgress);
+			}
+		});
+		const cachedClassProgress = this.localStorage.getItem<readonly ProfileClassProgress[]>(
+			LocalStorageService.LOCAL_STORAGE_CLASSES_PROCESS,
+		);
+		if (!!cachedClassProgress?.length) {
+			this.classesProgress$$.next(cachedClassProgress);
+		}
 	}
 
 	private initProfileInfo() {
@@ -104,13 +122,13 @@ export class InternalProfileInfoService {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 		// We only update the data after a game is over
-		combineLatest([this.store.enablePremiumFeatures$(), this.shouldTrigger$$.asObservable()])
+		combineLatest([this.shouldTrigger$$.asObservable()])
 			.pipe(
-				filter(([premium, shouldTrigger]) => premium && shouldTrigger),
+				filter(([shouldTrigger]) => shouldTrigger),
 				debounceTime(2000),
 				withLatestFrom(classAchievements$),
 			)
-			.subscribe(([[premium, shouldTrigger], classAchievements]) => {
+			.subscribe(([[shouldTrigger], classAchievements]) => {
 				this.updateProfileInfo(classAchievements);
 			});
 		this.shouldTrigger$$.next(true);
@@ -151,6 +169,7 @@ export class InternalProfileInfoService {
 			};
 			return result;
 		});
+		console.debug('updating profile info', classProgress);
 		if (!!classProgress?.length) {
 			this.classesProgress$$.next(classProgress);
 		}

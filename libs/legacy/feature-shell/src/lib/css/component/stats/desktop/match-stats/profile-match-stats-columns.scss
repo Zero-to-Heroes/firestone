@@ -1,0 +1,20 @@
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.player-class {
+	width: 75px;
+}
+
+.total-matches {
+	width: 150px;
+}
+
+.winrate,
+.wins,
+.losses {
+	width: 100px;
+}

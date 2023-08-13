@@ -27,9 +27,9 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								<span>{{ cat.name }} </span>
 							</li>
 						</ul>
-						<stats-filters> </stats-filters>
+						<stats-filters *ngIf="showFilters$ | async"> </stats-filters>
 						<stats-xp-graph *ngIf="category.value?.id === 'xp-graph'"></stats-xp-graph>
-						<!-- <profile-match-stats *ngIf="category.value?.id === 'match-stats'"></profile-match-stats> -->
+						<profile-match-stats *ngIf="category.value?.id === 'match-stats'"></profile-match-stats>
 					</div>
 				</with-loading>
 			</section>
@@ -43,6 +43,7 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StatsCategory>;
 	categories$: Observable<readonly StatsCategory[]>;
+	showFilters$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
@@ -62,6 +63,9 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 				([main, nav]) => nav.navigationStats.selectedCategoryId,
 			)
 			.pipe(this.mapData(([stats, selectedCategoryId]) => stats.findCategory(selectedCategoryId)));
+		this.showFilters$ = this.store
+			.listen$(([main, nav]) => nav.navigationStats.selectedCategoryId)
+			.pipe(this.mapData(([selectedCategoryId]) => selectedCategoryId !== 'match-stats'));
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.stats.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));

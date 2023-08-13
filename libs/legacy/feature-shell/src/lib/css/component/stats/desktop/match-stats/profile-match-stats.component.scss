@@ -1,0 +1,37 @@
+.player-match-stats {
+	display: flex;
+	flex-direction: column;
+	font-size: 14px;
+}
+
+.mode-selection {
+	display: flex;
+	gap: 20px;
+
+	.mode-overview {
+		width: 220px;
+	}
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+	align-items: center;
+}
+
+.stats-header {
+	display: flex;
+	height: 40px;
+}
+
+.stats-content {
+	display: flex;
+	flex-direction: column;
+	width: fit-content;
+
+	.class-info {
+		height: 40px;
+		margin-bottom: 5px;
+	}
+}

@@ -52,10 +52,13 @@ export class StatsXpSeasonFilterDropdownComponent
 
 	ngAfterContentInit() {
 		this.filter$ = this.store
-			.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter)
+			.listen$(
+				([main, nav]) => main.stats.filters.xpGraphSeasonFilter,
+				([main, nav]) => nav.navigationStats.selectedCategoryId,
+			)
 			.pipe(
-				filter(([filter]) => !!filter),
-				this.mapData(([filter]) => {
+				filter(([filter, selectedCategoryId]) => !!filter),
+				this.mapData(([filter, selectedCategoryId]) => {
 					const options = [
 						{
 							value: 'all-seasons',
@@ -75,7 +78,7 @@ export class StatsXpSeasonFilterDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: true,
+						visible: ['xp-graph'].includes(selectedCategoryId),
 					};
 				}),
 			);

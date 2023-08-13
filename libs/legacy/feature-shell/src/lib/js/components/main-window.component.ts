@@ -306,6 +306,8 @@ export class MainWindowComponent
 			case 'collection':
 			case 'battlegrounds':
 				return currentApp;
+			case 'profile':
+				return 'collection';
 			default:
 				return 'decktracker-desktop';
 		}

@@ -26,8 +26,8 @@ export class ProfileUploaderService {
 		private readonly gameStatus: GameStatusService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
-		this.init();
 		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
+		this.init();
 	}
 
 	private async init() {

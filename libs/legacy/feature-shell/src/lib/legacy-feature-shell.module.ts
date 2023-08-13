@@ -516,6 +516,9 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 // import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 // import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
+import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
+import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
+import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
@@ -1484,9 +1487,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
 		StatsXpSeasonFilterDropdownComponent,
-		// ProfileMatchStatsComponent,
-		// ProfileMatchStatsModeOverviewComponent,
-		// ProfileMatchStatsClassInfoComponent,
+		ProfileMatchStatsComponent,
+		ProfileMatchStatsModeOverviewComponent,
+		ProfileMatchStatsClassInfoComponent,
 
 		DecktrackerPlayerWidgetWrapperComponent,
 		DecktrackerOpponentWidgetWrapperComponent,

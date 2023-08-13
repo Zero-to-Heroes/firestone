@@ -1,0 +1,30 @@
+.player-match-stats-class-info {
+	display: flex;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 5px;
+	height: 100%;
+}
+
+.player-class {
+	height: 100%;
+
+	.class-icon {
+		height: 100%;
+	}
+}
+
+.wins {
+	color: #61ff47;
+}
+
+.losses {
+	color: #ff4747;
+}
+
+.positive {
+	color: #61ff47;
+}
+
+.negative {
+	color: #ff4747;
+}
