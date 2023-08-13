@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
 import { CardClass, GameType, CardClass as TAG_CLASS, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
-import { HsAchievementInfo } from '../../achievement/achievements-info';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { MemoryPlayerRecord } from '../../plugins/mind-vision/operations/get-profile-info-operation';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
-import { arraysEqual } from '../../utils';
 
 class HeroSkinAchievements {
 	readonly Golden500Win: number;
@@ -69,6 +68,7 @@ const ACHIEVEMENTS_FOR_HERO_CLASSES: { [playerClass: string]: HeroSkinAchievemen
 export class InternalProfileInfoService {
 	public winsForMode$$ = new BehaviorSubject<readonly ProfileWinsForMode[]>([]);
 	public classesProgress$$ = new BehaviorSubject<readonly ProfileClassProgress[]>([]);
+	public duelsHeroStats$$ = new BehaviorSubject<readonly ProfileDuelsHeroStat[]>([]);
 
 	private shouldTrigger$$ = new BehaviorSubject<boolean>(false);
 
@@ -102,38 +102,39 @@ export class InternalProfileInfoService {
 		if (!!cachedClassProgress?.length) {
 			this.classesProgress$$.next(cachedClassProgress);
 		}
+
+		this.duelsHeroStats$$.subscribe((duelsHeroStats) => {
+			console.debug('[profile-info] will update local cache', duelsHeroStats);
+			if (!!duelsHeroStats?.length) {
+				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_DUELS_HERO_STATS, duelsHeroStats);
+			}
+		});
+		const cachedDuelsHeroStats = this.localStorage.getItem<readonly ProfileDuelsHeroStat[]>(
+			LocalStorageService.LOCAL_STORAGE_DUELS_HERO_STATS,
+		);
+		if (!!cachedDuelsHeroStats?.length) {
+			this.duelsHeroStats$$.next(cachedDuelsHeroStats);
+		}
 	}
 
 	private initProfileInfo() {
-		const allClassUnlockAchievements = Object.values(ACHIEVEMENTS_FOR_HERO_CLASSES).flatMap((info) => [
-			info.Golden500Win,
-			info.Honored1kWin,
-		]);
-
 		this.gameEvents.allEvents
 			.pipe(filter((e) => e.type === GameEvent.GAME_END))
 			.subscribe(() => this.shouldTrigger$$.next(true));
 
-		const classAchievements$ = this.achievementsMonitor.nativeAchievements$$.pipe(
-			debounceTime(2000),
-			filter((achievements) => !!achievements?.length),
-			map((achievements) => achievements.filter((ach) => allClassUnlockAchievements.includes(ach.id))),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-		);
 		// We only update the data after a game is over
 		combineLatest([this.shouldTrigger$$.asObservable()])
 			.pipe(
 				filter(([shouldTrigger]) => shouldTrigger),
 				debounceTime(2000),
-				withLatestFrom(classAchievements$),
 			)
-			.subscribe(([[shouldTrigger], classAchievements]) => {
-				this.updateProfileInfo(classAchievements);
+			.subscribe(([shouldTrigger]) => {
+				this.updateProfileInfo();
 			});
 		this.shouldTrigger$$.next(true);
 	}
 
-	private async updateProfileInfo(classAchievements: readonly HsAchievementInfo[]) {
+	private async updateProfileInfo() {
 		const profileInfo = await this.memory.getProfileInfo();
 		const classProgress: readonly ProfileClassProgress[] = profileInfo?.PlayerClasses.map((playerClass) => {
 			const playerRecordsForClass = profileInfo.PlayerRecords.filter((r) => r.Data > 0).filter((r) =>
@@ -143,21 +144,7 @@ export class InternalProfileInfoService {
 					.map((c) => getDefaultHeroDbfIdForClass(c))
 					.includes(getDefaultHeroDbfIdForClass(CardClass[playerClass.TagClass])),
 			);
-			// console.debug(
-			// 	'playerRecordsForClass',
-			// 	CardClass[playerClass.TagClass],
-			// 	playerClass.TagClass,
-			// 	playerRecordsForClass,
-			// );
-			// const recordsThatCount = playerRecordsForClass.filter((r) =>
-			// 	[GameType.GT_ARENA, GameType.GT_RANKED, GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(
-			// 		r.RecordType,
-			// 	),
-			// );
 			const winsForModes = this.buildWinsForModes(playerRecordsForClass);
-			// const refAchievementForClass = ACHIEVEMENTS_FOR_HERO_CLASSES[playerClass.TagClass];
-			// const golden500Win = classAchievements.find((ach) => ach.id === refAchievementForClass.Golden500Win);
-			// const honored1kWin = classAchievements.find((ach) => ach.id === refAchievementForClass.Honored1kWin);
 			const result: ProfileClassProgress = {
 				playerClass: playerClass.TagClass,
 				level: playerClass.Level,
@@ -184,6 +171,49 @@ export class InternalProfileInfoService {
 		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords);
 		if (!!winsForMode?.length) {
 			this.winsForMode$$.next(winsForMode);
+		}
+
+		const duelsStats = profileInfo?.PlayerRecords.filter((r) =>
+			[GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(r.RecordType),
+		).filter((r) => r.Data > 0);
+		if (!!duelsStats?.length) {
+			const groupedByHero = groupByFunction((s: MemoryPlayerRecord) => s.Data)(duelsStats);
+			const duelsHeroStats: readonly ProfileDuelsHeroStat[] = Object.keys(groupedByHero).map((heroDbfId) => {
+				const heroCard = this.allCards.getCard(heroDbfId);
+				const records = groupedByHero[heroDbfId];
+				return {
+					heroCardId: heroCard.id,
+					wins: records.map((r) => r.Wins).reduce((a, b) => a + b, 0),
+					losses: records.map((r) => r.Losses).reduce((a, b) => a + b, 0),
+					winsByMode: [
+						{
+							mode: 'duels',
+							wins: records
+								.filter((r) => r.RecordType === GameType.GT_PVPDR)
+								.map((r) => r.Wins)
+								.reduce((a, b) => a + b, 0),
+							losses: records
+
+								.filter((r) => r.RecordType === GameType.GT_PVPDR)
+								.map((r) => r.Losses)
+								.reduce((a, b) => a + b, 0),
+						},
+						{
+							mode: 'paid-duels',
+							wins: records
+
+								.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
+								.map((r) => r.Wins)
+								.reduce((a, b) => a + b, 0),
+							losses: records
+								.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
+								.map((r) => r.Losses)
+								.reduce((a, b) => a + b, 0),
+						},
+					],
+				};
+			});
+			this.duelsHeroStats$$.next(duelsHeroStats);
 		}
 	}
 
@@ -212,4 +242,18 @@ export class InternalProfileInfoService {
 		);
 		return winsForMode;
 	}
+}
+
+// Until it's integrated into the profile API
+export interface ProfileDuelsHeroStat {
+	readonly heroCardId: string;
+	readonly wins: number;
+	readonly losses: number;
+	readonly winsByMode: readonly ProfileDuelsWinsByMode[];
+}
+
+export interface ProfileDuelsWinsByMode {
+	readonly mode: 'duels' | 'paid-duels';
+	readonly wins: number;
+	readonly losses: number;
 }

@@ -40,6 +40,7 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 						class="class-info"
 						*ngFor="let classInfo of classInfos$ | async"
 						[classInfo]="classInfo"
+						[currentMode]="value.currentMode"
 					>
 					</profile-match-stats-class-info>
 				</div>
@@ -69,15 +70,20 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 		this.classInfos$ = combineLatest([
 			this.store.profileClassesProgress$(),
 			this.store.profileBgHeroStat$(),
+			this.store.profileDuelsHeroStats$(),
 			this.currentMode$,
 		]).pipe(
-			this.mapData(([classProgress, bgHeroStat, currentMode]) => {
+			this.mapData(([classProgress, bgHeroStat, duelsHeroStats, currentMode]) => {
 				console.debug('building class infos', classProgress, currentMode);
 				const hsClassProgress: readonly ClassInfo[] =
 					currentMode === 'constructed' || currentMode === 'arena'
 						? classProgress.map((info) => {
 								const lowerCaseClass = CardClass[info.playerClass]?.toLowerCase();
-								const gamesForMode = info.winsForModes.find((info) => info.mode === currentMode);
+								const gamesForMode = info.winsForModes.find((info) => info.mode === currentMode) ?? {
+									wins: 0,
+									losses: 0,
+									ties: 0,
+								};
 								const classInfo: ClassInfo = {
 									playerClass: CardClass[info.playerClass],
 									icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${lowerCaseClass}.png`,
@@ -111,22 +117,42 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 								return classInfo;
 						  })
 						: [];
-				return [...hsClassProgress, ...bgClassProgress];
+				const duelsClassProgress: readonly ClassInfo[] =
+					currentMode === 'duels'
+						? duelsHeroStats.map((info) => {
+								const classInfo: ClassInfo = {
+									playerClass: info.heroCardId,
+									icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.heroCardId}.jpg`,
+									name: this.allCards.getCard(info.heroCardId).name,
+									totalMatches: info.wins + info.losses,
+									wins: info.wins,
+									losses: info.losses,
+									winrate:
+										info.wins + info.losses === 0
+											? null
+											: (100 * info.wins) / (info.wins + info.losses),
+								};
+								return classInfo;
+						  })
+						: [];
+				return [...hsClassProgress, ...bgClassProgress, ...duelsClassProgress];
 			}),
 		);
 
 		this.modeOverviews$ = combineLatest([
 			this.store.profileClassesProgress$(),
 			this.store.profileBgHeroStat$(),
+			this.store.profileDuelsHeroStats$(),
 		]).pipe(
-			this.mapData(([classProgress, bgHeroStat]) => {
+			this.mapData(([classProgress, bgHeroStat, duelsHeroStats]) => {
 				const modes = ['constructed', 'arena'] as const;
 				const hsModes = modes.map((mode) => {
+					console.debug('getting wins for mode', mode, classProgress);
 					const wins = classProgress
-						.map((info) => info.winsForModes.find((info) => info.mode === mode).wins)
+						.map((info) => info.winsForModes.find((info) => info.mode === mode)?.wins ?? 0)
 						.reduce((a, b) => a + b, 0);
 					const losses = classProgress
-						.map((info) => info.winsForModes.find((info) => info.mode === mode).losses)
+						.map((info) => info.winsForModes.find((info) => info.mode === mode)?.losses ?? 0)
 						.reduce((a, b) => a + b, 0);
 					// const ties = classProgress
 					// 	.map((info) => info.winsForModes.find((info) => info.mode === mode).ties)
@@ -141,6 +167,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					};
 					return result;
 				});
+
 				const top1 = bgHeroStat.map((info) => info.top1).reduce((a, b) => a + b, 0);
 				const top4 = bgHeroStat.map((info) => info.top4).reduce((a, b) => a + b, 0);
 				const gamesPlayed = bgHeroStat.map((info) => info.gamesPlayed).reduce((a, b) => a + b, 0);
@@ -153,7 +180,18 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					gamesPlayed: gamesPlayed,
 					winrate: gamesPlayed === 0 ? null : (100 * (top1 + top4)) / gamesPlayed,
 				};
-				return [...hsModes, bgMode];
+
+				const duelsWins = duelsHeroStats.map((info) => info.wins).reduce((a, b) => a + b, 0);
+				const duelsLosses = duelsHeroStats.map((info) => info.losses).reduce((a, b) => a + b, 0);
+				const duelsMode: ModeOverview = {
+					mode: 'duels',
+					title: this.i18n.translateString(`global.game-mode.duels`),
+					icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/duels.webp?v=2`,
+					wins: duelsWins,
+					losses: duelsLosses,
+					winrate: duelsWins + duelsLosses === 0 ? null : (100 * duelsWins) / (duelsWins + duelsLosses),
+				};
+				return [...hsModes, bgMode, duelsMode];
 			}),
 		);
 	}

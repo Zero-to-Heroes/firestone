@@ -4,7 +4,8 @@
 	padding: 5px;
 	height: 100%;
 
-	&.battlegrounds {
+	&.battlegrounds,
+	&.duels {
 		.player-class .class-icon {
 			clip-path: circle(40% at 50% 50%);
 			transform: scale(1.3);

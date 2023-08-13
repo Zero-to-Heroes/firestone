@@ -26,6 +26,7 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { sleep } from '../utils';
 import {
 	AppUiStoreService,
@@ -235,6 +236,10 @@ export class AppUiStoreFacadeService {
 
 	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {
 		return this.store.profileClassesProgress$();
+	}
+
+	public profileDuelsHeroStats$(): Observable<readonly ProfileDuelsHeroStat[]> {
+		return this.store.profileDuelsHeroStats$();
 	}
 
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {

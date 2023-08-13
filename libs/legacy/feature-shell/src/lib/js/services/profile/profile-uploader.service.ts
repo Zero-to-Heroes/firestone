@@ -28,6 +28,7 @@ export class ProfileUploaderService {
 	) {
 		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
 		window['profileBgHeroStat'] = this.internalBattlegrounds.bgFullTimeStatsByHero$$;
+		window['profileDuelsHeroStats'] = this.internalProfileInfo.duelsHeroStats$$;
 		this.init();
 	}
 

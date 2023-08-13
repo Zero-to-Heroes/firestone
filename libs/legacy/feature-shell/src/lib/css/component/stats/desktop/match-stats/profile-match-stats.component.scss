@@ -12,11 +12,12 @@
 
 .mode-selection {
 	display: flex;
-	gap: 20px;
+	gap: 13px;
 	flex-shrink: 0;
 
 	.mode-overview {
-		width: 220px;
+		width: 210px;
+		flex-shrink: 0;
 	}
 }
 

@@ -60,6 +60,7 @@ import { LotteryService } from '../lottery/lottery.service';
 import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
+import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual, sleep } from '../utils';
 import { filterBgsMatchStats } from './bgs-ui-helper';
@@ -119,6 +120,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private cardHistory: Observable<readonly CardHistory[]>;
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
+	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -446,6 +448,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.profileClassesProgress;
 	}
 
+	public profileDuelsHeroStats$(): Observable<readonly ProfileDuelsHeroStat[]> {
+		return this.profileDuelsHeroStats;
+	}
+
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
 		return this.profileBgHeroStat;
 	}
@@ -495,6 +501,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initLottery();
 		this.initAchievementsProgressTracking();
 		this.initProfileClassProgress();
+		this.initProfileDuelsHeroStat();
 		this.initProfileBgHeroStat();
 		this.initBgsQuests();
 		this.initAchievementCategories();
@@ -572,6 +579,12 @@ export class AppUiStoreService extends Store<Preferences> {
 	private initProfileClassProgress() {
 		this.profileClassesProgress = this.ow.getMainWindow().profileClassesProgress as BehaviorSubject<
 			readonly ProfileClassProgress[]
+		>;
+	}
+
+	private initProfileDuelsHeroStat() {
+		this.profileDuelsHeroStats = this.ow.getMainWindow().profileDuelsHeroStats as BehaviorSubject<
+			readonly ProfileDuelsHeroStat[]
 		>;
 	}
 

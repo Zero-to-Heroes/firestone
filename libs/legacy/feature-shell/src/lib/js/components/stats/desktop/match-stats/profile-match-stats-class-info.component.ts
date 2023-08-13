@@ -8,7 +8,13 @@ import { ClassInfo } from './profile-match-stats.model';
 		`../../../../../css/component/stats/desktop/match-stats/profile-match-stats-class-info.component.scss`,
 	],
 	template: `
-		<div class="player-match-stats-class-info" [ngClass]="{ battlegrounds: classInfo.top4 != null }">
+		<div
+			class="player-match-stats-class-info"
+			[ngClass]="{
+				battlegrounds: currentMode === 'battlegrounds',
+				duels: currentMode === 'duels'
+			}"
+		>
 			<div class="cell player-class">
 				<div class="class-name">{{ classInfo.name }}</div>
 				<img class="class-icon" [src]="classInfo.icon" [helpTooltip]="classInfo.name" />
@@ -40,4 +46,5 @@ import { ClassInfo } from './profile-match-stats.model';
 })
 export class ProfileMatchStatsClassInfoComponent {
 	@Input() classInfo: ClassInfo;
+	@Input() currentMode: string;
 }
