@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.7.3',
+		version: '11.7.4',
 		force: false,
 		sections: [
 			// {
@@ -63,7 +63,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `You can now see your all-time match stats for Ranked, Arena and Battlegrounds in the new Profile tab.`,
+								text: `You can now see your all-time match stats for Ranked, Arena, Duels and Battlegrounds in the new Profile tab.`,
 							},
 						],
 					},
