@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.7.1',
+		version: '11.7.3',
 		force: false,
 		sections: [
 			// {
@@ -55,6 +55,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now see the average final Placement for each Quest Reward in Battlegrounds from the main app's window.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now see your all-time match stats for Ranked, Arena and Battlegrounds in the new Profile tab.`,
 							},
 						],
 					},
