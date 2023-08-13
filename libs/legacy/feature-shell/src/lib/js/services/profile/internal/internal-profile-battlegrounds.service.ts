@@ -3,7 +3,7 @@ import { ProfileBgHeroStat } from '@firestone-hs/api-user-profile';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { groupByFunction } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
@@ -19,6 +19,7 @@ export class InternalProfileBattlegroundsService {
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly allCards: CardsFacadeService,
+		private readonly localStorage: LocalStorageService,
 	) {
 		this.init();
 	}
@@ -26,6 +27,22 @@ export class InternalProfileBattlegroundsService {
 	private async init() {
 		await this.store.initComplete();
 		this.initBattlegrounds();
+		this.initLocalCache();
+	}
+
+	private initLocalCache() {
+		this.bgFullTimeStatsByHero$$.subscribe((bgHeroStats) => {
+			console.debug('[profile-info] will update bgHeroStats local cache', bgHeroStats);
+			if (!!bgHeroStats?.length) {
+				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_BG_HERO_STAT, bgHeroStats);
+			}
+		});
+		const cachedInfo = this.localStorage.getItem<readonly ProfileBgHeroStat[]>(
+			LocalStorageService.LOCAL_STORAGE_BG_HERO_STAT,
+		);
+		if (!!cachedInfo?.length) {
+			this.bgFullTimeStatsByHero$$.next(cachedInfo);
+		}
 	}
 
 	private initBattlegrounds() {
@@ -69,15 +86,13 @@ export class InternalProfileBattlegroundsService {
 		);
 		const bgFullTimeStatsByHero$ = combineLatest([
 			achievementsData$,
-			this.store.enablePremiumFeatures$(),
 			this.achievementsMonitor.nativeAchievements$$,
 		]).pipe(
 			filter(
-				([achievementsData, premium, nativeAchievements]) =>
-					premium && !!achievementsData?.length && !!nativeAchievements?.length,
+				([achievementsData, nativeAchievements]) => !!achievementsData?.length && !!nativeAchievements?.length,
 			),
 			debounceTime(2000),
-			map(([achievementsData, premium, nativeAchievements]) => {
+			map(([achievementsData, nativeAchievements]) => {
 				return achievementsData.map((data) => {
 					return {
 						heroCardId: data.heroCardId,

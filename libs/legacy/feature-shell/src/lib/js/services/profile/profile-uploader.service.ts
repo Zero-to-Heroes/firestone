@@ -27,6 +27,7 @@ export class ProfileUploaderService {
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
+		window['profileBgHeroStat'] = this.internalBattlegrounds.bgFullTimeStatsByHero$$;
 		this.init();
 	}
 

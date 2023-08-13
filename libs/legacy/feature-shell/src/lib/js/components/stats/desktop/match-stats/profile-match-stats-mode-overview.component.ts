@@ -20,8 +20,11 @@ import { ModeOverview } from './profile-match-stats.model';
 				<div class="info win-loss">
 					<div class="label">Matches</div>
 					<div class="value">
-						<div class="wins">{{ overview.wins }}</div>
-						<div class="losses">{{ overview.losses }}</div>
+						<div class="wins" *ngIf="overview.wins != null">{{ overview.wins }}</div>
+						<div class="losses" *ngIf="overview.losses != null">{{ overview.losses }}</div>
+						<div class="top-1" *ngIf="overview.top1 != null">{{ overview.top1 }}</div>
+						<div class="top-4" *ngIf="overview.top4 != null">{{ overview.top4 }}</div>
+						<div class="games-played" *ngIf="overview.gamesPlayed != null">{{ overview.gamesPlayed }}</div>
 					</div>
 				</div>
 			</div>

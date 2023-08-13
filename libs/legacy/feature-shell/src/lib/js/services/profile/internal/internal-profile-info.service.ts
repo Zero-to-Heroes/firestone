@@ -80,7 +80,6 @@ export class InternalProfileInfoService {
 		private readonly allCards: CardsFacadeService,
 		private readonly localStorage: LocalStorageService,
 	) {
-		window['internalProfileInfoService'] = this;
 		this.init();
 	}
 
@@ -93,7 +92,7 @@ export class InternalProfileInfoService {
 	private initLocalCache() {
 		this.classesProgress$$.subscribe((classProgress) => {
 			console.debug('[profile-info] will update local cache', classProgress);
-			if (!!cachedClassProgress?.length) {
+			if (!!classProgress?.length) {
 				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_CLASSES_PROCESS, classProgress);
 			}
 		});

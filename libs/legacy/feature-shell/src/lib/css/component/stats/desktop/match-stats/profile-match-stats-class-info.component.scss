@@ -3,10 +3,24 @@
 	background: rgba(255, 255, 255, 0.08);
 	padding: 5px;
 	height: 100%;
+
+	&.battlegrounds {
+		.player-class .class-icon {
+			clip-path: circle(40% at 50% 50%);
+			transform: scale(1.3);
+		}
+	}
 }
 
 .player-class {
 	height: 100%;
+
+	.class-name {
+		width: 200px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
 	.class-icon {
 		height: 100%;
@@ -19,6 +33,14 @@
 
 .losses {
 	color: #ff4747;
+}
+
+.top-1 {
+	color: #61ff47;
+}
+
+.top-4 {
+	color: #f0ff0d;
 }
 
 .positive {

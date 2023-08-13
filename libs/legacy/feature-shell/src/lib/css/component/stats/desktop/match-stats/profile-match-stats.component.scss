@@ -1,12 +1,19 @@
+:host {
+	min-height: 0;
+}
+
 .player-match-stats {
 	display: flex;
 	flex-direction: column;
 	font-size: 14px;
+	min-height: 0;
+	max-height: 100%;
 }
 
 .mode-selection {
 	display: flex;
 	gap: 20px;
+	flex-shrink: 0;
 
 	.mode-overview {
 		width: 220px;
@@ -18,17 +25,20 @@
 	flex-direction: column;
 	margin-top: 20px;
 	align-items: center;
+	min-height: 0;
 }
 
 .stats-header {
 	display: flex;
 	height: 40px;
+	flex-shrink: 0;
 }
 
 .stats-content {
 	display: flex;
 	flex-direction: column;
 	width: fit-content;
+	overflow: auto;
 
 	.class-info {
 		height: 40px;

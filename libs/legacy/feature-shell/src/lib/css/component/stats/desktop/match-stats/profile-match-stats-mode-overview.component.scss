@@ -81,6 +81,27 @@
 		.losses {
 			color: #ff4747;
 		}
+
+		.top-1 {
+			color: #61ff47;
+
+			&:after {
+				content: '-';
+				color: var(--default-text-color);
+				margin-left: 2px;
+				margin-right: 2px;
+			}
+		}
+		.top-4 {
+			color: #f0ff0d;
+
+			&:after {
+				content: '-';
+				color: var(--default-text-color);
+				margin-left: 2px;
+				margin-right: 2px;
+			}
+		}
 	}
 
 	.positive {

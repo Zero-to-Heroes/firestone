@@ -17,7 +17,7 @@ import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 
-import { ProfileClassProgress } from '@firestone-hs/api-user-profile';
+import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
@@ -118,6 +118,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private packStats: Observable<readonly PackResult[]>;
 	private cardHistory: Observable<readonly CardHistory[]>;
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
+	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -445,6 +446,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.profileClassesProgress;
 	}
 
+	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
+		return this.profileBgHeroStat;
+	}
+
 	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {
 		return this.bgsQuests;
 	}
@@ -490,6 +495,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initLottery();
 		this.initAchievementsProgressTracking();
 		this.initProfileClassProgress();
+		this.initProfileBgHeroStat();
 		this.initBgsQuests();
 		this.initAchievementCategories();
 		this.initPackStats();
@@ -566,6 +572,12 @@ export class AppUiStoreService extends Store<Preferences> {
 	private initProfileClassProgress() {
 		this.profileClassesProgress = this.ow.getMainWindow().profileClassesProgress as BehaviorSubject<
 			readonly ProfileClassProgress[]
+		>;
+	}
+
+	private initProfileBgHeroStat() {
+		this.profileBgHeroStat = this.ow.getMainWindow().profileBgHeroStat as BehaviorSubject<
+			readonly ProfileBgHeroStat[]
 		>;
 	}
 

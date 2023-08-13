@@ -7,7 +7,7 @@ import { MailState } from '@mails/mail-state';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-import { ProfileClassProgress } from '@firestone-hs/api-user-profile';
+import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
@@ -235,6 +235,10 @@ export class AppUiStoreFacadeService {
 
 	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {
 		return this.store.profileClassesProgress$();
+	}
+
+	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
+		return this.store.profileBgHeroStat$();
 	}
 
 	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
