@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -26,33 +27,60 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 				</profile-match-stats-mode-overview>
 			</div>
 			<div class="content">
-				<div class="stats-header">
+				<div class="stats-header" *ngIf="sortCriteria$ | async as sort">
 					<div class="cell player-class"></div>
-					<div class="cell winrate" [owTranslate]="'app.profile.match-stats.header-winrate'"></div>
-					<div
+					<sortable-table-label
+						class="cell winrate"
+						[name]="'app.profile.match-stats.header-winrate' | owTranslate"
+						[sort]="sort"
+						[criteria]="'winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell total-matches"
-						[owTranslate]="'app.profile.match-stats.header-total-matches'"
-					></div>
-					<div
+						[name]="'app.profile.match-stats.header-total-matches' | owTranslate"
+						[sort]="sort"
+						[criteria]="'total-matches'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell wins"
 						*ngIf="value.currentMode !== 'battlegrounds'"
-						[owTranslate]="'app.profile.match-stats.header-wins'"
-					></div>
-					<div
+						[name]="'app.profile.match-stats.header-wins' | owTranslate"
+						[sort]="sort"
+						[criteria]="'wins'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell losses"
 						*ngIf="value.currentMode !== 'battlegrounds'"
-						[owTranslate]="'app.profile.match-stats.header-losses'"
-					></div>
-					<div
+						[name]="'app.profile.match-stats.header-losses' | owTranslate"
+						[sort]="sort"
+						[criteria]="'losses'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell top-1"
 						*ngIf="value.currentMode === 'battlegrounds'"
-						[owTranslate]="'app.profile.match-stats.header-top-1'"
-					></div>
-					<div
+						[name]="'app.profile.match-stats.header-top-1' | owTranslate"
+						[sort]="sort"
+						[criteria]="'top-1'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell top-4"
 						*ngIf="value.currentMode === 'battlegrounds'"
-						[owTranslate]="'app.profile.match-stats.header-top-4'"
-					></div>
+						[name]="'app.profile.match-stats.header-top-4' | owTranslate"
+						[sort]="sort"
+						[criteria]="'top-4'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 				</div>
 				<div class="stats-content">
 					<profile-match-stats-class-info
@@ -72,8 +100,13 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 	modeOverviews$: Observable<readonly ModeOverview[]>;
 	currentMode$: Observable<'constructed' | 'duels' | 'arena' | 'battlegrounds'>;
 	classInfos$: Observable<readonly ClassInfo[]>;
+	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 
 	private currentMode$$ = new BehaviorSubject<'constructed' | 'duels' | 'arena' | 'battlegrounds'>('constructed');
+	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
+		criteria: null,
+		direction: 'asc',
+	});
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -86,14 +119,16 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 
 	ngAfterContentInit() {
 		this.currentMode$ = this.currentMode$$.asObservable();
+		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		this.classInfos$ = combineLatest([
 			this.store.profileClassesProgress$(),
 			this.store.profileBgHeroStat$(),
 			this.store.profileDuelsHeroStats$(),
 			this.currentMode$,
+			this.sortCriteria$$,
 		]).pipe(
-			this.mapData(([classProgress, bgHeroStat, duelsHeroStats, currentMode]) => {
-				console.debug('building class infos', classProgress, currentMode);
+			this.mapData(([classProgress, bgHeroStat, duelsHeroStats, currentMode, sortCriteria]) => {
+				console.debug('building class infos', classProgress, currentMode, sortCriteria);
 				const hsClassProgress: readonly ClassInfo[] =
 					currentMode === 'constructed' || currentMode === 'arena'
 						? classProgress.map((info) => {
@@ -128,10 +163,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 									top1: info.top1,
 									top4: info.top4,
 									totalMatches: info.gamesPlayed,
-									winrate:
-										info.gamesPlayed === 0
-											? null
-											: (100 * (info.top1 + info.top4)) / info.gamesPlayed,
+									winrate: info.gamesPlayed === 0 ? null : (100 * info.top4) / info.gamesPlayed,
 								};
 								return classInfo;
 						  })
@@ -154,7 +186,9 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 								return classInfo;
 						  })
 						: [];
-				return [...hsClassProgress, ...bgClassProgress, ...duelsClassProgress];
+				return [...hsClassProgress, ...bgClassProgress, ...duelsClassProgress].sort((a, b) =>
+					this.sortClassProgress(a, b, sortCriteria),
+				);
 			}),
 		);
 
@@ -218,4 +252,66 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 	selectMode(mode: 'constructed' | 'duels' | 'arena' | 'battlegrounds') {
 		this.currentMode$$.next(mode);
 	}
+
+	onSortClick(rawCriteria: string) {
+		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
+		this.sortCriteria$$.next({
+			criteria: criteria,
+			direction:
+				criteria === this.sortCriteria$$.value?.criteria
+					? invertDirection(this.sortCriteria$$.value.direction)
+					: 'desc',
+		});
+	}
+
+	private sortClassProgress(a: ClassInfo, b: ClassInfo, sortCriteria: SortCriteria<ColumnSortType>): number {
+		switch (sortCriteria?.criteria) {
+			case 'winrate':
+				return this.sortByWinrate(a, b, sortCriteria.direction);
+			case 'total-matches':
+				return this.sortByTotalMatches(a, b, sortCriteria.direction);
+			case 'wins':
+				return this.sortByWins(a, b, sortCriteria.direction);
+			case 'losses':
+				return this.sortByLosses(a, b, sortCriteria.direction);
+			case 'top-1':
+				return this.sortByTop1(a, b, sortCriteria.direction);
+			case 'top-4':
+				return this.sortByTop4(a, b, sortCriteria.direction);
+			default:
+				return 0;
+		}
+	}
+
+	private sortByWinrate(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		if (a.winrate === null) {
+			return direction === 'asc' ? -1 : 1;
+		}
+		if (b.winrate === null) {
+			return direction === 'asc' ? 1 : -1;
+		}
+		return direction === 'asc' ? a.winrate - b.winrate : b.winrate - a.winrate;
+	}
+
+	private sortByTotalMatches(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		return direction === 'asc' ? a.totalMatches - b.totalMatches : b.totalMatches - a.totalMatches;
+	}
+
+	private sortByWins(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		return direction === 'asc' ? a.wins - b.wins : b.wins - a.wins;
+	}
+
+	private sortByLosses(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		return direction === 'asc' ? a.losses - b.losses : b.losses - a.losses;
+	}
+
+	private sortByTop1(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		return direction === 'asc' ? a.top1 - b.top1 : b.top1 - a.top1;
+	}
+
+	private sortByTop4(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		return direction === 'asc' ? a.top4 - b.top4 : b.top4 - a.top4;
+	}
 }
+
+export type ColumnSortType = 'winrate' | 'total-matches' | 'wins' | 'losses' | 'top-1' | 'top-4';
