@@ -16,7 +16,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<div class="label">
 				<span>{{ name }}</span>
 				<!-- TODO: use neutral sortable icon -->
-				<div class="caret" inlineSVG="assets/svg/arrow.svg"></div>
+				<div class="caret" inlineSVG="assets/svg/arrow_sort.svg"></div>
 			</div>
 		</div>
 	`,

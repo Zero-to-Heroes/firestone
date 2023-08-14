@@ -19,36 +19,18 @@
 		}
 
 		.caret {
-			display: none;
-			height: 8px;
-			margin-left: 5px;
+			display: flex;
+			height: 25px;
+			margin-left: 0px;
 		}
 	}
 
 	&.active-asc {
-		.label {
-			span {
-				position: relative;
-				left: -5px;
-			}
-			.caret {
-				display: flex;
-				margin-top: 5px;
-			}
-		}
+		--color-upwards: var(--default-title-color);
 	}
 
 	&.active-desc {
-		.label {
-			span {
-				position: relative;
-				left: -5px;
-			}
-			.caret {
-				transform: scale(1, -1);
-				display: flex;
-			}
-		}
+		--color-downwards: var(--default-title-color);
 	}
 
 	&.sortable:hover {
