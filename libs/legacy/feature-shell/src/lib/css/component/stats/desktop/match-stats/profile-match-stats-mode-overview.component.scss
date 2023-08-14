@@ -57,6 +57,7 @@
 		align-items: center;
 		justify-content: space-between;
 		width: 100%;
+		margin-bottom: 10px;
 	}
 
 	.info {
@@ -74,7 +75,6 @@
 
 	.win-loss {
 		position: relative;
-		margin-bottom: 10px;
 
 		.sub-value {
 			position: absolute;
