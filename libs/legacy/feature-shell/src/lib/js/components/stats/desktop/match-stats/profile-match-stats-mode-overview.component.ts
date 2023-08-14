@@ -12,13 +12,13 @@ import { ModeOverview } from './profile-match-stats.model';
 			<img class="icon" [src]="overview.icon" />
 			<div class="info-container">
 				<div class="info winrate">
-					<div class="label">Winrate</div>
+					<div class="label" [owTranslate]="'app.profile.match-stats.header-winrate'"></div>
 					<div class="value" [ngClass]="{ positive: overview.winrate > 51, negative: overview.winrate < 49 }">
 						{{ overview.winrate == null ? '-' : overview.winrate.toFixed(1) + '%' }}
 					</div>
 				</div>
 				<div class="info win-loss">
-					<div class="label">Matches</div>
+					<div class="label" [owTranslate]="'app.profile.match-stats.header-total-matches-short'"></div>
 					<div class="value">
 						<div class="wins" *ngIf="overview.wins != null">{{ overview.wins }}</div>
 						<div class="losses" *ngIf="overview.losses != null">{{ overview.losses }}</div>

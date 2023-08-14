@@ -28,12 +28,31 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 			<div class="content">
 				<div class="stats-header">
 					<div class="cell player-class"></div>
-					<div class="cell winrate">Winrate</div>
-					<div class="cell total-matches">Total matches</div>
-					<div class="cell wins" *ngIf="value.currentMode !== 'battlegrounds'">Wins</div>
-					<div class="cell losses" *ngIf="value.currentMode !== 'battlegrounds'">Losses</div>
-					<div class="cell top-1" *ngIf="value.currentMode === 'battlegrounds'">Top 1</div>
-					<div class="cell top-4" *ngIf="value.currentMode === 'battlegrounds'">Top 4</div>
+					<div class="cell winrate" [owTranslate]="'app.profile.match-stats.header-winrate'"></div>
+					<div
+						class="cell total-matches"
+						[owTranslate]="'app.profile.match-stats.header-total-matches'"
+					></div>
+					<div
+						class="cell wins"
+						*ngIf="value.currentMode !== 'battlegrounds'"
+						[owTranslate]="'app.profile.match-stats.header-wins'"
+					></div>
+					<div
+						class="cell losses"
+						*ngIf="value.currentMode !== 'battlegrounds'"
+						[owTranslate]="'app.profile.match-stats.header-losses'"
+					></div>
+					<div
+						class="cell top-1"
+						*ngIf="value.currentMode === 'battlegrounds'"
+						[owTranslate]="'app.profile.match-stats.header-top-1'"
+					></div>
+					<div
+						class="cell top-4"
+						*ngIf="value.currentMode === 'battlegrounds'"
+						[owTranslate]="'app.profile.match-stats.header-top-4'"
+					></div>
 				</div>
 				<div class="stats-content">
 					<profile-match-stats-class-info
