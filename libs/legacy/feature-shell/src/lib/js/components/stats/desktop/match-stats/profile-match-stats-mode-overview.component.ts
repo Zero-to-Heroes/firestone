@@ -20,11 +20,41 @@ import { ModeOverview } from './profile-match-stats.model';
 				<div class="info win-loss">
 					<div class="label" [owTranslate]="'app.profile.match-stats.header-total-matches-short'"></div>
 					<div class="value">
-						<div class="wins" *ngIf="overview.wins != null">{{ overview.wins }}</div>
-						<div class="losses" *ngIf="overview.losses != null">{{ overview.losses }}</div>
-						<div class="top-1" *ngIf="overview.top1 != null">{{ overview.top1 }}</div>
-						<div class="top-4" *ngIf="overview.top4 != null">{{ overview.top4 }}</div>
-						<div class="games-played" *ngIf="overview.gamesPlayed != null">{{ overview.gamesPlayed }}</div>
+						<div
+							class="wins"
+							*ngIf="overview.wins != null"
+							[helpTooltip]="'app.profile.match-stats.header-wins' | owTranslate"
+						>
+							{{ overview.wins }}
+						</div>
+						<div
+							class="top-1"
+							*ngIf="overview.top1 != null"
+							[helpTooltip]="'app.profile.match-stats.header-top-1' | owTranslate"
+						>
+							{{ overview.top1 }}
+						</div>
+						<div
+							class="top-4"
+							*ngIf="overview.top4 != null"
+							[helpTooltip]="'app.profile.match-stats.header-top-4' | owTranslate"
+						>
+							{{ overview.top4 }}
+						</div>
+						<div
+							class="games-played"
+							*ngIf="overview.gamesPlayed != null"
+							[helpTooltip]="'app.profile.match-stats.header-total-matches' | owTranslate"
+						>
+							{{ overview.gamesPlayed }}
+						</div>
+						<div
+							class="losses"
+							*ngIf="overview.losses != null"
+							[helpTooltip]="'app.profile.match-stats.header-losses' | owTranslate"
+						>
+							{{ overview.losses }}
+						</div>
 					</div>
 				</div>
 			</div>

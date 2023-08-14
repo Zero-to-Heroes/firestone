@@ -15,7 +15,10 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 		`../../../../../css/component/stats/desktop/match-stats/profile-match-stats.component.scss`,
 	],
 	template: `
-		<div class="player-match-stats" *ngIf="{ currentMode: currentMode$ | async } as value">
+		<div
+			class="player-match-stats"
+			*ngIf="{ currentMode: currentMode$ | async, missingContentText: missingContentText$ | async } as value"
+		>
 			<div class="mode-selection">
 				<profile-match-stats-mode-overview
 					class="mode-overview"
@@ -26,7 +29,7 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 				>
 				</profile-match-stats-mode-overview>
 			</div>
-			<div class="content">
+			<div class="content" *ngIf="!value.missingContentText?.length; else emptyState">
 				<div class="stats-header" *ngIf="sortCriteria$ | async as sort">
 					<div class="cell player-class"></div>
 					<sortable-table-label
@@ -92,6 +95,14 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 					</profile-match-stats-class-info>
 				</div>
 			</div>
+			<ng-template #emptyState>
+				<duels-empty-state
+					class="empty-state"
+					[title]="'app.profile.match-stats.no-data.title' | owTranslate"
+					[subtitle]="missingContentText$ | async"
+				>
+				</duels-empty-state>
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -101,6 +112,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 	currentMode$: Observable<'constructed' | 'duels' | 'arena' | 'battlegrounds'>;
 	classInfos$: Observable<readonly ClassInfo[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
+	missingContentText$: Observable<string>;
 
 	private currentMode$$ = new BehaviorSubject<'constructed' | 'duels' | 'arena' | 'battlegrounds'>('constructed');
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
@@ -230,7 +242,8 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/battlegrounds.webp?v=2`,
 					top1: top1,
 					top4: top4,
-					gamesPlayed: gamesPlayed,
+					losses: gamesPlayed - top1 - top4,
+					// gamesPlayed: gamesPlayed,
 					winrate: gamesPlayed === 0 ? null : (100 * (top1 + top4)) / gamesPlayed,
 				};
 
@@ -245,6 +258,30 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					winrate: duelsWins + duelsLosses === 0 ? null : (100 * duelsWins) / (duelsWins + duelsLosses),
 				};
 				return [...hsModes, bgMode, duelsMode];
+			}),
+		);
+
+		this.missingContentText$ = combineLatest([this.modeOverviews$, this.currentMode$]).pipe(
+			this.mapData(([modeOverviews, currentMode]) => {
+				switch (currentMode) {
+					case 'constructed':
+						console.debug();
+						return !!modeOverviews.find((m) => m.mode === 'constructed')?.wins
+							? null
+							: this.i18n.translateString('app.profile.match-stats.no-data.ranked');
+					case 'arena':
+						return !!modeOverviews.find((m) => m.mode === 'arena')?.wins
+							? null
+							: this.i18n.translateString('app.profile.match-stats.no-data.arena');
+					case 'battlegrounds':
+						return !!modeOverviews.find((m) => m.mode === 'battlegrounds')?.gamesPlayed
+							? null
+							: this.i18n.translateString('app.profile.match-stats.no-data.battlegrounds');
+					case 'duels':
+						return !!modeOverviews.find((m) => m.mode === 'duels')?.wins
+							? null
+							: this.i18n.translateString('app.profile.match-stats.no-data.duels');
+				}
 			}),
 		);
 	}

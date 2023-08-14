@@ -1,5 +1,7 @@
 :host {
 	min-height: 0;
+	flex-grow: 1;
+	display: flex;
 }
 
 .player-match-stats {
@@ -8,6 +10,7 @@
 	font-size: 14px;
 	min-height: 0;
 	max-height: 100%;
+	flex-grow: 1;
 }
 
 .mode-selection {
@@ -45,4 +48,8 @@
 		height: 40px;
 		margin-bottom: 5px;
 	}
+}
+
+.empty-state {
+	flex-grow: 1;
 }
