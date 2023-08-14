@@ -229,6 +229,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 						wins: wins,
 						losses: losses,
 						winrate: wins + losses === 0 ? null : (100 * wins) / (wins + losses),
+						winsTooltip: this.i18n.translateString('app.profile.match-stats.header-wins'),
 					};
 					return result;
 				});
@@ -240,11 +241,18 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					mode: 'battlegrounds',
 					title: this.i18n.translateString(`global.game-mode.battlegrounds`),
 					icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/battlegrounds.webp?v=2`,
+					wins: top4,
 					top1: top1,
-					top4: top4,
+					top1Tooltip: this.i18n.translateString('app.profile.match-stats.overview-top-1', {
+						value: `${top1}`,
+					}),
+					// top4: top4,
 					losses: gamesPlayed - top1 - top4,
 					// gamesPlayed: gamesPlayed,
 					winrate: gamesPlayed === 0 ? null : (100 * (top1 + top4)) / gamesPlayed,
+					winsTooltip: this.i18n.translateString('app.profile.match-stats.header-wins-bg', {
+						first: top1,
+					}),
 				};
 
 				const duelsWins = duelsHeroStats.map((info) => info.wins).reduce((a, b) => a + b, 0);
@@ -256,6 +264,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					wins: duelsWins,
 					losses: duelsLosses,
 					winrate: duelsWins + duelsLosses === 0 ? null : (100 * duelsWins) / (duelsWins + duelsLosses),
+					winsTooltip: this.i18n.translateString('app.profile.match-stats.header-wins'),
 				};
 				return [...hsModes, bgMode, duelsMode];
 			}),
@@ -274,7 +283,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 							? null
 							: this.i18n.translateString('app.profile.match-stats.no-data.arena');
 					case 'battlegrounds':
-						return !!modeOverviews.find((m) => m.mode === 'battlegrounds')?.gamesPlayed
+						return !!modeOverviews.find((m) => m.mode === 'battlegrounds')?.wins
 							? null
 							: this.i18n.translateString('app.profile.match-stats.no-data.battlegrounds');
 					case 'duels':

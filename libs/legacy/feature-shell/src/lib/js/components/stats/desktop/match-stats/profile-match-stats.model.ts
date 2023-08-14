@@ -14,10 +14,12 @@ export interface ModeOverview {
 	readonly mode: 'constructed' | 'duels' | 'arena' | 'battlegrounds';
 	readonly title: string;
 	readonly icon: string;
-	readonly wins?: number;
-	readonly losses?: number;
+	readonly wins: number;
+	readonly losses: number;
 	readonly top1?: number;
-	readonly top4?: number;
-	readonly gamesPlayed?: number;
+	readonly top1Tooltip?: string;
+	// readonly top4?: number;
+	// readonly gamesPlayed?: number;
 	readonly winrate: number;
+	readonly winsTooltip: string;
 }
