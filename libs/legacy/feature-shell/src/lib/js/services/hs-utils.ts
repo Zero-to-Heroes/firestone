@@ -478,6 +478,7 @@ const publicCardGiftCreators = [
 	CardIds.EliteTaurenChampion,
 	CardIds.EliteTaurenChampion_MoltenPickOfRockToken,
 	CardIds.EmbraceOfNature,
+	CardIds.EmbraceOfNature_EmbraceOfNatureToken,
 	CardIds.EmeraldExplorer_DRG_313,
 	CardIds.EncumberedPackMule,
 	CardIds.EnergyShaper,
