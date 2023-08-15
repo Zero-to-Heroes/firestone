@@ -84,6 +84,7 @@ import {
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
+	spellSchoolPlayedThisMatch,
 	summonsTreant,
 	taunt,
 	totem,
@@ -481,6 +482,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 			case CardIds.Bonecaller:
 				return and(side(inputSide), inGraveyard, minion, undead);
+			case CardIds.BonecrusherTavernBrawlToken:
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.Boneshredder:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.BoogieDown:
@@ -818,6 +821,14 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.InfantryReanimator:
 				return and(side(inputSide), inGraveyard, undead);
+			case CardIds.CoralKeeper:
+			case CardIds.Multicaster:
+			case CardIds.Sif:
+			case CardIds.DiscoveryOfMagic:
+			case CardIds.ElementalInspiration:
+			case CardIds.InquisitiveCreation:
+			case CardIds.WisdomOfNorgannon:
+				return and(side(inputSide), or(inDeck, inHand), spell, hasSpellSchool, not(spellSchoolPlayedThisMatch));
 			case CardIds.Insight:
 			case CardIds.Insight_InsightToken:
 				return and(side(inputSide), inDeck, minion);

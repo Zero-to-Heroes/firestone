@@ -73,32 +73,33 @@ export class SecretPlayedFromHandParser implements EventParser {
 				: cardWithZone,
 		);
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			hand: handAfterCardsRemembered,
-			otherZone: newOtherZone,
-			secrets: isCardCountered
-				? deck.secrets
-				: ([
-						...deck.secrets,
-						BoardSecret.create(
-							entityId,
-							cardId,
-							this.secretConfig.getValidSecrets(
-								currentState.metadata,
-								secretClass,
-								creatorCardId || card.creatorCardId,
+		const newPlayerDeck = deck
+			.update({
+				hand: handAfterCardsRemembered,
+				otherZone: newOtherZone,
+				secrets: isCardCountered
+					? deck.secrets
+					: ([
+							...deck.secrets,
+							BoardSecret.create(
+								entityId,
+								cardId,
+								this.secretConfig.getValidSecrets(
+									currentState.metadata,
+									secretClass,
+									creatorCardId || card.creatorCardId,
+								),
 							),
-						),
-				  ] as readonly BoardSecret[]),
-			cardsPlayedThisTurn:
-				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
-					? deck.cardsPlayedThisTurn
-					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
-			spellsPlayedThisMatch:
-				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
-					? deck.spellsPlayedThisMatch
-					: [...deck.spellsPlayedThisMatch, cardWithZone],
-		} as DeckState);
+					  ] as readonly BoardSecret[]),
+				cardsPlayedThisTurn:
+					isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
+						? deck.cardsPlayedThisTurn
+						: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
+			})
+			.updateSpellsPlayedThisMatch(
+				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY ? null : cardWithZone,
+				this.allCards,
+			);
 
 		const newCardPlayedThisMatch: ShortCard = {
 			entityId: cardWithZone.entityId,

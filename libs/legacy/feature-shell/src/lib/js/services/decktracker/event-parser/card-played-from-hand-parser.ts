@@ -1,7 +1,6 @@
 import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -177,25 +176,27 @@ export class CardPlayedFromHandParser implements EventParser {
 			manaSpentOnSpellsThisMatch += manaCost;
 		}
 
-		const newPlayerDeck = deck.update({
-			hand: handAfterCardsLinks,
-			board: newBoard,
-			deck: newDeck,
-			otherZone: newOtherZone,
-			cardsPlayedThisTurn: isCardCountered
-				? deck.cardsPlayedThisTurn
-				: ([...deck.cardsPlayedThisTurn, cardToAdd] as readonly DeckCard[]),
-			globalEffects: newGlobalEffects,
-			spellsPlayedThisMatch:
-				!isCardCountered && refCard?.type === 'Spell'
-					? [...deck.spellsPlayedThisMatch, cardToAdd]
-					: deck.spellsPlayedThisMatch,
-			manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
-			watchpostsPlayedThisMatch:
-				deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
-			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
-			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
-		} as DeckState);
+		const newPlayerDeck = deck
+			.update({
+				hand: handAfterCardsLinks,
+				board: newBoard,
+				deck: newDeck,
+				otherZone: newOtherZone,
+				cardsPlayedThisTurn: isCardCountered
+					? deck.cardsPlayedThisTurn
+					: ([...deck.cardsPlayedThisTurn, cardToAdd] as readonly DeckCard[]),
+				globalEffects: newGlobalEffects,
+				manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
+				watchpostsPlayedThisMatch:
+					deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
+				libramsPlayedThisMatch:
+					deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
+				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
+			})
+			.updateSpellsPlayedThisMatch(
+				isCardCountered && refCard?.type === 'Spell' ? null : cardToAdd,
+				this.allCards,
+			);
 		// console.debug('newPlayerDeck', newPlayerDeck);
 
 		const newCardPlayedThisMatch: ShortCard = {

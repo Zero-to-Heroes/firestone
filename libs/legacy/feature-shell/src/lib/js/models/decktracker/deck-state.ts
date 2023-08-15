@@ -84,6 +84,7 @@ export class DeckState {
 	readonly corpsesSpent: number = 0;
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
+	readonly uniqueSpellSchools: readonly string[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly manaSpentOnSpellsThisMatch: number = 0;
 	readonly watchpostsPlayedThisMatch: number = 0;
@@ -133,6 +134,26 @@ export class DeckState {
 
 	public update(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), this, value);
+	}
+
+	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService): DeckState {
+		if (!spell) {
+			return this;
+		}
+
+		const spellsPlayedThisMatch = [...(this.spellsPlayedThisMatch ?? []), spell];
+		const uniqueSpellSchools = [
+			...new Set(
+				(spellsPlayedThisMatch ?? [])
+					.map((card) => card.cardId)
+					.map((cardId) => allCards.getCard(cardId).spellSchool)
+					.filter((spellSchool) => !!spellSchool),
+			),
+		];
+		return this.update({
+			spellsPlayedThisMatch: spellsPlayedThisMatch,
+			uniqueSpellSchools: uniqueSpellSchools,
+		});
 	}
 
 	public findCard(entityId: number): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } {

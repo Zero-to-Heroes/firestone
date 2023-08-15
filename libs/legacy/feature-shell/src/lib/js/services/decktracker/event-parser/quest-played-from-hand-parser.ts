@@ -64,16 +64,15 @@ export class QuestPlayedFromHandParser implements EventParser {
 				  } as DeckCard)
 				: cardWithZone,
 		);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			hand: handAfterCardsRemembered,
-			otherZone: newOtherZone,
-			cardsPlayedThisTurn: isCardCountered
-				? deck.cardsPlayedThisTurn
-				: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
-			spellsPlayedThisMatch: isCardCountered
-				? deck.spellsPlayedThisMatch
-				: [...deck.spellsPlayedThisMatch, cardWithZone],
-		} as DeckState);
+		const newPlayerDeck = deck
+			.update({
+				hand: handAfterCardsRemembered,
+				otherZone: newOtherZone,
+				cardsPlayedThisTurn: isCardCountered
+					? deck.cardsPlayedThisTurn
+					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
+			})
+			.updateSpellsPlayedThisMatch(isCardCountered ? null : cardWithZone, this.allCards);
 
 		const newCardPlayedThisMatch: ShortCard = {
 			entityId: cardWithZone.entityId,

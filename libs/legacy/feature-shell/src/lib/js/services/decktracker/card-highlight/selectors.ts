@@ -194,6 +194,9 @@ export const hasSpellSchool = (input: SelectorInput): boolean => {
 	return !!input.card?.spellSchool;
 };
 
+export const spellSchoolPlayedThisMatch = (input: SelectorInput): boolean =>
+	input.deckState?.uniqueSpellSchools?.includes(input.card?.spellSchool);
+
 export const cardType =
 	(type: CardType) =>
 	(input: SelectorInput): boolean =>
