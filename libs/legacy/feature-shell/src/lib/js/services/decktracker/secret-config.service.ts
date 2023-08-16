@@ -28,7 +28,7 @@ export class SecretConfigService {
 			.filter((secret) => secret.playerClass === playerClass)
 			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
 			.filter((secret) => {
-				if (creatorCardId !== CardIds.TearReality) {
+				if (creatorCardId !== CardIds.TearReality && creatorCardId !== CardIds.TearReality_TornEnchantment) {
 					return true;
 				}
 				if (standardSecretCardIds.includes(secret.cardId)) {
@@ -60,7 +60,7 @@ export class SecretConfigService {
 	}
 
 	private getMode(metadata: Metadata, creatorCardId: string): string {
-		if (creatorCardId === CardIds.TearReality) {
+		if (creatorCardId === CardIds.TearReality || creatorCardId === CardIds.TearReality_TornEnchantment) {
 			return 'wild';
 		}
 
