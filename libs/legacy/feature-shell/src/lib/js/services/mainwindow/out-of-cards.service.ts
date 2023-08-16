@@ -1,12 +1,9 @@
-import { EventEmitter, Injectable, Optional } from '@angular/core';
-import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { EventEmitter, Injectable } from '@angular/core';
+import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Card } from '../../models/card';
 import { CollectionManager } from '../collection/collection-manager.service';
-import { Events } from '../events.service';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 
 const COLLECTION_UPLOAD = `https://outof.games/api/hearthstone/collection/import/`;
@@ -20,13 +17,13 @@ export class OutOfCardsService {
 		private api: ApiRunner,
 		private readonly i18n: LocalizationFacadeService,
 		// These are not needed for generating tokens
-		@Optional() private allCards: CardsFacadeService,
-		@Optional() private memory: MemoryInspectionService,
-		@Optional() private events: Events,
-		@Optional() private ow: OverwolfService,
-		@Optional() private gameEvents: GameEventsEmitterService,
-		@Optional() private notifs: OwNotificationsService,
-		@Optional() private collectionManager: CollectionManager,
+		private allCards: CardsFacadeService,
+		// @Optional() private memory: MemoryInspectionService,
+		// @Optional() private events: Events,
+		// @Optional() private ow: OverwolfService,
+		// @Optional() private gameEvents: GameEventsEmitterService,
+		private notifs: OwNotificationsService,
+		private collectionManager: CollectionManager,
 	) {
 		window['outOfCardsAuthUpdater'] = this.stateUpdater;
 		this.stateUpdater.subscribe((token: OutOfCardsToken) => {
@@ -44,22 +41,6 @@ export class OutOfCardsService {
 			});
 		}
 		console.log('[ooc-auth] handler init done');
-	}
-
-	public async generateToken(code: string): Promise<OutOfCardsToken> {
-		const requestString = `code=${code}&grant_type=authorization_code&redirect_uri=https://www.firestoneapp.com/ooc-login.html&client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC`;
-		const token: OutOfCardsToken = await this.api.callPostApi('https://outof.games/oauth/token/', requestString, {
-			contentType: 'application/x-www-form-urlencoded',
-		});
-		if (!token) {
-			return null;
-		}
-
-		const tokenWithExpiry: OutOfCardsToken = {
-			...token,
-			expires_timestamp: Date.now() + 1000 * token.expires_in,
-		};
-		return tokenWithExpiry;
 	}
 
 	private async handleToken(token: OutOfCardsToken) {

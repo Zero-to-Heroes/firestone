@@ -1,11 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { generateToken } from '@components/third-party/out-of-cards-callback.component';
+import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../../js/models/preferences';
 import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { FirestoneAchievementsChallengeService } from '../../js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
+import { OutOfCardsService, OutOfCardsToken } from '../../js/services/mainwindow/out-of-cards.service';
 import { ChangeVisibleApplicationEvent } from '../../js/services/mainwindow/store/events/change-visible-application-event';
 import { CloseMainWindowEvent } from '../../js/services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../js/services/mainwindow/store/events/main-window-store-event';
@@ -36,9 +38,11 @@ export class AppStartupService {
 		private readonly firestoneChallenges: FirestoneAchievementsChallengeService,
 		private readonly prefs: PreferencesService,
 		private readonly twitchAuth: TwitchAuthService,
+		private readonly oocAuth: OutOfCardsService,
 		private readonly ads: AdService,
 		private readonly localizationService: LocalizationFacadeService,
 		private readonly notifs: OwNotificationsService,
+		private readonly api: ApiRunner,
 	) {}
 
 	public async init() {
@@ -98,7 +102,8 @@ export class AppStartupService {
 
 		this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
-		this.ow.addAppLaunchTriggeredListener((info) => {
+		// TOOD: move this elsewhere
+		this.ow.addAppLaunchTriggeredListener(async (info) => {
 			if (
 				info?.origin === 'urlscheme' &&
 				decodeURIComponent(info.parameter).startsWith('firestoneapp://twitch/')
@@ -111,6 +116,20 @@ export class AppStartupService {
 					.reduce((pre, [key, value]) => ({ ...pre, [key]: value }), {});
 				console.log('hash is', hashAsObject);
 				this.twitchAuth.stateUpdater.next(hashAsObject);
+			} else if (
+				info?.origin === 'urlscheme' &&
+				decodeURIComponent(info.parameter).startsWith('firestoneapp://outofcards-callback')
+			) {
+				const codeCommponent = decodeURIComponent(info.parameter).split(
+					'firestoneapp://outofcards-callback/?',
+				)[1];
+				const code = codeCommponent.split('code=')[1];
+				console.debug('[oog] handling oog callback', info, code, decodeURIComponent(info.parameter));
+				const token: OutOfCardsToken = await generateToken(code, this.api);
+				console.debug('[oog] received token', token);
+				if (token) {
+					this.oocAuth.stateUpdater.next(token);
+				}
 			} else {
 				this.startApp(true);
 			}

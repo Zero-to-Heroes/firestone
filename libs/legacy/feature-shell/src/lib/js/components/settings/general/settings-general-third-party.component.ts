@@ -106,7 +106,7 @@ export class SettingsGeneralThirdPartyComponent
 	implements AfterContentInit, OnDestroy
 {
 	oocLoggedIn$: Observable<boolean>;
-	oocLoginUrl = `https://outof.games/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
+	oocLoginUrl = `https://outof.games/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/oog-login.html`;
 
 	vs = {
 		title: 'Vicious Syndicate',

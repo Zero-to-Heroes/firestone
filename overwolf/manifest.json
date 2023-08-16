@@ -241,6 +241,7 @@
 				"http://*.twitch.tv",
 				"https://*.twitch.tv",
 				"https://*.outof.games",
+				"https://outof.games",
 				"https://www.googletagmanager.com",
 				"https://*.pastebin.com"
 			]
