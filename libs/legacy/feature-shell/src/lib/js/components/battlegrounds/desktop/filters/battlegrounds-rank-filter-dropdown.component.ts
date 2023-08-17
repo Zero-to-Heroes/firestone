@@ -37,7 +37,7 @@ export class BattlegroundsRankFilterDropdownComponent
 
 	ngAfterContentInit() {
 		this.mmrPercentiles$ = this.store
-			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
+			.listen$(([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles)
 			.pipe(this.mapData(([percentiles]) => percentiles));
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter);
 		this.visible$ = this.store

@@ -44,7 +44,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
 				name: this.i18n.translateString('battlegrounds.menu.live-stats'),
 				stats: null,
-				globalStats: currentState.battlegrounds.globalStats,
+				// globalStats: currentState.battlegrounds.globalStats,
 				player: null,
 				// isComputing: true,
 				selectedStats: null, // We use the navigation-level info, to avoid

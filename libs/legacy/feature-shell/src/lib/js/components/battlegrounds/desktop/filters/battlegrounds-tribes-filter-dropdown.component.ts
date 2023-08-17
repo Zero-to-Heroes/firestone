@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -22,7 +22,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	template: `
 		<battlegrounds-tribes-filter-dropdown-view
 			class="battlegrounds-tribes-filter-dropdown"
-			[allTribes]="allTribes$ | async"
+			[allTribes]="allTribes"
 			[currentFilter]="currentFilter$ | async"
 			[visible]="visible$ | async"
 			[validationErrorTooltip]="validationErrorTooltip"
@@ -35,7 +35,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	allTribes$: Observable<readonly Race[]>;
+	allTribes = ALL_BG_RACES;
 	currentFilter$: Observable<readonly Race[]>;
 	visible$: Observable<boolean>;
 
@@ -53,9 +53,6 @@ export class BattlegroundsTribesFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.allTribes$ = this.store
-			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
-			.pipe(this.mapData(([allTribes]) => allTribes));
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveTribesFilter);
 		this.visible$ = this.store
 			.listen$(

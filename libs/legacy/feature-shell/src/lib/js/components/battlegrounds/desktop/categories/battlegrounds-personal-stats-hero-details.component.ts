@@ -6,12 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
@@ -33,7 +32,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<div class="stats" *ngIf="selectedTab$ | async as selectedTab">
 				<ul class="tabs">
 					<li
-						*ngFor="let tab of tabs$ | async"
+						*ngFor="let tab of tabs"
 						class="tab"
 						[ngClass]="{ active: tab === selectedTab }"
 						(mousedown)="selectTab(tab)"
@@ -57,7 +56,14 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	tabs$: Observable<readonly BgsHeroStatsFilterId[]>;
+	tabs: readonly BgsHeroStatsFilterId[] = [
+		'strategies',
+		'winrate-stats',
+		// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
+		// 'mmr',
+		'warband-stats',
+		'final-warbands',
+	];
 	selectedTab$: Observable<BgsHeroStatsFilterId>;
 	player$: Observable<BgsPlayer>;
 
@@ -74,16 +80,6 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 	}
 
 	ngAfterContentInit() {
-		this.tabs$ = this.store
-			.listen$(
-				([main, nav]) => main.battlegrounds,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			)
-			.pipe(
-				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
-				filter((category) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
-				this.mapData((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
-			);
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
 			.pipe(

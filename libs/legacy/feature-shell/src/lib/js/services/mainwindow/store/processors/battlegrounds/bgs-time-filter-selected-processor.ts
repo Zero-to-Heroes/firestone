@@ -2,7 +2,6 @@ import { EventEmitter } from '@angular/core';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreferencesService } from '../../../../preferences.service';
-import { BgsRequestNewGlobalStatsLoadEvent } from '../../events/battlegrounds/bgs-request-new-global-stats-load-event';
 import { BgsTimeFilterSelectedEvent } from '../../events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 import { Processor } from '../processor';
@@ -20,10 +19,10 @@ export class BgsTimeFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsTimeFilter(event.timeFilter);
-		const prefs = await this.prefs.getPreferences();
-		this.stateUpdater.next(
-			new BgsRequestNewGlobalStatsLoadEvent(prefs.bgsActiveTribesFilter, prefs.bgsActiveTimeFilter),
-		);
+		// const prefs = await this.prefs.getPreferences();
+		// this.stateUpdater.next(
+		// 	new BgsRequestNewGlobalStatsLoadEvent(prefs.bgsActiveTribesFilter, prefs.bgsActiveTimeFilter),
+		// );
 		return [null, null];
 	}
 }

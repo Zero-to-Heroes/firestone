@@ -2,11 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { ApiRunner, CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
 import { Events } from '../events.service';
@@ -67,7 +64,7 @@ export class BgsInitService {
 
 	public async initBattlegoundsAppState(
 		initialState: BattlegroundsAppState,
-		bgsGlobalStats: BgsStats,
+		// bgsGlobalStats: BgsStats,
 		// perfectGames: readonly GameStat[],
 		patch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
@@ -77,7 +74,7 @@ export class BgsInitService {
 			// 	name: this.i18n.translateString('app.battlegrounds.menu.overview'),
 			// }),
 			// this.buildPersonalHeroesCategory(bgsGlobalStats),
-			this.buildMetaHeroesCategory(bgsGlobalStats),
+			// this.buildMetaHeroesCategory(bgsGlobalStats),
 			FeatureFlags.ENABLE_BGS_QUESTS_IN_APP
 				? BattlegroundsCategory.create({
 						id: 'bgs-category-meta-quests',
@@ -103,7 +100,7 @@ export class BgsInitService {
 		].filter((c) => !!c);
 		return initialState.update({
 			categories: categories,
-			globalStats: bgsGlobalStats,
+			// globalStats: bgsGlobalStats,
 			// perfectGames: perfectGames,
 			loading: false,
 			currentBattlegroundsMetaPatch: patch,
@@ -134,31 +131,31 @@ export class BgsInitService {
 	// 	} as BattlegroundsPersonalHeroesCategory);
 	// }
 
-	private buildMetaHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
-		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
-		const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
-			BattlegroundsPersonalStatsHeroDetailsCategory.create({
-				id: 'bgs-category-personal-hero-details-' + heroCardId,
-				name: this.cards.getCard(heroCardId)?.name,
-				heroId: heroCardId,
-				tabs: [
-					'strategies',
-					'winrate-stats',
-					// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
-					// 'mmr',
-					'warband-stats',
-					'final-warbands',
-				] as readonly BgsHeroStatsFilterId[],
-			} as BattlegroundsPersonalStatsHeroDetailsCategory),
-		);
-		return BattlegroundsCategory.create({
-			id: 'bgs-category-meta-heroes',
-			name: this.i18n.translateString('app.battlegrounds.menu.meta-heroes'),
-			categories: heroDetailCategories,
-		});
-		// return BattlegroundsPersonalHeroesCategory.create({
-		// 	name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
-		// 	categories: heroDetailCategories,
-		// } as BattlegroundsPersonalHeroesCategory);
-	}
+	// private buildMetaHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
+	// 	const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
+	// 	const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
+	// 		BattlegroundsPersonalStatsHeroDetailsCategory.create({
+	// 			id: 'bgs-category-personal-hero-details-' + heroCardId,
+	// 			name: this.cards.getCard(heroCardId)?.name,
+	// 			heroId: heroCardId,
+	// 			tabs: [
+	// 				'strategies',
+	// 				'winrate-stats',
+	// 				// Graph is buggy at the moment, and is not super useful, so let's scrap it for now
+	// 				// 'mmr',
+	// 				'warband-stats',
+	// 				'final-warbands',
+	// 			] as readonly BgsHeroStatsFilterId[],
+	// 		} as BattlegroundsPersonalStatsHeroDetailsCategory),
+	// 	);
+	// 	return BattlegroundsCategory.create({
+	// 		id: 'bgs-category-meta-heroes',
+	// 		name: this.i18n.translateString('app.battlegrounds.menu.meta-heroes'),
+	// 		categories: heroDetailCategories,
+	// 	});
+	// 	// return BattlegroundsPersonalHeroesCategory.create({
+	// 	// 	name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
+	// 	// 	categories: heroDetailCategories,
+	// 	// } as BattlegroundsPersonalHeroesCategory);
+	// }
 }

@@ -153,10 +153,10 @@ export class StoreBootstrapService {
 		]);
 		console.log('loaded info');
 
-		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(
-			mergedPrefs.bgsActiveTribesFilter,
-			mergedPrefs.bgsActiveTimeFilter,
-		);
+		// const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(
+		// 	mergedPrefs.bgsActiveTribesFilter,
+		// 	mergedPrefs.bgsActiveTimeFilter,
+		// );
 
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
@@ -164,7 +164,7 @@ export class StoreBootstrapService {
 			: null;
 		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(
 			windowStateForFtue.battlegrounds,
-			bgsGlobalStats,
+			// bgsGlobalStats,
 			currentBattlegroundsMetaPatch,
 		);
 

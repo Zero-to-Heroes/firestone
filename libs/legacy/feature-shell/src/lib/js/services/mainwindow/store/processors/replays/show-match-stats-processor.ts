@@ -44,7 +44,7 @@ export class ShowMatchStatsProcessor implements Processor {
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
 				name: this.i18n.translateString('battlegrounds.menu.live-stats'),
 				stats: matchStats,
-				globalStats: currentState.battlegrounds.globalStats,
+				// globalStats: currentState.battlegrounds.globalStats,
 				player: matchStats
 					? BgsPlayer.create({
 							cardId: playerCardId,

@@ -47,7 +47,6 @@ import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-upda
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
 import { BgsInitMmrParser } from './event-parsers/bgs-init-mmr-parser';
-import { BgsInitParser } from './event-parsers/bgs-init-parser';
 import { BgsLeaderboardPlaceParser } from './event-parsers/bgs-leaderboard-place-parser';
 import { BgsMatchStartParser } from './event-parsers/bgs-match-start-parser';
 import { BgsNextOpponentParser } from './event-parsers/bgs-next-opponent-parser';
@@ -224,7 +223,7 @@ export class BattlegroundsStoreService {
 				// Order is important here, so that when the MMR is set the races are already populated
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
 				this.battlegroundsUpdater.next(
-					new BgsInitMmrEvent(this.mainWindowState.battlegrounds?.globalStats?.mmrPercentiles),
+					new BgsInitMmrEvent(this.mainWindowState.battlegrounds?.getMetaHeroStats()?.mmrPercentiles),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId, gameEvent.additionalData));
@@ -551,7 +550,7 @@ export class BattlegroundsStoreService {
 			new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n),
 			new BgsGameSettingsParser(),
 			// new BattlegroundsResetBattleStateParser(),
-			new BgsInitParser(this.prefs, this.i18n),
+			// new BgsInitParser(this.prefs, this.i18n),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
 			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs, this.i18n),
 			new BgsHeroSelectedParser(this.allCards, this.i18n),

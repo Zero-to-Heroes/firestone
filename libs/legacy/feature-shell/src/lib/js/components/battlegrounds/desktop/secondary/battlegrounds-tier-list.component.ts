@@ -8,7 +8,7 @@ import {
 	Input,
 } from '@angular/core';
 import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { Race, getTribeName } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
@@ -88,7 +88,7 @@ export class BattlegroundsTierListComponent
 
 	ngAfterContentInit() {
 		this.store
-			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats.mmrPercentiles)
+			.listen$(([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats().mmrPercentiles)
 			.pipe(this.mapData(([percentiles]) => percentiles))
 			.subscribe((percentiles) => {
 				this.percentiles = percentiles;
@@ -96,22 +96,20 @@ export class BattlegroundsTierListComponent
 		this.stats$ = combineLatest([
 			this.store.bgsMetaStatsHero$(),
 			this.store.listen$(
-				([main, nav, prefs]) => main.battlegrounds.globalStats.mmrPercentiles,
-				([main, nav, prefs]) => main.battlegrounds.globalStats.allTribes,
-				([main, nav, prefs]) => main.battlegrounds.globalStats.lastUpdateDate,
+				([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats().mmrPercentiles,
+				([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats().lastUpdateDate,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
 		]).pipe(
 			filter(
-				([stats, [mmrPercentiles, allTribes, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) =>
-					!!stats?.length,
+				([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => !!stats?.length,
 			),
-			map(([stats, [mmrPercentiles, allTribes, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => ({
+			map(([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => ({
 				stats: stats,
 				mmrPercentiles: mmrPercentiles,
-				allTribes: allTribes,
+				allTribes: ALL_BG_RACES,
 				lastUpdateDate: lastUpdateDate,
 				timeFilter: timeFilter,
 				rankFilter: rankFilter,

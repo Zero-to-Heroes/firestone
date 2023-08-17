@@ -34,7 +34,7 @@ export class BattlegroundsPerfectGamesComponent
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.getPerfectGames(),
-				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
+				([main, nav]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 			)

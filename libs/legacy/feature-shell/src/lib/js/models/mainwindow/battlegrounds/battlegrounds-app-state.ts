@@ -5,7 +5,6 @@ import { BgsHeroStrategies } from '../../../services/battlegrounds/bgs-meta-hero
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStatsForReview } from '../../battlegrounds/bgs-post-match-stats-for-review';
-import { BgsStats } from '../../battlegrounds/stats/bgs-stats';
 import { PatchInfo } from '../../patches';
 import { BattlegroundsCategory } from './battlegrounds-category';
 import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-state';
@@ -13,13 +12,15 @@ import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-stat
 export class BattlegroundsAppState {
 	readonly loading: boolean = true;
 	readonly categories: readonly BattlegroundsCategory[] = [];
-	readonly globalStats: BgsStats = new BgsStats();
+	// Is this really useful apart from getting the tribes and mmr percentiles?
+	// readonly globalStats: BgsStats = new BgsStats();
 	readonly currentBattlegroundsMetaPatch: PatchInfo;
 	readonly customSimulationState: BgsCustomSimulationState = new BgsCustomSimulationState();
 
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
 	readonly lastHeroPostMatchStatsHeroId: string;
 
+	// Use the getters
 	// See decktracker-state.ts for more info
 	readonly perfectGames: readonly GameStat[] = undefined;
 	readonly metaHeroStats: BgsHeroStatsV2 = undefined;
