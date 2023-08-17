@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 export class TavernLevelIconComponent {
 	image: string;
 
-	@Input() set level(value: number) {
+	@Input() set level(value: number | undefined) {
 		this.image = value
 			? `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${value}.png`
 			: 'https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_0.png';
