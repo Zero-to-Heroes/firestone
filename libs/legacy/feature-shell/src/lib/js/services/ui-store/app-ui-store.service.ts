@@ -715,31 +715,45 @@ export class AppUiStoreService extends Store<Preferences> {
 			this.listenPrefs$(
 				(prefs) => prefs.bgsActiveRankFilter,
 				(prefs) => prefs.bgsActiveTribesFilter,
+				(prefs) => prefs.bgsActiveAnomaliesFilter,
 				(prefs) => prefs.bgsHeroesUseConservativeEstimate,
 			),
 		]).pipe(
 			debounceTime(200),
 			distinctUntilChanged(),
-			map(([[stats], [bgsActiveRankFilter, bgsActiveTribesFilter, bgsHeroesUseConservativeEstimate]]) => {
-				console.debug(
-					'[bgs-1] rebuilding meta hero stats 1',
-					stats,
-					'rankFilter',
-					bgsActiveRankFilter,
-					'tribesFilter',
-					bgsActiveTribesFilter,
-					'bgsHeroesUseConservativeEstimate',
-					bgsHeroesUseConservativeEstimate,
-				);
-				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
-					stats?.heroStats,
-					bgsActiveRankFilter,
-					bgsActiveTribesFilter,
-					bgsHeroesUseConservativeEstimate,
-					this.allCards,
-				);
-				return result;
-			}),
+			map(
+				([
+					[stats],
+					[
+						bgsActiveRankFilter,
+						bgsActiveTribesFilter,
+						bgsActiveAnomaliesFilter,
+						bgsHeroesUseConservativeEstimate,
+					],
+				]) => {
+					console.debug(
+						'[bgs-1] rebuilding meta hero stats 1',
+						stats,
+						'rankFilter',
+						bgsActiveRankFilter,
+						'tribesFilter',
+						bgsActiveTribesFilter,
+						'anomaliesFilter',
+						bgsActiveAnomaliesFilter,
+						'bgsHeroesUseConservativeEstimate',
+						bgsHeroesUseConservativeEstimate,
+					);
+					const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
+						stats?.heroStats,
+						bgsActiveRankFilter,
+						bgsActiveTribesFilter,
+						bgsActiveAnomaliesFilter,
+						bgsHeroesUseConservativeEstimate,
+						this.allCards,
+					);
+					return result;
+				},
+			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 

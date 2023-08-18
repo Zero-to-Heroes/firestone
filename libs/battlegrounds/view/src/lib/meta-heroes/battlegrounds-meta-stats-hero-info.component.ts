@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ALL_BG_RACES, defaultStartingHp, GameType, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, GameType, defaultStartingHp, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
@@ -43,6 +43,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 					<span class="value">{{ playerAveragePosition }}</span>
 				</div>
+				<!-- TODO: add tooltip that details the calculation -->
 				<div
 					class="tribe-impact"
 					*ngIf="tribeImpactPosition !== null"
@@ -103,7 +104,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});
 
-		const showPlayerData = value.tribesFilter.length === ALL_BG_RACES.length;
+		const showPlayerData = value.tribesFilter.length === ALL_BG_RACES.length && value.anomaliesFilter?.length === 0;
 		this.playerDataPoints =
 			// Only show the player full data when not filtering by tribes
 			!!value.playerDataPoints && showPlayerData
@@ -112,7 +113,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 				  })
 				: null;
 		this.averagePosition = value.averagePosition.toFixed(2);
-		this.tribeImpactPosition = showPlayerData ? null : value.positionTribesModifier;
+		this.tribeImpactPosition = showPlayerData ? null : value.positionTribesModifier + value.positionAnomalyModifier;
 		this.playerAveragePosition = showPlayerData ? value.playerAveragePosition?.toFixed(2) : null;
 
 		const globalPlacementChartData: SimpleBarChartData = {

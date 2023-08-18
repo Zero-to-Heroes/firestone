@@ -12,8 +12,10 @@ export interface BgsMetaHeroStatTierItem {
 	readonly dataPoints: number;
 	readonly averagePosition: number;
 	readonly tribesFilter?: readonly Race[];
+	readonly anomaliesFilter: readonly string[];
 
 	readonly positionTribesModifier: number;
+	readonly positionAnomalyModifier: number;
 	readonly placementDistribution: readonly { rank: number; percentage: number }[];
 	readonly placementDistributionImpact: readonly { rank: number; percentage: number }[];
 	readonly combatWinrate: readonly { turn: number; winrate: number }[];

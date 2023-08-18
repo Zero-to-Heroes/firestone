@@ -592,6 +592,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 100;
 	readonly bgsActiveTribesFilter: readonly Race[] = [];
+	readonly bgsActiveAnomaliesFilter: readonly string[] = [];
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
