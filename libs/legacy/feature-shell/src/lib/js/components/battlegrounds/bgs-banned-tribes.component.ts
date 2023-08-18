@@ -6,8 +6,8 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { getTribeName, Race } from '@firestone-hs/reference-data';
-import { combineLatest, Observable } from 'rxjs';
+import { Race, getTribeName } from '@firestone-hs/reference-data';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -60,15 +60,14 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent
 	ngAfterContentInit() {
 		this.showAvailable$ = this.listenForBasicPref$((prefs) => prefs.bgsShowAvailableTribesOverlay);
 		this.singleRow$ = this.listenForBasicPref$((prefs) => prefs.bgsTribesOverlaySingleRow);
-		this.tribes$ = combineLatest(
-			this.store.listenBattlegrounds$(([state]) => state),
-			this.showAvailable$,
-		).pipe(
+		this.tribes$ = combineLatest([this.store.listenBattlegrounds$(([state]) => state), this.showAvailable$]).pipe(
 			this.mapData(([[state], showAvailable]) =>
-				showAvailable ? state?.currentGame?.availableRaces : state?.currentGame?.bannedRaces,
+				showAvailable || state?.currentGame?.availableRaces?.length == 1
+					? state?.currentGame?.availableRaces
+					: state?.currentGame?.bannedRaces,
 			),
 		);
-		this.tooltip$ = combineLatest(this.tribes$, this.showAvailable$).pipe(
+		this.tooltip$ = combineLatest([this.tribes$, this.showAvailable$]).pipe(
 			filter(([tribes, showAvailable]) => !!tribes?.length),
 			this.mapData(([tribes, showAvailable]) => {
 				const tribeNames = tribes.map((tribe) => getTribeName(tribe, this.i18n)).join(', ');
