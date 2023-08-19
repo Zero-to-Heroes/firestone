@@ -31,12 +31,11 @@ export class LadyDarkveinCounterDefinition implements CounterDefinition<GameStat
 
 	public select(gameState: GameState): readonly ShortCard[] {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.cardsPlayedThisMatch ?? [];
+		return deck.spellsPlayedThisMatch ?? [];
 	}
 
-	public emit(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<LadyDarkveinCounterDefinition> {
-		const lastShadowSpellCardId: string = cardsPlayedThisMatch
-			.filter((card) => card.side === this.side)
+	public emit(spellsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<LadyDarkveinCounterDefinition> {
+		const lastShadowSpellCardId: string = spellsPlayedThisMatch
 			.filter((card) => {
 				const ref = this.allCards.getCard(card.cardId);
 				return ref.spellSchool === SpellSchool[SpellSchool.SHADOW];
