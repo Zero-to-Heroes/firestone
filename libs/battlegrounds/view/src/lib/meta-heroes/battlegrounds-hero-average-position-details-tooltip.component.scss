@@ -27,6 +27,7 @@
 	font-weight: normal;
 	color: var(--default-text-color);
 	font-size: 13px;
+	max-width: 500px;
 
 	&.hidden {
 		display: none;
@@ -35,6 +36,10 @@
 	.modifiers {
 		list-style: none;
 		margin-top: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-right: 20px;
 
 		.item {
 			display: flex;

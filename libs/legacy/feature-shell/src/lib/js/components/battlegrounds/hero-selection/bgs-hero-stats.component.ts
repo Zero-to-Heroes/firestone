@@ -1,6 +1,10 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import {
+	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
+	BgsHeroAveragePositionDetails,
+} from '@firestone/battlegrounds/view';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -35,7 +39,10 @@ import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-to
 					></div>
 					<div
 						class="global-value"
-						[helpTooltip]="'battlegrounds.hero-stats.avg-position-global-tooltip' | owTranslate"
+						cachedComponentTooltip
+						[componentType]="averagePositionComponentType"
+						[componentInput]="averagePositionTooltipInput"
+						[componentTooltipCssClass]="'bgs-average-position-details'"
 					>
 						{{ buildValue(averagePosition) }}
 					</div>
@@ -88,6 +95,8 @@ import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-to
 })
 export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	componentType: ComponentType<BgsHeroStrategyTipsTooltipComponent> = BgsHeroStrategyTipsTooltipComponent;
+	averagePositionComponentType: ComponentType<BattlegroundsHeroAveragePositionDetailsTooltipComponent> =
+		BattlegroundsHeroAveragePositionDetailsTooltipComponent;
 
 	placementChartData$: Observable<SimpleBarChartData[]>;
 	averagePosition: number;
@@ -96,6 +105,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 	cardId: string;
 	_hero: BgsMetaHeroStatTierItem | BgsQuestStat;
 	showTurnWinrates: boolean;
+	averagePositionTooltipInput: BgsHeroAveragePositionDetails;
 
 	private placementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 	private playerPlacementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
@@ -113,6 +123,12 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 		this.placementDistribution$.next(value.placementDistribution);
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
 		this.showTurnWinrates = !!(value as BgsMetaHeroStatTierItem)?.combatWinrate?.length;
+		this.averagePositionTooltipInput = {
+			baseValue: value.averagePositionDetails.baseValue,
+			tribeModifiers: value.averagePositionDetails.tribesModifiers,
+			anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
+		};
+		console.debug('tooltip input', this.averagePositionTooltipInput);
 	}
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

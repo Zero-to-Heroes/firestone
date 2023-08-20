@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Race, getTribeIcon } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
@@ -6,7 +6,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 	selector: 'battlegrounds-hero-average-position-details-tooltip',
 	styleUrls: [`./battlegrounds-hero-average-position-details-tooltip.component.scss`],
 	template: `
-		<div class="bgs-hero-average-position-details-tooltip {{ cssClass }}" [ngClass]="{ hidden: !visible }">
+		<div class="bgs-hero-average-position-details-tooltip {{ cssClass }}" [ngClass]="{ hidden: !_visible }">
 			<div
 				class="details-text"
 				[fsTranslate]="'battlegrounds.hero-stats.avg-position-details-tooltip-details-text'"
@@ -36,7 +36,12 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 })
 export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 	@Input() cssClass: string;
-	@Input() visible = true;
+	@Input() set visible(value: boolean) {
+		this._visible = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	@Input() set config(value: BgsHeroAveragePositionDetails) {
 		this.baseValue = value.baseValue.toLocaleString(this.i18n.formatCurrentLocale(), {
@@ -71,6 +76,8 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 				.sort((a, b) => b.impact - a.impact) ?? [];
 	}
 
+	_visible: boolean;
+
 	baseValue: string;
 	tribes: readonly {
 		icon: string;
@@ -85,7 +92,11 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 		valueClass: string;
 	}[];
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 }
 
 export interface BgsHeroAveragePositionDetails {
