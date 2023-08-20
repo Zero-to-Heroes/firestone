@@ -7,6 +7,7 @@ import { BgsHeroPortraitComponent } from './common/bgs-hero-portrait.component';
 import { BattlegroundsRankFilterDropdownViewComponent } from './filters/battlegrounds-rank-filter-dropdown-view.component';
 import { BattlegroundsTimeFilterDropdownViewComponent } from './filters/battlegrounds-time-filter-dropdown-view.component';
 import { BattlegroundsTribesFilterDropdownViewComponent } from './filters/battlegrounds-tribes-filter-dropdown-view.component';
+import { BattlegroundsHeroAveragePositionDetailsTooltipComponent } from './meta-heroes/battlegrounds-hero-average-position-details-tooltip.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from './meta-heroes/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from './meta-heroes/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesViewComponent } from './meta-heroes/battlegrounds-meta-stats-heroes-view.component';
@@ -28,6 +29,7 @@ const components = [
 	BattlegroundsMetaStatsQuestRewardsViewComponent,
 	BattlegroundsMetaStatsQuestRewardTierComponent,
 	BattlegroundsMetaStatsQuestRewardInfoComponent,
+	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
 	BgsHeroPortraitComponent,
 	CircularProgressComponent,
 

@@ -1,10 +1,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ALL_BG_RACES, GameType, defaultStartingHp, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
+	BgsHeroAveragePositionDetails,
+} from './battlegrounds-hero-average-position-details-tooltip.component';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-hero-info',
@@ -35,7 +40,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</div>
 			</div>
 			<div class="position">
-				<div class="global">{{ averagePosition }}</div>
+				<div
+					class="global"
+					cachedComponentTooltip
+					[componentType]="averagePositionComponentType"
+					[componentInput]="averagePositionTooltipInput"
+					[componentTooltipCssClass]="'bgs-average-position-details'"
+				>
+					{{ averagePosition }}
+				</div>
 				<div
 					class="player"
 					*ngIf="playerAveragePosition !== null"
@@ -93,6 +106,9 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMetaStatsHeroInfoComponent {
+	averagePositionComponentType: ComponentType<BattlegroundsHeroAveragePositionDetailsTooltipComponent> =
+		BattlegroundsHeroAveragePositionDetailsTooltipComponent;
+
 	@Output() heroStatClick = new EventEmitter<string>();
 
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
@@ -115,6 +131,11 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 		this.averagePosition = value.averagePosition.toFixed(2);
 		this.tribeImpactPosition = showPlayerData ? null : value.positionTribesModifier + value.positionAnomalyModifier;
 		this.playerAveragePosition = showPlayerData ? value.playerAveragePosition?.toFixed(2) : null;
+		this.averagePositionTooltipInput = {
+			baseValue: value.averagePositionDetails.baseValue,
+			tribeModifiers: value.averagePositionDetails.tribesModifiers,
+			anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
+		};
 
 		const globalPlacementChartData: SimpleBarChartData = {
 			data: value.placementDistribution.map((p) => ({
@@ -158,6 +179,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	tribeImpactPosition: number;
 	placementChartData: SimpleBarChartData[];
 	netMmr: number;
+	averagePositionTooltipInput: BgsHeroAveragePositionDetails;
 
 	tribes: readonly TribeInfo[];
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };

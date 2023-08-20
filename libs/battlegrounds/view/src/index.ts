@@ -3,6 +3,7 @@ export * from './lib/common/bgs-hero-portrait.component';
 export * from './lib/filters/battlegrounds-rank-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-time-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-tribes-filter-dropdown-view.component';
+export * from './lib/meta-heroes/battlegrounds-hero-average-position-details-tooltip.component';
 export * from './lib/meta-heroes/battlegrounds-meta-stats-hero-info.component';
 export * from './lib/meta-heroes/battlegrounds-meta-stats-hero-tier.component';
 export * from './lib/meta-heroes/battlegrounds-meta-stats-heroes-view.component';

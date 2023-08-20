@@ -179,6 +179,12 @@ export const buildHeroStats = (
 			const tribesModifier = useTribesModifier
 				? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
 				: 0;
+			const tribesAveragePositionModifierDetails = useTribesModifier
+				? tribeStatsToUse?.map((t) => ({
+						tribe: t.tribe,
+						impact: t.impactAveragePosition,
+				  }))
+				: null;
 			debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
 
 			const useAnomalyModifier = !!anomalies?.length;
@@ -188,6 +194,12 @@ export const buildHeroStats = (
 			const anomalyModifier = useAnomalyModifier
 				? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
 				: 0;
+			const anomaliesAveragePositionModifierDetails = useAnomalyModifier
+				? anomalyStatsToUse.map((t) => ({
+						cardId: t.anomaly,
+						impact: t.impactAveragePosition,
+				  }))
+				: null;
 
 			let placementDistribution = stat.placementDistribution;
 			let combatWinrate = stat.combatWinrate;
@@ -290,13 +302,18 @@ export const buildHeroStats = (
 			);
 			warbandStats = addImpactToWarbandStats(warbandStats, warbandStatsImpactTribes, warbandStatsImpactAnomaly);
 
+			const averagePositionBaseValue = useConservativeEstimate
+				? stat.conservativePositionEstimate
+				: stat.averagePosition;
 			const result: BgsMetaHeroStatTierItem = {
 				id: stat.heroCardId,
 				dataPoints: stat.dataPoints,
-				averagePosition:
-					(useConservativeEstimate ? stat.conservativePositionEstimate : stat.averagePosition) +
-					tribesModifier +
-					anomalyModifier,
+				averagePosition: averagePositionBaseValue + tribesModifier + anomalyModifier,
+				averagePositionDetails: {
+					baseValue: averagePositionBaseValue,
+					tribesModifiers: tribesAveragePositionModifierDetails,
+					anomalyModifiers: anomaliesAveragePositionModifierDetails,
+				},
 				tribesFilter: tribes,
 				anomaliesFilter: anomalies,
 				positionTribesModifier: tribesModifier,
