@@ -651,7 +651,6 @@ import { WindowWrapperComponent } from './js/components/window-wrapper.component
 import { ActiveThemeDirective } from './js/directives/active-theme.directive';
 import { AskConfirmationDirective } from './js/directives/ask-confirmation.directive';
 import { BindCssVariableDirective } from './js/directives/bind-css-variable-directive';
-import { CachedComponentTooltipDirective } from './js/directives/cached-component-tooltip.directive';
 import { ComponentTooltipDirective } from './js/directives/component-tooltip.directive';
 import { DoubleClickDirective } from './js/directives/exclusive-double-click.directive';
 import { GrowOnClickDirective } from './js/directives/grow-on-click.directive';
@@ -932,7 +931,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConfirmationComponent,
 
 		ComponentTooltipDirective,
-		CachedComponentTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
@@ -1049,7 +1047,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConfirmationComponent,
 
 		ComponentTooltipDirective,
-		CachedComponentTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
@@ -1106,7 +1103,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MinionIconComponent,
 		BgsHeroTierComponent,
 		BgsHeroMiniComponent,
-		BgsHeroSelectionTooltipComponent,
 		BgsHeroStrategyTipsTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,

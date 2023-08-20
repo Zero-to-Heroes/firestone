@@ -9,6 +9,7 @@ export * from './lib/components/misc/progress-bar.component';
 export * from './lib/components/table/sortable-table-label.component';
 export * from './lib/components/toggle/toggle-view.component';
 export * from './lib/components/tooltip/buff-info.component';
+export * from './lib/components/tooltip/cached-component-tooltip.directive';
 export * from './lib/components/tooltip/card-tooltip-position.type';
 export * from './lib/components/tooltip/card-tooltip.component';
 export * from './lib/components/tooltip/card-tooltip.directive';

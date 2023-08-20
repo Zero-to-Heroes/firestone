@@ -1,9 +1,9 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
+import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { TooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

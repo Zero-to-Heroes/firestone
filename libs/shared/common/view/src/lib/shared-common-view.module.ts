@@ -15,6 +15,7 @@ import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { SortableLabelComponent } from './components/table/sortable-table-label.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
+import { CachedComponentTooltipDirective } from './components/tooltip/cached-component-tooltip.directive';
 import { CardTooltipComponent } from './components/tooltip/card-tooltip.component';
 import { CardTooltipDirective } from './components/tooltip/card-tooltip.directive';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
@@ -26,6 +27,7 @@ const components = [
 	CardTooltipDirective,
 	HelpTooltipDirective,
 	HelpTooltipComponent,
+	CachedComponentTooltipDirective,
 
 	FilterDropdownComponent,
 	FilterDropdownMultiselectComponent,
