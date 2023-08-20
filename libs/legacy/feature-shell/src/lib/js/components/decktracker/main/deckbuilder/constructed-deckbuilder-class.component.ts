@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { Observable } from 'rxjs';
 import { classes } from '../../../../services/hs-utils';
 import { ConstructedDeckbuilderClassSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-class-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -18,7 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 					role="listitem"
 					tabindex="0"
 					*ngFor="
-						let playerClass of classOptions | slice: row.startIndex:row.startIndex + row.items;
+						let playerClass of classOptions$ | async | slice: row.startIndex:row.startIndex + row.items;
 						trackBy: trackByCardId
 					"
 					(click)="onCardClicked(playerClass)"
@@ -52,7 +53,7 @@ export class ConstructedDeckbuilderClassComponent
 			startIndex: 7,
 		},
 	];
-	classOptions: readonly ClassOption[];
+	classOptions$: Observable<readonly ClassOption[]>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -63,13 +64,23 @@ export class ConstructedDeckbuilderClassComponent
 	}
 
 	ngAfterContentInit() {
-		this.classOptions = classes.map((playerClass) => {
-			return {
-				id: playerClass,
-				name: this.i18n.translateString(`global.class.${playerClass}`),
-				image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
-			};
-		});
+		this.classOptions$ = this.store
+			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat)
+			.pipe(
+				this.mapData(([currentFormat]) => {
+					const validClasses =
+						currentFormat === 'twist'
+							? classes.filter((c) => c !== 'DEMONHUNTER' && c !== 'DEATHKNIGHT')
+							: classes;
+					return validClasses.map((playerClass) => {
+						return {
+							id: playerClass,
+							name: this.i18n.translateString(`global.class.${playerClass}`),
+							image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
+						};
+					});
+				}),
+			);
 	}
 
 	trackByCardId(index: number, item: ClassOption) {
