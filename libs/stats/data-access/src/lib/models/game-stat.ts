@@ -39,6 +39,7 @@ export class GameStat {
 	readonly bgsHasPrizes: boolean;
 	readonly bgsHasQuests: boolean;
 	readonly bgsHeroQuests: readonly string[];
+	readonly bgsAnomalies: readonly string[];
 	readonly bgsQuestsCompletedTimings: readonly number[];
 	readonly bgsHeroQuestRewards: readonly string[];
 	readonly region: BnetRegion;

@@ -18,6 +18,7 @@ export class BgsPostMatchStatsPanel implements BgsPanel {
 	readonly numberOfDisplayedTabs: number;
 	readonly selectedStats: readonly BgsStatsFilterId[];
 	readonly availableTribes: readonly Race[];
+	readonly anomalies: readonly string[];
 	// readonly isComputing: boolean;
 	readonly forceOpen: boolean;
 

@@ -581,7 +581,6 @@ export class Preferences implements IPreferences {
 	readonly bgsMinionListShowGoldenCard: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;
-	readonly bgsUseTribeFilterInHeroSelection: boolean = false;
 	readonly bgsUseMmrFilterInHeroSelection: boolean = false;
 	readonly bgsShowOverlayButton: boolean = true;
 	readonly bgsOpponentOverlayAtTop: boolean = true;
@@ -607,6 +606,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' = 'all';
 	readonly bgsSavedRankFilter: BgsRankFilterType = 100;
 	readonly bgsSavedTribesFilter: readonly Race[] = [];
+	readonly bgsSavedAnomaliesFilter: readonly string[] = [];
 	readonly bgsHeroesUseConservativeEstimate: boolean = true;
 	readonly bgsShowBuddiesInSimulatorSelection: boolean = false;
 	readonly bgsQuestsActiveTab: BgsQuestActiveTabType = 'quests';

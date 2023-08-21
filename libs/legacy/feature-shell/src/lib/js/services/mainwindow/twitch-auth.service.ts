@@ -181,6 +181,7 @@ export class TwitchAuthService {
 						hasBuddies: bgsState.currentGame?.hasBuddies,
 						hasPrizes: bgsState.currentGame?.hasPrizes,
 						hasQuests: bgsState.currentGame?.hasQuests,
+						anomalies: bgsState.currentGame?.anomalies,
 					},
 			  }
 			: null;

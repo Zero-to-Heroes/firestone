@@ -10,9 +10,9 @@ import {
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import {
+	KnownBoard,
 	buildFinalWarband,
 	buildMatchResultText,
-	KnownBoard,
 } from '@components/replays/replay-info/replay-info-battlegrounds.component';
 import { GameType, getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
@@ -24,7 +24,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
-import { combineLatest, from, Observable } from 'rxjs';
+import { Observable, combineLatest, from } from 'rxjs';
 
 @Component({
 	selector: 'current-session-widget',
@@ -140,6 +140,11 @@ import { combineLatest, from, Observable } from 'rxjs';
 										}"
 									>
 										{{ match.deltaMmr }}
+									</div>
+									<div class="anomalies">
+										<div class="tribe" *ngFor="let tribe of match.anomalies">
+											<img class="icon" [src]="tribe.icon" />
+										</div>
 									</div>
 									<div class="tribes">
 										<div class="tribe" *ngFor="let tribe of match.availableTribes">
@@ -434,6 +439,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 			heroPortraitTooltip: heroCard.name,
 			placement: buildMatchResultText(info, this.i18n),
 			deltaMmr: parseInt(info.newPlayerRank) - parseInt(info.playerRank),
+			anomalies: [...(info.bgsAnomalies ?? [])].sort().map((anomaly) => ({
+				cardId: anomaly,
+				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
+				tooltip: this.allCards.getCard(anomaly).name,
+			})),
 			availableTribes: [...(info.bgsAvailableTribes ?? [])]
 				.sort((a, b) => a - b)
 				.map((race) => ({
@@ -486,6 +496,7 @@ interface SessionMatch {
 	readonly heroName: string;
 	readonly placement: string;
 	readonly deltaMmr: number;
+	readonly anomalies: readonly InternalTribe[];
 	readonly availableTribes: readonly InternalTribe[];
 	readonly finalWarband: KnownBoard;
 }

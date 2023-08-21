@@ -1,6 +1,6 @@
 .battlegrounds {
 	overflow: hidden;
-	
+
 	.group.result {
 		width: 55px;
 		display: flex;
@@ -13,12 +13,13 @@
 		opacity: 0.7;
 	}
 
-	.tribes {
+	.tribes,
+	.anomalies {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 
-		.tribe {
+		.item {
 			width: 30px;
 			height: 30px;
 			margin-top: -5px;

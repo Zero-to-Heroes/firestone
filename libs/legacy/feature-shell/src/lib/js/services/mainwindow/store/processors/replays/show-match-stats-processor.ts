@@ -66,6 +66,7 @@ export class ShowMatchStatsProcessor implements Processor {
 				],
 				numberOfDisplayedTabs: (await this.prefs.getPreferences()).bgsNumberOfDisplayedTabs,
 				availableTribes: selectedInfo.bgsAvailableTribes,
+				anomalies: selectedInfo.bgsAnomalies,
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({

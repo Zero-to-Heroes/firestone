@@ -766,11 +766,12 @@ export class AppUiStoreService extends Store<Preferences> {
 			this.listenPrefs$(
 				(prefs) => prefs.bgsActiveRankFilter,
 				(prefs) => prefs.bgsActiveTribesFilter,
+				(prefs) => prefs.bgsActiveAnomaliesFilter,
 				(prefs) => prefs.bgsActiveTimeFilter,
 			),
 		]).pipe(
 			// distinctUntilChanged(),
-			map(([games, [mmrPercentiles, patchInfo], [rankFilter, tribesFilter, timeFilter]]) => {
+			map(([games, [mmrPercentiles, patchInfo], [rankFilter, tribesFilter, anomaliesFilter, timeFilter]]) => {
 				console.debug('[bgs-1] rebuilding meta hero stats 2');
 				const targetRank: number =
 					!mmrPercentiles?.length || !rankFilter
@@ -783,6 +784,9 @@ export class AppUiStoreService extends Store<Preferences> {
 							!tribesFilter?.length ||
 							tribesFilter.length === ALL_BG_RACES.length ||
 							tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
+					)
+					.filter(
+						(g) => !anomaliesFilter?.length || anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a)),
 					);
 				const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
 				return afterFilter;

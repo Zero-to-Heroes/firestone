@@ -1,16 +1,15 @@
 import { EventEmitter } from '@angular/core';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { BgsRankFilterSelectedEvent } from '@services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
-import { BgsTribesFilterSelectedEvent } from '@services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
-import { BgsInitMmrEvent } from '../events/bgs-init-mmr-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsInitMmrEvent } from '../events/bgs-init-mmr-event';
 import { EventParser } from './_event-parser';
 
 export class BgsInitMmrParser implements EventParser {
@@ -42,24 +41,29 @@ export class BgsInitMmrParser implements EventParser {
 			...prefs,
 			bgsSavedRankFilter: prefs.bgsActiveRankFilter,
 			bgsSavedTribesFilter: prefs.bgsActiveTribesFilter,
+			bgsSavedAnomaliesFilter: prefs.bgsActiveAnomaliesFilter,
 		};
 		await this.prefs.savePreferences(savedPrefs);
 
-		const stateUpdater = this.stateUpdaterProvider();
-
-		const races = prefs.bgsUseTribeFilterInHeroSelection
-			? !!currentState.currentGame.availableRaces?.length
-				? currentState.currentGame.availableRaces
-				: ALL_BG_RACES
+		const races = !!currentState.currentGame.availableRaces?.length
+			? currentState.currentGame.availableRaces
 			: ALL_BG_RACES;
-		stateUpdater.next(new BgsTribesFilterSelectedEvent(races));
+
+		const anomalies = !!currentState.currentGame.anomalies?.length ? currentState.currentGame.anomalies : [];
 
 		const percentile = prefs.bgsUseMmrFilterInHeroSelection
 			? [...(event.mmrPercentiles ?? [])]
 					.sort((a, b) => b.mmr - a.mmr)
 					.find((percentile) => percentile.mmr <= (mmr ?? 0))
 			: null;
-		stateUpdater.next(new BgsRankFilterSelectedEvent(percentile?.percentile ?? 100));
+
+		const newPrefs: Preferences = {
+			...savedPrefs,
+			bgsActiveTribesFilter: races,
+			bgsActiveAnomaliesFilter: anomalies,
+			bgsActiveRankFilter: percentile?.percentile ?? 100,
+		};
+		await this.prefs.savePreferences(newPrefs);
 
 		return currentState.update({
 			currentGame: currentState.currentGame.update({

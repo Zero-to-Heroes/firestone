@@ -30,12 +30,6 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			</div>
 			<!-- <div class="filters" *ngIf="showFilters">
 				<preference-toggle
-					field="bgsUseTribeFilterInHeroSelection"
-					[label]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-label-short' | owTranslate"
-					[tooltip]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-tooltip' | owTranslate"
-					[toggleFunction]="toggleUseTribeFilter"
-				></preference-toggle>
-				<preference-toggle
 					field="bgsUseMmrFilterInHeroSelection"
 					[label]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate"
 					[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"

@@ -10,8 +10,6 @@ import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-ba
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { Preferences } from '../../../../models/preferences';
-import { BgsRankFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
-import { BgsTribesFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { PreferencesService } from '../../../preferences.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -43,15 +41,16 @@ export class BgsGameEndParser implements EventParser {
 		const prefs: Preferences = await this.prefs.getPreferences();
 
 		// Restore previous filter values
-		const savedPrefs = {
+		const savedPrefs: Preferences = {
 			...prefs,
 			bgsActiveRankFilter: prefs.bgsSavedRankFilter ?? prefs.bgsActiveRankFilter,
 			bgsActiveTribesFilter: prefs.bgsSavedTribesFilter ?? prefs.bgsActiveTribesFilter,
+			bgsActiveAnomaliesFilter: prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter,
 		};
 		await this.prefs.savePreferences(savedPrefs);
-		const stateUpdater = this.stateUpdaterProvider();
-		stateUpdater.next(new BgsTribesFilterSelectedEvent(savedPrefs.bgsActiveTribesFilter));
-		stateUpdater.next(new BgsRankFilterSelectedEvent(savedPrefs.bgsActiveRankFilter));
+		// const stateUpdater = this.stateUpdaterProvider();
+		// stateUpdater.next(new BgsTribesFilterSelectedEvent(savedPrefs.bgsActiveTribesFilter));
+		// stateUpdater.next(new BgsRankFilterSelectedEvent(savedPrefs.bgsActiveRankFilter));
 
 		console.debug('will build post-match info', prefs.bgsForceShowPostMatchStats2);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;

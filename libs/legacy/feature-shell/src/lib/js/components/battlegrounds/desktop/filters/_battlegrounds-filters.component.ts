@@ -19,6 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-hero-filter-dropdown class="hero-filter"></battlegrounds-hero-filter-dropdown>
 			<battlegrounds-rank-filter-dropdown class="rank-filter"></battlegrounds-rank-filter-dropdown>
 			<battlegrounds-tribes-filter-dropdown class="tribes-filter"></battlegrounds-tribes-filter-dropdown>
+			<battlegrounds-anomalies-filter-dropdown class="anomalies-filter"></battlegrounds-anomalies-filter-dropdown>
 			<battlegrounds-rank-group-dropdown class="rank-group"></battlegrounds-rank-group-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>

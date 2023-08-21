@@ -11,7 +11,7 @@ import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
@@ -39,12 +39,6 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				</div>
 			</div>
 			<div class="filters" *ngIf="showFilters">
-				<preference-toggle
-					field="bgsUseTribeFilterInHeroSelection"
-					[label]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-label-short' | owTranslate"
-					[tooltip]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-tooltip' | owTranslate"
-					[toggleFunction]="toggleUseTribeFilter"
-				></preference-toggle>
 				<preference-toggle
 					field="bgsUseMmrFilterInHeroSelection"
 					[label]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate"
@@ -78,6 +72,7 @@ export class BattlegroundsTierListComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -101,12 +96,13 @@ export class BattlegroundsTierListComponent
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
+				([main, nav, prefs]) => prefs.bgsActiveAnomaliesFilter,
 			),
 		]).pipe(
 			filter(
 				([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => !!stats?.length,
 			),
-			map(([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => ({
+			map(([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter, anomaliesFilter]]) => ({
 				stats: stats,
 				mmrPercentiles: mmrPercentiles,
 				allTribes: ALL_BG_RACES,
@@ -114,6 +110,7 @@ export class BattlegroundsTierListComponent
 				timeFilter: timeFilter,
 				rankFilter: rankFilter,
 				tribesFilter: tribesFilter,
+				anomaliesFilter: anomaliesFilter,
 			})),
 			this.mapData((info) => {
 				const stats = info.stats;
@@ -156,6 +153,7 @@ export class BattlegroundsTierListComponent
 									this.i18n,
 								)}</li>
 								<li class="filter tribesFilter">${this.buildTribesFilterText(info.tribesFilter, info.allTribes)}</li>
+								<li class="filter anomaliesFilter">${this.buildAnomaliesFilterText(info.anomaliesFilter)}</li>
 							</ul>
 							<div class="footer">${lastUpdateText}</div>
 						</div>
@@ -183,6 +181,16 @@ export class BattlegroundsTierListComponent
 		}
 		return tribesFilter
 			.map((tribe) => getTribeName(tribe, this.i18n))
+			.sort()
+			.join(', ');
+	}
+
+	private buildAnomaliesFilterText(anomaliesFilter: readonly string[]): string {
+		if (!anomaliesFilter?.length) {
+			return this.i18n.translateString('app.battlegrounds.filters.anomaly.all-anomalies');
+		}
+		return anomaliesFilter
+			.map((a) => this.allCards.getCard(a).name)
 			.sort()
 			.join(', ');
 	}

@@ -154,6 +154,7 @@ export class GameEvents {
 							battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
 							battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
 							battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
+							battlegroundsAnomalies: gameEvent.Value?.BattlegroundsAnomalies,
 						},
 					} as GameEvent),
 				);

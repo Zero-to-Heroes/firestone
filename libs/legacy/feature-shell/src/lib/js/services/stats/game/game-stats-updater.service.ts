@@ -1,9 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import {
+	Replay,
 	extractTotalDuration,
 	extractTotalTurns,
 	parseHsReplayString,
-	Replay,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
@@ -107,7 +107,7 @@ export class GameStatsUpdaterService {
 			bgsHeroQuests: quests.map((q) => q.questCardId) as readonly string[],
 			bgsQuestsCompletedTimings: quests.map((q) => q.turnCompleted) as readonly number[],
 			bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],
-			// xpGained: game.xpGained,
+			bgsAnomalies: game.bgsAnomalies,
 		} as GameStat);
 
 		const mainStore = this.stateEmitter?.value;

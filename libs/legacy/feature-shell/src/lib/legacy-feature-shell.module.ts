@@ -516,6 +516,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 // import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 // import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
+import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -1362,6 +1363,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsHeroFilterDropdownComponent,
 		BattlegroundsRankFilterDropdownComponent,
 		BattlegroundsTribesFilterDropdownComponent,
+		BattlegroundsAnomaliesFilterDropdownComponent,
 		BattlegroundsRankGroupDropdownComponent,
 		BattlegroundsTimeFilterDropdownComponent,
 		BattlegroundsQuestTypeFilterDropdownComponent,

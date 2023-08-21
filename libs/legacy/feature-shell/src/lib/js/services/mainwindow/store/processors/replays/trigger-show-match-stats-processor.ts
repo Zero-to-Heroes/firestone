@@ -57,6 +57,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 				],
 				numberOfDisplayedTabs: prefs.bgsNumberOfDisplayedTabs,
 				availableTribes: selectedInfo.bgsAvailableTribes,
+				anomalies: selectedInfo.bgsAnomalies,
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({

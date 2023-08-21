@@ -17,13 +17,13 @@ import {
 	ReferenceCard,
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
+import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { getAllCardsInGame, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Tier } from './battlegrounds-minions-tiers-view.component';
 
@@ -95,6 +95,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.store.listenBattlegrounds$(
 				([main, prefs]) => main?.currentGame?.availableRaces,
 				([main, prefs]) => main?.currentGame?.hasBuddies,
+				([main, prefs]) => main?.currentGame?.anomalies,
 				([main, prefs]) => main?.currentGame?.getMainPlayer()?.cardId,
 				([main, prefs]) => main?.currentGame?.players?.map((p) => p.cardId),
 			),
@@ -102,7 +103,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.mapData(
 				([
 					[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup],
-					[races, hasBuddies, playerCardId, allPlayersCardIds],
+					[races, hasBuddies, anomalies, playerCardId, allPlayersCardIds],
 				]) => {
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
@@ -115,6 +116,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						bgsGroupMinionsIntoTheirTribeGroup,
 						showMechanicsTiers,
 						races,
+						anomalies,
 						normalizedCardId,
 						allPlayerCardIds,
 						hasBuddies,
@@ -156,6 +158,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		groupMinionsIntoTheirTribeGroup: boolean,
 		showMechanicsTiers: boolean,
 		availableTribes: readonly Race[],
+		anomalies: readonly string[],
 		playerCardId: string,
 		allPlayerCardIds: readonly string[],
 		hasBuddies: boolean,
@@ -164,9 +167,11 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			return [];
 		}
 
+		const useTier7 = anomalies.includes(CardIds.SecretsOfNorgannon) || playerCardId === CardIds.ThorimStormlord_BG;
+		const filteredCards = cardsInGame.filter((card) => (useTier7 ? true : card.techLevel < 7));
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
-		)(cardsInGame);
+		)(filteredCards);
 		const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],

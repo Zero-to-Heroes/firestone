@@ -47,8 +47,14 @@ declare let amplitude;
 					<div class="result">{{ result }}</div>
 				</div>
 
+				<div class="group anomalies" *ngIf="anomalies?.length" [helpTooltip]="anomaliesTooltip">
+					<div class="item" *ngFor="let tribe of anomalies">
+						<img class="icon" [src]="tribe.icon" />
+					</div>
+				</div>
+
 				<div class="group tribes" *ngIf="availableTribes?.length" [helpTooltip]="tribesTooltip">
-					<div class="tribe" *ngFor="let tribe of availableTribes">
+					<div class="item" *ngFor="let tribe of availableTribes">
 						<img class="icon" [src]="tribe.icon" />
 					</div>
 				</div>
@@ -142,6 +148,8 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	hasPrizes: boolean;
 	availableTribes: readonly InternalTribe[];
 	tribesTooltip: string;
+	anomalies: readonly InternalTribe[];
+	anomaliesTooltip: string;
 
 	private bgsPerfectGame: boolean;
 
@@ -203,8 +211,16 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 				icon: getTribeIcon(race),
 				tooltip: getTribeName(race, this.i18n),
 			}));
+		this.anomalies = [...(this.replayInfo.bgsAnomalies ?? [])].sort().map((anomaly) => ({
+			cardId: anomaly,
+			icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
+			tooltip: this.allCards.getCard(anomaly).name,
+		}));
 		this.tribesTooltip = this.i18n.translateString('app.replays.replay-info.bgs-available-tribes-tooltip', {
 			value: this.availableTribes.map((tribe) => tribe.tooltip).join(', '),
+		});
+		this.anomaliesTooltip = this.i18n.translateString('app.replays.replay-info.bgs-anomalies-tooltip', {
+			value: this.anomalies.map((a) => a.tooltip).join(', '),
 		});
 		this.bgsPerfectGame = this.replayInfo.bgsPerfectGame;
 		this.finalWarband = buildFinalWarband(this.replayInfo, this.allCards);
