@@ -168,7 +168,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		}
 
 		const useTier7 = anomalies.includes(CardIds.SecretsOfNorgannon) || playerCardId === CardIds.ThorimStormlord_BG;
-		const filteredCards = cardsInGame.filter((card) => (useTier7 ? true : card.techLevel < 7));
+		const filteredCards = cardsInGame
+			.filter((card) => (useTier7 ? true : card.techLevel < 7))
+			.filter((card) => !isCardExcludedByAnomaly(card, anomalies));
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
 		)(filteredCards);
@@ -303,3 +305,42 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		return mechanicalTiers;
 	}
 }
+
+const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {
+	if (anomalies.includes(CardIds.UncompensatedUpset)) {
+		return [CardIds.CorpseRefiner_BG25_033, CardIds.CorpseRefiner_BG25_033_G].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.PackedStands)) {
+		return [CardIds.SeabornSummoner, CardIds.SeabornSummoner_G].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.FalseIdols)) {
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+			card.id as CardIds,
+		);
+	} else if (anomalies.includes(CardIds.GoldenArena)) {
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+			card.id as CardIds,
+		);
+	} else if (anomalies.includes(CardIds.BigLeague)) {
+		return [
+			CardIds.TheBoogieMonster_BG26_176,
+			CardIds.TheBoogieMonster_BG26_176_G,
+			CardIds.PatientScout_BG24_715,
+			CardIds.PatientScout_BG24_715_G,
+			CardIds.FacelessDisciple_BG24_719,
+			CardIds.FacelessDisciple_BG24_719_G,
+			CardIds.KingVarian_BG,
+			CardIds.KingVarian_BG_G,
+		].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.LittleLeague)) {
+		return [
+			CardIds.TheBoogieMonster_BG26_176,
+			CardIds.TheBoogieMonster_BG26_176_G,
+			CardIds.PatientScout_BG24_715,
+			CardIds.PatientScout_BG24_715_G,
+			CardIds.FacelessDisciple_BG24_719,
+			CardIds.FacelessDisciple_BG24_719_G,
+			CardIds.KingVarian_BG,
+			CardIds.KingVarian_BG_G,
+		].includes(card.id as CardIds);
+	}
+	return false;
+};
