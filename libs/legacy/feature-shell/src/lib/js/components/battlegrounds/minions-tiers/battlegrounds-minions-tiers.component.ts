@@ -167,7 +167,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			return [];
 		}
 
-		const useTier7 = anomalies.includes(CardIds.SecretsOfNorgannon) || playerCardId === CardIds.ThorimStormlord_BG;
+		const useTier7 =
+			anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
+			playerCardId === CardIds.ThorimStormlord_BG27_HERO_801;
 		const filteredCards = cardsInGame
 			.filter((card) => (useTier7 ? true : card.techLevel < 7))
 			.filter((card) => !isCardExcludedByAnomaly(card, anomalies));
@@ -307,19 +309,19 @@ export class BattlegroundsMinionsTiersOverlayComponent
 }
 
 const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {
-	if (anomalies.includes(CardIds.UncompensatedUpset)) {
+	if (anomalies.includes(CardIds.UncompensatedUpset_BG27_Anomaly_721)) {
 		return [CardIds.CorpseRefiner_BG25_033, CardIds.CorpseRefiner_BG25_033_G].includes(card.id as CardIds);
-	} else if (anomalies.includes(CardIds.PackedStands)) {
-		return [CardIds.SeabornSummoner, CardIds.SeabornSummoner_G].includes(card.id as CardIds);
-	} else if (anomalies.includes(CardIds.FalseIdols)) {
+	} else if (anomalies.includes(CardIds.PackedStands_BG27_Anomaly_750)) {
+		return [CardIds.SeabornSummoner_BG27_012, CardIds.SeabornSummoner_BG27_012_G].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.FalseIdols_BG27_Anomaly_301)) {
 		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
 			card.id as CardIds,
 		);
-	} else if (anomalies.includes(CardIds.GoldenArena)) {
+	} else if (anomalies.includes(CardIds.TheGoldenArena_BG27_Anomaly_801)) {
 		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
 			card.id as CardIds,
 		);
-	} else if (anomalies.includes(CardIds.BigLeague)) {
+	} else if (anomalies.includes(CardIds.BigLeague_BG27_Anomaly_100)) {
 		return [
 			CardIds.TheBoogieMonster_BG26_176,
 			CardIds.TheBoogieMonster_BG26_176_G,
@@ -327,10 +329,10 @@ const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string
 			CardIds.PatientScout_BG24_715_G,
 			CardIds.FacelessDisciple_BG24_719,
 			CardIds.FacelessDisciple_BG24_719_G,
-			CardIds.KingVarian_BG,
-			CardIds.KingVarian_BG_G,
+			CardIds.KingVarian_BG27_508,
+			CardIds.KingVarian_BG27_508_G,
 		].includes(card.id as CardIds);
-	} else if (anomalies.includes(CardIds.LittleLeague)) {
+	} else if (anomalies.includes(CardIds.LittleLeague_BG27_Anomaly_800)) {
 		return [
 			CardIds.TheBoogieMonster_BG26_176,
 			CardIds.TheBoogieMonster_BG26_176_G,
@@ -338,8 +340,8 @@ const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string
 			CardIds.PatientScout_BG24_715_G,
 			CardIds.FacelessDisciple_BG24_719,
 			CardIds.FacelessDisciple_BG24_719_G,
-			CardIds.KingVarian_BG,
-			CardIds.KingVarian_BG_G,
+			CardIds.KingVarian_BG27_508,
+			CardIds.KingVarian_BG27_508_G,
 		].includes(card.id as CardIds);
 	}
 	return false;

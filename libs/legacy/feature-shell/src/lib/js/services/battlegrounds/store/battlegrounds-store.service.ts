@@ -548,7 +548,7 @@ export class BattlegroundsStoreService {
 		const eventParsers = [
 			new NoBgsMatchParser(),
 			new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n),
-			new BgsGameSettingsParser(),
+			new BgsGameSettingsParser(this.allCards),
 			// new BattlegroundsResetBattleStateParser(),
 			// new BgsInitParser(this.prefs, this.i18n),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),

@@ -21,7 +21,7 @@ export interface TwitchBgsStateConfig {
 	readonly hasBuddies: boolean;
 	readonly hasQuests: boolean;
 	readonly hasPrizes: boolean;
-	readonly anomalies: readonly number[];
+	readonly anomalies: readonly string[];
 }
 
 export interface TwitchBgsCurrentBattle {

@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
@@ -6,7 +6,6 @@ import { PreferencesService } from '@legacy-import/src/lib/js/services/preferenc
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
@@ -34,8 +33,6 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	visible$: Observable<boolean>;
 
 	validationErrorTooltip = this.i18n.translateString('app.battlegrounds.filters.anomaly.validation-error-tooltip');
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,

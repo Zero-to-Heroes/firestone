@@ -172,10 +172,10 @@ export const buildHeroStats = (
 			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
 			const tribeStatsToUse = useTribesModifier
 				? stat.tribeStats
-						.filter((t) => tribes.includes(t.tribe))
+						?.filter((t) => tribes.includes(t.tribe))
 						// Remove some incorrect data points
-						.filter((t) => t.dataPoints > stat.dataPoints / 20)
-				: stat.tribeStats;
+						.filter((t) => t.dataPoints > stat.dataPoints / 20) ?? []
+				: stat.tribeStats ?? [];
 			const tribesModifier = useTribesModifier
 				? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
 				: 0;
@@ -188,9 +188,10 @@ export const buildHeroStats = (
 			debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
 
 			const useAnomalyModifier = !!anomalies?.length;
+			console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
 			const anomalyStatsToUse = useAnomalyModifier
-				? stat.anomalyStats.filter((t) => anomalies.includes(t.anomaly))
-				: stat.anomalyStats;
+				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
+				: stat.anomalyStats ?? [];
 			const anomalyModifier = useAnomalyModifier
 				? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
 				: 0;

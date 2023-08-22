@@ -11,7 +11,7 @@ import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'battlegrounds-anomalies-filter-dropdown-view',
@@ -84,6 +84,7 @@ export class BattlegroundsAnomaliesFilterDropdownViewComponent
 			}),
 		);
 		this.filter$ = combineLatest([this.options$, this.currentFilter$$, this.visible$$]).pipe(
+			tap((info) => console.debug('building anomalies filter', info)),
 			filter(([options, currentFilter, visible]) => !!currentFilter),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([options, currentFilter, visible]) => ({
