@@ -43,6 +43,7 @@ export class HsClientConfigService {
 				return;
 			}
 
+			console.log('[hs-client-config] config is different', strip(content), strip(existingConfig));
 			await this.ow.writeFileContents(targetPath, content);
 			console.log('[hs-client-config] wrote client config', targetPath);
 			await this.i18n.initReady();
