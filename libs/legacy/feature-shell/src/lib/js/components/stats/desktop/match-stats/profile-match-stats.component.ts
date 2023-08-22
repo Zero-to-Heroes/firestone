@@ -31,7 +31,14 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 			</div>
 			<div class="content" *ngIf="!value.missingContentText?.length; else emptyState">
 				<div class="stats-header" *ngIf="sortCriteria$ | async as sort">
-					<div class="cell player-class"></div>
+					<sortable-table-label
+						class="cell player-class"
+						[name]="'app.profile.match-stats.header-player-class' | owTranslate"
+						[sort]="sort"
+						[criteria]="'name'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 					<sortable-table-label
 						class="cell winrate"
 						[name]="'app.profile.match-stats.header-winrate' | owTranslate"
@@ -312,6 +319,8 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 
 	private sortClassProgress(a: ClassInfo, b: ClassInfo, sortCriteria: SortCriteria<ColumnSortType>): number {
 		switch (sortCriteria?.criteria) {
+			case 'name':
+				return this.sortByName(a, b, sortCriteria.direction);
 			case 'winrate':
 				return this.sortByWinrate(a, b, sortCriteria.direction);
 			case 'total-matches':
@@ -327,6 +336,10 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 			default:
 				return 0;
 		}
+	}
+
+	private sortByName(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
+		return direction === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
 	}
 
 	private sortByWinrate(a: ClassInfo, b: ClassInfo, direction: SortDirection): number {
@@ -360,4 +373,4 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 	}
 }
 
-export type ColumnSortType = 'winrate' | 'total-matches' | 'wins' | 'losses' | 'top-1' | 'top-4';
+export type ColumnSortType = 'name' | 'winrate' | 'total-matches' | 'wins' | 'losses' | 'top-1' | 'top-4';
