@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { CollectionCardType } from '@legacy-import/src/lib/js/models/collection/collection-card-type.type';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
@@ -14,18 +15,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				[cardTooltip]="card.cardId"
 				[cardTooltipType]="card.cardType"
 			>
-				<img *ngIf="card.cardType === 'NORMAL'" [src]="getCardImage(card.cardId, false)" />
-				<img *ngIf="card.cardType === 'GOLDEN'" [src]="getCardImage(card.cardId, true)" />
-				<!-- <video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
-					<source
-						src="{{
-							'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
-								card.cardId +
-								'.webm'
-						}}"
-						type="video/webm"
-					/>
-				</video> -->
+				<img [src]="getCardImage(card.cardId, card.cardType)" />
 			</div>
 		</div>
 	`,
@@ -50,7 +40,7 @@ export class PackDisplayComponent {
 		return item.cardId + '' + index;
 	}
 
-	getCardImage(cardId: string, isPremium: boolean): string {
-		return this.i18n.getCardImage(cardId, { isPremium: isPremium });
+	getCardImage(cardId: string, cardType: CollectionCardType): string {
+		return this.i18n.getCardImage(cardId, { cardType: cardType });
 	}
 }

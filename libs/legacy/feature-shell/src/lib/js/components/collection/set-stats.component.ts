@@ -4,13 +4,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
-import {
-	dustFor,
-	dustForPremium,
-	dustToCraftFor,
-	dustToCraftForPremium,
-	getPackDustValue,
-} from '../../services/hs-utils';
+import { dustFor, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -244,7 +238,9 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 			.reduce((a, b) => a + b, 0);
 		const duplicateDust = sets
 			.flatMap((s) => s.allCards)
-			.map((card) => dustFor(card.rarity) * Math.max(0, card.ownedNonPremium - card.getMaxCollectible()))
+			.map(
+				(card) => dustFor(card.rarity, 'NORMAL') * Math.max(0, card.ownedNonPremium - card.getMaxCollectible()),
+			)
 			.reduce((a, b) => a + b, 0);
 		return [
 			{
@@ -297,7 +293,7 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 			.reduce((a, b) => a + b, 0);
 		const duplicateDust = sets
 			.flatMap((s) => s.allCards)
-			.map((card) => dustForPremium(card.rarity) * Math.max(0, card.ownedPremium - card.getMaxCollectible()))
+			.map((card) => dustFor(card.rarity, 'GOLDEN') * Math.max(0, card.ownedPremium - card.getMaxCollectible()))
 			.reduce((a, b) => a + b, 0);
 		return [
 			{

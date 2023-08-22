@@ -12,12 +12,12 @@ import {
 } from '@angular/core';
 import {
 	AbstractSubscriptionStoreComponent,
-	groupByFunction,
 	IPreferences,
 	Store,
+	groupByFunction,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -98,7 +98,7 @@ export class CardTooltipComponent
 	@Input() set relativePosition(value: 'left' | 'right') {
 		this.relativePosition$$.next(value);
 	}
-	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
+	@Input() set cardType(value: CollectionCardType) {
 		this.cardType$$.next(value);
 	}
 	@Input() set additionalClass(value: string) {
@@ -135,7 +135,7 @@ export class CardTooltipComponent
 	private localized$$ = new BehaviorSubject<boolean>(true);
 	private isBgs$$ = new BehaviorSubject<boolean>(false);
 	private relativePosition$$ = new BehaviorSubject<'left' | 'right'>('left');
-	private cardType$$ = new BehaviorSubject<'NORMAL' | 'GOLDEN'>('NORMAL');
+	private cardType$$ = new BehaviorSubject<CollectionCardType>('NORMAL');
 	private additionalClass$$ = new BehaviorSubject<string | null>(null);
 	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
@@ -226,16 +226,16 @@ export class CardTooltipComponent
 							.reverse()
 							.map((cardId) => {
 								const card = this.allCards.getCard(cardId);
-								const isPremium =
-									cardId?.endsWith('_golden') ||
-									cardType === 'GOLDEN' ||
-									!!card.battlegroundsNormalDbfId;
+								const adjustedCardType =
+									cardId?.endsWith('_golden') || !!card.battlegroundsNormalDbfId
+										? 'GOLDEN'
+										: cardType;
 								const realCardId = cardId?.split('_golden')[0];
 								const image = !!realCardId
 									? localized
 										? this.i18n.getCardImage(realCardId, {
 												isBgs: isBgs,
-												isPremium: isPremium,
+												cardType: adjustedCardType,
 												isHighRes: highRes,
 										  })
 										: this.i18n.getNonLocalizedCardImage(realCardId)
@@ -246,7 +246,7 @@ export class CardTooltipComponent
 									// For now there are no cases where we have multiple card IDs, and different buffs for
 									// each one. If the case arises, we'll have to handle this differently
 									buffs: buffs,
-									cardType: cardType,
+									cardType: adjustedCardType,
 									createdBy: createdBy,
 									additionalClass: additionalClass,
 								};
@@ -268,9 +268,11 @@ export class CardTooltipComponent
 interface InternalCard {
 	readonly cardId: string;
 	readonly image: string;
-	readonly cardType: 'NORMAL' | 'GOLDEN';
+	readonly cardType: CollectionCardType;
 
 	readonly createdBy?: boolean;
 	readonly buffs?: readonly { bufferCardId: string; buffCardId: string; count: number }[];
 	readonly additionalClass?: string;
 }
+
+type CollectionCardType = 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE';

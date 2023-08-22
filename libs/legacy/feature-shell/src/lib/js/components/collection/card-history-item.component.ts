@@ -7,10 +7,12 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
+import { CollectionCardType } from '../../models/collection/collection-card-type.type';
+import { cardPremiumToCardType } from '../../services/collection/cards-monitor.service';
+import { dustFor } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -67,7 +69,7 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 	creationDate: string;
 	dustValue: number;
 	cardId: string;
-	cardType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
+	cardType: CollectionCardType = 'NORMAL';
 
 	private history$$ = new BehaviorSubject<CardHistory>(null);
 
@@ -98,11 +100,14 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 				this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
 
 				const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
-				this.cardName = history.isPremium
-					? this.i18n.translateString('app.collection.card-history.golden-card', { cardName: name })
+				this.cardType = cardPremiumToCardType(history.premium);
+				this.cardName = history.premium
+					? this.i18n.translateString(`app.collection.card-history.${this.cardType.toLowerCase()}-card`, {
+							cardName: name,
+					  })
 					: name;
 
-				this.dustValue = this.getDust(dbCard, history.isPremium);
+				this.dustValue = dustFor(dbCard.rarity, this.cardType);
 				this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(
 					this.i18n.formatCurrentLocale(),
 					{
@@ -111,7 +116,6 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 						year: '2-digit',
 					},
 				);
-				this.cardType = history.isPremium ? 'GOLDEN' : 'NORMAL';
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -123,23 +127,5 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 			page: 'collection',
 		});
 		this.store.send(new ShowCardDetailsEvent(this.cardId));
-	}
-
-	private getDust(dbCard: any, isPremium: boolean) {
-		const dust = this.dustFor((dbCard.rarity || 'free').toLowerCase());
-		return isPremium ? dust * 4 : dust;
-	}
-
-	private dustFor(rarity: string): number {
-		switch (rarity) {
-			case 'legendary':
-				return 400;
-			case 'epic':
-				return 100;
-			case 'rare':
-				return 20;
-			default:
-				return 5;
-		}
 	}
 }

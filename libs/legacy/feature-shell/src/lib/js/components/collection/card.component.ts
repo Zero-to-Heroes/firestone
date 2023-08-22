@@ -13,6 +13,7 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
+import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
@@ -114,8 +115,8 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 		this.updateImage();
 	}
 
-	@Input() set premium(value: boolean) {
-		this._premium = value;
+	@Input() set cardType(value: CollectionCardType) {
+		this._cardType = value;
 		this.updateImage();
 	}
 
@@ -124,7 +125,7 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 
 	_highRes = false;
 	_bgs = false;
-	_premium = false;
+	_cardType: CollectionCardType = 'NORMAL';
 
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
@@ -184,7 +185,7 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 		}
 		this.image = this.i18n.getCardImage(this._card.id, {
 			isBgs: this._bgs,
-			isPremium: this._premium,
+			cardType: this._cardType,
 			isHighRes: this._highRes,
 		});
 		this.secondaryClass = this._highRes ? 'high-res' : '';

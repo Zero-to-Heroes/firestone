@@ -7,7 +7,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 	selector: 'bgs-card-tooltip',
 	styleUrls: [`../../../css/component/battlegrounds/bgs-card-tooltip.component.scss`],
 	template: `
-		<div class="container" [ngClass]="{ 'hidden': !_visible }">
+		<div class="container" [ngClass]="{ hidden: !_visible }">
 			<img [src]="image" class="card" />
 			<card-stats [cardId]="cardId" [attack]="attack" [health]="health" [autoFontResize]="false"> </card-stats>
 		</div>
@@ -33,7 +33,7 @@ export class BgsCardTooltipComponent {
 		this.health = this._entity.getTag(GameTag.HEALTH);
 		this.image = this.i18n.getCardImage(this._entity.cardID, {
 			isBgs: true,
-			isPremium: this._entity.getTag(GameTag.PREMIUM) === 1,
+			cardType: this._entity.getTag(GameTag.PREMIUM) === 1 ? 'GOLDEN' : 'NORMAL',
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

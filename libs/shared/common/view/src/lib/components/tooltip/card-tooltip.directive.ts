@@ -20,7 +20,7 @@ import { CardTooltipComponent } from './card-tooltip.component';
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements OnDestroy {
-	@Input() cardTooltipType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
+	@Input() cardTooltipType: 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE' = 'NORMAL';
 	@Input() cardTooltipCard: {
 		cardId: string;
 		buffCardIds?: readonly string[];

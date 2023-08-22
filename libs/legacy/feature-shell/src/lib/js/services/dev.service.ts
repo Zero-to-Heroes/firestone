@@ -264,13 +264,6 @@ export class DevService {
 		}
 	}
 
-	// private addCollectionCommands() {
-	// 	window['showCardNotification'] = () => {
-	// 		const card: Card = new Card('AT_001', 1, 1);
-	// 		this.packMonitor.createNewCardToast(card, 'GOLDEN');
-	// 	};
-	// }
-
 	private addCustomLogLoaderCommand() {
 		// window['loadLog'] = (logName, deckString) => {
 		// 	if (deckString) {

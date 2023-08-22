@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CardsFacadeService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
+import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { formatClass } from './hs-utils';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 import { sleep } from './utils';
@@ -72,7 +73,8 @@ export class LocalizationService {
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
 		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this._locale}/${highRes}`;
-		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
+		const typeSuffix = this.buildTypeSuffix(options.cardType);
+		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;
 	}
 
@@ -81,7 +83,8 @@ export class LocalizationService {
 			return null;
 		}
 		const base = `https://static.firestoneapp.com/cards`;
-		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
+		const typeSuffix = this.buildTypeSuffix(options.cardType);
+		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;
 	}
 
@@ -155,6 +158,21 @@ export class LocalizationService {
 				return 'zh-TW';
 			default:
 				return 'en-US';
+		}
+	}
+
+	private buildTypeSuffix(cardType: CollectionCardType): string {
+		switch (cardType) {
+			case 'NORMAL':
+				return '';
+			case 'GOLDEN':
+				return '_golden';
+			case 'DIAMOND':
+				return '_diamond';
+			case 'SIGNATURE':
+				return '_signature';
+			default:
+				return '';
 		}
 	}
 }

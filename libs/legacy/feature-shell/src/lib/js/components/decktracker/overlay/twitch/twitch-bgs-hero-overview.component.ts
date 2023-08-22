@@ -12,7 +12,7 @@ import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getBuddy } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { from, Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
@@ -82,7 +82,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 		});
 		this.buddyCardGoldenImage = this.i18n.getCardImage(buddyCardGolden.id, {
 			isBgs: true,
-			isPremium: true,
+			cardType: 'GOLDEN',
 			isHighRes: true,
 		});
 		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards.getService());

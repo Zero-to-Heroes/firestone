@@ -37,7 +37,7 @@ declare let amplitude;
 					[card]="card"
 					[tooltips]="false"
 					[showCounts]="showCount"
-					[premium]="!!card.ownedPremium"
+					[cardType]="!!card.ownedPremium ? 'GOLDEN' : 'NORMAL'"
 					[highRes]="true"
 					>/</card-view
 				>

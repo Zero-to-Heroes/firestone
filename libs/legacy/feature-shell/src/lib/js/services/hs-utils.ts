@@ -10,6 +10,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 // Don't specify anything by default, so that the "cache refresh" properly refreshes the data
@@ -1146,7 +1147,11 @@ export const getGalakrondCardFor = (className: string, invokeCount: number): str
 	return CardIds.GalakrondTheNightmare;
 };
 
-export const dustFor = (rarity: string): number => {
+export const dustFor = (rarity: string, cardType: CollectionCardType): number => {
+	return cardType === 'NORMAL' ? dustForNormal(rarity) : dustForPremium(rarity);
+};
+
+const dustForNormal = (rarity: string): number => {
 	switch (rarity?.toLowerCase()) {
 		case 'legendary':
 			return 400;
@@ -1159,8 +1164,8 @@ export const dustFor = (rarity: string): number => {
 	}
 };
 
-export const dustForPremium = (rarity: string): number => {
-	return 4 * dustFor(rarity?.toLowerCase());
+const dustForPremium = (rarity: string): number => {
+	return 4 * dustForNormal(rarity?.toLowerCase());
 };
 
 export const dustToCraftFor = (rarity: string): number => {
@@ -1183,11 +1188,7 @@ export const dustToCraftForPremium = (rarity: string): number => {
 export const getPackDustValue = (pack: PackResult): number => {
 	return pack.boosterId === BoosterType.MERCENARIES
 		? pack.cards.map((card) => card.currencyAmount ?? 0).reduce((a, b) => a + b, 0)
-		: pack.cards
-				.map((card) =>
-					card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity),
-				)
-				.reduce((a, b) => a + b, 0);
+		: pack.cards.map((card) => dustFor(card.cardRarity, card.cardType)).reduce((a, b) => a + b, 0);
 };
 
 export const COUNTERSPELLS = [

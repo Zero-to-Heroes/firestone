@@ -11,7 +11,7 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
 import { Events } from '../events.service';
-import { dustFor, dustForPremium } from '../hs-utils';
+import { dustFor } from '../hs-utils';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
@@ -114,6 +114,7 @@ export class CardsMonitorService {
 	}
 
 	private async handleNewPack(pack: PackInfo) {
+		console.debug('[cards-monitor] handling new pack', pack);
 		const boosterId = pack.BoosterId;
 		if (boosterId === BoosterType.MERCENARIES) {
 			// That's pretty ugly - probably should work with reative streams as well here
@@ -133,7 +134,7 @@ export class CardsMonitorService {
 					cardId: this.getLettuceCardId(card, referenceData),
 					// No diamond card in pack, so we can leave it like this for now
 					// TODO: proper support for diamond / signature cards
-					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
+					cardType: cardPremiumToCardType(card.Premium),
 					currencyAmount: card.CurrencyAmount,
 					mercenaryCardId: this.getMercenaryCardId(card.MercenaryId, referenceData),
 				} as InternalCardInfo;
@@ -142,7 +143,7 @@ export class CardsMonitorService {
 				return {
 					cardId: card.CardId,
 					// No diamond card in pack, so we can leave it like this for now
-					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
+					cardType: cardPremiumToCardType(card.Premium),
 					isNew:
 						!cardInCollection ||
 						(card.Premium ? cardInCollection.premiumCount === 0 : cardInCollection.count === 0),
@@ -173,9 +174,15 @@ export class CardsMonitorService {
 				const cardInCollection = collection.find((c) => c.id === cardId);
 				const existingCount = !cardInCollection
 					? 0
+					: data[0].cardType === 'NORMAL'
+					? cardInCollection.count
 					: data[0].cardType === 'GOLDEN'
 					? cardInCollection.premiumCount
-					: cardInCollection.count;
+					: data[0].cardType === 'DIAMOND'
+					? cardInCollection.diamondCount
+					: data[0].cardType === 'SIGNATURE'
+					? cardInCollection.signatureCount
+					: 0;
 
 				for (let i = existingCount; i < existingCount + data.length; i++) {
 					this.handleNotification(cardId, type, i + 1, false);
@@ -218,7 +225,7 @@ export class CardsMonitorService {
 		const collection = this.collectionManager.collection$$.getValue();
 		for (const data of Object.values(groupedBy)) {
 			const cardId = data[0].CardId;
-			const type = data[0].Premium ? 'GOLDEN' : 'NORMAL';
+			const type = cardPremiumToCardType(data[0].Premium);
 			const cardInCollection = collection.find((c) => c.id === cardId);
 			const existingCount = data[0].Premium ? cardInCollection.premiumCount : cardInCollection.count;
 
@@ -239,7 +246,7 @@ export class CardsMonitorService {
 				if (!dbCard) {
 					return;
 				}
-				const dust = type === 'GOLDEN' ? dustForPremium(dbCard?.rarity) : dustFor(dbCard?.rarity);
+				const dust = dustFor(dbCard?.rarity, type);
 				this.notifications.createDustToast(dust, 1);
 			}
 		}
@@ -254,3 +261,35 @@ export class CardsMonitorService {
 		return dbCard.rarity === 'Legendary' ? newCount >= 2 : newCount >= 3;
 	}
 }
+
+export const cardPremiumToCardType = (premium: number): CollectionCardType => {
+	switch (premium) {
+		case 0:
+			return 'NORMAL';
+		case 1:
+			return 'GOLDEN';
+		case 2:
+			return 'DIAMOND';
+		case 3:
+			return 'SIGNATURE';
+		default:
+			console.warn('unknown premium', premium);
+			return 'NORMAL';
+	}
+};
+
+export const cardTypeToPremium = (cardType: CollectionCardType): number => {
+	switch (cardType) {
+		case 'NORMAL':
+			return 0;
+		case 'GOLDEN':
+			return 1;
+		case 'DIAMOND':
+			return 2;
+		case 'SIGNATURE':
+			return 3;
+		default:
+			console.warn('unknown card type', cardType);
+			return 0;
+	}
+};

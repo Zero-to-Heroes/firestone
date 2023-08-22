@@ -6,7 +6,7 @@ import { InternalCardInfo } from '../../../js/models/collection/internal-card-in
 import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';
 import { Events } from '../../../js/services/events.service';
 import { GameEventsEmitterService } from '../../../js/services/game-events-emitter.service';
-import { dustFor, dustForPremium } from '../../../js/services/hs-utils';
+import { dustFor } from '../../../js/services/hs-utils';
 
 @Injectable()
 export class PackMonitor {
@@ -41,10 +41,7 @@ export class PackMonitor {
 							? async () =>
 									this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType)
 							: async () => {
-									const dust =
-										card.cardType === 'GOLDEN'
-											? dustForPremium(dbCard.rarity)
-											: dustFor(dbCard.rarity);
+									const dust = dustFor(dbCard.rarity, card.cardType);
 									this.totalDustInPack += dust;
 									this.totalDuplicateCards++;
 							  },

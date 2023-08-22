@@ -18,7 +18,7 @@ export abstract class ILocalizationService {
 
 export interface ImageLocalizationOptions {
 	readonly isBgs?: boolean;
-	readonly isPremium?: boolean;
+	readonly cardType?: 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE';
 	readonly isHighRes?: boolean;
 	readonly isHeroSkin?: boolean;
 }

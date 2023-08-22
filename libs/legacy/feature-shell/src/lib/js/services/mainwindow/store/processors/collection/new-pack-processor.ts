@@ -23,7 +23,7 @@ export class NewPackProcessor implements Processor {
 			cards: event.packCards.map((card) => {
 				const result: CardPackResult = {
 					cardId: card.cardId,
-					cardType: card.cardType === 'DIAMOND' || card.cardType === 'SIGNATURE' ? 'GOLDEN' : card.cardType,
+					cardType: card.cardType as any,
 					cardRarity: (this.allCards.getCard(card.cardId)?.rarity?.toLowerCase() ??
 						this.allCards.getCard(card.mercenaryCardId)?.rarity?.toLowerCase()) as
 						| 'common'

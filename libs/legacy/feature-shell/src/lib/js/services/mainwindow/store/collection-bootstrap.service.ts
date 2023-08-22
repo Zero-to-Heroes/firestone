@@ -3,6 +3,7 @@ import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject } from 'rxjs';
 import { CardHistory } from '../../../models/card-history';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
+import { cardTypeToPremium } from '../../collection/cards-monitor.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { Events } from '../../events.service';
 
@@ -51,7 +52,7 @@ export class CollectionBootstrapService {
 	private buildCardHistory(card: CardPackResult, creationTimestamp: number): CardHistory {
 		const result: CardHistory = {
 			cardId: card.cardId,
-			isPremium: card.cardType === 'GOLDEN',
+			premium: cardTypeToPremium(card.cardType),
 			isNewCard: card.isNew || card.isSecondCopy,
 			relevantCount: card.isNew ? 1 : card.isSecondCopy ? 2 : -1,
 			creationTimestamp: creationTimestamp,
