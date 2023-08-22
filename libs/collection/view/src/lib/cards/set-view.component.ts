@@ -104,7 +104,7 @@ export class SetViewComponent {
 		this._setId = value;
 		this.logoUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/sets/${value}.png`;
 		this.setName = `global.set.${value}`;
-		if (['classic', 'core', 'legacy', 'demon_hunter_initiate'].includes(value)) {
+		if (['classic', 'core', 'legacy', 'demon_hunter_initiate', 'caverns_of_time'].includes(value)) {
 			this._displayName = true;
 		}
 	}
