@@ -25,7 +25,7 @@ export class MatchMetadataParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.MATCH_METADATA;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

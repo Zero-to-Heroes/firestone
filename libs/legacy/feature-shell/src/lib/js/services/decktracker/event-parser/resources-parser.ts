@@ -4,7 +4,7 @@ import { EventParser } from './event-parser';
 
 export class ResourcesParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.RESOURCES_UPDATED;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

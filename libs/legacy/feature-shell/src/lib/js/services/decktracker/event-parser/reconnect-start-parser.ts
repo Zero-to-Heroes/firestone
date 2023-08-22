@@ -5,7 +5,7 @@ import { EventParser } from './event-parser';
 
 export class ReconnectStartParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.RECONNECT_START;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {

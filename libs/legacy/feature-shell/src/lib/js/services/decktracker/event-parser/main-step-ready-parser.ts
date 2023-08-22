@@ -5,7 +5,7 @@ import { buildTurnTimings } from './new-turn-parser';
 
 export class MainStepReadyParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.MAIN_STEP_READY;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

@@ -16,7 +16,7 @@ export class PassiveTriggeredParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.PASSIVE_BUFF;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

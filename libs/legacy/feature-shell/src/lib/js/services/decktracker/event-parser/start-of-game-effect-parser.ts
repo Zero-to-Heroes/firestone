@@ -18,11 +18,7 @@ export class StartOfGameEffectParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return (
-			state &&
-			gameEvent.type === GameEvent.START_OF_GAME &&
-			globalEffectCards.includes(gameEvent.cardId as CardIds)
-		);
+		return !!state && globalEffectCards.includes(gameEvent.cardId as CardIds);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

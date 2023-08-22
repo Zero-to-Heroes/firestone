@@ -5,7 +5,7 @@ import { EventParser } from './event-parser';
 
 export class ShuffleDeckParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.SHUFFLE_DECK;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

@@ -8,11 +8,6 @@ import { EventParser } from './event-parser';
 export class MindrenderIlluciaParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return false;
-		return (
-			state &&
-			(gameEvent.type === GameEvent.MINDRENDER_ILLUCIA_START ||
-				gameEvent.type === GameEvent.MINDRENDER_ILLUCIA_END)
-		);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

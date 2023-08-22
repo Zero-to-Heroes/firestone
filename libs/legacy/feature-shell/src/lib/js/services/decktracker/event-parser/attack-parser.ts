@@ -7,10 +7,8 @@ import { EventParser } from './event-parser';
 export class AttackParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
-	// Whenever something occurs that publicly reveal a card, we try to assign its
-	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && [GameEvent.ATTACKING_HERO, GameEvent.ATTACKING_MINION].indexOf(gameEvent.type) !== -1;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

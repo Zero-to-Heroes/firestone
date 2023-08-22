@@ -11,7 +11,7 @@ export class MinionDiedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.MINIONS_DIED;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: MinionsDiedEvent): Promise<GameState> {

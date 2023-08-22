@@ -10,7 +10,7 @@ export class WhizbangDeckParser implements EventParser {
 	constructor(private readonly deckParser: DeckParserService, private readonly deckHandler: DeckHandlerService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.WHIZBANG_DECK_ID;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -30,7 +30,6 @@ export class WhizbangDeckParser implements EventParser {
 		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			currentState,
 			new DeckstringOverrideEvent(deck.name, deck.deckstring, 'player'),
-			null,
 		);
 		return stateAfterPlayerDeckUpdate;
 	}

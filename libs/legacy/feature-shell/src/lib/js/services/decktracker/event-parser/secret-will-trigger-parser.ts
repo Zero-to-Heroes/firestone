@@ -8,7 +8,7 @@ export class SecretWillTriggerParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.SECRET_WILL_TRIGGER;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

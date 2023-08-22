@@ -12,7 +12,7 @@ export class NewTurnParser implements EventParser {
 	constructor(private readonly owUtils: OwUtilsService, private readonly prefs: PreferencesService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.TURN_START;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

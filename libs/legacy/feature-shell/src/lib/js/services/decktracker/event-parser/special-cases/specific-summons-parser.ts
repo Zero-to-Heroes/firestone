@@ -39,13 +39,7 @@ const CARD_IDS = PROCESSORS.flatMap((p) => p.cardIds);
 
 export class SpecificSummonsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return (
-			state &&
-			[GameEvent.CARD_PLAYED, GameEvent.MINION_SUMMONED, GameEvent.MINION_SUMMONED_FROM_HAND].includes(
-				gameEvent.type,
-			) &&
-			CARD_IDS.includes(gameEvent.cardId as CardIds)
-		);
+		return !!state && CARD_IDS.includes(gameEvent.cardId as CardIds);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

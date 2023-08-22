@@ -5,7 +5,7 @@ import { EventParser } from './event-parser';
 
 export class GameStartParser implements EventParser {
 	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.GAME_START;
+		return true;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

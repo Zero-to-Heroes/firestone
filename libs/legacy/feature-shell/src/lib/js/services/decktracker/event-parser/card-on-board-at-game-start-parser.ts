@@ -12,7 +12,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

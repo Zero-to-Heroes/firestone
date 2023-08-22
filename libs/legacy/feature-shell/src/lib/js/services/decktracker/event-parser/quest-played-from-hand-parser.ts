@@ -13,7 +13,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.QUEST_PLAYED;
+		return !!state;
 	}
 
 	async parse(

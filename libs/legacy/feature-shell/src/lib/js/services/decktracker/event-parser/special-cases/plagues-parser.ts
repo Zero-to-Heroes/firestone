@@ -11,9 +11,7 @@ export const PLAGUES = [
 
 export class PlaguesParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return (
-			state && PLAGUES.includes(gameEvent.cardId as CardIds) && gameEvent.type === GameEvent.CREATE_CARD_IN_DECK
-		);
+		return !!state && PLAGUES.includes(gameEvent.cardId as CardIds);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

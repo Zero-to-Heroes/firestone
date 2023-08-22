@@ -24,8 +24,7 @@ export class CthunRevealedParser implements EventParser {
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
-			state &&
-			gameEvent.type === GameEvent.SUB_SPELL_START &&
+			!!state &&
 			gameEvent.additionalData.prefabId === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX' &&
 			gameEvent.cardId === CardIds.CthunTheShattered
 		);

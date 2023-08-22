@@ -9,7 +9,7 @@ export class HeroPowerDamageParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.DAMAGE;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: DamageGameEvent): Promise<GameState> {

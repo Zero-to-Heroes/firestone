@@ -21,7 +21,7 @@ export class CustomEffectsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.SUB_SPELL_START;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

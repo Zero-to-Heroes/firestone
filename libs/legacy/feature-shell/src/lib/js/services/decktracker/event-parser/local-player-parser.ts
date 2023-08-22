@@ -9,7 +9,7 @@ export class LocalPlayerParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && state.playerDeck && gameEvent.type === GameEvent.LOCAL_PLAYER;
+		return !!state && !!state.playerDeck;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

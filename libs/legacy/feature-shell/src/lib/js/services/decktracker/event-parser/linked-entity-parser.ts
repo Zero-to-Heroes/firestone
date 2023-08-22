@@ -12,7 +12,7 @@ export class LinkedEntityParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.LINKED_ENTITY;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

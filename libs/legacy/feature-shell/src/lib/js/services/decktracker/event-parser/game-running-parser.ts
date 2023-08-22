@@ -9,7 +9,7 @@ export class GameRunningParser implements EventParser {
 	constructor(private readonly handler: DeckHandlerService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && state.opponentDeck && gameEvent.type === GameEvent.GAME_RUNNING;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

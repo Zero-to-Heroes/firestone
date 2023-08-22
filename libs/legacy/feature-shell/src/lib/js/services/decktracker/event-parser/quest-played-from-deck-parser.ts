@@ -9,7 +9,7 @@ export class QuestPlayedFromDeckParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.QUEST_PLAYED_FROM_DECK;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -28,7 +28,7 @@ export class QuestPlayedFromDeckParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SECRET',
-			putIntoPlay: true
+			putIntoPlay: true,
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);

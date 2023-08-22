@@ -24,7 +24,7 @@ export class OpponentPlayerParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && state.opponentDeck && gameEvent.type === GameEvent.OPPONENT;
+		return !!state && !!state.opponentDeck;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

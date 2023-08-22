@@ -19,7 +19,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && (gameEvent.type === GameEvent.SECRET_PLAYED || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY);
+		return !!state;
 	}
 
 	async parse(

@@ -11,7 +11,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly secretConfig: SecretConfigService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.SECRET_PLAYED_FROM_DECK;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -33,7 +33,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'SECRET',
 			creatorCardId: creatorCardId ?? card.creatorCardId,
-			putIntoPlay: true
+			putIntoPlay: true,
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);

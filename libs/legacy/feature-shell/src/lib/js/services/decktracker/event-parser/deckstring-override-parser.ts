@@ -10,24 +10,10 @@ export class DeckstringOverrideParser implements EventParser {
 	constructor(private readonly deckHandler: DeckHandlerService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.DECKSTRING_OVERRIDE;
+		return !!state;
 	}
 
-	async parse(
-		currentState: GameState,
-		gameEvent: DeckstringOverrideEvent,
-		additionalInfo?: {
-			secretWillTrigger?: {
-				cardId: string;
-				reactingToCardId: string;
-				reactingToEntityId: number;
-			};
-			minionsWillDie?: readonly {
-				cardId: string;
-				entityId: number;
-			}[];
-		},
-	): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
 		const deckName = gameEvent.deckName;
 		const deckstring = gameEvent.deckstring;
 		const playerOrOpponent = gameEvent.playerOrOpponent;

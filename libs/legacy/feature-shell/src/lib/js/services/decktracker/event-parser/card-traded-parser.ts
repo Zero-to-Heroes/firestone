@@ -12,7 +12,7 @@ export class CardTradedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly prefs: PreferencesService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.TRADE_CARD;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

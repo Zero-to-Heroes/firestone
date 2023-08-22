@@ -10,7 +10,7 @@ export class WeaponEquippedParser implements EventParser {
 	constructor(private readonly cards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.WEAPON_EQUIPPED;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

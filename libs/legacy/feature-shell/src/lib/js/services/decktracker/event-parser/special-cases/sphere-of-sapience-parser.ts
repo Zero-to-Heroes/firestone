@@ -16,12 +16,7 @@ export class SphereOfSapienceParser implements EventParser {
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		// Handling the special cases depend on a lot of different events
-		return (
-			state &&
-			[GameEvent.SPECIAL_CARD_POWER_TRIGGERED, GameEvent.ENTITY_CHOSEN, GameEvent.CARD_DRAW_FROM_DECK].includes(
-				gameEvent.type,
-			)
-		);
+		return !!state;
 	}
 
 	async parse(

@@ -18,7 +18,7 @@ export class CardPlayedByEffectParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CARD_PLAYED_BY_EFFECT;
+		return !!state;
 	}
 
 	async parse(

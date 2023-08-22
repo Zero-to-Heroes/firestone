@@ -19,7 +19,6 @@ import { HeroCard } from '../../models/decktracker/hero-card';
 import { GameEvent, PlayerGameState } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { Events } from '../events.service';
-import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
@@ -38,11 +37,9 @@ import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
 import { BgsRewardDestroyedParser } from './event-parser/bgs-reward-destroyed-parser';
 import { BgsRewardEquippedParser } from './event-parser/bgs-reward-equipped-parser';
-import { BgsRewardRevealedParser } from './event-parser/bgs-reward-revealed-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardBuffedInHandParser } from './event-parser/card-buffed-in-hand-parser';
-import { CardChangedInDeckParser } from './event-parser/card-changed-in-deck-parser';
 import { CardChangedInHandParser } from './event-parser/card-changed-in-hand-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
 import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
@@ -59,9 +56,6 @@ import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CardTradedParser } from './event-parser/card-traded-parser';
 import { ChoosingOptionsParser } from './event-parser/choosing-options-parser';
-import { ConstructedAchievementsProgressionParser } from './event-parser/constructed/constructed-achievements-progression-parser';
-import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
-import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CopiedFromEntityIdParser } from './event-parser/copied-from-entity-id-parser';
 import { CorpsesSpentThisGameParser } from './event-parser/corpses-spent-this-game-parser';
 import { CostChangedParser } from './event-parser/cost-changed-parser';
@@ -90,7 +84,6 @@ import { LinkedEntityParser } from './event-parser/linked-entity-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
-import { MindrenderIlluciaParser } from './event-parser/mindrender-illucia-parser';
 import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionGoDormantParser } from './event-parser/minion-go-dormant-parser';
@@ -138,7 +131,7 @@ import { ZoneOrderingService } from './zone-ordering.service';
 @Injectable()
 export class GameStateService {
 	public state: GameState = new GameState();
-	private eventParsers: readonly EventParser[];
+	private eventParsers: { [eventKey: string]: readonly EventParser[] };
 
 	// Keep a single queue to avoid race conditions between the two queues (since they
 	// modify the same state)
@@ -309,7 +302,8 @@ export class GameStateService {
 			});
 		}
 
-		for (const parser of this.eventParsers) {
+		const parsersForEvent = this.eventParsers[event.type] ?? [];
+		for (const parser of parsersForEvent) {
 			try {
 				if (parser.applies(event, this.state)) {
 					this.state = await parser.parse(this.state, event);
@@ -375,7 +369,8 @@ export class GameStateService {
 			minionsWillDie: this.minionsWillDie,
 		});
 		const prefs = await this.prefs.getPreferences();
-		for (const parser of this.eventParsers) {
+		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
+		for (const parser of parsersForEvent) {
 			try {
 				if (parser.applies(gameEvent, this.state, prefs)) {
 					this.state = await parser.parse(this.state, gameEvent, {
@@ -500,131 +495,151 @@ export class GameStateService {
 		this.eventEmitters = result;
 	}
 
-	private buildEventParsers(): readonly EventParser[] {
-		const parsers: EventParser[] = [
-			new GameStartParser(),
-			new WhizbangDeckParser(this.deckParser, this.deckHandler),
-			new MatchMetadataParser(
-				this.deckParser,
-				this.prefs,
-				this.deckHandler,
-				this.allCards,
-				this.memory,
-				this.mercenariesStateBuilder,
-			),
-			new MulliganOverParser(),
-			new MainStepReadyParser(),
-			new CardDrawParser(this.helper, this.allCards, this.i18n),
-			new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n),
-			new CardBackToDeckParser(this.helper, this.allCards, this.i18n),
-			new CardTradedParser(this.helper, this.prefs),
-			new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
-			new CardRemovedFromDeckParser(this.helper, this.allCards),
-			new CardRemovedFromHandParser(this.helper),
-			new CardRemovedFromBoardParser(this.helper),
-			new CardChangedOnBoardParser(this.helper, this.allCards, this.i18n),
-			new CardChangedInHandParser(this.helper, this.allCards, this.i18n),
-			new CardChangedInDeckParser(this.helper, this.allCards, this.i18n),
-			new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
-			new CardPlayedByEffectParser(this.helper, this.allCards, this.i18n),
-			new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
-			new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
-			new EndOfEchoInHandParser(this.helper),
-			new GameEndParser(this.prefs, this.owUtils),
-			new DiscardedCardParser(this.helper),
-			new BgsHeroSelectedCardParser(this.helper),
-			new CardRecruitedParser(this.helper, this.allCards, this.i18n),
-			new MinionBackOnBoardParser(this.helper),
-			new MinionSummonedParser(this.helper, this.allCards, this.i18n),
-			new CardRevealedParser(this.helper, this.allCards, this.i18n),
-			new HeroRevealedParser(this.allCards),
-			new LinkedEntityParser(this.helper, this.i18n),
-			new MinionDiedParser(this.helper),
-			new BurnedCardParser(this.helper),
-			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
-			new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
-			new SecretDestroyedParser(this.helper),
-			new NewTurnParser(this.owUtils, this.prefs),
-			new FirstPlayerParser(),
-			new CardStolenParser(this.helper, this.i18n),
-			new CardCreatorChangedParser(this.helper),
-			new AssignCardIdParser(this.helper),
-			new HeroPowerChangedParser(this.allCards, this.i18n),
-			new WeaponEquippedParser(this.allCards, this.i18n),
-			new WeaponDestroyedParser(this.helper),
-			new BgsRewardRevealedParser(this.allCards, this.helper, this.i18n),
-			new BgsRewardEquippedParser(this.allCards, this.i18n),
-			new BgsRewardDestroyedParser(this.allCards, this.i18n),
-			new DeckstringOverrideParser(this.deckHandler),
-			new LocalPlayerParser(this.allCards),
-			new OpponentPlayerParser(
-				this.aiDecks,
-				this.deckHandler,
-				this.helper,
-				this.allCards,
-				this.prefs,
-				this.i18n,
-				this.memory,
-			),
-			new PlayersInfoParser(),
-			new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
-			new CardOnBoardAtGameStart(this.helper, this.allCards),
-			new GameRunningParser(this.deckHandler),
-			new SecretWillTriggerParser(this.helper),
-			new SecretTriggeredParser(this.helper),
-			new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n),
-			new QuestDestroyedParser(this.helper),
-			new QuestCompletedParser(this.helper),
-			new QuestPlayedFromDeckParser(this.helper),
-			new QuestPlayedFromHandParser(this.helper, this.allCards),
-			new MinionOnBoardAttackUpdatedParser(this.helper),
-			new GalakrondInvokedParser(),
-			new PogoPlayedParser(),
-			new SpecificSummonsParser(),
-			new JadeGolemParser(),
-			new CthunParser(),
-			new CardBuffedInHandParser(this.helper),
-			new CustomEffectsParser(this.helper),
-			new CustomEffects2Parser(this.helper, this.allCards),
-			new MinionGoDormantParser(this.helper),
-			new FatigueParser(),
-			new EntityUpdateParser(this.helper, this.i18n, this.allCards),
-			new PassiveTriggeredParser(this.helper, this.allCards, this.i18n),
-			new DamageTakenParser(),
-			new HeroPowerDamageParser(this.allCards),
-			new CthunRevealedParser(this.helper, this.allCards, this.i18n),
-			new MindrenderIlluciaParser(),
-			new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
-			new CopiedFromEntityIdParser(this.helper, this.i18n),
-			new ShuffleDeckParser(),
-			new EntityChosenParser(this.helper),
-			new TurnDurationUpdatedParser(),
-			new StartOfGameEffectParser(this.helper, this.allCards, this.i18n),
-			new CostChangedParser(this.helper),
-			new DataScriptChangedParser(this.helper, this.allCards),
-			new ChoosingOptionsParser(),
-			new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper),
-			new AttackParser(this.allCards),
-			new CorpsesSpentThisGameParser(),
-			new OverloadParser(),
-			new ResourcesParser(),
-
-			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
-			new CardDredgedParser(this.helper, this.allCards, this.i18n),
-			new SpecialCardPowerTriggeredParser(this.allCards, this.helper),
-			new SphereOfSapienceParser(this.helper),
-			new PlaguesParser(),
-
-			new ReconnectStartParser(),
-			new ReconnectOverParser(this.deckHandler),
-		];
-
-		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
-			parsers.push(new ConstructedAchievementsProgressionParser());
-			parsers.push(new ConstructedChangeTabParser());
-			parsers.push(new ListCardsPlayedFromInitialDeckParser(this.helper));
-		}
-
-		return parsers;
+	private buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
+		return {
+			[GameEvent.ATTACKING_HERO]: [new AttackParser(this.allCards)],
+			[GameEvent.ATTACKING_MINION]: [new AttackParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_HERO_SELECTED]: [new BgsHeroSelectedCardParser(this.helper)],
+			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED]: [new BgsRewardDestroyedParser(this.allCards, this.i18n)],
+			[GameEvent.BATTLEGROUNDS_REWARD_REVEALED]: [new BgsRewardEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper)],
+			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
+			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_CREATOR_CHANGED]: [new CardCreatorChangedParser(this.helper)],
+			[GameEvent.CARD_DRAW_FROM_DECK]: [
+				new CardDrawParser(this.helper, this.allCards, this.i18n),
+				new SphereOfSapienceParser(this.helper),
+			],
+			[GameEvent.CARD_DREDGED]: [new CardDredgedParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_ON_BOARD_AT_GAME_START]: [new CardOnBoardAtGameStart(this.helper, this.allCards)],
+			[GameEvent.CARD_PLAYED_BY_EFFECT]: [new CardPlayedByEffectParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_PLAYED]: [
+				new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
+				new PogoPlayedParser(),
+				new SpecificSummonsParser(),
+			],
+			[GameEvent.CARD_REMOVED_FROM_BOARD]: [new CardRemovedFromBoardParser(this.helper)],
+			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
+			[GameEvent.CARD_REMOVED_FROM_HAND]: [new CardRemovedFromHandParser(this.helper)],
+			[GameEvent.CARD_REVEALED]: [new CardRevealedParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_STOLEN]: [new CardStolenParser(this.helper, this.i18n)],
+			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser()],
+			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.i18n)],
+			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],
+			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper)],
+			[GameEvent.CREATE_CARD_IN_DECK]: [
+				new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
+				new PlaguesParser(),
+			],
+			[GameEvent.CREATE_CARD_IN_GRAVEYARD]: [
+				new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
+			],
+			[GameEvent.CTHUN]: [new CthunParser()],
+			[GameEvent.DAMAGE]: [new DamageTakenParser(), new HeroPowerDamageParser(this.allCards)],
+			[GameEvent.DATA_SCRIPT_CHANGED]: [new DataScriptChangedParser(this.helper, this.allCards)],
+			[GameEvent.DEATHRATTLE_TRIGGERED]: [new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper)],
+			[GameEvent.DECKLIST_UPDATE]: [
+				new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
+			],
+			[GameEvent.DECKSTRING_OVERRIDE]: [new DeckstringOverrideParser(this.deckHandler)],
+			[GameEvent.DISCARD_CARD]: [new DiscardedCardParser(this.helper)],
+			[GameEvent.END_OF_ECHO_IN_HAND]: [new EndOfEchoInHandParser(this.helper)],
+			[GameEvent.ENTITY_CHOSEN]: [new EntityChosenParser(this.helper), new SphereOfSapienceParser(this.helper)],
+			[GameEvent.ENTITY_UPDATE]: [new EntityUpdateParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.FATIGUE_DAMAGE]: [new FatigueParser()],
+			[GameEvent.FIRST_PLAYER]: [new FirstPlayerParser()],
+			[GameEvent.GALAKROND_INVOKED]: [new GalakrondInvokedParser()],
+			[GameEvent.GAME_END]: [new GameEndParser(this.prefs, this.owUtils)],
+			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
+			[GameEvent.GAME_START]: [new GameStartParser()],
+			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
+			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
+			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
+			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
+			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n)],
+			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards)],
+			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser()],
+			[GameEvent.MATCH_INFO]: [new PlayersInfoParser()],
+			[GameEvent.MATCH_METADATA]: [
+				new MatchMetadataParser(
+					this.deckParser,
+					this.prefs,
+					this.deckHandler,
+					this.allCards,
+					this.memory,
+					this.mercenariesStateBuilder,
+				),
+			],
+			[GameEvent.MINION_BACK_ON_BOARD]: [new MinionBackOnBoardParser(this.helper)],
+			[GameEvent.MINION_GO_DORMANT]: [new MinionGoDormantParser(this.helper)],
+			[GameEvent.MINION_ON_BOARD_ATTACK_UPDATED]: [new MinionOnBoardAttackUpdatedParser(this.helper)],
+			[GameEvent.MINION_SUMMONED_FROM_HAND]: [
+				new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
+				new SpecificSummonsParser(),
+			],
+			[GameEvent.MINION_SUMMONED]: [
+				new MinionSummonedParser(this.helper, this.allCards, this.i18n),
+				new SpecificSummonsParser(),
+			],
+			[GameEvent.MINIONS_DIED]: [new MinionDiedParser(this.helper)],
+			[GameEvent.MULLIGAN_DEALING]: [new MulliganOverParser()],
+			[GameEvent.OPPONENT]: [
+				new OpponentPlayerParser(
+					this.aiDecks,
+					this.deckHandler,
+					this.helper,
+					this.allCards,
+					this.prefs,
+					this.i18n,
+					this.memory,
+				),
+			],
+			[GameEvent.OVERLOADED_CRYSTALS_CHANGED]: [new OverloadParser()],
+			[GameEvent.PASSIVE_BUFF]: [new PassiveTriggeredParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper)],
+			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.QUEST_DESTROYED]: [new QuestDestroyedParser(this.helper)],
+			[GameEvent.QUEST_PLAYED_FROM_DECK]: [new QuestPlayedFromDeckParser(this.helper)],
+			[GameEvent.QUEST_PLAYED]: [new QuestPlayedFromHandParser(this.helper, this.allCards)],
+			[GameEvent.RECEIVE_CARD_IN_HAND]: [new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.RECONNECT_OVER]: [new ReconnectOverParser(this.deckHandler)],
+			[GameEvent.RECONNECT_START]: [new ReconnectStartParser()],
+			[GameEvent.RECRUIT_CARD]: [new CardRecruitedParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.RESOURCES_UPDATED]: [new ResourcesParser()],
+			[GameEvent.SECRET_CREATED_IN_GAME]: [
+				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
+			],
+			[GameEvent.SECRET_DESTROYED]: [new SecretDestroyedParser(this.helper)],
+			[GameEvent.SECRET_PLAYED_FROM_DECK]: [new SecretPlayedFromDeckParser(this.helper, this.secretsConfig)],
+			[GameEvent.SECRET_PLAYED]: [new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards)],
+			[GameEvent.SECRET_PUT_IN_PLAY]: [
+				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
+			],
+			[GameEvent.SECRET_TRIGGERED]: [new SecretTriggeredParser(this.helper)],
+			[GameEvent.SECRET_WILL_TRIGGER]: [new SecretWillTriggerParser(this.helper)],
+			[GameEvent.SHUFFLE_DECK]: [new ShuffleDeckParser()],
+			[GameEvent.SPECIAL_CARD_POWER_TRIGGERED]: [
+				new SpecialCardPowerTriggeredParser(this.allCards, this.helper),
+				new SphereOfSapienceParser(this.helper),
+			],
+			[GameEvent.SPECTATING]: [new GameEndParser(this.prefs, this.owUtils)],
+			[GameEvent.START_OF_GAME]: [new StartOfGameEffectParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.SUB_SPELL_END]: [new CustomEffects2Parser(this.helper, this.allCards)],
+			[GameEvent.SUB_SPELL_START]: [
+				new CustomEffectsParser(this.helper),
+				new CthunRevealedParser(this.helper, this.allCards, this.i18n),
+				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
+			],
+			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs)],
+			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
+			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs)],
+			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
+			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
+			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],
+			// [GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],
+		};
 	}
 }

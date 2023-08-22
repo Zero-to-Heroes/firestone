@@ -16,7 +16,7 @@ export class DecklistUpdateParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && state.opponentDeck && gameEvent.type === GameEvent.DECKLIST_UPDATE;
+		return !!state && !!state.opponentDeck;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

@@ -4,7 +4,7 @@ import { EventParser } from './event-parser';
 
 export class TurnDurationUpdatedParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.TURN_DURATION_UPDATED;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

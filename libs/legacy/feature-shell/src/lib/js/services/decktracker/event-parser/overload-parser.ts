@@ -5,7 +5,7 @@ import { EventParser } from './event-parser';
 
 export class OverloadParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.OVERLOADED_CRYSTALS_CHANGED;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

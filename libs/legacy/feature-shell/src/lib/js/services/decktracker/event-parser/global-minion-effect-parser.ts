@@ -17,11 +17,7 @@ export class GlobalMinionEffectParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return (
-			state &&
-			gameEvent.type === GameEvent.SUB_SPELL_START &&
-			globalEffectTriggersEffects.includes(gameEvent.additionalData?.prefabId)
-		);
+		return state && globalEffectTriggersEffects.includes(gameEvent.additionalData?.prefabId);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

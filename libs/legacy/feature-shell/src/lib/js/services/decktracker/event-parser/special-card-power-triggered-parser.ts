@@ -14,24 +14,10 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService, private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.SPECIAL_CARD_POWER_TRIGGERED;
+		return !!state;
 	}
 
-	async parse(
-		currentState: GameState,
-		gameEvent: GameEvent,
-		additionalInfo?: {
-			secretWillTrigger?: {
-				cardId: string;
-				reactingToCardId: string;
-				reactingToEntityId: number;
-			};
-			minionsWillDie?: readonly {
-				cardId: string;
-				entityId: number;
-			}[];
-		},
-	): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		if (!SPECIAL_CARD_POWERS.includes(cardId as CardIds)) {
 			return currentState;

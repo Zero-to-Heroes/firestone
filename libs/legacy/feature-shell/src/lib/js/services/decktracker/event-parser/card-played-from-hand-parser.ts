@@ -23,7 +23,7 @@ export class CardPlayedFromHandParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CARD_PLAYED;
+		return !!state;
 	}
 
 	async parse(

@@ -1,8 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import { DeckManipulationHelper } from '@legacy-import/src/lib/js/services/decktracker/event-parser/deck-manipulation-helper';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
@@ -15,7 +15,7 @@ export class DeathrattleTriggeredParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.DEATHRATTLE_TRIGGERED;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

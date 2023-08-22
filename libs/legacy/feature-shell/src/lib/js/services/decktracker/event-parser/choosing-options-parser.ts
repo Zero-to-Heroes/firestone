@@ -6,7 +6,7 @@ import { EventParser } from './event-parser';
 
 export class ChoosingOptionsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CHOOSING_OPTIONS;
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: ChoosingOptionsGameEvent): Promise<GameState> {
