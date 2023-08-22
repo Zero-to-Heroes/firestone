@@ -603,6 +603,7 @@ const publicCardGiftCreators = [
 	CardIds.KangorDancingKing,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
+	CardIds.KeywardenIvory,
 	CardIds.KingMukla_CORE_EX1_014,
 	CardIds.KingMuklaLegacy,
 	CardIds.KingMuklaVanilla,
