@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
-import { CardClass, GameType, CardClass as TAG_CLASS, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import {
+	CardClass,
+	GameType,
+	CardClass as TAG_CLASS,
+	getDefaultHeroDbfIdForClass,
+	normalizeDuelsHeroCardId,
+} from '@firestone-hs/reference-data';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
@@ -177,42 +183,48 @@ export class InternalProfileInfoService {
 			[GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(r.RecordType),
 		).filter((r) => r.Data > 0);
 		if (!!duelsStats?.length) {
-			const groupedByHero = groupByFunction((s: MemoryPlayerRecord) => s.Data)(duelsStats);
-			const duelsHeroStats: readonly ProfileDuelsHeroStat[] = Object.keys(groupedByHero).map((heroDbfId) => {
-				const heroCard = this.allCards.getCard(heroDbfId);
-				const records = groupedByHero[heroDbfId];
-				return {
-					heroCardId: heroCard.id,
-					wins: records.map((r) => r.Wins).reduce((a, b) => a + b, 0),
-					losses: records.map((r) => r.Losses).reduce((a, b) => a + b, 0),
-					winsByMode: [
-						{
-							mode: 'duels',
-							wins: records
-								.filter((r) => r.RecordType === GameType.GT_PVPDR)
-								.map((r) => r.Wins)
-								.reduce((a, b) => a + b, 0),
-							losses: records
+			const groupedByHero = groupByFunction((s: MemoryPlayerRecord) =>
+				normalizeDuelsHeroCardId(this.allCards.getCard(s.Data).id),
+			)(duelsStats);
+			const duelsHeroStats: readonly ProfileDuelsHeroStat[] = Object.keys(groupedByHero).map(
+				(normalizedHeroCardId) => {
+					const heroCard = this.allCards.getCard(normalizedHeroCardId);
+					const records = groupedByHero[normalizedHeroCardId];
+					const result: ProfileDuelsHeroStat = {
+						heroCardId: heroCard.id,
+						wins: records.map((r) => r.Wins).reduce((a, b) => a + b, 0),
+						losses: records.map((r) => r.Losses).reduce((a, b) => a + b, 0),
+						winsByMode: [
+							{
+								mode: 'duels',
+								wins: records
+									.filter((r) => r.RecordType === GameType.GT_PVPDR)
+									.map((r) => r.Wins)
+									.reduce((a, b) => a + b, 0),
+								losses: records
 
-								.filter((r) => r.RecordType === GameType.GT_PVPDR)
-								.map((r) => r.Losses)
-								.reduce((a, b) => a + b, 0),
-						},
-						{
-							mode: 'paid-duels',
-							wins: records
+									.filter((r) => r.RecordType === GameType.GT_PVPDR)
+									.map((r) => r.Losses)
+									.reduce((a, b) => a + b, 0),
+							},
+							{
+								mode: 'paid-duels',
+								wins: records
 
-								.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
-								.map((r) => r.Wins)
-								.reduce((a, b) => a + b, 0),
-							losses: records
-								.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
-								.map((r) => r.Losses)
-								.reduce((a, b) => a + b, 0),
-						},
-					],
-				};
-			});
+									.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
+									.map((r) => r.Wins)
+									.reduce((a, b) => a + b, 0),
+								losses: records
+									.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
+									.map((r) => r.Losses)
+									.reduce((a, b) => a + b, 0),
+							},
+						],
+					};
+					console.debug('built duels hero stats', heroCard.name, result, records);
+					return result;
+				},
+			);
 			this.duelsHeroStats$$.next(duelsHeroStats);
 		}
 	}
