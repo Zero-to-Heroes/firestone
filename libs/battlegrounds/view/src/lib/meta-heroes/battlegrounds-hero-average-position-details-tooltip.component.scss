@@ -76,14 +76,14 @@
 					color: #61ff47;
 
 					&:before {
-						content: '+';
+						content: '-';
 					}
 				}
 				&.negative {
 					color: #ff4747;
 
 					&:before {
-						content: '-';
+						content: '+';
 					}
 				}
 			}
