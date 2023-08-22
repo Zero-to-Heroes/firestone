@@ -669,6 +669,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, undead, not(cardIs(CardIds.FleshBehemoth_RLK_830)));
 			case CardIds.Flowrider:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.FogsailFreebooterCore:
+				return and(side(inputSide), or(inDeck, inHand), weapon);
 			case CardIds.FossilFanatic:
 				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.FrequencyOscillator:
@@ -975,6 +977,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.OverseerFrigidaraCore_RLK_224:
 			case CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.ParachuteBrigand:
+			case CardIds.PatchesThePirate_CFM_637:
+				return and(side(inputSide), or(inDeck, inHand), minion, pirate);
 			case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.PeacefulPiper:
