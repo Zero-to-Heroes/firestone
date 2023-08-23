@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -36,6 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
 				<autocomplete-search-with-list-item
+					class="item"
 					*ngFor="let result of value.searchResults"
 					[fullString]="valueMatcher(result)"
 					[searchString]="value.searchString"

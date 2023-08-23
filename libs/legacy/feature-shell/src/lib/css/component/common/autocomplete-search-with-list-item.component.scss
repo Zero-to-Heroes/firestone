@@ -1,7 +1,10 @@
-.search-autocomplete {
+:host {
 	display: flex;
-	justify-content: flex-start;
 	align-items: center;
+	justify-content: flex-start;
+}
+
+.search-autocomplete {
 	height: 30px;
 	padding-left: 12px;
 
