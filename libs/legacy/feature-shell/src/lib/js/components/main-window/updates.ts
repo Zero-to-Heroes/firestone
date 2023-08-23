@@ -33,65 +33,74 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.8.0',
+		version: '11.8.1',
 		force: false,
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `The last patch has been more bumpy than I expected. If you find that the app doesn't track your games properly, please first try restarting Hearthstone, and see if the problem persists. Thanks again for your patience and support!`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `I'm continuing to update the app to accomodate all the changes of latest 27.2 patch. These are mostly bug fixes and behind-the-scenes improvements, but may also contains a couple of quality of life features :)`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'content',
-								text: `The app has been updated for patch 27.2. There are still quite a lot of things to do, so stay tuned for more updates this week :)`,
+								type: 'bug',
+								text: `Fix an issue where the simulator would ignore most triggered abilities.`,
 							},
 						],
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Mousing over a card that uses different spell schools (like Inquisitive Creation) now highlights the spells in your deck and hand that have spell schools you haven't played yet.`,
-			// 				},
-			// 				{
-			// 					type: 'content',
-			// 					text: `Demon Hunter and Death Knight are momentarily removed from the Twist deckbuilder, in preparation of the first Twist season coming with patch 27.2.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where Lady Darkvein's counter widget would incorrectly consider spells that got countered.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the Secret Helper would sometimes not show the correct list for secrets created by Tear Reality.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'general',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where you could not log in to Out of Games anymore.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a way to filter hero stats based on the Anomaly. It's still experimental, and the sample size is probably still too small, so take the results with a grain of salt.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Evil Twin (the quest reward) would not cause the first attacker to be recomputed.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "Ooops, All ____" anomay would cause the banned tribes widget to display a single tribe with a banned icon.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the app would get lost when all players would be Sire Denathrius.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'content',
+								text: `Add card highlights and oracles for the new Caverns of Time cards.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where long card names would not be displayed nicely in the card seach dropdown.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
