@@ -686,12 +686,13 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'piloted-whirl-o-tron',
 			};
-		} else if (hasMinions(boardInfo, [CardIds.RylakMetalhead_BG26_801, CardIds.RylakMetalhead_BG26_801_G])) {
-			return {
-				isSupported: false,
-				reason: 'rylak',
-			};
 		}
+		// else if (hasMinions(boardInfo, [CardIds.RylakMetalhead_BG26_801, CardIds.RylakMetalhead_BG26_801_G])) {
+		// 	return {
+		// 		isSupported: false,
+		// 		reason: 'rylak',
+		// 	};
+		// }
 		// else if (!isPlayer && hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
 		// 	return {
 		// 		isSupported: false,
@@ -745,12 +746,12 @@ const hasPilotedWhirlOTron = (boardInfo: BgsBoardInfo) => {
 	);
 };
 
-const hasRylak = (boardInfo: BgsBoardInfo) => {
-	return (
-		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801) ||
-		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801_G)
-	);
-};
+// const hasRylak = (boardInfo: BgsBoardInfo) => {
+// 	return (
+// 		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801) ||
+// 		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801_G)
+// 	);
+// };
 
 const hasBaron = (boardInfo: BgsBoardInfo) => {
 	return (

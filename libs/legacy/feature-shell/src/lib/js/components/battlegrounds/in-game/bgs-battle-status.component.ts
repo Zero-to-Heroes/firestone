@@ -199,14 +199,14 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
-			case 'rylak':
-				this._simulationMessage = this.i18n.translateString(
-					'battlegrounds.battle.composition-not-supported.general',
-					{
-						value: this.allCards.getCard(CardIds.RylakMetalhead_BG26_801).name,
-					},
-				);
-				break;
+			// case 'rylak':
+			// 	this._simulationMessage = this.i18n.translateString(
+			// 		'battlegrounds.battle.composition-not-supported.general',
+			// 		{
+			// 			value: this.allCards.getCard(CardIds.RylakMetalhead_BG26_801).name,
+			// 		},
+			// 	);
+			// 	break;
 			// case 'choral-mrrrglr':
 			// 	this._simulationMessage = this.i18n.translateString(
 			// 		'battlegrounds.battle.composition-not-supported.general',

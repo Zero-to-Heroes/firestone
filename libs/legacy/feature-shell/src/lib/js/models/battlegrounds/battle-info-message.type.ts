@@ -1,7 +1,7 @@
 export type BattleInfoMessage =
 	| 'scallywag'
 	| 'piloted-whirl-o-tron'
-	| 'rylak'
+	// | 'rylak'
 	// | 'choral-mrrrglr'
 	// | 'bassgill'
 	| 'secret'
