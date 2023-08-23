@@ -314,9 +314,16 @@ export const buildHeroStats = (
 			const averagePositionBaseValue = useConservativeEstimate
 				? stat.conservativePositionEstimate
 				: stat.averagePosition;
+			const dataPoints = Math.min(
+				stat.dataPoints,
+				useAnomalyModifier
+					? anomalyStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
+					: 999_999_999,
+				useTribesModifier ? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0) : 999_999_999,
+			);
 			const result: BgsMetaHeroStatTierItem = {
 				id: stat.heroCardId,
-				dataPoints: stat.dataPoints,
+				dataPoints: dataPoints,
 				averagePosition: averagePositionBaseValue + tribesModifier + anomalyModifier,
 				averagePositionDetails: {
 					baseValue: averagePositionBaseValue,
