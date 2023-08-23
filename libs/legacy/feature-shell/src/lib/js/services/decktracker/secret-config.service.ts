@@ -6,6 +6,13 @@ import { Metadata } from '../../models/decktracker/metadata';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
 
+const createsSecretsFromThePast = [
+	CardIds.TearReality,
+	CardIds.TearReality_TornEnchantment,
+	CardIds.DiscoAtTheEndOfTime_WON_040,
+	CardIds.DiscoAtTheEndOfTime_EndOfTheDiscoEnchantment_WON_040e,
+];
+
 @Injectable()
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
@@ -28,7 +35,7 @@ export class SecretConfigService {
 			.filter((secret) => secret.playerClass === playerClass)
 			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
 			.filter((secret) => {
-				if (creatorCardId !== CardIds.TearReality && creatorCardId !== CardIds.TearReality_TornEnchantment) {
+				if (!createsSecretsFromThePast.includes(creatorCardId as CardIds)) {
 					return true;
 				}
 				if (standardSecretCardIds.includes(secret.cardId)) {
@@ -60,7 +67,7 @@ export class SecretConfigService {
 	}
 
 	private getMode(metadata: Metadata, creatorCardId: string): string {
-		if (creatorCardId === CardIds.TearReality || creatorCardId === CardIds.TearReality_TornEnchantment) {
+		if (createsSecretsFromThePast.includes(creatorCardId as CardIds)) {
 			return 'wild';
 		}
 

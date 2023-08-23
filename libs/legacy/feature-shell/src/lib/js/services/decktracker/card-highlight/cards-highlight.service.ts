@@ -22,6 +22,7 @@ import {
 	cardIs,
 	cardType,
 	cardsPlayedThisMatch,
+	charge,
 	chooseOne,
 	combo,
 	corrupt,
@@ -92,6 +93,7 @@ import {
 	undead,
 	weapon,
 	whelp,
+	windfury,
 } from './selectors';
 
 @Injectable()
@@ -375,6 +377,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				};
 			case CardIds.AdvancedTargetingMonocle:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.AlakirTheWindsOfTime_WON_092h:
+				return and(side(inputSide), inDeck, minion, or(charge, divineShield, taunt, windfury));
 			case CardIds.AllianceBannerman:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.AllShallServeTavernBrawl:
@@ -506,6 +510,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.CatrinaMuerteCore:
 			case CardIds.CatrinaMuerte:
 				return and(side(inputSide), inGraveyard, undead, minion);
+			case CardIds.CenarionHold_WON_015:
+				return and(side(inputSide), or(inHand, inDeck), chooseOne);
 			case CardIds.ChainedGuardian:
 				return and(side(inputSide), or(inHand, inDeck), generatesPlague);
 			case CardIds.ChampionOfStorms:
@@ -984,6 +990,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.PeacefulPiper:
 				return and(side(inputSide), inDeck, minion, beast);
+			case CardIds.PebblyPage_WON_090:
+				return and(side(inputSide), inDeck, overload);
 			case CardIds.PetCollector:
 				return and(side(inputSide), inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.PileOnHeroic:
@@ -1288,6 +1296,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.TimberTambourine:
 				return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(4));
+			case CardIds.TimelineAccelerator_WON_139:
+				return and(side(inputSide), inDeck, mech);
 			case CardIds.Timewarden:
 				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 			case CardIds.TortollanPilgrim:
@@ -1304,6 +1314,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.TrenchSurveyor_TSC_642:
 				return and(side(inputSide), inDeck, minion, mech);
+			case CardIds.TrialOfTheJormungars_WON_028:
+				return and(side(inputSide), inDeck, beast, effectiveCostLess(4));
 			case CardIds.TrinketTracker:
 				return and(side(inputSide), inDeck, spell, effectiveCostEqual(1));
 			case CardIds.Tyr:
@@ -1327,6 +1339,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 			case CardIds.UnstableMagicTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
+			case CardIds.ValstannStaghelm_WON_345:
+				return and(side(inputSide), inDeck, minion, taunt);
 			case CardIds.VanndarStormpike_AV_223:
 				return !!card
 					? and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1))

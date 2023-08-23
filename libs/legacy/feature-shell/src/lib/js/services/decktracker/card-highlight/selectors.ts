@@ -146,6 +146,7 @@ const hasMechanic =
 	(input: SelectorInput): boolean =>
 		(input.card?.mechanics ?? []).includes(GameTag[mechanic]);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
+export const charge = hasMechanic(GameTag.CHARGE);
 export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
 export const combo = hasMechanic(GameTag.COMBO);
 export const corrupt = hasMechanic(GameTag.CORRUPT);
@@ -153,6 +154,9 @@ export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
 export const discover = hasMechanic(GameTag.DISCOVER);
 export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
+export const dredge = hasMechanic(GameTag.DREDGE);
+export const forge = hasMechanic(GameTag.FORGE);
+export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
@@ -162,9 +166,7 @@ export const overload = hasMechanic(GameTag.OVERLOAD);
 export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
-export const dredge = hasMechanic(GameTag.DREDGE);
-export const forge = hasMechanic(GameTag.FORGE);
-export const forged = hasMechanic(GameTag.FORGED);
+export const windfury = hasMechanic(GameTag.WINDFURY);
 
 export const isSi7 = (input: SelectorInput): boolean =>
 	Object.values(Locale)
