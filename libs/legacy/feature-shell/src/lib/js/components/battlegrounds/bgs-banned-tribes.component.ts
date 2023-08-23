@@ -58,13 +58,14 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent
 	}
 
 	ngAfterContentInit() {
-		this.showAvailable$ = this.listenForBasicPref$((prefs) => prefs.bgsShowAvailableTribesOverlay);
+		this.showAvailable$ = combineLatest([
+			this.store.listenPrefs$((prefs) => prefs.bgsShowAvailableTribesOverlay),
+			this.store.listenBattlegrounds$(([state]) => state),
+		]).pipe(this.mapData(([[pref], [state]]) => pref || state?.currentGame?.availableRaces?.length == 1));
 		this.singleRow$ = this.listenForBasicPref$((prefs) => prefs.bgsTribesOverlaySingleRow);
 		this.tribes$ = combineLatest([this.store.listenBattlegrounds$(([state]) => state), this.showAvailable$]).pipe(
 			this.mapData(([[state], showAvailable]) =>
-				showAvailable || state?.currentGame?.availableRaces?.length == 1
-					? state?.currentGame?.availableRaces
-					: state?.currentGame?.bannedRaces,
+				showAvailable ? state?.currentGame?.availableRaces : state?.currentGame?.bannedRaces,
 			),
 		);
 		this.tooltip$ = combineLatest([this.tribes$, this.showAvailable$]).pipe(
