@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
+import { AllCardsService, CardType, ReferenceCard } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class CardsFacadeService {
 	private service: AllCardsService;
+
+	private allAnomalyIds: readonly string[];
 
 	constructor(private readonly ow: OverwolfService) {
 		this.init();
@@ -63,6 +65,18 @@ export class CardsFacadeService {
 
 	public getCards(): ReferenceCard[] {
 		return this.service.getCards();
+	}
+
+	public getAnomalyIds(): readonly string[] {
+		if (this.allAnomalyIds?.length) {
+			return this.allAnomalyIds;
+		}
+
+		const allAnomalies = this.getCards()
+			.filter((card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_ANOMALY])
+			.map((card) => card.id);
+		this.allAnomalyIds = allAnomalies;
+		return allAnomalies;
 	}
 
 	public getService() {

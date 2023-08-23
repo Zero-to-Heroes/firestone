@@ -61,10 +61,10 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 						minimumFractionDigits: 2,
 						maximumFractionDigits: 2,
 					}),
-					valueClass: tribe.impact > 0 ? 'positive' : tribe.impact < 0 ? 'negative' : 'neutral',
+					valueClass: tribe.impact < 0 ? 'positive' : tribe.impact > 0 ? 'negative' : 'neutral',
 					impact: tribe.impact,
 				}))
-				.sort((a, b) => b.impact - a.impact) ?? [];
+				.sort((a, b) => a.impact - b.impact) ?? [];
 		this.anomalies =
 			value.anomalyModifiers
 				?.map((anomaly) => ({
@@ -74,10 +74,10 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 						minimumFractionDigits: 2,
 						maximumFractionDigits: 2,
 					}),
-					valueClass: anomaly.impact > 0 ? 'positive' : anomaly.impact < 0 ? 'negative' : 'neutral',
+					valueClass: anomaly.impact < 0 ? 'positive' : anomaly.impact > 0 ? 'negative' : 'neutral',
 					impact: anomaly.impact,
 				}))
-				.sort((a, b) => b.impact - a.impact) ?? [];
+				.sort((a, b) => a.impact - b.impact) ?? [];
 	}
 
 	_visible: boolean;

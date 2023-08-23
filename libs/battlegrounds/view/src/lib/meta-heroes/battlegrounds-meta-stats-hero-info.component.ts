@@ -56,14 +56,13 @@ import {
 				>
 					<span class="value">{{ playerAveragePosition }}</span>
 				</div>
-				<!-- TODO: add tooltip that details the calculation -->
 				<div
 					class="tribe-impact"
 					*ngIf="tribeImpactPosition !== null"
 					[ngClass]="{ positive: tribeImpactPosition < 0, negative: tribeImpactPosition > 0 }"
 					[helpTooltip]="'app.battlegrounds.tier-list.tribe-impact-position-tooltip' | fsTranslate"
 				>
-					<span class="value">{{ tribeImpactPosition.toFixed(2) }}</span>
+					<span class="value">{{ abs(tribeImpactPosition).toFixed(2) }}</span>
 				</div>
 			</div>
 			<div class="placement">
@@ -192,6 +191,10 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 
 	seeDetailedHeroStats() {
 		this.heroStatClick.next(this.heroCardId);
+	}
+
+	abs(value: number): number {
+		return Math.abs(value);
 	}
 }
 

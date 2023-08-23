@@ -6,6 +6,7 @@
 .battlegrounds-tier-list {
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 
 	.title {
 		font-size: 14px;

@@ -31,7 +31,7 @@ export class LocalizationStandaloneService {
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
 		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this.locale}/${highRes}`;
-		const typeSuffix = this.buildTypeSuffix(options.cardType);
+		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;
 	}
@@ -41,7 +41,7 @@ export class LocalizationStandaloneService {
 			return null;
 		}
 		const base = `https://static.firestoneapp.com/cards`;
-		const typeSuffix = this.buildTypeSuffix(options.cardType);
+		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;
 	}

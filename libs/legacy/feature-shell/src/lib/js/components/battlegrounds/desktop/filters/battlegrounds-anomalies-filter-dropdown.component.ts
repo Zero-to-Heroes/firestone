@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
@@ -77,9 +76,6 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	}
 
 	private buildAllAnomalies(): readonly string[] {
-		return this.allCards
-			.getCards()
-			.filter((card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_ANOMALY])
-			.map((card) => card.id);
+		return this.allCards.getAnomalyIds();
 	}
 }
