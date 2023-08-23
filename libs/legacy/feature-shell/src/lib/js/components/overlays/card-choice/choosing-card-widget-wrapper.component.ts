@@ -135,11 +135,11 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		]).pipe(
 			this.mapData(([[state], premium, bgsShowQuestStatsOverlay]) => {
 				const options = state.playerDeck?.currentOptions;
-				console.debug('[choosing-card] options', options, state);
+				console.debug('[choosing-card] options', options, state, premium, bgsShowQuestStatsOverlay);
 				return (
 					options
 						?.map((o) => {
-							const isBaseDiscover = o.source !== CardIds.DiscoverQuestRewardDntToken;
+							const isBaseDiscover = !isBgQuestDiscover(o.source);
 							if (isBaseDiscover) {
 								const result: CardChoiceOption = {
 									cardId: o.cardId,
@@ -194,7 +194,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			.listenDeckState$((state) => state.playerDeck?.currentOptions)
 			.pipe(
 				this.mapData(([options]) =>
-					options?.some((o) => o.source === CardIds.DiscoverQuestRewardDntToken) ? 'bgsQuest' : 'normal',
+					options?.some((o) => isBgQuestDiscover(o.source)) ? 'bgsQuest' : 'normal',
 				),
 			);
 	}
@@ -410,3 +410,7 @@ export interface BgsQuestCardChoiceOption extends CardChoiceOption {
 }
 
 export type CardOptionFlag = 'flag' | 'value' | null;
+
+const isBgQuestDiscover = (source: string): boolean => {
+	return source === CardIds.DiscoverQuestRewardDntToken;
+};

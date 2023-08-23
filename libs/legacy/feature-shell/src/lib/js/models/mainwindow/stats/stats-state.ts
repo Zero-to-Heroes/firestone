@@ -1,10 +1,11 @@
 // import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 // import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
+import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { AppInjector } from '../../../services/app-injector';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
-import { BgsPostMatchStats } from '../../battlegrounds/post-match/bgs-post-match-stats';
+
 import { GameStats } from './game-stats';
 import { StatsCategory } from './stats-category';
 import { StatsFilters } from './stats-filters';

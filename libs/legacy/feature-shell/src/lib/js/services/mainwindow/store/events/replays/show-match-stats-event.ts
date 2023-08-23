@@ -1,8 +1,8 @@
-import { BgsPostMatchStats } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats';
+import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ShowMatchStatsEvent implements MainWindowStoreEvent {
-	constructor(public readonly reviewId: string, public readonly stats: BgsPostMatchStats) {}
+	constructor(public readonly reviewId: string, public readonly stats: IBgsPostMatchStats) {}
 
 	public static eventName(): string {
 		return 'ShowMatchStatsEvent';

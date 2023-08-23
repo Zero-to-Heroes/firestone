@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
@@ -26,7 +26,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 			*ngIf="{
 				bgsPlayers: bgsPlayers$ | async,
 				currentTurn: currentTurn$ | async,
-				lastOpponentCardId: lastOpponentCardId$ | async,
+				lastOpponentPlayerId: lastOpponentPlayerId$ | async,
 				showLastOpponentIcon: showLastOpponentIcon$ | async,
 				buddiesEnabled: buddiesEnabled$ | async
 			} as value"
@@ -37,7 +37,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 					*ngFor="let bgsPlayer of value.bgsPlayers; let i = index; trackBy: trackByFunction"
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="value.currentTurn"
-					[lastOpponentCardId]="value.lastOpponentCardId"
+					[lastOpponentPlayerId]="value.lastOpponentPlayerId"
 					[showLastOpponentIcon]="value.showLastOpponentIcon"
 					[buddiesEnabled]="value.buddiesEnabled"
 				>
@@ -58,7 +58,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 
 	showWidget$: Observable<boolean>;
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
-	lastOpponentCardId$: Observable<string>;
+	lastOpponentPlayerId$: Observable<number>;
 	currentTurn$: Observable<number>;
 	showLastOpponentIcon$: Observable<boolean>;
 	buddiesEnabled$: Observable<boolean>;
@@ -109,8 +109,8 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 					[...players].sort((a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace),
 				),
 			);
-		this.lastOpponentCardId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
+		this.lastOpponentPlayerId$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentPlayerId)
 			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.currentTurn)

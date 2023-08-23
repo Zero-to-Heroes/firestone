@@ -42,7 +42,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					class="stat"
 					*ngIf="selectedTab === 'hp-by-turn'"
 					[stats]="_panel?.stats"
-					[mainPlayerCardId]="mainPlayerCardId"
+					[mainPlayerId]="mainPlayerId"
 					[visible]="selectedTab === 'hp-by-turn'"
 					[tooltipSuffix]="tabIndex"
 				>
@@ -95,7 +95,7 @@ export class BgsPostMatchStatsTabsComponent
 
 	@Input() selectedTab: BgsStatsFilterId;
 	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
-	@Input() mainPlayerCardId: string;
+	@Input() mainPlayerId: number;
 	@Input() tabIndex = 0;
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {

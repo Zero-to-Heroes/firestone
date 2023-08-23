@@ -39,7 +39,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 						[faceOffs]="faceOffs$ | async"
 						[mmr]="mmr$ | async"
 						[gameEnded]="gameEnded$ | async"
-						[mainPlayerCardId]="mainPlayerCardId$ | async"
+						[mainPlayerId]="mainPlayerId$ | async"
 					>
 					</bgs-post-match-stats>
 					<bgs-battles *ngIf="value.currentPanelId === 'bgs-battles'"> </bgs-battles>
@@ -58,7 +58,7 @@ export class BattlegroundsContentComponent
 	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel | any>;
 	reviewId$: Observable<string>;
-	mainPlayerCardId$: Observable<string>;
+	mainPlayerId$: Observable<number>;
 	mmr$: Observable<number>;
 	gameEnded$: Observable<boolean>;
 	faceOffs$: Observable<readonly BgsFaceOffWithSimulation[]>;
@@ -114,11 +114,9 @@ export class BattlegroundsContentComponent
 		this.reviewId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.reviewId)
 			.pipe(this.mapData(([reviewId]) => reviewId));
-		this.mainPlayerCardId$ = this.store
+		this.mainPlayerId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.getNormalizedHeroCardId(this.allCards)),
-			);
+			.pipe(this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.playerId));
 		this.mmr$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.mmrAtStart)
 			.pipe(this.mapData(([mmrAtStart]) => mmrAtStart));

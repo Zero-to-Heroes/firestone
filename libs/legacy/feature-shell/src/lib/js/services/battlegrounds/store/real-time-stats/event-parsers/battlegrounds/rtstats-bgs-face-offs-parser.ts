@@ -24,6 +24,7 @@ export class RTStatsBgsFaceOffParser implements EventParser {
 			{
 				turn: currentState.currentTurn,
 				playerCardId: undefined,
+				opponentPlayerId: gameEvent.additionalData.opponentPlayerId,
 				damage: gameEvent.additionalData.damage,
 				opponentCardId: normalizeHeroCardId(gameEvent.additionalData.opponent, this.allCards),
 				result: result,

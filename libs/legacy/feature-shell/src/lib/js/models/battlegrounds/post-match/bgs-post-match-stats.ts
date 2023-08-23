@@ -6,6 +6,7 @@ import {
 	BgsComposition,
 	BgsPostMatchStats as IBgsPostMatchStats,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BgsBoard } from '../in-game/bgs-board';
 import { BgsTavernUpgrade } from '../in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../in-game/bgs-triple';
@@ -17,8 +18,9 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly tripleTimings: readonly BgsTriple[] = [];
 	readonly rerolls: number;
 	readonly highestWinStreak: number;
-
 	readonly replayLink: string;
+
+	readonly playerIdToCardIdMapping: { [playerId: string]: string } = {};
 
 	readonly boardHistory: readonly BgsBoard[] = [];
 	readonly compositionsOverTurn: readonly BgsComposition[] = [];
@@ -26,8 +28,8 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly freezesOverTurn: readonly NumericTurnInfo[] = [];
 	readonly coinsWastedOverTurn: readonly NumericTurnInfo[] = [];
 	readonly mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[] = [];
-	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
-	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
+	readonly hpOverTurn: { [playerId: string]: readonly NumericTurnInfo[] } = {};
+	readonly leaderboardPositionOverTurn: { [playerId: string]: readonly NumericTurnInfo[] } = {};
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[] = [];
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = [];
 	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [];
@@ -44,7 +46,11 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 
-	public static create(base: BgsPostMatchStats): BgsPostMatchStats {
+	public static create(base: Partial<NonFunctionProperties<BgsPostMatchStats>>): BgsPostMatchStats {
 		return Object.assign(new BgsPostMatchStats(), base);
+	}
+
+	public update(base: Partial<NonFunctionProperties<BgsPostMatchStats>>) {
+		return Object.assign(new BgsPostMatchStats(), this, base);
 	}
 }

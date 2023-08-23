@@ -20,7 +20,11 @@ export class BgsNextOpponentParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
 		console.debug('[bgs-next-opponent] parsing next opponent', event.cardId);
-		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(currentState, event.cardId);
+		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(
+			currentState,
+			event.cardId,
+			event.playerId,
+		);
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const opponent = currentState.currentGame.players.find(
@@ -42,13 +46,14 @@ export class BgsNextOpponentParser implements EventParser {
 			playerHpLeft: playerHpLeft,
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
 			opponentCardId: opponent?.getNormalizedHeroCardId(this.allCards),
+			opponentPlayerId: opponent?.playerId,
 			opponentHpLeft:
 				(opponent.initialHealth ??
 					defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId, this.allCards)) +
 				(opponent.currentArmor ?? 0) -
 				(opponent.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
-		} as BgsFaceOffWithSimulation);
+		});
 		if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH') {
 			console.error(
 				'[bgs-next-opponent] created a face-off with an invalid player card',
@@ -80,9 +85,19 @@ export class BgsNextOpponentParser implements EventParser {
 		return result;
 	}
 
-	private buildInGamePanel(currentState: BattlegroundsState, cardId: string): BgsNextOpponentOverviewPanel {
+	private buildInGamePanel(
+		currentState: BattlegroundsState,
+		cardId: string,
+		playerId: number,
+	): BgsNextOpponentOverviewPanel {
 		const opponentOverview: BgsOpponentOverview = BgsOpponentOverview.create({
 			// Just use the cardId, and let the UI reconstruct from the state to avoid duplicating the info
+			playerId:
+				playerId ??
+				// If there is no card ID, this means we face the same opponent as previously
+				currentState.panels
+					.filter((panel) => panel.id === 'bgs-next-opponent-overview')
+					.map((panel) => panel as BgsNextOpponentOverviewPanel)[0].opponentOverview?.playerId,
 			cardId:
 				normalizeHeroCardId(cardId, this.allCards) ??
 				// If there is no card ID, this means we face the same opponent as previously

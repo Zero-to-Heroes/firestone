@@ -34,7 +34,7 @@ import { normalizeCardId } from './card-utils';
 	],
 	template: `
 		<div class="container">
-			<div class="content empty-state" *ngIf="!_panel?.player && !mainPlayerCardId">
+			<div class="content empty-state" *ngIf="!_panel?.player && !mainPlayerId">
 				<i>
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
@@ -43,7 +43,7 @@ import { normalizeCardId } from './card-utils';
 				<span class="title">{{ emptyTitle }}</span>
 				<span class="subtitle">{{ emptySubtitle }} </span>
 			</div>
-			<div class="content" *ngIf="_panel?.player || mainPlayerCardId">
+			<div class="content" *ngIf="_panel?.player || mainPlayerId">
 				<social-shares
 					*ngIf="showSocialShares"
 					class="social-shares"
@@ -67,7 +67,7 @@ import { normalizeCardId } from './card-utils';
 						*ngFor="let selectedTab of selectedTabs; let i = index"
 						class="tab tab-{{ i + 1 }}"
 						[panel]="_panel"
-						[mainPlayerCardId]="mainPlayerCardId"
+						[mainPlayerId]="mainPlayerId"
 						[selectedTab]="selectedTab"
 						[selectTabHandler]="selectTabHandler"
 						[tabIndex]="i"
@@ -124,7 +124,7 @@ export class BgsPostMatchStatsComponent
 	@Input() emptyTitle = 'Nothing here yet';
 	@Input() emptySubtitle = 'Finish the run to get some stats!';
 	@Input() parentWindow = `Firestone - Battlegrounds`;
-	@Input() mainPlayerCardId: string;
+	@Input() mainPlayerId: number;
 
 	@Input() selectedTabs: readonly BgsStatsFilterId[] = [];
 	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
@@ -145,6 +145,7 @@ export class BgsPostMatchStatsComponent
 		if (!value?.player || value === this._panel) {
 			return;
 		}
+		console.debug('setting panel', value);
 		this._panel = value;
 		this.icon = this.i18n.getCardImage(value.player.getDisplayCardId(), { isBgs: true });
 		this.health = value.player.initialHealth + value.player.currentArmor - value.player.damageTaken;

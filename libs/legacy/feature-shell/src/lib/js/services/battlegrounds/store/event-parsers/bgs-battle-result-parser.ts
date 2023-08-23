@@ -3,7 +3,6 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
-import { normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { EventParser } from './_event-parser';
@@ -30,15 +29,12 @@ export class BgsBattleResultParser implements EventParser {
 			return currentState;
 		}
 
-		if (!event.opponentCardId || !normalizeHeroCardId(event.opponentCardId, this.allCards)) {
-			console.error('[bgs-battle-result] missing opponentCardId', event);
-		}
-
 		const lastFaceOff = currentState.currentGame.faceOffs[currentState.currentGame.faceOffs.length - 1];
 		if (!lastFaceOff) {
 			console.error(
 				'[missing face-off to assign result to',
 				event.opponentCardId,
+				event.opponentPlayerId,
 				currentState.currentGame.printFaceOffs(),
 			);
 			return currentState;
@@ -56,6 +52,7 @@ export class BgsBattleResultParser implements EventParser {
 		newFaceOff.checkIntegrity(gameAfterFirstFaceOff);
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,
+			lastOpponentPlayerId: event.opponentPlayerId,
 		} as BgsGame);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, newGame);
 		console.debug('[bgs-simulation] updating with result and resetting battle info');

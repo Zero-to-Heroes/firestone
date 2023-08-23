@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -27,7 +26,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				<ng-container
 					*ngIf="{
 						currentTurn: currentTurn$ | async,
-						lastOpponentCardId: lastOpponentCardId$ | async
+						lastOpponentPlayerId: lastOpponentPlayerId$ | async
 					} as value"
 				>
 					<bgs-opponent-overview-big
@@ -45,7 +44,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								*ngFor="let opponent of value2.opponents; trackBy: trackByOpponentInfoFn"
 								[opponent]="opponent"
 								[currentTurn]="value.currentTurn"
-								[showLastOpponentIcon]="isLastOpponent(opponent, lastOpponentCardId$ | async)"
+								[showLastOpponentIcon]="isLastOpponent(opponent, value.lastOpponentPlayerId)"
 								[buddiesEnabled]="value2.buddiesEnabled"
 							></bgs-opponent-overview>
 						</div>
@@ -86,7 +85,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 	nextOpponent$: Observable<BgsPlayer>;
 	currentTurn$: Observable<number>;
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
-	lastOpponentCardId$: Observable<string>;
+	lastOpponentPlayerId$: Observable<number>;
 
 	buddiesEnabled$: Observable<boolean>;
 
@@ -128,9 +127,9 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 				),
 			);
 		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
-		this.lastOpponentCardId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
-			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));
+		this.lastOpponentPlayerId$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentPlayerId)
+			.pipe(this.mapData(([lastOpponentPlayerId]) => lastOpponentPlayerId));
 		this.nextBattle$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
@@ -178,8 +177,8 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 		return item.cardId;
 	}
 
-	isLastOpponent(opponent: BgsPlayer, lastOpponentCardId: string): boolean {
-		const result = normalizeHeroCardId(opponent.cardId, this.allCards) === lastOpponentCardId;
+	isLastOpponent(opponent: BgsPlayer, lastOpponentPlayerId: number): boolean {
+		const result = opponent.playerId === lastOpponentPlayerId;
 		return result;
 	}
 }

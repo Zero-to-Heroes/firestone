@@ -44,6 +44,10 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 	}
 
 	@Input() set config(value: BgsHeroAveragePositionDetails) {
+		if (!value) {
+			return;
+		}
+
 		this.baseValue = value.baseValue.toLocaleString(this.i18n.formatCurrentLocale(), {
 			minimumFractionDigits: 2,
 			maximumFractionDigits: 2,

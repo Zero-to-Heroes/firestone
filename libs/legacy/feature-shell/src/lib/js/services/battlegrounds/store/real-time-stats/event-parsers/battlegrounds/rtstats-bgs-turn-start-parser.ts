@@ -1,6 +1,5 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
-import { normalizeHeroCardId } from '../../../../bgs-utils';
 import { HpTurnInfo, RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
@@ -21,9 +20,9 @@ export class RTStatBgsTurnStartParser implements EventParser {
 		const heroesFromGame: readonly Hero[] = gameEvent.additionalData.heroes;
 		const newCurrentTurn = Math.ceil(gameEvent.additionalData.turnNumber / 2);
 		const hpOverTurn = currentState.hpOverTurn;
-		for (const hero of Object.keys(hpOverTurn)) {
-			const normalizedHero = normalizeHeroCardId(hero, this.allCards);
-			const existingStats = hpOverTurn[normalizedHero];
+		for (const playerId of Object.keys(hpOverTurn)) {
+			// const normalizedHero = normalizeHeroCardId(hero, this.allCards);
+			const existingStats = hpOverTurn[playerId];
 			// This is just for the first turn, when opponents are not revealed yet
 			// We shouldn't even get to that safeguard, since opponents aren't added
 			// to the history, but it's just in case the order of events get
@@ -32,7 +31,7 @@ export class RTStatBgsTurnStartParser implements EventParser {
 				continue;
 			}
 
-			const { currentHp, currentArmor } = this.getHpForHero(normalizedHero, heroesFromGame);
+			const { currentHp, currentArmor } = this.getHpForHero(+playerId, heroesFromGame);
 			const newStats: readonly HpTurnInfo[] = [
 				...existingStats.filter((stat) => stat.turn !== newCurrentTurn),
 				{
@@ -41,7 +40,7 @@ export class RTStatBgsTurnStartParser implements EventParser {
 					armor: currentArmor ?? 0,
 				},
 			];
-			hpOverTurn[normalizedHero] = newStats;
+			hpOverTurn[playerId] = newStats;
 		}
 
 		return currentState.update({
@@ -49,15 +48,13 @@ export class RTStatBgsTurnStartParser implements EventParser {
 		} as RealTimeStatsState);
 	}
 
-	private getHpForHero(heroCardId: string, heroes: readonly Hero[]): { currentHp: number; currentArmor: number } {
-		const hero = heroes.find(
-			(h) => normalizeHeroCardId(h.CardId, this.allCards) === normalizeHeroCardId(heroCardId, this.allCards),
-		);
+	private getHpForHero(playerId: number, heroes: readonly Hero[]): { currentHp: number; currentArmor: number } {
+		const hero = heroes.find((h) => h.PlayerId === playerId);
 		if (!hero) {
 			console.warn(
 				'could not find hero',
-				heroCardId,
-				heroes.map((h) => h.CardId),
+				playerId,
+				heroes.map((h) => h.PlayerId),
 			);
 		}
 		return {
@@ -73,6 +70,7 @@ export class RTStatBgsTurnStartParser implements EventParser {
 
 interface Hero {
 	readonly CardId: string;
+	readonly PlayerId: number;
 	readonly EntityId: number;
 	readonly Health: number;
 	readonly Armor: number;

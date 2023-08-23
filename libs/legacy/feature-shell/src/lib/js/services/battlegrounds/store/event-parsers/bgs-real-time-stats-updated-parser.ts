@@ -4,8 +4,8 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsRealTimeStatsUpdatedEvent } from '../events/bgs-real-time-stats-updated-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsRealTimeStatsUpdatedEvent } from '../events/bgs-real-time-stats-updated-event';
 import { RealTimeStatsState } from '../real-time-stats/real-time-stats';
 import { EventParser } from './_event-parser';
 
@@ -41,8 +41,8 @@ export class BgsRealTimeStatsUpdatedParser implements EventParser {
 	): BgsPostMatchStatsPanel {
 		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const triples =
-			mainPlayer && realTimeStatsState.triplesPerHero[mainPlayer.cardId]
-				? new Array(realTimeStatsState.triplesPerHero[mainPlayer.cardId])
+			mainPlayer && realTimeStatsState.triplesPerHero[mainPlayer.playerId]
+				? new Array(realTimeStatsState.triplesPerHero[mainPlayer.playerId])
 				: [];
 		return (panel as BgsPostMatchStatsPanel).update({
 			stats: {

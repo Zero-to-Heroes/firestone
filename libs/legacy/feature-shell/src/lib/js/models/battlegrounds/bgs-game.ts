@@ -26,6 +26,7 @@ export class BgsGame {
 	readonly anomalies: readonly string[];
 
 	readonly lastOpponentCardId: string;
+	readonly lastOpponentPlayerId: number;
 	readonly liveStats: RealTimeStatsState;
 	readonly gameEnded: boolean;
 

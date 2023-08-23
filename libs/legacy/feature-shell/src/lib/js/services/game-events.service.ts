@@ -801,6 +801,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
 						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
 						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
+						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 					}),
 				);
 				break;
@@ -1006,6 +1007,7 @@ export class GameEvents {
 						damage: gameEvent.Value.Damage,
 						tavernLevel: gameEvent.Value.TavernLevel,
 						nextOpponentCardId: gameEvent.Value.NextOpponentCardId,
+						nextOpponentPlayerId: gameEvent.Value.NextOpponentPlayerId,
 					}),
 				);
 				break;
@@ -1014,6 +1016,9 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TRIPLE,
 						cardId: gameEvent.Value.CardId,
+						additionalData: {
+							playerId: gameEvent.Value.PlayerId,
+						},
 					} as GameEvent),
 				);
 				break;
@@ -1062,6 +1067,7 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 						additionalData: {
 							opponent: gameEvent.Value.Opponent,
+							opponentPlayerId: gameEvent.Value.OpponentPlayerId,
 							result: gameEvent.Value.Result,
 							damage: gameEvent.Value.Damage,
 						},
@@ -1075,6 +1081,7 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
 						additionalData: {
 							nextOpponentCardId: gameEvent.Value.CardId,
+							nextOpponentPlayerId: gameEvent.Value.PlayerId,
 							isSameOpponent: gameEvent.Value.IsSameOpponent,
 						},
 					} as GameEvent),
@@ -1087,6 +1094,7 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED,
 						additionalData: {
 							cardId: gameEvent.Value.CardId,
+							playerId: gameEvent.Value.PlayerId,
 							leaderboardPlace: gameEvent.Value.LeaderboardPlace,
 							health: gameEvent.Value.Health,
 							armor: gameEvent.Value.Armor,
@@ -1114,6 +1122,7 @@ export class GameEvents {
 						additionalData: {
 							playerBoard: {
 								cardId: gameEvent.Value.PlayerBoard.CardId,
+								playerId: gameEvent.Value.PlayerBoard.PlayerId,
 								board: gameEvent.Value.PlayerBoard.Board, // as is
 								secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
 								hand: gameEvent.Value.PlayerBoard.Hand, // as is
@@ -1126,6 +1135,7 @@ export class GameEvents {
 							},
 							opponentBoard: {
 								cardId: gameEvent.Value.OpponentBoard.CardId,
+								playerId: gameEvent.Value.OpponentBoard.PlayerId,
 								board: gameEvent.Value.OpponentBoard.Board, // as is
 								secrets: gameEvent.Value.OpponentBoard.Secrets, // as is
 								hand: gameEvent.Value.OpponentBoard.Hand, // as is
@@ -1145,8 +1155,8 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE,
 						additionalData: {
-							// turn =
 							cardId: gameEvent.Value.CardId,
+							playerId: gameEvent.Value.PlayerId,
 							leaderboardPlace: gameEvent.Value.LeaderboardPlace,
 						},
 					} as GameEvent),
@@ -1158,8 +1168,8 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,
 						additionalData: {
-							// turn =
 							cardId: gameEvent.Value.CardId,
+							playerId: gameEvent.Value.PlayerId,
 							tavernLevel: gameEvent.Value.TavernLevel,
 						},
 					} as GameEvent),
@@ -1171,6 +1181,7 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_BUDDY_GAINED,
 						additionalData: {
 							cardId: gameEvent.Value.CardId,
+							playerId: gameEvent.Value.PlayerId,
 							totalBuddies: gameEvent.Value.TotalBuddies,
 						},
 					} as GameEvent),
@@ -1182,6 +1193,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_REVEALED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 					}),
 				);
 				break;
@@ -1191,6 +1203,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_GAINED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 					}),
 				);
 				break;
@@ -1199,6 +1212,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 					}),
 				);
 				break;
@@ -1207,6 +1221,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 					}),
 				);
 				break;

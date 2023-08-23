@@ -1,6 +1,6 @@
+import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameStat } from '@firestone/stats/data-access';
 import { NonFunctionProperties } from '../../../services/utils';
-import { BgsPostMatchStats } from '../../battlegrounds/post-match/bgs-post-match-stats';
 
 export class GameStats {
 	// Ordered from newest (index 0) to oldest
@@ -25,7 +25,7 @@ export class GameStats {
 		const newReplay = replay.update({
 			...replay,
 			postMatchStats: postMatchStats,
-		} as GameStat);
+		});
 		const newStats: readonly GameStat[] = this.stats.map((r) =>
 			r.reviewId === newReplay.reviewId ? newReplay : r,
 		);

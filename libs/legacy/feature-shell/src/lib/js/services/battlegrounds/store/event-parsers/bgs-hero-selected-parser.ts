@@ -31,6 +31,7 @@ export class BgsHeroSelectedParser implements EventParser {
 		const newPlayer = existingMainPlayer
 			? existingMainPlayer.update({
 					cardId: normalizedCardId,
+					playerId: event.playerId,
 					heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
@@ -48,6 +49,7 @@ export class BgsHeroSelectedParser implements EventParser {
 			  } as BgsPlayer)
 			: BgsPlayer.create({
 					cardId: normalizedCardId,
+					playerId: event.playerId,
 					heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
@@ -83,7 +85,10 @@ export class BgsHeroSelectedParser implements EventParser {
 		if (event.additionalData?.nextOpponentCardId) {
 			return new BgsNextOpponentParser(this.i18n, this.allCards).parse(
 				updatedState,
-				new BgsNextOpponentEvent(event.additionalData.nextOpponentCardId),
+				new BgsNextOpponentEvent(
+					event.additionalData.nextOpponentCardId,
+					event.additionalData.nextOpponentPlayerId,
+				),
 			);
 		} else {
 			return updatedState;

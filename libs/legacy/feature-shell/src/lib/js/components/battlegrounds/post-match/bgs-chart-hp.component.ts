@@ -1,3 +1,5 @@
+import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -8,13 +10,10 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
-import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
-import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -54,7 +53,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						class="position-{{ player.position }}"
 						bindCssVariable="legend-icon-border-color"
 						[bindCssVariableValue]="player.color"
-						(click)="togglePlayer(player.cardId)"
+						(click)="togglePlayer(player.playerId)"
 					>
 						<p class="position-item">#{{ player.position }}</p>
 						<i class="unselected" *ngIf="!player.shown">
@@ -92,12 +91,12 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class BgsChartHpComponent {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
-	@Input() set stats(value: BgsPostMatchStats) {
+	@Input() set stats(value: IBgsPostMatchStats) {
 		this._stats = value;
 		this.setStats();
 	}
-	@Input() set mainPlayerCardId(value: string) {
-		this._mainPlayerCardId = value;
+	@Input() set mainPlayerId(value: number) {
+		this._mainPlayerId = value;
 		this.setStats();
 	}
 	@Input() set visible(value: boolean) {
@@ -289,9 +288,9 @@ export class BgsChartHpComponent {
 		},
 	};
 
-	private _stats: BgsPostMatchStats;
-	private _mainPlayerCardId: string;
-	private playerHiddenStatus: { [playerCardId: string]: boolean } = {};
+	private _stats: IBgsPostMatchStats;
+	private _mainPlayerId: number;
+	private playerHiddenStatus: { [playerId: string]: boolean } = {};
 
 	private _visible: boolean;
 	private _dirty = true;
@@ -303,8 +302,8 @@ export class BgsChartHpComponent {
 		private readonly i18n: LocalizationFacadeService,
 	) {}
 
-	togglePlayer(playerCardId: string) {
-		this.playerHiddenStatus[playerCardId] = !this.playerHiddenStatus[playerCardId];
+	togglePlayer(playerId: number) {
+		this.playerHiddenStatus[playerId] = !this.playerHiddenStatus[playerId];
 		this.setStats();
 	}
 
@@ -318,9 +317,9 @@ export class BgsChartHpComponent {
 
 	trackByLegendFn(
 		index: number,
-		player: { cardId: string; icon: string; position: number; isPlayer: boolean; shown: boolean },
+		player: { cardId: string; playerId: number; icon: string; position: number; isPlayer: boolean; shown: boolean },
 	) {
-		return player.cardId;
+		return player.playerId;
 	}
 
 	private doResize() {
@@ -359,32 +358,58 @@ export class BgsChartHpComponent {
 			return;
 		}
 
-		const playerOrder: readonly string[] = this.buildPlayerOrder(
+		const playerOrder: readonly number[] = this.buildPlayerOrder(
 			this._stats.leaderboardPositionOverTurn,
 			this._stats.hpOverTurn,
 		);
 		const hpOverTurn = {};
-		for (const playerCardId of playerOrder) {
-			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
+		for (const playerId of playerOrder) {
+			hpOverTurn[playerId] = this._stats.hpOverTurn[playerId];
 		}
+		const hpOverTurnDebug = {};
+		for (const playerId of Object.keys(hpOverTurn)) {
+			const playerCardId = this._stats.playerIdToCardIdMapping[playerId];
+			console.debug('playerCardId', playerCardId, playerId);
+			const lastInfo = hpOverTurn[playerId][hpOverTurn[playerId].length - 1];
+			hpOverTurnDebug[this.allCards.getCard(playerCardId).name] = lastInfo.value + (lastInfo.armor ?? 0);
+		}
+		const leaderboardPositionOverTurnDebug = {};
+		for (const playerId of Object.keys(this._stats.leaderboardPositionOverTurn)) {
+			const playerCardId = this._stats.playerIdToCardIdMapping[playerId];
+			console.debug('playerCardId', playerCardId, playerId);
+			const lastInfo =
+				this._stats.leaderboardPositionOverTurn[playerId][
+					this._stats.leaderboardPositionOverTurn[playerId].length - 1
+				];
+			leaderboardPositionOverTurnDebug[this.allCards.getCard(playerCardId).name] = lastInfo.value;
+		}
+		console.debug(
+			'hpOverTurn',
+			hpOverTurn,
+			hpOverTurnDebug,
+			leaderboardPositionOverTurnDebug,
+			this._stats.playerIdToCardIdMapping,
+			this._stats.leaderboardPositionOverTurn,
+		);
 
 		// It's just a way to arbitrarily always assign the same color to a player
-		const sortedPlayerCardIds = [...playerOrder].sort();
-		const players = playerOrder.map((cardId) => ({
-			cardId: cardId,
-			color: this.playerColors[sortedPlayerCardIds.indexOf(cardId)],
-			position: playerOrder.indexOf(cardId) + 1,
-			isPlayer:
-				normalizeHeroCardId(cardId, this.allCards) ===
-				normalizeHeroCardId(this._mainPlayerCardId, this.allCards),
+		const sortedPlayerIds = [...playerOrder].sort();
+		const players = playerOrder.map((playerId) => ({
+			playerId: playerId,
+			cardId: this._stats.playerIdToCardIdMapping[playerId],
+			color: this.playerColors[sortedPlayerIds.indexOf(playerId)],
+			position: playerOrder.indexOf(playerId) + 1,
+			isPlayer: playerId === this._mainPlayerId,
 			hpOverTurn:
-				hpOverTurn[cardId]
+				hpOverTurn[playerId]
 					?.filter((turnInfo) => turnInfo)
 					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
+		console.debug('players', players, this._mainPlayerId);
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
+			playerId: player.playerId,
 			name: this.allCards.getCard(player.cardId).name,
 			icon: this.i18n.getCardImage(player.cardId, { isBgs: true }),
 			position: player.position,
@@ -419,61 +444,61 @@ export class BgsChartHpComponent {
 	}
 
 	private buildPlayerOrder(
-		leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] },
-		hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] },
-	): readonly string[] {
+		leaderboardPositionOverTurn: { [playerId: string]: readonly NumericTurnInfo[] },
+		hpOverTurn: { [playerId: string]: readonly NumericTurnInfo[] },
+	): readonly number[] {
 		if (!!leaderboardPositionOverTurn && Object.keys(leaderboardPositionOverTurn)?.length) {
 			const lastTurn = leaderboardPositionOverTurn[0]?.length ?? 0;
 			return Object.keys(leaderboardPositionOverTurn)
-				.map((playerCardId) => {
-					const positionAtLastTurn = leaderboardPositionOverTurn[playerCardId][lastTurn];
+				.map((playerId) => {
+					const positionAtLastTurn = leaderboardPositionOverTurn[playerId][lastTurn];
 					return {
-						playerCardId: playerCardId,
+						playerId: +playerId,
 						position: positionAtLastTurn?.value ?? 99,
 					};
 				})
 				.sort((a, b) => a.position - b.position)
-				.map((info) => info.playerCardId);
+				.map((info) => info.playerId);
 		}
 
 		// Fallback which uses the total health + armor instead of the leaderboard position
 		const turnAtWhichEachPlayerDies = Object.keys(hpOverTurn)
-			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroic)
-			.map((playerCardId) => {
-				const info = hpOverTurn[playerCardId];
+			// .filter((playerId) => playerId !== CardIds.BaconphheroHeroic)
+			.map((playerId) => {
+				const info = hpOverTurn[playerId];
 				return {
-					playerCardId: playerCardId,
+					playerId: +playerId,
 					turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
 					lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
 				};
 			});
-		let playerOrder: string[] = turnAtWhichEachPlayerDies
+		const playerOrder: number[] = turnAtWhichEachPlayerDies
 			.sort(
 				(a, b) =>
 					b.turnDeath - a.turnDeath ||
 					// a.lastKnownPosition - b.lastKnownPosition ||
 					b.lastKnownHp - a.lastKnownHp,
 			)
-			.map((playerInfo) => playerInfo.playerCardId);
+			.map((playerInfo) => playerInfo.playerId);
 		// Legacy issue - the heroes that were offered during the hero selection phase are
 		// also proposed there
-		if (playerOrder.length > 8) {
-			const candidatesToRemove = turnAtWhichEachPlayerDies
-				.filter((info) => info.turnDeath === 99)
-				.filter(
-					(info) =>
-						info.lastKnownHp ===
-						defaultStartingHp(GameType.GT_BATTLEGROUNDS, info.playerCardId, this.allCards),
-				)
-				.filter((info) => info.playerCardId !== this._mainPlayerCardId);
-			playerOrder = playerOrder.filter(
-				(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
-			);
-		}
+		// if (playerOrder.length > 8) {
+		// 	const candidatesToRemove = turnAtWhichEachPlayerDies
+		// 		.filter((info) => info.turnDeath === 99)
+		// 		.filter(
+		// 			(info) =>
+		// 				info.lastKnownHp ===
+		// 				defaultStartingHp(GameType.GT_BATTLEGROUNDS, info.playerCardId, this.allCards),
+		// 		)
+		// 		.filter((info) => info.playerCardId !== this._mainPlayerCardId);
+		// 	playerOrder = playerOrder.filter(
+		// 		(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
+		// 	);
+		// }
 		return playerOrder;
 	}
 
-	private buildChartLabels(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): Label[] {
+	private buildChartLabels(value: { [playerId: string]: readonly NumericTurnInfo[] }): Label[] {
 		if (!value || !Object.values(value)) {
 			console.error('Could not build chart label for', value);
 			return [];
@@ -495,6 +520,7 @@ export class BgsChartHpComponent {
 
 interface LegendItem {
 	cardId: string;
+	playerId: number;
 	icon: string;
 	position: number;
 	isPlayer: boolean;

@@ -123,11 +123,13 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 		this.placementDistribution$.next(value.placementDistribution);
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
 		this.showTurnWinrates = !!(value as BgsMetaHeroStatTierItem)?.combatWinrate?.length;
-		this.averagePositionTooltipInput = {
-			baseValue: value.averagePositionDetails.baseValue,
-			tribeModifiers: value.averagePositionDetails.tribesModifiers,
-			anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
-		};
+		this.averagePositionTooltipInput = !value.averagePositionDetails
+			? null
+			: {
+					baseValue: value.averagePositionDetails.baseValue,
+					tribeModifiers: value.averagePositionDetails.tribesModifiers,
+					anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
+			  };
 		console.debug('tooltip input', this.averagePositionTooltipInput);
 	}
 

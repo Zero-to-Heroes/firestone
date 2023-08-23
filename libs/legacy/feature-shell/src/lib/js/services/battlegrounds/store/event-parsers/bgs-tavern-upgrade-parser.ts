@@ -19,11 +19,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsTavernUpgradeEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(
-			(player) =>
-				normalizeHeroCardId(player.cardId, this.allCards) ===
-				normalizeHeroCardId(event.heroCardId, this.allCards),
-		);
+		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
@@ -64,9 +60,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 			tripleHistory: newTripleHistory,
 		} as BgsPlayer);
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			normalizeHeroCardId(player.cardId, this.allCards) === normalizeHeroCardId(newPlayer.cardId, this.allCards)
-				? newPlayer
-				: player,
+			player.playerId === newPlayer.playerId ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
 		return currentState.update({

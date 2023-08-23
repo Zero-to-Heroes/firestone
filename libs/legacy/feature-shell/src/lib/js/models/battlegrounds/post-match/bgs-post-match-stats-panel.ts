@@ -1,6 +1,7 @@
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BgsPanel } from '../bgs-panel';
 import { BgsPanelId } from '../bgs-panel-id.type';
 import { BgsPlayer } from '../bgs-player';
@@ -22,11 +23,11 @@ export class BgsPostMatchStatsPanel implements BgsPanel {
 	// readonly isComputing: boolean;
 	readonly forceOpen: boolean;
 
-	public static create(base: BgsPostMatchStatsPanel): BgsPostMatchStatsPanel {
+	public static create(base: Partial<NonFunctionProperties<BgsPostMatchStatsPanel>>): BgsPostMatchStatsPanel {
 		return Object.assign(new BgsPostMatchStatsPanel(), base);
 	}
 
-	public update(base: BgsPostMatchStatsPanel): BgsPostMatchStatsPanel {
+	public update(base: Partial<NonFunctionProperties<BgsPostMatchStatsPanel>>): BgsPostMatchStatsPanel {
 		return Object.assign(new BgsPostMatchStatsPanel(), this, base);
 	}
 }

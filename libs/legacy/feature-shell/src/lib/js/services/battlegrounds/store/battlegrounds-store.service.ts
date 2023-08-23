@@ -226,7 +226,13 @@ export class BattlegroundsStoreService {
 					new BgsInitMmrEvent(this.mainWindowState.battlegrounds?.getMetaHeroStats()?.mmrPercentiles),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
-				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId, gameEvent.additionalData));
+				this.battlegroundsUpdater.next(
+					new BgsHeroSelectedEvent(
+						gameEvent.cardId,
+						gameEvent.localPlayer.PlayerId,
+						gameEvent.additionalData,
+					),
+				);
 				this.startMemoryReading();
 			} else if (gameEvent.type === GameEvent.GAME_START) {
 				this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState, null, true));
@@ -244,13 +250,17 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
 				this.handleEventOnlyAfterTrigger(
 					// cardID is null when repeating the same opponent
-					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
+					new BgsNextOpponentEvent(
+						gameEvent.additionalData.nextOpponentCardId,
+						gameEvent.additionalData.nextOpponentPlayerId,
+					),
 					GameEvent.TURN_START,
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(
 					new BgsOpponentRevealedEvent(
 						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.playerId,
 						gameEvent.additionalData.leaderboardPlace,
 						gameEvent.additionalData.health,
 						gameEvent.additionalData.armor,
@@ -271,11 +281,19 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsRecruitStartEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE) {
 				this.battlegroundsUpdater.next(
-					new BgsTavernUpgradeEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.tavernLevel),
+					new BgsTavernUpgradeEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.playerId,
+						gameEvent.additionalData.tavernLevel,
+					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BUDDY_GAINED) {
 				this.battlegroundsUpdater.next(
-					new BgsBuddyGainedEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.totalBuddies),
+					new BgsBuddyGainedEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.playerId,
+						gameEvent.additionalData.totalBuddies,
+					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_REVEALED) {
 				this.battlegroundsUpdater.next(
@@ -283,11 +301,16 @@ export class BattlegroundsStoreService {
 						gameEvent.cardId,
 						gameEvent.additionalData.questRewardDbfId,
 						gameEvent.additionalData.isHeroPowerReward,
+						gameEvent.additionalData.playerId,
 					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_GAINED) {
 				this.battlegroundsUpdater.next(
-					new BgsRewardGainedEvent(gameEvent.cardId, gameEvent.additionalData.isHeroPowerReward),
+					new BgsRewardGainedEvent(
+						gameEvent.cardId,
+						gameEvent.additionalData.playerId,
+						gameEvent.additionalData.isHeroPowerReward,
+					),
 				);
 			} else if (
 				gameEvent.type === GameEvent.DAMAGE &&
@@ -300,13 +323,18 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsDamageDealtEvent(playerCardId, damage));
 			} else if (gameEvent.type === GameEvent.ARMOR_CHANGED) {
 				this.battlegroundsUpdater.next(
-					new BgsArmorChangedEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.totalArmor),
+					new BgsArmorChangedEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.playerId,
+						gameEvent.additionalData.totalArmor,
+					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(
 					new BgsPlayerBoardEvent(
 						{
 							heroCardId: gameEvent.additionalData.playerBoard.cardId,
+							playerId: gameEvent.additionalData.playerBoard.playerId,
 							board: gameEvent.additionalData.playerBoard.board,
 							secrets: gameEvent.additionalData.playerBoard.secrets,
 							hand: gameEvent.additionalData.playerBoard.hand,
@@ -319,6 +347,7 @@ export class BattlegroundsStoreService {
 						},
 						{
 							heroCardId: gameEvent.additionalData.opponentBoard.cardId,
+							playerId: gameEvent.additionalData.opponentBoard.playerId,
 							board: gameEvent.additionalData.opponentBoard.board,
 							secrets: gameEvent.additionalData.opponentBoard.secrets,
 							hand: gameEvent.additionalData.opponentBoard.hand,
@@ -347,12 +376,15 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
 						gameEvent.additionalData.opponent,
+						gameEvent.additionalData.opponentPlayerId,
 						gameEvent.additionalData.result,
 						gameEvent.additionalData.damage,
 					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE) {
-				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
+				this.battlegroundsUpdater.next(
+					new BgsTripleCreatedEvent(gameEvent.cardId, gameEvent.additionalData.playerId),
+				);
 			} else if (gameEvent.type === GameEvent.CARD_PLAYED) {
 				this.battlegroundsUpdater.next(new BgsCardPlayedEvent(gameEvent));
 			} else if (
@@ -368,6 +400,7 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(
 						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.playerId,
 						gameEvent.additionalData.leaderboardPlace,
 					),
 				);

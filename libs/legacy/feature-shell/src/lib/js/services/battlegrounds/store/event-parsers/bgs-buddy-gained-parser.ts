@@ -16,11 +16,7 @@ export class BgsBuddyGainedParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsBuddyGainedEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(
-			(player) =>
-				normalizeHeroCardId(player.cardId, this.allCards.getService()) ===
-				normalizeHeroCardId(event.heroCardId, this.allCards.getService()),
-		);
+		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
@@ -45,9 +41,7 @@ export class BgsBuddyGainedParser implements EventParser {
 			buddyTurns: [...playerToUpdate.buddyTurns, turn],
 		});
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			normalizeHeroCardId(player.cardId, this.allCards) === normalizeHeroCardId(newPlayer.cardId, this.allCards)
-				? newPlayer
-				: player,
+			player.playerId === newPlayer.playerId ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
 		return currentState.update({

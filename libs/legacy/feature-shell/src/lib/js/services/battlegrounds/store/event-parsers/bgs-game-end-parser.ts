@@ -108,6 +108,6 @@ export class BgsGameEndParser implements EventParser {
 			name: this.i18n.translateString('battlegrounds.post-match-stats.final-position', {
 				position: finalPosition,
 			}),
-		} as BgsPostMatchStatsPanel);
+		});
 	}
 }

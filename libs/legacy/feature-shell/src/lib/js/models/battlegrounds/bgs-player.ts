@@ -14,6 +14,7 @@ import { BgsTribe } from './in-game/bgs-tribe';
 import { BgsTriple } from './in-game/bgs-triple';
 
 export class BgsPlayer implements IBgsPlayer {
+	readonly playerId: number;
 	readonly cardId: string;
 	readonly baseCardId?: string;
 	readonly displayedCardId: string;

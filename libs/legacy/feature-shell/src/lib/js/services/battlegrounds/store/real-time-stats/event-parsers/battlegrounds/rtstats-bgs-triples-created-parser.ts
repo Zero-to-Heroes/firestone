@@ -1,6 +1,6 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
-import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
+import { isBattlegrounds } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
@@ -15,11 +15,12 @@ export class RTStatsBgsTriplesCreatedParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const normaliedId = normalizeHeroCardId(gameEvent.cardId, this.allCards);
-		const existingTriples = currentState.triplesPerHero[normaliedId] || 0;
+		// const normaliedId = normalizeHeroCardId(gameEvent.cardId, this.allCards);
+		const playerId = gameEvent.additionalData.playerId;
+		const existingTriples = currentState.triplesPerHero[playerId] || 0;
 		const newTriples = {
 			...currentState.triplesPerHero,
-			[normaliedId]: existingTriples + 1,
+			[playerId]: existingTriples + 1,
 		};
 		return currentState.update({
 			triplesPerHero: newTriples,

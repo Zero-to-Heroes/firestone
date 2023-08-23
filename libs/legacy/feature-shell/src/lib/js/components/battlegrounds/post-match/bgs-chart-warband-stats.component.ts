@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { deepEqual } from '../../../services/utils';
 
@@ -53,7 +53,7 @@ export class BgsChartWarbandStatsComponent {
 		}
 	}
 
-	@Input() set stats(value: BgsPostMatchStats) {
+	@Input() set stats(value: IBgsPostMatchStats) {
 		if (!value) {
 			return;
 		}

@@ -25,14 +25,13 @@ export class BgsOpponentRevealedParser implements EventParser {
 			return currentState;
 		}
 
-		const existingPlayer = currentState.currentGame.players.find(
-			(player) => normalizeHeroCardId(player.cardId, this.allCards.getService()) === normalizedCardId,
-		);
+		const existingPlayer = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
 		const newPlayer =
 			existingPlayer != null
 				? existingPlayer
 				: BgsPlayer.create({
 						cardId: normalizedCardId,
+						playerId: event.playerId,
 						heroPowerCardId: getHeroPower(event.cardId, this.allCards.getService()),
 						name: this.allCards.getCard(event.cardId).name,
 						initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
@@ -44,9 +43,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 		});
 		const newGame = currentState.currentGame.update({
 			players: [
-				...currentState.currentGame.players.filter(
-					(player) => normalizeHeroCardId(player.cardId, this.allCards.getService()) !== normalizedCardId,
-				),
+				...currentState.currentGame.players.filter((player) => player.playerId !== event.playerId),
 				updatedPlayer,
 			] as readonly BgsPlayer[],
 		} as BgsGame);

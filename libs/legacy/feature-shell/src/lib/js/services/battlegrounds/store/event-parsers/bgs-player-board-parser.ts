@@ -82,16 +82,8 @@ export class BgsPlayerBoardParser implements EventParser {
 		}
 
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
-			.map((p) =>
-				normalizeHeroCardId(p.cardId, this.allCards) === normalizeHeroCardId(player.cardId, this.allCards)
-					? player
-					: p,
-			)
-			.map((p) =>
-				normalizeHeroCardId(p.cardId, this.allCards) === normalizeHeroCardId(opponent.cardId, this.allCards)
-					? opponent
-					: p,
-			);
+			.map((p) => (p.playerId === player.playerId ? player : p))
+			.map((p) => (p.playerId === opponent.playerId ? opponent : p));
 
 		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(player, event.playerBoard);
 		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
@@ -109,15 +101,15 @@ export class BgsPlayerBoardParser implements EventParser {
 			console.error('[bgs-player-board-parser] missing opponentCardId', event);
 		}
 
-		const opponentCardId = normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards);
+		// const opponentCardId = normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards);
 		// There shouldn't be any case where the board is assigned to a face-off that is not the last, since logs
 		// are procesed in order
 		const lastFaceOff = currentState.currentGame.faceOffs[currentState.currentGame.faceOffs.length - 1];
-		if (lastFaceOff?.opponentCardId !== opponentCardId) {
+		if (lastFaceOff?.opponentPlayerId !== event.opponentBoard.playerId) {
 			console.error(
 				'[bgs-player-board-parser] got incorrect matching face-off',
-				lastFaceOff?.opponentCardId,
-				opponentCardId,
+				lastFaceOff?.opponentPlayerId,
+				event.opponentBoard.playerId,
 				lastFaceOff,
 			);
 			return currentState;
@@ -201,9 +193,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 	private updatePlayer(currentState: BattlegroundsState, playerBoard: PlayerBoard): BgsPlayer {
 		const playerToUpdate = currentState.currentGame.players.find(
-			(player) =>
-				normalizeHeroCardId(player.cardId, this.allCards) ===
-				normalizeHeroCardId(playerBoard.heroCardId, this.allCards),
+			(player) => player.playerId === playerBoard.playerId,
 		);
 		if (!playerToUpdate) {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
@@ -211,8 +201,8 @@ export class BgsPlayerBoardParser implements EventParser {
 					'Could not idenfity player for whom to update board history',
 					currentState.currentGame.reviewId,
 					playerBoard.heroCardId,
-					normalizeHeroCardId(playerBoard.heroCardId, this.allCards),
-					currentState.currentGame.players.map((player) => normalizeHeroCardId(player.cardId, this.allCards)),
+					playerBoard.playerId,
+					currentState.currentGame.players.map((player) => player.playerId),
 				);
 			}
 			return null;
@@ -220,6 +210,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		console.debug(
 			'found player board to update',
 			playerToUpdate.cardId,
+			playerToUpdate.playerId,
 			playerToUpdate.damageTaken,
 			'with new board',
 			playerBoard.board.map((entity) => entity.CardId),

@@ -8,13 +8,12 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { Entity, BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
 import { Entity as ParserEntity } from '@firestone-hs/replay-parser';
-import { Color, ScaleType } from '@sebastientromp/ngx-charts';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Color, ScaleType } from '@sebastientromp/ngx-charts';
 import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
-import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -149,7 +148,7 @@ export class BgsChartWarbandCompositionComponent {
 		this.updateValues();
 	}
 
-	@Input() set stats(value: BgsPostMatchStats) {
+	@Input() set stats(value: IBgsPostMatchStats) {
 		if (value === this._stats) {
 			return;
 		}
@@ -180,7 +179,7 @@ export class BgsChartWarbandCompositionComponent {
 		}
 	}
 
-	private _stats: BgsPostMatchStats;
+	private _stats: IBgsPostMatchStats;
 	private _availableTribes: readonly Race[];
 	private boardHistory: readonly ParserEntity[];
 	private _visible: boolean;
@@ -275,7 +274,7 @@ export class BgsChartWarbandCompositionComponent {
 		}, 200);
 	}
 
-	private buildChartData(value: BgsPostMatchStats): any[] {
+	private buildChartData(value: IBgsPostMatchStats): any[] {
 		if (!value || !value.boardHistory) {
 			return null;
 		}

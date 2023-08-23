@@ -1,7 +1,7 @@
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { NumericTurnInfo } from '@models/battlegrounds/post-match/numeric-turn-info';
 import { GameEvent } from '../../../../../../models/game-event';
-import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
@@ -16,7 +16,8 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const heroCardId = normalizeHeroCardId(gameEvent.additionalData.cardId, this.allCards);
+		const playerId = gameEvent.additionalData.playerId;
+		// const heroCardId = normalizeHeroCardId(gameEvent.additionalData.cardId, this.allCards);
 		// const armor = gameEvent.additionalData.armor;
 		const health = gameEvent.additionalData.health;
 		const armor = gameEvent.additionalData.armor;
@@ -25,8 +26,8 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 		const turn = currentState.reconnectOngoing ? currentState.currentTurn : 0;
 		const hpOverTurn = currentState.hpOverTurn;
 		const leaderboardPositionOverTurn = currentState.leaderboardPositionOverTurn;
-		const existingHpData = hpOverTurn[heroCardId] ?? [];
-		const existingPositionData = leaderboardPositionOverTurn[heroCardId] ?? [];
+		const existingHpData = hpOverTurn[playerId] ?? [];
+		const existingPositionData = leaderboardPositionOverTurn[playerId] ?? [];
 		const newHpData = [
 			...existingHpData.filter((data) => data.turn !== turn),
 			{
@@ -48,11 +49,14 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 						: existingPositionData[existingPositionData.length - 1].value,
 			},
 		];
-		hpOverTurn[heroCardId] = newHpData;
-		leaderboardPositionOverTurn[heroCardId] = newPositionData;
+		hpOverTurn[playerId] = newHpData;
+		leaderboardPositionOverTurn[playerId] = newPositionData;
+		const playerIdMapping = currentState.playerIdToCardIdMapping;
+		playerIdMapping[playerId] = gameEvent.additionalData.cardId;
 		return currentState.update({
 			hpOverTurn: hpOverTurn,
 			leaderboardPositionOverTurn: leaderboardPositionOverTurn,
+			playerIdToCardIdMapping: playerIdMapping,
 		} as RealTimeStatsState);
 	}
 

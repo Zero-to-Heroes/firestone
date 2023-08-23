@@ -23,7 +23,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<bgs-post-match-stats
 				*ngIf="value.selectedView === 'match-stats'"
 				[panel]="value.selectedReplay?.bgsPostMatchStatsPanel"
-				[mainPlayerCardId]="value.selectedReplay?.bgsPostMatchStatsPanel?.player?.cardId"
+				[mainPlayerId]="value.selectedReplay?.bgsPostMatchStatsPanel?.player?.playerId"
 				[mmr]="parseInt(value.selectedReplay?.replayInfo?.playerRank)"
 				[selectedTabs]="selectedTabs$ | async"
 				[selectTabHandler]="selectTabHandler"

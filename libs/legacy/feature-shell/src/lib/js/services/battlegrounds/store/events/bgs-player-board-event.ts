@@ -7,6 +7,7 @@ export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {
 }
 
 export interface PlayerBoard {
+	readonly playerId: number;
 	readonly heroCardId: string;
 	readonly board: readonly PlayerBoardEntity[];
 	readonly hand: readonly PlayerBoardEntity[];

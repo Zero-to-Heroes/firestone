@@ -2,9 +2,9 @@ import {
 	BattleResultHistory,
 	BgsComposition,
 	BgsFaceOff,
-	BgsPostMatchStats as IBgsPostMatchStats,
 	BooleanTurnInfo,
 	ComplexTurnInfo,
+	BgsPostMatchStats as IBgsPostMatchStats,
 	NumericTurnInfo,
 	ValueHeroInfo,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
@@ -20,12 +20,14 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly gameOver: boolean;
 	readonly replayLink: string;
 
+	readonly playerIdToCardIdMapping: { [playerId: string]: string } = {};
+
 	readonly resourcesAvailableThisTurn: number = 0;
 	readonly resourcesUsedThisTurn: number = 0;
 	// Coins means any form of mana resource
 	readonly coinsWastedOverTurn: readonly NumericTurnInfo[] = [];
 	readonly mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[] = [];
-	readonly hpOverTurn: { [playerCardId: string]: readonly HpTurnInfo[] } = {};
+	readonly hpOverTurn: { [playerId: string]: readonly HpTurnInfo[] } = {};
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[] = [];
 	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [];
 	readonly totalMinionsDamageDealt: { [cardId: string]: number } = {};
@@ -39,7 +41,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly compositionsOverTurn: readonly BgsComposition[] = [];
 	readonly rerollsOverTurn: readonly NumericTurnInfo[] = [];
 	readonly freezesOverTurn: readonly NumericTurnInfo[] = [];
-	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
+	readonly leaderboardPositionOverTurn: { [playerId: string]: readonly NumericTurnInfo[] } = {};
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = [];
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[] = [];
 	readonly minionsPlayedOverTurn: readonly NumericTurnInfo[] = [];
@@ -49,7 +51,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly currentWinStreak: number = 0;
 	readonly highestWinStreak: number = 0;
-	readonly triplesPerHero: { [heroCardId: string]: number } = {};
+	readonly triplesPerHero: { [playerId: string]: number } = {};
 
 	// For now this one is not populated, as the post-match stats don't actually care about the timings
 	// but only the size

@@ -4,8 +4,8 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 import { normalizeHeroCardId } from '../../bgs-utils';
-import { BgsTripleCreatedEvent } from '../events/bgs-triple-created-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsTripleCreatedEvent } from '../events/bgs-triple-created-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTripleCreatedParser implements EventParser {
@@ -16,11 +16,7 @@ export class BgsTripleCreatedParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsTripleCreatedEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(
-			(player) =>
-				normalizeHeroCardId(player.cardId, this.allCards) ===
-				normalizeHeroCardId(event.heroCardId, this.allCards),
-		);
+		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
 		if (!playerToUpdate) {
 			console.warn(
 				'Could not find player to update for triple history',
@@ -43,9 +39,7 @@ export class BgsTripleCreatedParser implements EventParser {
 			tripleHistory: newHistory,
 		} as BgsPlayer);
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			normalizeHeroCardId(player.cardId, this.allCards) === normalizeHeroCardId(newPlayer.cardId, this.allCards)
-				? newPlayer
-				: player,
+			player.playerId === newPlayer.playerId ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
 		return currentState.update({

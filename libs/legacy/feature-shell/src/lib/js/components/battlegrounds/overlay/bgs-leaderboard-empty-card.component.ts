@@ -72,11 +72,11 @@ export class BgsLeaderboardEmptyCardComponent
 		this.updateInfo();
 	}
 
-	@Input() set lastOpponentCardId(value: string) {
-		if (this._lastOpponentCardId === value) {
+	@Input() set lastOpponentPlayerId(value: number) {
+		if (this._lastOpponentPlayerId === value) {
 			return;
 		}
-		this._lastOpponentCardId = value;
+		this._lastOpponentPlayerId = value;
 		this.updateInfo();
 	}
 
@@ -106,7 +106,7 @@ export class BgsLeaderboardEmptyCardComponent
 
 	_previousPlayer: BgsPlayer;
 	_currentTurn: number;
-	_lastOpponentCardId: string;
+	_lastOpponentPlayerId: number;
 	isLastOpponent: boolean;
 
 	tavernTier: number;
@@ -177,7 +177,7 @@ export class BgsLeaderboardEmptyCardComponent
 			return;
 		}
 
-		this.isLastOpponent = this._lastOpponentCardId === this._previousPlayer.getNormalizedHeroCardId(this.allCards);
+		this.isLastOpponent = this._lastOpponentPlayerId === this._previousPlayer.playerId;
 		this._bgsPlayer = {
 			player: BgsPlayer.create({
 				cardId: this._previousPlayer.cardId,

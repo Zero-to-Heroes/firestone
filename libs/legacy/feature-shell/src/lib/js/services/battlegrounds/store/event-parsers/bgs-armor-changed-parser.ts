@@ -1,10 +1,9 @@
-import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsArmorChangedEvent } from '../events/bgs-armor-changed-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsArmorChangedEvent } from '../events/bgs-armor-changed-event';
 import { EventParser } from './_event-parser';
 
 export class BgsArmorChangedParser implements EventParser {
@@ -15,11 +14,7 @@ export class BgsArmorChangedParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsArmorChangedEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(
-			(player) =>
-				normalizeHeroCardId(player.cardId, this.allCards) ===
-				normalizeHeroCardId(event.heroCardId, this.allCards),
-		);
+		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
 		if (!playerToUpdate) {
 			return currentState;
 		}
@@ -29,9 +24,7 @@ export class BgsArmorChangedParser implements EventParser {
 		});
 
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			normalizeHeroCardId(player.cardId, this.allCards) === normalizeHeroCardId(newPlayer.cardId, this.allCards)
-				? newPlayer
-				: player,
+			player.playerId === newPlayer.playerId ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
 		return currentState.update({

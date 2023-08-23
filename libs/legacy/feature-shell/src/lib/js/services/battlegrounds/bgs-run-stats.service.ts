@@ -101,6 +101,7 @@ export class BgsRunStatsService {
 			faceOffs: currentGame.faceOffs.map((faceOff) => ({
 				damage: faceOff.damage,
 				opponentCardId: faceOff.opponentCardId,
+				opponentPlayerId: faceOff.opponentPlayerId,
 				playerCardId: faceOff.playerCardId,
 				result: faceOff.result,
 				turn: faceOff.turn,
@@ -109,7 +110,12 @@ export class BgsRunStatsService {
 			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
 
-		const [postMatchStats, newBestValues] = this.populateObject(liveStats, input, bestBgsUserStats || []);
+		const [postMatchStats, newBestValues] = this.populateObject(
+			liveStats,
+			input,
+			bestBgsUserStats || [],
+			currentGame.getMainPlayer().playerId,
+		);
 		console.debug('[bgs-run-stats] newBestVaues');
 
 		// Even if stats are computed locally, we still do it on the server so that we can
@@ -139,6 +145,7 @@ export class BgsRunStatsService {
 		realTimeStatsState: RealTimeStatsState,
 		input: BgsComputeRunStatsInput,
 		existingBestStats: readonly BgsBestStat[],
+		mainPlayerId: number,
 	): [BgsPostMatchStats, readonly BgsBestStat[]] {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
 			...realTimeStatsState,
@@ -148,9 +155,10 @@ export class BgsRunStatsService {
 				? input.mainPlayer?.boardHistory
 				: [],
 			tripleTimings:
-				input.mainPlayer && realTimeStatsState.triplesPerHero[input.mainPlayer.cardId]
-					? new Array(realTimeStatsState.triplesPerHero[input.mainPlayer.cardId])
+				input.mainPlayer && realTimeStatsState.triplesPerHero[mainPlayerId]
+					? new Array(realTimeStatsState.triplesPerHero[mainPlayerId])
 					: [],
+			playerIdToCardIdMapping: realTimeStatsState.playerIdToCardIdMapping,
 		});
 		const newBestStats = buildNewStats(
 			existingBestStats,
