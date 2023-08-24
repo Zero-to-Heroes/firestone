@@ -121,6 +121,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			this.positionDirty = false;
 		}
 		if (!this.tooltipRef) {
+			if (!this.overlayRef) {
+				return;
+			}
 			// Create tooltip portal
 			this.tooltipPortal = new ComponentPortal(this._componentType);
 
