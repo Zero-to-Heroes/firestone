@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.8.1',
+		version: '11.8.2',
 		force: false,
 		sections: [
 			{
@@ -41,61 +41,44 @@ export const updates: readonly Update[] = [
 				header: 'Message from the dev',
 				text: `I'm continuing to update the app to accomodate all the changes of latest 27.2 patch. These are mostly bug fixes and behind-the-scenes improvements, but may also contains a couple of quality of life features :)`,
 			},
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the simulator would ignore most triggered abilities.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'battlegrounds',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where the simulator would ignore most triggered abilities.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a way to filter hero stats based on the Anomaly. It's still experimental, and the sample size is probably still too small, so take the results with a grain of salt.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Evil Twin (the quest reward) would not cause the first attacker to be recomputed.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the "Ooops, All ____" anomay would cause the banned tribes widget to display a single tribe with a banned icon.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the app would get lost when all players would be Sire Denathrius.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
-								type: 'content',
-								text: `Add card highlights and oracles for the new Caverns of Time cards.`,
+								type: 'bug',
+								text: `Fix an issue where Plagues would not be tracked properly after consecutive draws with Helya.`,
 							},
 						],
 					},
 					{
-						category: 'collection',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where long card names would not be displayed nicely in the card seach dropdown.`,
+								type: 'content',
+								text: `Add simulator support for Murky.`,
+							},
+							{
+								type: 'content',
+								text: `Remove the "unsupported composition" message when Rylak is on board (it's fully supported now).`,
 							},
 						],
 					},
