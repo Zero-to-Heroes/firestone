@@ -70,8 +70,8 @@ export class OpponentCardInfosComponent {
 			[
 				3,
 				{
-					positionLeft: Map.of(0, -89, 1, -28, 2, 33),
-					positionTop: Map.of(0, 18, 1, 28, 2, 21),
+					positionLeft: Map.of(0, -75, 1, -25, 2, 23),
+					positionTop: Map.of(0, 28, 1, 28, 2, 28),
 				} as Adjustment,
 			],
 			[
