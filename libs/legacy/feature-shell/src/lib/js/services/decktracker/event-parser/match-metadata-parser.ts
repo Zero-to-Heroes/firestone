@@ -39,6 +39,11 @@ export class MatchMetadataParser implements EventParser {
 			return null;
 		}
 
+		// All the meta data should already be in the existing state
+		if (currentState.reconnectOngoing) {
+			return currentState;
+		}
+
 		const format = gameEvent.additionalData.metaData.FormatType as number;
 		const metaData = {
 			gameType: gameEvent.additionalData.metaData.GameType as number,

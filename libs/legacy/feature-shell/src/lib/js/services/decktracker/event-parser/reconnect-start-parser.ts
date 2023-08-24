@@ -11,6 +11,7 @@ export class ReconnectStartParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
 		return currentState.update({
 			reconnectOngoing: true,
+			hasReconnected: true,
 		});
 	}
 

@@ -4,8 +4,8 @@ import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
 export class GameStartParser implements EventParser {
-	applies(gameEvent: GameEvent): boolean {
-		return true;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return !state || !state.reconnectOngoing;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

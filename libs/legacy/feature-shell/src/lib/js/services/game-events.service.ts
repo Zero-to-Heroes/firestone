@@ -103,7 +103,14 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-		this.gameStatus.onGameExit(() => {
+		// This is here so that, if we quit the game while spectating, we don't go back
+		// in spectator mode when starting the game again
+		// However, this means that the "spectate" event is also sent while we're reconnecting
+		// which resets all the states
+		// this.gameStatus.onGameExit(() => {
+		// Use game start, so we have a chance to spot reconnects
+		this.gameStatus.onGameStart(() => {
+			console.log('[game-events] leaving game, emitting End Spectator Mode event');
 			this.processingQueue.enqueue('End Spectator Mode');
 		});
 	}

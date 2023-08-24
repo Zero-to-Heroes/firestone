@@ -6,7 +6,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
-import { EntityGameState, GameEvent, GameState as EventGameState, PlayerGameState } from '../../../models/game-event';
+import { EntityGameState, GameState as EventGameState, GameEvent, PlayerGameState } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 
 @Injectable()
@@ -160,7 +160,10 @@ export class DeckManipulationHelper {
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
 		if (
 			cardTemplate.entityId != null &&
-			zone.filter((card) => card.entityId === cardTemplate.entityId).length > 0
+			// In case of reconnects, dead minions are "created in graveyard", but when minions die, we
+			// oppose their entityId
+			zone.filter((card) => card.entityId === cardTemplate.entityId || card.entityId === -cardTemplate.entityId)
+				.length > 0
 		) {
 			return zone;
 		}

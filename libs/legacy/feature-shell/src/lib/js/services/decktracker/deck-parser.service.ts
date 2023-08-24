@@ -190,9 +190,11 @@ export class DeckParserService {
 	private async init() {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.SPECTATING) {
-				console.log('[deck-parser] spectating, resetting deck', event.additionalData);
 				this.spectating = event.additionalData.spectating;
-				this.setCurrentDeck({} as DeckInfo);
+				if (this.spectating) {
+					console.log('[deck-parser] spectating, resetting deck', event.additionalData);
+					this.setCurrentDeck({} as DeckInfo);
+				}
 			} else if (event.type === GameEvent.GAME_END) {
 				if (
 					this.currentDeck?.gameType !== GameType.GT_VS_AI ||

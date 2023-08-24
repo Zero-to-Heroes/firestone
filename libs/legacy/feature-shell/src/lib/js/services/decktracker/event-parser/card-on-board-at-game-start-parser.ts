@@ -12,7 +12,8 @@ export class CardOnBoardAtGameStart implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		// If we had a reconnect, this means we are not at "game start" anymore
+		return !!state && !state.hasReconnected;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

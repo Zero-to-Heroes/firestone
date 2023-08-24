@@ -29,6 +29,7 @@ export class GameState {
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 
 	readonly reconnectOngoing: boolean;
+	readonly hasReconnected: boolean;
 
 	readonly playerTrackerClosedByUser: boolean;
 	readonly opponentTrackerClosedByUser: boolean;

@@ -12,7 +12,7 @@ export class GameEndParser implements EventParser {
 			!!state &&
 			(gameEvent.type === GameEvent.GAME_END ||
 				// When we stop spectating, we trigger the game end actions
-				(gameEvent.type === GameEvent.SPECTATING && !gameEvent.additionalData.spectating))
+				(gameEvent.type === GameEvent.SPECTATING && state.spectating && !gameEvent.additionalData.spectating))
 		);
 	}
 
