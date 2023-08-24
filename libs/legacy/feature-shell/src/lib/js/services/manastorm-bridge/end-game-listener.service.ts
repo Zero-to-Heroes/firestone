@@ -98,7 +98,7 @@ export class EndGameListenerService {
 			this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_START)),
 			this.uploadStarted$$,
 		).pipe(
-			tap((info) => console.log('[manastorm-bridge] game ended', info)),
+			// tap((info) => console.log('[manastorm-bridge] game ended', info)),
 			map((event) => {
 				// The uploadStarted subject fired, we reset the "ended" flag so that a new review id
 				// won't trigger a new upload

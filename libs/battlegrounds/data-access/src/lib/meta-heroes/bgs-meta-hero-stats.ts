@@ -162,9 +162,9 @@ export const buildHeroStats = (
 				!tribes?.length ||
 				overlyDominentTribes.every((t) => tribes.includes(t.tribe));
 			const debug = stat.heroCardId === CardIds.SylvanasWindrunner_BG23_HERO_306;
-			if (debug) {
-				console.debug('isIn', isIn, stat.heroCardId, overlyDominentTribes, stat);
-			}
+			// if (debug) {
+			// 	console.debug('isIn', isIn, stat.heroCardId, overlyDominentTribes, stat);
+			// }
 			return isIn;
 		})
 		.map((stat) => {
@@ -189,10 +189,10 @@ export const buildHeroStats = (
 						impact: t.impactAveragePosition,
 				  }))
 				: null;
-			debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
+			// debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
 
 			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalyIds().length;
-			console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
+			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
 			const anomalyStatsToUse = useAnomalyModifier
 				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
 				: stat.anomalyStats ?? [];
