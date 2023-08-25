@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { IOptionWithImage } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
@@ -38,7 +39,7 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	implements AfterContentInit
 {
 	// allAnomalies = this.buildAllAnomalies();
-	options: IOption[];
+	options: IOptionWithImage[];
 	currentFilter$: Observable<string>;
 	visible$: Observable<boolean>;
 
@@ -60,11 +61,12 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 			{
 				value: null,
 				label: this.i18n.translateString('app.battlegrounds.filters.anomaly.all-anomalies'),
+				image: null,
 			},
 			...this.allCards.getAnomalies().map((anomaly) => ({
 				value: anomaly.id,
 				label: anomaly.name,
-				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly.id}.jpg`,
+				image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly.id}.jpg`,
 			})),
 		];
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveAnomaliesFilter[0]);
