@@ -7,7 +7,7 @@ import { OverwolfService } from './overwolf.service';
 export class CardsFacadeService {
 	private service: AllCardsService;
 
-	private allAnomalyIds: readonly string[];
+	private allAnomalies: readonly ReferenceCard[];
 
 	constructor(private readonly ow: OverwolfService) {
 		this.init();
@@ -67,15 +67,15 @@ export class CardsFacadeService {
 		return this.service.getCards();
 	}
 
-	public getAnomalyIds(): readonly string[] {
-		if (this.allAnomalyIds?.length) {
-			return this.allAnomalyIds;
+	public getAnomalies(): readonly ReferenceCard[] {
+		if (this.allAnomalies?.length) {
+			return this.allAnomalies;
 		}
 
-		const allAnomalies = this.getCards()
-			.filter((card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_ANOMALY])
-			.map((card) => card.id);
-		this.allAnomalyIds = allAnomalies;
+		const allAnomalies = this.getCards().filter(
+			(card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_ANOMALY],
+		);
+		this.allAnomalies = allAnomalies;
 		return allAnomalies;
 	}
 

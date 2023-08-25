@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -12,14 +13,23 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	selector: 'battlegrounds-anomalies-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<battlegrounds-anomalies-filter-dropdown-view
+		<filter-dropdown
+			class="battlegrounds-anomalies-filter-dropdown"
+			[options]="options"
+			[filter]="currentFilter$ | async"
+			[placeholder]="'app.battlegrounds.filters.anomaly.all-anomalies' | owTranslate"
+			[visible]="visible$ | async"
+			(onOptionSelected)="onSelected($event)"
+		></filter-dropdown>
+
+		<!-- <battlegrounds-anomalies-filter-dropdown-view
 			class="battlegrounds-anomalies-filter-dropdown"
 			[allAnomalies]="allAnomalies"
 			[currentFilter]="currentFilter$ | async"
 			[visible]="visible$ | async"
 			[validationErrorTooltip]="validationErrorTooltip"
 			(valueSelected)="onSelected($event)"
-		></battlegrounds-anomalies-filter-dropdown-view>
+		></battlegrounds-anomalies-filter-dropdown-view> -->
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,8 +37,9 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
-	allAnomalies = this.buildAllAnomalies();
-	currentFilter$: Observable<readonly string[]>;
+	// allAnomalies = this.buildAllAnomalies();
+	options: IOption[];
+	currentFilter$: Observable<string>;
 	visible$: Observable<boolean>;
 
 	validationErrorTooltip = this.i18n.translateString('app.battlegrounds.filters.anomaly.validation-error-tooltip');
@@ -45,7 +56,18 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveAnomaliesFilter);
+		this.options = [
+			{
+				value: null,
+				label: this.i18n.translateString('app.battlegrounds.filters.anomaly.all-anomalies'),
+			},
+			...this.allCards.getAnomalies().map((anomaly) => ({
+				value: anomaly.id,
+				label: anomaly.name,
+				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly.id}.jpg`,
+			})),
+		];
+		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveAnomaliesFilter[0]);
 		this.visible$ = this.store
 			.listen$(
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
@@ -66,16 +88,12 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 			);
 	}
 
-	async onSelected(values: readonly string[]) {
+	async onSelected(value: IOption) {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsActiveAnomaliesFilter: values,
+			bgsActiveAnomaliesFilter: !value?.value ? [] : [value.value],
 		};
 		await this.prefs.savePreferences(newPrefs);
-	}
-
-	private buildAllAnomalies(): readonly string[] {
-		return this.allCards.getAnomalyIds();
 	}
 }
