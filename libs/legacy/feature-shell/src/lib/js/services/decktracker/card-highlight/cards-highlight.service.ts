@@ -494,6 +494,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 			case CardIds.BookOfSpecters:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.BrannBronzebeard_CORE_LOE_077:
+			case CardIds.BrannBronzebeard_LOE_077:
+				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.BronzeSignetTavernBrawl:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.CagematchCustodian:

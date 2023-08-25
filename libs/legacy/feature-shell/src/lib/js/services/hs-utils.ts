@@ -636,6 +636,7 @@ const publicCardGiftCreators = [
 	CardIds.LyraTheSunshard_CORE_UNG_963,
 	CardIds.LyraTheSunshard_UNG_963,
 	CardIds.MadameLazul,
+	CardIds.Magicfin,
 	CardIds.MagicTrick,
 	CardIds.MailboxDancer,
 	CardIds.MalygosAspectOfMagic,
