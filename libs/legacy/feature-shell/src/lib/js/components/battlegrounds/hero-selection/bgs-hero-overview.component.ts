@@ -24,7 +24,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 			<div
 				class="warning"
 				inlineSVG="assets/svg/attention.svg"
-				*ngIf="_hero.dataPoints < 100"
+				*ngIf="!_hero.dataPoints || _hero.dataPoints < 100"
 				[helpTooltip]="dataPointsTooltipWarning"
 			></div>
 			<!-- Used only for the in-game overlay -->
