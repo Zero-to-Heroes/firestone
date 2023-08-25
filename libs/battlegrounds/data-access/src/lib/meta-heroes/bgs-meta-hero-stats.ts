@@ -8,6 +8,8 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from './meta-heroes.model';
 
+const HERO_STATS_DATA_POINT_THRESHOLD = 100;
+
 export const enhanceHeroStat = (
 	hero: BgsMetaHeroStatTierItem,
 	bgGames: readonly GameStat[],
@@ -191,7 +193,7 @@ export const buildHeroStats = (
 				: null;
 			// debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
 
-			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalyIds().length;
+			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
 			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
 			const anomalyStatsToUse = useAnomalyModifier
 				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
@@ -358,6 +360,7 @@ export const buildHeroStats = (
 			return result;
 		})
 		.filter((s) => !!s)
+		.filter((s) => s.dataPoints > HERO_STATS_DATA_POINT_THRESHOLD)
 		.sort(sortByProperties((t) => [t.averagePosition]));
 };
 
