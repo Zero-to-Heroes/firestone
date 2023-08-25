@@ -21,6 +21,12 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 			<div class="tier {{ tier?.toLowerCase() }}">
 				<div class="tier-value">{{ tier }}</div>
 			</div>
+			<div
+				class="warning"
+				inlineSVG="assets/svg/attention.svg"
+				*ngIf="_hero.dataPoints < 100"
+				[helpTooltip]="dataPointsTooltipWarning"
+			></div>
 			<!-- Used only for the in-game overlay -->
 			<div
 				class="portrait-tooltip"
@@ -77,6 +83,7 @@ export class BgsHeroOverviewComponent {
 	health: number;
 	tier: BgsHeroTier;
 	achievementsToDisplay: readonly InternalAchievement[] = [];
+	dataPointsTooltipWarning: string;
 
 	@Input() set hero(value: BgsMetaHeroStatTierItem) {
 		this._hero = value;
@@ -90,6 +97,12 @@ export class BgsHeroOverviewComponent {
 			initialHealth: this.health,
 		} as BgsPlayer);
 		this.tier = value.tier;
+		this.dataPointsTooltipWarning = this.i18n.translateString(
+			'battlegrounds.hero-selection.not-enough-data-points-warning',
+			{
+				value: value.dataPoints,
+			},
+		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

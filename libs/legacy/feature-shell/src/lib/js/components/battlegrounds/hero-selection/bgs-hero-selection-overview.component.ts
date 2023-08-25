@@ -123,4 +123,5 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 interface InternalBgsHeroStat extends BgsMetaHeroStatTierItem {
 	readonly achievements: readonly VisualAchievement[];
+	readonly notEnoughDataPoints?: boolean;
 }

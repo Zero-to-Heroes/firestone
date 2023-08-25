@@ -8,7 +8,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from './meta-heroes.model';
 
-const HERO_STATS_DATA_POINT_THRESHOLD = 100;
+export const BGS_HERO_STATS_DATA_POINT_THRESHOLD = 100;
 
 export const enhanceHeroStat = (
 	hero: BgsMetaHeroStatTierItem,
@@ -166,216 +166,224 @@ export const buildHeroStats = (
 			overlyDominentTribes.every((t) => tribes.includes(t.tribe));
 		return isIn;
 	});
-	return result1
-		.map((stat) => {
-			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
-			const tribeStatsToUse = useTribesModifier
-				? stat.tribeStats
-						?.filter((t) => tribes.includes(t.tribe))
-						// Remove some incorrect data points
-						.filter((t) => t.dataPoints > stat.dataPoints / 20) ?? []
-				: stat.tribeStats ?? [];
-			if (useTribesModifier && !tribeStatsToUse?.length) {
-				console.debug(
-					'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
-					stat,
-					tribes,
-					tribeStatsToUse,
+	return (
+		result1
+			.map((stat) => {
+				const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
+				const tribeStatsToUse = useTribesModifier
+					? stat.tribeStats
+							?.filter((t) => tribes.includes(t.tribe))
+							// Remove some incorrect data points
+							.filter((t) => t.dataPoints > stat.dataPoints / 20) ?? []
+					: stat.tribeStats ?? [];
+				if (useTribesModifier && !tribeStatsToUse?.length) {
+					console.debug(
+						'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
+						stat,
+						tribes,
+						tribeStatsToUse,
+					);
+					return null;
+				}
+
+				const tribesModifier = useTribesModifier
+					? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
+					: 0;
+				const tribesAveragePositionModifierDetails = useTribesModifier
+					? tribeStatsToUse?.map((t) => ({
+							tribe: t.tribe,
+							impact: t.impactAveragePosition,
+					  }))
+					: null;
+				// debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
+
+				const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
+				// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
+				const anomalyStatsToUse = useAnomalyModifier
+					? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
+					: stat.anomalyStats ?? [];
+				if (useAnomalyModifier && !anomalyStatsToUse?.length) {
+					console.debug(
+						'[debug] [bgs-meta-stats] no anomaly stats to use, skipping',
+						stat,
+						anomalies,
+						anomalyStatsToUse,
+					);
+					return null;
+				}
+
+				const anomalyModifier = useAnomalyModifier
+					? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
+					: 0;
+				const anomaliesAveragePositionModifierDetails = useAnomalyModifier
+					? anomalyStatsToUse.map((t) => ({
+							cardId: t.anomaly,
+							impact: t.impactAveragePosition,
+					  }))
+					: null;
+
+				let placementDistribution = stat.placementDistribution;
+				let combatWinrate = stat.combatWinrate;
+				let warbandStats = stat.warbandStats;
+
+				let placementDistributionImpactTribes = null;
+				let combatWinrateImpactTribes = null;
+				let warbandStatsImpactTribes = null;
+				if (useTribesModifier) {
+					placementDistributionImpactTribes =
+						stat.placementDistribution?.map((p) => {
+							const rankImpact = tribeStatsToUse
+								.flatMap((t) => t.impactPlacementDistribution)
+								.filter((t) => t.rank === p.rank)
+								.map((t) => t.impact)
+								.reduce((a, b) => a + b, 0);
+							return {
+								rank: p.rank,
+								percentage: rankImpact,
+							};
+						}) ?? 0;
+					combatWinrateImpactTribes =
+						stat.combatWinrate?.map((p) => {
+							const turnImpact = tribeStatsToUse
+								.flatMap((t) => t.impactCombatWinrate)
+								.filter((t) => t.turn === p.turn)
+								.map((t) => t.impact)
+								.reduce((a, b) => a + b, 0);
+							return {
+								turn: p.turn,
+								percentage: turnImpact,
+							};
+						}) ?? 0;
+					warbandStatsImpactTribes =
+						stat.warbandStats?.map((p) => {
+							const turnImpact = tribeStatsToUse
+								.flatMap((t) => t.impactWarbandStats)
+								.filter((t) => t.turn === p.turn)
+								.map((t) => t.impact)
+								.reduce((a, b) => a + b, 0);
+							return {
+								turn: p.turn,
+								averageStats: turnImpact,
+							};
+						}) ?? 0;
+				}
+
+				let placementDistributionImpactAnomaly = null;
+				let combatWinrateImpactAnomaly = null;
+				let warbandStatsImpactAnomaly = null;
+				if (useAnomalyModifier) {
+					placementDistributionImpactAnomaly =
+						stat.placementDistribution?.map((p) => {
+							const rankImpact = anomalyStatsToUse
+								.flatMap((t) => t.impactPlacementDistribution)
+								.filter((t) => t.rank === p.rank)
+								.map((t) => t.impact)
+								.reduce((a, b) => a + b, 0);
+							return {
+								rank: p.rank,
+								percentage: rankImpact,
+							};
+						}) ?? 0;
+					combatWinrateImpactAnomaly =
+						stat.combatWinrate?.map((p) => {
+							const turnImpact = anomalyStatsToUse
+								.flatMap((t) => t.impactCombatWinrate)
+								.filter((t) => t.turn === p.turn)
+								.map((t) => t.impact)
+								.reduce((a, b) => a + b, 0);
+							return {
+								turn: p.turn,
+								percentage: turnImpact,
+							};
+						}) ?? 0;
+					warbandStatsImpactAnomaly =
+						stat.warbandStats?.map((p) => {
+							const turnImpact = anomalyStatsToUse
+								.flatMap((t) => t.impactWarbandStats)
+								.filter((t) => t.turn === p.turn)
+								.map((t) => t.impact)
+								.reduce((a, b) => a + b, 0);
+							return {
+								turn: p.turn,
+								averageStats: turnImpact,
+							};
+						}) ?? 0;
+				}
+
+				placementDistribution = addImpactToPlacementDistribution(
+					placementDistribution,
+					placementDistributionImpactTribes,
+					placementDistributionImpactAnomaly,
 				);
-				return null;
-			}
-
-			const tribesModifier = useTribesModifier
-				? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
-				: 0;
-			const tribesAveragePositionModifierDetails = useTribesModifier
-				? tribeStatsToUse?.map((t) => ({
-						tribe: t.tribe,
-						impact: t.impactAveragePosition,
-				  }))
-				: null;
-			// debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
-
-			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
-			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
-			const anomalyStatsToUse = useAnomalyModifier
-				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
-				: stat.anomalyStats ?? [];
-			if (useAnomalyModifier && !anomalyStatsToUse?.length) {
-				console.debug(
-					'[debug] [bgs-meta-stats] no anomaly stats to use, skipping',
-					stat,
-					anomalies,
-					anomalyStatsToUse,
+				combatWinrate = addImpactToCombatWinrate(
+					combatWinrate,
+					combatWinrateImpactTribes,
+					combatWinrateImpactAnomaly,
 				);
-				return null;
-			}
+				warbandStats = addImpactToWarbandStats(
+					warbandStats,
+					warbandStatsImpactTribes,
+					warbandStatsImpactAnomaly,
+				);
 
-			const anomalyModifier = useAnomalyModifier
-				? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
-				: 0;
-			const anomaliesAveragePositionModifierDetails = useAnomalyModifier
-				? anomalyStatsToUse.map((t) => ({
-						cardId: t.anomaly,
-						impact: t.impactAveragePosition,
-				  }))
-				: null;
+				const averagePositionBaseValue = useConservativeEstimate
+					? stat.conservativePositionEstimate
+					: stat.averagePosition;
+				const dataPoints = Math.min(
+					stat.dataPoints,
+					useAnomalyModifier
+						? anomalyStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
+						: 999_999_999,
+					useTribesModifier
+						? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
+						: 999_999_999,
+				);
+				const result: BgsMetaHeroStatTierItem = {
+					id: stat.heroCardId,
+					dataPoints: dataPoints,
+					averagePosition: averagePositionBaseValue + tribesModifier + anomalyModifier,
+					averagePositionDetails: {
+						baseValue: averagePositionBaseValue,
+						tribesModifiers: tribesAveragePositionModifierDetails,
+						anomalyModifiers: anomaliesAveragePositionModifierDetails,
+					},
+					tribesFilter: tribes,
+					anomaliesFilter: anomalies,
+					positionTribesModifier: tribesModifier,
+					positionAnomalyModifier: anomalyModifier,
+					placementDistribution: placementDistribution,
+					placementDistributionImpact: placementDistributionImpactTribes,
+					combatWinrate: combatWinrate,
+					combatWinrateImpact: combatWinrateImpactTribes,
+					warbandStats: warbandStats,
+					warbandStatsImpact: warbandStatsImpactTribes,
 
-			let placementDistribution = stat.placementDistribution;
-			let combatWinrate = stat.combatWinrate;
-			let warbandStats = stat.warbandStats;
+					tribeStats: tribeStatsToUse,
 
-			let placementDistributionImpactTribes = null;
-			let combatWinrateImpactTribes = null;
-			let warbandStatsImpactTribes = null;
-			if (useTribesModifier) {
-				placementDistributionImpactTribes =
-					stat.placementDistribution?.map((p) => {
-						const rankImpact = tribeStatsToUse
-							.flatMap((t) => t.impactPlacementDistribution)
-							.filter((t) => t.rank === p.rank)
-							.map((t) => t.impact)
-							.reduce((a, b) => a + b, 0);
-						return {
-							rank: p.rank,
-							percentage: rankImpact,
-						};
-					}) ?? 0;
-				combatWinrateImpactTribes =
-					stat.combatWinrate?.map((p) => {
-						const turnImpact = tribeStatsToUse
-							.flatMap((t) => t.impactCombatWinrate)
-							.filter((t) => t.turn === p.turn)
-							.map((t) => t.impact)
-							.reduce((a, b) => a + b, 0);
-						return {
-							turn: p.turn,
-							percentage: turnImpact,
-						};
-					}) ?? 0;
-				warbandStatsImpactTribes =
-					stat.warbandStats?.map((p) => {
-						const turnImpact = tribeStatsToUse
-							.flatMap((t) => t.impactWarbandStats)
-							.filter((t) => t.turn === p.turn)
-							.map((t) => t.impact)
-							.reduce((a, b) => a + b, 0);
-						return {
-							turn: p.turn,
-							averageStats: turnImpact,
-						};
-					}) ?? 0;
-			}
-
-			let placementDistributionImpactAnomaly = null;
-			let combatWinrateImpactAnomaly = null;
-			let warbandStatsImpactAnomaly = null;
-			if (useAnomalyModifier) {
-				placementDistributionImpactAnomaly =
-					stat.placementDistribution?.map((p) => {
-						const rankImpact = anomalyStatsToUse
-							.flatMap((t) => t.impactPlacementDistribution)
-							.filter((t) => t.rank === p.rank)
-							.map((t) => t.impact)
-							.reduce((a, b) => a + b, 0);
-						return {
-							rank: p.rank,
-							percentage: rankImpact,
-						};
-					}) ?? 0;
-				combatWinrateImpactAnomaly =
-					stat.combatWinrate?.map((p) => {
-						const turnImpact = anomalyStatsToUse
-							.flatMap((t) => t.impactCombatWinrate)
-							.filter((t) => t.turn === p.turn)
-							.map((t) => t.impact)
-							.reduce((a, b) => a + b, 0);
-						return {
-							turn: p.turn,
-							percentage: turnImpact,
-						};
-					}) ?? 0;
-				warbandStatsImpactAnomaly =
-					stat.warbandStats?.map((p) => {
-						const turnImpact = anomalyStatsToUse
-							.flatMap((t) => t.impactWarbandStats)
-							.filter((t) => t.turn === p.turn)
-							.map((t) => t.impact)
-							.reduce((a, b) => a + b, 0);
-						return {
-							turn: p.turn,
-							averageStats: turnImpact,
-						};
-					}) ?? 0;
-			}
-
-			placementDistribution = addImpactToPlacementDistribution(
-				placementDistribution,
-				placementDistributionImpactTribes,
-				placementDistributionImpactAnomaly,
-			);
-			combatWinrate = addImpactToCombatWinrate(
-				combatWinrate,
-				combatWinrateImpactTribes,
-				combatWinrateImpactAnomaly,
-			);
-			warbandStats = addImpactToWarbandStats(warbandStats, warbandStatsImpactTribes, warbandStatsImpactAnomaly);
-
-			const averagePositionBaseValue = useConservativeEstimate
-				? stat.conservativePositionEstimate
-				: stat.averagePosition;
-			const dataPoints = Math.min(
-				stat.dataPoints,
-				useAnomalyModifier
-					? anomalyStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
-					: 999_999_999,
-				useTribesModifier ? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0) : 999_999_999,
-			);
-			const result: BgsMetaHeroStatTierItem = {
-				id: stat.heroCardId,
-				dataPoints: dataPoints,
-				averagePosition: averagePositionBaseValue + tribesModifier + anomalyModifier,
-				averagePositionDetails: {
-					baseValue: averagePositionBaseValue,
-					tribesModifiers: tribesAveragePositionModifierDetails,
-					anomalyModifiers: anomaliesAveragePositionModifierDetails,
-				},
-				tribesFilter: tribes,
-				anomaliesFilter: anomalies,
-				positionTribesModifier: tribesModifier,
-				positionAnomalyModifier: anomalyModifier,
-				placementDistribution: placementDistribution,
-				placementDistributionImpact: placementDistributionImpactTribes,
-				combatWinrate: combatWinrate,
-				combatWinrateImpact: combatWinrateImpactTribes,
-				warbandStats: warbandStats,
-				warbandStatsImpact: warbandStatsImpactTribes,
-
-				tribeStats: tribeStatsToUse,
-
-				name: allCards.getCard(stat.heroCardId)?.name,
-				baseCardId: normalizeHeroCardId(stat.heroCardId, allCards.getService()),
-				heroPowerCardId: getHeroPower(stat.heroCardId, allCards.getService()),
-				top1: stat.placementDistribution
-					.filter((p) => p.rank === 1)
-					.map((p) => p.percentage)
-					.reduce((a, b) => a + b, 0),
-				top4: stat.placementDistribution
-					.filter((p) => p.rank <= 4)
-					.map((p) => p.percentage)
-					.reduce((a, b) => a + b, 0),
-			};
-			return result;
-		})
-		.filter((s) => !!s)
-		.filter((s) => {
-			if (s.dataPoints > HERO_STATS_DATA_POINT_THRESHOLD) {
-				return true;
-			}
-			console.debug('[debug] [bgs-meta-stats] not enough data points, skipping', s);
-			return false;
-		})
-		.sort(sortByProperties((t) => [t.averagePosition]));
+					name: allCards.getCard(stat.heroCardId)?.name,
+					baseCardId: normalizeHeroCardId(stat.heroCardId, allCards.getService()),
+					heroPowerCardId: getHeroPower(stat.heroCardId, allCards.getService()),
+					top1: stat.placementDistribution
+						.filter((p) => p.rank === 1)
+						.map((p) => p.percentage)
+						.reduce((a, b) => a + b, 0),
+					top4: stat.placementDistribution
+						.filter((p) => p.rank <= 4)
+						.map((p) => p.percentage)
+						.reduce((a, b) => a + b, 0),
+				};
+				return result;
+			})
+			.filter((s) => !!s)
+			// .filter((s) => {
+			// 	if (s.dataPoints > HERO_STATS_DATA_POINT_THRESHOLD) {
+			// 		return true;
+			// 	}
+			// 	console.debug('[debug] [bgs-meta-stats] not enough data points, skipping', s);
+			// 	return false;
+			// })
+			.sort(sortByProperties((t) => [t.averagePosition]))
+	);
 };
 
 export const filterItems = (

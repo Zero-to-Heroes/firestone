@@ -57,6 +57,17 @@
 		}
 	}
 
+	.warning {
+		position: absolute;
+		top: 6px;
+		left: 30px;
+		width: 22px;
+		height: 22px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	.portrait-tooltip {
 		display: none;
 	}
