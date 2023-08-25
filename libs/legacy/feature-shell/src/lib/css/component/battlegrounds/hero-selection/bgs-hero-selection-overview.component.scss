@@ -36,10 +36,36 @@
 	display: flex;
 	flex-grow: 1;
 	justify-content: space-around;
-	overflow: hidden;
 	margin-right: 5px;
-}
+	position: relative;
 
-bgs-hero-overview {
-	// width: 30%;
+	.filters {
+		display: flex;
+		gap: 50px;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 11px;
+		padding-right: 10px;
+		position: absolute;
+		right: 0;
+		top: -30px;
+
+		::ng-deep preference-toggle .preference-toggle {
+			margin-top: 0;
+			opacity: 0.7;
+
+			label p {
+				color: var(--color-1);
+				width: auto;
+
+				.info {
+					--icon-color: var(--color-1);
+				}
+			}
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
 }

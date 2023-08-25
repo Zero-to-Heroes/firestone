@@ -4,8 +4,8 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { BgsRankFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
-import { BgsFilterLiveMmrEvent } from '../events/bgs-filter-live-mmr-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsFilterLiveMmrEvent } from '../events/bgs-filter-live-mmr-event';
 import { EventParser } from './_event-parser';
 
 export class BgsFilterLiveMmrParser implements EventParser {
@@ -24,7 +24,7 @@ export class BgsFilterLiveMmrParser implements EventParser {
 		gameState?: GameState,
 	): Promise<BattlegroundsState> {
 		const prefs = await this.prefs.getPreferences();
-		await this.prefs.savePreferences({ ...prefs, bgsUseMmrFilterInHeroSelection: event.filterByLiveMmr });
+		await this.prefs.savePreferences({ ...prefs, bgsActiveUseMmrFilterInHeroSelection: event.filterByLiveMmr });
 
 		const currentMmr = currentState.currentGame?.mmrAtStart ?? 0;
 		const percentile = event.filterByLiveMmr

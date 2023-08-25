@@ -581,7 +581,6 @@ export class Preferences implements IPreferences {
 	readonly bgsMinionListShowGoldenCard: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;
-	readonly bgsUseMmrFilterInHeroSelection: boolean = false;
 	readonly bgsShowOverlayButton: boolean = true;
 	readonly bgsOpponentOverlayAtTop: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -611,6 +610,10 @@ export class Preferences implements IPreferences {
 	readonly bgsShowBuddiesInSimulatorSelection: boolean = false;
 	readonly bgsQuestsActiveTab: BgsQuestActiveTabType = 'quests';
 	readonly bgsGroupQuestsByDifficulty: boolean = false;
+	readonly bgsActiveUseMmrFilterInHeroSelection: boolean = true;
+	readonly bgsActiveUseAnomalyFilterInHeroSelection: boolean = true;
+	readonly bgsSavedUseMmrFilterInHeroSelection: boolean = false;
+	readonly bgsSavedUseAnomalyFilterInHeroSelection: boolean = false;
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

@@ -31,13 +31,13 @@ export class BgsInitMmrParser implements EventParser {
 	): Promise<BattlegroundsState> {
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const reviewId = await this.gameState.getCurrentReviewId();
-		const mmr = bgsInfo?.Rating;
+		const mmr = 10000; // bgsInfo?.Rating;
 		console.log('[bgs-mmr] mmrAtStart', reviewId, mmr, event);
 
 		const prefs = await this.prefs.getPreferences();
 
 		// Save the previous prefs so we can set them back to their original values once the game ends
-		const savedPrefs = {
+		const savedPrefs: Preferences = {
 			...prefs,
 			bgsSavedRankFilter: prefs.bgsActiveRankFilter,
 			bgsSavedTribesFilter: prefs.bgsActiveTribesFilter,
@@ -51,7 +51,7 @@ export class BgsInitMmrParser implements EventParser {
 
 		const anomalies = !!currentState.currentGame.anomalies?.length ? currentState.currentGame.anomalies : [];
 
-		const percentile = prefs.bgsUseMmrFilterInHeroSelection
+		const percentile = prefs.bgsActiveUseMmrFilterInHeroSelection
 			? [...(event.mmrPercentiles ?? [])]
 					.sort((a, b) => b.mmr - a.mmr)
 					.find((percentile) => percentile.mmr <= (mmr ?? 0))
@@ -62,6 +62,8 @@ export class BgsInitMmrParser implements EventParser {
 			bgsActiveTribesFilter: races,
 			bgsActiveAnomaliesFilter: anomalies.filter((a) => !!a),
 			bgsActiveRankFilter: percentile?.percentile ?? 100,
+			bgsActiveUseMmrFilterInHeroSelection: savedPrefs.bgsSavedUseMmrFilterInHeroSelection,
+			bgsActiveUseAnomalyFilterInHeroSelection: savedPrefs.bgsSavedUseAnomalyFilterInHeroSelection,
 		};
 		await this.prefs.savePreferences(newPrefs);
 

@@ -3,10 +3,12 @@ import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/bat
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, tap } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
+import { Preferences } from '../../../models/preferences';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -16,9 +18,29 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	template: `
 		<div class="container">
 			<div class="left" *ngIf="!(showAds$ | async)">
-				<battlegrounds-tier-list [showFilters]="true"></battlegrounds-tier-list>
+				<battlegrounds-tier-list></battlegrounds-tier-list>
 			</div>
 			<div class="hero-selection-overview">
+				<div class="filters">
+					<preference-toggle
+						field="bgsSavedUseMmrFilterInHeroSelection"
+						[label]="
+							'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate
+						"
+						[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
+						[toggleFunction]="toggleFilter"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsSavedUseAnomalyFilterInHeroSelection"
+						[label]="
+							'settings.battlegrounds.general.use-anomaly-filter-for-live-stats-label-short' | owTranslate
+						"
+						[tooltip]="
+							'settings.battlegrounds.general.use-anomaly-filter-for-live-stats-tooltip' | owTranslate
+						"
+						[toggleFunction]="toggleFilter"
+					></preference-toggle>
+				</div>
 				<bgs-hero-overview
 					*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
 					[hero]="hero"
@@ -40,6 +62,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
@@ -118,6 +141,16 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 
 	trackByHeroFn(index, item: BgsMetaHeroStatTierItem) {
 		return item?.id;
+	}
+
+	async toggleFilter() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			bgsActiveUseAnomalyFilterInHeroSelection: prefs.bgsSavedUseAnomalyFilterInHeroSelection,
+			bgsActiveUseMmrFilterInHeroSelection: prefs.bgsSavedUseMmrFilterInHeroSelection,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 }
 

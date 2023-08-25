@@ -146,10 +146,12 @@ export const buildHeroStats = (
 	tribes: readonly Race[],
 	anomalies: readonly string[] | null,
 	useConservativeEstimate: boolean,
+	useMmrFilter: boolean,
+	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {
-	// Backward compatibility
-	anomalies = anomalies.filter((a) => !!a);
+	mmrPercentile = useMmrFilter ? mmrPercentile : 100;
+	anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
 	const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
 	//console.debug('statsForMmr', statsForMmr, mmrPercentile, stats, tribes, anomalies);
 	const result1 = statsForMmr.filter((stat) => {

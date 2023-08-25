@@ -48,6 +48,8 @@ export class BgsGameEndParser implements EventParser {
 			bgsActiveAnomaliesFilter: (prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter).filter(
 				(a) => !!a,
 			),
+			bgsActiveUseAnomalyFilterInHeroSelection: true,
+			bgsActiveUseMmrFilterInHeroSelection: true,
 		};
 		await this.prefs.savePreferences(savedPrefs);
 		// const stateUpdater = this.stateUpdaterProvider();

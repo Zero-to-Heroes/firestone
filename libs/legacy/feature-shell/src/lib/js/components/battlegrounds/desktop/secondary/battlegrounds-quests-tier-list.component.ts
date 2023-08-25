@@ -28,14 +28,6 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 					</svg>
 				</div>
 			</div>
-			<!-- <div class="filters" *ngIf="showFilters">
-				<preference-toggle
-					field="bgsUseMmrFilterInHeroSelection"
-					[label]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate"
-					[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
-					[toggleFunction]="toggleUseMmrFilter"
-				></preference-toggle>
-			</div> -->
 			<div class="heroes" scrollable>
 				<bgs-hero-tier
 					*ngFor="let tier of stats.tiers || []; trackBy: trackByTierFn"

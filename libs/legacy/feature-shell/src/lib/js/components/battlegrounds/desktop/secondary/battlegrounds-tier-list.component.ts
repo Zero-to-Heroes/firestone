@@ -15,8 +15,6 @@ import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsFilterLiveMmrEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-mmr-event';
-import { BgsFilterLiveTribesEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-tribes-event';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
@@ -37,14 +35,6 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 						<use xlink:href="assets/svg/sprite.svg#info" />
 					</svg>
 				</div>
-			</div>
-			<div class="filters" *ngIf="showFilters">
-				<preference-toggle
-					field="bgsUseMmrFilterInHeroSelection"
-					[label]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate"
-					[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
-					[toggleFunction]="toggleUseMmrFilter"
-				></preference-toggle>
 			</div>
 			<div class="heroes" scrollable>
 				<bgs-hero-tier
@@ -166,14 +156,6 @@ export class BattlegroundsTierListComponent
 	trackByTierFn(index, item: HeroTier) {
 		return item.tier;
 	}
-
-	toggleUseTribeFilter = (newValue: boolean) => {
-		this.battlegroundsUpdater?.next(new BgsFilterLiveTribesEvent(newValue));
-	};
-
-	toggleUseMmrFilter = (newValue: boolean) => {
-		this.battlegroundsUpdater?.next(new BgsFilterLiveMmrEvent(newValue, this.percentiles));
-	};
 
 	private buildTribesFilterText(tribesFilter: readonly Race[], allTribes: readonly Race[]): string {
 		if (!tribesFilter?.length || tribesFilter.length === allTribes.length) {

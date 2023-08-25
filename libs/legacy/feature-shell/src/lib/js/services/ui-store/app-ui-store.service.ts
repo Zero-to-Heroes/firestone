@@ -717,6 +717,8 @@ export class AppUiStoreService extends Store<Preferences> {
 				(prefs) => prefs.bgsActiveTribesFilter,
 				(prefs) => prefs.bgsActiveAnomaliesFilter,
 				(prefs) => prefs.bgsHeroesUseConservativeEstimate,
+				(prefs) => prefs.bgsActiveUseMmrFilterInHeroSelection,
+				(prefs) => prefs.bgsActiveUseAnomalyFilterInHeroSelection,
 			),
 		]).pipe(
 			debounceTime(200),
@@ -729,6 +731,8 @@ export class AppUiStoreService extends Store<Preferences> {
 						bgsActiveTribesFilter,
 						bgsActiveAnomaliesFilter,
 						bgsHeroesUseConservativeEstimate,
+						useMmrFilter,
+						useAnomalyFilter,
 					],
 				]) => {
 					console.debug(
@@ -742,6 +746,10 @@ export class AppUiStoreService extends Store<Preferences> {
 						bgsActiveAnomaliesFilter,
 						'bgsHeroesUseConservativeEstimate',
 						bgsHeroesUseConservativeEstimate,
+						'useMmrFilter',
+						useMmrFilter,
+						'useAnomalyFilter',
+						useAnomalyFilter,
 					);
 					const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 						stats?.heroStats,
@@ -749,6 +757,8 @@ export class AppUiStoreService extends Store<Preferences> {
 						bgsActiveTribesFilter,
 						bgsActiveAnomaliesFilter,
 						bgsHeroesUseConservativeEstimate,
+						useMmrFilter,
+						useAnomalyFilter,
 						this.allCards,
 					);
 					return result;
