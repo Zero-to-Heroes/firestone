@@ -84,10 +84,8 @@ ng-select.disabled {
 
 	select-dropdown {
 		& > div {
-			background: var(--color-7);
-			border: 1px solid var(--secondary-text-color);
-			border-top: none;
 			outline: none;
+			border: none;
 		}
 
 		.below {
@@ -100,6 +98,11 @@ ng-select.disabled {
 
 		& > div .options {
 			max-height: 350px;
+			width: fit-content;
+			max-width: 500px;
+			background: var(--color-7);
+			border: 1px solid var(--secondary-text-color);
+			border-top: none;
 
 			ul li {
 				color: var(--color-1);
