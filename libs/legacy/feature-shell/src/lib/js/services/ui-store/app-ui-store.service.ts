@@ -772,7 +772,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		]).pipe(
 			// distinctUntilChanged(),
 			map(([games, [mmrPercentiles, patchInfo], [rankFilter, tribesFilter, anomaliesFilter, timeFilter]]) => {
-				console.debug('[bgs-1] rebuilding meta hero stats 2');
+				console.debug('[bgs-2] rebuilding meta hero stats 2', arguments);
 				const targetRank: number =
 					!mmrPercentiles?.length || !rankFilter
 						? 0
@@ -795,7 +795,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		);
 
 		const enhancedStats$ = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
-			tap((info) => console.debug('[bgs-1] rebuilding meta hero stats 3', info)),
+			tap((info) => console.debug('[bgs-3] rebuilding meta hero stats 3', info)),
 			map(
 				([stats, playerBgGames]) =>
 					stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards)) ?? [],

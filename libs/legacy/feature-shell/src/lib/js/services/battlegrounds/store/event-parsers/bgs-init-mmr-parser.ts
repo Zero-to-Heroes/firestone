@@ -60,7 +60,7 @@ export class BgsInitMmrParser implements EventParser {
 		const newPrefs: Preferences = {
 			...savedPrefs,
 			bgsActiveTribesFilter: races,
-			bgsActiveAnomaliesFilter: anomalies,
+			bgsActiveAnomaliesFilter: anomalies.filter((a) => !!a),
 			bgsActiveRankFilter: percentile?.percentile ?? 100,
 		};
 		await this.prefs.savePreferences(newPrefs);

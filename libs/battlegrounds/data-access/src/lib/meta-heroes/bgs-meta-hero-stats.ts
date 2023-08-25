@@ -2,7 +2,7 @@
 import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
 import { BgsGlobalHeroStat } from '@firestone-hs/bgs-global-stats/dist/stats-v2/bgs-hero-stat';
-import { ALL_BG_RACES, CardIds, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { getStandardDeviation, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -148,29 +148,26 @@ export const buildHeroStats = (
 	useConservativeEstimate: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {
+	// Backward compatibility
+	anomalies = anomalies.filter((a) => !!a);
 	const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
-	console.debug('statsForMmr', statsForMmr, mmrPercentile, stats);
-	return statsForMmr
-		.filter((stat) => {
-			// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
-			// that stat
-			// We can still have some leftover stats in the data, but that it very likely something bogus
-			const overlyDominentTribes = stat.tribeStats
-				.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints)
-				// Temporary, because since undeads where omnipresent the stats are skewed
-				.filter((t) => t.tribe !== Race.UNDEAD);
-			const isIn =
-				!overlyDominentTribes.length ||
-				!tribes?.length ||
-				overlyDominentTribes.every((t) => tribes.includes(t.tribe));
-			const debug = stat.heroCardId === CardIds.SylvanasWindrunner_BG23_HERO_306;
-			// if (debug) {
-			// 	console.debug('isIn', isIn, stat.heroCardId, overlyDominentTribes, stat);
-			// }
-			return isIn;
-		})
+	//console.debug('statsForMmr', statsForMmr, mmrPercentile, stats, tribes, anomalies);
+	const result1 = statsForMmr.filter((stat) => {
+		// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
+		// that stat
+		// We can still have some leftover stats in the data, but that it very likely something bogus
+		const overlyDominentTribes = stat.tribeStats
+			.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints)
+			// Temporary, because since undeads where omnipresent the stats are skewed
+			.filter((t) => t.tribe !== Race.UNDEAD);
+		const isIn =
+			!overlyDominentTribes.length ||
+			!tribes?.length ||
+			overlyDominentTribes.every((t) => tribes.includes(t.tribe));
+		return isIn;
+	});
+	return result1
 		.map((stat) => {
-			const debug = stat.heroCardId === CardIds.SylvanasWindrunner_BG23_HERO_306;
 			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
 			const tribeStatsToUse = useTribesModifier
 				? stat.tribeStats
@@ -179,6 +176,12 @@ export const buildHeroStats = (
 						.filter((t) => t.dataPoints > stat.dataPoints / 20) ?? []
 				: stat.tribeStats ?? [];
 			if (useTribesModifier && !tribeStatsToUse?.length) {
+				console.debug(
+					'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
+					stat,
+					tribes,
+					tribeStatsToUse,
+				);
 				return null;
 			}
 
@@ -199,6 +202,12 @@ export const buildHeroStats = (
 				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
 				: stat.anomalyStats ?? [];
 			if (useAnomalyModifier && !anomalyStatsToUse?.length) {
+				console.debug(
+					'[debug] [bgs-meta-stats] no anomaly stats to use, skipping',
+					stat,
+					anomalies,
+					anomalyStatsToUse,
+				);
 				return null;
 			}
 
@@ -256,7 +265,6 @@ export const buildHeroStats = (
 							averageStats: turnImpact,
 						};
 					}) ?? 0;
-				debug && console.debug('warbandStats', warbandStatsImpactTribes, stat.warbandStats);
 			}
 
 			let placementDistributionImpactAnomaly = null;
@@ -360,7 +368,13 @@ export const buildHeroStats = (
 			return result;
 		})
 		.filter((s) => !!s)
-		.filter((s) => s.dataPoints > HERO_STATS_DATA_POINT_THRESHOLD)
+		.filter((s) => {
+			if (s.dataPoints > HERO_STATS_DATA_POINT_THRESHOLD) {
+				return true;
+			}
+			console.debug('[debug] [bgs-meta-stats] not enough data points, skipping', s);
+			return false;
+		})
 		.sort(sortByProperties((t) => [t.averagePosition]));
 };
 

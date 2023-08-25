@@ -45,7 +45,9 @@ export class BgsGameEndParser implements EventParser {
 			...prefs,
 			bgsActiveRankFilter: prefs.bgsSavedRankFilter ?? prefs.bgsActiveRankFilter,
 			bgsActiveTribesFilter: prefs.bgsSavedTribesFilter ?? prefs.bgsActiveTribesFilter,
-			bgsActiveAnomaliesFilter: prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter,
+			bgsActiveAnomaliesFilter: (prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter).filter(
+				(a) => !!a,
+			),
 		};
 		await this.prefs.savePreferences(savedPrefs);
 		// const stateUpdater = this.stateUpdaterProvider();
