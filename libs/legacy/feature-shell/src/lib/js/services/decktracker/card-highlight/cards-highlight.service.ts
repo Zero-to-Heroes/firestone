@@ -1182,6 +1182,10 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FindTheImposter_MarkedATraitorToken:
 			case CardIds.JalTheSharpshot:
 				return and(side(inputSide), or(inDeck, inHand), minion, isSi7);
+			case CardIds.ShadowstepCore:
+			case CardIds.ShadowstepLegacy:
+			case CardIds.ShadowstepVanilla:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.ShroudOfConcealment:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.Shudderwock_GIL_820:
@@ -1334,6 +1338,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), inDeck, mech);
 			case CardIds.Timewarden:
 				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
+			case CardIds.TogwagglesScheme:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.TortollanPilgrim:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.TotemicMightLegacy:
