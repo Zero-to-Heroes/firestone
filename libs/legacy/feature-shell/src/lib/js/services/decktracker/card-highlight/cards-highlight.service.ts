@@ -564,6 +564,36 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Crystology:
 				return and(side(inputSide), inDeck, minion, attackLessThan(2));
+			case CardIds.CthunsChosen:
+			case CardIds.CthunsChosen_WON_125:
+			case CardIds.AncientShieldbearer:
+			case CardIds.AncientShieldbearer_WON_111:
+			case CardIds.BladeOfCthun:
+			case CardIds.BladeOfCthun_WON_075:
+			case CardIds.CrazedWorshipper:
+			case CardIds.CrazedWorshipper_WON_131:
+			case CardIds.DarkArakkoa:
+			case CardIds.DarkArakkoa_WON_304:
+			case CardIds.DiscipleOfCthun:
+			case CardIds.DiscipleOfCthun_WON_127:
+			case CardIds.EyestalkOfCthun_WON_144:
+			case CardIds.HoodedAcolyte:
+			case CardIds.HoodedAcolyte_WON_313:
+			case CardIds.KlaxxiAmberWeaver:
+			case CardIds.KlaxxiAmberWeaver_WON_010:
+			case CardIds.ThunderBluffValiant:
+			case CardIds.ThunderBluffValiant_WON_085:
+			case CardIds.TwilightGeomancer:
+			case CardIds.TwilightGeomancer_WON_124:
+			case CardIds.TwinEmperorVeklor:
+			case CardIds.TwinEmperorVeklor_WON_134:
+			case CardIds.UsherOfSouls:
+			case CardIds.UsherOfSouls_WON_322:
+				return and(
+					side(inputSide),
+					or(inDeck, inHand),
+					cardIs(CardIds.Cthun_WON_135, CardIds.Cthun_OG_279, CardIds.Cthun_OG_280),
+				);
 			case CardIds.Cultivation:
 				return and(side(inputSide), or(inDeck, inHand), summonsTreant);
 			case CardIds.CutlassCourier:
@@ -1010,6 +1040,10 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minion, rush);
 			case CardIds.PredatoryInstincts:
 				return and(side(inputSide), inDeck, minion, beast);
+			case CardIds.PreparationCore:
+			case CardIds.PreparationLegacy:
+			case CardIds.PreparationVanilla:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.Prescience:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.PrimalDungeoneer:
