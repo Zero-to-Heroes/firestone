@@ -27,6 +27,7 @@ import { IOption } from 'ng-select';
 			[noFilter]="1"
 		>
 			<ng-template #optionTemplate let-option="option">
+				<img class="image" *ngIf="option.image" [src]="option.image" />
 				<span
 					[helpTooltip]="option.label"
 					[ngClass]="{ unselectable: option?.unselectable }"
@@ -51,7 +52,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 	// eslint-disable-next-line @angular-eslint/no-output-on-prefix
 	@Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
 
-	@Input() options: IOption[] | null;
+	@Input() options: IOptionWithImage[] | null;
 	@Input() placeholder: string;
 
 	@Input() set filter(value: string) {
@@ -114,4 +115,8 @@ export class FilterDropdownComponent implements AfterViewInit {
 	select(option: IOption) {
 		this.onOptionSelected.next(option);
 	}
+}
+
+export interface IOptionWithImage extends IOption {
+	image?: string;
 }

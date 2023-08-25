@@ -111,7 +111,9 @@ ng-select.disabled {
 				padding-left: 9px;
 				padding-right: 10px;
 				display: flex;
-				justify-content: space-between;
+				// Not sure why this was the default
+				// justify-content: space-between;
+				justify-content: flex-start;
 				align-items: center;
 				height: 30px;
 
@@ -167,6 +169,14 @@ ng-select.disabled {
 			}
 		}
 	}
+}
+
+// We also need the styles when showing the icon as selected value once the dropdown is collapsed
+.image {
+	width: 30px;
+	height: 30px;
+	clip-path: ellipse(35% 35% at 50% 50%);
+	margin-right: 5px;
 }
 
 .tooltip {
