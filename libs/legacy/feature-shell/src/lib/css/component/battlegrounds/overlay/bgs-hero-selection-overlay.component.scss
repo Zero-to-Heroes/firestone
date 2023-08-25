@@ -39,6 +39,16 @@
 						color: var(--color-9);
 					}
 				}
+				.warning {
+					width: 40px;
+					height: 40px;
+					top: 19.2vh;
+					left: 5.5vh;
+					background: var(--default-text-color);
+					border-radius: 50%;
+					--icon-color: var(--color-5);
+					z-index: 99999;
+				}
 
 				bgs-hero-stats {
 					.placement {
