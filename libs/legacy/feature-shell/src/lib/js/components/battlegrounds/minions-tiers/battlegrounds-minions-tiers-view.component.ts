@@ -179,8 +179,12 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 
 export interface Tier {
 	tavernTier: number | 'B' | 'D' | 'DS' | 'T' | 'E' | 'R' | 'Buds';
-	cards: readonly ReferenceCard[];
-	groupingFunction: (card: ReferenceCard) => readonly string[];
+	cards: readonly ExtendedReferenceCard[];
+	groupingFunction: (card: ExtendedReferenceCard) => readonly string[];
 	tooltip?: string;
 	type: 'standard' | 'mechanics';
+}
+
+export interface ExtendedReferenceCard extends ReferenceCard {
+	readonly banned?: boolean;
 }

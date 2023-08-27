@@ -54,6 +54,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					<li
 						class="minion"
 						*ngFor="let minion of minions$ | async; trackBy: trackByFn"
+						[ngClass]="{ banned: minion.banned }"
 						[cardTooltip]="minion.displayedCardIds"
 						[cardTooltipBgs]="true"
 						(click)="clickMinion(minion)"
@@ -165,6 +166,10 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 								<span class="label">R</span>
 							</div>
 						</div>
+						<div
+							class="banned-overlay"
+							[helpTooltip]="'battlegrounds.in-game.minions-list.minion-banned-tooltip' | owTranslate"
+						></div>
 					</li>
 				</ul>
 			</div>
@@ -271,7 +276,7 @@ export class BattlegroundsMinionsGroupComponent
 							const hasDivineShield = card.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 							const hasEndOfTurn = card.mechanics?.includes(GameTag[GameTag.END_OF_TURN]);
 							const hasReborn = card.mechanics?.includes(GameTag[GameTag.REBORN]);
-							const result = {
+							const result: Minion = {
 								cardId: minion.id,
 								displayedCardIds: this.buildAllCardIds(minion.id, showGoldenCards),
 								image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
@@ -294,6 +299,7 @@ export class BattlegroundsMinionsGroupComponent
 								hasDivineShield: hasDivineShield,
 								hasEndOfTurn: hasEndOfTurn,
 								hasReborn: hasReborn,
+								banned: minion.banned,
 							};
 							return result;
 						})
@@ -470,6 +476,7 @@ interface Minion {
 	readonly displayedCardIds: string;
 	readonly image: string;
 	readonly name: string;
+	readonly banned?: boolean;
 	readonly techLevel?: number;
 	readonly highlighted: boolean;
 	readonly hasTaunt?: boolean;

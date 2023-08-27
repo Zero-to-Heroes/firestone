@@ -25,7 +25,7 @@ import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
-import { Tier } from './battlegrounds-minions-tiers-view.component';
+import { ExtendedReferenceCard, Tier } from './battlegrounds-minions-tiers-view.component';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',
@@ -167,19 +167,38 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			return [];
 		}
 
-		const useTier7 =
+		let tiersToInclude = [1, 2, 3, 4, 5, 6];
+		if (
 			anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
-			playerCardId === CardIds.ThorimStormlord_BG27_HERO_801;
-		const filteredCards = cardsInGame
-			.filter((card) => (useTier7 ? true : card.techLevel < 7))
-			.filter((card) => !isCardExcludedByAnomaly(card, anomalies));
-		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
-			(card: ReferenceCard) => '' + card.techLevel,
+			playerCardId === CardIds.ThorimStormlord_BG27_HERO_801
+		) {
+			tiersToInclude.push(7);
+		}
+		if (anomalies.includes(CardIds.BigLeague_BG27_Anomaly_100)) {
+			tiersToInclude = [3, 4, 5, 6];
+		}
+		if (anomalies.includes(CardIds.LittleLeague_BG27_Anomaly_800)) {
+			tiersToInclude = [1, 2, 3, 4];
+		}
+
+		const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
+			.filter((card) => tiersToInclude.includes(card.techLevel))
+			.map((card) =>
+				isCardExcludedByAnomaly(card, anomalies)
+					? {
+							...card,
+							banned: true,
+					  }
+					: card,
+			);
+		// .filter((card) => !isCardExcludedByAnomaly(card, anomalies));
+		const groupedByTier: { [tierLevel: string]: readonly ExtendedReferenceCard[] } = groupByFunction(
+			(card: ExtendedReferenceCard) => '' + card.techLevel,
 		)(filteredCards);
 		const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
-			groupingFunction: (card: ReferenceCard) =>
+			groupingFunction: (card: ExtendedReferenceCard) =>
 				getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
 					(t) =>
 						!availableTribes?.length ||
@@ -196,7 +215,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	}
 
 	private buildMechanicsTiers(
-		cardsInGame: readonly ReferenceCard[],
+		cardsInGame: readonly ExtendedReferenceCard[],
 		playerCardId: string,
 		availableTribes: readonly Race[],
 		hasBuddies: boolean,

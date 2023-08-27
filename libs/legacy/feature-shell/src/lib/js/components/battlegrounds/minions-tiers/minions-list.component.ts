@@ -16,7 +16,7 @@ import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/e
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { multiGroupByFunction } from '../../../services/utils';
-import { Tier } from './battlegrounds-minions-tiers-view.component';
+import { ExtendedReferenceCard, Tier } from './battlegrounds-minions-tiers-view.component';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
 @Component({
@@ -60,7 +60,7 @@ export class BattlegroundsMinionsListComponent
 		this.groupingFunction$$.next(value.groupingFunction);
 	}
 
-	@Input() set groupingFunction(value: (card: ReferenceCard) => readonly string[]) {
+	@Input() set groupingFunction(value: (card: ExtendedReferenceCard) => readonly string[]) {
 		this.groupingFunction$$.next(value);
 	}
 
