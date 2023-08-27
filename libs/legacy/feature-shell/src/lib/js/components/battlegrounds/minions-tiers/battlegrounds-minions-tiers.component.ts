@@ -190,7 +190,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			type: 'standard',
 		}));
 		const mechanicsTiers = showMechanicsTiers
-			? this.buildMechanicsTiers(cardsInGame, playerCardId, availableTribes, hasBuddies, allPlayerCardIds)
+			? this.buildMechanicsTiers(filteredCards, playerCardId, availableTribes, hasBuddies, allPlayerCardIds)
 			: [];
 		return [...standardTiers, ...mechanicsTiers];
 	}
