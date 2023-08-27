@@ -92,7 +92,7 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 					>
 					</sortable-table-label>
 				</div>
-				<div class="stats-content">
+				<div class="stats-content" scrollable>
 					<profile-match-stats-class-info
 						class="class-info"
 						*ngFor="let classInfo of classInfos$ | async"
