@@ -181,6 +181,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			tiersToInclude = [1, 2, 3, 4];
 		}
 
+		const showBuddies = hasBuddies || anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810);
 		const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 			.filter((card) => tiersToInclude.includes(card.techLevel))
 			.map((card) =>
@@ -209,7 +210,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			type: 'standard',
 		}));
 		const mechanicsTiers = showMechanicsTiers
-			? this.buildMechanicsTiers(filteredCards, playerCardId, availableTribes, hasBuddies, allPlayerCardIds)
+			? this.buildMechanicsTiers(filteredCards, playerCardId, availableTribes, showBuddies, allPlayerCardIds)
 			: [];
 		return [...standardTiers, ...mechanicsTiers];
 	}
