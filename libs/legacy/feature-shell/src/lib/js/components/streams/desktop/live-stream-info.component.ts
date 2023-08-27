@@ -71,9 +71,9 @@ export class LiveStreamInfoComponent {
 	streamLanguage: string;
 	streamTitle: string;
 	currentViewers: number;
-	watchTooltip = 'Watch on Twitch';
+	watchTooltip = this.i18n.translateString('app.streams.watch-on-twitch-button');
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
 
 	watchOnTwitch() {
 		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}?utm_source=firestone`);
