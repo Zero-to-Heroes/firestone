@@ -339,7 +339,8 @@
 					}
 				}
 
-				.tribes {
+				.tribes,
+				.anomalies {
 					display: none;
 					flex-shrink: 0;
 					background: var(--color-5);
@@ -401,6 +402,7 @@
 
 				&:hover {
 					.tribes,
+					.anomalies,
 					.board {
 						display: flex;
 					}
