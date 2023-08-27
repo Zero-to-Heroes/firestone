@@ -194,7 +194,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 			})
 			.updateSpellsPlayedThisMatch(
-				isCardCountered && refCard?.type === 'Spell' ? null : cardToAdd,
+				isCardCountered ? null : cardToAdd,
 				this.allCards,
 			);
 		// console.debug('newPlayerDeck', newPlayerDeck);

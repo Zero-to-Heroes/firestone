@@ -1,4 +1,4 @@
-import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
+import { CardIds, CardType, RELIC_IDS } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ShortCard } from '@models/decktracker/game-state';
 import { NonFunctionProperties } from '@services/utils';
@@ -138,6 +138,11 @@ export class DeckState {
 
 	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService): DeckState {
 		if (!spell) {
+			return this;
+		}
+
+		const refCard = allCards.getCard(spell.cardId);
+		if (refCard.type?.toUpperCase() !== CardType[CardType.SPELL]) {
 			return this;
 		}
 
