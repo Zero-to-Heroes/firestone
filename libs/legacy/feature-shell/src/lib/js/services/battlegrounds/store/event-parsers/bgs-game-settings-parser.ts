@@ -18,10 +18,7 @@ export class BgsGameSettingsParser implements EventParser {
 				hasPrizes: event.event.additionalData.battlegroundsPrizes,
 				hasQuests: event.event.additionalData.battlegroundsQuests,
 				hasBuddies: event.event.additionalData.battlegroundsBuddies,
-				anomalies:
-					event.event.additionalData.battlegroundsAnomalies?.map(
-						(dbfId) => this.allCards.getCard(dbfId)?.id,
-					) ?? ([] as readonly string[]),
+				anomalies: event.event.additionalData.battlegroundsAnomalies,
 			} as BgsGame),
 		} as BattlegroundsState);
 	}

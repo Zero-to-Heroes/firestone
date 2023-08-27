@@ -154,6 +154,7 @@ export class GameStatsLoaderService {
 				),
 		});
 		console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
+		console.debug('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats, data);
 		return this.gameStats;
 	}
 

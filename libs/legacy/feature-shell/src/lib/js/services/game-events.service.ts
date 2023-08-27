@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { ChoosingOptionsGameEvent } from '../models/mainwindow/game-events/choosing-options-game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
@@ -7,7 +8,6 @@ import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-ev
 import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
 import { MemoryUpdate } from '../models/memory/memory-update';
-import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { HsGameMetaData } from './game-mode-data.service';
@@ -32,14 +32,14 @@ export class GameEvents {
 	);
 
 	constructor(
-		private gameEventsPlugin: GameEventsPluginService,
-		private events: Events,
-		private gameEventsEmitter: GameEventsEmitterService,
-		private deckParser: DeckParserService,
-		private prefs: PreferencesService,
-		private store: MainWindowStoreService,
-		private memoryService: MemoryInspectionService,
+		private readonly gameEventsPlugin: GameEventsPluginService,
+		private readonly events: Events,
+		private readonly gameEventsEmitter: GameEventsEmitterService,
+		private readonly prefs: PreferencesService,
+		private readonly store: MainWindowStoreService,
+		private readonly memoryService: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -161,7 +161,10 @@ export class GameEvents {
 							battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
 							battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
 							battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
-							battlegroundsAnomalies: gameEvent.Value?.BattlegroundsAnomalies,
+							battlegroundsAnomalies:
+								gameEvent.Value?.BattlegroundsAnomalies?.map(
+									(dbfId) => this.allCards.getCard(dbfId)?.id,
+								) ?? ([] as readonly string[]),
 						},
 					} as GameEvent),
 				);
