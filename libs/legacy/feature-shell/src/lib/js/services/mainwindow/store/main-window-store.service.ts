@@ -440,6 +440,14 @@ export class MainWindowStoreService {
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
 
 		this.processors = this.buildProcessors();
+		
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+			const changes: MemoryUpdate = event.data[0];
+			const newScene = changes.CurrentScene;
+			if (!!newScene) {
+				this.stateUpdater.next(new SceneChangedEvent(newScene));
+			}
+		});
 
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
 			this.processingQueue.enqueue(event);
@@ -965,13 +973,6 @@ export class MainWindowStoreService {
 	private listenForSocialAccountLoginUpdates() {
 		this.ow.addTwitterLoginStateChangedListener(() => {
 			this.stateUpdater.next(new UpdateTwitterSocialInfoEvent());
-		});
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-			const changes: MemoryUpdate = event.data[0];
-			const newScene = changes.CurrentScene;
-			if (!!newScene) {
-				this.stateUpdater.next(new SceneChangedEvent(newScene));
-			}
 		});
 	}
 }
