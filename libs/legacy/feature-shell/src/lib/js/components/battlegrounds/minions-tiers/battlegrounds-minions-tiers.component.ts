@@ -181,7 +181,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			tiersToInclude = [1, 2, 3, 4];
 		}
 
-		const showBuddies = hasBuddies || anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810);
+		// Add a tier with all the buddies
+		const showBuddies =
+			anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
+			playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
+			(hasBuddies &&
+				[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+					playerCardId as CardIds,
+				));
+
 		const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 			.filter((card) => tiersToInclude.includes(card.techLevel))
 			.map((card) =>
@@ -283,14 +291,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				type: 'mechanics',
 			},
 		];
-		// Add a tier with all the buddies
-		const showBuddiesTier =
-			playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
-			(hasBuddies &&
-				[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
-					playerCardId as CardIds,
-				));
-		if (showBuddiesTier) {
+		if (hasBuddies) {
 			const allBuddies = this.allCards
 				.getCards()
 				.filter((c) => !!c.techLevel)
@@ -341,6 +342,36 @@ const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string
 		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
 			card.id as CardIds,
 		);
+	} else if (anomalies.includes(CardIds.AFaireReward_BG27_Anomaly_755)) {
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+			card.id as CardIds,
+		);
+	} else if (
+		anomalies.some((a) =>
+			[
+				CardIds.OopsAllBeastsToken_BG27_Anomaly_104t,
+				CardIds.OopsAllDemonsToken_BG27_Anomaly_104t2,
+				CardIds.OopsAllDragonsToken_BG27_Anomaly_104t3,
+				CardIds.OopsAllElementalsToken_BG27_Anomaly_104t4,
+				CardIds.OopsAllEvil_BG27_Anomaly_307,
+				CardIds.OopsAllMechsToken_BG27_Anomaly_104t5,
+				CardIds.OopsAllMurlocsToken_BG27_Anomaly_104t6,
+				CardIds.OopsAllNagaToken_BG27_Anomaly_104t7,
+				CardIds.OopsAllPiratesToken_BG27_Anomaly_104t10,
+				CardIds.OopsAllQuilboarToken_BG27_Anomaly_104t8,
+			].includes(a as CardIds),
+		)
+	) {
+		return [
+			CardIds.MenagerieMug_BGS_082,
+			CardIds.MenagerieMug_TB_BaconUps_144,
+			CardIds.MenagerieJug_BGS_083,
+			CardIds.MenagerieJug_TB_BaconUps_145,
+			CardIds.ReefExplorer_BG23_016,
+			CardIds.ReefExplorer_BG23_016_G,
+			CardIds.LivingConstellation_BG27_001,
+			CardIds.LivingConstellation_BG27_001_G,
+		].includes(card.id as CardIds);
 	} else if (anomalies.includes(CardIds.BigLeague_BG27_Anomaly_100)) {
 		return [
 			CardIds.TheBoogieMonster_BG26_176,
