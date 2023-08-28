@@ -214,12 +214,18 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 		this.cancelPlayingSounds();
 
 		const audioGroup = audioClip.audioGroup;
-
-		const mainFiles = Object.values(audioGroup)
-			.flatMap((effect) => effect.mainSounds)
-			.filter((sound) => !!sound);
+		console.debug('will play audio group', audioGroup);
+		// MusicStinger, PlayUnderlay + one random from the others
+		const keys = [
+			'MusicStinger',
+			'PlayUnderlay',
+			pickRandom(Object.keys(audioGroup).filter((key) => key !== 'MusicStinger' && key !== 'PlayUnderlay')),
+		].filter((key) => !!key);
+		const audioGroupFiles = keys.map((key) => audioGroup[key]).filter((effect) => !!effect);
+		const mainFiles = audioGroupFiles.flatMap((effect) => effect.mainSounds).filter((sound) => !!sound);
+		console.debug('will play main files', keys, mainFiles);
 		const randomSounds =
-			Object.values(audioGroup)
+			audioGroupFiles
 				.filter((effect) => !!effect.randomSounds?.length)
 				.map((effect) => pickRandom(effect.randomSounds).sound)
 				.filter((sound) => sound) ?? [];
@@ -227,6 +233,7 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 		audioClip.audios
 			.filter((audio) => allSoundsToPlay.includes((audio as any).key))
 			.forEach((audio) => {
+				console.debug('playing audio', audio);
 				audio.play();
 			});
 	}
