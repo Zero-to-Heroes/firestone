@@ -11,6 +11,7 @@ export class SceneChangedProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.log('[scene-changed-processor] processing event', event, currentState.currentScene);
 		return [
 			currentState.update({
 				currentScene: event.scene,
