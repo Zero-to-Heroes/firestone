@@ -7,6 +7,8 @@
 .search-autocomplete {
 	height: 30px;
 	padding-left: 12px;
+	display: flex;
+	align-items: center;
 
 	&:hover {
 		// $grey03
