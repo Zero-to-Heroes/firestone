@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
@@ -48,7 +49,7 @@ export class SecretsParserService {
 			return null;
 		}
 
-		if (this.isSecretInPlayer(gameState)) {
+		if (!this.shouldIgnoreSecrets(gameState) && this.isSecretInPlayer(gameState)) {
 			for (const parser of this.secretParsers) {
 				if (parser.applies(gameEvent, gameState)) {
 					gameState = await parser.parse(gameState, gameEvent, additionalInfo);
@@ -56,6 +57,14 @@ export class SecretsParserService {
 			}
 		}
 		return gameState;
+	}
+
+	private shouldIgnoreSecrets(gameState: GameState) {
+		const cardsPreventingSecrets = [CardIds.TightLippedWitness];
+		return (
+			gameState.playerDeck?.board?.some((e) => cardsPreventingSecrets.includes(e.cardId as CardIds)) ||
+			gameState.opponentDeck?.board?.some((e) => cardsPreventingSecrets.includes(e.cardId as CardIds))
+		);
 	}
 
 	private isSecretInPlayer(gameState: GameState) {
