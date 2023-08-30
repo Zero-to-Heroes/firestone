@@ -551,6 +551,8 @@ export class Preferences implements IPreferences {
 	readonly bgsEnableSimulationSampleInOverlay = false;
 	readonly bgsSimulatorNumberOfSims = 5000;
 	readonly bgsShowEndGameNotif: boolean = true;
+	readonly bgsEnableMinionAutoHighlight: boolean = true;
+	readonly bgsEnableTribeAutoHighlight: boolean = true;
 	// No way to change it for now
 	readonly bgsIgnoreGamesEndingBeforeHeroSelection = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

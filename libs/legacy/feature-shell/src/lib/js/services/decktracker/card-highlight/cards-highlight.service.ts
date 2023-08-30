@@ -1265,6 +1265,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), minion, beast);
 			case CardIds.Steamcleaner:
 				return notInInitialDeck;
+			case CardIds.SteamGuardian:
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.StickyFingersTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 			case CardIds.StonehearthVindicator:

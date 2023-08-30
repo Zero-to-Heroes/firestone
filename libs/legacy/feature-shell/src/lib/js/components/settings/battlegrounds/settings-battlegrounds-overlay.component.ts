@@ -68,6 +68,20 @@ import { Knob } from '../preference-slider.component';
 					premiumSetting
 				></preference-toggle>
 				<preference-toggle
+					field="bgsEnableMinionAutoHighlight"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-minions-auto-highlight-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-minions-auto-highlight-tooltip' | owTranslate"
+					premiumSetting
+				></preference-toggle>
+				<preference-toggle
+					field="bgsEnableTribeAutoHighlight"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-tribes-auto-highlight-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-tribes-auto-highlight-tooltip' | owTranslate"
+					premiumSetting
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowBannedTribesOverlay"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.show-banned-tribes-label' | owTranslate"

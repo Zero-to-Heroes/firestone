@@ -337,7 +337,7 @@ export class BattlegroundsMinionsGroupComponent
 		if (!this.showTribesHighlight) {
 			return;
 		}
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent(minion.cardId));
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent([minion.cardId]));
 	}
 
 	clickMinion(minion: Minion) {

@@ -1,6 +1,6 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsToggleHighlightMinionOnBoardEvent } from '../events/bgs-toggle-highlight-minion-on-board-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsToggleHighlightMinionOnBoardEvent } from '../events/bgs-toggle-highlight-minion-on-board-event';
 import { EventParser } from './_event-parser';
 
 export class BgsToggleHighlightMinionOnBoardParser implements EventParser {
@@ -12,9 +12,12 @@ export class BgsToggleHighlightMinionOnBoardParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsToggleHighlightMinionOnBoardEvent,
 	): Promise<BattlegroundsState> {
-		const highlightedMinions: readonly string[] = currentState.highlightedMinions.includes(event.cardId)
-			? currentState.highlightedMinions.filter((cardId) => cardId !== event.cardId)
-			: [...currentState.highlightedMinions, event.cardId];
+		let highlightedMinions: readonly string[] = currentState.highlightedMinions;
+		for (const cardId of event.cardIds) {
+			highlightedMinions = highlightedMinions.includes(cardId)
+				? highlightedMinions.filter((cardId) => cardId !== cardId)
+				: [...highlightedMinions, cardId];
+		}
 		return currentState.update({
 			highlightedMinions: highlightedMinions,
 		} as BattlegroundsState);
