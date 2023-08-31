@@ -331,7 +331,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 
 const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {
 	if (anomalies.includes(CardIds.UncompensatedUpset_BG27_Anomaly_721)) {
-		return [CardIds.CorpseRefiner_BG25_033, CardIds.CorpseRefiner_BG25_033_G].includes(card.id as CardIds);
+		return [
+			CardIds.CorpseRefiner_BG25_033,
+			CardIds.CorpseRefiner_BG25_033_G,
+			CardIds.TimeSaver_BG27_520,
+			CardIds.TimeSaver_BG27_520_G,
+		].includes(card.id as CardIds);
 	} else if (anomalies.includes(CardIds.PackedStands_BG27_Anomaly_750)) {
 		return [CardIds.SeabornSummoner_BG27_012, CardIds.SeabornSummoner_BG27_012_G].includes(card.id as CardIds);
 	} else if (anomalies.includes(CardIds.FalseIdols_BG27_Anomaly_301)) {
@@ -339,7 +344,12 @@ const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string
 			card.id as CardIds,
 		);
 	} else if (anomalies.includes(CardIds.TheGoldenArena_BG27_Anomaly_801)) {
-		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G,
+		CardIds.CaptainSanders_BG25_034,
+		CardIds.CaptainSanders_BG25_034_G,
+		CardIds.UpbeatImpressionist_BG26_124,
+		CardIds.UpbeatImpressionist_BG26_124_G,
+		].includes(
 			card.id as CardIds,
 		);
 	} else if (anomalies.includes(CardIds.AFaireReward_BG27_Anomaly_755)) {
