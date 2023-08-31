@@ -51,14 +51,25 @@ export class BgsPremiumHighlighterService {
 
 	private buildMinionToHighlight(heroCardId: string): readonly string[] {
 		switch (heroCardId) {
-			case CardIds.ThorimStormlord_BG27_HERO_801:
-				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.PatchesThePirate_TB_BaconShop_HERO_18:
-				return [CardIds.FreedealingGambler_BGS_049];
 			case CardIds.CapnHoggarr_BG26_HERO_101:
 				return [CardIds.FreedealingGambler_BGS_049];
 			case CardIds.Cthun_TB_BaconShop_HERO_29:
 				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
+			case CardIds.DancinDeryl:
+				return [CardIds.FreedealingGambler_BGS_049];
+			case CardIds.TradePrinceGallywix_TB_BaconShop_HERO_10:
+				return [CardIds.FreedealingGambler_BGS_049];
+			case CardIds.MillhouseManastorm_TB_BaconShop_HERO_49:
+				return [
+					CardIds.FreedealingGambler_BGS_049,
+					CardIds.PatientScout_BG24_715,
+					CardIds.Sellemental_BGS_115,
+					CardIds.RecyclingWraith_BG21_040,
+				];
+			case CardIds.ThorimStormlord_BG27_HERO_801:
+				return [CardIds.FreedealingGambler_BGS_049];
+			case CardIds.PatchesThePirate_TB_BaconShop_HERO_18:
+				return [CardIds.FreedealingGambler_BGS_049];
 			case CardIds.RagnarosTheFirelord_TB_BaconShop_HERO_11:
 				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
 			case CardIds.RockMasterVoone_BG26_HERO_104:
