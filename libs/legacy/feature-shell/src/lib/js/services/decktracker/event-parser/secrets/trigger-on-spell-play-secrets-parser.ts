@@ -100,6 +100,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 				targetCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()
 			) {
 				secretsWeCantRuleOut.push(CardIds.SpellbenderVanilla);
+				secretsWeCantRuleOut.push(CardIds.SpellbenderLegacy);
 			}
 		}
 
