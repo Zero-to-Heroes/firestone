@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardIds, Race } from '@firestone-hs/reference-data';
-import { combineLatest, debounceTime, filter, map } from 'rxjs';
+import { combineLatest, debounceTime, filter, tap } from 'rxjs';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BattlegroundsStoreService } from './store/battlegrounds-store.service';
 import { BgsToggleHighlightMinionOnBoardEvent } from './store/events/bgs-toggle-highlight-minion-on-board-event';
@@ -13,7 +13,9 @@ export class BgsPremiumHighlighterService {
 	}
 
 	private async init() {
+		console.debug('[bgs-premium-highlighter] init');
 		await this.store.initComplete();
+		console.debug('[bgs-premium-highlighter] init ready');
 
 		combineLatest([
 			this.store.enablePremiumFeatures$(),
@@ -26,16 +28,23 @@ export class BgsPremiumHighlighterService {
 				([state]) => state.currentGame?.gameEnded,
 				([state]) => state.currentGame?.getMainPlayer()?.cardId,
 			),
-		]).pipe(
-			debounceTime(1000),
-			filter(([premium, [minionAuto, tribeAuto], [state, gameEnded, cardId]]) => premium),
-			map(([premium, [minionAuto, tribeAuto], [state, gameEnded, heroCardId]]) => {
+		])
+			.pipe(
+				tap((info) => console.debug('[bgs-highlighter] new info', info)),
+				debounceTime(1000),
+				filter(
+					([premium, [minionAuto, tribeAuto], [hasCurrentGame, gameEnded, cardId]]) =>
+						hasCurrentGame && premium,
+				),
+			)
+			.subscribe(([premium, [minionAuto, tribeAuto], [hasCurrentGame, gameEnded, heroCardId]]) => {
 				if (gameEnded) {
 					return [];
 				}
 
 				const minionsToHighlight: readonly string[] = this.buildMinionToHighlight(heroCardId);
-				if (!minionsToHighlight?.length && minionAuto) {
+				console.debug('[bgs-highlighter] minionsToHighlight', minionsToHighlight, minionAuto);
+				if (!!minionsToHighlight?.length && minionAuto) {
 					this.bgsStore.battlegroundsUpdater.next(
 						new BgsToggleHighlightMinionOnBoardEvent(minionsToHighlight),
 					);
@@ -45,8 +54,7 @@ export class BgsPremiumHighlighterService {
 				if (tribeToHighlight && tribeAuto) {
 					this.bgsStore.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(tribeToHighlight));
 				}
-			}),
-		);
+			});
 	}
 
 	private buildMinionToHighlight(heroCardId: string): readonly string[] {

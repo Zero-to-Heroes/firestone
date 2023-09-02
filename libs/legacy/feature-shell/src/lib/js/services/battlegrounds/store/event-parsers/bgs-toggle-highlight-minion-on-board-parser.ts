@@ -18,6 +18,12 @@ export class BgsToggleHighlightMinionOnBoardParser implements EventParser {
 				? highlightedMinions.filter((cardId) => cardId !== cardId)
 				: [...highlightedMinions, cardId];
 		}
+		console.debug(
+			'[bgs-highlight] new highlighted minions',
+			highlightedMinions,
+			currentState.highlightedMinions,
+			event.cardIds,
+		);
 		return currentState.update({
 			highlightedMinions: highlightedMinions,
 		} as BattlegroundsState);
