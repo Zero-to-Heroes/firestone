@@ -192,7 +192,10 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
 		}
 
-		const base = this.buildBaseCards(deckState, hideGeneratedCardsInOtherZone);
+		const deckForBase: DeckState = deckState.update({
+			deck: cardsInDeckZone,
+		});
+		const base = this.buildBaseCards(deckForBase, hideGeneratedCardsInOtherZone);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
 			cards: base,
