@@ -46,12 +46,10 @@ export class CardDrawParser implements EventParser {
 		// the bottom of the deck
 		// If no cardId is provided, we use the entityId
 		const shouldUseEntityId =
-			!cardId ||
-			cardsWithMatchingCardId.length === 1 ||
-			cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null);
-		if (!shouldUseEntityId) {
-			// console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
-		}
+			!isPlayer &&
+			(!cardId ||
+				cardsWithMatchingCardId.length === 1 ||
+				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
 		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide].includes(gameEvent.additionalData.drawnByCardId);
 		const useBottomOfDeckToIdentifyCard =

@@ -51,7 +51,7 @@ export class CardChangedInDeckParser implements EventParser {
 		// previous attributes
 		const newCard = theCard.update({
 			cardId: realCardId,
-			entityId: isPlayer ? entityId ?? theCard.entityId : null,
+			entityId: entityId ?? theCard.entityId,
 			cardName: this.i18n.getCardName(cardData.id),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,

@@ -38,7 +38,7 @@ export class CardTradedParser implements EventParser {
 		// could possibly have an info leak
 		const cardWithoutInfluence = card
 			? card.update({
-					entityId: isPlayer ? card.entityId : null,
+					entityId: card.entityId ,
 					lastAffectedByCardId: undefined,
 					mainAttributeChange: buildAttributeChange(card),
 					positionFromTop: undefined,

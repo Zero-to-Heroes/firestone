@@ -89,12 +89,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 				cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardName),
 				manaCost: newCopy?.manaCost ?? copiedCard.manaCost,
 				// Always set the entityId to null when it's the opponent's deck to avoid info leaks
-				entityId: isCopiedPlayer || copiedCardZone === Zone.DECK ? copiedCardEntityId : null,
+				// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
+				// to differentiate the cards (e.g. when discovering copies of the same card)
+				entityId: copiedCardZone === Zone.DECK ? copiedCardEntityId : null,
 			} as DeckCard) ??
 			DeckCard.create({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId),
-				entityId: isCopiedPlayer ? copiedCardEntityId : null,
+				entityId: copiedCardEntityId,
 				// This was introduced so that discovering cards from deck would update the info of the card in deck
 				// with the updated info from the Discover (initially for Lady Prestor)
 				manaCost: isCopiedPlayer ? newCopy?.manaCost : null,
@@ -119,6 +121,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			isCopiedPlayer &&
 			!isPlayer &&
 			DREDGE_IN_OPPONENT_DECK_CARD_IDS.includes(newCopy?.lastAffectedByCardId as CardIds);
+		// console.debug('[copied-from-entity] isCardMovedAroundInPlayerDeck', isCardMovedAroundInPlayerDeck);
 
 		const newCopiedDeck =
 			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
