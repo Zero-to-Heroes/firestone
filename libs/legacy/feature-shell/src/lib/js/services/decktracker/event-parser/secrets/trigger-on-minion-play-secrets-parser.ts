@@ -14,6 +14,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.Kidnap_REV_828,
 		CardIds.SnipeLegacy_EX1_609,
 		CardIds.SnipeVanilla,
+		CardIds.Snipe_WON_018,
 		CardIds.PotionOfPolymorph,
 		CardIds.MirrorEntityLegacy,
 		CardIds.MirrorEntity,
@@ -120,6 +121,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);
 			secretsWeCantRuleOut.push(CardIds.SnipeLegacy_EX1_609);
 			secretsWeCantRuleOut.push(CardIds.SnipeVanilla);
+			secretsWeCantRuleOut.push(CardIds.Snipe_WON_018);
 			secretsWeCantRuleOut.push(CardIds.PotionOfPolymorph);
 			secretsWeCantRuleOut.push(CardIds.RepentanceLegacy);
 			secretsWeCantRuleOut.push(CardIds.RepentanceVanilla);
