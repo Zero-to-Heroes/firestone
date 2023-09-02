@@ -311,14 +311,8 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 					audios: files.flatMap((file) =>
 						// We don't know beforehand if the file is localized or not, so we try to load both versions
 						[
-							this.createAudio(
-								file,
-								`https://static.zerotoheroes.com/hearthstone/audio/sounds/common/${file}`,
-							),
-							this.createAudio(
-								file,
-								`https://static.zerotoheroes.com/hearthstone/audio/sounds/${locale}/${file}`,
-							),
+							this.createAudio(file, `https://static.firestoneapp.com/audio/sounds/common/${file}`),
+							this.createAudio(file, `https://static.firestoneapp.com/audio/sounds/${locale}/${file}`),
 						],
 					),
 				};
