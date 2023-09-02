@@ -465,7 +465,8 @@ export class GameEvents {
 			case 'CTHUN':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CTHUN, gameEvent, {
-						cthunSize: gameEvent.Value.AdditionalProps.CthunSize,
+						cthunAtk: gameEvent.Value.AdditionalProps.CthuAtk,
+						cthunHealth: gameEvent.Value.AdditionalProps.CthuHealth,
 					}),
 				);
 				break;

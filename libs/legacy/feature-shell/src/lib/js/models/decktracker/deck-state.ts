@@ -73,7 +73,8 @@ export class DeckState {
 
 	readonly totalAttackOnBoard: AttackOnBoard;
 	readonly galakrondInvokesCount: number = 0;
-	readonly cthunSize: number = 0;
+	readonly cthunAtk: number = 0;
+	readonly cthunHealth: number = 0;
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
 	readonly astralAutomatonsSummoned: number = 0;
@@ -223,7 +224,7 @@ export class DeckState {
 	}
 
 	public containsCthun(allCards: CardsFacadeService): boolean {
-		if (this.cthunSize > 0) {
+		if (this.cthunAtk > 0 || this.cthunHealth > 0) {
 			return true;
 		}
 

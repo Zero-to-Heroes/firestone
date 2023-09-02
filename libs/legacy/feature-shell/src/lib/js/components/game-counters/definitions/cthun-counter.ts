@@ -4,9 +4,9 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class CthunCounterDefinition implements CounterDefinition<GameState, number> {
+export class CthunCounterDefinition implements CounterDefinition<GameState, { atk: number; health: number }> {
 	readonly type = 'cthun';
-	readonly value: number;
+	readonly value: string;
 	readonly image: string;
 	readonly cssClass: string;
 	readonly tooltip: string;
@@ -26,18 +26,24 @@ export class CthunCounterDefinition implements CounterDefinition<GameState, numb
 		return new CthunCounterDefinition(side, allCards, i18n);
 	}
 
-	public select(gameState: GameState): number {
+	public select(gameState: GameState): { atk: number; health: number } {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.cthunSize || 6;
+		return {
+			atk: deck.cthunAtk || 6,
+			health: deck.cthunHealth || 6,
+		};
 	}
 
-	public emit(cthunSize: number): NonFunctionProperties<CthunCounterDefinition> {
+	public emit(cthunSize: { atk: number; health: number }): NonFunctionProperties<CthunCounterDefinition> {
 		return {
 			type: 'cthun',
-			value: cthunSize,
+			value: `${cthunSize.atk}/${cthunSize.health}`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/OG_280.jpg`,
 			cssClass: 'cthun-counter',
-			tooltip: this.i18n.translateString(`counters.cthun.${this.side}`, { value: cthunSize }),
+			tooltip: this.i18n.translateString(`counters.cthun.${this.side}`, {
+				atk: cthunSize.atk,
+				health: cthunSize.health,
+			}),
 			standardCounter: true,
 		};
 	}

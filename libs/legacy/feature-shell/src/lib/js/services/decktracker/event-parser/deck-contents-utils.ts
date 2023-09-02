@@ -149,10 +149,10 @@ const handleLorthemarTheron = (
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
 ): DeckState => {
-	console.debug('handling lorthemar', deckState.cthunSize, deckState);
 	// Works when played, but future C'Thun events don't take the buff into account
 	return deckState.update({
-		cthunSize: 2 * deckState.cthunSize,
+		cthunAtk: 2 * deckState.cthunAtk,
+		cthunHealth: 2 * deckState.cthunHealth,
 	});
 };
 
