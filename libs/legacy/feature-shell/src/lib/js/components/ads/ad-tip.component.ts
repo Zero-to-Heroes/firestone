@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { Tip, TipService } from '../../services/tip.service';
+import { TIP_URL, Tip, TipService } from '../../services/tip.service';
 
 @Component({
 	selector: 'ad-tip',
@@ -46,7 +46,7 @@ export class AdTipComponent extends AbstractSubscriptionComponent implements Aft
 			const tip = this.tipService.getRandomTip();
 			const extendedTip: ExtendedTip = {
 				...tip,
-				url: `https://static.firestoneapp.com/features/${tip.file}`,
+				url: `${TIP_URL}/${tip.file}`,
 				text: this.i18n.translateString('app.tips.ad-tip-prefix', {
 					text: tip.text,
 				}),

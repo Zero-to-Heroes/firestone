@@ -3,6 +3,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { FeatureFlags } from './feature-flags';
 import { pickRandom } from './utils';
 
+export const TIP_URL = `https://static.firestoneapp.com/features`;
+
 @Injectable()
 export class TipService {
 	private tips: readonly Tip[] = [
@@ -126,6 +128,12 @@ export class TipService {
 		// 	text: 'View latest release notes',
 		// 	premium: false,
 		// },
+		{
+			file: 'minion_auto_highlight.jpg',
+			type: 'image',
+			text: this.i18n.translateString('app.tips.minion_auto_highlight'),
+			premium: true,
+		},
 	];
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
