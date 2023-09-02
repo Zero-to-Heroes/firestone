@@ -72,7 +72,14 @@ export class DeckManipulationHelper {
 		// a) no card matches the known entityId,
 		// b) we find a card that matches our input card id and
 		// c) all such cards have a valid entityId (typically the case with Soul Fragments)
+		// However, this means that, when we don't know the deck list, and the discover offers us twice the same card
+		// from our deck, we will update the first card with the entityId of the second card, and fail to create a
+		// new card in the deck
+		// Test scenario: no-deck mode, discover / dredge and get offered the same card twice
+		// So we should have a way to force the utils to match the entityId
 		const shouldIgnoreEntityId =
+			// TODO: test with soul fragments?
+			false &&
 			!zone.filter((card) => card.entityId === entityId).length &&
 			zone.some((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId) &&
 			zone
@@ -367,7 +374,9 @@ export class DeckManipulationHelper {
 			false,
 			cardInfos,
 		);
+		//console.debug('[empiricReplaceCardInZone] removedCard', removedCard, newCard, newZone);
 		const updatedZone = this.addSingleCardToZone(newZone, newCard);
+		//console.debug('[empiricReplaceCardInZone] updatedZone', updatedZone);
 		return updatedZone;
 	}
 
