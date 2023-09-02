@@ -1,6 +1,10 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
+import {
+	DEFAULT_CTHUN_ATK,
+	DEFAULT_CTHUN_HEALTH,
+} from '../../../services/decktracker/event-parser/special-cases/cthun-parser';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
@@ -29,8 +33,8 @@ export class CthunCounterDefinition implements CounterDefinition<GameState, { at
 	public select(gameState: GameState): { atk: number; health: number } {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return {
-			atk: deck.cthunAtk || 6,
-			health: deck.cthunHealth || 6,
+			atk: deck.cthunAtk || DEFAULT_CTHUN_ATK,
+			health: deck.cthunHealth || DEFAULT_CTHUN_HEALTH,
 		};
 	}
 

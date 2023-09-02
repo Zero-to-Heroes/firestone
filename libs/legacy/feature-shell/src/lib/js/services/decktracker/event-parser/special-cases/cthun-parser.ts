@@ -2,6 +2,8 @@ import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { EventParser } from '../event-parser';
 
+export const DEFAULT_CTHUN_ATK = 6;
+export const DEFAULT_CTHUN_HEALTH = 6;
 export class CthunParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -12,9 +14,14 @@ export class CthunParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const newPlayerDeck = deck.update({
-			cthunAtk: gameEvent.additionalData.cthunAtk == null ? deck.cthunAtk : gameEvent.additionalData.cthunAtk,
+			cthunAtk:
+				gameEvent.additionalData.cthunAtk == null
+					? deck.cthunAtk
+					: DEFAULT_CTHUN_ATK + gameEvent.additionalData.cthunAtk,
 			cthunHealth:
-				gameEvent.additionalData.cthunHealth == null ? deck.cthunHealth : gameEvent.additionalData.cthunHealth,
+				gameEvent.additionalData.cthunHealth == null
+					? deck.cthunHealth
+					: DEFAULT_CTHUN_HEALTH + gameEvent.additionalData.cthunHealth,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
