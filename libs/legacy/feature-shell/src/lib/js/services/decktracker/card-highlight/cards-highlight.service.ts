@@ -666,6 +666,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(side(inputSide), spell, shadow);
 			case CardIds.ElementalEvocation:
 				return and(side(inputSide), or(inHand, inDeck), elemental);
+			case CardIds.ElderNadox:
+				return and(side(inputSide), or(inHand, inDeck), undead);
 			case CardIds.ElitistSnob:
 				return and(side(inputSide), inHand, paladin);
 			case CardIds.ElixirOfVigorTavernBrawl:
