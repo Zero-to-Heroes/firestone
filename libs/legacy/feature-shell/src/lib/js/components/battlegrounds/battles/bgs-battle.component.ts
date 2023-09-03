@@ -224,6 +224,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
+							heroPowerInfo2: 0,
 							questRewards: null,
 							globalInfo: {
 								EternalKnightsDeadThisGame:
@@ -253,6 +254,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
+							heroPowerInfo2: 0,
 							questRewards: null,
 							globalInfo: {
 								EternalKnightsDeadThisGame:

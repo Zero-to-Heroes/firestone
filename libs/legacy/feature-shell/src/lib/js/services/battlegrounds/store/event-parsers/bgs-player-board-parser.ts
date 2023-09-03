@@ -172,6 +172,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,
+				heroPowerInfo2: playerBoard.heroPowerInfo2,
 				questRewards: playerBoard.questRewards,
 				hand: hand,
 				globalInfo: {

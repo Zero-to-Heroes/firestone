@@ -16,6 +16,7 @@ export interface PlayerBoard {
 	readonly heroPowerCardId: string;
 	readonly heroPowerUsed: boolean;
 	readonly heroPowerInfo: number;
+	readonly heroPowerInfo2: number;
 	readonly questRewards: readonly string[];
 	readonly globalInfo: any; // BgsPlayerGlobalInfo;
 }
