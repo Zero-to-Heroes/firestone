@@ -1,8 +1,6 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { NonFunctionProperties } from '@legacy-import/src/lib/js/services/utils';
-import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
 import { BgsFaceOffWithSimulation } from './bgs-face-off-with-simulation';
 import { BgsPlayer } from './bgs-player';
@@ -38,13 +36,15 @@ export class BgsGame {
 		return Object.assign(new BgsGame(), this, base);
 	}
 
-	public updatePlayer(newPlayer: BgsPlayer, allCards: CardsFacadeService): BgsGame {
+	public updatePlayer(newPlayer: BgsPlayer): BgsGame {
 		const newPlayers: readonly BgsPlayer[] = this.players.map((player) =>
-			normalizeHeroCardId(player.cardId, allCards) === normalizeHeroCardId(newPlayer.cardId, allCards)
-				? newPlayer
-				: player,
+			player.playerId === newPlayer.playerId ? newPlayer : player,
 		);
 		return this.update({ players: newPlayers } as BgsGame);
+	}
+
+	public findPlayer(playerId: number): BgsPlayer {
+		return this.players.find((player) => player.playerId === playerId);
 	}
 
 	public getMainPlayer(): BgsPlayer {
@@ -65,7 +65,9 @@ export class BgsGame {
 	}
 
 	public printFaceOffs(): string {
-		return this.faceOffs.map((f) => `${f.playerCardId} vs ${f.opponentCardId}`).join(', \n');
+		return this.faceOffs
+			.map((f) => `${f.playerCardId} vs ${f.opponentCardId} (${f.opponentPlayerId})`)
+			.join(', \n');
 	}
 
 	// public updateLastFaceOff(

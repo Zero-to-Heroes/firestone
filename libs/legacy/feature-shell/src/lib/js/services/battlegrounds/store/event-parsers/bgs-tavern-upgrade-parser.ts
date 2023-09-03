@@ -1,7 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
@@ -19,7 +18,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsTavernUpgradeEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
+		const playerToUpdate = currentState.currentGame.findPlayer(event.playerId);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
@@ -59,10 +58,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 			tavernUpgradeHistory: newHistory,
 			tripleHistory: newTripleHistory,
 		} as BgsPlayer);
-		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			player.playerId === newPlayer.playerId ? newPlayer : player,
-		);
-		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
+		const newGame = currentState.currentGame.updatePlayer(newPlayer);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

@@ -112,6 +112,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				event.opponentBoard.playerId,
 				lastFaceOff,
 			);
+			console.debug(currentState);
 			return currentState;
 		}
 		const updatedFaceOff = lastFaceOff.update({
@@ -193,9 +194,7 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	private updatePlayer(currentState: BattlegroundsState, playerBoard: PlayerBoard): BgsPlayer {
-		const playerToUpdate = currentState.currentGame.players.find(
-			(player) => player.playerId === playerBoard.playerId,
-		);
+		const playerToUpdate = currentState.currentGame.findPlayer(playerBoard.playerId);
 		if (!playerToUpdate) {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 				console.warn(
@@ -217,6 +216,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			playerBoard.board.map((entity) => entity.CardId),
 			'from old board',
 			playerToUpdate.getLastKnownBoardState()?.map((entity) => entity.cardID),
+			playerBoard,
 		);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
@@ -231,6 +231,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		console.debug(
 			'update board for player',
 			newPlayer.cardId,
+			newPlayer.playerId,
 			newPlayer.getLastKnownBoardState()?.map((entity) => entity.cardID),
 		);
 		return newPlayer;

@@ -1,7 +1,6 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsPlayer, QuestReward } from '../../../../models/battlegrounds/bgs-player';
+import { QuestReward } from '../../../../models/battlegrounds/bgs-player';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsRewardGainedEvent } from '../events/bgs-reward-gained-event';
 import { EventParser } from './_event-parser';
@@ -14,7 +13,7 @@ export class BgsRewardGainedParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsRewardGainedEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
+		const playerToUpdate = currentState.currentGame.findPlayer(event.playerId);
 		if (!playerToUpdate) {
 			return currentState;
 		}
@@ -38,10 +37,7 @@ export class BgsRewardGainedParser implements EventParser {
 		const newPlayer = playerToUpdate.update({
 			questRewards: newRewards,
 		});
-		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			player.playerId === newPlayer.playerId ? newPlayer : player,
-		);
-		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
+		const newGame = currentState.currentGame.updatePlayer(newPlayer);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

@@ -1092,7 +1092,7 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
 						additionalData: {
 							nextOpponentCardId: gameEvent.Value.CardId,
-							nextOpponentPlayerId: gameEvent.Value.PlayerId,
+							nextOpponentPlayerId: gameEvent.Value.OpponentPlayerId,
 							isSameOpponent: gameEvent.Value.IsSameOpponent,
 						},
 					} as GameEvent),

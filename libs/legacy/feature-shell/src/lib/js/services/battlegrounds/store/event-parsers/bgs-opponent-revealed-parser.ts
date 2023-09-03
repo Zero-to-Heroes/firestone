@@ -25,7 +25,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 			return currentState;
 		}
 
-		const existingPlayer = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
+		const existingPlayer = currentState.currentGame.findPlayer(event.playerId);
 		const newPlayer =
 			existingPlayer != null
 				? existingPlayer

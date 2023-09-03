@@ -65,6 +65,7 @@ export class BgsHeroSelectedParser implements EventParser {
 						  ] as readonly BgsTavernUpgrade[])
 						: [],
 			  } as BgsPlayer);
+		console.debug('[bgs-hero-selected] new player', newPlayer, currentState.reconnectOngoing);
 		const newGame = currentState.currentGame.update({
 			players: [
 				...currentState.currentGame.players.filter((player) => !player.isMainPlayer),

@@ -19,17 +19,21 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
-		console.debug('[bgs-next-opponent] parsing next opponent', event.cardId);
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(
 			currentState,
 			event.cardId,
 			event.playerId,
 		);
+		console.debug(
+			'[bgs-next-opponent] parsing next opponent',
+			event.cardId,
+			newNextOpponentPanel.opponentOverview?.playerId,
+			newNextOpponentPanel,
+			event,
+		);
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();
-		const opponent = currentState.currentGame.players.find(
-			(player) => player.getNormalizedHeroCardId(this.allCards) === newNextOpponentPanel.opponentOverview?.cardId,
-		);
+		const opponent = currentState.currentGame.findPlayer(newNextOpponentPanel.opponentOverview?.playerId);
 		if (!mainPlayer || !opponent) {
 			return currentState;
 		}
@@ -42,9 +46,9 @@ export class BgsNextOpponentParser implements EventParser {
 
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
-			playerCardId: mainPlayer?.cardId,
 			playerHpLeft: playerHpLeft,
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
+			playerCardId: mainPlayer?.cardId,
 			opponentCardId: opponent?.getNormalizedHeroCardId(this.allCards),
 			opponentPlayerId: opponent?.playerId,
 			opponentHpLeft:
@@ -54,6 +58,7 @@ export class BgsNextOpponentParser implements EventParser {
 				(opponent.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		});
+		console.debug('[bgs-next-opponent] created face-off', faceOff, event);
 		if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH') {
 			console.error(
 				'[bgs-next-opponent] created a face-off with an invalid player card',

@@ -13,7 +13,7 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsLeaderboardPlaceEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find((player) => player.playerId === event.playerId);
+		const playerToUpdate = currentState.currentGame.findPlayer(event.playerId);
 
 		if (!playerToUpdate) {
 			return currentState;
@@ -26,7 +26,7 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 			leaderboardPlace: event.leaderboardPlace,
 		} as BgsPlayer);
 
-		const newGame = currentState.currentGame.updatePlayer(newPlayer, this.allCards);
+		const newGame = currentState.currentGame.updatePlayer(newPlayer);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

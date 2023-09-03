@@ -24,12 +24,13 @@ export class RTStatsBgsFaceOffParser implements EventParser {
 			{
 				turn: currentState.currentTurn,
 				playerCardId: undefined,
+				opponentCardId: normalizeHeroCardId(gameEvent.additionalData.opponent, this.allCards),
 				opponentPlayerId: gameEvent.additionalData.opponentPlayerId,
 				damage: gameEvent.additionalData.damage,
-				opponentCardId: normalizeHeroCardId(gameEvent.additionalData.opponent, this.allCards),
 				result: result,
-			},
+			} as BgsFaceOff,
 		];
+		// console.debug('[rtstats] faceoffs', newFaceOffs)
 		return currentState.update({
 			faceOffs: newFaceOffs,
 			currentWinStreak: currentWinStreak,
