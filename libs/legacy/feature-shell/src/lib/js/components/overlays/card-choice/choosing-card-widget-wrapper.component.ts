@@ -9,6 +9,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -18,7 +19,6 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -120,10 +120,23 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			.listenBattlegrounds$(([state]) => state)
 			.pipe(this.mapData(([state]) => state))
 			.subscribe((state) => {
-				if (state?.currentGame?.hasQuests && !subscribedToQuests) {
-					// Only subscribe to the quests if quests are active, so that we don't get data uselessly
-					this.store.bgsQuests$().subscribe((quests) => bgsQuests$$.next(quests));
-					subscribedToQuests = true;
+				if (!subscribedToQuests) {
+					const hasQuests =
+						state?.currentGame?.hasQuests ||
+						normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards) ===
+							CardIds.SireDenathrius_BG24_HERO_100;
+					// console.debug(
+					// 	'[choosing-card] hasQuests',
+					// 	hasQuests,
+					// 	state?.currentGame?.getMainPlayer()?.cardId,
+					// 	normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards),
+					// 	state?.currentGame?.hasQuests,
+					// );
+					if (hasQuests) {
+						// Only subscribe to the quests if quests are active, so that we don't get data uselessly
+						this.store.bgsQuests$().subscribe((quests) => bgsQuests$$.next(quests));
+						subscribedToQuests = true;
+					}
 				}
 				bgsState$$.next(state);
 			});
@@ -135,7 +148,17 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		]).pipe(
 			this.mapData(([[state], premium, bgsShowQuestStatsOverlay]) => {
 				const options = state.playerDeck?.currentOptions;
-				console.debug('[choosing-card] options', options, state, premium, bgsShowQuestStatsOverlay);
+				// const options = JSON.parse(
+				// 	'[{"entityId":1130,"cardId":"BG24_Quest_151","source":"BG24_QuestsPlayerEnch_t","context":{"DataNum1":-1},"questDifficulty":6,"questReward":{"EntityId":1131,"CardId":"BG24_Reward_363"}},{"entityId":1132,"cardId":"BG24_Quest_352","source":"BG24_QuestsPlayerEnch_t","context":{"DataNum1":-1},"questDifficulty":15,"questReward":{"EntityId":1133,"CardId":"BG24_Reward_309"}},{"entityId":1134,"cardId":"BG24_Quest_311","source":"BG24_QuestsPlayerEnch_t","context":{"DataNum1":-1},"questDifficulty":10,"questReward":{"EntityId":1135,"CardId":"BG24_Reward_350"}}]',
+				// );
+				// console.debug(
+				// 	'[choosing-card] options',
+				// 	options,
+				// 	state,
+				// 	premium,
+				// 	bgsShowQuestStatsOverlay,
+				// 	bgsQuests$$.getValue(),
+				// );
 				return (
 					options
 						?.map((o) => {
@@ -150,7 +173,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 								return result;
 							}
 
-							if (!FeatureFlags.ENABLE_BGS_QUESTS || !premium || !bgsShowQuestStatsOverlay) {
+							if (!premium || !bgsShowQuestStatsOverlay) {
 								return null;
 							}
 
@@ -159,6 +182,13 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 								bgsState$$.getValue(),
 								bgsQuests$$.getValue(),
 								this.allCards,
+							);
+							console.debug(
+								'[choosing-card] optionInfo',
+								optionInfo,
+								o,
+								bgsState$$.getValue(),
+								bgsQuests$$.getValue(),
 							);
 							if (!optionInfo) {
 								console.warn('[choosing-card] could not find option info', o);
@@ -169,8 +199,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 								cardId: o.cardId,
 								entityId: o.entityId,
 								flag: this.buildFlag(o, state),
-								questCompletionTurns: optionInfo.questCompletionTurns.toFixed(1),
-								rewardAveragePosition: optionInfo.rewardAveragePosition.toFixed(2),
+								questCompletionTurns: optionInfo.questCompletionTurns?.toFixed(1),
+								rewardAveragePosition: optionInfo.rewardAveragePosition?.toFixed(2),
 								rewardTier: optionInfo.rewardTier,
 								questTooltip: this.i18n.translateString(
 									'battlegrounds.in-game.quests.turn-to-complete-tooltip',

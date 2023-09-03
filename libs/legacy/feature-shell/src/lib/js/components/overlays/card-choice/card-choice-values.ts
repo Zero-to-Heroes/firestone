@@ -35,7 +35,7 @@ export const buildBgsQuestCardChoiceValue = (
 	const mainPlayerCardId = bgsState?.currentGame?.getMainPlayer()?.cardId;
 
 	// TODO: handle difficulty, MMR, etc.
-	const questStat = bgsQuests.questStats.find((s) => s.questCardId === bgQuestCardId);
+	const questStat = bgsQuests?.questStats.find((s) => s.questCardId === bgQuestCardId);
 	console.debug('questStat', questStat, bgsState?.currentGame?.getMainPlayer());
 	if (!questStat) {
 		return null;
