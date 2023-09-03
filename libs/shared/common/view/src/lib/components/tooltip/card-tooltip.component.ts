@@ -14,11 +14,10 @@ import {
 	AbstractSubscriptionStoreComponent,
 	IPreferences,
 	Store,
-	arraysEqual,
 	groupByFunction,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -62,6 +61,7 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, tap }
 					left: value.relativePosition === 'left',
 					hidden: !value.relativePosition
 				}"
+				[ngStyle]="{ opacity: value.opacity }"
 			>
 				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards?.length > 6 }">
 					<div class="related-cards">
@@ -146,7 +146,7 @@ export class CardTooltipComponent
 	private additionalClass$$ = new BehaviorSubject<string | null>(null);
 	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
-	private opacity$$ = new BehaviorSubject<number>(1);
+	private opacity$$ = new BehaviorSubject<number>(0);
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 
 	private timeout;
@@ -181,6 +181,7 @@ export class CardTooltipComponent
 		setTimeout(() => this.ngAfterViewInit(), 10);
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
+		this.opacity$ = this.opacity$$.asObservable();
 		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
 			this.localized$$.asObservable(),

@@ -164,10 +164,14 @@ export class CardTooltipDirective implements OnDestroy {
 
 		this.positionStrategy.apply();
 
-		await sleep(10);
 		await this.reposition(this.tooltipRef);
+		// await sleep(20);
 		if (this.tooltipRef) {
-			this.tooltipRef.instance.opacity = 1;
+			try {
+				this.tooltipRef.instance.opacity = 1;
+			} catch (e) {
+				console.log('tooltipRef was alredy destroyed when setting opacity for card toltip');
+			}
 		}
 	}
 
@@ -189,7 +193,7 @@ export class CardTooltipDirective implements OnDestroy {
 	}
 
 	private async reposition(tooltipRef) {
-		await sleep(10);
+		await sleep(5);
 		let positionUpdated = true;
 		let previousTooltipLeft = 0;
 		let previousTooltipTop = 0;
@@ -203,7 +207,7 @@ export class CardTooltipDirective implements OnDestroy {
 			positionUpdated = previousTooltipLeft !== tooltipRect.left || previousTooltipTop !== tooltipRect.top;
 			previousTooltipLeft = tooltipRect.left;
 			previousTooltipTop = tooltipRect.top;
-			await sleep(10);
+			await sleep(5);
 		}
 	}
 
