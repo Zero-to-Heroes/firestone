@@ -97,7 +97,7 @@ export class InternalProfileInfoService {
 
 	private initLocalCache() {
 		this.classesProgress$$.subscribe((classProgress) => {
-			console.debug('[profile-info] will update local cache', classProgress);
+			// console.debug('[profile-info] will update local cache', classProgress);
 			if (!!classProgress?.length) {
 				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_CLASSES_PROCESS, classProgress);
 			}
@@ -110,7 +110,7 @@ export class InternalProfileInfoService {
 		}
 
 		this.duelsHeroStats$$.subscribe((duelsHeroStats) => {
-			console.debug('[profile-info] will update local cache', duelsHeroStats);
+			// console.debug('[profile-info] will update local cache', duelsHeroStats);
 			if (!!duelsHeroStats?.length) {
 				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_DUELS_HERO_STATS, duelsHeroStats);
 			}
@@ -161,7 +161,7 @@ export class InternalProfileInfoService {
 			};
 			return result;
 		});
-		console.debug('updating profile info', classProgress);
+		// console.debug('updating profile info', classProgress);
 		if (!!classProgress?.length) {
 			this.classesProgress$$.next(classProgress);
 		}
@@ -221,7 +221,7 @@ export class InternalProfileInfoService {
 							},
 						],
 					};
-					console.debug('built duels hero stats', heroCard.name, result, records);
+					// console.debug('built duels hero stats', heroCard.name, result, records);
 					return result;
 				},
 			);

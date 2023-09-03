@@ -415,7 +415,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			// if (this.state.opponentDeck?.deck.some((c) => c.entityId)) {
 			// 	console.warn(
 			// 		'[game-state] found some cards with known entityIds in opponents deck',
