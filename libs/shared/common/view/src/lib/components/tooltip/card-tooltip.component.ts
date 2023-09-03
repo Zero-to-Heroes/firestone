@@ -14,10 +14,11 @@ import {
 	AbstractSubscriptionStoreComponent,
 	IPreferences,
 	Store,
+	arraysEqual,
 	groupByFunction,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -28,13 +29,15 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 				cards: cards$ | async,
 				relatedCards: relatedCards$ | async,
 				relativePosition: relativePosition$ | async,
-				displayBuffs: displayBuffs$ | async
+				displayBuffs: displayBuffs$ | async,
+				opacity: opacity$ | async
 			} as value"
 		>
 			<div
-				*ngFor="let card of value.cards"
+				*ngFor="let card of value.cards; trackBy: trackByFn"
 				class="card-tooltip {{ card.additionalClass }}"
 				[ngClass]="{ hidden: !value.relativePosition }"
+				[ngStyle]="{ opacity: value.opacity }"
 			>
 				<div *ngIf="card.createdBy" class="created-by">Created by</div>
 				<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
@@ -82,6 +85,7 @@ export class CardTooltipComponent
 	relatedCards$: Observable<readonly InternalCard[]>;
 	relativePosition$: Observable<'left' | 'right'>;
 	displayBuffs$: Observable<boolean>;
+	opacity$: Observable<number>;
 
 	@Input() set cardId(value: string) {
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
@@ -106,6 +110,9 @@ export class CardTooltipComponent
 	}
 	@Input() set displayBuffs(value: boolean) {
 		this.displayBuffs$$.next(value);
+	}
+	@Input() set opacity(value: number) {
+		this.opacity$$.next(value);
 	}
 	@Input() set cardTooltipCard(value: {
 		cardId: string;
@@ -139,6 +146,7 @@ export class CardTooltipComponent
 	private additionalClass$$ = new BehaviorSubject<string | null>(null);
 	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
+	private opacity$$ = new BehaviorSubject<number>(1);
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 
 	private timeout;
@@ -262,6 +270,10 @@ export class CardTooltipComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	trackByFn(index, item: InternalCard) {
+		return item.cardId;
 	}
 }
 

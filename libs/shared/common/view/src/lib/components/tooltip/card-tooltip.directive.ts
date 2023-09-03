@@ -142,6 +142,7 @@ export class CardTooltipDirective implements OnDestroy {
 		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
 		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 		// Pass content to tooltip component instance
+		this.tooltipRef.instance.opacity = 0;
 		this.tooltipRef.instance.additionalClass = this.cardTooltipClass;
 		this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
 			? []
@@ -164,7 +165,10 @@ export class CardTooltipDirective implements OnDestroy {
 		this.positionStrategy.apply();
 
 		await sleep(10);
-		this.reposition(this.tooltipRef);
+		await this.reposition(this.tooltipRef);
+		if (this.tooltipRef) {
+			this.tooltipRef.instance.opacity = 1;
+		}
 	}
 
 	@HostListener('mouseleave')
