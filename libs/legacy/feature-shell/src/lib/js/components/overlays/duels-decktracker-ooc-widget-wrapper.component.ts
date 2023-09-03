@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -63,16 +63,33 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+		// Because on that screen we can have left-over info from the previous run
+		const isOnInitialTreasureSelectScreen$ = this.store
+			.listen$(
+				([main, prefs]) => main?.duels,
+				([main, nav]) => main.currentScene,
+			)
+			.pipe(
+				this.mapData(([duels, currentScene]) => {
+					return currentScene === SceneMode.PVP_DUNGEON_RUN && !!duels.treasureSelection?.treasures?.length;
+				}),
+			);
+		this.showWidget$ = combineLatest([
+			isOnInitialTreasureSelectScreen$,
 			this.store.listenPrefs$((prefs) => prefs.duelsShowOocTracker),
 			this.store.listen$(
 				// Safeguard in case of memory reading failure
 				([main, nav]) => main.currentScene,
 				([main, nav]) => main.duels.isOnDuelsMainScreen,
 			),
-		).pipe(
-			this.mapData(([[displayFromPrefs], [currentScene, isOnMainScreen]]) => {
-				return displayFromPrefs && isOnMainScreen && currentScene === SceneMode.PVP_DUNGEON_RUN;
+		]).pipe(
+			this.mapData(([isOnInitialTreasureSelectScreen, [displayFromPrefs], [currentScene, isOnMainScreen]]) => {
+				return (
+					!isOnInitialTreasureSelectScreen &&
+					displayFromPrefs &&
+					isOnMainScreen &&
+					currentScene === SceneMode.PVP_DUNGEON_RUN
+				);
 			}),
 			this.handleReposition(),
 		);
