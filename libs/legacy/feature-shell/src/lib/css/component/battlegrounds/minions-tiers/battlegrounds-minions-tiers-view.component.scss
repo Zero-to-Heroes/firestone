@@ -146,6 +146,7 @@
 		.icon {
 			position: relative;
 			top: 10%;
+			width: 36px;
 		}
 
 		&.mechanics {
@@ -194,13 +195,39 @@
 				}
 			}
 		}
+
+		&.tribe {
+			border-radius: 50%;
+			overflow: hidden;
+			height: 31px;
+			width: 31px;
+			margin: 2px;
+			margin-right: 6px;
+			position: relative;
+			top: 2px;
+
+			.icon {
+				// clip-path: circle(35% at 50% 50%);
+				transform: scale(1.5);
+			}
+
+			&.selected,
+			&.locked,
+			&:hover {
+				&:before {
+					opacity: 0;
+				}
+				outline: 2px solid var(--color-1);
+			}
+		}
 	}
 }
 
 .minions-list {
 	display: none;
 	max-height: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 
 	&.active {
 		display: flex;

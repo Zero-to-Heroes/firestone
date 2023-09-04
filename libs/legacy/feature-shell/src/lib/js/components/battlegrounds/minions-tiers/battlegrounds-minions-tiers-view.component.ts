@@ -13,6 +13,7 @@ import {
 	NON_DISCOVERABLE_BUDDIES,
 	Race,
 	ReferenceCard,
+	getTribeIcon,
 } from '@firestone-hs/reference-data';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -70,6 +71,21 @@ import { getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bg
 								<div class="number">{{ currentTier.tavernTier }}</div>
 							</div>
 						</ul>
+						<ul class="tiers tribe" *ngIf="!!tribeTiers?.length">
+							<div
+								class="tier {{ currentTier.tavernTier }} tribe"
+								*ngFor="let currentTier of tribeTiers; trackBy: trackByFn"
+								[ngClass]="{
+									selected: displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
+									locked: isLocked(currentTier)
+								}"
+								[helpTooltip]="currentTier.tooltip"
+								(mouseover)="onTavernMouseOver(currentTier)"
+								(click)="onTavernClick(currentTier)"
+							>
+								<img class="icon" [src]="currentTier.tavernTierIcon" />
+							</div>
+						</ul>
 						<bgs-minions-list
 							*ngFor="let tier of allTiers; trackBy: trackByFn"
 							class="minions-list"
@@ -97,6 +113,7 @@ import { getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bg
 export class BattlegroundsMinionsTiersViewOverlayComponent {
 	tierLevels: readonly Tier[] = [];
 	mechanicalTiers: readonly Tier[] = [];
+	tribeTiers: readonly Tier[] = [];
 	allTiers: readonly Tier[] = [];
 
 	@Input() highlightedTribes: readonly Race[];
@@ -117,7 +134,9 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 		}
 		this.tierLevels = value.filter((t) => t.type === 'standard');
 		this.mechanicalTiers = value.filter((t) => t.type === 'mechanics');
-		this.allTiers = [...this.tierLevels, ...this.mechanicalTiers];
+		this.tribeTiers = value.filter((t) => t.type === 'tribe');
+		this.allTiers = [...this.tierLevels, ...this.mechanicalTiers, ...this.tribeTiers];
+		// console.debug('allTiers', this.allTiers);
 	}
 
 	@Input() set tavernTier(value: number) {
@@ -188,11 +207,12 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 }
 
 export interface Tier {
-	tavernTier: number | 'B' | 'D' | 'DS' | 'T' | 'E' | 'R' | 'Buds';
+	tavernTier: number | 'B' | 'D' | 'DS' | 'T' | 'E' | 'R' | 'Buds' | string;
+	tavernTierIcon?: string;
 	cards: readonly ExtendedReferenceCard[];
 	groupingFunction: (card: ExtendedReferenceCard) => readonly string[];
 	tooltip?: string;
-	type: 'standard' | 'mechanics';
+	type: 'standard' | 'mechanics' | 'tribe';
 }
 
 export interface ExtendedReferenceCard extends ReferenceCard {
@@ -203,6 +223,7 @@ export const buildTiers = (
 	cardsInGame: readonly ReferenceCard[],
 	groupMinionsIntoTheirTribeGroup: boolean,
 	showMechanicsTiers: boolean,
+	showTribeTiers: boolean,
 	availableTribes: readonly Race[],
 	anomalies: readonly string[],
 	playerCardId: string,
@@ -230,15 +251,6 @@ export const buildTiers = (
 	}
 	console.debug('tiersToInclude', tiersToInclude, anomalies, playerCardId);
 
-	// Add a tier with all the buddies
-	const showBuddies =
-		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
-		playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
-		(hasBuddies &&
-			[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
-				playerCardId as CardIds,
-			));
-
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 		.filter((card) => tiersToInclude.includes(card.techLevel))
 		.map((card) =>
@@ -249,10 +261,39 @@ export const buildTiers = (
 				  }
 				: card,
 		);
-	// .filter((card) => !isCardExcludedByAnomaly(card, anomalies));
 	const groupedByTier: { [tierLevel: string]: readonly ExtendedReferenceCard[] } = groupByFunction(
 		(card: ExtendedReferenceCard) => '' + card.techLevel,
 	)(filteredCards);
+
+	// Add a tier with all the buddies
+	const showBuddies =
+		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
+		playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
+		(hasBuddies &&
+			[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+				playerCardId as CardIds,
+			));
+	const allBuddies = allCards
+		.getCards()
+		.filter((c) => !!c.techLevel)
+		.filter((c) => !!c.battlegroundsPremiumDbfId)
+		.filter((card) => card.set !== 'Vanilla')
+		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+	const buddies: readonly ReferenceCard[] = !showBuddies
+		? []
+		: playerCardId === CardIds.ETCBandManager_BG25_HERO_105
+		? allBuddies
+				.filter((b) => !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds))
+				.filter(
+					(b) =>
+						!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
+						availableTribes.includes(BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe),
+				)
+		: [CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+				playerCardId as CardIds,
+		  )
+		? allPlayerCardIds.map((p) => getBuddy(p as CardIds, allCards)).map((b) => allCards.getCard(b))
+		: [];
 	const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 		tavernTier: parseInt(tierLevel),
 		cards: groupedByTier[tierLevel],
@@ -266,28 +307,56 @@ export const buildTiers = (
 			),
 		type: 'standard',
 	}));
-	const mechanicsTiers = showMechanicsTiers
-		? buildMechanicsTiers(
+	const mechanicsTiers = showMechanicsTiers ? buildMechanicsTiers(filteredCards, buddies, i18n) : [];
+	const tribeTiers = showTribeTiers
+		? buildTribeTiers(
 				filteredCards,
 				playerCardId,
 				availableTribes,
-				showBuddies,
-				allPlayerCardIds,
+				buddies,
+				groupMinionsIntoTheirTribeGroup,
 				i18n,
 				allCards,
 		  )
 		: [];
-	return [...standardTiers, ...mechanicsTiers];
+	return [...standardTiers, ...mechanicsTiers, ...tribeTiers];
+};
+
+const buildTribeTiers = (
+	cardsInGame: readonly ExtendedReferenceCard[],
+	playerCardId: string,
+	availableTribes: readonly Race[],
+	allBuddies: readonly ExtendedReferenceCard[],
+	groupMinionsIntoTheirTribeGroup: boolean,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	allCards: CardsFacadeService,
+): readonly Tier[] => {
+	const allTribes: readonly Race[] = [
+		...new Set(
+			cardsInGame
+				.flatMap((card) => card.races ?? [])
+				.filter((t) => t !== Race[Race.ALL] && availableTribes.includes(Race[t])),
+		),
+	].map((t) => Race[t]);
+	return allTribes.map((tribe: Race) => {
+		const cardsForTribe = cardsInGame.filter((c) =>
+			getEffectiveTribes(c, groupMinionsIntoTheirTribeGroup)?.includes(Race[tribe]),
+		);
+		return {
+			tavernTier: tribe,
+			tavernTierIcon: getTribeIcon(tribe),
+			tooltip: i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`),
+			cards: cardsForTribe,
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			type: 'tribe',
+		};
+	});
 };
 
 const buildMechanicsTiers = (
 	cardsInGame: readonly ExtendedReferenceCard[],
-	playerCardId: string,
-	availableTribes: readonly Race[],
-	hasBuddies: boolean,
-	allPlayerCardIds: readonly string[],
+	allBuddies: readonly ExtendedReferenceCard[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-	allCards: CardsFacadeService,
 ): readonly Tier[] => {
 	const mechanicalTiers: Tier[] = [
 		{
@@ -348,32 +417,10 @@ const buildMechanicsTiers = (
 			type: 'mechanics',
 		},
 	];
-	if (hasBuddies) {
-		const allBuddies = allCards
-			.getCards()
-			.filter((c) => !!c.techLevel)
-			.filter((c) => !!c.battlegroundsPremiumDbfId)
-			.filter((card) => card.set !== 'Vanilla')
-			.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
-		const buddies: readonly ReferenceCard[] =
-			playerCardId === CardIds.ETCBandManager_BG25_HERO_105
-				? allBuddies
-						.filter((b) => !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds))
-						.filter(
-							(b) =>
-								!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
-								availableTribes.includes(
-									BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe,
-								),
-						)
-				: [CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
-						playerCardId as CardIds,
-				  )
-				? allPlayerCardIds.map((p) => getBuddy(p as CardIds, allCards)).map((b) => allCards.getCard(b))
-				: [];
+	if (allBuddies.length) {
 		mechanicalTiers.push({
 			tavernTier: 'Buds',
-			cards: buddies,
+			cards: allBuddies,
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
 			type: 'mechanics',

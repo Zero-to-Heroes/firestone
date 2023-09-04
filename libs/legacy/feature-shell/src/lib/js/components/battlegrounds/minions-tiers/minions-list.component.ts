@@ -58,6 +58,7 @@ export class BattlegroundsMinionsListComponent
 		this.uuid = value.tavernTier + '-' + value.type;
 		this.cards$$.next(value.cards.filter((c) => !!c));
 		this.groupingFunction$$.next(value.groupingFunction);
+		// console.debug('setting tier', value);
 	}
 
 	@Input() set groupingFunction(value: (card: ExtendedReferenceCard) => readonly string[]) {

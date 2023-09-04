@@ -81,6 +81,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.tiers$ = combineLatest([
 			this.store.listenPrefs$(
 				(prefs) => prefs.bgsShowMechanicsTiers,
+				(prefs) => prefs.bgsShowTribeTiers,
 				(prefs) => prefs.bgsGroupMinionsIntoTheirTribeGroup,
 			),
 			this.store.listenBattlegrounds$(
@@ -93,7 +94,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		]).pipe(
 			this.mapData(
 				([
-					[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup],
+					[showMechanicsTiers, showTribeTiers, bgsGroupMinionsIntoTheirTribeGroup],
 					[races, hasBuddies, anomalies, playerCardId, allPlayersCardIds],
 				]) => {
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
@@ -106,6 +107,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						cardsToIncludes,
 						bgsGroupMinionsIntoTheirTribeGroup,
 						showMechanicsTiers,
+						showTribeTiers,
 						races,
 						anomalies,
 						normalizedCardId,

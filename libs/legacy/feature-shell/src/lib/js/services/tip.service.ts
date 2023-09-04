@@ -134,6 +134,12 @@ export class TipService {
 			text: this.i18n.translateString('app.tips.minion_auto_highlight'),
 			premium: true,
 		},
+		{
+			file: 'minions_list_by_tribe.jpg',
+			type: 'image',
+			text: this.i18n.translateString('app.tips.minions_list_by_tribe'),
+			premium: false,
+		},
 	];
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
