@@ -1744,5 +1744,8 @@
 	},
 	"currentTurn": 14,
 	"inGame": true,
-	"availableRaces": [14, 15, 17, 18, 20]
+	"availableRaces": [14, 15, 17, 18, 20],
+	"config": {
+		"anomalies": ["BG27_Anomaly_000"]
+	}
 }

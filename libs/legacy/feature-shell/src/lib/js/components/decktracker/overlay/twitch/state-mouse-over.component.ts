@@ -41,14 +41,14 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					></div>
 				</div>
 			</ul>
-			<!-- <div class="bgs-anomaly" *ngIf="bgsAnomaly">
+			<div class="bgs-anomaly" *ngIf="bgsAnomaly">
 				<empty-card
 					class="anomaly"
 					[cardId]="bgsAnomaly"
 					[cardTooltipPosition]="'left'"
 					[cardTooltipBgs]="isBgs"
 				></empty-card>
-			</div> -->
+			</div>
 			<ul class="hero top-hero">
 				<div class="weapon">
 					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>

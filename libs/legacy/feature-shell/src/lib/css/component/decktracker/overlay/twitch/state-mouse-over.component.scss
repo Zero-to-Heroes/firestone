@@ -53,14 +53,15 @@ empty-card {
 
 .bgs-anomaly {
 	position: absolute;
-	right: 0;
+	right: 26vh;
+	height: 100%;
 	width: 10vh;
 	display: flex;
-	justify-content: center;
-	align-items: center;
 
 	.anomaly {
-		width: 100%;
+		width: 10vh;
+		height: 10vh;
+		top: 32vh;
 	}
 }
 
@@ -186,10 +187,10 @@ empty-card {
 
 .bgs-leaderboard {
 	position: absolute;
-	height: 73%;
-	width: 7%;
-	left: 15%;
-	top: 14%;
+	height: 73vh;
+	width: 12.5vh;
+	left: 26.5vh;
+	top: 14vh;
 	display: flex;
 	flex-direction: column;
 	z-index: 1;

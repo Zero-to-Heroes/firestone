@@ -132,12 +132,15 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	async ngAfterViewInit() {
+		console.debug('after view init in container');
 		super.listenForResize();
 		if (!(window as any).Twitch) {
+			console.debug('wait for Twitch script');
 			setTimeout(() => this.ngAfterViewInit(), 500);
 			return;
 		}
 
+		console.debug('waiting for cards to init');
 		await this.allCards.init(new AllCardsService(), 'enUS');
 		this.translate.setDefaultLang('enUS');
 		this.twitch = (window as any).Twitch.ext;
