@@ -29,7 +29,7 @@ import { IOption } from 'ng-select';
 			<ng-template #optionTemplate let-option="option">
 				<img class="image" *ngIf="option.image" [src]="option.image" />
 				<span
-					[helpTooltip]="option.label"
+					[helpTooltip]="option.tooltip ?? option.label"
 					[ngClass]="{ unselectable: option?.unselectable }"
 					[innerHTML]="option?.label"
 				></span>

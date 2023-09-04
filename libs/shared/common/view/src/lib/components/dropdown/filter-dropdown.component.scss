@@ -99,6 +99,7 @@ ng-select.disabled {
 		& > div .options {
 			max-height: 350px;
 			width: fit-content;
+			min-width: 100%;
 			max-width: 500px;
 			background: var(--color-7);
 			border: 1px solid var(--secondary-text-color);
