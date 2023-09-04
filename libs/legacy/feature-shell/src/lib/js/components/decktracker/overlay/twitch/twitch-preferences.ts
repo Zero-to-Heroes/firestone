@@ -1,4 +1,5 @@
 export class TwitchPreferences {
+	readonly locale: string = 'auto';
 	readonly adaptativeScaling: boolean = true;
 	readonly scale: number = 100;
 	readonly showHeroCards: boolean = true;

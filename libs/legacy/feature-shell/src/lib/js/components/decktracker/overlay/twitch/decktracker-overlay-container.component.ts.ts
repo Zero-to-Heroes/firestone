@@ -15,7 +15,7 @@ import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-sta
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
-import { Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import { DeckCard } from '../../../../models/decktracker/deck-card';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Preferences } from '../../../../models/preferences';
@@ -24,6 +24,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
+import { mapTwitchLanguageToHsLocale } from './twitch-config-widget.component';
 
 @Component({
 	selector: 'decktracker-overlay-container',
@@ -35,6 +36,7 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 	template: `
 		<div
 			class="container drag-boundary overlay-container-parent"
+			*ngIf="baseInitDone$ | async"
 			[ngClass]="{
 				'battlegrounds-theme': currentDisplayMode === 'battlegrounds',
 				'decktracker-theme': currentDisplayMode === 'decktracker'
@@ -79,6 +81,7 @@ export class DeckTrackerOverlayContainerComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterViewInit, AfterContentInit
 {
+	baseInitDone$: Observable<boolean>;
 	showMinionsList$: Observable<boolean>;
 	showBattleSimulator$: Observable<boolean>;
 	hideSimulatorWhenEmpty$: Observable<boolean>;
@@ -103,6 +106,8 @@ export class DeckTrackerOverlayContainerComponent
 	private token: string;
 	private localeInit: boolean;
 
+	private baseInitDone$$ = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		protected readonly prefs: TwitchPreferencesService,
@@ -116,6 +121,7 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	ngAfterContentInit(): void {
+		this.baseInitDone$ = this.baseInitDone$$.asObservable();
 		this.showMinionsList$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsList),
 		);
@@ -145,23 +151,31 @@ export class DeckTrackerOverlayContainerComponent
 			return;
 		}
 
-		console.debug('waiting for cards to init');
-		await this.allCards.init(new AllCardsService(), 'enUS');
+		this.localeInit = false;
 		this.translate.setDefaultLang('enUS');
+		const prefs = this.prefs.prefs.getValue();
+		const localeFromPrefs = prefs.locale ?? 'auto';
+		console.log('search params', window.location.search);
+		const queryLanguage =
+			localeFromPrefs === 'auto' ? new URLSearchParams(window.location.search).get('language') : localeFromPrefs;
+		const locale = mapTwitchLanguageToHsLocale(queryLanguage);
+		console.log('mapped to HS locale', locale);
+
+		console.debug('waiting for cards to init');
+		await this.allCards.init(new AllCardsService(), locale);
+		console.debug('cards init done');
+
+		await this.i18n.setLocale(locale);
+		await this.translate.use(locale).toPromise();
+		this.localeInit = true;
+		console.log('finished setting up locale', locale, this.i18n);
+		this.baseInitDone$$.next(true);
+
 		this.twitch = (window as any).Twitch.ext;
 		this.twitch.onAuthorized(async (auth) => {
-			this.localeInit = false;
 			console.log('on authorized', auth);
 			this.token = auth.token;
 			console.log('set token', this.token);
-			console.log('search params', window.location.search);
-			const queryLanguage = new URLSearchParams(window.location.search).get('language');
-			const language = mapTwitchLanguageToHsLocale(queryLanguage);
-			console.log('mapped to HS locale', language);
-			await this.i18n.setLocale(language);
-			console.log('finished setting up locale', language, this.i18n);
-			await this.translate.use(language).toPromise();
-			this.localeInit = true;
 			this.twitch.listen('broadcast', async (target, contentType, event) => {
 				await this.waitForLocaleInit();
 				const deckEvent: TwitchEvent = JSON.parse(inflate(event, { to: 'string' }));
@@ -316,26 +330,3 @@ export class DeckTrackerOverlayContainerComponent
 		});
 	}
 }
-
-const mapTwitchLanguageToHsLocale = (twitchLanguage: string): string => {
-	const mapping = {
-		de: 'deDE',
-		en: 'enUS',
-		'en-gb': 'enUS',
-		es: 'esES',
-		'es-mx': 'esMX',
-		fr: 'frFR',
-		it: 'itIT',
-		ja: 'jaJP',
-		ko: 'koKR',
-		pl: 'plPL',
-		pt: 'ptBR',
-		'pt-br': 'ptBR',
-		ru: 'ruRU',
-		th: 'thTH',
-		'zh-cn': 'zhCN',
-		'zh-tw': 'zhTW',
-	};
-	const hsLocale = mapping[twitchLanguage] ?? 'enUS';
-	return hsLocale;
-};

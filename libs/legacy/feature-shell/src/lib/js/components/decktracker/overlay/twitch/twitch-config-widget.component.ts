@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { TwitchPreferences } from '@components/decktracker/overlay/twitch/twitch-preferences';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable, from } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DropdownOption } from '../../../settings/dropdown.component';
@@ -23,6 +24,15 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 		<!-- Don't add scalable class so that the root element itself is scaled -->
 		<div class="twitch-config-widget">
 			<div class="settings" *ngIf="prefs$ | async as prefs">
+				<dropdown
+					class="item"
+					[options]="languageOptions"
+					[label]="'twitch.language' | owTranslate"
+					[disabled]="!prefs.showBattleSimulator"
+					[value]="prefs.locale"
+					(valueChanged)="onLocaleChanged(prefs, $event)"
+				>
+				</dropdown>
 				<checkbox
 					class="item"
 					[label]="'twitch.adaptative-scaling' | owTranslate"
@@ -175,16 +185,80 @@ export class TwitchConfigWidgetComponent
 	autoTrueFalseOptions: DropdownOption[] = [
 		{
 			value: null,
-			label: 'Auto',
-			tooltip: 'Use streamer defaults',
+			label: this.i18n.translateString('twitch.options.auto'),
+			tooltip: this.i18n.translateString('twitch.options.auto-tooltip'),
 		},
 		{
 			value: 'true',
-			label: 'Yes',
+			label: this.i18n.translateString('twitch.options.true'),
 		},
 		{
 			value: 'false',
-			label: 'No',
+			label: this.i18n.translateString('twitch.options.false'),
+		},
+	];
+
+	languageOptions: DropdownOption[] = [
+		{
+			value: 'auto',
+			label: this.i18n.translateString('twitch.language-auto'),
+			tooltip: this.i18n.translateString('twitch.language-auto-tooltip'),
+		},
+		{
+			value: 'deDE',
+			label: 'Deutsch',
+		},
+		{
+			value: 'enUS',
+			label: 'English',
+		},
+		{
+			value: 'esES',
+			label: 'Espa\u00f1ol (EU)',
+		},
+		{
+			value: 'esMX',
+			label: 'Espa\u00f1ol (AL)',
+		},
+		{
+			value: 'frFR',
+			label: 'Fran\u00e7ais',
+		},
+		{
+			value: 'itIT',
+			label: 'Italiano',
+		},
+		{
+			value: 'jaJP',
+			label: '\u65e5\u672c\u8a9e',
+		},
+		{
+			value: 'koKR',
+			label: '\ud55c\uad6d\uc5b4',
+		},
+		{
+			value: 'plPL',
+			label: 'Polski',
+		},
+		{
+			value: 'ptBR',
+			label: 'Portugu\u00eas (BR)',
+		},
+		{
+			value: 'ruRU',
+			label: '\u0420\u0443\u0441\u0441\u043a\u0438\u0439',
+		},
+		{
+			value: 'thTH',
+			label: '\u0e44\u0e17\u0e22',
+		},
+		{
+			value: 'zhCN',
+			label: '\u7b80\u4f53\u4e2d\u6587',
+		},
+		{
+			value: 'zhTW',
+			label: '\u7e41\u9ad4\u4e2d\u6587',
 		},
 	];
 
@@ -193,6 +267,7 @@ export class TwitchConfigWidgetComponent
 		protected readonly prefs: TwitchPreferencesService,
 		protected readonly el: ElementRef,
 		protected readonly renderer: Renderer2,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(cdr, prefs, el, renderer);
 		super.minScale = 0.7;
@@ -205,6 +280,18 @@ export class TwitchConfigWidgetComponent
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
+	}
+
+	onLocaleChanged(prefs: TwitchPreferences, value: string) {
+		const newPrefs: TwitchPreferences = { ...prefs, locale: value };
+		console.log('changing locale pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+
+		const queryLanguage =
+			newPrefs.locale === 'auto' ? new URLSearchParams(window.location.search).get('language') : newPrefs.locale;
+		const locale = mapTwitchLanguageToHsLocale(queryLanguage);
+		console.debug('will set locale', locale);
+		this.i18n.setLocale(locale);
 	}
 
 	onAdaptativeScalingChanged(prefs: TwitchPreferences, value: boolean) {
@@ -291,3 +378,29 @@ export class TwitchConfigWidgetComponent
 		this.prefs.savePrefs(newPrefs);
 	}
 }
+
+export const mapTwitchLanguageToHsLocale = (twitchLanguage: string): string => {
+	const mapping = {
+		de: 'deDE',
+		en: 'enUS',
+		'en-gb': 'enUS',
+		es: 'esES',
+		'es-mx': 'esMX',
+		fr: 'frFR',
+		it: 'itIT',
+		ja: 'jaJP',
+		ko: 'koKR',
+		pl: 'plPL',
+		pt: 'ptBR',
+		'pt-br': 'ptBR',
+		ru: 'ruRU',
+		th: 'thTH',
+		'zh-cn': 'zhCN',
+		'zh-tw': 'zhTW',
+	};
+	if (Object.values(mapping).indexOf(twitchLanguage) !== -1) {
+		return twitchLanguage;
+	}
+	const hsLocale = mapping[twitchLanguage] ?? 'enUS';
+	return hsLocale;
+};
