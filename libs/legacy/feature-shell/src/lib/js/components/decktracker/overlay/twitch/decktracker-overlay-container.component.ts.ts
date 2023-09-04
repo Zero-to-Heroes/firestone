@@ -66,6 +66,7 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 					[anomalies]="bgsState.config?.anomalies"
 					[playerCardId]="getMainPlayerCardId(bgsState)"
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
+					[showTribeTiers]="showTribeTiers$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 				></battlegrounds-minions-tiers-twitch>
 			</ng-container>
@@ -82,6 +83,7 @@ export class DeckTrackerOverlayContainerComponent
 	showBattleSimulator$: Observable<boolean>;
 	hideSimulatorWhenEmpty$: Observable<boolean>;
 	showMechanicsTiers$: Observable<boolean>;
+	showTribeTiers$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
 
 	inGameplay: boolean;
@@ -125,6 +127,9 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.showMechanicsTiers$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowMechanicsTiers),
+		);
+		this.showTribeTiers$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsShowTribeTiers),
 		);
 		this.groupMinionsIntoTheirTribeGroup$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsGroupMinionsIntoTheirTribeGroup),

@@ -99,6 +99,16 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 						></checkbox>
 						<checkbox
 							class="item indented"
+							[label]="'settings.battlegrounds.overlay.minions-list-show-tribe-tiers-label' | owTranslate"
+							[labelTooltip]="
+								'settings.battlegrounds.overlay.minions-list-show-tribe-tiers-tooltip' | owTranslate
+							"
+							[disabled]="!prefs.showMinionsList"
+							[value]="prefs.bgsShowTribeTiers"
+							(valueChanged)="onShowTribeTiersChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
 							[label]="
 								'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'
 									| owTranslate
@@ -242,6 +252,12 @@ export class TwitchConfigWidgetComponent
 	onShowMechanisTiersChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, bgsShowMechanicsTiers: value };
 		console.log('changing bgsShowMechanicsTiers pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowTribeTiersChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTribeTiers: value };
+		console.log('changing bgsShowTribeTiers pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

@@ -11,5 +11,6 @@ export class TwitchPreferences {
 	readonly hideBattleOddsInTavern: 'auto' | 'true' | 'false' = 'auto';
 	readonly hideBattleOddsWhenEmpty: boolean = false;
 	readonly bgsShowMechanicsTiers: boolean = false;
+	readonly bgsShowTribeTiers: boolean = false;
 	readonly bgsGroupMinionsIntoTheirTribeGroup: boolean = false;
 }
