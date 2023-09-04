@@ -11,12 +11,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { getAllCardsInGame, getEffectiveTribes } from '@services/battlegrounds/bgs-utils';
+import { CardIds, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { groupByFunction } from '@services/utils';
-import { BehaviorSubject, from, Observable } from 'rxjs';
-import { Tier } from '../../../battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
+import { getAllCardsInGame, getBuddy } from '@services/battlegrounds/bgs-utils';
+import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
+import { Tier, buildTiers } from '../../../battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
@@ -50,15 +50,39 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	currentTurn$: Observable<number>;
 	showGoldenCards$: Observable<boolean>;
 
-	_availableRaces = new BehaviorSubject<readonly Race[]>([]);
-	_currentTurn = new BehaviorSubject<number>(null);
-
 	@Input() set availableRaces(value: readonly Race[]) {
-		this._availableRaces.next(value);
+		this.availableRaces$$.next(value ?? []);
 	}
 	@Input() set currentTurn(value: number) {
-		this._currentTurn.next(value);
+		this.currentTurn$$.next(value);
 	}
+	@Input() set hasBuddies(value: boolean) {
+		this.hasBuddies$$.next(value);
+	}
+	@Input() set anomalies(value: readonly string[]) {
+		this.anomalies$$.next(value ?? []);
+	}
+	@Input() set playerCardId(value: string) {
+		this.playerCardId$$.next(value);
+	}
+	@Input() set allPlayerCardIds(value: readonly string[]) {
+		this.allPlayerCardIds$$.next(value ?? []);
+	}
+	@Input() set showMechanicsTiers(value: boolean) {
+		this.showMechanicsTiers$$.next(value);
+	}
+	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
+		this.groupMinionsIntoTheirTribeGroup$$.next(value);
+	}
+
+	private availableRaces$$ = new BehaviorSubject<readonly Race[]>([]);
+	private currentTurn$$ = new BehaviorSubject<number>(null);
+	private hasBuddies$$ = new BehaviorSubject<boolean>(false);
+	private anomalies$$ = new BehaviorSubject<readonly string[]>([]);
+	private playerCardId$$ = new BehaviorSubject<string>(null);
+	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
+	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
+	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -66,19 +90,54 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		protected readonly el: ElementRef,
 		protected readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(cdr, prefs, el, renderer);
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = this._availableRaces.asObservable().pipe(
-			this.mapData((races) => {
-				const cardsInGame = getAllCardsInGame(races, this.allCards);
-				const result = this.buildTiers(cardsInGame);
-				return result;
-			}),
+		this.tiers$ = combineLatest([
+			this.availableRaces$$,
+			this.hasBuddies$$,
+			this.anomalies$$,
+			this.playerCardId$$,
+			this.allPlayerCardIds$$,
+			this.showMechanicsTiers$$,
+			this.groupMinionsIntoTheirTribeGroup$$,
+		]).pipe(
+			this.mapData(
+				([
+					races,
+					hasBuddies,
+					anomalies,
+					playerCardId,
+					allPlayersCardIds,
+					showMechanicsTiers,
+					bgsGroupMinionsIntoTheirTribeGroup,
+				]) => {
+					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
+					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
+					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
+					const cardsInGame = getAllCardsInGame(races, this.allCards);
+					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
+					const result = buildTiers(
+						cardsToIncludes,
+						bgsGroupMinionsIntoTheirTribeGroup,
+						showMechanicsTiers,
+						races,
+						anomalies,
+						normalizedCardId,
+						allPlayerCardIds,
+						hasBuddies,
+						this.i18n,
+						this.allCards,
+					);
+					return result;
+				},
+			),
 		);
-		this.currentTurn$ = this._currentTurn.asObservable().pipe(this.mapData((currentTurn) => currentTurn));
+		this.currentTurn$ = this.currentTurn$$.asObservable().pipe(this.mapData((currentTurn) => currentTurn));
 		this.showGoldenCards$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsListGoldenCards),
 		);
@@ -98,21 +157,5 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private buildTiers(cardsInGame: readonly ReferenceCard[]): readonly Tier[] {
-		if (!cardsInGame?.length) {
-			return [];
-		}
-
-		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
-			(card: ReferenceCard) => '' + card.techLevel,
-		)(cardsInGame);
-		return Object.keys(groupedByTier).map((tierLevel) => ({
-			tavernTier: parseInt(tierLevel),
-			cards: groupedByTier[tierLevel],
-			groupingFunction: (card: ReferenceCard) => getEffectiveTribes(card, false),
-			type: 'standard',
-		}));
 	}
 }

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { TwitchPreferences } from '@components/decktracker/overlay/twitch/twitch-preferences';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { from, Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DropdownOption } from '../../../settings/dropdown.component';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
@@ -84,6 +84,32 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 							[disabled]="!prefs.showMinionsList"
 							[value]="prefs.showMinionsListGoldenCards"
 							(valueChanged)="onShowMinionsListGoldenCardsChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
+							[label]="
+								'settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-label' | owTranslate
+							"
+							[labelTooltip]="
+								'settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-tooltip' | owTranslate
+							"
+							[disabled]="!prefs.showMinionsList"
+							[value]="prefs.bgsShowMechanicsTiers"
+							(valueChanged)="onShowMechanisTiersChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
+							[label]="
+								'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'
+									| owTranslate
+							"
+							[labelTooltip]="
+								'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-tooltip'
+									| owTranslate
+							"
+							[disabled]="!prefs.showMinionsList"
+							[value]="prefs.bgsGroupMinionsIntoTheirTribeGroup"
+							(valueChanged)="onGroupMinionsIntoTheirTribesChanged(prefs, $event)"
 						></checkbox>
 					</div>
 					<div class="group">
@@ -210,6 +236,18 @@ export class TwitchConfigWidgetComponent
 	onShowMinionsListGoldenCardsChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showMinionsListGoldenCards: value };
 		console.log('changing showMinionsListGoldenCards pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowMechanisTiersChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, bgsShowMechanicsTiers: value };
+		console.log('changing bgsShowMechanicsTiers pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onGroupMinionsIntoTheirTribesChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, bgsGroupMinionsIntoTheirTribeGroup: value };
+		console.log('changing bgsGroupMinionsIntoTheirTribeGroup pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

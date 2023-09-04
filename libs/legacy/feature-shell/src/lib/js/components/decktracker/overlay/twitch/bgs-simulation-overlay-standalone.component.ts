@@ -10,7 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { Preferences } from '../../../../models/preferences';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
@@ -92,11 +92,11 @@ export class BgsSimulationOverlayStandaloneComponent
 			this.mapData(([prefs, battleState, phase, streamerPrefs]) => {
 				const hideBattleOddsInCombat: boolean =
 					prefs.hideBattleOddsInCombat == null
-						? streamerPrefs.bgsShowSimResultsOnlyOnRecruit
+						? streamerPrefs?.bgsShowSimResultsOnlyOnRecruit
 						: prefs.hideBattleOddsInCombat === 'true';
 				const hideBattleOddsInTavern: boolean =
 					prefs.hideBattleOddsInTavern == null
-						? streamerPrefs.bgsHideSimResultsOnRecruit
+						? streamerPrefs?.bgsHideSimResultsOnRecruit
 						: prefs.hideBattleOddsInTavern === 'true';
 				if (hideBattleOddsInCombat && phase === 'combat') {
 					return null;

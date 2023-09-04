@@ -2,12 +2,20 @@ import { Injectable } from '@angular/core';
 import { arraysEqual, PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { distinctUntilChanged, filter, map, Observable } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable } from 'rxjs';
 
 @Injectable()
 export class TwitchStoreService extends Store<Preferences> {
 	constructor(private readonly prefs: PreferencesService) {
 		super();
+	}
+
+	async initComplete(): Promise<void> {
+		return;
+	}
+
+	enablePremiumFeatures$(): Observable<boolean> {
+		return new BehaviorSubject<boolean>(true).asObservable();
 	}
 
 	listenPrefs$<S extends PrefsSelector<Preferences, any>[]>(

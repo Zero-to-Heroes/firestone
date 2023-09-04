@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Map } from 'immutable';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
@@ -41,6 +41,14 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					></div>
 				</div>
 			</ul>
+			<!-- <div class="bgs-anomaly" *ngIf="bgsAnomaly">
+				<empty-card
+					class="anomaly"
+					[cardId]="bgsAnomaly"
+					[cardTooltipPosition]="'left'"
+					[cardTooltipBgs]="isBgs"
+				></empty-card>
+			</div> -->
 			<ul class="hero top-hero">
 				<div class="weapon">
 					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
@@ -135,6 +143,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 		this._bgsState = value;
 		this.bgsPlayers = this._bgsState?.leaderboard;
 		this.currentTurn = this._bgsState?.currentTurn;
+		this.bgsAnomaly = this._bgsState?.config?.anomalies?.[0];
 		this.isBgs =
 			!!this._bgsState && !!this.bgsPlayers?.length && this._bgsState?.inGame && !this._bgsState?.gameEnded;
 		// console.log('isBgs', this.isBgs, this._bgsState, this.bgsPlayers);
@@ -186,6 +195,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	bottomSecretCards: readonly string[];
 	bottomHandCards: readonly string[];
 	bgsPlayers: readonly TwitchBgsPlayer[];
+	bgsAnomaly: string;
 	currentTurn: number;
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();

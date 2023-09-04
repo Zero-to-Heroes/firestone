@@ -141,10 +141,10 @@ export class LeaderboardEmptyCardComponent {
 
 		const buddyImageRoot = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images`;
 		this.buddyImage =
-			this._previousPlayer.buddyTurns.length > 1
+			this._previousPlayer.buddyTurns?.length > 1
 				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
 				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
-		this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
+		this.buddyClass = this._previousPlayer.buddyTurns?.length === 0 ? 'missing' : '';
 	}
 
 	private extractBoardHistory(): readonly BgsBoard[] {

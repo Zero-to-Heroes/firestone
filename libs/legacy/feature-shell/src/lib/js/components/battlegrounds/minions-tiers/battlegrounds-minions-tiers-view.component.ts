@@ -6,7 +6,17 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	BUDDIES_TRIBE_REQUIREMENTS,
+	CardIds,
+	GameTag,
+	NON_DISCOVERABLE_BUDDIES,
+	Race,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
+import { groupByFunction } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-view',
@@ -188,3 +198,266 @@ export interface Tier {
 export interface ExtendedReferenceCard extends ReferenceCard {
 	readonly banned?: boolean;
 }
+
+export const buildTiers = (
+	cardsInGame: readonly ReferenceCard[],
+	groupMinionsIntoTheirTribeGroup: boolean,
+	showMechanicsTiers: boolean,
+	availableTribes: readonly Race[],
+	anomalies: readonly string[],
+	playerCardId: string,
+	allPlayerCardIds: readonly string[],
+	hasBuddies: boolean,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	allCards: CardsFacadeService,
+): readonly Tier[] => {
+	if (!cardsInGame?.length) {
+		return [];
+	}
+
+	let tiersToInclude = [1, 2, 3, 4, 5, 6];
+	if (
+		anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
+		playerCardId === CardIds.ThorimStormlord_BG27_HERO_801
+	) {
+		tiersToInclude.push(7);
+	}
+	if (anomalies.includes(CardIds.BigLeague_BG27_Anomaly_100)) {
+		tiersToInclude = [3, 4, 5, 6];
+	}
+	if (anomalies.includes(CardIds.LittleLeague_BG27_Anomaly_800)) {
+		tiersToInclude = [1, 2, 3, 4];
+	}
+	console.debug('tiersToInclude', tiersToInclude, anomalies, playerCardId);
+
+	// Add a tier with all the buddies
+	const showBuddies =
+		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
+		playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
+		(hasBuddies &&
+			[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+				playerCardId as CardIds,
+			));
+
+	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
+		.filter((card) => tiersToInclude.includes(card.techLevel))
+		.map((card) =>
+			isCardExcludedByAnomaly(card, anomalies)
+				? {
+						...card,
+						banned: true,
+				  }
+				: card,
+		);
+	// .filter((card) => !isCardExcludedByAnomaly(card, anomalies));
+	const groupedByTier: { [tierLevel: string]: readonly ExtendedReferenceCard[] } = groupByFunction(
+		(card: ExtendedReferenceCard) => '' + card.techLevel,
+	)(filteredCards);
+	const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
+		tavernTier: parseInt(tierLevel),
+		cards: groupedByTier[tierLevel],
+		groupingFunction: (card: ExtendedReferenceCard) =>
+			getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
+				(t) =>
+					!availableTribes?.length ||
+					availableTribes.includes(Race[t]) ||
+					Race[t] === Race.BLANK ||
+					Race[t] === Race.ALL,
+			),
+		type: 'standard',
+	}));
+	const mechanicsTiers = showMechanicsTiers
+		? buildMechanicsTiers(
+				filteredCards,
+				playerCardId,
+				availableTribes,
+				showBuddies,
+				allPlayerCardIds,
+				i18n,
+				allCards,
+		  )
+		: [];
+	return [...standardTiers, ...mechanicsTiers];
+};
+
+const buildMechanicsTiers = (
+	cardsInGame: readonly ExtendedReferenceCard[],
+	playerCardId: string,
+	availableTribes: readonly Race[],
+	hasBuddies: boolean,
+	allPlayerCardIds: readonly string[],
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	allCards: CardsFacadeService,
+): readonly Tier[] => {
+	const mechanicalTiers: Tier[] = [
+		{
+			tavernTier: 'B',
+			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BATTLECRY])),
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.BATTLECRY].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		},
+		{
+			tavernTier: 'D',
+			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])),
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.DEATHRATTLE].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		},
+		{
+			tavernTier: 'DS',
+			cards: [
+				...cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
+				cardsInGame.find((c) => c.id === CardIds.Glowscale_BG23_008),
+			],
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.DIVINE_SHIELD].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		},
+		{
+			tavernTier: 'T',
+			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.TAUNT])),
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.TAUNT].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		},
+		{
+			tavernTier: 'E',
+			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.END_OF_TURN])),
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.END_OF_TURN].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		},
+		{
+			tavernTier: 'R',
+			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.REBORN])),
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.REBORN].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		},
+	];
+	if (hasBuddies) {
+		const allBuddies = allCards
+			.getCards()
+			.filter((c) => !!c.techLevel)
+			.filter((c) => !!c.battlegroundsPremiumDbfId)
+			.filter((card) => card.set !== 'Vanilla')
+			.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+		const buddies: readonly ReferenceCard[] =
+			playerCardId === CardIds.ETCBandManager_BG25_HERO_105
+				? allBuddies
+						.filter((b) => !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds))
+						.filter(
+							(b) =>
+								!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
+								availableTribes.includes(
+									BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe,
+								),
+						)
+				: [CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+						playerCardId as CardIds,
+				  )
+				? allPlayerCardIds.map((p) => getBuddy(p as CardIds, allCards)).map((b) => allCards.getCard(b))
+				: [];
+		mechanicalTiers.push({
+			tavernTier: 'Buds',
+			cards: buddies,
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
+			type: 'mechanics',
+		});
+	}
+
+	return mechanicalTiers;
+};
+
+const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {
+	if (anomalies.includes(CardIds.UncompensatedUpset_BG27_Anomaly_721)) {
+		return [
+			CardIds.CorpseRefiner_BG25_033,
+			CardIds.CorpseRefiner_BG25_033_G,
+			CardIds.TimeSaver_BG27_520,
+			CardIds.TimeSaver_BG27_520_G,
+		].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.PackedStands_BG27_Anomaly_750)) {
+		return [CardIds.SeabornSummoner_BG27_012, CardIds.SeabornSummoner_BG27_012_G].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.FalseIdols_BG27_Anomaly_301)) {
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+			card.id as CardIds,
+		);
+	} else if (anomalies.includes(CardIds.TheGoldenArena_BG27_Anomaly_801)) {
+		return [
+			CardIds.TreasureSeekerElise_BG23_353,
+			CardIds.TreasureSeekerElise_BG23_353_G,
+			CardIds.CaptainSanders_BG25_034,
+			CardIds.CaptainSanders_BG25_034_G,
+			CardIds.UpbeatImpressionist_BG26_124,
+			CardIds.UpbeatImpressionist_BG26_124_G,
+		].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.AFaireReward_BG27_Anomaly_755)) {
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+			card.id as CardIds,
+		);
+	} else if (
+		anomalies.some((a) =>
+			[
+				CardIds.OopsAllBeastsToken_BG27_Anomaly_104t,
+				CardIds.OopsAllDemonsToken_BG27_Anomaly_104t2,
+				CardIds.OopsAllDragonsToken_BG27_Anomaly_104t3,
+				CardIds.OopsAllElementalsToken_BG27_Anomaly_104t4,
+				CardIds.OopsAllEvil_BG27_Anomaly_307,
+				CardIds.OopsAllMechsToken_BG27_Anomaly_104t5,
+				CardIds.OopsAllMurlocsToken_BG27_Anomaly_104t6,
+				CardIds.OopsAllNagaToken_BG27_Anomaly_104t7,
+				CardIds.OopsAllPiratesToken_BG27_Anomaly_104t10,
+				CardIds.OopsAllQuilboarToken_BG27_Anomaly_104t8,
+			].includes(a as CardIds),
+		)
+	) {
+		return [
+			CardIds.MenagerieMug_BGS_082,
+			CardIds.MenagerieMug_TB_BaconUps_144,
+			CardIds.MenagerieJug_BGS_083,
+			CardIds.MenagerieJug_TB_BaconUps_145,
+			CardIds.ReefExplorer_BG23_016,
+			CardIds.ReefExplorer_BG23_016_G,
+			CardIds.LivingConstellation_BG27_001,
+			CardIds.LivingConstellation_BG27_001_G,
+		].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.BigLeague_BG27_Anomaly_100)) {
+		return [
+			CardIds.TheBoogieMonster_BG26_176,
+			CardIds.TheBoogieMonster_BG26_176_G,
+			CardIds.PatientScout_BG24_715,
+			CardIds.PatientScout_BG24_715_G,
+			CardIds.FacelessDisciple_BG24_719,
+			CardIds.FacelessDisciple_BG24_719_G,
+			CardIds.KingVarian_BG27_508,
+			CardIds.KingVarian_BG27_508_G,
+		].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.LittleLeague_BG27_Anomaly_800)) {
+		return [
+			CardIds.TheBoogieMonster_BG26_176,
+			CardIds.TheBoogieMonster_BG26_176_G,
+			CardIds.PatientScout_BG24_715,
+			CardIds.PatientScout_BG24_715_G,
+			CardIds.FacelessDisciple_BG24_719,
+			CardIds.FacelessDisciple_BG24_719_G,
+			CardIds.KingVarian_BG27_508,
+			CardIds.KingVarian_BG27_508_G,
+		].includes(card.id as CardIds);
+	}
+	return false;
+};

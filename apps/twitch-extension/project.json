@@ -23,9 +23,9 @@
 					}
 				],
 				"sourceMap": {
-					"scripts": true,
-					"styles": true,
-					"vendor": true
+					"scripts": false,
+					"styles": false,
+					"vendor": false
 				},
 				"styles": ["apps/twitch-extension/src/styles.scss"],
 				"scripts": []

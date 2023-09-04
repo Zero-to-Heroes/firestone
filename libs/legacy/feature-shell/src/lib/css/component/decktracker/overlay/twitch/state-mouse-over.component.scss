@@ -51,6 +51,19 @@ empty-card {
 	}
 }
 
+.bgs-anomaly {
+	position: absolute;
+	right: 0;
+	width: 10vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.anomaly {
+		width: 100%;
+	}
+}
+
 .board {
 	position: absolute;
 	width: 100%;

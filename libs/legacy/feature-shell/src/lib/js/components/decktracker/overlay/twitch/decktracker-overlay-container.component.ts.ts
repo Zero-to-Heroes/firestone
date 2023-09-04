@@ -15,7 +15,7 @@ import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-sta
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
-import { from, Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { DeckCard } from '../../../../models/decktracker/deck-card';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Preferences } from '../../../../models/preferences';
@@ -60,8 +60,13 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 				</bgs-simulation-overlay-standalone>
 				<battlegrounds-minions-tiers-twitch
 					*ngIf="bgsState?.inGame && (showMinionsList$ | async)"
-					[availableRaces]="bgsState?.availableRaces"
-					[currentTurn]="bgsState?.currentTurn"
+					[availableRaces]="bgsState.availableRaces"
+					[currentTurn]="bgsState.currentTurn"
+					[hasBuddies]="bgsState.config?.hasBuddies"
+					[anomalies]="bgsState.config?.anomalies"
+					[playerCardId]="getMainPlayerCardId(bgsState)"
+					[showMechanicsTiers]="showMechanicsTiers$ | async"
+					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 				></battlegrounds-minions-tiers-twitch>
 			</ng-container>
 			<twitch-config-widget></twitch-config-widget>
@@ -76,6 +81,8 @@ export class DeckTrackerOverlayContainerComponent
 	showMinionsList$: Observable<boolean>;
 	showBattleSimulator$: Observable<boolean>;
 	hideSimulatorWhenEmpty$: Observable<boolean>;
+	showMechanicsTiers$: Observable<boolean>;
+	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
 
 	inGameplay: boolean;
 	gameState: GameState;
@@ -115,6 +122,12 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.hideSimulatorWhenEmpty$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.hideBattleOddsWhenEmpty),
+		);
+		this.showMechanicsTiers$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsShowMechanicsTiers),
+		);
+		this.groupMinionsIntoTheirTribeGroup$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsGroupMinionsIntoTheirTribeGroup),
 		);
 	}
 
@@ -183,6 +196,14 @@ export class DeckTrackerOverlayContainerComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	getMainPlayerCardId(bgsState: TwitchBgsState): string {
+		return bgsState.leaderboard?.find((p) => p.isMainPlayer)?.cardId;
+	}
+
+	getAllPlayerCardIds(bgsState: TwitchBgsState): readonly string[] {
+		return bgsState.leaderboard?.map((p) => p.cardId);
 	}
 
 	protected doResize(newScale: number): void {
