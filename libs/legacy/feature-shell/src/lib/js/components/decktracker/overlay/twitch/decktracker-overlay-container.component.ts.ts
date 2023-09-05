@@ -265,7 +265,7 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	private enrichDeck(playerDeck: DeckState): DeckState {
-		return DeckState.create({
+		return DeckState.create(playerDeck).update({
 			board: this.enrichCards(playerDeck.board),
 			deck: this.enrichCards(playerDeck.deck),
 			deckList: this.enrichCards(playerDeck.deckList),
@@ -280,15 +280,20 @@ export class DeckTrackerOverlayContainerComponent
 		return (source ?? []).map((c) => this.enrichCard(c));
 	}
 
-	private enrichCard(source: DeckCard): DeckCard {
-		if (!source) {
+	private enrichCard(card: DeckCard): DeckCard {
+		if (!card) {
 			return null;
 		}
-		const card = !!source.cardId ? this.allCards.getCard(source.cardId) : null;
+		const refCard = !!card.cardId ? this.allCards.getCard(card.cardId) : null;
+		if (!refCard) {
+			return card;
+		}
 		return DeckCard.create({
-			...source,
-			cardName: card?.name,
-			rarity: card?.rarity,
+			...card,
+			cardName: card.cardName ?? refCard.name,
+			manaCost: card.manaCost ?? refCard.cost,
+			rarity: card.rarity ?? refCard.rarity,
+			cardType: card.cardType ?? refCard.type,
 		});
 	}
 

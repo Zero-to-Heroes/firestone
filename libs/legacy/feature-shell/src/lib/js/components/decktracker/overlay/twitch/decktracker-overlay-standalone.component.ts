@@ -14,7 +14,6 @@ import {
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-state';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
@@ -68,8 +67,7 @@ export class DeckTrackerOverlayStandaloneComponent
 	@Output() dragEnd = new EventEmitter<void>();
 
 	@Input() set gameState(value: GameState) {
-		this.playerDeck = !!value?.playerDeck ? this.populateDeckState(value.playerDeck) : null;
-		//console.debug('playerDeck', this.playerDeck);
+		this.playerDeck = value?.playerDeck;
 		this.gameState$$.next(
 			GameState.create({
 				...value,
@@ -189,39 +187,5 @@ export class DeckTrackerOverlayStandaloneComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private populateDeckState(input: DeckState): DeckState {
-		const state = DeckState.create(input);
-		// At this stage we're missing some info that has not been transmitted over the wire
-		// from the game to the overlay
-		const populatedCards = state.update({
-			deckList: this.populateCards(state.deckList),
-			board: this.populateCards(state.board),
-			deck: this.populateCards(state.deck),
-			hand: this.populateCards(state.hand),
-			otherZone: this.populateCards(state.otherZone),
-			heroPower: this.populateCard(state.heroPower),
-			weapon: this.populateCard(state.weapon),
-		});
-		return populatedCards;
-	}
-
-	private populateCards(cards: readonly DeckCard[]): readonly DeckCard[] {
-		return cards.map((card) => this.populateCard(card));
-	}
-
-	private populateCard(card: DeckCard): DeckCard {
-		if (!card) {
-			return null;
-		}
-
-		const refCard = this.allCards.getCard(card.cardId);
-		return DeckCard.create(card).update({
-			cardName: card.cardName ?? refCard.name,
-			manaCost: card.manaCost ?? refCard.cost,
-			rarity: card.rarity ?? refCard.rarity,
-			cardType: card.cardType ?? refCard.type,
-		});
 	}
 }

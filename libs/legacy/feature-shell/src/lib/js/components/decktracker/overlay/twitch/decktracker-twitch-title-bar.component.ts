@@ -11,7 +11,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 		<div class="control-bar">
 			<div class="logo" inlineSVG="assets/svg/decktracker_logo.svg"></div>
 			<div
-				*ngIf="deckState?.deckstring"
+				*ngIf="deckstring"
 				class="copy-deckstring"
 				(mousedown)="copyDeckstring()"
 				(mouseenter)="onMouseEnter()"
@@ -28,7 +28,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 			></button>
 		</div>
 		<textarea readonly class="deckstring-code" *ngIf="shouldShowDeckstring" (mousedown)="stopBubbling($event)"
-			>{{ this.deckState.deckstring }} 
+			>{{ deckstring }} 
 			Copy is temporarily down please copy the code manually.
 			(click on the Copy button to close)			
 		</textarea
@@ -37,7 +37,15 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerTwitchTitleBarComponent {
-	@Input() deckState: DeckState;
+	@Input() set deckState(value: DeckState) {
+		console.debug('setting deckstring', value?.deckstring, value);
+		this.deckstring = value?.deckstring;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	deckstring: string;
 	copyText: string;
 	shouldShowDeckstring = false;
 	copied = false;
@@ -68,7 +76,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 			const listener = (e: ClipboardEvent) => {
 				const clipboardData = e.clipboardData;
 				if (clipboardData) {
-					clipboardData.setData('text/plain', this.deckState.deckstring);
+					clipboardData.setData('text/plain', this.deckstring);
 					worked = true;
 					e.preventDefault();
 				}
@@ -92,7 +100,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 				}
 			}
 		} else {
-			(navigator as any).clipboard.writeText(this.deckState.deckstring);
+			(navigator as any).clipboard.writeText(this.deckstring);
 			this.copyDone();
 		}
 		setTimeout(() => {
@@ -135,7 +143,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 	private copyDone() {
 		this.copyText = 'Copied';
 		this.copied = true;
-		console.log('copied deckstring to clipboard', this.deckState.deckstring);
+		console.log('copied deckstring to clipboard', this.deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
