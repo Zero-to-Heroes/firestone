@@ -38,8 +38,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 })
 export class DeckTrackerTwitchTitleBarComponent {
 	@Input() set deckState(value: DeckState) {
-		console.debug('setting deckstring', value?.deckstring, value);
-		this.deckstring = value?.deckstring;
+		this.deckstring = value?.duelsStartingDeckstring ?? value?.deckstring;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

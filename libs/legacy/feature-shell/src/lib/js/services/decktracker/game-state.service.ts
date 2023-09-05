@@ -18,6 +18,7 @@ import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { HeroCard } from '../../models/decktracker/hero-card';
 import { GameEvent, PlayerGameState } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
+import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
@@ -183,6 +184,7 @@ export class GameStateService {
 		private readonly owUtils: OwUtilsService,
 		private readonly attackOnBoardService: AttackOnBoardService,
 		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
+		private readonly duelsRunService: DuelsDecksProviderService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -415,13 +417,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
-			// if (this.state.opponentDeck?.deck.some((c) => c.entityId)) {
-			// 	console.warn(
-			// 		'[game-state] found some cards with known entityIds in opponents deck',
-			// 		this.state.opponentDeck,
-			// 	);
-			// }
+			//console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -555,7 +551,9 @@ export class GameStateService {
 			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
 			[GameEvent.GAME_START]: [new GameStartParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
-			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
+			[GameEvent.HERO_POWER_CHANGED]: [
+				new HeroPowerChangedParser(this.allCards, this.i18n, this.duelsRunService),
+			],
 			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n)],

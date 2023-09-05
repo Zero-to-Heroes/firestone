@@ -212,6 +212,7 @@ export class TwitchAuthService {
 			// ...deckState,
 			secrets: deckState.secrets,
 			deckstring: deckState.deckstring,
+			duelsStartingDeckstring: deckState.duelsStartingDeckstring,
 			name: deckState.name,
 			hero: deckState.hero,
 			cardsLeftInDeck: deckState.cardsLeftInDeck,
