@@ -115,6 +115,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				  } as DeckCard)
 				: cardWithZone.update({
 						relatedCardIds:
+							// Reset the related card IDs once you play it, so that the info will be reset if you bounce it back to hand
 							cardWithZone.cardId === CardIds.CommanderSivara_TSC_087 ? [] : cardWithZone.relatedCardIds,
 				  });
 
@@ -193,10 +194,7 @@ export class CardPlayedFromHandParser implements EventParser {
 					deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
 				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 			})
-			.updateSpellsPlayedThisMatch(
-				isCardCountered ? null : cardToAdd,
-				this.allCards,
-			);
+			.updateSpellsPlayedThisMatch(isCardCountered ? null : cardToAdd, this.allCards);
 		// console.debug('newPlayerDeck', newPlayerDeck);
 
 		const newCardPlayedThisMatch: ShortCard = {

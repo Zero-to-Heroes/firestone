@@ -37,14 +37,23 @@ export class CardTooltipDirective implements OnDestroy {
 	// (otherwise it only refreshes on mouseenter)
 	@Input() set cardTooltipRelatedCardIds(value: readonly string[]) {
 		this._cardTooltipRelatedCardIds = value;
+		// console.debug('setting related cards in directive input', value);
 		if (!!this.tooltipRef) {
 			const shouldShowRelatedCards =
 				this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
-			this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
+			const relatedCards = !shouldShowRelatedCards
 				? []
 				: this._cardTooltipRelatedCardIds?.length
 				? this._cardTooltipRelatedCardIds
 				: this.relatedCardIds;
+			this.tooltipRef.instance.relatedCardIds = relatedCards;
+			// console.debug(
+			// 	'setting related cards in directive input 2',
+			// 	shouldShowRelatedCards,
+			// 	relatedCards,
+			// 	this.cardTooltipShowRelatedCards,
+			// 	this._cardTooltipRelatedCardIds,
+			// );
 		}
 	}
 
@@ -144,11 +153,19 @@ export class CardTooltipDirective implements OnDestroy {
 		// Pass content to tooltip component instance
 		this.tooltipRef.instance.opacity = 0;
 		this.tooltipRef.instance.additionalClass = this.cardTooltipClass;
-		this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
+		const relatedCards = !shouldShowRelatedCards
 			? []
 			: this._cardTooltipRelatedCardIds?.length
 			? this._cardTooltipRelatedCardIds
 			: this.relatedCardIds;
+		this.tooltipRef.instance.relatedCardIds = relatedCards;
+		// console.debug(
+		// 	'will set related cards',
+		// 	relatedCards,
+		// 	shouldShowRelatedCards,
+		// 	this._cardTooltipRelatedCardIds,
+		// 	this.relatedCardIds,
+		// );
 		this.tooltipRef.instance.viewRef = this.tooltipRef;
 
 		if (this.cardTooltipCard) {
