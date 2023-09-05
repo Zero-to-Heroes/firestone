@@ -227,10 +227,10 @@ export class DeckTrackerOverlayContainerComponent
 		return bgsState.leaderboard?.map((p) => p.cardId);
 	}
 
-	protected doResize(newScale: number): void {
-		const newSidth = newScale * 250;
-		this.el.nativeElement.style.setProperty('--card-tooltip-min-width', `${newSidth}px`);
-	}
+	// protected doResize(newScale: number): void {
+	// 	const newSidth = newScale * 250;
+	// 	this.el.nativeElement.style.setProperty('--card-tooltip-min-width', `${newSidth}px`);
+	// }
 
 	private async processEvent(event: TwitchEvent) {
 		console.log('received event', event);
