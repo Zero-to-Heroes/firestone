@@ -110,10 +110,10 @@ export class CreateCardInDeckParser implements EventParser {
 	): readonly string[] {
 		switch (cardId) {
 			case CardIds.PhotographerFizzle_FizzlesSnapshotToken:
-				console.debug(
-					'setting related card ids',
-					deck.hand.map((c) => c.cardId),
-				);
+				// console.debug(
+				// 	'setting related card ids',
+				// 	deck.hand.map((c) => c.cardId),
+				// );
 				return deck.hand.map((c) => c.cardId);
 			default:
 				return existingCardIds ?? [];
