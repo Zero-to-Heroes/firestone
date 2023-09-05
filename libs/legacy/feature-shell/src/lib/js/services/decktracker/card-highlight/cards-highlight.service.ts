@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
@@ -11,11 +11,10 @@ import { CardsHighlightCommonService } from './cards-highlight-common.service';
 export class CardsHighlightService extends CardsHighlightCommonService {
 	constructor(
 		protected readonly allCards: CardsFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
-		super(allCards, cdr);
+		super(allCards);
 		this.setup();
 		window['cardsHighlightService'] = this;
 	}

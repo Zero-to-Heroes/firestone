@@ -1,4 +1,3 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { CardIds, CardType, GameTag, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -101,8 +100,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	private shouldHighlightProvider: () => Promise<boolean>;
 
-	constructor(protected readonly allCards: CardsFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(cdr);
+	constructor(protected readonly allCards: CardsFacadeService) {
+		super(null);
 	}
 
 	protected async setup(gameStateObs: Observable<GameState>, shouldHighlightProvider: () => Promise<boolean>) {

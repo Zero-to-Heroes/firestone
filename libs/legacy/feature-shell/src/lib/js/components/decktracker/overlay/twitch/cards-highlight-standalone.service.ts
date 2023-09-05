@@ -8,7 +8,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 @Injectable()
 export class CardsHighlightStandaloneService extends CardsHighlightCommonService {
 	constructor(protected readonly allCards: CardsFacadeService, private readonly prefs: TwitchPreferencesService) {
-		super(allCards, null);
+		super(allCards);
 	}
 
 	public async setup(gameStateObs: Observable<GameState>) {
