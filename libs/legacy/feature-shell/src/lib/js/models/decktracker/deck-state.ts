@@ -56,6 +56,7 @@ export class DeckState {
 	readonly isActivePlayer: boolean;
 	readonly isOpponent: boolean;
 	readonly deckstring?: string;
+	readonly duelsStartingDeckstring?: string;
 	readonly sideboards?: readonly DeckSideboard[];
 	readonly name?: string;
 	readonly hero?: HeroCard;
