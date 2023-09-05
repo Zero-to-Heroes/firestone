@@ -17,7 +17,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { Handler } from '../../../services/decktracker/card-highlight/cards-highlight.service';
+import { Handler } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
 import {
 	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS,
 	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
@@ -305,6 +305,7 @@ export class DeckCardComponent implements OnDestroy {
 	}
 
 	onMouseEnter(event: MouseEvent) {
+		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, this._card);
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this._card);
 		if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS.includes(this.cardId as CardIds)) {
 			this.relatedCardIds = this.cardsHighlightService

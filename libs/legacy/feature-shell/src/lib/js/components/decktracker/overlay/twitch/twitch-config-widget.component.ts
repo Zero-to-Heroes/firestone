@@ -54,10 +54,26 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 					<div class="group">
 						<checkbox
 							class="item"
+							[label]="'settings.decktracker.opponent-deck.group-cards-by-zone-label' | owTranslate"
+							[labelTooltip]="
+								'settings.decktracker.opponent-deck.group-cards-by-zone-tooltip' | owTranslate
+							"
+							[value]="prefs.useModernTracker"
+							(valueChanged)="onUseModernTrackerChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item"
 							[label]="'twitch.show-related-cards-help' | owTranslate"
 							[labelTooltip]="'twitch.show-related-cards-help-tooltip' | owTranslate"
 							[value]="prefs.showRelatedCards"
 							(valueChanged)="onShowRelatedCardsChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item"
+							[label]="'settings.decktracker.global.highlight-related-cards' | owTranslate"
+							[labelTooltip]="'settings.decktracker.global.highlight-related-cards-tooltip' | owTranslate"
+							[value]="prefs.overlayHighlightRelatedCards"
+							(valueChanged)="onHighlightRelatedCardsChanged(prefs, $event)"
 						></checkbox>
 					</div>
 				</section>
@@ -312,9 +328,21 @@ export class TwitchConfigWidgetComponent
 		this.prefs.savePrefs(newPrefs);
 	}
 
+	onUseModernTrackerChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, useModernTracker: value };
+		console.log('changing useModernTracker pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
 	onShowRelatedCardsChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showRelatedCards: value };
 		console.log('changing showRelatedCards pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onHighlightRelatedCardsChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, overlayHighlightRelatedCards: value };
+		console.log('changing overlayHighlightRelatedCards pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

@@ -13,7 +13,10 @@ import { CardsHighlightFacadeService } from '@legacy-import/src/lib/js/services/
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { CardsHighlightStandaloneService } from '@components/decktracker/overlay/twitch/cards-highlight-standalone.service';
+import { TwitchCardsHighlightFacadeService } from '@components/decktracker/overlay/twitch/twitch-cards-highlight-facade.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
@@ -36,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
 	declarations: [AppComponent],
 	imports: [
+		CommonModule,
 		BrowserModule,
 		LegacyFeatureShellModule,
 		TranslateModule.forRoot({
@@ -50,7 +54,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 	providers: [
 		CardsFacadeStandaloneService,
 		LocalizationStandaloneService,
+		CardsHighlightStandaloneService,
 		TwitchStoreService,
+		TwitchCardsHighlightFacadeService,
 
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
@@ -58,7 +64,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: AppUiStoreFacadeService, useExisting: TwitchStoreService },
 		// { provide: Store, useFactory: () => null },
 		{ provide: Store, useExisting: TwitchStoreService },
-		{ provide: CardsHighlightFacadeService, useFactory: () => null },
+		{ provide: CardsHighlightFacadeService, useExisting: TwitchCardsHighlightFacadeService },
 		// For coliseum-components
 		{ provide: AllCardsService, useExisting: CardsFacadeStandaloneService },
 	],

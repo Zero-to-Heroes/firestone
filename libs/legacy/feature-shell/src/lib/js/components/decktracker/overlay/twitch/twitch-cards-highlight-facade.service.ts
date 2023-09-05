@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { Handler, SelectorOptions } from './cards-highlight-common.service';
+import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
+import {
+	Handler,
+	SelectorOptions,
+} from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-common.service';
+import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Injectable()
-export class CardsHighlightFacadeService {
-	private service: CardsHighlightService;
-
-	constructor(private readonly ow: OverwolfService) {
-		this.service = ow.getMainWindow().cardsHighlightService;
-	}
+export class TwitchCardsHighlightFacadeService {
+	constructor(private readonly ow: OverwolfService, private readonly service: CardsHighlightStandaloneService) {}
 
 	public async init(options?: SelectorOptions) {
 		this.service.init(options);

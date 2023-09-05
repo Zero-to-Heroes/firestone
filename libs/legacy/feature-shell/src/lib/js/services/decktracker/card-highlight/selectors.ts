@@ -9,7 +9,7 @@ import {
 	RarityTYpe,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { Selector, SelectorInput } from './cards-highlight.service';
+import { Selector, SelectorInput } from './cards-highlight-common.service';
 
 export const and = (...filters: Selector[]): Selector => {
 	return (input: SelectorInput) => filters.every((filter) => filter(input));

@@ -13,9 +13,13 @@ import {
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { from, Observable } from 'rxjs';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
+import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-state';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
+import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Component({
 	selector: 'decktracker-overlay-standalone',
@@ -27,7 +31,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 	],
 	template: `
 		<div
-			*ngIf="gameState"
+			*ngIf="playerDeck"
 			class="root active decktracker-theme"
 			[ngClass]="{ dragging: dragging }"
 			[activeTheme]="'decktracker'"
@@ -37,16 +41,16 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 		>
 			<div class="scalable">
 				<div class="decktracker-container">
-					<div class="decktracker" *ngIf="gameState">
-						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck">
-						</decktracker-twitch-title-bar>
+					<div class="decktracker" *ngIf="playerDeck">
+						<decktracker-twitch-title-bar [deckState]="playerDeck"> </decktracker-twitch-title-bar>
 						<decktracker-deck-list
-							*ngIf="gameState?.playerDeck?.deck?.length > 0"
-							[deckState]="gameState.playerDeck"
-							[displayMode]="displayMode"
+							*ngIf="playerDeck?.deck?.length > 0"
+							[deckState]="playerDeck"
+							[displayMode]="displayMode$ | async"
 							[tooltipPosition]="tooltipPosition"
 							[showRelatedCards]="showRelatedCards$ | async"
 							[darkenUsedCards]="true"
+							[side]="'player'"
 						>
 						</decktracker-deck-list>
 					</div>
@@ -62,31 +66,49 @@ export class DeckTrackerOverlayStandaloneComponent
 {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
-	@Input() gameState: GameState;
 
+	@Input() set gameState(value: GameState) {
+		this.playerDeck = !!value?.playerDeck ? this.populateDeckState(value.playerDeck) : null;
+		//console.debug('playerDeck', this.playerDeck);
+		this.gameState$$.next(
+			GameState.create({
+				...value,
+				playerDeck: this.playerDeck,
+			}),
+		);
+	}
+
+	displayMode$: Observable<'DISPLAY_MODE_ZONE' | 'DISPLAY_MODE_GROUPED'>;
 	showRelatedCards$ = new Observable<boolean>();
 
-	displayMode: string;
+	playerDeck: DeckState;
 	dragging: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
+
+	private gameState$$ = new BehaviorSubject<GameState>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		protected readonly prefs: TwitchPreferencesService,
 		protected readonly el: ElementRef,
 		protected readonly renderer: Renderer2,
+		private readonly allCards: CardsFacadeService,
+		private readonly highlightService: CardsHighlightStandaloneService,
 	) {
 		super(cdr, prefs, el, renderer);
 	}
 
 	ngAfterContentInit() {
+		this.displayMode$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')),
+		);
 		this.showRelatedCards$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showRelatedCards),
 		);
+		this.highlightService.setup(this.gameState$$);
 	}
 
 	ngAfterViewInit() {
-		this.displayMode = 'DISPLAY_MODE_GROUPED';
 		super.listenForResize();
 	}
 
@@ -167,5 +189,39 @@ export class DeckTrackerOverlayStandaloneComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private populateDeckState(input: DeckState): DeckState {
+		const state = DeckState.create(input);
+		// At this stage we're missing some info that has not been transmitted over the wire
+		// from the game to the overlay
+		const populatedCards = state.update({
+			deckList: this.populateCards(state.deckList),
+			board: this.populateCards(state.board),
+			deck: this.populateCards(state.deck),
+			hand: this.populateCards(state.hand),
+			otherZone: this.populateCards(state.otherZone),
+			heroPower: this.populateCard(state.heroPower),
+			weapon: this.populateCard(state.weapon),
+		});
+		return populatedCards;
+	}
+
+	private populateCards(cards: readonly DeckCard[]): readonly DeckCard[] {
+		return cards.map((card) => this.populateCard(card));
+	}
+
+	private populateCard(card: DeckCard): DeckCard {
+		if (!card) {
+			return null;
+		}
+
+		const refCard = this.allCards.getCard(card.cardId);
+		return DeckCard.create(card).update({
+			cardName: card.cardName ?? refCard.name,
+			manaCost: card.manaCost ?? refCard.cost,
+			rarity: card.rarity ?? refCard.rarity,
+			cardType: card.cardType ?? refCard.type,
+		});
 	}
 }
