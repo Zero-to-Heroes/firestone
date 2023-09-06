@@ -27,7 +27,7 @@ export class LocalizationFacadeService implements ILocalizationService {
 		this.service = this.ow.getMainWindow().localizationService;
 		if (!this.service) {
 			console.warn('localization init failed, retrying');
-			setTimeout(() => this.init(), 20);
+			setTimeout(() => this.init(), 100);
 			return;
 		}
 	}

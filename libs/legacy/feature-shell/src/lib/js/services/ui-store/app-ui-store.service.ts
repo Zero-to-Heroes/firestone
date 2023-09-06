@@ -232,7 +232,7 @@ export class AppUiStoreService extends Store<Preferences> {
 					resolve();
 				} else {
 					console.warn('wait for store init');
-					setTimeout(() => dbWait(), 500);
+					setTimeout(() => dbWait(), 1000);
 				}
 			};
 			dbWait();
