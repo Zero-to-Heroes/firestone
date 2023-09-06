@@ -98,7 +98,7 @@ export class LotteryState {
 	}
 
 	public currentPoints(): number {
-		console.debug('[lottery] getting points', this);
+		// console.debug('[lottery] getting points', this);
 		return (
 			this.pointsForStat(this.config.resourceStat) +
 			this.pointsForStat(this.config.constructedStat) +

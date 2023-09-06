@@ -109,7 +109,7 @@ export class LotteryService {
 
 	private async loadLotteryConfig(): Promise<LotterySeasonConfig> {
 		const allSeasons = await this.api.callGetApi<readonly LotterySeasonConfig[]>(LOTTERY_SEASONS_URL);
-		console.debug('[lottery] loaded lottery seasons', allSeasons);
+		// console.debug('[lottery] loaded lottery seasons', allSeasons);
 		const seasonClosestToNow = allSeasons
 			.map((season) => ({ season: season, diff: new Date(season.startDate).getTime() - new Date().getTime() }))
 			// Keep only seasons that are in the past
