@@ -331,6 +331,10 @@ const buildTribeTiers = (
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
+	if (!availableTribes?.length) {
+		return [];
+	}
+	console.debug('building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
 	const allTribes: readonly Race[] = [
 		...new Set(
 			cardsInGame
