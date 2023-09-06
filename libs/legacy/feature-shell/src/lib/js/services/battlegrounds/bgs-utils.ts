@@ -821,3 +821,7 @@ export const isBattlegrounds = (gameType: GameType | StatGameModeType): boolean 
 export const isBattlegroundsScene = (scene: SceneMode): boolean => {
 	return [SceneMode.BACON].includes(scene);
 };
+
+export const isMinionGolden = (card: ReferenceCard): boolean => {
+	return !!card.battlegroundsNormalDbfId;
+};

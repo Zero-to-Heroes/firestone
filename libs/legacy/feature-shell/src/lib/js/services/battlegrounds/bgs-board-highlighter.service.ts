@@ -5,6 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { isMinionGolden } from './bgs-utils';
 import { BattlegroundsStoreService } from './store/battlegrounds-store.service';
 import { BgsToggleHighlightMinionOnBoardEvent } from './store/events/bgs-toggle-highlight-minion-on-board-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from './store/events/bgs-toggle-highlight-tribe-on-board-event';
@@ -32,6 +33,11 @@ export class BgsBoardHighlighterService {
 	}
 
 	private initHighlights() {
+		const enableAutoHighlight$ = combineLatest([
+			this.store.enablePremiumFeatures$(),
+			this.store.listenPrefs$((prefs) => prefs.bgsEnableMinionAutoHighlight),
+		]).pipe(map(([premium, [autoHighlight]]) => premium && autoHighlight));
+
 		const minionsToHighlight$ = combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.bgsShowTribesHighlight),
 			this.store.listenBattlegrounds$(
@@ -41,15 +47,19 @@ export class BgsBoardHighlighterService {
 				([state]) => state.highlightedMechanics,
 			),
 			this.store.listenDeckState$((state) => state?.opponentDeck?.board),
+			enableAutoHighlight$,
 		]).pipe(
 			debounceTime(50),
-			filter(([showTribesHighlight, [phase], [opponentBoard]]) => !!phase && !!opponentBoard),
+			filter(
+				([showTribesHighlight, [phase], [opponentBoard], enableAutoHighlight]) => !!phase && !!opponentBoard,
+			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
 					showTribesHighlight,
 					[phase, highlightedTribes, highlightedMinions, highlightedMechanics],
 					[opponentBoard],
+					enableAutoHighlight,
 				]) => {
 					if (!showTribesHighlight || phase !== 'recruit') {
 						return [];
@@ -62,6 +72,7 @@ export class BgsBoardHighlighterService {
 							highlightedTribes ?? [],
 							highlightedMinions ?? [],
 							highlightedMechanics ?? [],
+							enableAutoHighlight,
 						),
 					}));
 					return shopMinions;
@@ -78,6 +89,7 @@ export class BgsBoardHighlighterService {
 		highlightedTribes: readonly Race[],
 		highlightedMinions: readonly string[],
 		highlightedMechanics: readonly GameTag[],
+		enableAutoHighlight: boolean,
 	): boolean {
 		if (!minion.cardId) {
 			console.warn('could not find card for minion', minion);
@@ -103,6 +115,12 @@ export class BgsBoardHighlighterService {
 		if (highlightedFromMinion) {
 			return true;
 		}
+
+		if (enableAutoHighlight && isMinionGolden(card)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private initPremiumHighlights() {
