@@ -1471,10 +1471,10 @@ export class GameEvents {
 			this.processingQueue.clear();
 			return;
 		}
-		if (data.indexOf('Begin Spectating') !== -1) {
+		if (data.includes('Begin Spectating') || data.includes('Start Spectator')) {
 			console.log('begin spectating', data);
 		}
-		if (data.indexOf('End Spectator Mode') !== -1) {
+		if (data.includes('End Spectator')) {
 			console.log('end spectating', data);
 		}
 
@@ -1505,20 +1505,21 @@ export class GameEvents {
 	// Handles reading a log file mid-game, i.e. this data is already
 	// present in the log file when we're trying to read it
 	public receiveExistingLogLine(existingLine: string) {
-		if (existingLine.indexOf('Begin Spectating') !== -1) {
+		if (existingLine.includes('Begin Spectating') || existingLine.includes('Start Spectator')) {
 			console.log('[game-events] [existing] begin spectating', existingLine);
 			this.spectateLineToEnqueue = existingLine;
 		}
-		if (existingLine.indexOf('End Spectator Mode') !== -1) {
+		if (existingLine.includes('End Spectator')) {
 			console.log('[game-events] [existing] end spectating', existingLine);
 			this.spectateLineToEnqueue = null;
 		}
 
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
+			console.log('[game-events] [existing] end_of_existing_data');
 			// There is no automatic reconnect when spectating, so we can always safely say
 			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
-			console.log('[game-events] [existing] end_of_existing_data');
+			this.spectateLineToEnqueue = null;
 			this.triggerCatchUp();
 			return;
 		}
