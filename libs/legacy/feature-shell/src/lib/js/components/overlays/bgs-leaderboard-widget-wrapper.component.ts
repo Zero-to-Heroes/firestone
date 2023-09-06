@@ -7,12 +7,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { GameType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
-import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -28,6 +27,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				currentTurn: currentTurn$ | async,
 				lastOpponentPlayerId: lastOpponentPlayerId$ | async,
 				showLastOpponentIcon: showLastOpponentIcon$ | async,
+				opponentBoardMouseOver: opponentBoardMouseOver$ | async,
 				buddiesEnabled: buddiesEnabled$ | async
 			} as value"
 		>
@@ -39,6 +39,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 					[currentTurn]="value.currentTurn"
 					[lastOpponentPlayerId]="value.lastOpponentPlayerId"
 					[showLastOpponentIcon]="value.showLastOpponentIcon"
+					[opponentBoardMouseOver]="value.opponentBoardMouseOver"
 					[buddiesEnabled]="value.buddiesEnabled"
 				>
 				</bgs-leaderboard-empty-card>
@@ -61,6 +62,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	lastOpponentPlayerId$: Observable<number>;
 	currentTurn$: Observable<number>;
 	showLastOpponentIcon$: Observable<boolean>;
+	opponentBoardMouseOver$: Observable<boolean>;
 	buddiesEnabled$: Observable<boolean>;
 	windowWidth: number;
 	windowHeight: number;
@@ -77,19 +79,17 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
 			this.store.listenDeckState$((state) => state.metadata),
-			this.store.listenPrefs$((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
 				([state]) => state?.currentGame?.players?.length,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[currentScene], [metadata], [bgsEnableOpponentBoardMouseOver], [inGame, playerCount]]) =>
+				([[currentScene], [metadata], [inGame, playerCount]]) =>
 					isBattlegrounds(metadata.gameType) &&
-					bgsEnableOpponentBoardMouseOver &&
 					currentScene === SceneMode.GAMEPLAY &&
 					inGame &&
 					(GameType.GT_BATTLEGROUNDS_FRIENDLY === metadata.gameType ||
@@ -115,9 +115,8 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => currentTurn));
-		this.showLastOpponentIcon$ = this.store
-			.listen$(([state, nav, prefs]) => prefs.bgsShowLastOpponentIconInOverlay)
-			.pipe(this.mapData(([bgsShowLastOpponentIconInOverlay]) => bgsShowLastOpponentIconInOverlay));
+		this.showLastOpponentIcon$ = this.listenForBasicPref$((prefs) => prefs.bgsShowLastOpponentIconInOverlay);
+		this.opponentBoardMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableOpponentBoardMouseOver);
 	}
 
 	trackByFunction(index: number, player: BgsPlayer) {

@@ -25,7 +25,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 				class="mouse-leave-container"
 				componentTooltip
 				[componentType]="componentType"
-				[componentInput]="_bgsPlayer"
+				[componentInput]="opponentBoardMouseOver ? _bgsPlayer : null"
 				[componentTooltipPosition]="position"
 			>
 				<!-- transparent image with 1:1 intrinsic aspect ratio -->
@@ -89,6 +89,7 @@ export class BgsLeaderboardEmptyCardComponent
 	}
 
 	@Input() showLastOpponentIcon: boolean;
+	@Input() opponentBoardMouseOver: boolean;
 	@Input() buddiesEnabled: boolean;
 
 	position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';

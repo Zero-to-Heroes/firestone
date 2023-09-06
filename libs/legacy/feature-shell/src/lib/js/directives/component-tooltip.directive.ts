@@ -132,6 +132,9 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		if (!this._componentInput) {
+			return;
+		}
 		// Typically the case when mousing over the tooltip
 		if (this.overlayRef.hasAttached()) {
 			return;
