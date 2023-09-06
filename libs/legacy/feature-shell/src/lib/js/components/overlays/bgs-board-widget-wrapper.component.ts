@@ -5,13 +5,12 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
-	ViewRef,
 } from '@angular/core';
-import { GameTag, Race, SceneMode } from '@firestone-hs/reference-data';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import {} from 'jszip';
-import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { ShopMinion } from '../../services/battlegrounds/bgs-board-highlighter.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -20,28 +19,15 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	selector: 'bgs-board-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/bgs-board-widget-wrapper.component.scss'],
 	template: `
-		<ng-container
-			*ngIf="{
-				showTribesHighlight: showTribesHighlight$ | async,
-				highlightedTribes: highlightedTribes$ | async,
-				highlightedMechanics: highlightedMechanics$ | async,
-				highlightedMinions: highlightedMinions$ | async
-			} as value"
-		>
-			<div class="board-container" *ngIf="showWidget$ | async">
-				<ul class="board" *ngIf="minionCardIds$ | async as minionCardIds">
-					<bgs-tavern-minion
-						class="tavern-minion"
-						*ngFor="let minion of minionCardIds; trackBy: trackByMinion"
-						[minion]="minion"
-						[showTribesHighlight]="value.showTribesHighlight"
-						[highlightedTribes]="value.highlightedTribes"
-						[highlightedMechanics]="value.highlightedMechanics"
-						[highlightedMinions]="value.highlightedMinions"
-					></bgs-tavern-minion>
-				</ul>
-			</div>
-		</ng-container>
+		<div class="board-container" *ngIf="showWidget$ | async">
+			<ul class="board" *ngIf="highlightedMinions$ | async as highlightedMinions">
+				<bgs-tavern-minion
+					class="tavern-minion"
+					*ngFor="let minion of highlightedMinions; trackBy: trackByMinion"
+					[minion]="minion"
+				></bgs-tavern-minion>
+			</ul>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -53,13 +39,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	protected getRect = () => this.el.nativeElement.querySelector('.board-container')?.getBoundingClientRect();
 
 	showWidget$: Observable<boolean>;
-	minionCardIds$: Observable<readonly string[]>;
-	highlightedTribes$: Observable<readonly Race[]>;
-	highlightedMechanics$: Observable<readonly GameTag[]>;
-	highlightedMinions$: Observable<readonly string[]>;
-	showTribesHighlight$: Observable<boolean>;
-	windowWidth: number;
-	windowHeight: number;
+	highlightedMinions$: Observable<readonly ShopMinion[]>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -85,44 +65,12 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 			),
 			this.handleReposition(),
 		);
-		this.minionCardIds$ = combineLatest(
-			this.store.listenBattlegrounds$(([state]) => state.currentGame?.phase),
-			this.store.listenDeckState$((state) => state?.opponentDeck?.board),
-		).pipe(
-			debounceTime(500),
-			filter(([[phase], [opponentBoard]]) => !!phase && !!opponentBoard),
-			this.mapData(([[phase], [opponentBoard]]) =>
-				phase === 'recruit' ? opponentBoard.map((minion) => minion.cardId) : [],
-			),
-		);
-		this.highlightedTribes$ = this.store
-			.listenBattlegrounds$(([state]) => state.highlightedTribes)
-			.pipe(this.mapData(([highlightedTribes]) => highlightedTribes));
-		this.highlightedMechanics$ = this.store
-			.listenBattlegrounds$(([state]) => state.highlightedMechanics)
-			.pipe(this.mapData(([highlightedMechanics]) => highlightedMechanics));
 		this.highlightedMinions$ = this.store
-			.listenBattlegrounds$(([state]) => state.highlightedMinions)
-			.pipe(this.mapData(([highlightedMinions]) => highlightedMinions));
-		this.showTribesHighlight$ = this.store
-			.listen$(([state, nav, prefs]) => prefs.bgsShowTribesHighlight)
-			.pipe(this.mapData(([bgsShowTribesHighlight]) => bgsShowTribesHighlight));
+			.highlightedBgsMinions$()
+			.pipe(this.mapData((highlightedMinion) => highlightedMinion));
 	}
 
-	trackByMinion(index: number, minion: string) {
-		return index;
-	}
-
-	protected async doResize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameHeight = gameInfo.height;
-		this.windowWidth = gameHeight * 1.12;
-		this.windowHeight = gameHeight * 0.4;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+	trackByMinion(index: number, minion: ShopMinion) {
+		return minion.entityId;
 	}
 }

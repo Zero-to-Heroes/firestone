@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
+import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
@@ -49,6 +50,7 @@ export class BootstrapStoreServicesService {
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 		private readonly init_ProfileUploaderService: ProfileUploaderService,
+		private readonly init_BgsBoardHighlighterService: BgsBoardHighlighterService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

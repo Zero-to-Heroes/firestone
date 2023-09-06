@@ -46,6 +46,7 @@ import {
 } from '../achievement/achievements-live-progress-tracking.service';
 import { AchievementsStateManagerService } from '../achievement/achievements-state-manager.service';
 import { AdService } from '../ad.service';
+import { BgsBoardHighlighterService, ShopMinion } from '../battlegrounds/bgs-board-highlighter.service';
 import { BattlegroundsQuestsService } from '../battlegrounds/bgs-quests.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
@@ -121,6 +122,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
 	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
+	private highlightedBgsMinions: Observable<readonly ShopMinion[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -472,6 +474,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.cardHistory.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public highlightedBgsMinions$(): Observable<readonly ShopMinion[]> {
+		return this.highlightedBgsMinions;
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -507,6 +513,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initAchievementCategories();
 		this.initPackStats();
 		this.initCardsHistory();
+		this.initHighlightedBgsMinions();
 		await this.initDuelsTopDecks();
 		this.initialized = true;
 	}
@@ -646,6 +653,12 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.gameStats = (this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService).gameStats$.pipe(
 			shareReplay(1),
 		);
+	}
+
+	private initHighlightedBgsMinions() {
+		this.highlightedBgsMinions = (
+			this.ow.getMainWindow().bgsBoardHighlighter as BgsBoardHighlighterService
+		).shopMinions$$;
 	}
 
 	private initDuelsHeroStats() {

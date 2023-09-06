@@ -37,7 +37,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 							highlighted: showTribesHighlight && (highlighted$ | async),
 							'no-highlight': !showTribesHighlight
 						}"
-						inlineSVG="assets/svg/created_by.svg"
+						inlineSVG="assets/svg/pinned.svg"
 						(click)="highlightTribe(value.tribe)"
 						[helpTooltip]="
 							showTribesHighlight

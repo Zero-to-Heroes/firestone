@@ -6,7 +6,6 @@ import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achi
 import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { BgsBestUserStatsService } from '../../js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from '../../js/services/battlegrounds/bgs-init.service';
-import { BgsPremiumHighlighterService } from '../../js/services/battlegrounds/bgs-premium-highlighter.service';
 import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
@@ -95,7 +94,6 @@ export class BootstrapOtherServicesService {
 		private readonly translate: TranslateService,
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
-		private readonly init_BgsPremiumHighlighterService: BgsPremiumHighlighterService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

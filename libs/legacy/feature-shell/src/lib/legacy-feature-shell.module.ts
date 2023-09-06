@@ -683,12 +683,12 @@ import { BgsBattleSimulationExecutorService } from './js/services/battlegrounds/
 import { BgsBattleSimulationMockExecutorService } from './js/services/battlegrounds/bgs-battle-simulation-mock-executor.service';
 import { BgsBattleSimulationService } from './js/services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
+import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from './js/services/battlegrounds/bgs-init.service';
 import { BgsMetaHeroStatsService } from './js/services/battlegrounds/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './js/services/battlegrounds/bgs-meta-hero-strategies.service';
-import { BgsPremiumHighlighterService } from './js/services/battlegrounds/bgs-premium-highlighter.service';
 import { BattlegroundsQuestsService } from './js/services/battlegrounds/bgs-quests.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
@@ -1822,7 +1822,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		RealTimeStatsService,
 		BgsCustomSimulationService,
 		BgsSimulatorKeyboardControls,
-		BgsPremiumHighlighterService,
+		BgsBoardHighlighterService,
 
 		MercenariesMemoryUpdateService,
 		MercenariesMemoryCacheService,
