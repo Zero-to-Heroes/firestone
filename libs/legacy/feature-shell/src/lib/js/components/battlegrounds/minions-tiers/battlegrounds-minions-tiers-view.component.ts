@@ -266,9 +266,11 @@ export const buildTiers = (
 	)(filteredCards);
 
 	// Add a tier with all the buddies
-	const showBuddies =
+	const showAllBuddyCards =
 		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
-		playerCardId === CardIds.ETCBandManager_BG25_HERO_105 ||
+		playerCardId === CardIds.ETCBandManager_BG25_HERO_105;
+	const showBuddiesTier =
+		showAllBuddyCards ||
 		(hasBuddies &&
 			[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
 				playerCardId as CardIds,
@@ -279,9 +281,9 @@ export const buildTiers = (
 		.filter((c) => !!c.battlegroundsPremiumDbfId)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
-	const buddies: readonly ReferenceCard[] = !showBuddies
+	const buddies: readonly ReferenceCard[] = !showBuddiesTier
 		? []
-		: playerCardId === CardIds.ETCBandManager_BG25_HERO_105
+		: showAllBuddyCards
 		? allBuddies
 				.filter((b) => !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds))
 				.filter(
@@ -289,7 +291,8 @@ export const buildTiers = (
 						!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
 						availableTribes.includes(BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe),
 				)
-		: [CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
+		: // For tess, only show the buddies of the opponents
+		[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
 				playerCardId as CardIds,
 		  )
 		? allPlayerCardIds.map((p) => getBuddy(p as CardIds, allCards)).map((b) => allCards.getCard(b))
