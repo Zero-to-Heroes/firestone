@@ -6,7 +6,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, delay, distinctUntilChanged, map } from 'rxjs/operators';
+import { delay, distinctUntilChanged, map, sampleTime } from 'rxjs/operators';
 import {
 	TwitchBgsBoard,
 	TwitchBgsBoardEntity,
@@ -101,7 +101,7 @@ export class TwitchAuthService {
 			this.streamerPrefs$,
 		)
 			.pipe(
-				debounceTime(500),
+				sampleTime(500),
 				distinctUntilChanged(),
 				map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
 					this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
