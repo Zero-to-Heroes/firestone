@@ -23,8 +23,10 @@ export class DuelsHeroFilterSelectedProcessor implements Processor {
 		await this.prefs.updateDuelsHeroFilter(uniqueNormalizedHeroes);
 		// Update hero power and signature treasure filters if not compatible with the new hero selection
 		const prefs = await this.prefs.getPreferences();
-		const configForSelectedHeroes = duelsHeroConfigs.filter((config) =>
-			uniqueNormalizedHeroes.includes(normalizeDuelsHeroCardId(config.hero) as CardIds),
+		const configForSelectedHeroes = duelsHeroConfigs.filter(
+			(config) =>
+				!uniqueNormalizedHeroes?.length ||
+				uniqueNormalizedHeroes.includes(normalizeDuelsHeroCardId(config.hero) as CardIds),
 		);
 
 		// If the HP / signature fiters don't return anything, we reset them to their default values

@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsDeckSortFilterType } from '@firestone/duels/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -95,7 +95,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionStoreCompon
 						})
 						.filter((deck) => {
 							const matchesHero = !heroesFilter?.length
-								? false
+								? true
 								: heroesFilter.some(
 										(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
 								  );
