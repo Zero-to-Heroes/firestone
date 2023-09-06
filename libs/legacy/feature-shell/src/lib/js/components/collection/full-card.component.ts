@@ -216,11 +216,10 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 		const audioGroup = audioClip.audioGroup;
 		console.debug('will play audio group', audioGroup);
 		// MusicStinger, PlayUnderlay + one random from the others
-		const keys = [
-			'MusicStinger',
-			'PlayUnderlay',
-			pickRandom(Object.keys(audioGroup).filter((key) => key !== 'MusicStinger' && key !== 'PlayUnderlay')),
-		].filter((key) => !!key);
+		const rootKeysBase = ['Stinger', 'PlayUnderlay'];
+		const rootKeys = Object.keys(audioGroup).filter((key) => rootKeysBase.some((r) => key.includes(r)));
+		const otherKeys = Object.keys(audioGroup).filter((key) => !rootKeysBase.some((r) => key.includes(r)));
+		const keys = [...rootKeys, pickRandom(otherKeys)].filter((key) => !!key);
 		const audioGroupFiles = keys.map((key) => audioGroup[key]).filter((effect) => !!effect);
 		const mainFiles = audioGroupFiles.flatMap((effect) => effect.mainSounds).filter((sound) => !!sound);
 		console.debug('will play main files', keys, mainFiles);
