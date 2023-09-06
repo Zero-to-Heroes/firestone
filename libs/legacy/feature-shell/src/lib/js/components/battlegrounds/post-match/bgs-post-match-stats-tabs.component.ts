@@ -107,14 +107,19 @@ export class BgsPostMatchStatsTabsComponent
 		this.tabs = value.tabs;
 		this.faceOffs = (value.stats?.faceOffs ?? [])
 			.map((faceOff) => {
-				const battle = value.stats?.battleResultHistory?.find(
-					(battleResult) => battleResult.turn === faceOff.turn,
-				);
-				const isSupported = isSupportedScenario((battle as any)?.battleInfo);
+				const battle: any =
+					value.stats?.battleResultHistory?.find((battleResult) => battleResult.turn === faceOff.turn) ?? {};
+				const isSupported = isSupportedScenario(battle.battleInfo);
 				const battleMessage = isSupported?.reason;
 				return {
 					...faceOff,
-					battleInfo: (battle as any)?.battleInfo,
+					battleInfo: {
+						...(battle.battleInfo ?? {}),
+						gameState: {
+							...(battle.battleInfo?.gameState ?? {}),
+							anomalies: value.anomalies ?? [],
+						},
+					},
 					battleResult: battle?.simulationResult,
 					battleInfoMesage: battleMessage,
 				} as BgsFaceOffWithSimulation;
