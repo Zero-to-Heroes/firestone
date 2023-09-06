@@ -616,6 +616,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DevoutBlessingsTavernBrawlToken:
 				return and(side(inputSide), inGraveyard, minion, deathrattle, minionsDeadSinceLastTurn);
+			case CardIds.LesserDiamondSpellstone:
+			case CardIds.LesserDiamondSpellstone_DiamondSpellstoneToken:
+			case CardIds.LesserDiamondSpellstone_GreaterDiamondSpellstoneToken:
+				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.DinnerPerformer:
 				return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
 			case CardIds.DirgeOfDespair:
@@ -773,6 +777,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(5));
 			case CardIds.GrimtotemBuzzkill:
 				return and(side(inputSide), or(inDeck, inHand), weapon);
+			case CardIds.GrizzledGuardian:
+				return and(side(inputSide), inDeck, minion, effectiveCostLess(5));
 			case CardIds.GrommashsArmguardsTavernBrawl:
 				return and(side(inputSide), weapon);
 			case CardIds.GuardianAnimals:
