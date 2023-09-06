@@ -1,3 +1,4 @@
+import { CardClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
@@ -31,10 +32,10 @@ export class OpponentPlayerParser implements EventParser {
 		console.log('will process OPPONENT event');
 		const battleTag = gameEvent.opponentPlayer && gameEvent.opponentPlayer.Name;
 		const playerName = this.extractNameFromBTag(battleTag) || this.getNameFromCard(gameEvent.opponentPlayer.CardID);
-		const playerClass = this.allCards.getCard(gameEvent.opponentPlayer.CardID).playerClass;
+		const classes = this.allCards.getCard(gameEvent.opponentPlayer.CardID).classes;
 		const newHero = Object.assign(new HeroCard(), currentState.opponentDeck.hero, {
 			playerName: playerName,
-			playerClass: playerClass ? playerClass.toLowerCase() : null,
+			classes: classes?.map((c) => CardClass[c]) ?? ([CardClass.NEUTRAL] as readonly CardClass[]),
 		} as HeroCard);
 
 		// Total cards before setting the decklist

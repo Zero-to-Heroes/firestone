@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
@@ -60,9 +60,9 @@ export class TwitchPresenceService {
 		const hearthstoneInfo$ = combineLatest([
 			this.store.listenDeckState$(
 				(state) => state?.playerDeck?.hero?.cardId,
-				(state) => state?.playerDeck?.hero?.playerClass,
+				(state) => state?.playerDeck?.hero?.classes,
 				(state) => state?.opponentDeck?.hero?.cardId,
-				(state) => state?.opponentDeck?.hero?.playerClass,
+				(state) => state?.opponentDeck?.hero?.classes,
 				(state) => state?.metadata,
 				(state) => state?.gameStarted,
 			),
@@ -71,7 +71,7 @@ export class TwitchPresenceService {
 			debounceTime(1000),
 			filter(
 				([
-					[playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
+					[playerCardId, playerClasses, opponentCardId, opponentClasses, metadata, gameStarted],
 					[appearOnLiveStreams],
 				]) =>
 					gameStarted &&
@@ -80,19 +80,19 @@ export class TwitchPresenceService {
 					!!metadata?.formatType &&
 					!isBattlegrounds(metadata.gameType) &&
 					!isMercenaries(metadata.gameType) &&
-					!!playerClass &&
-					!!opponentClass,
+					!!playerClasses?.length &&
+					!!opponentClasses?.length,
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
-					[playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
+					[playerCardId, playerClasses, opponentCardId, opponentClasses, metadata, gameStarted],
 					[appearOnLiveStreams],
 				]) => ({
 					playerCardId: playerCardId,
-					playerClass: playerClass,
+					playerClass: playerClasses?.[0] ? CardClass[playerClasses[0]] : null,
 					opponentCardId: opponentCardId,
-					opponentClass: opponentClass,
+					opponentClass: opponentClasses?.[0] ? CardClass[opponentClasses[0]] : null,
 					metadata: metadata,
 					gameStarted: gameStarted,
 					appearOnLiveStreams: appearOnLiveStreams,

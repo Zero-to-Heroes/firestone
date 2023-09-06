@@ -40,7 +40,7 @@ export class OpponentMulticasterWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentMulticasterCounter;
 		this.deckStateExtractor = (state) =>
 			(state.opponentDeck?.spellsPlayedThisMatch?.length > 0 &&
-				state.opponentDeck?.hero?.playerClass?.toUpperCase() === CardClass[CardClass.MAGE]) ||
+				state.opponentDeck?.hero?.classes?.includes(CardClass.MAGE)) ||
 			state?.opponentDeck?.hasAnyCardInHandAndDeck([
 				CardIds.Multicaster,
 				CardIds.CoralKeeper,

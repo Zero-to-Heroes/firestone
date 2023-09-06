@@ -101,7 +101,7 @@ export class TwitchAuthService {
 			this.streamerPrefs$,
 		)
 			.pipe(
-				sampleTime(500),
+				sampleTime(2000),
 				distinctUntilChanged(),
 				map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
 					this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),

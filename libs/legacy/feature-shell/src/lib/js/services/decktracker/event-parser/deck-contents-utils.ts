@@ -1,4 +1,4 @@
-import { CardIds, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -232,7 +232,7 @@ const handleWyrmrestPurifier = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownCardName(deckState.hero?.playerClass),
+				cardName: i18n.getUnknownCardName(CardClass[deckState.hero?.classes[0] ?? CardClass.NEUTRAL]),
 				creatorCardId: CardIds.WyrmrestPurifier,
 				rarity: undefined,
 				cardType: undefined,

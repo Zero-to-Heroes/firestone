@@ -40,7 +40,7 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerCorpseSpentCounter;
 		this.deckStateExtractor = (state) => {
-			if (state.opponentDeck.hero?.playerClass?.toUpperCase() !== CardClass[CardClass.DEATHKNIGHT]) {
+			if (state.opponentDeck.hero?.classes?.includes(CardClass.DEATHKNIGHT)) {
 				return false;
 			}
 

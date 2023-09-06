@@ -4,9 +4,9 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2
+	Renderer2,
 } from '@angular/core';
-import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -44,7 +44,7 @@ export class OpponentHeroPowerDamageWidgetWrapperComponent
 			return (
 				isCorrectFormat &&
 				state?.opponentDeck?.heroPowerDamageThisMatch > 0 &&
-				state.opponentDeck.hero?.playerClass === 'mage'
+				state.opponentDeck.hero?.classes?.includes(CardClass.MAGE)
 			);
 		};
 		super.ngAfterContentInit();

@@ -8,6 +8,7 @@ export class StatsRecap {
 	readonly winratePercent: number;
 
 	public static from(deckStats: readonly GameStat[], opponentClass?: string): StatsRecap {
+		console.debug('building stats recap', deckStats, opponentClass);
 		if (!deckStats || deckStats.length === 0) {
 			return null;
 		}
@@ -15,12 +16,14 @@ export class StatsRecap {
 		const earliest = copy.sort((a, b) => a.creationTimestamp - b.creationTimestamp)[0];
 		const wins = copy.filter((stat) => stat.result === 'won').length;
 		const losses = copy.filter((stat) => stat.result === 'lost').length;
-		return Object.assign(new StatsRecap(), {
+		const result = Object.assign(new StatsRecap(), {
 			dateFrom: new Date(earliest.creationTimestamp),
 			totalWins: wins,
 			totalLosses: losses,
 			winratePercent: (100 * wins) / (wins + losses),
 			opponentClass: opponentClass,
 		} as StatsRecap);
+		console.debug('returning', result, earliest, wins, losses);
+		return result;
 	}
 }

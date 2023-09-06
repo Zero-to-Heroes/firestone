@@ -11,10 +11,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { CardClass } from '@firestone-hs/reference-data';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, share, takeUntil } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, share, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
@@ -183,13 +184,20 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	ngAfterContentInit() {
+		this.showDeckWinrate$ = this.listenForBasicPref$((preferences) => this.showDeckWinrateExtractor(preferences));
+		this.showMatchupWinrate$ = this.listenForBasicPref$((preferences) =>
+			this.showMatchupWinrateExtractor(preferences),
+		);
+
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(this.mapData(([gameState]) => (!gameState ? null : this.deckExtractor(gameState))));
 		this.showTotalCardsInZone$ = this.store
 			.listenDeckState$((gameState) => gameState.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => this.showTotalCardsInZoneExtractor(currentTurn !== 'mulligan')));
-		const gamesForDeck$ = combineLatest(
+		const gamesForDeck$ = combineLatest([
+			this.showDeckWinrate$,
+			this.showMatchupWinrate$,
 			this.store.listenDeckState$(
 				(gameState) => gameState?.playerDeck?.deckstring,
 				(gameState) => gameState?.metadata?.formatType,
@@ -207,18 +215,23 @@ export class DeckTrackerOverlayRootComponent
 				(prefs) => prefs.desktopDeckHiddenDeckCodes,
 				(prefs) => prefs.desktopDeckShowHiddenDecks,
 			),
-		).pipe(
+		]).pipe(
+			debounceTime(1000),
 			filter(
 				([
+					showDeckWinrate,
+					showMatchupWinrate,
 					[deckstring, formatType],
 					[timeFilter, rankFilter, patch],
 					gameStats,
 					decks,
 					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
-				]) => !!gameStats?.length && !!decks?.length,
+				]) => (showDeckWinrate || showDeckWinrate) && !!gameStats?.length && !!decks?.length,
 			),
 			this.mapData(
 				([
+					showDeckWinrate,
+					showMatchupWinrate,
 					[deckstring, formatType],
 					[timeFilter, rankFilter, patch],
 					gameStats,
@@ -246,14 +259,20 @@ export class DeckTrackerOverlayRootComponent
 			share(),
 		);
 
-		this.matchupStatsRecap$ = combineLatest(
-			this.store.listenDeckState$((gameState) => gameState),
+		this.matchupStatsRecap$ = combineLatest([
+			this.store.listenDeckState$((gameState) => gameState.opponentDeck?.hero?.classes),
 			gamesForDeck$,
-		).pipe(
-			this.mapData(([[gameState], gamesForDeck]) => {
-				const opponentClass = gameState.opponentDeck?.hero?.playerClass;
-				const gamesForOpponent = gamesForDeck.filter((stat) => stat.opponentClass === opponentClass);
-				return StatsRecap.from(gamesForOpponent, opponentClass);
+		]).pipe(
+			this.mapData(([[opponentClasses], gamesForDeck]) => {
+				const gamesForOpponent = gamesForDeck.filter((stat) =>
+					!stat.opponentClass
+						? false
+						: opponentClasses?.includes(CardClass[stat.opponentClass.toUpperCase()]),
+				);
+				return StatsRecap.from(
+					gamesForOpponent,
+					opponentClasses?.[0] ? CardClass[opponentClasses[0]].toLowerCase() : null,
+				);
 			}),
 		);
 		this.deckStatsRecap$ = gamesForDeck$.pipe(this.mapData((gameStats) => StatsRecap.from(gameStats)));
@@ -273,10 +292,6 @@ export class DeckTrackerOverlayRootComponent
 		this.cardsGoToBottom$ = this.listenForBasicPref$((preferences) => this.cardsGoToBottomExtractor(preferences));
 		this.showGlobalEffectsZone$ = this.listenForBasicPref$((preferences) =>
 			this.showGlobalEffectsExtractor(preferences),
-		);
-		this.showDeckWinrate$ = this.listenForBasicPref$((preferences) => this.showDeckWinrateExtractor(preferences));
-		this.showMatchupWinrate$ = this.listenForBasicPref$((preferences) =>
-			this.showMatchupWinrateExtractor(preferences),
 		);
 		this.darkenUsedCards$ = this.listenForBasicPref$((preferences) => this.darkenUsedCardsExtractor(preferences));
 		this.hideGeneratedCardsInOtherZone$ = this.listenForBasicPref$((preferences) =>

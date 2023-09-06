@@ -1,3 +1,4 @@
+import { CardClass } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '../../services/utils';
 
 export class HeroCard {
@@ -5,7 +6,7 @@ export class HeroCard {
 	readonly cardId: string;
 	readonly entityId: number;
 	readonly playerName: string;
-	readonly playerClass: string;
+	readonly classes: readonly CardClass[] = [];
 	readonly maxHealth: number;
 	readonly manaLeft: number;
 

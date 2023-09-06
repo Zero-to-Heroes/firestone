@@ -227,7 +227,7 @@ export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
 
 export const currentClass = (input: SelectorInput): boolean =>
-	input.card?.classes?.includes(input.deckState?.hero?.playerClass?.toUpperCase());
+	input.card?.classes.some((cardClass) => input.deckState?.hero?.classes?.includes(CardClass[cardClass]));
 
 export const cardClass =
 	(cardClass: CardClass) =>

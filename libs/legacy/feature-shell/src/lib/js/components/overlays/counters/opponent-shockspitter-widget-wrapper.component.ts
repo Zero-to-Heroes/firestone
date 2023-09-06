@@ -6,7 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { GameFormat } from '@firestone-hs/reference-data';
+import { CardClass, GameFormat } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -40,7 +40,7 @@ export class OpponentShockspitterWidgetWrapperComponent
 		this.deckStateExtractor = (state) =>
 			state?.metadata?.formatType !== GameFormat.FT_CLASSIC &&
 			state?.opponentDeck?.heroAttacksThisMatch > 0 &&
-			state.opponentDeck.hero?.playerClass === 'hunter';
+			state.opponentDeck.hero?.classes.includes(CardClass.HUNTER);
 		super.ngAfterContentInit();
 	}
 }

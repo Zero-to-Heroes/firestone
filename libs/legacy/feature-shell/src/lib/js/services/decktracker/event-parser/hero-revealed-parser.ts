@@ -1,3 +1,4 @@
+import { CardClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
@@ -23,7 +24,9 @@ export class HeroRevealedParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			maxHealth: health,
-			playerClass: this.allCards.getCard(cardId)?.playerClass?.toLowerCase() ?? existingHero.playerClass,
+			classes:
+				this.allCards.getCard(cardId)?.classes?.map((c) => CardClass[c]) ??
+				([CardClass.NEUTRAL] as readonly CardClass[]),
 		});
 		const newPlayerDeck = deck.update({
 			hero: newHero,

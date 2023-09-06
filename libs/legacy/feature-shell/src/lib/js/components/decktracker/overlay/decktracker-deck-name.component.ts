@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { CardClass } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -49,7 +50,9 @@ export class DeckTrackerDeckNameComponent {
 			(value.hero
 				? this.i18n.translateString(`decktracker.deck-name.player-name`, {
 						playerName: value.hero.playerName || value.hero.name,
-						playerClass: this.i18n.translateString(`global.class.${value.hero.playerClass}`),
+						playerClass: this.i18n.translateString(
+							`global.class.${CardClass[value.hero.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase()}`,
+						),
 				  })
 				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 		this.deckstring = value.deckstring;
