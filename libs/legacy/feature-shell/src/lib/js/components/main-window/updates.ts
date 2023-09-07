@@ -33,14 +33,14 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.8.10',
+		version: '11.9.0',
 		force: false,
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `There have been many small versions released during the past couple of weeks, without proper release notes. This is a summary of the changes that have been made since the last proper release notes.`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `There have been many small versions released during the past couple of weeks, without proper release notes. This is a summary of the changes that have been made since the last proper release notes.`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -50,7 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `You can now browse the stats for each anomaly in-app. Premium users can decide to use the current anomaly to have the stats be filtered by the current anomaly directly in the overlay.`,
+								text: `You can now see all minions for a single tribe in the minions list. This needs to be enabled in the settings first.`,
 							},
 						],
 					},
@@ -61,84 +61,40 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `(PREMIUM) Premium users can now have some minions be automatically highlighted in the shop based on their current hero (like Freedealing Gambler when you are Patches).`,
-							},
-							{
-								type: 'feature',
-								text: `Add toggles to easily turn the MMR and Anomaly filters on/off in the BG window.`,
-							},
-							{
-								type: 'bug',
-								text: `Add support for the Denathrius and Master Nguyen anomalies.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulatin issue where Tavish's hero power damage was incorrect.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulatin issue with Surf's spellcraft spell.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix aan issue where some minions would not appear as banned with some anomalies.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix aan issue where the buddies list would not appear when playing with the Bring in the Buddies anomaly.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'content',
-								text: `Mousing over Unending Swarm now directly shows you the target as related cards.`,
+								text: `The C'Thun counter now only shows the attack value, but still shows both attack and health when you hover over it.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix some issues when spectating games that could cause the tracker to stop working until you restarted Hearthstone.`,
 							},
 							{
 								type: 'content',
-								text: `Add multiple card highlights and oracles.`,
+								text: `Add multiple oracles and card highlights.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `(Premium) When minion auto-highlight is activated, golden minions are now automatically highlighted in the shop.`,
 							},
 							{
 								type: 'bug',
-								text: `Improve the app's behavior when reconnecting to a game.`,
+								text: `Fix an issue where the buddies list would be empty when playing with the Bring in the Buddies anomaly.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where card tooltips would sometimes flicker when hovering over the decklist.`,
+								text: `Fix an issue where turning off the "opponent boards" would also turn off the "last opponent" icon.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where the C'Thun buff counter would not be properly recorded if there are no C'Thun known in your deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the C'Thun buff counter would ignore health-specific buffs.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where a few secrets were missing or not properly implemented (Caverns of Time's Snipe and Wild's Spellbender).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where secrets would be greyed out in the Secrets Helper even if Tight-Lipped Witness was in play.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards at the top/bottom of the deck would still appear as "in deck" when using the Legacy view of the tracker.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the tracker would sometimes not properly track dredged cards, especially in no-deck mode (like for Tavern Brawls).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where "spells played this match" counters would count non-spell cards played."`,
+								type: 'misc',
+								text: `The name of the (premium) setting that lets you use the remote simulator has been changed to "Use remote simulator" to make it more consistent with how other premium settings are labeled (turned off by default).`,
 							},
 						],
 					},
@@ -147,7 +103,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the previous decklist would show up when choosing a signature treasure in your next run.`,
+								text: `Fix an issue where Tess / Contraband stash would only take the hero's first class into accunt when showing the list of cards that would be replayed.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "My Decks" tab would not show anything if all heroes were unselected.`,
 							},
 						],
 					},
@@ -156,7 +116,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the card sounds would not play correctly.`,
+								text: `Fix an issue where some sounds would not be played properly.`,
 							},
 						],
 					},
