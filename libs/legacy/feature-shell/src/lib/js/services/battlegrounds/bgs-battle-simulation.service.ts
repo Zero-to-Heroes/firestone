@@ -84,7 +84,7 @@ export class BgsBattleSimulationService {
 			'no-format',
 			'[bgs-simulation] battle simulation request prepared',
 			battleInfo,
-			prefs.bgsUseLocalSimulator,
+			prefs.bgsUseRemoteSimulator,
 			{
 				hp: battleInfo?.playerBoard.player.hpLeft,
 				debugHealth: (
@@ -105,11 +105,11 @@ export class BgsBattleSimulationService {
 			},
 		);
 
-		const shouldUseLocalSimulator = prefs.bgsUseLocalSimulator || !this.isPremium;
+		const shouldUseLocalSimulator = !prefs.bgsUseRemoteSimulator || !this.isPremium;
 		console.debug(
 			'[bgs-simulation] useLocalSim?',
 			shouldUseLocalSimulator,
-			prefs.bgsUseLocalSimulator,
+			prefs.bgsUseRemoteSimulator,
 			this.isPremium,
 		);
 		const result: SimulationResult = shouldUseLocalSimulator

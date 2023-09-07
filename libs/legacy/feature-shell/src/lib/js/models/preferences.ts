@@ -540,7 +540,7 @@ export class Preferences implements IPreferences {
 	readonly bgsShowQuestStatsOverlay = true;
 	readonly bgsTribesOverlaySingleRow = false;
 	readonly bgsForceShowPostMatchStats2 = false;
-	readonly bgsUseLocalSimulator = true;
+	readonly bgsUseRemoteSimulator = false;
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;
 	readonly bgsShowHeroSelectionTooltip: boolean = true;

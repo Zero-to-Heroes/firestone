@@ -92,10 +92,10 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.general.enable-battle-sim-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					field="bgsUseLocalSimulator"
+					field="bgsUseRemoteSimulator"
 					[ngClass]="{ disabled: !value.enableSimulation || !value.bgsFullToggle }"
-					[label]="'settings.battlegrounds.general.use-local-simulator-label' | owTranslate"
-					[tooltip]="'settings.battlegrounds.general.use-local-simulator-tooltip' | owTranslate"
+					[label]="'settings.battlegrounds.general.use-remote-simulator-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.use-remote-simulator-tooltip' | owTranslate"
 					premiumSetting
 				></preference-toggle>
 				<preference-toggle
@@ -185,7 +185,7 @@ export class SettingsBattlegroundsGeneralComponent
 		const premium$ = this.store.enablePremiumFeatures$().pipe(this.mapData((premium) => premium));
 		this.useLocalSimulator$ = combineLatest([
 			premium$,
-			this.store.listenPrefs$((prefs) => prefs.bgsUseLocalSimulator),
+			this.store.listenPrefs$((prefs) => !prefs.bgsUseRemoteSimulator),
 		]).pipe(this.mapData(([premium, [useLocalSimulator]]) => !premium || useLocalSimulator));
 		this.enableSimulation$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableSimulation);
 		this.bgsHideSimResultsOnRecruit$ = this.listenForBasicPref$((prefs) => prefs.bgsHideSimResultsOnRecruit);
