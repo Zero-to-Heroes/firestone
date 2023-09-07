@@ -41,7 +41,7 @@ export class CthunCounterDefinition implements CounterDefinition<GameState, { at
 	public emit(cthunSize: { atk: number; health: number }): NonFunctionProperties<CthunCounterDefinition> {
 		return {
 			type: 'cthun',
-			value: `${cthunSize.atk}/${cthunSize.health}`,
+			value: `${cthunSize.atk}`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/OG_280.jpg`,
 			cssClass: 'cthun-counter',
 			tooltip: this.i18n.translateString(`counters.cthun.${this.side}`, {
