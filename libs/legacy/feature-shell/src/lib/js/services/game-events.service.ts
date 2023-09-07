@@ -8,6 +8,7 @@ import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-ev
 import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
 import { MemoryUpdate } from '../models/memory/memory-update';
+import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { HsGameMetaData } from './game-mode-data.service';
@@ -40,6 +41,7 @@ export class GameEvents {
 		private readonly memoryService: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
 		private readonly allCards: CardsFacadeService,
+		private readonly gameState: GameStateService,
 	) {
 		this.init();
 	}
@@ -110,8 +112,11 @@ export class GameEvents {
 		// this.gameStatus.onGameExit(() => {
 		// Use game start, so we have a chance to spot reconnects
 		this.gameStatus.onGameStart(() => {
-			console.log('[game-events] leaving game, emitting End Spectator Mode event');
-			this.processingQueue.enqueue('End Spectator Mode');
+			// If we're current spectating, stop it
+			if (this.gameState.state?.spectating) {
+				console.log('[game-events] leaving game while spectating, emitting End Spectator Mode event');
+				this.processingQueue.enqueue('End Spectator Mode');
+			}
 		});
 	}
 
