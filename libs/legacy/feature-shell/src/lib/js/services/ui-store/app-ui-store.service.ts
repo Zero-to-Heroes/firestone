@@ -233,8 +233,8 @@ export class AppUiStoreService extends Store<Preferences> {
 				if (this.initialized) {
 					resolve();
 				} else {
-					console.warn('wait for store init');
-					setTimeout(() => dbWait(), 1000);
+					// console.debug('wait for store init', new Error().stack);
+					setTimeout(() => dbWait(), 500);
 				}
 			};
 			dbWait();

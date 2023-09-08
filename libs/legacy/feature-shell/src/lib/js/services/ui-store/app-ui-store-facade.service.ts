@@ -301,7 +301,7 @@ export class AppUiStoreFacadeService {
 				if (this.store) {
 					resolve();
 				} else {
-					setTimeout(() => dbWait(), 10);
+					setTimeout(() => dbWait(), 20);
 				}
 			};
 			dbWait();
