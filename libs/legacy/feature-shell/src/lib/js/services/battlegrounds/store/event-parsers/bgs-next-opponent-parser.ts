@@ -20,14 +20,17 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
+		const opponentCardId = event.isSameOpponent ? currentState.currentGame.lastOpponentCardId : event.cardId;
+		const opponentPlayerId = event.isSameOpponent ? currentState.currentGame.lastOpponentPlayerId : event.playerId;
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(
 			currentState,
-			event.cardId,
-			event.playerId,
+			opponentCardId,
+			opponentPlayerId,
 		);
 		console.debug(
 			'[bgs-next-opponent] parsing next opponent',
-			event.cardId,
+			opponentCardId,
+			opponentPlayerId,
 			newNextOpponentPanel.opponentOverview?.playerId,
 			newNextOpponentPanel,
 			event,
@@ -59,7 +62,7 @@ export class BgsNextOpponentParser implements EventParser {
 			(mainPlayer.damageTaken ?? 0);
 
 		const opponentHpLeft =
-			(opponent?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, event.cardId, this.allCards)) +
+			(opponent?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponentCardId, this.allCards)) +
 			(opponent?.currentArmor ?? 0) -
 			(opponent?.damageTaken ?? 0);
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
@@ -67,8 +70,8 @@ export class BgsNextOpponentParser implements EventParser {
 			playerHpLeft: playerHpLeft,
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
 			playerCardId: mainPlayer?.cardId,
-			opponentCardId: normalizeCardId(event.cardId, this.allCards),
-			opponentPlayerId: event.playerId,
+			opponentCardId: normalizeCardId(opponentCardId, this.allCards),
+			opponentPlayerId: opponentPlayerId,
 			opponentHpLeft: opponentHpLeft,
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		});
