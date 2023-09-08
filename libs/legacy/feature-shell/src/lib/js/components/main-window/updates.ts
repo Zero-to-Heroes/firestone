@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.9.0',
+		version: '11.9.1',
 		force: false,
 		sections: [
 			// {
@@ -50,7 +50,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `You can now see all minions for a single tribe in the minions list. This needs to be enabled in the settings first.`,
+								text: `You can now see all minions for a single tribe in the minions list (and of course you can turn that off in the settings).`,
+							},
+							{
+								type: 'bug',
+								text: `Reconnections should now be better handled. Reconnects are still a pretty thorny topic, so let me know if you still experience issues after reconnecting to your game.`,
 							},
 						],
 					},
@@ -91,6 +95,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where turning off the "opponent boards" would also turn off the "last opponent" icon.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue when Tavish' hero power kills a minion.`,
 							},
 							{
 								type: 'misc',
