@@ -9,9 +9,18 @@ export class ReconnectStartParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
+		// In Battlegrounds, when we reconnect, we might miss all the "minions removed" events
+		// Also, new events are emitted for all the minions that are still on board
+		// So we clean everything
+		const newOpponentState = currentState.isBattlegrounds()
+			? currentState.opponentDeck.update({
+					board: [],
+			  })
+			: currentState.opponentDeck;
 		return currentState.update({
 			reconnectOngoing: true,
 			hasReconnected: true,
+			opponentDeck: newOpponentState,
 		});
 	}
 

@@ -1,3 +1,4 @@
+import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { defaultStartingHp, GameType, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -34,8 +35,21 @@ export class BgsNextOpponentParser implements EventParser {
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const opponent = currentState.currentGame.findPlayer(newNextOpponentPanel.opponentOverview?.playerId);
-		if (!mainPlayer || !opponent) {
+		if (!mainPlayer) {
+			console.error('[bgs-next-opponent] could not find main player', currentState.currentGame.players);
 			return currentState;
+		}
+
+		// This can happen when reconnecting - the main player opponent is already decided on the "hero selection" event,
+		// but the opponent event itself has not yet been sent
+		if (!opponent) {
+			console.warn(
+				'[bgs-next-opponent] could not find opponent',
+				newNextOpponentPanel.opponentOverview?.playerId,
+				'is reconnect ongoing?',
+				currentState.reconnectOngoing,
+				'building a face-off with default values',
+			);
 		}
 
 		const playerHpLeft =
@@ -44,18 +58,18 @@ export class BgsNextOpponentParser implements EventParser {
 			(mainPlayer.currentArmor ?? 0) -
 			(mainPlayer.damageTaken ?? 0);
 
+		const opponentHpLeft =
+			(opponent?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, event.cardId, this.allCards)) +
+			(opponent?.currentArmor ?? 0) -
+			(opponent?.damageTaken ?? 0);
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerHpLeft: playerHpLeft,
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
 			playerCardId: mainPlayer?.cardId,
-			opponentCardId: opponent?.getNormalizedHeroCardId(this.allCards),
-			opponentPlayerId: opponent?.playerId,
-			opponentHpLeft:
-				(opponent.initialHealth ??
-					defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId, this.allCards)) +
-				(opponent.currentArmor ?? 0) -
-				(opponent.damageTaken ?? 0),
+			opponentCardId: normalizeCardId(event.cardId, this.allCards),
+			opponentPlayerId: event.playerId,
+			opponentHpLeft: opponentHpLeft,
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		});
 		console.debug('[bgs-next-opponent] created face-off', faceOff, event);

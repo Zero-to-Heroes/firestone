@@ -83,14 +83,25 @@ export class BgsHeroSelectedParser implements EventParser {
 					: panel,
 			) as readonly BgsPanel[],
 		} as BattlegroundsState);
-		if (event.additionalData?.nextOpponentCardId) {
-			return new BgsNextOpponentParser(this.i18n, this.allCards).parse(
-				updatedState,
-				new BgsNextOpponentEvent(
-					event.additionalData.nextOpponentCardId,
-					event.additionalData.nextOpponentPlayerId,
-				),
-			);
+		// Happens typically when reconnecting, but also if we choose our hero late, and the
+		// opponent has already been decided
+		if (event.additionalData?.nextOpponentPlayerId) {
+			console.debug('[bgs-hero-selected] next opponent event', event.additionalData.nextOpponentCardId);
+			const lastFaceOff = updatedState.currentGame?.faceOffs?.[updatedState?.currentGame?.faceOffs.length - 1];
+			// We're either facing a new opponent, or we're facing the same opponent, but the previous battle is
+			// already over
+			if (
+				lastFaceOff?.opponentPlayerId !== event.additionalData.nextOpponentPlayerId ||
+				lastFaceOff?.battleInfo
+			) {
+				return new BgsNextOpponentParser(this.i18n, this.allCards).parse(
+					updatedState,
+					new BgsNextOpponentEvent(
+						event.additionalData.nextOpponentCardId,
+						event.additionalData.nextOpponentPlayerId,
+					),
+				);
+			}
 		} else {
 			return updatedState;
 		}
