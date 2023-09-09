@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.9.1',
+		version: '11.9.2',
 		force: false,
 		sections: [
 			// {
@@ -99,6 +99,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a simulation issue when Tavish' hero power kills a minion.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation where golden Carbonic Copy would only summon one copy.`,
 							},
 							{
 								type: 'misc',
