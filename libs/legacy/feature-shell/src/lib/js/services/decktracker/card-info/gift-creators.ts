@@ -582,4 +582,6 @@ export const giftCreators = [
 	CardIds.DrakonidOperative,
 	CardIds.DrakonidOperativeCore,
 	CardIds.GrimestreetInformant_WON_331,
+	CardIds.DarkPeddler_WON_096,
+	CardIds.BlastFromThePast_WON_115,
 ];
