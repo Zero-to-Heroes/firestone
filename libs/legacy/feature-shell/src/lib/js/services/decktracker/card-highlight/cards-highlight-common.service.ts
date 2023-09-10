@@ -564,6 +564,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.CthunsChosen_WON_125:
 			case CardIds.AncientShieldbearer:
 			case CardIds.AncientShieldbearer_WON_111:
+			case CardIds.BeckonerOfEvil:
 			case CardIds.BladeOfCthun:
 			case CardIds.BladeOfCthun_WON_075:
 			case CardIds.CrazedWorshipper:
@@ -1270,6 +1271,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.StickyFingersTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
+			case CardIds.StolenGoods:
+			case CardIds.StolenGoods_WON_110:
+				return and(side(inputSide), inDeck, taunt);
 			case CardIds.StonehearthVindicator:
 				return and(side(inputSide), inDeck, spell, effectiveCostLess(4));
 			case CardIds.StormpikeBattleRam:
