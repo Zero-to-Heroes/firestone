@@ -106,6 +106,8 @@ export const battlecryGlobalEffectCards = [
 	CardIds.HalduronBrightwing,
 	CardIds.Helya,
 	CardIds.HemetJungleHunter,
+	CardIds.HobartGrapplehammer,
+	CardIds.HobartGrapplehammer_WON_117,
 	CardIds.InfiniteMurloc,
 	CardIds.Inzah,
 	CardIds.IronweaveBloodletterTavernBrawl,
