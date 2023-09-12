@@ -550,6 +550,7 @@ export const giftCreators = [
 	CardIds.UmbralSkulker,
 	CardIds.UnderbellyAngler,
 	CardIds.UndercityHuckster_OG_330,
+	CardIds.UndercityHuckster_WON_317,
 	CardIds.UnholyEmbraceTavernBrawl,
 	CardIds.UniteTheMurlocs_MegafinToken,
 	CardIds.UniteTheMurlocs,
@@ -593,4 +594,5 @@ export const giftCreators = [
 	CardIds.ZephrysTheGreat_ULD_003,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
+	CardIds.Nefarian_BRM_030,
 ];
