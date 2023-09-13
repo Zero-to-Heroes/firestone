@@ -11,6 +11,8 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.GrandMagisterRommath,
 	CardIds.HighCultistBasaleph,
 	CardIds.MassResurrection_DAL_724,
+	CardIds.OnyxBishop,
+	CardIds.OnyxBishop_WON_057,
 	CardIds.RaDen,
 	CardIds.RevivePet,
 	CardIds.SouleatersScythe_BoundSoulToken,

@@ -31,6 +31,7 @@ export const inDeck = inZoneName('deck');
 export const inHand = inZoneName('hand');
 export const inOther = inZoneName('other');
 export const inGraveyard = inZoneName('graveyard');
+export const discarded = inZoneName('discard');
 export const inPlay = (input: SelectorInput): boolean =>
 	input.deckCard.zone !== 'BURNED' &&
 	input.deckCard.zone !== 'REMOVEDFROMGAME' &&
@@ -110,6 +111,15 @@ export const attackLessThan =
 	(attack: number) =>
 	(input: SelectorInput): boolean =>
 		input.card.attack != null && input.card.attack < attack;
+
+export const healthGreaterThan =
+	(health: number) =>
+	(input: SelectorInput): boolean =>
+		input.card.health != null && input.card.health > health;
+export const healthLessThan =
+	(health: number) =>
+	(input: SelectorInput): boolean =>
+		input.card.health != null && input.card.health < health;
 
 export const cardIs =
 	(...cardIds: readonly CardIds[]) =>

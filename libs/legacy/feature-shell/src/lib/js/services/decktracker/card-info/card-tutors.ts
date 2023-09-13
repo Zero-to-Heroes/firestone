@@ -3,6 +3,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 export const tutors = [
 	CardIds.AbyssalDepths,
 	CardIds.AkaliTheRhino,
+	CardIds.AlakirTheWindsOfTime_WON_092h,
 	CardIds.AllianceBannerman,
 	CardIds.Ancharrr,
 	CardIds.AncientMysteries,
