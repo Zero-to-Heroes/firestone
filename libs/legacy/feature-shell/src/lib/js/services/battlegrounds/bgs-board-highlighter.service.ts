@@ -45,6 +45,7 @@ export class BgsBoardHighlighterService {
 				([state]) => state.highlightedTribes,
 				([state]) => state.highlightedMinions,
 				([state]) => state.highlightedMechanics,
+				([state]) => state.currentGame?.anomalies,
 			),
 			this.store.listenDeckState$((state) => state?.opponentDeck?.board),
 			enableAutoHighlight$,
@@ -57,7 +58,7 @@ export class BgsBoardHighlighterService {
 			map(
 				([
 					showTribesHighlight,
-					[phase, highlightedTribes, highlightedMinions, highlightedMechanics],
+					[phase, highlightedTribes, highlightedMinions, highlightedMechanics, anomalies],
 					[opponentBoard],
 					enableAutoHighlight,
 				]) => {
@@ -72,6 +73,7 @@ export class BgsBoardHighlighterService {
 							highlightedTribes ?? [],
 							highlightedMinions ?? [],
 							highlightedMechanics ?? [],
+							anomalies ?? [],
 							enableAutoHighlight,
 						),
 					}));
@@ -89,6 +91,7 @@ export class BgsBoardHighlighterService {
 		highlightedTribes: readonly Race[],
 		highlightedMinions: readonly string[],
 		highlightedMechanics: readonly GameTag[],
+		anomalies: readonly string[],
 		enableAutoHighlight: boolean,
 	): boolean {
 		if (!minion.cardId) {
@@ -116,7 +119,11 @@ export class BgsBoardHighlighterService {
 			return true;
 		}
 
-		if (enableAutoHighlight && isMinionGolden(card)) {
+		if (
+			enableAutoHighlight &&
+			!anomalies.includes(CardIds.TheGoldenArena_BG27_Anomaly_801) &&
+			isMinionGolden(card)
+		) {
 			return true;
 		}
 
