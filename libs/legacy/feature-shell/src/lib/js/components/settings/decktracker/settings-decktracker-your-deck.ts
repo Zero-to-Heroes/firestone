@@ -383,7 +383,9 @@ export class SettingsDecktrackerYourDeckComponent
 			id: 'grey-sage-parrot',
 			field: 'playerGreySageParrotCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-label'),
-			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip', {
+				cost: 6,
+			}),
 		},
 		{
 			id: 'multicaster',
