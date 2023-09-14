@@ -73,11 +73,16 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		this.deckstring$$.next(value);
 	}
 
+	@Input() set cards(value: readonly MinimalCard[]) {
+		this.cards$$.next(value);
+	}
+
 	@Input() set collection(value: readonly SetCard[]) {
 		this.collection$$.next(value);
 	}
 
 	private deckstring$$ = new BehaviorSubject<string>(null);
+	private cards$$ = new BehaviorSubject<readonly MinimalCard[]>([]);
 	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
 
 	constructor(
@@ -96,9 +101,15 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 
 	ngAfterContentInit(): void {
 		this.colorManaCost$ = this.listenForBasicPref$((prefs) => prefs.overlayShowRarityColors);
-		this.cards$ = combineLatest([this.deckstring$$, this.collection$$]).pipe(
-			filter(([deckstring, collection]) => !!deckstring?.length),
-			this.mapData(([deckstring, collection]) => this.buildCards(deckstring, collection)),
+		this.deckstring$$
+			.pipe(
+				filter((deckstring) => !!deckstring?.length),
+				this.mapData((deckstring) => this.buildCardsFromDeckstring(deckstring)),
+			)
+			.subscribe(this.cards$$);
+		this.cards$ = combineLatest([this.cards$$, this.collection$$]).pipe(
+			filter(([deckCards, collection]) => !!deckCards?.length),
+			this.mapData(([deckCards, collection]) => this.buildCards(deckCards, collection)),
 		);
 	}
 
@@ -106,26 +117,42 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		this.cardClicked.next(card);
 	}
 
-	private buildCards(deckstring: string, collection: readonly SetCard[]): readonly VisualDeckCard[] {
+	private buildCardsFromDeckstring(deckstring: string): readonly MinimalCard[] {
+		if (!deckstring?.length) {
+			return [];
+		}
+
 		const decklist = decode(deckstring);
-		return decklist.cards
-			.map((pair) => {
-				const cardDbfId = pair[0];
-				const quantity = pair[1];
-				const card = this.allCards.getCard(cardDbfId);
-				const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
-				const sideboard = this.buildSideboard(sideboardFromList);
+		return decklist.cards.map((pair) => {
+			const cardDbfId = pair[0];
+			const quantity = pair[1];
+			const card = this.allCards.getCard(cardDbfId);
+			const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
+			const sideboard = this.buildMinimalSideboard(sideboardFromList);
+			return {
+				cardId: card.id,
+				quantity: quantity,
+				sideboard: sideboard,
+			};
+		});
+	}
+
+	private buildCards(deckCards: readonly MinimalCard[], collection: readonly SetCard[]): readonly VisualDeckCard[] {
+		return deckCards
+			.map((miniCard) => {
+				const card = this.allCards.getCard(miniCard.cardId);
+				const sideboard = this.buildSideboard(miniCard.sideboard);
 				const internalEntityId = uuid();
 				const inCollection =
 					collection == null
 						? true
-						: collection.find((c) => c.id === card.id)?.getNumberCollected() >= quantity;
+						: collection.find((c) => c.id === card.id)?.getNumberCollected() >= miniCard.quantity;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
 					manaCost: card.cost,
 					rarity: card.rarity,
-					totalQuantity: quantity,
+					totalQuantity: miniCard.quantity,
 					sideboard: sideboard,
 					isMissing: !inCollection,
 					internalEntityId: internalEntityId,
@@ -135,23 +162,37 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 			.sort(sortByProperties((c: CardWithSideboard) => [c.manaCost, c.cardName]));
 	}
 
-	private buildSideboard(sideboardFromList: Sideboard): readonly VisualDeckCard[] {
+	private buildMinimalSideboard(sideboardFromList: Sideboard): readonly MinimalCard[] {
 		if (!sideboardFromList) {
 			return null;
 		}
 
-		return sideboardFromList.cards
-			.map((pair) => {
-				const cardDbfId = pair[0];
-				const quantity = pair[1];
-				const card = this.allCards.getCard(cardDbfId);
+		return sideboardFromList.cards.map((pair) => {
+			const cardDbfId = pair[0];
+			const quantity = pair[1];
+			const card = this.allCards.getCard(cardDbfId);
+			return {
+				cardId: card.id,
+				quantity: quantity,
+			};
+		});
+	}
+
+	private buildSideboard(sideboardFromList: readonly MinimalCard[]): readonly VisualDeckCard[] {
+		if (!sideboardFromList?.length) {
+			return null;
+		}
+
+		return sideboardFromList
+			.map((miniCard) => {
+				const card = this.allCards.getCard(miniCard.cardId);
 				const internalEntityId = uuid();
 				return VisualDeckCard.create({
 					cardId: card.id,
 					cardName: card.name,
 					manaCost: card.cost,
 					rarity: card.rarity,
-					totalQuantity: quantity,
+					totalQuantity: miniCard.quantity,
 					internalEntityId: internalEntityId,
 					internalEntityIds: [internalEntityId],
 				});
@@ -166,4 +207,10 @@ class CardWithSideboard extends VisualDeckCard {
 	public static create(base: Partial<NonFunctionProperties<CardWithSideboard>>): CardWithSideboard {
 		return Object.assign(new CardWithSideboard(), base);
 	}
+}
+
+export interface MinimalCard {
+	readonly cardId: string;
+	readonly quantity: number;
+	readonly sideboard?: readonly MinimalCard[];
 }
