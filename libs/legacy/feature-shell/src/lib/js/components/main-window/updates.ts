@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '11.9.2',
+		version: '12.0.0',
 		force: false,
 		sections: [
 			// {
@@ -46,15 +46,23 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `You can now see all minions for a single tribe in the minions list (and of course you can turn that off in the settings).`,
-							},
-							{
-								type: 'bug',
-								text: `Reconnections should now be better handled. Reconnects are still a pretty thorny topic, so let me know if you still experience issues after reconnecting to your game.`,
+								text: `Deck meta stats are here! You can now see detailed stats for decks to pick whatever will work best for you on the ladder. This is still an early version, so:
+								<ul>
+									<li>Only the "legend" rank and "last-patch" filters are working right now</li>
+									<li>The sample sizes are still pretty small, as I need to some time start collecting the data</li>
+								</ul>
+								There are still many things planned for the near future (some of these features will be available to premium users only):
+								<ul>
+									<li>Archetype stats</li>
+									<li>Detailed matchup stats</li>
+									<li>Detailed card stats</li>
+								</ul>
+								Also, a big thanks to https://www.d0nkey.top for sharing their archetype categorization with us!
+								`,
 							},
 						],
 					},
@@ -68,16 +76,12 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'content',
-								text: `The C'Thun counter now only shows the attack value, but still shows both attack and health when you hover over it.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix some issues when spectating games that could cause the tracker to stop working until you restarted Hearthstone.`,
+								text: `Fix the tooltip for the Grey Sage Parrot counter in the settings.`,
 							},
 							{
 								type: 'content',
-								text: `Add multiple oracles and card highlights.`,
+								text: `Add most of the missing oracles and card highlights for Caverns of Time.`,
 							},
 						],
 					},
@@ -85,50 +89,12 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `(Premium) When minion auto-highlight is activated, golden minions are now automatically highlighted in the shop.`,
+								type: 'bug',
+								text: `(Premium) Fix a bug where golden mininos would be auto-highlighted even when The Golden Arena anomaly was active.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the buddies list would be empty when playing with the Bring in the Buddies anomaly.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where turning off the "opponent boards" would also turn off the "last opponent" icon.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation issue when Tavish' hero power kills a minion.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation where golden Carbonic Copy would only summon one copy.`,
-							},
-							{
-								type: 'misc',
-								text: `The name of the (premium) setting that lets you use the remote simulator has been changed to "Use remote simulator" to make it more consistent with how other premium settings are labeled (turned off by default).`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where Tess / Contraband stash would only take the hero's first class into accunt when showing the list of cards that would be replayed.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the "My Decks" tab would not show anything if all heroes were unselected.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where some sounds would not be played properly.`,
+								text: `Fix a sim issue where Banana Slamma would buff itself after being summoned in combat.`,
 							},
 						],
 					},
