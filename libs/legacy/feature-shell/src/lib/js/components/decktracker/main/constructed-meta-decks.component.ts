@@ -1,9 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
-import { sortByProperties } from '@firestone/shared/framework/common';
-import { Observable } from 'rxjs';
+import { decode } from '@firestone-hs/deckstrings';
+import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { Card } from '../../../models/card';
+import { Card, totalOwned } from '../../../models/card';
+import { dustToCraftFor } from '../../../services/hs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -17,18 +20,52 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		<ng-container
 			*ngIf="{
 				decks: decks$ | async,
-				archetypes: archetypes$ | async,
-				collection: collection$ | async
+				archetypes: archetypes$ | async
 			} as value"
 		>
 			<div class="constructed-meta-decks" *ngIf="value.decks">
 				<with-loading [isLoading]="!value.decks?.length">
-					<div class="header">
-						<div class="cell player-class" [owTranslate]="'app.decktracker.meta.class-header'"></div>
-						<div class="cell name" [owTranslate]="'app.decktracker.meta.archetype-header'"></div>
-						<div class="cell dust" [owTranslate]="'app.decktracker.meta.cost-header'"></div>
-						<div class="cell winrate" [owTranslate]="'app.decktracker.meta.winrate-header'"></div>
-						<div class="cell games" [owTranslate]="'app.decktracker.meta.games-header'"></div>
+					<div class="header" *ngIf="sortCriteria$ | async as sort">
+						<sortable-table-label
+							class="cell player-class"
+							[name]="'app.decktracker.meta.class-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'player-class'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell name"
+							[name]="'app.decktracker.meta.archetype-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'archetype'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell dust"
+							[name]="'app.decktracker.meta.cost-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'cost'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell winrate"
+							[name]="'app.decktracker.meta.winrate-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'winrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell games"
+							[name]="'app.decktracker.meta.games-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'games'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
 						<div class="cell cards" [owTranslate]="'app.decktracker.meta.cards-header'"></div>
 					</div>
 					<virtual-scroller
@@ -45,7 +82,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							role="listitem"
 							[deck]="deck"
 							[archetypes]="value.archetypes"
-							[collection]="value.collection"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
 				</with-loading>
@@ -58,28 +94,131 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	decks$: Observable<DeckStat[]>;
 	archetypes$: Observable<readonly ArchetypeStat[]>;
 	collection$: Observable<readonly Card[]>;
+	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
+		criteria: 'winrate',
+		direction: 'desc',
+	});
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.decks$ = this.store.constructedMetaDecks$().pipe(
-			filter((stats) => !!stats?.dataPoints),
-			this.mapData((stats) => [...stats.deckStats].sort(sortByProperties((a) => [-a.winrate, -a.totalGames]))),
+		this.sortCriteria$ = this.sortCriteria$$.asObservable();
+		const collection$ = this.store.collection$().pipe(
+			filter((collection) => !!collection),
+			debounceTime(500),
+			this.mapData((collection) => collection),
+		);
+		this.decks$ = combineLatest([this.store.constructedMetaDecks$(), this.sortCriteria$$, collection$]).pipe(
+			filter(([stats, sortCriteria]) => !!stats?.dataPoints),
+			this.mapData(([stats, sortCriteria, collection]) =>
+				stats.deckStats
+					.map((stat) => this.enhanceStat(stat, collection))
+					.sort((a, b) => this.sortDecks(a, b, sortCriteria)),
+			),
 		);
 		this.archetypes$ = this.store.constructedMetaDecks$().pipe(
 			filter((stats) => !!stats?.dataPoints),
 			this.mapData((stats) => stats.archetypeStats),
 		);
-		this.collection$ = this.store.collection$().pipe(
-			filter((collection) => !!collection),
-			debounceTime(500),
-			this.mapData((collection) => collection),
-		);
+	}
+
+	onSortClick(rawCriteria: string) {
+		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
+		this.sortCriteria$$.next({
+			criteria: criteria,
+			direction:
+				criteria === this.sortCriteria$$.value?.criteria
+					? invertDirection(this.sortCriteria$$.value.direction)
+					: 'desc',
+		});
 	}
 
 	trackByDeck(index: number, item: DeckStat) {
 		return item.decklist;
 	}
+
+	private enhanceStat(stat: DeckStat, collection: readonly Card[]): EnhancedDeckStat {
+		const deckDefinition = decode(stat.decklist);
+		const deckCards = deckDefinition.cards.map((pair) => ({
+			quantity: pair[1],
+			card: this.allCards.getCardFromDbfId(pair[0]),
+		}));
+		const dustCost = deckCards
+			.map((card) => {
+				const collectionCard = collection?.find((c) => c.id === card.card.id);
+				const owned = Math.min(
+					totalOwned(collectionCard),
+					this.allCards.getCard(collectionCard?.id)?.rarity?.toLowerCase() === 'legendary' ? 1 : 2,
+				);
+				const missingQuantity = Math.max(0, card.quantity - owned);
+				if (missingQuantity) {
+					console.debug('missing quantity', card, collectionCard, owned, missingQuantity);
+				}
+				return dustToCraftFor(card.card.rarity) * missingQuantity;
+			})
+			.reduce((a, b) => a + b, 0);
+		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
+		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
+		return {
+			...stat,
+			dustCost: dustCost,
+			heroCardClass: heroCardClass,
+		};
+	}
+
+	private sortDecks(a: EnhancedDeckStat, b: EnhancedDeckStat, sortCriteria: SortCriteria<ColumnSortType>): number {
+		switch (sortCriteria?.criteria) {
+			case 'player-class':
+				return this.sortByPlayerClass(a, b, sortCriteria.direction);
+			case 'archetype':
+				return this.sortByArchetype(a, b, sortCriteria.direction);
+			case 'winrate':
+				return this.sortByWinrate(a, b, sortCriteria.direction);
+			case 'games':
+				return this.sortByGames(a, b, sortCriteria.direction);
+			case 'cost':
+				return this.sortByCost(a, b, sortCriteria.direction);
+			default:
+				return 0;
+		}
+	}
+
+	private sortByPlayerClass(a: EnhancedDeckStat, b: EnhancedDeckStat, direction: SortDirection): number {
+		return direction === 'asc'
+			? a.playerClass.localeCompare(b.playerClass)
+			: b.playerClass.localeCompare(a.playerClass);
+	}
+
+	private sortByArchetype(a: EnhancedDeckStat, b: EnhancedDeckStat, direction: SortDirection): number {
+		return direction === 'asc'
+			? a.archetypeName.localeCompare(b.archetypeName)
+			: b.archetypeName.localeCompare(a.archetypeName);
+	}
+
+	private sortByWinrate(a: EnhancedDeckStat, b: EnhancedDeckStat, direction: SortDirection): number {
+		return direction === 'asc' ? a.winrate - b.winrate : b.winrate - a.winrate;
+	}
+
+	private sortByGames(a: EnhancedDeckStat, b: EnhancedDeckStat, direction: SortDirection): number {
+		return direction === 'asc' ? a.totalGames - b.totalGames : b.totalGames - a.totalGames;
+	}
+
+	private sortByCost(a: EnhancedDeckStat, b: EnhancedDeckStat, direction: SortDirection): number {
+		return direction === 'asc' ? a.dustCost - b.dustCost : b.dustCost - a.dustCost;
+	}
+}
+
+export type ColumnSortType = 'player-class' | 'archetype' | 'winrate' | 'games' | 'cost';
+
+export interface EnhancedDeckStat extends DeckStat {
+	readonly dustCost: number;
+	readonly heroCardClass: string;
 }
