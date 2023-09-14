@@ -33,8 +33,11 @@ with-loading {
 		overflow-y: scroll;
 
 		.deck {
-			height: 50px;
 			margin-bottom: 5px;
+
+			::ng-deep .constructed-meta-deck-summary {
+				height: 50px;
+			}
 		}
 	}
 }

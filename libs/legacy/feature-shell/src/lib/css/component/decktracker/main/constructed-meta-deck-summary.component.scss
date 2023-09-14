@@ -1,6 +1,8 @@
 :host {
 	position: relative;
 	display: flex;
+	flex-direction: column;
+	color: var(--default-text-color);
 }
 
 .constructed-meta-deck-summary {
@@ -10,10 +12,6 @@
 	width: 100%;
 	background: rgba(255, 255, 255, 0.08);
 	position: relative;
-	padding: 10px;
-	font-family: 'Open Sans', sans-serif;
-	color: var(--default-text-color);
-	// font-size: 12px;
 	padding: 0;
 
 	.player-class {
@@ -141,6 +139,32 @@
 	}
 }
 
+.deck-details {
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.08);
+	margin-top: 1px;
+
+	.cards-containers {
+		display: flex;
+		justify-content: space-around;
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 23%;
+			align-items: center;
+
+			.title {
+				font-size: 14px;
+				margin-bottom: 10px;
+			}
+
+			.cards {
+				width: 100%;
+			}
+		}
+	}
+}
 // @media (max-width: 1690px) {
 // 	.constructed-meta-deck-summary {
 // 		.name {

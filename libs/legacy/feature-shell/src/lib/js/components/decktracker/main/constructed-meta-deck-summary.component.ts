@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DeckStat } from '@firestone-hs/constructed-deck-stats';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
-import { groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 import { dustToCraftFor } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { MinimalCard } from '../overlay/deck-list-static.component';
 
 @Component({
 	selector: 'constructed-meta-deck-summary',
@@ -13,7 +15,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		`../../../../css/component/decktracker/main/constructed-meta-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="constructed-meta-deck-summary">
+		<div class="constructed-meta-deck-summary" (click)="toggleDetails()">
 			<div class="player-class cell">
 				<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
 			</div>
@@ -60,38 +62,27 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				></div>
 			</div> -->
 		</div>
+		<div class="deck-details" *ngIf="showDetails$ | async">
+			<div class="cards-containers">
+				<div class="container core">
+					<div class="title">Archetype core cards</div>
+					<deck-list-static class="cards" [cards]="archetypeCoreCards"> </deck-list-static>
+				</div>
+				<div class="container removed">
+					<div class="title">Removed cards</div>
+					<deck-list-static class="cards" [cards]="removedCards"> </deck-list-static>
+				</div>
+				<div class="container added">
+					<div class="title">Added cards</div>
+					<deck-list-static class="cards" [cards]="addedCards"> </deck-list-static>
+				</div>
+			</div>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMetaDeckSummaryComponent {
-	@Input() set deck(value: DeckStat) {
-		console.debug('setting deck', value, value.decklist);
-		if (!value.decklist) {
-			return;
-		}
-		const deckDefinition = decode(value.decklist);
-		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
-		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
-		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCardClass}.png`;
-		this.classTooltip = this.i18n.translateString(`global.class.${heroCardClass}`);
-		this.deckName =
-			this.i18n.translateString(`archetype.${value.archetypeName}`) === `archetype.${value.archetypeName}`
-				? value.archetypeName
-				: this.i18n.translateString(`archetype.${value.archetypeName}`);
-		const deckCards = deckDefinition.cards.map((pair) => ({
-			quantity: pair[1],
-			card: this.allCards.getCardFromDbfId(pair[0]),
-		}));
-		this.dustCost = deckCards
-			.map((card) => dustToCraftFor(card.card.rarity) * card.quantity)
-			.reduce((a, b) => a + b, 0);
-		this.winrate = this.buildPercents(value.winrate);
-		this.totalGames = this.formatGamesCount(value.totalGames);
-		this.removedCards = this.buildCardVariations(value.cardVariations?.removed);
-		this.addedCards = this.buildCardVariations(value.cardVariations?.added);
-	}
-
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	showDetails$: Observable<boolean>;
 
 	classTooltip: string;
 	classIcon: string;
@@ -99,8 +90,68 @@ export class ConstructedMetaDeckSummaryComponent {
 	dustCost: number;
 	winrate: string;
 	totalGames: number;
+	archetypeCoreCards: readonly MinimalCard[];
 	removedCards: readonly CardVariation[];
 	addedCards: readonly CardVariation[];
+
+	@Input() set deck(value: DeckStat) {
+		this.deck$$.next(value);
+	}
+
+	@Input() set archetypes(value: readonly ArchetypeStat[]) {
+		this.archetypes$$.next(value);
+	}
+
+	private showDetails$$ = new BehaviorSubject<boolean>(false);
+	private deck$$ = new BehaviorSubject<DeckStat>(null);
+	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
+
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {
+		super(cdr);
+	}
+
+	ngAfterContentInit() {
+		this.showDetails$ = this.showDetails$$.asObservable();
+		combineLatest([this.deck$$, this.archetypes$$])
+			.pipe(
+				filter(([deck]) => !!deck?.decklist?.length),
+				this.mapData(([deck, archetypes]) => {
+					const archetype = archetypes.find((arch) => arch.id === deck.archetypeId);
+					return { deck, archetype };
+				}),
+				distinctUntilChanged(
+					(a, b) => a.deck.decklist === b.deck.decklist && a.archetype?.id === b.archetype?.id,
+				),
+			)
+			.subscribe(({ deck, archetype }) => {
+				console.debug('setting deck', deck, archetype);
+				const deckDefinition = decode(deck.decklist);
+				const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
+				const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
+				this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCardClass}.png`;
+				this.classTooltip = this.i18n.translateString(`global.class.${heroCardClass}`);
+				this.deckName =
+					this.i18n.translateString(`archetype.${deck.archetypeName}`) === `archetype.${deck.archetypeName}`
+						? deck.archetypeName
+						: this.i18n.translateString(`archetype.${deck.archetypeName}`);
+				const deckCards = deckDefinition.cards.map((pair) => ({
+					quantity: pair[1],
+					card: this.allCards.getCardFromDbfId(pair[0]),
+				}));
+				this.dustCost = deckCards
+					.map((card) => dustToCraftFor(card.card.rarity) * card.quantity)
+					.reduce((a, b) => a + b, 0);
+				this.winrate = this.buildPercents(deck.winrate);
+				this.totalGames = this.formatGamesCount(deck.totalGames);
+				this.removedCards = this.buildCardVariations(deck.cardVariations?.removed);
+				this.addedCards = this.buildCardVariations(deck.cardVariations?.added);
+				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards);
+			});
+	}
 
 	buildPercents(value: number): string {
 		return value == null ? '-' : (100 * value).toFixed(1) + '%';
@@ -110,8 +161,8 @@ export class ConstructedMetaDeckSummaryComponent {
 		return item.cardId;
 	}
 
-	showDeck() {
-		console.log('showing deck');
+	toggleDetails() {
+		this.showDetails$$.next(!this.showDetails$$.value);
 	}
 
 	private buildCardVariations(cardIds: readonly string[]): readonly CardVariation[] {
@@ -145,11 +196,9 @@ export class ConstructedMetaDeckSummaryComponent {
 	}
 }
 
-interface CardVariation {
-	cardId: string;
+interface CardVariation extends MinimalCard {
 	cardName: string;
 	cardImage: string;
-	quantity: number;
 	isLegendary?: boolean;
 	manaCost: number;
 }
