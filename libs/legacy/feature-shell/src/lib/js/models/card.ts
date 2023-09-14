@@ -5,3 +5,6 @@ export interface Card {
 	readonly diamondCount: number;
 	readonly signatureCount: number;
 }
+
+export const totalOwned = (card: Card) =>
+	!!card ? card.count + card.premiumCount + card.diamondCount + card.signatureCount : 0;

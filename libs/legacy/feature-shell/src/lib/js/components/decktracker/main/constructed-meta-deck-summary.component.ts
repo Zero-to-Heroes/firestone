@@ -4,6 +4,7 @@ import { decode } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import { Card, totalOwned } from '../../../models/card';
 import { dustToCraftFor } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
@@ -21,12 +22,12 @@ import { MinimalCard } from '../overlay/deck-list-static.component';
 			</div>
 			<div class="name cell">
 				<div class="deck-name">{{ deckName }}</div>
-				<!-- <div class="dust cell">
-					<div class="dust-amount">
-						{{ dustCost }}
-					</div>
-					<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
-				</div> -->
+			</div>
+			<div class="dust cell">
+				<div class="dust-amount">
+					{{ dustCost }}
+				</div>
+				<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
 			</div>
 			<div class="winrate cell">{{ winrate }}</div>
 			<div class="games cell">{{ totalGames }}</div>
@@ -102,9 +103,14 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		this.archetypes$$.next(value);
 	}
 
+	@Input() set collection(value: readonly Card[]) {
+		this.collection$$.next(value);
+	}
+
 	private showDetails$$ = new BehaviorSubject<boolean>(false);
 	private deck$$ = new BehaviorSubject<DeckStat>(null);
 	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
+	private collection$$ = new BehaviorSubject<readonly Card[]>([]);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -116,18 +122,21 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 
 	ngAfterContentInit() {
 		this.showDetails$ = this.showDetails$$.asObservable();
-		combineLatest([this.deck$$, this.archetypes$$])
+		combineLatest([this.deck$$, this.archetypes$$, this.collection$$])
 			.pipe(
 				filter(([deck]) => !!deck?.decklist?.length),
-				this.mapData(([deck, archetypes]) => {
+				this.mapData(([deck, archetypes, collection]) => {
 					const archetype = archetypes.find((arch) => arch.id === deck.archetypeId);
-					return { deck, archetype };
+					return { deck, archetype, collection };
 				}),
 				distinctUntilChanged(
-					(a, b) => a.deck.decklist === b.deck.decklist && a.archetype?.id === b.archetype?.id,
+					(a, b) =>
+						a.deck.decklist === b.deck.decklist &&
+						a.archetype?.id === b.archetype?.id &&
+						a.collection?.length === b.collection?.length,
 				),
 			)
-			.subscribe(({ deck, archetype }) => {
+			.subscribe(({ deck, archetype, collection }) => {
 				console.debug('setting deck', deck, archetype);
 				const deckDefinition = decode(deck.decklist);
 				const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
@@ -143,7 +152,18 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 					card: this.allCards.getCardFromDbfId(pair[0]),
 				}));
 				this.dustCost = deckCards
-					.map((card) => dustToCraftFor(card.card.rarity) * card.quantity)
+					.map((card) => {
+						const collectionCard = collection?.find((c) => c.id === card.card.id);
+						const owned = Math.min(
+							totalOwned(collectionCard),
+							this.allCards.getCard(collectionCard?.id)?.rarity?.toLowerCase() === 'legendary' ? 1 : 2,
+						);
+						const missingQuantity = Math.max(0, card.quantity - owned);
+						if (missingQuantity) {
+							console.debug('missing quantity', card, collectionCard, owned, missingQuantity);
+						}
+						return dustToCraftFor(card.card.rarity) * missingQuantity;
+					})
 					.reduce((a, b) => a + b, 0);
 				this.winrate = this.buildPercents(deck.winrate);
 				this.totalGames = this.formatGamesCount(deck.totalGames);

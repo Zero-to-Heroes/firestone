@@ -15,14 +15,11 @@
 		width: 220px;
 	}
 
-	// .dust {
-	// 	margin-left: 10px;
-	// 	display: flex;
-	// 	align-items: center;
-	// 	justify-content: flex-end;
-	// 	--icon-color: var(--default-text-color);
-	// 	width: 60px;
-	// }
+	&.dust {
+		margin-left: 10px;
+		width: 60px;
+		--icon-color: var(--default-text-color);
+	}
 
 	&.winrate {
 		margin-left: 10px;

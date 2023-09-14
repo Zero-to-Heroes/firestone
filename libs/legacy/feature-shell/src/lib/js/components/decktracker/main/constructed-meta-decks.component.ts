@@ -2,7 +2,8 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
+import { Card } from '../../../models/card';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -16,7 +17,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		<ng-container
 			*ngIf="{
 				decks: decks$ | async,
-				archetypes: archetypes$ | async
+				archetypes: archetypes$ | async,
+				collection: collection$ | async
 			} as value"
 		>
 			<div class="constructed-meta-decks" *ngIf="value.decks">
@@ -24,6 +26,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					<div class="header">
 						<div class="cell player-class">Class</div>
 						<div class="cell name">Archetype</div>
+						<div class="cell dust">Cost</div>
 						<div class="cell winrate">Winrate</div>
 						<div class="cell games">Games</div>
 						<div class="cell cards">Cards</div>
@@ -42,6 +45,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							role="listitem"
 							[deck]="deck"
 							[archetypes]="value.archetypes"
+							[collection]="value.collection"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
 				</with-loading>
@@ -53,6 +57,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	decks$: Observable<DeckStat[]>;
 	archetypes$: Observable<readonly ArchetypeStat[]>;
+	collection$: Observable<readonly Card[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -66,6 +71,11 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		this.archetypes$ = this.store.constructedMetaDecks$().pipe(
 			filter((stats) => !!stats?.dataPoints),
 			this.mapData((stats) => stats.archetypeStats),
+		);
+		this.collection$ = this.store.collection$().pipe(
+			filter((collection) => !!collection),
+			debounceTime(500),
+			this.mapData((collection) => collection),
 		);
 	}
 
