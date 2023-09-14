@@ -51,6 +51,13 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				[label]="'app.decktracker.filters.show-hidden-decks' | owTranslate"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
+			<preference-toggle
+				class="use-conservative-estimate-link"
+				*ngIf="showUseConservativeWinrateLink$ | async"
+				field="constructedMetaDecksUseConservativeWinrate"
+				[label]="'app.decktracker.filters.use-conservative-winrate' | owTranslate"
+				[helpTooltip]="'app.decktracker.filters.use-conservative-estimate-tooltip' | owTranslate"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,6 +68,7 @@ export class DecktrackerFiltersComponent
 {
 	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
+	showUseConservativeWinrateLink$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
@@ -96,6 +104,12 @@ export class DecktrackerFiltersComponent
 						currentView !== 'constructed-deckbuilder' &&
 						hiddenDeckCodes.length > 0,
 				),
+			);
+		this.showUseConservativeWinrateLink$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(([currentView]) => currentView === 'constructed-meta-decks'),
 			);
 		this.showInfo$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)

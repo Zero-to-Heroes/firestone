@@ -177,6 +177,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksFormatFilter: GameFormat = 'standard';
 	readonly constructedMetaDecksTimeFilter: TimePeriod = 'last-patch';
 	readonly constructedMetaDecksRankFilter: RankBracket = 'legend';
+	readonly constructedMetaDecksUseConservativeWinrate: boolean = false;
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

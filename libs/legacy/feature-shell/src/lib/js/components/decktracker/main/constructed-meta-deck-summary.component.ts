@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { EnhancedDeckStat } from './constructed-meta-decks.component';
@@ -122,9 +122,12 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 					const archetype = archetypes.find((arch) => arch.id === deck.archetypeId);
 					return { deck, archetype };
 				}),
-				distinctUntilChanged(
-					(a, b) => a.deck.decklist === b.deck.decklist && a.archetype?.id === b.archetype?.id,
-				),
+				// distinctUntilChanged(
+				// 	(a, b) =>
+				// 		a.deck.decklist === b.deck.decklist &&
+				// 		a.archetype?.id === b.archetype?.id &&
+				// 		a.deck.winrate === b.deck.winrate,
+				// ),
 			)
 			.subscribe(({ deck, archetype }) => {
 				console.debug('setting deck', deck, archetype);

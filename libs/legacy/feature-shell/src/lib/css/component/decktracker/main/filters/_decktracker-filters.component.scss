@@ -7,7 +7,7 @@
 .decktracker-filters {
 	position: relative;
 	display: flex;
-	align-items: center;
+	// align-items: center;
 	min-height: 30px;
 	color: var(--secondary-text-color);
 	font-family: Open Sans;
@@ -56,6 +56,27 @@
 
 		&:hover {
 			opacity: 1;
+		}
+	}
+
+	.use-conservative-estimate-link {
+		margin-left: auto;
+		color: var(--color-2);
+		height: calc(100% - 10px);
+		align-items: center;
+		justify-content: center;
+
+		::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+			margin-top: 0;
+
+			.settings-p {
+				color: currentColor;
+			}
+		}
+
+		&:hover {
+			opacity: 1;
+			color: var(--color-1);
 		}
 	}
 

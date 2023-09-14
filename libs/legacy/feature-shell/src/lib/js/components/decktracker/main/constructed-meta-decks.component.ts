@@ -4,7 +4,7 @@ import { decode } from '@firestone-hs/deckstrings';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { Card, totalOwned } from '../../../models/card';
 import { dustToCraftFor } from '../../../services/hs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -116,13 +116,19 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
-		this.decks$ = combineLatest([this.store.constructedMetaDecks$(), this.sortCriteria$$, collection$]).pipe(
+		this.decks$ = combineLatest([
+			this.store.constructedMetaDecks$(),
+			this.sortCriteria$$,
+			collection$,
+			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
+		]).pipe(
 			filter(([stats, sortCriteria]) => !!stats?.dataPoints),
-			this.mapData(([stats, sortCriteria, collection]) =>
+			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate]]) =>
 				stats.deckStats
-					.map((stat) => this.enhanceStat(stat, collection))
+					.map((stat) => this.enhanceStat(stat, collection, conservativeEstimate))
 					.sort((a, b) => this.sortDecks(a, b, sortCriteria)),
 			),
+			tap((decks) => console.debug('[meta-decks] emitting decks', decks)),
 		);
 		this.archetypes$ = this.store.constructedMetaDecks$().pipe(
 			filter((stats) => !!stats?.dataPoints),
@@ -145,7 +151,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		return item.decklist;
 	}
 
-	private enhanceStat(stat: DeckStat, collection: readonly Card[]): EnhancedDeckStat {
+	private enhanceStat(stat: DeckStat, collection: readonly Card[], conservativeEstimate: boolean): EnhancedDeckStat {
 		const deckDefinition = decode(stat.decklist);
 		const deckCards = deckDefinition.cards.map((pair) => ({
 			quantity: pair[1],
@@ -159,18 +165,22 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 					this.allCards.getCard(collectionCard?.id)?.rarity?.toLowerCase() === 'legendary' ? 1 : 2,
 				);
 				const missingQuantity = Math.max(0, card.quantity - owned);
-				if (missingQuantity) {
-					console.debug('missing quantity', card, collectionCard, owned, missingQuantity);
-				}
 				return dustToCraftFor(card.card.rarity) * missingQuantity;
 			})
 			.reduce((a, b) => a + b, 0);
 		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
 		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
+		const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);
+		const conservativeWinrate: number = stat.winrate - 1.96 * standardDeviation;
+		const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
 		return {
 			...stat,
+			rawWinrate: stat.winrate,
 			dustCost: dustCost,
 			heroCardClass: heroCardClass,
+			standardDeviation: standardDeviation,
+			conservativeWinrate: conservativeWinrate,
+			winrate: winrateToUse,
 		};
 	}
 
@@ -220,5 +230,8 @@ export type ColumnSortType = 'player-class' | 'archetype' | 'winrate' | 'games' 
 
 export interface EnhancedDeckStat extends DeckStat {
 	readonly dustCost: number;
+	readonly rawWinrate: number;
 	readonly heroCardClass: string;
+	readonly standardDeviation: number;
+	readonly conservativeWinrate: number;
 }
