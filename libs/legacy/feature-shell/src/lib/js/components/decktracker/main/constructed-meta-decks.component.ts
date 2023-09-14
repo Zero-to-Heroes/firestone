@@ -24,12 +24,12 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			<div class="constructed-meta-decks" *ngIf="value.decks">
 				<with-loading [isLoading]="!value.decks?.length">
 					<div class="header">
-						<div class="cell player-class">Class</div>
-						<div class="cell name">Archetype</div>
-						<div class="cell dust">Cost</div>
-						<div class="cell winrate">Winrate</div>
-						<div class="cell games">Games</div>
-						<div class="cell cards">Cards</div>
+						<div class="cell player-class" [owTranslate]="'app.decktracker.meta.class-header'"></div>
+						<div class="cell name" [owTranslate]="'app.decktracker.meta.archetype-header'"></div>
+						<div class="cell dust" [owTranslate]="'app.decktracker.meta.cost-header'"></div>
+						<div class="cell winrate" [owTranslate]="'app.decktracker.meta.winrate-header'"></div>
+						<div class="cell games" [owTranslate]="'app.decktracker.meta.games-header'"></div>
+						<div class="cell cards" [owTranslate]="'app.decktracker.meta.cards-header'"></div>
 					</div>
 					<virtual-scroller
 						#scroll

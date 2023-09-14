@@ -66,15 +66,15 @@ import { MinimalCard } from '../overlay/deck-list-static.component';
 		<div class="deck-details" *ngIf="showDetails$ | async">
 			<div class="cards-containers">
 				<div class="container core">
-					<div class="title">Archetype core cards</div>
+					<div class="title" [owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"></div>
 					<deck-list-static class="cards" [cards]="archetypeCoreCards"> </deck-list-static>
 				</div>
 				<div class="container removed">
-					<div class="title">Removed cards</div>
+					<div class="title" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></div>
 					<deck-list-static class="cards" [cards]="removedCards"> </deck-list-static>
 				</div>
 				<div class="container added">
-					<div class="title">Added cards</div>
+					<div class="title" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></div>
 					<deck-list-static class="cards" [cards]="addedCards"> </deck-list-static>
 				</div>
 			</div>
