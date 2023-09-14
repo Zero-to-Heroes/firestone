@@ -14,10 +14,11 @@ import {
 	Race,
 	ReferenceCard,
 	getTribeIcon,
+	getTribeName,
 } from '@firestone-hs/reference-data';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
+import { compareTribes, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-view',
@@ -337,27 +338,31 @@ const buildTribeTiers = (
 	if (!availableTribes?.length) {
 		return [];
 	}
-	console.debug('building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
-	const allTribes: readonly Race[] = [
+	console.debug('[debug] building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
+	const allTribes: Race[] = [
 		...new Set(
 			cardsInGame
 				.flatMap((card) => card.races ?? [])
 				.filter((t) => t !== Race[Race.ALL] && availableTribes.includes(Race[t])),
 		),
 	].map((t) => Race[t]);
-	return allTribes.map((tribe: Race) => {
-		const cardsForTribe = cardsInGame.filter((c) =>
-			getEffectiveTribes(c, groupMinionsIntoTheirTribeGroup)?.includes(Race[tribe]),
-		);
-		return {
-			tavernTier: tribe,
-			tavernTierIcon: getTribeIcon(tribe),
-			tooltip: i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`),
-			cards: cardsForTribe,
-			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
-			type: 'tribe',
-		};
-	});
+	console.debug('[debug] all tribes', allTribes, availableTribes);
+	return allTribes
+		.map((tribe: Race) => {
+			const cardsForTribe = cardsInGame.filter((c) =>
+				getEffectiveTribes(c, groupMinionsIntoTheirTribeGroup)?.includes(Race[tribe]),
+			);
+			const result: Tier = {
+				tavernTier: tribe,
+				tavernTierIcon: getTribeIcon(tribe),
+				tooltip: getTribeName(tribe, i18n),
+				cards: cardsForTribe,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+				type: 'tribe',
+			};
+			return result;
+		})
+		.sort((a, b) => compareTribes(a.tavernTier as Race, b.tavernTier as Race, i18n));
 };
 
 const buildMechanicsTiers = (

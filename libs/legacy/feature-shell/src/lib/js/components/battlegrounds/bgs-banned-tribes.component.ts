@@ -9,6 +9,7 @@ import {
 import { Race, getTribeName } from '@firestone-hs/reference-data';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { compareTribes } from '../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -64,9 +65,10 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent
 		]).pipe(this.mapData(([[pref], [state]]) => pref || state?.currentGame?.availableRaces?.length == 1));
 		this.singleRow$ = this.listenForBasicPref$((prefs) => prefs.bgsTribesOverlaySingleRow);
 		this.tribes$ = combineLatest([this.store.listenBattlegrounds$(([state]) => state), this.showAvailable$]).pipe(
-			this.mapData(([[state], showAvailable]) =>
-				showAvailable ? state?.currentGame?.availableRaces : state?.currentGame?.bannedRaces,
-			),
+			this.mapData(([[state], showAvailable]) => {
+				const tribes = showAvailable ? state?.currentGame?.availableRaces : state?.currentGame?.bannedRaces;
+				return [...(tribes ?? [])].sort((a, b) => compareTribes(a, b, this.i18n));
+			}),
 		);
 		this.tooltip$ = combineLatest([this.tribes$, this.showAvailable$]).pipe(
 			filter(([tribes, showAvailable]) => !!tribes?.length),

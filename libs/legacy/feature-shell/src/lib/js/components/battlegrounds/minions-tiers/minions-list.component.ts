@@ -11,7 +11,7 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent, arraysEqual, uuid } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';
+import { compareTribes } from '../../../services/battlegrounds/bgs-utils';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -115,7 +115,6 @@ export class BattlegroundsMinionsListComponent
 			this.mapData(([cards, groupingFunction, highlightedMinions, highlightedTribes, highlightedMechanics]) => {
 				const groupedByTribe = multiGroupByFunction(groupingFunction)(cards);
 				return Object.keys(groupedByTribe)
-					.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
 					.map((tribeString) => {
 						return {
 							tribe: isNaN(+tribeString) ? Race[tribeString] : null,
@@ -129,7 +128,8 @@ export class BattlegroundsMinionsListComponent
 							highlightedTribes: highlightedTribes || [],
 							highlightedMechanics: highlightedMechanics || [],
 						};
-					});
+					})
+					.sort((a, b) => compareTribes(a.tribe, b.tribe, this.i18n));
 			}),
 		);
 	}

@@ -6,6 +6,7 @@ import {
 	Race,
 	ReferenceCard,
 	SceneMode,
+	getTribeName,
 } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -166,33 +167,20 @@ export const getEffectiveTribesEnum = (card: ReferenceCard): readonly Race[] => 
 	return !!card.races?.length ? card.races.map((r) => Race[r]) : [Race.BLANK];
 };
 
-export const tribeValueForSort = (tribe: string): number => {
-	switch (tribe) {
-		case Race[Race.BEAST]:
-			return 1;
-		case Race[Race.DEMON]:
-			return 2;
-		case Race[Race.DRAGON]:
-			return 3;
-		case Race[Race.ELEMENTAL]:
-			return 4;
-		case Race[Race.MECH]:
-			return 5;
-		case Race[Race.MURLOC]:
-			return 6;
-		case Race[Race.PIRATE]:
-			return 7;
-		case Race[Race.QUILBOAR]:
-			return 8;
-		case Race[Race.NAGA]:
-			return 9;
-		case Race[Race.UNDEAD]:
-			return 10;
-		case Race[Race.ALL]:
-			return 100;
-		case Race[Race.BLANK]:
-			return 101;
+export const compareTribes = (a: Race, b: Race, i18n: { translateString: (key: string) => string }): number => {
+	if (a === Race.BLANK) {
+		return 1;
 	}
+	if (b === Race.BLANK) {
+		return -1;
+	}
+	if (a === Race.ALL) {
+		return 1;
+	}
+	if (b === Race.ALL) {
+		return -1;
+	}
+	return getTribeName(a, i18n).localeCompare(getTribeName(b, i18n));
 };
 
 export const getAchievementsForHero = (

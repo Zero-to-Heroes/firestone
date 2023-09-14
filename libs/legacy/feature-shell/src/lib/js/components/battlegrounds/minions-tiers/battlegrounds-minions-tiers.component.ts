@@ -9,8 +9,9 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { CardIds, GameTag, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
 import { getAllCardsInGame, getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -92,6 +93,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				([main, prefs]) => main?.currentGame?.players?.map((p) => p.cardId),
 			),
 		]).pipe(
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			tap((info) => console.debug('[debug] [bgs-minions-tiers] new info', info)),
 			this.mapData(
 				([
 					[showMechanicsTiers, showTribeTiers, bgsGroupMinionsIntoTheirTribeGroup],
