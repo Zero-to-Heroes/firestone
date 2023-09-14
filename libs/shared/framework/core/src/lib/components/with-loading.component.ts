@@ -6,7 +6,7 @@ import { ILocalizationService } from '../localization/localization.service';
 	selector: 'with-loading',
 	styleUrls: [`./with-loading.component.scss`],
 	template: `
-		<ng-container class="with-loading">
+		<ng-container>
 			<ng-container *ngIf="!isLoading">
 				<ng-content [@fadeInOut]></ng-content>
 			</ng-container>
@@ -21,6 +21,7 @@ import { ILocalizationService } from '../localization/localization.service';
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	// encapsulation: ViewEncapsulation.None,
 	animations: [
 		trigger('fadeInOut', [
 			state(

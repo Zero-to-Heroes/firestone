@@ -1,5 +1,5 @@
 import { LotteryTabType } from '@components/lottery/lottery-navigation.component';
-import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
+import { GameFormat, RankBracket, TimePeriod } from '@firestone-hs/constructed-deck-stats';
 import { BnetRegion, Race, allDuelsHeroes } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
@@ -174,9 +174,9 @@ export class Preferences implements IPreferences {
 	readonly constructedDeckVersions: readonly ConstructedDeckVersions[] = [];
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
 	readonly constructedDecksSearchString: string;
-	readonly constructedMetaDecksFormatFilter: FormatForDeckData = 'standard';
-	readonly constructedMetaDecksTimeFilter: TimeForDeckData = 'last-patch';
-	readonly constructedMetaDecksRankFilter: RankForDeckData = 'all';
+	readonly constructedMetaDecksFormatFilter: GameFormat = 'standard';
+	readonly constructedMetaDecksTimeFilter: TimePeriod = 'last-patch';
+	readonly constructedMetaDecksRankFilter: RankBracket = 'legend';
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

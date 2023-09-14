@@ -1,65 +1,74 @@
 import { Injectable } from '@angular/core';
-import { DataForRank, DeckStat, FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
+import { DeckStats, GameFormat, RankBracket, TimePeriod } from '@firestone-hs/constructed-deck-stats';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { ConstructedMetaDecksLoadedEvent } from '../mainwindow/store/events/decktracker/constructed-meta-decks-loaded-event';
+import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
-const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/ranked/decks';
+const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
 
 @Injectable()
-export class ConstructedMetaDecksStateBuilderService {
-	private requestedInitialLoad = new BehaviorSubject<boolean>(false);
+export class ConstructedMetaDecksStateService {
+	public constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<DeckStats>(null);
+
+	private triggerLoad$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		private readonly localStorage: LocalStorageService,
 		private readonly api: ApiRunner,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		window['constructedMetaDecks'] = this;
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
-		combineLatest(
+
+		this.constructedMetaDecks$$.onFirstSubscribe(async () => {
+			this.triggerLoad$$.next(true);
+		});
+
+		combineLatest([
+			this.triggerLoad$$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksRankFilter,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
 				(prefs) => prefs.constructedMetaDecksFormatFilter,
 			),
-			this.requestedInitialLoad.asObservable(),
-		)
+		])
 			.pipe(
-				filter(([[rank, time, format], load]) => load),
-				map(([[rank, time, format], load]) => ({ rank, time, format })),
+				filter(
+					([triggerLoad, [rankFilter, timeFilter, formatFilter]]) =>
+						triggerLoad && !!timeFilter && !!formatFilter && !!rankFilter,
+				),
 			)
-			.subscribe(({ rank, time, format }) => this.loadNewDecks(format, time, rank));
+			.subscribe(async ([_, [rankFilter, timeFilter, formatFilter]]) => {
+				const localStats: DeckStats = this.localStorage.getItem<DeckStats>(
+					LocalStorageService.CONSTRUCTED_META_DECK_STATS,
+				);
+				if (localStats?.dataPoints) {
+					// this.constructedMetaDecks$$.next(localStats);
+				}
+
+				const stats = await this.loadNewDecks(formatFilter, timeFilter, rankFilter);
+				this.constructedMetaDecks$$.next(stats);
+			});
 	}
 
-	public async loadInitialStats() {
-		const localMetaDecks = this.localStorage.getItem<readonly DeckStat[]>(
-			LocalStorageService.CONSTRUCTED_META_DECKS,
-		);
-		if (!!localMetaDecks?.length) {
-			this.store.send(new ConstructedMetaDecksLoadedEvent(localMetaDecks));
-		}
-
-		this.requestedInitialLoad.next(true);
-	}
-
-	public async loadNewDecks(format: FormatForDeckData, time: TimeForDeckData, rank: RankForDeckData) {
-		const fileName = `ranked-decks-${format}-${time}-${rank}.gz.json`;
+	public async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<DeckStats> {
+		const fileName = `${format}/${time}/${rank}.gz.json?v=3`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		const resultStr = await this.api.get(url);
 		if (!resultStr?.length) {
 			console.error('could not load meta decks', format, time, rank, url);
 			return;
 		}
-		const json: DataForRank = JSON.parse(resultStr);
-		const decks: readonly DeckStat[] = json.deckStats;
-		console.log('loaded meta decks', format, time, rank, decks?.length);
-		this.localStorage.setItem(LocalStorageService.CONSTRUCTED_META_DECKS, decks);
-		this.store.send(new ConstructedMetaDecksLoadedEvent(decks));
+
+		const stats: DeckStats = JSON.parse(resultStr);
+		console.log('loaded meta decks', format, time, rank, stats?.dataPoints);
+		this.localStorage.setItem(LocalStorageService.CONSTRUCTED_META_DECK_STATS, stats);
+		return stats;
 	}
 }

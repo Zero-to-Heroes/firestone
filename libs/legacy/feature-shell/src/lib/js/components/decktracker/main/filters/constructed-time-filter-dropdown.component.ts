@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { TimeForDeckData } from '@firestone-hs/deck-stats';
+import { TimePeriod } from '@firestone-hs/constructed-deck-stats';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -91,5 +91,5 @@ export class ConstructedTimeFilterDropdownComponent
 }
 
 interface FilterOption extends IOption {
-	value: TimeForDeckData;
+	value: TimePeriod;
 }

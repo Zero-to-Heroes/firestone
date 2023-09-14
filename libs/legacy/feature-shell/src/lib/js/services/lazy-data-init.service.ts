@@ -5,7 +5,6 @@ import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BgsMetaHeroStatsService } from './battlegrounds/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './battlegrounds/bgs-meta-hero-strategies.service';
 import { BattlegroundsQuestsService } from './battlegrounds/bgs-quests.service';
-import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
 import { DuelsStateBuilderService } from './duels/duels-state-builder.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { LiveStreamsService } from './mainwindow/live-streams.service';
@@ -17,7 +16,6 @@ import { QuestsService } from './quests.service';
 @Injectable()
 export class LazyDataInitService {
 	constructor(
-		private readonly constructedMetaDecksStateBuilder: ConstructedMetaDecksStateBuilderService,
 		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 		private readonly globalStatsService: GlobalStatsService,
 		private readonly duelsService: DuelsStateBuilderService,
@@ -33,8 +31,6 @@ export class LazyDataInitService {
 
 	public async requestLoad(dataType: StateDataType) {
 		switch (dataType) {
-			case 'constructed-meta-decks':
-				return this.constructedMetaDecksStateBuilder.loadInitialStats();
 			case 'mercenaries-global-stats':
 				return this.mercenariesStateBuilder.loadInitialGlobalStats();
 			case 'mercenaries-reference-data':
@@ -60,7 +56,6 @@ export class LazyDataInitService {
 }
 
 export type StateDataType =
-	| 'constructed-meta-decks'
 	| 'mercenaries-global-stats'
 	| 'mercenaries-reference-data'
 	| 'user-global-stats'

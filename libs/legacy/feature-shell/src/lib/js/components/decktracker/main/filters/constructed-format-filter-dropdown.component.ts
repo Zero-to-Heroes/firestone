@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { FormatForDeckData } from '@firestone-hs/deck-stats';
+import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -53,10 +53,10 @@ export class ConstructedFormatFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.filter$ = combineLatest(
+		this.filter$ = combineLatest([
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksFormatFilter),
-		).pipe(
+		]).pipe(
 			filter(([[currentView], [filter]]) => !!currentView),
 			this.mapData(([[currentView], [filter]]) => {
 				const options: FilterOption[] = ['standard'].map(
@@ -91,5 +91,5 @@ export class ConstructedFormatFilterDropdownComponent
 }
 
 interface FilterOption extends IOption {
-	value: FormatForDeckData;
+	value: GameFormat;
 }

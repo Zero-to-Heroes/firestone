@@ -19,6 +19,7 @@ import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } fro
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
+import { DeckStats } from '@firestone-hs/constructed-deck-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
@@ -51,6 +52,7 @@ import { BattlegroundsQuestsService } from '../battlegrounds/bgs-quests.service'
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
+import { ConstructedMetaDecksStateService } from '../decktracker/constructed-meta-decks-state-builder.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { DuelsTopDeckService } from '../duels/duels-top-decks.service';
@@ -123,6 +125,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
 	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
 	private highlightedBgsMinions: Observable<readonly ShopMinion[]>;
+	private constructedMetaDecks: Observable<DeckStats>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -478,6 +481,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.highlightedBgsMinions;
 	}
 
+	public constructedMetaDecks$(): Observable<DeckStats> {
+		return this.constructedMetaDecks;
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -514,6 +521,9 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initPackStats();
 		this.initCardsHistory();
 		this.initHighlightedBgsMinions();
+		this.constructedMetaDecks = (
+			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
+		).constructedMetaDecks$$;
 		await this.initDuelsTopDecks();
 		this.initialized = true;
 	}

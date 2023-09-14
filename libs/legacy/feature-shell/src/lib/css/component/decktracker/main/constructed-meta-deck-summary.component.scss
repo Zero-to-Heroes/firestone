@@ -13,20 +13,17 @@
 	padding: 10px;
 	font-family: 'Open Sans', sans-serif;
 	color: var(--default-text-color);
-	font-size: 12px;
-	padding: 0 10px;
-
-	.cell {
-		flex-shrink: 0;
-	}
+	// font-size: 12px;
+	padding: 0;
 
 	.player-class {
-		height: 80%;
+		.icon {
+			height: 80%;
+			max-height: 60px;
+		}
 	}
 
 	.name {
-		margin-left: 10px;
-		width: 100px;
 		display: flex;
 		flex-direction: column;
 
@@ -36,49 +33,60 @@
 		}
 	}
 
-	.dust {
-		margin-left: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		--icon-color: var(--default-text-color);
-		width: 60px;
-	}
+	// .dust {
+	// 	display: flex;
+	// 	align-items: center;
+	// 	justify-content: flex-end;
+	// 	--icon-color: var(--default-text-color);
+	// }
 
 	.winrate {
-		margin-left: 10px;
-		width: 50px;
 		justify-content: center;
 		display: flex;
 	}
 
 	.games {
-		margin-left: 10px;
-		width: 50px;
 		justify-content: center;
 		display: flex;
 	}
 
 	.cards {
-		margin-left: 10px;
-		display: flex;
 		height: 100%;
-		flex-grow: 1;
 		overflow: hidden;
-		flex-shrink: 1;
+		display: flex;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+
+		.removed-cards,
+		.added-cards {
+			display: flex;
+			justify-content: flex-start;
+		}
 
 		.card {
 			position: relative;
 			display: flex;
-			width: 40px;
+			width: 35px;
+			height: 35px;
 
 			&:not(:first-child) {
-				margin-left: -10px;
+				margin-left: -7px;
+			}
+
+			.icon-container {
+				border: 2px solid;
+				border-radius: 50%;
+				overflow: hidden;
+				position: relative;
+				display: flex;
 			}
 
 			.icon {
-				height: 100%;
-				clip-path: ellipse(35% 35% at 50% 50%);
+				height: 160%;
+				position: relative;
+				// clip-path: ellipse(35% 35% at 50% 50%);
+				left: -25%;
+				top: -25%;
 			}
 
 			.quantity {
@@ -92,40 +100,51 @@
 
 			.legendary-icon {
 				z-index: 1;
-				width: 15px;
-				height: 15px;
 				position: absolute;
-				right: 4px;
+				left: 7px;
 				bottom: 2px;
+				width: 20px;
+				height: 20px;
 			}
 		}
 
-		.view-deck {
-			font-size: 14px;
-			margin-left: auto;
-			width: 50px;
+		.removed-cards {
+			margin-right: 20px;
 
-			.icon {
-				margin-left: 8px;
-				transition: transform 0.4s ease-in-out;
-			}
-
-			&:hover {
-				color: var(--default-title-color);
-				--icon-color: var(--default-title-color);
+			.icon-container {
+				border-color: #ff4747;
 			}
 		}
-
-		&:hover {
-			flex-shrink: 0;
+		.added-cards {
+			.icon-container {
+				border-color: #61ff47;
+			}
 		}
+	}
+
+	// .view-deck {
+	// 	font-size: 14px;
+
+	// 	.icon {
+	// 		margin-left: 8px;
+	// 		transition: transform 0.4s ease-in-out;
+	// 	}
+
+	// 	&:hover {
+	// 		color: var(--default-title-color);
+	// 		--icon-color: var(--default-title-color);
+	// 	}
+	// }
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
 	}
 }
 
-@media (max-width: 1690px) {
-	.constructed-meta-deck-summary {
-		.name {
-			display: none;
-		}
-	}
-}
+// @media (max-width: 1690px) {
+// 	.constructed-meta-deck-summary {
+// 		.name {
+// 			display: none;
+// 		}
+// 	}
+// }

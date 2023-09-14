@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { RankForDeckData } from '@firestone-hs/deck-stats';
+import { RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -59,18 +59,19 @@ export class ConstructedRankFilterDropdownComponent
 		).pipe(
 			filter(([[currentView], [filter]]) => !!currentView),
 			this.mapData(([[currentView], [filter]]) => {
-				const options: DeckRankOption[] = [
-					'all',
-					'bronze-platinum',
-					'diamond-legend',
+				const brackets: RankBracket[] = [
+					'bronze-gold',
+					'platinum',
+					'diamond',
+					'legend-diamond',
 					'legend',
-					'legend-1000',
-					'legend-100',
-				].map(
+					'top-2000-legend',
+				];
+				const options: DeckRankOption[] = brackets.map(
 					(option) =>
 						({
 							value: option,
-							label: this.i18n.translateString(`app.decktracker.filters.rank-filter.${option}`),
+							label: this.i18n.translateString(`app.decktracker.filters.rank-bracket.${option}`),
 						} as DeckRankOption),
 				);
 				return {
@@ -98,5 +99,5 @@ export class ConstructedRankFilterDropdownComponent
 }
 
 interface DeckRankOption extends IOption {
-	value: RankForDeckData;
+	value: RankBracket;
 }

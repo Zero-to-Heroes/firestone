@@ -31,9 +31,6 @@ export class StoreInitProcessor implements Processor {
 				referenceData: currentState.mercenaries.referenceData,
 				globalStats: currentState.mercenaries.globalStats,
 			}),
-			decktracker: event.initialState.decktracker.update({
-				metaDecks: currentState.decktracker.metaDecks,
-			}),
 			// Hack - quests are not handled by the store init process
 			quests: currentState.quests,
 		});

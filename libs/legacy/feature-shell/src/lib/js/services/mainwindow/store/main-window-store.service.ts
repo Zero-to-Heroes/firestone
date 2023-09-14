@@ -125,7 +125,6 @@ import { ConstructedDeckbuilderGoBackEvent } from './events/decktracker/construc
 import { ConstructedDeckbuilderImportDeckEvent } from './events/decktracker/constructed-deckbuilder-import-deck-event';
 import { ConstructedDeckbuilderSaveDeckEvent } from './events/decktracker/constructed-deckbuilder-save-deck-event';
 import { ConstructedEjectDeckVersionEvent } from './events/decktracker/constructed-eject-deck-version-event';
-import { ConstructedMetaDecksLoadedEvent } from './events/decktracker/constructed-meta-decks-loaded-event';
 import { ConstructedNewDeckVersionEvent } from './events/decktracker/constructed-new-deck-version-event';
 import { ConstructedToggleDeckVersionStatsEvent } from './events/decktracker/constructed-toggle-deck-version-stats-event';
 import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
@@ -282,7 +281,6 @@ import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/
 import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktracker/constructed-deckbuilder-import-deck-processor';
 import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
 import { ConstructedEjectDeckVersionProcessor } from './processors/decktracker/constructed-eject-deck-version-processor';
-import { ConstructedMetaDecksLoadedProcessor } from './processors/decktracker/constructed-meta-decks-loaded-processor';
 import { ConstructedNewDeckVersionProcessor } from './processors/decktracker/constructed-new-deck-version-processor';
 import { ConstructedToggleDeckVersionStatsProcessor } from './processors/decktracker/constructed-toggle-deck-version-stats-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
@@ -440,7 +438,7 @@ export class MainWindowStoreService {
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
 
 		this.processors = this.buildProcessors();
-		
+
 		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 			const changes: MemoryUpdate = event.data[0];
 			const newScene = changes.CurrentScene;
@@ -733,7 +731,6 @@ export class MainWindowStoreService {
 				ConstructedDeckbuilderImportDeckEvent.eventName(),
 				new ConstructedDeckbuilderImportDeckProcessor(this.cards),
 			],
-			[ConstructedMetaDecksLoadedEvent.eventName(), new ConstructedMetaDecksLoadedProcessor()],
 			[ConstructedNewDeckVersionEvent.eventName(), new ConstructedNewDeckVersionProcessor(this.prefs)],
 			[ConstructedEjectDeckVersionEvent.eventName(), new ConstructedEjectDeckVersionProcessor(this.prefs)],
 			[ConstructedToggleDeckVersionStatsEvent.eventName(), new ConstructedToggleDeckVersionStatsProcessor()],

@@ -12,7 +12,6 @@ import { CollectionManager } from '../../js/services/collection/collection-manag
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
 import { ArenaRunParserService } from '../../js/services/decktracker/arena-run-parser.service';
 import { CardsHighlightService } from '../../js/services/decktracker/card-highlight/cards-highlight.service';
-import { ConstructedMetaDecksStateBuilderService } from '../../js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { DeckParserService } from '../../js/services/decktracker/deck-parser.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
@@ -79,7 +78,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_LogParserService: CardsMonitorService,
 		private readonly init_MercenariesMemoryUpdateService: MercenariesMemoryUpdateService,
 		private readonly init_CardsHighlightService: CardsHighlightService,
-		private readonly init_ConstructedMetaDecksStateBuilderService: ConstructedMetaDecksStateBuilderService,
 		private readonly ini_DecksProviderService: DecksProviderService,
 		private readonly init_gameStatus: GameStatusService,
 		private readonly init_quests: QuestsService,

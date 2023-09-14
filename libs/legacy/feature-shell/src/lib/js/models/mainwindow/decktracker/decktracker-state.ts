@@ -1,7 +1,4 @@
-import { DeckStat } from '@firestone-hs/deck-stats';
-import { AppInjector } from '../../../services/app-injector';
-import { LazyDataInitService } from '../../../services/lazy-data-init.service';
-import { NonFunctionProperties } from '../../../services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { ConstructedConfig } from '../../decktracker/constructed-config';
 import { PatchInfo } from '../../patches';
 import { ConstructedDeckbuilder } from './constructed-deckbuilder';
@@ -13,33 +10,10 @@ export class DecktrackerState {
 	readonly isLoading: boolean = true;
 	readonly deckbuilder: ConstructedDeckbuilder = new ConstructedDeckbuilder();
 	readonly config: ConstructedConfig;
-
-	// I couldn't find a way to disable accessing the property directly (force a getter) while
-	// also keeping the property easy to set via Object.assign.
-	// (getter and setter have the same visibility in Typescript, and I can't have complex logic in the getter)
-	// because it gets called by Object.assign
-	// Important to assign it to undefined, so that we only call the LazyInit once
-	readonly metaDecks: readonly DeckStat[] = undefined;
-
 	readonly initComplete: boolean = false;
 
 	public update(base: Partial<NonFunctionProperties<DecktrackerState>>): DecktrackerState {
 		return Object.assign(new DecktrackerState(), this, base);
-	}
-
-	public getMetaDecks(): readonly DeckStat[] {
-		if (!this.initComplete) {
-			return this.metaDecks;
-		}
-		if (this.metaDecks === undefined) {
-			console.log('meta decks not initialized yet');
-			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
-			if (service) {
-				(this.metaDecks as readonly DeckStat[]) = [];
-				service.requestLoad('constructed-meta-decks');
-			}
-		}
-		return this.metaDecks;
 	}
 }
 

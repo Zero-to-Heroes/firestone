@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { DeckStat } from '@firestone-hs/deck-stats';
+import { DeckStat } from '@firestone-hs/constructed-deck-stats';
+import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -8,12 +9,19 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 @Component({
 	selector: 'constructed-meta-decks',
 	styleUrls: [
-		`../../../../css/global/menu.scss`,
+		`../../../../css/component/decktracker/main/constructed-meta-decks-columns.scss`,
 		`../../../../css/component/decktracker/main/constructed-meta-decks.component.scss`,
 	],
 	template: `
 		<div class="constructed-meta-decks" *ngIf="decks$ | async as decks">
 			<with-loading [isLoading]="!decks?.length">
+				<div class="header">
+					<div class="cell player-class">Class</div>
+					<div class="cell name">Archetype</div>
+					<div class="cell winrate">Winrate</div>
+					<div class="cell games">Games</div>
+					<div class="cell cards">Cards</div>
+				</div>
 				<virtual-scroller
 					#scroll
 					class="decks-list"
@@ -42,15 +50,13 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	}
 
 	ngAfterContentInit() {
-		this.decks$ = this.store
-			.listen$(([main, nav, prefs]) => main.decktracker.getMetaDecks())
-			.pipe(
-				filter(([decks]) => !!decks?.length),
-				this.mapData(([decks]) => [...decks]),
-			);
+		this.decks$ = this.store.constructedMetaDecks$().pipe(
+			filter((stats) => !!stats?.dataPoints),
+			this.mapData((stats) => [...stats.deckStats].sort(sortByProperties((a) => [-a.winrate, -a.totalGames]))),
+		);
 	}
 
 	trackByDeck(index: number, item: DeckStat) {
-		return item.deckstring;
+		return item.decklist;
 	}
 }

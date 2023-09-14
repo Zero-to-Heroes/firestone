@@ -4,6 +4,13 @@
 :host {
 	height: 100%;
 	display: flex;
+	color: var(--color-1);
+	font-size: 13px;
+}
+
+with-loading {
+	display: flex;
+	flex-direction: column;
 }
 
 .constructed-meta-decks {
@@ -11,18 +18,22 @@
 	flex-direction: column;
 	flex-grow: 1;
 
+	.header {
+		display: flex;
+		margin-bottom: 10px;
+	}
+
 	.decks-list {
 		display: flex;
 		flex-direction: column;
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		width: 100%;
-		height: 100%;
+		flex-grow: 1;
 		overflow-y: scroll;
 
 		.deck {
-			height: 40px;
+			height: 50px;
 			margin-bottom: 5px;
 		}
 	}

@@ -34,6 +34,14 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			<button
 				class="menu-item"
 				tabindex="0"
+				[ngClass]="{ selected: selectedTab === 'constructed-meta-decks' }"
+				(mousedown)="selectStage('constructed-meta-decks')"
+			>
+				<span [owTranslate]="'app.decktracker.menu.meta-decks-header'"></span>
+			</button>
+			<button
+				class="menu-item"
+				tabindex="0"
 				[ngClass]="{ selected: selectedTab === 'ladder-stats' }"
 				(mousedown)="selectStage('ladder-stats')"
 			>

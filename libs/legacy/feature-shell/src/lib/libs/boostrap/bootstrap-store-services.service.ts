@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
+import { ConstructedMetaDecksStateService } from '../../js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
@@ -46,11 +47,12 @@ export class BootstrapStoreServicesService {
 		private readonly ini_LotterService: LotteryService,
 		private readonly achievementsMonitor: AchievementsLiveProgressTrackingService,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
-		// Other dependencies
-		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
+		private readonly init_BgsBoardHighlighterService: BgsBoardHighlighterService,
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 		private readonly init_ProfileUploaderService: ProfileUploaderService,
-		private readonly init_BgsBoardHighlighterService: BgsBoardHighlighterService,
+		private readonly init_ConstructedMetaDecksStateService: ConstructedMetaDecksStateService,
+		// Other dependencies
+		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
