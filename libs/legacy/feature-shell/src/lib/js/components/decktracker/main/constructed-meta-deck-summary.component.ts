@@ -153,7 +153,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				this.removedCards = this.buildCardVariations(deck.cardVariations?.removed);
 				this.addedCards = this.buildCardVariations(deck.cardVariations?.added);
 				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards);
-				this.standardDeviation = `±${this.buildPercents(deck.standardDeviation)}`;
+				this.standardDeviation = `±${this.buildPercents(3 * deck.standardDeviation)}`;
 			});
 	}
 

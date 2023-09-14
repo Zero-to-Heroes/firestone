@@ -177,7 +177,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
 		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
 		const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);
-		const conservativeWinrate: number = stat.winrate - 1.96 * standardDeviation;
+		const conservativeWinrate: number = stat.winrate - 3 * standardDeviation;
 		const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
 		return {
 			...stat,
