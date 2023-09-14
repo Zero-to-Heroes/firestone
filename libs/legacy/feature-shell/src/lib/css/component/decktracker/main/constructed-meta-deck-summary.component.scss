@@ -45,6 +45,12 @@
 	.winrate {
 		justify-content: center;
 		display: flex;
+
+		.deviation {
+			margin-left: 3px;
+			font-size: 11px;
+			color: var(--color-2);
+		}
 	}
 
 	.games {

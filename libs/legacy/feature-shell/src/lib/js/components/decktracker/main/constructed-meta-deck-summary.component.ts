@@ -27,7 +27,15 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 				</div>
 				<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
 			</div>
-			<div class="winrate cell">{{ winrate }}</div>
+			<div class="winrate cell">
+				{{ winrate }}
+				<span
+					class="deviation"
+					*ngIf="showStandardDeviation"
+					[helpTooltip]="'app.decktracker.meta.deck.deviation-tooltip' | owTranslate"
+					>{{ standardDeviation }}</span
+				>
+			</div>
 			<div class="games cell">{{ totalGames }}</div>
 			<div class="cards cell">
 				<div class="removed-cards" *ngIf="removedCards?.length">
@@ -92,6 +100,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	archetypeCoreCards: readonly MinimalCard[];
 	removedCards: readonly CardVariation[];
 	addedCards: readonly CardVariation[];
+	standardDeviation: string;
 
 	@Input() set deck(value: EnhancedDeckStat) {
 		this.deck$$.next(value);
@@ -100,6 +109,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	@Input() set archetypes(value: readonly ArchetypeStat[]) {
 		this.archetypes$$.next(value);
 	}
+	@Input() showStandardDeviation: boolean;
 
 	private showDetails$$ = new BehaviorSubject<boolean>(false);
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
@@ -143,6 +153,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				this.removedCards = this.buildCardVariations(deck.cardVariations?.removed);
 				this.addedCards = this.buildCardVariations(deck.cardVariations?.added);
 				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards);
+				this.standardDeviation = `±${this.buildPercents(deck.standardDeviation)}`;
 			});
 	}
 

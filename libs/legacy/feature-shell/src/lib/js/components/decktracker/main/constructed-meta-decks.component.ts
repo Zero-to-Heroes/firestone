@@ -20,7 +20,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		<ng-container
 			*ngIf="{
 				decks: decks$ | async,
-				archetypes: archetypes$ | async
+				archetypes: archetypes$ | async,
+				showStandardDeviation: showStandardDeviation$ | async
 			} as value"
 		>
 			<div class="constructed-meta-decks" *ngIf="value.decks">
@@ -82,6 +83,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							role="listitem"
 							[deck]="deck"
 							[archetypes]="value.archetypes"
+							[showStandardDeviation]="value.showStandardDeviation"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
 				</with-loading>
@@ -95,6 +97,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	archetypes$: Observable<readonly ArchetypeStat[]>;
 	collection$: Observable<readonly Card[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
+	showStandardDeviation$: Observable<boolean>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'winrate',
@@ -111,6 +114,9 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 
 	ngAfterContentInit() {
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
+		this.showStandardDeviation$ = this.listenForBasicPref$(
+			(prefs) => !prefs.constructedMetaDecksUseConservativeWinrate,
+		);
 		const collection$ = this.store.collection$().pipe(
 			filter((collection) => !!collection),
 			debounceTime(500),
