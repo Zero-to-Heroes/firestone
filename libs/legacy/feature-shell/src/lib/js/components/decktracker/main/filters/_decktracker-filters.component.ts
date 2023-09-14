@@ -56,7 +56,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				*ngIf="showUseConservativeWinrateLink$ | async"
 				field="constructedMetaDecksUseConservativeWinrate"
 				[label]="'app.decktracker.filters.use-conservative-winrate' | owTranslate"
-				[helpTooltip]="'app.decktracker.filters.use-conservative-estimate-tooltip' | owTranslate"
+				[helpTooltip]="'app.decktracker.filters.use-conservative-winrate-tooltip' | owTranslate"
 			></preference-toggle>
 		</div>
 	`,
