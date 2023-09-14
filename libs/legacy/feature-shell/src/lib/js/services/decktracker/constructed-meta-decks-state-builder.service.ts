@@ -58,7 +58,7 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	public async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<DeckStats> {
-		const fileName = `${format}/${time}/${rank}.gz.json?v=3`;
+		const fileName = `${format}/${time}/${rank}.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		const resultStr = await this.api.get(url);
 		if (!resultStr?.length) {

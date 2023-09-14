@@ -12,10 +12,16 @@
 
 .copy-deckstring {
 	display: flex;
+	align-items: center;
 	flex-direction: row;
 	// --icon-color: var(--color-6);
 	--icon-color: var(--color-4);
 	--icon-color-secondary: var(--color-1);
+
+	.icon {
+		display: flex;
+		align-items: center;
+	}
 
 	::ng-deep svg {
 		height: 16px;
@@ -25,6 +31,7 @@
 	&:hover {
 		--icon-color: var(--color-1);
 	}
+
 	.message {
 		font-size: 13px;
 		margin-left: 10px;

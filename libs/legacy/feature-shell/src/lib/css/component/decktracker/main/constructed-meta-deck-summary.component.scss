@@ -149,6 +149,55 @@
 	}
 }
 
+.buttons-container {
+	height: 50px;
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.08);
+	display: flex;
+	justify-content: space-around;
+	position: relative;
+	margin-top: 1px;
+
+	.button {
+		display: flex;
+		align-items: center;
+		color: var(--color-2);
+
+		.watch-icon {
+			height: 100%;
+			aspect-ratio: 4/3;
+			align-items: center;
+		}
+
+		.text {
+			margin-left: 15px;
+		}
+
+		&:hover {
+			color: var(--color-1);
+		}
+	}
+
+	.copy-deckstring {
+		::ng-deep .copy-deckstring {
+			height: 100%;
+
+			.icon {
+				height: 100%;
+			}
+
+			svg {
+				height: 75%;
+				width: auto;
+			}
+
+			.message {
+				width: fit-content;
+			}
+		}
+	}
+}
+
 .deck-details {
 	padding: 10px;
 	background: rgba(255, 255, 255, 0.08);

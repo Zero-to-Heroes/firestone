@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
@@ -69,6 +69,25 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 				></div>
 			</div> -->
 		</div>
+		<div class="buttons-container" *ngIf="showDetails$ | async">
+			<div class="button view-online" (click)="viewOnline()">
+				<div class="watch-icon">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
+					</svg>
+				</div>
+				<div
+					class="text"
+					[owTranslate]="'app.decktracker.meta.deck.view-online-button'"
+					[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
+				></div>
+			</div>
+			<copy-deckstring
+				class="button copy-deckstring"
+				[deckstring]="deckstring"
+				[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
+			></copy-deckstring>
+		</div>
 		<div class="deck-details" *ngIf="showDetails$ | async">
 			<div class="cards-containers">
 				<div class="container core">
@@ -101,6 +120,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	removedCards: readonly CardVariation[];
 	addedCards: readonly CardVariation[];
 	standardDeviation: string;
+	deckstring: string;
 
 	@Input() set deck(value: EnhancedDeckStat) {
 		this.deck$$.next(value);
@@ -119,6 +139,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ow: OverwolfService,
 	) {
 		super(cdr);
 	}
@@ -135,7 +156,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				// distinctUntilChanged(
 				// 	(a, b) =>
 				// 		a.deck.decklist === b.deck.decklist &&
-				// 		a.archetype?.id === b.archetype?.id &&
+				// 		a.archetype?.id === b.archetype?.id &&s
 				// 		a.deck.winrate === b.deck.winrate,
 				// ),
 			)
@@ -154,6 +175,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				this.addedCards = this.buildCardVariations(deck.cardVariations?.added);
 				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards);
 				this.standardDeviation = `±${this.buildPercents(3 * deck.standardDeviation)}`;
+				this.deckstring = deck.decklist;
 			});
 	}
 
@@ -167,6 +189,13 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 
 	toggleDetails() {
 		this.showDetails$$.next(!this.showDetails$$.value);
+	}
+
+	viewOnline() {
+		this.ow.openUrlInDefaultBrowser(
+			`https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`,
+		);
+		// this.ow.openUrlInDefaultBrowser(`https://www.d0nkey.top/decks/${this.deckstring}`);
 	}
 
 	private buildCardVariations(cardIds: readonly string[]): readonly CardVariation[] {
