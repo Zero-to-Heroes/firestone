@@ -161,7 +161,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				// ),
 			)
 			.subscribe(({ deck, archetype }) => {
-				console.debug('setting deck', deck, archetype);
+				// console.debug('setting deck', deck, archetype);
 				this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${deck.heroCardClass}.png`;
 				this.classTooltip = this.i18n.translateString(`global.class.${deck.heroCardClass}`);
 				this.deckName =
