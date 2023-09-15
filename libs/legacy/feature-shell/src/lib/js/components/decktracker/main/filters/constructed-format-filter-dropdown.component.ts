@@ -59,7 +59,7 @@ export class ConstructedFormatFilterDropdownComponent
 		]).pipe(
 			filter(([[currentView], [filter]]) => !!currentView),
 			this.mapData(([[currentView], [filter]]) => {
-				const options: FilterOption[] = ['standard'].map(
+				const options: FilterOption[] = ['standard', 'wild', 'twist'].map(
 					(option) =>
 						({
 							value: option,
