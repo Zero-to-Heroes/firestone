@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
+import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
@@ -161,7 +162,10 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				// ),
 			)
 			.subscribe(({ deck, archetype }) => {
-				// console.debug('setting deck', deck, archetype);
+				const debug = deck.archetypeName === 'xl-control-priest';
+				if (debug) {
+					console.debug('setting deck', deck, archetype, decode(deck.decklist));
+				}
 				this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${deck.heroCardClass}.png`;
 				this.classTooltip = this.i18n.translateString(`global.class.${deck.heroCardClass}`);
 				this.deckName =
@@ -171,9 +175,9 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				this.dustCost = deck.dustCost;
 				this.winrate = this.buildPercents(deck.winrate);
 				this.totalGames = this.formatGamesCount(deck.totalGames);
-				this.removedCards = this.buildCardVariations(deck.cardVariations?.removed);
-				this.addedCards = this.buildCardVariations(deck.cardVariations?.added);
-				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards);
+				this.removedCards = this.buildCardVariations(deck.cardVariations?.removed, deck.sideboards ?? []);
+				this.addedCards = this.buildCardVariations(deck.cardVariations?.added, deck.sideboards ?? []);
+				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards, deck.sideboards ?? []);
 				this.standardDeviation = `±${this.buildPercents(3 * deck.standardDeviation)}`;
 				this.deckstring = deck.decklist;
 			});
@@ -198,15 +202,24 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		// this.ow.openUrlInDefaultBrowser(`https://www.d0nkey.top/decks/${this.deckstring}`);
 	}
 
-	private buildCardVariations(cardIds: readonly string[]): readonly CardVariation[] {
+	private buildCardVariations(
+		cardIds: readonly string[],
+		sideboards: readonly Sideboard[],
+	): readonly CardVariation[] {
 		const groupedByCard = groupByFunction((cardId: string) => cardId)(cardIds);
 		return Object.keys(groupedByCard)
-			.map((cardId) => this.buildCardVariation(cardId, groupedByCard[cardId].length))
+			.map((cardId) => this.buildCardVariation(cardId, groupedByCard[cardId].length, sideboards))
 			.sort(sortByProperties((c) => [c.manaCost, c.cardName]));
 	}
 
-	private buildCardVariation(cardId: string, quantity: number): CardVariation {
+	private buildCardVariation(cardId: string, quantity: number, sideboards: readonly Sideboard[]): CardVariation {
 		const card = this.allCards.getCard(cardId);
+		const sideboardCards = sideboards
+			.find((s) => s.keyCardDbfId === card.dbfId)
+			?.cards?.map((pair) => ({
+				quantity: pair[1],
+				card: this.allCards.getCardFromDbfId(pair[0]),
+			}));
 		return {
 			cardId: card.id,
 			cardImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
@@ -214,6 +227,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 			isLegendary: card.rarity?.toLowerCase() === 'legendary',
 			manaCost: card.cost,
 			cardName: card.name,
+			sideboard: sideboardCards?.map((c) => this.buildCardVariation(c.card.id, c.quantity, [])),
 		};
 	}
 

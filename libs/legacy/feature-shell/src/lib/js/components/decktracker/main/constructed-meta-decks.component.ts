@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
-import { decode } from '@firestone-hs/deckstrings';
+import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -160,10 +160,12 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 
 	private enhanceStat(stat: DeckStat, collection: readonly Card[], conservativeEstimate: boolean): EnhancedDeckStat {
 		const deckDefinition = decode(stat.decklist);
-		const deckCards = deckDefinition.cards.map((pair) => ({
-			quantity: pair[1],
-			card: this.allCards.getCardFromDbfId(pair[0]),
-		}));
+		const deckCards = [...deckDefinition.cards, ...(deckDefinition.sideboards ?? []).flatMap((s) => s.cards)].map(
+			(pair) => ({
+				quantity: pair[1],
+				card: this.allCards.getCardFromDbfId(pair[0]),
+			}),
+		);
 		const dustCost = deckCards
 			.map((card) => {
 				const collectionCard = collection?.find((c) => c.id === card.card.id);
@@ -188,6 +190,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			standardDeviation: standardDeviation,
 			conservativeWinrate: conservativeWinrate,
 			winrate: winrateToUse,
+			sideboards: deckDefinition.sideboards,
 		};
 	}
 
@@ -241,4 +244,5 @@ export interface EnhancedDeckStat extends DeckStat {
 	readonly heroCardClass: string;
 	readonly standardDeviation: number;
 	readonly conservativeWinrate: number;
+	readonly sideboards: readonly Sideboard[];
 }
