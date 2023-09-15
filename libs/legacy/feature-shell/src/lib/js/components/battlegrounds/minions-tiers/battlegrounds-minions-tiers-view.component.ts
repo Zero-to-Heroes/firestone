@@ -341,7 +341,7 @@ const buildTribeTiers = (
 	if (!availableTribes?.length) {
 		return [];
 	}
-	console.debug('[debug] building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
+	console.debug('building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
 	const allTribes: Race[] = [
 		...new Set(
 			cardsInGame
@@ -349,7 +349,7 @@ const buildTribeTiers = (
 				.filter((t) => t !== Race[Race.ALL] && availableTribes.includes(Race[t])),
 		),
 	].map((t) => Race[t]);
-	console.debug('[debug] all tribes', allTribes, availableTribes);
+	console.log('[tribe-tiers] all tribes', allTribes, availableTribes);
 	return allTribes
 		.map((tribe: Race) => {
 			const cardsForTribe = cardsInGame.filter((c) =>
