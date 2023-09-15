@@ -73,6 +73,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						#scroll
 						class="decks-list"
 						[items]="value.decks"
+						[bufferAmount]="15"
 						[attr.aria-label]="'Meta deck stats'"
 						role="list"
 						scrollable
