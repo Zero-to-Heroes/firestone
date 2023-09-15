@@ -123,6 +123,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const newFaceOffs = currentState.currentGame.faceOffs.map((f) =>
 			f.id === updatedFaceOff.id ? updatedFaceOff : f,
 		);
+		console.debug('[bgs-simulation] updated face-off', updatedFaceOff, newFaceOffs);
 		const stateAfterFaceOff = currentState.currentGame.update({
 			faceOffs: newFaceOffs,
 		});

@@ -248,11 +248,13 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
+				console.debug('[bgs-store] will send next opponent', gameEvent);
 				this.handleEventOnlyAfterTrigger(
 					// cardID is null when repeating the same opponent
 					new BgsNextOpponentEvent(
 						gameEvent.additionalData.nextOpponentCardId,
 						gameEvent.additionalData.nextOpponentPlayerId,
+						gameEvent.additionalData.isSameOpponent,
 					),
 					GameEvent.TURN_START,
 				);

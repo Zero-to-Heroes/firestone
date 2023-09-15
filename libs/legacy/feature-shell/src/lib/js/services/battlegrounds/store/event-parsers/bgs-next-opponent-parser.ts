@@ -104,6 +104,7 @@ export class BgsNextOpponentParser implements EventParser {
 					faceOffs: [...currentState.currentGame.faceOffs, faceOff],
 				}),
 			} as BattlegroundsState);
+		console.debug('[bgs-next-opponent] updated face offs', faceOff, result);
 		return result;
 	}
 

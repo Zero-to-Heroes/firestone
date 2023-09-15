@@ -1091,7 +1091,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				console.log(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
@@ -1226,7 +1226,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_QUEST_REWARD_EQUIPPED':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
@@ -1235,7 +1235,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_QUEST_REWARD_DESTROYED':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,

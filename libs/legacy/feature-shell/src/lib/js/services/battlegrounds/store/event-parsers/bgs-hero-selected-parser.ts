@@ -94,11 +94,13 @@ export class BgsHeroSelectedParser implements EventParser {
 				lastFaceOff?.opponentPlayerId !== event.additionalData.nextOpponentPlayerId ||
 				lastFaceOff?.battleInfo
 			) {
+				console.debug('[bgs-hero-selected] next opponent in hero selected parser', event);
 				return new BgsNextOpponentParser(this.i18n, this.allCards).parse(
 					updatedState,
 					new BgsNextOpponentEvent(
 						event.additionalData.nextOpponentCardId,
 						event.additionalData.nextOpponentPlayerId,
+						false,
 					),
 				);
 			}

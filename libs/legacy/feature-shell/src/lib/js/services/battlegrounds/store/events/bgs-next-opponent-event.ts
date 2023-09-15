@@ -4,7 +4,7 @@ export class BgsNextOpponentEvent extends BattlegroundsStoreEvent {
 	constructor(
 		public readonly cardId: string,
 		public readonly playerId: number,
-		public readonly isSameOpponent?: boolean,
+		public readonly isSameOpponent: boolean,
 	) {
 		super('BgsNextOpponentEvent');
 	}
