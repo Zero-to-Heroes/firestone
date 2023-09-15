@@ -67,7 +67,12 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							(sortClick)="onSortClick($event)"
 						>
 						</sortable-table-label>
-						<div class="cell cards" [owTranslate]="'app.decktracker.meta.cards-header'"></div>
+						<div class="cell cards">
+							<span
+								[owTranslate]="'app.decktracker.meta.cards-header'"
+								[helpTooltip]="'app.decktracker.meta.cards-header-tooltip' | owTranslate"
+							></span>
+						</div>
 					</div>
 					<virtual-scroller
 						#scroll
