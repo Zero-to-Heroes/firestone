@@ -237,6 +237,9 @@ export const buildTiers = (
 		return [];
 	}
 
+	anomalies = anomalies ?? [];
+	availableTribes = availableTribes ?? [];
+	allPlayerCardIds = allPlayerCardIds ?? [];
 	let tiersToInclude = [1, 2, 3, 4, 5, 6];
 	if (
 		anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
