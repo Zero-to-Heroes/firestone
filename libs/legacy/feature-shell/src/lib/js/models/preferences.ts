@@ -606,7 +606,7 @@ export class Preferences implements IPreferences {
 	];
 	readonly bgsNumberOfDisplayedTabs: number = 1;
 	readonly bgsActiveSimulatorMinionTribeFilter: 'all' | 'blank' | string = 'all';
-	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' = 'all';
+	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' | '7' = 'all';
 	readonly bgsSavedRankFilter: BgsRankFilterType = 100;
 	readonly bgsSavedTribesFilter: readonly Race[] = [];
 	readonly bgsSavedAnomaliesFilter: readonly string[] = [];

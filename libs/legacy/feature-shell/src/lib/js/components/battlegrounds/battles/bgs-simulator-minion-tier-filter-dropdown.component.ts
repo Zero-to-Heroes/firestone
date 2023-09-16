@@ -49,7 +49,7 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		const tiers = [1, 2, 3, 4, 5, 6];
+		const tiers = [1, 2, 3, 4, 5, 6, 7];
 		this.options = [
 			{
 				value: 'all',
