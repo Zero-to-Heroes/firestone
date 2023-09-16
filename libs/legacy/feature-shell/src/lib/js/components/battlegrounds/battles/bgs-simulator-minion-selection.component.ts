@@ -83,6 +83,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								(valueChanged)="onVenomousChanged($event)"
 							></checkbox>
 							<checkbox
+								[label]="'global.hs-terms.poisonous' | owTranslate"
+								[value]="poisonous"
+								(valueChanged)="onPoisonousChanged($event)"
+							></checkbox>
+							<checkbox
 								[label]="'global.hs-terms.reborn' | owTranslate"
 								[value]="reborn"
 								(valueChanged)="onRebornChanged($event)"
@@ -197,6 +202,7 @@ export class BgsSimulatorMinionSelectionComponent
 	premium: boolean;
 	divineShield: boolean;
 	venomous: boolean;
+	poisonous: boolean;
 	reborn: boolean;
 	taunt: boolean;
 	attack: number;
@@ -383,6 +389,13 @@ export class BgsSimulatorMinionSelectionComponent
 		}
 	}
 
+	onPoisonousChanged(value: boolean) {
+		this.poisonous = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	onRebornChanged(value: boolean) {
 		this.reborn = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -425,6 +438,7 @@ export class BgsSimulatorMinionSelectionComponent
 		this.health = this.ref.health;
 		this.divineShield = this.ref.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 		this.venomous = this.ref.mechanics?.includes(GameTag[GameTag.VENOMOUS]);
+		this.poisonous = this.ref.mechanics?.includes(GameTag[GameTag.POISONOUS]);
 		this.reborn = this.ref.mechanics?.includes(GameTag[GameTag.REBORN]);
 		this.taunt = this.ref.mechanics?.includes(GameTag[GameTag.TAUNT]);
 		this.stealth = this.ref.mechanics?.includes(GameTag[GameTag.STEALTH]);
@@ -447,6 +461,7 @@ export class BgsSimulatorMinionSelectionComponent
 			health: this.health,
 			divineShield: this.divineShield,
 			venomous: this.venomous,
+			poisonous: this.poisonous,
 			scriptDataNum1: this.scriptDataNum1,
 			taunt: this.taunt,
 			reborn: this.reborn,
@@ -490,6 +505,7 @@ export class BgsSimulatorMinionSelectionComponent
 		this.health = this._entity.health;
 		this.divineShield = this._entity.divineShield;
 		this.venomous = this._entity.venomous;
+		this.poisonous = this._entity.poisonous;
 		this.scriptDataNum1 = this._entity.scriptDataNum1;
 		this.reborn = this._entity.reborn;
 		this.taunt = this._entity.taunt;
