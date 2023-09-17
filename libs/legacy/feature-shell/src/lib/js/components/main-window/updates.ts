@@ -50,13 +50,10 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Deck meta stats are here! You can now see detailed stats for decks to pick whatever will work best for you on the ladder. This is still an early version, so:
-								<ul>
-									<li>Only the "legend" rank and "last-patch" filters are working right now</li>
-									<li>The sample sizes are still pretty small, as I need to some time start collecting the data</li>
-								</ul>
+								text: `Deck meta stats are here! You can now see detailed stats for decks to pick whatever will work best for you on the ladder. This is still an early version, so expect some bugs and missing features.
 								There are still many things planned for the near future (some of these features will be available to premium users only):
 								<ul>
+									<li>Additional filters (let me know which ones you need!)</li>
 									<li>Archetype stats</li>
 									<li>Detailed matchup stats</li>
 									<li>Detailed card stats</li>

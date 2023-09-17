@@ -5,6 +5,7 @@ import {
 	Directive,
 	ElementRef,
 	Host,
+	Input,
 	Optional,
 	Renderer2,
 	Self,
@@ -21,6 +22,8 @@ export class PremiumSettingDirective
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
+	@Input() premiumSettingEnabled = true;
+
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
@@ -36,10 +39,12 @@ export class PremiumSettingDirective
 	}
 
 	ngAfterContentInit() {
-		this.store
-			.enablePremiumFeatures$()
-			.pipe(this.mapData((premium) => premium))
-			.subscribe((value) => this.setPremium(value));
+		if (this.premiumSettingEnabled) {
+			this.store
+				.enablePremiumFeatures$()
+				.pipe(this.mapData((premium) => premium))
+				.subscribe((value) => this.setPremium(value));
+		}
 	}
 
 	ngAfterViewInit(): void {

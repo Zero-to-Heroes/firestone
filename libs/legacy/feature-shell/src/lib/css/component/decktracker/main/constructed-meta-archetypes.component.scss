@@ -1,0 +1,22 @@
+:host {
+	height: 100%;
+	display: flex;
+	color: var(--default-text-color);
+	font-size: 13px;
+}
+
+with-loading {
+	display: flex;
+	flex-direction: column;
+}
+
+.constructed-meta-archetypes {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	.header {
+		display: flex;
+		margin-bottom: 10px;
+	}
+}

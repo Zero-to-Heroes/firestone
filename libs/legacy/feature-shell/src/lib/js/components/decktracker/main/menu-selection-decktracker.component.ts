@@ -9,7 +9,6 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -24,53 +23,24 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	template: `
 		<nav class="menu-selection" *ngIf="selectedTab$ | async as selectedTab">
 			<button
+				*ngFor="let menuItem of menuItems"
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ selected: selectedTab === 'decks' }"
-				(mousedown)="selectStage('decks')"
+				[ngClass]="{ selected: selectedTab === menuItem.id }"
+				premiumSetting
+				[premiumSettingEnabled]="menuItem.isPremium"
 			>
-				<span [owTranslate]="'app.decktracker.menu.decks-header'"></span>
-			</button>
-			<button
-				class="menu-item"
-				tabindex="0"
-				[ngClass]="{ selected: selectedTab === 'constructed-meta-decks' }"
-				(mousedown)="selectStage('constructed-meta-decks')"
-			>
-				<span [owTranslate]="'app.decktracker.menu.meta-decks-header'"></span>
-			</button>
-			<button
-				class="menu-item"
-				tabindex="0"
-				[ngClass]="{ selected: selectedTab === 'ladder-stats' }"
-				(mousedown)="selectStage('ladder-stats')"
-			>
-				<span [owTranslate]="'app.decktracker.menu.stats-header'"></span>
-			</button>
-			<button
-				class="menu-item"
-				tabindex="0"
-				[ngClass]="{ selected: selectedTab === 'ladder-ranking' }"
-				(mousedown)="selectStage('ladder-ranking')"
-			>
-				<span [owTranslate]="'app.decktracker.menu.ranking-header'"></span>
-			</button>
-			<button
-				class="menu-item"
-				tabindex="0"
-				[ngClass]="{ selected: selectedTab === 'constructed-deckbuilder' }"
-				(mousedown)="selectStage('constructed-deckbuilder')"
-			>
-				<span [owTranslate]="'app.decktracker.menu.deckbuilder-header'"></span>
-			</button>
-			<button
-				class="menu-item"
-				tabindex="0"
-				[ngClass]="{ selected: selectedTab === 'constructed-meta-decks' }"
-				(mousedown)="selectStage('constructed-meta-decks')"
-				*ngIf="enableMetaDecks"
-			>
-				<span [owTranslate]="'app.decktracker.menu.meta-decks-header'"></span>
+				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#lock" />
+					</svg>
+				</div>
+				<span class="text" [owTranslate]="menuItem.translationKey" (mousedown)="selectStage(menuItem)"></span>
+				<span
+					class="coming-soon"
+					*ngIf="menuItem.comingSoon"
+					[owTranslate]="'app.collection.sets.coming-soon'"
+				></span>
 			</button>
 		</nav>
 	`,
@@ -80,9 +50,36 @@ export class MenuSelectionDecktrackerComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	enableMetaDecks = FeatureFlags.ENABLE_CONSTRUCTED_META_DECKS;
-
 	selectedTab$: Observable<string>;
+
+	menuItems: readonly MenuItem[] = [
+		{
+			id: 'decks',
+			translationKey: 'app.decktracker.menu.decks-header',
+		},
+		{
+			id: 'constructed-meta-decks',
+			translationKey: 'app.decktracker.menu.meta-decks-header',
+		},
+		{
+			id: 'constructed-meta-archetypes',
+			translationKey: 'app.decktracker.menu.meta-archetypes-header',
+			isPremium: true,
+			comingSoon: true,
+		},
+		{
+			id: 'ladder-stats',
+			translationKey: 'app.decktracker.menu.stats-header',
+		},
+		{
+			id: 'ladder-ranking',
+			translationKey: 'app.decktracker.menu.ranking-header',
+		},
+		{
+			id: 'constructed-deckbuilder',
+			translationKey: 'app.decktracker.menu.deckbuilder-header',
+		},
+	];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -104,7 +101,17 @@ export class MenuSelectionDecktrackerComponent
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	selectStage(stage: DecktrackerViewType) {
-		this.stateUpdater.next(new SelectDecksViewEvent(stage));
+	selectStage(item: MenuItem) {
+		if (item.comingSoon) {
+			return;
+		}
+		this.stateUpdater.next(new SelectDecksViewEvent(item.id));
 	}
+}
+
+interface MenuItem {
+	readonly id: DecktrackerViewType;
+	readonly translationKey: string;
+	readonly isPremium?: boolean;
+	readonly comingSoon?: boolean;
 }

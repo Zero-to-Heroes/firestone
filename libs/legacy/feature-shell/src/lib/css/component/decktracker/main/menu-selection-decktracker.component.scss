@@ -3,19 +3,45 @@
 	flex-shrink: 0;
 	flex-grow: 0;
 
-	li,
-	button.menu-item {
+	.menu-item {
 		margin-right: 25px;
 		padding-bottom: 7px;
+		display: flex;
+		align-items: center;
+
+		.premium-lock {
+			display: none;
+			height: 25px;
+			aspect-ratio: 2;
+			margin-right: -10px;
+		}
+
+		&.locked {
+			color: var(--default-title-color);
+			.premium-lock {
+				display: flex;
+			}
+			.text {
+				pointer-events: none;
+			}
+		}
 
 		&:hover {
-			&:not(.disabled) {
+			&:not(.disabled):not(.locked) {
 				color: var(--on-menu-selection-color);
 			}
 		}
 
-		span {
+		.text {
 			display: flex;
+		}
+
+		.coming-soon {
+			position: absolute;
+			font-size: 12px;
+			bottom: -5px;
+			text-align: center;
+			width: 100%;
 		}
 	}
 }
