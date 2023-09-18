@@ -28,6 +28,7 @@ export class CopyDesckstringComponent {
 	@Input() showTooltip: boolean;
 	@Input() title: string;
 	@Input() origin: string;
+	@Input() deckName: string;
 
 	@Input() set deckstring(value: string) {
 		this._deckstring = value;
@@ -60,10 +61,14 @@ export class CopyDesckstringComponent {
 			console.log('no OW service present, not copying to clipboard');
 			return;
 		}
-		this.ow.placeOnClipboard(this.normalizedDeckstring);
+		let copiedString = this.normalizedDeckstring;
+		if (this.deckName) {
+			copiedString = '### ' + this.deckName + '\n' + copiedString;
+		}
+		this.ow.placeOnClipboard(copiedString);
 		this.inputCopy = this.title || this.copyText;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
-		console.log('copied deckstring to clipboard', this.normalizedDeckstring, this._deckstring);
+		console.log('copied deckstring to clipboard', copiedString, this._deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

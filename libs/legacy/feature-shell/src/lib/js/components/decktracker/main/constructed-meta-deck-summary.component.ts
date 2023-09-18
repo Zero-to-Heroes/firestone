@@ -86,6 +86,7 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 			<copy-deckstring
 				class="button copy-deckstring"
 				[deckstring]="deckstring"
+				[deckName]="deckName"
 				[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
 			></copy-deckstring>
 		</div>
