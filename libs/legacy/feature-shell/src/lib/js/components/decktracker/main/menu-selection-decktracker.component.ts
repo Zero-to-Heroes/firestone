@@ -26,7 +26,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				*ngFor="let menuItem of menuItems"
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ selected: selectedTab === menuItem.id }"
+				[ngClass]="{ selected: selectedTab === menuItem.id, disabled: menuItem.comingSoon }"
 				premiumSetting
 				[premiumSettingEnabled]="menuItem.isPremium"
 			>

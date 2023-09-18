@@ -21,6 +21,9 @@
 			.premium-lock {
 				display: flex;
 			}
+		}
+
+		&.disabled {
 			.text {
 				pointer-events: none;
 			}
