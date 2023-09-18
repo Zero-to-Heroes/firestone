@@ -3,9 +3,8 @@ import Plausible from 'plausible-tracker';
 
 @Injectable()
 export class AnalyticsService {
-	// TODO: make that configurable
 	plausible = Plausible({
-		domain: 'firestoneapp.gg',
+		domain: 'firestoneapp.gg-app',
 		trackLocalhost: true,
 		apiHost: 'https://apps.zerotoheroes.com',
 	});
