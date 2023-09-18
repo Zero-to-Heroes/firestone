@@ -283,6 +283,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						// No restrictions on tribes yet
 						validTribes: undefined,
 						currentTurn: 0,
+						anomalies: this._faceOff.battleInfo?.gameState?.anomalies ?? [],
 					},
 				},
 			} as BgsFaceOffWithSimulation);
@@ -789,6 +790,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				maxAcceptableDuration: 6000,
 			},
 			gameState: {
+				...this._faceOff.battleInfo.gameState,
 				// No restrictions on tribes yet
 				validTribes: undefined,
 				currentTurn: 0,
