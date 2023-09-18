@@ -9,7 +9,13 @@ export class AnalyticsService {
 		apiHost: 'https://apps.zerotoheroes.com',
 	});
 
-	public trackEvent(eventName: string) {
-		this.plausible.trackEvent(eventName);
+	public trackEvent(eventName: string, options?: EventOptions) {
+		this.plausible.trackEvent(eventName, {
+			props: options,
+		});
 	}
 }
+
+export type EventOptions = {
+	readonly [propName: string]: string | number | boolean;
+};

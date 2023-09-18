@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
@@ -142,6 +142,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
 	}
@@ -200,7 +201,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		this.ow.openUrlInDefaultBrowser(
 			`https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`,
 		);
-		// this.ow.openUrlInDefaultBrowser(`https://www.d0nkey.top/decks/${this.deckstring}`);
+		this.analytics.trackEvent('meta-deck-view-online', { deckstring: this.deckstring });
 	}
 
 	private buildCardVariations(

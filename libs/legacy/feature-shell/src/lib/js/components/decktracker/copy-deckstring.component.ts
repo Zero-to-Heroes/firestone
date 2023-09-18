@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import { CardClass, CardIds, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -54,6 +54,7 @@ export class CopyDesckstringComponent {
 		@Optional() private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly analytics: AnalyticsService,
 	) {}
 
 	async copyDeckstring() {
@@ -78,7 +79,8 @@ export class CopyDesckstringComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
-		amplitude.getInstance().logEvent('copy-deckstring', { origin: this.origin });
+		// amplitude.getInstance().logEvent('copy-deckstring', { origin: this.origin });
+		this.analytics.trackEvent('copy-deckstring', { origin: this.origin });
 	}
 }
 

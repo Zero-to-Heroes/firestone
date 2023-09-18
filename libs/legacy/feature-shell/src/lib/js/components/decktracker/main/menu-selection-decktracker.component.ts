@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
@@ -84,9 +84,10 @@ export class MenuSelectionDecktrackerComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
@@ -105,6 +106,7 @@ export class MenuSelectionDecktrackerComponent
 		if (item.comingSoon) {
 			return;
 		}
+		this.analytics.trackEvent(`navigation-decktracker`, { tab: item.id });
 		this.stateUpdater.next(new SelectDecksViewEvent(item.id));
 	}
 }
