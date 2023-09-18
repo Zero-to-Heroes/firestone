@@ -141,11 +141,11 @@ export class NavigationBackProcessor implements Processor {
 				const currentCategory: BattlegroundsCategory = dataState.battlegrounds?.findCategory(
 					navigationState.navigationBattlegrounds.selectedCategoryId,
 				);
-				console.log(
-					'currentCategory',
-					currentCategory?.id,
-					navigationState.navigationBattlegrounds.selectedCategoryId,
-				);
+				// console.log(
+				// 	'currentCategory',
+				// 	currentCategory?.id,
+				// 	navigationState.navigationBattlegrounds.selectedCategoryId,
+				// );
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 						menuDisplayType: 'menu',
