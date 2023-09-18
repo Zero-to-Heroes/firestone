@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.0.0',
+		version: '12.0.2',
 		force: false,
 		sections: [
 			// {
@@ -86,12 +86,44 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'content',
+								text: `You can now again choose "Poisonous" as a minion attribute in the simulator.`,
+							},
+							{
+								type: 'content',
+								text: `You can now filter Tier 7 minions in the simulator.`,
+							},
+							{
 								type: 'bug',
-								text: `(Premium) Fix a bug where golden mininos would be auto-highlighted even when The Golden Arena anomaly was active.`,
+								text: `(Premium) Fix an issue where golden mininos would be auto-highlighted even when The Golden Arena anomaly was active.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the opponent's information would not be properly updated when facing them multiple times in a row.`,
 							},
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Banana Slamma would buff itself after being summoned in combat.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Amalgadon would do nothing when its battlecry got triggered by Rylak.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the Undead Legion attack buff would not apply to minions already on board.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where "on attack" buffs would not be consistently applied if the defender had an "on being attacked" trigger.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Feathermane would not always be summoned from hand.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where importing a battle from the Replays tab into the Simulator would not import the anomalies.`,
 							},
 						],
 					},
