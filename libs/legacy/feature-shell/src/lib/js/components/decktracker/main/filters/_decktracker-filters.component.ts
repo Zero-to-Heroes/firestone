@@ -36,6 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<constructed-format-filter-dropdown class="filter"></constructed-format-filter-dropdown>
 			<constructed-time-filter-dropdown class="filter"></constructed-time-filter-dropdown>
 			<constructed-rank-filter-dropdown class="filter"></constructed-rank-filter-dropdown>
+			<constructed-sample-size-filter-dropdown class="filter"></constructed-sample-size-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
 

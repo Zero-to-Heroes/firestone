@@ -132,12 +132,16 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
 			collection$,
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
+			this.store.listenPrefs$(
+				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
+				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
+			),
 		]).pipe(
 			filter(([stats, sortCriteria]) => !!stats?.dataPoints),
-			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate]]) =>
+			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize]]) =>
 				stats.deckStats
 					.map((stat) => this.enhanceStat(stat, collection, conservativeEstimate))
+					.filter((stat) => stat.totalGames >= sampleSize)
 					.sort((a, b) => this.sortDecks(a, b, sortCriteria)),
 			),
 			tap((decks) => console.debug('[meta-decks] emitting decks', decks)),
