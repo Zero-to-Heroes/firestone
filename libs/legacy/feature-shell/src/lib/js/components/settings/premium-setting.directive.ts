@@ -40,8 +40,10 @@ export class PremiumSettingDirective
 
 	ngAfterContentInit() {
 		if (this.premiumSettingEnabled) {
+			// I don't think there's a case where I would want to make the directive conditional to the lottery
+			// being shown, as settings are permanent, and the lottery is just something you can pop on and off
 			this.store
-				.enablePremiumFeatures$()
+				.hasPremiumSub$()
 				.pipe(this.mapData((premium) => premium))
 				.subscribe((value) => this.setPremium(value));
 		}
@@ -53,6 +55,7 @@ export class PremiumSettingDirective
 	}
 
 	private setPremium(value: boolean) {
+		console.debug('setting premium', value);
 		this.renderer.removeClass(this.el.nativeElement, 'locked');
 		this.renderer.removeClass(this.el.nativeElement, 'unlocked');
 		this.renderer.addClass(this.el.nativeElement, value ? 'unlocked' : 'locked');
