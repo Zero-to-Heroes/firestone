@@ -38,7 +38,7 @@ export class OpponentShockspitterWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentShockspitterCounter;
 		this.deckStateExtractor = (state) =>
-			state?.metadata?.formatType !== GameFormat.FT_CLASSIC &&
+			state?.metadata?.formatType === GameFormat.FT_WILD &&
 			state?.opponentDeck?.heroAttacksThisMatch > 0 &&
 			state.opponentDeck.hero?.classes.includes(CardClass.HUNTER);
 		super.ngAfterContentInit();
