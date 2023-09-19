@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	Output,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { FeatureFlags } from '../../services/feature-flags';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -64,9 +64,10 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	topAdSize = { width: 300, height: 250 };
 
 	constructor(
-		private ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
@@ -83,6 +84,7 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 
 	showFeatures() {
 		this.ow.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads');
+		this.analytics.trackEvent('show-premium-features');
 	}
 
 	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {
