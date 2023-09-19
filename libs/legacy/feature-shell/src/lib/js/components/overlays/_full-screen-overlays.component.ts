@@ -111,6 +111,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-volatile-skeleton-widget-wrapper></player-volatile-skeleton-widget-wrapper>
 			<player-relic-widget-wrapper></player-relic-widget-wrapper>
 			<player-chained-guardian-widget-wrapper></player-chained-guardian-widget-wrapper>
+			<player-treant-widget-wrapper></player-treant-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
