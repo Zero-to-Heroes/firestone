@@ -40,6 +40,11 @@ export class DeckState {
 		CardIds.YoggSaronHopesEnd_OG_134,
 		CardIds.YoggSaronMasterOfFate,
 		CardIds.ArcaneGiant,
+		CardIds.MeddlesomeServant_YOG_518,
+		CardIds.ContaminatedLasher_YOG_528,
+		CardIds.SaroniteShambler_YOG_521,
+		CardIds.PrisonBreaker_YOG_411,
+		CardIds.YoggSaronUnleashed_YOG_516,
 	];
 
 	private static readonly NEW_CTHUN_CARD_IDS = [

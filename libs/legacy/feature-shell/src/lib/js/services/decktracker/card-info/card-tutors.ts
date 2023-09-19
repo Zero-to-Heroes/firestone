@@ -4,6 +4,7 @@ export const tutors = [
 	CardIds.AbyssalDepths,
 	CardIds.AkaliTheRhino,
 	CardIds.AlakirTheWindsOfTime_WON_092h,
+	CardIds.AlarmedSecuritybot_YOG_510,
 	CardIds.AllianceBannerman,
 	CardIds.Ancharrr,
 	CardIds.AncientMysteries,

@@ -150,13 +150,16 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.GennGreymane_GIL_692,
 	CardIds.BakuTheMooneater,
 	CardIds.PrinceRenathal,
+	CardIds.ChogallTwilightChieftain_YOG_530,
 ];
 
 export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
 	...startOfGameGlobalEffectCards,
+	CardIds.BestialMadness_YOG_505,
 	CardIds.BlackrockNRoll,
 	CardIds.CelestialAlignment,
+	CardIds.ChaoticTendril_YOG_514,
 	CardIds.DeckOfChaos,
 	CardIds.DeckOfLunacy,
 	CardIds.DraconicMunitionTavernBrawl,

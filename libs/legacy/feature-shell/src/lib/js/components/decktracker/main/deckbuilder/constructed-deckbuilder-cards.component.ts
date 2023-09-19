@@ -150,6 +150,7 @@ export class ConstructedDeckbuilderCardsComponent
 	// highRes$: Observable<boolean>;
 	showRelatedCards$: Observable<boolean>;
 	maxCardsInDeck$: Observable<number>;
+	minCardsInDeck$: Observable<number>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
 	searchString$: Observable<string>;
@@ -312,14 +313,32 @@ export class ConstructedDeckbuilderCardsComponent
 				50,
 			),
 		);
-		this.maxCardsInDeck$ = this.currentDeckCards$.pipe(
-			this.mapData((cards) => (cards?.includes(CardIds.PrinceRenathal) ? 40 : 30)),
+		// TODO: externalize rules?
+		this.maxCardsInDeck$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat),
+			this.currentDeckCards$,
+		]).pipe(
+			this.mapData(([[currentFormat], cards]) =>
+				currentFormat === 'twist' || cards?.includes(CardIds.PrinceRenathal) ? 40 : 30,
+			),
+		);
+		this.minCardsInDeck$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat),
+			this.currentDeckCards$,
+		]).pipe(
+			this.mapData(([[currentFormat], cards]) =>
+				currentFormat !== 'twist' && cards?.includes(CardIds.PrinceRenathal) ? 40 : 30,
+			),
 		);
 
-		this.deckValid$ = combineLatest([this.currentDeckCards$, this.maxCardsInDeck$]).pipe(
-			this.mapData(([cards, maxCards]) => {
+		this.deckValid$ = combineLatest([this.currentDeckCards$, this.maxCardsInDeck$, this.minCardsInDeck$]).pipe(
+			this.mapData(([cards, maxCards, minCards]) => {
 				const groupedCards = groupByFunction((cardId: string) => cardId)(cards);
-				return cards?.length === maxCards && Object.values(groupedCards).every((cards) => cards.length <= 2);
+				return (
+					cards?.length >= minCards &&
+					cards?.length <= maxCards &&
+					Object.values(groupedCards).every((cards) => cards.length <= 2)
+				);
 			}),
 		);
 		// Init cards if they already exist in the store (because of a deck import for instance)

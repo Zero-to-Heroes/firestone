@@ -608,4 +608,13 @@ export const giftCreators = [
 	CardIds.ZephrysTheGreat_ULD_003,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
+	CardIds.VoidScripture_YOG_507,
+	CardIds.SoulburnerVaria_YOG_520,
+	CardIds.AssemblyLine_YOG_410,
+	CardIds.TentacleGrip_YOG_526,
+	CardIds.ShockHopper_YOG_524,
+	CardIds.InfestedWatcher_YOG_523,
+	CardIds.TentacleTender_YOG_517,
+	CardIds.EyeOfChaos_YOG_515,
+	CardIds.RunesOfDarkness_YOG_511,
 ];
