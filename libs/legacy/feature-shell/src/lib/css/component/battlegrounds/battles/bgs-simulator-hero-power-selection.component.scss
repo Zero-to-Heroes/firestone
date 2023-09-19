@@ -8,9 +8,10 @@
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	width: 710px;
+	width: 50vw;
 	min-height: 580px;
 	max-height: calc(100% - 100px);
+	height: 100%;
 	color: var(--default-text-color);
 	background: var(--popup-background-image);
 	font-size: 14px;
@@ -113,7 +114,7 @@
 				cursor: text;
 				flex-grow: 1;
 
-				&::placeholder{
+				&::placeholder {
 					color: var(--color-2);
 					opacity: 0.5;
 				}
@@ -143,8 +144,10 @@
 			padding: 15px;
 
 			.hero-portrait-frame {
-				width: 119px;
-				height: 164px;
+				width: 17vh;
+				margin-right: 10px;
+				aspect-ratio: 3/4;
+				height: auto;
 				margin-right: 10px;
 			}
 
