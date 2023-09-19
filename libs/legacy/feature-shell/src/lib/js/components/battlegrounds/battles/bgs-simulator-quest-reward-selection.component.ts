@@ -9,9 +9,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
@@ -22,6 +22,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
+		`../../../../css/component/battlegrounds/battles/bgs-selection-popup.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-simulator-quest-reward-selection.component.scss`,
 	],
 	template: `

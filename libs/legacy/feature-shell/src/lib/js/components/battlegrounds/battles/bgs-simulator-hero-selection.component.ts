@@ -23,6 +23,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
+		`../../../../css/component/battlegrounds/battles/bgs-selection-popup.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-simulator-hero-selection.component.scss`,
 	],
 	template: `
