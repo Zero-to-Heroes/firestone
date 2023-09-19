@@ -53,7 +53,7 @@ declare let amplitude;
 			<div class="battle-content">
 				<div class="battle-boards">
 					<bgs-battle-side
-						class="opponent"
+						class="side opponent"
 						[player]="opponent"
 						[showTavernTier]="showTavernTier"
 						[clickToChange]="clickToChange"
@@ -102,7 +102,7 @@ declare let amplitude;
 						</div>
 					</div>
 					<bgs-battle-side
-						class="player"
+						class="side player"
 						[player]="player"
 						[showTavernTier]="showTavernTier"
 						[clickToChange]="clickToChange"

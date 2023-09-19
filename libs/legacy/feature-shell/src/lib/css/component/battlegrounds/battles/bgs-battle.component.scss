@@ -357,10 +357,19 @@
 
 		.battle-content {
 			height: 100%;
+			justify-content: center;
 		}
 
 		.battle-boards {
 			justify-content: space-between;
+			aspect-ratio: 840/626;
+			width: auto;
+			height: auto;
+			flex-grow: 0;
+
+			.side {
+				// flex-grow: 1;
+			}
 		}
 
 		.simulations {
