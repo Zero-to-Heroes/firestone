@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.0.2',
+		version: '12.0.3',
 		force: false,
 		sections: [
 			// {
@@ -73,12 +73,16 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'content',
+								text: `Add most of the missing oracles and card highlights for Caverns of Time.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix the tooltip for the Grey Sage Parrot counter in the settings.`,
 							},
 							{
-								type: 'content',
-								text: `Add most of the missing oracles and card highlights for Caverns of Time.`,
+								type: 'bug',
+								text: `Fix an issue where the Treant counter would not show up.`,
 							},
 						],
 					},
@@ -124,6 +128,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where importing a battle from the Replays tab into the Simulator would not import the anomalies.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the heroes' player stats in the overlay would always use the current anomaly and MMR rank filters, even if these were disabled.`,
 							},
 						],
 					},
