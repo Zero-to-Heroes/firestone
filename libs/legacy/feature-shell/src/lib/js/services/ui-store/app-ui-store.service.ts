@@ -801,29 +801,40 @@ export class AppUiStoreService extends Store<Preferences> {
 				(prefs) => prefs.bgsActiveTribesFilter,
 				(prefs) => prefs.bgsActiveAnomaliesFilter,
 				(prefs) => prefs.bgsActiveTimeFilter,
+				(prefs) => prefs.bgsActiveUseMmrFilterInHeroSelection,
+				(prefs) => prefs.bgsActiveUseAnomalyFilterInHeroSelection,
 			),
 		]).pipe(
 			// distinctUntilChanged(),
-			map(([games, [mmrPercentiles, patchInfo], [rankFilter, tribesFilter, anomaliesFilter, timeFilter]]) => {
-				console.debug('[bgs-2] rebuilding meta hero stats 2', arguments);
-				const targetRank: number =
-					!mmrPercentiles?.length || !rankFilter
-						? 0
-						: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
-				const bgGames = games
-					.filter((g) => isBattlegrounds(g.gameMode))
-					.filter(
-						(g) =>
-							!tribesFilter?.length ||
-							tribesFilter.length === ALL_BG_RACES.length ||
-							tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
-					)
-					.filter(
-						(g) => !anomaliesFilter?.length || anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a)),
-					);
-				const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
-				return afterFilter;
-			}),
+			map(
+				([
+					games,
+					[mmrPercentiles, patchInfo],
+					[rankFilter, tribesFilter, anomaliesFilter, timeFilter, useMmrFilter, useAnomalyFilter],
+				]) => {
+					console.debug('[bgs-2] rebuilding meta hero stats 2', arguments);
+					const targetRank: number =
+						!mmrPercentiles?.length || !rankFilter || !useMmrFilter
+							? 0
+							: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
+					const bgGames = games
+						.filter((g) => isBattlegrounds(g.gameMode))
+						.filter(
+							(g) =>
+								!tribesFilter?.length ||
+								tribesFilter.length === ALL_BG_RACES.length ||
+								tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
+						)
+						.filter(
+							(g) =>
+								!anomaliesFilter?.length ||
+								!useAnomalyFilter ||
+								anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a)),
+						);
+					const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
+					return afterFilter;
+				},
+			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 
