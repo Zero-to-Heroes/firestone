@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.0.3',
+		version: '12.0.6',
 		force: false,
 		sections: [
 			// {
@@ -73,6 +73,14 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Also consider the cards in ETC's sideboard when deciding which widgets to show.`,
+							},
+							{
+								type: 'feature',
+								text: `Show the date of the last patch in the "time" filter dropdown.`,
+							},
+							{
 								type: 'content',
 								text: `Add most of the missing oracles and card highlights for Caverns of Time.`,
 							},
@@ -83,6 +91,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where the Treant counter would not show up.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the attack counter would ignore the hero's attack if they didn't have a weapon equipped.`,
 							},
 						],
 					},
@@ -96,6 +108,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'content',
 								text: `You can now filter Tier 7 minions in the simulator.`,
+							},
+							{
+								type: 'content',
+								text: `Add simulator support for Lovesick Balladist.`,
 							},
 							{
 								type: 'bug',
@@ -132,6 +148,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where the heroes' player stats in the overlay would always use the current anomaly and MMR rank filters, even if these were disabled.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Add missing Blackrock Mountain set from deckbuilding pool.`,
 							},
 						],
 					},
