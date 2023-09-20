@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { TimePeriod } from '@firestone-hs/constructed-deck-stats';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { formatPatch } from '@legacy-import/src/lib/js/services/utils';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
@@ -53,17 +54,19 @@ export class ConstructedTimeFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.filter$ = combineLatest(
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.patch),
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksTimeFilter),
-		).pipe(
-			filter(([[currentView], [filter]]) => !!currentView),
-			this.mapData(([[currentView], [filter]]) => {
+		]).pipe(
+			filter(([[patch], [currentView], [filter]]) => !!currentView),
+			this.mapData(([[patch], [currentView], [filter]]) => {
 				const options: FilterOption[] = ['all-time', 'past-30', 'past-7', 'past-3', 'last-patch'].map(
 					(option) =>
 						({
 							value: option,
 							label: this.i18n.translateString(`app.decktracker.filters.time-filter.${option}`),
+							tooltip: option === 'last-patch' ? formatPatch(patch, this.i18n) : undefined,
 						} as FilterOption),
 				);
 				return {
@@ -92,4 +95,5 @@ export class ConstructedTimeFilterDropdownComponent
 
 interface FilterOption extends IOption {
 	value: TimePeriod;
+	tooltip?: string;
 }
