@@ -379,8 +379,10 @@ export class DeckState {
 
 	public hasAnyCardInHandAndDeck(cardIds: readonly CardIds[]) {
 		return [...this.hand, ...this.deck, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => cardIds.includes(card.cardId as CardIds));
+			.map((card) => card.cardId)
+			.concat(this.getCardsInSideboards())
+			.filter((cardId: string) => !!cardId)
+			.some((cardId) => cardIds.includes(cardId as CardIds));
 	}
 
 	public hasAsvedon() {
@@ -453,6 +455,10 @@ export class DeckState {
 		}
 
 		return battlecryCards[0];
+	}
+
+	public getCardsInSideboards(): readonly string[] {
+		return (this.sideboards ?? []).flatMap((s) => s.cards ?? []);
 	}
 }
 
