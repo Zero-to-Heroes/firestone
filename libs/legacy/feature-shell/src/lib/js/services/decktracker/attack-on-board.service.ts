@@ -30,9 +30,21 @@ export class AttackOnBoardService {
 			: Math.max(playerFromTracker?.Weapon?.attack || 0, 0);
 		const heroAttack =
 			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, deck.isActivePlayer)
-				? Math.min(this.windfuryMultiplier(playerFromTracker.Hero), playerFromTracker?.Weapon?.durability) *
+				? Math.min(
+						this.windfuryMultiplier(playerFromTracker.Hero),
+						// We can get attack outside of weapons
+						playerFromTracker?.Weapon?.durability || 1,
+				  ) *
 				  (numberOfVoidtouchedAttendants + baseHeroAttack)
 				: 0;
+		// console.debug(
+		// 	'heroAttack',
+		// 	heroAttack,
+		// 	baseHeroAttack,
+		// 	this.canAttack(playerFromTracker.Hero, deck.isActivePlayer),
+		// 	this.windfuryMultiplier(playerFromTracker.Hero),
+		// 	playerFromTracker?.Weapon?.durability,
+		// );
 		return {
 			board: totalAttackOnBoard,
 			hero: heroAttack,
