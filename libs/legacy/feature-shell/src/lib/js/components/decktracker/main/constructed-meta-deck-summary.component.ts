@@ -88,6 +88,7 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 				[deckstring]="deckstring"
 				[deckName]="deckName"
 				[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
+				[origin]="'constructed-meta-decks'"
 			></copy-deckstring>
 		</div>
 		<div class="deck-details" *ngIf="showDetails$ | async">
