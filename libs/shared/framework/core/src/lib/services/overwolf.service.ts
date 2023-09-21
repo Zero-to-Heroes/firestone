@@ -29,9 +29,9 @@ export class OverwolfService {
 	private twitterUserInfo: TwitterUserInfo;
 	private redditUserInfo: RedditUserInfo = null;
 
-	public static getAppFolder(): string {
-		return `${overwolf.io.paths.localAppData}/overwolf/Log/Apps/Firestone`;
-	}
+	// public static getAppFolder(): string {
+	// 	return `${overwolf.io.paths.localAppData}/overwolf/Log/Apps/Firestone`;
+	// }
 
 	public static getLocalAppDataFolder(): string {
 		return `${overwolf.io.paths.localAppData}`;

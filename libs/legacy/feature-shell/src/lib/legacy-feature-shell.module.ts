@@ -676,6 +676,7 @@ import { FirestoneRemoteAchievementsLoaderService } from './js/services/achievem
 import { RawAchievementsLoaderService } from './js/services/achievement/data/raw-achievements-loader.service';
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
+import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
 import { setAppInjector } from './js/services/app-injector';
 import { ArenaStateBuilderService } from './js/services/arena/arena-state-builder.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
@@ -1756,6 +1757,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		QuestsService,
 		LiveStreamsService,
 		SystemTrayService,
+
+		HearthArenaAnalyticsService,
 
 		AppUiStoreService,
 		// Not sure that this is needed, but I don't want to replace all instances of the facade by the interface

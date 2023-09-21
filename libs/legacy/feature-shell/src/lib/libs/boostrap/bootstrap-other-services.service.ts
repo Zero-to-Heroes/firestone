@@ -4,6 +4,7 @@ import { AchievementsNotificationService } from '../../js/services/achievement/a
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
 import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
+import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
 import { BgsBestUserStatsService } from '../../js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from '../../js/services/battlegrounds/bgs-init.service';
 import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
@@ -92,6 +93,7 @@ export class BootstrapOtherServicesService {
 		private readonly translate: TranslateService,
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
+		private readonly init_HearthArenaAnalyticsService: HearthArenaAnalyticsService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
