@@ -53,7 +53,7 @@ import { uuid } from '../../../services/utils';
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="mana-cost" [ngClass]="{ 'cost-reduction': manaCostReduction }">
-				<span>{{ manaCost == null ? '?' : manaCost }}</span>
+				<span>{{ manaCostStr }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
 			<div class="gradiant"></div>
@@ -218,6 +218,7 @@ export class DeckCardComponent implements OnDestroy {
 	cardId: string;
 	cardImage: string;
 	manaCost: number;
+	manaCostStr: string;
 	cardName: string;
 	rarity: string;
 	numberOfCopies: number;
@@ -339,8 +340,10 @@ export class DeckCardComponent implements OnDestroy {
 		}
 
 		this.cardId = this._card.cardId;
+		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
+		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
 		this.cardName =
 			(!!this._card.cardName?.length
@@ -379,7 +382,6 @@ export class DeckCardComponent implements OnDestroy {
 				`https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png`;
 			const image = new Image();
 			image.src = imageUrl;
-			this._referenceCard = this.cards.getCard(this.cardId);
 		}
 
 		if (this.numberOfCopies > 1) {
