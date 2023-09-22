@@ -9,8 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import Plausible from 'plausible-tracker';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
@@ -129,23 +128,19 @@ export class MainWindowComponent
 	private hotkey;
 
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly owUtils: OwUtilsService,
 		private readonly hotkeyService: HotkeyService,
 		private readonly preferencesService: PreferencesService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		const plausible = Plausible({
-			domain: 'firestoneapp.gg-app',
-			trackLocalhost: true,
-			apiHost: 'https://apps.zerotoheroes.com',
-		});
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
@@ -154,9 +149,7 @@ export class MainWindowComponent
 			.listen$(([main, nav, prefs]) => nav.currentApp)
 			.pipe(this.mapData(([currentApp]) => currentApp));
 		this.currentApp$.subscribe((currentApp) => {
-			plausible.trackPageview({
-				url: currentApp,
-			});
+			this.analytics.trackPageView(currentApp);
 		});
 		this.activeTheme$ = combineLatest(
 			this.showFtue$,

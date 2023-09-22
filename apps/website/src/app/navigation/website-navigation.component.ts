@@ -2,12 +2,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { AnalyticsService, ILocalizationService } from '@firestone/shared/framework/core';
 import { Store } from '@ngrx/store';
 import { startProfileShare, startProfileUnshare } from 'libs/website/profile/src/lib/+state/website/pofile.actions';
 import { WebsiteProfileState } from 'libs/website/profile/src/lib/+state/website/profile.models';
 import { getShareAlias, getWatchingOtherPlayer } from 'libs/website/profile/src/lib/+state/website/profile.selectors';
-import Plausible from 'plausible-tracker';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 
 @Component({
@@ -46,22 +45,16 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 		private readonly router: Router,
 		private readonly i18n: ILocalizationService,
 		private readonly profileStore: Store<WebsiteProfileState>,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
-		const plausible = Plausible({
-			domain: 'firestoneapp.gg',
-			trackLocalhost: true,
-			apiHost: 'https://apps.zerotoheroes.com',
-		});
 		this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
 			this.selectedModule = (event as NavigationEnd).urlAfterRedirects?.replace('/', '');
 			console.debug('[nav] selected module', this.selectedModule, event);
-			plausible.trackPageview({
-				url: this.selectedModule,
-			});
+			this.analytics.trackPageView(this.selectedModule);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
