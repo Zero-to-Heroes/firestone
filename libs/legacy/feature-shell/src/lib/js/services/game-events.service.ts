@@ -217,6 +217,9 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'ANOMALY_REVEALED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.ANOMALY_REVEALED, gameEvent));
+				break;
 			case 'INITIAL_CARD_IN_DECK':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.INITIAL_CARD_IN_DECK, gameEvent));
 				break;

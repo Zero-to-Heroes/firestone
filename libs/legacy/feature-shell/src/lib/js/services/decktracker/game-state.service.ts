@@ -34,6 +34,7 @@ import { DeckCardService } from './deck-card.service';
 import { DeckHandlerService } from './deck-handler.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
+import { AnomalyRevealedParser } from './event-parser/anomaly-revealed-parser';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
 import { BgsRewardDestroyedParser } from './event-parser/bgs-reward-destroyed-parser';
@@ -493,6 +494,7 @@ export class GameStateService {
 
 	private buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
 		return {
+			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.ATTACKING_HERO]: [new AttackParser(this.allCards)],
 			[GameEvent.ATTACKING_MINION]: [new AttackParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_HERO_SELECTED]: [new BgsHeroSelectedCardParser(this.helper)],
