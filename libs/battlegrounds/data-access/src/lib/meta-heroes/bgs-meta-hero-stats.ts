@@ -224,109 +224,9 @@ export const buildHeroStats = (
 					  }))
 					: null;
 
-				let placementDistribution = stat.placementDistribution;
-				let combatWinrate = stat.combatWinrate;
-				let warbandStats = stat.warbandStats;
-
-				let placementDistributionImpactTribes = null;
-				let combatWinrateImpactTribes = null;
-				let warbandStatsImpactTribes = null;
-				if (useTribesModifier) {
-					placementDistributionImpactTribes =
-						stat.placementDistribution?.map((p) => {
-							const rankImpact = tribeStatsToUse
-								.flatMap((t) => t.impactPlacementDistribution)
-								.filter((t) => t.rank === p.rank)
-								.map((t) => t.impact)
-								.reduce((a, b) => a + b, 0);
-							return {
-								rank: p.rank,
-								percentage: rankImpact,
-							};
-						}) ?? 0;
-					combatWinrateImpactTribes =
-						stat.combatWinrate?.map((p) => {
-							const turnImpact = tribeStatsToUse
-								.flatMap((t) => t.impactCombatWinrate)
-								.filter((t) => t.turn === p.turn)
-								.map((t) => t.impact)
-								.reduce((a, b) => a + b, 0);
-							return {
-								turn: p.turn,
-								percentage: turnImpact,
-							};
-						}) ?? 0;
-					warbandStatsImpactTribes =
-						stat.warbandStats?.map((p) => {
-							const turnImpact = tribeStatsToUse
-								.flatMap((t) => t.impactWarbandStats)
-								.filter((t) => t.turn === p.turn)
-								.map((t) => t.impact)
-								.reduce((a, b) => a + b, 0);
-							return {
-								turn: p.turn,
-								averageStats: turnImpact,
-							};
-						}) ?? 0;
-				}
-
-				let placementDistributionImpactAnomaly = null;
-				let combatWinrateImpactAnomaly = null;
-				let warbandStatsImpactAnomaly = null;
-				if (useAnomalyModifier) {
-					placementDistributionImpactAnomaly =
-						stat.placementDistribution?.map((p) => {
-							const rankImpact = anomalyStatsToUse
-								.flatMap((t) => t.impactPlacementDistribution)
-								.filter((t) => t.rank === p.rank)
-								.map((t) => t.impact)
-								.reduce((a, b) => a + b, 0);
-							return {
-								rank: p.rank,
-								percentage: rankImpact,
-							};
-						}) ?? 0;
-					combatWinrateImpactAnomaly =
-						stat.combatWinrate?.map((p) => {
-							const turnImpact = anomalyStatsToUse
-								.flatMap((t) => t.impactCombatWinrate)
-								.filter((t) => t.turn === p.turn)
-								.map((t) => t.impact)
-								.reduce((a, b) => a + b, 0);
-							return {
-								turn: p.turn,
-								percentage: turnImpact,
-							};
-						}) ?? 0;
-					warbandStatsImpactAnomaly =
-						stat.warbandStats?.map((p) => {
-							const turnImpact = anomalyStatsToUse
-								.flatMap((t) => t.impactWarbandStats)
-								.filter((t) => t.turn === p.turn)
-								.map((t) => t.impact)
-								.reduce((a, b) => a + b, 0);
-							return {
-								turn: p.turn,
-								averageStats: turnImpact,
-							};
-						}) ?? 0;
-				}
-
-				placementDistribution = addImpactToPlacementDistribution(
-					placementDistribution,
-					placementDistributionImpactTribes,
-					placementDistributionImpactAnomaly,
-				);
-				combatWinrate = addImpactToCombatWinrate(
-					combatWinrate,
-					combatWinrateImpactTribes,
-					combatWinrateImpactAnomaly,
-				);
-				warbandStats = addImpactToWarbandStats(
-					warbandStats,
-					warbandStatsImpactTribes,
-					warbandStatsImpactAnomaly,
-				);
+				const placementDistribution = stat.placementDistribution;
+				const combatWinrate = stat.combatWinrate;
+				const warbandStats = stat.warbandStats;
 
 				const averagePositionBaseValue = useConservativeEstimate
 					? stat.conservativePositionEstimate
@@ -354,11 +254,11 @@ export const buildHeroStats = (
 					positionTribesModifier: tribesModifier,
 					positionAnomalyModifier: anomalyModifier,
 					placementDistribution: placementDistribution,
-					placementDistributionImpact: placementDistributionImpactTribes,
+					// placementDistributionImpact: placementDistributionImpactTribes,
 					combatWinrate: combatWinrate,
-					combatWinrateImpact: combatWinrateImpactTribes,
+					// combatWinrateImpact: combatWinrateImpactTribes,
 					warbandStats: warbandStats,
-					warbandStatsImpact: warbandStatsImpactTribes,
+					// warbandStatsImpact: warbandStatsImpactTribes,
 
 					tribeStats: tribeStatsToUse,
 

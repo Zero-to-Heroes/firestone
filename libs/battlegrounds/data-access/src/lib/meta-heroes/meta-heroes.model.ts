@@ -28,11 +28,11 @@ export interface BgsMetaHeroStatTierItem {
 	readonly positionTribesModifier: number;
 	readonly positionAnomalyModifier: number;
 	readonly placementDistribution: readonly { rank: number; percentage: number }[];
-	readonly placementDistributionImpact: readonly { rank: number; percentage: number }[];
+	// readonly placementDistributionImpact: readonly { rank: number; percentage: number }[];
 	readonly combatWinrate: readonly { turn: number; winrate: number }[];
-	readonly combatWinrateImpact: readonly { turn: number; winrate: number }[];
+	// readonly combatWinrateImpact: readonly { turn: number; winrate: number }[];
 	readonly warbandStats: readonly { turn: number; averageStats: number }[];
-	readonly warbandStatsImpact: readonly { turn: number; averageStats: number }[];
+	// readonly warbandStatsImpact: readonly { turn: number; averageStats: number }[];
 
 	readonly tribeStats: readonly {
 		readonly tribe: Race;
