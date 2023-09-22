@@ -177,7 +177,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 						: this.i18n.translateString(`archetype.${deck.archetypeName}`);
 				this.dustCost = deck.dustCost;
 				this.winrate = this.buildPercents(deck.winrate);
-				this.totalGames = this.formatGamesCount(deck.totalGames);
+				this.totalGames = deck.totalGames;
 				this.removedCards = this.buildCardVariations(deck.cardVariations?.removed, deck.sideboards ?? []);
 				this.addedCards = this.buildCardVariations(deck.cardVariations?.added, deck.sideboards ?? []);
 				this.archetypeCoreCards = this.buildCardVariations(archetype?.coreCards, deck.sideboards ?? []);
@@ -232,17 +232,6 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 			cardName: card.name,
 			sideboard: sideboardCards?.map((c) => this.buildCardVariation(c.card.id, c.quantity, [])),
 		};
-	}
-
-	private formatGamesCount(value: number): number {
-		if (value >= 1000) {
-			return 1000 * Math.round(value / 1000);
-		} else if (value >= 100) {
-			return 100 * Math.round(value / 100);
-		} else if (value >= 10) {
-			return 10 * Math.round(value / 10);
-		}
-		return value;
 	}
 }
 

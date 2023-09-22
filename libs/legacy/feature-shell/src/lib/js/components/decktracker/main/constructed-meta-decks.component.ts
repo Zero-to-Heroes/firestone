@@ -25,74 +25,72 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			} as value"
 		>
 			<div class="constructed-meta-decks" *ngIf="value.decks">
-				<with-loading [isLoading]="!value.decks?.length">
-					<div class="header" *ngIf="sortCriteria$ | async as sort">
-						<sortable-table-label
-							class="cell player-class"
-							[name]="'app.decktracker.meta.class-header' | owTranslate"
-							[sort]="sort"
-							[criteria]="'player-class'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell name"
-							[name]="'app.decktracker.meta.archetype-header' | owTranslate"
-							[sort]="sort"
-							[criteria]="'archetype'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell dust"
-							[name]="'app.decktracker.meta.cost-header' | owTranslate"
-							[sort]="sort"
-							[criteria]="'cost'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell winrate"
-							[name]="'app.decktracker.meta.winrate-header' | owTranslate"
-							[sort]="sort"
-							[criteria]="'winrate'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell games"
-							[name]="'app.decktracker.meta.games-header' | owTranslate"
-							[sort]="sort"
-							[criteria]="'games'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<div class="cell cards">
-							<span
-								[owTranslate]="'app.decktracker.meta.cards-header'"
-								[helpTooltip]="'app.decktracker.meta.cards-header-tooltip' | owTranslate"
-							></span>
-						</div>
-					</div>
-					<virtual-scroller
-						#scroll
-						class="decks-list"
-						[items]="value.decks"
-						[bufferAmount]="15"
-						[attr.aria-label]="'Meta deck stats'"
-						role="list"
-						scrollable
+				<div class="header" *ngIf="sortCriteria$ | async as sort">
+					<sortable-table-label
+						class="cell player-class"
+						[name]="'app.decktracker.meta.class-header' | owTranslate"
+						[sort]="sort"
+						[criteria]="'player-class'"
+						(sortClick)="onSortClick($event)"
 					>
-						<constructed-meta-deck-summary
-							*ngFor="let deck of scroll.viewPortItems; trackBy: trackByDeck"
-							class="deck"
-							role="listitem"
-							[deck]="deck"
-							[archetypes]="value.archetypes"
-							[showStandardDeviation]="value.showStandardDeviation"
-						></constructed-meta-deck-summary>
-					</virtual-scroller>
-				</with-loading>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell name"
+						[name]="'app.decktracker.meta.archetype-header' | owTranslate"
+						[sort]="sort"
+						[criteria]="'archetype'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell dust"
+						[name]="'app.decktracker.meta.cost-header' | owTranslate"
+						[sort]="sort"
+						[criteria]="'cost'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell winrate"
+						[name]="'app.decktracker.meta.winrate-header' | owTranslate"
+						[sort]="sort"
+						[criteria]="'winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell games"
+						[name]="'app.decktracker.meta.games-header' | owTranslate"
+						[sort]="sort"
+						[criteria]="'games'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<div class="cell cards">
+						<span
+							[owTranslate]="'app.decktracker.meta.cards-header'"
+							[helpTooltip]="'app.decktracker.meta.cards-header-tooltip' | owTranslate"
+						></span>
+					</div>
+				</div>
+				<virtual-scroller
+					#scroll
+					class="decks-list"
+					[items]="value.decks"
+					[bufferAmount]="15"
+					[attr.aria-label]="'Meta deck stats'"
+					role="list"
+					scrollable
+				>
+					<constructed-meta-deck-summary
+						*ngFor="let deck of scroll.viewPortItems; trackBy: trackByDeck"
+						class="deck"
+						role="listitem"
+						[deck]="deck"
+						[archetypes]="value.archetypes"
+						[showStandardDeviation]="value.showStandardDeviation"
+					></constructed-meta-deck-summary>
+				</virtual-scroller>
 			</div>
 		</ng-container>
 	`,
@@ -193,6 +191,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
 		return {
 			...stat,
+			totalGames: this.formatGamesCount(stat.totalGames),
 			rawWinrate: stat.winrate,
 			dustCost: dustCost,
 			heroCardClass: heroCardClass,
@@ -201,6 +200,17 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			winrate: winrateToUse,
 			sideboards: deckDefinition.sideboards,
 		};
+	}
+
+	private formatGamesCount(value: number): number {
+		if (value >= 1000) {
+			return 1000 * Math.round(value / 1000);
+		} else if (value >= 100) {
+			return 100 * Math.round(value / 100);
+		} else if (value >= 10) {
+			return 10 * Math.round(value / 10);
+		}
+		return value;
 	}
 
 	private sortDecks(a: EnhancedDeckStat, b: EnhancedDeckStat, sortCriteria: SortCriteria<ColumnSortType>): number {
