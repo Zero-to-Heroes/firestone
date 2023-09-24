@@ -9,6 +9,7 @@ export const TREANT_CARD_IDS = [
 	CardIds.Treenforcements_TreantToken,
 	CardIds.Move_AngryTreantToken,
 	CardIds.PlotOfSin_TreantToken,
+	CardIds.DrumCircle_TreantToken,
 	CardIds.SowTheSoil_TreantToken,
 	CardIds.GardenGnome_TreantToken,
 	CardIds.PoisonSeeds_TreantToken,
