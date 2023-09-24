@@ -5,7 +5,22 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class SpellCounterDefinition implements CounterDefinition<GameState, number> {
+const PRIORITY_LIST = [
+	CardIds.YoggSaronUnleashed_YOG_516,
+	CardIds.YoggSaronHopesEnd_OG_134,
+	CardIds.YoggSaronMasterOfFate,
+	CardIds.ArcaneGiant,
+];
+export class SpellCounterDefinition
+	implements
+		CounterDefinition<
+			GameState,
+			{
+				spellsPlayed: number;
+				allCardsInDeck: readonly string[];
+			}
+		>
+{
 	readonly type = 'spells';
 	readonly value: number;
 	readonly image: string;
@@ -27,18 +42,34 @@ export class SpellCounterDefinition implements CounterDefinition<GameState, numb
 		return new SpellCounterDefinition(side, allCards, i18n);
 	}
 
-	public select(gameState: GameState): number {
+	public select(gameState: GameState): {
+		spellsPlayed: number;
+		allCardsInDeck: readonly string[];
+	} {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.spellsPlayedThisMatch?.length ?? 0;
+		return {
+			spellsPlayed: deck.spellsPlayedThisMatch?.length ?? 0,
+			allCardsInDeck: deck.getAllCardsInDeck().map((c) => c.cardId),
+		};
 	}
 
-	public emit(spellsPlayed: number): NonFunctionProperties<SpellCounterDefinition> {
+	public emit(info: {
+		spellsPlayed: number;
+		allCardsInDeck: readonly string[];
+	}): NonFunctionProperties<SpellCounterDefinition> {
+		let iconToShow = CardIds.YoggSaronUnleashed_YOG_516;
+		for (const cardId of PRIORITY_LIST) {
+			if (info.allCardsInDeck.includes(cardId)) {
+				iconToShow = cardId;
+				break;
+			}
+		}
 		return {
 			type: 'spells',
-			value: spellsPlayed,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.YoggSaronMasterOfFate}.jpg`,
+			value: info.spellsPlayed,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${iconToShow}.jpg`,
 			cssClass: 'spell-counter',
-			tooltip: this.i18n.translateString(`counters.spell.${this.side}`, { value: spellsPlayed }),
+			tooltip: this.i18n.translateString(`counters.spell.${this.side}`, { value: info.spellsPlayed }),
 			standardCounter: true,
 		};
 	}

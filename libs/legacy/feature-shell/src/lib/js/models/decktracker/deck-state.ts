@@ -37,6 +37,7 @@ export class DeckState {
 	private static readonly HERO_POWER_DAMAGE_CARD_IDS = [CardIds.MordreshFireEye, CardIds.JanalaiTheDragonhawk];
 
 	private static readonly SPELL_COUNTER_CARD_IDS = [
+		CardIds.YoggSaronUnleashed_YOG_516,
 		CardIds.YoggSaronHopesEnd_OG_134,
 		CardIds.YoggSaronMasterOfFate,
 		CardIds.ArcaneGiant,
@@ -44,7 +45,6 @@ export class DeckState {
 		CardIds.ContaminatedLasher_YOG_528,
 		CardIds.SaroniteShambler_YOG_521,
 		CardIds.PrisonBreaker_YOG_411,
-		CardIds.YoggSaronUnleashed_YOG_516,
 	];
 
 	private static readonly NEW_CTHUN_CARD_IDS = [
