@@ -6,10 +6,13 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
+
+const HERO_POWER_DAMAGE_CARD_IDS = [CardIds.MordreshFireEye, CardIds.JanalaiTheDragonhawk];
 
 @Component({
 	selector: 'player-hero-power-damage-widget-wrapper',
@@ -37,7 +40,12 @@ export class PlayerHeroPowerDamageWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerHeroPowerDamageCounter;
-		this.deckStateExtractor = (state) => state.playerDeck?.containsHeroPowerDamageCard();
+		this.deckStateExtractor = (state, prefValue) => {
+			if (prefValue === 'limited') {
+				return state.playerDeck?.hasAnyStartingCard(HERO_POWER_DAMAGE_CARD_IDS);
+			}
+			return state.playerDeck?.hasAnyCard(HERO_POWER_DAMAGE_CARD_IDS);
+		};
 		super.ngAfterContentInit();
 	}
 }

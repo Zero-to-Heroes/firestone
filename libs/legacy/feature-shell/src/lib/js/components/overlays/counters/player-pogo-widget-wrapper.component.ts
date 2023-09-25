@@ -7,6 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { POGO_CARD_IDS } from '../../../models/decktracker/deck-state';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
@@ -36,7 +37,12 @@ export class PlayerPogoWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerPogoCounter;
-		this.deckStateExtractor = (state) => state.playerDeck?.containsPogoHopper();
+		this.deckStateExtractor = (state, prefValue) => {
+			if (prefValue === 'limited') {
+				return state.playerDeck?.hasAnyStartingCard(POGO_CARD_IDS);
+			}
+			return state.playerDeck?.containsPogoHopper();
+		};
 		super.ngAfterContentInit();
 	}
 }

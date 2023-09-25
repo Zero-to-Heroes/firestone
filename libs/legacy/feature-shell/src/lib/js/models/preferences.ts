@@ -283,46 +283,46 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly countersScale: number = 100;
 
-	readonly playerGalakrondCounter: boolean = true;
+	readonly playerGalakrondCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
-	readonly opponentGalakrondCounter: boolean = true;
+	readonly opponentGalakrondCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentGalakrondCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerWatchpostCounter: boolean = true;
+	readonly playerWatchpostCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerWatchpostCounterWidgetPosition: { left: number; top: number };
-	readonly opponentWatchpostCounter: boolean = true;
+	readonly opponentWatchpostCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentWatchpostCounterWidgetPosition: { left: number; top: number };
 
 	// These are turned off by default because you can quite easily see the info from the tracker
-	readonly playerLibramCounter: boolean = false;
+	readonly playerLibramCounter: BooleanWithLimited = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerLibramCounterWidgetPosition: { left: number; top: number };
-	readonly opponentLibramCounter: boolean = false;
+	readonly opponentLibramCounter: BooleanWithLimited = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentLibramCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerPogoCounter: boolean = true;
+	readonly playerPogoCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerPogoCounterWidgetPosition: { left: number; top: number };
-	readonly opponentPogoCounter: boolean = true;
+	readonly opponentPogoCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentPogoCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerAstralAutomatonCounter: boolean = true;
+	readonly playerAstralAutomatonCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAstralAutomatonCounterWidgetPosition: { left: number; top: number };
-	readonly opponentAstralAutomatonCounter: boolean = true;
+	readonly opponentAstralAutomatonCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAstralAutomatonCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerEarthenGolemCounter: boolean = true;
+	readonly playerEarthenGolemCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerEarthenGolemCounterWidgetPosition: { left: number; top: number };
-	readonly opponentEarthenGolemCounter: boolean = true;
+	readonly opponentEarthenGolemCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentEarthenGolemCounterWidgetPosition: { left: number; top: number };
 
@@ -330,14 +330,14 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerTreantCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerChainedGuardianCounter: boolean = true;
+	readonly playerChainedGuardianCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerChainedGuardianCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerJadeGolemCounter: boolean = true;
+	readonly playerJadeGolemCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerJadeGolemCounterWidgetPosition: { left: number; top: number };
-	readonly opponentJadeGolemCounterCounter: boolean = true;
+	readonly opponentJadeGolemCounterCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentJadeGolemWidgetPosition: { left: number; top: number };
 
@@ -348,10 +348,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerCthunCounter: boolean = true;
+	readonly playerCthunCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCthunCounterWidgetPosition: { left: number; top: number };
-	readonly opponentCthunCounter: boolean = true;
+	readonly opponentCthunCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentCthunCounterWidgetPosition: { left: number; top: number };
 
@@ -362,144 +362,144 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerAbyssalCurseCounter: boolean = true;
+	readonly playerAbyssalCurseCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAbyssalCurseCounterWidgetPosition: { left: number; top: number };
-	readonly opponentAbyssalCurseCounter: boolean = true;
+	readonly opponentAbyssalCurseCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAbyssalCurseCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerSpellCounter: boolean = true;
+	readonly playerSpellCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerElementalCounter: boolean = true;
+	readonly playerElementalCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerMulticasterCounter: boolean = true;
+	readonly playerMulticasterCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMulticasterCounterWidgetPosition: { left: number; top: number };
-	readonly opponentMulticasterCounter: boolean = true;
+	readonly opponentMulticasterCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentMulticasterCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerHeroPowerDamageCounter: boolean = true;
+	readonly playerHeroPowerDamageCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
-	readonly opponentHeroPowerDamageCounter: boolean = true;
+	readonly opponentHeroPowerDamageCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerElwynnBoarCounter: boolean = true;
+	readonly playerElwynnBoarCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElwynnBoarCounterWidgetPosition: { left: number; top: number };
-	readonly opponentElwynnBoarCounter: boolean = true;
+	readonly opponentElwynnBoarCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentElwynnBoarCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerVolatileSkeletonCounter: boolean = true;
+	readonly playerVolatileSkeletonCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
-	readonly opponentVolatileSkeletonCounter: boolean = true;
+	readonly opponentVolatileSkeletonCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerRelicCounter: boolean = true;
+	readonly playerRelicCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerRelicCounterWidgetPosition: { left: number; top: number };
-	readonly opponentRelicCounter: boolean = true;
+	readonly opponentRelicCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentRelicCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerBolnerCounter: boolean = true;
+	readonly playerBolnerCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBolnerCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerBrilliantMacawCounter: boolean = true;
+	readonly playerBrilliantMacawCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBrilliantMacawCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerMonstrousParrotCounter: boolean = true;
+	readonly playerMonstrousParrotCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMonstrousParrotCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerVanessaVanCleefCounter: boolean = true;
+	readonly playerVanessaVanCleefCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerLightrayCounter: boolean = true;
+	readonly playerLightrayCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerLightrayCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerMenagerieCounter: boolean = true;
+	readonly playerMenagerieCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMenagerieCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerCorpseSpentCounter: boolean = true;
+	readonly playerCorpseSpentCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCorpseSpentCounterWidgetPosition: { left: number; top: number };
-	readonly opponentCorpseSpentCounter: boolean = true;
+	readonly opponentCorpseSpentCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentCorpseSpentCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerOverdraftCounter: boolean = true;
+	readonly playerOverdraftCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerOverdraftCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerAsvedonCounter: boolean = true;
+	readonly playerAsvedonCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAsvedonCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerMurozondTheInfiniteCounter: boolean = true;
+	readonly playerMurozondTheInfiniteCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMurozondTheInfiniteCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerNagaGiantCounter: boolean = true;
+	readonly playerNagaGiantCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerNagaGiantCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerAnachronosCounter: boolean = true;
+	readonly playerAnachronosCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAnachronosCounterWidgetPosition: { left: number; top: number };
 
-	readonly opponentAnachronosCounter: boolean = true;
+	readonly opponentAnachronosCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAnachronosCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerBonelordFrostwhisperCounter: boolean = true;
+	readonly playerBonelordFrostwhisperCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBonelordFrostwhisperCounterWidgetPosition: { left: number; top: number };
 
-	readonly opponentBonelordFrostwhisperCounter: boolean = true;
+	readonly opponentBonelordFrostwhisperCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentBonelordFrostwhisperCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerShockspitterCounter: boolean = true;
+	readonly playerShockspitterCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerShockspitterCounterWidgetPosition: { left: number; top: number };
 
-	readonly opponentShockspitterCounter: boolean = true;
+	readonly opponentShockspitterCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentShockspitterCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerParrotMascotCounter: boolean = true;
+	readonly playerParrotMascotCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerParrotMascotCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerQueensguardCounter: boolean = true;
+	readonly playerQueensguardCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerQueensguardCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerSpectralPillagerCounter: boolean = true;
+	readonly playerSpectralPillagerCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerSpectralPillagerCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerLadyDarkveinCounter: boolean = true;
+	readonly playerLadyDarkveinCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerLadyDarkveinCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerGreySageParrotCounter: boolean = true;
+	readonly playerGreySageParrotCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerGreySageParrotCounterWidgetPosition: { left: number; top: number };
 

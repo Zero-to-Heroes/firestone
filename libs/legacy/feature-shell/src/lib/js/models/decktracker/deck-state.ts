@@ -9,6 +9,12 @@ import { DeckCard } from './deck-card';
 import { HeroCard } from './hero-card';
 import { DynamicZone } from './view/dynamic-zone';
 
+export const POGO_CARD_IDS = [
+	CardIds.PogoHopper_BOT_283,
+	CardIds.PogoHopper_BGS_028,
+	CardIds.PogoHopper_TB_BaconUps_077,
+];
+
 export class DeckState {
 	private static readonly GALAKROND_CARD_IDS = [
 		CardIds.GalakrondTheUnspeakable,
@@ -27,14 +33,6 @@ export class DeckState {
 		CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
 		CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
 	];
-
-	private static readonly POGO_CARD_IDS = [
-		CardIds.PogoHopper_BOT_283,
-		CardIds.PogoHopper_BGS_028,
-		CardIds.PogoHopper_TB_BaconUps_077,
-	];
-
-	private static readonly HERO_POWER_DAMAGE_CARD_IDS = [CardIds.MordreshFireEye, CardIds.JanalaiTheDragonhawk];
 
 	private static readonly SPELL_COUNTER_CARD_IDS = [
 		CardIds.YoggSaronUnleashed_YOG_516,
@@ -223,12 +221,6 @@ export class DeckState {
 			);
 	}
 
-	public containsHeroPowerDamageCard(allCards?: CardsFacadeService): boolean {
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some((card) => DeckState.HERO_POWER_DAMAGE_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
-	}
-
 	public containsCthun(allCards: CardsFacadeService): boolean {
 		if (this.cthunAtk > 0 || this.cthunHealth > 0) {
 			return true;
@@ -294,7 +286,7 @@ export class DeckState {
 
 		return this.getAllCardsInDeck()
 			.filter((card) => card.cardId)
-			.some((card) => DeckState.POGO_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
+			.some((card) => POGO_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
 	}
 
 	public containsSpellCounterMinion(): boolean {
@@ -349,24 +341,6 @@ export class DeckState {
 			);
 	}
 
-	public hasBolner() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.BolnerHammerbeak);
-	}
-
-	public hasBrilliantMacaw() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.BrilliantMacaw);
-	}
-
-	public hasMonstrousParrot() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.MonstrousParrot);
-	}
-
 	public hasVanessaVanCleef() {
 		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)
@@ -400,10 +374,14 @@ export class DeckState {
 			.some((cardId) => cardIds.includes(cardId as CardIds));
 	}
 
-	public hasAsvedon() {
-		return [...this.hand, ...this.currentOptions]
+	// Useful to also include the graveyard
+	public hasAnyCard(cardIds: readonly CardIds[]): boolean {
+		return this.getAllCardsInDeck()
 			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.AsvedonTheGrandshield);
+			.map((card) => card.cardId)
+			.concat(this.getCardsInSideboards())
+			.filter((cardId: string) => !!cardId)
+			.some((cardId) => cardIds.includes(cardId as CardIds));
 	}
 
 	public hasMurozondTheInfinite() {
@@ -442,18 +420,6 @@ export class DeckState {
 					card.cardId as CardIds,
 				),
 			);
-	}
-
-	public hasLadyDarkvein() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.LadyDarkvein);
-	}
-
-	public hasGreySageParrot() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.GreySageParrot);
 	}
 
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {

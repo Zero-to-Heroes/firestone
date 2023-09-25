@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -38,7 +39,8 @@ export class PlayerMonstrousParrotWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMonstrousParrotCounter;
 		this.deckStateExtractor = (state) =>
-			!!state?.playerDeck.lastDeathrattleTriggered && state.playerDeck.hasMonstrousParrot();
+			!!state?.playerDeck.lastDeathrattleTriggered &&
+			state.playerDeck.hasAnyCardInHandAndDeck([CardIds.MonstrousParrot]);
 		super.ngAfterContentInit();
 	}
 }

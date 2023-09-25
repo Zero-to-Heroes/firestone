@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +38,12 @@ export class PlayerWatchpostCounterWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerWatchpostCounter;
-		this.deckStateExtractor = (deckState) => deckState?.playerDeck?.containsWatchpost(this.allCards, false);
+		this.deckStateExtractor = (state, prefValue) => {
+			if (prefValue === 'limited') {
+				return state.playerDeck?.hasAnyStartingCard([CardIds.KargalBattlescar_BAR_077]);
+			}
+			return state?.playerDeck?.containsWatchpost(this.allCards, false);
+		};
 		super.ngAfterContentInit();
 	}
 }

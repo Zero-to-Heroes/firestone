@@ -37,8 +37,14 @@ export class PlayerVolatileSkeletonWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerVolatileSkeletonCounter;
-		this.deckStateExtractor = (state) =>
-			state.playerDeck?.containsVolatileSkeletonCards() || state.playerDeck?.hasSecondarySkeletonActivator();
+		this.deckStateExtractor = (state, prefValue) => {
+			if (prefValue === 'limited') {
+				return state.playerDeck?.containsVolatileSkeletonCards();
+			}
+			return (
+				state.playerDeck?.containsVolatileSkeletonCards() || state.playerDeck?.hasSecondarySkeletonActivator()
+			);
+		};
 		super.ngAfterContentInit();
 	}
 }

@@ -37,9 +37,15 @@ export class PlayerAstralAutomatonWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAstralAutomatonCounter;
-		this.deckStateExtractor = (state) =>
-			!!state.playerDeck?.astralAutomatonsSummoned ||
-			state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.AstralAutomaton]);
+		this.deckStateExtractor = (state, prefValue) => {
+			if (prefValue === 'limited') {
+				return state.playerDeck?.hasAnyStartingCard([CardIds.AstralAutomaton]);
+			}
+			return (
+				!!state.playerDeck?.astralAutomatonsSummoned ||
+				state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.AstralAutomaton])
+			);
+		};
 		super.ngAfterContentInit();
 	}
 }

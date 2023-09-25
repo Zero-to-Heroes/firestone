@@ -95,14 +95,14 @@ import { CounterSetting } from './model';
 			<div class="settings-group">
 				<ng-container *ngFor="let counter of counters">
 					<preference-toggle
-						*ngIf="!counter.includesLimitedChoice"
+						*ngIf="counter.onlyTrueFalse"
 						class="toggle"
 						[field]="counter.field"
 						[label]="counter.label"
 						[tooltip]="counter.tooltip"
 					></preference-toggle>
 					<preference-ynlimited
-						*ngIf="counter.includesLimitedChoice"
+						*ngIf="!counter.onlyTrueFalse"
 						class="toggle"
 						[field]="counter.field"
 						[label]="counter.label"
@@ -178,6 +178,7 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerGalakrondCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.galakrond-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'pogo',
@@ -196,6 +197,7 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerChainedGuardianCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.chained-guardian-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.chained-guardian-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'earthenGolem',
@@ -208,13 +210,13 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerTreantCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.treant-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.treant-tooltip'),
-			includesLimitedChoice: true,
 		},
 		{
 			id: 'jade',
 			field: 'playerJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.jade-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'cthun',
@@ -227,12 +229,14 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerFatigueCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.fatigue-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.fatigue-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'abyssal-curse',
 			field: 'playerAbyssalCurseCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.abyssal-curse-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.abyssal-curse-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'attack-on-board',
@@ -245,12 +249,14 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerSpellCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'elementals',
 			field: 'playerElementalCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.elementals-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.elementals-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'watch-post',
@@ -263,6 +269,7 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerLibramCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.libram-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'elwynn-boar',
@@ -281,6 +288,7 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerRelicCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.relic-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'hero-power-damage',
@@ -293,12 +301,14 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerBolnerCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bolner-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.bolner-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'brilliant-macaw',
 			field: 'playerBrilliantMacawCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.brilliant-macaw-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.brilliant-macaw-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'monstrous-parrot',
@@ -311,30 +321,35 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerVanessaVanCleefCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'lightray',
 			field: 'playerLightrayCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.lightray-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.lightray-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'menagerie',
 			field: 'playerMenagerieCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'corpse-spent',
 			field: 'playerCorpseSpentCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'overdraft',
 			field: 'playerOverdraftCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.overdraft-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.overdraft-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'asvedon',
@@ -347,48 +362,56 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerMurozondTheInfiniteCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'nagaGiant',
 			field: 'playerNagaGiantCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.naga-giant-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.naga-giant-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'anachronos',
 			field: 'playerAnachronosCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'shockspitter',
 			field: 'playerShockspitterCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'parrotMascot',
 			field: 'playerParrotMascotCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.parrot-mascot-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.parrot-mascot-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'queensguard',
 			field: 'playerQueensguardCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.queensguard-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.queensguard-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'spectral-pillager',
 			field: 'playerSpectralPillagerCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.spectral-pillager-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.spectral-pillager-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'lady-darkvein',
 			field: 'playerLadyDarkveinCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'grey-sage-parrot',
@@ -397,12 +420,14 @@ export class SettingsDecktrackerYourDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip', {
 				cost: 6,
 			}),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'multicaster',
 			field: 'playerMulticasterCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-tooltip'),
+			onlyTrueFalse: true,
 		},
 		{
 			id: 'bonelord-frostwhisper',
