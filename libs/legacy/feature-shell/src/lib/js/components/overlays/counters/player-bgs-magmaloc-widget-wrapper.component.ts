@@ -42,7 +42,7 @@ export class PlayerBgsMagmalocWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBgsMagmalocCounter;
-		this.deckStateExtractor = (state: GameState, bgState: BattlegroundsState) => {
+		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
 			const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
 			if (!isRecruitPhase) {
 				return false;

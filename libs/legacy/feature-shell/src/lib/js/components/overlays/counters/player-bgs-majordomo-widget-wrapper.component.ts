@@ -44,7 +44,7 @@ export class PlayerBgsMajordomoWidgetWrapperComponent
 		this.prefExtractor = (prefs) => {
 			return prefs.playerBgsMajordomoCounter;
 		};
-		this.deckStateExtractor = (state: GameState, bgState: BattlegroundsState) => {
+		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
 			const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
 			if (!isRecruitPhase) {
 				return false;

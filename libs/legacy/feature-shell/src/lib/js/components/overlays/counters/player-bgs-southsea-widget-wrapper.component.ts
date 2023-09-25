@@ -42,7 +42,7 @@ export class PlayerBgsSouthseaWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBgsSouthseaCounter;
-		this.deckStateExtractor = (state: GameState, bgState: BattlegroundsState) => {
+		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
 			const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
 			if (!isRecruitPhase) {
 				return false;

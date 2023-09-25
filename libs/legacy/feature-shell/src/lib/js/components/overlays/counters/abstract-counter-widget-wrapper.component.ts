@@ -56,8 +56,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	protected prefExtractor: (prefs: Preferences) => BooleanWithLimited;
 	protected deckStateExtractor: (
 		deckState: GameState,
-		bgsState?: BattlegroundsState,
 		displayFromPrefs?: BooleanWithLimited,
+		bgsState?: BattlegroundsState,
 	) => boolean;
 
 	protected onBgs: boolean;
@@ -100,7 +100,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					displayFromGameMode,
 				]) => {
 					const displayFromState = this.deckStateExtractor
-						? this.deckStateExtractor(deckState, bgState, displayFromPrefs)
+						? this.deckStateExtractor(deckState, displayFromPrefs, bgState)
 						: true;
 					if (
 						!gameStarted ||
