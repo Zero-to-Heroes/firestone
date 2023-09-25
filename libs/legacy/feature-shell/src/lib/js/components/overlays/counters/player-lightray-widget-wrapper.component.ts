@@ -37,7 +37,8 @@ export class PlayerLightrayWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerSpellCounter;
-		this.deckStateExtractor = (state) => state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.Lightray]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.Lightray], { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

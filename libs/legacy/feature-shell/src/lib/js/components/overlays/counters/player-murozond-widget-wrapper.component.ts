@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +38,13 @@ export class PlayerMurozondTheInfiniteWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMurozondTheInfiniteCounter;
-		this.deckStateExtractor = (state) => state.playerDeck.hasMurozondTheInfinite();
+		this.deckStateExtractor = (state, prefValue) =>
+			prefValue === 'limited'
+				? state.playerDeck.hasMurozondTheInfinite()
+				: state.playerDeck.hasRelevantCard([
+						CardIds.MurozondTheInfinite_DRG_090,
+						CardIds.MurozondTheInfinite_CORE_DRG_090,
+				  ]);
 		super.ngAfterContentInit();
 	}
 }

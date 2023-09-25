@@ -38,11 +38,10 @@ export class PlayerCorpseSpentWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerCorpseSpentCounter;
-		this.deckStateExtractor = (state) =>
-			state.playerDeck.hasAnyCardInHandAndDeck([
-				CardIds.ClimacticNecroticExplosion,
-				CardIds.StitchedGiantCore_RLK_744,
-			]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.ClimacticNecroticExplosion, CardIds.StitchedGiantCore_RLK_744], {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
 	}
 }

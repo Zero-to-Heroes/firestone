@@ -6,7 +6,9 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { DeckState } from '../../../models/decktracker/deck-state';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
@@ -37,14 +39,30 @@ export class PlayerVolatileSkeletonWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerVolatileSkeletonCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.containsVolatileSkeletonCards();
-			}
-			return (
-				state.playerDeck?.containsVolatileSkeletonCards() || state.playerDeck?.hasSecondarySkeletonActivator()
-			);
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard(
+				[CardIds.KelthuzadTheInevitable_REV_514, CardIds.KelthuzadTheInevitable_REV_786],
+				{
+					onlyLimited: prefValue === 'limited',
+				},
+			) ||
+			this.hasSecondarySkeletonActivator(state.playerDeck, {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
+	}
+
+	private hasSecondarySkeletonActivator(
+		state: DeckState,
+		options?: {
+			onlyLimited?: boolean;
+		},
+	): boolean {
+		return (
+			state.volatileSkeletonsDeadThisMatch > 0 &&
+			state.hasRelevantCard([CardIds.XyrellaTheDevout], {
+				onlyLimited: options?.onlyLimited,
+			})
+		);
 	}
 }

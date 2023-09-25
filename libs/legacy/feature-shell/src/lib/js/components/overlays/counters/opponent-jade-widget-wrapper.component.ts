@@ -37,7 +37,12 @@ export class OpponentJadeWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentJadeGolemCounterCounter;
-		this.deckStateExtractor = (state) => state.opponentDeck?.containsJade(this.allCards);
+		this.deckStateExtractor = (state) =>
+			state.opponentDeck.jadeGolemSize > 0 ||
+			state.opponentDeck?.hasRelevantCard(
+				(cardId: string) => this.allCards.getCard(cardId)?.referencedTags.includes('JADE_GOLEM'),
+				{ onlyLimited: true },
+			);
 		super.ngAfterContentInit();
 	}
 }

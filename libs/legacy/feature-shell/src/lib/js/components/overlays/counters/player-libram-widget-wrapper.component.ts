@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +38,8 @@ export class PlayerLibramWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerLibramCounter;
-		this.deckStateExtractor = (state) => state.playerDeck?.containsLibram(this.allCards);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.LadyLiadrin], { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

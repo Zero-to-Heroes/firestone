@@ -37,7 +37,8 @@ export class PlayerChainedGuardianWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerChainedGuardianCounter;
-		this.deckStateExtractor = (state) => state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.ChainedGuardian]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.ChainedGuardian], { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

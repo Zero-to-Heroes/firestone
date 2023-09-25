@@ -36,7 +36,7 @@ export class OpponentPogoWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentPogoCounter;
-		this.deckStateExtractor = (state) => state.opponentDeck?.containsPogoHopper();
+		this.deckStateExtractor = (state) => state.opponentDeck?.pogoHopperSize > 0;
 		super.ngAfterContentInit();
 	}
 }

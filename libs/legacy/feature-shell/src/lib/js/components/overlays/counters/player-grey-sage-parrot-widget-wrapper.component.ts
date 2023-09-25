@@ -38,9 +38,9 @@ export class PlayerGreySageParrotWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerGreySageParrotCounter;
-		this.deckStateExtractor = (state) =>
-			!!state?.lastBattlecryPlayedForMacaw(this.allCards, this.side) &&
-			state.playerDeck.hasAnyCardInHandAndDeck([CardIds.GreySageParrot]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard([CardIds.GreySageParrot], { onlyLimited: prefValue === 'limited' }) &&
+			!!state?.lastBattlecryPlayedForMacaw(this.allCards, this.side);
 		super.ngAfterContentInit();
 	}
 }

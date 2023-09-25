@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
@@ -39,17 +38,11 @@ export class PlayerElementalWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerElementalCounter;
-		this.deckStateExtractor = (state) =>
-			this.containsCards(state?.playerDeck?.hand, [
-				CardIds.ManaCyclone,
-				CardIds.GrandFinale,
-				CardIds.Ozruk,
-				CardIds.UnchainedGladiator,
-			]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard(
+				[CardIds.ManaCyclone, CardIds.GrandFinale, CardIds.Ozruk, CardIds.UnchainedGladiator],
+				{ onlyLimited: prefValue === 'limited' },
+			);
 		super.ngAfterContentInit();
-	}
-
-	private containsCards(zone: readonly DeckCard[], cardIds: string[]): boolean {
-		return (zone || []).some((card) => cardIds.includes(card.cardId));
 	}
 }

@@ -45,7 +45,7 @@ export class OpponentEarthenGolemWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentEarthenGolemCounter;
 		this.deckStateExtractor = (state) =>
 			!!state.opponentDeck?.earthenGolemsSummoned ||
-			state.opponentDeck?.hasAnyCardInHandAndDeck(EARTHEN_GOLEM_CARDS);
+			state.opponentDeck?.hasRelevantCard(EARTHEN_GOLEM_CARDS, { onlyLimited: true });
 		super.ngAfterContentInit();
 	}
 }

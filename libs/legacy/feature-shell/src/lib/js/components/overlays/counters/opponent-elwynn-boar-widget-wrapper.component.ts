@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +38,9 @@ export class OpponentElwynnBoarWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentElwynnBoarCounter;
-		this.deckStateExtractor = (state) => !!state.opponentDeck?.containsElwynnBoar();
+		this.deckStateExtractor = (state) =>
+			state.opponentDeck?.elwynnBoarsDeadThisMatch > 0 ||
+			state.opponentDeck?.hasRelevantCard([CardIds.ElwynnBoar], { onlyLimited: true });
 		super.ngAfterContentInit();
 	}
 }

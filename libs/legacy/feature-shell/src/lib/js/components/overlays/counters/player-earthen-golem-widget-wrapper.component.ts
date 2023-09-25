@@ -37,15 +37,8 @@ export class PlayerEarthenGolemWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerEarthenGolemCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard(EARTHEN_GOLEM_CARDS);
-			}
-			return (
-				!!state.playerDeck?.earthenGolemsSummoned ||
-				state.playerDeck?.hasAnyCardInHandAndDeck(EARTHEN_GOLEM_CARDS)
-			);
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard(EARTHEN_GOLEM_CARDS, { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

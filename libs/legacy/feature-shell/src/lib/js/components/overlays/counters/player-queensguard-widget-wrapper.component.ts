@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +38,11 @@ export class PlayerQueensguardWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerQueensguardCounter;
-		this.deckStateExtractor = (state) => state.playerDeck.hasQueensguard();
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard([CardIds.Queensguard], {
+				onlyLimited: prefValue === 'limited',
+				excludesDeckInLimited: true,
+			});
 		super.ngAfterContentInit();
 	}
 }

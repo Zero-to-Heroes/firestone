@@ -37,12 +37,10 @@ export class PlayerPogoWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerPogoCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard(POGO_CARD_IDS);
-			}
-			return state.playerDeck?.containsPogoHopper();
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard(POGO_CARD_IDS, {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
 	}
 }

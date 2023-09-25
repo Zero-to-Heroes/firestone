@@ -38,20 +38,19 @@ export class PlayerMulticasterWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMulticasterCounter;
-		this.deckStateExtractor = (state) =>
-			this.containsCards(state?.playerDeck?.getAllCardsInDeck(), [
-				CardIds.Multicaster,
-				CardIds.CoralKeeper,
-				CardIds.WisdomOfNorgannon,
-				CardIds.Sif,
-				CardIds.InquisitiveCreation,
-				CardIds.DiscoveryOfMagic,
-				CardIds.ElementalInspiration,
-			]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard(
+				[
+					CardIds.Multicaster,
+					CardIds.CoralKeeper,
+					CardIds.WisdomOfNorgannon,
+					CardIds.Sif,
+					CardIds.InquisitiveCreation,
+					CardIds.DiscoveryOfMagic,
+					CardIds.ElementalInspiration,
+				],
+				{ onlyLimited: prefValue === 'limited' },
+			);
 		super.ngAfterContentInit();
-	}
-
-	private containsCards(zone: readonly { entityId: number; cardId: string }[], cardIds: string[]): boolean {
-		return (zone || []).some((card) => cardIds.includes(card.cardId));
 	}
 }

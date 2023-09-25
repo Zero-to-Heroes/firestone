@@ -38,8 +38,10 @@ export class PlayerMenagerieCounterWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMenagerieCounter;
-		this.deckStateExtractor = (state) =>
-			state.playerDeck.hasAnyCardInHandAndDeck([CardIds.TheOneAmalgamBand, CardIds.PowerSlider]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard([CardIds.TheOneAmalgamBand, CardIds.PowerSlider], {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
 	}
 }

@@ -38,8 +38,8 @@ export class OpponentAstralAutomatonWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentAstralAutomatonCounter;
 		this.deckStateExtractor = (state) =>
-			!!state.opponentDeck?.astralAutomatonsSummoned ||
-			state.opponentDeck?.hasAnyCardInHandAndDeck([CardIds.AstralAutomaton]);
+			state.opponentDeck?.astralAutomatonsSummoned > 0 ||
+			state.opponentDeck?.hasRelevantCard([CardIds.AstralAutomaton], { onlyLimited: true });
 		super.ngAfterContentInit();
 	}
 }

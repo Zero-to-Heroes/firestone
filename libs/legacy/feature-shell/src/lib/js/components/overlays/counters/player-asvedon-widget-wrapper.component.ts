@@ -37,15 +37,11 @@ export class PlayerAsvedonWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAsvedonCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard([CardIds.AsvedonTheGrandshield]);
-			}
-			return (
-				!!state.opponentDeck.spellsPlayedThisMatch?.length &&
-				state.playerDeck.hasAnyCardInHandAndDeck([CardIds.AsvedonTheGrandshield])
-			);
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			!!state.opponentDeck.spellsPlayedThisMatch?.length &&
+			state.playerDeck?.hasRelevantCard([CardIds.AsvedonTheGrandshield], {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
 	}
 }

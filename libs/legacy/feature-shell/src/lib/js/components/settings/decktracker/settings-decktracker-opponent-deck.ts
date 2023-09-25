@@ -145,14 +145,14 @@ import { CounterSetting } from './model';
 			<div class="settings-group">
 				<ng-container *ngFor="let counter of counters">
 					<preference-toggle
-						*ngIf="counter.onlyTrueFalse"
+						*ngIf="!counter.showLimitedOption"
 						class="toggle"
 						[field]="counter.field"
 						[label]="counter.label"
 						[tooltip]="counter.tooltip"
 					></preference-toggle>
 					<preference-ynlimited
-						*ngIf="!counter.onlyTrueFalse"
+						*ngIf="counter.showLimitedOption"
 						class="toggle"
 						[field]="counter.field"
 						[label]="counter.label"
@@ -271,140 +271,120 @@ export class SettingsDecktrackerOpponentDeckComponent
 			field: 'opponentGalakrondCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'pogo',
 			field: 'opponentPogoCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'astralAutomaton',
 			field: 'opponentAstralAutomatonCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'earthenGolem',
 			field: 'opponentEarthenGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.earthen-golem-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.earthen-golem-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'multicaster',
 			field: 'opponentMulticasterCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.multicaster-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'jade',
 			field: 'opponentJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'cthun',
 			field: 'opponentCthunCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'fatigue',
 			field: 'opponentFatigueCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.fatigue-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.fatigue-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'abyssal-curse',
 			field: 'opponentAbyssalCurseCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.abyssal-curse-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.abyssal-curse-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'attack-on-board',
 			field: 'opponentAttackCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'watch-post',
 			field: 'opponentWatchpostCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'libram',
 			field: 'opponentLibramCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'elwynn-boar',
 			field: 'opponentElwynnBoarCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'volatile-skeleton',
 			field: 'opponentVolatileSkeletonCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.volatile-skeleton-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.volatile-skeleton-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'relic',
 			field: 'opponentRelicCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'hero-power-damage',
 			field: 'opponentHeroPowerDamageCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'anachronos',
 			field: 'opponentAnachronosCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'bonelord-frostwhisper',
 			field: 'opponentBonelordFrostwhisperCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'shockspitter',
 			field: 'opponentShockspitterCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.shockspitter-tooltip'),
-			onlyTrueFalse: true,
 		},
 		{
 			id: 'corpse-spent',
 			field: 'opponentCorpseSpentCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.corpse-spent-tooltip'),
-			onlyTrueFalse: true,
 		},
 	].sort(sortByProperties((t) => [t.label]));
 

@@ -38,12 +38,8 @@ export class PlayerElwynnBoarWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerElwynnBoarCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard([CardIds.ElwynnBoar]);
-			}
-			return !!state.playerDeck?.containsElwynnBoar();
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.ElwynnBoar], { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

@@ -40,12 +40,8 @@ export class PlayerHeroPowerDamageWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerHeroPowerDamageCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard(HERO_POWER_DAMAGE_CARD_IDS);
-			}
-			return state.playerDeck?.hasAnyCard(HERO_POWER_DAMAGE_CARD_IDS);
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard(HERO_POWER_DAMAGE_CARD_IDS, { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

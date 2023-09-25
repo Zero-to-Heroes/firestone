@@ -38,12 +38,10 @@ export class PlayerWatchpostCounterWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerWatchpostCounter;
-		this.deckStateExtractor = (state, prefValue) => {
-			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard([CardIds.KargalBattlescar_BAR_077]);
-			}
-			return state?.playerDeck?.containsWatchpost(this.allCards, false);
-		};
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.KargalBattlescar_BAR_077], {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
 	}
 }

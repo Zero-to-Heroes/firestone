@@ -38,8 +38,8 @@ export class PlayerBrilliantMacawWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBrilliantMacawCounter;
-		this.deckStateExtractor = (state) =>
-			state.playerDeck.hasAnyCardInHandAndDeck([CardIds.BrilliantMacaw]) &&
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard([CardIds.BrilliantMacaw], { onlyLimited: prefValue === 'limited' }) &&
 			!!state?.lastBattlecryPlayedForMacaw(this.allCards, this.side);
 		super.ngAfterContentInit();
 	}

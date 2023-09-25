@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +38,18 @@ export class PlayerRelicWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerRelicCounter;
-		this.deckStateExtractor = (state) => !!state.playerDeck?.containsRelicCards();
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard(
+				[
+					CardIds.ArtificerXymox_REV_787,
+					CardIds.ArtificerXymox_REV_937,
+					CardIds.ArtificerXymox_ArtificerXymoxToken,
+					...RELIC_IDS,
+				],
+				{
+					onlyLimited: prefValue === 'limited',
+				},
+			);
 		super.ngAfterContentInit();
 	}
 }

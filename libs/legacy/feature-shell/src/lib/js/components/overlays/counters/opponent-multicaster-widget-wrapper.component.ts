@@ -41,15 +41,18 @@ export class OpponentMulticasterWidgetWrapperComponent
 		this.deckStateExtractor = (state) =>
 			(state.opponentDeck?.spellsPlayedThisMatch?.length > 0 &&
 				state.opponentDeck?.hero?.classes?.includes(CardClass.MAGE)) ||
-			state?.opponentDeck?.hasAnyCardInHandAndDeck([
-				CardIds.Multicaster,
-				CardIds.CoralKeeper,
-				CardIds.WisdomOfNorgannon,
-				CardIds.Sif,
-				CardIds.InquisitiveCreation,
-				CardIds.DiscoveryOfMagic,
-				CardIds.ElementalInspiration,
-			]);
+			state?.opponentDeck?.hasRelevantCard(
+				[
+					CardIds.Multicaster,
+					CardIds.CoralKeeper,
+					CardIds.WisdomOfNorgannon,
+					CardIds.Sif,
+					CardIds.InquisitiveCreation,
+					CardIds.DiscoveryOfMagic,
+					CardIds.ElementalInspiration,
+				],
+				{ onlyLimited: true },
+			);
 		super.ngAfterContentInit();
 	}
 }

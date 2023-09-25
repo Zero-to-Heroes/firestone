@@ -38,7 +38,8 @@ export class PlayerNagaGiantWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerNagaGiantCounter;
-		this.deckStateExtractor = (state) => state.playerDeck.hasAnyCardInHandAndDeck([CardIds.NagaGiant]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard([CardIds.NagaGiant], { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }

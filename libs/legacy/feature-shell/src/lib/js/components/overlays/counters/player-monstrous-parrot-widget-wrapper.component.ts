@@ -38,9 +38,9 @@ export class PlayerMonstrousParrotWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMonstrousParrotCounter;
-		this.deckStateExtractor = (state) =>
-			!!state?.playerDeck.lastDeathrattleTriggered &&
-			state.playerDeck.hasAnyCardInHandAndDeck([CardIds.MonstrousParrot]);
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard([CardIds.MonstrousParrot], { onlyLimited: prefValue === 'limited' }) &&
+			!!state?.playerDeck.lastDeathrattleTriggered;
 		super.ngAfterContentInit();
 	}
 }

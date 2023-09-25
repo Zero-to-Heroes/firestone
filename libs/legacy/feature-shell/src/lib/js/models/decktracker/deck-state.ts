@@ -1,4 +1,4 @@
-import { CardIds, CardType, RELIC_IDS } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ShortCard } from '@models/decktracker/game-state';
 import { NonFunctionProperties } from '@services/utils';
@@ -32,17 +32,6 @@ export class DeckState {
 		CardIds.GalakrondTheUnbreakable,
 		CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
 		CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
-	];
-
-	private static readonly SPELL_COUNTER_CARD_IDS = [
-		CardIds.YoggSaronUnleashed_YOG_516,
-		CardIds.YoggSaronHopesEnd_OG_134,
-		CardIds.YoggSaronMasterOfFate,
-		CardIds.ArcaneGiant,
-		CardIds.MeddlesomeServant_YOG_518,
-		CardIds.ContaminatedLasher_YOG_528,
-		CardIds.SaroniteShambler_YOG_521,
-		CardIds.PrisonBreaker_YOG_411,
 	];
 
 	private static readonly NEW_CTHUN_CARD_IDS = [
@@ -238,150 +227,55 @@ export class DeckState {
 			);
 	}
 
-	public containsJade(allCards?: CardsFacadeService): boolean {
-		if (this.jadeGolemSize > 0) {
+	private hasRelevantCardLimited(cardIds: readonly CardIds[] | ((cardId: string) => boolean), excludesDeck = false) {
+		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
+		if (!excludesDeck) {
+			pool = pool.concat(this.deck.map((card) => card.cardId));
+		}
+		// console.debug(
+		// 	'checking for relevant card 2',
+		// 	cardIds instanceof Array ? cardIds.join('') : cardIds,
+		// 	// pool.join(', '),
+		// 	excludesDeck,
+		// 	cardIds instanceof Array,
+		// 	pool.concat(!excludesDeck ? this.getCardsInSideboards() : []).join(', '),
+		// );
+		return pool
+			.concat(!excludesDeck ? this.getCardsInSideboards() : [])
+			.filter((cardId: string) => !!cardId)
+			.some((cardId) =>
+				Array.isArray(cardIds) ? cardIds.includes(cardId as CardIds) : (cardIds as any)(cardId),
+			);
+	}
+
+	public hasRelevantCard(
+		cardIds: readonly CardIds[] | ((cardId: string) => boolean),
+		options?: {
+			excludesDeckInLimited?: boolean;
+			onlyLimited?: boolean;
+		},
+	) {
+		// if you have such a card in your hand and deck, or as a discover optip,; show the counter
+		// console.debug(
+		// 	'checking for relevant card',
+		// 	this.hasRelevantCardLimited(cardIds, options?.onlyLimited && !options.excludesDeckInLimited),
+		// 	options,
+		// );
+		if (this.hasRelevantCardLimited(cardIds, options?.onlyLimited && !options.excludesDeckInLimited)) {
 			return true;
 		}
 
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some(
-				(card) =>
-					allCards &&
-					allCards.getCard(card.cardId)?.referencedTags &&
-					allCards.getCard(card.cardId)?.referencedTags.includes('JADE_GOLEM'),
-			);
-	}
-
-	public containsWatchpost(allCards?: CardsFacadeService, lookAtWatchpostsPlayed = false): boolean {
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some(
-				(card) =>
-					card.cardId === CardIds.KargalBattlescar_BAR_077 ||
-					(lookAtWatchpostsPlayed &&
-						allCards &&
-						allCards.getCard(card.cardId)?.name &&
-						allCards.getCard(card.cardId)?.name.toLowerCase().includes('watch post')),
-			);
-	}
-
-	public containsLibram(allCards?: CardsFacadeService, lookAtLibramsPlayed = false): boolean {
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some(
-				(card) =>
-					card.cardId === CardIds.LadyLiadrin ||
-					(lookAtLibramsPlayed &&
-						allCards &&
-						allCards.getCard(card.cardId)?.name &&
-						allCards.getCard(card.cardId)?.name.toLowerCase().startsWith('libram')),
-			);
-	}
-
-	public containsPogoHopper(): boolean {
-		if (this.pogoHopperSize > 0) {
-			return true;
+		if (options?.onlyLimited) {
+			return false;
 		}
 
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some((card) => POGO_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
-	}
-
-	public containsSpellCounterMinion(): boolean {
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId as CardIds));
-	}
-
-	public containsElwynnBoar(): boolean {
-		if (this.elwynnBoarsDeadThisMatch > 0) {
-			return true;
-		}
-
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.ElwynnBoar);
-	}
-
-	public containsVolatileSkeletonCards(): boolean {
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some((card) =>
-				[CardIds.KelthuzadTheInevitable_REV_514, CardIds.KelthuzadTheInevitable_REV_786].includes(
-					card.cardId as CardIds,
-				),
-			);
-	}
-
-	public hasSecondarySkeletonActivator(): boolean {
-		return (
-			this.volatileSkeletonsDeadThisMatch > 0 &&
-			this.getAllCardsInDeck()
-				.filter((card) => card.cardId)
-				.some((card) => [CardIds.XyrellaTheDevout].includes(card.cardId as CardIds))
-		);
-	}
-
-	public containsRelicCards(): boolean {
-		if (this.relicsPlayedThisMatch > 0) {
-			return true;
-		}
-
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.some((card) =>
-				[
-					CardIds.ArtificerXymox_REV_787,
-					CardIds.ArtificerXymox_REV_937,
-					CardIds.ArtificerXymox_ArtificerXymoxToken,
-					...RELIC_IDS,
-				].includes(card.cardId as CardIds),
-			);
-	}
-
-	public hasVanessaVanCleef() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some(
-				(card) =>
-					card.cardId === CardIds.VanessaVancleefLegacy ||
-					card.cardId === CardIds.VanessaVancleef_CORE_CS3_005,
-			);
-	}
-
-	public hasAnyCardInHandAndDeck(cardIds: readonly CardIds[]) {
-		return [...this.hand, ...this.deck, ...this.currentOptions]
+		return [...this.deckList, ...this.board, ...this.otherZone.filter((card) => card.zone !== 'SETASIDE')]
 			.map((card) => card.cardId)
 			.concat(this.getCardsInSideboards())
 			.filter((cardId: string) => !!cardId)
-			.some((cardId) => cardIds.includes(cardId as CardIds));
-	}
-
-	public hasAnyStartingCard(cardIds: readonly CardIds[]) {
-		return [
-			...this.deckList,
-			...this.hand,
-			...this.deck,
-			...this.board,
-			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
-		]
-			.filter((card) => !card.creatorCardId?.length)
-			.map((card) => card.cardId)
-			.concat(this.getCardsInSideboards())
-			.filter((cardId: string) => !!cardId)
-			.some((cardId) => cardIds.includes(cardId as CardIds));
-	}
-
-	// Useful to also include the graveyard
-	public hasAnyCard(cardIds: readonly CardIds[]): boolean {
-		return this.getAllCardsInDeck()
-			.filter((card) => card.cardId)
-			.map((card) => card.cardId)
-			.concat(this.getCardsInSideboards())
-			.filter((cardId: string) => !!cardId)
-			.some((cardId) => cardIds.includes(cardId as CardIds));
+			.some((cardId) =>
+				Array.isArray(cardIds) ? cardIds.includes(cardId as CardIds) : (cardIds as any)(cardId),
+			);
 	}
 
 	public hasMurozondTheInfinite() {
@@ -391,34 +285,6 @@ export class DeckState {
 				(card) =>
 					card.cardId === CardIds.MurozondTheInfinite_DRG_090 ||
 					card.cardId === CardIds.MurozondTheInfinite_CORE_DRG_090,
-			);
-	}
-
-	public hasShockspitter() {
-		return [...this.hand, ...this.deck, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.Shockspitter);
-	}
-
-	public hasParrotMascot() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.ParrotMascot);
-	}
-
-	public hasQueensguard() {
-		const cards = [...this.hand, ...this.currentOptions];
-		return cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard);
-	}
-
-	public hasSpectralPillager() {
-		const cards = [...this.hand, ...this.currentOptions];
-		return cards
-			.filter((card) => card.cardId)
-			.some((card) =>
-				[CardIds.SpectralPillager_CORE_ICC_910, CardIds.SpectralPillager_ICC_910].includes(
-					card.cardId as CardIds,
-				),
 			);
 	}
 

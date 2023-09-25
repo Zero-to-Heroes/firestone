@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,8 +38,11 @@ export class PlayerVanessaVanCleefWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerVanessaVanCleefCounter;
-		this.deckStateExtractor = (state) =>
-			!!state.opponentDeck.cardsPlayedThisMatch?.length && state.playerDeck.hasVanessaVanCleef();
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck?.hasRelevantCard([CardIds.VanessaVancleefLegacy, CardIds.VanessaVancleef_CORE_CS3_005], {
+				onlyLimited: prefValue === 'limited',
+				excludesDeckInLimited: true,
+			}) && !!state.opponentDeck.cardsPlayedThisMatch?.length;
 		super.ngAfterContentInit();
 	}
 }

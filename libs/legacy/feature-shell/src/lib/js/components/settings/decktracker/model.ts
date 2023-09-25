@@ -3,5 +3,5 @@ export interface CounterSetting {
 	readonly field: string;
 	readonly label: string;
 	readonly tooltip: string;
-	readonly onlyTrueFalse?: boolean;
+	readonly showLimitedOption?: boolean;
 }

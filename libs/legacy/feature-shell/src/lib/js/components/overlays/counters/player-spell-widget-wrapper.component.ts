@@ -6,10 +6,22 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
+
+const SPELL_COUNTER_CARD_IDS = [
+	CardIds.YoggSaronUnleashed_YOG_516,
+	CardIds.YoggSaronHopesEnd_OG_134,
+	CardIds.YoggSaronMasterOfFate,
+	CardIds.ArcaneGiant,
+	CardIds.MeddlesomeServant_YOG_518,
+	CardIds.ContaminatedLasher_YOG_528,
+	CardIds.SaroniteShambler_YOG_521,
+	CardIds.PrisonBreaker_YOG_411,
+];
 
 @Component({
 	selector: 'player-spell-widget-wrapper',
@@ -36,7 +48,10 @@ export class PlayerSpellWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerSpellCounter;
-		this.deckStateExtractor = (state) => state.playerDeck?.containsSpellCounterMinion();
+		this.deckStateExtractor = (state, prefValue) =>
+			state.playerDeck.hasRelevantCard(SPELL_COUNTER_CARD_IDS, {
+				onlyLimited: prefValue === 'limited',
+			});
 		super.ngAfterContentInit();
 	}
 }

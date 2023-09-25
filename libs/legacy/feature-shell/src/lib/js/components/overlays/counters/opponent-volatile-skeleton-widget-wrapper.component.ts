@@ -37,10 +37,7 @@ export class OpponentVolatileSkeletonWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentVolatileSkeletonCounter;
-		this.deckStateExtractor = (state) =>
-			state.opponentDeck?.volatileSkeletonsDeadThisMatch > 0 ||
-			state.opponentDeck?.containsVolatileSkeletonCards() ||
-			state.opponentDeck?.hasSecondarySkeletonActivator();
+		this.deckStateExtractor = (state) => state.opponentDeck?.volatileSkeletonsDeadThisMatch > 0;
 		super.ngAfterContentInit();
 	}
 }

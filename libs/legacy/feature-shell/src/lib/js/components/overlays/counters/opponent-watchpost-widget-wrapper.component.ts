@@ -37,7 +37,7 @@ export class OpponentWatchpostCounterWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentWatchpostCounter;
-		this.deckStateExtractor = (deckState) => deckState?.opponentDeck?.containsWatchpost(this.allCards, true);
+		this.deckStateExtractor = (deckState) => deckState?.opponentDeck?.watchpostsPlayedThisMatch > 0;
 		super.ngAfterContentInit();
 	}
 }

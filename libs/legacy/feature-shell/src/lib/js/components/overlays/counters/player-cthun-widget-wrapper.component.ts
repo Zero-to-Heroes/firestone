@@ -40,7 +40,9 @@ export class PlayerCthunWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.playerCthunCounter;
 		this.deckStateExtractor = (state, prefValue) => {
 			if (prefValue === 'limited') {
-				return state.playerDeck?.hasAnyStartingCard([CardIds.Cthun_OG_279, CardIds.Cthun_OG_280]);
+				return state.playerDeck?.hasRelevantCard([CardIds.Cthun_OG_279, CardIds.Cthun_OG_280], {
+					onlyLimited: true,
+				});
 			}
 			return state?.playerDeck?.containsCthun(this.allCards);
 		};

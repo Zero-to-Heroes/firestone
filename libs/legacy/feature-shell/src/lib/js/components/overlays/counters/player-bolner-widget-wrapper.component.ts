@@ -38,9 +38,9 @@ export class PlayerBolnerWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBolnerCounter;
-		this.deckStateExtractor = (state) =>
+		this.deckStateExtractor = (state, prefValue) =>
 			!!state?.playerDeck?.firstBattlecryPlayedThisTurn(this.allCards) &&
-			state.playerDeck.hasAnyCardInHandAndDeck([CardIds.BolnerHammerbeak]);
+			state.playerDeck.hasRelevantCard([CardIds.BolnerHammerbeak], { onlyLimited: prefValue === 'limited' });
 		super.ngAfterContentInit();
 	}
 }
