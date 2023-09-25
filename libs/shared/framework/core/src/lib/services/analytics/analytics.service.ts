@@ -25,13 +25,13 @@ export class AnalyticsService {
 	}
 
 	public trackEvent(eventName: string, options?: EventOptions) {
-		this.plausible.trackEvent(eventName, {
+		this.plausible?.trackEvent(eventName, {
 			props: options,
 		});
 	}
 
 	public trackPageView(page: string) {
-		this.plausible.trackPageview({
+		this.plausible?.trackPageview({
 			url: page,
 		});
 	}
