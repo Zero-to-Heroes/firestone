@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.0.6',
+		version: '12.0.7',
 		force: false,
 		sections: [
 			// {
@@ -41,30 +41,30 @@ export const updates: readonly Update[] = [
 			// 	header: 'Message from the dev',
 			// 	text: `There have been many small versions released during the past couple of weeks, without proper release notes. This is a summary of the changes that have been made since the last proper release notes.`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Deck meta stats are here! You can now see detailed stats for decks to pick whatever will work best for you on the ladder. This is still an early version, so expect some bugs and missing features.
-								There are still many things planned for the near future (some of these features will be available to premium users only):
-								<ul>
-									<li>Additional filters (let me know which ones you need!)</li>
-									<li>Archetype stats</li>
-									<li>Detailed matchup stats</li>
-									<li>Detailed card stats</li>
-								</ul>
-								Also, a big thanks to https://www.d0nkey.top for sharing their archetype categorization with us!
-								`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `Deck meta stats are here! You can now see detailed stats for decks to pick whatever will work best for you on the ladder. This is still an early version, so expect some bugs and missing features.
+			// 					There are still many things planned for the near future (some of these features will be available to premium users only):
+			// 					<ul>
+			// 						<li>Additional filters (let me know which ones you need!)</li>
+			// 						<li>Archetype stats</li>
+			// 						<li>Detailed matchup stats</li>
+			// 						<li>Detailed card stats</li>
+			// 					</ul>
+			// 					Also, a big thanks to https://www.d0nkey.top for sharing their archetype categorization with us!
+			// 					`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -74,27 +74,19 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Also consider the cards in ETC's sideboard when deciding which widgets to show.`,
+								text: `Add a "limited" option to most of the counters, that only shows up the counter on the most likely cases you want to see it. Use this option if you feel like you're seeing the counters too often when you don't need them.`,
 							},
 							{
-								type: 'feature',
-								text: `Show the date of the last patch in the "time" filter dropdown.`,
+								type: 'bug',
+								text: `Fix an issue where the Treant counter would not count the Treants summoned by Drum Circle.`,
 							},
 							{
 								type: 'content',
-								text: `Add most of the missing oracles and card highlights for Caverns of Time.`,
+								text: `Add more oracles, mostly for the new Standard Anomalies and a couple of Duels treasures.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix the tooltip for the Grey Sage Parrot counter in the settings.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Treant counter would not show up.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the attack counter would ignore the hero's attack if they didn't have a weapon equipped.`,
+								type: 'ui',
+								text: `Due to popular demand, the "Yogg" counter now has a different icon reflecting the cards in your deck.`,
 							},
 						],
 					},
@@ -102,61 +94,12 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'content',
-								text: `You can now again choose "Poisonous" as a minion attribute in the simulator.`,
-							},
-							{
-								type: 'content',
-								text: `You can now filter Tier 7 minions in the simulator.`,
-							},
-							{
-								type: 'content',
-								text: `Add simulator support for Lovesick Balladist.`,
+								type: 'bug',
+								text: `Fix a sim issue where Tough Tusk would not get divine shield when a blood gem is played on it.`,
 							},
 							{
 								type: 'bug',
-								text: `(Premium) Fix an issue where golden mininos would be auto-highlighted even when The Golden Arena anomaly was active.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's information would not be properly updated when facing them multiple times in a row.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Banana Slamma would buff itself after being summoned in combat.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Amalgadon would do nothing when its battlecry got triggered by Rylak.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where the Undead Legion attack buff would not apply to minions already on board.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where "on attack" buffs would not be consistently applied if the defender had an "on being attacked" trigger.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Feathermane would not always be summoned from hand.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where importing a battle from the Replays tab into the Simulator would not import the anomalies.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the heroes' player stats in the overlay would always use the current anomaly and MMR rank filters, even if these were disabled.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Add missing Blackrock Mountain set from deckbuilding pool.`,
+								text: `Fix a sim issue where Warpwing would lose its shield after attacking .`,
 							},
 						],
 					},
