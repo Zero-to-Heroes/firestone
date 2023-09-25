@@ -326,7 +326,7 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentEarthenGolemCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerTreantCounter: boolean = true;
+	readonly playerTreantCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerTreantCounterWidgetPosition: { left: number; top: number };
 
@@ -721,3 +721,4 @@ export class Preferences implements IPreferences {
 }
 
 export type CollectionSetStatsTypeFilterType = 'cards-stats' | 'cards-history';
+export type BooleanWithLimited = boolean | 'limited';

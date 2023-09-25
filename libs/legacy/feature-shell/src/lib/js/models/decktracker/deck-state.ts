@@ -385,6 +385,21 @@ export class DeckState {
 			.some((cardId) => cardIds.includes(cardId as CardIds));
 	}
 
+	public hasAnyStartingCard(cardIds: readonly CardIds[]) {
+		return [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		]
+			.filter((card) => !card.creatorCardId?.length)
+			.map((card) => card.cardId)
+			.concat(this.getCardsInSideboards())
+			.filter((cardId: string) => !!cardId)
+			.some((cardId) => cardIds.includes(cardId as CardIds));
+	}
+
 	public hasAsvedon() {
 		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)

@@ -1,0 +1,16 @@
+:host {
+	display: flex;
+}
+
+.label {
+	width: 260px;
+}
+
+filter-dropdown {
+	--color-1: var(--color-3);
+	width: 150px;
+
+	::ng-deep ng-select > div {
+		border-radius: 15px;
+	}
+}

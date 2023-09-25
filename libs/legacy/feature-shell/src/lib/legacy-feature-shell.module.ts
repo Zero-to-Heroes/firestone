@@ -519,6 +519,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -953,6 +954,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
+		PreferenceYNLimitedComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,
@@ -1063,12 +1065,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
 		OwTranslateDirective,
-
-		PreferenceToggleComponent,
-		PreferenceNumericInputComponent,
-		DropdownComponent,
-		NumericInputComponent,
-		PreferenceDropdownComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,

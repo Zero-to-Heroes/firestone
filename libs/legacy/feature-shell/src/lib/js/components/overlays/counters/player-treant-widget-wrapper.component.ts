@@ -37,8 +37,14 @@ export class PlayerTreantWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerTreantCounter;
-		this.deckStateExtractor = (state) =>
-			!!state.playerDeck?.treantsSummoned || state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.Cultivation]);
+		this.deckStateExtractor = (state, bg, prefValue) => {
+			if (prefValue === 'limited') {
+				return state.playerDeck?.hasAnyStartingCard([CardIds.Cultivation]);
+			}
+			return (
+				!!state.playerDeck?.treantsSummoned || state.playerDeck?.hasAnyCardInHandAndDeck([CardIds.Cultivation])
+			);
+		};
 		super.ngAfterContentInit();
 	}
 }

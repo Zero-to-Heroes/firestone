@@ -11,7 +11,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
-import { Preferences } from '../../../models/preferences';
+import { BooleanWithLimited, Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { CounterType } from '../../game-counters/definitions/_counter-definition';
@@ -53,8 +53,12 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 		prefService.getCounterPosition(this.activeCounter, this.side);
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
-	protected prefExtractor: (prefs: Preferences) => boolean;
-	protected deckStateExtractor: (deckState: GameState, bgsState?: BattlegroundsState) => boolean;
+	protected prefExtractor: (prefs: Preferences) => BooleanWithLimited;
+	protected deckStateExtractor: (
+		deckState: GameState,
+		bgsState?: BattlegroundsState,
+		displayFromPrefs?: BooleanWithLimited,
+	) => boolean;
 
 	protected onBgs: boolean;
 
@@ -96,7 +100,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					displayFromGameMode,
 				]) => {
 					const displayFromState = this.deckStateExtractor
-						? this.deckStateExtractor(deckState, bgState)
+						? this.deckStateExtractor(deckState, bgState, displayFromPrefs)
 						: true;
 					if (
 						!gameStarted ||

@@ -3,4 +3,5 @@ export interface CounterSetting {
 	readonly field: string;
 	readonly label: string;
 	readonly tooltip: string;
+	readonly includesLimitedChoice?: boolean;
 }

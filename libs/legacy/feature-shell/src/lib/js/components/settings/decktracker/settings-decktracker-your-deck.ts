@@ -93,12 +93,22 @@ import { CounterSetting } from './model';
 
 			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.counters.title'"></div>
 			<div class="settings-group">
-				<preference-toggle
-					*ngFor="let counter of counters"
-					[field]="counter.field"
-					[label]="counter.label"
-					[tooltip]="counter.tooltip"
-				></preference-toggle>
+				<ng-container *ngFor="let counter of counters">
+					<preference-toggle
+						*ngIf="!counter.includesLimitedChoice"
+						class="toggle"
+						[field]="counter.field"
+						[label]="counter.label"
+						[tooltip]="counter.tooltip"
+					></preference-toggle>
+					<preference-ynlimited
+						*ngIf="counter.includesLimitedChoice"
+						class="toggle"
+						[field]="counter.field"
+						[label]="counter.label"
+						[tooltip]="counter.tooltip"
+					></preference-ynlimited>
+				</ng-container>
 			</div>
 
 			<div class="title" [owTranslate]="'settings.decktracker.opponent-deck.size-title'"></div>
@@ -198,6 +208,7 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerTreantCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.treant-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.treant-tooltip'),
+			includesLimitedChoice: true,
 		},
 		{
 			id: 'jade',
