@@ -3,6 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { MatchInfo } from '../../../models/match-info';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -37,9 +38,14 @@ export class AnomalyRevealedParser implements EventParser {
 		const newPlayerDeck: DeckState = deck.update({
 			globalEffects: newGlobalEffects,
 		} as DeckState);
+		const matchInfo: MatchInfo = {
+			...(currentState.matchInfo ?? ({} as MatchInfo)),
+			anomalies: (currentState.matchInfo?.anomalies ?? []).concat([cardId]),
+		};
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
-		} as any);
+			matchInfo: matchInfo,
+		});
 	}
 
 	event(): string {

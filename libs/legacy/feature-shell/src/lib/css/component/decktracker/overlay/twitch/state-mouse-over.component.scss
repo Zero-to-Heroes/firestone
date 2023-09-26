@@ -65,6 +65,36 @@ empty-card {
 	}
 }
 
+.constructed-anomaly {
+	position: absolute;
+	left: 29vh;
+	height: 100%;
+	width: 7vh;
+	display: flex;
+
+	.anomaly {
+		width: 8vh;
+		height: 7vh;
+		top: 25vh;
+	}
+}
+
+.constructed-cards-left-in-deck {
+	position: absolute;
+	right: 26vh;
+	width: 8vh;
+	height: 15vh;
+	pointer-events: all;
+
+	&.player {
+		top: 49vh;
+	}
+
+	&.opponent {
+		top: 23vh;
+	}
+}
+
 .board {
 	position: absolute;
 	width: 100%;

@@ -8,6 +8,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -49,6 +50,19 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					[cardTooltipBgs]="isBgs"
 				></empty-card>
 			</div>
+			<div class="constructed-anomaly" *ngIf="constructedAnomaly">
+				<empty-card class="anomaly" [cardId]="constructedAnomaly" [cardTooltipPosition]="'right'"></empty-card>
+			</div>
+			<div
+				class="constructed-cards-left-in-deck player"
+				*ngIf="!isBgs"
+				[helpTooltip]="playerCardsLeftInDeckTooltip"
+			></div>
+			<div
+				class="constructed-cards-left-in-deck opponent"
+				*ngIf="!isBgs"
+				[helpTooltip]="opponentCardsLeftInDeckTooltip"
+			></div>
 			<ul class="hero top-hero">
 				<div class="weapon">
 					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
@@ -170,6 +184,15 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 			.filter((card) => card.zone === 'SECRET')
 			.map((card) => card.cardId);
 		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
+		this.constructedAnomaly = this._gameState.matchInfo?.anomalies?.[0];
+		this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
+			cardsInDeck: this._gameState.playerDeck?.deck?.length ?? 0,
+			cardsInHand: this._gameState.playerDeck?.hand?.length ?? 0,
+		});
+		this.opponentCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-opponent-tooltip', {
+			cardsInDeck: this._gameState.opponentDeck?.deck?.length ?? 0,
+			cardsInHand: this._gameState.opponentDeck?.hand?.length ?? 0,
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -196,7 +219,10 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	bottomHandCards: readonly string[];
 	bgsPlayers: readonly TwitchBgsPlayer[];
 	bgsAnomaly: string;
+	constructedAnomaly: string;
 	currentTurn: number;
+	playerCardsLeftInDeckTooltip: string;
+	opponentCardsLeftInDeckTooltip: string;
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 	private showLiveInfo = new BehaviorSubject<boolean>(false);
@@ -204,7 +230,11 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 
 	private destroyed$ = new Subject<void>();
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly prefs: TwitchPreferencesService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly prefs: TwitchPreferencesService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterContentInit(): void {
 		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(takeUntil(this.destroyed$));

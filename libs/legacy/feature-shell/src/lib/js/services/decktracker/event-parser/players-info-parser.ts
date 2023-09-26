@@ -18,7 +18,10 @@ export class PlayersInfoParser implements EventParser {
 		} as DeckState);
 		return currentState.update({
 			opponentDeck: newOpponentDeck,
-			matchInfo: gameEvent.additionalData.matchInfo,
+			matchInfo: {
+				...(currentState.matchInfo ?? {}),
+				...gameEvent.additionalData.matchInfo,
+			},
 		} as GameState);
 	}
 

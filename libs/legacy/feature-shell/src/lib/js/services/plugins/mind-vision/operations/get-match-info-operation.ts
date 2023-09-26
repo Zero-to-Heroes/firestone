@@ -20,6 +20,7 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 					localPlayer: localPlayer,
 					opponent: opponent,
 					boardId: matchInfo.BoardDbId,
+					anomalies: [],
 				};
 				return result;
 			},

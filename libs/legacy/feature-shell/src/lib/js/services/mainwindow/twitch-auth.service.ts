@@ -158,6 +158,7 @@ export class TwitchAuthService {
 			gameStarted: deckEvent.state.gameStarted,
 			gameEnded: deckEvent.state.gameEnded,
 			cardsPlayedThisMatch: undefined,
+			matchInfo: deckEvent.state.matchInfo,
 		});
 
 		// We need to show the last non-empty face off to let the extension decide whether to show the result
