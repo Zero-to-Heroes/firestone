@@ -18,6 +18,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 	selector: 'twitch-config-widget',
 	styleUrls: [
 		`../../../../../css/themes/battlegrounds-theme.scss`,
+		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'../../../../../css/component/decktracker/overlay/twitch/twitch-config-widget.component.scss',
 	],
 	template: `
