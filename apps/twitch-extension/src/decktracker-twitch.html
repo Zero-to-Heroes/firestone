@@ -18,6 +18,31 @@
 		<link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet" />
 
 		<style>
+			::-webkit-scrollbar {
+				width: 5px;
+				height: 0;
+			}
+
+			::-webkit-scrollbar-track {
+				display: none;
+			}
+
+			::-webkit-scrollbar-thumb {
+				background: var(--fs-scrollbar-thumb-color);
+			}
+
+			::-webkit-scrollbar-thumb:hover {
+				background: var(--on-fs-scrollbar-thumb-color);
+			}
+
+			::-webkit-scrollbar-button {
+				display: none;
+			}
+
+			::-webkit-scrollbar-track-piece {
+				display: none;
+			}
+
 			.cdk-global-overlay-wrapper,
 			.cdk-overlay-container {
 				pointer-events: none;
