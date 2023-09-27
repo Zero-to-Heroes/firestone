@@ -47,6 +47,7 @@ import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-count
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
 import { RelicCounterDefinition } from './definitions/relic-counter';
+import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
 import { ShockspitterCounterDefinition } from './definitions/shockspitter-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
@@ -181,6 +182,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'secretsPlayed':
+				return SecretsPlayedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'lightray':
 				return LightrayCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'menagerie':

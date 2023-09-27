@@ -44,7 +44,7 @@ export class LightrayCounterDefinition implements CounterDefinition<GameState, r
 			type: 'lightray',
 			value: paladinCardsPlayed,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Lightray}.jpg`,
-			cssClass: 'vanessa-counter',
+			cssClass: 'lightray-counter',
 			tooltip: tooltip,
 			standardCounter: true,
 		};

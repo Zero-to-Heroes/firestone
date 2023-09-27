@@ -331,6 +331,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'secretsPlayed',
+			field: 'playerSecretsPlayedCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.secrets-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.secrets-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'lightray',
 			field: 'playerLightrayCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.lightray-label'),
