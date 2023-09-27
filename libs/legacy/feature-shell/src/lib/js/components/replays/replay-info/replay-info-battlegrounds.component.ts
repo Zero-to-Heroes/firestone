@@ -47,11 +47,11 @@ declare let amplitude;
 					<div class="result">{{ result }}</div>
 				</div>
 
-<div class="group anomalies" *ngIf="anomalies?.length" [helpTooltip]="anomaliesTooltip">
-	<div class="item" *ngFor="let tribe of anomalies">
-		<img class="icon" [src]="tribe.icon" />
-	</div>
-</div>
+				<div class="group anomalies" *ngIf="anomalies?.length">
+					<div class="item" *ngFor="let anomaly of anomalies" [cardTooltip]="anomaly.cardId">
+						<img class="icon" [src]="anomaly.icon" />
+					</div>
+				</div>
 
 				<div class="group tribes" *ngIf="availableTribes?.length" [helpTooltip]="tribesTooltip">
 					<div class="item" *ngFor="let tribe of availableTribes">
