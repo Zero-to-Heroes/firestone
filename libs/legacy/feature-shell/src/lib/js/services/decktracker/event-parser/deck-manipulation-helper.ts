@@ -312,7 +312,15 @@ export class DeckManipulationHelper {
 				zone.find((card) => {
 					const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 					return refCardId === normalizedCardId && !card.entityId;
+				}) ??
+				// Without this, we can't draw cards that were specifically put back in our deck with special attributes
+				// (like Fizzle's Snapshot).
+				// I'm not sure what the issue could be in this case, so wait and see if this causes an info leak of some sort?
+				zone.find((card) => {
+					const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+					return refCardId === normalizedCardId;
 				});
+			// console.debug('found card?', found, zone);
 			if (!found) {
 				const card = this.allCards.getCard(cardId);
 				return DeckCard.create({
