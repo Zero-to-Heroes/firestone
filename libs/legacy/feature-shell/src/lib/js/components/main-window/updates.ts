@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.0.7',
+		version: '12.1.0',
 		force: false,
 		sections: [
 			// {
@@ -77,6 +77,18 @@ export const updates: readonly Update[] = [
 								text: `Add a "limited" option to most of the counters, that only shows up the counter on the most likely cases you want to see it. Use this option if you feel like you're seeing the counters too often when you don't need them.`,
 							},
 							{
+								type: 'feature',
+								text: `Add a Chaotic Tendrils counter.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a Secrets Played counter.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Fizzle's Snapshot info would disappear after drawing it.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where the Treant counter would not count the Treants summoned by Drum Circle.`,
 							},
@@ -100,6 +112,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Warpwing would lose its shield after attacking .`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where corrupted data would sometimes appear in the meta hero stats.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `Now show the full anomaly card when mousing over it in the Replays section.`,
 							},
 						],
 					},
