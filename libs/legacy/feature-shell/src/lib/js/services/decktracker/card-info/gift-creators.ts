@@ -126,6 +126,7 @@ export const giftCreators = [
 	CardIds.CreationProtocol_CreationProtocolToken,
 	CardIds.CreationProtocol,
 	CardIds.CrystallineOracle,
+	CardIds.CuriousGlimmerroot,
 	CardIds.Cutpurse,
 	CardIds.DarkPeddler_WON_096,
 	CardIds.DarkPeddler,

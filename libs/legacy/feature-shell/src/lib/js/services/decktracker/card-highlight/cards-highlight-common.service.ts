@@ -668,6 +668,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), dragon);
 			case CardIds.DragonboneRitualTavernBrawl:
 				return and(side(inputSide), dragon);
+			case CardIds.DragonConsort:
+				return and(side(inputSide), or(inHand, inDeck), dragon);
 			case CardIds.Drekthar_AV_100:
 				return !card
 					? null
