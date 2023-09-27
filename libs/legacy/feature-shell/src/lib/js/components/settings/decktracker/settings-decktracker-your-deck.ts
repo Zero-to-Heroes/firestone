@@ -331,6 +331,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'chaoticTendril',
+			field: 'playerChaoticTendrilCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'secretsPlayed',
 			field: 'playerSecretsPlayedCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.secrets-label'),

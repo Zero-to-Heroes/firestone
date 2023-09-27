@@ -519,6 +519,8 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
+import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
@@ -1579,6 +1581,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerChaoticTendrilWidgetWrapperComponent,
 		PlayerSecretsPlayedWidgetWrapperComponent,
 		PlayerLightrayWidgetWrapperComponent,
 		PlayerMenagerieCounterWidgetWrapperComponent,
@@ -1619,6 +1622,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,
 		OpponentShockspitterWidgetWrapperComponent,
 		OpponentMulticasterWidgetWrapperComponent,
+		OpponentChaoticTendrilWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

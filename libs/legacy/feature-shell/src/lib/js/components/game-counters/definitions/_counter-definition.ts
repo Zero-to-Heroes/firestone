@@ -35,6 +35,7 @@ export type CounterType =
 	| 'brilliantMacaw'
 	| 'monstrousParrot'
 	| 'vanessaVanCleef'
+	| 'chaoticTendril'
 	| 'secretsPlayed'
 	| 'lightray'
 	| 'menagerie'

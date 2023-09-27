@@ -297,6 +297,13 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.multicaster-tooltip'),
 		},
 		{
+			id: 'chaoticTendril',
+			field: 'opponentChaoticTendrilCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.chaotic-tendril-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'jade',
 			field: 'opponentJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),

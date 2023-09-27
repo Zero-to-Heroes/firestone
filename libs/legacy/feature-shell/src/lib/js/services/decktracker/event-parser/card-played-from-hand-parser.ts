@@ -192,6 +192,9 @@ export class CardPlayedFromHandParser implements EventParser {
 					deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
 				libramsPlayedThisMatch:
 					deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
+				chaoticTendrilsPlayedThisMatch:
+					deck.chaoticTendrilsPlayedThisMatch +
+					(!isCardCountered && refCard.id === CardIds.ChaoticTendril_YOG_514 ? 1 : 0),
 				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 			})
 			.updateSpellsPlayedThisMatch(isCardCountered ? null : cardToAdd, this.allCards);

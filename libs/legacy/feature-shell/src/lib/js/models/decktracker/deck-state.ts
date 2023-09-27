@@ -83,6 +83,7 @@ export class DeckState {
 	readonly manaSpentOnSpellsThisMatch: number = 0;
 	readonly watchpostsPlayedThisMatch: number = 0;
 	readonly libramsPlayedThisMatch: number = 0;
+	readonly chaoticTendrilsPlayedThisMatch: number = 0;
 	readonly elementalsPlayedThisTurn: number = 0;
 	readonly elementalsPlayedLastTurn: number = 0;
 	readonly elwynnBoarsDeadThisMatch: number = 0;

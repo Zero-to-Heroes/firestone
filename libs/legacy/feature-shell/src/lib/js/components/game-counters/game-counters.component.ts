@@ -24,6 +24,7 @@ import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indic
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian-counter';
+import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { EarthenGolemCounterDefinition } from './definitions/earthen-golem-counter';
@@ -182,6 +183,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'chaoticTendril':
+				return ChaoticTendrilCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'secretsPlayed':
 				return SecretsPlayedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'lightray':
