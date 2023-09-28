@@ -19,7 +19,9 @@ import {
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { Card } from '../../../models/card';
 import { SetCard } from '../../../models/set';
+import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 
 @Component({
@@ -77,13 +79,32 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		this.cards$$.next(value);
 	}
 
-	@Input() set collection(value: readonly SetCard[]) {
-		this.collection$$.next(value);
+	@Input() set collection(value: readonly (Card | SetCard)[]) {
+		if (!value?.length) {
+			this.normalizedCollection$$?.next([]);
+			return;
+		}
+
+		if ((value[0] as SetCard).ownedNonPremium !== undefined) {
+			const normalizedValue = value.map((card: SetCard) => {
+				const result: Card = {
+					id: card.id,
+					count: card.ownedNonPremium,
+					premiumCount: card.ownedPremium,
+					diamondCount: card.ownedDiamond,
+					signatureCount: card.ownedSignature,
+				};
+				return result;
+			});
+			this.normalizedCollection$$.next(normalizedValue);
+		} else {
+			this.normalizedCollection$$.next(value as readonly Card[]);
+		}
 	}
 
 	private deckstring$$ = new BehaviorSubject<string>(null);
 	private cards$$ = new BehaviorSubject<readonly MinimalCard[]>([]);
-	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
+	private normalizedCollection$$ = new BehaviorSubject<readonly Card[]>([]);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -107,7 +128,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				this.mapData((deckstring) => this.buildCardsFromDeckstring(deckstring)),
 			)
 			.subscribe(this.cards$$);
-		this.cards$ = combineLatest([this.cards$$, this.collection$$]).pipe(
+		this.cards$ = combineLatest([this.cards$$, this.normalizedCollection$$]).pipe(
 			filter(([deckCards, collection]) => !!deckCards?.length),
 			this.mapData(([deckCards, collection]) => this.buildCards(deckCards, collection)),
 		);
@@ -137,16 +158,13 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		});
 	}
 
-	private buildCards(deckCards: readonly MinimalCard[], collection: readonly SetCard[]): readonly VisualDeckCard[] {
+	private buildCards(deckCards: readonly MinimalCard[], collection: readonly Card[]): readonly VisualDeckCard[] {
 		return deckCards
 			.map((miniCard) => {
 				const card = this.allCards.getCard(miniCard.cardId);
 				const sideboard = this.buildSideboard(miniCard.sideboard);
 				const internalEntityId = uuid();
-				const inCollection =
-					collection == null
-						? true
-						: collection.find((c) => c.id === card.id)?.getNumberCollected() >= miniCard.quantity;
+				const inCollection = getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,

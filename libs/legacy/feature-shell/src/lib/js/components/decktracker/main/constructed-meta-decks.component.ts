@@ -5,8 +5,8 @@ import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
-import { Card, totalOwned } from '../../../models/card';
-import { dustToCraftFor } from '../../../services/hs-utils';
+import { Card } from '../../../models/card';
+import { deckDustCost } from '../../../services/collection/collection-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -21,7 +21,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			*ngIf="{
 				decks: decks$ | async,
 				archetypes: archetypes$ | async,
-				showStandardDeviation: showStandardDeviation$ | async
+				showStandardDeviation: showStandardDeviation$ | async,
+				collection: collection$ | async
 			} as value"
 		>
 			<div class="constructed-meta-decks" *ngIf="value.decks">
@@ -89,6 +90,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						[deck]="deck"
 						[archetypes]="value.archetypes"
 						[showStandardDeviation]="value.showStandardDeviation"
+						[collection]="value.collection"
 					></constructed-meta-deck-summary>
 				</virtual-scroller>
 			</div>
@@ -121,7 +123,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		this.showStandardDeviation$ = this.listenForBasicPref$(
 			(prefs) => !prefs.constructedMetaDecksUseConservativeWinrate,
 		);
-		const collection$ = this.store.collection$().pipe(
+		this.collection$ = this.store.collection$().pipe(
 			filter((collection) => !!collection),
 			debounceTime(500),
 			this.mapData((collection) => collection),
@@ -129,7 +131,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		this.decks$ = combineLatest([
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
-			collection$,
+			this.collection$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
@@ -173,17 +175,11 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				card: this.allCards.getCardFromDbfId(pair[0]),
 			}),
 		);
-		const dustCost = deckCards
-			.map((card) => {
-				const collectionCard = collection?.find((c) => c.id === card.card.id);
-				const owned = Math.min(
-					totalOwned(collectionCard),
-					this.allCards.getCard(collectionCard?.id)?.rarity?.toLowerCase() === 'legendary' ? 1 : 2,
-				);
-				const missingQuantity = Math.max(0, card.quantity - owned);
-				return dustToCraftFor(card.card.rarity) * missingQuantity;
-			})
-			.reduce((a, b) => a + b, 0);
+		const dustCost = deckDustCost(
+			deckCards.map((c) => ({ quantity: c.quantity, cardId: c.card.id })),
+			collection,
+			this.allCards,
+		);
 		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
 		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
 		const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);

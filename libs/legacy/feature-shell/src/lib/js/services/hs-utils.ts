@@ -418,10 +418,12 @@ export const getGalakrondCardFor = (cardClass: CardClass, invokeCount: number): 
 	return null;
 };
 
+/** @deprecated */
 export const dustFor = (rarity: string, cardType: CollectionCardType): number => {
 	return cardType === 'NORMAL' ? dustForNormal(rarity) : dustForPremium(rarity);
 };
 
+/** @deprecated */
 const dustForNormal = (rarity: string): number => {
 	switch (rarity?.toLowerCase()) {
 		case 'legendary':
@@ -435,10 +437,12 @@ const dustForNormal = (rarity: string): number => {
 	}
 };
 
+/** @deprecated */
 const dustForPremium = (rarity: string): number => {
 	return 4 * dustForNormal(rarity?.toLowerCase());
 };
 
+/** @deprecated */
 export const dustToCraftFor = (rarity: string): number => {
 	switch (rarity?.toLowerCase()) {
 		case 'legendary':
@@ -452,10 +456,12 @@ export const dustToCraftFor = (rarity: string): number => {
 	}
 };
 
+/** @deprecated */
 export const dustToCraftForPremium = (rarity: string): number => {
 	return 4 * dustToCraftFor(rarity?.toLowerCase());
 };
 
+/** @deprecated */
 export const getPackDustValue = (pack: PackResult): number => {
 	return pack.boosterId === BoosterType.MERCENARIES
 		? pack.cards.map((card) => card.currencyAmount ?? 0).reduce((a, b) => a + b, 0)

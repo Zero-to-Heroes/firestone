@@ -4,6 +4,7 @@ import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { EnhancedDeckStat } from './constructed-meta-decks.component';
@@ -95,15 +96,17 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 			<div class="cards-containers">
 				<div class="container core">
 					<div class="title" [owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="archetypeCoreCards"> </deck-list-static>
+					<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="collection">
+					</deck-list-static>
 				</div>
 				<div class="container removed">
 					<div class="title" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="removedCards"> </deck-list-static>
+					<deck-list-static class="cards" [cards]="removedCards" [collection]="collection">
+					</deck-list-static>
 				</div>
 				<div class="container added">
 					<div class="title" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="addedCards"> </deck-list-static>
+					<deck-list-static class="cards" [cards]="addedCards" [collection]="collection"> </deck-list-static>
 				</div>
 			</div>
 		</div>
@@ -132,6 +135,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	@Input() set archetypes(value: readonly ArchetypeStat[]) {
 		this.archetypes$$.next(value);
 	}
+	@Input() collection: readonly Card[];
 	@Input() showStandardDeviation: boolean;
 
 	private showDetails$$ = new BehaviorSubject<boolean>(false);
