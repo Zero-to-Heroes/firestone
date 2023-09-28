@@ -120,7 +120,9 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 					};
 				});
 				console.debug('heroOverviews', heroOverviews, tiers);
-				if (heroOverviews.length === 2) {
+				if (heroOverviews.length === 1) {
+					return [null, null, ...heroOverviews, null];
+				} else if (heroOverviews.length === 2) {
 					return [null, ...heroOverviews, null];
 				} else if (heroOverviews.length === 3) {
 					return [...heroOverviews, null];

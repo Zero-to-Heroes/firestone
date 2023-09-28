@@ -110,13 +110,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 					};
 				});
 				console.debug('heroOverviews', heroOverviews, tiers);
-				if (heroOverviews.length === 2) {
-					return [null, ...heroOverviews, null];
-				} else if (heroOverviews.length === 3) {
-					return [...heroOverviews, null];
-				} else {
-					return heroOverviews;
-				}
+				heroOverviews;
 			}),
 		);
 	}
