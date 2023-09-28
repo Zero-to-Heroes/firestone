@@ -517,7 +517,9 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 // import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
+import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
+import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
@@ -1283,6 +1285,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedMetaDecksComponent,
 		ConstructedMetaDeckSummaryComponent,
 		ConstructedMetaArchetypesComponent,
+		ConstructedMetaArchetypeComponent,
 		DeckWinrateMatrixComponent,
 		DeckMatchupInfoComponent,
 		DecktrackerDeckRecapComponent,
@@ -1298,6 +1301,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DecktrackerFiltersComponent,
 		DecktrackerFormatFilterDropdownComponent,
 		ConstructedSampleSizeFilterDropdownComponent,
+		ConstructedArchetypeSampleSizeFilterDropdownComponent,
 		DecktrackerTimeFilterDropdownComponent,
 		DecktrackerRankFilterDropdownComponent,
 		DecktrackerDeckSortDropdownComponent,

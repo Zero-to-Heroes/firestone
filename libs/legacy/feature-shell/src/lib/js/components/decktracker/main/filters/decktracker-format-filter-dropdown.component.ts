@@ -84,9 +84,12 @@ export class DecktrackerFormatFilterDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: !['deck-details', 'constructed-deckbuilder', 'constructed-meta-decks'].includes(
-							currentView,
-						),
+						visible: ![
+							'deck-details',
+							'constructed-deckbuilder',
+							'constructed-meta-decks',
+							'constructed-meta-archetypes',
+						].includes(currentView),
 					};
 				}),
 			);

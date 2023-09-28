@@ -91,7 +91,11 @@ export class DecktrackerTimeFilterDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: !['constructed-deckbuilder', 'constructed-meta-decks'].includes(currentView),
+						visible: ![
+							'constructed-deckbuilder',
+							'constructed-meta-decks',
+							'constructed-meta-archetypes',
+						].includes(currentView),
 					};
 				}),
 			);

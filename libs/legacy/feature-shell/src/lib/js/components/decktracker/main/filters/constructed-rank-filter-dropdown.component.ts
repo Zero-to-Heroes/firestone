@@ -78,7 +78,7 @@ export class ConstructedRankFilterDropdownComponent
 					filter: filter,
 					options: options,
 					placeholder: options.find((option) => option.value === filter)?.label,
-					visible: ['constructed-meta-decks'].includes(currentView),
+					visible: ['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
 				};
 			}),
 		);

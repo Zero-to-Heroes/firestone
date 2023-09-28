@@ -5,11 +5,6 @@
 	font-size: 13px;
 }
 
-with-loading {
-	display: flex;
-	flex-direction: column;
-}
-
 .constructed-meta-archetypes {
 	display: flex;
 	flex-direction: column;
@@ -18,5 +13,23 @@ with-loading {
 	.header {
 		display: flex;
 		margin-bottom: 10px;
+	}
+
+	.archetypes-list {
+		display: flex;
+		flex-direction: column;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		flex-grow: 1;
+		overflow-y: scroll;
+
+		.archetype {
+			margin-bottom: 5px;
+
+			::ng-deep .constructed-meta-archetype {
+				height: 80px;
+			}
+		}
 	}
 }

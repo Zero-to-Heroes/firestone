@@ -187,7 +187,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
 		return {
 			...stat,
-			totalGames: this.formatGamesCount(stat.totalGames),
+			totalGames: formatGamesCount(stat.totalGames),
 			rawWinrate: stat.winrate,
 			dustCost: dustCost,
 			heroCardClass: heroCardClass,
@@ -196,17 +196,6 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			winrate: winrateToUse,
 			sideboards: deckDefinition.sideboards,
 		};
-	}
-
-	private formatGamesCount(value: number): number {
-		if (value >= 1000) {
-			return 1000 * Math.round(value / 1000);
-		} else if (value >= 100) {
-			return 100 * Math.round(value / 100);
-		} else if (value >= 10) {
-			return 10 * Math.round(value / 10);
-		}
-		return value;
 	}
 
 	private sortDecks(a: EnhancedDeckStat, b: EnhancedDeckStat, sortCriteria: SortCriteria<ColumnSortType>): number {
@@ -261,3 +250,14 @@ export interface EnhancedDeckStat extends DeckStat {
 	readonly conservativeWinrate: number;
 	readonly sideboards: readonly Sideboard[];
 }
+
+export const formatGamesCount = (value: number): number => {
+	if (value >= 1000) {
+		return 1000 * Math.round(value / 1000);
+	} else if (value >= 100) {
+		return 100 * Math.round(value / 100);
+	} else if (value >= 10) {
+		return 10 * Math.round(value / 10);
+	}
+	return value;
+};

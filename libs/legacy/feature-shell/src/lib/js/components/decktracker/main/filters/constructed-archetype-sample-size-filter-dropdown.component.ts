@@ -9,7 +9,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
-	selector: 'constructed-sample-size-filter-dropdown',
+	selector: 'constructed-archetype-sample-size-filter-dropdown',
 	styleUrls: [],
 	template: `
 		<filter-dropdown
@@ -23,12 +23,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedSampleSizeFilterDropdownComponent
+export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
-	options: IOption[] = [50, 100, 200, 500, 1000, 2000, 4000].map((value) => ({
+	options: IOption[] = [500, 1000, 2000, 4000, 8000].map((value) => ({
 		value: '' + value,
 		label: this.i18n.translateString('app.decktracker.filters.sample-size-filter', { value: value }),
 	}));
@@ -44,7 +44,7 @@ export class ConstructedSampleSizeFilterDropdownComponent
 
 	ngAfterContentInit() {
 		this.filter$ = combineLatest([
-			this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksSampleSizeFilter),
+			this.listenForBasicPref$((prefs) => prefs.constructedMetaArchetypesSampleSizeFilter),
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 		]).pipe(
 			filter(([filter, [currentView]]) => !!filter && !!currentView),
@@ -53,7 +53,7 @@ export class ConstructedSampleSizeFilterDropdownComponent
 					filter: '' + filter,
 					options: this.options,
 					placeholder: this.options.find((option) => +option.value === filter)?.label,
-					visible: ['constructed-meta-decks'].includes(currentView),
+					visible: ['constructed-meta-archetypes'].includes(currentView),
 				};
 			}),
 		);
@@ -61,7 +61,7 @@ export class ConstructedSampleSizeFilterDropdownComponent
 
 	async onSelected(option: IOption) {
 		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = { ...prefs, constructedMetaDecksSampleSizeFilter: +option.value };
+		const newPrefs: Preferences = { ...prefs, constructedMetaArchetypesSampleSizeFilter: +option.value };
 		await this.prefs.savePreferences(newPrefs);
 	}
 }

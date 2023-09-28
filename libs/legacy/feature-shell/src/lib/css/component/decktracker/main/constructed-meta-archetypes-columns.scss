@@ -1,0 +1,33 @@
+.cell {
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	height: 100%;
+
+	&.player-class {
+		width: 60px;
+	}
+
+	&.name {
+		margin-left: 10px;
+		width: 220px;
+	}
+
+	&.winrate {
+		margin-left: 10px;
+		width: 80px;
+	}
+
+	&.games {
+		margin-left: 10px;
+		width: 80px;
+	}
+
+	&.cards {
+		margin-left: 10px;
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+}

@@ -37,6 +37,9 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<constructed-time-filter-dropdown class="filter"></constructed-time-filter-dropdown>
 			<constructed-rank-filter-dropdown class="filter"></constructed-rank-filter-dropdown>
 			<constructed-sample-size-filter-dropdown class="filter"></constructed-sample-size-filter-dropdown>
+			<constructed-archetype-sample-size-filter-dropdown
+				class="filter"
+			></constructed-archetype-sample-size-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
 
@@ -110,11 +113,17 @@ export class DecktrackerFiltersComponent
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
 			.pipe(
 				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView === 'constructed-meta-decks'),
+				this.mapData(
+					([currentView]) => !['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+				),
 			);
 		this.showInfo$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
-			.pipe(this.mapData(([currentView]) => currentView !== 'constructed-meta-decks'));
+			.pipe(
+				this.mapData(
+					([currentView]) => !['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+				),
+			);
 	}
 
 	ngAfterViewInit() {
