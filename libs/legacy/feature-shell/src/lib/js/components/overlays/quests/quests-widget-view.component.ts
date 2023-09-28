@@ -9,7 +9,7 @@ import {
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 
@@ -102,7 +102,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionStoreComponen
 						const result: Quest = {
 							name: refQuest?.name ?? 'Unknown quest',
 							description:
-								refQuest?.description?.replace('$q', '' + refQuest?.quota) ?? 'Unknown description',
+								refQuest?.description?.replaceAll('$q', '' + refQuest?.quota) ?? 'Unknown description',
 							quota: refQuest?.quota,
 							progress: quest.Progress ?? 0,
 							progressPercentage: !!refQuest?.quota ? (100 * (quest.Progress ?? 0)) / refQuest.quota : 0,
