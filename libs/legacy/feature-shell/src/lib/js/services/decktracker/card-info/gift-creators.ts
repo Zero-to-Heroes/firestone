@@ -537,6 +537,7 @@ export const giftCreators = [
 	CardIds.TasteOfChaos,
 	CardIds.TearReality,
 	CardIds.TentacleGrip_YOG_526,
+	CardIds.YoggSaronUnleashed_TentacleSwarmToken_YOG_516t3,
 	CardIds.TentacleTender_YOG_517,
 	CardIds.TheCandlesquestion_TheCandlesquestion_DALA_714a,
 	CardIds.TheCandlesquestion_TheCandlesquestion_DALA_714b,

@@ -126,6 +126,7 @@ export const tutors = [
 	CardIds.RadarDetector_TSC_079,
 	CardIds.RaidingParty,
 	CardIds.RaidTheDocks,
+	CardIds.RedscaleDragontamer,
 	CardIds.RelicOfDimensions,
 	CardIds.RingmasterWhatley,
 	CardIds.RollTheBones_CORE_ICC_201,
