@@ -310,6 +310,12 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-tooltip'),
 		},
 		{
+			id: 'number-of-spells',
+			field: 'opponentSpellCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-tooltip'),
+		},
+		{
 			id: 'cthun',
 			field: 'opponentCthunCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-label'),

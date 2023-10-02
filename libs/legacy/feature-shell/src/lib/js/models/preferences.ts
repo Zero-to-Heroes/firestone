@@ -373,6 +373,9 @@ export class Preferences implements IPreferences {
 	readonly playerSpellCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
+	readonly opponentSpellCounter: BooleanWithLimited = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentSpellCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerElementalCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

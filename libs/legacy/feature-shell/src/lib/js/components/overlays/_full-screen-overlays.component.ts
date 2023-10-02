@@ -134,6 +134,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-shockspitter-widget-wrapper></opponent-shockspitter-widget-wrapper>
 			<opponent-multicaster-widget-wrapper></opponent-multicaster-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
+			<opponent-spell-widget-wrapper></opponent-spell-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
