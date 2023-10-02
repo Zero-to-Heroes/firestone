@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.1.0',
+		version: '12.1.2',
 		force: false,
 		sections: [
 			// {
@@ -41,30 +41,21 @@ export const updates: readonly Update[] = [
 			// 	header: 'Message from the dev',
 			// 	text: `There have been many small versions released during the past couple of weeks, without proper release notes. This is a summary of the changes that have been made since the last proper release notes.`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Deck meta stats are here! You can now see detailed stats for decks to pick whatever will work best for you on the ladder. This is still an early version, so expect some bugs and missing features.
-			// 					There are still many things planned for the near future (some of these features will be available to premium users only):
-			// 					<ul>
-			// 						<li>Additional filters (let me know which ones you need!)</li>
-			// 						<li>Archetype stats</li>
-			// 						<li>Detailed matchup stats</li>
-			// 						<li>Detailed card stats</li>
-			// 					</ul>
-			// 					Also, a big thanks to https://www.d0nkey.top for sharing their archetype categorization with us!
-			// 					`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `There is a bug where some decklists in the constructed meta decks use Wild cards instead of the standard legal ones. I have fixed this recently, but it will take a few days for the new games to use the updated decklists. The data has also been cleaned of the corrupted lists, so there will be a gap in data for the next few days. Sorry for the inconvenience!`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -90,7 +81,11 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Treant counter would not count the Treants summoned by Drum Circle.`,
+								text: `Fix an issue where the Treant counter would not count some Treants.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Plague + Helya parser would break if another "cast when drawn" card was revealed between two Plagues.`,
 							},
 							{
 								type: 'content',
@@ -105,6 +100,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the MMR filter would not work anymore.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Tough Tusk would not get divine shield when a blood gem is played on it.`,
