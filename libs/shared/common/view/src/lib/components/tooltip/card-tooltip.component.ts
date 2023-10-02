@@ -167,7 +167,7 @@ export class CardTooltipComponent
 	}
 
 	ngAfterViewInit(): void {
-		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
+		this.timeout = setTimeout(() => this.viewRef?.destroy(), 30_000);
 	}
 
 	override ngOnDestroy(): void {
