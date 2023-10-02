@@ -22,6 +22,7 @@ export const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING,
 	BoosterType.GOLDEN_BATTLE_OF_THE_BANDS,
 	BoosterType.GOLDEN_TITANS,
+	BoosterType.GOLDEN_CAVERNS_OF_TIME,
 ];
 
 export const CLASS_PACKS = [
