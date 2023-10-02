@@ -8,6 +8,7 @@ export const EXCLUDED_BOOSTER_IDS = [
 	BoosterType.MAMMOTH_BUNDLE,
 	BoosterType.WAILING_CAVERNS,
 	BoosterType.PATH_OF_ARTHAS,
+	BoosterType.WILD_WEST,
 ];
 
 export const GOLDEN_SET_PACKS = [
