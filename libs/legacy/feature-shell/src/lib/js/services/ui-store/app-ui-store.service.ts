@@ -776,7 +776,7 @@ export class AppUiStoreService extends Store<Preferences> {
 					);
 					const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 						stats?.heroStats,
-						bgsActiveRankFilter,
+						// bgsActiveRankFilter,
 						bgsActiveTribesFilter,
 						bgsActiveAnomaliesFilter,
 						bgsHeroesUseConservativeEstimate,

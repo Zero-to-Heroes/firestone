@@ -23,12 +23,13 @@ export class BgsMetaHeroStatsService {
 			this.store.listenPrefs$(
 				(prefs) => prefs.bgsActiveTimeFilter,
 				(prefs) => prefs.bgsActiveRankFilter,
-				(prefs) => prefs.bgsSavedUseMmrFilterInHeroSelection,
+				(prefs) => prefs.bgsActiveUseMmrFilterInHeroSelection,
 			),
 			this.requestLoad$$,
 		])
 			.pipe(distinctUntilChanged())
 			.subscribe(async ([[timeFilter, mmrFilter, useMmrFilter], requestLoad]) => {
+				console.debug('[bgs-meta-hero] loading meta hero stats', timeFilter, mmrFilter, useMmrFilter);
 				const mmr = useMmrFilter ? mmrFilter : 100;
 				const stats = await this.access.loadMetaHeroStats(timeFilter, mmr);
 				this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_META_HERO_STATS, stats);

@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { BgsHeroTier } from '@firestone-hs/bgs-global-stats';
 import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
 import { BgsGlobalHeroStat, BgsHeroAnomalyStat } from '@firestone-hs/bgs-global-stats/dist/stats-v2/bgs-hero-stat';
 import { ALL_BG_RACES, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
@@ -144,7 +144,7 @@ export const buildTiers = (
 
 export const buildHeroStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalHeroStat>[],
-	mmrPercentile: MmrPercentile['percentile'],
+	// mmrPercentile: MmrPercentile['percentile'],
 	tribes: readonly Race[],
 	anomalies: readonly string[] | null,
 	useConservativeEstimate: boolean,
@@ -152,9 +152,11 @@ export const buildHeroStats = (
 	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {
-	mmrPercentile = useMmrFilter ? mmrPercentile : 100;
+	// mmrPercentile = useMmrFilter ? mmrPercentile : 100;
 	anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
-	const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
+	// const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
+	// Files are split by MMR already
+	const statsForMmr = stats ?? [];
 	//console.debug('statsForMmr', statsForMmr, mmrPercentile, stats, tribes, anomalies);
 	const result1 = statsForMmr.filter((stat) => {
 		// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out

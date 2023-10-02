@@ -41,12 +41,15 @@ export class MetaHeroStatsEffects {
 				const mmrPercentile = percentileFilter;
 				const tribes = tribesFilter;
 				const timePeriod = timeFilter;
-				const apiResult: BgsHeroStatsV2 = await this.access.loadMetaHeroStats(timePeriod);
+				const apiResult: BgsHeroStatsV2 = await this.access.loadMetaHeroStats(timePeriod, mmrPercentile);
 				const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
 					apiResult?.heroStats ?? [],
-					mmrPercentile,
+					// mmrPercentile,
 					tribes,
+					[],
 					true,
+					true,
+					false,
 					this.allCards,
 				);
 				console.debug('result', result);
