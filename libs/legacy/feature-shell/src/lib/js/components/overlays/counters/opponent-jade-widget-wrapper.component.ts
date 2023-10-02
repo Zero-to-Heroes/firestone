@@ -40,7 +40,7 @@ export class OpponentJadeWidgetWrapperComponent
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck.jadeGolemSize > 0 ||
 			state.opponentDeck?.hasRelevantCard(
-				(cardId: string) => this.allCards.getCard(cardId)?.referencedTags.includes('JADE_GOLEM'),
+				(cardId: string) => this.allCards.getCard(cardId)?.referencedTags?.includes('JADE_GOLEM'),
 				{ onlyLimited: true },
 			);
 		super.ngAfterContentInit();

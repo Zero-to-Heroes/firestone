@@ -39,7 +39,7 @@ export class PlayerJadeWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.playerJadeGolemCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(
-				(cardId: string) => this.allCards.getCard(cardId)?.referencedTags.includes('JADE_GOLEM'),
+				(cardId: string) => this.allCards.getCard(cardId)?.referencedTags?.includes('JADE_GOLEM'),
 				{ onlyLimited: prefValue === 'limited' },
 			);
 		super.ngAfterContentInit();
