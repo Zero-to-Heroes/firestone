@@ -18,6 +18,13 @@ export const TREANT_CARD_IDS = [
 	CardIds.LivingMana_ManaTreantToken,
 	CardIds.WitchwoodApple_TreantToken,
 	CardIds.ForestSeedlings_TreantToken,
+	CardIds.TreantLegacy,
+	CardIds.TreantVanilla,
+	CardIds.Treant_TreantVanilla,
+	CardIds.BloodTreant,
+	CardIds.Cenarius_TreantLegacyToken,
+	CardIds.RunicCarvings_TreantTotemToken,
+	CardIds.SoulOfTheForest_TreantLegacyToken,
 ];
 
 const PROCESSORS = [
