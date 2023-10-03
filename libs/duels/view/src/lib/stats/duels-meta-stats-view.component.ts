@@ -87,7 +87,9 @@ export class DuelsMetaStatsViewComponent extends AbstractSubscriptionComponent i
 				switch (heroSort) {
 					case 'games-played':
 						return buildMonoTier(
-							[...filteredStats].sort(sortByProperties((s) => [-(s.playerRunsPlayed ?? 0)])),
+							[...filteredStats].sort(
+								sortByProperties((s) => [-(s.playerRunsPlayed ?? 0), -(s.globalRunsPlayed ?? 0)]),
+							),
 						);
 					case 'player-winrate':
 						return buildMonoTier(
