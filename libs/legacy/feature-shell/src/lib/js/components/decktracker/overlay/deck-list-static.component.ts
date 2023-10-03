@@ -81,7 +81,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 
 	@Input() set collection(value: readonly (Card | SetCard)[]) {
 		if (!value?.length) {
-			this.normalizedCollection$$?.next([]);
+			this.normalizedCollection$$?.next(null);
 			return;
 		}
 
@@ -104,7 +104,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 
 	private deckstring$$ = new BehaviorSubject<string>(null);
 	private cards$$ = new BehaviorSubject<readonly MinimalCard[]>([]);
-	private normalizedCollection$$ = new BehaviorSubject<readonly Card[]>([]);
+	private normalizedCollection$$ = new BehaviorSubject<readonly Card[]>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -164,7 +164,10 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				const card = this.allCards.getCard(miniCard.cardId);
 				const sideboard = this.buildSideboard(miniCard.sideboard);
 				const internalEntityId = uuid();
-				const inCollection = getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
+				const inCollection =
+					collection == null
+						? true
+						: getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
