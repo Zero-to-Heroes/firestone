@@ -20,7 +20,15 @@ export class DuelsMetaHeroStatsAccessService {
 			timeFilter,
 		);
 		const result: DuelsStat | null = await this.api.callGetApi(url);
-		console.debug('[duels-state-builder] loaded global stats', result, url, mmrForBackwardCompability, timeFilter);
+		console.debug(
+			'[duels-state-builder] loaded global stats',
+			result,
+			result?.heroes?.map((h) => h.totalMatches).reduce((a, b) => a + b, 0),
+			result?.heroes?.map((h) => h.totalRuns).reduce((a, b) => a + b, 0),
+			url,
+			mmrForBackwardCompability,
+			timeFilter,
+		);
 		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
 		return result;
 	}
