@@ -519,6 +519,8 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
+import { ConstructedMetaDeckDetailsViewComponent } from '@components/decktracker/main/constructed-meta-deck-details-view.component';
+import { ConstructedMetaDeckDetailsComponent } from '@components/decktracker/main/constructed-meta-deck-details.component';
 import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
@@ -1285,6 +1287,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DecktrackerDeckDetailsComponent,
 		ConstructedMetaDecksComponent,
 		ConstructedMetaDeckSummaryComponent,
+		ConstructedMetaDeckDetailsComponent,
+		ConstructedMetaDeckDetailsViewComponent,
 		ConstructedMetaArchetypesComponent,
 		ConstructedMetaArchetypeComponent,
 		DeckWinrateMatrixComponent,

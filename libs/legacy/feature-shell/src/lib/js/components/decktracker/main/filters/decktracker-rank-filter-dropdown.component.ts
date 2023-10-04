@@ -99,6 +99,7 @@ export class DecktrackerRankFilterDropdownComponent
 							'ladder-ranking',
 							'constructed-deckbuilder',
 							'constructed-meta-decks',
+							'constructed-meta-deck-details',
 							'constructed-meta-archetypes',
 						].includes(currentView),
 					};

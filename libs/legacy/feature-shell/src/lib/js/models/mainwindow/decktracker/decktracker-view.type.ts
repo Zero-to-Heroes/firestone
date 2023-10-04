@@ -5,6 +5,7 @@ export type DecktrackerViewType =
 	| 'replays'
 	| 'deck-details'
 	| 'constructed-meta-decks'
+	| 'constructed-meta-deck-details'
 	| 'constructed-meta-archetypes'
 	| 'constructed-deckbuilder';
 

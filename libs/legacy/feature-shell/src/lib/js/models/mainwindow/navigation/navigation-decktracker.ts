@@ -6,6 +6,7 @@ export class NavigationDecktracker {
 	readonly menuDisplayType: string = 'menu';
 	readonly selectedDeckstring: string;
 	readonly selectedVersionDeckstring: string;
+	readonly selectedConstructedMetaDeck: string;
 
 	public update(base: Partial<NonFunctionProperties<NavigationDecktracker>>): NavigationDecktracker {
 		return Object.assign(new NavigationDecktracker(), this, base);

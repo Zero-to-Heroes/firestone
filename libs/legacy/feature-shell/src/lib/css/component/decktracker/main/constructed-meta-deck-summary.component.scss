@@ -171,11 +171,35 @@
 			align-items: center;
 		}
 
+		.view-icon {
+			height: 100%;
+			aspect-ratio: 4/3;
+			align-items: center;
+		}
+
 		.text {
 			margin-left: 15px;
 		}
 
-		&:hover {
+		.premium-lock {
+			display: none;
+			height: 25px;
+			aspect-ratio: 2;
+			margin-right: -10px;
+		}
+
+		&.locked {
+			color: var(--default-title-color);
+
+			.premium-lock {
+				display: flex;
+			}
+			.view-icon {
+				display: none;
+			}
+		}
+
+		&:hover:not(.locked) {
 			color: var(--color-1);
 		}
 	}

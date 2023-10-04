@@ -26,7 +26,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				*ngFor="let menuItem of menuItems"
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ selected: selectedTab === menuItem.id, disabled: menuItem.comingSoon }"
+				[ngClass]="{
+					selected: selectedTab === menuItem.id || menuItem.subMenus?.includes(selectedTab),
+					disabled: menuItem.comingSoon
+				}"
 				premiumSetting
 				[premiumSettingEnabled]="menuItem.isPremium"
 			>
@@ -50,7 +53,7 @@ export class MenuSelectionDecktrackerComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
-	selectedTab$: Observable<string>;
+	selectedTab$: Observable<DecktrackerViewType>;
 
 	menuItems: readonly MenuItem[] = [
 		{
@@ -60,6 +63,7 @@ export class MenuSelectionDecktrackerComponent
 		{
 			id: 'constructed-meta-decks',
 			translationKey: 'app.decktracker.menu.meta-decks-header',
+			subMenus: ['constructed-meta-deck-details'],
 		},
 		{
 			id: 'constructed-meta-archetypes',
@@ -114,6 +118,7 @@ export class MenuSelectionDecktrackerComponent
 interface MenuItem {
 	readonly id: DecktrackerViewType;
 	readonly translationKey: string;
+	readonly subMenus?: readonly DecktrackerViewType[];
 	readonly isPremium?: boolean;
 	readonly comingSoon?: boolean;
 }

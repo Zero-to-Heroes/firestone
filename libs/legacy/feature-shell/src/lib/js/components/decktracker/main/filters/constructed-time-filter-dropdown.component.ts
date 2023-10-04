@@ -73,7 +73,11 @@ export class ConstructedTimeFilterDropdownComponent
 					filter: filter,
 					options: options,
 					placeholder: options.find((option) => option.value === filter)?.label,
-					visible: ['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+					visible: [
+						'constructed-meta-decks',
+						'constructed-meta-deck-details',
+						'constructed-meta-archetypes',
+					].includes(currentView),
 				};
 			}),
 		);

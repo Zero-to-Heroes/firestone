@@ -281,6 +281,10 @@ import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/
 import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktracker/constructed-deckbuilder-import-deck-processor';
 import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
 import { ConstructedEjectDeckVersionProcessor } from './processors/decktracker/constructed-eject-deck-version-processor';
+import {
+	ConstructedMetaDeckDetailsShowEvent,
+	ConstructedMetaDeckDetailsShowProcessor,
+} from './processors/decktracker/constructed-meta-deck-show-details';
 import { ConstructedNewDeckVersionProcessor } from './processors/decktracker/constructed-new-deck-version-processor';
 import { ConstructedToggleDeckVersionStatsProcessor } from './processors/decktracker/constructed-toggle-deck-version-stats-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
@@ -734,6 +738,7 @@ export class MainWindowStoreService {
 			[ConstructedNewDeckVersionEvent.eventName(), new ConstructedNewDeckVersionProcessor(this.prefs)],
 			[ConstructedEjectDeckVersionEvent.eventName(), new ConstructedEjectDeckVersionProcessor(this.prefs)],
 			[ConstructedToggleDeckVersionStatsEvent.eventName(), new ConstructedToggleDeckVersionStatsProcessor()],
+			[ConstructedMetaDeckDetailsShowEvent.eventName(), new ConstructedMetaDeckDetailsShowProcessor()],
 			// Battlegrounds
 			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],
 			[BgsBestStatsLoadedEvent.eventName(), new BgsBestStatsLoadedProcessor()],

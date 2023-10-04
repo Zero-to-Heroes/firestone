@@ -1,0 +1,91 @@
+:host {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	color: var(--default-text-color);
+}
+
+.constructed-meta-deck-details-view {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	height: 100%;
+	width: 100%;
+	position: relative;
+	padding: 0;
+
+	.cartouche {
+		display: flex;
+		border: 1px solid var(--default-title-color);
+		border-radius: 15px;
+		background: rgba(255, 255, 255, 0.12);
+		padding: 10px;
+		align-items: center;
+		margin-bottom: 50px;
+
+		.player-class {
+			height: 10vh;
+			aspect-ratio: 1;
+			position: relative;
+			margin-right: 15px;
+
+			.icon {
+				height: 100%;
+			}
+		}
+
+		.general-info {
+			display: flex;
+			flex-direction: column;
+
+			.deck-name {
+				color: var(--default-title-color);
+				font-size: 1.5em;
+				margin-bottom: 0.5em;
+			}
+
+			.label-value {
+				display: flex;
+				margin-bottom: 5px;
+
+				.label {
+					font-size: 12px;
+					margin-right: 5px;
+				}
+
+				.value {
+					font-size: 12px;
+					font-weight: bold;
+				}
+			}
+		}
+
+		.buttons {
+			margin-left: 50px;
+
+			.copy-deckstring {
+				width: 200px;
+			}
+		}
+	}
+
+	.details-container {
+		.tabs {
+			display: flex;
+			list-style: none;
+
+			.tab {
+				&.selected {
+					color: var(--default-title-color);
+				}
+			}
+		}
+	}
+}
+// @media (max-width: 1690px) {
+// 	.constructed-meta-deck-summary {
+// 		.name {
+// 			display: none;
+// 		}
+// 	}
+// }

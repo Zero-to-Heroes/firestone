@@ -88,6 +88,7 @@ export class DecktrackerFormatFilterDropdownComponent
 							'deck-details',
 							'constructed-deckbuilder',
 							'constructed-meta-decks',
+							'constructed-meta-deck-details',
 							'constructed-meta-archetypes',
 						].includes(currentView),
 					};
