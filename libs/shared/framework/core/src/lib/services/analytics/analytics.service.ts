@@ -19,6 +19,8 @@ export class AnalyticsService {
 				apiHost: 'https://apps.zerotoheroes.com',
 			});
 			window['plausibleInstance'] = this.plausible;
+			this.plausible.enableAutoPageviews();
+			this.plausible.enableAutoOutboundTracking();
 		} else {
 			this.plausible = window['plausibleInstance'];
 		}

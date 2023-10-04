@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../js/services/debug.service';
 import { PreferencesService } from '../../js/services/preferences.service';
 import { AppBootstrapService } from './app-bootstrap.service';
@@ -16,6 +16,7 @@ export class DaemonComponent {
 		private readonly debug: DebugService,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly analytics: AnalyticsService,
 	) {
 		this.init();
 	}
@@ -45,6 +46,7 @@ export class DaemonComponent {
 				this.injector.get(AppBootstrapService).init();
 			});
 		}
+		this.analytics.trackPageView('app-root');
 	}
 
 	private isLaunchedByGameEvent(): boolean {
