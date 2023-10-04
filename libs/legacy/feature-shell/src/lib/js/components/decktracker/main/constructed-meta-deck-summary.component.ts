@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
-import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
@@ -84,6 +84,18 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 					[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
 				></div>
 			</div>
+			<!-- <div class="button view-details" (click)="viewDetails()" premiumSetting>
+				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#lock" />
+					</svg>
+				</div>
+				<div
+					class="text"
+					[owTranslate]="'app.decktracker.meta.deck.view-details-button'"
+					[helpTooltip]="'app.decktracker.meta.deck.view-details-button-tooltip' | owTranslate"
+				></div>
+			</div> -->
 			<copy-deckstring
 				class="button copy-deckstring"
 				[deckstring]="deckstring"
@@ -93,20 +105,21 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 			></copy-deckstring>
 		</div>
 		<div class="deck-details" *ngIf="showDetails$ | async">
-			<div class="cards-containers">
+			<div class="cards-containers" *ngIf="{ collection: collection$ | async } as value">
 				<div class="container core">
 					<div class="title" [owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="collection">
+					<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="value.collection">
 					</deck-list-static>
 				</div>
 				<div class="container removed">
 					<div class="title" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="removedCards" [collection]="collection">
+					<deck-list-static class="cards" [cards]="removedCards" [collection]="value.collection">
 					</deck-list-static>
 				</div>
 				<div class="container added">
 					<div class="title" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="addedCards" [collection]="collection"> </deck-list-static>
+					<deck-list-static class="cards" [cards]="addedCards" [collection]="value.collection">
+					</deck-list-static>
 				</div>
 			</div>
 		</div>
@@ -115,6 +128,7 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 })
 export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showDetails$: Observable<boolean>;
+	collection$: Observable<readonly Card[]>;
 
 	classTooltip: string;
 	classIcon: string;
@@ -135,12 +149,17 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	@Input() set archetypes(value: readonly ArchetypeStat[]) {
 		this.archetypes$$.next(value);
 	}
-	@Input() collection: readonly Card[];
+
+	@Input() set collection(value: readonly Card[]) {
+		this.collection$$.next(value);
+	}
+
 	@Input() showStandardDeviation: boolean;
 
 	private showDetails$$ = new BehaviorSubject<boolean>(false);
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
 	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
+	private collection$$ = new BehaviorSubject<readonly Card[]>([]);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -156,30 +175,20 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		this.showDetails$ = this.showDetails$$.asObservable();
 		combineLatest([this.deck$$, this.archetypes$$])
 			.pipe(
+				// debounceTime(300),
 				filter(([deck]) => !!deck?.decklist?.length),
 				this.mapData(([deck, archetypes]) => {
 					const archetype = archetypes.find((arch) => arch.id === deck.archetypeId);
 					return { deck, archetype };
 				}),
-				// distinctUntilChanged(
-				// 	(a, b) =>
-				// 		a.deck.decklist === b.deck.decklist &&
-				// 		a.archetype?.id === b.archetype?.id &&s
-				// 		a.deck.winrate === b.deck.winrate,
-				// ),
 			)
 			.subscribe(({ deck, archetype }) => {
-				const debug = deck.archetypeName === 'xl-control-priest';
-				if (debug) {
-					console.debug('setting deck', deck, archetype, decode(deck.decklist));
-				}
 				this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${deck.heroCardClass}.png`;
 				this.classTooltip = this.i18n.translateString(`global.class.${deck.heroCardClass}`);
 				this.deckName =
 					this.i18n.translateString(`archetype.${deck.archetypeName}`) === `archetype.${deck.archetypeName}`
 						? deck.archetypeName
 						: this.i18n.translateString(`archetype.${deck.archetypeName}`);
-				this.dustCost = deck.dustCost;
 				this.winrate = this.buildPercents(deck.winrate);
 				this.totalGames = deck.totalGames;
 				this.removedCards = buildCardVariations(
@@ -195,6 +204,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				);
 				this.standardDeviation = `±${this.buildPercents(3 * deck.standardDeviation)}`;
 				this.deckstring = deck.decklist;
+				this.dustCost = deck.dustCost;
 			});
 	}
 
@@ -215,6 +225,11 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 			`https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`,
 		);
 		this.analytics.trackEvent('meta-deck-view-online', { deckstring: this.deckstring });
+	}
+
+	viewDetails() {
+		console.debug('viewing deck details');
+		this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
 	}
 }
 

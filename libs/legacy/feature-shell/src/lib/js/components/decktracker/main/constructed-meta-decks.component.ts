@@ -4,9 +4,9 @@ import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, tap } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { Card } from '../../../models/card';
-import { deckDustCost } from '../../../services/collection/collection-utils';
+import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -128,23 +128,36 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
+		const ownedCardIds$ = this.collection$.pipe(
+			this.mapData((collection) => {
+				const ownedByCardId = collection.map((card) => ({
+					cardId: card.id,
+					owned: getOwnedForDeckBuilding(card.id, collection, this.allCards),
+				}));
+				const result: { [cardId: string]: number } = {};
+				for (const card of ownedByCardId) {
+					result[card.cardId] = card.owned;
+				}
+				return result;
+			}),
+		);
 		this.decks$ = combineLatest([
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
-			this.collection$,
+			ownedCardIds$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
 			),
 		]).pipe(
 			filter(([stats, sortCriteria]) => !!stats?.dataPoints),
-			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize]]) =>
+			this.mapData(([stats, sortCriteria, ownedCardIds, [conservativeEstimate, sampleSize]]) =>
 				stats.deckStats
-					.map((stat) => this.enhanceStat(stat, collection, conservativeEstimate))
+					.map((stat) => this.enhanceStat(stat, ownedCardIds, conservativeEstimate))
 					.filter((stat) => stat.totalGames >= sampleSize)
 					.sort((a, b) => this.sortDecks(a, b, sortCriteria)),
 			),
-			tap((decks) => console.debug('[meta-decks] emitting decks', decks)),
+			// tap((decks) => console.debug('[meta-decks] emitting decks', decks)),
 		);
 		this.archetypes$ = this.store.constructedMetaDecks$().pipe(
 			filter((stats) => !!stats?.dataPoints),
@@ -167,7 +180,11 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		return item.decklist;
 	}
 
-	private enhanceStat(stat: DeckStat, collection: readonly Card[], conservativeEstimate: boolean): EnhancedDeckStat {
+	private enhanceStat(
+		stat: DeckStat,
+		ownedByCardId: { [cardId: string]: number },
+		conservativeEstimate: boolean,
+	): EnhancedDeckStat {
 		const deckDefinition = decode(stat.decklist);
 		const deckCards = [...deckDefinition.cards, ...(deckDefinition.sideboards ?? []).flatMap((s) => s.cards)].map(
 			(pair) => ({
@@ -175,11 +192,20 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				card: this.allCards.getCardFromDbfId(pair[0]),
 			}),
 		);
-		const dustCost = deckDustCost(
-			deckCards.map((c) => ({ quantity: c.quantity, cardId: c.card.id })),
-			collection,
-			this.allCards,
-		);
+		// const dustCost = deckDustCost(
+		// 	deckCards.map((c) => ({ quantity: c.quantity, cardId: c.card.id })),
+		// 	collection,
+		// 	this.allCards,
+		// );
+		const dustCost = deckCards
+			.map((c) => ({ quantity: c.quantity, cardId: c.card.id }))
+			.map((card) => {
+				const owned = ownedByCardId[card.cardId] ?? 0;
+				const missingQuantity = Math.max(0, card.quantity - owned);
+				const rarity = this.allCards.getCard(card.cardId)?.rarity;
+				return dustToCraftFor(rarity) * missingQuantity;
+			})
+			.reduce((a, b) => a + b, 0);
 		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
 		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
 		const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);
