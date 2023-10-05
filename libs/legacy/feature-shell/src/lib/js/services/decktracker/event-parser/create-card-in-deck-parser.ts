@@ -70,8 +70,8 @@ export class CreateCardInDeckParser implements EventParser {
 				// Update: see ...
 				entityId: entityId,
 				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
-				manaCost: cardData ? cardData.cost : undefined,
-				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+				manaCost: cardData?.cost,
+				rarity: cardData?.rarity?.toLowerCase(),
 				creatorCardId: gameEvent.additionalData.creatorCardId,
 				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 				positionFromBottom: positionFromBottom,
@@ -80,6 +80,7 @@ export class CreateCardInDeckParser implements EventParser {
 			} as DeckCard)
 			.update({
 				relatedCardIds: this.buildRelatedCardIds(newCardId, deck, card?.relatedCardIds),
+				manaCost: this.buildKnownUpdatedManaCost(card, gameEvent.additionalData.creatorCardId),
 			});
 
 		console.debug('[create-card-in-deck]', 'adding card', card);
@@ -101,6 +102,17 @@ export class CreateCardInDeckParser implements EventParser {
 
 	event(): string {
 		return GameEvent.CREATE_CARD_IN_DECK;
+	}
+
+	private buildKnownUpdatedManaCost(card: DeckCard, creatorCardId: string): number {
+		switch (creatorCardId) {
+			case CardIds.ElixirOfVigor:
+				return 1;
+			case CardIds.ElixirOfVigorTavernBrawl:
+				return 2;
+			default:
+				return card.manaCost;
+		}
 	}
 
 	private buildRelatedCardIds(
