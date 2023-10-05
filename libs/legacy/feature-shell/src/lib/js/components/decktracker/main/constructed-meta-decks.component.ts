@@ -130,35 +130,24 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
-		const ownedCardIds$ = this.collection$.pipe(
-			this.mapData((collection) => {
-				const ownedByCardId = collection.map((card) => ({
-					cardId: card.id,
-					owned: getOwnedForDeckBuilding(card.id, collection, this.allCards),
-				}));
-				const result: { [cardId: string]: number } = {};
-				for (const card of ownedByCardId) {
-					result[card.cardId] = card.owned;
-				}
-				return result;
-			}),
-		);
+		const ownedCardIdsCache: { [cardId: string]: number } = {};
 		this.decks$ = combineLatest([
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
-			ownedCardIds$,
+			this.collection$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
 			),
 		]).pipe(
-			this.mapData(([stats, sortCriteria, ownedCardIds, [conservativeEstimate, sampleSize]]) =>
-				stats?.deckStats
+			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize]]) => {
+				return stats?.deckStats
 					.filter((stat) => stat.totalGames >= sampleSize)
-					.map((stat) => this.enhanceStat(stat, ownedCardIds, conservativeEstimate))
-					.sort((a, b) => this.sortDecks(a, b, sortCriteria)),
-			),
-			// tap((decks) => console.debug('[meta-decks] emitting decks', decks)),
+					.map((stat) => {
+						return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
+					})
+					.sort((a, b) => this.sortDecks(a, b, sortCriteria));
+			}),
 		);
 		this.archetypes$ = this.store
 			.constructedMetaDecks$()
@@ -183,6 +172,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	private enhanceStat(
 		stat: DeckStat,
 		ownedByCardId: { [cardId: string]: number },
+		collection: readonly Card[],
 		conservativeEstimate: boolean,
 	): EnhancedDeckStat {
 		const deckDefinition = decode(stat.decklist);
@@ -195,7 +185,12 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		const dustCost = deckCards
 			.map((c) => ({ quantity: c.quantity, cardId: c.card.id }))
 			.map((card) => {
-				const owned = ownedByCardId[card.cardId] ?? 0;
+				let owned = ownedByCardId[card.cardId];
+				// Cache not populated yet
+				if (owned == null) {
+					owned = getOwnedForDeckBuilding(card.cardId, collection, this.allCards) ?? 0;
+					ownedByCardId[card.cardId] = owned;
+				}
 				const missingQuantity = Math.max(0, card.quantity - owned);
 				const rarity = this.allCards.getCard(card.cardId)?.rarity;
 				return dustToCraftFor(rarity) * missingQuantity;
@@ -215,7 +210,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			conservativeWinrate: conservativeWinrate,
 			winrate: winrateToUse,
 			sideboards: deckDefinition.sideboards,
-		} as any;
+		};
 	}
 
 	private sortDecks(a: EnhancedDeckStat, b: EnhancedDeckStat, sortCriteria: SortCriteria<ColumnSortType>): number {

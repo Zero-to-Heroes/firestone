@@ -57,8 +57,8 @@ export class ConstructedMetaDeckDetailsViewComponent {
 	deckstring?: string;
 
 	@Input() set input(value: ConstructedDeckDetails) {
-		console.debug('[debug] input', value);
-		const isDeck = value.type === 'deck';
+		// console.debug('[debug] input', value);
+		const isDeck = value?.type === 'deck';
 		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value?.heroCardClass}.png`;
 		this.classTooltip = this.i18n.translateString(`global.class.${value?.heroCardClass}`);
 		this.deckName = isDeck

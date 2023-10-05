@@ -55,7 +55,7 @@ export class ConstructedRankFilterDropdownComponent
 	ngAfterContentInit() {
 		this.filter$ = combineLatest(
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksRankFilter),
+			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksRankFilter2),
 		).pipe(
 			filter(([[currentView], [filter]]) => !!currentView),
 			this.mapData(([[currentView], [filter]]) => {
@@ -96,7 +96,7 @@ export class ConstructedRankFilterDropdownComponent
 		this.stateUpdater.next(
 			new GenericPreferencesUpdateEvent((prefs) => ({
 				...prefs,
-				constructedMetaDecksRankFilter: (option as DeckRankOption).value,
+				constructedMetaDecksRankFilter2: (option as DeckRankOption).value,
 			})),
 		);
 	}
