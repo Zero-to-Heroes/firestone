@@ -153,8 +153,8 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			filter(([stats, sortCriteria]) => !!stats?.dataPoints),
 			this.mapData(([stats, sortCriteria, ownedCardIds, [conservativeEstimate, sampleSize]]) =>
 				stats.deckStats
-					.map((stat) => this.enhanceStat(stat, ownedCardIds, conservativeEstimate))
 					.filter((stat) => stat.totalGames >= sampleSize)
+					.map((stat) => this.enhanceStat(stat, ownedCardIds, conservativeEstimate))
 					.sort((a, b) => this.sortDecks(a, b, sortCriteria)),
 			),
 			// tap((decks) => console.debug('[meta-decks] emitting decks', decks)),
@@ -192,11 +192,6 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				card: this.allCards.getCardFromDbfId(pair[0]),
 			}),
 		);
-		// const dustCost = deckDustCost(
-		// 	deckCards.map((c) => ({ quantity: c.quantity, cardId: c.card.id })),
-		// 	collection,
-		// 	this.allCards,
-		// );
 		const dustCost = deckCards
 			.map((c) => ({ quantity: c.quantity, cardId: c.card.id }))
 			.map((card) => {
@@ -206,8 +201,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				return dustToCraftFor(rarity) * missingQuantity;
 			})
 			.reduce((a, b) => a + b, 0);
-		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
-		const heroCardClass = heroCard.classes?.[0]?.toLowerCase() ?? 'neutral';
+		const heroCardClass = stat.playerClass?.toLowerCase();
 		const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);
 		const conservativeWinrate: number = stat.winrate - 3 * standardDeviation;
 		const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
