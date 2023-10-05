@@ -3,7 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { DeckDefinition } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
@@ -148,19 +148,7 @@ export class DuelsStateBuilderService {
 	public async loadBuckets(): Promise<readonly DuelsBucketsData[]> {
 		const result: readonly DuelsBucketsData[] = await this.api.callGetApi(DUELS_BUCKETS_URL);
 		console.log('[duels-state-builder] loaded buckets data', result?.length);
-		return (
-			result
-				?.map(
-					(bucket) =>
-						({
-							...bucket,
-							bucketClasses: bucket.bucketClasses.map(
-								(bucketClass) => CardClass[bucketClass as any as string],
-							),
-						} as DuelsBucketsData),
-				)
-				.filter((bucket) => bucket.bucketId !== CardIds.GroupLearningTavernBrawl) ?? []
-		);
+		return result.filter((bucket) => bucket.bucketId !== CardIds.GroupLearningTavernBrawl) ?? [];
 	}
 
 	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {

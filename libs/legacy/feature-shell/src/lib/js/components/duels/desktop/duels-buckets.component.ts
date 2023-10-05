@@ -59,14 +59,6 @@ export const DEFAULT_CARD_HEIGHT = 221;
 				>
 					<div *ngFor="let bucket of scroll.viewPortItems; trackBy: trackByBucketId" class="bucket">
 						<div class="bucket-name">{{ bucket.bucketName }}</div>
-						<!-- <div class="class-images">
-							<img
-								*ngFor="let bucketClass of bucket.bucketClasses"
-								[src]="bucketClass.image"
-								class="bucket-class"
-								[helpTooltip]="bucketClass.name"
-							/>
-						</div> -->
 						<div class="bucket-cards">
 							<duels-bucket-cards-list [cards]="bucket.bucketCards"></duels-bucket-cards-list>
 						</div>
@@ -113,37 +105,25 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 				this.mapData(([buckets]) => {
 					return buckets.map((bucket) => {
 						const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
-						const bucketCards = bucket.cards
-							.map((card) => {
-								const totalBuckets = buckets.filter((b) =>
-									b.cards.map((c) => c.cardId).includes(card.cardId),
-								).length;
-								const refCard = this.allCards.getCard(card.cardId);
-								const bucketCard: BucketCard = {
-									cardId: card.cardId,
-									cardName: refCard.name,
-									manaCost: refCard.cost,
-									rarity: refCard.rarity?.toLowerCase(),
-									offeringRate: card.totalOffered / totalCardsOffered,
-									totalBuckets: totalBuckets,
-								};
-								return bucketCard;
-							})
-							.sort(
-								(a, b) =>
-									a.manaCost - b.manaCost ||
-									(a.cardName?.toLowerCase() < b.cardName?.toLowerCase() ? -1 : 1),
-							);
+						const bucketCards = bucket.cards.map((card) => {
+							const totalBuckets = buckets.filter((b) =>
+								b.cards.map((c) => c.cardId).includes(card.cardId),
+							).length;
+							const refCard = this.allCards.getCard(card.cardId);
+							const bucketCard: BucketCard = {
+								cardId: card.cardId,
+								cardName: refCard.name,
+								manaCost: refCard.cost,
+								rarity: refCard.rarity?.toLowerCase(),
+								classes: refCard.classes,
+								offeringRate: card.totalOffered / totalCardsOffered,
+								totalBuckets: totalBuckets,
+							};
+							return bucketCard;
+						});
 						const bucketData: BucketData = {
 							bucketId: bucket.bucketId,
 							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
-							bucketClasses: bucket.bucketClasses.map((bucketClass) => ({
-								class: bucketClass,
-								name: this.i18n.translateString(`global.class.${CardClass[bucketClass].toLowerCase()}`),
-								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${CardClass[
-									bucketClass
-								].toLowerCase()}.png`,
-							})),
 							bucketCardIds: bucketCards.map((c) => c.cardId),
 							bucketCards: bucketCards,
 						};
@@ -164,6 +144,7 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 							return (
 								!refCard.classes?.length ||
 								refCard.classes.includes(CardClass[CardClass.NEUTRAL]) ||
+								!activeClassFilters.length ||
 								activeClassFilters.some((c: string) => refCard.classes.includes(c.toUpperCase()))
 							);
 						});
@@ -184,13 +165,6 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 						};
 					})
 					.filter((bucket) => !!bucket)
-					.filter(
-						(bucket) =>
-							!activeClassFilters.length ||
-							bucket.bucketClasses.some((bucketClass) =>
-								activeClassFilters.includes(CardClass[bucketClass.class].toLowerCase()),
-							),
-					)
 					.map((bucket) =>
 						!searchString?.length ? bucket : this.highlightCardsInBucket(bucket, searchString),
 					)

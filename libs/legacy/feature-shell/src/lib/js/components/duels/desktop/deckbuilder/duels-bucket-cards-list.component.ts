@@ -7,8 +7,8 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
+import { sortByProperties } from '@firestone/shared/framework/common';
 import { SetCard } from '@models/set';
-import { sortByProperties } from '../../../../services/utils';
 
 @Component({
 	selector: 'duels-bucket-cards-list',
@@ -32,7 +32,14 @@ import { sortByProperties } from '../../../../services/utils';
 export class DuelsBucketCardsListComponent {
 	@Output() cardClick = new EventEmitter<BucketCard>();
 	@Input() set cards(value: readonly BucketCard[]) {
-		this._cards = [...value].sort(sortByProperties((c: BucketCard) => [c.dimmed]));
+		this._cards = [...value].sort(
+			sortByProperties((c: BucketCard) => [
+				c.dimmed,
+				!c.classes.length || c.classes[0] === 'NEUTRAL' ? 'ZZZZ' : c.classes[0],
+				c.manaCost,
+				c.cardName,
+			]),
+		);
 	}
 
 	@Input() collection: readonly SetCard[];
@@ -56,6 +63,7 @@ export interface BucketCard {
 	readonly cardName: string;
 	readonly manaCost: number;
 	readonly rarity: string;
+	readonly classes: readonly string[];
 	readonly offeringRate: number;
 	readonly totalBuckets: number;
 	readonly dimmed?: boolean;

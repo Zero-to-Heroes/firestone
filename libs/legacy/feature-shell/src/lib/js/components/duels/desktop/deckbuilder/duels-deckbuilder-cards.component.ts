@@ -148,14 +148,6 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								[attr.data-bucket-id]="bucket.bucketId"
 							>
 								<div class="bucket-name">{{ bucket.bucketName }}</div>
-								<!-- <div class="class-images">
-									<img
-										*ngFor="let bucketClass of bucket.bucketClasses"
-										[src]="bucketClass.image"
-										class="bucket-class"
-										[helpTooltip]="bucketClass.name"
-									/>
-								</div> -->
 								<button
 									class="filter-button"
 									inlineSVG="assets/svg/created_by.svg"
@@ -238,12 +230,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 			)
 			.pipe(
 				this.mapData(([buckets, currentClasses]) => {
-					// const candidateBuckets: readonly DuelsBucketsData[] = buckets.filter(
-					// 	(bucket) =>
-					// 		bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
-					// 		bucket.bucketClasses.includes(CardClass.DEATHKNIGHT) ||
-					// 		(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
-					// );
 					return buckets.map((bucket) => {
 						const cardsForClass = bucket.cards.filter((card) => {
 							const refCard = this.allCards.getCard(card.cardId);
@@ -265,6 +251,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 									cardName: refCard.name,
 									manaCost: refCard.cost,
 									rarity: refCard.rarity?.toLowerCase(),
+									classes: refCard.classes,
 									offeringRate: card.totalOffered / totalCardsOffered,
 									totalBuckets: totalBuckets,
 								};
@@ -278,13 +265,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						const bucketData: BucketData = {
 							bucketId: bucket.bucketId,
 							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
-							bucketClasses: bucket.bucketClasses.map((bucketClass) => ({
-								class: bucketClass,
-								name: this.i18n.translateString(`global.class.${CardClass[bucketClass].toLowerCase()}`),
-								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${CardClass[
-									bucketClass
-								].toLowerCase()}.png`,
-							})),
 							bucketCardIds: bucketCards.map((c) => c.cardId),
 							bucketCards: bucketCards,
 						};
@@ -769,15 +749,8 @@ interface SearchFilters {
 export interface BucketData {
 	readonly bucketId: string;
 	readonly bucketName: string;
-	readonly bucketClasses: readonly BucketClass[];
 	readonly bucketCards: readonly BucketCard[];
 	readonly bucketCardIds: readonly string[];
-}
-
-export interface BucketClass {
-	readonly class: CardClass;
-	readonly name: string;
-	readonly image: string;
 }
 
 interface ReferenceCardWithBucket extends ReferenceCard {

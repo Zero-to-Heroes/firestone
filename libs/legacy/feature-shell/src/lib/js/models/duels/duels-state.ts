@@ -1,6 +1,6 @@
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
-import { CardClass, DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
+import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsConfig } from '@models/duels/duels-config';
@@ -83,7 +83,6 @@ export interface TreasureSelection {
 export interface DuelsBucketsData {
 	readonly bucketId: string;
 	readonly bucketName: string;
-	readonly bucketClasses: readonly CardClass[];
 	readonly cards: readonly BucketCard[];
 }
 
