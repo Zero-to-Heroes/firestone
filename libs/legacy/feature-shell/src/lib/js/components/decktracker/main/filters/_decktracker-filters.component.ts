@@ -113,8 +113,8 @@ export class DecktrackerFiltersComponent
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
 			.pipe(
 				filter(([currentView]) => !!currentView),
-				this.mapData(
-					([currentView]) => !['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+				this.mapData(([currentView]) =>
+					['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
 				),
 			);
 		this.showInfo$ = this.store
