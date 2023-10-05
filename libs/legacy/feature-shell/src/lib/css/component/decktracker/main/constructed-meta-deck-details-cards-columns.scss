@@ -12,17 +12,12 @@
 		flex-shrink: 0;
 	}
 
-	&.winrate {
+	&.data {
 		margin-left: 10px;
 		width: 140px;
 		max-width: 260px;
 		flex-basis: 33%;
 		flex-grow: 1;
 		flex-shrink: 1;
-	}
-
-	&.kept {
-		margin-left: 10px;
-		width: 140px;
 	}
 }

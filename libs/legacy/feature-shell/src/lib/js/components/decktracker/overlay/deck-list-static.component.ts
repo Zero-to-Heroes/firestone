@@ -85,26 +85,30 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 			return;
 		}
 
+		const normalizedValues: { [cardId: string]: Card } = {};
 		if ((value[0] as SetCard).ownedNonPremium !== undefined) {
-			const normalizedValue = value.map((card: SetCard) => {
+			for (const card of value) {
+				const setCard = card as SetCard;
 				const result: Card = {
 					id: card.id,
-					count: card.ownedNonPremium,
-					premiumCount: card.ownedPremium,
-					diamondCount: card.ownedDiamond,
-					signatureCount: card.ownedSignature,
+					count: setCard.ownedNonPremium,
+					premiumCount: setCard.ownedPremium,
+					diamondCount: setCard.ownedDiamond,
+					signatureCount: setCard.ownedSignature,
 				};
-				return result;
-			});
-			this.normalizedCollection$$.next(normalizedValue);
+				normalizedValues[card.id] = result;
+			}
 		} else {
-			this.normalizedCollection$$.next(value as readonly Card[]);
+			for (const card of value) {
+				normalizedValues[card.id] = card as Card;
+			}
 		}
+		this.normalizedCollection$$.next(normalizedValues);
 	}
 
 	private deckstring$$ = new BehaviorSubject<string>(null);
 	private cards$$ = new BehaviorSubject<readonly MinimalCard[]>([]);
-	private normalizedCollection$$ = new BehaviorSubject<readonly Card[]>(null);
+	private normalizedCollection$$ = new BehaviorSubject<{ [cardId: string]: Card }>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -158,7 +162,10 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		});
 	}
 
-	private buildCards(deckCards: readonly MinimalCard[], collection: readonly Card[]): readonly VisualDeckCard[] {
+	private buildCards(
+		deckCards: readonly MinimalCard[],
+		collection: { [cardId: string]: Card },
+	): readonly VisualDeckCard[] {
 		return deckCards
 			.map((miniCard) => {
 				const card = this.allCards.getCard(miniCard.cardId);

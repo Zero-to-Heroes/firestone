@@ -21,14 +21,11 @@ import { CollectionCardType } from '../../models/collection/collection-card-type
 
 export const getOwnedForDeckBuilding = (
 	cardId: string,
-	collection: readonly Card[],
+	collection: { [cardId: string]: Card },
 	allCards: CardsFacadeService,
 ): number => {
 	const allDuplicates: readonly string[] = getAllCardDuplicateIdsForDeckbuilding(cardId, allCards);
-	return allDuplicates
-		.map((id) => collection?.find((card) => card.id === id))
-		.map((card) => totalOwned(card))
-		.reduce((a, b) => a + b, 0);
+	return allDuplicates.map((id) => totalOwned(collection[id])).reduce((a, b) => a + b, 0);
 };
 
 const getAllCardDuplicateIdsForDeckbuilding = (cardId: string, allCards: CardsFacadeService): readonly string[] => {
@@ -36,7 +33,12 @@ const getAllCardDuplicateIdsForDeckbuilding = (cardId: string, allCards: CardsFa
 	const card = allCards.getCard(cardId);
 	let duplicateDbfId = card.deckDuplicateDbfId;
 	while (!!duplicateDbfId) {
+		// console.debug('handling duplicate', duplicateDbfId, cardId);
 		const duplicateCard = allCards.getCard(duplicateDbfId);
+		// Prevent infinite loops due to circular dependencies
+		if (allDuplicates.includes(duplicateCard.id)) {
+			break;
+		}
 		allDuplicates.push(duplicateCard.id);
 		duplicateDbfId = duplicateCard.deckDuplicateDbfId;
 	}

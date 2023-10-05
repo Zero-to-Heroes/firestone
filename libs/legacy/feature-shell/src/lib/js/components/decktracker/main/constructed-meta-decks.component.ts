@@ -130,23 +130,36 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
+		const collectionCache$ = this.collection$.pipe(
+			this.mapData((collection) => {
+				const result = {};
+				for (const card of collection) {
+					result[card.id] = card;
+				}
+				return result;
+			}),
+		);
 		const ownedCardIdsCache: { [cardId: string]: number } = {};
 		this.decks$ = combineLatest([
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
-			this.collection$,
+			collectionCache$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
 			),
 		]).pipe(
 			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize]]) => {
-				return stats?.deckStats
+				// let enhancedCounter = 0;
+				const enhanced = stats?.deckStats
 					.filter((stat) => stat.totalGames >= sampleSize)
 					.map((stat) => {
+						// enhancedCounter++;
+						// console.debug('enhancedCounter', enhancedCounter);
 						return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
-					})
-					.sort((a, b) => this.sortDecks(a, b, sortCriteria));
+					});
+				// console.debug('enhanced', enhanced);
+				return enhanced.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 			}),
 		);
 		this.archetypes$ = this.store
@@ -172,7 +185,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	private enhanceStat(
 		stat: DeckStat,
 		ownedByCardId: { [cardId: string]: number },
-		collection: readonly Card[],
+		collection: { [cardId: string]: Card },
 		conservativeEstimate: boolean,
 	): EnhancedDeckStat {
 		const deckDefinition = decode(stat.decklist);
@@ -186,9 +199,17 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			.map((c) => ({ quantity: c.quantity, cardId: c.card.id }))
 			.map((card) => {
 				let owned = ownedByCardId[card.cardId];
+				// owned = 0;
 				// Cache not populated yet
 				if (owned == null) {
 					owned = getOwnedForDeckBuilding(card.cardId, collection, this.allCards) ?? 0;
+					// console.debug(
+					// 	'recomputing cache for',
+					// 	card.cardId,
+					// 	owned,
+					// 	Object.keys(ownedByCardId).length,
+					// 	owned,
+					// );
 					ownedByCardId[card.cardId] = owned;
 				}
 				const missingQuantity = Math.max(0, card.quantity - owned);

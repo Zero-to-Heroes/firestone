@@ -14,6 +14,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 				<div class="general-info">
 					<div class="deck-name">{{ deckName }}</div>
+					<div class="deck-type label-value">
+						<div class="label" [owTranslate]="'app.decktracker.meta.deck-type-header'"></div>
+						<div class="value">{{ deckType }}</div>
+					</div>
 					<div class="games label-value">
 						<div class="label" [owTranslate]="'app.decktracker.meta.games-header'"></div>
 						<div class="value">{{ gamesPlayed }}</div>
@@ -50,6 +54,7 @@ export class ConstructedMetaDeckDetailsViewComponent {
 	classTooltip: string;
 	classIcon: string;
 	deckName: string;
+	deckType: string;
 	gamesPlayed: string;
 	winrate: string;
 	cards: readonly ConstructedCardData[];
@@ -61,9 +66,10 @@ export class ConstructedMetaDeckDetailsViewComponent {
 		const isDeck = value?.type === 'deck';
 		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value?.heroCardClass}.png`;
 		this.classTooltip = this.i18n.translateString(`global.class.${value?.heroCardClass}`);
-		this.deckName = isDeck
-			? this.i18n.translateString('app.decktracker.meta.details.deck-title', { name: value?.name })
-			: this.i18n.translateString('app.decktracker.meta.details.archetype-title', { name: value?.name });
+		this.deckName = value?.name;
+		this.deckType = isDeck
+			? this.i18n.translateString('app.decktracker.meta.details.deck-type')
+			: this.i18n.translateString('app.decktracker.meta.details.archetype-type');
 		this.gamesPlayed = value?.games.toLocaleString(this.i18n.formatCurrentLocale());
 		this.winrate = buildPercents(value?.winrate);
 		this.cards = value?.cardsData;
