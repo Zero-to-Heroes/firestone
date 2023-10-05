@@ -89,7 +89,7 @@ export const getGameBaseDir = async (
 };
 
 const extractBaseDirFromPath = (path: string): string => {
-	return path?.includes('Hearthstone Beta Launcher')
-		? path?.split('Hearthstone Beta Launcher.exe')[0]
-		: path?.split('Hearthstone.exe')[0];
+	return path?.toLowerCase()?.includes('hearthstone beta launcher')
+		? path.toLowerCase().split('hearthstone beta launcher.exe')[0]
+		: path?.toLowerCase()?.split('hearthstone.exe')[0];
 };
