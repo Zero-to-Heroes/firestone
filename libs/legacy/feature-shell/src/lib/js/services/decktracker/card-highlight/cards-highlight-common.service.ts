@@ -1478,6 +1478,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 			case CardIds.UnstableMagicTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
+			case CardIds.Ursatron:
+				return and(side(inputSide), inDeck, mech);
 			case CardIds.ValstannStaghelm_WON_345:
 				return and(side(inputSide), inDeck, minion, taunt);
 			case CardIds.VanndarStormpike_AV_223:
