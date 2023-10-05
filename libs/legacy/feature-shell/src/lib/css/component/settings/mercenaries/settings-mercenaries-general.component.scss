@@ -5,9 +5,9 @@
 	min-height: 0;
 	overflow: auto;
 
-	::ng-deep preference-toggle .preference-toggle p {
-		width: 250px;
-	}
+	// ::ng-deep preference-toggle .preference-toggle p {
+	// 	width: 250px;
+	// }
 
 	.title {
 		margin-top: 30px;
@@ -24,7 +24,7 @@
 	}
 
 	::ng-deep preference-slider .preference-slider label {
-		width: 260px;
+		// width: 260px;
 		font-size: 13px;
 	}
 

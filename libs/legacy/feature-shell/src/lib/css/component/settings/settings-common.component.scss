@@ -216,6 +216,10 @@ input[type='range'] {
 	}
 	.preference-toggle {
 		margin-top: 15px;
+
+		.toggle .settings-p {
+			width: 300px;
+		}
 	}
 }
 

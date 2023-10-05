@@ -9,9 +9,9 @@
 		justify-content: center;
 		align-items: flex-start;
 
-		::ng-deep .toggle p {
-			width: 280px;
-		}
+		// ::ng-deep .toggle p {
+		// 	width: 280px;
+		// }
 	}
 
 	.title {
@@ -31,7 +31,7 @@
 	}
 
 	::ng-deep preference-slider .preference-slider label {
-		width: 260px;
+		// width: 260px;
 		font-size: 13px;
 	}
 
