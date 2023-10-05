@@ -35,7 +35,6 @@ export class ConstructedMetaDeckDetailsComponent
 		]).pipe(
 			this.mapData(([stats, [currentConstructedMetaDeck], [conservativeEstimate]]) => {
 				const stat = stats.deckStats.find((s) => s.decklist === currentConstructedMetaDeck);
-				console.debug('[debug] stat', stat);
 				if (!stat) {
 					return null;
 				}
@@ -44,6 +43,7 @@ export class ConstructedMetaDeckDetailsComponent
 				const conservativeWinrate: number = stat.winrate - 3 * standardDeviation;
 				const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
 				const result: ConstructedDeckDetails = {
+					type: 'deck',
 					name:
 						this.i18n.translateString(`archetype.${stat.archetypeName}`) ===
 						`archetype.${stat.archetypeName}`
@@ -53,8 +53,8 @@ export class ConstructedMetaDeckDetailsComponent
 					games: stat.totalGames,
 					winrate: winrateToUse,
 					deckstring: stat.decklist,
+					cardsData: stat.cardsData,
 				};
-				console.debug('[debug] result', result);
 				return result;
 			}),
 			// tap((decks) => console.debug('[meta-decks] emitting decks', decks)),

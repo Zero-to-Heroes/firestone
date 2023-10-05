@@ -51,7 +51,7 @@ export class ConstructedMetaDecksStateService {
 				if (localStats?.dataPoints) {
 					// this.constructedMetaDecks$$.next(localStats);
 				}
-
+				this.constructedMetaDecks$$.next(null);
 				const stats = await this.loadNewDecks(formatFilter, timeFilter, rankFilter);
 				this.constructedMetaDecks$$.next(stats);
 			});

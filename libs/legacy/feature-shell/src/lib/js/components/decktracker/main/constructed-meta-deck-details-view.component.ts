@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
 import { buildPercents } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -14,11 +15,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<div class="general-info">
 					<div class="deck-name">{{ deckName }}</div>
 					<div class="games label-value">
-						<div class="label">Games</div>
+						<div class="label" [owTranslate]="'app.decktracker.meta.games-header'"></div>
 						<div class="value">{{ gamesPlayed }}</div>
 					</div>
 					<div class="winrate label-value">
-						<div class="label">Winrate</div>
+						<div class="label" [owTranslate]="'app.decktracker.meta.winrate-header'"></div>
 						<div class="value">{{ winrate }}</div>
 					</div>
 				</div>
@@ -35,9 +36,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			</div>
 			<div class="details-container">
 				<ul class="tabs">
-					<li class="tab selected">Cards</li>
+					<li class="tab selected" [owTranslate]="'app.decktracker.meta.cards-header'"></li>
 				</ul>
-				<div class="details"></div>
+				<div class="details">
+					<constructed-meta-deck-details-cards [cards]="cards"></constructed-meta-deck-details-cards>
+				</div>
 			</div>
 		</div>
 	`,
@@ -49,16 +52,21 @@ export class ConstructedMetaDeckDetailsViewComponent {
 	deckName: string;
 	gamesPlayed: string;
 	winrate: string;
+	cards: readonly ConstructedCardData[];
 
 	deckstring?: string;
 
 	@Input() set input(value: ConstructedDeckDetails) {
 		console.debug('[debug] input', value);
+		const isDeck = value.type === 'deck';
 		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value?.heroCardClass}.png`;
 		this.classTooltip = this.i18n.translateString(`global.class.${value?.heroCardClass}`);
-		this.deckName = value?.name;
+		this.deckName = isDeck
+			? this.i18n.translateString('app.decktracker.meta.details.deck-title', { name: value?.name })
+			: this.i18n.translateString('app.decktracker.meta.details.archetype-title', { name: value?.name });
 		this.gamesPlayed = value?.games.toLocaleString(this.i18n.formatCurrentLocale());
 		this.winrate = buildPercents(value?.winrate);
+		this.cards = value?.cardsData;
 		this.deckstring = value?.deckstring;
 	}
 
@@ -66,10 +74,12 @@ export class ConstructedMetaDeckDetailsViewComponent {
 }
 
 export interface ConstructedDeckDetails {
+	readonly type: 'deck' | 'archetype';
 	readonly heroCardClass: string;
 	readonly name: string;
 	readonly games: number;
 	readonly winrate: number;
+	readonly cardsData: readonly ConstructedCardData[];
 
 	readonly deckstring?: string;
 }

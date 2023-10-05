@@ -1,0 +1,28 @@
+.cell {
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	height: 100%;
+
+	&.card-name {
+		margin-right: 10px;
+		width: 220px;
+		flex-shrink: 0;
+	}
+
+	&.winrate {
+		margin-left: 10px;
+		width: 140px;
+		max-width: 260px;
+		flex-basis: 33%;
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+
+	&.kept {
+		margin-left: 10px;
+		width: 140px;
+	}
+}
