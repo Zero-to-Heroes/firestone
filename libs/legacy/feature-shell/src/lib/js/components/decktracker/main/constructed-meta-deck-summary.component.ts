@@ -6,6 +6,8 @@ import { AnalyticsService, CardsFacadeService, OverwolfService } from '@fireston
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { EnhancedDeckStat } from './constructed-meta-decks.component';
 
@@ -84,10 +86,15 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 					[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
 				></div>
 			</div>
-			<!-- <div class="button view-details" (click)="viewDetails()" premiumSetting>
+			<div class="button view-details" (click)="viewDetails()" premiumSetting>
 				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#lock" />
+					</svg>
+				</div>
+				<div class="view-icon">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/replays/sprite.svg#show" />
 					</svg>
 				</div>
 				<div
@@ -95,7 +102,7 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 					[owTranslate]="'app.decktracker.meta.deck.view-details-button'"
 					[helpTooltip]="'app.decktracker.meta.deck.view-details-button-tooltip' | owTranslate"
 				></div>
-			</div> -->
+			</div>
 			<copy-deckstring
 				class="button copy-deckstring"
 				[deckstring]="deckstring"
@@ -161,18 +168,24 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
 	private collection$$ = new BehaviorSubject<readonly Card[]>([]);
 
+	private hasPremiumAccess: boolean;
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit() {
 		this.showDetails$ = this.showDetails$$.asObservable();
+		this.store.hasPremiumSub$().subscribe((hasPremium) => {
+			this.hasPremiumAccess = hasPremium;
+		});
 		combineLatest([this.deck$$, this.archetypes$$])
 			.pipe(
 				// debounceTime(300),
@@ -228,8 +241,11 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	viewDetails() {
-		console.debug('viewing deck details');
-		this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
+		console.debug('viewing deck details', this.hasPremiumAccess);
+		if (this.hasPremiumAccess) {
+			this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
+		}
+		this.store.send(new ConstructedMetaDeckDetailsShowEvent(this.deckstring));
 	}
 }
 
