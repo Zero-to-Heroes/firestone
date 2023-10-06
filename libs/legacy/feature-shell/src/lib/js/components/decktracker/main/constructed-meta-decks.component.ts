@@ -159,7 +159,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 						return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
 					});
 				// console.debug('enhanced', enhanced);
-				return enhanced.sort((a, b) => this.sortDecks(a, b, sortCriteria));
+				return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 			}),
 		);
 		this.archetypes$ = this.store
