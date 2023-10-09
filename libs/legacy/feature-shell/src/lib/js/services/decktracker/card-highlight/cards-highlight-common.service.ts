@@ -122,7 +122,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	public async init(options?: SelectorOptions) {
 		this.options = options;
-		console.debug('init done', this.options, options);
+		// console.debug('init done', this.options, options);
 	}
 
 	// public shutDown() {
