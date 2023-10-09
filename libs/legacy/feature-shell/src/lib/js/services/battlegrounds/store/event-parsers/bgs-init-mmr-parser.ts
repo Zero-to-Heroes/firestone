@@ -31,7 +31,7 @@ export class BgsInitMmrParser implements EventParser {
 	): Promise<BattlegroundsState> {
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const reviewId = await this.gameState.getCurrentReviewId();
-		const mmr = 10000; // bgsInfo?.Rating;
+		const mmr = bgsInfo?.Rating;
 		console.log('[bgs-mmr] mmrAtStart', reviewId, mmr, event);
 
 		const prefs = await this.prefs.getPreferences();
