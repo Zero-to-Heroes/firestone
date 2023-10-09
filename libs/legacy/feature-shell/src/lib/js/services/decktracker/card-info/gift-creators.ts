@@ -632,4 +632,5 @@ export const giftCreators = [
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
 	CardIds.RuleModifier_SeeingDoubleToken_TTN_002t22,
+	CardIds.RuleModifier_ApproachingNightmareToken_TTN_002t14,
 ];

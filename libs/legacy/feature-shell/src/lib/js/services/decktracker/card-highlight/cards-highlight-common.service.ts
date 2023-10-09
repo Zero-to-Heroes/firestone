@@ -562,6 +562,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, secret);
 			case CardIds.CorruptedFelstoneTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fel);
+			case CardIds.CorruptTheWaters:
+				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.CountessAshmore:
 				return and(side(inputSide), inDeck, or(rush, lifesteal, deathrattle));
 			case CardIds.CowardlyGrunt:
@@ -1012,6 +1014,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.MagistersApprentice:
 				return and(side(inputSide), inDeck, spell, arcane);
+			case CardIds.MalganisCore:
+			case CardIds.Malganis_GVG_021:
+				return and(side(inputSide), or(inDeck, inHand), demon);
 			case CardIds.Malorne:
 			case CardIds.Malorne_WON_011:
 				return and(side(inputSide), or(inDeck, inHand), beast);
@@ -1061,7 +1066,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.NzothGodOfTheDeep:
 				return and(side(inputSide), inGraveyard, minion, (input: SelectorInput) => !!input.card?.races?.length);
 			case CardIds.NzothTheCorruptor:
-				return and(side(inputSide), inGraveyard, minion, deathrattle);
+				return and(side(inputSide), or(inGraveyard, inHand, inDeck), minion, deathrattle);
 			case CardIds.OnyxBishop:
 			case CardIds.OnyxBishop_WON_057:
 				return and(side(inputSide), inGraveyard);
@@ -1262,7 +1267,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ShroudOfConcealment:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.Shudderwock_GIL_820:
-				return and(side(inputSide), cardsPlayedThisMatch, minion, battlecry);
+				return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), minion, battlecry);
 			case CardIds.SicklyGrimewalker_YOG_512:
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SilvermoonFarstrider_RLK_826:
@@ -1501,6 +1506,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), beast);
 			case CardIds.VitalitySurge:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.Voidcaller:
+			case CardIds.VoidcallerCore:
+				return and(side(inputSide), or(inDeck, inHand), demon);
 			case CardIds.VolumeUp:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.WarCommandsTavernBrawl:
