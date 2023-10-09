@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.1.2',
+		version: '12.2.1',
 		force: false,
 		sections: [
 			// {
@@ -49,8 +49,12 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `(PREMIUM) You can now view card-level stats for each deck. This will tell you, for a given decklist, the Mulligan winrate, drawn winrate and kept percentage for each card in the deck.`,
+							},
+							{
 								type: 'bug',
-								text: `There is a bug where some decklists in the constructed meta decks use Wild cards instead of the standard legal ones. I have fixed this recently, but it will take a few days for the new games to use the updated decklists. The data has also been cleaned of the corrupted lists, so there will be a gap in data for the next few days. Sorry for the inconvenience!`,
+								text: `Fix an issue where cards created in deck would not be properly detected anymore.`,
 							},
 						],
 					},
@@ -64,36 +68,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a "limited" option to most of the counters, that only shows up the counter on the most likely cases you want to see it. Use this option if you feel like you're seeing the counters too often when you don't need them.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a Chaotic Tendrils counter.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a Secrets Played counter.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where Fizzle's Snapshot info would disappear after drawing it.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Treant counter would not count some Treants.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Plague + Helya parser would break if another "cast when drawn" card was revealed between two Plagues.`,
-							},
-							{
-								type: 'content',
-								text: `Add more oracles, mostly for the new Standard Anomalies and a couple of Duels treasures.`,
-							},
-							{
-								type: 'ui',
-								text: `Due to popular demand, the "Yogg" counter now has a different icon reflecting the cards in your deck.`,
+								text: `Remove Death Knight and Demon Hunter as valid classes for Twist and Classic in the deckbuilder.`,
 							},
 						],
 					},
@@ -102,28 +78,32 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the MMR filter would not work anymore.`,
+								text: `Fix an issue where stats on the hero selection overlay would not show up anymore.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Tough Tusk would not get divine shield when a blood gem is played on it.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Warpwing would lose its shield after attacking .`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where corrupted data would sometimes appear in the meta hero stats.`,
+								text: `Fix an issue where the MMR filter in the hero selection phase would always consider the top 1% of players instead of your own MMR.`,
 							},
 						],
 					},
 					{
-						category: 'replays',
+						category: 'duels',
 						details: [
 							{
 								type: 'feature',
-								text: `Now show the full anomaly card when mousing over it in the Replays section.`,
+								text: `Cards created by Elixir of Vigor should now have their cost be set to 2 in the deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where ties would not be detected properly and cause runs to be split.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the classes filters would not work properly on the Buckets screen.`,
+							},
+							{
+								type: 'content',
+								text: `The card classes will now appear at the top of each bucket when browsing them in the Buckets or Deckbuilding tabs.`,
 							},
 						],
 					},
