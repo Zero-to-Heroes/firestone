@@ -151,105 +151,32 @@
 	}
 }
 
-.buttons-container {
-	height: 50px;
-	padding: 10px;
-	background: rgba(255, 255, 255, 0.08);
-	display: flex;
-	justify-content: space-around;
-	position: relative;
-	margin-top: 1px;
+// .deck-details {
+// 	padding: 10px;
+// 	background: rgba(255, 255, 255, 0.08);
+// 	margin-top: 1px;
 
-	.button {
-		display: flex;
-		align-items: center;
-		color: var(--color-2);
+// 	.cards-containers {
+// 		display: flex;
+// 		justify-content: space-around;
 
-		.watch-icon {
-			height: 100%;
-			aspect-ratio: 4/3;
-			align-items: center;
-		}
+// 		.container {
+// 			display: flex;
+// 			flex-direction: column;
+// 			flex-basis: 23%;
+// 			align-items: center;
 
-		.view-icon {
-			height: 100%;
-			aspect-ratio: 4/3;
-			align-items: center;
-		}
+// 			.title {
+// 				font-size: 14px;
+// 				margin-bottom: 10px;
+// 			}
 
-		.text {
-			margin-left: 15px;
-		}
-
-		.premium-lock {
-			display: none;
-			height: 25px;
-			aspect-ratio: 2;
-			margin-right: -10px;
-		}
-
-		&.locked {
-			color: var(--default-title-color);
-
-			.premium-lock {
-				display: flex;
-			}
-			.view-icon {
-				display: none;
-			}
-		}
-
-		&:hover:not(.locked) {
-			color: var(--color-1);
-		}
-	}
-
-	.copy-deckstring {
-		::ng-deep .copy-deckstring {
-			height: 100%;
-
-			.icon {
-				height: 100%;
-			}
-
-			svg {
-				height: 75%;
-				width: auto;
-			}
-
-			.message {
-				width: fit-content;
-			}
-		}
-	}
-}
-
-.deck-details {
-	padding: 10px;
-	background: rgba(255, 255, 255, 0.08);
-	margin-top: 1px;
-
-	.cards-containers {
-		display: flex;
-		justify-content: space-around;
-
-		.container {
-			display: flex;
-			flex-direction: column;
-			flex-basis: 23%;
-			align-items: center;
-
-			.title {
-				font-size: 14px;
-				margin-bottom: 10px;
-			}
-
-			.cards {
-				width: 100%;
-			}
-		}
-	}
-}
+// 			.cards {
+// 				width: 100%;
+// 			}
+// 		}
+// 	}
+// }
 // @media (max-width: 1690px) {
 // 	.constructed-meta-deck-summary {
 // 		.name {

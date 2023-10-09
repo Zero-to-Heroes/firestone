@@ -91,7 +91,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[deck]="deck"
 							[archetypes]="value.archetypes"
 							[showStandardDeviation]="value.showStandardDeviation"
-							[collection]="value.collection"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
 				</div>

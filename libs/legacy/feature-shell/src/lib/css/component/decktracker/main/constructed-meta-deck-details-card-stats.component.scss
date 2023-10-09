@@ -1,0 +1,49 @@
+:host {
+	min-height: 0;
+	display: flex;
+	width: 100%;
+}
+
+.constructed-meta-deck-details-card-stats {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	.header {
+		display: flex;
+		margin-bottom: 10px;
+	}
+
+	.cards {
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		overflow: scroll;
+		position: relative;
+		padding-left: 10px;
+		left: -10px;
+		width: calc(100% + 10px);
+		padding-bottom: 20px;
+
+		.card-line {
+			display: flex;
+			align-items: center;
+			// height: 35px;
+			height: fit-content;
+			padding: 2px 0;
+			flex-shrink: 0;
+
+			.cell {
+				font-size: 13px;
+			}
+
+			.card-name {
+				justify-content: flex-start;
+			}
+
+			&:nth-child(odd) {
+				background: rgba(255, 255, 255, 0.08);
+			}
+		}
+	}
+}
