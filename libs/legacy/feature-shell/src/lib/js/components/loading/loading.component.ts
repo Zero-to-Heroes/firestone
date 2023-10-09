@@ -130,6 +130,12 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async positionWindow() {
+		const currentWindow = await this.ow.getCurrentWindow();
+		console.debug('[loading] current window', currentWindow);
+		// THe user already moved the window, we don't reposition it
+		if (currentWindow.isVisible && (currentWindow.left > 0 || currentWindow.top > 0)) {
+			return;
+		}
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
