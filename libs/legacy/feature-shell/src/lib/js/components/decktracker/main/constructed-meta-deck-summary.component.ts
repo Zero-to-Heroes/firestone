@@ -22,7 +22,9 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 				<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
 			</div>
 			<div class="name cell">
-				<div class="deck-name">{{ deckName }}</div>
+				<div class="deck-name" [helpTooltip]="'app.decktracker.meta.view-details-cta' | owTranslate">
+					{{ deckName }}
+				</div>
 			</div>
 			<div class="dust cell">
 				<div class="dust-amount">
