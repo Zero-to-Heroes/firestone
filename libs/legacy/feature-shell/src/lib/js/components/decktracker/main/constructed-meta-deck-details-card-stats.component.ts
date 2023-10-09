@@ -19,6 +19,14 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	],
 	template: `
 		<div class="constructed-meta-deck-details-card-stats">
+			<div class="controls">
+				<preference-toggle
+					class="show-relative-info-button"
+					field="constructedMetaDecksShowRelativeInfo"
+					[label]="'app.decktracker.meta.details.cards.show-relative-info-button' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.show-relative-info-button-tooltip' | owTranslate"
+				></preference-toggle>
+			</div>
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
 				<sortable-table-label
 					class="cell card-name"
@@ -64,9 +72,9 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 							[side]="'player'"
 						></deck-card>
 					</div>
-					<div class="cell data winrate">{{ card.mulliganWinrateStr }}</div>
-					<div class="cell data kept">{{ card.keptInMulliganStr }}</div>
-					<div class="cell data drawn">{{ card.drawnWinrateStr }}</div>
+					<div class="cell data winrate {{ card.mulliganWinrateCss }}">{{ card.mulliganWinrateStr }}</div>
+					<div class="cell data kept ">{{ card.keptInMulliganStr }}</div>
+					<div class="cell data drawn {{ card.drawnWinrateCss }}">{{ card.drawnWinrateStr }}</div>
 				</li>
 			</div>
 		</div>
@@ -83,8 +91,16 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	@Input() set cards(value: readonly ConstructedCardData[]) {
 		this.cardData$$.next(value);
 	}
+	@Input() set showRelativeInfo(value: boolean) {
+		this.showRelativeInfo$$.next(value);
+	}
+	@Input() set deckWinrate(value: number) {
+		this.deckWinrate$$.next(value);
+	}
 
 	private cardData$$ = new BehaviorSubject<readonly ConstructedCardData[]>([]);
+	private showRelativeInfo$$ = new BehaviorSubject<boolean>(false);
+	private deckWinrate$$ = new BehaviorSubject<number>(null);
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'mulligan-winrate',
@@ -99,8 +115,13 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	// which cards do well or not
 	ngAfterContentInit(): void {
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
-		this.cardData$ = combineLatest([this.cardData$$, this.sortCriteria$$]).pipe(
-			this.mapData(([cardData, sortCriteria]) => {
+		this.cardData$ = combineLatest([
+			this.cardData$$,
+			this.sortCriteria$$,
+			this.showRelativeInfo$$,
+			this.deckWinrate$$,
+		]).pipe(
+			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate]) => {
 				const groupedByCardId = groupByFunction((data: ConstructedCardData) => data.cardId)(cardData);
 				const result = Object.keys(groupedByCardId)
 					.map((cardId) => {
@@ -108,26 +129,34 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const data = groupedByCardId[cardId];
 						const copies = data.length;
 						const firstCopyData = data[0];
-						const mulliganWinrate = firstCopyData.inHandAfterMulligan
+						const absoluteMulliganWinrate = firstCopyData.inHandAfterMulligan
 							? firstCopyData.inHandAfterMulliganThenWin / firstCopyData.inHandAfterMulligan
 							: null;
+						const relativeMulliganWinrate = buildRelative(absoluteMulliganWinrate, deckWinrate);
+						const mulliganWinrate = showRelativeInfo ? relativeMulliganWinrate : absoluteMulliganWinrate;
 						const mulliganWinrateStr = buildPercents(mulliganWinrate);
+						const mulliganWinrateCss = buildCss(relativeMulliganWinrate);
 						const keptInMulligan = firstCopyData.drawnBeforeMulligan
 							? firstCopyData.keptInMulligan / firstCopyData.drawnBeforeMulligan
 							: null;
 						const keptInMulliganStr = buildPercents(keptInMulligan);
-						const drawnWinrate = firstCopyData.drawn
+						const absoluteDrawnWinrate = firstCopyData.drawn
 							? firstCopyData.drawnThenWin / firstCopyData.drawn
 							: null;
+						const relativeDrawnWinrate = buildRelative(absoluteDrawnWinrate, deckWinrate);
+						const drawnWinrate = showRelativeInfo ? relativeDrawnWinrate : absoluteDrawnWinrate;
 						const drawnWinrateStr = buildPercents(drawnWinrate);
+						const drawnWinrateCss = buildCss(relativeDrawnWinrate);
 						const internalEntityId = uuid();
 						// const mulliganKept = buildPercents(firstCopyData.keptInMulligan);
 						const result: InternalCardData = {
 							cardName: card.name,
 							mulliganWinrate: mulliganWinrate,
 							mulliganWinrateStr: mulliganWinrateStr,
+							mulliganWinrateCss: mulliganWinrateCss,
 							drawnWinrate: drawnWinrate,
 							drawnWinrateStr: drawnWinrateStr,
+							drawnWinrateCss: drawnWinrateCss,
 							keptInMulligan: keptInMulligan,
 							keptInMulliganStr: keptInMulliganStr,
 							deckCard: VisualDeckCard.create({
@@ -195,15 +224,31 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	}
 }
 
+const buildRelative = (value: number, deckWinrate: number): number => {
+	if (value == null) {
+		return null;
+	}
+	return value - deckWinrate;
+};
+
+const buildCss = (value: number): string => {
+	if (value == null) {
+		return null;
+	}
+	return value > 0 ? 'positive' : value < 0 ? 'negative' : null;
+};
+
 interface InternalCardData {
 	readonly cardName: string;
 	readonly deckCard: VisualDeckCard;
 	readonly mulliganWinrate: number;
 	readonly mulliganWinrateStr: string;
+	readonly mulliganWinrateCss: string;
 	readonly keptInMulligan: number;
 	readonly keptInMulliganStr: string;
 	readonly drawnWinrate: number;
 	readonly drawnWinrateStr: string;
+	readonly drawnWinrateCss: string;
 }
 
 type ColumnSortType = 'name' | 'mulligan-winrate' | 'kept' | 'drawn-winrate';

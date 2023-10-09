@@ -180,6 +180,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksSampleSizeFilter: number = 200;
 	readonly constructedMetaArchetypesSampleSizeFilter: number = 2000;
 	readonly constructedMetaDecksUseConservativeWinrate: boolean = false;
+	readonly constructedMetaDecksShowRelativeInfo: boolean = false;
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

@@ -82,6 +82,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<constructed-meta-deck-details-card-stats
 						*ngIf="value.selectedTab === 'card-stats'"
 						[cards]="cards"
+						[showRelativeInfo]="showRelativeInfo"
+						[deckWinrate]="winrateNumber"
 					></constructed-meta-deck-details-card-stats>
 				</div>
 			</div>
@@ -100,6 +102,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	deckType: string;
 	gamesPlayed: string;
 	winrate: string;
+	winrateNumber: number;
 	cards: readonly ConstructedCardData[];
 
 	deckstring?: string;
@@ -107,6 +110,8 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	@Input() archetypes: readonly ArchetypeStat[];
 	@Input() collection: readonly Card[];
 	@Input() hasPremiumAccess: boolean;
+	@Input() showRelativeInfo: boolean;
+
 	@Input() set input(value: ConstructedDeckDetails) {
 		// console.debug('[debug] input', value);
 		const isDeck = value?.type === 'deck';
@@ -119,6 +124,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 			: this.i18n.translateString('app.decktracker.meta.details.archetype-type');
 		this.gamesPlayed = value?.games.toLocaleString(this.i18n.formatCurrentLocale());
 		this.winrate = buildPercents(value?.winrate);
+		this.winrateNumber = value?.winrate;
 		this.cards = value?.cardsData;
 		this.deckstring = value?.deckstring;
 	}

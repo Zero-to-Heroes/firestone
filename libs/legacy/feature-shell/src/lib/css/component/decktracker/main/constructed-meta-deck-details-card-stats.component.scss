@@ -8,6 +8,35 @@
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
+	position: relative;
+
+	.controls {
+		position: absolute;
+		top: -55px;
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: flex-end;
+		padding-right: 15px;
+
+		.show-relative-info-button {
+			::ng-deep .preference-toggle {
+				.settings-p {
+					color: var(--color-2);
+					width: auto;
+					margin-right: 15px;
+				}
+			}
+
+			&:hover {
+				::ng-deep .preference-toggle {
+					.settings-p {
+						color: var(--color-1);
+					}
+				}
+			}
+		}
+	}
 
 	.header {
 		display: flex;
@@ -39,6 +68,15 @@
 
 			.card-name {
 				justify-content: flex-start;
+			}
+
+			.data {
+				&.positive {
+					color: #61ff47;
+				}
+				&.negative {
+					color: #ff4747;
+				}
 			}
 
 			&:nth-child(odd) {

@@ -17,6 +17,7 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 			[archetypes]="archetypes$ | async"
 			[collection]="collection$ | async"
 			[hasPremiumAccess]="hasPremiumAccess$ | async"
+			[showRelativeInfo]="showRelativeInfo$ | async"
 		>
 		</constructed-meta-deck-details-view>
 	`,
@@ -30,6 +31,7 @@ export class ConstructedMetaDeckDetailsComponent
 	archetypes$: Observable<readonly ArchetypeStat[]>;
 	collection$: Observable<readonly Card[]>;
 	hasPremiumAccess$: Observable<boolean>;
+	showRelativeInfo$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -41,6 +43,7 @@ export class ConstructedMetaDeckDetailsComponent
 
 	ngAfterContentInit(): void {
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
+		this.showRelativeInfo$ = this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksShowRelativeInfo);
 		this.archetypes$ = this.store
 			.constructedMetaDecks$()
 			.pipe(this.mapData((stats) => stats?.archetypeStats ?? []));
