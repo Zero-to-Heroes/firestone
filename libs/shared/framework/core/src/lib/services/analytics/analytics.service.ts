@@ -1,4 +1,5 @@
 import { Injectable, Optional } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import Plausible from 'plausible-tracker';
 import { OverwolfService } from '../overwolf.service';
 
@@ -22,20 +23,31 @@ export class AnalyticsService {
 			this.plausible.enableAutoPageviews();
 			this.plausible.enableAutoOutboundTracking();
 		} else {
-			this.plausible = window['plausibleInstance'];
+			this.plausible = this.ow.getMainWindow()['plausibleInstance'];
 		}
+		console.log('init plausible', currentWindow?.name, this.plausible != null);
+		console.debug('plausible details', this.plausible, window);
 	}
 
-	public trackEvent(eventName: string, options?: EventOptions) {
-		this.plausible?.trackEvent(eventName, {
+	public async trackEvent(eventName: string, options?: EventOptions) {
+		await this.ready();
+		this.plausible.trackEvent(eventName, {
 			props: options,
 		});
 	}
 
-	public trackPageView(page: string) {
-		this.plausible?.trackPageview({
+	public async trackPageView(page: string) {
+		await this.ready();
+		this.plausible.trackPageview({
 			url: page,
 		});
+	}
+
+	private async ready() {
+		// Wait until the plausible member variable is not null
+		while (!this.plausible) {
+			await sleep(500);
+		}
 	}
 }
 
