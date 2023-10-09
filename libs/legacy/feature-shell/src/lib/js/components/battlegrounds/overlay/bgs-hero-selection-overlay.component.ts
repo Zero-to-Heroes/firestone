@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -77,12 +77,14 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 			this.mapData(([tiers, achievements, [panel, showAchievements]]) => {
 				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
 				if (!panel || !heroesAchievementCategory) {
+					console.log('no panel or no category', !panel, !heroesAchievementCategory);
 					return [];
 				}
 
 				const selectionOptions =
 					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
 				if (!selectionOptions?.length) {
+					console.log('no selection options', selectionOptions);
 					return [];
 				}
 
@@ -110,7 +112,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 					};
 				});
 				console.debug('heroOverviews', heroOverviews, tiers);
-				heroOverviews;
+				return heroOverviews;
 			}),
 		);
 	}
