@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CardClass } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { classes } from '../../../../services/hs-utils';
@@ -69,9 +70,14 @@ export class ConstructedDeckbuilderClassComponent
 			.pipe(
 				this.mapData(([currentFormat]) => {
 					const validClasses =
-						currentFormat === 'twist'
-							? classes.filter((c) => c !== 'DEMONHUNTER' && c !== 'DEATHKNIGHT')
+						currentFormat === 'twist' || currentFormat === 'classic'
+							? classes.filter(
+									(c) =>
+										c.toUpperCase() !== CardClass[CardClass.DEMONHUNTER] &&
+										c.toUpperCase() !== CardClass[CardClass.DEATHKNIGHT],
+							  )
 							: classes;
+					console.debug('valid classes', validClasses, currentFormat);
 					return validClasses.map((playerClass) => {
 						return {
 							id: playerClass,
