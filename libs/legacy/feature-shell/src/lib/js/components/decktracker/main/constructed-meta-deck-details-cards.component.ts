@@ -5,6 +5,7 @@ import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Card } from '../../../models/card';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
 
@@ -14,17 +15,29 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 	template: `
 		<div class="constructed-meta-deck-details-cards" *ngIf="{ collection: collection$ | async } as value">
 			<div class="container core">
-				<div class="title" [owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"></div>
+				<div class="title">
+					<span
+						class="main-text"
+						[owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"
+					></span>
+					<span class="details">{{ archetypeCoreCardsHeaderDetails }}</span>
+				</div>
 				<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="value.collection">
 				</deck-list-static>
 			</div>
 			<div class="container removed">
-				<div class="title" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></div>
+				<div class="title">
+					<span class="main-text" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></span>
+					<span class="details">{{ removedCardsHeaderDetails }}</span>
+				</div>
 				<deck-list-static class="cards" [cards]="removedCards" [collection]="value.collection">
 				</deck-list-static>
 			</div>
 			<div class="container added">
-				<div class="title" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></div>
+				<div class="title">
+					<span class="main-text" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></span>
+					<span class="details">{{ addedCardsHeaderDetails }}</span>
+				</div>
 				<deck-list-static class="cards" [cards]="addedCards" [collection]="value.collection">
 				</deck-list-static>
 			</div>
@@ -42,6 +55,10 @@ export class ConstructedMetaDeckDetailsCardsComponent
 	removedCards: readonly CardVariation[];
 	addedCards: readonly CardVariation[];
 
+	archetypeCoreCardsHeaderDetails: string;
+	removedCardsHeaderDetails: string;
+	addedCardsHeaderDetails: string;
+
 	@Input() set deck(value: ConstructedDeckDetails) {
 		this.deck$$.next(value);
 	}
@@ -58,7 +75,11 @@ export class ConstructedMetaDeckDetailsCardsComponent
 	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
 	private collection$$ = new BehaviorSubject<readonly Card[]>([]);
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(cdr);
 	}
 
@@ -72,17 +93,41 @@ export class ConstructedMetaDeckDetailsCardsComponent
 				}),
 			)
 			.subscribe(({ deck, archetype }) => {
+				this.archetypeCoreCards = buildCardVariations(
+					archetype?.coreCards,
+					deck.sideboards ?? [],
+					this.allCards,
+				);
 				this.removedCards = buildCardVariations(
 					deck.cardVariations?.removed,
 					deck.sideboards ?? [],
 					this.allCards,
 				);
 				this.addedCards = buildCardVariations(deck.cardVariations?.added, deck.sideboards ?? [], this.allCards);
-				this.archetypeCoreCards = buildCardVariations(
-					archetype?.coreCards,
-					deck.sideboards ?? [],
-					this.allCards,
-				);
+
+				const archetypeCoreCardsNumber = this.archetypeCoreCards
+					.map((c) => c.quantity)
+					.reduce((a, b) => a + b, 0);
+				this.archetypeCoreCardsHeaderDetails =
+					archetypeCoreCardsNumber > 0
+						? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
+								value: archetypeCoreCardsNumber,
+						  })
+						: null;
+				const removedCardsNumber = this.removedCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
+				this.removedCardsHeaderDetails =
+					removedCardsNumber > 0
+						? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
+								value: removedCardsNumber,
+						  })
+						: null;
+				const addedCardsNumber = this.addedCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
+				this.addedCardsHeaderDetails =
+					addedCardsNumber > 0
+						? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
+								value: addedCardsNumber,
+						  })
+						: null;
 			});
 	}
 }
