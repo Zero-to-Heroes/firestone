@@ -129,16 +129,20 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
+		let ownedCardIdsCache: { [cardId: string]: number } = {};
 		const collectionCache$ = this.collection$.pipe(
 			this.mapData((collection) => {
 				const result = {};
 				for (const card of collection) {
 					result[card.id] = card;
 				}
+				console.debug('updating collection', collection, result);
 				return result;
 			}),
 		);
-		const ownedCardIdsCache: { [cardId: string]: number } = {};
+		collectionCache$.subscribe((cache) => {
+			ownedCardIdsCache = {};
+		});
 		this.decks$ = combineLatest([
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
@@ -149,6 +153,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				(prefs) => prefs.constructedMetaDecksDustFilter,
 			),
 		]).pipe(
+			debounceTime(300),
 			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize, dust]]) => {
 				// let enhancedCounter = 0;
 				console.debug('filtering decks', dust);
