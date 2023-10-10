@@ -621,6 +621,7 @@ import { ControlSettingsComponent } from './js/components/controls/control-setti
 import { ControlShareComponent } from './js/components/controls/control-share.component';
 import { CopyDesckstringComponent } from './js/components/decktracker/copy-deckstring.component';
 import { ImportDeckstringComponent } from './js/components/decktracker/import-deckstring.component';
+import { ConstructedDustFilterDropdownComponent } from './js/components/decktracker/main/filters/constructed-dust-filter-dropdown.component';
 import { DeckCardComponent } from './js/components/decktracker/overlay/deck-card.component';
 import { DeckListByZoneComponent } from './js/components/decktracker/overlay/deck-list-by-zone.component';
 import { DeckListComponent } from './js/components/decktracker/overlay/deck-list.component';
@@ -1310,6 +1311,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DecktrackerFiltersComponent,
 		DecktrackerFormatFilterDropdownComponent,
 		ConstructedSampleSizeFilterDropdownComponent,
+		ConstructedDustFilterDropdownComponent,
 		ConstructedArchetypeSampleSizeFilterDropdownComponent,
 		DecktrackerTimeFilterDropdownComponent,
 		DecktrackerRankFilterDropdownComponent,

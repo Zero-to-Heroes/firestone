@@ -40,6 +40,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<constructed-archetype-sample-size-filter-dropdown
 				class="filter"
 			></constructed-archetype-sample-size-filter-dropdown>
+			<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
 

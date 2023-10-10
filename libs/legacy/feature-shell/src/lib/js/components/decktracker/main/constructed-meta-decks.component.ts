@@ -146,17 +146,20 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
+				(prefs) => prefs.constructedMetaDecksDustFilter,
 			),
 		]).pipe(
-			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize]]) => {
+			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize, dust]]) => {
 				// let enhancedCounter = 0;
+				console.debug('filtering decks', dust);
 				const enhanced = stats?.deckStats
 					.filter((stat) => stat.totalGames >= sampleSize)
 					.map((stat) => {
 						// enhancedCounter++;
 						// console.debug('enhancedCounter', enhancedCounter);
 						return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
-					});
+					})
+					.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
 				// console.debug('enhanced', enhanced);
 				return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 			}),

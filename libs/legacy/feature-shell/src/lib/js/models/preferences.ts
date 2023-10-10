@@ -26,6 +26,7 @@ import {
 	CollectionPortraitCategoryFilter,
 	CollectionPortraitOwnedFilter,
 } from './collection/filter-types';
+import { ConstructedMetaDecksDustFilterType } from './constructed/constructed-meta-decks';
 import { DuelsTopDecksDustFilterType } from './duels/duels-types';
 import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
 import { BgsQuestActiveTabType, BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
@@ -178,6 +179,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksTimeFilter: TimePeriod = 'last-patch';
 	readonly constructedMetaDecksRankFilter2: RankBracket = 'legend';
 	readonly constructedMetaDecksSampleSizeFilter: number = 200;
+	readonly constructedMetaDecksDustFilter: ConstructedMetaDecksDustFilterType = 'all';
 	readonly constructedMetaArchetypesSampleSizeFilter: number = 2000;
 	readonly constructedMetaDecksUseConservativeWinrate: boolean = false;
 	readonly constructedMetaDecksShowRelativeInfo: boolean = false;
