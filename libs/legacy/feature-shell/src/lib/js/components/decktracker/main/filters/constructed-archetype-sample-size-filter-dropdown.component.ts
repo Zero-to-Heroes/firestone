@@ -28,7 +28,7 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
-	options: IOption[] = [500, 1000, 2000, 4000, 8000].map((value) => ({
+	options: IOption[] = [200, 500, 1000, 2000, 4000, 8000].map((value) => ({
 		value: '' + value,
 		label: this.i18n.translateString('app.decktracker.filters.sample-size-filter', { value: value }),
 	}));
