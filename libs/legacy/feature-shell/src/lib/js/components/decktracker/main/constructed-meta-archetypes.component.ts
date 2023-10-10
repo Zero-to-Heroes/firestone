@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -85,7 +84,7 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 })
 export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
-	archetypes$: Observable<ArchetypeStat[]>;
+	archetypes$: Observable<EnhancedArchetypeStat[]>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'winrate',
@@ -95,7 +94,6 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
@@ -109,11 +107,14 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaArchetypesSampleSizeFilter,
+				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
 			),
 		]).pipe(
 			filter(([sortCriteria, stats, [useConservativeEstimate, sampleSize]]) => !!stats?.dataPoints),
-			this.mapData(([sortCriteria, stats, [useConservativeEstimate, sampleSize]]) =>
+			this.mapData(([sortCriteria, stats, [useConservativeEstimate, sampleSize, playerClasses]]) =>
 				stats.archetypeStats
+					.filter((a) => a.totalGames >= sampleSize)
+					.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.heroCardClass))
 					.map((a) => ({
 						...a,
 						totalGames: formatGamesCount(a.totalGames),
@@ -122,10 +123,9 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 								? a.name
 								: this.i18n.translateString(`archetype.${a.name}`),
 					}))
-					.filter((a) => a.totalGames >= sampleSize)
+					.map((stat) => this.enhanceStat(stat, useConservativeEstimate))
 					.sort((a, b) => this.sortArchetypes(a, b, sortCriteria)),
 			),
-			tap((stats) => console.log('stats in meta archetypes', stats)),
 		);
 	}
 
@@ -142,6 +142,19 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 
 	trackByArchetype(index: number, item: ArchetypeStat) {
 		return item.id;
+	}
+
+	private enhanceStat(stat: ArchetypeStat, conservativeEstimate: boolean): EnhancedArchetypeStat {
+		const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);
+		const conservativeWinrate: number = stat.winrate - 3 * standardDeviation;
+		const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
+		return {
+			...stat,
+			rawWinrate: stat.winrate,
+			standardDeviation: standardDeviation,
+			conservativeWinrate: conservativeWinrate,
+			winrate: winrateToUse,
+		};
 	}
 
 	private sortArchetypes(a: ArchetypeStat, b: ArchetypeStat, sortCriteria: SortCriteria<ColumnSortType>): number {
@@ -171,3 +184,9 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 }
 
 export type ColumnSortType = 'name' | 'winrate' | 'games';
+
+export interface EnhancedArchetypeStat extends ArchetypeStat {
+	readonly rawWinrate: number;
+	readonly standardDeviation: number;
+	readonly conservativeWinrate: number;
+}

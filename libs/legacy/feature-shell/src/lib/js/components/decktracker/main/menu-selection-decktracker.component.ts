@@ -69,7 +69,7 @@ export class MenuSelectionDecktrackerComponent
 			id: 'constructed-meta-archetypes',
 			translationKey: 'app.decktracker.menu.meta-archetypes-header',
 			isPremium: true,
-			comingSoon: true,
+			// comingSoon: true,
 		},
 		{
 			id: 'ladder-stats',
