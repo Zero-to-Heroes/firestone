@@ -9,6 +9,7 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 	protected abstract type: () => string;
 	protected abstract memoryInfoCountExtractor: (update: MemoryUpdate) => number;
 	protected abstract memoryReadingOperation: () => Promise<readonly U[]>;
+	protected abstract isMemoryInfoEmpty: (collection: readonly U[]) => boolean;
 	protected abstract localDbRetrieveOperation: () => Promise<readonly T[]>;
 	protected abstract localDbSaveOperation: (collection: readonly T[]) => Promise<any>;
 
@@ -41,7 +42,7 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 		);
 		collectionUpdate$.pipe(debounceTime(5000), distinctUntilChanged()).subscribe(async (newCount) => {
 			const collection = await this.memoryReadingOperation();
-			if (!!collection?.length) {
+			if (!this.isMemoryInfoEmpty(collection)) {
 				const updated = this.updateMemoryInfo(collection);
 				console.debug(
 					`[collection-manager] [${this.type()}] updating collection`,
@@ -53,13 +54,21 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 			}
 		});
 		this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
-			console.debug(`[collection-manager] [${this.type()}] updating collection in db`, collection.length);
+			console.debug(
+				`[collection-manager] [${this.type()}] updating collection in db`,
+				collection.length,
+				collection,
+			);
 			await this.localDbSaveOperation(collection);
 		});
 
 		const collectionFromDb = await this.localDbRetrieveOperation();
 		if (collectionFromDb?.length) {
-			console.debug(`[collection-manager] [${this.type()}] init collection from db`, collectionFromDb.length);
+			console.debug(
+				`[collection-manager] [${this.type()}] init collection from db`,
+				collectionFromDb.length,
+				collectionFromDb,
+			);
 			this.collection$$.next(collectionFromDb);
 		}
 		await this.postInit();

@@ -8,6 +8,7 @@ export class BgHeroSkinsInternalService extends AbstractCollectionInternalServic
 	protected type = () => 'bg-hero-skins';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionBgHeroSkinsCount;
 	protected memoryReadingOperation = () => this.memoryReading.getBattlegroundsOwnedHeroSkinDbfIds();
+	protected isMemoryInfoEmpty = (collection: readonly number[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getBattlegroundsOwnedHeroSkinDbfIds();
 	protected localDbSaveOperation = (collection: readonly number[]) =>
 		this.db.saveBattlegroundsOwnedHeroSkinDbfIds(collection);

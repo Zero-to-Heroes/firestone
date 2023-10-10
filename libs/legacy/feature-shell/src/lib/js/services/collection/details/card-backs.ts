@@ -14,6 +14,7 @@ export class CardBacksInternalService extends AbstractCollectionInternalService<
 	protected type = () => 'card-backs';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionCardBacksCount;
 	protected memoryReadingOperation = () => this.memoryReading.getCardBacks();
+	protected isMemoryInfoEmpty = (collection: readonly CardBack[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getCardBacks();
 	protected localDbSaveOperation = (collection: readonly CardBack[]) => this.db.saveCardBacks(collection);
 
