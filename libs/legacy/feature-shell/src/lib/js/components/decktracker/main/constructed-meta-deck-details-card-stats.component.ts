@@ -39,6 +39,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				<sortable-table-label
 					class="cell data winrate"
 					[name]="'app.decktracker.meta.details.cards.mulligan-winrate-header' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.mulligan-winrate-header-tooltip' | owTranslate"
 					[sort]="sort"
 					[criteria]="'mulligan-winrate'"
 					(sortClick)="onSortClick($event)"
@@ -47,6 +48,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				<sortable-table-label
 					class="cell data kept"
 					[name]="'app.decktracker.meta.details.cards.mulligan-kept-header' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.mulligan-kept-header-tooltip' | owTranslate"
 					[sort]="sort"
 					[criteria]="'kept'"
 					(sortClick)="onSortClick($event)"
@@ -55,6 +57,9 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				<sortable-table-label
 					class="cell data drawn"
 					[name]="'app.decktracker.meta.details.cards.mulligan-drawn-winrate-header' | owTranslate"
+					[helpTooltip]="
+						'app.decktracker.meta.details.cards.mulligan-drawn-winrate-header-tooltip' | owTranslate
+					"
 					[sort]="sort"
 					[criteria]="'drawn-winrate'"
 					(sortClick)="onSortClick($event)"
@@ -122,6 +127,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 			this.deckWinrate$$,
 		]).pipe(
 			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate]) => {
+				console.debug('cardsData', cardData);
 				const groupedByCardId = groupByFunction((data: ConstructedCardData) => data.cardId)(cardData);
 				const result = Object.keys(groupedByCardId)
 					.map((cardId) => {
@@ -129,6 +135,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const data = groupedByCardId[cardId];
 						const copies = data.length;
 						const firstCopyData = data[0];
+
 						const absoluteMulliganWinrate = firstCopyData.inHandAfterMulligan
 							? firstCopyData.inHandAfterMulliganThenWin / firstCopyData.inHandAfterMulligan
 							: null;
@@ -136,17 +143,26 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const mulliganWinrate = showRelativeInfo ? relativeMulliganWinrate : absoluteMulliganWinrate;
 						const mulliganWinrateStr = buildPercents(mulliganWinrate);
 						const mulliganWinrateCss = buildCss(relativeMulliganWinrate);
+
 						const keptInMulligan = firstCopyData.drawnBeforeMulligan
 							? firstCopyData.keptInMulligan / firstCopyData.drawnBeforeMulligan
 							: null;
 						const keptInMulliganStr = buildPercents(keptInMulligan);
-						const absoluteDrawnWinrate = firstCopyData.drawn
-							? firstCopyData.drawnThenWin / firstCopyData.drawn
-							: null;
+
+						// const absoluteDrawnWinrate = firstCopyData.drawn
+						// 	? firstCopyData.drawnThenWin / firstCopyData.drawn
+						// 	: null;
+
+						const absoluteDrawnWinrate =
+							firstCopyData.drawn + firstCopyData.inHandAfterMulligan
+								? (firstCopyData.drawnThenWin + firstCopyData.inHandAfterMulliganThenWin) /
+								  (firstCopyData.drawn + firstCopyData.inHandAfterMulligan)
+								: null;
 						const relativeDrawnWinrate = buildRelative(absoluteDrawnWinrate, deckWinrate);
 						const drawnWinrate = showRelativeInfo ? relativeDrawnWinrate : absoluteDrawnWinrate;
 						const drawnWinrateStr = buildPercents(drawnWinrate);
 						const drawnWinrateCss = buildCss(relativeDrawnWinrate);
+
 						const internalEntityId = uuid();
 						// const mulliganKept = buildPercents(firstCopyData.keptInMulligan);
 						const result: InternalCardData = {
