@@ -151,23 +151,27 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
 				(prefs) => prefs.constructedMetaDecksDustFilter,
+				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
 			),
 		]).pipe(
 			debounceTime(300),
-			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize, dust]]) => {
-				// let enhancedCounter = 0;
-				console.debug('filtering decks', dust);
-				const enhanced = stats?.deckStats
-					.filter((stat) => stat.totalGames >= sampleSize)
-					.map((stat) => {
-						// enhancedCounter++;
-						// console.debug('enhancedCounter', enhancedCounter);
-						return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
-					})
-					.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
-				// console.debug('enhanced', enhanced);
-				return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
-			}),
+			this.mapData(
+				([stats, sortCriteria, collection, [conservativeEstimate, sampleSize, dust, playerClasses]]) => {
+					// let enhancedCounter = 0;
+					console.debug('filtering decks', dust);
+					const enhanced = stats?.deckStats
+						.filter((stat) => stat.totalGames >= sampleSize)
+						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+						.map((stat) => {
+							// enhancedCounter++;
+							// console.debug('enhancedCounter', enhancedCounter);
+							return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
+						})
+						.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
+					// console.debug('enhanced', enhanced);
+					return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
+				},
+			),
 		);
 		this.archetypes$ = this.store
 			.constructedMetaDecks$()

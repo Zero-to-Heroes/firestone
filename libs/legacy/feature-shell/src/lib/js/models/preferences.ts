@@ -183,6 +183,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaArchetypesSampleSizeFilter: number = 2000;
 	readonly constructedMetaDecksUseConservativeWinrate: boolean = false;
 	readonly constructedMetaDecksShowRelativeInfo: boolean = false;
+	readonly constructedMetaDecksPlayerClassFilter: readonly string[] = [];
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;
