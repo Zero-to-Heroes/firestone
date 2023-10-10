@@ -145,6 +145,7 @@ export const giftCreators = [
 	CardIds.DiscoveryOfMagic,
 	CardIds.DispossessedSoul,
 	CardIds.DivineIlluminationTavernBrawl,
+	CardIds.DivineIllumination_DivineIlluminationTavernBrawlEnchantment,
 	CardIds.Doomerang_CORE_ICC_233,
 	CardIds.Doomerang_ICC_233,
 	CardIds.DraconicLackey,
