@@ -17,7 +17,8 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 	template: `
 		<ng-container
 			*ngIf="{
-				archetypes: archetypes$ | async
+				archetypes: archetypes$ | async,
+				showStandardDeviation: showStandardDeviation$ | async
 			} as value"
 		>
 			<div class="constructed-meta-archetypes" *ngIf="value.archetypes">
@@ -75,6 +76,7 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 						class="archetype"
 						role="listitem"
 						[archetype]="archetype"
+						[showStandardDeviation]="value.showStandardDeviation"
 					></constructed-meta-archetype>
 				</virtual-scroller>
 			</div>
@@ -85,6 +87,7 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	archetypes$: Observable<EnhancedArchetypeStat[]>;
+	showStandardDeviation$: Observable<boolean>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'winrate',
@@ -101,6 +104,9 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 
 	ngAfterContentInit() {
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
+		this.showStandardDeviation$ = this.listenForBasicPref$(
+			(prefs) => !prefs.constructedMetaDecksUseConservativeWinrate,
+		);
 		this.archetypes$ = combineLatest([
 			this.sortCriteria$$,
 			this.store.constructedMetaDecks$(),

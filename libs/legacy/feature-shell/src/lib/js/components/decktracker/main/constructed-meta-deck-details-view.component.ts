@@ -40,7 +40,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
 						[origin]="'constructed-meta-decks'"
 					></copy-deckstring>
-					<div class="button view-online" (click)="viewOnline()">
+					<div class="button view-online" (click)="viewOnline()" *ngIf="deckstring">
 						<div class="icon">
 							<svg class="svg-icon-fill">
 								<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
@@ -74,11 +74,17 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</ul>
 				<div class="details" *ngIf="{ selectedTab: selectedTab$ | async } as value">
 					<constructed-meta-deck-details-cards
-						*ngIf="value.selectedTab === 'cards'"
+						*ngIf="value.selectedTab === 'cards' && isDeck"
 						[deck]="deck"
 						[archetypes]="archetypes"
 						[collection]="collection"
 					></constructed-meta-deck-details-cards>
+					<constructed-meta-archetype-details-cards
+						*ngIf="value.selectedTab === 'cards' && !isDeck"
+						[deck]="deck"
+						[archetypes]="archetypes"
+						[collection]="collection"
+					></constructed-meta-archetype-details-cards>
 					<constructed-meta-deck-details-card-stats
 						*ngIf="value.selectedTab === 'card-stats'"
 						[cards]="cards"
@@ -96,6 +102,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	selectedTab$: Observable<TabType>;
 
 	deck: ConstructedDeckDetails;
+	isDeck: boolean;
 	classTooltip: string;
 	classIcon: string;
 	deckName: string;
@@ -114,12 +121,12 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 
 	@Input() set input(value: ConstructedDeckDetails) {
 		// console.debug('[debug] input', value);
-		const isDeck = value?.type === 'deck';
+		this.isDeck = value?.type === 'deck';
 		this.deck = value;
 		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value?.heroCardClass}.png`;
 		this.classTooltip = this.i18n.translateString(`global.class.${value?.heroCardClass}`);
 		this.deckName = value?.name;
-		this.deckType = isDeck
+		this.deckType = this.isDeck
 			? this.i18n.translateString('app.decktracker.meta.details.deck-type')
 			: this.i18n.translateString('app.decktracker.meta.details.archetype-type');
 		this.gamesPlayed = value?.games.toLocaleString(this.i18n.formatCurrentLocale());
@@ -197,12 +204,12 @@ export interface ConstructedDeckDetails {
 	readonly winrate: number;
 	readonly archetypeId: number;
 	readonly cardsData: readonly ConstructedCardData[];
-	readonly cardVariations: {
+	readonly archetypeCoreCards: readonly string[];
+	readonly cardVariations?: {
 		readonly added: readonly string[];
 		readonly removed: readonly string[];
 	};
-	readonly archetypeCoreCards: readonly string[];
-	readonly sideboards: readonly Sideboard[];
+	readonly sideboards?: readonly Sideboard[];
 
 	readonly deckstring?: string;
 }

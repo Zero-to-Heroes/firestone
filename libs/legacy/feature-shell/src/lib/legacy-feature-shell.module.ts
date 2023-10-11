@@ -517,6 +517,8 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 // import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
+import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
+import { ConstructedMetaArchetypeDetailsComponent } from '@components/decktracker/main/constructed-meta-archetype-details.component';
 import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
 import { ConstructedMetaDeckDetailsCardStatsComponent } from '@components/decktracker/main/constructed-meta-deck-details-card-stats.component';
@@ -1295,8 +1297,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedMetaDeckDetailsViewComponent,
 		ConstructedMetaDeckDetailsCardStatsComponent,
 		ConstructedMetaDeckDetailsCardsComponent,
+		ConstructedMetaArchetypeDetailsCardsComponent,
 		ConstructedMetaArchetypesComponent,
 		ConstructedMetaArchetypeComponent,
+		ConstructedMetaArchetypeDetailsComponent,
 		DeckWinrateMatrixComponent,
 		DeckMatchupInfoComponent,
 		DecktrackerDeckRecapComponent,
