@@ -60,6 +60,7 @@ export class ConstructedRankFilterDropdownComponent
 			filter(([[currentView], [filter]]) => !!currentView),
 			this.mapData(([[currentView], [filter]]) => {
 				const brackets: RankBracket[] = [
+					'all',
 					'bronze-gold',
 					'platinum',
 					'diamond',
