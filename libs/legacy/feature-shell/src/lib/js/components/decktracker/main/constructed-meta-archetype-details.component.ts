@@ -65,11 +65,12 @@ export class ConstructedMetaArchetypeDetailsComponent
 						this.i18n.translateString(`archetype.${stat.name}`) === `archetype.${stat.name}`
 							? stat.name
 							: this.i18n.translateString(`archetype.${stat.name}`),
+					format: this.i18n.translateString(`global.format.${stat.format}`),
 					heroCardClass: stat.heroCardClass,
 					games: stat.totalGames,
 					winrate: winrateToUse,
 					archetypeCoreCards: stat.coreCards,
-					cardsData: [],
+					cardsData: stat.cardsData,
 				};
 				return result;
 			}),

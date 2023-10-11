@@ -18,7 +18,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 		`../../../../css/component/decktracker/main/constructed-meta-deck-details-card-stats.component.scss`,
 	],
 	template: `
-		<div class="constructed-meta-deck-details-card-stats">
+		<div class="constructed-meta-deck-details-card-stats" [ngClass]="{ deck: isDeck, archetype: !isDeck }">
 			<div class="controls">
 				<preference-toggle
 					class="show-relative-info-button"
@@ -33,6 +33,24 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					[name]="'app.decktracker.meta.details.cards.card-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'name'"
+					(sortClick)="onSortClick($event)"
+				>
+				</sortable-table-label>
+				<sortable-table-label
+					class="cell data copy-1"
+					[name]="'app.decktracker.meta.details.cards.copy-1-header' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.copy-1-header-tooltip' | owTranslate"
+					[sort]="sort"
+					[criteria]="'copy-1'"
+					(sortClick)="onSortClick($event)"
+				>
+				</sortable-table-label>
+				<sortable-table-label
+					class="cell data copy-2"
+					[name]="'app.decktracker.meta.details.cards.copy-2-header' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.copy-2-header-tooltip' | owTranslate"
+					[sort]="sort"
+					[criteria]="'copy-2'"
 					(sortClick)="onSortClick($event)"
 				>
 				</sortable-table-label>
@@ -77,6 +95,8 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 							[side]="'player'"
 						></deck-card>
 					</div>
+					<div class="cell data copy-1">{{ card.copy1Str }}</div>
+					<div class="cell data copy-2">{{ card.copy2Str }}</div>
 					<div class="cell data winrate {{ card.mulliganWinrateCss }}">{{ card.mulliganWinrateStr }}</div>
 					<div class="cell data kept ">{{ card.keptInMulliganStr }}</div>
 					<div class="cell data drawn {{ card.drawnWinrateCss }}">{{ card.drawnWinrateStr }}</div>
@@ -102,10 +122,15 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	@Input() set deckWinrate(value: number) {
 		this.deckWinrate$$.next(value);
 	}
+	@Input() set totalGames(value: number) {
+		this.totalGames$$.next(value);
+	}
+	@Input() isDeck: boolean;
 
 	private cardData$$ = new BehaviorSubject<readonly ConstructedCardData[]>([]);
 	private showRelativeInfo$$ = new BehaviorSubject<boolean>(false);
 	private deckWinrate$$ = new BehaviorSubject<number>(null);
+	private totalGames$$ = new BehaviorSubject<number>(null);
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'mulligan-winrate',
@@ -125,8 +150,9 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 			this.sortCriteria$$,
 			this.showRelativeInfo$$,
 			this.deckWinrate$$,
+			this.totalGames$$,
 		]).pipe(
-			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate]) => {
+			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate, totalGames]) => {
 				console.debug('cardsData', cardData);
 				const groupedByCardId = groupByFunction((data: ConstructedCardData) => data.cardId)(cardData);
 				const result = Object.keys(groupedByCardId)
@@ -163,6 +189,12 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const drawnWinrateStr = buildPercents(drawnWinrate);
 						const drawnWinrateCss = buildCss(relativeDrawnWinrate);
 
+						const copy1 = firstCopyData.inStartingDeck / totalGames;
+						const copy1Str = buildPercents(copy1);
+						const secondCopyData = data[1];
+						const copy2 = (secondCopyData?.inStartingDeck ?? 0) / totalGames;
+						const copy2Str = copy2 > 0 ? buildPercents(copy2) : '-';
+
 						const internalEntityId = uuid();
 						// const mulliganKept = buildPercents(firstCopyData.keptInMulligan);
 						const result: InternalCardData = {
@@ -175,6 +207,10 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 							drawnWinrateCss: drawnWinrateCss,
 							keptInMulligan: keptInMulligan,
 							keptInMulliganStr: keptInMulliganStr,
+							copy1: copy1,
+							copy1Str: copy1Str,
+							copy2: copy2,
+							copy2Str: copy2Str,
 							deckCard: VisualDeckCard.create({
 								cardId: card.id,
 								cardName: card.name,
@@ -215,6 +251,10 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 				return this.sortByKept(a, b, sortCriteria.direction);
 			case 'drawn-winrate':
 				return this.sortByDrawnWinrate(a, b, sortCriteria.direction);
+			case 'copy-1':
+				return this.sortByCopy1(a, b, sortCriteria.direction);
+			case 'copy-2':
+				return this.sortByCopy2(a, b, sortCriteria.direction);
 			default:
 				return 0;
 		}
@@ -237,6 +277,14 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 
 	private sortByDrawnWinrate(a: InternalCardData, b: InternalCardData, direction: SortDirection): number {
 		return direction === 'asc' ? a.drawnWinrate - b.drawnWinrate : b.drawnWinrate - a.drawnWinrate;
+	}
+
+	private sortByCopy1(a: InternalCardData, b: InternalCardData, direction: SortDirection): number {
+		return direction === 'asc' ? a.copy1 - b.copy1 : b.copy1 - a.copy1;
+	}
+
+	private sortByCopy2(a: InternalCardData, b: InternalCardData, direction: SortDirection): number {
+		return direction === 'asc' ? a.copy2 - b.copy2 : b.copy2 - a.copy2;
 	}
 }
 
@@ -265,6 +313,10 @@ interface InternalCardData {
 	readonly drawnWinrate: number;
 	readonly drawnWinrateStr: string;
 	readonly drawnWinrateCss: string;
+	readonly copy1: number;
+	readonly copy1Str: string;
+	readonly copy2: number;
+	readonly copy2Str: string;
 }
 
-type ColumnSortType = 'name' | 'mulligan-winrate' | 'kept' | 'drawn-winrate';
+type ColumnSortType = 'name' | 'mulligan-winrate' | 'kept' | 'drawn-winrate' | 'copy-1' | 'copy-2';

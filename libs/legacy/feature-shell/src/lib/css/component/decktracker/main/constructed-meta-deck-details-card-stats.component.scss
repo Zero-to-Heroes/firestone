@@ -84,4 +84,11 @@
 			}
 		}
 	}
+
+	&.deck {
+		.copy-1,
+		.copy-2 {
+			display: none;
+		}
+	}
 }

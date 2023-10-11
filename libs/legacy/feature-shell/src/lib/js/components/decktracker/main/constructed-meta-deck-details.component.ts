@@ -76,6 +76,7 @@ export class ConstructedMetaDeckDetailsComponent
 						`archetype.${stat.archetypeName}`
 							? stat.archetypeName
 							: this.i18n.translateString(`archetype.${stat.archetypeName}`),
+					format: this.i18n.translateString(`global.format.${stat.format}`),
 					heroCardClass: stat.playerClass,
 					games: stat.totalGames,
 					winrate: winrateToUse,
