@@ -90,7 +90,7 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 	showStandardDeviation$: Observable<boolean>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
-		criteria: 'winrate',
+		criteria: 'games',
 		direction: 'desc',
 	});
 

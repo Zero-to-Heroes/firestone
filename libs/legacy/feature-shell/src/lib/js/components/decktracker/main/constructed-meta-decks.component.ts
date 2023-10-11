@@ -107,7 +107,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	showStandardDeviation$: Observable<boolean>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
-		criteria: 'winrate',
+		criteria: 'games',
 		direction: 'desc',
 	});
 
