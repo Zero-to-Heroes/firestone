@@ -8,6 +8,7 @@ import {
 	Input,
 	OnDestroy,
 	Output,
+	ViewChild,
 	ViewRef,
 } from '@angular/core';
 import {
@@ -17,7 +18,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'filter-dropdown-multiselect',
@@ -37,6 +38,17 @@ import { distinctUntilChanged, filter } from 'rxjs/operators';
 					} as value
 				"
 			>
+				<input
+					class="text-input"
+					*ngIf="allowSearch"
+					#search
+					[cdkTrapFocusAutoCapture]="showing"
+					[cdkTrapFocus]="showing"
+					[autofocus]="true"
+					[ngModel]="currentSearch$ | async"
+					(ngModelChange)="onCurrentSearchChanged($event)"
+					(mousedown)="preventDrag($event)"
+				/>
 				<div class="choices" scrollable>
 					<div class="option" *ngFor="let option of value.workingOptions; trackBy: trackByFn">
 						<checkbox
@@ -73,6 +85,8 @@ import { distinctUntilChanged, filter } from 'rxjs/operators';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
+	@ViewChild('search') searchInput: ElementRef;
+
 	@Output() optionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
@@ -92,12 +106,15 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
+	@Input() allowSearch: boolean;
 	@Input() validSelectionNumber: number;
 	@Input() validationErrorTooltip: string;
+	@Input() debounceTime = 200;
 
 	valueText$: Observable<string>;
 	workingOptions$: Observable<readonly InternalOption[]>;
 	validSelection$: Observable<boolean>;
+	currentSearch$: Observable<string>;
 
 	showing: boolean;
 
@@ -107,6 +124,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	private tempSelected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
 	private options$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
 	private selected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
+	private currentSearch$$ = new BehaviorSubject<string>(null);
 
 	private sub$$: Subscription;
 
@@ -142,14 +160,24 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 						.filter((option) => this.tempSelected$.value?.includes(option)),
 				);
 			});
-		this.workingOptions$ = combineLatest([this.options$.asObservable(), this.tempSelected$.asObservable()]).pipe(
-			filter(([options, tempSelected]) => !!options),
+		this.workingOptions$ = combineLatest([
+			this.options$.asObservable(),
+			this.tempSelected$.asObservable(),
+			this.currentSearch$$,
+		]).pipe(
+			filter(([options, tempSelected, currentSearch]) => !!options),
+			debounceTime(this.debounceTime),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([options, tempSelected]) => {
-				const result = options.map((option) => ({
-					...option,
-					selected: tempSelected?.includes(option.value),
-				}));
+			this.mapData(([options, tempSelected, currentSearch]) => {
+				const result = options
+					.filter(
+						(option) =>
+							!currentSearch?.length || option.label.toLowerCase().includes(currentSearch.toLowerCase()),
+					)
+					.map((option) => ({
+						...option,
+						selected: tempSelected?.includes(option.value),
+					}));
 				return result;
 			}),
 		);
@@ -157,6 +185,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			filter(([options, workingOptions]) => !!options),
 			this.mapData(([options, workingOptions]) => this.isValidSelection(options, workingOptions)),
 		);
+		this.currentSearch$ = this.currentSearch$$.asObservable().pipe(this.mapData((v) => v));
 	}
 
 	@HostListener('window:beforeunload')
@@ -181,6 +210,10 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+		// setTimeout
+		// if (this.showing && this.allowSearch) {
+		// 	this.searchInput.nativeElement.focus();
+		// }
 	}
 
 	select(option: MultiselectOption, isSelected: boolean) {
@@ -218,13 +251,25 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		if (!validSelection) {
 			return;
 		}
-		const value = this.tempSelected$.value;
+		const value = this.tempSelected$.value.filter((option) =>
+			!this.currentSearch$$.value?.length
+				? true
+				: option.toLowerCase().includes(this.currentSearch$$.value.toLowerCase()),
+		);
 		this.optionSelected.next(value);
 		this.toggle();
 	}
 
 	trackByFn(index: number, item: InternalOption) {
 		return item.value;
+	}
+
+	onCurrentSearchChanged(event: string) {
+		this.currentSearch$$.next(event);
+	}
+
+	preventDrag(event: MouseEvent) {
+		event.stopPropagation();
 	}
 
 	private buildIcons(options: MultiselectOption[]): string {

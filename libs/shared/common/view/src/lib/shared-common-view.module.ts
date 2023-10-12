@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -50,6 +51,7 @@ const components = [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
+		A11yModule,
 
 		InlineSVGModule.forRoot(),
 		SelectModule,
