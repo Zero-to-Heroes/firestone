@@ -525,6 +525,7 @@ import { ConstructedMetaDeckDetailsCardsComponent } from '@components/decktracke
 import { ConstructedMetaDeckDetailsViewComponent } from '@components/decktracker/main/constructed-meta-deck-details-view.component';
 import { ConstructedMetaDeckDetailsComponent } from '@components/decktracker/main/constructed-meta-deck-details.component';
 import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
+import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
@@ -1332,6 +1333,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedTimeFilterDropdownComponent,
 		ConstructedMyDecksSearchComponent,
 		ConstructedPlayerClassFilterDropdownComponent,
+		ConstructedPlayerArchetypeFilterDropdownComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

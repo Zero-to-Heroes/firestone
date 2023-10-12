@@ -149,16 +149,23 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
 				(prefs) => prefs.constructedMetaDecksDustFilter,
 				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
+				(prefs) => prefs.constructedMetaDecksArchetypeFilter,
 			),
 		]).pipe(
 			debounceTime(300),
 			this.mapData(
-				([stats, sortCriteria, collection, [conservativeEstimate, sampleSize, dust, playerClasses]]) => {
+				([
+					stats,
+					sortCriteria,
+					collection,
+					[conservativeEstimate, sampleSize, dust, playerClasses, archetypes],
+				]) => {
 					// let enhancedCounter = 0;
 					console.debug('filtering decks', dust);
 					const enhanced = stats?.deckStats
 						.filter((stat) => stat.totalGames >= sampleSize)
 						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+						.filter((stat) => !archetypes?.length || archetypes.includes(stat.archetypeId))
 						.map((stat) => {
 							// enhancedCounter++;
 							// console.debug('enhancedCounter', enhancedCounter);

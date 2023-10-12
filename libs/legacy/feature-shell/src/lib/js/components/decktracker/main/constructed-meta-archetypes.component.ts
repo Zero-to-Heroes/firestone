@@ -116,13 +116,15 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaArchetypesSampleSizeFilter,
 				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
+				(prefs) => prefs.constructedMetaDecksArchetypeFilter,
 			),
 		]).pipe(
 			filter(([sortCriteria, stats, [useConservativeEstimate, sampleSize]]) => !!stats?.dataPoints),
-			this.mapData(([sortCriteria, stats, [useConservativeEstimate, sampleSize, playerClasses]]) =>
+			this.mapData(([sortCriteria, stats, [useConservativeEstimate, sampleSize, playerClasses, archetypes]]) =>
 				stats.archetypeStats
 					.filter((a) => a.totalGames >= sampleSize)
 					.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.heroCardClass))
+					.filter((stat) => !archetypes?.length || archetypes.includes(stat.id))
 					.map((a) => ({
 						...a,
 						totalGames: formatGamesCount(a.totalGames),

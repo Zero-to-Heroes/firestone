@@ -95,7 +95,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	@Input() set selected(value: readonly string[]) {
-		this.tempSelected$.next(value);
+		this.tempSelectedValues$.next(value);
 		this.selected$.next(value);
 	}
 
@@ -121,7 +121,8 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	_visible: boolean;
 	_selected: readonly string[];
 
-	private tempSelected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
+	private tempSelectedValues$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
+	private tempSelected$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
 	private options$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
 	private selected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
 	private currentSearch$$ = new BehaviorSubject<string>(null);
@@ -132,6 +133,17 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		super(cdr);
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
 		// the first time (maybe because of "visible"?)
+		combineLatest([this.options$, this.tempSelectedValues$])
+			.pipe(
+				filter(([options, tempSelectedValues]) => !!options?.length),
+				this.mapData(([options, tempSelectedValues]) => {
+					const tempSelected = options.filter((option) =>
+						tempSelectedValues?.some((e) => option.value === e),
+					);
+					return tempSelected;
+				}),
+			)
+			.subscribe((tempSelected) => this.tempSelected$.next(tempSelected));
 		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
 			filter(([options, selected]) => !!options?.length),
 			this.mapData(([options, selected]) => {
@@ -155,9 +167,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			)
 			.subscribe((options) => {
 				this.tempSelected$.next(
-					options
-						.map((option) => option.value)
-						.filter((option) => this.tempSelected$.value?.includes(option)),
+					options.filter((option) => this.tempSelected$.value?.some((e) => option.value === option.value)),
 				);
 			});
 		this.workingOptions$ = combineLatest([
@@ -176,7 +186,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 					)
 					.map((option) => ({
 						...option,
-						selected: tempSelected?.includes(option.value),
+						selected: tempSelected.some((o) => o.value === option.value),
 					}));
 				return result;
 			}),
@@ -218,10 +228,13 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	select(option: MultiselectOption, isSelected: boolean) {
 		let tempSelected = this.tempSelected$.value;
-		if (isSelected && !tempSelected.includes(option.value)) {
-			tempSelected = [...tempSelected, option.value];
-		} else if (!isSelected && tempSelected.includes(option.value)) {
-			tempSelected = removeFromReadonlyArray(tempSelected, tempSelected.indexOf(option.value));
+		if (isSelected && !tempSelected.some((o) => o.value === option.value)) {
+			tempSelected = [...tempSelected, option];
+		} else if (!isSelected && tempSelected.some((o) => o.value === option.value)) {
+			tempSelected = removeFromReadonlyArray(
+				tempSelected,
+				tempSelected.map((e) => e.value).indexOf(option.value),
+			);
 		}
 		this.tempSelected$.next(tempSelected);
 	}
@@ -231,7 +244,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	resetSelection() {
-		this.tempSelected$.next(this.options$.value.map((option) => option.value));
+		this.tempSelected$.next(this.options$.value);
 	}
 
 	buttonTooltip(validSelection: boolean): string {
@@ -254,9 +267,9 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		const value = this.tempSelected$.value.filter((option) =>
 			!this.currentSearch$$.value?.length
 				? true
-				: option.toLowerCase().includes(this.currentSearch$$.value.toLowerCase()),
+				: option.label.toLowerCase().includes(this.currentSearch$$.value.toLowerCase()),
 		);
-		this.optionSelected.next(value);
+		this.optionSelected.next(value.map((o) => o.value));
 		this.toggle();
 	}
 
