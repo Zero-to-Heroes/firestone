@@ -134,6 +134,7 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		enchantments: buildEnchantments(logEntity.Enchantments),
 		entityId: logEntity.Entity,
 		health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
+		maxHealth: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
 		poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
 		venomous: logEntity.Tags.find((tag) => tag.Name === GameTag.VENOMOUS)?.Value === 1,
 		reborn: logEntity.Tags.find((tag) => tag.Name === GameTag.REBORN)?.Value === 1,
