@@ -30,8 +30,6 @@ export class ConstructedPlayerClassFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
-	allValuesLabel = this.i18n.translateString('app.decktracker.filters.class-filter.all') as string;
-
 	options: MultiselectOption[];
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
