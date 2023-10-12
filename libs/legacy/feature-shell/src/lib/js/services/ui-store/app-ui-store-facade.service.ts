@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { DeckStats } from '@firestone-hs/constructed-deck-stats';
+import { ArchetypeStat, ArchetypeStats, DeckStat, DeckStats } from '@firestone-hs/constructed-deck-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
@@ -270,6 +270,18 @@ export class AppUiStoreFacadeService {
 
 	public constructedMetaDecks$(): Observable<DeckStats> {
 		return this.store.constructedMetaDecks$();
+	}
+
+	public currentConstructedMetaDeck$(): Observable<DeckStat> {
+		return this.store.currentConstructedMetaDeck$();
+	}
+
+	public constructedMetaArchetypes$(): Observable<ArchetypeStats> {
+		return this.store.constructedMetaArchetypes$();
+	}
+
+	public currentConstructedMetaArchetype$(): Observable<ArchetypeStat> {
+		return this.store.currentConstructedMetaArchetype$();
 	}
 
 	public send(event: MainWindowStoreEvent) {

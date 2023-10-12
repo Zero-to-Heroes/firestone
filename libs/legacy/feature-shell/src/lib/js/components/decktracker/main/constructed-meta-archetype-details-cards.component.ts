@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
@@ -39,19 +38,10 @@ export class ConstructedMetaArchetypeDetailsCardsComponent
 	collection$: Observable<readonly Card[]>;
 
 	archetypeCoreCards: readonly MinimalCard[];
-	removedCards: readonly CardVariation[];
-	addedCards: readonly CardVariation[];
-
 	archetypeCoreCardsHeaderDetails: string;
-	removedCardsHeaderDetails: string;
-	addedCardsHeaderDetails: string;
 
 	@Input() set deck(value: ConstructedDeckDetails) {
 		this.deck$$.next(value);
-	}
-
-	@Input() set archetypes(value: readonly ArchetypeStat[]) {
-		this.archetypes$$.next(value);
 	}
 
 	@Input() set collection(value: readonly Card[]) {
@@ -59,7 +49,6 @@ export class ConstructedMetaArchetypeDetailsCardsComponent
 	}
 
 	private deck$$ = new BehaviorSubject<ConstructedDeckDetails>(null);
-	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
 	private collection$$ = new BehaviorSubject<readonly Card[]>([]);
 
 	constructor(
@@ -71,51 +60,20 @@ export class ConstructedMetaArchetypeDetailsCardsComponent
 	}
 
 	ngAfterContentInit() {
-		combineLatest([this.deck$$, this.archetypes$$])
-			.pipe(
-				// debounceTime(300),
-				this.mapData(([deck, archetypes]) => {
-					const archetype = archetypes.find((arch) => arch.id === deck.archetypeId);
-					return { deck, archetype };
-				}),
-			)
-			.subscribe(({ deck, archetype }) => {
-				this.archetypeCoreCards = buildCardVariations(
-					archetype?.coreCards,
-					deck.sideboards ?? [],
-					this.allCards,
-				);
-				this.removedCards = buildCardVariations(
-					deck.cardVariations?.removed,
-					deck.sideboards ?? [],
-					this.allCards,
-				);
-				this.addedCards = buildCardVariations(deck.cardVariations?.added, deck.sideboards ?? [], this.allCards);
-
-				const archetypeCoreCardsNumber = this.archetypeCoreCards
-					.map((c) => c.quantity)
-					.reduce((a, b) => a + b, 0);
-				this.archetypeCoreCardsHeaderDetails =
-					archetypeCoreCardsNumber > 0
-						? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
-								value: archetypeCoreCardsNumber,
-						  })
-						: null;
-				const removedCardsNumber = this.removedCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
-				this.removedCardsHeaderDetails =
-					removedCardsNumber > 0
-						? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
-								value: removedCardsNumber,
-						  })
-						: null;
-				const addedCardsNumber = this.addedCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
-				this.addedCardsHeaderDetails =
-					addedCardsNumber > 0
-						? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
-								value: addedCardsNumber,
-						  })
-						: null;
-			});
+		this.deck$$.pipe(this.mapData((deck) => deck)).subscribe((deck) => {
+			this.archetypeCoreCards = buildCardVariations(
+				deck?.archetypeCoreCards,
+				deck.sideboards ?? [],
+				this.allCards,
+			);
+			const archetypeCoreCardsNumber = this.archetypeCoreCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
+			this.archetypeCoreCardsHeaderDetails =
+				archetypeCoreCardsNumber > 0
+					? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
+							value: archetypeCoreCardsNumber,
+					  })
+					: null;
+		});
 	}
 }
 

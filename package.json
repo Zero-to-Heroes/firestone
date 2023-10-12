@@ -35,7 +35,7 @@
 		"@firestone-hs/bgs-global-stats": "^1.0.40",
 		"@firestone-hs/build-global-stats": "^1.0.8",
 		"@firestone-hs/coliseum-components": "^0.0.24",
-		"@firestone-hs/constructed-deck-stats": "^0.0.8",
+		"@firestone-hs/constructed-deck-stats": "^0.0.9",
 		"@firestone-hs/deckstrings": "^2.2.7",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.5",

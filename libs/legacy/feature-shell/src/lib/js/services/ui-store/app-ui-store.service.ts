@@ -19,7 +19,7 @@ import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } fro
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { DeckStats } from '@firestone-hs/constructed-deck-stats';
+import { ArchetypeStat, ArchetypeStats, DeckStat, DeckStats } from '@firestone-hs/constructed-deck-stats';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
@@ -126,6 +126,9 @@ export class AppUiStoreService extends Store<Preferences> {
 	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
 	private highlightedBgsMinions: Observable<readonly ShopMinion[]>;
 	private constructedMetaDecks: Observable<DeckStats>;
+	private currentConstructedMetaDeck: Observable<DeckStat>;
+	private constructedMetaArchetypes: Observable<ArchetypeStats>;
+	private currentConstructedMetaArchetype: Observable<ArchetypeStat>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -485,6 +488,18 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.constructedMetaDecks;
 	}
 
+	public currentConstructedMetaDeck$(): Observable<DeckStat> {
+		return this.currentConstructedMetaDeck;
+	}
+
+	public constructedMetaArchetypes$(): Observable<ArchetypeStats> {
+		return this.constructedMetaArchetypes;
+	}
+
+	public currentConstructedMetaArchetype$(): Observable<ArchetypeStat> {
+		return this.currentConstructedMetaArchetype;
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -524,6 +539,15 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.constructedMetaDecks = (
 			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
 		).constructedMetaDecks$$;
+		this.currentConstructedMetaDeck = (
+			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
+		).currentConstructedMetaDeck$$;
+		this.constructedMetaArchetypes = (
+			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
+		).constructedMetaArchetypes$$;
+		this.currentConstructedMetaArchetype = (
+			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
+		).currentConstructedMetaArchetype$$;
 		await this.initDuelsTopDecks();
 		this.initialized = true;
 	}

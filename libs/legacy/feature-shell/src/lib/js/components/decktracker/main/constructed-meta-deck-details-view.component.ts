@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ArchetypeStat, ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
+import { ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
@@ -85,7 +85,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<constructed-meta-archetype-details-cards
 						*ngIf="value.selectedTab === 'cards' && !isDeck"
 						[deck]="deck"
-						[archetypes]="archetypes"
 						[collection]="collection"
 					></constructed-meta-archetype-details-cards>
 					<constructed-meta-deck-details-card-stats
@@ -121,7 +120,6 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 
 	deckstring?: string;
 
-	@Input() archetypes: readonly ArchetypeStat[];
 	@Input() collection: readonly Card[];
 	@Input() hasPremiumAccess: boolean;
 	@Input() showRelativeInfo: boolean;

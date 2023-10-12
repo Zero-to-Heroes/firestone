@@ -5,6 +5,11 @@
 	font-size: 13px;
 }
 
+with-loading {
+	display: flex;
+	flex-direction: column;
+}
+
 .constructed-meta-archetypes {
 	display: flex;
 	flex-direction: column;

@@ -21,65 +21,67 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 				showStandardDeviation: showStandardDeviation$ | async
 			} as value"
 		>
-			<div class="constructed-meta-archetypes" *ngIf="value.archetypes">
-				<div class="header" *ngIf="sortCriteria$ | async as sort">
-					<sortable-table-label
-						class="cell player-class"
-						[name]="'app.decktracker.meta.class-header' | owTranslate"
-						[sort]="sort"
-						[criteria]="'player-class'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell name"
-						[name]="'app.decktracker.meta.archetype-header' | owTranslate"
-						[sort]="sort"
-						[criteria]="'name'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell winrate"
-						[name]="'app.decktracker.meta.winrate-header' | owTranslate"
-						[sort]="sort"
-						[criteria]="'winrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell games"
-						[name]="'app.decktracker.meta.games-header' | owTranslate"
-						[sort]="sort"
-						[criteria]="'games'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<div class="cell cards">
-						<span
-							[owTranslate]="'app.decktracker.meta.core-cards-header'"
-							[helpTooltip]="'app.decktracker.meta.core-cards-header-tooltip' | owTranslate"
-						></span>
+			<with-loading [isLoading]="!value.archetypes">
+				<div class="constructed-meta-archetypes">
+					<div class="header" *ngIf="sortCriteria$ | async as sort">
+						<sortable-table-label
+							class="cell player-class"
+							[name]="'app.decktracker.meta.class-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'player-class'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell name"
+							[name]="'app.decktracker.meta.archetype-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'name'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell winrate"
+							[name]="'app.decktracker.meta.winrate-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'winrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell games"
+							[name]="'app.decktracker.meta.games-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'games'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<div class="cell cards">
+							<span
+								[owTranslate]="'app.decktracker.meta.core-cards-header'"
+								[helpTooltip]="'app.decktracker.meta.core-cards-header-tooltip' | owTranslate"
+							></span>
+						</div>
 					</div>
+					<virtual-scroller
+						#scroll
+						class="archetypes-list"
+						[items]="value.archetypes"
+						[bufferAmount]="15"
+						[attr.aria-label]="'Meta archetype stats'"
+						role="list"
+						scrollable
+					>
+						<constructed-meta-archetype
+							*ngFor="let archetype of scroll.viewPortItems; trackBy: trackByArchetype"
+							class="archetype"
+							role="listitem"
+							[archetype]="archetype"
+							[showStandardDeviation]="value.showStandardDeviation"
+						></constructed-meta-archetype>
+					</virtual-scroller>
 				</div>
-				<virtual-scroller
-					#scroll
-					class="archetypes-list"
-					[items]="value.archetypes"
-					[bufferAmount]="15"
-					[attr.aria-label]="'Meta archetype stats'"
-					role="list"
-					scrollable
-				>
-					<constructed-meta-archetype
-						*ngFor="let archetype of scroll.viewPortItems; trackBy: trackByArchetype"
-						class="archetype"
-						role="listitem"
-						[archetype]="archetype"
-						[showStandardDeviation]="value.showStandardDeviation"
-					></constructed-meta-archetype>
-				</virtual-scroller>
-			</div>
+			</with-loading>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -109,7 +111,7 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 		);
 		this.archetypes$ = combineLatest([
 			this.sortCriteria$$,
-			this.store.constructedMetaDecks$(),
+			this.store.constructedMetaArchetypes$(),
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaArchetypesSampleSizeFilter,

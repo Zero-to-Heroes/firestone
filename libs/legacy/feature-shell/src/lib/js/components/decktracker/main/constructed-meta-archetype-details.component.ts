@@ -1,6 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -12,7 +11,6 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 	template: `
 		<constructed-meta-deck-details-view
 			[input]="deckDetails$ | async"
-			[archetypes]="archetypes$ | async"
 			[hasPremiumAccess]="hasPremiumAccess$ | async"
 			[showRelativeInfo]="showRelativeInfo$ | async"
 		>
@@ -25,7 +23,6 @@ export class ConstructedMetaArchetypeDetailsComponent
 	implements AfterContentInit
 {
 	deckDetails$: Observable<ConstructedDeckDetails>;
-	archetypes$: Observable<readonly ArchetypeStat[]>;
 	hasPremiumAccess$: Observable<boolean>;
 	showRelativeInfo$: Observable<boolean>;
 
@@ -40,16 +37,11 @@ export class ConstructedMetaArchetypeDetailsComponent
 	ngAfterContentInit(): void {
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
 		this.showRelativeInfo$ = this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksShowRelativeInfo);
-		this.archetypes$ = this.store
-			.constructedMetaDecks$()
-			.pipe(this.mapData((stats) => stats?.archetypeStats ?? []));
 		this.deckDetails$ = combineLatest([
-			this.store.constructedMetaDecks$(),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaArchetype),
+			this.store.currentConstructedMetaArchetype$(),
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
 		]).pipe(
-			this.mapData(([stats, [archetypeId], [conservativeEstimate]]) => {
-				const stat: ArchetypeStat = stats?.archetypeStats?.find((s) => s.id === archetypeId);
+			this.mapData(([stat, [conservativeEstimate]]) => {
 				if (!stat) {
 					return null;
 				}

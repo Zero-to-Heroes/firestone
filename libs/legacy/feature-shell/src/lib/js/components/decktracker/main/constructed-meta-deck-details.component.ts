@@ -1,6 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import { Observable, combineLatest, debounceTime, filter } from 'rxjs';
 import { Card } from '../../../models/card';
@@ -48,13 +47,11 @@ export class ConstructedMetaDeckDetailsComponent
 			this.mapData((collection) => collection),
 		);
 		this.deckDetails$ = combineLatest([
-			this.store.constructedMetaDecks$(),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaDeck),
+			this.store.currentConstructedMetaDeck$(),
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
 		]).pipe(
-			this.mapData(([stats, [currentConstructedMetaDeck], [conservativeEstimate]]) => {
-				const stat: DeckStat = stats?.deckStats?.find((s) => s.decklist === currentConstructedMetaDeck);
-				console.debug('deckStat', stat, stats);
+			this.mapData(([stat, [conservativeEstimate]]) => {
+				console.debug('deckStat', stat);
 				if (!stat) {
 					return null;
 				}
