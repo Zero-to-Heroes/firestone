@@ -98,6 +98,7 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
+			bgsActiveUseAnomalyFilterInHeroSelection: true,
 			bgsActiveAnomaliesFilter: !value?.value ? [] : [value.value],
 		};
 		console.debug('[bgs-anomalies-filter-dropdown] setting new prefs', value, newPrefs);

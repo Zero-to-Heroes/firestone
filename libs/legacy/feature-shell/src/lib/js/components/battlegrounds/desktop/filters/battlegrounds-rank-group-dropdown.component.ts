@@ -1,19 +1,11 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-} from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { BgsMmrGroupFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-mmr-group-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -36,19 +28,17 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 })
 export class BattlegroundsRankGroupDropdownComponent
 	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
+	implements AfterContentInit
 {
 	options: MmrGroupFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
@@ -81,12 +71,14 @@ export class BattlegroundsRankGroupDropdownComponent
 			);
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	onSelected(option: IOption) {
-		this.stateUpdater.next(new BgsMmrGroupFilterSelectedEvent((option as MmrGroupFilterOption).value));
+	async onSelected(option: IOption) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			bgsActiveMmrGroupFilter: (option as MmrGroupFilterOption).value,
+		};
+		const updated = await this.prefs.savePreferences(newPrefs);
+		console.debug('updated prefs', updated);
 	}
 }
 

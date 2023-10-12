@@ -1,10 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { RankFilterOption } from '@firestone/battlegrounds/view';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -31,7 +32,11 @@ export class BattlegroundsRankFilterDropdownComponent
 	currentFilter$: Observable<number>;
 	visible$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
@@ -60,7 +65,13 @@ export class BattlegroundsRankFilterDropdownComponent
 			);
 	}
 
-	onSelected(option: RankFilterOption) {
-		this.store.send(new BgsRankFilterSelectedEvent(+option.value as BgsRankFilterType));
+	async onSelected(option: RankFilterOption) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			bgsActiveUseMmrFilterInHeroSelection: true,
+			bgsActiveRankFilter: +option.value as BgsRankFilterType,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 }
