@@ -146,7 +146,7 @@ export class ConstructedMetaDecksStateService {
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat> {
-		const deckId = encodeURIComponent(deckstring);
+		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const fileName = `${format}/${time}/${rank}/deck/${deckId}.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
