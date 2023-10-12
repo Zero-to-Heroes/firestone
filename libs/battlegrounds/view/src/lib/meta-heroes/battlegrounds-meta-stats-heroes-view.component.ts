@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/template/eqeqeq */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -20,46 +21,48 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 		`./battlegrounds-meta-stats-heroes-view.component.scss`,
 	],
 	template: `
-		<section
-			class="battlegrounds-meta-stats-heroes"
-			[attr.aria-label]="'Battlegrounds meta hero stats'"
-			*ngIf="{ tiers: tiers$ | async } as value"
-		>
-			<div class="header">
-				<div class="portrait"></div>
-				<div class="hero-details" [fsTranslate]="'app.battlegrounds.tier-list.header-hero-details'"></div>
-				<div class="position" [fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"></div>
-				<div
-					class="placement"
-					[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
-				></div>
-				<div
-					class="tribes"
-					[fsTranslate]="'app.battlegrounds.tier-list.header-tribes'"
-					[helpTooltip]="'app.battlegrounds.tier-list.header-tribes-tooltip' | fsTranslate"
-				></div>
-				<div
-					class="net-mmr"
-					[fsTranslate]="'app.battlegrounds.tier-list.header-net-mmr'"
-					[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
-				></div>
-				<!-- <div class="winrate" [owTranslate]="'app.battlegrounds.tier-list.header-combat-winrate'"></div> -->
-			</div>
-			<div class="heroes-list" role="list" scrollable>
-				<battlegrounds-meta-stats-hero-tier
-					*ngFor="let tier of value.tiers; trackBy: trackByFn"
-					role="listitem"
-					[tier]="tier"
-					(heroStatClick)="onHeroStatsClick($event)"
-				></battlegrounds-meta-stats-hero-tier>
-				<a
-					class="more-info"
-					href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Meta-Stats-for-Heroes"
-					target="_blank"
-					[fsTranslate]="'app.battlegrounds.tier-list.learn-more'"
-				></a>
-			</div>
-		</section>
+		<with-loading [isLoading]="(tiers$ | async) == null">
+			<section
+				class="battlegrounds-meta-stats-heroes"
+				[attr.aria-label]="'Battlegrounds meta hero stats'"
+				*ngIf="{ tiers: tiers$ | async } as value"
+			>
+				<div class="header">
+					<div class="portrait"></div>
+					<div class="hero-details" [fsTranslate]="'app.battlegrounds.tier-list.header-hero-details'"></div>
+					<div class="position" [fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"></div>
+					<div
+						class="placement"
+						[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
+					></div>
+					<div
+						class="tribes"
+						[fsTranslate]="'app.battlegrounds.tier-list.header-tribes'"
+						[helpTooltip]="'app.battlegrounds.tier-list.header-tribes-tooltip' | fsTranslate"
+					></div>
+					<div
+						class="net-mmr"
+						[fsTranslate]="'app.battlegrounds.tier-list.header-net-mmr'"
+						[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
+					></div>
+					<!-- <div class="winrate" [owTranslate]="'app.battlegrounds.tier-list.header-combat-winrate'"></div> -->
+				</div>
+				<div class="heroes-list" role="list" scrollable>
+					<battlegrounds-meta-stats-hero-tier
+						*ngFor="let tier of value.tiers; trackBy: trackByFn"
+						role="listitem"
+						[tier]="tier"
+						(heroStatClick)="onHeroStatsClick($event)"
+					></battlegrounds-meta-stats-hero-tier>
+					<a
+						class="more-info"
+						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Meta-Stats-for-Heroes"
+						target="_blank"
+						[fsTranslate]="'app.battlegrounds.tier-list.learn-more'"
+					></a>
+				</div>
+			</section>
+		</with-loading>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -87,8 +90,12 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 
 	ngAfterContentInit() {
 		this.tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
-			filter(([stats, heroSort]) => !!stats && !!heroSort),
+			filter(([stats, heroSort]) => !!heroSort),
 			this.mapData(([stats, heroSort]) => {
+				if (!stats) {
+					return null;
+				}
+
 				switch (heroSort) {
 					case 'average-position':
 						// Make sure we keep the items without data at the end

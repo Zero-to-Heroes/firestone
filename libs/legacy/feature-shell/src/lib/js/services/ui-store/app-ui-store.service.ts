@@ -774,16 +774,18 @@ export class AppUiStoreService extends Store<Preferences> {
 						'useAnomalyFilter',
 						useAnomalyFilter,
 					);
-					const result: readonly BgsMetaHeroStatTierItem[] = buildHeroStats(
-						stats?.heroStats,
-						// bgsActiveRankFilter,
-						bgsActiveTribesFilter,
-						bgsActiveAnomaliesFilter,
-						bgsHeroesUseConservativeEstimate,
-						useMmrFilter,
-						useAnomalyFilter,
-						this.allCards,
-					);
+					const result: readonly BgsMetaHeroStatTierItem[] = !stats?.heroStats
+						? null
+						: buildHeroStats(
+								stats?.heroStats,
+								// bgsActiveRankFilter,
+								bgsActiveTribesFilter,
+								bgsActiveAnomaliesFilter,
+								bgsHeroesUseConservativeEstimate,
+								useMmrFilter,
+								useAnomalyFilter,
+								this.allCards,
+						  );
 					return result;
 				},
 			),
@@ -840,10 +842,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 		const enhancedStats$ = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
 			tap((info) => console.debug('[bgs-3] rebuilding meta hero stats 3', info)),
-			map(
-				([stats, playerBgGames]) =>
-					stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards)) ?? [],
-			),
+			map(([stats, playerBgGames]) => stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		);

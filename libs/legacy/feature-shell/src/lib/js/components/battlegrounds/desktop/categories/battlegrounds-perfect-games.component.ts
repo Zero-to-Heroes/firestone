@@ -39,7 +39,10 @@ export class BattlegroundsPerfectGamesComponent
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 			)
 			.pipe(
-				filter(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => !!perfectGames?.length),
+				filter(
+					([perfectGames, mmrPercentiles, rankFilter, heroFilter]) =>
+						!!perfectGames?.length && !!mmrPercentiles?.length,
+				),
 				this.mapData(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => {
 					const mmrThreshold = getMmrThreshold(rankFilter, mmrPercentiles);
 					return this.applyFilters(perfectGames ?? [], mmrThreshold, heroFilter);

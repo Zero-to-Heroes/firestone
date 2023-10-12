@@ -74,7 +74,10 @@ export class BattlegroundsTierListComponent
 	ngAfterContentInit() {
 		this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles)
-			.pipe(this.mapData(([percentiles]) => percentiles))
+			.pipe(
+				filter(([percentiles]) => !!percentiles?.length),
+				this.mapData(([percentiles]) => percentiles),
+			)
 			.subscribe((percentiles) => {
 				this.percentiles = percentiles;
 			});
@@ -90,7 +93,8 @@ export class BattlegroundsTierListComponent
 			),
 		]).pipe(
 			filter(
-				([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => !!stats?.length,
+				([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) =>
+					!!stats?.length && !!mmrPercentiles?.length && !!lastUpdateDate,
 			),
 			map(([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter, anomaliesFilter]]) => ({
 				stats: stats,

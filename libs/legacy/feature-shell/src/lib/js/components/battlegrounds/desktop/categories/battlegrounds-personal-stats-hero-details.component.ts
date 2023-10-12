@@ -25,30 +25,33 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-personal-stats-hero-details">
-			<bgs-player-capsule [player]="player$ | async" [displayTavernTier]="false">
-				<bgs-hero-detailed-stats> </bgs-hero-detailed-stats>
-			</bgs-player-capsule>
-			<div class="stats" *ngIf="selectedTab$ | async as selectedTab">
-				<ul class="tabs">
-					<li
-						*ngFor="let tab of tabs"
-						class="tab"
-						[ngClass]="{ active: tab === selectedTab }"
-						(mousedown)="selectTab(tab)"
-					>
-						{{ getLabel(tab) }}
-					</li>
-				</ul>
-				<bgs-strategies class="stat" *ngIf="selectedTab === 'strategies'"> </bgs-strategies>
-				<bgs-last-warbands class="stat" *ngIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
-				<bgs-mmr-evolution-for-hero class="stat" *ngIf="selectedTab === 'mmr'"> </bgs-mmr-evolution-for-hero>
-				<bgs-warband-stats-for-hero class="stat" *ngIf="selectedTab === 'warband-stats'">
-				</bgs-warband-stats-for-hero>
-				<bgs-winrate-stats-for-hero class="stat" *ngIf="selectedTab === 'winrate-stats'">
-				</bgs-winrate-stats-for-hero>
+		<with-loading [isLoading]="(player$ | async) == null">
+			<div class="battlegrounds-personal-stats-hero-details">
+				<bgs-player-capsule [player]="player$ | async" [displayTavernTier]="false">
+					<bgs-hero-detailed-stats> </bgs-hero-detailed-stats>
+				</bgs-player-capsule>
+				<div class="stats" *ngIf="selectedTab$ | async as selectedTab">
+					<ul class="tabs">
+						<li
+							*ngFor="let tab of tabs"
+							class="tab"
+							[ngClass]="{ active: tab === selectedTab }"
+							(mousedown)="selectTab(tab)"
+						>
+							{{ getLabel(tab) }}
+						</li>
+					</ul>
+					<bgs-strategies class="stat" *ngIf="selectedTab === 'strategies'"> </bgs-strategies>
+					<bgs-last-warbands class="stat" *ngIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
+					<bgs-mmr-evolution-for-hero class="stat" *ngIf="selectedTab === 'mmr'">
+					</bgs-mmr-evolution-for-hero>
+					<bgs-warband-stats-for-hero class="stat" *ngIf="selectedTab === 'warband-stats'">
+					</bgs-warband-stats-for-hero>
+					<bgs-winrate-stats-for-hero class="stat" *ngIf="selectedTab === 'winrate-stats'">
+					</bgs-winrate-stats-for-hero>
+				</div>
 			</div>
-		</div>
+		</with-loading>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -97,16 +100,18 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				heroStats: heroStats,
 				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
 			})),
-			filter((info) => !!info.heroStats?.length && !!info.heroId),
-			map((info) => info.heroStats.find((stat) => stat.id === info.heroId)),
+			filter((info) => !info.heroId),
+			map((info) => info.heroStats?.find((stat) => stat.id === info.heroId)),
 			distinctUntilChanged(),
 			this.mapData((heroStat) =>
-				BgsPlayer.create({
-					cardId: heroStat.id,
-					displayedCardId: heroStat.id,
-					heroPowerCardId: heroStat.heroPowerCardId,
-					initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, heroStat.id, this.allCards),
-				} as BgsPlayer),
+				heroStat == null
+					? null
+					: BgsPlayer.create({
+							cardId: heroStat.id,
+							displayedCardId: heroStat.id,
+							heroPowerCardId: heroStat.heroPowerCardId,
+							initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, heroStat.id, this.allCards),
+					  } as BgsPlayer),
 			),
 		);
 	}
