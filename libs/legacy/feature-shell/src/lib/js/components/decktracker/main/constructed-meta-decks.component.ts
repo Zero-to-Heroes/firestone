@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
+import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -20,7 +20,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		<ng-container
 			*ngIf="{
 				decks: decks$ | async,
-				archetypes: archetypes$ | async,
 				showStandardDeviation: showStandardDeviation$ | async,
 				collection: collection$ | async
 			} as value"
@@ -89,7 +88,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							class="deck"
 							role="listitem"
 							[deck]="deck"
-							[archetypes]="value.archetypes"
 							[showStandardDeviation]="value.showStandardDeviation"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
@@ -101,7 +99,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 })
 export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	decks$: Observable<DeckStat[]>;
-	archetypes$: Observable<readonly ArchetypeStat[]>;
 	collection$: Observable<readonly Card[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	showStandardDeviation$: Observable<boolean>;
@@ -173,9 +170,6 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				},
 			),
 		);
-		this.archetypes$ = this.store
-			.constructedMetaDecks$()
-			.pipe(this.mapData((stats) => stats?.archetypeStats ?? []));
 	}
 
 	onSortClick(rawCriteria: string) {

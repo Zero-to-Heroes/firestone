@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -89,14 +88,9 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		this.deck$$.next(value);
 	}
 
-	@Input() set archetypes(value: readonly ArchetypeStat[]) {
-		this.archetypes$$.next(value);
-	}
-
 	@Input() showStandardDeviation: boolean;
 
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
-	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -110,16 +104,13 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	ngAfterContentInit() {
-		combineLatest([this.deck$$, this.archetypes$$])
+		combineLatest([this.deck$$])
 			.pipe(
 				// debounceTime(300),
 				filter(([deck]) => !!deck?.decklist?.length),
-				this.mapData(([deck, archetypes]) => {
-					const archetype = archetypes.find((arch) => arch.id === deck.archetypeId);
-					return { deck, archetype };
-				}),
+				this.mapData(([deck]) => deck),
 			)
-			.subscribe(({ deck, archetype }) => {
+			.subscribe((deck) => {
 				this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${deck.heroCardClass}.png`;
 				this.classTooltip = this.i18n.translateString(`global.class.${deck.heroCardClass}`);
 				this.deckName =
@@ -135,7 +126,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				);
 				this.addedCards = buildCardVariations(deck.cardVariations?.added, deck.sideboards ?? [], this.allCards);
 				this.archetypeCoreCards = buildCardVariations(
-					archetype?.coreCards,
+					deck.archetypeCoreCards ?? [],
 					deck.sideboards ?? [],
 					this.allCards,
 				);
