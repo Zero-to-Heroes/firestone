@@ -16,8 +16,6 @@ import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsTopDecksDustFilterType } from '../models/duels/duels-types';
-import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
@@ -357,12 +355,6 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateBgsRankFilter(value: BgsRankFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, bgsActiveRankFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
 	public async updateBgsTribesFilter(value: readonly Race[]) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveTribesFilter: value };
@@ -378,12 +370,6 @@ export class PreferencesService {
 	public async updateBgsHeroFilter(value: string) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveHeroFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateBgsMmrGroupFilter(value: MmrGroupFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, bgsActiveMmrGroupFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

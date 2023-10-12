@@ -77,8 +77,7 @@ export class BattlegroundsRankGroupDropdownComponent
 			...prefs,
 			bgsActiveMmrGroupFilter: (option as MmrGroupFilterOption).value,
 		};
-		const updated = await this.prefs.savePreferences(newPrefs);
-		console.debug('updated prefs', updated);
+		await this.prefs.savePreferences(newPrefs);
 	}
 }
 

@@ -85,12 +85,10 @@ import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filt
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from './events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { BattlegroundsMetaHeroStrategiesLoadedEvent } from './events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
-import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs-perfect-games-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
-import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategies-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { BgsTribesFilterSelectedEvent } from './events/battlegrounds/bgs-tribes-filter-selected-event';
@@ -241,12 +239,10 @@ import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-h
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BattlegroundsMetaHeroStatsLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-stats-loaded-processor';
 import { BattlegroundsMetaHeroStrategiesLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-strategies-loaded-processor';
-import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
 import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegrounds/bgs-perfect-games-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
-import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsShowStrategiesProcessor } from './processors/battlegrounds/bgs-show-strategies-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { BgsTribesFilterSelectedProcessor } from './processors/battlegrounds/bgs-tribes-filter-selected-processor';
@@ -748,7 +744,6 @@ export class MainWindowStoreService {
 			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],
 			[BgsBestStatsLoadedEvent.eventName(), new BgsBestStatsLoadedProcessor()],
 			[BgsTimeFilterSelectedEvent.eventName(), new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater)],
-			[BgsRankFilterSelectedEvent.eventName(), new BgsRankFilterSelectedProcessor(this.prefs)],
 			[
 				BgsTribesFilterSelectedEvent.eventName(),
 				new BgsTribesFilterSelectedProcessor(this.prefs, this.stateUpdater),
@@ -759,7 +754,6 @@ export class MainWindowStoreService {
 			// ],
 			[BgsHeroSortFilterSelectedEvent.eventName(), new BgsHeroSortFilterSelectedProcessor(this.prefs)],
 			[BgsHeroFilterSelectedEvent.eventName(), new BgsHeroFilterSelectedProcessor(this.prefs)],
-			[BgsMmrGroupFilterSelectedEvent.eventName(), new BgsMmrGroupFilterSelectedProcessor(this.prefs)],
 			[
 				BgsPostMatchStatsComputedEvent.eventName(),
 				new BgsPostMatchStatsComputedProcessor(this.replaysStateBuilder),

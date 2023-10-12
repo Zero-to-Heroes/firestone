@@ -52,9 +52,6 @@ export class BgsGameEndParser implements EventParser {
 			bgsActiveUseMmrFilterInHeroSelection: true,
 		};
 		await this.prefs.savePreferences(savedPrefs);
-		// const stateUpdater = this.stateUpdaterProvider();
-		// stateUpdater.next(new BgsTribesFilterSelectedEvent(savedPrefs.bgsActiveTribesFilter));
-		// stateUpdater.next(new BgsRankFilterSelectedEvent(savedPrefs.bgsActiveRankFilter));
 
 		console.debug('will build post-match info', prefs.bgsForceShowPostMatchStats2);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;

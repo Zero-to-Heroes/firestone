@@ -76,7 +76,6 @@ import { BattlegroundsTimeFilterDropdownComponent } from './js/components/battle
 import { BattlegroundsTribesFilterDropdownComponent } from './js/components/battlegrounds/desktop/filters/battlegrounds-tribes-filter-dropdown.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
-import { BattlegroundsQuestsTierListComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-quests-tier-list.component';
 import { BattlegroundsReplaysRecapComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
 import { BattlegroundsTierListComponent } from './js/components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
 import { GraphWithSingleValueComponent } from './js/components/battlegrounds/graph-with-single-value.component';
@@ -1371,7 +1370,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsPersonalStatsStatsComponent,
 		BattlegroundsPersonalStatsHeroDetailsComponent,
 		BattlegroundsTierListComponent,
-		BattlegroundsQuestsTierListComponent,
 		BattlegroundsHeroesRecordsBrokenComponent,
 		BattlegroundsHeroRecordsBrokenComponent,
 		BattlegroundsReplaysRecapComponent,
