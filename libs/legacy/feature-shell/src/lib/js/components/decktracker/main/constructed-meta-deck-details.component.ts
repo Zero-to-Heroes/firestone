@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
+import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import { Observable, combineLatest, debounceTime, filter } from 'rxjs';
 import { Card } from '../../../models/card';
@@ -14,7 +14,6 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 	template: `
 		<constructed-meta-deck-details-view
 			[input]="deckDetails$ | async"
-			[archetypes]="archetypes$ | async"
 			[collection]="collection$ | async"
 			[hasPremiumAccess]="hasPremiumAccess$ | async"
 			[showRelativeInfo]="showRelativeInfo$ | async"
@@ -28,7 +27,6 @@ export class ConstructedMetaDeckDetailsComponent
 	implements AfterContentInit
 {
 	deckDetails$: Observable<ConstructedDeckDetails>;
-	archetypes$: Observable<readonly ArchetypeStat[]>;
 	collection$: Observable<readonly Card[]>;
 	hasPremiumAccess$: Observable<boolean>;
 	showRelativeInfo$: Observable<boolean>;
@@ -44,9 +42,6 @@ export class ConstructedMetaDeckDetailsComponent
 	ngAfterContentInit(): void {
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
 		this.showRelativeInfo$ = this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksShowRelativeInfo);
-		this.archetypes$ = this.store
-			.constructedMetaDecks$()
-			.pipe(this.mapData((stats) => stats?.archetypeStats ?? []));
 		this.collection$ = this.store.collection$().pipe(
 			filter((collection) => !!collection),
 			debounceTime(500),
@@ -59,6 +54,7 @@ export class ConstructedMetaDeckDetailsComponent
 		]).pipe(
 			this.mapData(([stats, [currentConstructedMetaDeck], [conservativeEstimate]]) => {
 				const stat: DeckStat = stats?.deckStats?.find((s) => s.decklist === currentConstructedMetaDeck);
+				console.debug('deckStat', stat, stats);
 				if (!stat) {
 					return null;
 				}

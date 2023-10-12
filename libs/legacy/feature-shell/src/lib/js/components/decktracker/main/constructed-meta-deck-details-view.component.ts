@@ -80,7 +80,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<constructed-meta-deck-details-cards
 						*ngIf="value.selectedTab === 'cards' && isDeck"
 						[deck]="deck"
-						[archetypes]="archetypes"
 						[collection]="collection"
 					></constructed-meta-deck-details-cards>
 					<constructed-meta-archetype-details-cards

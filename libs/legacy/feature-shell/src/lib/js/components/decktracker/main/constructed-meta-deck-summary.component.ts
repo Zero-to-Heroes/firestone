@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -104,11 +104,10 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	ngAfterContentInit() {
-		combineLatest([this.deck$$])
+		this.deck$$
 			.pipe(
-				// debounceTime(300),
-				filter(([deck]) => !!deck?.decklist?.length),
-				this.mapData(([deck]) => deck),
+				filter((deck) => !!deck?.decklist?.length),
+				this.mapData((deck) => deck),
 			)
 			.subscribe((deck) => {
 				this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${deck.heroCardClass}.png`;
