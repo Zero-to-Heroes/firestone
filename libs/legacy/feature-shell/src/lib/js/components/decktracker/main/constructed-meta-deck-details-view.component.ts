@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	Optional,
+} from '@angular/core';
 import { ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
@@ -6,6 +13,8 @@ import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/c
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ConstructedMetaArchetypeShowDecksEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-decks';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'constructed-meta-deck-details-view',
@@ -56,25 +65,39 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 							[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
 						></div>
 					</div>
+					<div class="button view-decks" (click)="viewDecks()" *ngIf="!isDeck">
+						<div class="icon">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
+							</svg>
+						</div>
+						<div
+							class="text"
+							[owTranslate]="'app.decktracker.meta.deck.view-decks-button'"
+							[helpTooltip]="'app.decktracker.meta.deck.view-decks-button-tooltip' | owTranslate"
+						></div>
+					</div>
 				</div>
 			</div>
 			<div class="details-container">
 				<ul class="tabs">
-					<li
-						*ngFor="let tab of tabs$ | async"
-						class="tab"
-						[ngClass]="{ selected: tab.selected }"
-						premiumSetting
-						[premiumSettingEnabled]="tab.isPremium"
-						(click)="selectTab(tab)"
-					>
-						<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
-							<svg>
-								<use xlink:href="assets/svg/sprite.svg#lock" />
-							</svg>
-						</div>
-						<div class="text" [owTranslate]="tab.name" [helpTooltip]="tab.tooltip"></div>
-					</li>
+					<ng-container *ngFor="let tab of tabs$ | async">
+						<li
+							*ngIf="!tab.restricted || tab.restricted === (isDeck ? 'deck' : 'archetype')"
+							class="tab"
+							[ngClass]="{ selected: tab.selected }"
+							premiumSetting
+							[premiumSettingEnabled]="tab.isPremium"
+							(click)="selectTab(tab)"
+						>
+							<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+								<svg>
+									<use xlink:href="assets/svg/sprite.svg#lock" />
+								</svg>
+							</div>
+							<div class="text" [owTranslate]="tab.name" [helpTooltip]="tab.tooltip"></div>
+						</li>
+					</ng-container>
 				</ul>
 				<div class="details" *ngIf="{ selectedTab: selectedTab$ | async } as value">
 					<constructed-meta-deck-details-cards
@@ -148,8 +171,9 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
+		@Optional() private readonly ow: OverwolfService,
+		@Optional() private readonly store: AppUiStoreFacadeService,
 	) {
 		super(cdr);
 	}
@@ -158,11 +182,11 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 		this.selectedTab$ = this.selectedTab$$.asObservable();
 		const refTabs = [
 			{
-				id: 'cards' as TabType,
+				id: 'cards' as const,
 				name: this.i18n.translateString('app.decktracker.meta.cards-header'),
 			},
 			{
-				id: 'card-stats' as TabType,
+				id: 'card-stats' as const,
 				name: this.i18n.translateString('app.decktracker.meta.card-stats-header'),
 				tooltip: this.i18n.translateString('app.decktracker.meta.card-stats-header-tooltip'),
 				isPremium: true,
@@ -180,28 +204,41 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 
 	selectTab(tab: Tab) {
 		if (tab.id !== this.selectedTab$$.value && (!tab.isPremium || this.hasPremiumAccess)) {
-			this.selectedTab$$.next(tab.id);
 			this.analytics.trackEvent('meta-deck-select-tab', { tab: tab.id });
+			this.selectedTab$$.next(tab.id);
 		}
 	}
 
 	viewOnline() {
-		this.ow.openUrlInDefaultBrowser(
-			`https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`,
-		);
 		this.analytics.trackEvent('meta-deck-view-online', { deckstring: this.deckstring });
+		const url = `https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`;
+		if (!!this.ow) {
+			this.ow.openUrlInDefaultBrowser(url);
+		} else {
+			window.open(url, '_blank');
+		}
+	}
+
+	viewDecks() {
+		this.analytics.trackEvent('meta-archetype-view-decks', { archetype: this.deck.archetypeId });
+		if (!!this.store) {
+			this.store.send(new ConstructedMetaArchetypeShowDecksEvent(this.deck.archetypeId));
+		} else {
+			// Navigate to the correct URL
+		}
 	}
 }
 
 interface Tab {
 	readonly id: TabType;
 	readonly name: string;
+	readonly selected: boolean;
 	readonly tooltip?: string;
 	readonly isPremium?: boolean;
-	readonly selected: boolean;
+	readonly restricted?: 'archetype' | 'deck';
 }
 
-type TabType = 'cards' | 'card-stats';
+type TabType = 'cards' | 'card-stats' | 'decks';
 
 export interface ConstructedDeckDetails {
 	readonly type: 'deck' | 'archetype';

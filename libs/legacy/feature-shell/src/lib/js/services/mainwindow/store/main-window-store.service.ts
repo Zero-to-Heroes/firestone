@@ -278,6 +278,10 @@ import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktrac
 import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
 import { ConstructedEjectDeckVersionProcessor } from './processors/decktracker/constructed-eject-deck-version-processor';
 import {
+	ConstructedMetaArchetypeShowDecksEvent,
+	ConstructedMetaArchetypeShowDecksProcessor,
+} from './processors/decktracker/constructed-meta-archetype-show-decks';
+import {
 	ConstructedMetaArchetypeDetailsShowEvent,
 	ConstructedMetaArchetypeDetailsShowProcessor,
 } from './processors/decktracker/constructed-meta-archetype-show-details';
@@ -740,6 +744,10 @@ export class MainWindowStoreService {
 			[ConstructedToggleDeckVersionStatsEvent.eventName(), new ConstructedToggleDeckVersionStatsProcessor()],
 			[ConstructedMetaDeckDetailsShowEvent.eventName(), new ConstructedMetaDeckDetailsShowProcessor()],
 			[ConstructedMetaArchetypeDetailsShowEvent.eventName(), new ConstructedMetaArchetypeDetailsShowProcessor()],
+			[
+				ConstructedMetaArchetypeShowDecksEvent.eventName(),
+				new ConstructedMetaArchetypeShowDecksProcessor(this.prefs),
+			],
 			// Battlegrounds
 			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],
 			[BgsBestStatsLoadedEvent.eventName(), new BgsBestStatsLoadedProcessor()],
