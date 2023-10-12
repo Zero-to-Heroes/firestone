@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, tap } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -112,7 +112,15 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 					};
 				});
 				console.debug('heroOverviews', heroOverviews, tiers);
-				return heroOverviews;
+				if (heroOverviews.length === 2) {
+					return [null, ...heroOverviews, null];
+				} else if (heroOverviews.length === 1) {
+					return [null, ...heroOverviews, null];
+				} else if (heroOverviews.length === 3) {
+					return [...heroOverviews, null];
+				} else {
+					return heroOverviews;
+				}
 			}),
 		);
 	}
