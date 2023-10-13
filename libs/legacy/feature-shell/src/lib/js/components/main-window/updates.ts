@@ -33,14 +33,16 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.2.1',
+		version: '12.2.6',
 		force: false,
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `There have been many small versions released during the past couple of weeks, without proper release notes. This is a summary of the changes that have been made since the last proper release notes.`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `This release is the first fully-functional iteration of the Constructed Meta Stats! I hope you enjoy it :) <br/>
+				Next up is to add overlays to help you during the Mulligan phase; but first I want to make sure that the stats provided in the app are correct, so please let me know if you spot any issue!
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -50,11 +52,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `(PREMIUM) You can now view card-level stats for each deck. This will tell you, for a given decklist, the Mulligan winrate, drawn winrate and kept percentage for each card in the deck.`,
+								text: `You can now browse all meta archetypes, view the core cards to the archetypes, and browse all decks that are part of the archetype.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where cards created in deck would not be properly detected anymore.`,
+								type: 'feature',
+								text: `(PREMIUM) You can now view card-level stats for each deck and archetype. This will tell you each card's Mulligan winrate, drawn winrate and kept percentage.`,
+							},
+							{
+								type: 'feature',
+								text: `(PREMIUM) You can now view how each deck or archetype performs against other classes.`,
 							},
 						],
 					},
@@ -68,8 +74,20 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Replaced the "all-time" filter with a "current-season" filter in the constructed meta tabs. (Community Suggestion!)`,
+							},
+							{
+								type: 'feature',
+								text: `Added an "all ranks" filter for constructed meta tabs.`,
+							},
+							{
 								type: 'bug',
-								text: `Remove Death Knight and Demon Hunter as valid classes for Twist and Classic in the deckbuilder.`,
+								text: `Fix an issue where some treant-generating cards would not be properly highlighted when mousing over Cultivation. (Community Suggestion!)`,
+							},
+							{
+								type: 'ui',
+								text: `Move the "legend" star to be less intrusive when viewing the list of decks and archetypes. (Community Suggestion!)`,
 							},
 						],
 					},
@@ -78,32 +96,19 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where stats on the hero selection overlay would not show up anymore.`,
+								text: `Fix an issue where changing the MMR / Anomaly filter would sometimes not update the tierlists.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the MMR filter in the hero selection phase would always consider the top 1% of players instead of your own MMR.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `Cards created by Elixir of Vigor should now have their cost be set to 2 in the deck.`,
+								text: `Fix an issue where the achievements and hero stats info would not be correctly aligned when choosing between only two heroes. (Community Suggestion!)`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where ties would not be detected properly and cause runs to be split.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the classes filters would not work properly on the Buckets screen.`,
+								text: `Fix a sim issue where Recurring Nightmare could enchant non-Undead minions. (Community Suggestion!)`,
 							},
 							{
 								type: 'content',
-								text: `The card classes will now appear at the top of each bucket when browsing them in the Buckets or Deckbuilding tabs.`,
+								text: `You should now see a "now loading" animation when changing some of the filters.`,
 							},
 						],
 					},
