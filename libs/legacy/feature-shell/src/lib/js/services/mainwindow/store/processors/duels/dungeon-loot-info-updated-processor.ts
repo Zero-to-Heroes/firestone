@@ -1,6 +1,6 @@
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { DuelsRewardsInfo as InputDuelsRewardsInfo, Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { Input, DuelsRewardsInfo as InputDuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsState } from '../../../../../models/duels/duels-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -20,8 +20,8 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 		const infosForCurrentRun =
 			currentState.duels.duelsRunInfos?.filter((info) => info.runId === dungeonLootInfo.runId) ?? [];
 		const newInfos: readonly DuelsRunInfo[] = this.buildNewInfos(dungeonLootInfo, infosForCurrentRun);
-		console.debug('[duels-loot] newInfos', newInfos, event, currentState.duels);
-		console.log('[duels-loot] existing loot length', currentState.duels.duelsRewardsInfo?.length);
+		console.debug('[duels-loot] newInfos', newInfos, infosForCurrentRun, event, currentState.duels);
+		console.log('[duels-loot] existing loot length', currentState.duels.duelsRunInfos?.length);
 		const duelsRunInfos: readonly DuelsRunInfo[] = [...currentState.duels.duelsRunInfos, ...newInfos];
 		console.log('[duels-loot] new loot length', duelsRunInfos.length);
 

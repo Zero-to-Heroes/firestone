@@ -50,17 +50,15 @@ export class DuelsLootParserService {
 				const signatureTreasure = duelsInfo.SignatureTreasureCardDbfId
 					? this.allCards.getCard(duelsInfo.SignatureTreasureCardDbfId).id
 					: findSignatureTreasure(duelsInfo.DuelsDeck?.DeckList, this.allCards);
-				console.debug(
-					'[duels-loot] signatureTreasure from decklist',
-					signatureTreasure,
-					duelsInfo,
-					!!signatureTreasure && !!duelsInfo?.HeroPowerCardDbfId,
-				);
 				// It is important to only send the data once we have everything
-				return !!signatureTreasure && !!duelsInfo?.HeroPowerCardDbfId;
+				const result = !!signatureTreasure && !!duelsInfo?.HeroPowerCardDbfId;
+				console.debug('[duels-loot] signatureTreasure from decklist', signatureTreasure, duelsInfo, result);
+				return result;
 			}),
 		);
 
+		// ISSUE: sending the loot info only when the next match starts means that, if the match is played without the app,
+		// we won't have the loot info.
 		combineLatest([this.gameEvents.allEvents, memoryReadyToEmit$])
 			.pipe(
 				filter(([event, ready]) => !!ready),
@@ -152,7 +150,7 @@ export class DuelsLootParserService {
 						),
 				  }))
 				: [],
-			chosenLootIndex: duelsInfo.ChosenLoot,
+			chosenLootIndex: duelsInfo.ChosenLoot, // Careful: this is 1-based, and not 0-based
 			treasureOptions: treasures,
 			chosenTreasureIndex: duelsInfo.ChosenTreasure,
 			rewards: null,

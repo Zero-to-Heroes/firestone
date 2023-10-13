@@ -16,7 +16,6 @@ import {
 	map,
 	skip,
 	take,
-	tap,
 } from 'rxjs';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
@@ -57,9 +56,9 @@ export class DuelsTopDeckService {
 		);
 
 		this.topDeck$ = defer(() => {
-			console.debug('[duels-top-deck] init top deck defer');
+			// console.debug('[duels-top-deck] init top deck defer');
 			const result = combineLatest([this.remoteTopDeckStats$$, debouncedSets$]).pipe(
-				tap((data) => console.debug('[duels-top-deck] received data', data, this.loadingInitialData)),
+				// tap((data) => console.debug('[duels-top-deck] received data', data, this.loadingInitialData)),
 				filter(([remoteTopDeckStats, sets]) => sets?.length > 0),
 				debounceTime(100),
 				map(([remoteTopDeckStats, sets]) => {
@@ -68,7 +67,7 @@ export class DuelsTopDeckService {
 					}
 
 					if (remoteTopDeckStats == null) {
-						console.debug('[duels-top-deck] no remote top deck stats, loading initial data');
+						// console.debug('[duels-top-deck] no remote top deck stats, loading initial data');
 						this.loadInitialData();
 						return [];
 					}
@@ -77,7 +76,7 @@ export class DuelsTopDeckService {
 						remoteTopDeckStats.decks ?? [],
 						sets,
 					);
-					console.debug('[duels-top-deck] built top deck stats', topDecks);
+					// console.debug('[duels-top-deck] built top deck stats', topDecks);
 					return topDecks;
 				}),
 			);
