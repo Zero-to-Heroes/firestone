@@ -63,6 +63,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 					winrate: winrateToUse,
 					archetypeCoreCards: stat.coreCards,
 					cardsData: stat.cardsData,
+					matchups: stat.matchupInfo,
 				};
 				return result;
 			}),

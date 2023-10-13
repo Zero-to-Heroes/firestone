@@ -75,6 +75,7 @@ export class ConstructedMetaDeckDetailsComponent
 					winrate: winrateToUse,
 					deckstring: stat.decklist,
 					cardsData: stat.cardsData,
+					matchups: stat.matchupInfo,
 					cardVariations: stat.cardVariations,
 					archetypeCoreCards: stat.archetypeCoreCards,
 					sideboards: deckDefinition.sideboards,

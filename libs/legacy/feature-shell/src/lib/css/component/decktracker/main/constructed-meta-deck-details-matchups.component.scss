@@ -1,0 +1,48 @@
+.constructed-meta-deck-details-matchups {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	font-size: 13px;
+
+	.header,
+	.matchup-row {
+		display: flex;
+		height: 45px;
+		position: relative;
+	}
+
+	.matchup-row {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
+
+	.name {
+		width: 200px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.cell {
+		width: 80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&.positive {
+			color: #61ff47;
+		}
+		&.negative {
+			color: #ff4747;
+		}
+	}
+
+	.opponent-class .icon {
+		height: 100%;
+	}
+}

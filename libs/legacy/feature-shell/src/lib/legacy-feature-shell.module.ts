@@ -522,6 +522,7 @@ import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
 import { ConstructedMetaDeckDetailsCardStatsComponent } from '@components/decktracker/main/constructed-meta-deck-details-card-stats.component';
 import { ConstructedMetaDeckDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-deck-details-cards.component';
+import { ConstructedMetaDeckDetailsMatchupsComponent } from '@components/decktracker/main/constructed-meta-deck-details-matchups.component';
 import { ConstructedMetaDeckDetailsViewComponent } from '@components/decktracker/main/constructed-meta-deck-details-view.component';
 import { ConstructedMetaDeckDetailsComponent } from '@components/decktracker/main/constructed-meta-deck-details.component';
 import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
@@ -1297,6 +1298,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedMetaDeckDetailsViewComponent,
 		ConstructedMetaDeckDetailsCardStatsComponent,
 		ConstructedMetaDeckDetailsCardsComponent,
+		ConstructedMetaDeckDetailsMatchupsComponent,
 		ConstructedMetaArchetypeDetailsCardsComponent,
 		ConstructedMetaArchetypesComponent,
 		ConstructedMetaArchetypeComponent,
