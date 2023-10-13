@@ -7,6 +7,7 @@ export type DecktrackerViewType =
 	| 'constructed-meta-decks'
 	| 'constructed-meta-deck-details'
 	| 'constructed-meta-archetypes'
+	| 'constructed-meta-archetype-details'
 	| 'constructed-deckbuilder';
 
 export type ConstructedStatsTab = 'overview' | 'matchups';

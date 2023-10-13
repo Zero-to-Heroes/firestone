@@ -96,6 +96,7 @@ export class DecktrackerTimeFilterDropdownComponent
 							'constructed-meta-decks',
 							'constructed-meta-deck-details',
 							'constructed-meta-archetypes',
+							'constructed-meta-archetype-details',
 						].includes(currentView),
 					};
 				}),

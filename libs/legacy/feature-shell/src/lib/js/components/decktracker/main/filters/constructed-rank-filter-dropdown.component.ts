@@ -60,6 +60,7 @@ export class ConstructedRankFilterDropdownComponent
 			filter(([[currentView], [filter]]) => !!currentView),
 			this.mapData(([[currentView], [filter]]) => {
 				const brackets: RankBracket[] = [
+					'all',
 					'bronze-gold',
 					'platinum',
 					'diamond',
@@ -82,6 +83,7 @@ export class ConstructedRankFilterDropdownComponent
 						'constructed-meta-decks',
 						'constructed-meta-deck-details',
 						'constructed-meta-archetypes',
+						'constructed-meta-archetype-details',
 					].includes(currentView),
 				};
 			}),

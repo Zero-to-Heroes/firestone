@@ -9,6 +9,7 @@ export class CardsInternalService extends AbstractCollectionInternalService<Card
 	protected type = () => 'cards';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionCardsCount;
 	protected memoryReadingOperation = () => this.memoryReading.getCollection();
+	protected isMemoryInfoEmpty = (collection: readonly Card[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getCollection();
 	protected localDbSaveOperation = (collection: readonly Card[]) => this.db.saveCollection(collection);
 

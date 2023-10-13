@@ -3,13 +3,12 @@ import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
-	selector: 'constructed-archetype-sample-size-filter-dropdown',
+	selector: 'constructed-dust-filter-dropdown',
 	styleUrls: [],
 	template: `
 		<filter-dropdown
@@ -23,15 +22,13 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedArchetypeSampleSizeFilterDropdownComponent
+export class ConstructedDustFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
+	options: DustFilterOption[];
+
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
-	options: IOption[] = [200, 500, 1000, 2000, 4000, 8000].map((value) => ({
-		value: '' + value,
-		label: this.i18n.translateString('app.decktracker.filters.sample-size-filter', { value: value }),
-	}));
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -43,17 +40,38 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
+		this.options = [
+			{
+				value: 'all',
+				label: this.i18n.translateString('app.duels.filters.dust.all'),
+			} as DustFilterOption,
+			{
+				value: '0',
+				label: this.i18n.translateString('app.duels.filters.dust.own'),
+			} as DustFilterOption,
+			{
+				value: '400',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 400 }),
+			} as DustFilterOption,
+			{
+				value: '1600',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 1600 }),
+			} as DustFilterOption,
+			{
+				value: '3200',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 3200 }),
+			} as DustFilterOption,
+		];
 		this.filter$ = combineLatest([
-			this.listenForBasicPref$((prefs) => prefs.constructedMetaArchetypesSampleSizeFilter),
+			this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksDustFilter ?? 'all'),
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 		]).pipe(
-			filter(([filter, [currentView]]) => !!filter && !!currentView),
 			this.mapData(([filter, [currentView]]) => {
+				console.debug('dust filter', filter, this.options);
 				return {
 					filter: '' + filter,
-					options: this.options,
-					placeholder: this.options.find((option) => +option.value === filter)?.label,
-					visible: ['constructed-meta-archetypes'].includes(currentView),
+					placeholder: this.options.find((option) => option.value === '' + filter)?.label,
+					visible: ['constructed-meta-decks', 'constructed-meta-deck-details'].includes(currentView),
 				};
 			}),
 		);
@@ -61,7 +79,14 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 
 	async onSelected(option: IOption) {
 		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = { ...prefs, constructedMetaArchetypesSampleSizeFilter: +option.value };
+		const newPrefs: Preferences = {
+			...prefs,
+			constructedMetaDecksDustFilter: option.value === 'all' ? 'all' : +option.value,
+		};
 		await this.prefs.savePreferences(newPrefs);
 	}
+}
+
+interface DustFilterOption extends IOption {
+	value: string /*ConstructedMetaDecksDustFilterType*/;
 }

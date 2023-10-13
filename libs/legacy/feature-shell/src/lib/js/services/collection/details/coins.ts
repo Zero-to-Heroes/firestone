@@ -14,6 +14,7 @@ export class CoinsInternalService extends AbstractCollectionInternalService<Coin
 	protected type = () => 'coins';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionCoinsCount;
 	protected memoryReadingOperation = () => this.memoryReading.getCoins();
+	protected isMemoryInfoEmpty = (collection: readonly CoinInfo[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getCoins();
 	protected localDbSaveOperation = (collection: readonly Coin[]) => this.db.saveCoins(collection);
 

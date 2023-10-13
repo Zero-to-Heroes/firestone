@@ -1,21 +1,18 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { ArchetypeStat, DeckStat } from '@firestone-hs/constructed-deck-stats';
-import { decode } from '@firestone-hs/deckstrings';
-import { Observable, combineLatest, debounceTime, filter } from 'rxjs';
-import { Card } from '../../../models/card';
+import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
+import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
 
 @Component({
-	selector: 'constructed-meta-deck-details',
+	selector: 'constructed-meta-archetype-details',
 	styleUrls: [`../../../../css/component/decktracker/main/constructed-meta-deck-details.component.scss`],
 	template: `
 		<constructed-meta-deck-details-view
 			[input]="deckDetails$ | async"
 			[archetypes]="archetypes$ | async"
-			[collection]="collection$ | async"
 			[hasPremiumAccess]="hasPremiumAccess$ | async"
 			[showRelativeInfo]="showRelativeInfo$ | async"
 		>
@@ -23,13 +20,12 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMetaDeckDetailsComponent
+export class ConstructedMetaArchetypeDetailsComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
 	deckDetails$: Observable<ConstructedDeckDetails>;
 	archetypes$: Observable<readonly ArchetypeStat[]>;
-	collection$: Observable<readonly Card[]>;
 	hasPremiumAccess$: Observable<boolean>;
 	showRelativeInfo$: Observable<boolean>;
 
@@ -47,18 +43,13 @@ export class ConstructedMetaDeckDetailsComponent
 		this.archetypes$ = this.store
 			.constructedMetaDecks$()
 			.pipe(this.mapData((stats) => stats?.archetypeStats ?? []));
-		this.collection$ = this.store.collection$().pipe(
-			filter((collection) => !!collection),
-			debounceTime(500),
-			this.mapData((collection) => collection),
-		);
 		this.deckDetails$ = combineLatest([
 			this.store.constructedMetaDecks$(),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaDeck),
+			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaArchetype),
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
 		]).pipe(
-			this.mapData(([stats, [currentConstructedMetaDeck], [conservativeEstimate]]) => {
-				const stat: DeckStat = stats?.deckStats?.find((s) => s.decklist === currentConstructedMetaDeck);
+			this.mapData(([stats, [archetypeId], [conservativeEstimate]]) => {
+				const stat: ArchetypeStat = stats?.archetypeStats?.find((s) => s.id === archetypeId);
 				if (!stat) {
 					return null;
 				}
@@ -67,24 +58,19 @@ export class ConstructedMetaDeckDetailsComponent
 				const conservativeWinrate: number = stat.winrate - 3 * standardDeviation;
 				const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
 
-				const deckDefinition = decode(stat.decklist);
 				const result: ConstructedDeckDetails = {
-					type: 'deck',
-					archetypeId: stat.archetypeId,
+					type: 'archetype',
+					archetypeId: stat.id,
 					name:
-						this.i18n.translateString(`archetype.${stat.archetypeName}`) ===
-						`archetype.${stat.archetypeName}`
-							? stat.archetypeName
-							: this.i18n.translateString(`archetype.${stat.archetypeName}`),
+						this.i18n.translateString(`archetype.${stat.name}`) === `archetype.${stat.name}`
+							? stat.name
+							: this.i18n.translateString(`archetype.${stat.name}`),
 					format: this.i18n.translateString(`global.format.${stat.format}`),
-					heroCardClass: stat.playerClass,
+					heroCardClass: stat.heroCardClass,
 					games: stat.totalGames,
 					winrate: winrateToUse,
-					deckstring: stat.decklist,
+					archetypeCoreCards: stat.coreCards,
 					cardsData: stat.cardsData,
-					cardVariations: stat.cardVariations,
-					archetypeCoreCards: stat.archetypeCoreCards,
-					sideboards: deckDefinition.sideboards,
 				};
 				return result;
 			}),

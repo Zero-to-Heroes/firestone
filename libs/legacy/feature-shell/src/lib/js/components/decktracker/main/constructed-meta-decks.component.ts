@@ -91,7 +91,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[deck]="deck"
 							[archetypes]="value.archetypes"
 							[showStandardDeviation]="value.showStandardDeviation"
-							[collection]="value.collection"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
 				</div>
@@ -108,7 +107,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	showStandardDeviation$: Observable<boolean>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
-		criteria: 'winrate',
+		criteria: 'games',
 		direction: 'desc',
 	});
 
@@ -130,16 +129,20 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
+		let ownedCardIdsCache: { [cardId: string]: number } = {};
 		const collectionCache$ = this.collection$.pipe(
 			this.mapData((collection) => {
 				const result = {};
 				for (const card of collection) {
 					result[card.id] = card;
 				}
+				console.debug('updating collection', collection, result);
 				return result;
 			}),
 		);
-		const ownedCardIdsCache: { [cardId: string]: number } = {};
+		collectionCache$.subscribe((cache) => {
+			ownedCardIdsCache = {};
+		});
 		this.decks$ = combineLatest([
 			this.store.constructedMetaDecks$(),
 			this.sortCriteria$$,
@@ -147,20 +150,28 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
+				(prefs) => prefs.constructedMetaDecksDustFilter,
+				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
 			),
 		]).pipe(
-			this.mapData(([stats, sortCriteria, collection, [conservativeEstimate, sampleSize]]) => {
-				// let enhancedCounter = 0;
-				const enhanced = stats?.deckStats
-					.filter((stat) => stat.totalGames >= sampleSize)
-					.map((stat) => {
-						// enhancedCounter++;
-						// console.debug('enhancedCounter', enhancedCounter);
-						return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
-					});
-				// console.debug('enhanced', enhanced);
-				return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
-			}),
+			debounceTime(300),
+			this.mapData(
+				([stats, sortCriteria, collection, [conservativeEstimate, sampleSize, dust, playerClasses]]) => {
+					// let enhancedCounter = 0;
+					console.debug('filtering decks', dust);
+					const enhanced = stats?.deckStats
+						.filter((stat) => stat.totalGames >= sampleSize)
+						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+						.map((stat) => {
+							// enhancedCounter++;
+							// console.debug('enhancedCounter', enhancedCounter);
+							return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
+						})
+						.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
+					// console.debug('enhanced', enhanced);
+					return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
+				},
+			),
 		);
 		this.archetypes$ = this.store
 			.constructedMetaDecks$()

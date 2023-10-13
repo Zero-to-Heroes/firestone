@@ -184,7 +184,10 @@ export const isSi7 = (input: SelectorInput): boolean =>
 		.filter((loc) => loc !== Locale[Locale.UNKNOWN])
 		.some((locale: string) => input.card?.name?.includes(getSi7Locale(locale)));
 
-const TREANT_DBF_IDS = [75686, 56371, 85655, 86213, 68188, 54541, 1803, 61465, 53302, 41432, 48911, 99806];
+const TREANT_DBF_IDS = [
+	358, 600, 678, 1803, 41432, 48911, 53302, 54541, 56371, 61465, 68188, 70071, 71310, 75686, 85655, 86213, 91248,
+	99806,
+];
 export const summonsTreant = (input: SelectorInput): boolean =>
 	TREANT_DBF_IDS.some((treantDbfId) => input.card.relatedCardDbfIds?.includes(treantDbfId));
 

@@ -61,7 +61,7 @@ export class ConstructedTimeFilterDropdownComponent
 		]).pipe(
 			filter(([[patch], [currentView], [filter]]) => !!currentView),
 			this.mapData(([[patch], [currentView], [filter]]) => {
-				const options: FilterOption[] = ['all-time', 'past-30', 'past-7', 'past-3', 'last-patch'].map(
+				const options: FilterOption[] = ['current-season', 'past-30', 'past-7', 'past-3', 'last-patch'].map(
 					(option) =>
 						({
 							value: option,
@@ -77,6 +77,7 @@ export class ConstructedTimeFilterDropdownComponent
 						'constructed-meta-decks',
 						'constructed-meta-deck-details',
 						'constructed-meta-archetypes',
+						'constructed-meta-archetype-details',
 					].includes(currentView),
 				};
 			}),

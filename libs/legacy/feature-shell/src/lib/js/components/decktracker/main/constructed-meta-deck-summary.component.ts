@@ -4,7 +4,6 @@ import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
-import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -18,12 +17,14 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 		`../../../../css/component/decktracker/main/constructed-meta-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="constructed-meta-deck-summary" (click)="toggleDetails()">
+		<div class="constructed-meta-deck-summary" (click)="viewDetails()">
 			<div class="player-class cell">
 				<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
 			</div>
 			<div class="name cell">
-				<div class="deck-name">{{ deckName }}</div>
+				<div class="deck-name" [helpTooltip]="'app.decktracker.meta.view-details-cta' | owTranslate">
+					{{ deckName }}
+				</div>
 			</div>
 			<div class="dust cell">
 				<div class="dust-amount">
@@ -65,77 +66,12 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 					</div>
 				</div>
 			</div>
-			<!-- <div class="view-deck cell" (click)="showDeck()">
-				<div
-					class="icon"
-					inlineSVG="assets/svg/loot.svg"
-					[helpTooltip]="'app.duels.run.view-deck-button' | owTranslate"
-				></div>
-			</div> -->
-		</div>
-		<div class="buttons-container" *ngIf="showDetails$ | async">
-			<div class="button view-online" (click)="viewOnline()">
-				<div class="watch-icon">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-					</svg>
-				</div>
-				<div
-					class="text"
-					[owTranslate]="'app.decktracker.meta.deck.view-online-button'"
-					[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
-				></div>
-			</div>
-			<div class="button view-details" (click)="viewDetails()" premiumSetting>
-				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#lock" />
-					</svg>
-				</div>
-				<div class="view-icon">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/replays/sprite.svg#show" />
-					</svg>
-				</div>
-				<div
-					class="text"
-					[owTranslate]="'app.decktracker.meta.deck.view-details-button'"
-					[helpTooltip]="'app.decktracker.meta.deck.view-details-button-tooltip' | owTranslate"
-				></div>
-			</div>
-			<copy-deckstring
-				class="button copy-deckstring"
-				[deckstring]="deckstring"
-				[deckName]="deckName"
-				[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
-				[origin]="'constructed-meta-decks'"
-			></copy-deckstring>
-		</div>
-		<div class="deck-details" *ngIf="showDetails$ | async">
-			<div class="cards-containers" *ngIf="{ collection: collection$ | async } as value">
-				<div class="container core">
-					<div class="title" [owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="value.collection">
-					</deck-list-static>
-				</div>
-				<div class="container removed">
-					<div class="title" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="removedCards" [collection]="value.collection">
-					</deck-list-static>
-				</div>
-				<div class="container added">
-					<div class="title" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></div>
-					<deck-list-static class="cards" [cards]="addedCards" [collection]="value.collection">
-					</deck-list-static>
-				</div>
-			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showDetails$: Observable<boolean>;
-	collection$: Observable<readonly Card[]>;
 
 	classTooltip: string;
 	classIcon: string;
@@ -157,18 +93,10 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		this.archetypes$$.next(value);
 	}
 
-	@Input() set collection(value: readonly Card[]) {
-		this.collection$$.next(value);
-	}
-
 	@Input() showStandardDeviation: boolean;
 
-	private showDetails$$ = new BehaviorSubject<boolean>(false);
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
 	private archetypes$$ = new BehaviorSubject<readonly ArchetypeStat[]>([]);
-	private collection$$ = new BehaviorSubject<readonly Card[]>([]);
-
-	private hasPremiumAccess: boolean;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -182,10 +110,6 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	ngAfterContentInit() {
-		this.showDetails$ = this.showDetails$$.asObservable();
-		this.store.hasPremiumSub$().subscribe((hasPremium) => {
-			this.hasPremiumAccess = hasPremium;
-		});
 		combineLatest([this.deck$$, this.archetypes$$])
 			.pipe(
 				// debounceTime(300),
@@ -229,22 +153,8 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		return item.cardId;
 	}
 
-	toggleDetails() {
-		this.showDetails$$.next(!this.showDetails$$.value);
-	}
-
-	viewOnline() {
-		this.ow.openUrlInDefaultBrowser(
-			`https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`,
-		);
-		this.analytics.trackEvent('meta-deck-view-online', { deckstring: this.deckstring });
-	}
-
 	viewDetails() {
-		console.debug('viewing deck details', this.hasPremiumAccess);
-		if (this.hasPremiumAccess) {
-			this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
-		}
+		this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
 		this.store.send(new ConstructedMetaDeckDetailsShowEvent(this.deckstring));
 	}
 }

@@ -48,6 +48,9 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 						<constructed-meta-archetypes
 							*ngIf="value.currentView === 'constructed-meta-archetypes'"
 						></constructed-meta-archetypes>
+						<constructed-meta-archetype-details
+							*ngIf="value.currentView === 'constructed-meta-archetype-details'"
+						></constructed-meta-archetype-details>
 					</div>
 				</with-loading>
 			</section>

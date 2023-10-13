@@ -122,7 +122,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	public async init(options?: SelectorOptions) {
 		this.options = options;
-		console.debug('init done', this.options, options);
+		// console.debug('init done', this.options, options);
 	}
 
 	// public shutDown() {
@@ -501,6 +501,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.BrannBronzebeard_CORE_LOE_077:
 			case CardIds.BrannBronzebeard_LOE_077:
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
+			case CardIds.Breakdance:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.BronzeSignetTavernBrawl:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.CagematchCustodian:
@@ -647,6 +649,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
 			case CardIds.DirgeOfDespair:
 				return and(side(inputSide), inDeck, demon, minion);
+			case CardIds.DiscipleOfEonar:
+				return and(side(inputSide), or(inDeck, inHand), chooseOne);
 			case CardIds.DiscoMaul:
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.DisksOfLegendTavernBrawl:
@@ -1242,6 +1246,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Shadowcasting101TavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion);
+			case CardIds.ShadowOfDemise:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.ShadowVisions:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.SharkPuncher_WON_138:
@@ -1549,6 +1555,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), outcast);
 			case CardIds.XyrellaTheDevout:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
+			case CardIds.YoggSaronUnleashed_YOG_516:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.YshaarjTheDefiler:
 				return and(side(inputSide), cardsPlayedThisMatch, corrupted);
 		}

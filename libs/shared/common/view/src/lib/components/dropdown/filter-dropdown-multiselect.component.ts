@@ -16,7 +16,7 @@ import {
 	removeFromReadonlyArray,
 } from '@firestone/shared/framework/common';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({

@@ -10,42 +10,29 @@ import { MinimalCard } from '../overlay/deck-list-static.component';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
 
 @Component({
-	selector: 'constructed-meta-deck-details-cards',
-	styleUrls: [`../../../../css/component/decktracker/main/constructed-meta-deck-details-cards.component.scss`],
+	selector: 'constructed-meta-archetype-details-cards',
+	styleUrls: [
+		`../../../../css/component/decktracker/main/constructed-meta-deck-details-cards.component.scss`,
+		`../../../../css/component/decktracker/main/constructed-meta-archetype-details-cards.component.scss`,
+	],
 	template: `
 		<div class="constructed-meta-deck-details-cards" *ngIf="{ collection: collection$ | async } as value">
 			<div class="container core">
 				<div class="title">
 					<span
 						class="main-text"
-						[owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"
+						[owTranslate]="'app.decktracker.meta.archetype.archetype-core-cards-header'"
 					></span>
 					<span class="details">{{ archetypeCoreCardsHeaderDetails }}</span>
 				</div>
 				<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="value.collection">
 				</deck-list-static>
 			</div>
-			<div class="container removed">
-				<div class="title">
-					<span class="main-text" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></span>
-					<span class="details">{{ removedCardsHeaderDetails }}</span>
-				</div>
-				<deck-list-static class="cards" [cards]="removedCards" [collection]="value.collection">
-				</deck-list-static>
-			</div>
-			<div class="container added">
-				<div class="title">
-					<span class="main-text" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></span>
-					<span class="details">{{ addedCardsHeaderDetails }}</span>
-				</div>
-				<deck-list-static class="cards" [cards]="addedCards" [collection]="value.collection">
-				</deck-list-static>
-			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMetaDeckDetailsCardsComponent
+export class ConstructedMetaArchetypeDetailsCardsComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {

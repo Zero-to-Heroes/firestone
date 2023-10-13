@@ -36,10 +36,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<constructed-format-filter-dropdown class="filter"></constructed-format-filter-dropdown>
 			<constructed-time-filter-dropdown class="filter"></constructed-time-filter-dropdown>
 			<constructed-rank-filter-dropdown class="filter"></constructed-rank-filter-dropdown>
+			<constructed-player-class-filter-dropdown class="filter"></constructed-player-class-filter-dropdown>
 			<constructed-sample-size-filter-dropdown class="filter"></constructed-sample-size-filter-dropdown>
 			<constructed-archetype-sample-size-filter-dropdown
 				class="filter"
 			></constructed-archetype-sample-size-filter-dropdown>
+			<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
 
@@ -121,7 +123,13 @@ export class DecktrackerFiltersComponent
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
 			.pipe(
 				this.mapData(
-					([currentView]) => !['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+					([currentView]) =>
+						![
+							'constructed-meta-decks',
+							'constructed-meta-deck-details',
+							'constructed-meta-archetypes',
+							'constructed-meta-archetype-details',
+						].includes(currentView),
 				),
 			);
 	}

@@ -9,6 +9,7 @@ export class AllTimeBoostersInternalService extends AbstractCollectionInternalSe
 	protected type = () => 'all-time-boosters';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.BoostersCount;
 	protected memoryReadingOperation = () => this.memoryReading.getBoostersInfo();
+	protected isMemoryInfoEmpty = (collection: readonly PackInfo[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getAllTimeBoosters();
 	protected localDbSaveOperation = (collection: readonly PackInfo[]) => this.db.saveAllTimeBoosters(collection);
 

@@ -517,12 +517,16 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 // import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
+import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
+import { ConstructedMetaArchetypeDetailsComponent } from '@components/decktracker/main/constructed-meta-archetype-details.component';
 import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
 import { ConstructedMetaArchetypesComponent } from '@components/decktracker/main/constructed-meta-archetypes.component';
+import { ConstructedMetaDeckDetailsCardStatsComponent } from '@components/decktracker/main/constructed-meta-deck-details-card-stats.component';
 import { ConstructedMetaDeckDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-deck-details-cards.component';
 import { ConstructedMetaDeckDetailsViewComponent } from '@components/decktracker/main/constructed-meta-deck-details-view.component';
 import { ConstructedMetaDeckDetailsComponent } from '@components/decktracker/main/constructed-meta-deck-details.component';
 import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
+import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
@@ -620,6 +624,7 @@ import { ControlSettingsComponent } from './js/components/controls/control-setti
 import { ControlShareComponent } from './js/components/controls/control-share.component';
 import { CopyDesckstringComponent } from './js/components/decktracker/copy-deckstring.component';
 import { ImportDeckstringComponent } from './js/components/decktracker/import-deckstring.component';
+import { ConstructedDustFilterDropdownComponent } from './js/components/decktracker/main/filters/constructed-dust-filter-dropdown.component';
 import { DeckCardComponent } from './js/components/decktracker/overlay/deck-card.component';
 import { DeckListByZoneComponent } from './js/components/decktracker/overlay/deck-list-by-zone.component';
 import { DeckListComponent } from './js/components/decktracker/overlay/deck-list.component';
@@ -1290,9 +1295,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedMetaDeckSummaryComponent,
 		ConstructedMetaDeckDetailsComponent,
 		ConstructedMetaDeckDetailsViewComponent,
+		ConstructedMetaDeckDetailsCardStatsComponent,
 		ConstructedMetaDeckDetailsCardsComponent,
+		ConstructedMetaArchetypeDetailsCardsComponent,
 		ConstructedMetaArchetypesComponent,
 		ConstructedMetaArchetypeComponent,
+		ConstructedMetaArchetypeDetailsComponent,
 		DeckWinrateMatrixComponent,
 		DeckMatchupInfoComponent,
 		DecktrackerDeckRecapComponent,
@@ -1308,6 +1316,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DecktrackerFiltersComponent,
 		DecktrackerFormatFilterDropdownComponent,
 		ConstructedSampleSizeFilterDropdownComponent,
+		ConstructedDustFilterDropdownComponent,
 		ConstructedArchetypeSampleSizeFilterDropdownComponent,
 		DecktrackerTimeFilterDropdownComponent,
 		DecktrackerRankFilterDropdownComponent,
@@ -1323,6 +1332,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedFormatFilterDropdownComponent,
 		ConstructedTimeFilterDropdownComponent,
 		ConstructedMyDecksSearchComponent,
+		ConstructedPlayerClassFilterDropdownComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

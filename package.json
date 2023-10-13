@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "12.2.2",
+	"version": "12.2.4",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
@@ -35,7 +35,7 @@
 		"@firestone-hs/bgs-global-stats": "^1.0.40",
 		"@firestone-hs/build-global-stats": "^1.0.8",
 		"@firestone-hs/coliseum-components": "^0.0.24",
-		"@firestone-hs/constructed-deck-stats": "^0.0.6",
+		"@firestone-hs/constructed-deck-stats": "^0.0.8",
 		"@firestone-hs/deckstrings": "^2.2.7",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.5",
@@ -45,7 +45,7 @@
 		"@firestone-hs/replay-parser": "^1.2.9",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.310",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.315",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.30",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.10",
 		"@firestone-hs/twitch-presence": "^1.0.1",

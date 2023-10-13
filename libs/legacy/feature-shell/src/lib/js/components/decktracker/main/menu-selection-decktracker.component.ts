@@ -7,7 +7,7 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -68,8 +68,9 @@ export class MenuSelectionDecktrackerComponent
 		{
 			id: 'constructed-meta-archetypes',
 			translationKey: 'app.decktracker.menu.meta-archetypes-header',
+			subMenus: ['constructed-meta-archetype-details'],
 			isPremium: true,
-			comingSoon: true,
+			// comingSoon: true,
 		},
 		{
 			id: 'ladder-stats',
@@ -87,6 +88,8 @@ export class MenuSelectionDecktrackerComponent
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
+	private premium$$ = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
@@ -100,6 +103,12 @@ export class MenuSelectionDecktrackerComponent
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
 			.pipe(this.mapData(([tab]) => tab));
+		this.store
+			.hasPremiumSub$()
+			.pipe(this.mapData((hasPremium) => hasPremium))
+			.subscribe((hasPremium) => {
+				this.premium$$.next(hasPremium);
+			});
 	}
 
 	ngAfterViewInit() {
@@ -110,6 +119,10 @@ export class MenuSelectionDecktrackerComponent
 		if (item.comingSoon) {
 			return;
 		}
+		if (item.isPremium && !this.premium$$.value) {
+			return;
+		}
+
 		this.analytics.trackEvent(`navigation-decktracker`, { tab: item.id });
 		this.stateUpdater.next(new SelectDecksViewEvent(item.id));
 	}

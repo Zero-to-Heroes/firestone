@@ -17,8 +17,8 @@
 		}
 
 		&.locked {
-			color: var(--default-title-color);
 			.premium-lock {
+				color: var(--default-title-color);
 				display: flex;
 			}
 		}
