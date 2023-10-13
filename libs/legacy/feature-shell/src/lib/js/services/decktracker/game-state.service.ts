@@ -129,7 +129,6 @@ import { ConstructedAchievementsProgressionEvent } from './event/constructed-ach
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
-import { MindrenderIlluciaParser } from './event-parser/mindrender-illucia-parser';
 
 @Injectable()
 export class GameStateService {
@@ -309,7 +308,6 @@ export class GameStateService {
 		const parsersForEvent = this.eventParsers[event.type] ?? [];
 		for (const parser of parsersForEvent) {
 			try {
-				// console.log(event);
 				if (parser.applies(event, this.state)) {
 					this.state = await parser.parse(this.state, event);
 				}
@@ -641,7 +639,7 @@ export class GameStateService {
 			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.i18n)],
 			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
 			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],
-			[GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],
+			// [GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],
 		};
 	}
 }
