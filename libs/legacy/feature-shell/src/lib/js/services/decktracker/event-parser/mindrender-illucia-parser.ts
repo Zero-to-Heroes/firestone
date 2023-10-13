@@ -7,17 +7,29 @@ import { EventParser } from './event-parser';
 // but we also need to update everything else, like the decklist
 export class MindrenderIlluciaParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return false;
+		// return false;
+		return (
+			state && (gameEvent.type === GameEvent.MINDRENDER_ILLUCIA_START)
+		)
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const newPlayerDeck = this.swapDecks(currentState.playerDeck, currentState.opponentDeck);
-		const newOpponentDeck = this.swapDecks(currentState.opponentDeck, currentState.playerDeck);
+		const newOpponentDeck = currentState.opponentDeck.update({
+			hand: currentState.playerDeck.hand
+		});
 		return currentState.update({
-			playerDeck: newPlayerDeck,
 			opponentDeck: newOpponentDeck,
 		} as GameState);
 	}
+
+	// async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+	// 	const newPlayerDeck = this.swapDecks(currentState.playerDeck, currentState.opponentDeck);
+	// 	const newOpponentDeck = this.swapDecks(currentState.opponentDeck, currentState.playerDeck);
+	// 	return currentState.update({
+	// 		playerDeck: newPlayerDeck,
+	// 		opponentDeck: newOpponentDeck,
+	// 	} as GameState);
+	// }
 
 	private swapDecks(firstDeck: DeckState, secondDeck: DeckState): DeckState {
 		return firstDeck.update({
