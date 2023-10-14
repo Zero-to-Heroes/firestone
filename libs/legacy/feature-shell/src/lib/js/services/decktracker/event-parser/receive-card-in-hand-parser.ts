@@ -204,18 +204,23 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		// If player copies opponent's hand with Mindrender Illucia, update opponent hand to reflect
 		// learned card information.
-		if(isCreatedByMindrenderIllucia && isPlayer) {
-			const opponentHand: DeckCard[] = [];
-			for(const card of handAfterCardInference) {
-				opponentHand.push(
-					DeckCard.create({
-						cardId: card.cardId,
-						cardName: card.cardName,
-						manaCost: card.manaCost,
-						rarity: card.rarity,
-					} as DeckCard)
-				);
-			}
+		// We only update the opponent's hand once we're on the last card gained from illucia, since
+		// our hand will have all information from previous illucia card recieved events.
+		if(isCreatedByMindrenderIllucia
+			&& isPlayer
+			&& ++gameEvent.additionalData.position === currentState.opponentDeck.hand.length) {
+			const opponentHand: DeckCard[] = currentState.opponentDeck.hand.map(
+				// remove entity ID and creator card ID since these are not accurate for opponent's hand
+				// preserve metaInfo and internalEntityID from opponent's hand
+				// (not sure if internalEntityID is necessary)
+				(opponentCard, idx) => 
+					handAfterCardInference[idx].update({
+						entityId: null,
+						creatorCardId: null,
+						internalEntityId: opponentCard.internalEntityId,
+						metaInfo: opponentCard.metaInfo,
+					})
+			);
 			const newOpponentDeck = currentState.opponentDeck.update({
 				hand: opponentHand
 			});
