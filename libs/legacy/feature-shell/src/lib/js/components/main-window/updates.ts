@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.2.6',
+		version: '12.2.7',
 		force: false,
 		sections: [
 			{
@@ -61,6 +61,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `(PREMIUM) You can now view how each deck or archetype performs against other classes.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Try and make everything linked to duels detection more robust. This *should* reduce the number of times some loots, initial decklists or sideboards being incorrectly detected.`,
 							},
 						],
 					},
