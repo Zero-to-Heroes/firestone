@@ -36,7 +36,7 @@ export class CopyDesckstringComponent {
 		if (!!value) {
 			try {
 				const deckDefinition = decode(value);
-				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
+				const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
 				this.normalizedDeckstring = encode(updatedDeckDefinition);
 				console.debug('deckDefinition', deckDefinition, updatedDeckDefinition, this.normalizedDeckstring);
 			} catch (e) {
@@ -84,7 +84,16 @@ export class CopyDesckstringComponent {
 	}
 }
 
-export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: CardsFacadeService): DeckDefinition => {
+export const sanitizeDeckstring = (deckstring: string, allCards: CardsFacadeService): string => {
+	const deckDefinition = decode(deckstring);
+	const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, allCards);
+	return encode(updatedDeckDefinition);
+};
+
+export const sanitizeDeckDefinition = (
+	deckDefinition: DeckDefinition,
+	allCards: CardsFacadeService,
+): DeckDefinition => {
 	// Filter for Duels - remove the signature treasure, as it breaks the HS deck builder
 	const newCards = deckDefinition.cards.filter(([cardDbfId, quantity]) => {
 		const card = allCards.getCardFromDbfId(cardDbfId);

@@ -16,6 +16,11 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[duels-loot] handling loot', event.dungeonLootInfo);
 		const dungeonLootInfo = event.dungeonLootInfo;
+		// There was a race condition
+		if (currentState.duels.duelsRunInfos == null) {
+			console.error('[duels-loot] no duels run info in state', currentState.duels);
+			return [null, null];
+		}
 
 		const infosForCurrentRun =
 			currentState.duels.duelsRunInfos?.filter((info) => info.runId === dungeonLootInfo.runId) ?? [];
@@ -72,7 +77,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 		}
 		return {
 			...this.buildCommonInfo(dungeonLootInfo),
-			bundleType: 'loot',
+			bundleType: 'treasure',
 			option1: dungeonLootInfo.treasureOptions[0],
 			option2: dungeonLootInfo.treasureOptions.length < 2 ? null : dungeonLootInfo.treasureOptions[1],
 			option3: dungeonLootInfo.treasureOptions.length < 3 ? null : dungeonLootInfo.treasureOptions[2],

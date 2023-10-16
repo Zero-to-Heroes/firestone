@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
@@ -6,13 +8,13 @@ import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MatchInfo } from '../../models/match-info';
-import { DuelsInfo } from '../../models/memory/memory-duels';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsRunIdService } from '../duels/duels-run-id.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
+import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
@@ -21,7 +23,6 @@ import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ReviewIdService } from '../review-id.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
-import { sleep } from '../utils';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
 
 @Injectable()
@@ -40,6 +41,7 @@ export class EndGameListenerService {
 		private readonly duelsRunIdService: DuelsRunIdService,
 		private readonly bgStore: BattlegroundsStoreService,
 		private readonly lottery: LotteryService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -60,10 +62,19 @@ export class EndGameListenerService {
 			filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
 			map((event) => event.additionalData.playerDeck as DeckInfo),
 			startWith(null),
+			map((deck) =>
+				// Remove signature treasures from the decklists
+				isDuels(deck?.gameType)
+					? {
+							...deck,
+							deckstring: sanitizeDeckstring(deck.deckstring, this.allCards),
+					  }
+					: deck,
+			),
 			tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
 		);
 		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe();
-		const duelsRunId$ = this.duelsRunIdService.duelsRunId$.pipe();
+		const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
 		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.ARENA_INFO),
 			map((event) => event.additionalData.arenaInfo as ArenaInfo),
@@ -289,23 +300,23 @@ export class EndGameListenerService {
 		return result;
 	}
 
-	private async getDuelsNewPlayerRank(initialRank: number, existingDuelsInfo: DuelsInfo): Promise<number> {
-		// Ideally should trigger this only when winning at 11 or losing at 2, but we don't have the match result yet
-		// Could add it somewhere, but for now I think it's good enough like that
-		if (existingDuelsInfo.Wins !== 11 && existingDuelsInfo.Losses !== 2) {
-			return null;
-		}
-		// This only matters when a run is over, so we need to be careful no to take too much time
-		let duelsInfo = await this.memoryInspection.getDuelsInfo();
-		let retriesLeft = 10;
-		while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
-			await sleep(500);
-			duelsInfo = await this.memoryInspection.getDuelsInfo();
-			retriesLeft--;
-		}
-		if (!duelsInfo) {
-			return null;
-		}
-		return duelsInfo.LastRatingChange + initialRank;
-	}
+	// private async getDuelsNewPlayerRank(initialRank: number, existingDuelsInfo: DuelsInfo): Promise<number> {
+	// 	// Ideally should trigger this only when winning at 11 or losing at 2, but we don't have the match result yet
+	// 	// Could add it somewhere, but for now I think it's good enough like that
+	// 	if (existingDuelsInfo.Wins !== 11 && existingDuelsInfo.Losses !== 2) {
+	// 		return null;
+	// 	}
+	// 	// This only matters when a run is over, so we need to be careful no to take too much time
+	// 	let duelsInfo = await this.memoryInspection.getDuelsInfo();
+	// 	let retriesLeft = 10;
+	// 	while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
+	// 		await sleep(500);
+	// 		duelsInfo = await this.memoryInspection.getDuelsInfo();
+	// 		retriesLeft--;
+	// 	}
+	// 	if (!duelsInfo) {
+	// 		return null;
+	// 	}
+	// 	return duelsInfo.LastRatingChange + initialRank;
+	// }
 }

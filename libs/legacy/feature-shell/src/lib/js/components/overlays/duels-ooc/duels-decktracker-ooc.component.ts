@@ -14,7 +14,6 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { explodeDecklist, normalizeWithDbfIds } from '../../../services/decktracker/deck-parser.service';
 
 @Component({
@@ -60,8 +59,11 @@ export class DuelsDecktrackerOocComponent
 		this.deckstring$ = this.store
 			.listen$(([main, nav]) => main.duels.currentDuelsDeck)
 			.pipe(
-				filter(([deck]) => !!deck),
 				this.mapData(([deck]) => {
+					if (!deck) {
+						return null;
+					}
+
 					const cardIds = deck.DeckList as readonly string[];
 					const deckDefinition: DeckDefinition = {
 						format: GameFormat.FT_WILD,
@@ -79,7 +81,7 @@ export class DuelsDecktrackerOocComponent
 									};
 							  }),
 					};
-					console.debug('[duels-decktracker-ooc] encoding', deckDefinition, deck);
+					// console.debug('[duels-decktracker-ooc] encoding', deckDefinition, deck);
 					return encode(deckDefinition);
 				}),
 			);

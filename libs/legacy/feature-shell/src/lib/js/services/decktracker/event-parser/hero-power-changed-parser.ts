@@ -1,4 +1,4 @@
-import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
+import { sanitizeDeckDefinition } from '@components/decktracker/copy-deckstring.component';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -73,7 +73,7 @@ export class HeroPowerChangedParser implements EventParser {
 
 		// Take care of the treasure being here
 		if (currentDeck.cards.length <= 16) {
-			const result = encode(sanitizeDeckstring(currentDeck, this.allCards));
+			const result = encode(sanitizeDeckDefinition(currentDeck, this.allCards));
 			console.debug('[duels-run-deckstring] first game, returning deckstring', result, currentDeck);
 			return result;
 		}
@@ -91,7 +91,7 @@ export class HeroPowerChangedParser implements EventParser {
 			return null;
 		}
 		const deckDefinition = decode(currentRun.initialDeckList);
-		const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
+		const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
 		const result = encode(updatedDeckDefinition);
 		console.debug('[duels-run-deckstring] returning deckstring', result, updatedDeckDefinition, deckDefinition);
 		return result;

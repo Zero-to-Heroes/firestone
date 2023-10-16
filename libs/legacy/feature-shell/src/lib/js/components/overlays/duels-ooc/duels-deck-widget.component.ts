@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
+import { sanitizeDeckDefinition } from '@components/decktracker/copy-deckstring.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -118,7 +118,7 @@ export class DuelsDeckWidgetComponent {
 
 	copyDeckCode() {
 		const deckDefinition = decode(this.initialDeck);
-		const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
+		const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
 		const normalizedDeckstring = encode(updatedDeckDefinition);
 		this.ow.placeOnClipboard(normalizedDeckstring);
 		this.screenCaptureOn = true;

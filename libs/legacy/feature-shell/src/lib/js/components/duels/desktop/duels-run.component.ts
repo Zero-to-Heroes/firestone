@@ -182,6 +182,13 @@ export class DuelsRunComponent implements AfterViewInit {
 			} else if ((steps[i] as DuelsRunInfo).chosenOptionIndex && result.length > 0) {
 				const lastGameIndex = result.length - 1;
 				const info: DuelsRunInfo = steps[i] as DuelsRunInfo;
+				// console.debug(
+				// 	'[duels-run] updating last step',
+				// 	steps[i],
+				// 	lastGameIndex,
+				// 	info,
+				// 	info.bundleType === 'loot' ? this.extractLoot(info) : result[lastGameIndex].lootCardIds,
+				// );
 				result[lastGameIndex] = GameStat.create({
 					...result[lastGameIndex],
 					treasureCardId:
@@ -201,6 +208,7 @@ export class DuelsRunComponent implements AfterViewInit {
 			return;
 		}
 
+		// console.debug('[duels-run] updating values', this._run);
 		this.deckstring = this._run.initialDeckList;
 		this.gameMode = this._run.type;
 		this.gameModeImage =
@@ -217,6 +225,7 @@ export class DuelsRunComponent implements AfterViewInit {
 		this.deltaRating =
 			this._run.ratingAtEnd && !isNaN(this._run.ratingAtEnd) ? this._run.ratingAtEnd - this.rating : null;
 		this.steps = this.buildSteps(this._run.steps);
+		// console.debug('[duels-run] steps', this.steps);
 		this.rewards = this._run.rewards;
 
 		this.playerClassImage = this._run.heroCardId
@@ -252,6 +261,7 @@ export class DuelsRunComponent implements AfterViewInit {
 			return null;
 		}
 		const result = info[`option${info.chosenOptionIndex}Contents`];
+		// console.debug('[duels-run] extracted loot', info, result);
 		if (result && result.length === 3 && result.every((item) => item === '0')) {
 			return null;
 		}

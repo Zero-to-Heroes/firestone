@@ -38,14 +38,15 @@ export class DuelsRewardsService {
 				map((event) => event.data[0] as MemoryUpdate),
 				filter((changes) => changes.IsDuelsRewardsPending),
 				withLatestFrom(
-					this.duelsRunIdService.duelsRunId$,
+					// this.duelsRunIdService.duelsRunId$,
 					this.duelsRunIdService.lastDuelsGame$,
 					this.duelsState.duelsInfo$$,
 					this.reviewIdService.reviewId$,
 				),
+				filter(([changes, lastDuelsGame, duelsInfo, reviewId]) => !!duelsInfo?.DeckId),
 			)
-			.subscribe(([changes, duelsRunId, lastDuelsGame, duelsInfo, reviewId]) => {
-				this.handleRewards(duelsRunId, lastDuelsGame, duelsInfo, reviewId);
+			.subscribe(([changes, lastDuelsGame, duelsInfo, reviewId]) => {
+				this.handleRewards(duelsInfo.DeckId, lastDuelsGame, duelsInfo, reviewId);
 			});
 	}
 

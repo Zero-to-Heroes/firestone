@@ -63,19 +63,7 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 	}
 
 	ngAfterContentInit(): void {
-		// Because on that screen we can have left-over info from the previous run
-		const isOnInitialTreasureSelectScreen$ = this.store
-			.listen$(
-				([main, prefs]) => main?.duels,
-				([main, nav]) => main.currentScene,
-			)
-			.pipe(
-				this.mapData(([duels, currentScene]) => {
-					return currentScene === SceneMode.PVP_DUNGEON_RUN && !!duels.treasureSelection?.treasures?.length;
-				}),
-			);
 		this.showWidget$ = combineLatest([
-			isOnInitialTreasureSelectScreen$,
 			this.store.listenPrefs$((prefs) => prefs.duelsShowOocTracker),
 			this.store.listen$(
 				// Safeguard in case of memory reading failure
@@ -83,13 +71,12 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 				([main, nav]) => main.duels.isOnDuelsMainScreen,
 			),
 		]).pipe(
-			this.mapData(([isOnInitialTreasureSelectScreen, [displayFromPrefs], [currentScene, isOnMainScreen]]) => {
-				return (
-					!isOnInitialTreasureSelectScreen &&
-					displayFromPrefs &&
-					isOnMainScreen &&
-					currentScene === SceneMode.PVP_DUNGEON_RUN
-				);
+			this.mapData(([[displayFromPrefs], [currentScene, isOnMainScreen]]) => {
+				const result =
+					// !isOnInitialTreasureSelectScreen &&
+					displayFromPrefs && isOnMainScreen && currentScene === SceneMode.PVP_DUNGEON_RUN;
+				// console.debug('[duels-ooc] show widget?', result, displayFromPrefs, isOnMainScreen, currentScene);
+				return result;
 			}),
 			this.handleReposition(),
 		);

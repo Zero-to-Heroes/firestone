@@ -1,12 +1,19 @@
 import { DeckInfoFromMemory } from '../mainwindow/decktracker/deck-info-from-memory';
 
 export interface DuelsInfo {
-	readonly HeroCardId: string;
-	readonly PlayerClass: number;
+	// readonly HeroCardId: string; // REMOOOOOOOOVE
+	readonly DeckId: string;
+	readonly HeroCardDbfId: string;
 	readonly HeroPowerCardDbfId: string | number;
 	readonly SignatureTreasureCardDbfId: string | number;
+	readonly PlayerClass: number;
+
+	// Not sure these are needed
+	readonly RunActive: boolean;
+	readonly SessionActive: boolean;
 
 	readonly DuelsDeck: DeckInfoFromMemory;
+	readonly IsPaidEntry: boolean;
 	readonly Wins: number;
 	readonly Losses: number;
 	readonly Rating: number;
@@ -17,20 +24,6 @@ export interface DuelsInfo {
 	readonly ChosenLoot: number;
 	readonly TreasureOption: readonly number[];
 	readonly ChosenTreasure: number;
-
-	// Use that in priority
-	// readonly DeckList: readonly (string | number)[];
-	// // readonly DeckListWithCardIds: readonly string[];
-	// readonly StartingHeroPower: number;
-	// // Use that in priority
-	// readonly StartingHeroPowerCardId: number;
-
-	// // Not read from memory, just there for compatiblity with standard decklists
-	// /** @deprecated */
-	// readonly FormatType: GameFormat;
-	// /** @deprecated */
-	// readonly Name: string;
-	// /** @deprecated */
 }
 
 export interface OptionBundle {

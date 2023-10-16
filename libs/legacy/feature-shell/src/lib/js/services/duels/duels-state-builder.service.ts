@@ -31,10 +31,8 @@ import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { sleep } from '../utils';
 
-// const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json';
-// const DUELS_GLOBAL_STATS_DECKS =
-// 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-buckets.gz.json';
 const DUELS_RUN_INFO_URL = 'https://cc3tc224po5orwembimzyaxqhy0khyij.lambda-url.us-west-2.on.aws/';
@@ -296,32 +294,6 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
-	// private buildDeckStatInfo(runs: readonly DuelsRun[]): DuelsDeckStatInfo {
-	// 	const totalMatchesPlayed = runs.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0);
-	// 	return {
-	// 		totalRunsPlayed: runs.length,
-	// 		totalMatchesPlayed: totalMatchesPlayed,
-	// 		winrate: (100 * runs.map((run) => run.wins).reduce((a, b) => a + b, 0)) / totalMatchesPlayed,
-	// 		averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
-	// 		winsDistribution: this.buildWinDistributionForRun(runs),
-	// 		netRating: runs
-	// 			.filter((run) => run.ratingAtEnd != null && run.ratingAtStart != null)
-	// 			.map((run) => +run.ratingAtEnd - +run.ratingAtStart)
-	// 			.reduce((a, b) => a + b, 0),
-	// 	} as DuelsDeckStatInfo;
-	// }
-
-	// private buildWinDistributionForRun(runs: readonly DuelsRun[]): readonly { winNumber: number; value: number }[] {
-	// 	const result: { winNumber: number; value: number }[] = [];
-	// 	for (let i = 0; i <= 12; i++) {
-	// 		result.push({
-	// 			winNumber: i,
-	// 			value: runs.filter((run) => run.wins === i).length,
-	// 		});
-	// 	}
-	// 	return result;
-	// }
-
 	private initDuelsInfoObservable() {
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
@@ -333,10 +305,10 @@ export class DuelsStateBuilderService {
 	}
 
 	private async updateDuelsInfo() {
+		// Just make sure that the info is properly updated
+		await sleep(200);
 		const duelsInfo = await this.memory.getDuelsInfo();
-		if (duelsInfo) {
-			this.duelsInfo$$.next(duelsInfo);
-		}
+		this.duelsInfo$$.next(duelsInfo);
 	}
 }
 

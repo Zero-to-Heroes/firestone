@@ -3,7 +3,6 @@ import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import {
 	ARENAS,
 	CardClass,
-	CardIds,
 	GameFormat,
 	GameType,
 	PRACTICE_ALL,
@@ -299,20 +298,20 @@ export class DeckParserService {
 
 	private sentReports: { [type: string]: boolean } = {};
 	private async validateDeck(deck: DeckInfo) {
-		const etcDbfId = this.allCards.getCard(CardIds.ETCBandManager_ETC_080).dbfId;
-		if (deck.deck?.cards.map((pair) => pair[0]).includes(etcDbfId) && !deck.deck.sideboards?.length) {
-			console.warn('invalid deck', deck?.deck?.cards?.length, deck);
-			const duelsDeckFromCollection = await this.memory.getDuelsDeckFromCollection();
-			const duelsDeck = await this.memory.getDuelsDeck();
-			console.log('no-format', 'more duels deck info', duelsDeckFromCollection, duelsDeck);
-			// if (!this.sentReports['invalid-etc-deck']) {
-			// 	this.bugReportService.submitAutomatedReport({
-			// 		type: 'invalid-etc-deck-3',
-			// 		info: JSON.stringify(deck),
-			// 	});
-			// 	this.sentReports['invalid-etc-deck'] = true;
-			// }
-		}
+		// const etcDbfId = this.allCards.getCard(CardIds.ETCBandManager_ETC_080).dbfId;
+		// if (deck.deck?.cards.map((pair) => pair[0]).includes(etcDbfId) && !deck.deck.sideboards?.length) {
+		// 	console.warn('invalid deck', deck?.deck?.cards?.length, deck);
+		// 	const duelsDeckFromCollection = await this.memory.getDuelsDeckFromCollection();
+		// 	const duelsDeck = await this.memory.getDuelsDeck();
+		// 	console.log('no-format', 'more duels deck info', duelsDeckFromCollection, duelsDeck);
+		// 	// if (!this.sentReports['invalid-etc-deck']) {
+		// 	// 	this.bugReportService.submitAutomatedReport({
+		// 	// 		type: 'invalid-etc-deck-3',
+		// 	// 		info: JSON.stringify(deck),
+		// 	// 	});
+		// 	// 	this.sentReports['invalid-etc-deck'] = true;
+		// 	// }
+		// }
 	}
 
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number, gameType: GameType) {
@@ -380,6 +379,7 @@ export class DeckParserService {
 			ScenarioId.WIZARD_DUELS___REVENDRETH,
 			ScenarioId.WIZARD_DUELS___THE_SUNKEN_CITY,
 			ScenarioId.WIZARD_DUELS___DEATH_KNIGHT,
+			ScenarioId.WIZARD_DUELS___TITANS_MINISET,
 			ScenarioId.TAVERN_BRAWL_BRAWLISEUM,
 			ScenarioId.TAVERN_BRAWL_WILD_BRAWLISEUM,
 		];

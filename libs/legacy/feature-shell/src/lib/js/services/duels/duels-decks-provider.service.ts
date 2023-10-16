@@ -8,7 +8,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { BehaviorSubject, combineLatest, concat } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
-import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
+import { sanitizeDeckDefinition, sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import {
 	DuelsDeckStatInfo,
 	DuelsDeckSummary,
@@ -149,21 +149,22 @@ export class DuelsDecksProviderService {
 				});
 
 				// Make sure the decklist doesn't include signature treasures
-				const deckDefinition = decode(firstMatch.initialDeckList);
-				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
-				const sanitizedDeckstring = encode(updatedDeckDefinition);
-				return {
-					...mainStats,
-					initialDeckList: sanitizedDeckstring,
-					heroCardId: heroCardId,
-					playerClass: playerClass,
-					deckStatsForTypes: decksForTypes,
-					// FIXME: use prefs in component to override deck name
-					deckName: this.getDeckName(sanitizedDeckstring, duelsPersonalDeckNames) ?? defaultDeckName,
-					runs: groupedByDecklist[deckstring],
-					debug1: deckDefinition,
-					debug2: updatedDeckDefinition,
-				} as any as DuelsDeckSummary;
+				try {
+					const sanitizedDeckstring = sanitizeDeckstring(firstMatch.initialDeckList, this.allCards);
+					return {
+						...mainStats,
+						initialDeckList: sanitizedDeckstring,
+						heroCardId: heroCardId,
+						playerClass: playerClass,
+						deckStatsForTypes: decksForTypes,
+						// FIXME: use prefs in component to override deck name
+						deckName: this.getDeckName(sanitizedDeckstring, duelsPersonalDeckNames) ?? defaultDeckName,
+						runs: groupedByDecklist[deckstring],
+					} as any as DuelsDeckSummary;
+				} catch (e) {
+					console.warn('invalid deckstring', firstMatch.id, firstMatch.initialDeckList, e);
+					return null;
+				}
 			});
 		for (const personalDeck of duelsPersonalAdditionalDecks) {
 			if (decks.find((deck) => deck.initialDeckList === personalDeck.initialDeckList)) {
@@ -309,9 +310,15 @@ export class DuelsDecksProviderService {
 		const [wins, losses] = this.extractWins(sortedMatches);
 		let normalizedDeckstring = firstMatch?.playerDecklist;
 		if (!!firstMatch?.playerDecklist) {
-			const deckDefinition = decode(firstMatch?.playerDecklist);
-			const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
-			normalizedDeckstring = encode(updatedDeckDefinition);
+			try {
+				console.debug('decoding', firstMatch?.playerDecklist, firstMatch);
+				const deckDefinition = decode(firstMatch?.playerDecklist);
+				const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
+				normalizedDeckstring = encode(updatedDeckDefinition);
+			} catch (e) {
+				console.warn('invalid deckstring', firstMatch.reviewId, firstMatch.playerDecklist, e);
+				return null;
+			}
 		}
 		return DuelsRun.create({
 			id: runId,
