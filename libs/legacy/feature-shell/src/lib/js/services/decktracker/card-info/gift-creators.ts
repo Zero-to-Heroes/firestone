@@ -122,6 +122,7 @@ export const giftCreators = [
 	CardIds.Convert_WON_342,
 	CardIds.Convert,
 	CardIds.CoppertailSnoop,
+	CardIds.CoppertailSnoop_CoppertailSnoopEnchantment,
 	CardIds.CorsairCache,
 	CardIds.CreationProtocol_CreationProtocolToken,
 	CardIds.CreationProtocol,
