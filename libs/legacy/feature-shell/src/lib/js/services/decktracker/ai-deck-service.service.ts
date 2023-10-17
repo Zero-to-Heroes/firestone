@@ -28,6 +28,7 @@ export class AiDeckService {
 	}
 
 	private async init() {
+		console.log('[ai-decks] init');
 		const deckNames: readonly string[] = await this.getDeckNames();
 		const decksArray = await Promise.all(deckNames.map((fileName) => this.loadAiDecks(fileName)));
 		this.aiDecks = decksArray.reduce((a, b) => a.concat(b), []);

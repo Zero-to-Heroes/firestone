@@ -39,6 +39,7 @@ export class DuelsDecksProviderService {
 	}
 
 	private async init() {
+		console.log('[duels-decks] init');
 		await this.store.initComplete();
 
 		// The idea is to compute the initial value, whatever the most recent game is, and

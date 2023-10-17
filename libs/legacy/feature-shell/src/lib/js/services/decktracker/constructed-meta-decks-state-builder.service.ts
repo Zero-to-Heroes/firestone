@@ -33,6 +33,7 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	private async init() {
+		console.log('[constructed-meta-decks] init');
 		await this.store.initComplete();
 
 		this.constructedMetaDecks$$.onFirstSubscribe(async () => {
@@ -149,7 +150,7 @@ export class ConstructedMetaDecksStateService {
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const fileName = `${format}/${time}/${rank}/deck/${deckId}.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
-		console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
+		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
 		const resultStr = await this.api.get(url);
 		if (!resultStr?.length) {
 			console.error('could not load meta decks', format, time, rank, url);
@@ -184,7 +185,7 @@ export class ConstructedMetaDecksStateService {
 	): Promise<ArchetypeStat> {
 		const fileName = `${format}/${time}/${rank}/archetype/${archetypeId}.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
-		console.debug('[constructed-meta-decks] will load stat for archetype', url, format, time, rank, archetypeId);
+		console.log('[constructed-meta-decks] will load stat for archetype', url, format, time, rank, archetypeId);
 		const resultStr = await this.api.get(url);
 		if (!resultStr?.length) {
 			console.error('could not load meta archetypes', format, time, rank, url);

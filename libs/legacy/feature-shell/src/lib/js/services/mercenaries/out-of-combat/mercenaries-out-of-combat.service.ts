@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -10,8 +10,8 @@ import { Preferences } from '../../../models/preferences';
 import { BroadcastEvent, Events } from '../../events.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
-import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
+import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 
 @Injectable()
 export class MercenariesOutOfCombatService {
@@ -59,6 +59,7 @@ export class MercenariesOutOfCombatService {
 		currentScene: SceneMode,
 		preferences: Preferences,
 	): Promise<void> {
+		console.debug('[mercenaries-ooc-store] emitting new state', newState, currentScene, preferences);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
 		await Promise.all(
 			this.overlayHandlers.map((handler) => handler.updateOverlay(newState, currentScene, preferences)),

@@ -119,6 +119,7 @@ export class TwitchPresenceService {
 					return true;
 				}),
 				map(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
+					console.debug('[twitch-presence] sending new game event?', hearthstoneInfo, duelsInfo, arenaInfo);
 					return {
 						playerRank: buildRankInfo(hearthstoneInfo.metadata, duelsInfo, arenaInfo, matchInfo),
 						metaData: hearthstoneInfo.metadata,

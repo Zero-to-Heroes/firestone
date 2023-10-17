@@ -17,6 +17,7 @@ export class SetsManagerService {
 	}
 
 	private async init() {
+		console.log('[sets-manager] init');
 		this.allSets = this.setsService.getAllSets();
 
 		this.collectionManager.collection$$.pipe(debounceTime(1000)).subscribe((collection) => {

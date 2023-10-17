@@ -19,6 +19,7 @@ export class BgsMetaHeroStatsService {
 	}
 
 	private init() {
+		console.log('[bgs-meta-hero] init');
 		combineLatest([
 			this.store.listenPrefs$(
 				(prefs) => prefs.bgsActiveTimeFilter,

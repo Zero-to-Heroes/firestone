@@ -23,11 +23,13 @@ export class LocalizationFacadeService implements ILocalizationService {
 		return this.service.locale;
 	}
 
-	public init() {
+	public init(attempts = 0) {
 		this.service = this.ow.getMainWindow().localizationService;
 		if (!this.service) {
-			console.warn('localization init failed, retrying');
-			setTimeout(() => this.init(), 100);
+			if (attempts % 20 === 0) {
+				console.warn('localization init failed, retrying');
+			}
+			setTimeout(() => this.init(attempts + 1), 100);
 			return;
 		}
 	}

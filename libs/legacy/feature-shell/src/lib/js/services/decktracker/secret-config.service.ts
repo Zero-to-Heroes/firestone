@@ -48,6 +48,7 @@ export class SecretConfigService {
 	}
 
 	private async init() {
+		console.log('[secrets-config] init');
 		this.secretConfigs = await this.getSecretsConfig();
 		console.log('[secrets-config] loaded secrets config');
 	}

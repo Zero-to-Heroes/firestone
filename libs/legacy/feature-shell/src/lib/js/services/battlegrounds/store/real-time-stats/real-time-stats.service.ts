@@ -5,6 +5,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
+import { EventParser } from './event-parsers/_event-parser';
 import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';
 import { RTStatsBgsBattleHistoryUpdatedParser } from './event-parsers/battlegrounds/rtstats-bgs-battle-history-updated-parser';
 import { RTStatsBgsBoardStatsParser } from './event-parsers/battlegrounds/rtstats-bgs-board-stats-parser';
@@ -31,7 +32,6 @@ import { RTStatsTotalDamageDealtByMinionsParser } from './event-parsers/rtstats-
 import { RTStatsTotalDamageTakenByHeroesParser } from './event-parsers/rtstats-total-damage-taken-by-heroes-parser';
 import { RTStatsTotalDamageTakenByMinionsParser } from './event-parsers/rtstats-total-damage-taken-by-minions-parser';
 import { RTStatTurnStartParser } from './event-parsers/rtstats-turn-start-parser';
-import { EventParser } from './event-parsers/_event-parser';
 import { RealTimeStatsState } from './real-time-stats';
 
 // TODO: move this into a mode-independant package, as it could be used for non-bg stuff
@@ -95,6 +95,7 @@ export class RealTimeStatsService {
 	}
 
 	private init() {
+		console.log('[real-time-stats] init');
 		this.eventParsers = this.buildEventParsers();
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);

@@ -44,6 +44,7 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async init() {
+		console.log('[firestone-achievements] init');
 		await this.store.initComplete();
 
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {

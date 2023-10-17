@@ -193,7 +193,7 @@ export class TwitchAuthService {
 			bgs: newBgsState,
 			streamerPrefs: streamerPrefs,
 		};
-		// console.debug('[twitch-auth] built event', result, bgsState);
+		console.debug('[twitch-auth] built event', result, bgsState);
 		return result;
 	}
 

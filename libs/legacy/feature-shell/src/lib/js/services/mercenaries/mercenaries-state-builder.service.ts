@@ -43,6 +43,7 @@ export class MercenariesStateBuilderService {
 	}
 
 	public async loadInitialGlobalStats() {
+		console.log('[mercenaries-state-builder] loading initial global stats');
 		const localInfo = this.localStorage.getItem<MercenariesGlobalStats>(
 			LocalStorageService.MERCENARIES_GLOBAL_STATS,
 		);
@@ -60,6 +61,7 @@ export class MercenariesStateBuilderService {
 	}
 
 	public async loadReferenceData(locale?: string) {
+		console.log('[mercenaries-state-builder] loading reference data');
 		const localInfo = await this.diskCache.getItem<MercenariesReferenceData>(
 			DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA,
 		);
@@ -73,7 +75,7 @@ export class MercenariesStateBuilderService {
 			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
 		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA, referenceData);
-		console.log('loaded remote mercenaries ref data');
+		// console.log('loaded remote mercenaries ref data');
 		this.store.send(new MercenariesReferenceDataLoadedEvent(referenceData));
 		return referenceData;
 	}

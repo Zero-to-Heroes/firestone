@@ -24,7 +24,7 @@ export class BgsBoardHighlighterService {
 	}
 
 	private async init() {
-		console.debug('[bgs-board-highlighter] init');
+		console.log('[bgs-board-highlighter] init');
 		await this.store.initComplete();
 
 		this.initPremiumHighlights();

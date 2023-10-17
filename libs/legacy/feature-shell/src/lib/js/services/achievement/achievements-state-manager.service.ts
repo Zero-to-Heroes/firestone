@@ -39,6 +39,7 @@ export class AchievementsStateManagerService {
 	}
 
 	private async init() {
+		console.log('[achievements-state-manager] init');
 		const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();
 
 		let isLoading = false;

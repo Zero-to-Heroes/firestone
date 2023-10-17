@@ -19,6 +19,7 @@ export class AchievementsRefLoaderService {
 	}
 
 	private init() {
+		console.log('[achievements-ref-loader] init');
 		this.triggerRefDataLoad$$.pipe(distinctUntilChanged()).subscribe(async (trigger) => {
 			console.debug('will load ref data', trigger);
 			if (!trigger) {

@@ -18,7 +18,8 @@ export class MailsService {
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly api: ApiRunner) {
 		window['mailsProvider'] = this;
-		this.init();
+		// Disabled until further notice
+		// this.init();
 	}
 
 	private async init() {

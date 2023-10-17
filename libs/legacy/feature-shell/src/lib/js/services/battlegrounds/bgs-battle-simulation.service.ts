@@ -44,6 +44,7 @@ export class BgsBattleSimulationService {
 	}
 
 	private async init() {
+		console.log('[bgs-simulation] init');
 		this.cardsData = new CardsData(this.cards.getService(), false);
 		this.cardsData.inititialize();
 		if (this.ow?.isOwEnabled()) {

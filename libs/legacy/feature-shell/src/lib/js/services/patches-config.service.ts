@@ -21,6 +21,7 @@ export class PatchesConfigService {
 		if (this.patchesConfig) {
 			return;
 		}
+		console.log('[patches-config] init');
 		this.patchesConfig = await this.getPatchesConfig();
 		console.log('[patches-config] loaded patches config');
 	}

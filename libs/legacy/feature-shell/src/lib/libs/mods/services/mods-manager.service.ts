@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { toModVersion, toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
 import { ModsUtilsService } from './mods-utils.service';
@@ -24,6 +25,7 @@ export class ModsManagerService {
 		private readonly modsConfigService: ModsConfigService,
 		private readonly modsUtils: ModsUtilsService,
 		private readonly api: ApiRunner,
+		private readonly prefs: PreferencesService,
 	) {
 		window['modsManager'] = this;
 	}
@@ -35,13 +37,18 @@ export class ModsManagerService {
 
 		this.gameStatus.onGameExit(() => this.inGame$$.next(false));
 		this.gameStatus.onGameStart(() => this.inGame$$.next(true));
-		this.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
-			if (inGame) {
-				this.connectWebSocket();
-			} else {
-				this.disconnectWebSocket();
-			}
-		});
+		combineLatest([this.store.listenPrefs$((prefs) => prefs.modsEnabled), this.inGame$$])
+			.pipe(
+				filter(([[enabled], inGame]) => enabled),
+				distinctUntilChanged(),
+			)
+			.subscribe(([[enabled], inGame]) => {
+				if (inGame) {
+					this.connectWebSocket();
+				} else {
+					this.disconnectWebSocket();
+				}
+			});
 
 		// Typical use-case is that the game updates, starts, auto-quits (because of unstripped libs).
 		// Ideally this can then trigger, refresh the libs, so that on next launch it works

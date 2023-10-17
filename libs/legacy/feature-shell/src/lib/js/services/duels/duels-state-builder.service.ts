@@ -61,6 +61,7 @@ export class DuelsStateBuilderService {
 	}
 
 	private async init() {
+		console.log('[duels-state-builder] init');
 		await this.store.initComplete();
 
 		this.initDuelsInfoObservable();

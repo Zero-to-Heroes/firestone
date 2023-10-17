@@ -47,7 +47,7 @@ export class GameEvents {
 	}
 
 	async init() {
-		console.log('init game events monitor');
+		console.log('[game-events] init game events monitor');
 		this.plugin = await this.gameEventsPlugin.get();
 		if (this.plugin) {
 			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {

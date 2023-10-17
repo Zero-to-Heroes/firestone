@@ -20,7 +20,7 @@ export class HsClientConfigService {
 	}
 
 	private async init() {
-		console.log('[hs-client-config] initiating client config');
+		console.log('[hs-client-config] init');
 		this.writeClientConfig();
 		this.gameStatus.onGameStart(() => this.writeClientConfig());
 	}

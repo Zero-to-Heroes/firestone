@@ -47,6 +47,7 @@ export class CardsMonitorService {
 	}
 
 	private async init() {
+		console.log('[cards-monitor] init');
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		window['triggerMemoryUpdate'] = async (cardId: string) => {
 			this.packNotificationQueue.next(true);

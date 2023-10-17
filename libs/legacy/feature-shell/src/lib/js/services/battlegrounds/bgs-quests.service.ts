@@ -23,6 +23,7 @@ export class BattlegroundsQuestsService {
 	}
 
 	private async init() {
+		console.log('[bgs-quests] init');
 		await this.store.initComplete();
 
 		this.questStats$$.onFirstSubscribe(async () => {

@@ -16,6 +16,7 @@ export class OverlayDisplayService {
 	}
 
 	private async init() {
+		console.log('[overlay-display] init');
 		await this.store.initComplete();
 		combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
@@ -31,6 +32,7 @@ export class OverlayDisplayService {
 	}
 
 	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
+		console.debug('[overlay-display] should display?', gameState, prefs);
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
 			if (gameState?.metadata?.gameType) {
 				console.warn(

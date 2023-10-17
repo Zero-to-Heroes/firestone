@@ -681,7 +681,7 @@ export class PreferencesService {
 	private lastSyncPrefs: Preferences;
 
 	private startPrefsSync() {
-		console.warn('prefs are not synced for now');
+		// console.warn('prefs are not synced for now');
 		return;
 		setInterval(async () => {
 			const userPrefs = await this.getPreferences();

@@ -34,6 +34,7 @@ export class TavernBrawlService {
 	}
 
 	public async loadStats() {
+		console.debug('[tavern-brawl] loading stats');
 		const localInfo = this.localStorage.getItem<TavernBrawlStats>(LocalStorageService.TAVERN_BRAWL_STATS);
 		if (!!localInfo?.stats?.length) {
 			console.debug('loaded tavern brawl stats');

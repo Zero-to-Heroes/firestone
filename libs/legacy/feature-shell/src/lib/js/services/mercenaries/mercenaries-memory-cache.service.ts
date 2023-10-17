@@ -75,6 +75,7 @@ export class MercenariesMemoryCacheService {
 			}
 
 			processingUpdate = true;
+			console.debug('[mercenaries-memory-cache] processing update', newScene);
 			const newMercenariesCollectionInfo = await this.getMercenariesMergedCollectionInfo(true);
 			// const newMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(5, true);
 			if (newMercenariesCollectionInfo) {
@@ -86,11 +87,11 @@ export class MercenariesMemoryCacheService {
 			while (!mapInfo?.Map?.PlayerTeam?.length && retiesLeft >= 0) {
 				await sleep(200);
 				mapInfo = await this.memoryService.getMercenariesInfo(1);
-				console.debug('[mercs] retrying to get mapInfo', mapInfo, retiesLeft);
+				console.debug('[mercenaries-memory-cache] retrying to get mapInfo', mapInfo, retiesLeft);
 				retiesLeft--;
 			}
 
-			console.debug('[mercs] got mapInfo', mapInfo);
+			console.debug('[mercenaries-memory-cache] got mapInfo', mapInfo);
 			this.memoryMapInfo$.next(mapInfo);
 			processingUpdate = false;
 		});

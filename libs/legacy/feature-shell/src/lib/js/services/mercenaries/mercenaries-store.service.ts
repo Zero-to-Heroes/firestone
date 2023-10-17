@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
@@ -10,6 +10,7 @@ import { Preferences } from '../../models/preferences';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';
+import { MercenariesParser } from './parser/_mercenaries-parser';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
 import { MercenariesAbilityRevealedParser } from './parser/mercenaries-ability-revealed-parser';
@@ -31,7 +32,6 @@ import { MercenariesTeamPlayerManualCloseParser } from './parser/mercenaries-tea
 import { MercenariesTurnStartParser } from './parser/mercenaries-turn-start-parser';
 import { MercenariesZoneChangedParser } from './parser/mercenaries-zone-changed-parser';
 import { MercenariesZonePositionChangedParser } from './parser/mercenaries-zone-position-changed-parser';
-import { MercenariesParser } from './parser/_mercenaries-parser';
 
 @Injectable()
 export class MercenariesStoreService {
@@ -107,6 +107,7 @@ export class MercenariesStoreService {
 	}
 
 	private async emitState(newState: MercenariesBattleState, preferences: Preferences): Promise<void> {
+		console.debug('[mercenaries-store] emitting new state', newState);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
 		await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(newState, preferences)));
 	}

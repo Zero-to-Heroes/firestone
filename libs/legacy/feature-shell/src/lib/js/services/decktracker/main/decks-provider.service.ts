@@ -27,6 +27,7 @@ export class DecksProviderService {
 	}
 
 	private async init() {
+		console.log('[decks-provider] init');
 		await this.store.initComplete();
 
 		combineLatest(
@@ -101,6 +102,7 @@ export class DecksProviderService {
 		constructedDeckVersions: readonly ConstructedDeckVersions[],
 		desktopDeckShowHiddenDecks: boolean,
 	): readonly DeckSummary[] {
+		console.debug('[decks-provider] building state', stats?.length, filters, patch, personalDecks?.length);
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
 		if (!stats || !stats?.length) {
 			return personalDecks;

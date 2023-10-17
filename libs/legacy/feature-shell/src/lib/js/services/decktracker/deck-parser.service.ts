@@ -187,6 +187,7 @@ export class DeckParserService {
 	}
 
 	private async init() {
+		console.log('[deck-parser] init');
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.SPECTATING) {
 				this.spectating = event.additionalData.spectating;

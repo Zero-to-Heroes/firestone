@@ -34,7 +34,7 @@ export class LogRegisterService {
 	}
 
 	private init(): void {
-		console.log('[log-register] initiating log registerservice');
+		console.log('[log-register] init');
 
 		new LogListenerService(this.ow, this.gameStatus, this.prefs, this.logUtils)
 			.configure(

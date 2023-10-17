@@ -49,6 +49,7 @@ export class DuelsTopDeckService {
 	}
 
 	private async init() {
+		console.log('[duels-top-deck] init');
 		const sets$ = this.setsManager.sets$$.asObservable();
 		const debouncedSets$ = concat(sets$.pipe(take(1)), sets$.pipe(skip(1), debounceTime(2000))).pipe(
 			distinctUntilChanged(),
@@ -76,7 +77,7 @@ export class DuelsTopDeckService {
 						remoteTopDeckStats.decks ?? [],
 						sets,
 					);
-					// console.debug('[duels-top-deck] built top deck stats', topDecks);
+					console.debug('[duels-top-deck] built top deck stats', topDecks);
 					return topDecks;
 				}),
 			);

@@ -45,6 +45,7 @@ export class AchievementsLiveProgressTrackingService {
 			return;
 		}
 
+		console.log('[achievements-live-progress-tracking] init');
 		await this.store.initComplete();
 		await this.initQuotas();
 		await this.initAchievementsOnGameStart();

@@ -28,6 +28,7 @@ export class LiveStreamsService {
 	}
 
 	public async loadLiveStreams(locale?: string) {
+		console.debug('[live-streams] loading live streams');
 		const result: PresenceResult = await this.api.callGetApi<PresenceResult>(LIVE_STREAMS_URL);
 		// Remove duplicates
 		const uniqueIds = result.streams.map((s) => s.user_id);

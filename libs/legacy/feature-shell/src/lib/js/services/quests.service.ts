@@ -34,11 +34,12 @@ export class QuestsService {
 	}
 
 	private async init() {
+		console.log('[quests] init');
 		await this.store.initComplete();
-		combineLatest(
+		combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.locale),
 			this.requestedInitialReferenceQuestsLoad.asObservable(),
-		)
+		])
 			.pipe(
 				filter(([[locale], load]) => load),
 				map(([[locale], load]) => ({ locale })),

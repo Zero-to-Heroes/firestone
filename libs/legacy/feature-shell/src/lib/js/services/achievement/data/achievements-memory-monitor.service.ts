@@ -34,6 +34,7 @@ export class AchievementsMemoryMonitor {
 	}
 
 	private async init() {
+		console.log('[achievements-memory-monitor] init');
 		const forceRetrigger$ = new BehaviorSubject<void>(null);
 		this.numberOfCompletedAchievements$$
 			.pipe(
