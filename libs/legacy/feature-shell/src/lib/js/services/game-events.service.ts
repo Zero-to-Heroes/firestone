@@ -340,6 +340,7 @@ export class GameEvents {
 									immune: gameEvent.Value.AdditionalProps.Immune,
 									dormant: gameEvent.Value.AdditionalProps.Dormant,
 									cost: gameEvent.Value.AdditionalProps.Cost,
+									magnetized: gameEvent.Value.AdditionalProps.Magnetized,
 							  }
 							: {},
 					),
