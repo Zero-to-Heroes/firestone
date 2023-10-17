@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CardIds, formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Metadata } from '../../models/decktracker/metadata';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
@@ -17,18 +16,19 @@ const createsSecretsFromThePast = [
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
 
-	constructor(private readonly http: HttpClient, private readonly allCards: CardsFacadeService) {
-		this.init();
-	}
+	constructor(private readonly http: HttpClient) {}
 
-	public getValidSecrets(metadata: Metadata, playerClass: string, creatorCardId?: string): readonly string[] {
-		const mode: string = this.getMode(metadata, creatorCardId);
-		const config = this.secretConfigs.find((conf) => conf.mode === mode);
+	public async getValidSecrets(
+		metadata: Metadata,
+		playerClass: string,
+		creatorCardId?: string,
+	): Promise<readonly string[]> {
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
-			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
-			return null;
+			await this.init();
 		}
 
+		const mode: string = this.getMode(metadata, creatorCardId);
+		const config = this.secretConfigs.find((conf) => conf.mode === mode);
 		const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
 		const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
 		const result = config.secrets
@@ -48,7 +48,6 @@ export class SecretConfigService {
 	}
 
 	private async init() {
-		console.log('[secrets-config] init');
 		this.secretConfigs = await this.getSecretsConfig();
 		console.log('[secrets-config] loaded secrets config');
 	}

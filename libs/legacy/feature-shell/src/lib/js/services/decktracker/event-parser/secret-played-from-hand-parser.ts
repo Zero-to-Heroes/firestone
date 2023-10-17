@@ -73,6 +73,11 @@ export class SecretPlayedFromHandParser implements EventParser {
 				: cardWithZone,
 		);
 
+		const secretsConfig = await this.secretConfig.getValidSecrets(
+			currentState.metadata,
+			secretClass,
+			creatorCardId || card.creatorCardId,
+		);
 		const newPlayerDeck = deck
 			.update({
 				hand: handAfterCardsRemembered,
@@ -81,15 +86,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 					? deck.secrets
 					: ([
 							...deck.secrets,
-							BoardSecret.create(
-								entityId,
-								cardId,
-								this.secretConfig.getValidSecrets(
-									currentState.metadata,
-									secretClass,
-									creatorCardId || card.creatorCardId,
-								),
-							),
+							BoardSecret.create(entityId, cardId, secretsConfig),
 					  ] as readonly BoardSecret[]),
 				cardsPlayedThisTurn:
 					isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
