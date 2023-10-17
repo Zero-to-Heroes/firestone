@@ -87,6 +87,11 @@ export class DuelsLootParserService {
 	}
 
 	private async sendBasicLootInfo(game: GameForUpload, duelsInfo: DuelsInfo) {
+		if (!duelsInfo) {
+			console.warn('[duels-loot] no duels info, not sending basic loot info', game, duelsInfo);
+			return;
+		}
+
 		const user = await this.ow.getCurrentUser();
 		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
 		console.debug('[duels-loot] replay', replay.mainPlayerHeroPowerCardId, replay.opponentPlayerHeroPowerCardId);
