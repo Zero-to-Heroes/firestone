@@ -18,9 +18,9 @@ import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MemoryUpdate } from '../../models/memory/memory-update';
-import { BugReportService } from '../bug/bug-report.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { GameStatusService } from '../game-status.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { getLogsDir } from '../log-utils.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -54,8 +54,8 @@ export class DeckParserService {
 		private readonly handler: DeckHandlerService,
 		private readonly api: ApiRunner,
 		private readonly duelsService: DuelsStateBuilderService,
-		private readonly bugReportService: BugReportService,
 		private readonly prefs: PreferencesService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
@@ -175,7 +175,8 @@ export class DeckParserService {
 		}
 
 		// Templates are negative
-		const deck = this.deckTemplates.find((deck) => deck.DeckId === deckId || deck.Id === -deckId);
+		const deckTemplates = await this.getDeckTemplates();
+		const deck = deckTemplates.find((deck) => deck.DeckId === deckId || deck.Id === -deckId);
 		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
@@ -184,6 +185,22 @@ export class DeckParserService {
 			this.setCurrentDeck(null);
 		}
 		return this.currentDeck;
+	}
+
+	private async getDeckTemplates(): Promise<readonly DeckInfoFromMemory[]> {
+		if (!this.deckTemplates?.length) {
+			const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
+			this.deckTemplates = (templatesFromRemote ?? [])
+				.filter((template) => template.DeckList?.length)
+				.map(
+					(template) =>
+						({
+							...template,
+							DeckList: template.DeckList.map((dbfId) => +dbfId),
+						} as DeckInfoFromMemory),
+				);
+		}
+		return this.deckTemplates ?? [];
 	}
 
 	private async init() {
@@ -271,48 +288,20 @@ export class DeckParserService {
 			}
 		});
 
-		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
-		this.deckTemplates = (templatesFromRemote ?? [])
-			.filter((template) => template.DeckList?.length)
-			.map(
-				(template) =>
-					({
-						...template,
-						DeckList: template.DeckList.map((dbfId) => +dbfId),
-					} as DeckInfoFromMemory),
-			);
-
 		// Init fields that are normally populated from memory reading events
-		this.currentNonGamePlayScene =
-			this.currentNonGamePlayScene ?? (await this.memory.getCurrentSceneFromMindVision());
-		console.log('[deck-parser] initial scene', this.currentNonGamePlayScene, this.currentScene);
-		this.selectedDeckId = await this.memory.getSelectedDeckId();
+		if (await this.gameStatus.inGame()) {
+			this.currentNonGamePlayScene =
+				this.currentNonGamePlayScene ?? (await this.memory.getCurrentSceneFromMindVision());
+			console.log('[deck-parser] initial scene', this.currentNonGamePlayScene, this.currentScene);
+			this.selectedDeckId = await this.memory.getSelectedDeckId();
+		}
 	}
 
 	private setCurrentDeck(deck: DeckInfo) {
 		this.currentDeck = deck;
 		if (this.currentDeck) {
 			console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
-			this.validateDeck(this.currentDeck);
 		}
-	}
-
-	private sentReports: { [type: string]: boolean } = {};
-	private async validateDeck(deck: DeckInfo) {
-		// const etcDbfId = this.allCards.getCard(CardIds.ETCBandManager_ETC_080).dbfId;
-		// if (deck.deck?.cards.map((pair) => pair[0]).includes(etcDbfId) && !deck.deck.sideboards?.length) {
-		// 	console.warn('invalid deck', deck?.deck?.cards?.length, deck);
-		// 	const duelsDeckFromCollection = await this.memory.getDuelsDeckFromCollection();
-		// 	const duelsDeck = await this.memory.getDuelsDeck();
-		// 	console.log('no-format', 'more duels deck info', duelsDeckFromCollection, duelsDeck);
-		// 	// if (!this.sentReports['invalid-etc-deck']) {
-		// 	// 	this.bugReportService.submitAutomatedReport({
-		// 	// 		type: 'invalid-etc-deck-3',
-		// 	// 		info: JSON.stringify(deck),
-		// 	// 	});
-		// 	// 	this.sentReports['invalid-etc-deck'] = true;
-		// 	// }
-		// }
 	}
 
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number, gameType: GameType) {
