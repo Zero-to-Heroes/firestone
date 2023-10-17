@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.2.7',
+		version: '12.3.0',
 		force: false,
 		sections: [
 			{
@@ -69,7 +69,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Try and make everything linked to duels detection more robust. This *should* reduce the number of times some loots, initial decklists or sideboards being incorrectly detected.`,
+								text: `Try and make everything linked to duels detection more robust. This should reduce the number of times some loots, initial decklists or sideboards being incorrectly detected. WARNING: because of a change to how runs are identified, the first game you play with this version of the app will start a new run. Sorry for the inconvenience.`,
 							},
 						],
 					},
