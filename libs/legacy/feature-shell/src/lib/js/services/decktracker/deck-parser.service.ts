@@ -187,7 +187,6 @@ export class DeckParserService {
 	}
 
 	private async init() {
-		console.log('[deck-parser] init');
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.SPECTATING) {
 				this.spectating = event.additionalData.spectating;
@@ -271,6 +270,7 @@ export class DeckParserService {
 				this.currentScene = changes.CurrentScene;
 			}
 		});
+
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
 		this.deckTemplates = (templatesFromRemote ?? [])
 			.filter((template) => template.DeckList?.length)

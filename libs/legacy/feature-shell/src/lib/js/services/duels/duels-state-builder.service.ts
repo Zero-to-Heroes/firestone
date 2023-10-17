@@ -61,11 +61,8 @@ export class DuelsStateBuilderService {
 	}
 
 	private async init() {
-		console.log('[duels-state-builder] init');
 		await this.store.initComplete();
-
 		this.initDuelsInfoObservable();
-
 		this.events
 			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
 			.subscribe((data) => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
