@@ -1136,6 +1136,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.Psychopomp:
 				return and(side(inputSide), inGraveyard, minion);
+			case CardIds.QueenAzshara_TSC_641:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.RaiseDead_SCH_514:
 				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.ImpendingCatastrophe:
