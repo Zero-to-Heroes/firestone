@@ -1,7 +1,6 @@
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { captureEvent } from '@sentry/browser';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
 import { NonFunctionProperties, uuid } from '../../services/utils';
 import { BattleInfoMessage } from './battle-info-message.type';
@@ -63,16 +62,6 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 				this.battleInfo,
 				this.battleResult,
 			);
-			captureEvent({
-				message: 'Impossible battle ' + status,
-				extra: {
-					reviewId: game.reviewId,
-					// user: user,
-					turnNumber: game.currentTurn,
-					battleInput: JSON.stringify(this.battleInfo),
-					battleResult: JSON.stringify(this.battleResult),
-				},
-			});
 		}
 	}
 }

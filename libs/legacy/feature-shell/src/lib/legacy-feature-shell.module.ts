@@ -3,15 +3,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ErrorHandler, Injectable, Injector, NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PieChartComponent } from '@components/common/chart/pie-chart.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
-import { Integrations, captureException, init } from '@sentry/browser';
-import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SelectModule } from 'ng-select';
@@ -832,47 +830,10 @@ try {
 		overwolf.settings.getExtensionSettings((settingsResult) => {
 			const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
 			process.env['APP_CHANNEL'] = settingsResult?.settings?.channel;
-			const release = `firestone@${manifestResult.meta.version}`;
-			console.log(
-				'init Sentry with sampleRate',
-				sampleRate,
-				release,
-				settingsResult?.settings?.channel,
-				settingsResult,
-			);
-			init({
-				dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
-				enabled: process.env['NODE_ENV'] === 'production',
-				release: release,
-				attachStacktrace: true,
-				sampleRate: sampleRate,
-				normalizeDepth: 6,
-				ignoreErrors: ['ResizeObserver loop limit exceeded'],
-				integrations: [
-					new Integrations.GlobalHandlers({
-						onerror: true,
-						onunhandledrejection: true,
-					}),
-					new ExtraErrorData(),
-					new CaptureConsole({
-						levels: ['error'],
-					}),
-				],
-			});
 		});
 	});
 } catch (e) {
 	console.log('could not gt overwolf info, continuing', e);
-}
-
-@Injectable()
-export class SentryErrorHandler implements ErrorHandler {
-	handleError(error: { originalError: unknown }): unknown {
-		// console.log('capturing error', error);
-		const originalError = error.originalError ?? error;
-		captureException(originalError);
-		throw error;
-	}
 }
 
 // AoT requires an exported function for factories
@@ -1766,7 +1727,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CardsHighlightService,
 		CardsHighlightFacadeService,
 
-		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 		AppBootstrapService,
 		BootstrapEssentialServicesService,
 		BootstrapStoreServicesService,

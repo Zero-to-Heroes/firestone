@@ -61,8 +61,6 @@
 		"@nrwl/angular": "15.2.1",
 		"@nrwl/nx-plugin": "^15.2.1",
 		"@sebastientromp/ngx-charts": "^19.0.5",
-		"@sentry/browser": "^7.20.1",
-		"@sentry/integrations": "^7.20.1",
 		"@swc/helpers": "~0.4.11",
 		"angular2-notifications": "^12.0.0",
 		"aws-sdk": "^2.1261.0",

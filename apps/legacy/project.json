@@ -27,11 +27,6 @@
 						"output": "./"
 					},
 					{
-						"glob": "sentry.properties",
-						"input": "./",
-						"output": "./"
-					},
-					{
 						"glob": "**/*",
 						"input": "overwolf-plugins",
 						"output": "./plugins"
