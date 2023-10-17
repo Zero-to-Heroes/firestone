@@ -51,7 +51,8 @@ export class WebsiteProfileEffects {
 			withLatestFrom(params$, hasInfo$),
 			filter(([action, params, hasInfo]) => !hasInfo),
 			filter(([action, params, hasInfo]) => !!action || !!params),
-			switchMap(async ([action, [fsToken]]) => {
+			withLatestFrom(this.refAchievements.refData$$),
+			switchMap(async ([[action, [fsToken]], achievementsRefData]) => {
 				if (!this.allCards.getCards()?.length) {
 					await this.allCards.waitForReady();
 				}
@@ -61,10 +62,7 @@ export class WebsiteProfileEffects {
 				}
 
 				try {
-					const [profile, achievementsRefData] = await Promise.all([
-						this.access.loadOwnProfileData(fsToken),
-						this.refAchievements.getLatestRefData(),
-					]);
+					const [profile] = await Promise.all([this.access.loadOwnProfileData(fsToken)]);
 					console.debug('loaded profile data', profile, achievementsRefData);
 					const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
 					return WebsiteProfileActions.loadProfileDataSuccess({
@@ -90,7 +88,8 @@ export class WebsiteProfileEffects {
 			withLatestFrom(hasInfo$),
 			filter(([action, hasInfo]) => !hasInfo),
 			filter(([action, hasInfo]) => !!action),
-			switchMap(async ([action]) => {
+			withLatestFrom(this.refAchievements.refData$$),
+			switchMap(async ([[action, hasInfo], achievementsRefData]) => {
 				if (!this.allCards.getCards()?.length) {
 					await this.allCards.waitForReady();
 				}
@@ -98,10 +97,7 @@ export class WebsiteProfileEffects {
 					this.collectibleCards = this.allCards.getCards()?.filter((c) => c.collectible);
 				}
 
-				const [profile, achievementsRefData] = await Promise.all([
-					this.access.loadOtherProfileData(action.shareAlias),
-					this.refAchievements.getLatestRefData(),
-				]);
+				const [profile] = await Promise.all([this.access.loadOtherProfileData(action.shareAlias)]);
 				const extendedProfile = this.buildExtendedProfile(profile, achievementsRefData);
 				return WebsiteProfileActions.loadOtherProfileDataSuccess({
 					profile: extendedProfile,

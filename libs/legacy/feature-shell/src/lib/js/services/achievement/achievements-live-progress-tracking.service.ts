@@ -226,7 +226,7 @@ export class AchievementsLiveProgressTrackingService {
 				this.achievementQuotas[ach.id] = ach.quota;
 			}
 		});
-		this.refLoaderService.getLatestRefData();
+		// this.refLoaderService.getLatestRefData();
 	}
 
 	private async initAchievementsOnGameStart() {

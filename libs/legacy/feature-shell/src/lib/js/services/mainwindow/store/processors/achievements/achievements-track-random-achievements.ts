@@ -45,7 +45,7 @@ export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentProgress = await this.achievementsManager.getInGameAchievementsInfo();
-		const refAchievements = (await this.refLoaderService.getLatestRefData())?.achievements ?? [];
+		const refAchievements = this.refLoaderService.refData$$.value?.achievements ?? [];
 
 		console.debug(
 			'[achievements-track-random-achievements] categories',

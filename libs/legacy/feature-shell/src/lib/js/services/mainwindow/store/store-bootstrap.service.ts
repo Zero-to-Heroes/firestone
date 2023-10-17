@@ -70,10 +70,8 @@ export class StoreBootstrapService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 	) {
-		console.log('[store-boostrap] constructor');
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-			console.log('[store-boostrap] retrieved state updater');
 		});
 	}
 
