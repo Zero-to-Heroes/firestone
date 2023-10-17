@@ -42,8 +42,10 @@ export class OpponentPlayerParser implements EventParser {
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
 
 		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
-		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
-		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
+		const aiDeck = shouldLoadDecklist
+			? await this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
+			: null;
+		const aiDeckString = aiDeck?.deckstring;
 
 		// No deckstring, so don't change anything
 		if (!aiDeckString) {

@@ -31,9 +31,10 @@ export class DecklistUpdateParser implements EventParser {
 		if (!shouldLoadDecklist) {
 			return currentState;
 		}
+
 		const deckId = gameEvent.additionalData.deckId;
 		const aiDeck = shouldLoadDecklist
-			? this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
+			? await this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
 			: null;
 		const newDeckstring = aiDeck && aiDeck.decks && aiDeck.decks[deckId];
 		console.log(

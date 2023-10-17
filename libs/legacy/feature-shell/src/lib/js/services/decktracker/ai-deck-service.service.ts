@@ -7,14 +7,11 @@ const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_
 export class AiDeckService {
 	private aiDecks: readonly AiDeck[];
 
-	constructor(private readonly http: HttpClient) {
-		this.init();
-	}
+	constructor(private readonly http: HttpClient) {}
 
-	public getAiDeck(opponentCardId: string, scenarioId: number): AiDeck {
+	public async getAiDeck(opponentCardId: string, scenarioId: number): Promise<AiDeck> {
 		if (!this.aiDecks || this.aiDecks.length === 0) {
-			console.warn('[ai-decks] decks not initialized yet', opponentCardId, scenarioId);
-			return null;
+			await this.init();
 		}
 
 		const deck =
