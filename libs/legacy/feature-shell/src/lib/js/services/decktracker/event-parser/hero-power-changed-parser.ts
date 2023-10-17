@@ -78,7 +78,7 @@ export class HeroPowerChangedParser implements EventParser {
 			return result;
 		}
 
-		const allRuns = this.duelsRunService.duelsRuns$.getValue();
+		const allRuns = this.duelsRunService.duelsRuns$$.getValueWithInit();
 		const currentRun = allRuns[0];
 		console.debug('[duels-run-deckstring] current run', currentRun);
 		if (currentRun?.heroCardId !== heroCardId || currentRun?.heroPowerCardId !== heroPowerCardId) {

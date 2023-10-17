@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
-import { BehaviorSubject, combineLatest, concat } from 'rxjs';
+import { combineLatest, concat } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { sanitizeDeckDefinition, sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import {
@@ -26,8 +27,8 @@ import { arraysEqual, deepEqual, groupByFunction } from '../utils';
 
 @Injectable()
 export class DuelsDecksProviderService {
-	public duelsRuns$ = new BehaviorSubject<readonly DuelsRun[]>(null);
-	public duelsDecks$ = new BehaviorSubject<readonly DuelsDeckSummary[]>(null);
+	public duelsRuns$$ = new SubscriberAwareBehaviorSubject<readonly DuelsRun[]>(null);
+	public duelsDecks$$ = new SubscriberAwareBehaviorSubject<readonly DuelsDeckSummary[]>(null);
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
@@ -39,78 +40,82 @@ export class DuelsDecksProviderService {
 	}
 
 	private async init() {
-		console.log('[duels-decks] init');
 		await this.store.initComplete();
-
-		// The idea is to compute the initial value, whatever the most recent game is, and
-		// once this is done, we only recompute things once the most recent stat is not empty
-		const runSourceFirstValue$ = combineLatest([
-			this.store.listen$(
-				([main, nav]) => main.duels.duelsRunInfos,
-				([main, nav]) => main.duels.duelsRewardsInfo,
-			),
-			this.store.gameStats$(),
-		]).pipe(
-			filter(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => !!gameStats?.length),
-			take(1),
-		);
-		const runSourceFilteredValues$ = combineLatest([
-			this.store.listen$(
-				([main, nav]) => main.duels.duelsRunInfos,
-				([main, nav]) => main.duels.duelsRewardsInfo,
-			),
-			this.store.gameStats$(),
-		]).pipe(
-			filter(
-				([[duelsRunInfos, duelsRewardsInfo], gameStats]) =>
-					!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
-			),
-		);
-		concat(runSourceFirstValue$, runSourceFilteredValues$)
-			.pipe(
-				map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
-					const duelMatches =
-						gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
-					const matchesByRun = groupByFunction((match: GameStat) => match.runId)(duelMatches);
-					const runIds = Object.keys(matchesByRun);
-					const runs: readonly DuelsRun[] = runIds
-						.map((runId) =>
-							this.buildRun(
-								runId,
-								matchesByRun[runId],
-								duelsRunInfos?.filter((runInfo) => runInfo.runId === runId) ?? [],
-								duelsRewardsInfo?.filter((runInfo) => runInfo.runId === runId) ?? [],
-							),
-						)
-						.filter((run) => run);
-					console.debug('[duels-runs] rebuilding runs', {
-						runs,
-						duelsRunInfos,
-						duelsRewardsInfo,
-						duelGames: gameStats?.filter((match) => isDuels(match.gameMode)),
-						duelGamesWithRunId: duelMatches,
-						gameStats,
-					});
-					return runs;
-				}),
-			)
-			.subscribe(this.duelsRuns$);
-
-		combineLatest(
-			this.duelsRuns$.asObservable(),
-			this.store.listenPrefs$(
-				(prefs) => prefs.duelsPersonalAdditionalDecks,
-				(prefs) => prefs.duelsPersonalDeckNames,
-			),
-		)
-			.pipe(
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				map(([runs, [duelsPersonalAdditionalDecks, duelsPersonalDeckNames]]) =>
-					this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks, duelsPersonalDeckNames),
+		this.duelsRuns$$.onFirstSubscribe(() => {
+			console.log('[duels-runs] init duels runs');
+			// The idea is to compute the initial value, whatever the most recent game is, and
+			// once this is done, we only recompute things once the most recent stat is not empty
+			const runSourceFirstValue$ = combineLatest([
+				this.store.listen$(
+					([main, nav]) => main.duels.duelsRunInfos,
+					([main, nav]) => main.duels.duelsRewardsInfo,
 				),
-			)
-			.subscribe(this.duelsDecks$);
+				this.store.gameStats$(),
+			]).pipe(
+				filter(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => !!gameStats?.length),
+				take(1),
+			);
+			const runSourceFilteredValues$ = combineLatest([
+				this.store.listen$(
+					([main, nav]) => main.duels.duelsRunInfos,
+					([main, nav]) => main.duels.duelsRewardsInfo,
+				),
+				this.store.gameStats$(),
+			]).pipe(
+				filter(
+					([[duelsRunInfos, duelsRewardsInfo], gameStats]) =>
+						!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
+				),
+			);
+			concat(runSourceFirstValue$, runSourceFilteredValues$)
+				.pipe(
+					map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
+						const duelMatches =
+							gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
+						const matchesByRun = groupByFunction((match: GameStat) => match.runId)(duelMatches);
+						const runIds = Object.keys(matchesByRun);
+						const runs: readonly DuelsRun[] = runIds
+							.map((runId) =>
+								this.buildRun(
+									runId,
+									matchesByRun[runId],
+									duelsRunInfos?.filter((runInfo) => runInfo.runId === runId) ?? [],
+									duelsRewardsInfo?.filter((runInfo) => runInfo.runId === runId) ?? [],
+								),
+							)
+							.filter((run) => run);
+						console.debug('[duels-runs] rebuilding runs', {
+							runs,
+							duelsRunInfos,
+							duelsRewardsInfo,
+							duelGames: gameStats?.filter((match) => isDuels(match.gameMode)),
+							duelGamesWithRunId: duelMatches,
+							gameStats,
+						});
+						return runs;
+					}),
+				)
+				.subscribe(this.duelsRuns$$);
+		});
+
+		this.duelsDecks$$.onFirstSubscribe(() => {
+			console.log('[duels-decks] init duels decks');
+			combineLatest([
+				this.duelsRuns$$.asObservable(),
+				this.store.listenPrefs$(
+					(prefs) => prefs.duelsPersonalAdditionalDecks,
+					(prefs) => prefs.duelsPersonalDeckNames,
+				),
+			])
+				.pipe(
+					distinctUntilChanged((a, b) => arraysEqual(a, b)),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					map(([runs, [duelsPersonalAdditionalDecks, duelsPersonalDeckNames]]) =>
+						this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks, duelsPersonalDeckNames),
+					),
+				)
+				.subscribe(this.duelsDecks$$);
+		});
 	}
 
 	private buildPersonalDeckStats(

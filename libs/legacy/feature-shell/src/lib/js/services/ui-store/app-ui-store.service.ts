@@ -3,7 +3,7 @@ import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildHeroStats, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { filterDuelsHeroStats } from '@firestone/duels/data-access';
-import { PrefsSelector, Store } from '@firestone/shared/framework/common';
+import { PrefsSelector, Store, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
@@ -102,7 +102,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private bgsQuests: BehaviorSubject<BgsQuestStats>;
 	private gameStats: Observable<readonly GameStat[]>;
 	private decks: Observable<readonly DeckSummary[]>;
-	private duelsHeroStats: Observable<readonly DuelsHeroPlayerStat[]>;
+	private duelsHeroStats = new SubscriberAwareBehaviorSubject<readonly DuelsHeroPlayerStat[]>([]);
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
@@ -141,64 +141,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	) {
 		super();
 		window['appStore'] = this;
-		window['snapshotAppStore'] = (showLog = true) => {
-			const snapshot = {
-				mainStore: this.mainStore.observers,
-				gameNativeState: this.gameNativeState.observers,
-				prefs: this.prefs.observers,
-				modsConfig: this.modsConfig.observers,
-				deckStore: this.deckStore.observers,
-				battlegroundsStore: this.battlegroundsStore.observers,
-				mercenariesStore: this.mercenariesStore.observers,
-				mercenariesOutOfCombatStore: this.mercenariesOutOfCombatStore.observers,
-				mercenariesSynergiesStore: this.mercenariesSynergiesStore.observers,
-				// bgsMetaStatsHero: this.bgsMetaStatsHero,
-				// bgsMetaStatsHero: this.bgsMetaStatsHero.observers,
-				// duelsHeroStats: this.duelsHeroStats.observers,
-				// gameStats: this.gameStats.observers,
-				// decks: this.decks.observers,
-				// duelsRuns: this.duelsRuns.observers,
-				// duelsDecks: this.duelsDecks.observers,
-				// mails: this.mails.observers,
-				// tavernBrawl: this.tavernBrawl.observers,
-			};
-			showLog && console.debug(snapshot);
-			return snapshot;
-		};
-		let previousSnapshot = {};
-		window['debugAppStore'] = () => {
-			const result = {};
-			const newSnapshot = window['snapshotAppStore'](false);
-			for (const key of Object.keys(newSnapshot)) {
-				const oldObservers = previousSnapshot[key] ?? [];
-				const newObservers = newSnapshot[key];
-				const changedObservers = [];
-				// Because sometimes between two snapshot, the same observers have been deleted then recreated.
-				// In that case, we don't want to list the newly created obs (which simply replace the old ones
-				// that were removed, but which won't have the same IDs)
-				if (newObservers.length > oldObservers.length) {
-					for (const obs of newObservers) {
-						if (!oldObservers.find((o) => o.subscriberId === obs.subscriberId)) {
-							// console.debug('could not find old obs', obs.subscriberId, oldObservers, obs);
-							changedObservers.push(obs);
-						}
-					}
-				}
-				// console.debug('updated for', key, newObservers.length, oldObservers.length, changedObservers);
-				result[key] = changedObservers;
-				if (!changedObservers.length && newObservers.length > oldObservers.length) {
-					console.warn('didnt detect changes', newObservers, oldObservers);
-				}
-			}
-			const snapshotToMap = {};
-			Object.keys(newSnapshot).forEach((key) => {
-				snapshotToMap[key] = newSnapshot[key].map((o) => ({
-					subscriberId: o.subscriberId,
-				}));
-			});
-			previousSnapshot = snapshotToMap;
-			return result;
-		};
 	}
 
 	// WARNING: All services used here should be called in BootstrapStoreServicesService to make sure they are booted up
@@ -214,22 +156,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
 		this.mercenariesSynergiesStore = this.ow.getMainWindow().mercenariesSynergiesStore;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-
-		if (
-			!this.mainStore ||
-			!this.gameNativeState ||
-			!this.prefs ||
-			!this.modsConfig ||
-			!this.deckStore ||
-			!this.battlegroundsStore ||
-			!this.mercenariesStore ||
-			!this.mercenariesOutOfCombatStore ||
-			!this.mercenariesSynergiesStore ||
-			!this.stateUpdater
-		) {
-			console.error('incomplete init', this);
-		}
-
 		this.init();
 	}
 
@@ -356,8 +282,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		this.debugCall('duelsHeroStats$');
-		return this.duelsHeroStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.duelsHeroStats;
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
@@ -366,14 +291,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
-		this.debugCall('duelsRuns$');
-		return this.duelsRuns.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.duelsRuns;
 	}
 
 	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
-		this.debugCall('duelsDecks$');
-		const result = this.duelsDecks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
-		return result;
+		return this.duelsDecks;
 	}
 
 	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
@@ -661,9 +583,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initDuelsDecks() {
-		this.duelsDecks = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsDecks$.pipe(
-			shareReplay(1),
-		);
+		this.duelsDecks = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsDecks$$;
 	}
 
 	private async initDuelsTopDecks() {
@@ -674,9 +594,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initDuelsRuns() {
-		this.duelsRuns = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsRuns$.pipe(
-			shareReplay(1),
-		);
+		this.duelsRuns = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsRuns$$;
 	}
 
 	private initDecks() {
@@ -696,64 +614,69 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initDuelsHeroStats() {
-		this.duelsHeroStats = combineLatest([
-			this.duelsRuns,
-			this.listen$(
-				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => nav.navigationDuels.heroSearchString,
-				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			),
-		]).pipe(
-			map(
-				([
-					runs,
-					[
-						duelStats,
-						heroSearchString,
-						statType,
-						gameMode,
-						timeFilter,
-						heroFilter,
-						heroPowerFilter,
-						sigTreasureFilter,
-						patch,
-					],
-				]) =>
-					[
-						filterDuelsHeroStats(
-							duelStats,
-							heroFilter,
-							heroPowerFilter,
-							sigTreasureFilter,
-							statType,
-							this.allCards,
-							heroSearchString,
-						),
-						filterDuelsRuns(
+		this.duelsHeroStats.onFirstSubscribe(() => {
+			combineLatest([
+				this.duelsRuns,
+				this.listen$(
+					([main, nav]) => main.duels.globalStats?.heroes,
+					([main, nav]) => nav.navigationDuels.heroSearchString,
+					([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
+					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+					([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
+					([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
+					([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
+					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+				),
+			])
+				.pipe(
+					map(
+						([
 							runs,
-							timeFilter,
-							heroFilter,
-							gameMode,
-							null,
-							patch,
-							0,
-							heroPowerFilter,
-							sigTreasureFilter,
-							statType,
-						),
-						statType,
-					] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
-			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
-			shareReplay(1),
-		);
+							[
+								duelStats,
+								heroSearchString,
+								statType,
+								gameMode,
+								timeFilter,
+								heroFilter,
+								heroPowerFilter,
+								sigTreasureFilter,
+								patch,
+							],
+						]) =>
+							[
+								filterDuelsHeroStats(
+									duelStats,
+									heroFilter,
+									heroPowerFilter,
+									sigTreasureFilter,
+									statType,
+									this.allCards,
+									heroSearchString,
+								),
+								filterDuelsRuns(
+									runs,
+									timeFilter,
+									heroFilter,
+									gameMode,
+									null,
+									patch,
+									0,
+									heroPowerFilter,
+									sigTreasureFilter,
+									statType,
+								),
+								statType,
+							] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
+					),
+					distinctUntilChanged((a, b) => arraysEqual(a, b)),
+					map(([duelStats, duelsRuns, statType]) =>
+						buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns),
+					),
+				)
+				.subscribe(this.duelsHeroStats);
+		});
 	}
 
 	private initBgsMetaStatsHero() {

@@ -138,8 +138,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		this.debugCall('duelsHeroStats$');
-		return this.debugObservable(this.store.duelsHeroStats$());
+		return this.store.duelsHeroStats$();
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
@@ -148,8 +147,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
-		this.debugCall('duelsDecks$');
-		return this.debugObservable(this.store.duelsDecks$());
+		return this.store.duelsDecks$();
 	}
 
 	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
@@ -157,9 +155,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
-		this.debugCall('duelsRuns$');
-		const result = this.debugObservable(this.store.duelsRuns$());
-		return result;
+		return this.store.duelsRuns$();
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {

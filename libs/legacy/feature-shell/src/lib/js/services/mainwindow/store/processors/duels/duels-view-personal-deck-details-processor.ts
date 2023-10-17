@@ -20,9 +20,8 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const deck = this.duelsDecksProvider.duelsDecks$.value.find(
-			(stat) => stat.initialDeckList === event.deckstring,
-		);
+		const duelsDecks = await this.duelsDecksProvider.duelsDecks$$.getValueWithInit();
+		const deck = duelsDecks.find((stat) => stat.initialDeckList === event.deckstring);
 		const firstRun = deck.runs?.length ? deck.runs[0] : null;
 		const expandedRunIds: readonly string[] = !!firstRun ? [firstRun.id] : [];
 		const prefs = await this.prefs.getPreferences();
