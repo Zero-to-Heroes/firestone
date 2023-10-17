@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-declare let amplitude;
-
 @Injectable()
 export class DebugService {
 	constructor() {
@@ -52,10 +50,6 @@ export class DebugService {
 	private overrideError(oldConsoleLogFunc: any, oldWarnFunc: any, debugMode: boolean) {
 		if (debugMode) {
 			return function () {
-				// Sampling of events
-				if (Math.random() < 0.001) {
-					amplitude.getInstance().logEvent('error-logged');
-				}
 				const stack = new Error().stack;
 				// oldConsoleLogFunc.apply(console, arguments, stack);
 				let argsString = stack + '\n|';

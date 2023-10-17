@@ -3,8 +3,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
-declare let amplitude;
-
 @Component({
 	selector: 'control-minimize',
 	styleUrls: [
@@ -35,8 +33,6 @@ export class ControlMinimizeComponent implements AfterViewInit {
 
 	async minimizeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
-		amplitude.getInstance().logEvent('minimize', { window: windowName });
-
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
 		}

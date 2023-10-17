@@ -6,8 +6,6 @@ import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-battle-status',
 	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-battle-status.component.scss`],
@@ -331,13 +329,6 @@ export class BgsBattleStatusComponent {
 			} else {
 				window.open(`https://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
 			}
-			try {
-				if (amplitude) {
-					amplitude.getInstance().logEvent('bgsSimulation', {
-						bgsSimulationId: id,
-					});
-				}
-			} catch (e) {}
 		}
 		this.processingSimulationSample = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {

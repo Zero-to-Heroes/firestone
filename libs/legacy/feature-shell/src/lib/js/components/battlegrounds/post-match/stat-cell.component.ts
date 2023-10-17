@@ -1,11 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
-
-declare let amplitude: any;
 
 @Component({
 	selector: 'stat-cell',
@@ -88,7 +85,6 @@ export class StatCellComponent implements AfterViewInit {
 	}
 
 	showReplay() {
-		amplitude.getInstance().logEvent('click-on-record-broken-replay');
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 

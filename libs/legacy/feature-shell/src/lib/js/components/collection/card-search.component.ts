@@ -6,7 +6,6 @@ import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/col
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
-declare let amplitude;
 @Component({
 	selector: 'card-search',
 	styleUrls: [`../../../css/component/collection/card-search.component.scss`],
@@ -41,9 +40,6 @@ export class CardSearchComponent extends AbstractSubscriptionStoreComponent impl
 	}
 
 	showCard(result: SetCard) {
-		amplitude.getInstance().logEvent('search', {
-			page: 'collection',
-		});
 		this.store.send(new ShowCardDetailsEvent(result.id));
 	}
 }

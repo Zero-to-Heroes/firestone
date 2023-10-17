@@ -6,8 +6,6 @@ import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 
-declare let amplitude;
-
 @Injectable()
 export class CollectionStorageService {
 	constructor(

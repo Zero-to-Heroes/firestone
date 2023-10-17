@@ -5,8 +5,6 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
-declare let amplitude;
-
 @Component({
 	selector: 'achievement-history-item',
 	styleUrls: [`../../../css/component/achievements/achievement-history-item.component.scss`],
@@ -46,9 +44,6 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 
 	@HostListener('mousedown')
 	onClick() {
-		amplitude.getInstance().logEvent('history', {
-			page: 'achievements',
-		});
 		this.stateUpdater.next(new ChangeVisibleAchievementEvent(this.achievementId));
 	}
 }

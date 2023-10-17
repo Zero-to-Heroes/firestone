@@ -12,8 +12,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'loading',
 	styleUrls: [`../../../css/component/loading/loading.component.scss`],
@@ -119,9 +117,6 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	}
 
 	closeWindow() {
-		if (this.loading) {
-			amplitude.getInstance().logEvent('loading', { timing: 'close-before-complete' });
-		}
 		this.ow.closeWindow(this.thisWindowId);
 	}
 

@@ -20,8 +20,6 @@ import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { freeRegexp } from './utils';
 
-declare let amplitude;
-
 @Injectable()
 export class GameEvents {
 	private plugin;

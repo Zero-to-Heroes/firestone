@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, ViewRef } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BgsToggleOverlayWindowEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-overlay-window-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsToggleOverlayWindowEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-overlay-window-event';
 import { DebugService } from '../../../services/debug.service';
 import { PreferencesService } from '../../../services/preferences.service';
-
-declare let amplitude;
 
 @Component({
 	selector: 'battlegrounds-overlay-button',
@@ -56,7 +54,6 @@ export class BattlegroundsOverlayButtonComponent {
 		}
 		this.big = true;
 		this.battlegroundsUpdater.next(new BgsToggleOverlayWindowEvent());
-		amplitude.getInstance().logEvent('battlegrounds-widget-toggle');
 		setTimeout(() => {
 			this.big = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {

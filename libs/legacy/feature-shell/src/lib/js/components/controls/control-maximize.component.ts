@@ -13,8 +13,6 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
-declare let amplitude;
-
 @Component({
 	selector: 'control-maximize',
 	styleUrls: [
@@ -92,7 +90,6 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 
 	async toggleMaximizeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
-		amplitude.getInstance().logEvent('maximize', { window: windowName });
 
 		// Delegate all the logic
 		if (this.eventProvider) {

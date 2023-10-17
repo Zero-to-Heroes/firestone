@@ -35,11 +35,6 @@ import { GenericStorageService } from './generic-storage.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { capitalizeFirstLetter, deepEqual } from './utils';
 
-// declare let amplitude;
-
-// const PREF_UPDATE_URL = 'https://g2ykjpoghg2xpyih55hv5pl37m0tewks.lambda-url.us-west-2.on.aws/';
-// const PREF_RETRIEVE_URL = 'https://o3ii67morr2gm3vcysyumxrm7a0eepeo.lambda-url.us-west-2.on.aws/';
-
 @Injectable()
 export class PreferencesService {
 	public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';

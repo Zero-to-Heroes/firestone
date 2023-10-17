@@ -7,8 +7,6 @@ import { AchievementsStateManagerService } from '../../../../achievement/achieve
 import { FilterShownAchievementsEvent } from '../../events/achievements/filter-shown-achievements-event';
 import { Processor } from '../processor';
 
-declare let amplitude;
-
 export class FilterShownAchievementsProcessor implements Processor {
 	constructor(private readonly stateManager: AchievementsStateManagerService) {}
 
@@ -22,12 +20,6 @@ export class FilterShownAchievementsProcessor implements Processor {
 
 		if (searchString?.length && searchString.length < 3) {
 			return [currentState, navigationState];
-		}
-
-		if (searchString?.length) {
-			amplitude.getInstance().logEvent('search', {
-				page: 'achievements',
-			});
 		}
 
 		const selectedCategory = findCategory(

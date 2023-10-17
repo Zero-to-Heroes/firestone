@@ -15,8 +15,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';
 
-declare let amplitude;
-
 @Component({
 	selector: 'replay-info-battlegrounds',
 	styleUrls: [
@@ -164,9 +162,6 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	}
 
 	showReplay() {
-		if (this.bgsPerfectGame) {
-			amplitude.getInstance().logEvent('load-bgs-perfect-game');
-		}
 		this.store.send(new ShowReplayEvent(this.reviewId));
 	}
 

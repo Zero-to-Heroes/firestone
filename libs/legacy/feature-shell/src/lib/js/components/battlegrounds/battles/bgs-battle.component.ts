@@ -37,7 +37,6 @@ import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selecti
 import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
 import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest-reward-selection.component';
 
-declare let amplitude;
 @Component({
 	selector: 'bgs-battle',
 	styleUrls: [`../../../../css/component/battlegrounds/battles/bgs-battle.component.scss`],
@@ -721,14 +720,12 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			const faceOffStr = atob(code);
 			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
 			this.simulationUpdater(null, faceOff);
-			amplitude.getInstance().logEvent('import-bgs-sim-code');
 		} catch (e) {
 			console.warn('could not import from clipboard', fromClipboard, e);
 		}
 	}
 
 	async exportBoards() {
-		amplitude.getInstance().logEvent('export-bgs-sim-code');
 		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -752,7 +749,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		}, this.exportConfirmationTimeout);
-		amplitude.getInstance().logEvent('export-bgs-sim-code');
 	}
 
 	// For now do it purely in the UI, let's see later on if we want to use the store
@@ -761,7 +757,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		amplitude.getInstance().logEvent('battle-resim');
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'waiting-for-result',
 			battleResult: null,
@@ -831,7 +826,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		}
 
 		this.processingReposition = true;
-		amplitude.getInstance().logEvent('battle-reposition');
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'waiting-for-result',
 			battleResult: null,

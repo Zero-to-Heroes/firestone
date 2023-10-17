@@ -8,7 +8,7 @@ import {
 	Input,
 	ViewEncapsulation,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { LocalizationFacadeService } from '../services/localization-facade.service';
@@ -16,8 +16,6 @@ import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/even
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
-
-declare let amplitude;
 
 @Component({
 	selector: 'menu-selection',
@@ -272,6 +270,7 @@ export class MenuSelectionComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
@@ -306,7 +305,7 @@ export class MenuSelectionComponent
 	}
 
 	selectModule(module: CurrentAppType) {
-		amplitude.getInstance().logEvent('app-navigation', { section: module });
+		this.analytics.trackEvent('app-navigation', { section: module });
 		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
 	}
 
@@ -315,7 +314,7 @@ export class MenuSelectionComponent
 	}
 
 	goPremium() {
-		amplitude.getInstance().logEvent('subscription-click', { page: 'left-menu' });
+		this.analytics.trackEvent('subscription-click', { page: 'left-menu' });
 		this.ow.openStore();
 	}
 }

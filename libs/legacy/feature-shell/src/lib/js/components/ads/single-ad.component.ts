@@ -108,7 +108,6 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 					console.log(`[ads-${this.adId}] play`);
 				};
 				this.videoImpressionListener = async (data) => {
-					// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
 					console.log(`[ads-${this.adId}] video impression`);
 				};
 				// https://overwolf.github.io/api/general/ads-sdk/overwolf-platform/owad

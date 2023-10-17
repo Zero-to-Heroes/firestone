@@ -13,8 +13,6 @@ import { FeatureFlags } from '../../services/feature-flags';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'ads',
 	styleUrls: [`../../../css/component/ads/ads.component.scss`],
@@ -78,7 +76,7 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	}
 
 	showSubscription() {
-		amplitude.getInstance().logEvent('subscription-click', { page: 'banner' });
+		this.analytics.trackEvent('subscription-click', { page: 'banner' });
 		this.ow.openStore();
 	}
 

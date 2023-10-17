@@ -19,7 +19,6 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
-declare let amplitude;
 @Component({
 	selector: 'replay-info-ranked',
 	styleUrls: [
@@ -140,9 +139,6 @@ export class ReplayInfoRankedComponent
 	}
 
 	showReplay() {
-		if (this.bgsPerfectGame) {
-			amplitude.getInstance().logEvent('load-bgs-perfect-game');
-		}
 		this.store.send(new ShowReplayEvent(this.reviewId));
 	}
 

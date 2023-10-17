@@ -18,8 +18,6 @@ import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/col
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
-declare let amplitude;
-
 @Component({
 	selector: 'card-history-item',
 	styleUrls: [`../../../css/component/collection/card-history-item.component.scss`],
@@ -123,9 +121,6 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 	}
 
 	@HostListener('mousedown') onClick() {
-		amplitude.getInstance().logEvent('history', {
-			page: 'collection',
-		});
 		this.store.send(new ShowCardDetailsEvent(this.cardId));
 	}
 }

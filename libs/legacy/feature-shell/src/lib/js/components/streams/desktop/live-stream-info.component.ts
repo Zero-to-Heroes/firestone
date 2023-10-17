@@ -7,8 +7,6 @@ import { isBattlegrounds, normalizeHeroCardId } from '../../../services/battlegr
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
 
-declare let amplitude;
-
 @Component({
 	selector: 'live-stream-info',
 	styleUrls: [
@@ -77,7 +75,6 @@ export class LiveStreamInfoComponent {
 
 	watchOnTwitch() {
 		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}?utm_source=firestone`);
-		amplitude.getInstance().logEvent('stream-click', { channel: this.streamerName });
 	}
 }
 

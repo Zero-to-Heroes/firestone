@@ -3,8 +3,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { loadAsync } from 'jszip';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
-declare let amplitude;
-
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 const REPLAY_API = 'https://xml.firestoneapp.com/';
 
@@ -33,7 +31,6 @@ export class GameReplayComponent {
 			return;
 		}
 
-		amplitude.getInstance().logEvent('load-replay');
 		console.log('[game-replay] setting game', value.replayInfo.reviewId);
 		this.loadReview(value.replayInfo.reviewId);
 	}

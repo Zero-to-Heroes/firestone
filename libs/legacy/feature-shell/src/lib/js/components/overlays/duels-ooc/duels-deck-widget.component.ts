@@ -7,8 +7,6 @@ import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework
 import { SetCard } from '@models/set';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'duels-deck-widget',
 	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-deck-widget.component.scss'],
@@ -139,7 +137,6 @@ export class DuelsDeckWidgetComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
-		amplitude.getInstance().logEvent('copy-deckstring', { origin: 'duels-quick-deck' });
 	}
 
 	getImage(cardId: string) {

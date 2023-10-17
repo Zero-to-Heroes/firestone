@@ -11,8 +11,6 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { capitalizeFirstLetter } from '../../services/utils';
 
-declare let amplitude;
-
 @Component({
 	selector: 'social-share-button',
 	styleUrls: [`../../../css/component/sharing/social-share-button.component.scss`],
@@ -58,10 +56,6 @@ export class SocialShareButtonComponent implements AfterViewInit {
 	async startSharing(copyToCliboard = false) {
 		console.log('starting sharing');
 		setTimeout(async () => {
-			amplitude.getInstance().logEvent('share', {
-				page: this.page,
-				network: this._network,
-			});
 			const [screenshotLocation, base64Image] = await this.onSocialClick(copyToCliboard);
 			if (!screenshotLocation || !base64Image) {
 				console.error('Could not take screenshot', screenshotLocation, base64Image);

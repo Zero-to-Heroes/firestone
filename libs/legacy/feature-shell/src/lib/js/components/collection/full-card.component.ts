@@ -21,8 +21,6 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
-declare let amplitude;
-
 @Component({
 	selector: 'full-card',
 	styleUrls: [`../../../css/component/collection/full-card.component.scss`],
@@ -208,9 +206,6 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 	}
 
 	playSound(audioClip: AudioClip) {
-		amplitude.getInstance().logEvent('sound', {
-			'card-id': this.card.id,
-		});
 		this.cancelPlayingSounds();
 
 		const audioGroup = audioClip.audioGroup;

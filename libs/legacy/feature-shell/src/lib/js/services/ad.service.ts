@@ -3,8 +3,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
-declare let amplitude;
-
 @Injectable()
 export class AdService {
 	public showAds$$ = new BehaviorSubject<boolean>(true);
@@ -32,7 +30,6 @@ export class AdService {
 		await this.store.initComplete();
 		combineLatest([this.hasPremiumSub$$, this.store.shouldTrackLottery$()]).subscribe(
 			([isPremium, shouldTrack]) => {
-				amplitude.getInstance().logEvent('overlay-ads', { enabled: shouldTrack });
 				console.debug('[ads] show ads?', isPremium, shouldTrack);
 				this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
 			},

@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-declare let amplitude;
-
 @Component({
 	selector: 'control-close-simple',
 	styleUrls: [

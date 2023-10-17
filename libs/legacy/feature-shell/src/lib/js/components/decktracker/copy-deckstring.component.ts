@@ -5,8 +5,6 @@ import { AnalyticsService, CardsFacadeService, OverwolfService } from '@fireston
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'copy-deckstring',
 	styleUrls: ['../../../css/component/decktracker/copy-deckstring.component.scss'],
@@ -79,7 +77,6 @@ export class CopyDesckstringComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
-		// amplitude.getInstance().logEvent('copy-deckstring', { origin: this.origin });
 		this.analytics.trackEvent('copy-deckstring', { origin: this.origin });
 	}
 }

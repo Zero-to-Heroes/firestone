@@ -7,8 +7,6 @@ import { groupByFunction } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { HeroStat } from './hero-stat';
 
-declare let amplitude;
-
 @Component({
 	selector: 'battlegrounds-heroes-records-broken',
 	styleUrls: [
@@ -60,8 +58,6 @@ export class BattlegroundsHeroesRecordsBrokenComponent
 						.sort((a, b) => b.numberOfRecords - a.numberOfRecords);
 				}),
 			);
-
-		amplitude.getInstance().logEvent('records-broken-page-view');
 	}
 
 	trackByFn(index, item: HeroStat) {

@@ -17,8 +17,6 @@ import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.serv
 import { OwNotificationsService } from '../../js/services/notifications.service';
 import { PreferencesService } from '../../js/services/preferences.service';
 
-declare let amplitude: any;
-
 @Injectable()
 export class AppStartupService {
 	private static readonly STATES = ['INIT', 'READY'];
@@ -138,7 +136,6 @@ export class AppStartupService {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const settingsWindow = await this.ow.getSettingsWindow(prefs);
 		await this.ow.hideWindow(settingsWindow.id);
-		amplitude.getInstance().logEvent('start-app', { version: process.env.APP_VERSION });
 		setTimeout(() => this.addAnalytics());
 
 		this.prefs.init();
@@ -321,7 +318,5 @@ export class AppStartupService {
 		}
 		delete prefsToSend.desktopDeckDeletes;
 		delete prefsToSend.desktopDeckStatsReset;
-		amplitude.getInstance().logEvent('preferences', prefsToSend);
-		// console.log('no-format', 'pref status', prefsToSend);
 	}
 }

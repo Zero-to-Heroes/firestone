@@ -4,8 +4,6 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { HsAchievementsInfo } from './achievements-info';
 
-declare let amplitude;
-
 @Injectable()
 export class AchievementsStorageService {
 	private achievementsCache: { [achievementId: string]: CompletedAchievement } = {};

@@ -9,14 +9,11 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
-
-declare let amplitude;
 
 @Component({
 	selector: 'mercenaries-desktop',
@@ -102,12 +99,7 @@ export class MercenariesDesktopComponent
 			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
-			.pipe(
-				tap(([info]) => {
-					amplitude.getInstance().logEvent('mercs-navigation', { page: info });
-				}),
-				this.mapData(([selectedCategoryId]) => selectedCategoryId),
-			);
+			.pipe(this.mapData(([selectedCategoryId]) => selectedCategoryId));
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)
 			.pipe(this.mapData(([categories]) => categories ?? []));

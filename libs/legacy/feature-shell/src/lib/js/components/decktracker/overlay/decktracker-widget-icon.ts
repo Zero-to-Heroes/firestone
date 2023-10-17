@@ -2,8 +2,6 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input,
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'decktracker-widget-icon',
 	styleUrls: [
@@ -44,7 +42,6 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 		if (this.isDragging || this.isDebounce) {
 			return;
 		}
-		amplitude.getInstance().logEvent('decktracker-widget-toggle');
 		this.big = true;
 		setTimeout(() => (this.big = false), 200);
 		this._decktrackerToggled = !this._decktrackerToggled;

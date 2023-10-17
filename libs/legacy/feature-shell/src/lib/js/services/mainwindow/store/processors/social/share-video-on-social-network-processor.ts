@@ -5,8 +5,6 @@ import { NavigationState } from '../../../../../models/mainwindow/navigation/nav
 import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
 import { Processor } from '../processor';
 
-declare let amplitude;
-
 export class ShareVideoOnSocialNetworkProcessor implements Processor {
 	constructor(private ow: OverwolfService) {}
 
@@ -16,9 +14,6 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		amplitude.getInstance().logEvent('share-video', {
-			network: event.network,
-		});
 		switch (event.network) {
 			case 'twitter':
 				await this.ow.twitterShare(event.videoPathOnDisk, event.message);
