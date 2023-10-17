@@ -54,7 +54,7 @@ export class InternalProfileBattlegroundsService {
 					.map((c) => normalizeHeroCardId(c.id, this.allCards)),
 			),
 		];
-		const achievementsData$ = from(this.achievementsRefLoader.getLatestRefData()).pipe(
+		const achievementsData$ = from(this.achievementsRefLoader.refData$$).pipe(
 			filter((refData) => !!refData?.achievements?.length),
 			map((refData) => {
 				return uniqueBgHeroes

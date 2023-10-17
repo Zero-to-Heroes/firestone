@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
-import { BehaviorSubject } from 'rxjs';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { BehaviorSubject, filter } from 'rxjs';
 import { CardHistory } from '../../../models/card-history';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { cardTypeToPremium } from '../../collection/cards-monitor.service';
@@ -9,7 +10,7 @@ import { Events } from '../../events.service';
 
 @Injectable()
 export class CollectionBootstrapService {
-	public packStats$$ = new BehaviorSubject<readonly PackResult[]>([]);
+	public packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[]>([]);
 	public cardHistory$$ = new BehaviorSubject<readonly CardHistory[]>([]);
 
 	constructor(private readonly events: Events, private readonly collectionManager: CollectionManager) {
@@ -26,17 +27,21 @@ export class CollectionBootstrapService {
 		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.CollectionInit) {
+				console.debug('[collection-bootstrap] collection init detected in memory updates');
 				this.initCollectionState();
 			}
 		});
 
-		this.packStats$$.subscribe((packStats) => {
+		this.packStats$$.onFirstSubscribe(() => {
+			console.debug('[collection-bootstrap] first subscription to pack stats, initializing');
+			this.initCollectionState();
+		});
+
+		this.packStats$$.pipe(filter((packStats) => !!packStats?.length)).subscribe((packStats) => {
 			const history = this.buildHistory(packStats);
 			console.debug('emitting new card history', history);
 			this.cardHistory$$.next(history);
 		});
-
-		this.initCollectionState();
 	}
 
 	private async initCollectionState(): Promise<void> {
