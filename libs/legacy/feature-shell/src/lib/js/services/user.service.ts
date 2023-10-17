@@ -8,6 +8,7 @@ import { MainWindowStoreService } from './mainwindow/store/main-window-store.ser
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
+// TODO: use Hearthstone user id
 @Injectable()
 export class UserService {
 	// private currentUser: overwolf.profile.GetCurrentUserResult;
