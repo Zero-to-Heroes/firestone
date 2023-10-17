@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, tap } from 'rxjs/operators';
 import { toModVersion, toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
 import { ModsUtilsService } from './mods-utils.service';
@@ -25,125 +24,134 @@ export class ModsManagerService {
 		private readonly modsConfigService: ModsConfigService,
 		private readonly modsUtils: ModsUtilsService,
 		private readonly api: ApiRunner,
-		private readonly prefs: PreferencesService,
 	) {
 		window['modsManager'] = this;
 	}
 
 	public async init() {
-		console.log('[mods-manager] Initializing mods services');
 		await this.store.initComplete();
-		console.log('[mods-manager] moving on');
-
-		this.gameStatus.onGameExit(() => this.inGame$$.next(false));
-		this.gameStatus.onGameStart(() => this.inGame$$.next(true));
-		combineLatest([this.store.listenPrefs$((prefs) => prefs.modsEnabled), this.inGame$$])
+		this.store
+			.listenPrefs$((prefs) => prefs.modsEnabled)
 			.pipe(
-				filter(([[enabled], inGame]) => enabled),
-				distinctUntilChanged(),
+				filter(([enabled]) => enabled),
+				take(1),
 			)
-			.subscribe(([[enabled], inGame]) => {
-				if (inGame) {
-					this.connectWebSocket();
-				} else {
-					this.disconnectWebSocket();
-				}
-			});
+			.subscribe(async () => {
+				console.log('[mods-manager] Initializing mods services');
+				await this.store.initComplete();
 
-		// Typical use-case is that the game updates, starts, auto-quits (because of unstripped libs).
-		// Ideally this can then trigger, refresh the libs, so that on next launch it works
-		// TODO: test this!
-		this.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
-			if (!inGame) {
-				this.modsUtils.refreshEngine();
-			}
-		});
-
-		combineLatest([this.internalModsData$$.asObservable(), this.store.listenModsConfig$((conf) => conf)])
-			.pipe(
-				tap((info) => console.debug('[mods-manager] processing mods data', info)),
-				// filter(([modsData, conf]) => !!modsData?.length),
-			)
-			.subscribe(async ([modsData, [conf]]) => {
-				let modsDirty = false;
-				const newConf = { ...conf };
-				for (const modData of modsData) {
-					if (newConf[modData.AssemblyName] == null) {
-						newConf[modData.AssemblyName] = {
-							assemblyName: modData.AssemblyName,
-							enabled: modData.Registered,
-						};
-						modsDirty = true;
-					}
-
-					newConf[modData.AssemblyName] = {
-						...newConf[modData.AssemblyName],
-						modName: modData.Name ?? newConf[modData.AssemblyName].modName,
-						downloadLink: modData.DownloadLink ?? newConf[modData.AssemblyName].downloadLink,
-						lastKnownVersion:
-							toModVersion(modData.Version) ?? newConf[modData.AssemblyName]?.lastKnownVersion,
-					};
-
-					if (conf[modData.AssemblyName]?.modName !== newConf[modData.AssemblyName].modName) {
-						modsDirty = true;
-					}
-					if (conf[modData.AssemblyName]?.downloadLink !== newConf[modData.AssemblyName].downloadLink) {
-						modsDirty = true;
-					}
-					if (
-						toVersionString(conf[modData.AssemblyName]?.lastKnownVersion) !==
-						toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion)
-					) {
-						modsDirty = true;
-					}
-					if (
-						toVersionString(conf[modData.AssemblyName]?.updateAvailableVersion) !==
-						toVersionString(newConf[modData.AssemblyName]?.updateAvailableVersion)
-					) {
-						modsDirty = true;
-					}
-				}
-				// If we update a mod outside of a game, we don't have live data, so we have to rely fuily on the conf
-				const dataFromLiveOrPrefs: readonly Partial<ModData>[] = !!modsData?.length
-					? modsData
-					: Object.keys(newConf).map((assemblyName) => ({
-							AssemblyName: assemblyName,
-							Name: newConf[assemblyName]?.modName ?? assemblyName,
-					  }));
-				const result: ModData[] = [...dataFromLiveOrPrefs]
-					.map(
-						(modData) =>
-							({
-								...modData,
-								Registered: newConf[modData.AssemblyName].enabled,
-								Version: toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion),
-								DownloadLink: newConf[modData.AssemblyName].downloadLink,
-								updateAvailableVersion: toVersionString(
-									newConf[modData.AssemblyName]?.updateAvailableVersion,
-								),
-							} as ModData),
+				this.gameStatus.onGameExit(() => this.inGame$$.next(false));
+				this.gameStatus.onGameStart(() => this.inGame$$.next(true));
+				combineLatest([this.store.listenPrefs$((prefs) => prefs.modsEnabled), this.inGame$$])
+					.pipe(
+						filter(([[enabled], inGame]) => enabled),
+						distinctUntilChanged(),
 					)
-					.sort(sortByProperties((m: ModData) => [m.Name]));
-
-				// To avoid infinite loops
-				if (modsDirty) {
-					this.modsConfigService.updateConf(newConf);
-				}
-
-				// Because mods are loaded as Registered by default
-				const modsToDeactivate = modsData
-					.filter((m) => m.Registered)
-					.filter((m) => {
-						const processedMod = result.find((m2) => m2.AssemblyName === m.AssemblyName);
-						return !processedMod.Registered;
+					.subscribe(([[enabled], inGame]) => {
+						if (inGame) {
+							this.connectWebSocket();
+						} else {
+							this.disconnectWebSocket();
+						}
 					});
-				if (!!modsToDeactivate.length) {
-					console.debug('[mods-manager] will request mod deactivationg', modsData, result);
-					this.deactivateMods(modsToDeactivate.map((m) => m.AssemblyName));
-				}
 
-				console.debug('[mods-manager] sending mods data', result);
-				this.modsData$$.next(result);
+				// Typical use-case is that the game updates, starts, auto-quits (because of unstripped libs).
+				// Ideally this can then trigger, refresh the libs, so that on next launch it works
+				// TODO: test this!
+				this.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
+					if (!inGame) {
+						this.modsUtils.refreshEngine();
+					}
+				});
+
+				combineLatest([this.internalModsData$$.asObservable(), this.store.listenModsConfig$((conf) => conf)])
+					.pipe(
+						tap((info) => console.debug('[mods-manager] processing mods data', info)),
+						// filter(([modsData, conf]) => !!modsData?.length),
+					)
+					.subscribe(async ([modsData, [conf]]) => {
+						let modsDirty = false;
+						const newConf = { ...conf };
+						for (const modData of modsData) {
+							if (newConf[modData.AssemblyName] == null) {
+								newConf[modData.AssemblyName] = {
+									assemblyName: modData.AssemblyName,
+									enabled: modData.Registered,
+								};
+								modsDirty = true;
+							}
+
+							newConf[modData.AssemblyName] = {
+								...newConf[modData.AssemblyName],
+								modName: modData.Name ?? newConf[modData.AssemblyName].modName,
+								downloadLink: modData.DownloadLink ?? newConf[modData.AssemblyName].downloadLink,
+								lastKnownVersion:
+									toModVersion(modData.Version) ?? newConf[modData.AssemblyName]?.lastKnownVersion,
+							};
+
+							if (conf[modData.AssemblyName]?.modName !== newConf[modData.AssemblyName].modName) {
+								modsDirty = true;
+							}
+							if (
+								conf[modData.AssemblyName]?.downloadLink !== newConf[modData.AssemblyName].downloadLink
+							) {
+								modsDirty = true;
+							}
+							if (
+								toVersionString(conf[modData.AssemblyName]?.lastKnownVersion) !==
+								toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion)
+							) {
+								modsDirty = true;
+							}
+							if (
+								toVersionString(conf[modData.AssemblyName]?.updateAvailableVersion) !==
+								toVersionString(newConf[modData.AssemblyName]?.updateAvailableVersion)
+							) {
+								modsDirty = true;
+							}
+						}
+						// If we update a mod outside of a game, we don't have live data, so we have to rely fuily on the conf
+						const dataFromLiveOrPrefs: readonly Partial<ModData>[] = !!modsData?.length
+							? modsData
+							: Object.keys(newConf).map((assemblyName) => ({
+									AssemblyName: assemblyName,
+									Name: newConf[assemblyName]?.modName ?? assemblyName,
+							  }));
+						const result: ModData[] = [...dataFromLiveOrPrefs]
+							.map(
+								(modData) =>
+									({
+										...modData,
+										Registered: newConf[modData.AssemblyName].enabled,
+										Version: toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion),
+										DownloadLink: newConf[modData.AssemblyName].downloadLink,
+										updateAvailableVersion: toVersionString(
+											newConf[modData.AssemblyName]?.updateAvailableVersion,
+										),
+									} as ModData),
+							)
+							.sort(sortByProperties((m: ModData) => [m.Name]));
+
+						// To avoid infinite loops
+						if (modsDirty) {
+							this.modsConfigService.updateConf(newConf);
+						}
+
+						// Because mods are loaded as Registered by default
+						const modsToDeactivate = modsData
+							.filter((m) => m.Registered)
+							.filter((m) => {
+								const processedMod = result.find((m2) => m2.AssemblyName === m.AssemblyName);
+								return !processedMod.Registered;
+							});
+						if (!!modsToDeactivate.length) {
+							console.debug('[mods-manager] will request mod deactivationg', modsData, result);
+							this.deactivateMods(modsToDeactivate.map((m) => m.AssemblyName));
+						}
+
+						console.debug('[mods-manager] sending mods data', result);
+						this.modsData$$.next(result);
+					});
 			});
 	}
 
