@@ -54,12 +54,15 @@ export class AppUiStoreFacadeService {
 		this.init();
 	}
 
-	private async init() {
+	private async init(attempts = 0) {
 		this.store = this.ow.getMainWindow()?.appStore;
 		while (!this.store) {
-			console.warn('could not retrieve store from main window');
+			if (attempts > 0 && attempts % 50 === 0) {
+				console.warn('could not retrieve store from main window');
+			}
 			await sleep(200);
 			this.store = this.ow.getMainWindow()?.appStore;
+			attempts++;
 		}
 		this.eventBus$$ = this.store.eventBus$$;
 	}
