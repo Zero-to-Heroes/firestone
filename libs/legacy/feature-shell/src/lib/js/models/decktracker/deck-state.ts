@@ -228,9 +228,9 @@ export class DeckState {
 			);
 	}
 
-	private hasRelevantCardLimited(cardIds: readonly CardIds[] | ((cardId: string) => boolean), excludesDeck = false) {
+	private hasRelevantCardLimited(cardIds: readonly CardIds[] | ((cardId: string) => boolean), includesDeck = true) {
 		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
-		if (!excludesDeck) {
+		if (includesDeck) {
 			pool = pool.concat(this.deck.map((card) => card.cardId));
 		}
 		// console.debug(
@@ -242,7 +242,7 @@ export class DeckState {
 		// 	pool.concat(!excludesDeck ? this.getCardsInSideboards() : []).join(', '),
 		// );
 		return pool
-			.concat(!excludesDeck ? this.getCardsInSideboards() : [])
+			.concat(includesDeck ? this.getCardsInSideboards() : [])
 			.filter((cardId: string) => !!cardId)
 			.some((cardId) =>
 				Array.isArray(cardIds) ? cardIds.includes(cardId as CardIds) : (cardIds as any)(cardId),
@@ -256,13 +256,7 @@ export class DeckState {
 			onlyLimited?: boolean;
 		},
 	) {
-		// if you have such a card in your hand and deck, or as a discover optip,; show the counter
-		// console.debug(
-		// 	'checking for relevant card',
-		// 	this.hasRelevantCardLimited(cardIds, options?.onlyLimited && !options.excludesDeckInLimited),
-		// 	options,
-		// );
-		if (this.hasRelevantCardLimited(cardIds, options?.onlyLimited && !options.excludesDeckInLimited)) {
+		if (this.hasRelevantCardLimited(cardIds, options?.onlyLimited ? !options.excludesDeckInLimited : true)) {
 			return true;
 		}
 
