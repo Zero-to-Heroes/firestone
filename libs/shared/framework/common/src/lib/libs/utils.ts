@@ -25,8 +25,6 @@ export const arraysEqual = (a: readonly any[] | any, b: readonly any[] | any): b
 	}
 	return (
 		a.length === b.length &&
-		// deepEqual is pretty fast, so we can check for full equality here, especially since a non-equality usually means
-		// rerendering something, which is much more costly
 		a.every((el, ix) => {
 			return Array.isArray(el) ? arraysEqual(el, b[ix]) : el == b[ix];
 		})

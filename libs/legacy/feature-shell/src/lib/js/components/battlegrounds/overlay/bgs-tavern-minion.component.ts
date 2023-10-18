@@ -11,7 +11,6 @@ import { ShopMinion } from '../../../services/battlegrounds/bgs-board-highlighte
 		<div class="battlegrounds-theme card">
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-
 			<div
 				class="highlight highlight-minion"
 				*ngIf="highlighted"

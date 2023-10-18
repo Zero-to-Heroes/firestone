@@ -53,21 +53,24 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
 				([state]) => state?.currentGame?.gameEnded,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([[currentScene], [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
 			),
 			this.handleReposition(),
 		);
-		this.highlightedMinions$ = this.store
-			.highlightedBgsMinions$()
-			.pipe(this.mapData((highlightedMinion) => highlightedMinion));
+		this.highlightedMinions$ = this.store.highlightedBgsMinions$().pipe(
+			this.mapData((highlightedMinion) => {
+				console.debug('[bgs-board-widget-wrapper] updating highlighted minions', highlightedMinion);
+				return highlightedMinion;
+			}),
+		);
 	}
 
 	trackByMinion(index: number, minion: ShopMinion) {

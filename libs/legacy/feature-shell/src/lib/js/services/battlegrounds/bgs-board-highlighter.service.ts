@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
-import { arraysEqual } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { deepEqual } from '../utils';
 import { isMinionGolden } from './bgs-utils';
 import { BattlegroundsStoreService } from './store/battlegrounds-store.service';
 import { BgsToggleHighlightMinionOnBoardEvent } from './store/events/bgs-toggle-highlight-minion-on-board-event';
@@ -12,7 +13,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from './store/events/bgs-toggle-h
 
 @Injectable()
 export class BgsBoardHighlighterService {
-	public shopMinions$$ = new BehaviorSubject<readonly ShopMinion[]>([]);
+	public shopMinions$$ = new SubscriberAwareBehaviorSubject<readonly ShopMinion[]>([]);
 
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
@@ -24,22 +25,25 @@ export class BgsBoardHighlighterService {
 	}
 
 	private async init() {
-		console.log('[bgs-board-highlighter] init');
 		await this.store.initComplete();
-
-		this.initPremiumHighlights();
-		this.initHighlights();
-		console.debug('[bgs-board-highlighter] init ready');
+		this.shopMinions$$.onFirstSubscribe(() => {
+			this.initPremiumHighlights();
+			this.initHighlights();
+		});
 	}
 
 	private initHighlights() {
+		console.debug('[bgs-board-highlighter] init highlights');
 		const enableAutoHighlight$ = combineLatest([
 			this.store.enablePremiumFeatures$(),
 			this.store.listenPrefs$((prefs) => prefs.bgsEnableMinionAutoHighlight),
 		]).pipe(map(([premium, [autoHighlight]]) => premium && autoHighlight));
 
 		const minionsToHighlight$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.bgsShowTribesHighlight),
+			this.store.listenPrefs$(
+				(prefs) => prefs.bgsShowTribesHighlight,
+				(prefs) => prefs.bgsShowMechanicsHighlight,
+			),
 			this.store.listenBattlegrounds$(
 				([state]) => state.currentGame?.phase,
 				([state]) => state.highlightedTribes,
@@ -52,19 +56,22 @@ export class BgsBoardHighlighterService {
 		]).pipe(
 			debounceTime(50),
 			filter(
-				([showTribesHighlight, [phase], [opponentBoard], enableAutoHighlight]) => !!phase && !!opponentBoard,
+				([[showTribesHighlight, showMechanicsHighlights], [phase], [opponentBoard], enableAutoHighlight]) =>
+					!!phase && !!opponentBoard,
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
-					showTribesHighlight,
+					[showTribesHighlight, showMechanicsHighlights],
 					[phase, highlightedTribes, highlightedMinions, highlightedMechanics, anomalies],
 					[opponentBoard],
 					enableAutoHighlight,
 				]) => {
-					if (!showTribesHighlight || phase !== 'recruit') {
+					if (phase !== 'recruit') {
 						return [];
 					}
+					highlightedTribes = showTribesHighlight ? highlightedTribes : [];
+					highlightedMinions = showMechanicsHighlights ? highlightedMinions : [];
 					const shopMinions: readonly ShopMinion[] = opponentBoard.map((minion) => ({
 						entityId: minion.entityId,
 						cardId: minion.cardId,
@@ -81,7 +88,8 @@ export class BgsBoardHighlighterService {
 				},
 			),
 		);
-		minionsToHighlight$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))).subscribe((minions) => {
+		minionsToHighlight$.pipe(distinctUntilChanged((a, b) => deepEqual(a, b))).subscribe((minions) => {
+			console.debug('[bgs-board-highlighter] new minions', minions);
 			this.shopMinions$$.next(minions);
 		});
 	}
@@ -131,6 +139,7 @@ export class BgsBoardHighlighterService {
 	}
 
 	private initPremiumHighlights() {
+		console.debug('[bgs-board-highlighter] init premium highlights');
 		combineLatest([
 			this.store.enablePremiumFeatures$(),
 			this.store.listenPrefs$(
@@ -144,7 +153,6 @@ export class BgsBoardHighlighterService {
 			),
 		])
 			.pipe(
-				tap((info) => console.debug('[bgs-highlighter] new info', info)),
 				debounceTime(1000),
 				filter(
 					([premium, [minionAuto, tribeAuto], [hasCurrentGame, gameEnded, cardId]]) =>
