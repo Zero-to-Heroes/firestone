@@ -41,6 +41,7 @@ export class OpponentChaoticTendrilWidgetWrapperComponent
 		this.deckStateExtractor = (state, prefValue) =>
 			state.opponentDeck?.hasRelevantCard([CardIds.ChaoticTendril_YOG_514], {
 				onlyLimited: prefValue === 'limited',
+				includesOtherZone: true,
 			});
 		super.ngAfterContentInit();
 	}

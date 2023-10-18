@@ -254,6 +254,7 @@ export class DeckState {
 		options?: {
 			excludesDeckInLimited?: boolean;
 			onlyLimited?: boolean;
+			includesOtherZone?: boolean;
 		},
 	) {
 		if (this.hasRelevantCardLimited(cardIds, options?.onlyLimited ? !options.excludesDeckInLimited : true)) {
@@ -264,7 +265,11 @@ export class DeckState {
 			return false;
 		}
 
-		return [...this.deckList, ...this.board, ...this.otherZone.filter((card) => card.zone !== 'SETASIDE')]
+		let updatedPool = [...this.deckList, ...this.board];
+		if (options?.includesOtherZone) {
+			updatedPool = updatedPool.concat(this.otherZone.filter((card) => card.zone !== 'SETASIDE'));
+		}
+		return updatedPool
 			.map((card) => card.cardId)
 			.concat(this.getCardsInSideboards())
 			.filter((cardId: string) => !!cardId)

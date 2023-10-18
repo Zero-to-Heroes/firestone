@@ -40,7 +40,7 @@ export class OpponentLibramWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentLibramCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck?.libramsPlayedThisMatch > 0 ||
-			state.opponentDeck?.hasRelevantCard([CardIds.LadyLiadrin]);
+			state.opponentDeck?.hasRelevantCard([CardIds.LadyLiadrin], { onlyLimited: true });
 		super.ngAfterContentInit();
 	}
 }
