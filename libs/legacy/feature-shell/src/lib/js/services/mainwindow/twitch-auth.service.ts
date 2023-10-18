@@ -194,7 +194,7 @@ export class TwitchAuthService {
 			bgs: newBgsState,
 			streamerPrefs: streamerPrefs,
 		};
-		console.debug('[twitch-auth] built event', result, bgsState);
+		// console.debug('[twitch-auth] built event', result, bgsState);
 		return result;
 	}
 
@@ -291,7 +291,7 @@ export class TwitchAuthService {
 		}
 
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
-		// console.debug('[twitch-auth] sending event', newEvent);
+		console.debug('[twitch-auth] sending event', newEvent);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			(data: any) => {
 				// Do nothing
