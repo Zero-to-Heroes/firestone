@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.3.0',
+		version: '12.3.1',
 		force: false,
 		sections: [
 			{
@@ -48,11 +48,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `The app has been updated for patch 27.6. There are still some things to work on, and probably some bugs that were introduced, and I will iron this out over the next few days. Enjoy the new patch!`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `You can now browse all meta archetypes, view the core cards to the archetypes, and browse all decks that are part of the archetype.`,
+								text: `(PREMIUM) You can now browse all meta archetypes, view the core cards to the archetypes, and browse all decks that are part of the archetype.`,
 							},
 							{
 								type: 'feature',
