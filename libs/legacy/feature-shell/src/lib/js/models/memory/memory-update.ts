@@ -37,6 +37,7 @@ export interface MemoryUpdate {
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPack: PackInfo;
+	readonly MassOpenedPacks: readonly PackInfo[];
 	readonly NewCards: readonly CardPackInfo[];
 }
 

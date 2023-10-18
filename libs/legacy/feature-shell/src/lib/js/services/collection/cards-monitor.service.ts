@@ -11,7 +11,6 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
 import { Events } from '../events.service';
-import { dustFor } from '../hs-utils';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
@@ -23,6 +22,7 @@ import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
+import { dustFor } from './collection-utils';
 
 // Only works when cards are logged in the Achievements.log
 @Injectable()
@@ -99,12 +99,34 @@ export class CardsMonitorService {
 	private async triggerMemoryDetection(process = true) {
 		// console.log('[cards-monitor] triggerging memory detection');
 		const changes: MemoryUpdate = await this.memoryService.getMemoryChanges();
-		// console.log('[cards-monitor] memoryChanges detection');
+		console.debug('[cards-monitor] memoryChanges detection', changes);
 		if (!process || !changes) {
 			return;
 		}
 
-		if (changes.OpenedPack) {
+		if (changes.MassOpenedPacks) {
+			const allCards = (
+				await Promise.all(changes.MassOpenedPacks.flatMap((pack) => this.handleNewPack(pack)))
+			).flat();
+			console.debug('[cards-monitor] handling mass pack opening', allCards);
+			// Only show info for total dust, and new epic / legs
+			const totalDustValues = allCards
+				.filter((card) => !card.isNew && !card.isSecondCopy)
+				.map((card) => dustFor(this.cards.getCard(card.cardId)?.rarity, card.cardType));
+			const totalDust = totalDustValues.reduce((a, b) => a + b, 0);
+			const newCards = allCards
+				.filter((card) => card.isNew || card.isSecondCopy)
+				.filter(
+					(card) =>
+						['legendary', 'epic'].includes(this.cards.getCard(card.cardId)?.rarity?.toLowerCase()) ||
+						card.cardType !== 'NORMAL',
+				);
+			console.debug('[cards-monitor] sending notifs for new cards', newCards);
+			this.notifications.createDustToast(totalDust, totalDustValues.length);
+			for (const card of newCards) {
+				this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType);
+			}
+		} else if (changes.OpenedPack) {
 			this.handleNewPack(changes.OpenedPack);
 		}
 		// Cards received outside of packs
@@ -156,7 +178,7 @@ export class CardsMonitorService {
 			}
 		});
 
-		const setId = this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase() ?? boosterIdToSetId(boosterId);
+		const setId = boosterIdToSetId(boosterId) || this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase();
 		console.log('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
@@ -190,6 +212,8 @@ export class CardsMonitorService {
 				}
 			}
 		}
+
+		return packCards;
 	}
 
 	private getMercenaryCardId(mercenaryId: number, referenceData: MercenariesReferenceData): string {
@@ -236,7 +260,13 @@ export class CardsMonitorService {
 		}
 	}
 
-	private async handleNotification(cardId: string, type: CollectionCardType, newCount: number, showNotifs = true) {
+	private async handleNotification(
+		cardId: string,
+		type: CollectionCardType,
+		newCount: number,
+		showNotifs = true,
+		isMassPackOpening = false,
+	) {
 		const prefs = await this.prefs.getPreferences();
 		const isDust = this.hasReachedMaxCollectibleOf(cardId, newCount);
 		if (prefs.showCardsOutsideOfPacks && showNotifs) {
