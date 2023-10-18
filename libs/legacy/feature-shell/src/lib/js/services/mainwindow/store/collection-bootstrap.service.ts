@@ -18,8 +18,8 @@ export class CollectionBootstrapService {
 		this.init();
 	}
 
-	public newPack(pack: PackResult) {
-		const currentStats = this.packStats$$.value;
+	public async newPack(pack: PackResult) {
+		const currentStats = await this.packStats$$.getValueWithInit();
 		this.packStats$$.next([pack, ...currentStats]);
 	}
 

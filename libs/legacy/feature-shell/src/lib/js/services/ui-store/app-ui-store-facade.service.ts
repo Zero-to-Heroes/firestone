@@ -256,7 +256,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {
-		return this.debugObservable(this.store.packStats$());
+		return this.store.packStats$();
 	}
 
 	public cardHistory$(): Observable<readonly CardHistory[]> {

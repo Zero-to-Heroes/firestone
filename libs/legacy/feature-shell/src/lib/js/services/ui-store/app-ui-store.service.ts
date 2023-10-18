@@ -395,7 +395,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {
-		return this.packStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.packStats;
 	}
 
 	public cardHistory$(): Observable<readonly CardHistory[]> {
@@ -568,9 +568,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initPackStats() {
-		this.packStats = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).packStats$$.pipe(
-			shareReplay(1),
-		);
+		this.packStats = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).packStats$$;
 	}
 
 	private initCardsHistory() {
