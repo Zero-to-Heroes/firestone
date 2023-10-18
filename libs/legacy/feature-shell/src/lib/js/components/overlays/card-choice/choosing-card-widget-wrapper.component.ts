@@ -12,6 +12,7 @@ import {
 import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
+import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
@@ -22,7 +23,6 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { uuid } from '../../../services/utils';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 import { buildBasicCardChoiceValue, buildBgsQuestCardChoiceValue } from './card-choice-values';
 
@@ -345,7 +345,7 @@ export class ChoosingCardOptionComponent {
 
 	registerHighlight() {
 		this._uniqueId && this.cardsHighlightService.unregister(this._uniqueId, this.side);
-		this._uniqueId = this._uniqueId || uuid();
+		this._uniqueId = this._uniqueId || uuidShort();
 		if (this.shouldHighlight) {
 			this.cardsHighlightService.register(
 				this._uniqueId,

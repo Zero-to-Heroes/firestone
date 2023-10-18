@@ -160,11 +160,6 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			})
 			.sort((a, b) => a.value - b.value)
 			.slice(0, 3);
-
-		// this.winrateContainer = {
-		// 	id: uuid(),
-		// 	combatWinrate: value.combatWinrate,
-		// };
 	}
 
 	heroCardId: string;

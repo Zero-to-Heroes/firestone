@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { uuid } from '@firestone/shared/framework/common';
+import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BoardSecret } from '../../models/decktracker/board-secret';
@@ -125,7 +125,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
 					highlight: refOption.isValidOption ? 'normal' : 'dim',
 					classes: dbCard.classes?.map((c) => CardClass[c]) ?? [],
-					internalEntityIds: [uuid()],
+					internalEntityIds: [uuidShort()],
 				});
 			});
 

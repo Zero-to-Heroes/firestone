@@ -1,5 +1,5 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { NonFunctionProperties, uuid } from '@firestone/shared/framework/common';
+import { NonFunctionProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
@@ -68,7 +68,7 @@ export class DeckCard {
 		return Object.assign(
 			new DeckCard(),
 			{
-				internalEntityId: uuid(),
+				internalEntityId: uuidShort(),
 			},
 			base,
 		);

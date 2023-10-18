@@ -8,7 +8,7 @@ import {
 	Input,
 } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { AbstractSubscriptionComponent, arraysEqual, uuid } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { compareTribes } from '../../../services/battlegrounds/bgs-utils';
@@ -55,7 +55,7 @@ export class BattlegroundsMinionsListComponent
 	groups$: Observable<readonly BgsMinionsGroup[]>;
 
 	@Input() set tier(value: Tier) {
-		this.uuid = value.tavernTier + '-' + value.type;
+		// this.uuid = value.tavernTier + '-' + value.type;
 		this.cards$$.next(value.cards.filter((c) => !!c));
 		this.groupingFunction$$.next(value.groupingFunction);
 		// console.debug('setting tier', value);
@@ -88,8 +88,6 @@ export class BattlegroundsMinionsListComponent
 	highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
-	private uuid = uuid();
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,

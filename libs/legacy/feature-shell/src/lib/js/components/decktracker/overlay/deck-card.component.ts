@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
@@ -23,7 +24,6 @@ import {
 	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
 } from '../../../services/decktracker/card-highlight/merged-highlights';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { uuid } from '../../../services/utils';
 
 @Component({
 	selector: 'deck-card',
@@ -266,7 +266,7 @@ export class DeckCardComponent implements OnDestroy {
 			return;
 		}
 
-		this._uniqueId = uuid();
+		this._uniqueId = uuidShort();
 		this.cardsHighlightService?.register(
 			this._uniqueId,
 			{

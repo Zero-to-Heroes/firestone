@@ -3,6 +3,7 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
 import { CardIds, ReferenceCard, allDuelsHeroes, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { filterDuelsHeroStats } from '@firestone/duels/data-access';
+import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
@@ -15,7 +16,7 @@ import {
 	mergeDuelsHeroPlayerStats,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
-import { groupByFunction, uuid } from '@services/utils';
+import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -206,7 +207,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 			.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 			.map((deck) => {
 				const result: DuelsHeroInfoTopDeck = {
-					deckId: uuid(),
+					deckId: uuidShort(),
 					decklist: deck.decklist,
 					heroCardId: deck.heroCardId,
 					heroPowerCardId: deck.heroPowerCardId,

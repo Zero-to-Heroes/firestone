@@ -1,8 +1,9 @@
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { uuidShort } from '@firestone/shared/framework/common';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
-import { NonFunctionProperties, uuid } from '../../services/utils';
+import { NonFunctionProperties } from '../../services/utils';
 import { BattleInfoMessage } from './battle-info-message.type';
 import { BgsGame } from './bgs-game';
 
@@ -18,7 +19,7 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 	readonly battleInfoMesage: BattleInfoMessage;
 
 	public static create(base: Partial<NonFunctionProperties<BgsFaceOffWithSimulation>>): BgsFaceOffWithSimulation {
-		return Object.assign(new BgsFaceOffWithSimulation(), { id: uuid() }, base);
+		return Object.assign(new BgsFaceOffWithSimulation(), { id: uuidShort() }, base);
 	}
 
 	public update(base: Partial<NonFunctionProperties<BgsFaceOffWithSimulation>>): BgsFaceOffWithSimulation {

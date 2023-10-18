@@ -8,10 +8,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { uuidShort } from '@firestone/shared/framework/common';
 import { Subscription } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { uuid } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 // TODO: refactor this to extend from toggle-view
@@ -87,7 +87,7 @@ export class PreferenceToggleComponent
 	) {
 		super(store, cdr);
 		this.loadDefaultValues();
-		this.uniqueId = uuid();
+		this.uniqueId = uuidShort();
 	}
 
 	ngAfterContentInit() {

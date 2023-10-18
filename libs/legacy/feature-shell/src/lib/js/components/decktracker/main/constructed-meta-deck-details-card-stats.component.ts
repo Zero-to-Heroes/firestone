@@ -5,7 +5,7 @@ import {
 	AbstractSubscriptionComponent,
 	buildPercents,
 	groupByFunction,
-	uuid,
+	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -195,7 +195,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const copy2 = (secondCopyData?.inStartingDeck ?? 0) / totalGames;
 						const copy2Str = copy2 > 0 ? buildPercents(copy2) : '-';
 
-						const internalEntityId = uuid();
+						const internalEntityId = uuidShort();
 						// const mulliganKept = buildPercents(firstCopyData.keptInMulligan);
 						const result: InternalCardData = {
 							cardName: card.name,

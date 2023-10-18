@@ -14,7 +14,7 @@ import {
 	NonFunctionProperties,
 	Store,
 	sortByProperties,
-	uuid,
+	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
@@ -170,7 +170,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 			.map((miniCard) => {
 				const card = this.allCards.getCard(miniCard.cardId);
 				const sideboard = this.buildSideboard(miniCard.sideboard);
-				const internalEntityId = uuid();
+				const internalEntityId = uuidShort();
 				const inCollection =
 					collection == null
 						? true
@@ -214,7 +214,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		return sideboardFromList
 			.map((miniCard) => {
 				const card = this.allCards.getCard(miniCard.cardId);
-				const internalEntityId = uuid();
+				const internalEntityId = uuidShort();
 				return VisualDeckCard.create({
 					cardId: card.id,
 					cardName: card.name,
