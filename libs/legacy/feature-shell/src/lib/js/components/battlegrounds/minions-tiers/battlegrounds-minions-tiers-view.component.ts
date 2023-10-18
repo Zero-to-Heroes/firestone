@@ -253,6 +253,15 @@ export const buildTiers = (
 	if (anomalies.includes(CardIds.LittleLeague_BG27_Anomaly_800)) {
 		tiersToInclude = [1, 2, 3, 4];
 	}
+	if (anomalies.includes(CardIds.WhatAreTheOddsquestion_BG27_Anomaly_101)) {
+		tiersToInclude = [1, 3, 5];
+	}
+	if (anomalies.includes(CardIds.HowToEvenquestionquestion_BG27_Anomaly_102)) {
+		tiersToInclude = [2, 4, 6];
+	}
+	if (anomalies.includes(CardIds.ValuationInflation_BG27_Anomaly_556)) {
+		tiersToInclude = tiersToInclude.filter((tier) => tier !== 1);
+	}
 	console.debug('tiersToInclude', tiersToInclude, anomalies, playerCardId);
 
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
