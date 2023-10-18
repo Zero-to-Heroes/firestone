@@ -20,6 +20,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
+import { MatchInfo } from '../../models/match-info';
 import { Preferences } from '../../models/preferences';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
@@ -158,7 +159,7 @@ export class TwitchAuthService {
 			gameStarted: deckEvent.state.gameStarted,
 			gameEnded: deckEvent.state.gameEnded,
 			cardsPlayedThisMatch: undefined,
-			matchInfo: deckEvent.state.matchInfo,
+			matchInfo: { anomalies: deckEvent.state.matchInfo?.anomalies } as MatchInfo,
 		});
 
 		// We need to show the last non-empty face off to let the extension decide whether to show the result
@@ -224,7 +225,9 @@ export class TwitchAuthService {
 			board: this.cleanZone(deckState.board, isBattlegrounds),
 			deck: this.cleanZone(deckState.deck, isBattlegrounds),
 			otherZone: this.cleanZone(deckState.otherZone, isBattlegrounds),
-			deckList: this.cleanZone(deckState.deckList, isBattlegrounds),
+			deckList: deckState.deckList?.map(
+				(c) => ({ cardId: c.cardId, manaCost: c.manaCost } as DeckCard),
+			) as readonly DeckCard[],
 		};
 		return result as DeckState;
 	}
