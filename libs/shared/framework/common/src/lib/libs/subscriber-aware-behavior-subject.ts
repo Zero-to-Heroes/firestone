@@ -38,13 +38,15 @@ export class SubscriberAwareBehaviorSubject<T> extends BehaviorSubject<T> {
 	}
 
 	private triggerListeners() {
-		for (const listener of this.listeners) {
+		const listenersToTrigger = this.listeners;
+		this.listeners = [];
+		for (const listener of listenersToTrigger) {
 			try {
 				listener();
 			} catch (e) {
 				console.error(e);
 			}
 		}
-		this.listeners = [];
+		// this.listeners = [];
 	}
 }
