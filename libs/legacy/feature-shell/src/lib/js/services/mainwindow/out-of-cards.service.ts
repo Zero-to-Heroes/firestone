@@ -1,10 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { combineLatest, filter, take } from 'rxjs';
 import { Card } from '../../models/card';
 import { CollectionManager } from '../collection/collection-manager.service';
+import { GameStatusService } from '../game-status.service';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const COLLECTION_UPLOAD = `https://outof.games/api/hearthstone/collection/import/`;
 
@@ -24,14 +27,26 @@ export class OutOfCardsService {
 		// @Optional() private gameEvents: GameEventsEmitterService,
 		private notifs: OwNotificationsService,
 		private collectionManager: CollectionManager,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		window['outOfCardsAuthUpdater'] = this.stateUpdater;
+		this.init();
+	}
+
+	private init() {
+		combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.outOfCardsToken)])
+			.pipe(
+				filter(([inGame, token]) => inGame && !!token?.length),
+				take(1),
+			)
+			.subscribe(() => {
+				this.initCollectionListener();
+			});
 		this.stateUpdater.subscribe((token: OutOfCardsToken) => {
 			console.log('[ooc-auth] received access token');
 			this.handleToken(token);
 		});
-
-		this.initCollectionListener();
 	}
 
 	private async initCollectionListener() {
@@ -45,10 +60,9 @@ export class OutOfCardsService {
 
 	private async handleToken(token: OutOfCardsToken) {
 		await this.prefs.udpateOutOfCardsToken(token);
-		this.uploadCollection();
 	}
 
-	private async uploadCollection(collection: readonly Card[] = null) {
+	private async uploadCollection(collection: readonly Card[]) {
 		const token: OutOfCardsToken = await this.getToken();
 		if (!token) {
 			return;
@@ -56,7 +70,7 @@ export class OutOfCardsService {
 
 		console.log('[ooc-auth] starting collection sync');
 		// Read the memory, as if we can't access it we're not really interested in uploading a new version
-		collection = collection ?? this.collectionManager?.collection$$.getValue();
+		collection = await this.collectionManager?.collection$$.getValueWithInit();
 		if (!collection?.length) {
 			console.log('[ooc-auth] collection from memory is empty, not synchronizing it');
 			return;
