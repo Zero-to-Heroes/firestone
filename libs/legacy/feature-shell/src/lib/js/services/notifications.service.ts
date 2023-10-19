@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
@@ -22,6 +22,7 @@ export class OwNotificationsService {
 		this.startNotificationsWindow();
 
 		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
+			filter((message) => !!message),
 			tap((message) => console.debug('[notifications] emitting new message', message)),
 		);
 
