@@ -53,29 +53,7 @@ export class GameEvents {
 			)
 			.subscribe(async () => {
 				console.log('[game-events] init game events monitor');
-				this.plugin = await this.gameEventsPlugin.get();
-				if (this.plugin) {
-					this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
-						console.log('[game-events] received global event', first, second);
-					});
-					this.plugin.onGameEvent.addListener((gameEvent) => {
-						try {
-							const events: any | readonly any[] = JSON.parse(gameEvent);
-							if (!!(events as readonly any[]).length) {
-								for (const event of events as readonly any[]) {
-									this.dispatchGameEvent(event);
-								}
-							} else {
-								this.dispatchGameEvent(events);
-							}
-						} catch (e) {
-							console.error('Error while parsing game event', gameEvent, e);
-						}
-					});
-					this.plugin.initRealtimeLogConversion(() => {
-						console.log('[game-events] real-time log processing ready to go');
-					});
-				}
+				this.initPlugin();
 				this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 					const changes: MemoryUpdate = event.data[0];
 					if (changes.CurrentScene) {
@@ -101,7 +79,6 @@ export class GameEvents {
 					);
 				});
 				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
-					const prefs = await this.prefs.getPreferences();
 					console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
@@ -130,6 +107,7 @@ export class GameEvents {
 		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
+		await this.initPlugin();
 		await this.processLogs(eventQueue);
 		return [];
 	}
@@ -1620,5 +1598,36 @@ export class GameEvents {
 			return dateWithMillis.getTime();
 		}
 		freeRegexp();
+	}
+
+	private async initPlugin() {
+		if (this.plugin) {
+			return;
+		}
+
+		console.log('[game-events] init log listener plugin');
+		this.plugin = await this.gameEventsPlugin.get();
+		if (this.plugin) {
+			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
+				console.log('[game-events] received global event', first, second);
+			});
+			this.plugin.onGameEvent.addListener((gameEvent) => {
+				try {
+					const events: any | readonly any[] = JSON.parse(gameEvent);
+					if (!!(events as readonly any[]).length) {
+						for (const event of events as readonly any[]) {
+							this.dispatchGameEvent(event);
+						}
+					} else {
+						this.dispatchGameEvent(events);
+					}
+				} catch (e) {
+					console.error('Error while parsing game event', gameEvent, e);
+				}
+			});
+			this.plugin.initRealtimeLogConversion(() => {
+				console.log('[game-events] real-time log processing ready to go');
+			});
+		}
 	}
 }

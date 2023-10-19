@@ -5,15 +5,20 @@ declare let OverwolfPlugin: any;
 @Injectable()
 export class GameEventsPluginService {
 	private gameEventsPlugin: any;
-	initialized = false;
+
+	private initialized = false;
+	private initializing = false;
 
 	constructor() {
 		this.gameEventsPlugin = new OverwolfPlugin('overwolf-replay-converter', true);
-		this.initialize();
 	}
 
 	async initialize() {
-		this.initialized = false;
+		if (this.initialized || this.initializing) {
+			return;
+		}
+
+		this.initializing = true;
 		try {
 			this.gameEventsPlugin.initialize((status: boolean) => {
 				if (status === false) {
@@ -23,6 +28,7 @@ export class GameEventsPluginService {
 				}
 				console.log('[game-events] Plugin ' + this.gameEventsPlugin.get()._PluginName_ + ' was loaded!');
 				this.initialized = true;
+				this.initializing = false;
 			});
 			const plugin = await this.get();
 			plugin.onGlobalEvent.addListener((first: string, second: string) => {
@@ -37,6 +43,7 @@ export class GameEventsPluginService {
 	}
 
 	public async get() {
+		await this.initialize();
 		await this.waitForInit();
 		return this.gameEventsPlugin.get();
 	}
