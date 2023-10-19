@@ -1,49 +1,59 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { GameState } from '../../models/decktracker/game-state';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
+import { GameStatusService } from '../game-status.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class OverlayDisplayService {
 	private decktrackerDisplayEventBus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly gameStatus: GameStatusService) {
 		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
 		this.init();
 	}
 
 	private async init() {
-		console.log('[overlay-display] init');
 		await this.store.initComplete();
-		combineLatest(
+		combineLatest([
 			this.store.listenDeckState$((gameState) => gameState),
 			this.store.listen$(([main, nav, prefs]) => prefs),
-		)
+			this.gameStatus.inGame$$,
+		])
 			.pipe(
 				debounceTime(200),
-				map(([[gameState], [prefs]]) => ({ gameState: gameState, prefs: prefs })),
-				map((info) => this.shouldDisplay(info.gameState, info.prefs)),
+				filter(([gameState, prefs, inGame]) => inGame),
+				map(([[gameState], [prefs]]) => ({
+					gameType: gameState?.metadata?.gameType,
+					hasPlayerDeck: true, // gameState?.playerDeck?.deckList?.length > 0,
+					prefs: prefs,
+				})),
+				distinctUntilChanged((a, b) => {
+					return (
+						a.gameType === b.gameType &&
+						a.hasPlayerDeck === b.hasPlayerDeck &&
+						a.prefs.decktrackerShowArena === b.prefs.decktrackerShowArena &&
+						a.prefs.decktrackerShowCasual === b.prefs.decktrackerShowCasual &&
+						a.prefs.decktrackerShowRanked === b.prefs.decktrackerShowRanked &&
+						a.prefs.decktrackerShowPractice === b.prefs.decktrackerShowPractice &&
+						a.prefs.decktrackerShowFriendly === b.prefs.decktrackerShowFriendly &&
+						a.prefs.decktrackerShowTavernBrawl === b.prefs.decktrackerShowTavernBrawl
+					);
+				}),
+				map((info) => this.shouldDisplay(info.gameType, info.hasPlayerDeck, info.prefs)),
 				distinctUntilChanged(),
 			)
 			.subscribe((shouldDisplay) => this.decktrackerDisplayEventBus.next(shouldDisplay));
 	}
 
-	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
-		console.debug('[overlay-display] should display?', gameState, prefs);
-		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
-			if (gameState?.metadata?.gameType) {
-				console.warn(
-					'[overlay-display] not enough info to display',
-					gameState?.metadata,
-					gameState?.playerDeck,
-				);
-			}
+	private shouldDisplay(gameType: GameType, hasPlayerDeck: boolean, prefs: Preferences): boolean {
+		console.debug('[overlay-display] should display?', gameType, hasPlayerDeck, prefs);
+		if (!gameType || !hasPlayerDeck) {
 			return false;
 		}
-		switch (gameState.metadata.gameType as GameType) {
+		switch (gameType) {
 			case GameType.GT_ARENA:
 				return prefs.decktrackerShowArena;
 			case GameType.GT_CASUAL:
@@ -77,7 +87,7 @@ export class OverlayDisplayService {
 			case GameType.GT_MERCENARIES_PVE_COOP:
 				return false;
 		}
-		console.warn('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
-		return gameState.playerDeck.deckList.length > 0;
+		console.warn('[overlay-display] unknown game type', gameType as GameType);
+		return hasPlayerDeck;
 	}
 }
