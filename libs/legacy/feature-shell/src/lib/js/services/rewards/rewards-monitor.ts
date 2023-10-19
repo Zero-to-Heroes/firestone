@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { filter, take } from 'rxjs';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { GameStatusService } from '../game-status.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { Season } from '../stats/xp/xp-tables/_season';
 import { Season6 } from '../stats/xp/xp-tables/season-6';
@@ -21,6 +23,7 @@ export class RewardMonitorService {
 		private readonly events: Events,
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
@@ -91,54 +94,62 @@ export class RewardMonitorService {
 	}
 
 	private async init() {
-		this.gameEvents.onGameStart.subscribe(() => {
-			this.xpForGameInfo = null;
-		});
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
-			const changes: MemoryUpdate = data.data[0];
-			if (changes?.XpChanges?.length) {
-				console.debug('[rewards-monitor] received xp changes', changes.XpChanges);
-				// If there are multiple causes for XP changes, like game end + quest, we
-				// receive several items.
-				// The first item seems to always be about the current match itself
-				const xpChange = changes.XpChanges[0];
-				// const prefs: Preferences = await this.prefs.getPreferences();
-				const levelsGained = xpChange.CurrentLevel - xpChange.PreviousLevel;
-				const xpGained =
-					levelsGained === 0
-						? xpChange.CurrentXp - xpChange.PreviousXp
-						: xpChange.CurrentXp +
-						  // Xp needed to finish the previous level
-						  (this.currentSeason.getXpForLevel(xpChange.PreviousLevel) - xpChange.PreviousXp) +
-						  this.getXpForIntermediaryLevels(xpChange.PreviousLevel, xpChange.CurrentLevel);
+		this.gameStatus.inGame$$
+			.pipe(
+				filter((inGame) => inGame),
+				take(1),
+			)
+			.subscribe(async () => {
+				console.log('[rewards-monitor] game started, init');
+				this.gameEvents.onGameStart.subscribe(() => {
+					this.xpForGameInfo = null;
+				});
+				this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
+					const changes: MemoryUpdate = data.data[0];
+					if (changes?.XpChanges?.length) {
+						console.debug('[rewards-monitor] received xp changes', changes.XpChanges);
+						// If there are multiple causes for XP changes, like game end + quest, we
+						// receive several items.
+						// The first item seems to always be about the current match itself
+						const xpChange = changes.XpChanges[0];
+						// const prefs: Preferences = await this.prefs.getPreferences();
+						const levelsGained = xpChange.CurrentLevel - xpChange.PreviousLevel;
+						const xpGained =
+							levelsGained === 0
+								? xpChange.CurrentXp - xpChange.PreviousXp
+								: xpChange.CurrentXp +
+								  // Xp needed to finish the previous level
+								  (this.currentSeason.getXpForLevel(xpChange.PreviousLevel) - xpChange.PreviousXp) +
+								  this.getXpForIntermediaryLevels(xpChange.PreviousLevel, xpChange.CurrentLevel);
+						const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
+						const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
+							(track) => track.TrackType === RewardTrackType.GLOBAL,
+						);
+						const xpModifier = 1 + (rewardTrackInfo?.XpBonusPercent ?? 0) / 100;
+						const rawXpGained = xpGained / xpModifier;
+						// if (prefs.showXpRecapAtGameEnd) {
+						this.xpForGameInfo = {
+							previousXp: xpChange.PreviousXp,
+							previousLevel: xpChange.PreviousLevel,
+							currentXp: xpChange.CurrentXp,
+							currentLevel: xpChange.CurrentLevel,
+							xpGainedWithoutBonus: rawXpGained,
+							realXpGained: xpGained,
+							levelsGained: levelsGained,
+							bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
+							xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel + 1),
+						};
+						console.log('[rewards-monitor] built xp for game', levelsGained, xpGained, this.xpForGameInfo);
+						// }
+					}
+				});
 				const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
 				const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
 					(track) => track.TrackType === RewardTrackType.GLOBAL,
 				);
-				const xpModifier = 1 + (rewardTrackInfo?.XpBonusPercent ?? 0) / 100;
-				const rawXpGained = xpGained / xpModifier;
-				// if (prefs.showXpRecapAtGameEnd) {
-				this.xpForGameInfo = {
-					previousXp: xpChange.PreviousXp,
-					previousLevel: xpChange.PreviousLevel,
-					currentXp: xpChange.CurrentXp,
-					currentLevel: xpChange.CurrentLevel,
-					xpGainedWithoutBonus: rawXpGained,
-					realXpGained: xpGained,
-					levelsGained: levelsGained,
-					bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-					xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel + 1),
-				};
-				console.log('[rewards-monitor] built xp for game', levelsGained, xpGained, this.xpForGameInfo);
-				// }
-			}
-		});
-		const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
-		const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
-			(track) => track.TrackType === RewardTrackType.GLOBAL,
-		);
-		console.log('[rewards-monitor] initialize values from rewardsTrackInfo', rewardTrackInfo);
-		this.lastRewardTrackInfo = rewardTrackInfo;
+				console.log('[rewards-monitor] initialize values from rewardsTrackInfo', rewardTrackInfo);
+				this.lastRewardTrackInfo = rewardTrackInfo;
+			});
 	}
 
 	private getXpForIntermediaryLevels(startLevel: number, endLevel: number): number {

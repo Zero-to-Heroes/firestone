@@ -6,7 +6,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { delay, distinctUntilChanged, map, sampleTime } from 'rxjs/operators';
+import { delay, distinctUntilChanged, filter, map, sampleTime, take } from 'rxjs/operators';
 import {
 	TwitchBgsBoard,
 	TwitchBgsBoardEntity,
@@ -22,6 +22,7 @@ import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { MatchInfo } from '../../models/match-info';
 import { Preferences } from '../../models/preferences';
+import { GameStatusService } from '../game-status.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -57,6 +58,7 @@ export class TwitchAuthService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 		window['deflate'] = (input, options) => {
@@ -68,50 +70,60 @@ export class TwitchAuthService {
 	}
 
 	private async init() {
-		this.stateUpdater.subscribe((twitchInfo: any) => {
-			console.log('[twitch-auth] received access token', !!twitchInfo);
-			this.saveAccessToken(twitchInfo.access_token);
-		});
-
 		await this.store.initComplete();
 
-		this.store.listenPrefs$((prefs) => prefs.twitchDelay).subscribe(([delay]) => (this.twitchDelay = delay));
-		this.twitchAccessToken$ = this.store
-			.listenPrefs$((prefs) => prefs.twitchAccessToken)
+		this.gameStatus.inGame$$
 			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-			);
-		this.streamerPrefs$ = this.store
-			.listenPrefs$(
-				(prefs) => prefs.bgsHideSimResultsOnRecruit,
-				(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+				filter((inGame) => inGame),
+				take(1),
 			)
-			.pipe(
-				distinctUntilChanged(),
-				map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
-					bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
-					bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
-				})),
-			);
-		combineLatest(
-			this.store.listen$(([main, nav]) => main.currentScene),
-			this.deckEvents,
-			this.bgEvents,
-			this.twitchAccessToken$,
-			this.streamerPrefs$,
-		)
-			.pipe(
-				sampleTime(2000),
-				distinctUntilChanged(),
-				map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
-					this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
-				),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				delay(this.twitchDelay),
-			)
-			.subscribe((event) => this.sendEvent(event));
-		console.log('[twitch-auth] init done');
+			.subscribe(async () => {
+				console.log('[twitch-auth] init');
+				this.stateUpdater.subscribe((twitchInfo: any) => {
+					console.log('[twitch-auth] received access token', !!twitchInfo);
+					this.saveAccessToken(twitchInfo.access_token);
+				});
+
+				this.store
+					.listenPrefs$((prefs) => prefs.twitchDelay)
+					.subscribe(([delay]) => (this.twitchDelay = delay));
+				this.twitchAccessToken$ = this.store
+					.listenPrefs$((prefs) => prefs.twitchAccessToken)
+					.pipe(
+						map(([pref]) => pref),
+						distinctUntilChanged(),
+					);
+				this.streamerPrefs$ = this.store
+					.listenPrefs$(
+						(prefs) => prefs.bgsHideSimResultsOnRecruit,
+						(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+					)
+					.pipe(
+						distinctUntilChanged(),
+						map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
+							bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
+							bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
+						})),
+					);
+				combineLatest([
+					this.store.listen$(([main, nav]) => main.currentScene),
+					this.deckEvents,
+					this.bgEvents,
+					this.twitchAccessToken$,
+					this.streamerPrefs$,
+				])
+					.pipe(
+						sampleTime(2000),
+						distinctUntilChanged(),
+						map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
+							this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
+						),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+						delay(this.twitchDelay),
+					)
+					.subscribe((event) => this.sendEvent(event));
+				console.log('[twitch-auth] init done');
+			});
 	}
 
 	public async emitDeckEvent(event: any) {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
@@ -12,12 +12,12 @@ import { MemoryUpdate } from '../../models/memory/memory-update';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
-import { DuelsRunIdService } from '../duels/duels-run-id.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
+import { GameStatusService } from '../game-status.service';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -38,192 +38,209 @@ export class EndGameListenerService {
 		private readonly rewards: RewardMonitorService,
 		private readonly duelsState: DuelsStateBuilderService,
 		private readonly reviewIdService: ReviewIdService,
-		private readonly duelsRunIdService: DuelsRunIdService,
 		private readonly bgStore: BattlegroundsStoreService,
 		private readonly lottery: LotteryService,
 		private readonly allCards: CardsFacadeService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
 
 	private init(): void {
-		const metadata$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.MATCH_METADATA),
-			map((event) => event.additionalData.metaData as HsGameMetaData),
-			startWith(null),
-		);
-		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.MATCH_INFO),
-			map((event) => event.additionalData.matchInfo as MatchInfo),
-			startWith(null),
-		);
-		const playerDeck$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
-			map((event) => event.additionalData.playerDeck as DeckInfo),
-			startWith(null),
-			map((deck) =>
-				// Remove signature treasures from the decklists
-				isDuels(deck?.gameType)
-					? {
-							...deck,
-							deckstring: sanitizeDeckstring(deck.deckstring, this.allCards),
-					  }
-					: deck,
-			),
-			tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
-		);
-		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe();
-		const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
-		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.ARENA_INFO),
-			map((event) => event.additionalData.arenaInfo as ArenaInfo),
-			startWith(null),
-		);
-		const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$.pipe(startWith(null));
-		const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$.pipe(startWith(null));
-		const bgInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.BATTLEGROUNDS_INFO),
-			map((event) => event.additionalData.bgInfo as BattlegroundsInfo),
-			startWith(null),
-		);
-		const gameSettings$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.GAME_SETTINGS),
-			map((event) => event as GameSettingsEvent),
-			map((event) => event.additionalData),
-			startWith(null),
-		);
-		// This is triggered really early: as soon as the GameState match is over (no need to wait for
-		// the final combat animations)
-		const bgNewRating$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-			map((event) => event.data[0] as MemoryUpdate),
-			filter((changes) => !!changes.BattlegroundsNewRating),
-			map((changes) => changes.BattlegroundsNewRating),
-			startWith(null),
-			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
-		);
-		const reviewId$ = this.reviewIdService.reviewId$;
-		// Doesn't work, reviewId arrives earlier
-		const gameEnded$ = merge(
-			this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_END)),
-			this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_START)),
-			this.uploadStarted$$,
-		).pipe(
-			// tap((info) => console.log('[manastorm-bridge] game ended', info)),
-			map((event) => {
-				// The uploadStarted subject fired, we reset the "ended" flag so that a new review id
-				// won't trigger a new upload
-				if (!(event as GameEvent).type) {
-					return {
-						ended: false,
-						spectating: false,
-						game: null,
-						replayXml: null,
-					};
-				}
-				if ((event as GameEvent).type === GameEvent.GAME_END) {
-					const endEvent = event as GameEvent;
-					return {
-						ended: true,
-						spectating: endEvent.additionalData.spectating,
-						game: endEvent.additionalData.game,
-						replayXml: endEvent.additionalData.replayXml,
-					};
-				}
-				if ((event as GameEvent).type === GameEvent.GAME_START) {
-					const startEvent = event as GameEvent;
-					return {
-						ended: false,
-						spectating: startEvent.additionalData.spectating,
-						game: null,
-						replayXml: null,
-					};
-				}
-			}),
-			startWith({ ended: false, spectating: false, game: null, replayXml: null }),
-		);
-
-		// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible
-		// that the rating doesn't change, this obersvable isn't reliable enough
-		// It actually emits even if the ranking doesn't change, so we can use that
-		const bgMemoryInfo$ = bgNewRating$.pipe(
-			concatMap(async (_) => {
-				return await this.getBattlegroundsEndGame();
-			}),
-			startWith(null),
-			tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
-		);
-
-		combineLatest([
-			reviewId$,
-			metadata$,
-			gameEnded$,
-			gameSettings$,
-			mercsInfo$,
-			mercsCollectionInfo$,
-			duelsRunId$,
-			duelsInfo$,
-			matchInfo$,
-			playerDeck$,
-			arenaInfo$,
-			bgInfo$,
-		])
+		this.gameStatus.inGame$$
 			.pipe(
-				withLatestFrom(bgMemoryInfo$, bgNewRating$),
-				map(
-					([
-						[
-							reviewId,
-							metadata,
-							gameEnded,
-							gameSettings,
-							mercsInfo,
-							mercsCollectionInfo,
-							duelsRunId,
-							duelsInfo,
-							matchInfo,
-							playerDeck,
-							arenaInfo,
-							bgInfo,
-						],
-						bgMemoryInfo,
-						bgNewRating,
-					]) =>
-						({
-							reviewId: reviewId,
-							metadata: metadata,
-							gameEnded: gameEnded,
-							matchInfo: matchInfo,
-							playerDeck: playerDeck,
-							duelsInfo: duelsInfo,
-							arenaInfo: arenaInfo,
-							mercsInfo: mercsInfo,
-							mercsCollectionInfo: mercsCollectionInfo,
-							duelsRunId: duelsRunId,
-							bgInfo: bgInfo,
-							bgNewRating: bgNewRating,
-							battlegroundsInfoAfterGameOver: bgMemoryInfo,
-							gameSettings: gameSettings,
-						} as UploadInfo),
-				),
-				tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
-				// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
-				// the current game) or the reviewId changed (to mark the start)
-				distinctUntilChanged((a, b) => {
-					// console.debug('[manastorm-bridge] comparing', a, b);
-					return a?.reviewId === b?.reviewId && a?.gameEnded?.ended === b?.gameEnded?.ended;
-				}),
-				filter((info) => !!info.reviewId && info.gameEnded.ended),
-				tap((info) =>
-					console.debug('[manastorm-bridge] end game, uploading? spectating=', info.gameEnded.spectating),
-				),
-				filter((info) => !info.gameEnded.spectating),
-				tap((info) =>
-					console.debug('[manastorm-bridge] not a spectate game, continuing', info.metadata, info.playerDeck),
-				),
+				filter((inGame) => inGame),
+				take(1),
 			)
-			.subscribe((info) => {
-				this.prepareUpload(info);
-				this.uploadStarted$$.next(!this.uploadStarted$$.value);
+			.subscribe(() => {
+				console.log('[manastorm-bridge] game started, initializing');
+				const metadata$ = this.gameEvents.allEvents.asObservable().pipe(
+					filter((event) => event.type === GameEvent.MATCH_METADATA),
+					map((event) => event.additionalData.metaData as HsGameMetaData),
+					startWith(null),
+				);
+				const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+					filter((event) => event.type === GameEvent.MATCH_INFO),
+					map((event) => event.additionalData.matchInfo as MatchInfo),
+					startWith(null),
+				);
+				const playerDeck$ = this.gameEvents.allEvents.asObservable().pipe(
+					filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
+					map((event) => event.additionalData.playerDeck as DeckInfo),
+					startWith(null),
+					map((deck) =>
+						// Remove signature treasures from the decklists
+						isDuels(deck?.gameType)
+							? {
+									...deck,
+									deckstring: sanitizeDeckstring(deck.deckstring, this.allCards),
+							  }
+							: deck,
+					),
+					tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
+				);
+				const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe();
+				const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
+				const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+					filter((event) => event.type === GameEvent.ARENA_INFO),
+					map((event) => event.additionalData.arenaInfo as ArenaInfo),
+					startWith(null),
+				);
+				const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$.pipe(startWith(null));
+				const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$.pipe(startWith(null));
+				const bgInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+					filter((event) => event.type === GameEvent.BATTLEGROUNDS_INFO),
+					map((event) => event.additionalData.bgInfo as BattlegroundsInfo),
+					startWith(null),
+				);
+				const gameSettings$ = this.gameEvents.allEvents.asObservable().pipe(
+					filter((event) => event.type === GameEvent.GAME_SETTINGS),
+					map((event) => event as GameSettingsEvent),
+					map((event) => event.additionalData),
+					startWith(null),
+				);
+				// This is triggered really early: as soon as the GameState match is over (no need to wait for
+				// the final combat animations)
+				const bgNewRating$ = this.events.on(Events.MEMORY_UPDATE).pipe(
+					map((event) => event.data[0] as MemoryUpdate),
+					filter((changes) => !!changes.BattlegroundsNewRating),
+					map((changes) => changes.BattlegroundsNewRating),
+					startWith(null),
+					tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
+				);
+				const reviewId$ = this.reviewIdService.reviewId$;
+				// Doesn't work, reviewId arrives earlier
+				const gameEnded$ = merge(
+					this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_END)),
+					this.gameEvents.allEvents
+						.asObservable()
+						.pipe(filter((event) => event.type === GameEvent.GAME_START)),
+					this.uploadStarted$$,
+				).pipe(
+					// tap((info) => console.log('[manastorm-bridge] game ended', info)),
+					map((event) => {
+						// The uploadStarted subject fired, we reset the "ended" flag so that a new review id
+						// won't trigger a new upload
+						if (!(event as GameEvent).type) {
+							return {
+								ended: false,
+								spectating: false,
+								game: null,
+								replayXml: null,
+							};
+						}
+						if ((event as GameEvent).type === GameEvent.GAME_END) {
+							const endEvent = event as GameEvent;
+							return {
+								ended: true,
+								spectating: endEvent.additionalData.spectating,
+								game: endEvent.additionalData.game,
+								replayXml: endEvent.additionalData.replayXml,
+							};
+						}
+						if ((event as GameEvent).type === GameEvent.GAME_START) {
+							const startEvent = event as GameEvent;
+							return {
+								ended: false,
+								spectating: startEvent.additionalData.spectating,
+								game: null,
+								replayXml: null,
+							};
+						}
+					}),
+					startWith({ ended: false, spectating: false, game: null, replayXml: null }),
+				);
+
+				// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible
+				// that the rating doesn't change, this obersvable isn't reliable enough
+				// It actually emits even if the ranking doesn't change, so we can use that
+				const bgMemoryInfo$ = bgNewRating$.pipe(
+					concatMap(async (_) => {
+						return await this.getBattlegroundsEndGame();
+					}),
+					startWith(null),
+					tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
+				);
+
+				combineLatest([
+					reviewId$,
+					metadata$,
+					gameEnded$,
+					gameSettings$,
+					mercsInfo$,
+					mercsCollectionInfo$,
+					duelsRunId$,
+					duelsInfo$,
+					matchInfo$,
+					playerDeck$,
+					arenaInfo$,
+					bgInfo$,
+				])
+					.pipe(
+						withLatestFrom(bgMemoryInfo$, bgNewRating$),
+						map(
+							([
+								[
+									reviewId,
+									metadata,
+									gameEnded,
+									gameSettings,
+									mercsInfo,
+									mercsCollectionInfo,
+									duelsRunId,
+									duelsInfo,
+									matchInfo,
+									playerDeck,
+									arenaInfo,
+									bgInfo,
+								],
+								bgMemoryInfo,
+								bgNewRating,
+							]) =>
+								({
+									reviewId: reviewId,
+									metadata: metadata,
+									gameEnded: gameEnded,
+									matchInfo: matchInfo,
+									playerDeck: playerDeck,
+									duelsInfo: duelsInfo,
+									arenaInfo: arenaInfo,
+									mercsInfo: mercsInfo,
+									mercsCollectionInfo: mercsCollectionInfo,
+									duelsRunId: duelsRunId,
+									bgInfo: bgInfo,
+									bgNewRating: bgNewRating,
+									battlegroundsInfoAfterGameOver: bgMemoryInfo,
+									gameSettings: gameSettings,
+								} as UploadInfo),
+						),
+						tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
+						// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
+						// the current game) or the reviewId changed (to mark the start)
+						distinctUntilChanged((a, b) => {
+							// console.debug('[manastorm-bridge] comparing', a, b);
+							return a?.reviewId === b?.reviewId && a?.gameEnded?.ended === b?.gameEnded?.ended;
+						}),
+						filter((info) => !!info.reviewId && info.gameEnded.ended),
+						tap((info) =>
+							console.debug(
+								'[manastorm-bridge] end game, uploading? spectating=',
+								info.gameEnded.spectating,
+							),
+						),
+						filter((info) => !info.gameEnded.spectating),
+						tap((info) =>
+							console.debug(
+								'[manastorm-bridge] not a spectate game, continuing',
+								info.metadata,
+								info.playerDeck,
+							),
+						),
+					)
+					.subscribe((info) => {
+						this.prepareUpload(info);
+						this.uploadStarted$$.next(!this.uploadStarted$$.value);
+					});
 			});
 	}
 

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AdService } from './ad.service';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
+import { deepEqual } from './utils';
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
@@ -32,6 +33,7 @@ export class UserService {
 			.pipe(
 				debounceTime(500),
 				filter(([premium, user]) => !!user),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			)
 			.subscribe(([premium, user]) => {
 				console.log('[user-service] info', premium, user);
