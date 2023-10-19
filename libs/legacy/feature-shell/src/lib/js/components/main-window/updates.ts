@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.3.1',
+		version: '12.3.3',
 		force: false,
 		sections: [
 			{
@@ -74,11 +74,29 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the board info sent to Twitch would include incorrect minions, thus breaking the mouse overs for the Twitch extension users.`,
+							},
+						],
+					},
+					{
 						category: 'duels',
 						details: [
 							{
 								type: 'bug',
 								text: `Try and make everything linked to duels detection more robust. This should reduce the number of times some loots, initial decklists or sideboards being incorrectly detected. WARNING: because of a change to how runs are identified, the first game you play with this version of the app will start a new run. Sorry for the inconvenience.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Pack tracking now works for the new Mass Opening feature!`,
 							},
 						],
 					},
@@ -98,6 +116,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Added an "all ranks" filter for constructed meta tabs.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some counters would stay visible after the relevant cards were played/died. (Community Suggestion!)`,
 							},
 							{
 								type: 'bug',
@@ -123,6 +145,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Recurring Nightmare could enchant non-Undead minions. (Community Suggestion!)`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Motley Phalanx.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Cultist S'Thara.`,
 							},
 							{
 								type: 'content',
