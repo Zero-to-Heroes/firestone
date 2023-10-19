@@ -126,6 +126,7 @@ export class BattlegroundsStoreService {
 	private eventEmitters = [];
 	private memoryInterval;
 	private battlegroundsHotkeyListener;
+	private realTimeStatsListener: (state: RealTimeStatsState) => void;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -150,52 +151,83 @@ export class BattlegroundsStoreService {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
 		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
+		this.init();
+	}
+
+	// TODO: I'd like to find a way to only initialize this if we actually play BG
+	// But waiting until we get a "game start" event for BG is too late, and we would
+	// need to buffer all the events we receive after this game start event, until we're properly
+	// initialized, and replay them. Doable, but cumbersome, and will probably lead to bugs
+
+	private async init() {
 		this.eventParsers = this.buildEventParsers();
+		this.realTimeStatsListener = (state: RealTimeStatsState) => {
+			this.battlegroundsUpdater.next(new BgsRealTimeStatsUpdatedEvent(state));
+		};
 		this.registerGameEvents();
 		this.buildEventEmitters();
 		this.buildOverlayHandlers();
+
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
+			const info: ManastormInfo = event.data[0];
+			console.debug(
+				'[bgs-store] Replay created, received info',
+				info.type,
+				this.state?.inGame,
+				!!this.state?.currentGame,
+			);
+			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
+			// could be already reset when it arrives
+			if (info && info.type === 'new-review' && this.state?.inGame && !!this.state.currentGame) {
+				const currentGame = this.state.currentGame;
+				console.debug('[bgs-store] will trigger START_BGS_RUN_STATS');
+				const bestBgsUserStats = await this.bgsUserStatsService.loadBgsBestUserStats();
+				this.events.broadcast(
+					Events.START_BGS_RUN_STATS,
+					info.reviewId,
+					currentGame,
+					bestBgsUserStats,
+					info.game,
+				);
+			}
+		});
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsStoreEvent) => {
 			this.processingQueue.enqueue(event);
 		});
 		this.battlegroundsWindowsListener.subscribe((event: boolean) => {
 			this.handleHotkeyPressed(true);
 		});
-
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
 			this.handleHotkeyPressed();
 		});
-
 		this.handleDisplayPreferences();
-		setTimeout(() => {
-			const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-			preferencesEventBus.subscribe((event) => {
-				if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-					console.log('[bgs-store] rebuilding event emitters');
-					this.buildEventEmitters();
-					return;
-				}
-				if (event?.preferences) {
-					this.handleDisplayPreferences(event.preferences);
-				}
-			});
-
-			const mainWindowStoreEmitter: BehaviorSubject<[MainWindowState, NavigationState]> =
-				window['mainWindowStoreMerged'];
-			mainWindowStoreEmitter.subscribe((newState) => {
-				this.mainWindowState = newState[0];
-			});
-
-			const deckEventBus: BehaviorSubject<any> = window['deckEventBus'];
-			deckEventBus.subscribe((event) => {
-				this.deckState = event?.state as GameState;
-			});
-
-			this.stateUpdater = window['mainWindowStoreUpdater'];
-		});
 		this.gameStatus.onGameExit(() => {
 			if (this.memoryInterval) {
 				clearInterval(this.memoryInterval);
 				this.memoryInterval = null;
+			}
+		});
+
+		await sleep(1);
+		const mainWindowStoreEmitter: BehaviorSubject<[MainWindowState, NavigationState]> =
+			window['mainWindowStoreMerged'];
+		mainWindowStoreEmitter.subscribe((newState) => {
+			this.mainWindowState = newState[0];
+		});
+		this.stateUpdater = window['mainWindowStoreUpdater'];
+		const deckEventBus: BehaviorSubject<any> = window['deckEventBus'];
+		deckEventBus.subscribe((event) => {
+			this.deckState = event?.state as GameState;
+		});
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
+		preferencesEventBus.subscribe((event) => {
+			if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
+				console.log('[bgs-store] rebuilding event emitters');
+				this.buildEventEmitters();
+				return;
+			}
+			if (event?.preferences) {
+				this.handleDisplayPreferences(event.preferences);
 			}
 		});
 	}
@@ -242,6 +274,7 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(
 						new BgsMatchStartEvent(this.mainWindowState, gameEvent.additionalData.spectating, false),
 					);
+					this.realTimeStats.addListener(this.realTimeStatsListener);
 				} else {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
@@ -410,33 +443,6 @@ export class BattlegroundsStoreService {
 				);
 			}
 			this.processPendingEvents(gameEvent);
-		});
-		this.realTimeStats.addListener((state: RealTimeStatsState) => {
-			this.battlegroundsUpdater.next(new BgsRealTimeStatsUpdatedEvent(state));
-		});
-
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
-			const info: ManastormInfo = event.data[0];
-			console.debug(
-				'[bgs-store] Replay created, received info',
-				info.type,
-				this.state?.inGame,
-				!!this.state?.currentGame,
-			);
-			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
-			// could be already reset when it arrives
-			if (info && info.type === 'new-review' && this.state?.inGame && !!this.state.currentGame) {
-				const currentGame = this.state.currentGame;
-				console.debug('[bgs-store] will trigger START_BGS_RUN_STATS');
-				const bestBgsUserStats = await this.bgsUserStatsService.loadBgsBestUserStats();
-				this.events.broadcast(
-					Events.START_BGS_RUN_STATS,
-					info.reviewId,
-					currentGame,
-					bestBgsUserStats,
-					info.game,
-				);
-			}
 		});
 	}
 

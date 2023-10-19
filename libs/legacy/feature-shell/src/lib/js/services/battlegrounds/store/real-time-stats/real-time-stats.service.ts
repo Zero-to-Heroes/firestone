@@ -50,12 +50,33 @@ export class RealTimeStatsService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
-	) {
-		this.init();
-	}
+	) {}
 
 	public addListener(listener: (state: RealTimeStatsState) => void): void {
-		this.listeners.push(listener);
+		if (!this.listeners.includes(listener)) {
+			this.listeners.push(listener);
+		}
+		if (!this.eventParsers?.length) {
+			this.init();
+		}
+	}
+
+	private init() {
+		console.log('[real-time-stats] init');
+		this.eventParsers = this.buildEventParsers();
+		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			this.processingQueue.enqueue(gameEvent);
+		});
+		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe((data) => {
+			this.processingQueue.enqueue(
+				Object.assign(new GameEvent(), {
+					type: Events.BATTLE_SIMULATION_HISTORY_UPDATED,
+					additionalData: {
+						game: data.data[0],
+					},
+				}),
+			);
+		});
 	}
 
 	private async processQueue(eventQueue: readonly GameEvent[]) {
@@ -76,7 +97,6 @@ export class RealTimeStatsService {
 	}
 
 	private async processEvent(gameEvent: GameEvent) {
-		// this.debug('parsing', this.state);
 		let newState = this.state;
 		for (const parser of this.eventParsers) {
 			try {
@@ -89,27 +109,9 @@ export class RealTimeStatsService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			// this.debug('state', this.state);
+			console.debug('[real-time-stats] new state', this.state);
 			this.listeners.forEach((listener) => listener(this.state));
 		}
-	}
-
-	private init() {
-		console.log('[real-time-stats] init');
-		this.eventParsers = this.buildEventParsers();
-		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
-			this.processingQueue.enqueue(gameEvent);
-		});
-		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe((data) => {
-			this.processingQueue.enqueue(
-				Object.assign(new GameEvent(), {
-					type: Events.BATTLE_SIMULATION_HISTORY_UPDATED,
-					additionalData: {
-						game: data.data[0],
-					},
-				}),
-			);
-		});
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
