@@ -32,7 +32,6 @@ export class DuelsLootParserService {
 	}
 
 	private async init() {
-		console.log('[duels-loot] init');
 		await this.store.initComplete();
 
 		// We have two requirements:
