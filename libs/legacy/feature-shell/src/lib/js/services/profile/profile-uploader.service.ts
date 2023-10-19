@@ -34,6 +34,7 @@ export class ProfileUploaderService {
 
 	private async init() {
 		await this.store.initComplete();
+
 		const elligible$ = combineLatest([this.gameStatus.inGame$$, this.store.hasPremiumSub$()]).pipe(
 			map(([inGame, hasPremium]) => inGame && hasPremium),
 			filter((elligible) => elligible),

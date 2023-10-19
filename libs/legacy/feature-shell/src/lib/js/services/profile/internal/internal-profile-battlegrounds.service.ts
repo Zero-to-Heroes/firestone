@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ProfileBgHeroStat } from '@firestone-hs/api-user-profile';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
-import { groupByFunction } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
@@ -12,7 +12,7 @@ import { deepEqual } from '../../utils';
 
 @Injectable()
 export class InternalProfileBattlegroundsService {
-	public bgFullTimeStatsByHero$$ = new BehaviorSubject<readonly ProfileBgHeroStat[]>([]);
+	public bgFullTimeStatsByHero$$ = new SubscriberAwareBehaviorSubject<readonly ProfileBgHeroStat[]>([]);
 
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
@@ -26,8 +26,11 @@ export class InternalProfileBattlegroundsService {
 
 	private async init() {
 		await this.store.initComplete();
-		this.initBattlegrounds();
-		this.initLocalCache();
+
+		this.bgFullTimeStatsByHero$$.onFirstSubscribe(() => {
+			this.initBattlegrounds();
+			this.initLocalCache();
+		});
 	}
 
 	private initLocalCache() {

@@ -34,11 +34,11 @@ export class AchievementsMemoryMonitor {
 
 	private async init() {
 		this.achievementsFromMemory$$.onFirstSubscribe(async () => {
-			console.debug('[achievements-memory-monitor] init achievementsFromMemory');
+			console.log('[achievements-memory-monitor] init achievementsFromMemory');
 			this.initAchievements();
 		});
 		this.achievementCategories$$.onFirstSubscribe(async () => {
-			console.debug('[achievements-memory-monitor] init achievementCategories');
+			console.log('[achievements-memory-monitor] init achievementCategories');
 			this.initAchievements();
 		});
 	}
