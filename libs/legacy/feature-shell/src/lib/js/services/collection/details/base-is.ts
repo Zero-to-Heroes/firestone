@@ -1,10 +1,10 @@
-import { sleep } from '@firestone/shared/framework/common';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 
 export abstract class AbstractCollectionInternalService<T, U = T> {
-	public collection$$ = new BehaviorSubject<readonly T[]>([]);
+	public collection$$ = new SubscriberAwareBehaviorSubject<readonly T[]>([]);
 
 	protected abstract type: () => string;
 	protected abstract memoryInfoCountExtractor: (update: MemoryUpdate) => number;
@@ -29,49 +29,51 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 	}
 
 	private async init() {
-		// So that the protected methods are initialized in the child class
-		await sleep(1);
-
-		await this.preInit();
-		const collectionUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-			filter((event) => this.memoryInfoCountExtractor(event.data[0]) != null),
-			map((event) => {
-				const changes: MemoryUpdate = event.data[0];
-				return this.memoryInfoCountExtractor(changes);
-			}),
-		);
-		collectionUpdate$.pipe(debounceTime(5000), distinctUntilChanged()).subscribe(async (newCount) => {
-			const collection = await this.memoryReadingOperation();
-			if (!this.isMemoryInfoEmpty(collection)) {
-				const updated = this.updateMemoryInfo(collection);
+		this.collection$$.onFirstSubscribe(async () => {
+			console.log('[collection-manager] init', this.type(), new Error().stack);
+			// So that the protected methods are initialized in the child class
+			// await sleep(1);
+			await this.preInit();
+			const collectionUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
+				filter((event) => this.memoryInfoCountExtractor(event.data[0]) != null),
+				map((event) => {
+					const changes: MemoryUpdate = event.data[0];
+					return this.memoryInfoCountExtractor(changes);
+				}),
+			);
+			collectionUpdate$.pipe(debounceTime(5000), distinctUntilChanged()).subscribe(async (newCount) => {
+				const collection = await this.memoryReadingOperation();
+				if (!this.isMemoryInfoEmpty(collection)) {
+					const updated = this.updateMemoryInfo(collection);
+					console.debug(
+						`[collection-manager] [${this.type()}] updating collection`,
+						newCount,
+						collection.length,
+						updated.length,
+					);
+					this.collection$$.next(updated);
+				}
+			});
+			this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
 				console.debug(
-					`[collection-manager] [${this.type()}] updating collection`,
-					newCount,
+					`[collection-manager] [${this.type()}] updating collection in db`,
 					collection.length,
-					updated.length,
+					collection,
 				);
-				this.collection$$.next(updated);
-			}
-		});
-		this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
-			console.debug(
-				`[collection-manager] [${this.type()}] updating collection in db`,
-				collection.length,
-				collection,
-			);
-			await this.localDbSaveOperation(collection);
-		});
+				await this.localDbSaveOperation(collection);
+			});
 
-		const collectionFromDb = await this.localDbRetrieveOperation();
-		if (collectionFromDb?.length) {
-			console.debug(
-				`[collection-manager] [${this.type()}] init collection from db`,
-				collectionFromDb.length,
-				collectionFromDb,
-			);
-			this.collection$$.next(collectionFromDb);
-		}
-		await this.postInit();
+			const collectionFromDb = await this.localDbRetrieveOperation();
+			if (collectionFromDb?.length) {
+				console.debug(
+					`[collection-manager] [${this.type()}] init collection from db`,
+					collectionFromDb.length,
+					collectionFromDb,
+				);
+				this.collection$$.next(collectionFromDb);
+			}
+			await this.postInit();
+		});
 	}
 
 	public async getCollection(): Promise<readonly T[]> {

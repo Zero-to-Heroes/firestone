@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
 
 import { PackInfo } from '@firestone/collection/view';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
@@ -22,11 +22,11 @@ export class CollectionManager {
 	public static EPIC_PITY_TIMER = 10;
 	public static LEGENDARY_PITY_TIMER = 40;
 
-	public collection$$: BehaviorSubject<readonly Card[]>;
-	public cardBacks$$: BehaviorSubject<readonly CardBack[]>;
-	public bgHeroSkins$$: BehaviorSubject<readonly number[]>;
-	public allTimeBoosters$$: BehaviorSubject<readonly PackInfo[]>;
-	public coins$$: BehaviorSubject<readonly Coin[]>;
+	public collection$$: SubscriberAwareBehaviorSubject<readonly Card[]>;
+	public cardBacks$$: SubscriberAwareBehaviorSubject<readonly CardBack[]>;
+	public bgHeroSkins$$: SubscriberAwareBehaviorSubject<readonly number[]>;
+	public allTimeBoosters$$: SubscriberAwareBehaviorSubject<readonly PackInfo[]>;
+	public coins$$: SubscriberAwareBehaviorSubject<readonly Coin[]>;
 
 	private cardsIS: CardsInternalService;
 	private cardBacksIS: CardBacksInternalService;
@@ -55,26 +55,6 @@ export class CollectionManager {
 		this.allTimeBoosters$$ = this.allTimeBoostersIS.collection$$;
 		this.coins$$ = this.coinsIS.collection$$;
 		window['collectionManager'] = this;
-	}
-
-	public async getCollection(): Promise<readonly Card[]> {
-		return this.cardsIS.getCollection();
-	}
-
-	public async getCardBacks(): Promise<readonly CardBack[]> {
-		return this.cardBacksIS.getCollection();
-	}
-
-	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
-		return this.bgHeroSkinsIS.getCollection();
-	}
-
-	public async getPacks(): Promise<readonly PackInfo[]> {
-		return this.allTimeBoostersIS.getCollection();
-	}
-
-	public async getCoins(): Promise<readonly Coin[]> {
-		return this.coinsIS.getCollection();
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {

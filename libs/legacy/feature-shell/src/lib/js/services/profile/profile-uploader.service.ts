@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Profile } from '@firestone-hs/api-user-profile';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { GameStatusService } from '../game-status.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
@@ -40,53 +40,61 @@ export class ProfileUploaderService {
 			distinctUntilChanged(),
 		);
 
-		combineLatest([elligible$, this.internalAchievements.achievementCategories$$])
+		// Wait until we know the user is a premium user AND in game to subscribe
+		elligible$
 			.pipe(
-				filter(([elligible, data]) => elligible && !!data?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				filter((elligible) => elligible),
+				take(1),
 			)
-			.subscribe(([_, data]) => {
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, { achievements: data } as Profile);
-			});
-		combineLatest([elligible$, this.internalBattlegrounds.bgFullTimeStatsByHero$$])
-			.pipe(
-				filter(([elligible, data]) => elligible && !!data?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-			)
-			.subscribe(([_, data]) => {
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, { bgFullTimeStatsByHero: data } as Profile);
-			});
-		combineLatest([elligible$, this.internalCollection.sets$$])
-			.pipe(
-				filter(([elligible, data]) => elligible && !!data?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-			)
-			.subscribe(([_, data]) => {
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, { sets: data } as Profile);
-			});
-		combineLatest([elligible$, this.internalCollection.packsAllTime$$])
-			.pipe(
-				filter(([elligible, data]) => elligible && !!data?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-			)
-			.subscribe(([_, data]) => {
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, { packsAllTime: data } as Profile);
-			});
-		combineLatest([elligible$, this.internalProfileInfo.classesProgress$$])
-			.pipe(
-				filter(([elligible, data]) => elligible && !!data?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-			)
-			.subscribe(([_, data]) => {
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, { classesProgress: data } as Profile);
-			});
-		combineLatest([elligible$, this.internalProfileInfo.winsForMode$$])
-			.pipe(
-				filter(([elligible, data]) => elligible && !!data?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-			)
-			.subscribe(([_, data]) => {
-				this.api.callPostApiSecure(PROFILE_UPDATE_URL, { winsForModes: data } as Profile);
+			.subscribe(() => {
+				combineLatest([elligible$, this.internalAchievements.achievementCategories$$])
+					.pipe(
+						filter(([elligible, data]) => elligible && !!data?.length),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					)
+					.subscribe(([_, data]) => {
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { achievements: data } as Profile);
+					});
+				combineLatest([elligible$, this.internalBattlegrounds.bgFullTimeStatsByHero$$])
+					.pipe(
+						filter(([elligible, data]) => elligible && !!data?.length),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					)
+					.subscribe(([_, data]) => {
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { bgFullTimeStatsByHero: data } as Profile);
+					});
+				combineLatest([elligible$, this.internalCollection.sets$$])
+					.pipe(
+						filter(([elligible, data]) => elligible && !!data?.length),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					)
+					.subscribe(([_, data]) => {
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { sets: data } as Profile);
+					});
+				combineLatest([elligible$, this.internalCollection.packsAllTime$$])
+					.pipe(
+						filter(([elligible, data]) => elligible && !!data?.length),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					)
+					.subscribe(([_, data]) => {
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { packsAllTime: data } as Profile);
+					});
+				combineLatest([elligible$, this.internalProfileInfo.classesProgress$$])
+					.pipe(
+						filter(([elligible, data]) => elligible && !!data?.length),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					)
+					.subscribe(([_, data]) => {
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { classesProgress: data } as Profile);
+					});
+				combineLatest([elligible$, this.internalProfileInfo.winsForMode$$])
+					.pipe(
+						filter(([elligible, data]) => elligible && !!data?.length),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					)
+					.subscribe(([_, data]) => {
+						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { winsForModes: data } as Profile);
+					});
 			});
 		// Improvement areas:
 		// - mercs info: best mythic bounty level, bounties completed, heroic bounties completed, fewest turns per bounty

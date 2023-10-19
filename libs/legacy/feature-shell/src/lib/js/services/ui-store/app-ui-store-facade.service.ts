@@ -5,7 +5,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
@@ -75,69 +75,59 @@ export class AppUiStoreFacadeService {
 	public listen$<S extends Selector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
-		this.debugCall('listen$');
-		return this.debugObservable(this.store.listen$(...selectors));
+		return this.store.listen$(...selectors);
 	}
 
 	public listenPrefs$<S extends PrefsSelector<Preferences, any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
-		this.debugCall('listenPrefs$');
-		return this.debugObservable(this.store.listenPrefs$(...selectors));
+		return this.store.listenPrefs$(...selectors);
 	}
 
 	public listenModsConfig$<S extends ModsConfigSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends ModsConfigSelector<infer T> ? T : never }> {
-		this.debugCall('listenModsConfig$');
-		return this.debugObservable(this.store.listenModsConfig$(...selectors));
+		return this.store.listenModsConfig$(...selectors);
 	}
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenDeckState$');
-		return this.debugObservable(this.store.listenDeckState$(...selectors));
+		return this.store.listenDeckState$(...selectors);
 	}
 
 	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenNativeGameState$');
-		return this.debugObservable(this.store.listenNativeGameState$(...selectors));
+		return this.store.listenNativeGameState$(...selectors);
 	}
 
 	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenBattlegrounds$');
-		return this.debugObservable(this.store.listenBattlegrounds$(...selectors));
+		return this.store.listenBattlegrounds$(...selectors);
 	}
 
 	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenMercenaries$');
-		return this.debugObservable(this.store.listenMercenaries$(...selectors));
+		return this.store.listenMercenaries$(...selectors);
 	}
 
 	public listenMercenariesOutOfCombat$<S extends MercenariesOutOfCombatStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenMercenariesOutOfCombat$');
-		return this.debugObservable(this.store.listenMercenariesOutOfCombat$(...selectors));
+		return this.store.listenMercenariesOutOfCombat$(...selectors);
 	}
 
 	public listenMercenariesHighlights$<S extends MercenariesHighlightsSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
-		this.debugCall('listenMercenariesHighlights$');
-		return this.debugObservable(this.store.listenMercenariesHighlights$(...selectors));
+		return this.store.listenMercenariesHighlights$(...selectors);
 	}
 
 	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
-		this.debugCall('bgsMetaStatsHero$');
-		return this.debugObservable(this.store.bgsMetaStatsHero$());
+		return this.store.bgsMetaStatsHero$();
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
@@ -145,8 +135,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
-		this.debugCall('gameStats$');
-		return this.debugObservable(this.store.gameStats$());
+		return this.store.gameStats$();
 	}
 
 	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
@@ -166,68 +155,59 @@ export class AppUiStoreFacadeService {
 	}
 
 	public mails$(): Observable<MailState> {
-		this.debugCall('mails$');
-		return this.debugObservable(this.store.mails$());
+		return this.store.mails$();
 	}
 
 	public shouldTrackLottery$(): Observable<boolean> {
-		return this.debugObservable(this.store.shouldTrackLottery$());
+		return this.store.shouldTrackLottery$();
 	}
 
 	public shouldShowLotteryOverlay$(): Observable<boolean> {
-		return this.debugObservable(this.store.shouldShowLotteryOverlay$());
+		return this.store.shouldShowLotteryOverlay$();
 	}
 
 	public sets$(): Observable<readonly Set[]> {
-		this.debugCall('sets$');
-		return this.debugObservable(this.store.sets$());
+		return this.store.sets$();
 	}
 
 	public bgHeroSkins$(): Observable<readonly number[]> {
-		this.debugCall('bgHeroSkins$');
-		return this.debugObservable(this.store.bgHeroSkins$());
+		return this.store.bgHeroSkins$();
 	}
 
 	public collection$(): Observable<readonly Card[]> {
-		this.debugCall('collection$');
-		return this.debugObservable(this.store.collection$());
+		return this.store.collection$();
 	}
 
 	public coins$(): Observable<readonly Coin[]> {
-		this.debugCall('coins$');
-		return this.debugObservable(this.store.coins$());
+		return this.store.coins$();
 	}
 
 	public cardBacks$(): Observable<readonly CardBack[]> {
-		this.debugCall('mails$');
-		return this.debugObservable(this.store.cardBacks$());
+		return this.store.cardBacks$();
 	}
 
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
-		this.debugCall('mails$');
-		return this.debugObservable(this.store.allTimeBoosters$());
+		return this.store.allTimeBoosters$();
 	}
 
 	public tavernBrawl$(): Observable<TavernBrawlState> {
-		this.debugCall('tavernBrawl$');
-		return this.debugObservable(this.store.tavernBrawl$());
+		return this.store.tavernBrawl$();
 	}
 
 	public showAds$(): Observable<boolean> {
-		this.debugCall('shouldShowAds$');
-		return this.debugObservable(this.store.showAds$());
+		return this.store.showAds$();
 	}
 
 	public enablePremiumFeatures$(): Observable<boolean> {
-		return this.debugObservable(this.store.enablePremiumFeatures$());
+		return this.store.enablePremiumFeatures$();
 	}
 
 	public hasPremiumSub$(): Observable<boolean> {
-		return this.debugObservable(this.store.hasPremiumSub$());
+		return this.store.hasPremiumSub$();
 	}
 
 	public lottery$(): Observable<LotteryState> {
-		return this.debugObservable(this.store.lottery$());
+		return this.store.lottery$();
 	}
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
@@ -259,7 +239,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public cardHistory$(): Observable<readonly CardHistory[]> {
-		return this.debugObservable(this.store.cardHistory$());
+		return this.store.cardHistory$();
 	}
 
 	public highlightedBgsMinions$(): Observable<readonly ShopMinion[]> {
@@ -286,30 +266,6 @@ export class AppUiStoreFacadeService {
 		return this.store.send(event);
 	}
 
-	private debugObservable<T>(obs: Observable<T>) {
-		if (process.env.NODE_ENV === 'production') {
-			return obs;
-		}
-		obs.subscribe = this.overrideSubscribe(obs, obs.subscribe, new Error(), this);
-		return obs;
-	}
-
-	private overrideSubscribe<T>(obs: Observable<T>, oldSubscribe, error, obj) {
-		return function () {
-			// const sub = arguments[0];
-			// sub['debugStack'] = error.stack.split('\n').filter((line) => line.includes('main.js'));
-			// this.debugCall('hopArgs', arguments, sub);
-			// obs['initStack'] = error.stack.split('\n');
-			const result: Subscription = oldSubscribe.apply(obs, arguments);
-			// result['stack'] = error.stack;
-			// this.debugCall('override subscribe', result, obs, arguments, error);
-			// result['hop'] = error.stack.split('\n');
-			// result['hopContext'] = obj;
-			// result['hopArgs'] = arguments;
-			return result;
-		};
-	}
-
 	private async waitForStoreInstance(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			const dbWait = () => {
@@ -321,10 +277,5 @@ export class AppUiStoreFacadeService {
 			};
 			dbWait();
 		});
-	}
-
-	private debugCall(...args) {
-		return;
-		console.debug('[store-facade]', args, new Error());
 	}
 }
