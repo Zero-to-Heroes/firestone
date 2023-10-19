@@ -584,7 +584,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private async initDuelsTopDecks() {
 		while (!this.duelsTopDecks) {
-			this.duelsTopDecks = (this.ow.getMainWindow().duelsTopDeckService as DuelsTopDeckService).topDeck$;
+			this.duelsTopDecks = (this.ow.getMainWindow().duelsTopDeckService as DuelsTopDeckService).topDeck$$;
 			await sleep(50);
 		}
 	}

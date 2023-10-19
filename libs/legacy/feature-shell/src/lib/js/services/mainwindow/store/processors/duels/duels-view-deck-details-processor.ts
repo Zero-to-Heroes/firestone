@@ -22,7 +22,7 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const topDecks = this.topDecks.replaySubject.getValue();
+		const topDecks = await this.topDecks.topDeck$$.getValueWithInit();
 		const deck = topDecks
 			?.map((grouped) => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])

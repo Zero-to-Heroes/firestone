@@ -2,15 +2,13 @@
 import { Injectable } from '@angular/core';
 import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
-import { groupByFunction } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
-	Observable,
 	combineLatest,
 	concat,
 	debounceTime,
-	defer,
 	distinctUntilChanged,
 	filter,
 	map,
@@ -28,11 +26,7 @@ const DUELS_GLOBAL_STATS_DECKS =
 
 @Injectable()
 export class DuelsTopDeckService {
-	public topDeck$: Observable<readonly DuelsGroupedDecks[]>;
-
-	// TODO: remove this and move to full reactive
-	/** @deprecated */
-	public replaySubject = new BehaviorSubject<readonly DuelsGroupedDecks[]>([]);
+	public topDeck$$ = new SubscriberAwareBehaviorSubject<readonly DuelsGroupedDecks[]>([]);
 
 	private remoteTopDeckStats$$: BehaviorSubject<ExtendedDuelsStatDecks | null> =
 		new BehaviorSubject<ExtendedDuelsStatDecks | null>(null);
@@ -50,39 +44,37 @@ export class DuelsTopDeckService {
 
 	private async init() {
 		console.log('[duels-top-deck] init');
-		const sets$ = this.setsManager.sets$$.asObservable();
-		const debouncedSets$ = concat(sets$.pipe(take(1)), sets$.pipe(skip(1), debounceTime(2000))).pipe(
-			distinctUntilChanged(),
-			// tap((sets) => console.log('[duels-top-deck] received sets', sets)),
-		);
-
-		this.topDeck$ = defer(() => {
-			// console.debug('[duels-top-deck] init top deck defer');
-			const result = combineLatest([this.remoteTopDeckStats$$, debouncedSets$]).pipe(
-				// tap((data) => console.debug('[duels-top-deck] received data', data, this.loadingInitialData)),
-				filter(([remoteTopDeckStats, sets]) => sets?.length > 0),
-				debounceTime(100),
-				map(([remoteTopDeckStats, sets]) => {
-					if (this.loadingInitialData) {
-						return [];
-					}
-
-					if (remoteTopDeckStats == null) {
-						// console.debug('[duels-top-deck] no remote top deck stats, loading initial data');
-						this.loadInitialData();
-						return [];
-					}
-
-					const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
-						remoteTopDeckStats.decks ?? [],
-						sets,
-					);
-					console.debug('[duels-top-deck] built top deck stats', topDecks);
-					return topDecks;
-				}),
+		this.topDeck$$.onFirstSubscribe(() => {
+			const sets$ = this.setsManager.sets$$.asObservable();
+			const debouncedSets$ = concat(sets$.pipe(take(1)), sets$.pipe(skip(1), debounceTime(2000))).pipe(
+				distinctUntilChanged(),
 			);
-			result.subscribe((data) => this.replaySubject.next(data));
-			return result;
+
+			combineLatest([this.remoteTopDeckStats$$, debouncedSets$])
+				.pipe(
+					filter(([remoteTopDeckStats, sets]) => sets?.length > 0),
+					debounceTime(100),
+					map(([remoteTopDeckStats, sets]) => {
+						console.debug('[duels-top-deck] request for building new decks', remoteTopDeckStats, sets);
+						if (this.loadingInitialData) {
+							return [];
+						}
+
+						if (remoteTopDeckStats == null) {
+							// console.debug('[duels-top-deck] no remote top deck stats, loading initial data');
+							this.loadInitialData();
+							return [];
+						}
+
+						const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
+							remoteTopDeckStats.decks ?? [],
+							sets,
+						);
+						console.debug('[duels-top-deck] built top deck stats', topDecks);
+						return topDecks;
+					}),
+				)
+				.subscribe((topDecks) => this.topDeck$$.next(topDecks));
 		});
 	}
 
