@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
@@ -22,7 +22,6 @@ export class FirestoneAchievementsChallengeService {
 	public challengeModules: readonly Challenge[] = [];
 
 	private spectating: boolean;
-
 	private processingQueue = new ProcessingQueue<InternalEvent>(
 		(eventQueue) => this.processQueue(eventQueue),
 		1000,
@@ -44,22 +43,32 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async init() {
-		console.log('[firestone-achievements] init');
 		await this.store.initComplete();
-
-		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			this.handleEvent(gameEvent);
-			if (gameEvent.type === GameEvent.SPECTATING) {
-				this.spectating = gameEvent.additionalData.spectating;
-			}
-		});
-		await this.initChallenges();
-		this.gameStatus.onGameExit(() => {
-			// Because Firestone can stay open between two game sessions, and if
-			// the game was forced-closed, some achievements didn't have the opportunity
-			// to reset, so we're forcing it here
-			this.challengeModules.forEach((c) => c.resetState());
-		});
+		this.store
+			.listenPrefs$(
+				(prefs) => prefs.achievementsFullEnabled,
+				(prefs) => prefs.achievementsEnabled2,
+			)
+			.pipe(
+				filter(([full, firestoneAchievements]) => full && firestoneAchievements),
+				take(1),
+			)
+			.subscribe(async () => {
+				console.log('[firestone-achievements] init');
+				this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+					this.handleEvent(gameEvent);
+					if (gameEvent.type === GameEvent.SPECTATING) {
+						this.spectating = gameEvent.additionalData.spectating;
+					}
+				});
+				await this.initChallenges();
+				this.gameStatus.onGameExit(() => {
+					// Because Firestone can stay open between two game sessions, and if
+					// the game was forced-closed, some achievements didn't have the opportunity
+					// to reset, so we're forcing it here
+					this.challengeModules.forEach((c) => c.resetState());
+				});
+			});
 	}
 
 	private async initChallenges() {

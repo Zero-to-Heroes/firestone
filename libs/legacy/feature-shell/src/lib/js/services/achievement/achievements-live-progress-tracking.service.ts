@@ -13,7 +13,6 @@ import { buildAchievementHierarchy } from './achievement-utils';
 import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
 import { AchievementsStateManagerService } from './achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
-import { FirestoneAchievementsChallengeService } from './firestone-achievements-challenges.service';
 
 @Injectable()
 export class AchievementsLiveProgressTrackingService {
@@ -34,7 +33,6 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly stateManager: AchievementsStateManagerService,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,
-		private readonly firestoneAchievements: FirestoneAchievementsChallengeService,
 	) {
 		this.init();
 		window['achievementsMonitor'] = this;
