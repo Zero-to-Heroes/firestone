@@ -48,7 +48,9 @@ export class MercenariesOutOfCombatService {
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, currentScene);
 			}
-			this.internalStore$.next(state);
+			if (state !== this.internalStore$.value) {
+				this.internalStore$.next(state);
+			}
 		} catch (e) {
 			console.error('[mercenaries-ooc-store] could not process event', event.key, event, e);
 		}
