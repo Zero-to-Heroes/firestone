@@ -33,7 +33,6 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	private async init() {
-		console.log('[constructed-meta-decks] init');
 		await this.store.initComplete();
 
 		this.constructedMetaDecks$$.onFirstSubscribe(async () => {
