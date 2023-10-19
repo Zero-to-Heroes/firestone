@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { filter, take } from 'rxjs';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { ChoosingOptionsGameEvent } from '../models/mainwindow/game-events/choosing-options-game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
@@ -45,77 +46,84 @@ export class GameEvents {
 	}
 
 	async init() {
-		console.log('[game-events] init game events monitor');
-		this.plugin = await this.gameEventsPlugin.get();
-		if (this.plugin) {
-			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
-				console.log('[game-events] received global event', first, second);
-			});
-			this.plugin.onGameEvent.addListener((gameEvent) => {
-				try {
-					const events: any | readonly any[] = JSON.parse(gameEvent);
-					if (!!(events as readonly any[]).length) {
-						for (const event of events as readonly any[]) {
-							this.dispatchGameEvent(event);
+		this.gameStatus.inGame$$
+			.pipe(
+				filter((inGame) => inGame),
+				take(1),
+			)
+			.subscribe(async () => {
+				console.log('[game-events] init game events monitor');
+				this.plugin = await this.gameEventsPlugin.get();
+				if (this.plugin) {
+					this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
+						console.log('[game-events] received global event', first, second);
+					});
+					this.plugin.onGameEvent.addListener((gameEvent) => {
+						try {
+							const events: any | readonly any[] = JSON.parse(gameEvent);
+							if (!!(events as readonly any[]).length) {
+								for (const event of events as readonly any[]) {
+									this.dispatchGameEvent(event);
+								}
+							} else {
+								this.dispatchGameEvent(events);
+							}
+						} catch (e) {
+							console.error('Error while parsing game event', gameEvent, e);
 						}
-					} else {
-						this.dispatchGameEvent(events);
-					}
-				} catch (e) {
-					console.error('Error while parsing game event', gameEvent, e);
+					});
+					this.plugin.initRealtimeLogConversion(() => {
+						console.log('[game-events] real-time log processing ready to go');
+					});
 				}
-			});
-			this.plugin.initRealtimeLogConversion(() => {
-				console.log('[game-events] real-time log processing ready to go');
-			});
-		}
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-			const changes: MemoryUpdate = event.data[0];
-			if (changes.CurrentScene) {
-				try {
-					console.log('emitting new scene event', changes.CurrentScene);
+				this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+					const changes: MemoryUpdate = event.data[0];
+					if (changes.CurrentScene) {
+						try {
+							console.log('emitting new scene event', changes.CurrentScene);
+							this.gameEventsEmitter.allEvents.next(
+								Object.assign(new GameEvent(), {
+									type: GameEvent.SCENE_CHANGED_MINDVISION,
+									additionalData: { scene: changes.CurrentScene },
+								} as GameEvent),
+							);
+						} catch (e) {
+							console.warn('missing scene enum', changes.CurrentScene);
+						}
+					}
+				});
+				this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
-							type: GameEvent.SCENE_CHANGED_MINDVISION,
-							additionalData: { scene: changes.CurrentScene },
+							type: GameEvent.GAME_STATS_UPDATED,
+							additionalData: { gameStats: event.data[0] },
 						} as GameEvent),
 					);
-				} catch (e) {
-					console.warn('missing scene enum', changes.CurrentScene);
-				}
-			}
-		});
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
-			this.gameEventsEmitter.allEvents.next(
-				Object.assign(new GameEvent(), {
-					type: GameEvent.GAME_STATS_UPDATED,
-					additionalData: { gameStats: event.data[0] },
-				} as GameEvent),
-			);
-		});
-		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
-			const prefs = await this.prefs.getPreferences();
-			console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
-			this.gameEventsEmitter.allEvents.next(
-				Object.assign(new GameEvent(), {
-					type: GameEvent.GLOBAL_STATS_UPDATED,
-					additionalData: { stats: event.data[0] },
-				} as GameEvent),
-			);
-		});
-		// This is here so that, if we quit the game while spectating, we don't go back
-		// in spectator mode when starting the game again
-		// However, this means that the "spectate" event is also sent while we're reconnecting
-		// which resets all the states
-		// this.gameStatus.onGameExit(() => {
-		// Use game start, so we have a chance to spot reconnects
-		this.gameStatus.onGameStart(() => {
-			// If we're current spectating, stop it
-			if (this.gameState.state?.spectating) {
-				console.log('[game-events] leaving game while spectating, emitting End Spectator Mode event');
-				this.processingQueue.enqueue('End Spectator Mode');
-			}
-		});
+				});
+				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
+					const prefs = await this.prefs.getPreferences();
+					console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
+					this.gameEventsEmitter.allEvents.next(
+						Object.assign(new GameEvent(), {
+							type: GameEvent.GLOBAL_STATS_UPDATED,
+							additionalData: { stats: event.data[0] },
+						} as GameEvent),
+					);
+				});
+				// This is here so that, if we quit the game while spectating, we don't go back
+				// in spectator mode when starting the game again
+				// However, this means that the "spectate" event is also sent while we're reconnecting
+				// which resets all the states
+				// this.gameStatus.onGameExit(() => {
+				// Use game start, so we have a chance to spot reconnects
+				this.gameStatus.onGameStart(() => {
+					// If we're current spectating, stop it
+					if (this.gameState.state?.spectating) {
+						console.log('[game-events] leaving game while spectating, emitting End Spectator Mode event');
+						this.processingQueue.enqueue('End Spectator Mode');
+					}
+				});
+			});
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
