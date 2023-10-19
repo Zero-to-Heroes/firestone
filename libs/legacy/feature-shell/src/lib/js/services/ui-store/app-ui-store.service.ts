@@ -335,8 +335,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public sets$(): Observable<readonly Set[]> {
-		this.debugCall('sets$');
-		return this.sets.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.sets;
 	}
 
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
@@ -487,7 +486,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initSets() {
-		this.sets = (this.ow.getMainWindow().setsManager as SetsManagerService).sets$$.pipe(shareReplay(1));
+		this.sets = (this.ow.getMainWindow().setsManager as SetsManagerService).sets$$;
 	}
 
 	private initBgHeroSkins() {

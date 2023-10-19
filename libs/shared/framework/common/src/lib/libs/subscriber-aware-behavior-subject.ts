@@ -4,6 +4,9 @@ import { sleep } from './utils';
 export class SubscriberAwareBehaviorSubject<T> extends BehaviorSubject<T> {
 	listeners: (() => void | PromiseLike<void>)[] = [];
 
+	/**
+	 * @deprecated use #getValueWthInit() instead to avoid accessing a non-initialized value
+	 * */
 	override getValue(): T {
 		// console.debug('getting value', new Error().stack);
 		this.triggerListeners();

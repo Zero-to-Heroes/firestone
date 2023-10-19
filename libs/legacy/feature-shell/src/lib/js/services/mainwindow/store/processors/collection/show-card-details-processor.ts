@@ -16,7 +16,8 @@ export class ShowCardDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedSet: Set = this.pickSet(this.setsManager.sets$$.getValue(), event.cardId);
+		const allSets = await this.setsManager.sets$$.getValueWithInit();
+		const selectedSet: Set = this.pickSet(allSets, event.cardId);
 		const referenceCard = this.cards.getCard(event.cardId);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'card-details',

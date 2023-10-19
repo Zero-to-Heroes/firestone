@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, debounceTime } from 'rxjs';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { debounceTime } from 'rxjs';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { CollectionManager } from './collection-manager.service';
@@ -7,7 +8,7 @@ import { SetsService } from './sets-service.service';
 
 @Injectable()
 export class SetsManagerService {
-	public sets$$ = new BehaviorSubject<readonly Set[]>([]);
+	public sets$$ = new SubscriberAwareBehaviorSubject<readonly Set[]>([]);
 
 	private allSets: readonly Set[];
 
@@ -17,13 +18,13 @@ export class SetsManagerService {
 	}
 
 	private async init() {
-		console.log('[sets-manager] init');
-		this.allSets = this.setsService.getAllSets();
-
-		this.collectionManager.collection$$.pipe(debounceTime(1000)).subscribe((collection) => {
-			const newSets = this.allSets.map((set) => this.buildSet(collection, set));
-			console.debug('[sets-manager] new sets', collection.length, newSets);
-			this.sets$$.next(newSets);
+		this.sets$$.onFirstSubscribe(() => {
+			this.allSets = this.setsService.getAllSets();
+			this.collectionManager.collection$$.pipe(debounceTime(1000)).subscribe((collection) => {
+				const newSets = this.allSets.map((set) => this.buildSet(collection, set));
+				console.debug('[sets-manager] new sets', collection.length, newSets);
+				this.sets$$.next(newSets);
+			});
 		});
 	}
 
