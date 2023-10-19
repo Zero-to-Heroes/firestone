@@ -5,7 +5,6 @@ export class FeatureFlags {
 	public static readonly ENABLE_DUELS_DECK_BUILDER_BUCKETS = true;
 	public static readonly ENABLE_DECK_VERSIONS = true;
 	public static readonly ENABLE_MAILBOX_TAB = true;
-	public static readonly ACHIEVEMENT_PINS = true;
 	public static readonly APP_TIPS = true;
 	public static readonly ENABLE_BGS_QUESTS = true;
 

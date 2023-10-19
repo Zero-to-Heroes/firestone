@@ -231,7 +231,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
-		return this.debugObservable(this.store.achievementsProgressTracking$());
+		return this.store.achievementsProgressTracking$();
 	}
 
 	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {

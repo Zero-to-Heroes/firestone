@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, take } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
-import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { GameStatusService } from '../game-status.service';
 import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -16,7 +17,9 @@ import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.se
 
 @Injectable()
 export class AchievementsLiveProgressTrackingService {
-	public achievementsProgressTracking$$ = new BehaviorSubject<readonly AchievementsProgressTracking[]>([]);
+	public achievementsProgressTracking$$ = new SubscriberAwareBehaviorSubject<readonly AchievementsProgressTracking[]>(
+		[],
+	);
 
 	private achievementQuotas: { [achievementId: number]: number };
 	private refAchievements: readonly HsRefAchievement[];
@@ -33,80 +36,93 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly stateManager: AchievementsStateManagerService,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 		window['achievementsMonitor'] = this;
 	}
 
 	private async init() {
-		if (!FeatureFlags.ACHIEVEMENT_PINS) {
-			return;
-		}
-
-		console.log('[achievements-live-progress-tracking] init');
 		await this.store.initComplete();
-		await this.initQuotas();
-		await this.initAchievementsOnGameStart();
 
-		const achievementsOnGameStart$ = this.achievementsOnGameStart$$.pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
-		);
-		const currentAchievementProgress$ = this.currentAchievementsProgress$$.pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
-		);
+		this.achievementsProgressTracking$$.onFirstSubscribe(async () => {
+			combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.showLottery)])
+				.pipe(
+					filter(([inGame, [showLottery]]) => inGame && showLottery),
+					take(1),
+				)
+				.subscribe(async () => {
+					console.log('[achievements-live-progress-tracking] init');
+					await this.initQuotas();
+					await this.initAchievementsOnGameStart();
+					const achievementsOnGameStart$ = this.achievementsOnGameStart$$.pipe(
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					);
+					const currentAchievementProgress$ = this.currentAchievementsProgress$$.pipe(
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					);
+					// TODO: refresh this when an achievement gets completed
+					combineLatest([
+						this.store.listenPrefs$((prefs) => prefs.pinnedAchievementIds),
+						achievementsOnGameStart$,
+					])
+						.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
+						.subscribe(async ([[pinnedAchievementIds], achievementsOnGameStart]) => {
+							console.debug(
+								'[achievements-monitor] pinnedAchievementIds',
+								pinnedAchievementIds,
+								achievementsOnGameStart,
+							);
+							const mappedAchiements: readonly { id: number; achievement: HsRefAchievement }[] =
+								pinnedAchievementIds
+									.map((id) => {
+										const achievementToTrack = this.findFirstUncompletedStep(
+											id,
+											this.refAchievements,
+											achievementsOnGameStart,
+										);
+										return { id: id, achievement: achievementToTrack };
+									})
+									.filter((a) => !!a.id && !isNaN(a.id));
+							const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
+							console.debug(
+								'[achievements-monitor] completedAchievements',
+								completedAchievements,
+								mappedAchiements,
+								pinnedAchievementIds,
+								achievementsOnGameStart,
+							);
+							this.store.send(
+								new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)),
+							);
 
-		// TODO: refresh this when an achievement gets completed
-		combineLatest([this.store.listenPrefs$((prefs) => prefs.pinnedAchievementIds), achievementsOnGameStart$])
-			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
-			.subscribe(async ([[pinnedAchievementIds], achievementsOnGameStart]) => {
-				console.debug(
-					'[achievements-monitor] pinnedAchievementIds',
-					pinnedAchievementIds,
-					achievementsOnGameStart,
-				);
-				const mappedAchiements: readonly { id: number; achievement: HsRefAchievement }[] = pinnedAchievementIds
-					.map((id) => {
-						const achievementToTrack = this.findFirstUncompletedStep(
-							id,
-							this.refAchievements,
-							achievementsOnGameStart,
-						);
-						return { id: id, achievement: achievementToTrack };
-					})
-					.filter((a) => !!a.id && !isNaN(a.id));
-				const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
-				console.debug(
-					'[achievements-monitor] completedAchievements',
-					completedAchievements,
-					mappedAchiements,
-					pinnedAchievementIds,
-					achievementsOnGameStart,
-				);
-				this.store.send(new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)));
+							// When pinning an achievement, we get the first step of the achievements chain
+							// We actually want to pin the most recent uncompleted step
+							this.achievementIdsToTrack$$.next(
+								mappedAchiements.map((a) => a.achievement?.id).filter((id) => !!id),
+							);
+						});
 
-				// When pinning an achievement, we get the first step of the achievements chain
-				// We actually want to pin the most recent uncompleted step
-				this.achievementIdsToTrack$$.next(mappedAchiements.map((a) => a.achievement?.id).filter((id) => !!id));
-			});
+					combineLatest([currentAchievementProgress$, achievementsOnGameStart$, this.achievementIdsToTrack$$])
+						// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
+						.subscribe(([progress, achievementsOnGameStart, achievementIdsToTrack]) => {
+							const finalAchievements = this.buildAchievementsProgressTracking(
+								achievementsOnGameStart,
+								progress,
+								achievementIdsToTrack,
+							);
+							console.debug(
+								'[achievements-monitor] emitting achievements progress',
+								finalAchievements,
+								achievementsOnGameStart,
+								progress,
+							);
+							this.achievementsProgressTracking$$.next(finalAchievements);
+						});
 
-		combineLatest([currentAchievementProgress$, achievementsOnGameStart$, this.achievementIdsToTrack$$])
-			// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-			.subscribe(([progress, achievementsOnGameStart, achievementIdsToTrack]) => {
-				const finalAchievements = this.buildAchievementsProgressTracking(
-					achievementsOnGameStart,
-					progress,
-					achievementIdsToTrack,
-				);
-				console.debug(
-					'[achievements-monitor] emitting achievements progress',
-					finalAchievements,
-					achievementsOnGameStart,
-					progress,
-				);
-				this.achievementsProgressTracking$$.next(finalAchievements);
-			});
-
-		setInterval(() => this.detectAchievementsProgress(), 1500);
+					setInterval(() => this.detectAchievementsProgress(), 1500);
+				});
+		});
 	}
 
 	private findFirstUncompletedStep(

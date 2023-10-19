@@ -369,7 +369,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
-		return this.achievementsProgressTracking.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.achievementsProgressTracking;
 	}
 
 	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {
@@ -534,7 +534,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private initAchievementsProgressTracking() {
 		this.achievementsProgressTracking = (
 			this.ow.getMainWindow().achievementsMonitor as AchievementsLiveProgressTrackingService
-		).achievementsProgressTracking$$.pipe(shareReplay(1));
+		).achievementsProgressTracking$$;
 	}
 
 	private initProfileClassProgress() {

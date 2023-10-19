@@ -5,7 +5,6 @@ import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
-import { FeatureFlags } from '../../services/feature-flags';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -35,7 +34,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					</div>
 				</div>
 			</div>
-			<div class="buttons" *ngIf="achievementPins">
+			<div class="buttons">
 				<div
 					*ngIf="canPin$ | async"
 					class="pin-button"
@@ -56,8 +55,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	achievementPins = FeatureFlags.ACHIEVEMENT_PINS;
-
 	achievement$: Observable<VisualAchievement>;
 	achievementStatus$: Observable<AchievementStatus>;
 	achievementText$: Observable<string>;
