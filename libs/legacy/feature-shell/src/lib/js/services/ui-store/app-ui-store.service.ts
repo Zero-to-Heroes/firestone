@@ -180,65 +180,65 @@ export class AppUiStoreService extends Store<Preferences> {
 	public listen$<S extends Selector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
-		this.debugCall('listen$');
-		return combineLatest(this.mainStore, this.prefs).pipe(
+		return combineLatest([this.mainStore, this.prefs]).pipe(
 			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs?.preferences),
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
 	}
 
 	public listenPrefs$<S extends PrefsSelector<Preferences, any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
-		this.debugCall('listenPrefs$');
 		return this.prefs.pipe(
 			filter((prefs) => !!prefs?.preferences),
 			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
 	}
 
 	public listenModsConfig$<S extends ModsConfigSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends ModsConfigSelector<infer T> ? T : never }> {
-		this.debugCall('listenModsConfigs$');
 		return this.modsConfig.pipe(
 			map((conf) => selectors.map((selector) => selector(conf))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends ModsConfigSelector<infer T> ? T : never }>;
 	}
 
 	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenNativeGameState$');
 		return this.gameNativeState.pipe(
 			filter((state) => !!state),
 			map((state) => selectors.map((selector) => selector(state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }>;
 	}
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenDeckState$');
 		return this.deckStore.pipe(
 			filter((gameState) => !!gameState),
 			map((gameState) => selectors.map((selector) => selector(gameState.state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }>;
 	}
 
 	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenBattlegrounds$');
-		const result = combineLatest(this.battlegroundsStore, this.prefs).pipe(
+		const result = combineLatest([this.battlegroundsStore, this.prefs]).pipe(
 			filter(([state, prefs]) => !!state && !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
 		return result;
 	}
@@ -246,39 +246,38 @@ export class AppUiStoreService extends Store<Preferences> {
 	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenMercenaries$');
-		return combineLatest(this.mercenariesStore, this.prefs).pipe(
+		return combineLatest([this.mercenariesStore, this.prefs]).pipe(
 			filter(([state, prefs]) => !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }>;
 	}
 
 	public listenMercenariesOutOfCombat$<S extends MercenariesOutOfCombatStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }> {
-		this.debugCall('listenMercenariesOutOfCombat$');
-		return combineLatest(this.mercenariesOutOfCombatStore, this.prefs).pipe(
+		return combineLatest([this.mercenariesOutOfCombatStore, this.prefs]).pipe(
 			filter(([state, prefs]) => !!state && !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }>;
 	}
 
 	public listenMercenariesHighlights$<S extends MercenariesHighlightsSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
-		this.debugCall('listenMercenariesHighlights$');
-		return combineLatest(this.mercenariesSynergiesStore, this.prefs).pipe(
+		return combineLatest([this.mercenariesSynergiesStore, this.prefs]).pipe(
 			filter(([highlights, prefs]) => !!prefs?.preferences),
 			map(([highlights, prefs]) => selectors.map((selector) => selector([highlights, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }>;
 	}
 
 	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
-		this.debugCall('bgHeroStats$');
-		return this.bgsMetaStatsHero.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.bgsMetaStatsHero;
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
@@ -286,8 +285,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
-		this.debugCall('gameStats$');
-		return this.gameStats.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.gameStats;
 	}
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
@@ -303,35 +301,31 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public mails$(): Observable<MailState> {
-		this.debugCall('mails$');
-		return this.mails.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.mails;
 	}
 
 	public shouldTrackLottery$(): Observable<boolean> {
-		return this.shouldTrackLottery.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.shouldTrackLottery;
 	}
 
 	public shouldShowLotteryOverlay$(): Observable<boolean> {
-		return this.shouldShowLotteryOverlay.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.shouldShowLotteryOverlay;
 	}
 
 	public cardBacks$(): Observable<readonly CardBack[]> {
-		return this.cardBacks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.cardBacks;
 	}
 
 	public collection$(): Observable<readonly Card[]> {
-		this.debugCall('collection$');
-		return this.collection.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.collection;
 	}
 
 	public coins$(): Observable<readonly Coin[]> {
-		this.debugCall('coins$');
-		return this.coins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.coins;
 	}
 
 	public bgHeroSkins$(): Observable<readonly number[]> {
-		this.debugCall('bgHeroSkins$');
-		return this.bgHeroSkins.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.bgHeroSkins;
 	}
 
 	public sets$(): Observable<readonly Set[]> {
@@ -339,12 +333,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
-		return this.allTimeBoosters.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.allTimeBoosters;
 	}
 
 	public tavernBrawl$(): Observable<TavernBrawlState> {
-		this.debugCall('tavernBrawl$');
-		return this.tavernBrawl.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.tavernBrawl;
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {
@@ -352,20 +345,19 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public showAds$(): Observable<boolean> {
-		this.debugCall('shouldShowAds$');
-		return this.ads.showAds$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.ads.showAds$$;
 	}
 
 	public enablePremiumFeatures$(): Observable<boolean> {
-		return this.ads.enablePremiumFeatures$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.ads.enablePremiumFeatures$$;
 	}
 
 	public hasPremiumSub$(): Observable<boolean> {
-		return this.ads.hasPremiumSub$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.ads.hasPremiumSub$$;
 	}
 
 	public lottery$(): Observable<LotteryState> {
-		return this.lottery.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.lottery;
 	}
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
@@ -397,7 +389,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public cardHistory$(): Observable<readonly CardHistory[]> {
-		return this.cardHistory.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.cardHistory;
 	}
 
 	public highlightedBgsMinions$(): Observable<readonly ShopMinion[]> {
@@ -473,16 +465,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initTavernBrawl() {
-		this.tavernBrawl = (this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService).tavernBrawl$.pipe(
-			shareReplay(1),
-		);
-		// tavernBrawl.subscribe(this.tavernBrawl);
+		this.tavernBrawl = (this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService).tavernBrawl$;
 	}
 
 	private initAllTimeBoosters() {
-		this.allTimeBoosters = (this.ow.getMainWindow().collectionManager as CollectionManager).allTimeBoosters$$.pipe(
-			shareReplay(1),
-		);
+		this.allTimeBoosters = (this.ow.getMainWindow().collectionManager as CollectionManager).allTimeBoosters$$;
 	}
 
 	private initSets() {
@@ -490,45 +477,39 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initBgHeroSkins() {
-		this.bgHeroSkins = (this.ow.getMainWindow().collectionManager as CollectionManager).bgHeroSkins$$.pipe(
-			shareReplay(1),
-		);
+		this.bgHeroSkins = (this.ow.getMainWindow().collectionManager as CollectionManager).bgHeroSkins$$;
 	}
 
 	private initCollection() {
-		this.collection = (this.ow.getMainWindow().collectionManager as CollectionManager).collection$$.pipe(
-			shareReplay(1),
-		);
+		this.collection = (this.ow.getMainWindow().collectionManager as CollectionManager).collection$$;
 	}
 
 	private initCoins() {
-		this.coins = (this.ow.getMainWindow().collectionManager as CollectionManager).coins$$.pipe(shareReplay(1));
+		this.coins = (this.ow.getMainWindow().collectionManager as CollectionManager).coins$$;
 	}
 
 	private initCardBacks() {
-		this.cardBacks = (this.ow.getMainWindow().collectionManager as CollectionManager).cardBacks$$.pipe(
-			shareReplay(1),
-		);
+		this.cardBacks = (this.ow.getMainWindow().collectionManager as CollectionManager).cardBacks$$;
 	}
 
 	private initMails() {
-		this.mails = (this.ow.getMainWindow().mailsProvider as MailsService).mails$.pipe(shareReplay(1));
+		this.mails = (this.ow.getMainWindow().mailsProvider as MailsService).mails$;
 	}
 
 	private initShouldTrackLottery() {
 		this.shouldTrackLottery = (
 			this.ow.getMainWindow().lotteryWidgetController as LotteryWidgetControllerService
-		).shouldTrack$$.pipe(shareReplay(1));
+		).shouldTrack$$;
 	}
 
 	private initShouldShowLotteryOverlay() {
 		this.shouldShowLotteryOverlay = (
 			this.ow.getMainWindow().lotteryWidgetController as LotteryWidgetControllerService
-		).shouldShowOverlay$$.pipe(shareReplay(1));
+		).shouldShowOverlay$$;
 	}
 
 	private initLottery() {
-		this.lottery = (this.ow.getMainWindow().lotteryProvider as LotteryService).lottery$$.pipe(shareReplay(1));
+		this.lottery = (this.ow.getMainWindow().lotteryProvider as LotteryService).lottery$$;
 	}
 
 	private initAchievementsProgressTracking() {
@@ -570,12 +551,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initCardsHistory() {
-		this.cardHistory = (
-			this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService
-		).cardHistory$$.pipe(
-			// distinctUntilChanged((a, b) => a == b || a?.[0]?.creationTimestamp === b?.[0]?.creationTimestamp),
-			shareReplay(1),
-		);
+		this.cardHistory = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).cardHistory$$;
 	}
 
 	private initDuelsDecks() {
@@ -598,9 +574,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initGameStats() {
-		this.gameStats = (this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService).gameStats$.pipe(
-			shareReplay(1),
-		);
+		this.gameStats = (this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService).gameStats$;
 	}
 
 	private initHighlightedBgsMinions() {
@@ -783,19 +757,12 @@ export class AppUiStoreService extends Store<Preferences> {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 
-		const enhancedStats$ = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
+		this.bgsMetaStatsHero = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
 			tap((info) => console.debug('[bgs-3] rebuilding meta hero stats 3', info)),
 			map(([stats, playerBgGames]) => stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		);
-
-		this.bgsMetaStatsHero = enhancedStats$;
-	}
-
-	private debugCall(...args) {
-		return;
-		console.debug('[store]', args, new Error());
 	}
 }
 
