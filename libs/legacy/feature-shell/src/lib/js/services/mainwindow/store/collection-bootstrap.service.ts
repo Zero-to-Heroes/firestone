@@ -35,12 +35,12 @@ export class CollectionBootstrapService {
 		this.packStats$$.onFirstSubscribe(() => {
 			console.debug('[collection-bootstrap] first subscription to pack stats, initializing');
 			this.initCollectionState();
-		});
 
-		this.packStats$$.pipe(filter((packStats) => !!packStats?.length)).subscribe((packStats) => {
-			const history = this.buildHistory(packStats);
-			console.debug('emitting new card history', history);
-			this.cardHistory$$.next(history);
+			this.packStats$$.pipe(filter((packStats) => !!packStats?.length)).subscribe((packStats) => {
+				const history = this.buildHistory(packStats);
+				console.debug('emitting new card history', history);
+				this.cardHistory$$.next(history);
+			});
 		});
 	}
 

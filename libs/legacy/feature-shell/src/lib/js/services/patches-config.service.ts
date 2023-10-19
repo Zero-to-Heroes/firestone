@@ -8,9 +8,7 @@ const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/pat
 export class PatchesConfigService {
 	private patchesConfig: PatchesConfig;
 
-	constructor(private readonly http: HttpClient) {
-		this.init();
-	}
+	constructor(private readonly http: HttpClient) {}
 
 	public async getConf(): Promise<PatchesConfig> {
 		await this.init();
@@ -21,7 +19,6 @@ export class PatchesConfigService {
 		if (this.patchesConfig) {
 			return;
 		}
-		console.log('[patches-config] init');
 		this.patchesConfig = await this.getPatchesConfig();
 		console.log('[patches-config] loaded patches config');
 	}

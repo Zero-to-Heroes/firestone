@@ -2,9 +2,10 @@
 import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
@@ -19,7 +20,7 @@ import { deepEqual, groupByFunction, removeFromArray, sumOnArray } from '../../u
 
 @Injectable()
 export class DecksProviderService {
-	public decks$ = new BehaviorSubject<readonly DeckSummary[]>(null);
+	public decks$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[]>(null);
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
 		window['decksProvider'] = this;
@@ -27,71 +28,59 @@ export class DecksProviderService {
 	}
 
 	private async init() {
-		console.log('[decks-provider] init');
 		await this.store.initComplete();
 
-		combineLatest(
-			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav]) => main.decktracker.filters,
-				([main, nav]) => main.decktracker.patch,
-			),
-			this.store.listenPrefs$(
-				(prefs) => prefs.constructedPersonalAdditionalDecks,
-				(prefs) => prefs.desktopDeckDeletes,
-				(prefs) => prefs.desktopDeckHiddenDeckCodes,
-				(prefs) => prefs.constructedDeckVersions,
-				(prefs) => prefs.desktopDeckStatsReset,
-				(prefs) => prefs.desktopDeckShowHiddenDecks,
-			),
-		)
-			.pipe(
-				filter(
-					([
-						stats,
-						[filters, patch],
-						[
-							constructedPersonalAdditionalDecks,
-							desktopDeckDeletes,
-							desktopDeckHiddenDeckCodes,
-							constructedDeckVersions,
-							desktopDeckStatsReset,
-							desktopDeckShowHiddenDecks,
-						],
-					]) => !!stats?.length && !!patch,
+		this.decks$.onFirstSubscribe(() => {
+			combineLatest([
+				this.store.gameStats$(),
+				this.store.listen$(
+					([main, nav]) => main.decktracker.filters,
+					([main, nav]) => main.decktracker.patch,
 				),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				map(
-					([
-						stats,
-						[filters, patch],
-						[
-							constructedPersonalAdditionalDecks,
-							desktopDeckDeletes,
-							desktopDeckHiddenDeckCodes,
-							constructedDeckVersions,
-							desktopDeckStatsReset,
-							desktopDeckShowHiddenDecks,
-						],
-					]) => {
-						return this.buildState(
+				this.store.listenPrefs$(
+					(prefs) => prefs.constructedPersonalAdditionalDecks,
+					(prefs) => prefs.desktopDeckDeletes,
+					(prefs) => prefs.desktopDeckHiddenDeckCodes,
+					(prefs) => prefs.constructedDeckVersions,
+					(prefs) => prefs.desktopDeckStatsReset,
+					(prefs) => prefs.desktopDeckShowHiddenDecks,
+				),
+			])
+				.pipe(
+					filter(([stats, [filters, patch]]) => !!stats?.length && !!patch),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					map(
+						([
 							stats,
-							filters,
-							patch,
-							constructedPersonalAdditionalDecks,
-							desktopDeckDeletes,
-							desktopDeckStatsReset,
-							desktopDeckHiddenDeckCodes,
-							constructedDeckVersions,
-							desktopDeckShowHiddenDecks,
-						);
-					},
-				),
-			)
-			.subscribe(this.decks$);
+							[filters, patch],
+							[
+								constructedPersonalAdditionalDecks,
+								desktopDeckDeletes,
+								desktopDeckHiddenDeckCodes,
+								constructedDeckVersions,
+								desktopDeckStatsReset,
+								desktopDeckShowHiddenDecks,
+							],
+						]) => {
+							return this.buildState(
+								stats,
+								filters,
+								patch,
+								constructedPersonalAdditionalDecks,
+								desktopDeckDeletes,
+								desktopDeckStatsReset,
+								desktopDeckHiddenDeckCodes,
+								constructedDeckVersions,
+								desktopDeckShowHiddenDecks,
+							);
+						},
+					),
+				)
+				.subscribe(this.decks$);
+		});
 	}
 
-	public buildState(
+	private buildState(
 		stats: readonly GameStat[],
 		filters: DeckFilters,
 		patch: PatchInfo,

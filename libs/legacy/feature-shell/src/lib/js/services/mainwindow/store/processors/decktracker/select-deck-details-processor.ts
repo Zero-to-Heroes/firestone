@@ -14,6 +14,7 @@ export class SelectDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		const decks = await this.decksProviderService.decks$.getValueWithInit();
 		return [
 			null,
 			navigationState.update({
@@ -22,7 +23,7 @@ export class SelectDeckDetailsProcessor implements Processor {
 					menuDisplayType: 'breadcrumbs',
 					selectedDeckstring: event.deckstring,
 				} as NavigationDecktracker),
-				text: this.decksProviderService.decks$.value.find(
+				text: decks.find(
 					(deck) =>
 						deck.deckstring === event.deckstring ||
 						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(event.deckstring),

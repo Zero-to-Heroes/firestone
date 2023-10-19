@@ -162,8 +162,7 @@ export class AppUiStoreFacadeService {
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {
-		this.debugCall('decks$');
-		return this.debugObservable(this.store.decks$());
+		return this.store.decks$();
 	}
 
 	public mails$(): Observable<MailState> {

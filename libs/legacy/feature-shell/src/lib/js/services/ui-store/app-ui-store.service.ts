@@ -349,8 +349,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {
-		this.debugCall('decks$');
-		return this.decks.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+		return this.decks;
 	}
 
 	public showAds$(): Observable<boolean> {
@@ -596,7 +595,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initDecks() {
-		this.decks = (this.ow.getMainWindow().decksProvider as DecksProviderService).decks$.pipe(shareReplay(1));
+		this.decks = (this.ow.getMainWindow().decksProvider as DecksProviderService).decks$;
 	}
 
 	private initGameStats() {
