@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
-import { Preferences } from '../../models/preferences';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
@@ -40,12 +38,10 @@ export class MercenariesStoreService {
 	private internalStore$ = new BehaviorSubject<MercenariesBattleState>(null);
 	private internalEventSubject$ = new BehaviorSubject<GameEvent>(null);
 
-	private preferences$: Observable<Preferences>;
 	private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
 
 	private parsers: { [eventType: string]: readonly MercenariesParser[] };
 	private eventEmitters: ((state: MercenariesBattleState) => void)[] = [];
-	private overlayHandlers: MercenariesOverlayHandler[];
 
 	constructor(
 		private readonly events: GameEventsEmitterService,
@@ -55,30 +51,29 @@ export class MercenariesStoreService {
 	) {
 		window['battleStateUpdater'] = this.internalEventSubject$;
 		window['mercenariesStore'] = this.store$;
+
+		// TODO: add a general option to disable Mercs stuff?
 		this.init();
 
 		// So that we're sure that all services have been initialized
 		setTimeout(() => {
-			this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
-				.asObservable()
-				.pipe(map((theEvent) => theEvent.preferences as Preferences));
-			this.mainWindowState$ = (
-				this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<[MainWindowState, NavigationState]>
-			).asObservable();
+			this.mainWindowState$ = this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
+				[MainWindowState, NavigationState]
+			>;
 
-			combineLatest(this.internalEventSubject$.asObservable(), this.mainWindowState$)
+			combineLatest([this.internalEventSubject$, this.mainWindowState$])
 				.pipe(
 					distinctUntilChanged(),
 					filter(([event, mainWindowState]) => !!event),
 					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState[0])),
 				)
 				.subscribe();
-			combineLatest(this.preferences$, this.internalStore$.asObservable())
+			this.internalStore$
 				.pipe(
+					skipWhile((state) => !state),
 					distinctUntilChanged(),
-					concatMap(async ([prefs, newState]) => await this.emitState(newState, prefs)),
 				)
-				.subscribe();
+				.subscribe(async (newState) => await this.emitState(newState));
 		});
 	}
 
@@ -100,23 +95,23 @@ export class MercenariesStoreService {
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, mainWindowState);
 			}
-			this.internalStore$.next(state);
+			if (state !== battleState) {
+				this.internalStore$.next(state);
+			}
 		} catch (e) {
 			console.error('[mercenaries-store] could not process event', event.type, event, e);
 		}
 	}
 
-	private async emitState(newState: MercenariesBattleState, preferences: Preferences): Promise<void> {
+	private async emitState(newState: MercenariesBattleState): Promise<void> {
 		console.debug('[mercenaries-store] emitting new state', newState);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
-		await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(newState, preferences)));
 	}
 
 	private init() {
 		this.events.allEvents.subscribe((event) => this.internalEventSubject$.next(event));
 		this.registerParser();
 		this.buildEventEmitters();
-		this.buildOverlayHandlers();
 	}
 
 	private getParsersFor(type: string, battleState: MercenariesBattleState): readonly MercenariesParser[] {
@@ -127,10 +122,6 @@ export class MercenariesStoreService {
 	private buildEventEmitters() {
 		const result = [(state) => this.store$.next(state)];
 		this.eventEmitters = result;
-	}
-
-	private buildOverlayHandlers() {
-		this.overlayHandlers = [];
 	}
 
 	private registerParser() {
