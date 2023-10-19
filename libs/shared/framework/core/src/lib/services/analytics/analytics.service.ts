@@ -1,5 +1,5 @@
 import { Injectable, Optional } from '@angular/core';
-import { sleep } from '@firestone/shared/framework/common';
+import { sleep, uuid } from '@firestone/shared/framework/common';
 import Plausible from 'plausible-tracker';
 import { OverwolfService } from '../overwolf.service';
 
@@ -20,13 +20,14 @@ export class AnalyticsService {
 				apiHost: 'https://apps.zerotoheroes.com',
 			});
 			window['plausibleInstance'] = this.plausible;
-			this.plausible.enableAutoPageviews();
-			this.plausible.enableAutoOutboundTracking();
+			this.plausible['debugId'] = uuid();
+			this.plausible.trackEvent('app-started');
+			console.log('[analytics] created new Plausible instance', currentWindow?.name);
 		} else {
 			this.plausible = this.ow.getMainWindow()['plausibleInstance'];
+			console.log('[analytics] reusing Plausible instance');
 		}
-		console.log('init plausible', currentWindow?.name, this.plausible != null);
-		console.debug('plausible details', this.plausible, window);
+		console.debug('[analytics] initialized', this.plausible);
 	}
 
 	public async trackEvent(eventName: string, options?: EventOptions) {
