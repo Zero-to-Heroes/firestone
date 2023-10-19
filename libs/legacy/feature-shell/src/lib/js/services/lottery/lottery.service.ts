@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
@@ -19,7 +20,7 @@ const LOTTERY_SEASONS_URL = `https://static.zerotoheroes.com/api/lottery/lottery
 
 @Injectable()
 export class LotteryService {
-	public lottery$$ = new BehaviorSubject<LotteryState | null>(null);
+	public lottery$$ = new SubscriberAwareBehaviorSubject<LotteryState | null>(null);
 
 	private parsers: { [eventName: string]: LotteryProcessor } = {
 		[GameEvent.RESOURCES_UPDATED]: new LotteryResourcesUpdateProcessor(),
@@ -49,17 +50,19 @@ export class LotteryService {
 	}
 
 	private async init() {
-		const lotteryConfig: LotterySeasonConfig = await this.loadLotteryConfig();
+		this.lottery$$.onFirstSubscribe(async () => {
+			const lotteryConfig: LotterySeasonConfig = await this.loadLotteryConfig();
 
-		let currentLottery = this.localStorage.getItem<LotteryState>(LocalStorageService.LOTTERY_STATE);
-		if (!currentLottery || isPreviousSeason(currentLottery.lastUpdateDate, lotteryConfig)) {
-			currentLottery = LotteryState.create({ lastUpdateDate: new Date().toISOString() }, lotteryConfig);
-			this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, currentLottery);
-		}
-		currentLottery = LotteryState.create(currentLottery, lotteryConfig);
-		this.lottery$$.next(currentLottery);
+			let currentLottery = this.localStorage.getItem<LotteryState>(LocalStorageService.LOTTERY_STATE);
+			if (!currentLottery || isPreviousSeason(currentLottery.lastUpdateDate, lotteryConfig)) {
+				currentLottery = LotteryState.create({ lastUpdateDate: new Date().toISOString() }, lotteryConfig);
+				this.localStorage.setItem(LocalStorageService.LOTTERY_STATE, currentLottery);
+			}
+			currentLottery = LotteryState.create(currentLottery, lotteryConfig);
+			this.lottery$$.next(currentLottery);
 
-		this.listenToGameEvents();
+			this.listenToGameEvents();
+		});
 	}
 
 	private async listenToGameEvents() {
