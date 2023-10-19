@@ -40,10 +40,9 @@ export class AchievementsStateManagerService {
 	}
 
 	private async init() {
-		const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();
-
 		this.groupedAchievements$$.onFirstSubscribe(async () => {
 			console.debug('[achievements-state] subscriber to groupedAchievements$$');
+			const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();
 			combineLatest([this.rawAchievements$$, this.achievementsInGameProgress$$, this.completedAchievements$$])
 				.pipe(
 					filter(
