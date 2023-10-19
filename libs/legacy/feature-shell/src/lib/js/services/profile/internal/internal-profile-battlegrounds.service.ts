@@ -86,7 +86,7 @@ export class InternalProfileBattlegroundsService {
 		);
 		const bgFullTimeStatsByHero$ = combineLatest([
 			achievementsData$,
-			this.achievementsMonitor.nativeAchievements$$,
+			this.achievementsMonitor.achievementsFromMemory$$,
 		]).pipe(
 			filter(
 				([achievementsData, nativeAchievements]) => !!achievementsData?.length && !!nativeAchievements?.length,

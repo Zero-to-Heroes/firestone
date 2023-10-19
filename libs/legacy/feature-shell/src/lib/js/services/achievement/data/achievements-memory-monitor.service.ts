@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
@@ -10,12 +11,10 @@ import { AchievementsStorageService } from '../achievements-storage.service';
 
 @Injectable()
 export class AchievementsMemoryMonitor {
-	public nativeAchievements$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
-	public achievementCategories$$ = new BehaviorSubject<readonly HsAchievementCategory[]>([]);
+	public achievementsFromMemory$$ = new SubscriberAwareBehaviorSubject<readonly HsAchievementInfo[]>([]);
+	public achievementCategories$$ = new SubscriberAwareBehaviorSubject<readonly HsAchievementCategory[]>([]);
 
 	private numberOfCompletedAchievements$$ = new BehaviorSubject<number>(0);
-
-	// TODO: add local cache as well, in case the app is launched without the game running
 
 	constructor(
 		private readonly events: Events,
@@ -26,15 +25,25 @@ export class AchievementsMemoryMonitor {
 		this.init();
 	}
 
-	public async getInGameAchievementsInfo(): Promise<readonly HsAchievementInfo[]> {
+	public async fetchInGameAchievementsInfo(): Promise<readonly HsAchievementInfo[]> {
 		const achievementsFromMemory = await this.memory.getAchievementsInfo();
 		console.debug('[achievements-memory-monitor] updated achievements from memory 2', achievementsFromMemory);
-		this.nativeAchievements$$.next(achievementsFromMemory?.achievements);
+		this.achievementsFromMemory$$.next(achievementsFromMemory?.achievements);
 		return achievementsFromMemory?.achievements ?? [];
 	}
 
 	private async init() {
-		console.log('[achievements-memory-monitor] init');
+		this.achievementsFromMemory$$.onFirstSubscribe(async () => {
+			console.debug('[achievements-memory-monitor] init achievementsFromMemory');
+			this.initAchievements();
+		});
+		this.achievementCategories$$.onFirstSubscribe(async () => {
+			console.debug('[achievements-memory-monitor] init achievementCategories');
+			this.initAchievements();
+		});
+	}
+
+	private async initAchievements() {
 		const forceRetrigger$ = new BehaviorSubject<void>(null);
 		this.numberOfCompletedAchievements$$
 			.pipe(
@@ -42,7 +51,11 @@ export class AchievementsMemoryMonitor {
 				distinctUntilChanged(),
 				debounceTime(1000),
 			)
-			.subscribe(() => forceRetrigger$?.next(null));
+			.subscribe(() => forceRetrigger$.next(null));
+		// Also update the achievements (their progress) once a game ends
+		this.gameEvents.allEvents.pipe(filter((event) => event.type === GameEvent.GAME_END)).subscribe((event) => {
+			forceRetrigger$.next(null);
+		});
 
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
 			const changes = event.data[0] as MemoryUpdate;
@@ -51,15 +64,10 @@ export class AchievementsMemoryMonitor {
 			}
 		});
 
-		// Also update the achievements (their progress) once a game ends
-		this.gameEvents.allEvents.pipe(filter((event) => event.type === GameEvent.GAME_END)).subscribe((event) => {
-			forceRetrigger$.next(null);
-		});
-
 		forceRetrigger$.subscribe(async () => {
 			const achievementsFromMemory = await this.memory.getAchievementsInfo();
 			console.debug('[achievements-memory-monitor] updated achievements from memory', achievementsFromMemory);
-			this.nativeAchievements$$.next(achievementsFromMemory?.achievements ?? []);
+			this.achievementsFromMemory$$.next(achievementsFromMemory?.achievements ?? []);
 		});
 		forceRetrigger$.subscribe(async () => {
 			const achievementCategories = await this.memory.getAchievementCategories();
@@ -67,7 +75,7 @@ export class AchievementsMemoryMonitor {
 			this.achievementCategories$$.next(achievementCategories);
 		});
 
-		this.nativeAchievements$$
+		this.achievementsFromMemory$$
 			.pipe(filter((achievements) => !!achievements?.length))
 			.subscribe((nativeAchievements) => {
 				console.debug('[achievements-memory-monitor] saving achievements to db', nativeAchievements);
@@ -77,7 +85,7 @@ export class AchievementsMemoryMonitor {
 			});
 		const achievementsFromDb = await this.db.retrieveInGameAchievements();
 		if (achievementsFromDb?.achievements?.length) {
-			this.nativeAchievements$$.next(achievementsFromDb.achievements);
+			this.achievementsFromMemory$$.next(achievementsFromDb.achievements);
 		}
 	}
 }

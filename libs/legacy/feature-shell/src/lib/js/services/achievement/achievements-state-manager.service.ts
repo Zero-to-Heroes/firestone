@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, filter } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { IndexedVisualAchievement } from '../../models/indexed-visual-achievement';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { PreferencesService } from '../preferences.service';
+import { deepEqual } from '../utils';
 import { HsAchievementInfo } from './achievements-info';
 import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
 import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
@@ -19,9 +20,9 @@ const CATEGORIES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/
 export class AchievementsStateManagerService {
 	// The achievements grouped by categories
 	public groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[]>([]);
-
 	// The achievement definitions loaded from the config and reference files
-	public rawAchievements$$ = new BehaviorSubject<readonly Achievement[]>([]);
+	public rawAchievements$$ = new SubscriberAwareBehaviorSubject<readonly Achievement[]>([]);
+
 	// The current in-game progress for each achievement
 	private achievementsInGameProgress$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
 	// The Firestone achievements that have been completed
@@ -39,55 +40,56 @@ export class AchievementsStateManagerService {
 	}
 
 	private async init() {
-		console.log('[achievements-state-manager] init');
 		const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();
 
-		let isLoading = false;
 		this.groupedAchievements$$.onFirstSubscribe(async () => {
 			console.debug('[achievements-state] subscriber to groupedAchievements$$');
-			if (!isLoading && !this.rawAchievements$$.value?.length) {
-				console.debug('[achievements-state] loading achievement definitions');
-				isLoading = true;
-				await Promise.all([
-					this.loadAchievementDefinitions(),
-					this.remoteAchievementsLoader.loadAchievements(),
-				]);
-				isLoading = false;
-			}
+			combineLatest([this.rawAchievements$$, this.achievementsInGameProgress$$, this.completedAchievements$$])
+				.pipe(
+					filter(
+						([rawAchievements, achievementsFromMemory, completedAchievements]) =>
+							rawAchievements?.length > 0,
+					),
+					debounceTime(1000),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
+				)
+				.subscribe(([rawAchievements, achievementsFromMemory, completedAchievements]) => {
+					this.groupedAchievements$$.next(
+						this.buildGroupedAchievements(
+							rawAchievements,
+							achievementsFromMemory,
+							completedAchievements,
+							categoryConfiguration,
+						),
+					);
+				});
+
+			this.remoteAchievementsLoader.remoteAchievements$$
+				.pipe(filter((remoteAchievements) => !!remoteAchievements?.length))
+				.subscribe((remoteAchievements) => {
+					this.completedAchievements$$.next(remoteAchievements);
+				});
+
+			this.memoryMonitor.achievementsFromMemory$$
+				.pipe(filter((inGameAchievements) => !!inGameAchievements?.length))
+				.subscribe((inGameAchievements) => {
+					this.achievementsInGameProgress$$.next(inGameAchievements);
+				});
 		});
 
-		combineLatest([this.rawAchievements$$, this.achievementsInGameProgress$$, this.completedAchievements$$])
-			.pipe(
-				filter(
-					([rawAchievements, achievementsFromMemory, completedAchievements]) => rawAchievements?.length > 0,
-				),
-			)
-			.subscribe(([rawAchievements, achievementsFromMemory, completedAchievements]) => {
-				this.groupedAchievements$$.next(
-					this.buildGroupedAchievements(
-						rawAchievements,
-						achievementsFromMemory,
-						completedAchievements,
-						categoryConfiguration,
-					),
-				);
-			});
-
-		this.remoteAchievementsLoader.remoteAchievements$$
-			.pipe(filter((remoteAchievements) => !!remoteAchievements?.length))
-			.subscribe((remoteAchievements) => {
-				this.completedAchievements$$.next(remoteAchievements);
-			});
-
-		this.memoryMonitor.nativeAchievements$$
-			.pipe(filter((inGameAchievements) => !!inGameAchievements?.length))
-			.subscribe((inGameAchievements) => {
-				this.achievementsInGameProgress$$.next(inGameAchievements);
-			});
-
-		// TODO: only trigger this when we have a subscriber to the subject
-
-		// Happens only at app start, as this never changes
+		this.rawAchievements$$.onFirstSubscribe(async () => {
+			console.debug('[achievements-state] loading raw achievement definitions');
+			const [achievementDefinitions, _] = await Promise.all([
+				this.loadAchievementDefinitions(),
+				this.remoteAchievementsLoader.loadAchievements(),
+			]);
+			this.rawAchievements$$.next(
+				achievementDefinitions.map((d) => ({
+					...d,
+					numberOfCompletions: 0,
+				})),
+			);
+		});
 	}
 
 	private buildGroupedAchievements(
@@ -118,12 +120,7 @@ export class AchievementsStateManagerService {
 	private async loadAchievementDefinitions() {
 		console.debug('[achievements-state] loading achievement definitions');
 		const achievementDefinitions = await this.rawAchievementsLoader.loadRawAchievements();
-		this.rawAchievements$$.next(
-			achievementDefinitions.map((d) => ({
-				...d,
-				numberOfCompletions: 0,
-			})),
-		);
+		return achievementDefinitions;
 	}
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {

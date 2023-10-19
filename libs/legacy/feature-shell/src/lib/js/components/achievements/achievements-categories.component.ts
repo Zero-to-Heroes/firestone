@@ -9,16 +9,20 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	selector: 'achievements-categories',
 	styleUrls: [`../../../css/component/achievements/achievements-categories.component.scss`],
 	template: `
-		<div class="achievements-categories" scrollable>
-			<ul class="categories">
-				<achievement-category
-					*ngFor="let category of categories$ | async; trackBy: trackByFn"
-					class="item"
-					[category]="category"
-					(mousedown)="selectCategory(category)"
-				></achievement-category>
-			</ul>
-		</div>
+		<ng-container *ngIf="{ categories: categories$ | async } as value">
+			<with-loading [isLoading]="!value.categories?.length">
+				<div class="achievements-categories" scrollable>
+					<ul class="categories">
+						<achievement-category
+							*ngFor="let category of value.categories; trackBy: trackByFn"
+							class="item"
+							[category]="category"
+							(mousedown)="selectCategory(category)"
+						></achievement-category>
+					</ul>
+				</div>
+			</with-loading>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

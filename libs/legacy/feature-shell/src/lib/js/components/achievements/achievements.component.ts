@@ -17,13 +17,11 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				*ngIf="currentView$ | async as currentView"
 				[ngClass]="{ divider: currentView === 'list' }"
 			>
-				<with-loading [isLoading]="isLoading$ | async">
-					<div class="content main-content">
-						<global-header></global-header>
-						<achievements-categories *ngIf="currentView === 'categories'"> </achievements-categories>
-						<achievements-list *ngIf="currentView === 'list'"> </achievements-list>
-					</div>
-				</with-loading>
+				<div class="content main-content">
+					<global-header></global-header>
+					<achievements-categories *ngIf="currentView === 'categories'"> </achievements-categories>
+					<achievements-list *ngIf="currentView === 'list'"> </achievements-list>
+				</div>
 			</section>
 			<section class="secondary" *ngIf="!(showAds$ | async)">
 				<achievements-filter></achievements-filter>
@@ -35,7 +33,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 })
 export class AchievementsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	currentView$: Observable<CurrentView>;
-	isLoading$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
@@ -43,9 +40,6 @@ export class AchievementsComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	ngAfterContentInit() {
-		this.isLoading$ = this.store
-			.listen$(([main, nav, prefs]) => main.achievements.isLoading)
-			.pipe(this.mapData(([prefs]) => prefs));
 		this.currentView$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationAchievements.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));

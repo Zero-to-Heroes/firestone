@@ -250,7 +250,7 @@ export class AchievementsLiveProgressTrackingService {
 	}
 
 	private async assignAchievementsOnGameStart() {
-		const existingAchievements = this.achievementsMemoryMonitor.nativeAchievements$$.value;
+		const existingAchievements = await this.achievementsMemoryMonitor.achievementsFromMemory$$.getValueWithInit();
 		if (!existingAchievements) {
 			return;
 		}

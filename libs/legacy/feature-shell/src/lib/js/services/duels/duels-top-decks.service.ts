@@ -43,7 +43,6 @@ export class DuelsTopDeckService {
 	}
 
 	private async init() {
-		console.log('[duels-top-deck] init');
 		this.topDeck$$.onFirstSubscribe(() => {
 			const sets$ = this.setsManager.sets$$.asObservable();
 			const debouncedSets$ = concat(sets$.pipe(take(1)), sets$.pipe(skip(1), debounceTime(2000))).pipe(

@@ -95,15 +95,13 @@ export class FirestoneAchievementsChallengeService {
 
 	private async sendUnlockEvent(challenge: Challenge) {
 		console.debug('[firestone-achievements] sending unlock event', challenge.achievementId);
-		const achievement: Achievement = getAchievement(
-			this.achievementsStateManager.rawAchievements$$.value,
-			challenge.achievementId,
-		);
+		const rawAchievements = await this.achievementsStateManager.rawAchievements$$.getValueWithInit();
+		const achievement: Achievement = getAchievement(rawAchievements, challenge.achievementId);
 		console.debug(
 			'[firestone-achievements] sending unlock event 2',
 			challenge.achievementId,
 			achievement,
-			this.achievementsStateManager.rawAchievements$$.value,
+			rawAchievements,
 		);
 		if (!achievement) {
 			console.warn(
@@ -122,10 +120,8 @@ export class FirestoneAchievementsChallengeService {
 			return;
 		}
 
-		const autoGrantAchievements = getAchievements(
-			this.achievementsStateManager.rawAchievements$$.value,
-			achievement.linkedAchievementIds,
-		);
+		const rawAchievements = await this.achievementsStateManager.rawAchievements$$.getValueWithInit();
+		const autoGrantAchievements = getAchievements(rawAchievements, achievement.linkedAchievementIds);
 		const allAchievements =
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
 
