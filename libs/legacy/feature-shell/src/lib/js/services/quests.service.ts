@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { MemoryUpdate } from '../models/memory/memory-update';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
@@ -35,28 +35,35 @@ export class QuestsService {
 
 	private async init() {
 		await this.store.initComplete();
-		combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.locale),
-			this.requestedInitialReferenceQuestsLoad.asObservable(),
-		])
+
+		// TODO: expose subject via the store, instead of using the common global state
+		combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.enableQuestsWidget)])
 			.pipe(
-				filter(([[locale], load]) => load),
-				map(([[locale], load]) => ({ locale })),
+				filter(([inGame, [enableQuestsWidget]]) => inGame && enableQuestsWidget),
+				take(1),
 			)
-			.subscribe(({ locale }) => this.loadReferenceQuests(locale));
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
-			const changes: MemoryUpdate = data.data[0];
-			// Assumption for now is that quests can only be completed during gameplay
-			// Also, quests are not updated live while playing
-			// TODO: doesn't account for rerolls
-			if (changes.CurrentScene) {
-				// this.previousScene = changes.CurrentScene;
-				const activeQuests = await this.memory.getActiveQuests();
-				this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));
-				// this.hasFetchedQuestsAtLeastOnce = true;
-			}
-		});
-		// this.gameStatus.onGameExit(() => (this.hasFetchedQuestsAtLeastOnce = false));
+			.subscribe(() => {
+				combineLatest([
+					this.store.listenPrefs$((prefs) => prefs.locale),
+					this.requestedInitialReferenceQuestsLoad.asObservable(),
+				])
+					.pipe(
+						filter(([[locale], load]) => load),
+						map(([[locale], load]) => ({ locale })),
+					)
+					.subscribe(({ locale }) => this.loadReferenceQuests(locale));
+				this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
+					const changes: MemoryUpdate = data.data[0];
+					// Assumption for now is that quests can only be completed during gameplay
+					// Also, quests are not updated live while playing
+					// TODO: doesn't account for rerolls
+					if (changes.CurrentScene) {
+						// this.previousScene = changes.CurrentScene;
+						const activeQuests = await this.memory.getActiveQuests();
+						this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));
+					}
+				});
+			});
 	}
 
 	public loadInitialReferenceQuests() {
