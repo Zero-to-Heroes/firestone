@@ -13,7 +13,6 @@ export class AchievementsNotificationService {
 		private events: Events,
 	) {
 		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.handleAchievementCompleted(data.data[0]));
-		console.log('[achievements-notification] listening for achievement completion events');
 	}
 
 	private async handleAchievementCompleted(achievement: Achievement) {

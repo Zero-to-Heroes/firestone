@@ -26,7 +26,6 @@ export class ReplaysNotificationService {
 		private readonly mainWindowState: MainWindowStoreService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((data) => this.showNewMatchEndNotification(data.data[0]));
-		console.log('[replays-notification] listening for replay completion events');
 		window['showReplay'] = () => {
 			const stat = this.mainWindowState.state.stats.gameStats.stats[0];
 			console.debug('using stat', stat, this.mainWindowState.state.stats.gameStats);

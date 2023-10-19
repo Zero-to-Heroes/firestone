@@ -47,7 +47,6 @@ export class EndGameListenerService {
 	}
 
 	private init(): void {
-		console.debug('[manastorm-bridge] stgarting end-game-listener init');
 		const metadata$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_METADATA),
 			map((event) => event.additionalData.metaData as HsGameMetaData),
@@ -215,11 +214,11 @@ export class EndGameListenerService {
 				}),
 				filter((info) => !!info.reviewId && info.gameEnded.ended),
 				tap((info) =>
-					console.log('[manastorm-bridge] end game, uploading? spectating=', info.gameEnded.spectating),
+					console.debug('[manastorm-bridge] end game, uploading? spectating=', info.gameEnded.spectating),
 				),
 				filter((info) => !info.gameEnded.spectating),
 				tap((info) =>
-					console.log('[manastorm-bridge] not a spectate game, continuing', info.metadata, info.playerDeck),
+					console.debug('[manastorm-bridge] not a spectate game, continuing', info.metadata, info.playerDeck),
 				),
 			)
 			.subscribe((info) => {
@@ -232,7 +231,7 @@ export class EndGameListenerService {
 	private async prepareUpload(info: UploadInfo) {
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
-		console.log('[manastorm-bridge] reading memory info');
+		console.log('[manastorm-bridge] preparing to upload');
 		// Here we get the information that is only available once the game is over
 		// TODO: move this elsewhere? So that this method doesn't care about memory reading at all anymore
 		// const duelsInitialRank =

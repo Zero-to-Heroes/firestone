@@ -30,7 +30,6 @@ export class DuelsRewardsService {
 	}
 
 	private async init() {
-		console.log('[duels-rewards] init');
 		await this.store.initComplete();
 
 		this.events

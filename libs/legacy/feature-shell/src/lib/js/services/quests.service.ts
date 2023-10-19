@@ -34,7 +34,6 @@ export class QuestsService {
 	}
 
 	private async init() {
-		console.log('[quests] init');
 		await this.store.initComplete();
 		combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.locale),
