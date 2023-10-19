@@ -14,9 +14,8 @@ export class ShowCardBackDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedCardBack: CardBack = this.collectionManager.cardBacks$$
-			.getValue()
-			.find((cardBack) => cardBack.id === event.cardBackId);
+		const cardBacks = await this.collectionManager.cardBacks$$.getValueWithInit();
+		const selectedCardBack: CardBack = cardBacks.find((cardBack) => cardBack.id === event.cardBackId);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'card-back-details',
 			menuDisplayType: 'breadcrumbs',

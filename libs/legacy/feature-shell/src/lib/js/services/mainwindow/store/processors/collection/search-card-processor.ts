@@ -22,7 +22,7 @@ export class SearchCardProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const collection = this.collectionManager.collection$$.getValue();
+		const collection = await this.collectionManager.collection$$.getValueWithInit();
 		const searchResults: readonly SetCard[] = this.cards.searchCards(event.searchString, collection).map((card) => {
 			const collectionCard: Card = this.findCollectionCard(collection, card);
 			return new SetCard(

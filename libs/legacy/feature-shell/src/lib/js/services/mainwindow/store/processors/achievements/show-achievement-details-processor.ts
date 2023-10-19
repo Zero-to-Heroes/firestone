@@ -15,10 +15,8 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const hierarchy = buildAchievementHierarchy(
-			event.achievementId,
-			this.stateManager.groupedAchievements$$.getValue(),
-		);
+		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
+		const hierarchy = buildAchievementHierarchy(event.achievementId, groupedAchievements);
 		if (!hierarchy?.achievement) {
 			return [null, null];
 		}

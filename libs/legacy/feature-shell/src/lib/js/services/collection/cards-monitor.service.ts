@@ -149,7 +149,7 @@ export class CardsMonitorService {
 			}
 		}
 		// Get the collection as it was before opening cards
-		const collection = this.collectionManager.collection$$.getValue();
+		const collection = await this.collectionManager.collection$$.getValueWithInit();
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
 			if (boosterId === BoosterType.MERCENARIES) {
 				const referenceData = this.mainWindowStore.value[0]?.mercenaries?.referenceData;
@@ -247,7 +247,7 @@ export class CardsMonitorService {
 		const groupedBy: { [key: string]: readonly CardPackInfo[] } = groupByFunction(
 			(card: CardPackInfo) => card.CardId + card.Premium,
 		)(newCards);
-		const collection = this.collectionManager.collection$$.getValue();
+		const collection = await this.collectionManager.collection$$.getValueWithInit();
 		for (const data of Object.values(groupedBy)) {
 			const cardId = data[0].CardId;
 			const type = cardPremiumToCardType(data[0].Premium);

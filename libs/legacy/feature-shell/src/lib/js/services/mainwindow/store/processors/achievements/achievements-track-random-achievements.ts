@@ -48,11 +48,9 @@ export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 		const refData = await this.refLoaderService.refData$$.getValueWithInit();
 		const refAchievements = refData?.achievements ?? [];
 
-		console.debug(
-			'[achievements-track-random-achievements] categories',
-			this.stateManager.groupedAchievements$$.getValue(),
-		);
-		const hsCategory = this.stateManager.groupedAchievements$$.getValue().find((c) => c.id === 'hearthstone_game');
+		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
+		console.debug('[achievements-track-random-achievements] categories', groupedAchievements);
+		const hsCategory = groupedAchievements.find((c) => c.id === 'hearthstone_game');
 		const validCategories = hsCategory.categories
 			// Progression
 			.filter((c) => c.id !== 'hearthstone_game_1')

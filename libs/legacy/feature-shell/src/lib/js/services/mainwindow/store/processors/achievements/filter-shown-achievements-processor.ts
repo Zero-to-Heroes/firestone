@@ -22,14 +22,15 @@ export class FilterShownAchievementsProcessor implements Processor {
 			return [currentState, navigationState];
 		}
 
+		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
 		const selectedCategory = findCategory(
 			navigationState.navigationAchievements.selectedCategoryId,
-			this.stateManager.groupedAchievements$$.getValue(),
+			groupedAchievements,
 		);
 
 		const allAchievements: readonly VisualAchievement[] = selectedCategory
 			? selectedCategory.retrieveAllAchievements()
-			: retrieveAllAchievements(this.stateManager.groupedAchievements$$.getValue());
+			: retrieveAllAchievements(groupedAchievements);
 		const displayedAchievementsList: readonly string[] =
 			searchString?.length && searchString.length > 2
 				? allAchievements

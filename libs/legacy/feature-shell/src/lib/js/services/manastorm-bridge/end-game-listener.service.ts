@@ -288,7 +288,8 @@ export class EndGameListenerService {
 			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
 			bgBattleOdds: battleOdds,
-			lotteryPoints: this.lottery.lottery$$.value?.currentPoints(),
+			// Here we purposefully don't want to init the lottery if it hasn't been initialized yet
+			lotteryPoints: this.lottery.lottery$$.getValue()?.currentPoints(),
 		};
 		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 		await this.endGameUploader.upload2(augmentedInfo);

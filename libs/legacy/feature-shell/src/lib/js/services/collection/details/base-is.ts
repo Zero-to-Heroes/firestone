@@ -75,8 +75,4 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 			await this.postInit();
 		});
 	}
-
-	public async getCollection(): Promise<readonly T[]> {
-		return this.collection$$.getValue();
-	}
 }

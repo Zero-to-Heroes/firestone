@@ -15,17 +15,10 @@ export class SelectAchievementCategoryProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const hierarchyResult = builCategoryHierarchy(
-			event.categoryId,
-			this.stateManager.groupedAchievements$$.getValue(),
-		);
+		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
+		const hierarchyResult = builCategoryHierarchy(event.categoryId, groupedAchievements);
 		const hierarchy = hierarchyResult?.categories;
-		console.debug(
-			'[select-achievement-category] hierarchy',
-			hierarchy,
-			event.categoryId,
-			this.stateManager.groupedAchievements$$.getValue(),
-		);
+		console.debug('[select-achievement-category] hierarchy', hierarchy, event.categoryId, groupedAchievements);
 		if (!hierarchy?.length) {
 			return [null, null];
 		}

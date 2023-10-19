@@ -105,8 +105,8 @@ export class AchievementsLiveProgressTrackingService {
 
 					combineLatest([currentAchievementProgress$, achievementsOnGameStart$, this.achievementIdsToTrack$$])
 						// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-						.subscribe(([progress, achievementsOnGameStart, achievementIdsToTrack]) => {
-							const finalAchievements = this.buildAchievementsProgressTracking(
+						.subscribe(async ([progress, achievementsOnGameStart, achievementIdsToTrack]) => {
+							const finalAchievements = await this.buildAchievementsProgressTracking(
 								achievementsOnGameStart,
 								progress,
 								achievementIdsToTrack,
@@ -144,11 +144,12 @@ export class AchievementsLiveProgressTrackingService {
 		return currentAchievement;
 	}
 
-	private buildAchievementsProgressTracking(
+	private async buildAchievementsProgressTracking(
 		achievementsOnGameStart: readonly HsAchievementInfo[],
 		progress: readonly HsAchievementInfo[],
 		achievementIdsToTrack: readonly number[],
-	): readonly AchievementsProgressTracking[] {
+	): Promise<readonly AchievementsProgressTracking[]> {
+		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
 		return (
 			achievementIdsToTrack?.map((id) => {
 				const currentProgress = progress.find((a) => a.id === id);
@@ -167,10 +168,7 @@ export class AchievementsLiveProgressTrackingService {
 						? currentProgress.progress
 						: achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0,
 					rewardTrackXp: refAchievement?.rewardTrackXp,
-					hierarchy: buildAchievementHierarchy(
-						id,
-						this.stateManager.groupedAchievements$$.getValue(),
-					)?.categories?.map((c) => c.name),
+					hierarchy: buildAchievementHierarchy(id, groupedAchievements)?.categories?.map((c) => c.name),
 				};
 				console.debug('[achievements-monitor] built progress', result, quota, id, this.achievementQuotas);
 				return result;
