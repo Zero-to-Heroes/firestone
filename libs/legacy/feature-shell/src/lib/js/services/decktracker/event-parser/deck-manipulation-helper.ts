@@ -308,7 +308,7 @@ export class DeckManipulationHelper {
 		// add cards to a zone without an entityId, but with a cardId?
 		// I'll add warning logs to try and keep track of this
 		if (cardId) {
-			if (entityId) {
+			if (entityId && process.env.NODE_ENV !== 'production') {
 				console.warn('[findCardInZone] not found with entityId, search by cardId', cardId, entityId, zone);
 			}
 			const found =
