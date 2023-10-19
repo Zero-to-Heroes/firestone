@@ -1,9 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { BugReportService } from '../../../services/bug/bug-report.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { LogsUploaderService } from '../../../services/logs-uploader.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
@@ -70,10 +67,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 	buttonDisabled: boolean;
 
 	constructor(
-		private readonly logService: LogsUploaderService,
-		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly http: HttpClient,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly bugService: BugReportService,

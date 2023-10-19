@@ -93,11 +93,25 @@ export class ApiRunner {
 	}
 
 	public async get(url: string): Promise<string | undefined> {
-		return this.http
-			.get(url, {
-				responseType: 'text',
-			})
-			.toPromise();
+		return new Promise<string | undefined>((resolve, reject) => {
+			this.http
+				.get(url, {
+					responseType: 'text',
+				})
+				.subscribe(
+					(result: any) => {
+						console.debug('retrieved GET call', url);
+						resolve(result);
+					},
+					(error) => {
+						// Some users have a VPN / ISP config that prevents them from accessing our static
+						// data, so there's nothing we can do unless they contact us directly
+						// We still log an error though, because it can be useful when debugging other things
+						console.error('Could not execute GET call', url, error);
+						resolve(undefined);
+					},
+				);
+		});
 	}
 
 	private async secureUserToken(): Promise<string> {

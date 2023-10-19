@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { PatchesConfig } from '../models/patches';
 
 const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json';
@@ -8,7 +8,7 @@ const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/pat
 export class PatchesConfigService {
 	private patchesConfig: PatchesConfig;
 
-	constructor(private readonly http: HttpClient) {}
+	constructor(private readonly api: ApiRunner) {}
 
 	public async getConf(): Promise<PatchesConfig> {
 		await this.init();
@@ -24,16 +24,6 @@ export class PatchesConfigService {
 	}
 
 	private async getPatchesConfig(): Promise<PatchesConfig> {
-		return new Promise<PatchesConfig>((resolve) => {
-			this.http.get(`${PATCHES_CONFIG_URL}`).subscribe(
-				(result: PatchesConfig) => {
-					resolve(result);
-				},
-				(error) => {
-					console.error('[secrets-config] could not retrieve secrets-config from CDN', error);
-					resolve(null);
-				},
-			);
-		});
+		return this.api.callGetApi<PatchesConfig>(`${PATCHES_CONFIG_URL}`);
 	}
 }

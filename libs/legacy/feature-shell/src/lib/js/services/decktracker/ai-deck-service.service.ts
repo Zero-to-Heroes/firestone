@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiRunner } from '@firestone/shared/framework/core';
 
 const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_decks';
 
@@ -7,7 +7,7 @@ const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_
 export class AiDeckService {
 	private aiDecks: readonly AiDeck[];
 
-	constructor(private readonly http: HttpClient) {}
+	constructor(private readonly api: ApiRunner) {}
 
 	public async getAiDeck(opponentCardId: string, scenarioId: number): Promise<AiDeck> {
 		if (!this.aiDecks || this.aiDecks.length === 0) {
@@ -33,31 +33,11 @@ export class AiDeckService {
 	}
 
 	private async getDeckNames(): Promise<readonly string[]> {
-		return new Promise<readonly string[]>((resolve) => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json`).subscribe(
-				(result: any[]) => {
-					resolve(result);
-				},
-				(error) => {
-					console.error('[ai-decks] could not retrieve ai decks from CDN', error);
-					resolve([]);
-				},
-			);
-		});
+		return this.api.callGetApi<readonly string[]>(`${AI_DECKSTRINGS_URL}/all_files.json`);
 	}
 
 	private async loadAiDecks(fileName: string): Promise<readonly AiDeck[]> {
-		return new Promise<readonly AiDeck[]>((resolve) => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json`).subscribe(
-				(result: any[]) => {
-					resolve(result);
-				},
-				(error) => {
-					console.error('[ai-decks] could not retrieve ai decks from CDN', fileName, error);
-					resolve([]);
-				},
-			);
-		});
+		return this.api.callGetApi<readonly AiDeck[]>(`${AI_DECKSTRINGS_URL}/${fileName}.json`);
 	}
 }
 

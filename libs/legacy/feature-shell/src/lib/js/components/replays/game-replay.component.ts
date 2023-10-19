@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ApiRunner } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
@@ -20,7 +21,11 @@ export class GameReplayComponent {
 	_replayXml: string;
 	reviewId: string;
 
-	constructor(private http: HttpClient, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly api: ApiRunner,
+		private readonly http: HttpClient,
+	) {}
 
 	@Input() set replay(value: MatchDetail) {
 		this.setReplay(value);
@@ -52,7 +57,7 @@ export class GameReplayComponent {
 		// window['coliseum'].zone.run(() => {
 		// 	window['coliseum'].component.updateStatus('Downloading replay file');
 		// });
-		const review: any = await this.http.get(`${RETRIEVE_REVIEW_URL}/${reviewId}`).toPromise();
+		const review: any = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${reviewId}`);
 		if (!review) {
 			return null;
 		}

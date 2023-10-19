@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -6,7 +5,7 @@ import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-bat
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -24,7 +23,7 @@ export class BgsBattleSimulationService {
 	private isPremium: boolean;
 
 	constructor(
-		private readonly http: HttpClient,
+		private readonly api: ApiRunner,
 		private readonly cards: CardsFacadeService,
 		private readonly executor: BgsBattleSimulationExecutorService,
 		private readonly store: AppUiStoreFacadeService,
@@ -102,7 +101,7 @@ export class BgsBattleSimulationService {
 		);
 		const result: SimulationResult = shouldUseLocalSimulator
 			? await this.simulateLocalBattle(battleInfoInput, prefs)
-			: ((await this.http.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput).toPromise()) as SimulationResult);
+			: await this.api.callPostApi<SimulationResult>(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput);
 		const resultForLog = !!result ? { ...result } : null;
 		if (!!resultForLog) {
 			delete resultForLog.outcomeSamples;
@@ -120,9 +119,7 @@ export class BgsBattleSimulationService {
 	public async getIdForSimulationSample(sample: GameSample): Promise<string> {
 		console.log('calling sample endpoint');
 		try {
-			const result: any = (await this.http
-				.post(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, sample)
-				.toPromise()) as string;
+			const result = await this.api.callPostApi<string>(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, sample);
 			console.log('[bgs-simulation] id for simulation sample', result);
 			return result;
 		} catch (e) {
