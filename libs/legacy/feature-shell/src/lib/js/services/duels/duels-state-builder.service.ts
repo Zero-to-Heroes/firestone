@@ -62,6 +62,7 @@ export class DuelsStateBuilderService {
 
 	private async init() {
 		await this.store.initComplete();
+
 		this.initDuelsInfoObservable();
 		this.events
 			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
@@ -105,8 +106,10 @@ export class DuelsStateBuilderService {
 			});
 		});
 
+		// TODO: this can probably wait until we're on the correct scene at least?
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
+				console.log('[duels-state-builder] in game, updating duels adventures info');
 				const [updatedAdventuresInfo] = await Promise.all([this.duelsMemoryCeche.getAdventuresInfo()]);
 				this.mainWindowStateUpdater.next(new DuelsStateUpdatedEvent(updatedAdventuresInfo));
 			}
