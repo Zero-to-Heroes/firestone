@@ -4,7 +4,6 @@ import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
-import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -22,9 +21,6 @@ const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q
 @Injectable()
 export class BgsBattleSimulationService {
 	private stateUpdater: EventEmitter<BattlegroundsStoreEvent>;
-	private cardsData: CardsData;
-
-	private cpuCount: number;
 	private isPremium: boolean;
 
 	constructor(
@@ -44,15 +40,6 @@ export class BgsBattleSimulationService {
 	}
 
 	private async init() {
-		console.log('[bgs-simulation] init');
-		this.cardsData = new CardsData(this.cards.getService(), false);
-		this.cardsData.inititialize();
-		if (this.ow?.isOwEnabled()) {
-			const systemInfo = await this.ow.getSystemInformation();
-
-			this.cpuCount = systemInfo?.PhysicalCPUCount ?? 1;
-			console.log('CPU count', this.cpuCount);
-		}
 		await this.store.initComplete();
 		this.store.enablePremiumFeatures$().subscribe((premium) => {
 			this.isPremium = premium;
