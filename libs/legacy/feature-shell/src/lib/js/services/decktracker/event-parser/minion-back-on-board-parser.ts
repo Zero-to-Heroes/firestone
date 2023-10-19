@@ -19,12 +19,17 @@ export class MinionBackOnBoardParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
+		//console.debug('[minion-back-on-board] found card', card, cardId, entityId, deck.otherZone, deck.board);
+		if (Math.abs(card?.entityId) !== Math.abs(entityId)) {
+			return currentState;
+		}
 
 		const newOtherZone: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.otherZone,
 			cardId,
 			entityId,
 		)[0];
+		//console.debug('[minion-back-on-board] new other zone', newOtherZone);
 		const cardWithZone = card.update({
 			zone: 'PLAY',
 			creatorCardId: creatorCardId,
@@ -32,6 +37,7 @@ export class MinionBackOnBoardParser implements EventParser {
 			playTiming: GameState.playTiming++,
 			putIntoPlay: true,
 		} as DeckCard);
+		//console.debug('[minion-back-on-board] card with zone', cardWithZone);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

@@ -248,6 +248,7 @@ export class DeckManipulationHelper {
 		// Explicit search by entity id
 		if (entityId) {
 			const found = zone.find((card) => card.entityId === entityId);
+			//console.debug('[findCardInZone] found card', found, entityId, cardId, zone);
 			if (!found) {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
@@ -255,6 +256,7 @@ export class DeckManipulationHelper {
 						const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 						return refCardId === normalizedCardId && !card.entityId;
 					});
+					//console.debug('[findCardInZone] idByCardId', idByCardId, entityId, cardId, zone);
 					if (idByCardId) {
 						const card = this.allCards.getCard(normalizedCardId);
 						return idByCardId.update({
@@ -302,7 +304,13 @@ export class DeckManipulationHelper {
 			}
 		}
 		// Search by cardId only
+		// Do we also want to search by cardId if we have an entityId but couldn't find anything? Are there cases where we
+		// add cards to a zone without an entityId, but with a cardId?
+		// I'll add warning logs to try and keep track of this
 		if (cardId) {
+			if (entityId) {
+				console.warn('[findCardInZone] not found with entityId, search by cardId', cardId, entityId, zone);
+			}
 			const found =
 				// Avoid picking card at the bottom of the deck first if possible
 				zone.find((card) => {
@@ -320,9 +328,10 @@ export class DeckManipulationHelper {
 					const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 					return refCardId === normalizedCardId;
 				});
-			// console.debug('found card?', found, zone);
+			//console.debug('[findCardInZone] found card by cardid', found, entityId, cardId, zone);
 			if (!found) {
 				const card = this.allCards.getCard(cardId);
+				//console.debug('[findCardInZone] not found, creating default card', card, entityId, cardId, zone);
 				return DeckCard.create({
 					cardId: cardId,
 					cardName: card ? this.i18n.getCardName(card.id) : null,
