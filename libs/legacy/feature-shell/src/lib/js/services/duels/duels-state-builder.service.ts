@@ -101,7 +101,6 @@ export class DuelsStateBuilderService {
 				this.mainWindowStateUpdater.next(new DuelsCurrentDeckEvent(duelsInfo?.DuelsDeck));
 			});
 			this.isOnMainScreen.subscribe((deck) => {
-				console.debug('[duels-state-builder] isOnMainScreen', deck);
 				this.mainWindowStateUpdater.next(new DuelsIsOnMainScreenEvent(deck));
 			});
 		});
