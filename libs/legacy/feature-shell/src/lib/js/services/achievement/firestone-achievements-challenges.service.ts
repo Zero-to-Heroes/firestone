@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter, take } from 'rxjs';
+import { combineLatest, filter, take } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
@@ -44,13 +44,15 @@ export class FirestoneAchievementsChallengeService {
 
 	private async init() {
 		await this.store.initComplete();
-		this.store
-			.listenPrefs$(
+		combineLatest([
+			this.gameStatus.inGame$$,
+			this.store.listenPrefs$(
 				(prefs) => prefs.achievementsFullEnabled,
 				(prefs) => prefs.achievementsEnabled2,
-			)
+			),
+		])
 			.pipe(
-				filter(([full, firestoneAchievements]) => full && firestoneAchievements),
+				filter(([inGame, [full, firestoneAchievements]]) => inGame && full && firestoneAchievements),
 				take(1),
 			)
 			.subscribe(async () => {
