@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -48,15 +48,13 @@ export class DuelsLeaderboardComponent extends AbstractSubscriptionStoreComponen
 	}
 
 	ngAfterContentInit() {
-		this.values$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.leaderboard,
-				([main, nav, prefs]) => prefs.duelsActiveLeaderboardModeFilter,
-			)
-			.pipe(
-				filter(([stats, filter]) => !!stats && !!filter),
-				this.mapData(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
-			);
+		this.values$ = combineLatest([
+			this.store.duelsLeaderboard$(),
+			this.store.listen$(([main, nav, prefs]) => prefs.duelsActiveLeaderboardModeFilter),
+		]).pipe(
+			filter(([stats, [filter]]) => !!stats && !!filter),
+			this.mapData(([stats, [filter]]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
+		);
 	}
 
 	getRegion(region: BnetRegion): string {

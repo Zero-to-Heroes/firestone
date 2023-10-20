@@ -2,7 +2,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DeckDefinition } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
@@ -34,7 +33,6 @@ import { sleep } from '../utils';
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 const DUELS_RUN_INFO_URL = 'https://cc3tc224po5orwembimzyaxqhy0khyij.lambda-url.us-west-2.on.aws/';
 const DUELS_RUN_DETAILS_URL = 'https://c3ewlwwljryrgtmeeqbwghb23y0xtltz.lambda-url.us-west-2.on.aws/';
-const DUELS_LEADERBOARD_URL = 'https://hj7zgbe3esjkltgsbu3pznjq4q0edrhn.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -120,17 +118,6 @@ export class DuelsStateBuilderService {
 		}, 'duelsInfo');
 	}
 
-	public async loadLeaderboard(): Promise<DuelsLeaderboard> {
-		const user = await this.ow.getCurrentUser();
-		const input: Input = {
-			userId: user.userId,
-			userName: user.username,
-		};
-		const results: any = await this.api.callPostApi(DUELS_LEADERBOARD_URL, input);
-		console.log('[duels-state-builder] loaded leaderboard', results?.results?.heroic?.length);
-		return results?.results;
-	}
-
 	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {
 		const user = await this.ow.getCurrentUser();
 		const input: Input = {
@@ -165,7 +152,7 @@ export class DuelsStateBuilderService {
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		duelsConfig: DuelsConfig,
-		leaderboard: DuelsLeaderboard,
+		// leaderboard: DuelsLeaderboard,
 		// bucketsData: readonly DuelsBucketsData[],
 		// collectionState: BinderState,
 		// adventuresInfo: AdventuresInfo,
@@ -180,7 +167,7 @@ export class DuelsStateBuilderService {
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,
 			// bucketsData: bucketsData,
-			leaderboard: leaderboard,
+			// leaderboard: leaderboard,
 			// adventuresInfo: adventuresInfo,
 			currentDuelsMetaPatch: currentDuelsMetaPatch,
 			loading: false,

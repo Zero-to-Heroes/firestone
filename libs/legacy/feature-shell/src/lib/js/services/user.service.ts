@@ -12,10 +12,10 @@ const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda
 // TODO: use Hearthstone user id
 @Injectable()
 export class UserService {
+	public user$$ = new BehaviorSubject<overwolf.profile.GetCurrentUserResult>(null);
+
 	// private currentUser: overwolf.profile.GetCurrentUserResult;
 	private store: MainWindowStoreService;
-
-	private user$$ = new BehaviorSubject<overwolf.profile.GetCurrentUserResult>(null);
 
 	constructor(
 		private readonly ow: OverwolfService,
