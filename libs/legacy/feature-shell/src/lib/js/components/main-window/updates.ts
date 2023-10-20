@@ -33,75 +33,31 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.3.3',
+		version: '12.4.1',
 		force: false,
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
-				text: `This release is the first fully-functional iteration of the Constructed Meta Stats! I hope you enjoy it :) <br/>
-				Next up is to add overlays to help you during the Mulligan phase; but first I want to make sure that the stats provided in the app are correct, so please let me know if you spot any issue!
+				text: `This release for now mostly contains technical updates. I'm trying to make the app load faster, and decrease the memory it uses overall, especially if you're only using one or two modes. It will take a while to get there, so expect the improvements to be very gradual. </br>
+				This first phase focuses on making the app load faster when on desktop (i.e. HS is not running).
 				`,
 			},
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `The app has been updated for patch 27.6. There are still some things to work on, and probably some bugs that were introduced, and I will iron this out over the next few days. Enjoy the new patch!`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `(PREMIUM) You can now browse all meta archetypes, view the core cards to the archetypes, and browse all decks that are part of the archetype.`,
-							},
-							{
-								type: 'feature',
-								text: `(PREMIUM) You can now view card-level stats for each deck and archetype. This will tell you each card's Mulligan winrate, drawn winrate and kept percentage.`,
-							},
-							{
-								type: 'feature',
-								text: `(PREMIUM) You can now view how each deck or archetype performs against other classes.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the board info sent to Twitch would include incorrect minions, thus breaking the mouse overs for the Twitch extension users.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Try and make everything linked to duels detection more robust. This should reduce the number of times some loots, initial decklists or sideboards being incorrectly detected. WARNING: because of a change to how runs are identified, the first game you play with this version of the app will start a new run. Sorry for the inconvenience.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `Pack tracking now works for the new Mass Opening feature!`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'general',
+			// 			details: [
+			// 				{
+			// 					type: 'content',
+			// 					text: `The app has been updated for patch 27.6. There are still some things to work on, and probably some bugs that were introduced, and I will iron this out over the next few days. Enjoy the new patch!`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -110,53 +66,17 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Replaced the "all-time" filter with a "current-season" filter in the constructed meta tabs. (Community Suggestion!)`,
-							},
-							{
-								type: 'feature',
-								text: `Added an "all ranks" filter for constructed meta tabs.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where some counters would stay visible after the relevant cards were played/died. (Community Suggestion!)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some treant-generating cards would not be properly highlighted when mousing over Cultivation. (Community Suggestion!)`,
-							},
-							{
-								type: 'ui',
-								text: `Move the "legend" star to be less intrusive when viewing the list of decks and archetypes. (Community Suggestion!)`,
+								text: `Fix an issue the cards in ETC's sideboard would appear in the Other zone when playing ETC.`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'duels',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where changing the MMR / Anomaly filter would sometimes not update the tierlists.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the achievements and hero stats info would not be correctly aligned when choosing between only two heroes. (Community Suggestion!)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Recurring Nightmare could enchant non-Undead minions. (Community Suggestion!)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Motley Phalanx.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Cultist S'Thara.`,
-							},
-							{
-								type: 'content',
-								text: `You should now see a "now loading" animation when changing some of the filters.`,
+								text: `Fix an issue where the buttons to quickly build a deck when starting a new run would not appear anymore.`,
 							},
 						],
 					},
