@@ -73,6 +73,7 @@ export class LinkedEntityParser implements EventParser {
 				// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
 				// even ones who already had a position previously
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
+				// When the card is in the setaside zone, we don't want to override the temporaryCard, because it is very likely a temp card
 				temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
 			} as DeckCard);
 			//console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
