@@ -39,8 +39,10 @@ export class AnalyticsService {
 
 	public async trackPageView(page: string) {
 		await this.ready();
-		this.plausible.trackPageview({
-			url: page,
+		this.plausible.trackEvent('pageview', {
+			props: {
+				page: page,
+			},
 		});
 	}
 
