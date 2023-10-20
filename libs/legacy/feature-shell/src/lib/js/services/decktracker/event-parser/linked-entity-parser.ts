@@ -73,9 +73,9 @@ export class LinkedEntityParser implements EventParser {
 				// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
 				// even ones who already had a position previously
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
-				temporaryCard: undefined,
+				temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
 			} as DeckCard);
-			// console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
+			//console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard, isPlayerForAdd, true);
 			// console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
 		} else {
@@ -94,7 +94,7 @@ export class LinkedEntityParser implements EventParser {
 				zone: undefined,
 				temporaryCard: undefined,
 			} as DeckCard);
-			// console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
+			//console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToAddTheCard.deck,
 				updatedCard.cardId,
