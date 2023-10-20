@@ -1050,6 +1050,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), beast);
 			case CardIds.MendingPoolsTavernBrawl:
 				return and(side(inputSide), spell, nature);
+			case CardIds.MimironTheMastermind:
+				return and(side(inputSide), or(inDeck, inHand), mech);
 			case CardIds.Mixtape:
 				return and(opposingSide(inputSide), cardsPlayedThisMatch);
 			case CardIds.MulchMadnessTavernBrawl:
