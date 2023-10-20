@@ -3,10 +3,22 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class WindowManagerService {
-	public mainWindow;
+	private mainWindow;
 
 	constructor(@Optional() private readonly ow: OverwolfService) {
 		this.init();
+	}
+
+	public async isMainWindow() {
+		const currentWindow = await this.ow?.getCurrentWindow();
+		return !this.ow || !currentWindow || currentWindow?.name === OverwolfService.MAIN_WINDOW;
+	}
+
+	public async getMainWindow() {
+		if (!this.mainWindow) {
+			await this.init();
+		}
+		return this.mainWindow;
 	}
 
 	private async init() {

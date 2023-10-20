@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { DuelsConfigService } from '@firestone/duels/general';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { FeatureFlags } from '@services/feature-flags';
@@ -11,7 +12,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { groupByFunction, sortByProperties, sumOnArray } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
-import { startWith, takeUntil, tap } from 'rxjs/operators';
+import { filter, startWith, takeUntil, tap } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -205,11 +206,14 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly duelsConfig: DuelsConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.duelsConfig.isReady();
+
 		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
 		this.store
@@ -270,15 +274,15 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 				});
 			}),
 		);
-		this.allowedCards$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.duels.config,
-				([main, nav]) => main.duels.deckbuilder.currentClasses,
-			),
+		this.allowedCards$ = combineLatest([
+			this.duelsConfig.duelsConfig$$,
+			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentClasses),
 			allBuckets$,
 			from([this.allCards.getCards()]),
-		).pipe(
-			this.mapData(([[config, currentClasses], allBuckets, cards]) => {
+		]).pipe(
+			filter(([config, [currentClasses]]) => !!config),
+			this.mapData(([config, [currentClasses], allBuckets, cards]) => {
+				console.debug('computing allowed cards', config, currentClasses, allBuckets, cards);
 				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
 					.filter((card) => config.includedSets?.includes(card.set?.toLowerCase()))

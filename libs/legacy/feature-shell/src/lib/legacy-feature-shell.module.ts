@@ -542,6 +542,7 @@ import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-acc
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
+import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -874,6 +875,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CollectionViewModule,
 		AchievementsViewModule,
 		AchievementsDataAccessModule,
+		DuelsGeneralModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

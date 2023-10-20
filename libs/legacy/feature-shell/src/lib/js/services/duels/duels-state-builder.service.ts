@@ -6,7 +6,6 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
-import { DuelsConfig } from '@models/duels/duels-config';
 import { DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
@@ -28,7 +27,6 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { sleep } from '../utils';
 
-const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 const DUELS_RUN_DETAILS_URL = 'https://c3ewlwwljryrgtmeeqbwghb23y0xtltz.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
@@ -115,18 +113,12 @@ export class DuelsStateBuilderService {
 		}, 'duelsInfo');
 	}
 
-	public async loadConfig(): Promise<DuelsConfig> {
-		const result: DuelsConfig = await this.api.callGetApi(DUELS_CONFIG_URL);
-		console.log('[duels-state-builder] loaded duels config');
-		return result;
-	}
-
 	public initState(
 		initialState: DuelsState,
 		// globalStats: DuelsStat,
 		// duelsRunInfo: readonly DuelsRunInfo[],
 		// duelsRewardsInfo: readonly DuelsRewardsInfo[],
-		duelsConfig: DuelsConfig,
+		// duelsConfig: DuelsConfig,
 		// leaderboard: DuelsLeaderboard,
 		// bucketsData: readonly DuelsBucketsData[],
 		// collectionState: BinderState,
@@ -137,7 +129,7 @@ export class DuelsStateBuilderService {
 		return initialState.update({
 			categories: categories,
 			// globalStats: globalStats,
-			config: duelsConfig,
+			// config: duelsConfig,
 			// topDecks: topDecks,
 			// duelsRunInfos: duelsRunInfo,
 			// duelsRewardsInfo: duelsRewardsInfo,

@@ -24,6 +24,7 @@
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
 			"@firestone/collection/view": ["libs/collection/view/src/index.ts"],
 			"@firestone/duels/data-access": ["libs/duels/data-access/src/index.ts"],
+			"@firestone/duels/general": ["libs/duels/general/src/index.ts"],
 			"@firestone/duels/view": ["libs/duels/view/src/index.ts"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/profile/data-access": ["libs/profile/data-access/src/index.ts"],
