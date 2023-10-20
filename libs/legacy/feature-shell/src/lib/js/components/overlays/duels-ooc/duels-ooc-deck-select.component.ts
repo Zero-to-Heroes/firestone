@@ -16,24 +16,26 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
 	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-deck-select.component.scss'],
 	template: `
-		<div class="container" *ngIf="decks$ | async as decks">
+		<div class="container">
 			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDeck: tempDuelsDeck$ | async } as value">
-				<duels-deck-widget
-					class="deck-container item-{{ i }}"
-					[ngClass]="{ inactive: currentActiveDeck != null && currentActiveDeck !== i }"
-					*ngFor="let deck of decks; let i = index; trackBy: trackByDeckFn"
-					[deck]="deck"
-					[collection]="value.collection"
-					(mouseenter)="onMouseEnter(i)"
-					(mouseleave)="onMouseLeave(i)"
-				>
-				</duels-deck-widget>
+				<ng-container *ngIf="decks$ | async as decks">
+					<duels-deck-widget
+						class="deck-container item-{{ i }}"
+						[ngClass]="{ inactive: currentActiveDeck != null && currentActiveDeck !== i }"
+						*ngFor="let deck of decks; let i = index; trackBy: trackByDeckFn"
+						[deck]="deck"
+						[collection]="value.collection"
+						(mouseenter)="onMouseEnter(i)"
+						(mouseleave)="onMouseLeave(i)"
+					>
+					</duels-deck-widget>
+				</ng-container>
 				<div class="deck-container item-3 explore-decks-widget" *ngIf="value.tempDuelsDeck">
 					<div
 						class="vignette"
