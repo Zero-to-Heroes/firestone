@@ -21,6 +21,7 @@ import { Coin } from '../../models/coin';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
+import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { AdventuresInfo } from '../../models/memory/memory-duels';
 import { Preferences } from '../../models/preferences';
@@ -154,6 +155,10 @@ export class AppUiStoreFacadeService {
 
 	public duelsAdventureInfo$(): Observable<AdventuresInfo> {
 		return this.store.duelsAdventureInfo$();
+	}
+
+	public duelsBuckets$(): Observable<readonly DuelsBucketsData[]> {
+		return this.store.duelsBuckets$();
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {

@@ -223,55 +223,53 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 					this.cdr.detectChanges();
 				}
 			});
-		const allBuckets$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.bucketsData,
-				([main, nav]) => main.duels.deckbuilder.currentClasses,
-			)
-			.pipe(
-				this.mapData(([buckets, currentClasses]) => {
-					return buckets.map((bucket) => {
-						const cardsForClass = bucket.cards.filter((card) => {
-							const refCard = this.allCards.getCard(card.cardId);
-							return (
-								!refCard.classes?.length ||
-								refCard.classes.includes(CardClass[CardClass.NEUTRAL]) ||
-								currentClasses.some((c: CardClass) => refCard.classes.includes(CardClass[c]))
-							);
-						});
-						const totalCardsOffered = sumOnArray(cardsForClass, (card) => card.totalOffered);
-						const bucketCards = cardsForClass
-							.map((card) => {
-								const totalBuckets = buckets.filter((b) =>
-									b.cards.map((c) => c.cardId).includes(card.cardId),
-								).length;
-								const refCard = this.allCards.getCard(card.cardId);
-								const bucketCard: BucketCard = {
-									cardId: card.cardId,
-									cardName: refCard.name,
-									manaCost: refCard.cost,
-									rarity: refCard.rarity?.toLowerCase(),
-									classes: refCard.classes,
-									offeringRate: card.totalOffered / totalCardsOffered,
-									totalBuckets: totalBuckets,
-								};
-								return bucketCard;
-							})
-							.sort(
-								(a, b) =>
-									a.manaCost - b.manaCost ||
-									(a.cardName?.toLowerCase() < b.cardName?.toLowerCase() ? -1 : 1),
-							);
-						const bucketData: BucketData = {
-							bucketId: bucket.bucketId,
-							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
-							bucketCardIds: bucketCards.map((c) => c.cardId),
-							bucketCards: bucketCards,
-						};
-						return bucketData;
+		const allBuckets$ = combineLatest([
+			this.store.duelsBuckets$(),
+			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentClasses),
+		]).pipe(
+			this.mapData(([buckets, [currentClasses]]) => {
+				return buckets.map((bucket) => {
+					const cardsForClass = bucket.cards.filter((card) => {
+						const refCard = this.allCards.getCard(card.cardId);
+						return (
+							!refCard.classes?.length ||
+							refCard.classes.includes(CardClass[CardClass.NEUTRAL]) ||
+							currentClasses.some((c: CardClass) => refCard.classes.includes(CardClass[c]))
+						);
 					});
-				}),
-			);
+					const totalCardsOffered = sumOnArray(cardsForClass, (card) => card.totalOffered);
+					const bucketCards = cardsForClass
+						.map((card) => {
+							const totalBuckets = buckets.filter((b) =>
+								b.cards.map((c) => c.cardId).includes(card.cardId),
+							).length;
+							const refCard = this.allCards.getCard(card.cardId);
+							const bucketCard: BucketCard = {
+								cardId: card.cardId,
+								cardName: refCard.name,
+								manaCost: refCard.cost,
+								rarity: refCard.rarity?.toLowerCase(),
+								classes: refCard.classes,
+								offeringRate: card.totalOffered / totalCardsOffered,
+								totalBuckets: totalBuckets,
+							};
+							return bucketCard;
+						})
+						.sort(
+							(a, b) =>
+								a.manaCost - b.manaCost ||
+								(a.cardName?.toLowerCase() < b.cardName?.toLowerCase() ? -1 : 1),
+						);
+					const bucketData: BucketData = {
+						bucketId: bucket.bucketId,
+						bucketName: this.allCards.getCard(bucket.bucketId)?.name,
+						bucketCardIds: bucketCards.map((c) => c.cardId),
+						bucketCards: bucketCards,
+					};
+					return bucketData;
+				});
+			}),
+		);
 		this.allowedCards$ = combineLatest(
 			this.store.listen$(
 				([main, nav]) => main.duels.config,

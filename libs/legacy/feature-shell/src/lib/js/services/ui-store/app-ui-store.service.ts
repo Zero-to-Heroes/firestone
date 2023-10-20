@@ -33,6 +33,7 @@ import { Coin } from '../../models/coin';
 import { GameState } from '../../models/decktracker/game-state';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
+import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
@@ -58,6 +59,7 @@ import { SetsManagerService } from '../collection/sets-manager.service';
 import { ConstructedMetaDecksStateService } from '../decktracker/constructed-meta-decks-state-builder.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsAdventureInfoService } from '../duels/duels-adventure-info.service';
+import { DuelsBucketsService } from '../duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { DuelsTopDeckService } from '../duels/duels-top-decks.service';
 import { GameNativeState } from '../game/game-native-state';
@@ -111,6 +113,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
 	private duelsAdventureInfo: Observable<AdventuresInfo>;
+	private duelsBuckets: Observable<readonly DuelsBucketsData[]>;
 	private mails: Observable<MailState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
@@ -310,6 +313,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.duelsAdventureInfo;
 	}
 
+	public duelsBuckets$(): Observable<readonly DuelsBucketsData[]> {
+		return this.duelsBuckets;
+	}
+
 	public mails$(): Observable<MailState> {
 		return this.mails;
 	}
@@ -445,6 +452,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.duelsAdventureInfo = (
 			this.ow.getMainWindow().duelsAdventureInfo as DuelsAdventureInfoService
 		).duelsAdventureInfo$$;
+		this.duelsBuckets = (this.ow.getMainWindow().duelsBuckets as DuelsBucketsService).duelsBuckets$$;
 		this.initMails();
 		this.initCardBacks();
 		this.initCoins();

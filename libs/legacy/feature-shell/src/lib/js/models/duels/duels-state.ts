@@ -21,7 +21,7 @@ export class DuelsState {
 	readonly duelsRewardsInfo: readonly DuelsRewardsInfo[];
 	readonly globalStats: DuelsStat;
 	readonly globalStatsDecks: ExtendedDuelsStatDecks;
-	readonly bucketsData: readonly DuelsBucketsData[] = [];
+	// readonly bucketsData: readonly DuelsBucketsData[] = [];
 	readonly leaderboard: DuelsLeaderboard;
 	// Used to store additional deck data loaded during the course of the app's use,
 	// like the 12-wins additional data. If we store it directly in the deck stats,

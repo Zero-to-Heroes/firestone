@@ -99,38 +99,36 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 				image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
 			};
 		});
-		const allBuckets$ = this.store
-			.listen$(([main, nav]) => main.duels.bucketsData)
-			.pipe(
-				this.mapData(([buckets]) => {
-					return buckets.map((bucket) => {
-						const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
-						const bucketCards = bucket.cards.map((card) => {
-							const totalBuckets = buckets.filter((b) =>
-								b.cards.map((c) => c.cardId).includes(card.cardId),
-							).length;
-							const refCard = this.allCards.getCard(card.cardId);
-							const bucketCard: BucketCard = {
-								cardId: card.cardId,
-								cardName: refCard.name,
-								manaCost: refCard.cost,
-								rarity: refCard.rarity?.toLowerCase(),
-								classes: refCard.classes,
-								offeringRate: card.totalOffered / totalCardsOffered,
-								totalBuckets: totalBuckets,
-							};
-							return bucketCard;
-						});
-						const bucketData: BucketData = {
-							bucketId: bucket.bucketId,
-							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
-							bucketCardIds: bucketCards.map((c) => c.cardId),
-							bucketCards: bucketCards,
+		const allBuckets$ = this.store.duelsBuckets$().pipe(
+			this.mapData((buckets) => {
+				return buckets.map((bucket) => {
+					const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
+					const bucketCards = bucket.cards.map((card) => {
+						const totalBuckets = buckets.filter((b) =>
+							b.cards.map((c) => c.cardId).includes(card.cardId),
+						).length;
+						const refCard = this.allCards.getCard(card.cardId);
+						const bucketCard: BucketCard = {
+							cardId: card.cardId,
+							cardName: refCard.name,
+							manaCost: refCard.cost,
+							rarity: refCard.rarity?.toLowerCase(),
+							classes: refCard.classes,
+							offeringRate: card.totalOffered / totalCardsOffered,
+							totalBuckets: totalBuckets,
 						};
-						return bucketData;
+						return bucketCard;
 					});
-				}),
-			);
+					const bucketData: BucketData = {
+						bucketId: bucket.bucketId,
+						bucketName: this.allCards.getCard(bucket.bucketId)?.name,
+						bucketCardIds: bucketCards.map((c) => c.cardId),
+						bucketCards: bucketCards,
+					};
+					return bucketData;
+				});
+			}),
+		);
 		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.trim()?.toLowerCase(), null, 50),
