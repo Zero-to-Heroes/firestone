@@ -1,17 +1,26 @@
 import { Injectable } from '@angular/core';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { BehaviorSubject } from 'rxjs';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
 
 const ACHIEVEMENTS_URL = 'https://static.zerotoheroes.com/hearthstone/data/achievements';
 
 @Injectable()
 export class RawAchievementsLoaderService {
+	private rawAchievements$$ = new BehaviorSubject<readonly RawAchievement[]>([]);
+
 	constructor(private readonly api: ApiRunner, private readonly prefs: PreferencesService) {}
 
 	public async loadRawAchievements(): Promise<readonly RawAchievement[]> {
+		if (this.rawAchievements$$.getValue().length > 0) {
+			return this.rawAchievements$$.getValue();
+		}
+
 		console.log('[achievements-loader] Initializing achievements');
+		console.debug('[achievements-loader] loading all achievements', new Error().stack);
 		const rawAchievements: readonly RawAchievement[] = await this.loadAll();
+		this.rawAchievements$$.next(rawAchievements);
 		console.log('[achievements-loader] loaded all', rawAchievements.length);
 		return rawAchievements;
 	}
