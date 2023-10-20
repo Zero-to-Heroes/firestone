@@ -470,6 +470,8 @@ export class TwitchAuthService {
 		return isTokenValid;
 	}
 
+	// TODO: refactor this so that this service becomes a single source of truth for the token
+	// and only exposes a valid token?
 	public async validateToken(accessToken: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);

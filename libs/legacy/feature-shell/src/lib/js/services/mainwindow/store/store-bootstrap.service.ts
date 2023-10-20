@@ -90,9 +90,9 @@ export class StoreBootstrapService {
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(windowStateForFtue, false));
 
-		// First update the prefs, for local installs
-		const prefsFromRemote = await this.prefs.loadRemotePrefs();
-		const mergedPrefs = await this.mergePrefs(prefs, prefsFromRemote);
+		// ==========================
+		// TODO: Ideally, everything after this is handled as deferred subjects
+		// ==========================
 
 		// Load all the initial data
 		const [
@@ -119,7 +119,7 @@ export class StoreBootstrapService {
 			Promise.all([this.gameStatsLoader.retrieveStats()]),
 			Promise.all([
 				this.duels.loadRuns(),
-				this.duelsAccess.loadMetaHeroes(mergedPrefs.duelsActiveMmrFilter, mergedPrefs.duelsActiveTimeFilter),
+				this.duelsAccess.loadMetaHeroes(prefs.duelsActiveMmrFilter, prefs.duelsActiveTimeFilter),
 				this.duels.loadConfig(),
 				this.duels.loadLeaderboard(),
 				this.duels.loadBuckets(),
@@ -163,7 +163,7 @@ export class StoreBootstrapService {
 			newStatsState,
 			constructedConfig,
 			currentRankedMetaPatch,
-			mergedPrefs,
+			prefs,
 		);
 		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
 			windowStateForFtue.replays,
@@ -172,9 +172,7 @@ export class StoreBootstrapService {
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
 		const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);
-		const validHiddenCodes = mergedPrefs.desktopDeckHiddenDeckCodes.filter((deckCode) =>
-			allDeckCodes.includes(deckCode),
-		);
+		const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter((deckCode) => allDeckCodes.includes(deckCode));
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
 		const newAchievementState = windowStateForFtue.achievements.update({
@@ -227,7 +225,7 @@ export class StoreBootstrapService {
 			currentScene: currentScene,
 			lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
 			currentUser: currentUser,
-			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
+			showFtue: !prefs.ftue.hasSeenGlobalFtue,
 			replays: replayState,
 			// binder: collectionState,
 			achievements: newAchievementState,
@@ -289,6 +287,7 @@ export class StoreBootstrapService {
 	}
 
 	private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {
+		console.log('[social] initializing social share user info');
 		const twitter = await this.ow.getTwitterUserInfo();
 		return Object.assign(new SocialShareUserInfo(), {
 			twitter: twitter,
