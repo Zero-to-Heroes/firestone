@@ -2,8 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { TranslateService } from '@ngx-translate/core';
-import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationService } from '@services/localization.service';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
@@ -18,7 +18,6 @@ import { DuelsDeletePersonalDeckSummaryEvent } from '@services/mainwindow/store/
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
-import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { DuelsBuildDeckParser } from '@services/mainwindow/store/processors/duels/duels-build-deck-parser';
 import { DuelsChoosingHeroParser } from '@services/mainwindow/store/processors/duels/duels-choosing-hero-parser';
 import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
@@ -32,7 +31,6 @@ import { DuelsDeletePersonalDeckSummaryProcessor } from '@services/mainwindow/st
 import { DuelsExploreDecksParser } from '@services/mainwindow/store/processors/duels/duels-explore-decks-parser';
 import { DuelsIsOnDeckBuildingLobbyScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-deck-building-lobby-screen-processor';
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
-import { DuelsStateUpdatedProcessor } from '@services/mainwindow/store/processors/duels/duels-state-updated-processor';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
@@ -423,7 +421,7 @@ export class MainWindowStoreService {
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
-		private readonly duelsMemoryCache: DuelsMemoryCacheService,
+		private readonly duelsMemoryCache: DuelsAdventureInfoService,
 		private readonly translate: TranslateService,
 		private readonly i18n: LocalizationService,
 		private readonly packsService: PackStatsService,
@@ -839,7 +837,6 @@ export class MainWindowStoreService {
 				new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 			],
 			// Duels
-			[DuelsStateUpdatedEvent.eventName(), new DuelsStateUpdatedProcessor()],
 			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor()],
 			[DuelsSelectCategoryEvent.eventName(), new DuelsSelectCategoryProcessor()],
 			[

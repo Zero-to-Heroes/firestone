@@ -741,9 +741,9 @@ import { OverlayDisplayService } from './js/services/decktracker/overlay-display
 import { SecretConfigService } from './js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
+import { DuelsAdventureInfoService } from './js/services/duels/duels-adventure-info.service';
 import { DuelsDecksProviderService } from './js/services/duels/duels-decks-provider.service';
 import { DuelsLootParserService } from './js/services/duels/duels-loot-parser.service';
-import { DuelsMemoryCacheService } from './js/services/duels/duels-memory-cache.service';
 import { DuelsRewardsService } from './js/services/duels/duels-rewards.service';
 import { DuelsRunIdService } from './js/services/duels/duels-run-id.service';
 import { DuelsStateBuilderService } from './js/services/duels/duels-state-builder.service';
@@ -1847,7 +1847,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		DuelsStateBuilderService,
 		DuelsTopDeckService,
-		DuelsMemoryCacheService,
+		DuelsAdventureInfoService,
 
 		ArenaStateBuilderService,
 

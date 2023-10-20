@@ -37,6 +37,7 @@ import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/bat
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { AdventuresInfo } from '../../models/memory/memory-duels';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../models/preferences';
@@ -56,6 +57,7 @@ import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { ConstructedMetaDecksStateService } from '../decktracker/constructed-meta-decks-state-builder.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
+import { DuelsAdventureInfoService } from '../duels/duels-adventure-info.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { DuelsTopDeckService } from '../duels/duels-top-decks.service';
 import { GameNativeState } from '../game/game-native-state';
@@ -108,6 +110,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
+	private duelsAdventureInfo: Observable<AdventuresInfo>;
 	private mails: Observable<MailState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
@@ -303,6 +306,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.duelsTopDecks;
 	}
 
+	public duelsAdventureInfo$(): Observable<AdventuresInfo> {
+		return this.duelsAdventureInfo;
+	}
+
 	public mails$(): Observable<MailState> {
 		return this.mails;
 	}
@@ -435,6 +442,9 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initDuelsHeroStats();
 		this.initDecks();
 		this.initDuelsDecks();
+		this.duelsAdventureInfo = (
+			this.ow.getMainWindow().duelsAdventureInfo as DuelsAdventureInfoService
+		).duelsAdventureInfo$$;
 		this.initMails();
 		this.initCardBacks();
 		this.initCoins();

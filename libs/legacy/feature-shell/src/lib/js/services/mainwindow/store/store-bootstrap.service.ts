@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
+import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
@@ -64,7 +64,7 @@ export class StoreBootstrapService {
 		private readonly mercenariesService: MercenariesStateBuilderService,
 		private readonly mercenariesMemory: MercenariesMemoryCacheService,
 		private readonly memory: MemoryInspectionService,
-		private readonly duelsMemoryCache: DuelsMemoryCacheService,
+		private readonly duelsMemoryCache: DuelsAdventureInfoService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 	) {
@@ -105,7 +105,7 @@ export class StoreBootstrapService {
 				duelsConfig,
 				duelsLeaderboard,
 				duelsBucketsData,
-				adventuresInfo,
+				// adventuresInfo,
 			],
 			[arenaRewards],
 			[mercenariesCollection],
@@ -123,7 +123,7 @@ export class StoreBootstrapService {
 				this.duels.loadConfig(),
 				this.duels.loadLeaderboard(),
 				this.duels.loadBuckets(),
-				this.duelsMemoryCache.getAdventuresInfo(),
+				// this.duelsMemoryCache.getAdventuresInfo(),
 			]),
 			Promise.all([this.arena.loadRewards()]),
 			Promise.all([
@@ -195,7 +195,7 @@ export class StoreBootstrapService {
 			duelsLeaderboard,
 			duelsBucketsData,
 			// collectionState,
-			adventuresInfo,
+			// adventuresInfo,
 			currentDuelsMetaPatch,
 		);
 

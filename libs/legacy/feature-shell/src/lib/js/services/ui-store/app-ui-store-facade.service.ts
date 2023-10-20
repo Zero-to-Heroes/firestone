@@ -22,6 +22,7 @@ import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
+import { AdventuresInfo } from '../../models/memory/memory-duels';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
@@ -149,6 +150,10 @@ export class AppUiStoreFacadeService {
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
 		return this.store.duelsRuns$();
+	}
+
+	public duelsAdventureInfo$(): Observable<AdventuresInfo> {
+		return this.store.duelsAdventureInfo$();
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {

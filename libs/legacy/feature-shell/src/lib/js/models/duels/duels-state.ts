@@ -6,7 +6,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { DuelsConfig } from '@models/duels/duels-config';
 import { DuelsDeckbuilder } from '@models/duels/duels-deckbuilder';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
-import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
+import { DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { ExtendedDuelsStatDecks } from '../../services/duels/duels-state-builder.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
@@ -40,7 +40,7 @@ export class DuelsState {
 	readonly heroOptionsDbfIds: readonly number[];
 	readonly heroPowerOptions: readonly MemoryDuelsHeroPowerOption[];
 	readonly signatureTreasureOptions: readonly MemoryDuelsHeroPowerOption[];
-	readonly adventuresInfo: AdventuresInfo;
+	// readonly adventuresInfo: AdventuresInfo;
 	readonly decksSearchString: string;
 
 	readonly initComplete: boolean;

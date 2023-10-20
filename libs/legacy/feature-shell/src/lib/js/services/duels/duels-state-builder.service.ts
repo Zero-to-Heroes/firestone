@@ -9,16 +9,15 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { DuelsConfig } from '@models/duels/duels-config';
-import { AdventuresInfo, DuelsInfo } from '@models/memory/memory-duels';
+import { DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
-import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
-import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { BehaviorSubject } from 'rxjs';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
@@ -54,7 +53,7 @@ export class DuelsStateBuilderService {
 		private readonly events: Events,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly memory: MemoryInspectionService,
-		private readonly duelsMemoryCeche: DuelsMemoryCacheService,
+		private readonly duelsMemoryCeche: DuelsAdventureInfoService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
@@ -103,15 +102,6 @@ export class DuelsStateBuilderService {
 			this.isOnMainScreen.subscribe((deck) => {
 				this.mainWindowStateUpdater.next(new DuelsIsOnMainScreenEvent(deck));
 			});
-		});
-
-		// TODO: this can probably wait until we're on the correct scene at least?
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
-				console.log('[duels-state-builder] in game, updating duels adventures info');
-				const [updatedAdventuresInfo] = await Promise.all([this.duelsMemoryCeche.getAdventuresInfo()]);
-				this.mainWindowStateUpdater.next(new DuelsStateUpdatedEvent(updatedAdventuresInfo));
-			}
 		});
 	}
 
@@ -186,7 +176,7 @@ export class DuelsStateBuilderService {
 		leaderboard: DuelsLeaderboard,
 		bucketsData: readonly DuelsBucketsData[],
 		// collectionState: BinderState,
-		adventuresInfo: AdventuresInfo,
+		// adventuresInfo: AdventuresInfo,
 		currentDuelsMetaPatch?: PatchInfo,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
@@ -199,7 +189,7 @@ export class DuelsStateBuilderService {
 			duelsRewardsInfo: duelsRewardsInfo,
 			bucketsData: bucketsData,
 			leaderboard: leaderboard,
-			adventuresInfo: adventuresInfo,
+			// adventuresInfo: adventuresInfo,
 			currentDuelsMetaPatch: currentDuelsMetaPatch,
 			loading: false,
 			initComplete: true,

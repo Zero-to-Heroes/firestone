@@ -71,7 +71,6 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
-				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
@@ -82,7 +81,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 					runs,
 					duelsTopDecks,
 					allHeroPowerCards,
-					[duelStats, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch],
+					[duelStats, mmrPercentiles, mmrFilter, dustFilter, patch],
 				]) => {
 					return allHeroPowerCards
 						.map((card) => card.id)
