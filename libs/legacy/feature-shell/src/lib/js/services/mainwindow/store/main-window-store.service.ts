@@ -41,11 +41,10 @@ import { PackStatsService } from '../../../../libs/packs/services/pack-stats.ser
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
-import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
+import { AchievementHistoryService } from '../../achievement/achievements-history.service';
 import { AchievementsStateManagerService } from '../../achievement/achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../achievement/data/firestone-remote-achievements-loader.service';
-import { RawAchievementsLoaderService } from '../../achievement/data/raw-achievements-loader.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
@@ -70,7 +69,6 @@ import { UserService } from '../../user.service';
 import { LiveStreamsService } from '../live-streams.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
-import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
@@ -216,7 +214,6 @@ import { LiveStreamsDataLoadedEvent } from './events/streams/live-streams-data-l
 import { LiveStreamsForceReloadEvent } from './events/streams/live-streams-force-reload-event';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
-import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
 import {
 	AchievementsRemovePinnedAchievementsEvent,
@@ -406,8 +403,7 @@ export class MainWindowStoreService {
 		private readonly cards: CardsFacadeService,
 		private readonly sets: SetsService,
 		private readonly collectionManager: CollectionManager,
-		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
-		private readonly achievementsLoader: RawAchievementsLoaderService,
+		private readonly achievementHistory: AchievementHistoryService,
 		private readonly firestoneRemoteAchievements: FirestoneRemoteAchievementsLoaderService,
 		private readonly collectionDb: CollectionStorageService,
 		private readonly gameStatsUpdater: GameStatsUpdaterService,
@@ -624,10 +620,6 @@ export class MainWindowStoreService {
 				new AchievementsFullRefreshProcessor(this.firestoneRemoteAchievements),
 			],
 			[
-				AchievementHistoryCreatedEvent.eventName(),
-				new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
-			],
-			[
 				ChangeVisibleAchievementEvent.eventName(),
 				new ChangeVisibleAchievementProcessor(this.achievementsStateManager),
 			],
@@ -643,7 +635,7 @@ export class MainWindowStoreService {
 				ShowAchievementDetailsEvent.eventName(),
 				new ShowAchievementDetailsProcessor(this.achievementsStateManager),
 			],
-			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistoryStorage)],
+			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistory)],
 			[
 				FilterShownAchievementsEvent.eventName(),
 				new FilterShownAchievementsProcessor(this.achievementsStateManager),

@@ -24,6 +24,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
+import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
@@ -41,6 +42,7 @@ import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-com
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { AchievementHistoryService } from '../achievement/achievements-history.service';
 import {
 	AchievementsLiveProgressTrackingService,
 	AchievementsProgressTracking,
@@ -119,6 +121,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private lottery: Observable<LotteryState>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
 	private achievementCategories: Observable<readonly VisualAchievementCategory[]>;
+	private achievementsHistory: BehaviorSubject<readonly AchievementHistory[]>;
 	private packStats: Observable<readonly PackResult[]>;
 	private cardHistory: Observable<readonly CardHistory[]>;
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
@@ -376,6 +379,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.profileBgHeroStat;
 	}
 
+	public achievementsHistory$(): Observable<readonly AchievementHistory[]> {
+		return this.achievementsHistory;
+	}
+
 	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {
 		return this.bgsQuests;
 	}
@@ -445,6 +452,9 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initProfileBgHeroStat();
 		this.initBgsQuests();
 		this.initAchievementCategories();
+		this.achievementsHistory = (
+			this.ow.getMainWindow().achievementsHistory as AchievementHistoryService
+		).achievementsHistory$$;
 		this.initPackStats();
 		this.initCardsHistory();
 		this.initHighlightedBgsMinions();

@@ -43,9 +43,7 @@ export class AchievementHistoryComponent extends AbstractSubscriptionStoreCompon
 	}
 
 	ngAfterContentInit() {
-		this.achievementHistory$ = this.store
-			.listen$(([main, nav, prefs]) => main.achievements.achievementHistory)
-			.pipe(this.mapData(([history]) => history));
+		this.achievementHistory$ = this.store.achievementsHistory$().pipe(this.mapData((history) => history));
 	}
 
 	trackById(index, history: AchievementHistory) {

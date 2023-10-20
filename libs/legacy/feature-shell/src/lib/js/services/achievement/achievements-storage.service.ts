@@ -61,13 +61,4 @@ export class AchievementsStorageService {
 	public async saveAllHistory(history: readonly AchievementHistory[]) {
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY, history);
 	}
-
-	public async saveHistory(history: AchievementHistory) {
-		const fromStorage = this.localStorageService.getItem<readonly AchievementHistory[]>(
-			LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY,
-		);
-		const historyList: readonly AchievementHistory[] = fromStorage ?? [];
-		const newHistory = [history, ...historyList];
-		this.saveAllHistory(newHistory);
-	}
 }

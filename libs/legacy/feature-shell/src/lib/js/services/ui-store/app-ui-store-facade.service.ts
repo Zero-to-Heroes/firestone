@@ -13,6 +13,7 @@ import { ArchetypeStat, ArchetypeStats, DeckStat, DeckStats } from '@firestone-h
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
+import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
@@ -228,6 +229,10 @@ export class AppUiStoreFacadeService {
 
 	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
 		return this.store.achievementCategories$();
+	}
+
+	public achievementsHistory$(): Observable<readonly AchievementHistory[]> {
+		return this.store.achievementsHistory$();
 	}
 
 	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {

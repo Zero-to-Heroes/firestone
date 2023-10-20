@@ -680,6 +680,7 @@ import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over
 import { ScrollableDirective } from './js/directives/scrollable.directive';
 import { SafeHtmlPipe } from './js/pipes/safe-html.pipe';
 import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
+import { AchievementHistoryService } from './js/services/achievement/achievements-history.service';
 import { AchievementsLiveProgressTrackingService } from './js/services/achievement/achievements-live-progress-tracking.service';
 import { AchievementsNotificationService } from './js/services/achievement/achievements-notification.service';
 import { AchievementsStateManagerService } from './js/services/achievement/achievements-state-manager.service';
@@ -770,7 +771,6 @@ import { LotteryService } from './js/services/lottery/lottery.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { CollectionBootstrapService } from './js/services/mainwindow/store/collection-bootstrap.service';
-import { AchievementUpdateHelper } from './js/services/mainwindow/store/helper/achievement-update-helper';
 import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from './js/services/mainwindow/store/store-bootstrap.service';
 import { TwitchAuthService } from './js/services/mainwindow/twitch-auth.service';
@@ -1710,6 +1710,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ModsConfigService,
 
 		AchievementHistoryStorageService,
+		AchievementHistoryService,
+
 		ChallengeBuilderService,
 		RawAchievementsLoaderService,
 		FirestoneRemoteAchievementsLoaderService,
@@ -1786,7 +1788,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementsMemoryMonitor,
 		AchievementsNotificationService,
 		FirestoneRemoteAchievementsLoaderService,
-		AchievementUpdateHelper,
 
 		DecktrackerStateLoaderService,
 		DecksProviderService,

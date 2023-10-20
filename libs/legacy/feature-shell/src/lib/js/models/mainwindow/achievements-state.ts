@@ -1,16 +1,11 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AchievementHistory } from '../achievement/achievement-history';
 import { FilterOption } from '../filter-option';
 import { VisualAchievement } from '../visual-achievement';
 import { VisualAchievementCategory } from '../visual-achievement-category';
 
 export class AchievementsState {
 	readonly filters: readonly FilterOption[];
-	// readonly categories: readonly VisualAchievementCategory[] = [];
-	// Holds the IDs of all the relevant achievements. The real data is somewhere in the achievements catergories
-	readonly achievementHistory: readonly AchievementHistory[] = [];
-	readonly isLoading: boolean = true;
 
 	public update(base: Partial<NonFunctionProperties<AchievementsState>>): AchievementsState {
 		return Object.assign(new AchievementsState(), this, base);

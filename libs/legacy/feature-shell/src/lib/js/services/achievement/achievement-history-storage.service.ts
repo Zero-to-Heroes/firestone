@@ -6,8 +6,8 @@ import { AchievementsStorageService } from './achievements-storage.service';
 export class AchievementHistoryStorageService {
 	constructor(private storage: AchievementsStorageService) {}
 
-	public async save(history: AchievementHistory): Promise<void> {
-		return this.storage.saveHistory(history);
+	public async saveAll(history: readonly AchievementHistory[]): Promise<void> {
+		return this.storage.saveAllHistory(history);
 	}
 
 	public loadAll(): Promise<readonly AchievementHistory[]> {

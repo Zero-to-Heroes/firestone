@@ -36,7 +36,6 @@ import { sleep } from '../../utils';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { StoreInitEvent } from './events/store-init-event';
-import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 
 @Injectable()
 export class StoreBootstrapService {
@@ -44,7 +43,6 @@ export class StoreBootstrapService {
 
 	constructor(
 		private readonly cardsInit: CardsInitService,
-		private readonly achievementsHelper: AchievementUpdateHelper,
 		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
 		private readonly prefs: PreferencesService,
@@ -98,18 +96,9 @@ export class StoreBootstrapService {
 
 		// Load all the initial data
 		const [
-			[
-				socialShareUserInfo,
-				currentUser,
-				achievementHistory,
-				// collectionState,
-				currentScene,
-			],
+			[socialShareUserInfo, currentUser, currentScene],
 			[constructedConfig],
-			[
-				matchStats,
-				// archetypesConfig, archetypesStats
-			],
+			[matchStats],
 			[
 				[duelsRunInfo, duelsRewardsInfo],
 				duelsGlobalStats,
@@ -124,16 +113,10 @@ export class StoreBootstrapService {
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
 				this.userService.getCurrentUser(),
-				this.achievementsHelper.buildAchievementHistory(),
-				// this.collectionBootstrap.initCollectionState(windowStateForFtue.binder),
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
-			Promise.all([
-				this.gameStatsLoader.retrieveStats(),
-				// this.gameStatsLoader.retrieveArchetypesConfig(),
-				// this.gameStatsLoader.retrieveArchetypesStats(),
-			]),
+			Promise.all([this.gameStatsLoader.retrieveStats()]),
 			Promise.all([
 				this.duels.loadRuns(),
 				this.duelsAccess.loadMetaHeroes(mergedPrefs.duelsActiveMmrFilter, mergedPrefs.duelsActiveTimeFilter),
@@ -195,8 +178,6 @@ export class StoreBootstrapService {
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
 		const newAchievementState = windowStateForFtue.achievements.update({
-			achievementHistory: achievementHistory,
-			isLoading: false,
 			filters: AchievementsState.buildFilterOptions(this.i18n),
 		});
 
