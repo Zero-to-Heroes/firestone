@@ -28,7 +28,6 @@ export class SubscriberAwareBehaviorSubject<T> extends BehaviorSubject<T> {
 	}
 
 	protected _subscribe(subscriber: Subscriber<T>): Subscription {
-		console.debug('subscribing', new Error().stack);
 		this.triggerListeners();
 		return super['_subscribe'](subscriber);
 	}
