@@ -55,6 +55,7 @@ import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state
 import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { DuelsTopDeckService } from '../../duels/duels-top-decks.service';
+import { DuelsUserRunsService } from '../../duels/duels-user-runs.service';
 import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
@@ -418,6 +419,7 @@ export class MainWindowStoreService {
 		private readonly duelsDeckProvider: DuelsDecksProviderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
+		private readonly duelsUserRuns: DuelsUserRunsService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 		private readonly duelsMemoryCache: DuelsAdventureInfoService,
 		private readonly translate: TranslateService,
@@ -835,7 +837,7 @@ export class MainWindowStoreService {
 				new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 			],
 			// Duels
-			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor()],
+			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor(this.duelsUserRuns)],
 			[DuelsSelectCategoryEvent.eventName(), new DuelsSelectCategoryProcessor()],
 			[
 				DuelsHeroSortFilterSelectedEvent.eventName(),

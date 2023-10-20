@@ -24,6 +24,7 @@ import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual, groupByFunction } from '../utils';
+import { DuelsUserRunsService } from './duels-user-runs.service';
 
 @Injectable()
 export class DuelsDecksProviderService {
@@ -34,6 +35,7 @@ export class DuelsDecksProviderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly duelsUserRuns: DuelsUserRunsService,
 	) {
 		window['duelsDecksProvider'] = this;
 		this.init();
@@ -46,30 +48,26 @@ export class DuelsDecksProviderService {
 			// The idea is to compute the initial value, whatever the most recent game is, and
 			// once this is done, we only recompute things once the most recent stat is not empty
 			const runSourceFirstValue$ = combineLatest([
-				this.store.listen$(
-					([main, nav]) => main.duels.duelsRunInfos,
-					([main, nav]) => main.duels.duelsRewardsInfo,
-				),
+				this.duelsUserRuns.duelsRuns$$,
+				this.duelsUserRuns.duelsRewards$$,
 				this.store.gameStats$(),
 			]).pipe(
-				filter(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => !!gameStats?.length),
+				filter(([duelsRunInfos, duelsRewardsInfo, gameStats]) => !!gameStats?.length),
 				take(1),
 			);
 			const runSourceFilteredValues$ = combineLatest([
-				this.store.listen$(
-					([main, nav]) => main.duels.duelsRunInfos,
-					([main, nav]) => main.duels.duelsRewardsInfo,
-				),
+				this.duelsUserRuns.duelsRuns$$,
+				this.duelsUserRuns.duelsRewards$$,
 				this.store.gameStats$(),
 			]).pipe(
 				filter(
-					([[duelsRunInfos, duelsRewardsInfo], gameStats]) =>
+					([duelsRunInfos, duelsRewardsInfo, gameStats]) =>
 						!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
 				),
 			);
 			concat(runSourceFirstValue$, runSourceFilteredValues$)
 				.pipe(
-					map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
+					map(([duelsRunInfos, duelsRewardsInfo, gameStats]) => {
 						const duelMatches =
 							gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
 						const matchesByRun = groupByFunction((match: GameStat) => match.runId)(duelMatches);

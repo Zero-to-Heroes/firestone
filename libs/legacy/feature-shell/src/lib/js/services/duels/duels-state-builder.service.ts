@@ -2,9 +2,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DeckDefinition } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
@@ -31,7 +29,6 @@ import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service
 import { sleep } from '../utils';
 
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
-const DUELS_RUN_INFO_URL = 'https://cc3tc224po5orwembimzyaxqhy0khyij.lambda-url.us-west-2.on.aws/';
 const DUELS_RUN_DETAILS_URL = 'https://c3ewlwwljryrgtmeeqbwghb23y0xtltz.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
@@ -118,28 +115,6 @@ export class DuelsStateBuilderService {
 		}, 'duelsInfo');
 	}
 
-	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {
-		const user = await this.ow.getCurrentUser();
-		const input: Input = {
-			userId: user.userId,
-			userName: user.username,
-		};
-		const results: any = await this.api.callPostApi(DUELS_RUN_INFO_URL, input);
-		const stepResults: readonly DuelsRunInfo[] =
-			results?.results.map(
-				(info) =>
-					({
-						...info,
-						option1Contents: info.option1Contents?.split(','),
-						option2Contents: info.option2Contents?.split(','),
-						option3Contents: info.option3Contents?.split(','),
-					} as DuelsRunInfo),
-			) || [];
-		const rewardsResults: readonly DuelsRewardsInfo[] = results?.rewardsResults || [];
-		console.log('[duels-state-builder] loaded result');
-		return [stepResults, rewardsResults];
-	}
-
 	public async loadConfig(): Promise<DuelsConfig> {
 		const result: DuelsConfig = await this.api.callGetApi(DUELS_CONFIG_URL);
 		console.log('[duels-state-builder] loaded duels config');
@@ -149,8 +124,8 @@ export class DuelsStateBuilderService {
 	public initState(
 		initialState: DuelsState,
 		// globalStats: DuelsStat,
-		duelsRunInfo: readonly DuelsRunInfo[],
-		duelsRewardsInfo: readonly DuelsRewardsInfo[],
+		// duelsRunInfo: readonly DuelsRunInfo[],
+		// duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		duelsConfig: DuelsConfig,
 		// leaderboard: DuelsLeaderboard,
 		// bucketsData: readonly DuelsBucketsData[],
@@ -164,8 +139,8 @@ export class DuelsStateBuilderService {
 			// globalStats: globalStats,
 			config: duelsConfig,
 			// topDecks: topDecks,
-			duelsRunInfos: duelsRunInfo,
-			duelsRewardsInfo: duelsRewardsInfo,
+			// duelsRunInfos: duelsRunInfo,
+			// duelsRewardsInfo: duelsRewardsInfo,
 			// bucketsData: bucketsData,
 			// leaderboard: leaderboard,
 			// adventuresInfo: adventuresInfo,
