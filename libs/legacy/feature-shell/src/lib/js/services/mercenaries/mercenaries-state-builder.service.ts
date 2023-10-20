@@ -5,7 +5,6 @@ import { ApiRunner, DiskCacheService, LocalStorageService } from '@firestone/sha
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { MercenariesGlobalStatsLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-global-stats-loaded-event';
@@ -84,7 +83,7 @@ export class MercenariesStateBuilderService {
 		currentState: MercenariesState,
 		// globalStats: MercenariesGlobalStats,
 		// referenceData: MercenariesReferenceData,
-		mercenariesCollection: MemoryMercenariesCollectionInfo,
+		// mercenariesCollection: MemoryMercenariesCollectionInfo,
 	): MercenariesState {
 		const categoryIds: readonly MercenariesCategoryId[] = [
 			'mercenaries-personal-hero-stats',
@@ -96,7 +95,7 @@ export class MercenariesStateBuilderService {
 		return currentState.update({
 			// globalStats: globalStats,
 			// referenceData: referenceData,
-			collectionInfo: mercenariesCollection,
+			// collectionInfo: mercenariesCollection,
 			categoryIds: categoryIds,
 			loading: false,
 			initComplete: true,

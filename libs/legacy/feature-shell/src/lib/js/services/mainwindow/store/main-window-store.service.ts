@@ -163,13 +163,11 @@ import { GenericPreferencesUpdateEvent } from './events/generic-preferences-upda
 import { LocalizationUpdateEvent } from './events/localization-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesAddMercToBackupTeamEvent } from './events/mercenaries/mercenaries-add-merc-to-backup-team-event';
-import { MercenariesCollectionInformationFromMemoryEvent } from './events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { MercenariesGlobalStatsLoadedEvent } from './events/mercenaries/mercenaries-global-stats-loaded-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
 import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
 import { MercenariesHideTeamSummaryEvent } from './events/mercenaries/mercenaries-hide-team-summary-event';
-import { MercenariesMapInformationFromMemoryEvent } from './events/mercenaries/mercenaries-map-information-from-memory-event';
 import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
 import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
@@ -326,13 +324,11 @@ import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
 import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
 import { MercenariesAddMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
-import { MercenariesCollectionInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-collection-information-from-memory-processor';
 import { MercenariesGlobalStatsLoadedProcessor } from './processors/mercenaries/mercenaries-global-stats-loaded-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
 import { MercenariesHideTeamSummaryProcessor } from './processors/mercenaries/mercenaries-hide-team-summary-processor';
-import { MercenariesMapInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-map-information-from-memory-processor';
 import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
 import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
@@ -818,11 +814,6 @@ export class MainWindowStoreService {
 			[MercenariesHeroSearchEvent.eventName(), new MercenariesHeroSearchProcessor()],
 			[MercenariesSelectCompositionEvent.eventName(), new MercenariesSelectCompositionProcessor(this.i18n)],
 			[MercenariesSelectCategoryEvent.eventName(), new MercenariesSelectCategoryProcessor()],
-			[
-				MercenariesCollectionInformationFromMemoryEvent.eventName(),
-				new MercenariesCollectionInformationFromMemoryProcessor(),
-			],
-			[MercenariesMapInformationFromMemoryEvent.eventName(), new MercenariesMapInformationFromMemoryProcessor()],
 			[MercenariesPersonalHeroesSortEvent.eventName(), new MercenariesPersonalHeroesSortProcessor(this.prefs)],
 			[MercenariesHideTeamSummaryEvent.eventName(), new MercenariesHideTeamSummaryProcessor(this.prefs)],
 			[MercenariesRestoreTeamSummaryEvent.eventName(), new MercenariesRestoreTeamSummaryProcessor(this.prefs)],

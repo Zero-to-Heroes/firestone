@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import {
@@ -11,6 +11,7 @@ import {
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -69,11 +70,14 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 		private readonly el: ElementRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.mercenariesCollection.isReady();
+
 		const team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
@@ -88,15 +92,15 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 				),
 				startWith(null),
 			);
-		const oocTeam$ = combineLatest(
+		const oocTeam$ = combineLatest([
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				([main, nav, prefs]) => main.mercenaries?.getReferenceData(),
-				([main, nav, prefs]) => main.mercenaries?.mapInfo,
 			),
-		).pipe(
-			filter(([[currentScene, referenceData, mapInfo]]) => !!referenceData),
-			this.mapData(([[currentScene, referenceData, refMapInfo]]) => {
+			this.mercenariesCollection.memoryMapInfo$$,
+		]).pipe(
+			filter(([[currentScene, referenceData], mapInfo]) => !!referenceData),
+			this.mapData(([[currentScene, referenceData], refMapInfo]) => {
 				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
 				return MercenariesBattleTeam.create({
 					mercenaries:
@@ -147,16 +151,15 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 			}),
 			startWith(null),
 		);
+
 		// We use separate observables to reduce the quantity of equality checking we have to do
-		const referenceData$: Observable<[MercenariesReferenceData, readonly MemoryVisitor[]]> = this.store
-			.listen$(
-				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
-				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
-			)
-			.pipe(
-				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
-				this.mapData(([referenceData, visitors]) => [referenceData, visitors]),
-			);
+		const referenceData$: Observable<[MercenariesReferenceData, readonly MemoryVisitor[]]> = combineLatest([
+			this.store.listen$(([main, nav, prefs]) => main.mercenaries.getReferenceData()),
+			this.mercenariesCollection.memoryCollectionInfo$$,
+		]).pipe(
+			filter(([[referenceData], collectionInfo]) => !!referenceData && !!collectionInfo?.Visitors?.length),
+			this.mapData(([[referenceData], collectionInfo]) => [referenceData, collectionInfo?.Visitors ?? []]),
+		);
 		const activeMercIds$ = combineLatest(team$, oocTeam$).pipe(
 			this.mapData(([team, oocTeam]) =>
 				[...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])].map((m) => m.mercenaryId),

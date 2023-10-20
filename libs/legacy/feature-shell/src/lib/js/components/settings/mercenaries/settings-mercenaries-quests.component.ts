@@ -1,9 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Observable, combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { MercenariesAddMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesRemoveMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
+import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -59,23 +60,24 @@ export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionStor
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.backupTeam$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.mercenariesCollection.isReady();
+
+		this.backupTeam$ = combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
-			this.store.listen$(
-				([main, nav]) => main.mercenaries.collectionInfo,
-				([main, nav]) => main.mercenaries.getReferenceData(),
-			),
-		).pipe(
+			this.mercenariesCollection.memoryCollectionInfo$$,
+			this.store.listen$(([main, nav]) => main.mercenaries.getReferenceData()),
+		]).pipe(
 			filter(
-				([[backupTeam], [collection, refData]]) =>
+				([[backupTeam], collection, [refData]]) =>
 					!!refData?.mercenaries?.length && !!collection?.Mercenaries?.length,
 			),
-			this.mapData(([[backupTeam], [collection, refData]]) => {
+			this.mapData(([[backupTeam], collection, [refData]]) => {
 				const refBackup = backupTeam.map((mercId) => refData.mercenaries.find((m) => m.id === mercId));
 				const result = refBackup
 					.map((refMerc) => {
@@ -98,18 +100,16 @@ export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionStor
 				return !!result?.length ? result : null;
 			}),
 		);
-		this.mercs$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.mercenaries.collectionInfo,
-				([main, nav]) => main.mercenaries.getReferenceData(),
-			),
+		this.mercs$ = combineLatest([
+			this.mercenariesCollection.memoryCollectionInfo$$,
+			this.store.listen$(([main, nav]) => main.mercenaries.getReferenceData()),
 			this.backupTeam$,
-		).pipe(
+		]).pipe(
 			filter(
-				([[mercCollection, refData], backupTeam]) =>
+				([mercCollection, [refData], backupTeam]) =>
 					!!refData?.mercenaries?.length && !!mercCollection?.Mercenaries?.length,
 			),
-			this.mapData(([[mercCollection, refData], backupTeam]) => {
+			this.mapData(([mercCollection, [refData], backupTeam]) => {
 				const backupTeamIds = backupTeam?.map((m) => m.id) ?? [];
 				const result = mercCollection?.Mercenaries?.filter((m) => m.Owned)
 					.filter((m) => !backupTeamIds.includes(m.Id))

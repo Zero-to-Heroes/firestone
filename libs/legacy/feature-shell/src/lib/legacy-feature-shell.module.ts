@@ -786,7 +786,6 @@ import { GameParserService } from './js/services/manastorm-bridge/game-parser.se
 import { ReplayUploadService } from './js/services/manastorm-bridge/replay-upload.service';
 import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesMemoryCacheService } from './js/services/mercenaries/mercenaries-memory-cache.service';
-import { MercenariesMemoryUpdateService } from './js/services/mercenaries/mercenaries-memory-updates.service';
 import { MercenariesStateBuilderService } from './js/services/mercenaries/mercenaries-state-builder.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
@@ -1824,7 +1823,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsSimulatorKeyboardControls,
 		BgsBoardHighlighterService,
 
-		MercenariesMemoryUpdateService,
 		MercenariesMemoryCacheService,
 		MercenariesStoreService,
 		MercenariesOutOfCombatService,

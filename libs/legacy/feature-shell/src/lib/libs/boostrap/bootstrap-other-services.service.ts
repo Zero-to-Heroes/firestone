@@ -32,7 +32,6 @@ import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.ser
 import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
-import { MercenariesMemoryUpdateService } from '../../js/services/mercenaries/mercenaries-memory-updates.service';
 import { PreferencesService } from '../../js/services/preferences.service';
 import { QuestsService } from '../../js/services/quests.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
@@ -77,7 +76,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_RewardMonitorService: RewardMonitorService,
 		private readonly init_BgsRealTimeStatsService: RealTimeStatsService,
 		private readonly init_LogParserService: CardsMonitorService,
-		private readonly init_MercenariesMemoryUpdateService: MercenariesMemoryUpdateService,
 		private readonly init_CardsHighlightService: CardsHighlightService,
 		private readonly ini_DecksProviderService: DecksProviderService,
 		private readonly init_gameStatus: GameStatusService,

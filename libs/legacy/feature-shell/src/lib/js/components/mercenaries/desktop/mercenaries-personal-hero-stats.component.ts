@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenary } from '../../../models/memory/memory-mercenaries-info';
@@ -15,6 +15,7 @@ import {
 	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
+import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -140,27 +141,28 @@ export class MercenariesPersonalHeroStatsComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.mercenariesCollection.isReady();
+
 		this.sortCriteria$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion)
 			.pipe(this.mapData(([sortCriteria]) => sortCriteria));
-		this.unsortedStats$ = this.store
-			.listen$(
-				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.mercenaries.collectionInfo,
-			)
-			.pipe(
-				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
-				this.mapData(([referenceData, collectionInfo]) =>
-					collectionInfo.Mercenaries?.map((memMerc) =>
-						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
-					).filter((stat) => stat),
-				),
-			);
+		this.unsortedStats$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.mercenaries.getReferenceData()),
+			this.mercenariesCollection.memoryCollectionInfo$$,
+		]).pipe(
+			filter(([[referenceData], collectionInfo]) => !!referenceData && !!collectionInfo),
+			this.mapData(([[referenceData], collectionInfo]) =>
+				collectionInfo.Mercenaries?.map((memMerc) =>
+					this.buildMercenaryStat(memMerc, referenceData, collectionInfo?.Visitors),
+				).filter((stat) => stat),
+			),
+		);
 		this.stats$ = combineLatest(
 			this.unsortedStats$,
 			this.store.listen$(

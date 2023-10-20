@@ -100,7 +100,7 @@ export class StoreBootstrapService {
 			[constructedConfig],
 			[matchStats],
 			[arenaRewards],
-			[mercenariesCollection],
+			// [mercenariesCollection],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -110,18 +110,9 @@ export class StoreBootstrapService {
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
 			Promise.all([this.gameStatsLoader.retrieveStats()]),
 			Promise.all([this.arena.loadRewards()]),
-			Promise.all([
-				// this.mercenariesService.loadGlobalStats(),
-				// this.mercenariesService.loadReferenceData(),
-				this.mercenariesMemory.getMercenariesMergedCollectionInfo(),
-			]),
+			// Promise.all([this.mercenariesMemory.getMercenariesMergedCollectionInfo()]),
 		]);
 		console.log('loaded info');
-
-		// const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(
-		// 	mergedPrefs.bgsActiveTribesFilter,
-		// 	mergedPrefs.bgsActiveTimeFilter,
-		// );
 
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
@@ -196,7 +187,7 @@ export class StoreBootstrapService {
 			windowStateForFtue.mercenaries,
 			// mercenariesGlobalStats,
 			// mercenariesReferenceData,
-			mercenariesCollection,
+			// mercenariesCollection,
 		);
 
 		// FIXME: this causes some issues: partial states are init, data is resquested on these partials states,

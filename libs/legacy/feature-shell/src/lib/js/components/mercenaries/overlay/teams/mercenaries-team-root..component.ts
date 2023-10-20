@@ -17,6 +17,7 @@ import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
@@ -119,12 +120,14 @@ export class MercenariesTeamRootComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.mercenariesMemoryCache.isReady();
+
 		this.scale = this.store
 			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))
 			.pipe(
@@ -150,12 +153,14 @@ export class MercenariesTeamRootComponent
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => currentTurn));
-		this.totalMapTurns$ = combineLatest(
+		this.totalMapTurns$ = combineLatest([
 			this.currentBattleTurn$,
-			this.store.listen$(([main, nav]) => main.mercenaries.mapInfo?.Map?.TurnsTaken),
-		).pipe(
-			this.mapData(([currentBattleTurn, [totalMapTurns]]) =>
-				totalMapTurns == null ? '?' : '' + ((totalMapTurns ?? 0) + (currentBattleTurn ?? 0)),
+			this.mercenariesMemoryCache.memoryMapInfo$$,
+		]).pipe(
+			this.mapData(([currentBattleTurn, mapInfo]) =>
+				mapInfo?.Map?.TurnsTaken == null
+					? '?'
+					: '' + ((mapInfo?.Map?.TurnsTaken ?? 0) + (currentBattleTurn ?? 0)),
 			),
 		);
 		this.mapTurnsTooltip$ = this.totalMapTurns$.pipe(
@@ -243,23 +248,24 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.mercenariesCollection.isReady();
+
 		this.tasks$ = this.tasks$$.asObservable().pipe(this.mapData((info) => info));
 		this.tasks$.pipe(this.mapData((info) => info)).subscribe((info) => this.tasksListUpdated.next());
-		combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.mercenaries.collectionInfo,
-			),
+		combineLatest([
+			this.store.listen$(([main, nav]) => main.mercenaries.getReferenceData()),
+			this.mercenariesCollection.memoryCollectionInfo$$,
 			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
 			this.tasks$,
-		)
+		])
 			.pipe(
-				this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
+				this.mapData(([[refData], collectionInfo, [mercBackupIds], tasks]) =>
 					buildTeamsForTasks(tasks, refData as any, collectionInfo, mercBackupIds, this.allCards, this.i18n),
 				),
 			)

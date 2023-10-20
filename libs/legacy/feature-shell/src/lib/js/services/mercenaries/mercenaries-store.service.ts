@@ -7,7 +7,7 @@ import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { MercenariesMemoryCacheService } from './mercenaries-memory-cache.service';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
@@ -47,7 +47,7 @@ export class MercenariesStoreService {
 		private readonly events: GameEventsEmitterService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
-		private readonly memoryService: MemoryInspectionService,
+		private readonly memoryCache: MercenariesMemoryCacheService,
 	) {
 		window['battleStateUpdater'] = this.internalEventSubject$;
 		window['mercenariesStore'] = this.store$;
@@ -126,7 +126,7 @@ export class MercenariesStoreService {
 
 	private registerParser() {
 		const parsers: readonly MercenariesParser[] = [
-			new MercenariesMatchMetadataParser(this.memoryService),
+			new MercenariesMatchMetadataParser(this.memoryCache),
 			new MercenariesTurnStartParser(),
 			new MercenariesGameEndParser(),
 

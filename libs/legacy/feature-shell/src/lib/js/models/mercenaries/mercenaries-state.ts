@@ -5,8 +5,7 @@ import {
 	MercenariesReferenceData,
 } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { NonFunctionProperties } from '../../services/utils';
-import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../memory/memory-mercenaries-collection-info';
-import { MemoryMercenariesInfo } from '../memory/memory-mercenaries-info';
+import { MemoryVisitor } from '../memory/memory-mercenaries-collection-info';
 import { MercenariesCategoryId } from './mercenary-category-id.type';
 // import { MercenaryGlobalStats } from './mercenary-info';
 
@@ -14,8 +13,8 @@ export class MercenariesState {
 	readonly loading: boolean = true;
 	readonly categoryIds: MercenariesCategoryId[] = [];
 	// Merc-specific collection info from the game's memory
-	readonly collectionInfo: MemoryMercenariesCollectionInfo;
-	readonly mapInfo: MemoryMercenariesInfo;
+	// readonly collectionInfo: MemoryMercenariesCollectionInfo;
+	// readonly mapInfo: MemoryMercenariesInfo;
 	readonly visitorsInfo: readonly MemoryVisitor[];
 
 	readonly referenceData: MercenariesReferenceData = undefined;

@@ -7,7 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
@@ -17,6 +17,7 @@ import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { MercenariesMemoryCacheService } from '../../services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -93,24 +94,26 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
+		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
+		await this.mercenariesCollection.isReady();
 		const mercenariesReferenceData$ = this.store
 			.listen$(([main, nav, prefs]) => main.mercenaries.getReferenceData())
 			.pipe(this.mapData(([mercs]) => mercs?.mercenaries));
 		const relevantHeroes$ = combineLatest([
 			this.store.bgHeroSkins$(),
 			this.store.collection$(),
-			this.store.listen$(([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries),
+			this.mercenariesCollection.memoryCollectionInfo$$,
+			// this.store.listen$(([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries),
 			mercenariesReferenceData$,
 			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
 		]).pipe(
 			this.mapData(
-				([ownedBgsHeroSkins, collection, [mercenariesCollection], mercenariesReferenceData, category]) => {
+				([ownedBgsHeroSkins, collection, mercenariesCollection, mercenariesReferenceData, category]) => {
 					switch (category) {
 						case 'collectible':
 							return this.buildCollectibleHeroPortraits(collection, this.allCards.getCards());
@@ -118,7 +121,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 							return this.buildBattlegroundsHeroPortraits(ownedBgsHeroSkins, this.allCards.getCards());
 						case 'mercenaries':
 							return this.buildMercenariesHeroPortraits(
-								mercenariesCollection,
+								mercenariesCollection?.Mercenaries ?? [],
 								mercenariesReferenceData,
 								this.allCards.getCards(),
 							);

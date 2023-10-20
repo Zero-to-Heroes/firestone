@@ -52,7 +52,7 @@ export class EndGameListenerService {
 				filter((inGame) => inGame),
 				take(1),
 			)
-			.subscribe(() => {
+			.subscribe(async () => {
 				console.log('[manastorm-bridge] game started, initializing');
 				const metadata$ = this.gameEvents.allEvents.asObservable().pipe(
 					filter((event) => event.type === GameEvent.MATCH_METADATA),
@@ -86,8 +86,10 @@ export class EndGameListenerService {
 					map((event) => event.additionalData.arenaInfo as ArenaInfo),
 					startWith(null),
 				);
-				const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$.pipe(startWith(null));
-				const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$.pipe(startWith(null));
+
+				await this.mercsMemoryCache.isReady();
+				const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$$.pipe(startWith(null));
+				const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$$.pipe(startWith(null));
 				const bgInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 					filter((event) => event.type === GameEvent.BATTLEGROUNDS_INFO),
 					map((event) => event.additionalData.bgInfo as BattlegroundsInfo),

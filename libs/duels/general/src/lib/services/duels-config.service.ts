@@ -16,7 +16,6 @@ export class DuelsConfigService {
 	}
 
 	public async isReady() {
-		// Wait until the duelsConfig$$ member variable is not null
 		while (!this.duelsConfig$$) {
 			await sleep(50);
 		}
