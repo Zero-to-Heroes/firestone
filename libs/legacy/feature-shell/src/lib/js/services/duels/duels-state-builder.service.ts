@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
 import { DeckDefinition } from '@firestone-hs/deckstrings';
-import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DeckStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
@@ -148,7 +148,7 @@ export class DuelsStateBuilderService {
 
 	public initState(
 		initialState: DuelsState,
-		globalStats: DuelsStat,
+		// globalStats: DuelsStat,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		duelsConfig: DuelsConfig,
@@ -161,7 +161,7 @@ export class DuelsStateBuilderService {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		return initialState.update({
 			categories: categories,
-			globalStats: globalStats,
+			// globalStats: globalStats,
 			config: duelsConfig,
 			// topDecks: topDecks,
 			duelsRunInfos: duelsRunInfo,

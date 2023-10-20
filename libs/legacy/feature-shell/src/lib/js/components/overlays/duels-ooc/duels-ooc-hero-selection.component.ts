@@ -78,14 +78,15 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		const topDecks$ = combineLatest([
 			allHeroCardIds$,
 			this.store.duelsTopDecks$(),
+			this.store.duelsMetaStats$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		]).pipe(
-			this.mapData(([allHeroCards, duelsTopDecks, [mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
+			this.mapData(([allHeroCards, duelsTopDecks, duelsMetaStats, [mmrFilter, dustFilter, patch]]) => {
+				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
 				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
 				const topDecks = (duelsTopDecks ?? [])
 					.map((deck) =>
@@ -113,13 +114,10 @@ export class DuelsOutOfCombatHeroSelectionComponent
 			}),
 		);
 
-		const duelsHeroStats$ = combineLatest([
-			allHeroCardIds$,
-			this.store.listen$(([main, nav]) => main.duels.globalStats?.heroes),
-		]).pipe(
-			this.mapData(([allHeroCards, [duelStats]]) => {
+		const duelsHeroStats$ = combineLatest([allHeroCardIds$, this.store.duelsMetaStats$()]).pipe(
+			this.mapData(([allHeroCards, duelStats]) => {
 				const duelsHeroStats = filterDuelsHeroStats(
-					duelStats,
+					duelStats?.heroes,
 					allHeroCards as CardIds[],
 					null,
 					null,

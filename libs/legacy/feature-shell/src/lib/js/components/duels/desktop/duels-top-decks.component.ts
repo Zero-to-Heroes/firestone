@@ -46,8 +46,9 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 	ngAfterContentInit(): void {
 		this.sub$$ = combineLatest([
 			this.store.duelsTopDecks$(),
+			this.store.duelsMetaStats$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+				// ([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.decksSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
@@ -60,12 +61,14 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 			),
 		])
 			.pipe(
-				filter(([topDecks, [mmrPercentiles]]) => !!topDecks?.length && !!mmrPercentiles?.length),
+				filter(
+					([topDecks, duelsMetaStats, [_]]) => !!topDecks?.length && !!duelsMetaStats?.mmrPercentiles?.length,
+				),
 				this.mapData(
 					([
 						topDecks,
+						duelsMetaStats,
 						[
-							mmrPercentiles,
 							searchString,
 							mmrFilter,
 							classFilter,
@@ -77,7 +80,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 							patch,
 						],
 					]) => {
-						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+						const trueMmrFilter = getDuelsMmrFilterNumber(duelsMetaStats.mmrPercentiles, mmrFilter);
 						const result = topDecks
 							.map((deck) =>
 								topDeckApplyFilters(

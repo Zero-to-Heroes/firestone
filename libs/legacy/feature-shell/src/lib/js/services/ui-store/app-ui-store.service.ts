@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsHeroStat, DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildHeroStats, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { filterDuelsHeroStats } from '@firestone/duels/data-access';
@@ -63,6 +63,7 @@ import { DuelsAdventureInfoService } from '../duels/duels-adventure-info.service
 import { DuelsBucketsService } from '../duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { DuelsLeaderboardService } from '../duels/duels-leaderboard.service';
+import { DuelsMetaStatsService } from '../duels/duels-meta-stats.service';
 import { DuelsTopDeckService } from '../duels/duels-top-decks.service';
 import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
@@ -116,6 +117,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
 	private duelsAdventureInfo: Observable<AdventuresInfo>;
 	private duelsBuckets: Observable<readonly DuelsBucketsData[]>;
+	private duelsMetaStats: Observable<DuelsStat>;
 	private duelsLeaderboard: Observable<DuelsLeaderboard>;
 	private mails: Observable<MailState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
@@ -320,6 +322,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.duelsBuckets;
 	}
 
+	public duelsMetaStats$(): Observable<DuelsStat> {
+		return this.duelsMetaStats;
+	}
+
 	public duelsLeaderboard$(): Observable<DuelsLeaderboard> {
 		return this.duelsLeaderboard;
 	}
@@ -460,6 +466,7 @@ export class AppUiStoreService extends Store<Preferences> {
 			this.ow.getMainWindow().duelsAdventureInfo as DuelsAdventureInfoService
 		).duelsAdventureInfo$$;
 		this.duelsBuckets = (this.ow.getMainWindow().duelsBuckets as DuelsBucketsService).duelsBuckets$$;
+		this.duelsMetaStats = (this.ow.getMainWindow().duelsMetaStats as DuelsMetaStatsService).duelsMetaStats$$;
 		this.duelsLeaderboard = (
 			this.ow.getMainWindow().duelsLeaderboard as DuelsLeaderboardService
 		).duelsLeaderboard$$;
@@ -624,9 +631,9 @@ export class AppUiStoreService extends Store<Preferences> {
 	private initDuelsHeroStats() {
 		this.duelsHeroStats.onFirstSubscribe(() => {
 			combineLatest([
-				this.duelsRuns,
+				this.duelsRuns$(),
+				this.duelsMetaStats$(),
 				this.listen$(
-					([main, nav]) => main.duels.globalStats?.heroes,
 					([main, nav]) => nav.navigationDuels.heroSearchString,
 					([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
@@ -641,8 +648,8 @@ export class AppUiStoreService extends Store<Preferences> {
 					map(
 						([
 							runs,
+							duelStats,
 							[
-								duelStats,
 								heroSearchString,
 								statType,
 								gameMode,
@@ -655,7 +662,7 @@ export class AppUiStoreService extends Store<Preferences> {
 						]) =>
 							[
 								filterDuelsHeroStats(
-									duelStats,
+									duelStats?.heroes,
 									heroFilter,
 									heroPowerFilter,
 									sigTreasureFilter,

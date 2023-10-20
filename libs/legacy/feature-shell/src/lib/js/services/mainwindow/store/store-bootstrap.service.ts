@@ -99,7 +99,7 @@ export class StoreBootstrapService {
 			[socialShareUserInfo, currentUser, currentScene],
 			[constructedConfig],
 			[matchStats],
-			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsConfig],
+			[[duelsRunInfo, duelsRewardsInfo], duelsConfig],
 			[arenaRewards],
 			[mercenariesCollection],
 		] = await Promise.all([
@@ -110,11 +110,7 @@ export class StoreBootstrapService {
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
 			Promise.all([this.gameStatsLoader.retrieveStats()]),
-			Promise.all([
-				this.duels.loadRuns(),
-				this.duelsAccess.loadMetaHeroes(prefs.duelsActiveMmrFilter, prefs.duelsActiveTimeFilter),
-				this.duels.loadConfig(),
-			]),
+			Promise.all([this.duels.loadRuns(), this.duels.loadConfig()]),
 			Promise.all([this.arena.loadRewards()]),
 			Promise.all([
 				// this.mercenariesService.loadGlobalStats(),
@@ -178,7 +174,7 @@ export class StoreBootstrapService {
 			: null;
 		const duelsStats: DuelsState = this.duels.initState(
 			windowStateForFtue.duels,
-			duelsGlobalStats,
+			// duelsGlobalStats,
 			duelsRunInfo,
 			duelsRewardsInfo,
 			duelsConfig,

@@ -1,4 +1,3 @@
-import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -18,7 +17,7 @@ export class DuelsState {
 	readonly config: DuelsConfig;
 	readonly duelsRunInfos: readonly DuelsRunInfo[];
 	readonly duelsRewardsInfo: readonly DuelsRewardsInfo[];
-	readonly globalStats: DuelsStat;
+	// readonly globalStats: DuelsStat;
 	readonly globalStatsDecks: ExtendedDuelsStatDecks;
 	// readonly bucketsData: readonly DuelsBucketsData[] = [];
 	// readonly leaderboard: DuelsLeaderboard;

@@ -746,6 +746,7 @@ import { DuelsBucketsService } from './js/services/duels/duels-buckets.service';
 import { DuelsDecksProviderService } from './js/services/duels/duels-decks-provider.service';
 import { DuelsLeaderboardService } from './js/services/duels/duels-leaderboard.service';
 import { DuelsLootParserService } from './js/services/duels/duels-loot-parser.service';
+import { DuelsMetaStatsService } from './js/services/duels/duels-meta-stats.service';
 import { DuelsRewardsService } from './js/services/duels/duels-rewards.service';
 import { DuelsRunIdService } from './js/services/duels/duels-run-id.service';
 import { DuelsStateBuilderService } from './js/services/duels/duels-state-builder.service';
@@ -1852,6 +1853,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsAdventureInfoService,
 		DuelsBucketsService,
 		DuelsLeaderboardService,
+		DuelsMetaStatsService,
 
 		ArenaStateBuilderService,
 

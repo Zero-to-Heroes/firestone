@@ -10,6 +10,7 @@ import { DuelsAdventureInfoService } from '../../js/services/duels/duels-adventu
 import { DuelsBucketsService } from '../../js/services/duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../../js/services/duels/duels-decks-provider.service';
 import { DuelsLeaderboardService } from '../../js/services/duels/duels-leaderboard.service';
+import { DuelsMetaStatsService } from '../../js/services/duels/duels-meta-stats.service';
 import { GameNativeStateStoreService } from '../../js/services/game/game-native-state-store.service';
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
@@ -57,6 +58,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_DuelsAdventureInfoService: DuelsAdventureInfoService,
 		private readonly init_DuelsBucketsService: DuelsBucketsService,
 		private readonly init_DuelsLeaderboardService: DuelsLeaderboardService,
+		private readonly init_DuelsMetaStatsService: DuelsMetaStatsService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

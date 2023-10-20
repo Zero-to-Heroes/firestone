@@ -42,9 +42,10 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 	ngAfterContentInit() {
 		const rawStats$ = combineLatest([
 			this.store.duelsRuns$(),
+			this.store.duelsMetaStats$(),
 			this.store.listen$(
-				([main, nav]) => main.duels?.globalStats?.treasures,
-				([main, nav]) => main.duels?.globalStats?.mmrPercentiles,
+				// ([main, nav]) => main.duels?.globalStats?.treasures,
+				// ([main, nav]) => main.duels?.globalStats?.mmrPercentiles,
 				([main, nav]) => nav.navigationDuels.treasureSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
@@ -59,9 +60,9 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 			this.mapData(
 				([
 					runs,
+					duelMetaStats,
 					[
-						duelStats,
-						mmrPercentiles,
+						// mmrPercentiles,
 						treasureSearchString,
 						statType,
 						gameMode,
@@ -75,7 +76,7 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 				]) =>
 					[
 						filterDuelsTreasureStats(
-							duelStats,
+							duelMetaStats?.treasures,
 							classFilter,
 							heroPowerFilter,
 							sigTreasureFilter,

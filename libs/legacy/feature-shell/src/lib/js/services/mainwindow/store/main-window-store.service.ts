@@ -139,7 +139,6 @@ import { DuelsLeaderboardGameModeFilterSelectedEvent } from './events/duels/duel
 import { DuelsMmrFilterSelectedEvent } from './events/duels/duels-mmr-filter-selected-event';
 import { DuelsPassivesFilterSelectedEvent } from './events/duels/duels-passives-filter-selected-event';
 import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
-import { DuelsRequestNewGlobalStatsLoadEvent } from './events/duels/duels-request-new-global-stats-load-event';
 import { DuelsRestorePersonalDeckSummaryEvent } from './events/duels/duels-restore-personal-deck-summary-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DuelsSignatureTreasureFilterSelectedEvent } from './events/duels/duels-signature-treasure-filter-selected-event';
@@ -304,7 +303,6 @@ import { DuelsLeaderboardGameModeFilterSelectedProcessor } from './processors/du
 import { DuelsMmrFilterSelectedProcessor } from './processors/duels/duels-mmr-filter-selected-processor';
 import { DuelsPassivesFilterSelectedProcessor } from './processors/duels/duels-passives-filter-selected-processor';
 import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
-import { DuelsRequestNewGlobalStatsLoadProcessor } from './processors/duels/duels-request-new-global-stats-load-processor';
 import { DuelsRestorePersonalDeckSummaryProcessor } from './processors/duels/duels-restore-personal-deck-summary-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DuelsSignatureTreasureFilterSelectedProcessor } from './processors/duels/duels-signature-treasure-filter-selected-processor';
@@ -859,10 +857,7 @@ export class MainWindowStoreService {
 				DuelsLeaderboardGameModeFilterSelectedEvent.eventName(),
 				new DuelsLeaderboardGameModeFilterSelectedProcessor(this.prefs),
 			],
-			[
-				DuelsTimeFilterSelectedEvent.eventName(),
-				new DuelsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater),
-			],
+			[DuelsTimeFilterSelectedEvent.eventName(), new DuelsTimeFilterSelectedProcessor(this.prefs)],
 			[
 				DuelsTreasurePassiveTypeFilterSelectedEvent.eventName(),
 				new DuelsTreasurePassiveTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
@@ -876,10 +871,7 @@ export class MainWindowStoreService {
 				DuelsTopDecksDustFilterSelectedEvent.eventName(),
 				new DuelsTopDecksDustFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 			],
-			[
-				DuelsMmrFilterSelectedEvent.eventName(),
-				new DuelsMmrFilterSelectedProcessor(this.prefs, this.stateUpdater),
-			],
+			[DuelsMmrFilterSelectedEvent.eventName(), new DuelsMmrFilterSelectedProcessor(this.prefs)],
 			[DuelsHeroPowerFilterSelectedEvent.eventName(), new DuelsHeroPowerFilterSelectedProcessor(this.prefs)],
 			[
 				DuelsSignatureTreasureFilterSelectedEvent.eventName(),
@@ -915,10 +907,6 @@ export class MainWindowStoreService {
 			[DuelsTreasureSearchEvent.eventName(), new DuelsTreasureSearchProcessor()],
 			[DuelsHeroSearchEvent.eventName(), new DuelsHeroSearchProcessor()],
 			[DuelsDecksSearchEvent.eventName(), new DuelsDecksSearchProcessor()],
-			[
-				DuelsRequestNewGlobalStatsLoadEvent.eventName(),
-				new DuelsRequestNewGlobalStatsLoadProcessor(this.duelsAccess, this.prefs),
-			],
 			[DuelsCurrentDeckEvent.eventName(), new DuelsCurrentDeckProcessor()],
 			[DuelsIsOnMainScreenEvent.eventName(), new DuelsIsOnMainScreenProcessor()],
 			[

@@ -5,7 +5,7 @@ import { DuelsStatTypeFilterType, filterDuelsHeroStats } from '@firestone/duels/
 import { DuelsMetaStatsViewComponent } from '@firestone/duels/view';
 import { getStandardDeviation } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -42,9 +42,9 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionStoreCompone
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.globalStats?.heroes,
+		this.tiers$ = combineLatest([
+			this.store.duelsMetaStats$(),
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
@@ -53,11 +53,12 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionStoreCompone
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
-			)
-			.pipe(
-				filter(
-					([
-						duelsStats,
+			),
+		]).pipe(
+			filter(
+				([
+					duelsStats,
+					[
 						statType,
 						gameMode,
 						timeFilter,
@@ -66,11 +67,13 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionStoreCompone
 						sigTreasureFilter,
 						mmrFilter,
 						hideThreshold,
-					]) => !!duelsStats?.length,
-				),
-				map(
-					([
-						duelStats,
+					],
+				]) => !!duelsStats?.heroes?.length,
+			),
+			map(
+				([
+					duelStats,
+					[
 						statType,
 						gameMode,
 						timeFilter,
@@ -79,66 +82,65 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionStoreCompone
 						sigTreasureFilter,
 						mmrFilter,
 						hideThreshold,
-					]) =>
-						[
-							filterDuelsHeroStats(
-								duelStats,
-								classFilter,
-								heroPowerFilter,
-								sigTreasureFilter,
-								statType,
-								this.allCards,
-								null,
-							),
+					],
+				]) =>
+					[
+						filterDuelsHeroStats(
+							duelStats.heroes,
+							classFilter,
+							heroPowerFilter,
+							sigTreasureFilter,
 							statType,
-							hideThreshold,
-						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType, boolean],
-				),
-				// distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				this.mapData(([duelsStats, statType, hideThreshold]) => {
-					const stats = buildDuelsHeroPlayerStats(duelsStats, statType)
-						.sort((a, b) => b.globalWinrate - a.globalWinrate)
-						.filter((stat) =>
-							hideThreshold
-								? stat.globalTotalMatches >= DuelsMetaStatsViewComponent.STATS_THRESHOLD
-								: true,
-						);
+							this.allCards,
+							null,
+						),
+						statType,
+						hideThreshold,
+					] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType, boolean],
+			),
+			// distinctUntilChanged((a, b) => this.areEqual(a, b)),
+			this.mapData(([duelsStats, statType, hideThreshold]) => {
+				const stats = buildDuelsHeroPlayerStats(duelsStats, statType)
+					.sort((a, b) => b.globalWinrate - a.globalWinrate)
+					.filter((stat) =>
+						hideThreshold ? stat.globalTotalMatches >= DuelsMetaStatsViewComponent.STATS_THRESHOLD : true,
+					);
 
-					const { mean, standardDeviation } = getStandardDeviation(stats.map((stat) => stat.globalWinrate));
-					return [
-						{
-							label: 'S',
-							tooltip: this.i18n.translateString('app.duels.stats.tier-s-tooltip'),
-							items: this.filterItems(stats, mean + 2 * standardDeviation, 101),
-						},
-						{
-							label: 'A',
-							tooltip: this.i18n.translateString('app.duels.stats.tier-a-tooltip'),
-							items: this.filterItems(stats, mean + standardDeviation, mean + 2 * standardDeviation),
-						},
-						{
-							label: 'B',
-							tooltip: this.i18n.translateString('app.duels.stats.tier-b-tooltip'),
-							items: this.filterItems(stats, mean, mean + standardDeviation),
-						},
-						{
-							label: 'C',
-							tooltip: this.i18n.translateString('app.duels.stats.tier-c-tooltip'),
-							items: this.filterItems(stats, mean - standardDeviation, mean),
-						},
-						{
-							label: 'D',
-							tooltip: this.i18n.translateString('app.duels.stats.tier-d-tooltip'),
-							items: this.filterItems(stats, mean - 2 * standardDeviation, mean - standardDeviation),
-						},
-						{
-							label: 'E',
-							tooltip: this.i18n.translateString('app.duels.stats.tier-e-tooltip'),
-							items: this.filterItems(stats, 0, mean - 2 * standardDeviation),
-						},
-					].filter((tier) => tier.items?.length);
-				}),
-			);
+				const { mean, standardDeviation } = getStandardDeviation(stats.map((stat) => stat.globalWinrate));
+				return [
+					{
+						label: 'S',
+						tooltip: this.i18n.translateString('app.duels.stats.tier-s-tooltip'),
+						items: this.filterItems(stats, mean + 2 * standardDeviation, 101),
+					},
+					{
+						label: 'A',
+						tooltip: this.i18n.translateString('app.duels.stats.tier-a-tooltip'),
+						items: this.filterItems(stats, mean + standardDeviation, mean + 2 * standardDeviation),
+					},
+					{
+						label: 'B',
+						tooltip: this.i18n.translateString('app.duels.stats.tier-b-tooltip'),
+						items: this.filterItems(stats, mean, mean + standardDeviation),
+					},
+					{
+						label: 'C',
+						tooltip: this.i18n.translateString('app.duels.stats.tier-c-tooltip'),
+						items: this.filterItems(stats, mean - standardDeviation, mean),
+					},
+					{
+						label: 'D',
+						tooltip: this.i18n.translateString('app.duels.stats.tier-d-tooltip'),
+						items: this.filterItems(stats, mean - 2 * standardDeviation, mean - standardDeviation),
+					},
+					{
+						label: 'E',
+						tooltip: this.i18n.translateString('app.duels.stats.tier-e-tooltip'),
+						items: this.filterItems(stats, 0, mean - 2 * standardDeviation),
+					},
+				].filter((tier) => tier.items?.length);
+			}),
+		);
 	}
 
 	private filterItems(

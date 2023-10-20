@@ -67,116 +67,112 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 		const allStats$ = combineLatest([
 			this.store.duelsRuns$(),
 			this.store.duelsTopDecks$(),
+			this.store.duelsMetaStats$(),
 			this.heroPowers$,
 			this.store.listen$(
-				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+				// ([main, nav]) => main.duels.globalStats?.heroes,
+				// ([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		]).pipe(
-			this.mapData(
-				([
-					runs,
-					duelsTopDecks,
-					allHeroPowerCards,
-					[duelStats, mmrPercentiles, mmrFilter, dustFilter, patch],
-				]) => {
-					return allHeroPowerCards
-						.map((card) => card.id)
-						.map((currentHeroPowerCardId) => {
-							const stats = buildDuelsHeroPlayerStats(
-								filterDuelsHeroStats(
-									duelStats,
+			this.mapData(([runs, duelsTopDecks, duelsMetaStats, allHeroPowerCards, [mmrFilter, dustFilter, patch]]) => {
+				const duelStats = duelsMetaStats?.heroes;
+				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
+				return allHeroPowerCards
+					.map((card) => card.id)
+					.map((currentHeroPowerCardId) => {
+						const stats = buildDuelsHeroPlayerStats(
+							filterDuelsHeroStats(
+								duelStats,
+								allDuelsHeroes,
+								[currentHeroPowerCardId],
+								[],
+								'hero-power',
+								this.allCards,
+								null,
+							),
+							'hero-power',
+							// TODO: remove this filter and use the current Duels mode from memory
+							filterDuelsRuns(
+								runs,
+								'last-patch',
+								allDuelsHeroes,
+								'all',
+								null,
+								patch,
+								0,
+								[currentHeroPowerCardId],
+								[],
+								'hero-power',
+							),
+						);
+						const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === currentHeroPowerCardId);
+						if (!stat) {
+							console.warn('missing stat', currentHeroPowerCardId, stats);
+							return null;
+						}
+
+						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+						const topDecks = (duelsTopDecks ?? [])
+							.map((deck) =>
+								topDeckApplyFilters(
+									deck,
+									trueMmrFilter,
 									allDuelsHeroes,
 									[currentHeroPowerCardId],
 									[],
-									'hero-power',
-									this.allCards,
-									null,
-								),
-								'hero-power',
-								// TODO: remove this filter and use the current Duels mode from memory
-								filterDuelsRuns(
-									runs,
 									'last-patch',
-									allDuelsHeroes,
-									'all',
+									dustFilter,
 									null,
 									patch,
-									0,
-									[currentHeroPowerCardId],
-									[],
-									'hero-power',
 								),
-							);
-							const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === currentHeroPowerCardId);
-							if (!stat) {
-								console.warn('missing stat', currentHeroPowerCardId, stats);
-								return null;
-							}
-
-							const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
-							const topDecks = (duelsTopDecks ?? [])
-								.map((deck) =>
-									topDeckApplyFilters(
-										deck,
-										trueMmrFilter,
-										allDuelsHeroes,
-										[currentHeroPowerCardId],
-										[],
-										'last-patch',
-										dustFilter,
-										null,
-										patch,
-									),
-								)
-								.filter((group) => group.decks.length > 0)
-								.flatMap((group) => group.decks);
-							const heroPowerDecks = topDecks
-								.filter((deck) => deck.heroPowerCardId === currentHeroPowerCardId)
-								.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
-								.map((deck) => {
-									const result: DuelsHeroInfoTopDeck = {
-										deckId: uuidShort(),
-										decklist: deck.decklist,
-										heroCardId: deck.heroCardId,
-										heroPowerCardId: deck.heroPowerCardId,
-										signatureTreasureCardId: deck.signatureTreasureCardId,
-										wins: deck.wins,
-										losses: deck.losses,
-										treasureCardIds: deck.treasuresCardIds,
-										dust: deck.dustCost,
-									};
-									return result;
-								});
-							// Remove duplicate decklists
-							const groupedDecks = groupByFunction(
-								(deck: DuelsHeroInfoTopDeck) =>
-									`${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
-							)(heroPowerDecks);
-							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
-							const card = this.allCards.getCard(currentHeroPowerCardId);
-							const result: DuelsHeroPowerInfo = {
-								cardId: currentHeroPowerCardId,
-								heroCardId: stat.hero,
-								name: card.name,
-								globalTotalMatches: stat.globalTotalMatches,
-								globalWinrate: stat.globalWinrate,
-								playerWinrate: stat.playerWinrate,
-								globalPopularity: stat.globalPopularity,
-								playerMatches: stat.playerTotalMatches,
-								globalWinDistribution: stat.globalWinDistribution,
-								topDecks: uniqueDecks,
-							};
-							return {
-								cardId: currentHeroPowerCardId,
-								stat: result,
-							};
-						});
-				},
-			),
+							)
+							.filter((group) => group.decks.length > 0)
+							.flatMap((group) => group.decks);
+						const heroPowerDecks = topDecks
+							.filter((deck) => deck.heroPowerCardId === currentHeroPowerCardId)
+							.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
+							.map((deck) => {
+								const result: DuelsHeroInfoTopDeck = {
+									deckId: uuidShort(),
+									decklist: deck.decklist,
+									heroCardId: deck.heroCardId,
+									heroPowerCardId: deck.heroPowerCardId,
+									signatureTreasureCardId: deck.signatureTreasureCardId,
+									wins: deck.wins,
+									losses: deck.losses,
+									treasureCardIds: deck.treasuresCardIds,
+									dust: deck.dustCost,
+								};
+								return result;
+							});
+						// Remove duplicate decklists
+						const groupedDecks = groupByFunction(
+							(deck: DuelsHeroInfoTopDeck) =>
+								`${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+						)(heroPowerDecks);
+						const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
+						const card = this.allCards.getCard(currentHeroPowerCardId);
+						const result: DuelsHeroPowerInfo = {
+							cardId: currentHeroPowerCardId,
+							heroCardId: stat.hero,
+							name: card.name,
+							globalTotalMatches: stat.globalTotalMatches,
+							globalWinrate: stat.globalWinrate,
+							playerWinrate: stat.playerWinrate,
+							globalPopularity: stat.globalPopularity,
+							playerMatches: stat.playerTotalMatches,
+							globalWinDistribution: stat.globalWinDistribution,
+							topDecks: uniqueDecks,
+						};
+						return {
+							cardId: currentHeroPowerCardId,
+							stat: result,
+						};
+					});
+			}),
 		);
 		this.heroPowerInfo$ = combineLatest(this.selectedHeroPowerCardId.asObservable(), allStats$).pipe(
 			this.mapData(([currentHeroPowerCardId, allStats]) => {

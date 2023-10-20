@@ -39,8 +39,8 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionStoreCo
 
 	ngAfterContentInit() {
 		this.mmrPercentiles$ = this.store
-			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
-			.pipe(this.mapData(([percentiles]) => percentiles));
+			.duelsMetaStats$()
+			.pipe(this.mapData((metaStats) => metaStats?.mmrPercentiles));
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveMmrFilter);
 		this.visible$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
