@@ -35,6 +35,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div
 			tabindex="0"
 			[attr.aria-label]="cardName"
+			[attr.entityId]="entityId"
 			class="deck-card {{ rarity }} {{ highlight }} {{ cardClass }}"
 			*ngIf="!isUnknownCard || _showUnknownCards"
 			[ngClass]="{
@@ -216,6 +217,7 @@ export class DeckCardComponent implements OnDestroy {
 
 	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
+	entityId: number;
 	cardImage: string;
 	manaCost: number;
 	manaCostStr: string;
@@ -340,6 +342,7 @@ export class DeckCardComponent implements OnDestroy {
 		}
 
 		this.cardId = this._card.cardId;
+		this.entityId = this._card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
