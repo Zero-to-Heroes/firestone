@@ -140,6 +140,18 @@ export class TipService {
 			text: this.i18n.translateString('app.tips.minions_list_by_tribe'),
 			premium: false,
 		},
+		{
+			file: 'constructed_deck_stats_free.webm',
+			type: 'video',
+			text: this.i18n.translateString('app.tips.constructed_deck_stats_free'),
+			premium: false,
+		},
+		{
+			file: 'constructed_deck_stats.webm',
+			type: 'video',
+			text: this.i18n.translateString('app.tips.constructed_deck_stats'),
+			premium: true,
+		},
 	];
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
