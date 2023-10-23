@@ -62,7 +62,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 					games: stat.totalGames,
 					winrate: winrateToUse,
 					archetypeCoreCards: stat.coreCards,
-					cardsData: stat.cardsData,
+					cardsData: stat.cardsData.filter((c) => c.inStartingDeck > stat.totalGames / 50),
 					matchups: stat.matchupInfo,
 				};
 				return result;

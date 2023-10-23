@@ -74,7 +74,7 @@ export class ConstructedMetaDeckDetailsComponent
 					games: stat.totalGames,
 					winrate: winrateToUse,
 					deckstring: stat.decklist,
-					cardsData: stat.cardsData,
+					cardsData: stat.cardsData.filter((c) => c.inStartingDeck > stat.totalGames / 50),
 					matchups: stat.matchupInfo,
 					cardVariations: stat.cardVariations,
 					archetypeCoreCards: stat.archetypeCoreCards,
