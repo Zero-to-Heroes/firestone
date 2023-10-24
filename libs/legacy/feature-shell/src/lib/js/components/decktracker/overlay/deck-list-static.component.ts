@@ -178,7 +178,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
-					manaCost: card.cost,
+					manaCost: card.hideStats ? null : card.cost,
 					rarity: card.rarity,
 					totalQuantity: miniCard.quantity,
 					sideboard: sideboard,
@@ -225,7 +225,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 					internalEntityIds: [internalEntityId],
 				});
 			})
-			.sort((a, b) => a.manaCost - b.manaCost);
+			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
 	}
 }
 

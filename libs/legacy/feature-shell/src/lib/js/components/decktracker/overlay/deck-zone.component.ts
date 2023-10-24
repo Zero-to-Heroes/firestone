@@ -9,6 +9,7 @@ import {
 	Output,
 } from '@angular/core';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -131,6 +132,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		@Optional() private readonly prefs: PreferencesService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -341,6 +343,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 	}
 
 	private getCost(card: VisualDeckCard, showUpdatedCost: boolean): number {
-		return showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
+		const refCard = this.allCards.getCard(card.cardId);
+		return refCard.hideStats ? null : showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
 	}
 }

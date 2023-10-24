@@ -262,7 +262,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 
 	private sortByCost(a: InternalCardData, b: InternalCardData, direction: SortDirection): number {
 		const compare =
-			(a.deckCard?.manaCost ?? 0) - (b.deckCard?.manaCost ?? 0) || a.cardName.localeCompare(b.cardName);
+			(a.deckCard?.manaCost ?? -1) - (b.deckCard?.manaCost ?? -1) || a.cardName.localeCompare(b.cardName);
 
 		return direction === 'asc' ? compare : -compare;
 	}

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional } from '@angular/core';
 import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'duels-bucket-card',

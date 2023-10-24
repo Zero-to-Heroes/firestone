@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -309,7 +310,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 							VisualDeckCard.create({
 								...refCard,
 								// Always show the base cost in this display mode
-								manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
+								manaCost: this.allCards.getCard(refCard.cardId).hideStats
+									? null
+									: this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost,
 								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 								// Don't show a gift icon when the card is in the deck
 								creatorCardIds: [],
@@ -333,7 +336,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						...Array(quantityNotInDeck).fill(
 							VisualDeckCard.create({
 								...refCard,
-								manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
+								manaCost: this.allCards.getCard(refCard.cardId).hideStats
+									? null
+									: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
 								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 								creatorCardIds: otherCreatorCardIds,
 								highlight: 'dim',
@@ -345,7 +350,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 				}
 				return result;
 			})
-			.sort((a, b) => a.manaCost - b.manaCost);
+			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
 		return result;
 	}
 
@@ -431,7 +436,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								VisualDeckCard.create({
 									...refCard,
 									// Always show the base cost in this display mode
-									manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
+									manaCost: this.allCards.getCard(refCard.cardId).hideStats
+										? null
+										: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
 									actualManaCost:
 										this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 									highlight: 'dim',
@@ -454,7 +461,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						...Array(quantityNotInDeck).fill(
 							VisualDeckCard.create({
 								...refCard,
-								manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
+								manaCost: this.allCards.getCard(refCard.cardId).hideStats
+									? null
+									: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
 								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
 								creatorCardIds: otherCreatorCardIds,
 								highlight: 'dim',
@@ -466,7 +475,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 				}
 				return result;
 			})
-			.sort((a, b) => a.manaCost - b.manaCost);
+			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
 		return result;
 	}
 

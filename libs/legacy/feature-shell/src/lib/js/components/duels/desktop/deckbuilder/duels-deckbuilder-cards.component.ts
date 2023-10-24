@@ -4,13 +4,13 @@ import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-c
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsConfigService } from '@firestone/duels/general';
+import { groupByFunction, sortByProperties, sumOnArray } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { FeatureFlags } from '@services/feature-flags';
 import { dustToCraftFor, normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
-import { groupByFunction, sortByProperties, sumOnArray } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 import { filter, startWith, takeUntil, tap } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
@@ -251,7 +251,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 							const bucketCard: BucketCard = {
 								cardId: card.cardId,
 								cardName: refCard.name,
-								manaCost: refCard.cost,
+								manaCost: refCard.hideStats ? null : refCard.cost,
 								rarity: refCard.rarity?.toLowerCase(),
 								classes: refCard.classes,
 								offeringRate: card.totalOffered / totalCardsOffered,
@@ -259,11 +259,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 							};
 							return bucketCard;
 						})
-						.sort(
-							(a, b) =>
-								a.manaCost - b.manaCost ||
-								(a.cardName?.toLowerCase() < b.cardName?.toLowerCase() ? -1 : 1),
-						);
+						.sort(sortByProperties((c: BucketCard) => [c.manaCost, c.cardName]));
 					const bucketData: BucketData = {
 						bucketId: bucket.bucketId,
 						bucketName: this.allCards.getCard(bucket.bucketId)?.name,

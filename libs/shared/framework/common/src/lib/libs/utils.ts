@@ -73,8 +73,8 @@ export const sortByProperties = <T>(sorter: (t: T) => any[]): ((a: T, b: T) => n
 		const aProps = sorter(a);
 		const bProps = sorter(b);
 		for (let i = 0; i < aProps.length; i++) {
-			if (aProps[i] !== bProps[i]) {
-				return aProps[i] < bProps[i] ? -1 : 1;
+			if (aProps[i] != bProps[i]) {
+				return aProps[i] == null ? -1 : bProps[i] == null ? 1 : aProps[i] < bProps[i] ? -1 : 1;
 			}
 		}
 		return 0;

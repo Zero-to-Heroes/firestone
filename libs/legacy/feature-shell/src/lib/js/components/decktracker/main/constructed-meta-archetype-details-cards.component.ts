@@ -113,7 +113,7 @@ export const buildCardVariation = (
 		cardImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 		quantity: quantity,
 		isLegendary: card.rarity?.toLowerCase() === 'legendary',
-		manaCost: card.cost,
+		manaCost: card.hideStats ? null : card.cost,
 		cardName: card.name,
 		sideboard: sideboardCards?.map((c) => buildCardVariation(c.card.id, c.quantity, [], allCards)),
 	};

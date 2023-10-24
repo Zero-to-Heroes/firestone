@@ -61,6 +61,7 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 					name: stat.archetypeName,
 					playerClass: stat.playerClass,
 				}));
+				console.debug('considering archetypes', archetypes);
 				const archetypesById = groupByFunction((a: { id: number; name: string; playerClass: string }) => a.id)(
 					archetypes,
 				);
