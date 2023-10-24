@@ -65,35 +65,45 @@ export class HeroPowerChangedParser implements EventParser {
 	}
 
 	private getDuelsStartingDeckstring(currentDeckString: string, heroCardId: string, heroPowerCardId: string): string {
-		const currentDeck = decode(currentDeckString);
-		if (!currentDeck?.cards?.length) {
-			console.debug('[duels-run-deckstring] no deck found', currentDeck);
-			return null;
-		}
+		try {
+			const currentDeck = decode(currentDeckString);
+			if (!currentDeck?.cards?.length) {
+				console.debug('[duels-run-deckstring] no deck found', currentDeck);
+				return null;
+			}
 
-		// Take care of the treasure being here
-		if (currentDeck.cards.length <= 16) {
-			const result = encode(sanitizeDeckDefinition(currentDeck, this.allCards));
-			console.debug('[duels-run-deckstring] first game, returning deckstring', result, currentDeck);
+			// Take care of the treasure being here
+			if (currentDeck.cards.length <= 16) {
+				const result = encode(sanitizeDeckDefinition(currentDeck, this.allCards));
+				console.debug('[duels-run-deckstring] first game, returning deckstring', result, currentDeck);
+				return result;
+			}
+
+			const allRuns = this.duelsRunService.duelsRuns$$.getValueWithInit();
+			const currentRun = allRuns[0];
+			console.debug('[duels-run-deckstring] current run', currentRun);
+			if (currentRun?.heroCardId !== heroCardId || currentRun?.heroPowerCardId !== heroPowerCardId) {
+				console.debug(
+					'[duels-run-deckstring] hero or hero power do not match',
+					currentRun,
+					heroCardId,
+					heroPowerCardId,
+				);
+				return null;
+			}
+			const deckDefinition = decode(currentRun.initialDeckList);
+			const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
+			const result = encode(updatedDeckDefinition);
+			console.debug('[duels-run-deckstring] returning deckstring', result, updatedDeckDefinition, deckDefinition);
 			return result;
-		}
-
-		const allRuns = this.duelsRunService.duelsRuns$$.getValueWithInit();
-		const currentRun = allRuns[0];
-		console.debug('[duels-run-deckstring] current run', currentRun);
-		if (currentRun?.heroCardId !== heroCardId || currentRun?.heroPowerCardId !== heroPowerCardId) {
-			console.debug(
-				'[duels-run-deckstring] hero or hero power do not match',
-				currentRun,
+		} catch (e) {
+			console.error(
+				'[duels-run-deckstring] could not build deckstring',
+				currentDeckString,
 				heroCardId,
 				heroPowerCardId,
+				e,
 			);
-			return null;
 		}
-		const deckDefinition = decode(currentRun.initialDeckList);
-		const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
-		const result = encode(updatedDeckDefinition);
-		console.debug('[duels-run-deckstring] returning deckstring', result, updatedDeckDefinition, deckDefinition);
-		return result;
 	}
 }
