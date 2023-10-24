@@ -384,7 +384,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.AllShallServeTavernBrawl:
 				return and(side(inputSide), minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
-				return and(side(inputSide), or(inDeck, inHand), battlecry);
+				return and(side(inputSide), or(inDeck, inHand), battlecry, effectiveCostMore(2));
 			case CardIds.AlwaysABiggerJormungar:
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.AmalgamOfTheDeep:
