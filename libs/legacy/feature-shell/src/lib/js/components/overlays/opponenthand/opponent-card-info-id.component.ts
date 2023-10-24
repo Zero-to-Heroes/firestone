@@ -18,7 +18,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[cardTooltipDisplayBuffs]="displayBuff"
 			[ngClass]="{ buffed: hasBuffs }"
 		>
-			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" />
+			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" (error)="handleMissingImage($event)" />
 			<div *ngIf="drawnBy" class="drawn">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#created_by" />
@@ -82,6 +82,10 @@ export class OpponentCardInfoIdComponent {
 		private readonly allCards: CardsFacadeService,
 	) {}
 
+	handleMissingImage(event: Event) {
+		console.warn('missing image', this.cardId, this.cardUrl, this.createdBy, this.drawnBy);
+	}
+
 	// In some cases, it's an enchantment that creates the card. And while we want to keep that
 	// info in our internal model that reflects the actual game state, it's better to show the
 	// user the actual card
@@ -90,14 +94,13 @@ export class OpponentCardInfoIdComponent {
 			return cardId;
 		}
 
-		const mergedCardId = cardId || creatorCardId;
 		const card = this.allCards.getCard(cardId);
 		if (card.type !== 'Enchantment') {
 			return cardId;
 		}
 
 		// Manual exceptions
-		switch (mergedCardId) {
+		switch (creatorCardId) {
 			case CardIds.DrawOffensivePlayTavernBrawlEnchantment:
 				return CardIds.OffensivePlayTavernBrawl;
 			case CardIds.SecretPassage_SecretEntranceEnchantment:
@@ -106,15 +109,17 @@ export class OpponentCardInfoIdComponent {
 				return CardIds.SecretPassage;
 			case CardIds.CloakOfEmeraldDreams_CloakOfEmeraldDreamsTavernBrawlEnchantment:
 				return CardIds.CloakOfEmeraldDreamsTavernBrawl;
+			case CardIds.DivineIllumination_DivineIlluminationTavernBrawlEnchantment:
+				return CardIds.DivineIlluminationTavernBrawl;
 		}
 
 		// The base case
-		const match = /(.*)e\d*$/.exec(mergedCardId);
+		const match = /(.*)e\d*$/.exec(creatorCardId);
 		if (!!match) {
 			const rootCardId = match[1];
 			return rootCardId;
 		}
-		console.warn('unhandled enchantment', mergedCardId);
-		return mergedCardId;
+		console.warn('unhandled enchantment', creatorCardId);
+		return creatorCardId;
 	}
 }
