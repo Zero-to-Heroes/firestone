@@ -141,7 +141,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 								(s) => s.cardId === currentSignatureTreasureCardId,
 							);
 							if (!stat) {
-								console.warn('missing stat', currentSignatureTreasureCardId, stats);
+								console.warn('missing stat', currentSignatureTreasureCardId);
 								return null;
 							}
 

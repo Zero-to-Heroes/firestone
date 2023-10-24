@@ -110,7 +110,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 						);
 						const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === currentHeroPowerCardId);
 						if (!stat) {
-							console.warn('missing stat', currentHeroPowerCardId, stats);
+							console.warn('missing stat', currentHeroPowerCardId);
 							return null;
 						}
 
