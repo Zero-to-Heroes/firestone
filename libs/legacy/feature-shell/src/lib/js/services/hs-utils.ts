@@ -159,7 +159,6 @@ export const globalEffectCards = [
 	CardIds.BestialMadness_YOG_505,
 	CardIds.BlackrockNRoll,
 	CardIds.CelestialAlignment,
-	CardIds.ChaoticTendril_YOG_514,
 	CardIds.DeckOfChaos,
 	CardIds.DeckOfLunacy,
 	CardIds.DraconicMunitionTavernBrawl,
