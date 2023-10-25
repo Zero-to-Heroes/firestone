@@ -70,14 +70,14 @@ export class GameEvents {
 						}
 					}
 				});
-				this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
-					this.gameEventsEmitter.allEvents.next(
-						Object.assign(new GameEvent(), {
-							type: GameEvent.GAME_STATS_UPDATED,
-							additionalData: { gameStats: event.data[0] },
-						} as GameEvent),
-					);
-				});
+				// this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
+				// 	this.gameEventsEmitter.allEvents.next(
+				// 		Object.assign(new GameEvent(), {
+				// 			type: GameEvent.GAME_STATS_UPDATED,
+				// 			additionalData: { gameStats: event.data[0] },
+				// 		} as GameEvent),
+				// 	);
+				// });
 				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
 					console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
 					this.gameEventsEmitter.allEvents.next(
@@ -1508,7 +1508,7 @@ export class GameEvents {
 		}
 
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
-			console.log('[game-events] [existing] end_of_existing_data');
+			console.log('[game-events] [existing] end_of_existing_data', this.existingLogLines.length);
 			// There is no automatic reconnect when spectating, so we can always safely say
 			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
@@ -1519,7 +1519,8 @@ export class GameEvents {
 
 		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
 			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
-			this.existingLogLines = [];
+			// Don't do this, as it breaks reconnects
+			// this.existingLogLines = [];
 		}
 		if (existingLine.indexOf('tag=PLAYSTATE value=WON') !== -1) {
 			console.log('[game-events] [existing] received tag=PLAYSTATE value=WON log', existingLine);
