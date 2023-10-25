@@ -341,8 +341,9 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(
 					new BgsRewardGainedEvent(
 						gameEvent.cardId,
-						gameEvent.additionalData.playerId,
+						gameEvent.additionalData.questRewardDbfId,
 						gameEvent.additionalData.isHeroPowerReward,
+						gameEvent.additionalData.playerId,
 					),
 				);
 			} else if (

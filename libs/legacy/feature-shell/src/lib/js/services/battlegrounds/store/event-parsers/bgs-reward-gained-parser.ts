@@ -20,20 +20,31 @@ export class BgsRewardGainedParser implements EventParser {
 
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		const reward: QuestReward = playerToUpdate.questRewards.find((r) => r.isHeroPower === event.isHeroPowerReward);
+		let newRewards: QuestReward[] = [...(playerToUpdate.questRewards ?? [])];
 		if (!reward) {
-			console.warn('[bgs-reward] missing reward', event, playerToUpdate.questRewards, playerToUpdate);
-			return currentState;
+			console.warn(
+				'[bgs-reward] missing reward, it could be a case of a reward gained directly',
+				event,
+				playerToUpdate.questRewards,
+				playerToUpdate,
+			);
+			newRewards.push({
+				cardId: this.allCards.getCard(event.rewardDbfId).id,
+				completed: true,
+				completedTurn: turn,
+				isHeroPower: event.isHeroPowerReward,
+			} as QuestReward);
+		} else {
+			newRewards = playerToUpdate.questRewards.map((r) =>
+				r.isHeroPower === event.isHeroPowerReward
+					? {
+							...r,
+							completed: true,
+							completedTurn: turn,
+					  }
+					: r,
+			);
 		}
-
-		const newRewards: readonly QuestReward[] = playerToUpdate.questRewards.map((r) =>
-			r.isHeroPower === event.isHeroPowerReward
-				? {
-						...r,
-						completed: true,
-						completedTurn: turn,
-				  }
-				: r,
-		);
 		const newPlayer = playerToUpdate.update({
 			questRewards: newRewards,
 		});
