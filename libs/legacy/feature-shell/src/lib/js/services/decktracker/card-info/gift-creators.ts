@@ -646,4 +646,6 @@ export const giftCreators = [
 	CardIds.RingOfBlackIceTavernBrawl,
 	CardIds.RingOfBlackIce_RingOfBlackIceTavernBrawlEnchantment_PVPDR_AV_Passive28e1,
 	CardIds.RingOfBlackIce_RingOfBlackIceTavernBrawlEnchantment_PVPDR_AV_Passive28e2,
+	CardIds.OutlanderTavernBrawl,
+	CardIds.Outlander_OutlandersPowerTavernBrawlEnchantment,
 ];
