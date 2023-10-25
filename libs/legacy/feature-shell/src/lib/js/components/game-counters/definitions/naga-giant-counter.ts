@@ -61,6 +61,7 @@ export class NagaGiantCounterDefinition
 			tooltip: this.i18n.translateString(`counters.naga-giant.${this.side}`, {
 				cost: costAfterReduction,
 				spells: spellsPlayed,
+				spellsMana: totalCostReduction,
 			}),
 			standardCounter: true,
 		};
