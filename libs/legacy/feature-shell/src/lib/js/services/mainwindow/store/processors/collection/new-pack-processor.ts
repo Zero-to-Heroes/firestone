@@ -38,7 +38,7 @@ export class NewPackProcessor implements Processor {
 				return result;
 			}),
 		};
-		console.log('[pack-history] handling new pack', newPack);
+		console.debug('[pack-history] handling new pack', newPack);
 		this.collectionBootstrap.newPack(newPack);
 		return [null, null];
 	}

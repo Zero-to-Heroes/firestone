@@ -172,7 +172,7 @@ export class CardsMonitorService {
 		});
 
 		const setId = boosterIdToSetId(boosterId) || this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase();
-		console.log('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
+		console.debug('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
 		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
