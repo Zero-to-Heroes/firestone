@@ -3,7 +3,7 @@ import { MultiselectOption } from '@firestone/shared/common/view';
 import { groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { Observable, combineLatest, tap } from 'rxjs';
+import { Observable, combineLatest, filter, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -55,6 +55,7 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 				),
 			);
 		this.options$ = this.store.constructedMetaDecks$().pipe(
+			filter((decks) => !!decks?.deckStats?.length),
 			this.mapData((decks) => {
 				const archetypes = decks.deckStats.flatMap((stat) => ({
 					id: stat.archetypeId,
