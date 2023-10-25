@@ -47,23 +47,19 @@ export class CardsMonitorService {
 	}
 
 	private async init() {
-		console.log('[cards-monitor] init');
+		await sleep(1);
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-
-		setTimeout(() => {
-			this.mainWindowStore = this.ow.getMainWindow().mainWindowStoreMerged;
-			this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-				const changes: MemoryUpdate = event.data[0];
-				if (changes.IsOpeningPack) {
-					this.packNotificationQueue.next(true);
-				}
-			});
+		this.mainWindowStore = this.ow.getMainWindow().mainWindowStoreMerged;
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.IsOpeningPack) {
+				this.packNotificationQueue.next(true);
+			}
 		});
-
 		this.packNotificationQueue
 			.pipe(
-				debounceTime(500),
 				filter((info) => info),
+				debounceTime(500),
 				tap((info) => this.triggerMemoryDetection(true)),
 			)
 			.subscribe();
