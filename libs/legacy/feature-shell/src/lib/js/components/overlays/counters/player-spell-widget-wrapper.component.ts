@@ -13,7 +13,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 
 const SPELL_COUNTER_CARD_IDS = [
-	CardIds.YoggSaronUnleashed_YOG_516,
+	// CardIds.YoggSaronUnleashed_YOG_516,
 	CardIds.YoggSaronHopesEnd_OG_134,
 	CardIds.YoggSaronMasterOfFate,
 	CardIds.ArcaneGiant,

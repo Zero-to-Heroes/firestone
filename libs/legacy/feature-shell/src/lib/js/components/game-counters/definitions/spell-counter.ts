@@ -6,7 +6,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { CounterDefinition } from './_counter-definition';
 
 const PRIORITY_LIST = [
-	CardIds.YoggSaronUnleashed_YOG_516,
+	// CardIds.YoggSaronUnleashed_YOG_516,
 	CardIds.YoggSaronHopesEnd_OG_134,
 	CardIds.YoggSaronMasterOfFate,
 	CardIds.ArcaneGiant,
@@ -57,7 +57,7 @@ export class SpellCounterDefinition
 		spellsPlayed: number;
 		allCardsInDeck: readonly string[];
 	}): NonFunctionProperties<SpellCounterDefinition> {
-		let iconToShow = CardIds.YoggSaronUnleashed_YOG_516;
+		let iconToShow = CardIds.YoggSaronHopesEnd_OG_134;
 		for (const cardId of PRIORITY_LIST) {
 			if (info.allCardsInDeck.includes(cardId)) {
 				iconToShow = cardId;
