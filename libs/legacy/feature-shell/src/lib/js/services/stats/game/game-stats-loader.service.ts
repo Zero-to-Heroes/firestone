@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { ApiRunner, CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
+import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
+import {
+	ApiRunner,
+	CardsFacadeService,
+	DiskCacheService,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { filter } from 'rxjs';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../../models/patches';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
-import { UpdateGameStatsEvent } from '../../mainwindow/store/events/stats/update-game-stats-event';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
 import { decode } from '../../utils';
 
 const GAME_STATS_ENDPOINT = 'https://lq32rsf3wgmmjxihavjplf5jfq0ntetn.lambda-url.us-west-2.on.aws/';
-const ARCHETYPE_CONFIG_ENDPOINT = 'https://static.zerotoheroes.com/api/decks-config.json';
-const ARCHETYPE_STATS_ENDPOINT = 'https://static.zerotoheroes.com/api/ranked-decks.json';
 
 @Injectable()
 export class GameStatsLoaderService {
-	private gameStats: GameStats;
+	public gameStats$$: SubscriberAwareBehaviorSubject<GameStats>;
 
+	private mainInstance: GameStatsLoaderService;
 	private patchInfo: PatchInfo;
 
 	constructor(
@@ -32,20 +37,58 @@ export class GameStatsLoaderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreService,
+		private readonly windowManager: WindowManagerService,
 	) {
-		this.init();
+		this.initFacade();
+	}
+
+	public async isReady() {
+		while (!this.gameStats$$) {
+			await sleep(50);
+		}
+	}
+
+	public async addGame(game: GameStat) {
+		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
+		const newStats = currentStats?.update({
+			stats: [game, ...(currentStats?.stats ?? [])],
+		});
+		this.gameStats$$.next(newStats);
+	}
+
+	public async updateBgsPostMatchStats(reviewId: string, postMatchStats: BgsPostMatchStats) {
+		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
+		const newStats = currentStats.updateBgsPostMatchStats(reviewId, postMatchStats);
+		this.gameStats$$.next(newStats);
+	}
+
+	private async initFacade() {
+		const isMainWindow = await this.windowManager.isMainWindow();
+		if (isMainWindow) {
+			window['gameStatsLoader'] = this;
+			this.mainInstance = this;
+			this.init();
+		} else {
+			const mainWindow = await this.windowManager.getMainWindow();
+			this.mainInstance = mainWindow['gameStatsLoader'];
+			this.gameStats$$ = this.mainInstance.gameStats$$;
+		}
 	}
 
 	private async init() {
+		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
 		await this.store.initComplete();
 
-		this.store
-			.listen$(([main]) => main.stats?.gameStats)
-			.pipe(filter(([gameStats]) => !!gameStats?.stats?.length))
-			.subscribe(([gameStats]) => {
+		this.gameStats$$.onFirstSubscribe(async () => {
+			console.debug('[game-stats-loader] first subscriber, loading stats', new Error().stack);
+			this.gameStats$$.pipe(filter((gameStats) => !!gameStats?.stats?.length)).subscribe((gameStats) => {
 				console.debug('[game-stats-loader] updating local games');
 				this.saveLocalStats(gameStats.stats);
 			});
+
+			await this.retrieveStats();
+		});
+
 		this.store
 			.listen$(([main]) => main.patchConfig?.patches)
 			.pipe(filter(([patches]) => !!patches?.length))
@@ -55,42 +98,46 @@ export class GameStatsLoaderService {
 			});
 	}
 
-	public async retrieveStats(): Promise<GameStats> {
+	private async retrieveStats() {
 		const localStats = await this.loadLocalGameStats();
 		if (!!localStats?.length) {
 			console.log('[game-stats-loader] retrieved stats locally', localStats.length);
 			const prefs = await this.prefs.getPreferences();
-			return GameStats.create({
-				stats: localStats
-					.map((stat) => GameStat.create({ ...stat }))
-					.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
-					// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
-					// appear anywhere
-					.filter(
-						(stat) =>
-							!prefs?.desktopDeckDeletes ||
-							!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
-							prefs.desktopDeckDeletes[stat.playerDecklist][
-								prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
-							] < stat.creationTimestamp,
-					),
-			});
+			this.gameStats$$.next(
+				GameStats.create({
+					stats: localStats
+						.map((stat) => GameStat.create({ ...stat }))
+						.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
+						// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
+						// appear anywhere
+						.filter(
+							(stat) =>
+								!prefs?.desktopDeckDeletes ||
+								!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
+								prefs.desktopDeckDeletes[stat.playerDecklist][
+									prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
+								] < stat.creationTimestamp,
+						),
+				}),
+			);
+		} else {
+			console.log('[game-stats-loader] no stats locally, retrieving from server');
+			const stats = await this.refreshGameStats(false);
+			this.gameStats$$.next(stats);
 		}
-
-		return this.refreshGameStats(false);
 	}
 
 	public async clearGames() {
 		console.log('[game-stats-loader] clearing games');
 		await this.saveLocalStats([]);
 		const stats = await this.refreshGameStats(false);
-		this.store.send(new UpdateGameStatsEvent(stats.stats));
+		this.gameStats$$.next(stats);
 	}
 
 	public async fullRefresh() {
 		console.log('[game-stats-loader] triggering full refresh');
 		const stats = await this.refreshGameStats(true);
-		this.store.send(new UpdateGameStatsEvent(stats.stats));
+		this.gameStats$$.next(stats);
 	}
 
 	private async refreshGameStats(fullRetrieve: boolean) {
@@ -104,7 +151,7 @@ export class GameStatsLoaderService {
 		// const input = {
 		// 	userId: 'zerg',
 		// };
-		console.log('[game-stats-loader] retrieving stats', user);
+		console.log('[game-stats-loader] retrieving stats from API', user);
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
@@ -138,7 +185,8 @@ export class GameStatsLoaderService {
 			.map((stat) => Object.assign(new GameStat(), stat))
 			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod));
 		await this.saveLocalStats(stats);
-		this.gameStats = GameStats.create({
+		console.log('[game-stats-loader] Retrieved game stats for user', stats?.length);
+		return GameStats.create({
 			stats: stats
 				// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
 				// appear anywhere
@@ -153,9 +201,6 @@ export class GameStatsLoaderService {
 						] < stat.creationTimestamp,
 				),
 		});
-		console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
-		console.debug('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats, data);
-		return this.gameStats;
 	}
 
 	private isCorrectPeriod(

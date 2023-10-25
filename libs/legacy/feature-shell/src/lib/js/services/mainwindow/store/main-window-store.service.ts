@@ -51,7 +51,6 @@ import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
-import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { DuelsTopDeckService } from '../../duels/duels-top-decks.service';
@@ -204,7 +203,6 @@ import { GlobalStatsLoadedEvent } from './events/stats/global/global-stats-loade
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
-import { UpdateGameStatsEvent } from './events/stats/update-game-stats-event';
 import { StoreInitEvent } from './events/store-init-event';
 import { LiveStreamsDataLoadedEvent } from './events/streams/live-streams-data-loaded-event';
 import { LiveStreamsForceReloadEvent } from './events/streams/live-streams-force-reload-event';
@@ -367,7 +365,6 @@ import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-st
 import { ProfileSelectCategoryEvent, ProfileSelectCategoryProcessor } from './processors/stats/profile-select-category';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
-import { UpdateGameStatsProcessor } from './processors/stats/update-game-stats-processor';
 import { LiveStreamsDataLoadedProcessor } from './processors/sterams/live-streams-data-loaded-processor';
 import { LiveStreamsForceReloadProcessor } from './processors/sterams/live-streams-force-reload-processor';
 import { StoreInitProcessor } from './processors/store-init-processor';
@@ -409,7 +406,6 @@ export class MainWindowStoreService {
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly storeBootstrap: StoreBootstrapService,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
-		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly prefs: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly duelsDeckProvider: DuelsDecksProviderService,
@@ -429,6 +425,7 @@ export class MainWindowStoreService {
 		private readonly achievementsManager: AchievementsMemoryMonitor,
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
+		private readonly gameStats: GameStatsLoaderService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -664,14 +661,7 @@ export class MainWindowStoreService {
 			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor()],
 			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs)],
 			// Stats
-			[
-				RecomputeGameStatsEvent.eventName(),
-				new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.events, this.prefs),
-			],
-			[
-				UpdateGameStatsEvent.eventName(),
-				new UpdateGameStatsProcessor(this.decktrackerStateLoader, this.events, this.prefs),
-			],
+			[RecomputeGameStatsEvent.eventName(), new RecomputeGameStatsProcessor(this.gameStats)],
 			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
 			[GamesFullClearEvent.eventName(), new GameStatsFullClearProcessor(this.gameStatsLoader)],
 			[
@@ -682,14 +672,17 @@ export class MainWindowStoreService {
 			[
 				// Replays
 				ShowReplayEvent.eventName(),
-				new ShowReplayProcessor(this.bgsRunStatsService, this.i18n),
+				new ShowReplayProcessor(this.bgsRunStatsService, this.i18n, this.gameStats),
 			],
 			[ShowReplaysEvent.eventName(), new ShowReplaysProcessor(this.prefs)],
 			[
 				TriggerShowMatchStatsEvent.eventName(),
-				new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs, this.i18n),
+				new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs, this.i18n, this.gameStats),
 			],
-			[ShowMatchStatsEvent.eventName(), new ShowMatchStatsProcessor(this.prefs, this.i18n, this.cards)],
+			[
+				ShowMatchStatsEvent.eventName(),
+				new ShowMatchStatsProcessor(this.prefs, this.i18n, this.cards, this.gameStats),
+			],
 			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
 			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
 			[
@@ -711,7 +704,7 @@ export class MainWindowStoreService {
 			[ChangeDeckSortEvent.eventName(), new ChangeDeckSortProcessor(this.prefs)],
 			[HideDeckSummaryEvent.eventName(), new HideDeckSummaryProcessor(this.prefs)],
 			[DecktrackerResetDeckStatsEvent.eventName(), new DecktrackerResetDeckStatsProcessor(this.prefs)],
-			[DecktrackerDeleteDeckEvent.eventName(), new DecktrackerDeleteDeckProcessor(this.prefs)],
+			[DecktrackerDeleteDeckEvent.eventName(), new DecktrackerDeleteDeckProcessor(this.prefs, this.gameStats)],
 			[RestoreDeckSummaryEvent.eventName(), new RestoreDeckSummaryProcessor(this.prefs)],
 			[ToggleShowHiddenDecksEvent.eventName(), new ToggleShowHiddenDecksProcessor(this.prefs)],
 			[ConstructedDeckbuilderGoBackEvent.eventName(), new ConstructedDeckbuilderGoBackProcessor()],
@@ -748,10 +741,7 @@ export class MainWindowStoreService {
 			// ],
 			[BgsHeroSortFilterSelectedEvent.eventName(), new BgsHeroSortFilterSelectedProcessor(this.prefs)],
 			[BgsHeroFilterSelectedEvent.eventName(), new BgsHeroFilterSelectedProcessor(this.prefs)],
-			[
-				BgsPostMatchStatsComputedEvent.eventName(),
-				new BgsPostMatchStatsComputedProcessor(this.replaysStateBuilder),
-			],
+			[BgsPostMatchStatsComputedEvent.eventName(), new BgsPostMatchStatsComputedProcessor(this.gameStats)],
 			[
 				BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
 				new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.cards, this.i18n),

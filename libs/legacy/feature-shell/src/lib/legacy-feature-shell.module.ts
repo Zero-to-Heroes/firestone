@@ -737,7 +737,6 @@ import { GameStateMetaInfoService } from './js/services/decktracker/game-state-m
 import { GameStateService } from './js/services/decktracker/game-state.service';
 import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
-import { ReplaysStateBuilderService } from './js/services/decktracker/main/replays-state-builder.service';
 import { OverlayDisplayService } from './js/services/decktracker/overlay-display.service';
 import { SecretConfigService } from './js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
@@ -812,6 +811,7 @@ import { SettingsCommunicationService } from './js/services/settings/settings-co
 import { GameStatsLoaderService } from './js/services/stats/game/game-stats-loader.service';
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
+import { MatchStatsService } from './js/services/stats/match-stats.service';
 import { StatsStateBuilderService } from './js/services/stats/stats-state-builder.service';
 import { SystemTrayService } from './js/services/system-tray.service';
 import { TipService } from './js/services/tip.service';
@@ -1796,7 +1796,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		DecktrackerStateLoaderService,
 		DecksProviderService,
-		ReplaysStateBuilderService,
 		ConstructedMetaDecksStateService,
 
 		EndGameListenerService,
@@ -1834,6 +1833,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		GameStatsLoaderService,
 		GameStatsUpdaterService,
 		GameStatsProviderService,
+		MatchStatsService,
 
 		OverlayDisplayService,
 		DeckCardService,

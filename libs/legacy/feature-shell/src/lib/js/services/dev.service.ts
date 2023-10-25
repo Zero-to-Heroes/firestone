@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
 import { CardIds, ReferenceCard, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
 import { Achievement } from '../models/achievement';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { DeckCard } from '../models/decktracker/deck-card';
 import { DeckState } from '../models/decktracker/deck-state';
 import { GameState } from '../models/decktracker/game-state';
-import { GameStats } from '../models/mainwindow/stats/game-stats';
 import { AchievementsLiveProgressTrackingService } from './achievement/achievements-live-progress-tracking.service';
 import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
@@ -99,20 +97,20 @@ export class DevService {
 		) => {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
-		window['showMatchStatsNotification'] = () => {
-			this.events.broadcast(
-				Events.GAME_STATS_UPDATED,
-				Object.assign(new GameStats(), {
-					stats: [
-						Object.assign(new GameStat(), {
-							reviewId: '5ddd7f7f3c4a7900013e16de',
-							gameMode: 'battlegrounds',
-							playerRank: '5123',
-						} as GameStat),
-					] as readonly GameStat[],
-				} as GameStats),
-			);
-		};
+		// window['showMatchStatsNotification'] = () => {
+		// 	this.events.broadcast(
+		// 		Events.GAME_STATS_UPDATED,
+		// 		Object.assign(new GameStats(), {
+		// 			stats: [
+		// 				Object.assign(new GameStat(), {
+		// 					reviewId: '5ddd7f7f3c4a7900013e16de',
+		// 					gameMode: 'battlegrounds',
+		// 					playerRank: '5123',
+		// 				} as GameStat),
+		// 			] as readonly GameStat[],
+		// 		} as GameStats),
+		// 	);
+		// };
 		window['loadEvents'] = async (
 			fileName,
 			awaitEvents = false,

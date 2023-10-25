@@ -7,6 +7,7 @@ import { MatchDetail } from '../../../../../models/mainwindow/replays/match-deta
 import { Preferences } from '../../../../../models/preferences';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
 import { PreferencesService } from '../../../../preferences.service';
+import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { TriggerShowMatchStatsEvent } from '../../events/replays/trigger-show-match-stats-event';
 import { Processor } from '../processor';
 
@@ -15,6 +16,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		private readonly bgsRunStats: BgsRunStatsService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
+		private readonly gameStats: GameStatsLoaderService,
 	) {}
 
 	public async process(
@@ -38,7 +40,8 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 
 		const prefs: Preferences = await this.prefs.getPreferences();
 		this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
-		const selectedInfo = currentState.findReplay(event.reviewId);
+		const gameStats = await this.gameStats.gameStats$$.getValueWithInit();
+		const selectedInfo = gameStats?.stats?.find((replay) => replay.reviewId === event.reviewId);
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({

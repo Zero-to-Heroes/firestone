@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../models/mainwindow/stats/stats-state';
 import { Preferences } from '../../models/preferences';
 
@@ -12,7 +11,7 @@ export class StatsStateBuilderService {
 	public initState(
 		initialState: StatsState,
 		prefs: Preferences,
-		matchStats: GameStats,
+		// matchStats: GameStats,
 		// archetypesConfig: readonly ArchetypeConfig[],
 		// archetypesStats: ArchetypeStats,
 	) {
@@ -32,7 +31,7 @@ export class StatsStateBuilderService {
 				},
 			],
 			loading: false,
-			gameStats: matchStats,
+			// gameStats: matchStats,
 			// archetypesConfig: archetypesConfig,
 			// archetypesStats: archetypesStats,
 			filters: {

@@ -2,11 +2,12 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationDecktracker } from '../../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreferencesService } from '../../../../preferences.service';
+import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { DecktrackerDeleteDeckEvent } from '../../events/decktracker/decktracker-delete-deck-event';
 import { Processor } from '../processor';
 
 export class DecktrackerDeleteDeckProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly gamesLoader: GameStatsLoaderService) {}
 
 	public async process(
 		event: DecktrackerDeleteDeckEvent,
@@ -31,8 +32,9 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		}
 
 		// If no games were played with the deck, no need to change anything
-		const gamesWithDeck = currentState.stats.gameStats.stats.filter((s) => s.playerDecklist === event.deckstring);
-		if (!gamesWithDeck.length) {
+		const gameStats = await this.gamesLoader.gameStats$$.getValueWithInit();
+		const gamesWithDeck = gameStats?.stats?.filter((s) => s.playerDecklist === event.deckstring);
+		if (!gamesWithDeck?.length) {
 			return [
 				null,
 				navigationState.update({

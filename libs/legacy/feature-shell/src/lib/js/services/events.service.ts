@@ -29,7 +29,7 @@ export class Events {
 	public static readonly START_BGS_BATTLE_SIMULATION = 'EVENTS_START_BGS_BATTLE_SIMULATION';
 	public static readonly BATTLE_SIMULATION_HISTORY_UPDATED = 'BATTLE_SIMULATION_HISTORY_UPDATED';
 
-	public static readonly GAME_STATS_UPDATED = 'events-game-stats-updated';
+	// public static readonly GAME_STATS_UPDATED = 'events-game-stats-updated';
 	public static readonly GLOBAL_STATS_UPDATED = 'global-stats-updated';
 
 	// An intermediate layer for decktracker, so that we have better control on the display

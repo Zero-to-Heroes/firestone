@@ -41,9 +41,9 @@ export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirem
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.GAME_STATS_UPDATED) {
-			this.handleEvent(gameEvent);
-		}
+		// if (gameEvent.type === GameEvent.GAME_STATS_UPDATED) {
+		// 	this.handleEvent(gameEvent);
+		// }
 	}
 
 	private handleEvent(gameEvent: GameEvent) {

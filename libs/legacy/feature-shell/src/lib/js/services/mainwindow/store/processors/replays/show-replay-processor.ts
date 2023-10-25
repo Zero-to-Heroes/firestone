@@ -4,11 +4,16 @@ import { NavigationReplays } from '../../../../../models/mainwindow/navigation/n
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
+import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { ShowReplayEvent } from '../../events/replays/show-replay-event';
 import { Processor } from '../processor';
 
 export class ShowReplayProcessor implements Processor {
-	constructor(private readonly bgsRunStats: BgsRunStatsService, private readonly i18n: LocalizationService) {}
+	constructor(
+		private readonly bgsRunStats: BgsRunStatsService,
+		private readonly i18n: LocalizationService,
+		private readonly gameStats: GameStatsLoaderService,
+	) {}
 
 	public async process(
 		event: ShowReplayEvent,
@@ -16,7 +21,8 @@ export class ShowReplayProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedInfo = currentState.findReplay(event.reviewId);
+		const gameStats = await this.gameStats.gameStats$$.getValueWithInit();
+		const selectedInfo = gameStats?.stats?.find((replay) => replay.reviewId === event.reviewId);
 		if (!selectedInfo) {
 			console.warn('Could not find selected info for replay', event.reviewId);
 			return [currentState, navigationState];

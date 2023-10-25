@@ -1,12 +1,10 @@
 // import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 // import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
-import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { AppInjector } from '../../../services/app-injector';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
 
-import { GameStats } from './game-stats';
 import { StatsCategory } from './stats-category';
 import { StatsFilters } from './stats-filters';
 
@@ -15,7 +13,7 @@ export class StatsState {
 	readonly categories: readonly StatsCategory[] = [];
 	readonly filters: StatsFilters = new StatsFilters();
 
-	readonly gameStats: GameStats = new GameStats();
+	// readonly gameStats: GameStats = new GameStats();
 	// readonly archetypesConfig: readonly ArchetypeConfig[];
 	// readonly archetypesStats: ArchetypeStats;
 
@@ -46,12 +44,16 @@ export class StatsState {
 		return this.bestBgsUserStats;
 	}
 
-	public updateBgsPostMatchStats(reviewId: string, postMatchStats: BgsPostMatchStats): StatsState {
-		const newGameStats: GameStats = this.gameStats.updateBgsPostMatchStats(reviewId, postMatchStats);
-		return this.update({
-			gameStats: newGameStats,
-		} as StatsState);
-	}
+	// public updateBgsPostMatchStats(
+	// 	reviewId: string,
+	// 	postMatchStats: BgsPostMatchStats,
+	// 	gameStats: GameStatsLoaderService,
+	// ): StatsState {
+	// 	const newGameStats: GameStats = gameStats.updateBgsPostMatchStats(reviewId, postMatchStats);
+	// 	return this.update({
+	// 		gameStats: newGameStats,
+	// 	} as StatsState);
+	// }
 
 	public findCategory(categoryId: string): StatsCategory {
 		const result = this.categories?.find((cat) => cat.id === categoryId);

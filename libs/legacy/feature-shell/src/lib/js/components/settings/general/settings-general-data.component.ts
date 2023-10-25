@@ -2,11 +2,12 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { DiskCacheService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
 import { AchievementsFullRefreshEvent } from '../../../services/mainwindow/store/events/achievements/achievements-full-refresh-event';
 import { CollectionRefreshPacksEvent } from '../../../services/mainwindow/store/events/collection/colection-refresh-packs-event';
 import { GamesFullClearEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-clear-event';
 import { GamesFullRefreshEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-refresh-event';
+import { GameStatsLoaderService } from '../../../services/stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -112,11 +113,14 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly diskCache: DiskCacheService,
+		private readonly gamesLoader: GameStatsLoaderService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.gamesLoader.isReady();
+
 		this.disableLocalCache$ = this.listenForBasicPref$((prefs) => prefs.disableLocalCache);
 		this.isRefreshingGames$ = this.isRefreshingGames.asObservable();
 		this.refreshGamesLabel$ = this.isRefreshingGames$.pipe(
@@ -152,13 +156,10 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 			}),
 		);
 
-		this.store
-			.listen$(([main, nav]) => main.stats?.gameStats)
-			.pipe(this.mapData(([gameStats]) => gameStats))
-			.subscribe((gameStats) => {
-				this.isRefreshingGames.next(false);
-				this.isClearingGames.next(false);
-			});
+		this.gamesLoader.gameStats$$.pipe(this.mapData((gameStats) => gameStats)).subscribe((gameStats) => {
+			this.isRefreshingGames.next(false);
+			this.isClearingGames.next(false);
+		});
 		this.store
 			.packStats$()
 			.pipe(this.mapData((packs) => packs))
@@ -172,15 +173,15 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 				this.isRefreshingAchievements.next(false);
 			});
 
-		this.gamesSynced$ = this.store
-			.listen$(([main]) => main.stats?.gameStats?.stats?.length)
-			.pipe(
-				this.mapData(([totalGames]) =>
-					this.i18n.translateString('settings.general.data.total-games', {
-						value: totalGames,
-					}),
-				),
-			);
+		this.gamesSynced$ = this.gamesLoader.gameStats$$.pipe(
+			map((stats) => stats?.stats?.length ?? 0),
+			distinctUntilChanged(),
+			this.mapData((totalGames) =>
+				this.i18n.translateString('settings.general.data.total-games', {
+					value: totalGames,
+				}),
+			),
+		);
 	}
 
 	changeDisableLocalCache = (disableCache: boolean) => {

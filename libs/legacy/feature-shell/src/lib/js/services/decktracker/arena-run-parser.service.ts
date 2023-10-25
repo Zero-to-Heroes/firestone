@@ -5,7 +5,6 @@ import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/share
 import { GameStat } from '@firestone/stats/data-access';
 import { ArenaInfo } from '../../models/arena-info';
 import { GameEvent } from '../../models/game-event';
-import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -13,7 +12,7 @@ import { ArenaRewardsUpdatedEvent } from '../mainwindow/store/events/arena/arena
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { PreferencesService } from '../preferences.service';
+import { GameStatsLoaderService } from '../stats/game/game-stats-loader.service';
 import { uuid } from '../utils';
 
 const UPDATE_URL = 'https://5ko26odaiczaspuvispnw3iv3e0kthll.lambda-url.us-west-2.on.aws/';
@@ -43,13 +42,18 @@ export class ArenaRunParserService {
 		private allCards: CardsFacadeService,
 		private ow: OverwolfService,
 		private events: Events,
-		private prefs: PreferencesService,
 		private api: ApiRunner,
+		private gamesStats: GameStatsLoaderService,
 	) {
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
-			const newGameStats: GameStats = event.data[0];
+		this.init();
+	}
+
+	private async init() {
+		await this.gamesStats.isReady();
+		this.gamesStats.gameStats$$.subscribe((newGameStats) => {
 			this.setLastArenaMatch(newGameStats?.stats);
 		});
+
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA && !event.additionalData.spectating && !this.spectating) {
 				this.currentGameType = event.additionalData.metaData.GameType;
@@ -120,12 +124,13 @@ export class ArenaRunParserService {
 		this.stateUpdater.next(new ArenaRewardsUpdatedEvent(this.rewardsInput));
 	}
 
-	public setLastArenaMatch(stats: readonly GameStat[]) {
+	private setLastArenaMatch(stats: readonly GameStat[]) {
 		if (!stats?.length) {
 			return;
 		}
 
-		if (stats[0].gameMode === 'arena') {
+		const arenaGames = stats?.filter((stat) => stat.gameMode === 'arena');
+		if (arenaGames?.[0]?.gameMode === 'arena') {
 			this.debug(
 				'setting last arena match, trying to see if it is the last match in run',
 				stats[0].additionalResult,

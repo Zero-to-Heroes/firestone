@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { buildRankText, GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { distinctUntilChanged, filter, map, skip } from 'rxjs';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsShowPostMatchStatsEvent } from '../battlegrounds/store/events/bgs-show-post-match-stats-event';
-import { Events } from '../events.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { RewardMonitorService, XpForGameInfo } from '../rewards/rewards-monitor';
+import { GameStatsLoaderService } from '../stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
@@ -18,24 +17,29 @@ export class ReplaysNotificationService {
 	constructor(
 		private readonly notificationService: OwNotificationsService,
 		private readonly prefs: PreferencesService,
-		private readonly events: Events,
 		private readonly rewards: RewardMonitorService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly bgsStore: BattlegroundsStoreService,
-		private readonly mainWindowState: MainWindowStoreService,
+		private readonly gameStats: GameStatsLoaderService,
 	) {
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe((data) => this.showNewMatchEndNotification(data.data[0]));
-		window['showReplay'] = () => {
-			const stat = this.mainWindowState.state.stats.gameStats.stats[0];
-			console.debug('using stat', stat, this.mainWindowState.state.stats.gameStats);
-			this.showBgsMatchEndNotification(stat);
-		};
+		this.init();
 	}
 
-	private async showNewMatchEndNotification(gameStats: GameStats) {
+	private async init() {
+		await this.gameStats.isReady();
+		this.gameStats.gameStats$$
+			.pipe(
+				filter((stats) => !!stats?.stats?.length),
+				map((stats) => stats.stats[0]),
+				distinctUntilChanged((a, b) => a?.reviewId === b?.reviewId),
+				skip(1),
+			)
+			.subscribe((gameStat) => this.showNewMatchEndNotification(gameStat));
+	}
+
+	private async showNewMatchEndNotification(gameStat: GameStat) {
 		console.debug('[replays-notification] received new game, preparing notification?');
-		const gameStat = gameStats.stats[0];
 		const prefs = await this.prefs.getPreferences();
 		if (isBattlegrounds(gameStat.gameMode) && prefs.bgsShowEndGameNotif) {
 			this.showBgsMatchEndNotification(gameStat);

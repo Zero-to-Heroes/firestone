@@ -8,7 +8,6 @@ import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
 import { MercenariesState } from '../../../models/mercenaries/mercenaries-state';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
@@ -20,7 +19,6 @@ import { BattlegroundsQuestsService } from '../../battlegrounds/bgs-quests.servi
 import { CardsInitService } from '../../cards-init.service';
 import { ArenaRunParserService } from '../../decktracker/arena-run-parser.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
-import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsLootParserService } from '../../duels/duels-loot-parser.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
@@ -50,7 +48,6 @@ export class StoreBootstrapService {
 		private readonly bgsInit: BgsInitService,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly init_bgsQuestsService: BattlegroundsQuestsService,
-		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly globalStats: GlobalStatsService,
 		private readonly bestBgsStats: BgsBestUserStatsService,
@@ -98,7 +95,7 @@ export class StoreBootstrapService {
 		const [
 			[socialShareUserInfo, currentUser, currentScene],
 			[constructedConfig],
-			[matchStats],
+			// [matchStats],
 			[arenaRewards],
 			// [mercenariesCollection],
 		] = await Promise.all([
@@ -108,7 +105,7 @@ export class StoreBootstrapService {
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
-			Promise.all([this.gameStatsLoader.retrieveStats()]),
+			// Promise.all([this.gameStatsLoader.retrieveStats()]),
 			Promise.all([this.arena.loadRewards()]),
 			// Promise.all([this.mercenariesMemory.getMercenariesMergedCollectionInfo()]),
 		]);
@@ -127,7 +124,7 @@ export class StoreBootstrapService {
 		const newStatsState = this.stats.initState(
 			windowStateForFtue.stats,
 			prefs,
-			matchStats,
+			// matchStats,
 			//archetypesConfig, archetypesStats
 		);
 		const currentRankedMetaPatch = patchConfig?.patches
@@ -135,28 +132,20 @@ export class StoreBootstrapService {
 			: null;
 		const decktracker = this.decktrackerStateLoader.buildState(
 			windowStateForFtue.decktracker,
-			newStatsState,
+			// newStatsState,
 			constructedConfig,
 			currentRankedMetaPatch,
 			prefs,
 		);
-		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
-			windowStateForFtue.replays,
-			newStatsState,
-		);
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
-		const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);
-		const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter((deckCode) => allDeckCodes.includes(deckCode));
-		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
+		// const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);
+		// const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter((deckCode) => allDeckCodes.includes(deckCode));
+		// await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
 		const newAchievementState = windowStateForFtue.achievements.update({
 			filters: AchievementsState.buildFilterOptions(this.i18n),
 		});
-
-		this.arenaService.setLastArenaMatch(
-			newStatsState.gameStats?.stats?.filter((stat) => stat.gameMode === 'arena'),
-		);
 
 		const currentDuelsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
@@ -201,7 +190,7 @@ export class StoreBootstrapService {
 			lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
 			currentUser: currentUser,
 			showFtue: !prefs.ftue.hasSeenGlobalFtue,
-			replays: replayState,
+			// replays: replayState,
 			// binder: collectionState,
 			achievements: newAchievementState,
 			decktracker: decktracker,

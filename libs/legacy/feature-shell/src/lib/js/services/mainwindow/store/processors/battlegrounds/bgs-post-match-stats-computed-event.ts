@@ -1,12 +1,12 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
-import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
+import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { BgsPostMatchStatsComputedEvent } from '../../events/battlegrounds/bgs-post-match-stats-computed-event';
 import { Processor } from '../processor';
 
 export class BgsPostMatchStatsComputedProcessor implements Processor {
-	constructor(private readonly replaysBuilder: ReplaysStateBuilderService) {}
+	constructor(private readonly gameStats: GameStatsLoaderService) {}
 
 	public async process(
 		event: BgsPostMatchStatsComputedEvent,
@@ -17,12 +17,10 @@ export class BgsPostMatchStatsComputedProcessor implements Processor {
 		const newStats = currentState.stats.update({
 			bestBgsUserStats: event.newBestStats,
 		} as StatsState);
-		const statsAfterBgsUpdate: StatsState = newStats.updateBgsPostMatchStats(event.reviewId, event.postMatchStats);
-		const replays = await this.replaysBuilder.buildState(currentState.replays, statsAfterBgsUpdate);
+		this.gameStats.updateBgsPostMatchStats(event.reviewId, event.postMatchStats);
 		return [
 			currentState.update({
-				stats: statsAfterBgsUpdate,
-				replays: replays,
+				stats: newStats,
 			} as MainWindowState),
 			null,
 		];

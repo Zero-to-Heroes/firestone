@@ -14,7 +14,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	template: `
 		<div class="app-section replays" *ngIf="currentView$ | async as currentView">
 			<section class="main divider">
-				<with-loading [isLoading]="loading$ | async">
+				<with-loading>
 					<div class="content main-content">
 						<global-header *ngIf="showGlobalHeader$ | async"> </global-header>
 						<replays-list *ngIf="currentView === 'list'"></replays-list>
@@ -62,9 +62,6 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 	}
 
 	ngAfterContentInit() {
-		this.loading$ = this.store
-			.listen$(([main, nav, prefs]) => main.replays.isLoading)
-			.pipe(this.mapData(([isLoading]) => isLoading));
 		this.showGlobalHeader$ = this.store
 			.listen$(([main, nav, prefs]) => nav.text)
 			.pipe(this.mapData(([text]) => !!text));

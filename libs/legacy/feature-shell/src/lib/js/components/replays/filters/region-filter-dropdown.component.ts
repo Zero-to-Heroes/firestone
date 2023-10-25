@@ -10,10 +10,11 @@ import { BnetRegion } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
+import { GameStatsLoaderService } from '../../../services/stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -47,27 +48,27 @@ export class RegionFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly gamesLoader: GameStatsLoaderService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => nav.navigationDecktracker.currentView,
-				// Here we really want to use all the stats, not the gameStats$ observable
-				([main, nav]) => main.stats?.gameStats?.stats,
-			),
+	async ngAfterContentInit() {
+		await this.gamesLoader.isReady();
+
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.gamesLoader.gameStats$$,
 			this.store.listenPrefs$((prefs) => prefs.regionFilter),
-		).pipe(
-			filter(([[currentView, stats], [filter]]) => !!currentView),
-			this.mapData(([[currentView, stats], [filter]]) => {
+		]).pipe(
+			filter(([[currentView], stats, [filter]]) => !!currentView),
+			this.mapData(([[currentView], stats, [filter]]) => {
 				const allOptions = ['all'];
-				const allRegions = new Set(stats.map((stat) => stat.region).filter((region) => !!region));
+				const allRegions = new Set(stats?.stats?.map((stat) => stat.region).filter((region) => !!region));
 				// Don't show the filter when only one region
 				if (allRegions.size === 1) {
 					return null;

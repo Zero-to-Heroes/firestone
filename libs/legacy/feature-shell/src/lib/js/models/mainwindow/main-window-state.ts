@@ -1,6 +1,5 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { GameStat } from '@firestone/stats/data-access';
 import { AppInjector } from '../../services/app-injector';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
@@ -13,7 +12,6 @@ import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
 import { QuestsState } from './quests/quests-state';
-import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
 import { StatsState } from './stats/stats-state';
 import { StreamsState } from './streams/streams-state';
@@ -23,7 +21,6 @@ export class MainWindowState {
 	readonly lastNonGamePlayScene: SceneMode = null;
 	readonly currentUser: overwolf.profile.GetCurrentUserResult = null;
 	readonly showFtue: boolean = false;
-	readonly replays: ReplaysState = new ReplaysState();
 	readonly binder: BinderState = new BinderState();
 	readonly achievements: AchievementsState = new AchievementsState();
 	readonly decktracker: DecktrackerState = new DecktrackerState();
@@ -50,14 +47,14 @@ export class MainWindowState {
 		return Object.assign(new MainWindowState(), this, base);
 	}
 
-	public findReplay(reviewId: string): GameStat {
-		const result = this.stats.gameStats?.stats.find((replay) => replay.reviewId === reviewId);
-		if (result) {
-			return result;
-		}
+	// public findReplay(reviewId: string): GameStat {
+	// 	const result = this.stats.gameStats?.stats.find((replay) => replay.reviewId === reviewId);
+	// 	if (result) {
+	// 		return result;
+	// 	}
 
-		return this.battlegrounds.findReplay(reviewId);
-	}
+	// 	return this.battlegrounds.findReplay(reviewId);
+	// }
 
 	public getGlobalStats(): GlobalStats {
 		if (!this.initComplete) {

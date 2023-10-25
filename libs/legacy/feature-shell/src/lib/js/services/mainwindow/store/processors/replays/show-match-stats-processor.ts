@@ -10,6 +10,7 @@ import { NavigationReplays } from '../../../../../models/mainwindow/navigation/n
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { PreferencesService } from '../../../../preferences.service';
+import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
 import { Processor } from '../processor';
 
@@ -18,6 +19,7 @@ export class ShowMatchStatsProcessor implements Processor {
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
 		private readonly allCards: CardsFacadeService,
+		private readonly gameStats: GameStatsLoaderService,
 	) {}
 
 	public async process(
@@ -27,7 +29,8 @@ export class ShowMatchStatsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const matchStats = event.stats;
-		const selectedInfo = currentState.findReplay(event.reviewId);
+		const gameStats = await this.gameStats.gameStats$$.getValueWithInit();
+		const selectedInfo = gameStats?.stats?.find((replay) => replay.reviewId === event.reviewId);
 		const playerCardId = selectedInfo.playerCardId;
 		const mappedBoardInfo = matchStats
 			? matchStats.boardHistory.map(

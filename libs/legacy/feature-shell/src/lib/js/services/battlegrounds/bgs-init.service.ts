@@ -1,13 +1,12 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ApiRunner, CardsFacadeService, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
-import { Events } from '../events.service';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
+import { GameStatsLoaderService } from '../stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
@@ -19,16 +18,20 @@ export class BgsInitService {
 	private bgsStateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
-		private readonly events: Events,
 		private readonly ow: OverwolfService,
-		private readonly cards: CardsFacadeService,
 		private readonly api: ApiRunner,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly gameStats: GameStatsLoaderService,
 	) {
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
-			const newGameStats: GameStats = event.data[0];
+		this.init();
+	}
+
+	private async init() {
+		await this.gameStats.isReady();
+		// TODO: can we defer this?
+		this.gameStats.gameStats$$.subscribe((newGameStats) => {
 			console.debug('[bgs-init] match stats updated');
 			this.bgsStateUpdater?.next(new BgsStatUpdateEvent(newGameStats));
 		});
