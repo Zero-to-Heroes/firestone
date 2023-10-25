@@ -81,6 +81,7 @@ export const giftCreators = [
 	CardIds.BronzeExplorerCore,
 	CardIds.BronzeHerald,
 	CardIds.BronzeSignetTavernBrawl,
+	CardIds.BronzeSignet_BronzeSignetTavernBrawlEnchantment,
 	CardIds.BubbleBlower,
 	CardIds.BubbleBlowerTavernBrawl,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
@@ -641,4 +642,8 @@ export const giftCreators = [
 	CardIds.ZephrysTheGreat_ULD_003,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
+	CardIds.DefenseAttorneyNathanos,
+	CardIds.RingOfBlackIceTavernBrawl,
+	CardIds.RingOfBlackIce_RingOfBlackIceTavernBrawlEnchantment_PVPDR_AV_Passive28e1,
+	CardIds.RingOfBlackIce_RingOfBlackIceTavernBrawlEnchantment_PVPDR_AV_Passive28e2,
 ];
