@@ -1,34 +1,41 @@
 import { Injectable } from '@angular/core';
-import { sleep } from '@firestone/shared/framework/common';
-import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AdService } from './ad.service';
-import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
-import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { deepEqual } from './utils';
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
 // TODO: use Hearthstone user id
 @Injectable()
-export class UserService {
-	public user$$ = new BehaviorSubject<overwolf.profile.GetCurrentUserResult>(null);
+export class UserService extends AbstractFacadeService<UserService> {
+	public user$$: SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult>;
 
-	// private currentUser: overwolf.profile.GetCurrentUserResult;
-	private store: MainWindowStoreService;
+	private ow: OverwolfService;
+	private api: ApiRunner;
+	private ads: AdService;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly api: ApiRunner,
-		private readonly ads: AdService,
-	) {}
-
-	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
-		await this.waitForInit();
-		return this.user$$.value;
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'userService', () => !!this.user$$);
 	}
 
-	public async init(store: MainWindowStoreService) {
+	protected override assignSubjects() {
+		this.user$$ = this.mainInstance.user$$;
+	}
+
+	protected async init() {
+		this.user$$ = new SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult | null>(null);
+		this.api = AppInjector.get(ApiRunner);
+		this.ow = AppInjector.get(OverwolfService);
+		this.ads = AppInjector.get(AdService);
+
 		combineLatest([this.ads.enablePremiumFeatures$$, this.user$$])
 			.pipe(
 				debounceTime(500),
@@ -40,8 +47,6 @@ export class UserService {
 				this.sendCurrentUser(user, premium);
 			});
 
-		this.store = store;
-
 		const user = await this.retrieveUserInfo();
 		this.user$$.next(user);
 
@@ -49,6 +54,10 @@ export class UserService {
 			const user = await this.retrieveUserInfo();
 			this.user$$.next(user);
 		});
+	}
+
+	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
+		return await this.user$$.getValueWithInit();
 	}
 
 	private async retrieveUserInfo() {
@@ -70,7 +79,6 @@ export class UserService {
 		}
 
 		// console.log('[user-service] sending current user', user, isPremium);
-		this.store.stateUpdater.next(new CurrentUserEvent(user));
 		if (!!user.username) {
 			await this.api.callPostApi(USER_MAPPING_UPDATE_URL, {
 				userId: user.userId,
@@ -78,18 +86,5 @@ export class UserService {
 				isPremium: isPremium,
 			});
 		}
-	}
-
-	private waitForInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
-			const dbWait = () => {
-				if (!!this.user$$.value) {
-					resolve();
-				} else {
-					setTimeout(() => dbWait(), 50);
-				}
-			};
-			dbWait();
-		});
 	}
 }

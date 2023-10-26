@@ -39,7 +39,7 @@ export class StoreBootstrapService {
 	constructor(
 		private readonly cardsInit: CardsInitService,
 		private readonly ow: OverwolfService,
-		private readonly userService: UserService,
+		private readonly init_UserService: UserService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
 		private readonly bgsInit: BgsInitService,
@@ -91,7 +91,7 @@ export class StoreBootstrapService {
 		const [
 			[
 				// socialShareUserInfo,
-				currentUser,
+				// currentUser,
 				currentScene,
 			],
 			[constructedConfig],
@@ -101,7 +101,7 @@ export class StoreBootstrapService {
 		] = await Promise.all([
 			Promise.all([
 				// this.initializeSocialShareUserInfo(),
-				this.userService.getCurrentUser(),
+				// this.userService.getCurrentUser(),
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
@@ -181,7 +181,7 @@ export class StoreBootstrapService {
 		const initialWindowState = windowStateForFtue.update({
 			currentScene: currentScene,
 			lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
-			currentUser: currentUser,
+			// currentUser: currentUser,
 			showFtue: !prefs.ftue.hasSeenGlobalFtue,
 			// replays: replayState,
 			// binder: collectionState,

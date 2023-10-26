@@ -18,7 +18,7 @@ import { StreamsState } from './streams/streams-state';
 export class MainWindowState {
 	readonly currentScene: SceneMode = null;
 	readonly lastNonGamePlayScene: SceneMode = null;
-	readonly currentUser: overwolf.profile.GetCurrentUserResult = null;
+	// readonly currentUser: overwolf.profile.GetCurrentUserResult = null;
 	readonly showFtue: boolean = false;
 	readonly binder: BinderState = new BinderState();
 	readonly achievements: AchievementsState = new AchievementsState();

@@ -63,7 +63,6 @@ import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
-import { UserService } from '../../user.service';
 import { LiveStreamsService } from '../live-streams.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
@@ -105,7 +104,6 @@ import { SelectCollectionSetEvent } from './events/collection/select-collection-
 import { ShowCardBackDetailsEvent } from './events/collection/show-card-back-details-event';
 import { ShowCardDetailsEvent } from './events/collection/show-card-details-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
-import { CurrentUserEvent } from './events/current-user-event';
 import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
 import { ChangeDeckRankCategoryFilterEvent } from './events/decktracker/change-deck-rank-category-filter-event';
@@ -248,7 +246,6 @@ import { SelectCollectionSetProcessor } from './processors/collection/select-col
 import { ShowCardBackDetailsProcessor } from './processors/collection/show-card-back-details-processor';
 import { ShowCardDetailsProcessor } from './processors/collection/show-card-details-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
-import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
 import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
 import { ChangeDeckRankCategoryFilterProcessor } from './processors/decktracker/change-deck-rank-category-filter-processor';
@@ -390,7 +387,6 @@ export class MainWindowStoreService {
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly events: Events,
 		private readonly notifs: OwNotificationsService,
-		private readonly userService: UserService,
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly storeBootstrap: StoreBootstrapService,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
@@ -415,7 +411,6 @@ export class MainWindowStoreService {
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly gameStats: GameStatsLoaderService,
 	) {
-		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
@@ -568,7 +563,6 @@ export class MainWindowStoreService {
 			[ChangeVisibleApplicationEvent.eventName(), new ChangeVisibleApplicationProcessor(this.prefs, this.i18n)],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor()],
-			[CurrentUserEvent.eventName(), new CurrentUserProcessor()],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
 			[LocalizationUpdateEvent.eventName(), new LocalizationUpdateProcessor(this.prefs, this.translate)],
 			[SceneChangedEvent.eventName(), new SceneChangedProcessor()],

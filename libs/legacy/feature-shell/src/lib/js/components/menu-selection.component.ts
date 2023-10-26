@@ -7,6 +7,7 @@ import {
 	EventEmitter,
 	Input,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -15,6 +16,7 @@ import { LocalizationFacadeService } from '../services/localization-facade.servi
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
+import { UserService } from '../services/user.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
@@ -271,17 +273,18 @@ export class MenuSelectionComponent
 		private ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
+		private readonly userService: UserService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.userName$ = this.store
-			.listen$(([main, nav, prefs]) => main.currentUser)
-			.pipe(this.mapData(([currentUser]) => currentUser?.username));
-		this.avatarUrl$ = this.store
-			.listen$(([main, nav, prefs]) => main.currentUser)
-			.pipe(this.mapData(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'));
+	async ngAfterContentInit() {
+		await this.userService.isReady();
+
+		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
+		this.avatarUrl$ = this.userService.user$$.pipe(
+			this.mapData((currentUser) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
+		);
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
@@ -298,6 +301,10 @@ export class MenuSelectionComponent
 				}),
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

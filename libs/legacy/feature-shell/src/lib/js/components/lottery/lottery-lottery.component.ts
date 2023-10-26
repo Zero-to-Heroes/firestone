@@ -5,6 +5,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LotteryConfigResourceStatType } from '../../services/lottery/lottery.model';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
 	selector: 'lottery-lottery',
@@ -94,18 +95,19 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
+		private readonly userService: UserService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.userName$ = this.store
-			.listen$(([main, nav, prefs]) => main.currentUser)
-			.pipe(this.mapData(([currentUser]) => currentUser?.username));
+	async ngAfterContentInit() {
+		await this.userService.isReady();
+
+		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.loggedIn$ = this.userName$.pipe(this.mapData((userName) => !!userName));
-		this.avatarUrl$ = this.store
-			.listen$(([main, nav, prefs]) => main.currentUser)
-			.pipe(this.mapData(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'));
+		this.avatarUrl$ = this.userService.user$$.pipe(
+			this.mapData((currentUser) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
+		);
 
 		this.totalPoints$ = this.store
 			.lottery$()
