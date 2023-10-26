@@ -27,10 +27,6 @@ export class StoreInitProcessor implements Processor {
 		// Whenever we move some data init to be async, we need to update this
 		// Ultimately we won't need that anymore once all the data is moved to an async init
 		const stateToUpdate = event.initialState.update({
-			mercenaries: event.initialState.mercenaries.update({
-				referenceData: currentState.mercenaries.referenceData,
-				globalStats: currentState.mercenaries.globalStats,
-			}),
 			// Hack - quests are not handled by the store init process
 			quests: currentState.quests,
 		});

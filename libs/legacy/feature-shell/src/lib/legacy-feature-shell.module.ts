@@ -217,19 +217,9 @@ import { MenuSelectionComponent } from './js/components/menu-selection.component
 import { MercenariesFiltersComponent } from './js/components/mercenaries/desktop/filters/_mercenaries-filters.component';
 import { MercenariesFullyUpgradedFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-fully-upgraded-filter-dropdown.component';
 import { MercenariesHeroLevelFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-level-filter-dropdown.component';
-import { MercenariesModeFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-mode-filter-dropdown.component';
 import { MercenariesOwnedFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-owned-filter-dropdown.component';
-import { MercenariesPveDifficultyFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-pve-difficulty-filter-dropdown.component';
-import { MercenariesPvpMmrFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-pvp-mmr-filter-dropdown.component';
-import { MercenariesRoleFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-role-filter-dropdown.component';
-import { MercenariesStarterFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-starter-filter-dropdown.component';
-import { MercenariesCompositionStatComponent } from './js/components/mercenaries/desktop/mercenaries-composition-stat.component';
-import { MercenariesCompositionsStatsComponent } from './js/components/mercenaries/desktop/mercenaries-compositions-stats.component';
 import { MercenariesDesktopComponent } from './js/components/mercenaries/desktop/mercenaries-desktop.component';
 import { MercenariesEmptyStateComponent } from './js/components/mercenaries/desktop/mercenaries-empty-state.component';
-import { MercenariesMetaHeroDetailsComponent } from './js/components/mercenaries/desktop/mercenaries-meta-hero-details.component';
-import { MercenariesMetaHeroStatComponent } from './js/components/mercenaries/desktop/mercenaries-meta-hero-stat.component';
-import { MercenariesMetaHeroStatsComponent } from './js/components/mercenaries/desktop/mercenaries-meta-hero-stats.component';
 import { MercenariesMyTeamsComponent } from './js/components/mercenaries/desktop/mercenaries-my-teams.component';
 import { MercenariesPersonalHeroStatComponent } from './js/components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
 import {
@@ -238,7 +228,6 @@ import {
 } from './js/components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { MercenariesPersonalTeamSummaryComponent } from './js/components/mercenaries/desktop/mercenaries-personal-team-summary.component';
 import { MercenariesHeroSearchComponent } from './js/components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
-import { MercenariesComposiionDetailsComponent } from './js/components/mercenaries/desktop/unused_mercenaries-composition-details.component';
 import { MercenariesActionsQueueComponent } from './js/components/mercenaries/overlay/action-queue/mercenaries-action-queue..component';
 import { MercenariesActionComponent } from './js/components/mercenaries/overlay/action-queue/mercenaries-action.component';
 import { MercenariesHighlightDirective } from './js/components/mercenaries/overlay/teams/mercenaries-highlight.directive';
@@ -785,7 +774,7 @@ import { GameParserService } from './js/services/manastorm-bridge/game-parser.se
 import { ReplayUploadService } from './js/services/manastorm-bridge/replay-upload.service';
 import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesMemoryCacheService } from './js/services/mercenaries/mercenaries-memory-cache.service';
-import { MercenariesStateBuilderService } from './js/services/mercenaries/mercenaries-state-builder.service';
+import { MercenariesReferenceDataService } from './js/services/mercenaries/mercenaries-reference-data.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { OwNotificationsService } from './js/services/notifications.service';
@@ -1438,26 +1427,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MercenariesPersonalHeroStatComponent,
 		MercenariesMyTeamsComponent,
 		MercenariesPersonalTeamSummaryComponent,
-		MercenariesCompositionsStatsComponent,
-		MercenariesCompositionStatComponent,
-		MercenariesComposiionDetailsComponent,
 		MercenariesHeroSearchComponent,
 		MercenariesEmptyStateComponent,
 		MercenariesTeamAbilityComponent,
 		MercenariesActionComponent,
 
-		// Not used for now
-		MercenariesMetaHeroStatsComponent,
-		MercenariesMetaHeroStatComponent,
-		MercenariesMetaHeroDetailsComponent,
-
 		SortableLabelComponent,
 		MercenariesFiltersComponent,
-		MercenariesModeFilterDropdownComponent,
-		MercenariesRoleFilterDropdownComponent,
-		MercenariesPveDifficultyFilterDropdownComponent,
-		MercenariesPvpMmrFilterDropdownComponent,
-		MercenariesStarterFilterDropdownComponent,
 		MercenariesHeroLevelFilterDropdownComponent,
 		MercenariesFullyUpgradedFilterDropdownComponent,
 		MercenariesOwnedFilterDropdownComponent,
@@ -1825,6 +1801,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MercenariesMemoryCacheService,
 		MercenariesStoreService,
 		MercenariesOutOfCombatService,
+		MercenariesReferenceDataService,
+		MercenariesSynergiesHighlightService,
 
 		AiDeckService,
 		SecretConfigService,
@@ -1858,9 +1836,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsUserRunsService,
 
 		ArenaStateBuilderService,
-
-		MercenariesStateBuilderService,
-		MercenariesSynergiesHighlightService,
 
 		StatsStateBuilderService,
 

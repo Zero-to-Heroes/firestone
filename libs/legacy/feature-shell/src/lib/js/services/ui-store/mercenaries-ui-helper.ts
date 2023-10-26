@@ -22,7 +22,7 @@ import {
 	MercenariesComposition,
 	MercenariesHeroStat,
 	MercenariesReferenceData,
-} from '../mercenaries/mercenaries-state-builder.service';
+} from '../mercenaries/mercenaries-reference-data.service';
 import {
 	getHeroRole,
 	getShortMercHeroName,

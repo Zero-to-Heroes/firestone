@@ -4,11 +4,8 @@ import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.ser
 import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BgsMetaHeroStatsService } from './battlegrounds/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './battlegrounds/bgs-meta-hero-strategies.service';
-import { BattlegroundsQuestsService } from './battlegrounds/bgs-quests.service';
-import { DuelsStateBuilderService } from './duels/duels-state-builder.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { LiveStreamsService } from './mainwindow/live-streams.service';
-import { MercenariesStateBuilderService } from './mercenaries/mercenaries-state-builder.service';
 import { QuestsService } from './quests.service';
 
 // Called from the data model, which lives in the main window (even though it is often accessed from
@@ -16,14 +13,11 @@ import { QuestsService } from './quests.service';
 @Injectable()
 export class LazyDataInitService {
 	constructor(
-		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 		private readonly globalStatsService: GlobalStatsService,
-		private readonly duelsService: DuelsStateBuilderService,
 		private readonly bgsPerfectGamesStateBuilder: BgsInitService,
 		private readonly bgsBestStatsService: BgsBestUserStatsService,
 		private readonly bgsMetaHeroStatsStateBuilder: BgsMetaHeroStatsService,
 		private readonly bgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
-		private readonly bgsQuestsService: BattlegroundsQuestsService,
 		private readonly questsService: QuestsService,
 		private readonly streamsService: LiveStreamsService,
 		private readonly tavernBrawlService: TavernBrawlService,
@@ -31,10 +25,6 @@ export class LazyDataInitService {
 
 	public async requestLoad(dataType: StateDataType) {
 		switch (dataType) {
-			case 'mercenaries-global-stats':
-				return this.mercenariesStateBuilder.loadInitialGlobalStats();
-			case 'mercenaries-reference-data':
-				return this.mercenariesStateBuilder.loadInitialReferenceData();
 			case 'battlegrounds-perfect-games':
 				return this.bgsPerfectGamesStateBuilder.loadInitialPerfectGames();
 			case 'bgs-meta-hero-stats':

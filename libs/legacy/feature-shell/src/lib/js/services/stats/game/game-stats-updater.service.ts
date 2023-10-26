@@ -19,9 +19,11 @@ import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
 import { GameForUpload } from '../../manastorm-bridge/game-for-upload';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
-import { MercenariesReferenceData } from '../../mercenaries/mercenaries-state-builder.service';
+import {
+	MercenariesReferenceData,
+	MercenariesReferenceDataService,
+} from '../../mercenaries/mercenaries-reference-data.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { extractPlayerInfoFromDeckstring } from './game-stats-loader.service';
 
 @Injectable()
@@ -35,7 +37,7 @@ export class GameStatsUpdaterService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		this.init();
 		setTimeout(() => {
@@ -45,15 +47,15 @@ export class GameStatsUpdaterService {
 
 	private async init() {
 		// For now we keep the main store as the source of truth, but maybe this should be moved away at some point?
-		this.events.on(Events.REVIEW_FINALIZED).subscribe((data) => {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
 			const info: ManastormInfo = data.data[0];
-			const newGameStat: GameStat = this.buildGameStat(info.reviewId, info.game);
+			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game);
 			console.log('built new game stat', newGameStat);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
 
-	private buildGameStat(reviewId: string, game: GameForUpload): GameStat {
+	private async buildGameStat(reviewId: string, game: GameForUpload): Promise<GameStat> {
 		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
@@ -110,23 +112,20 @@ export class GameStatsUpdaterService {
 			bgsAnomalies: game.bgsAnomalies,
 		} as GameStat);
 
-		const mainStore = this.stateEmitter?.value;
 		if (!isMercenaries(game.gameMode)) {
 			return firstGame;
 		}
 
-		const refData = mainStore[0]?.mercenaries?.referenceData;
+		const refData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
 		if (!refData) {
 			return firstGame;
 		}
-
 		const { mercHeroTimings, mercOpponentHeroTimings, mercEquipments, mercOpponentEquipments } = extractHeroTimings(
 			firstGame,
 			replay,
 			refData,
 			this.allCards.getService(),
 		);
-
 		const gameWithMercStats = firstGame.update({
 			mercHeroTimings: mercHeroTimings,
 			mercOpponentHeroTimings: mercOpponentHeroTimings,

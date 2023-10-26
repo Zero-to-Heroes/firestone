@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -50,7 +50,7 @@ export class MercsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				([main, nav, prefs]) => main.lastNonGamePlayScene,
@@ -58,7 +58,7 @@ export class MercsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 				([main, nav, prefs]) => prefs.mercsShowQuestsWidget && prefs.enableQuestsWidget,
 				([main, nav, prefs]) => prefs.showQuestsInGame,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs, showQuestsInGame]]) => {
 				if (!displayFromPrefs) {
 					return false;

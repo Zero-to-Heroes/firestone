@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardRarity } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { FeatureFlags } from '../../../services/feature-flags';
-import { MercenariesViewMercDetailsEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-view-merc-details-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
@@ -15,11 +13,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 		`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stat.component.scss`,
 	],
 	template: `
-		<div
-			class="mercenaries-personal-hero-stat"
-			[ngClass]="{ missing: !owned, 'fully-upgraded': fullyUpgraded }"
-			(click)="select()"
-		>
+		<div class="mercenaries-personal-hero-stat" [ngClass]="{ missing: !owned, 'fully-upgraded': fullyUpgraded }">
 			<div class="rarity-level">
 				<img class="rarity" [src]="rarityImg" />
 				<div class="level">
@@ -256,12 +250,6 @@ export class MercenariesPersonalHeroStatComponent {
 
 	buildValue(value: number, decimal = 2): string {
 		return value == null ? '-' : value === 0 ? '0' : value.toFixed(decimal);
-	}
-
-	select() {
-		if (FeatureFlags.ENABLE_DETAILED_MERC) {
-			this.store.send(new MercenariesViewMercDetailsEvent(this.mercenaryId));
-		}
 	}
 
 	private buildCoinsNeededTooltip(value: PersonalHeroStat): string {

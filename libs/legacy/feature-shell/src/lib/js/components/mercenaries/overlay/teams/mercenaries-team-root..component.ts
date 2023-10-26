@@ -18,6 +18,7 @@ import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenar
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
+import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
@@ -170,6 +171,11 @@ export class MercenariesTeamRootComponent
 					: this.i18n.translateString('mercenaries.team-widget.turn-counter.total-map-turns-tooltip'),
 			),
 		);
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByTaskFn(index: number, task: Task) {
@@ -249,23 +255,25 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.mercenariesCollection.isReady();
+		await this.mercenariesReferenceData.isReady();
 
 		this.tasks$ = this.tasks$$.asObservable().pipe(this.mapData((info) => info));
 		this.tasks$.pipe(this.mapData((info) => info)).subscribe((info) => this.tasksListUpdated.next());
 		combineLatest([
-			this.store.listen$(([main, nav]) => main.mercenaries.getReferenceData()),
+			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesCollection.memoryCollectionInfo$$,
 			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
 			this.tasks$,
 		])
 			.pipe(
-				this.mapData(([[refData], collectionInfo, [mercBackupIds], tasks]) =>
+				this.mapData(([refData, collectionInfo, [mercBackupIds], tasks]) =>
 					buildTeamsForTasks(tasks, refData as any, collectionInfo, mercBackupIds, this.allCards, this.i18n),
 				),
 			)
@@ -276,6 +284,11 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 					this.cdr.detectChanges();
 				}
 			});
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	createTeamFromTasks(info: TeamDeckstringInfo) {
@@ -321,7 +334,7 @@ export interface Task {
 	readonly additionalMercDbfIds: readonly number[];
 }
 
-export const buildTeamsForTasks = (
+const buildTeamsForTasks = (
 	tasks: readonly Task[],
 	mercReferenceData: MercenariesReferenceData,
 	mercCollectionInfo: MemoryMercenariesCollectionInfo,

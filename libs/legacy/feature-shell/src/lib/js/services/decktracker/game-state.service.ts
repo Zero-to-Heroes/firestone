@@ -23,7 +23,6 @@ import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
-import { MercenariesStateBuilderService } from '../mercenaries/mercenaries-state-builder.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { OwUtilsService } from '../plugins/ow-utils.service';
 import { PreferencesService } from '../preferences.service';
@@ -184,7 +183,6 @@ export class GameStateService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly attackOnBoardService: AttackOnBoardService,
-		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 		private readonly duelsRunService: DuelsDecksProviderService,
 	) {
 		this.eventParsers = this.buildEventParsers();
@@ -563,14 +561,7 @@ export class GameStateService {
 			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser()],
 			[GameEvent.MATCH_INFO]: [new PlayersInfoParser()],
 			[GameEvent.MATCH_METADATA]: [
-				new MatchMetadataParser(
-					this.deckParser,
-					this.prefs,
-					this.deckHandler,
-					this.allCards,
-					this.memory,
-					this.mercenariesStateBuilder,
-				),
+				new MatchMetadataParser(this.deckParser, this.prefs, this.deckHandler, this.allCards, this.memory),
 			],
 			[GameEvent.MINION_BACK_ON_BOARD]: [new MinionBackOnBoardParser(this.helper)],
 			[GameEvent.MINION_GO_DORMANT]: [new MinionGoDormantParser(this.helper)],

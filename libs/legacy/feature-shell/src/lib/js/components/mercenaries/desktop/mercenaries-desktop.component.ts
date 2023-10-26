@@ -43,24 +43,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								*ngIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 							>
 							</mercenaries-personal-hero-stats>
-							<!-- <mercenaries-hero-details *ngIf="selectedCategoryId === 'mercenaries-hero-details'">
-							</mercenaries-hero-details> -->
 							<mercenaries-my-teams *ngIf="selectedCategoryId === 'mercenaries-my-teams'">
 							</mercenaries-my-teams>
-							<mercenaries-meta-hero-stats *ngIf="selectedCategoryId === 'mercenaries-hero-stats'">
-							</mercenaries-meta-hero-stats>
-							<mercenaries-meta-hero-details
-								*ngIf="selectedCategoryId === 'mercenaries-meta-hero-details'"
-							>
-							</mercenaries-meta-hero-details>
-							<mercenaries-compositions-stats
-								*ngIf="selectedCategoryId === 'mercenaries-compositions-stats'"
-							>
-							</mercenaries-compositions-stats>
-							<!-- <mercenaries-composition-details
-								*ngIf="selectedCategoryId === 'mercenaries-composition-details'"
-							>
-							</mercenaries-composition-details> -->
 						</ng-container>
 					</div>
 				</with-loading>

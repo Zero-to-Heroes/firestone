@@ -162,7 +162,6 @@ import { GenericPreferencesUpdateEvent } from './events/generic-preferences-upda
 import { LocalizationUpdateEvent } from './events/localization-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesAddMercToBackupTeamEvent } from './events/mercenaries/mercenaries-add-merc-to-backup-team-event';
-import { MercenariesGlobalStatsLoadedEvent } from './events/mercenaries/mercenaries-global-stats-loaded-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
 import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
@@ -170,16 +169,12 @@ import { MercenariesHideTeamSummaryEvent } from './events/mercenaries/mercenarie
 import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
 import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
-import { MercenariesPvpMmrFilterSelectedEvent } from './events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
-import { MercenariesReferenceDataLoadedEvent } from './events/mercenaries/mercenaries-reference-data-loaded-event';
 import { MercenariesRemoveMercToBackupTeamEvent } from './events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
 import { MercenariesRestoreTeamSummaryEvent } from './events/mercenaries/mercenaries-restore-team-summary-event';
 import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercenaries-role-filter-selected-event';
 import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
-import { MercenariesSelectCompositionEvent } from './events/mercenaries/mercenaries-select-composition-event';
 import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/mercenaries-starter-filter-selected-event';
 import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
-import { MercenariesViewMercDetailsEvent } from './events/mercenaries/mercenaries-view-merc-details-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { ActiveQuestsUpdatedEvent } from './events/quests/active-quests-updated-event';
@@ -322,7 +317,6 @@ import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
 import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
 import { MercenariesAddMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
-import { MercenariesGlobalStatsLoadedProcessor } from './processors/mercenaries/mercenaries-global-stats-loaded-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
@@ -330,16 +324,12 @@ import { MercenariesHideTeamSummaryProcessor } from './processors/mercenaries/me
 import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
 import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
-import { MercenariesPvpMmrFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pvp-mmr-filter-selected-processor';
-import { MercenariesReferenceDataLoadedProcessor } from './processors/mercenaries/mercenaries-reference-data-loaded-processor';
 import { MercenariesRemoveMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-remove-merc-to-backup-team-processor';
 import { MercenariesRestoreTeamSummaryProcessor } from './processors/mercenaries/mercenaries-restore-team-summary-processor';
 import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries/mercenaries-role-filter-selected-processor';
 import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
-import { MercenariesSelectCompositionProcessor } from './processors/mercenaries/mercenaries-select-composition-processor';
 import { MercenariesStarterFilterSelectedProcessor } from './processors/mercenaries/mercenaries-starter-filter-selected-processor';
 import { MercenariesToggleShowHiddenTeamsProcessor } from './processors/mercenaries/mercenaries-toggle-show-hidden-teams-processor';
-import { MercenariesViewMercDetailsProcessor } from './processors/mercenaries/mercenaries-view-merc-details-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
@@ -780,17 +770,11 @@ export class MainWindowStoreService {
 			[LiveStreamsDataLoadedEvent.eventName(), new LiveStreamsDataLoadedProcessor()],
 			[LiveStreamsForceReloadEvent.eventName(), new LiveStreamsForceReloadProcessor(this.streamsService)],
 			// Mercenaries
-			[MercenariesGlobalStatsLoadedEvent.eventName(), new MercenariesGlobalStatsLoadedProcessor()],
-			[MercenariesReferenceDataLoadedEvent.eventName(), new MercenariesReferenceDataLoadedProcessor()],
 			[MercenariesModeFilterSelectedEvent.eventName(), new MercenariesModeFilterSelectedProcessor(this.prefs)],
 			[MercenariesRoleFilterSelectedEvent.eventName(), new MercenariesRoleFilterSelectedProcessor(this.prefs)],
 			[
 				MercenariesPveDifficultyFilterSelectedEvent.eventName(),
 				new MercenariesPveDifficultyFilterSelectedProcessor(this.prefs),
-			],
-			[
-				MercenariesPvpMmrFilterSelectedEvent.eventName(),
-				new MercenariesPvpMmrFilterSelectedProcessor(this.prefs),
 			],
 			[
 				MercenariesStarterFilterSelectedEvent.eventName(),
@@ -802,7 +786,6 @@ export class MainWindowStoreService {
 			],
 			[MercenariesHeroSelectedEvent.eventName(), new MercenariesHeroSelectedProcessor(this.cards)],
 			[MercenariesHeroSearchEvent.eventName(), new MercenariesHeroSearchProcessor()],
-			[MercenariesSelectCompositionEvent.eventName(), new MercenariesSelectCompositionProcessor(this.i18n)],
 			[MercenariesSelectCategoryEvent.eventName(), new MercenariesSelectCategoryProcessor()],
 			[MercenariesPersonalHeroesSortEvent.eventName(), new MercenariesPersonalHeroesSortProcessor(this.prefs)],
 			[MercenariesHideTeamSummaryEvent.eventName(), new MercenariesHideTeamSummaryProcessor(this.prefs)],
@@ -811,7 +794,6 @@ export class MainWindowStoreService {
 				MercenariesToggleShowHiddenTeamsEvent.eventName(),
 				new MercenariesToggleShowHiddenTeamsProcessor(this.prefs),
 			],
-			[MercenariesViewMercDetailsEvent.eventName(), new MercenariesViewMercDetailsProcessor()],
 			[MercenariesAddMercToBackupTeamEvent.eventName(), new MercenariesAddMercToBackupTeamProcessor(this.prefs)],
 			[
 				MercenariesRemoveMercToBackupTeamEvent.eventName(),

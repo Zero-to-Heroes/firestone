@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
+import { concatMap, debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MercenariesMemoryCacheService } from './mercenaries-memory-cache.service';
+import { MercenariesReferenceDataService } from './mercenaries-reference-data.service';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
@@ -48,6 +49,7 @@ export class MercenariesStoreService {
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly memoryCache: MercenariesMemoryCacheService,
+		private readonly referenceData: MercenariesReferenceDataService,
 	) {
 		window['battleStateUpdater'] = this.internalEventSubject$;
 		window['mercenariesStore'] = this.store$;
@@ -71,14 +73,13 @@ export class MercenariesStoreService {
 			this.internalStore$
 				.pipe(
 					skipWhile((state) => !state),
+					debounceTime(200),
 					distinctUntilChanged(),
 				)
 				.subscribe(async (newState) => await this.emitState(newState));
 		});
 	}
 
-	// Maybe find a way to only emit the state each N milliseconds at the most to limit the
-	// redraws in the UI
 	private async processEvent(event: GameEvent, mainWindowState: MainWindowState): Promise<void> {
 		try {
 			const battleState = this.internalStore$.value;
@@ -97,6 +98,7 @@ export class MercenariesStoreService {
 			}
 			if (state !== battleState) {
 				this.internalStore$.next(state);
+				// console.debug('[mercenaries-store] emitting new state', event.type, state);
 			}
 		} catch (e) {
 			console.error('[mercenaries-store] could not process event', event.type, event, e);
@@ -104,7 +106,6 @@ export class MercenariesStoreService {
 	}
 
 	private async emitState(newState: MercenariesBattleState): Promise<void> {
-		console.debug('[mercenaries-store] emitting new state', newState);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
 	}
 
@@ -130,8 +131,8 @@ export class MercenariesStoreService {
 			new MercenariesTurnStartParser(),
 			new MercenariesGameEndParser(),
 
-			new MercenariesHeroRevealedParser(this.allCards),
-			new MercenariesHeroUpdatedParser(this.allCards),
+			new MercenariesHeroRevealedParser(this.allCards, this.referenceData),
+			new MercenariesHeroUpdatedParser(this.allCards, this.referenceData),
 			new MercenariesHeroDiedParser(this.allCards),
 			new MercenariesHeroRevivedParser(),
 			new MercenariesAbilityRevealedParser(this.allCards),

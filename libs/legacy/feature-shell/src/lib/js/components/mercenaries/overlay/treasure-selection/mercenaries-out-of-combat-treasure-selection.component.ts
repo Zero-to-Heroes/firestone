@@ -5,10 +5,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
+import { Observable, combineLatest } from 'rxjs';
 import { MercenariesSynergiesHighlightService } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -44,16 +46,19 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.mercenariesReferenceData.isReady();
+
 		this.treasures$ = combineLatest([
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
-			this.store.listen$(([main]) => main.mercenaries.getReferenceData()),
+			this.mercenariesReferenceData.referenceData$$,
 		]).pipe(
-			this.mapData(([[state], [refData]]) => {
+			this.mapData(([[state], refData]) => {
 				if (!state.treasureSelection?.treasureIds?.length) {
 					return null;
 				}
@@ -64,6 +69,11 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 				});
 			}),
 		);
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

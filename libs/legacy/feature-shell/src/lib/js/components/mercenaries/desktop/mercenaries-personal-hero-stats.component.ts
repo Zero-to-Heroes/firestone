@@ -16,7 +16,10 @@ import {
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
-import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
+import {
+	MercenariesReferenceData,
+	MercenariesReferenceDataService,
+} from '../../../services/mercenaries/mercenaries-reference-data.service';
 import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -142,48 +145,60 @@ export class MercenariesPersonalHeroStatsComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.mercenariesCollection.isReady();
+		await this.mercenariesReferenceData.isReady();
 
 		this.sortCriteria$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion)
 			.pipe(this.mapData(([sortCriteria]) => sortCriteria));
 		this.unsortedStats$ = combineLatest([
-			this.store.listen$(([main, nav]) => main.mercenaries.getReferenceData()),
+			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesCollection.memoryCollectionInfo$$,
 		]).pipe(
-			filter(([[referenceData], collectionInfo]) => !!referenceData && !!collectionInfo),
-			this.mapData(([[referenceData], collectionInfo]) =>
+			filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
+			this.mapData(([referenceData, collectionInfo]) =>
 				collectionInfo.Mercenaries?.map((memMerc) =>
 					this.buildMercenaryStat(memMerc, referenceData, collectionInfo?.Visitors),
 				).filter((stat) => stat),
 			),
 		);
-		this.stats$ = combineLatest(
+		this.stats$ = combineLatest([
 			this.unsortedStats$,
+			this.mercenariesReferenceData.referenceData$$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion,
 				([main, nav, prefs]) => prefs.mercenariesActiveFullyUpgradedFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveOwnedFilter,
 				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,
 			),
-		).pipe(
+		]).pipe(
 			filter(
-				([stats, [referenceData, sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
+				([stats, referenceData, [sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
 					!!stats?.length && !!referenceData,
 			),
 			// distinctUntilChanged((a, b) => deepEqual(a, b)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([stats, [referenceData, sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
+			this.mapData(([stats, referenceData, [sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, owned, sortCriteria, referenceData),
 			),
+			// tap((info) => {
+			// 	const totalCoinsLeft = info.map((i) => i.totalCoinsLeft).reduce((a, b) => a + b, 0);
+			// 	const totalCoinsNeeded = info.map((i) => i.totalCoinsNeeded).reduce((a, b) => a + b, 0);
+			// 	console.debug('[mercenaries-personal-hero-stats] total coins left', totalCoinsLeft, totalCoinsNeeded);
+			// }),
 		);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildMercenaryStat(

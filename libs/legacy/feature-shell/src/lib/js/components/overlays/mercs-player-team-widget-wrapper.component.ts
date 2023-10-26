@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -61,13 +61,13 @@ export class MercsPlayerTeamWidgetWrapperComponent extends AbstractWidgetWrapper
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.mercenariesEnablePlayerTeamWidget),
 			this.store.listenMercenaries$(
 				([state, prefs]) => state?.playerClosedManually,
 				([state, prefs]) => !!state?.playerTeam?.mercenaries?.length,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(([[displayFromPrefs], [playerClosedManually, hasTeamMercs]]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),

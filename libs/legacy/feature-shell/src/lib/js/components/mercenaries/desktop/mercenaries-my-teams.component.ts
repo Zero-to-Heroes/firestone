@@ -1,8 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
+import { Observable, combineLatest } from 'rxjs';
 import { isMercenariesPvP, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
@@ -35,32 +33,24 @@ export class MercenariesMyTeamsComponent extends AbstractSubscriptionStoreCompon
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.teams$ = combineLatest(
+	async ngAfterContentInit() {
+		this.teams$ = combineLatest([
 			this.store.gameStats$(),
 			this.store.listen$(
-				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesHiddenTeamIds,
 				([main, nav, prefs]) => prefs.mercenariesShowHiddenTeams,
 			),
-		).pipe(
-			filter(
-				([gameStats, [referenceData, globalStats, mmrFilter, hiddenTeamIds, showHiddenTeams]]) =>
-					!!referenceData?.mercenaries?.length,
-			),
-			this.mapData(([gameStats, [referenceData, globalStats, mmrFilter, hiddenTeamIds, showHiddenTeams]]) => {
-				const mmrThreshold =
-					globalStats?.pvp?.mmrPercentiles?.find((percentile) => percentile.percentile === mmrFilter)?.mmr ??
-					0;
+		]).pipe(
+			this.mapData(([gameStats, [mmrFilter, hiddenTeamIds, showHiddenTeams]]) => {
+				const mmrThreshold = 0;
 				const relevantStats = gameStats
 					// Include the AI games here, as otherwise this is confusing
 					?.filter((stat) => isMercenariesPvP(stat.gameMode))
 					.filter((stat) => (mmrThreshold === 0 ? true : stat.playerRank && +stat.playerRank >= mmrThreshold))
 					.filter((stat) => !!stat.mercHeroTimings?.length);
 				const groupedByTeam = groupByFunction((stat: GameStat) =>
-					this.normalizeMercDecklist(stat.mercHeroTimings, referenceData),
+					this.normalizeMercDecklist(stat.mercHeroTimings),
 				)(relevantStats);
 				const teams = Object.keys(groupedByTeam)
 					.map((mercIds) => {
@@ -88,7 +78,6 @@ export class MercenariesMyTeamsComponent extends AbstractSubscriptionStoreCompon
 			cardId: string;
 			turnInPlay: number;
 		}[],
-		referenceData: MercenariesReferenceData,
 	): string {
 		return timings
 			.map((info) => info.cardId)

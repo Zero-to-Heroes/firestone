@@ -21,7 +21,10 @@ import { Events } from '../events.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LogsUploaderService } from '../logs-uploader.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
-import { MercenariesReferenceData } from '../mercenaries/mercenaries-state-builder.service';
+import {
+	MercenariesReferenceData,
+	MercenariesReferenceDataService,
+} from '../mercenaries/mercenaries-reference-data.service';
 import {
 	isMercenaries,
 	isMercenariesPvE,
@@ -59,6 +62,7 @@ export class EndGameUploaderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly events: Events,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {}
 
 	public async upload2(info: UploadInfo): Promise<void> {
@@ -174,7 +178,7 @@ export class EndGameUploaderService {
 				: null;
 			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? info.mercsInfo?.Map?.BountyId : null;
 
-			const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+			const referenceData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
 			const { mercHeroTimings, ...other } = extractHeroTimings(
 				{ gameMode: game.gameMode },
 				replay,
@@ -209,7 +213,7 @@ export class EndGameUploaderService {
 					: null;
 			game.forceOpponentName =
 				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
-					? this.buildOpponentName(info.mercsInfo)
+					? await this.buildOpponentName(info.mercsInfo)
 					: null;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
@@ -412,13 +416,13 @@ export class EndGameUploaderService {
 		return null;
 	}
 
-	private buildOpponentName(mercenariesInfo: MemoryMercenariesInfo): string {
+	private async buildOpponentName(mercenariesInfo: MemoryMercenariesInfo): Promise<string> {
 		const bountyId = mercenariesInfo?.Map?.BountyId;
 		if (bountyId == null) {
 			return null;
 		}
 
-		const referenceData = this.mainWindowStore?.state?.mercenaries?.getReferenceData();
+		const referenceData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
 		if (!referenceData) {
 			return null;
 		}
@@ -432,8 +436,8 @@ export class EndGameUploaderService {
 		return `${bounty.name} (${mercenariesInfo.Map.CurrentStep} / ${mercenariesInfo.Map.MaxStep})`;
 	}
 
-	private getMercenariesBountyDifficulty(mercsBountyId: number): 'normal' | 'heroic' | 'legendary' {
-		const referenceData = this.mainWindowStore?.state?.mercenaries?.getReferenceData();
+	private async getMercenariesBountyDifficulty(mercsBountyId: number): Promise<'normal' | 'heroic' | 'legendary'> {
+		const referenceData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
 		if (!referenceData) {
 			return null;
 		}

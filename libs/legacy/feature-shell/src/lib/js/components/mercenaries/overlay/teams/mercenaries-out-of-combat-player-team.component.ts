@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenariesMapType, SceneMode } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
+import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import {
@@ -42,22 +43,22 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.mercenariesMemoryCache.isReady();
+		await this.mercenariesReferenceData.isReady();
 
 		this.team$ = combineLatest([
-			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				([main, nav, prefs]) => main.mercenaries?.getReferenceData(),
-			),
+			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesMemoryCache.memoryMapInfo$$,
 		]).pipe(
-			filter(([[currentScene, referenceData], mapInfo]) => !!referenceData),
-			this.mapData(([[currentScene, referenceData], refMapInfo]) => {
+			filter(([[currentScene], referenceData, mapInfo]) => !!referenceData),
+			this.mapData(([[currentScene], referenceData, refMapInfo]) => {
 				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
 				const result = MercenariesBattleTeam.create({
 					mercenaries:
@@ -121,5 +122,10 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 				return result;
 			}),
 		);
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

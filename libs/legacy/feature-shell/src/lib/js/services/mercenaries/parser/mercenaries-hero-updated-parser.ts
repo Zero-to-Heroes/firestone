@@ -7,6 +7,7 @@ import {
 	BattleMercenary,
 	MercenariesBattleState,
 } from '../../../models/mercenaries/mercenaries-battle-state';
+import { MercenariesReferenceDataService } from '../mercenaries-reference-data.service';
 import {
 	getHeroRole,
 	getMercCardLevel,
@@ -16,7 +17,10 @@ import {
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesHeroUpdatedParser implements MercenariesParser {
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+	) {}
 
 	public eventType = () => GameEvent.ENTITY_UPDATE;
 
@@ -37,7 +41,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 		}
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
-		const refData = mainWindowState?.mercenaries?.referenceData;
+		const refData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
 
 		// Sometimes the spawns are not referenced in the data (like for Ahune's Ice Shards),
 		// so it's possible that this doesn't return anything

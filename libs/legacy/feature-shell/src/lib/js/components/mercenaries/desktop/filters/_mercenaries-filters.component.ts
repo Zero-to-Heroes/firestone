@@ -14,14 +14,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	template: `
 		<div class="mercenaries-filters">
 			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
-			<mercenaries-mode-filter-dropdown class="mode"></mercenaries-mode-filter-dropdown>
-			<mercenaries-pve-difficulty-filter-dropdown
-				class="pve-difficulty"
-			></mercenaries-pve-difficulty-filter-dropdown>
-			<mercenaries-pvp-mmr-filter-dropdown class="pvp-mmr"></mercenaries-pvp-mmr-filter-dropdown>
-			<mercenaries-role-filter-dropdown class="role"></mercenaries-role-filter-dropdown>
 			<mercenaries-hero-level-filter-dropdown class="level"></mercenaries-hero-level-filter-dropdown>
-			<mercenaries-starter-filter-dropdown class="starter"></mercenaries-starter-filter-dropdown>
 			<mercenaries-fully-upgraded-filter-dropdown
 				class="fully-upgraded"
 			></mercenaries-fully-upgraded-filter-dropdown>
@@ -36,19 +29,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				[label]="'mercenaries.filters.show-hidden-teams-link-label' | owTranslate"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
-			<preference-toggle
-				class="show-merc-names-in-teams-link"
-				*ngIf="showMercNamesInTeamsLink$ | async"
-				field="mercenariesShowMercNamesInTeams"
-				[label]="'mercenaries.filters.show-merc-names-in-teams-link-label' | owTranslate"
-			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showHiddenTeamsLink$: Observable<boolean>;
-	showMercNamesInTeamsLink$: Observable<boolean>;
 	showRegionFilter$: Observable<boolean>;
 	showSearch$: Observable<boolean>;
 
@@ -69,12 +55,6 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionStoreCompon
 						currentView === 'mercenaries-my-teams' && hiddenTeamIds.length > 0,
 				),
 			);
-		this.showMercNamesInTeamsLink$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView === 'mercenaries-compositions-stats'),
-			);
 		this.showRegionFilter$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
@@ -85,10 +65,7 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionStoreCompon
 			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
 				filter(([currentView]) => !!currentView),
-				this.mapData(
-					([currentView]) =>
-						currentView === 'mercenaries-personal-hero-stats' || currentView === 'mercenaries-hero-stats',
-				),
+				this.mapData(([currentView]) => currentView === 'mercenaries-personal-hero-stats'),
 			);
 	}
 

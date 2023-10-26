@@ -15,8 +15,8 @@ import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-eve
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import {
 	MercenariesReferenceData,
-	MercenariesStateBuilderService,
-} from '../mercenaries/mercenaries-state-builder.service';
+	MercenariesReferenceDataService,
+} from '../mercenaries/mercenaries-reference-data.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
@@ -41,7 +41,7 @@ export class CardsMonitorService {
 		private readonly notifications: CardNotificationsService,
 		private readonly memoryService: MemoryInspectionService,
 		private readonly allCards: CardsFacadeService,
-		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		this.init();
 	}
@@ -132,27 +132,21 @@ export class CardsMonitorService {
 	private async handleNewPack(pack: PackInfo) {
 		console.debug('[cards-monitor] handling new pack', pack);
 		const boosterId = pack.BoosterId;
-		if (boosterId === BoosterType.MERCENARIES) {
-			// That's pretty ugly - probably should work with reative streams as well here
-			await this.mercenariesStateBuilder.loadReferenceData();
-			let retriesLeft = 5;
-			while (!this.mainWindowStore.value[0]?.mercenaries?.referenceData && retriesLeft >= 0) {
-				await sleep(100);
-				retriesLeft--;
-			}
-		}
 		// Get the collection as it was before opening cards
 		const collection = await this.collectionManager.collection$$.getValueWithInit();
+		const mercRefData =
+			boosterId === BoosterType.MERCENARIES
+				? await this.mercenariesReferenceData.referenceData$$.getValueWithInit()
+				: null;
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
 			if (boosterId === BoosterType.MERCENARIES) {
-				const referenceData = this.mainWindowStore.value[0]?.mercenaries?.referenceData;
 				return {
-					cardId: this.getLettuceCardId(card, referenceData),
+					cardId: this.getLettuceCardId(card, mercRefData),
 					// No diamond card in pack, so we can leave it like this for now
 					// TODO: proper support for diamond / signature cards
 					cardType: cardPremiumToCardType(card.Premium),
 					currencyAmount: card.CurrencyAmount,
-					mercenaryCardId: this.getMercenaryCardId(card.MercenaryId, referenceData),
+					mercenaryCardId: this.getMercenaryCardId(card.MercenaryId, mercRefData),
 				} as InternalCardInfo;
 			} else {
 				const cardInCollection = collection.find((c) => c.id === card.CardId);

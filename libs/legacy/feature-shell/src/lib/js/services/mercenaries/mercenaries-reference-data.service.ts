@@ -1,105 +1,82 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
-import { ApiRunner, DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
-import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
-import { MercenariesGlobalStatsLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-global-stats-loaded-event';
-import { MercenariesReferenceDataLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-reference-data-loaded-event';
+import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
+import { ApiRunner, DiskCacheService, WindowManagerService } from '@firestone/shared/framework/core';
+import { distinctUntilChanged, map } from 'rxjs';
+import { AppInjector } from '../app-injector';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=3';
 
 @Injectable()
-export class MercenariesStateBuilderService {
-	private requestedInitialRefDataLoad = new BehaviorSubject<boolean>(false);
+export class MercenariesReferenceDataService {
+	public referenceData$$: SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>;
 
-	constructor(
-		private readonly api: ApiRunner,
-		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly localStorage: LocalStorageService,
-		private readonly diskCache: DiskCacheService,
-	) {
-		this.init();
+	private mainInstance: MercenariesReferenceDataService;
+
+	private api: ApiRunner;
+	private store: AppUiStoreFacadeService;
+	private diskCache: DiskCacheService;
+
+	constructor(private readonly windowManager: WindowManagerService) {
+		this.initFacade();
+	}
+
+	public async isReady() {
+		while (!this.referenceData$$) {
+			await sleep(50);
+		}
+	}
+
+	private async initFacade() {
+		const isMainWindow = await this.windowManager.isMainWindow();
+		if (isMainWindow) {
+			window['mercenariesReferenceData'] = this;
+			this.mainInstance = this;
+			this.init();
+		} else {
+			const mainWindow = await this.windowManager.getMainWindow();
+			this.mainInstance = mainWindow['mercenariesReferenceData'];
+			this.referenceData$$ = this.mainInstance.referenceData$$;
+		}
 	}
 
 	private async init() {
+		this.referenceData$$ = new SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>(null);
+		this.api = AppInjector.get(ApiRunner);
+		this.store = AppInjector.get(AppUiStoreFacadeService);
+		this.diskCache = AppInjector.get(DiskCacheService);
+
 		await this.store.initComplete();
-		combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.locale),
-			this.requestedInitialRefDataLoad.asObservable(),
-		)
-			.pipe(
-				filter(([[locale], load]) => load),
-				map(([[locale], load]) => ({ locale })),
-			)
-			.subscribe(({ locale }) => this.loadReferenceData(locale));
+
+		this.referenceData$$.onFirstSubscribe(async () => {
+			this.store
+				.listenPrefs$((prefs) => prefs.locale)
+				.pipe(
+					map(([locale]) => [locale]),
+					distinctUntilChanged(),
+				)
+				.subscribe(async ([locale]) => {
+					this.loadReferenceData(locale);
+				});
+		});
 	}
 
-	public async loadInitialGlobalStats() {
-		console.log('[mercenaries-state-builder] loading initial global stats');
-		const localInfo = this.localStorage.getItem<MercenariesGlobalStats>(
-			LocalStorageService.MERCENARIES_GLOBAL_STATS,
-		);
-		if (!!localInfo) {
-			this.store.send(new MercenariesGlobalStatsLoadedEvent(localInfo));
-		}
-
-		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-		this.localStorage.setItem(LocalStorageService.MERCENARIES_GLOBAL_STATS, globalStats);
-		this.store.send(new MercenariesGlobalStatsLoadedEvent(globalStats));
-	}
-
-	public loadInitialReferenceData() {
-		this.requestedInitialRefDataLoad.next(true);
-	}
-
-	public async loadReferenceData(locale?: string) {
+	private async loadReferenceData(locale: string) {
 		console.log('[mercenaries-state-builder] loading reference data');
 		const localInfo = await this.diskCache.getItem<MercenariesReferenceData>(
 			DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA,
 		);
 		if (!!localInfo?.mercenaries?.length) {
 			console.log('loaded local mercenaries ref data');
-			this.store.send(new MercenariesReferenceDataLoadedEvent(localInfo));
+			this.referenceData$$.next(localInfo);
 		}
 
-		locale = locale ?? (await this.prefs.getPreferences()).locale;
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
 			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
 		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA, referenceData);
-		// console.log('loaded remote mercenaries ref data');
-		this.store.send(new MercenariesReferenceDataLoadedEvent(referenceData));
-		return referenceData;
-	}
-
-	public initState(
-		currentState: MercenariesState,
-		// globalStats: MercenariesGlobalStats,
-		// referenceData: MercenariesReferenceData,
-		// mercenariesCollection: MemoryMercenariesCollectionInfo,
-	): MercenariesState {
-		const categoryIds: readonly MercenariesCategoryId[] = [
-			'mercenaries-personal-hero-stats',
-			'mercenaries-my-teams',
-			// Barely used for now
-			// 'mercenaries-hero-stats',
-			// 'mercenaries-compositions-stats',
-		];
-		return currentState.update({
-			// globalStats: globalStats,
-			// referenceData: referenceData,
-			// collectionInfo: mercenariesCollection,
-			categoryIds: categoryIds,
-			loading: false,
-			initComplete: true,
-		} as MercenariesState);
+		this.referenceData$$.next(referenceData);
 	}
 }
 

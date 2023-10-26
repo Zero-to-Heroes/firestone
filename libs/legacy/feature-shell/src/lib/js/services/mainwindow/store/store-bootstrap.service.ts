@@ -9,7 +9,6 @@ import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
-import { MercenariesState } from '../../../models/mercenaries/mercenaries-state';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
@@ -23,7 +22,6 @@ import { DuelsLootParserService } from '../../duels/duels-loot-parser.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
-import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
 import { PatchesConfigService } from '../../patches-config.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
@@ -58,7 +56,6 @@ export class StoreBootstrapService {
 		private readonly dungeonLoot: DuelsLootParserService,
 		private readonly arenaService: ArenaRunParserService,
 		private readonly stats: StatsStateBuilderService,
-		private readonly mercenariesService: MercenariesStateBuilderService,
 		private readonly mercenariesMemory: MercenariesMemoryCacheService,
 		private readonly memory: MemoryInspectionService,
 		private readonly duelsMemoryCache: DuelsAdventureInfoService,
@@ -172,13 +169,6 @@ export class StoreBootstrapService {
 			arenaRewards,
 		);
 
-		const mercenariesState: MercenariesState = this.mercenariesService.initState(
-			windowStateForFtue.mercenaries,
-			// mercenariesGlobalStats,
-			// mercenariesReferenceData,
-			// mercenariesCollection,
-		);
-
 		// FIXME: this causes some issues: partial states are init, data is resquested on these partials states,
 		// which triggers async services. Once these services complete, events are emitted and the current state is
 		// updated.
@@ -197,7 +187,7 @@ export class StoreBootstrapService {
 			battlegrounds: battlegroundsAppState,
 			duels: duelsStats,
 			arena: arenaState,
-			mercenaries: mercenariesState,
+			mercenaries: windowStateForFtue.mercenaries,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			patchConfig: patchConfig,

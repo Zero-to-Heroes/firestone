@@ -11,7 +11,6 @@ export class FeatureFlags {
 	public static readonly ENABLE_BGS_QUESTS_IN_APP = true;
 
 	// Shelved for now
-	public static readonly ENABLE_DETAILED_MERC = false;
 	public static readonly ENABLE_MULTI_GRAPHS = false;
 	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false; // Doesn't work anymore?
 	public static readonly ENABLE_RANKED_ARCHETYPE = false; // Doesn't work anymore?

@@ -8,6 +8,7 @@ import {
 	MercenariesBattleState,
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
+import { MercenariesReferenceDataService } from '../mercenaries-reference-data.service';
 import {
 	getHeroRole,
 	getMercCardLevel,
@@ -17,7 +18,10 @@ import {
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesHeroRevealedParser implements MercenariesParser {
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+	) {}
 
 	public eventType = () => GameEvent.MERCENARIES_HERO_REVEALED;
 
@@ -49,7 +53,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
-		const refData = mainWindowState?.mercenaries?.referenceData;
+		const refData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
 		const refMerc = normalizedCardId
 			? refData?.mercenaries?.find(
 					(merc) =>
