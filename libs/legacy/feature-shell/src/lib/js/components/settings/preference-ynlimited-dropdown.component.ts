@@ -78,7 +78,7 @@ export class PreferenceYNLimitedComponent
 			.listen$(([main, nav, prefs]) => prefs[this.field])
 			.pipe(
 				this.mapData(([pref]) => ({
-					filter: pref,
+					filter: '' + pref,
 					placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label,
 					visible: true,
 				})),
