@@ -131,6 +131,11 @@ export class AchievementsLiveProgressTrackingService {
 		achievementsOnGameStart: readonly HsAchievementInfo[],
 	): HsRefAchievement {
 		let currentAchievement = refAchievements.find((a) => a.id === id);
+		if (!currentAchievement) {
+			console.warn('[achievements-monitor] could not find achievement', id, refAchievements?.length);
+			return null;
+		}
+
 		let currentCompletion = achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0;
 		//console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
 		while (currentCompletion > 0 && currentCompletion >= currentAchievement.quota) {
