@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { DuelsConfig } from '../models/duels-config';
+
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 
 @Injectable()

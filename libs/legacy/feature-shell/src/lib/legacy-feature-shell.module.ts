@@ -687,6 +687,7 @@ import { RawAchievementsLoaderService } from './js/services/achievement/data/raw
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
+import { ArenaRewardsService } from './js/services/arena/arena-rewards.service';
 import { ArenaStateBuilderService } from './js/services/arena/arena-state-builder.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
@@ -1840,6 +1841,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsUserRunsService,
 
 		ArenaStateBuilderService,
+		ArenaRewardsService,
 
 		StatsStateBuilderService,
 

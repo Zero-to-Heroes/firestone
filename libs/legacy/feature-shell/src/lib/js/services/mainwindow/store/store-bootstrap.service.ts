@@ -93,7 +93,7 @@ export class StoreBootstrapService {
 			[socialShareUserInfo, currentUser, currentScene],
 			[constructedConfig],
 			// [matchStats],
-			[arenaRewards],
+			// [arenaRewards],
 			// [mercenariesCollection],
 		] = await Promise.all([
 			Promise.all([
@@ -103,7 +103,7 @@ export class StoreBootstrapService {
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
 			// Promise.all([this.gameStatsLoader.retrieveStats()]),
-			Promise.all([this.arena.loadRewards()]),
+			// Promise.all([this.arena.loadRewards()]),
 			// Promise.all([this.mercenariesMemory.getMercenariesMergedCollectionInfo()]),
 		]);
 		console.log('loaded info');
@@ -166,7 +166,7 @@ export class StoreBootstrapService {
 		const arenaState: ArenaState = await this.arena.initState(
 			windowStateForFtue.arena,
 			currentArenaMetaPatch,
-			arenaRewards,
+			// arenaRewards,
 		);
 
 		// FIXME: this causes some issues: partial states are init, data is resquested on these partials states,

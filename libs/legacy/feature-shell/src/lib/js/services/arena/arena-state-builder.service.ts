@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
-import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards/dist/retrieve-arena-rewards';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../models/arena/arena-state';
@@ -26,19 +25,10 @@ export class ArenaStateBuilderService {
 		});
 	}
 
-	public async loadRewards(): Promise<readonly ArenaRewardInfo[]> {
-		const currentUser = await this.ow.getCurrentUser();
-		const result: any = await this.api.callPostApi(REWARDS_RETRIEVE_URL, {
-			userId: currentUser.userId,
-			userName: currentUser.username,
-		});
-		return result;
-	}
-
 	public async initState(
 		initialState: ArenaState,
 		currentArenaMetaPatch: PatchInfo,
-		rewards: readonly ArenaRewardInfo[],
+		// rewards: readonly ArenaRewardInfo[],
 	): Promise<ArenaState> {
 		const prefs = await this.prefs.getPreferences();
 		return initialState.update({
@@ -55,7 +45,7 @@ export class ArenaStateBuilderService {
 			activeHeroFilter: prefs.arenaActiveClassFilter,
 			activeTimeFilter: prefs.arenaActiveTimeFilter,
 			currentArenaMetaPatch: currentArenaMetaPatch,
-			rewards: rewards,
+			// rewards: rewards,
 		});
 	}
 }
