@@ -40,6 +40,8 @@ import { RewardMonitorService } from '../../js/services/rewards/rewards-monitor'
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
+import { ModsBootstrapService } from '../mods/services/mods-bootstrap.service';
+import { ModsManagerService } from '../mods/services/mods-manager.service';
 import { PackMonitor } from '../packs/services/pack-monitor.service';
 import { PackStatsService } from '../packs/services/pack-stats.service';
 import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';
@@ -92,11 +94,16 @@ export class BootstrapOtherServicesService {
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
 		private readonly init_HearthArenaAnalyticsService: HearthArenaAnalyticsService,
+		// TODO: might not be the best place
+		private readonly modsBootstrap: ModsBootstrapService,
+		private readonly modsManager: ModsManagerService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
 		window['translateService'] = this.translate;
 		await this.initLocalization();
+		this.modsBootstrap.init();
+		this.modsManager.init();
 	}
 
 	private async initLocalization() {

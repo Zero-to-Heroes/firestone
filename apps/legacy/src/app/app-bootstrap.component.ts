@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
-import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { Observable, Subject, from } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 
@@ -44,9 +42,6 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly titleService: Title,
 		private readonly cdr: ChangeDetectorRef,
-		// TODO: might not be the best place
-		private readonly modsBootstrap: ModsBootstrapService,
-		private readonly modsManager: ModsManagerService,
 	) {}
 
 	@HostListener('window:beforeunload')
@@ -71,12 +66,6 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 		this.currentWindowName$.subscribe((name) => {
 			const humanFriendlyName = this.buildHumanFriendlyName(name);
 			this.titleService.setTitle(`Firestone - ${humanFriendlyName}`);
-		});
-		this.currentWindowName$.subscribe((name) => {
-			if (name === 'MainWindow') {
-				this.modsBootstrap.init();
-				this.modsManager.init();
-			}
 		});
 	}
 
