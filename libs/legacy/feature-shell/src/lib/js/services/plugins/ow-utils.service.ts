@@ -8,13 +8,6 @@ export class OwUtilsService {
 	private plugin: any;
 	initialized = false;
 
-	constructor() {
-		console.log('[ow-utils] init starting');
-		this.initialize();
-		window['flashWindow'] = () => this.flashWindow();
-		console.log('[ow-utils] init done');
-	}
-
 	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			// console.log('[ow-utils] flashing window', windowName);
@@ -158,7 +151,7 @@ export class OwUtilsService {
 		return this.plugin.get();
 	}
 
-	private initialize() {
+	public initialize() {
 		this.initialized = false;
 		try {
 			console.log('[ow-utils] plugin init starting', this.plugin);
