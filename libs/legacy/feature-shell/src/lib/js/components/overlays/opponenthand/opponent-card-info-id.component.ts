@@ -111,6 +111,8 @@ export class OpponentCardInfoIdComponent {
 				return CardIds.CloakOfEmeraldDreamsTavernBrawl;
 			case CardIds.DivineIllumination_DivineIlluminationTavernBrawlEnchantment:
 				return CardIds.DivineIlluminationTavernBrawl;
+			case CardIds.Melomania_MelomaniaEnchantment:
+				return CardIds.Melomania;
 		}
 
 		// The base case
