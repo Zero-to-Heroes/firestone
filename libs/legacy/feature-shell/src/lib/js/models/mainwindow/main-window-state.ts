@@ -12,7 +12,6 @@ import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
 import { QuestsState } from './quests/quests-state';
-import { SocialShareUserInfo } from './social-share-user-info';
 import { StatsState } from './stats/stats-state';
 import { StreamsState } from './streams/streams-state';
 
@@ -28,7 +27,7 @@ export class MainWindowState {
 	readonly duels: DuelsState = new DuelsState();
 	readonly arena: ArenaState = new ArenaState();
 	readonly mercenaries: MercenariesState = new MercenariesState();
-	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
+	// readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly quests: QuestsState = new QuestsState();
 	readonly streams: StreamsState = new StreamsState();

@@ -8,7 +8,6 @@ import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
@@ -90,14 +89,18 @@ export class StoreBootstrapService {
 
 		// Load all the initial data
 		const [
-			[socialShareUserInfo, currentUser, currentScene],
+			[
+				// socialShareUserInfo,
+				currentUser,
+				currentScene,
+			],
 			[constructedConfig],
 			// [matchStats],
 			// [arenaRewards],
 			// [mercenariesCollection],
 		] = await Promise.all([
 			Promise.all([
-				this.initializeSocialShareUserInfo(),
+				// this.initializeSocialShareUserInfo(),
 				this.userService.getCurrentUser(),
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
@@ -188,7 +191,7 @@ export class StoreBootstrapService {
 			duels: duelsStats,
 			arena: arenaState,
 			mercenaries: windowStateForFtue.mercenaries,
-			socialShareUserInfo: socialShareUserInfo,
+			// socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			patchConfig: patchConfig,
 			initComplete: true,
@@ -240,11 +243,11 @@ export class StoreBootstrapService {
 		return merged;
 	}
 
-	private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {
-		console.log('[social] initializing social share user info');
-		const twitter = await this.ow.getTwitterUserInfo();
-		return Object.assign(new SocialShareUserInfo(), {
-			twitter: twitter,
-		} as SocialShareUserInfo);
-	}
+	// private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {
+	// 	console.log('[social] initializing social share user info');
+	// 	const twitter = await this.ow.getTwitterUserInfo();
+	// 	return Object.assign(new SocialShareUserInfo(), {
+	// 		twitter: twitter,
+	// 	} as SocialShareUserInfo);
+	// }
 }

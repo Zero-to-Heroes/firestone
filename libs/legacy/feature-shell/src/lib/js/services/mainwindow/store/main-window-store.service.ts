@@ -191,7 +191,6 @@ import { CloseSocialShareModalEvent } from './events/social/close-social-share-m
 import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
-import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
 import { GamesFullClearEvent } from './events/stats/game-stats-full-clear-event';
 import { GamesFullRefreshEvent } from './events/stats/game-stats-full-refresh-event';
 import { GlobalStatsLoadedEvent } from './events/stats/global/global-stats-loaded-event';
@@ -347,7 +346,6 @@ import { CloseSocialShareModalProcessor } from './processors/social/close-social
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
-import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
 import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-clear-processor';
 import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
 import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-stats-loaded-processor';
@@ -450,7 +448,6 @@ export class MainWindowStoreService {
 		// });
 
 		// this.populateStore();
-		this.listenForSocialAccountLoginUpdates();
 	}
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
@@ -640,7 +637,6 @@ export class MainWindowStoreService {
 			// Social
 			[StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor()],
 			[TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor()],
-			[UpdateTwitterSocialInfoEvent.eventName(), new UpdateTwitterSocialInfoProcessor(this.ow)],
 			[ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
 			[CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor()],
 			[
@@ -919,11 +915,5 @@ export class MainWindowStoreService {
 		// Launch events to start gathering data for the store
 		// this.stateUpdater.next(new PopulateStoreEvent());
 		// this.stateUpdater.next(new TriggerPopulateStoreEvent(onlyGameData));
-	}
-
-	private listenForSocialAccountLoginUpdates() {
-		this.ow.addTwitterLoginStateChangedListener(() => {
-			this.stateUpdater.next(new UpdateTwitterSocialInfoEvent());
-		});
 	}
 }
