@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.4.1',
+		version: '12.4.7',
 		force: false,
 		sections: [
 			{
@@ -63,11 +63,49 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `Update for 27.6.2.`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
+								type: 'content',
+								text: `Miscellaneous small updates to widget texts, oracles and card highlights.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix some issues with stealth reconnects - the game logs would behave as though a reconnect was happening, but without any visible effect in the UI. This would cause the tracker to sometimes stop working.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue the cards in ETC's sideboard would appear in the Other zone when playing ETC.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Plagues created by Helya would sometimes not be properly tracked and could cause the tracker to stop working.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Diremuck Forager.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Goldrinn.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with the Anomalous Evidence anomaly.`,
 							},
 						],
 					},
