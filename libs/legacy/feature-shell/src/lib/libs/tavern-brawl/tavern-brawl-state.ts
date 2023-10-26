@@ -1,6 +1,6 @@
 import { TavernBrawlStats } from '@firestone-hs/tavern-brawl-stats';
+import { AppInjector } from '@firestone/shared/framework/core';
 import { NonFunctionProperties } from '@services/utils';
-import { AppInjector } from '../../js/services/app-injector';
 import { LazyDataInitService } from '../../js/services/lazy-data-init.service';
 
 export class TavernBrawlState {

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
+	AbstractFacadeService,
 	ApiRunner,
+	AppInjector,
 	CardsFacadeService,
 	DiskCacheService,
 	OverwolfService,
@@ -13,7 +15,6 @@ import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { filter } from 'rxjs';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../../models/patches';
-import { AppInjector } from '../../app-injector';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
@@ -24,10 +25,9 @@ import { decode } from '../../utils';
 const GAME_STATS_ENDPOINT = 'https://lq32rsf3wgmmjxihavjplf5jfq0ntetn.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
-export class GameStatsLoaderService {
+export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoaderService> {
 	public gameStats$$: SubscriberAwareBehaviorSubject<GameStats>;
 
-	private mainInstance: GameStatsLoaderService;
 	private patchInfo: PatchInfo;
 
 	private api: ApiRunner;
@@ -38,44 +38,15 @@ export class GameStatsLoaderService {
 	private diskCache: DiskCacheService;
 	private store: AppUiStoreService;
 
-	constructor(private readonly windowManager: WindowManagerService) {
-		this.initFacade();
+	constructor(protected readonly windowManager: WindowManagerService) {
+		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
 	}
 
-	public async isReady() {
-		while (!this.gameStats$$) {
-			await sleep(50);
-		}
+	protected override assignSubjects() {
+		this.gameStats$$ = this.mainInstance.gameStats$$;
 	}
 
-	public async addGame(game: GameStat) {
-		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
-		const newStats = currentStats?.update({
-			stats: [game, ...(currentStats?.stats ?? [])],
-		});
-		this.gameStats$$.next(newStats);
-	}
-
-	public async updateBgsPostMatchStats(reviewId: string, postMatchStats: BgsPostMatchStats) {
-		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
-		const newStats = currentStats.updateBgsPostMatchStats(reviewId, postMatchStats);
-		this.gameStats$$.next(newStats);
-	}
-
-	private async initFacade() {
-		const isMainWindow = await this.windowManager.isMainWindow();
-		if (isMainWindow) {
-			window['gameStatsLoader'] = this;
-			this.mainInstance = this;
-			this.init();
-		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.mainInstance = mainWindow['gameStatsLoader'];
-			this.gameStats$$ = this.mainInstance.gameStats$$;
-		}
-	}
-
-	private async init() {
+	protected async init() {
 		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
@@ -104,6 +75,20 @@ export class GameStatsLoaderService {
 				const lastPatch = patches[patches.length - 1];
 				this.patchInfo = lastPatch;
 			});
+	}
+
+	public async addGame(game: GameStat) {
+		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
+		const newStats = currentStats?.update({
+			stats: [game, ...(currentStats?.stats ?? [])],
+		});
+		this.gameStats$$.next(newStats);
+	}
+
+	public async updateBgsPostMatchStats(reviewId: string, postMatchStats: BgsPostMatchStats) {
+		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
+		const newStats = currentStats.updateBgsPostMatchStats(reviewId, postMatchStats);
+		this.gameStats$$.next(newStats);
 	}
 
 	private async retrieveStats() {

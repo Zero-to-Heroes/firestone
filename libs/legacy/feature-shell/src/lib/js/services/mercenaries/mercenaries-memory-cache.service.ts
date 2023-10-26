@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { LocalStorageService, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	LocalStorageService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, debounceTime, filter, take } from 'rxjs';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
-import { AppInjector } from '../app-injector';
 import { Events } from '../events.service';
 import { GameStatusService } from '../game-status.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -38,13 +42,12 @@ export const SCENE_WITH_RELEVANT_MERC_INFO = [
 ];
 
 @Injectable()
-export class MercenariesMemoryCacheService {
+export class MercenariesMemoryCacheService extends AbstractFacadeService<MercenariesMemoryCacheService> {
 	public memoryCollectionInfo$$: SubscriberAwareBehaviorSubject<MemoryMercenariesCollectionInfo>;
 	public memoryMapInfo$$: SubscriberAwareBehaviorSubject<MemoryMercenariesInfo>;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<null>;
 
-	private mainInstance: MercenariesMemoryCacheService;
 	private previousScene: SceneMode;
 	private triggerMemoryReading$$ = new BehaviorSubject<boolean>(false);
 
@@ -53,31 +56,16 @@ export class MercenariesMemoryCacheService {
 	private localStorageService: LocalStorageService;
 	private gameStatus: GameStatusService;
 
-	constructor(private readonly windowManager: WindowManagerService) {
-		this.initFacade();
+	constructor(protected readonly windowManager: WindowManagerService) {
+		super(windowManager, 'mercenariesMemoryCache', () => !!this.memoryCollectionInfo$$ && !this.memoryMapInfo$$);
 	}
 
-	public async isReady() {
-		while (!this.memoryCollectionInfo$$ && !this.memoryMapInfo$$) {
-			await sleep(50);
-		}
+	protected override assignSubjects() {
+		this.memoryCollectionInfo$$ = this.mainInstance.memoryCollectionInfo$$;
+		this.memoryMapInfo$$ = this.mainInstance.memoryMapInfo$$;
 	}
 
-	private async initFacade() {
-		const isMainWindow = await this.windowManager.isMainWindow();
-		if (isMainWindow) {
-			window['mercenariesMemoryCache'] = this;
-			this.mainInstance = this;
-			this.init();
-		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.mainInstance = mainWindow['mercenariesMemoryCache'];
-			this.memoryCollectionInfo$$ = this.mainInstance.memoryCollectionInfo$$;
-			this.memoryMapInfo$$ = this.mainInstance.memoryMapInfo$$;
-		}
-	}
-
-	private init() {
+	protected init() {
 		this.memoryService = AppInjector.get(MemoryInspectionService);
 		this.events = AppInjector.get(Events);
 		this.localStorageService = AppInjector.get(LocalStorageService);

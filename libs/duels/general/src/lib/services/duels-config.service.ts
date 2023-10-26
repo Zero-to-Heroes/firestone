@@ -1,43 +1,24 @@
 import { Injectable } from '@angular/core';
-import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
-import { ApiRunner, WindowManagerService } from '@firestone/shared/framework/core';
-import { AppInjector } from '@legacy-import/src/lib/js/services/app-injector';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { DuelsConfig } from '../models/duels-config';
-
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 
 @Injectable()
-export class DuelsConfigService {
+export class DuelsConfigService extends AbstractFacadeService<DuelsConfigService> {
 	public duelsConfig$$: SubscriberAwareBehaviorSubject<DuelsConfig | null>;
-
-	private mainInstance: DuelsConfigService;
 
 	private api: ApiRunner;
 
-	constructor(private readonly windowManager: WindowManagerService) {
-		this.initFacade();
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'duelsConfig', () => !!this.duelsConfig$$);
 	}
 
-	public async isReady() {
-		while (!this.duelsConfig$$) {
-			await sleep(50);
-		}
+	protected override assignSubjects() {
+		this.duelsConfig$$ = this.mainInstance.duelsConfig$$;
 	}
 
-	private async initFacade() {
-		const isMainWindow = await this.windowManager.isMainWindow();
-		if (isMainWindow) {
-			window['duelsConfig'] = this;
-			this.mainInstance = this;
-			this.init();
-		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.mainInstance = mainWindow['duelsConfig'];
-			this.duelsConfig$$ = this.mainInstance.duelsConfig$$;
-		}
-	}
-
-	private async init() {
+	protected async init() {
 		this.duelsConfig$$ = new SubscriberAwareBehaviorSubject<DuelsConfig | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 

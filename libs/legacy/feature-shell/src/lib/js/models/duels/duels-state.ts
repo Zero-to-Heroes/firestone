@@ -50,20 +50,6 @@ export class DuelsState {
 		return Object.assign(new DuelsState(), this, base);
 	}
 
-	// public getTopDecks(): readonly DuelsGroupedDecks[] {
-	// 	if (!this.initComplete) {
-	// 		return this.topDecks;
-	// 	}
-	// 	if (this.topDecks === undefined) {
-	// 		const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
-	// 		if (service) {
-	// 			(this.topDecks as readonly DuelsGroupedDecks[]) = [];
-	// 			service.requestLoad('duels-top-decks');
-	// 		}
-	// 	}
-	// 	return this.topDecks;
-	// }
-
 	public findCategory(categoryId: string) {
 		const result = this.categories?.find((cat) => cat.id === categoryId);
 		return result;

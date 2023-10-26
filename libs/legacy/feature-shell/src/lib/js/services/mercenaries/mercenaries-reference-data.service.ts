@@ -1,47 +1,35 @@
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
-import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
-import { ApiRunner, DiskCacheService, WindowManagerService } from '@firestone/shared/framework/core';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	DiskCacheService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map } from 'rxjs';
-import { AppInjector } from '../app-injector';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
 
 @Injectable()
-export class MercenariesReferenceDataService {
+export class MercenariesReferenceDataService extends AbstractFacadeService<MercenariesReferenceDataService> {
 	public referenceData$$: SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>;
-
-	private mainInstance: MercenariesReferenceDataService;
 
 	private api: ApiRunner;
 	private store: AppUiStoreFacadeService;
 	private diskCache: DiskCacheService;
 
-	constructor(private readonly windowManager: WindowManagerService) {
-		this.initFacade();
+	constructor(protected readonly windowManager: WindowManagerService) {
+		super(windowManager, 'mercenariesReferenceData', () => !!this.referenceData$$);
 	}
 
-	public async isReady() {
-		while (!this.referenceData$$) {
-			await sleep(50);
-		}
+	protected override assignSubjects() {
+		this.referenceData$$ = this.mainInstance.referenceData$$;
 	}
 
-	private async initFacade() {
-		const isMainWindow = await this.windowManager.isMainWindow();
-		if (isMainWindow) {
-			window['mercenariesReferenceData'] = this;
-			this.mainInstance = this;
-			this.init();
-		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.mainInstance = mainWindow['mercenariesReferenceData'];
-			this.referenceData$$ = this.mainInstance.referenceData$$;
-		}
-	}
-
-	private async init() {
+	protected async init() {
 		this.referenceData$$ = new SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.store = AppInjector.get(AppUiStoreFacadeService);

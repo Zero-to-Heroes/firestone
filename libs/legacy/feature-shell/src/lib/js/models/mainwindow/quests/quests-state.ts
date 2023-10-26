@@ -1,5 +1,5 @@
 import { QuestsInfo } from '@firestone-hs/reference-data';
-import { AppInjector } from '../../../services/app-injector';
+import { AppInjector } from '@firestone/shared/framework/core';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { MemoryQuestsLog } from '../../../services/plugins/mind-vision/operations/get-active-quests-operation';
 import { NonFunctionProperties } from '../../../services/utils';

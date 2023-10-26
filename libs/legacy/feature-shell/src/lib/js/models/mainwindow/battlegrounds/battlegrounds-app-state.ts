@@ -1,6 +1,6 @@
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
+import { AppInjector } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { AppInjector } from '../../../services/app-injector';
 import { BgsHeroStrategies } from '../../../services/battlegrounds/bgs-meta-hero-strategies.service';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
