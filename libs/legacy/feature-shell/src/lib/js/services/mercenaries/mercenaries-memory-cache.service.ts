@@ -57,7 +57,7 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 	private gameStatus: GameStatusService;
 
 	constructor(protected readonly windowManager: WindowManagerService) {
-		super(windowManager, 'mercenariesMemoryCache', () => !!this.memoryCollectionInfo$$ && !this.memoryMapInfo$$);
+		super(windowManager, 'mercenariesMemoryCache', () => !!this.memoryCollectionInfo$$ && !!this.memoryMapInfo$$);
 	}
 
 	protected override assignSubjects() {
