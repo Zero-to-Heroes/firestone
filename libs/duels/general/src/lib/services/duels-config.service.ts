@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, WindowManagerService } from '@firestone/shared/framework/core';
+import { AppInjector } from '@legacy-import/src/lib/js/services/app-injector';
 import { DuelsConfig } from '../models/duels-config';
 
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
@@ -11,7 +12,9 @@ export class DuelsConfigService {
 
 	private mainInstance: DuelsConfigService;
 
-	constructor(private readonly api: ApiRunner, private readonly windowManager: WindowManagerService) {
+	private api: ApiRunner;
+
+	constructor(private readonly windowManager: WindowManagerService) {
 		this.initFacade();
 	}
 
@@ -36,6 +39,8 @@ export class DuelsConfigService {
 
 	private async init() {
 		this.duelsConfig$$ = new SubscriberAwareBehaviorSubject<DuelsConfig | null>(null);
+		this.api = AppInjector.get(ApiRunner);
+
 		this.duelsConfig$$.onFirstSubscribe(async () => {
 			const result: DuelsConfig | null = await this.api.callGetApi(DUELS_CONFIG_URL);
 			console.log('[duels-config] loaded duels config');

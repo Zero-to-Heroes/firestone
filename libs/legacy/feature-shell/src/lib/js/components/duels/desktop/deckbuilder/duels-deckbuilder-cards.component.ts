@@ -536,6 +536,11 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 				</ul>
 			</div>
 		`;
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByCardId(index: number, item: DeckBuilderCard) {

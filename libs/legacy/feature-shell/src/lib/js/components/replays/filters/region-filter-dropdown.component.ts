@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
@@ -96,6 +97,11 @@ export class RegionFilterDropdownComponent
 				};
 			}),
 		);
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

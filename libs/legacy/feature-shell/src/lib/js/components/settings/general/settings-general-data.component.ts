@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DiskCacheService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
@@ -182,6 +182,11 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 				}),
 			),
 		);
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	changeDisableLocalCache = (disableCache: boolean) => {

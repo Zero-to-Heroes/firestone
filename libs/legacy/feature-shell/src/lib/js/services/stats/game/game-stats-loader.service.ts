@@ -13,6 +13,7 @@ import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { filter } from 'rxjs';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../../models/patches';
+import { AppInjector } from '../../app-injector';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
@@ -29,16 +30,15 @@ export class GameStatsLoaderService {
 	private mainInstance: GameStatsLoaderService;
 	private patchInfo: PatchInfo;
 
-	constructor(
-		private readonly api: ApiRunner,
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-		private readonly handler: DeckHandlerService,
-		private readonly allCards: CardsFacadeService,
-		private readonly diskCache: DiskCacheService,
-		private readonly store: AppUiStoreService,
-		private readonly windowManager: WindowManagerService,
-	) {
+	private api: ApiRunner;
+	private ow: OverwolfService;
+	private prefs: PreferencesService;
+	private handler: DeckHandlerService;
+	private allCards: CardsFacadeService;
+	private diskCache: DiskCacheService;
+	private store: AppUiStoreService;
+
+	constructor(private readonly windowManager: WindowManagerService) {
 		this.initFacade();
 	}
 
@@ -77,6 +77,14 @@ export class GameStatsLoaderService {
 
 	private async init() {
 		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
+		this.api = AppInjector.get(ApiRunner);
+		this.ow = AppInjector.get(OverwolfService);
+		this.prefs = AppInjector.get(PreferencesService);
+		this.handler = AppInjector.get(DeckHandlerService);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.diskCache = AppInjector.get(DiskCacheService);
+		this.store = AppInjector.get(AppUiStoreService);
+
 		await this.store.initComplete();
 
 		this.gameStats$$.onFirstSubscribe(async () => {

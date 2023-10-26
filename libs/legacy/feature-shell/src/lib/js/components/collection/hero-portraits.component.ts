@@ -18,7 +18,10 @@ import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MercenariesMemoryCacheService } from '../../services/mercenaries/mercenaries-memory-cache.service';
-import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
+import {
+	MercenariesReferenceData,
+	MercenariesReferenceDataService,
+} from '../../services/mercenaries/mercenaries-reference-data.service';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sortByProperties } from '../../services/utils';
@@ -95,15 +98,18 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.mercenariesCollection.isReady();
-		const mercenariesReferenceData$ = this.store
-			.listen$(([main, nav, prefs]) => main.mercenaries.getReferenceData())
-			.pipe(this.mapData(([mercs]) => mercs?.mercenaries));
+		await this.mercenariesReferenceData.isReady();
+
+		const mercenariesReferenceData$ = this.mercenariesReferenceData.referenceData$$.pipe(
+			this.mapData((mercs) => mercs?.mercenaries),
+		);
 		const relevantHeroes$ = combineLatest([
 			this.store.bgHeroSkins$(),
 			this.store.collection$(),
@@ -159,6 +165,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 					this.cdr.detectChanges();
 				}
 			});
+
+		// Because we await
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	showFullHeroPortrait(heroPortrait: CollectionReferenceCard) {
