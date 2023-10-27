@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
+import { distinctUntilChanged, map, skip } from 'rxjs';
 import { CARDS_VERSION } from './hs-utils';
 import { PreferencesService } from './preferences.service';
-import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class CardsInitService {
 	private inInit = false;
 
-	constructor(
-		private readonly cards: AllCardsService,
-		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreFacadeService,
-	) {}
+	constructor(private readonly cards: AllCardsService, private readonly prefs: PreferencesService) {}
 
 	public async init() {
 		if (this.inInit) {
@@ -28,13 +24,21 @@ export class CardsInitService {
 	}
 
 	private async startListeningToChanges() {
-		await this.store.initComplete();
-		this.store.listenPrefs$((prefs) => prefs.locale).subscribe(async ([locale]) => this.initCards(locale));
+		await this.prefs.isReady();
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs.locale),
+				distinctUntilChanged(),
+				skip(1), // Initial load is done in orchestrator
+			)
+			.subscribe((locale) => {
+				this.initCards(locale);
+			});
 	}
 
 	private async initCards(locale: string) {
 		const fileName = this.getFileName(locale);
-		console.log('initializing cards db with', fileName);
+		console.log('[cards-init] initializing cards db with', fileName);
 		await this.cards.initializeCardsDb(CARDS_VERSION, fileName, false);
 	}
 
