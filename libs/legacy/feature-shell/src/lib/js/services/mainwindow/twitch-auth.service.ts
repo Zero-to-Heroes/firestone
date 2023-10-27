@@ -125,7 +125,6 @@ export class TwitchAuthService {
 						delay(this.twitchDelay),
 					)
 					.subscribe((event) => this.sendEvent(event));
-				console.log('[twitch-auth] init done');
 			});
 	}
 

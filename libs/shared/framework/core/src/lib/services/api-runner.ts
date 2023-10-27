@@ -118,11 +118,11 @@ export class ApiRunner {
 		let firestoneToken: string | null = this.localStorage.getItem<string>(
 			LocalStorageService.FIRESTONE_SESSION_TOKEN,
 		);
-		console.debug('checking firestoneToken', firestoneToken);
+		// console.debug('checking firestoneToken', firestoneToken);
 		// If the token is valid, we can use it
 		if (!!firestoneToken?.length) {
 			const decoded: JwtPayload = decode(firestoneToken) as JwtPayload;
-			console.debug('decoded', decoded);
+			// console.debug('decoded', decoded);
 			// Check if JWT token is expired
 			if ((decoded.exp ?? 0) * 1000 < Date.now()) {
 				firestoneToken = null;
