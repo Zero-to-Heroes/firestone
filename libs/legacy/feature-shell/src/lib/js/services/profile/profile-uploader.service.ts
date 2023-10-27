@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '@firestone-hs/api-user-profile';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
+import { ApiRunner, DiskCacheService } from '@firestone/shared/framework/core';
+import { combineLatest, distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 import { GameStatusService } from '../game-status.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
@@ -25,6 +25,7 @@ export class ProfileUploaderService {
 		private readonly api: ApiRunner,
 		private readonly gameStatus: GameStatusService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly diskCache: DiskCacheService,
 	) {
 		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
 		window['profileBgHeroStat'] = this.internalBattlegrounds.bgFullTimeStatsByHero$$;
@@ -53,48 +54,86 @@ export class ProfileUploaderService {
 						filter(([elligible, data]) => elligible && !!data?.length),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
-					.subscribe(([_, data]) => {
-						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { achievements: data } as Profile);
+					.subscribe(async ([_, data]) => {
+						const lastUpload = await this.diskCache.getItem(
+							DiskCacheService.DISK_CACHE_KEYS.PROFILE_ACHIEVEMENTS,
+						);
+						if (!deepEqual(lastUpload, data)) {
+							this.api.callPostApiSecure(PROFILE_UPDATE_URL, { achievements: data } as Profile);
+							this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_ACHIEVEMENTS, data);
+						}
 					});
 				combineLatest([elligible$, this.internalBattlegrounds.bgFullTimeStatsByHero$$])
 					.pipe(
 						filter(([elligible, data]) => elligible && !!data?.length),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
-					.subscribe(([_, data]) => {
-						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { bgFullTimeStatsByHero: data } as Profile);
+					.subscribe(async ([_, data]) => {
+						const lastUpload = await this.diskCache.getItem(
+							DiskCacheService.DISK_CACHE_KEYS.PROFILE_BG_FULL_TIME_STATS_BY_HERO,
+						);
+						if (!deepEqual(lastUpload, data)) {
+							this.api.callPostApiSecure(PROFILE_UPDATE_URL, { bgFullTimeStatsByHero: data } as Profile);
+							this.diskCache.storeItem(
+								DiskCacheService.DISK_CACHE_KEYS.PROFILE_BG_FULL_TIME_STATS_BY_HERO,
+								data,
+							);
+						}
 					});
 				combineLatest([elligible$, this.internalCollection.sets$$])
 					.pipe(
 						filter(([elligible, data]) => elligible && !!data?.length),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
-					.subscribe(([_, data]) => {
-						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { sets: data } as Profile);
+					.subscribe(async ([_, data]) => {
+						const lastUpload = await this.diskCache.getItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_SETS);
+						if (!deepEqual(lastUpload, data)) {
+							this.api.callPostApiSecure(PROFILE_UPDATE_URL, { sets: data } as Profile);
+							this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_SETS, data);
+						}
 					});
 				combineLatest([elligible$, this.internalCollection.packsAllTime$$])
 					.pipe(
 						filter(([elligible, data]) => elligible && !!data?.length),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
-					.subscribe(([_, data]) => {
-						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { packsAllTime: data } as Profile);
+					.subscribe(async ([_, data]) => {
+						const lastUpload = await this.diskCache.getItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_PACKS);
+						if (!deepEqual(lastUpload, data)) {
+							this.api.callPostApiSecure(PROFILE_UPDATE_URL, { packsAllTime: data } as Profile);
+							this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_PACKS, data);
+						}
 					});
-				combineLatest([elligible$, this.internalProfileInfo.classesProgress$$])
+				// Don't upload on startup
+				combineLatest([elligible$, this.internalProfileInfo.classesProgress$$.pipe(skip(1))])
 					.pipe(
 						filter(([elligible, data]) => elligible && !!data?.length),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
-					.subscribe(([_, data]) => {
-						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { classesProgress: data } as Profile);
+					.subscribe(async ([_, data]) => {
+						const lastUpload = await this.diskCache.getItem(
+							DiskCacheService.DISK_CACHE_KEYS.PROFILE_CLASSES_PROGRESS,
+						);
+						// console.debug('[profile] classesProgress', data, lastUpload);
+						if (!deepEqual(lastUpload, data)) {
+							this.api.callPostApiSecure(PROFILE_UPDATE_URL, { classesProgress: data } as Profile);
+							this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_CLASSES_PROGRESS, data);
+						}
 					});
-				combineLatest([elligible$, this.internalProfileInfo.winsForMode$$])
+				combineLatest([elligible$, this.internalProfileInfo.winsForMode$$.pipe(skip(1))])
 					.pipe(
 						filter(([elligible, data]) => elligible && !!data?.length),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
-					.subscribe(([_, data]) => {
-						this.api.callPostApiSecure(PROFILE_UPDATE_URL, { winsForModes: data } as Profile);
+					.subscribe(async ([_, data]) => {
+						const lastUpload = await this.diskCache.getItem(
+							DiskCacheService.DISK_CACHE_KEYS.PROFILE_WINS_FOR_MODE,
+						);
+						// console.debug('[profile] winsForMode', data, lastUpload);
+						if (!deepEqual(lastUpload, data)) {
+							this.api.callPostApiSecure(PROFILE_UPDATE_URL, { winsForModes: data } as Profile);
+							this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.PROFILE_WINS_FOR_MODE, data);
+						}
 					});
 			});
 		// Improvement areas:

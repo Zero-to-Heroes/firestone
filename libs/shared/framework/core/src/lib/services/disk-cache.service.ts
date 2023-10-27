@@ -17,6 +17,12 @@ export class DiskCacheService {
 		BATTLEGROUNDS_META_HERO_STATS: 'battlegrounds-meta-hero-stats.json',
 		MERCENARIES_COLLECTION: 'mercenaries-memory-collection-info.json',
 		MERCENARIES_REFERENCE_DATA: 'mercenaries-reference-data.json',
+		PROFILE_ACHIEVEMENTS: 'profile-achievements.json',
+		PROFILE_BG_FULL_TIME_STATS_BY_HERO: 'profile-bg-full-time-stats-by-hero.json',
+		PROFILE_SETS: 'profile-sets.json',
+		PROFILE_PACKS: 'profile-packs.json',
+		PROFILE_CLASSES_PROGRESS: 'profile-classes-progress.json',
+		PROFILE_WINS_FOR_MODE: 'profile-wins-for-mode.json',
 	};
 
 	private cacheDisabled = false;

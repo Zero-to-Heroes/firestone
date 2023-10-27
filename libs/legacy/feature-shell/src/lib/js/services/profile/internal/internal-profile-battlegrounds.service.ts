@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ProfileBgHeroStat } from '@firestone-hs/api-user-profile';
-import { normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { SceneMode, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map, take } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
+import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 
@@ -20,16 +21,27 @@ export class InternalProfileBattlegroundsService {
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly allCards: CardsFacadeService,
 		private readonly localStorage: LocalStorageService,
+		private readonly sceneService: SceneService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
+		await this.sceneService.isReady();
 
+		// Only sync info when going into a BG scene
 		this.bgFullTimeStatsByHero$$.onFirstSubscribe(() => {
-			this.initBattlegrounds();
-			this.initLocalCache();
+			// Don't require premium sub here, as the info is also used elsewhere (on the app's profile)
+			this.sceneService.currentScene$$
+				.pipe(
+					filter((scene) => [SceneMode.BACON, SceneMode.BACON_COLLECTION].includes(scene)),
+					take(1),
+				)
+				.subscribe(() => {
+					this.initBattlegrounds();
+					this.initLocalCache();
+				});
 		});
 	}
 
@@ -90,10 +102,15 @@ export class InternalProfileBattlegroundsService {
 		const bgFullTimeStatsByHero$ = combineLatest([
 			achievementsData$,
 			this.achievementsMonitor.achievementsFromMemory$$,
+			this.sceneService.currentScene$$,
 		]).pipe(
 			filter(
-				([achievementsData, nativeAchievements]) => !!achievementsData?.length && !!nativeAchievements?.length,
+				([achievementsData, nativeAchievements, currentScene]) =>
+					[SceneMode.BACON, SceneMode.BACON_COLLECTION].includes(currentScene) &&
+					!!achievementsData?.length &&
+					!!nativeAchievements?.length,
 			),
+			distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1]),
 			debounceTime(2000),
 			map(([achievementsData, nativeAchievements]) => {
 				return achievementsData.map((data) => {
