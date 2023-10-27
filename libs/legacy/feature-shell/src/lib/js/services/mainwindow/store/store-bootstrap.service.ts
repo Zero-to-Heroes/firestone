@@ -86,86 +86,23 @@ export class StoreBootstrapService {
 		// ==========================
 		// TODO: Ideally, everything after this is handled as deferred subjects
 		// ==========================
-
-		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(
-			windowStateForFtue.battlegrounds,
-			// bgsGlobalStats,
-			// currentBattlegroundsMetaPatch,
-		);
-
-		const newStatsState = this.stats.initState(
-			windowStateForFtue.stats,
-			prefs,
-			// matchStats,
-			//archetypesConfig, archetypesStats
-		);
-		// const currentRankedMetaPatch = patchConfig?.patches
-		// 	? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
-		// 	: null;
-		const decktracker = this.decktrackerStateLoader.buildState(
-			windowStateForFtue.decktracker,
-			// newStatsState,
-			// constructedConfig,
-			// currentRankedMetaPatch,
-			prefs,
-		);
-
-		// Update prefs to remove hidden deck codes that are not in an active deck anymore
-		// const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);
-		// const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter((deckCode) => allDeckCodes.includes(deckCode));
-		// await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
-
+		// const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(windowStateForFtue.battlegrounds);
+		const newStatsState = this.stats.initState(windowStateForFtue.stats, prefs);
+		const decktracker = this.decktrackerStateLoader.buildState(windowStateForFtue.decktracker, prefs);
 		const newAchievementState = windowStateForFtue.achievements.update({
 			filters: AchievementsState.buildFilterOptions(this.i18n),
 		});
-
-		// const currentDuelsMetaPatch = patchConfig?.patches
-		// 	? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
-		// 	: null;
-		const duelsStats: DuelsState = this.duels.initState(
-			windowStateForFtue.duels,
-			// duelsGlobalStats,
-			// duelsRunInfo,
-			// duelsRewardsInfo,
-			// duelsConfig,
-			// duelsLeaderboard,
-			// duelsBucketsData,
-			// collectionState,
-			// adventuresInfo,
-			// currentDuelsMetaPatch,
-		);
-
-		// const currentArenaMetaPatch = patchConfig?.patches
-		// 	? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
-		// 	: null;
-		const arenaState: ArenaState = await this.arena.initState(
-			windowStateForFtue.arena,
-			// currentArenaMetaPatch,
-			// arenaRewards,
-		);
-
-		// FIXME: this causes some issues: partial states are init, data is resquested on these partials states,
-		// which triggers async services. Once these services complete, events are emitted and the current state is
-		// updated.
-		// However, if this happens before this completes, we will override the data retrieved by the services, because
-		// the skeleton state has been created before
-		// So actually we should get rid of this big bootstrap thing, and only handle async store updates
+		const duelsStats: DuelsState = this.duels.initState(windowStateForFtue.duels);
+		const arenaState: ArenaState = await this.arena.initState(windowStateForFtue.arena);
 		const initialWindowState = windowStateForFtue.update({
-			// currentScene: currentScene,
-			// lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
-			// currentUser: currentUser,
 			showFtue: !prefs.ftue.hasSeenGlobalFtue,
-			// replays: replayState,
-			// binder: collectionState,
 			achievements: newAchievementState,
 			decktracker: decktracker,
-			battlegrounds: battlegroundsAppState,
+			// battlegrounds: battlegroundsAppState,
 			duels: duelsStats,
 			arena: arenaState,
 			mercenaries: windowStateForFtue.mercenaries,
-			// socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
-			// patchConfig: patchConfig,
 			initComplete: true,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));

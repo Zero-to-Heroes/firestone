@@ -1,4 +1,3 @@
-import { BattlegroundsCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
@@ -138,19 +137,10 @@ export class NavigationBackProcessor implements Processor {
 			case 'category':
 				return null;
 			case 'list':
-				const currentCategory: BattlegroundsCategory = dataState.battlegrounds?.findCategory(
-					navigationState.navigationBattlegrounds.selectedCategoryId,
-				);
-				// console.log(
-				// 	'currentCategory',
-				// 	currentCategory?.id,
-				// 	navigationState.navigationBattlegrounds.selectedCategoryId,
-				// );
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 						menuDisplayType: 'menu',
 						currentView: 'list',
-						selectedCategoryId: currentCategory?.id,
 					} as NavigationBattlegrounds),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in

@@ -100,7 +100,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				heroStats: heroStats,
 				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
 			})),
-			filter((info) => !info.heroId),
+			filter((info) => !!info.heroId),
 			map((info) => info.heroStats?.find((stat) => stat.id === info.heroId)),
 			distinctUntilChanged(),
 			this.mapData((heroStat) =>

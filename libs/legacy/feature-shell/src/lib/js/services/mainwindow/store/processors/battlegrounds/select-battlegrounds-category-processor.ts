@@ -1,4 +1,3 @@
-import { BattlegroundsCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -12,13 +11,10 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const category: BattlegroundsCategory = currentState.battlegrounds.categories.find(
-			(cat) => cat.id === event.categoryId,
-		);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
 			menuDisplayType: 'menu',
-			selectedCategoryId: category.id,
+			selectedCategoryId: event.categoryId,
 		} as NavigationBattlegrounds);
 		return [
 			null,

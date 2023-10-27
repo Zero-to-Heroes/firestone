@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { Observable, combineLatest } from 'rxjs';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -45,18 +44,12 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionStor
 	}
 
 	ngAfterContentInit(): void {
-		this.replays$ = combineLatest(
+		this.replays$ = combineLatest([
 			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav]) => main.battlegrounds,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			),
-		).pipe(
-			this.mapData(([replays, [battlegrounds, selectedCategoryId]]) => {
-				const category = battlegrounds.findCategory(
-					selectedCategoryId,
-				) as BattlegroundsPersonalStatsHeroDetailsCategory;
-				const heroId = category?.heroId;
+			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId),
+		]).pipe(
+			this.mapData(([replays, [selectedCategoryId]]) => {
+				const heroId = selectedCategoryId?.split('bgs-category-personal-hero-details-')?.[1];
 				return replays
 					.filter((replay) => isBattlegrounds(replay.gameMode))
 					.filter((replay) => replay.playerRank != null)

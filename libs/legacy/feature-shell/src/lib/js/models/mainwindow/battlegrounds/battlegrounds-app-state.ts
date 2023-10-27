@@ -9,7 +9,7 @@ import { BattlegroundsCategory } from './battlegrounds-category';
 import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-state';
 
 export class BattlegroundsAppState {
-	readonly loading: boolean = true;
+	// readonly loading: boolean = true;
 	readonly categories: readonly BattlegroundsCategory[] = [];
 	// Is this really useful apart from getting the tribes and mmr percentiles?
 	// readonly globalStats: BgsStats = new BgsStats();
@@ -25,7 +25,7 @@ export class BattlegroundsAppState {
 	readonly metaHeroStats: BgsHeroStatsV2 = undefined;
 	readonly metaHeroStrategies: BgsHeroStrategies = undefined;
 
-	readonly initComplete: boolean = false;
+	// readonly initComplete: boolean = false;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
@@ -36,9 +36,9 @@ export class BattlegroundsAppState {
 	}
 
 	public getPerfectGames(): readonly GameStat[] {
-		if (!this.initComplete) {
-			return this.perfectGames;
-		}
+		// if (!this.initComplete) {
+		// 	return this.perfectGames;
+		// }
 		if (this.perfectGames === undefined) {
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
 			if (service) {
@@ -51,9 +51,9 @@ export class BattlegroundsAppState {
 
 	public getMetaHeroStats(): BgsHeroStatsV2 {
 		// Hack, see store-bootstrap.service.ts
-		if (!this.initComplete) {
-			return this.metaHeroStats;
-		}
+		// if (!this.initComplete) {
+		// 	return this.metaHeroStats;
+		// }
 		if (this.metaHeroStats === undefined) {
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
 			if (service) {
@@ -65,9 +65,9 @@ export class BattlegroundsAppState {
 	}
 
 	public getMetaHeroStrategies(): BgsHeroStrategies {
-		if (!this.initComplete) {
-			return this.metaHeroStrategies;
-		}
+		// if (!this.initComplete) {
+		// 	return this.metaHeroStrategies;
+		// }
 		if (this.metaHeroStrategies === undefined) {
 			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
 			if (service) {
@@ -76,17 +76,6 @@ export class BattlegroundsAppState {
 			}
 		}
 		return this.metaHeroStrategies;
-	}
-
-	public findCategory(categoryId: string) {
-		const result = this.categories?.find((cat) => cat.id === categoryId);
-		if (result) {
-			return result;
-		}
-		return this.categories
-			?.map((cat) => cat.categories)
-			?.reduce((a, b) => a.concat(b), [])
-			?.find((cat) => cat.findCategory(categoryId));
 	}
 
 	public findReplay(reviewId: string): GameStat {
