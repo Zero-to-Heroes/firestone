@@ -1,9 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { LiveStreamsForceReloadEvent } from '../../../services/mainwindow/store/events/streams/live-streams-force-reload-event';
+import { LiveStreamsService } from '../../../services/mainwindow/live-streams.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -55,18 +62,26 @@ export class LiveStreamsComponent extends AbstractSubscriptionStoreComponent imp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly liveStreamsService: LiveStreamsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.streams$ = this.store
-			.listen$(([main, nav]) => main.streams.getLiveStreamsData())
-			.pipe(this.mapData(([data]) => data?.streams ?? []));
-		this.loading$ = this.streams$.pipe(this.mapData((data) => data == null));
+	async ngAfterContentInit() {
+		await this.liveStreamsService.isReady();
+
+		this.streams$ = this.liveStreamsService.streams$$.pipe(this.mapData((data) => data?.streams));
+		this.loading$ = this.streams$.pipe(
+			tap((info) => console.debug('[live-streams] loading streams', info)),
+			this.mapData((data) => data == null),
+		);
 		// Refresh the stream data every minute while the user is on the page
 		this.interval = setInterval(() => this.refreshStreamsData(), 60 * 1000);
 		this.refreshStreamsData();
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngOnDestroy(): void {
@@ -90,6 +105,6 @@ export class LiveStreamsComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private refreshStreamsData() {
-		this.store.send(new LiveStreamsForceReloadEvent());
+		this.liveStreamsService.reloadLiveStreams();
 	}
 }

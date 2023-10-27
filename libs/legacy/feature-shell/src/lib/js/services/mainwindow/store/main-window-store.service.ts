@@ -194,8 +194,6 @@ import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-upda
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
 import { StoreInitEvent } from './events/store-init-event';
-import { LiveStreamsDataLoadedEvent } from './events/streams/live-streams-data-loaded-event';
-import { LiveStreamsForceReloadEvent } from './events/streams/live-streams-force-reload-event';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
@@ -346,8 +344,6 @@ import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-st
 import { ProfileSelectCategoryEvent, ProfileSelectCategoryProcessor } from './processors/stats/profile-select-category';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
-import { LiveStreamsDataLoadedProcessor } from './processors/sterams/live-streams-data-loaded-processor';
-import { LiveStreamsForceReloadProcessor } from './processors/sterams/live-streams-force-reload-processor';
 import { StoreInitProcessor } from './processors/store-init-processor';
 import { StateHistory } from './state-history';
 import { StoreBootstrapService } from './store-bootstrap.service';
@@ -729,9 +725,6 @@ export class MainWindowStoreService {
 			],
 			[BgsShowStrategiesEvent.eventName(), new BgsShowStrategiesProcessor(this.events, this.cards, this.i18n)],
 
-			// Streams
-			[LiveStreamsDataLoadedEvent.eventName(), new LiveStreamsDataLoadedProcessor()],
-			[LiveStreamsForceReloadEvent.eventName(), new LiveStreamsForceReloadProcessor(this.streamsService)],
 			// Mercenaries
 			[MercenariesModeFilterSelectedEvent.eventName(), new MercenariesModeFilterSelectedProcessor(this.prefs)],
 			[MercenariesRoleFilterSelectedEvent.eventName(), new MercenariesRoleFilterSelectedProcessor(this.prefs)],

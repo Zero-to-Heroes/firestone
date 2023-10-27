@@ -5,7 +5,6 @@ import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BgsMetaHeroStatsService } from './battlegrounds/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './battlegrounds/bgs-meta-hero-strategies.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
-import { LiveStreamsService } from './mainwindow/live-streams.service';
 import { QuestsService } from './quests.service';
 
 // Called from the data model, which lives in the main window (even though it is often accessed from
@@ -19,7 +18,6 @@ export class LazyDataInitService {
 		private readonly bgsMetaHeroStatsStateBuilder: BgsMetaHeroStatsService,
 		private readonly bgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
 		private readonly questsService: QuestsService,
-		private readonly streamsService: LiveStreamsService,
 		private readonly tavernBrawlService: TavernBrawlService,
 	) {}
 
@@ -37,8 +35,6 @@ export class LazyDataInitService {
 				return this.bgsBestStatsService.loadBgsBestUserStats();
 			case 'reference-quests':
 				return this.questsService.loadReferenceQuests();
-			case 'live-streams':
-				return this.streamsService.loadLiveStreams();
 			case 'tavern-brawl-stats':
 				return this.tavernBrawlService.loadStats();
 		}
@@ -54,6 +50,5 @@ export type StateDataType =
 	| 'duels-top-decks'
 	| 'bgs-meta-hero-stats'
 	| 'bgs-meta-hero-strategies'
-	| 'live-streams'
 	| 'tavern-brawl-stats'
 	| 'battlegrounds-perfect-games';
