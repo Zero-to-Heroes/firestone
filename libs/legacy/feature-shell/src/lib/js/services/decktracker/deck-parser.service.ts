@@ -206,6 +206,8 @@ export class DeckParserService {
 	}
 
 	private async init() {
+		await this.scene.isReady();
+
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.SPECTATING) {
 				this.spectating = event.additionalData.spectating;
@@ -257,11 +259,15 @@ export class DeckParserService {
 					this.setCurrentDeck(this.updateDeckFromMemory(activeDeck, null, null));
 				}
 			}
+		});
+
+		console.debug('[deck-parser] scene', this.scene);
+		this.scene.currentScene$$.subscribe(async (scene) => {
 			// Resetting the selectedDeckId if empty means that if a memory update reset occurs while on
 			// the deck selection screen, or simply that another memory update event occurs (which
 			// will have a null selected deck)
 			// Only reset when moving away from the scene where selecting a deck is possible
-			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
+			if (scene !== SceneMode.GAMEPLAY) {
 				if (!!this.selectedDeckId || !!this.currentDeck) {
 					// Don't reset if we're reconnecting
 					const lines: readonly string[] = await this.readAllLogLines();
@@ -273,7 +279,7 @@ export class DeckParserService {
 						// When reconnecting, the sequence of scenes is always the same: LOGIN, then GAMEPLAY
 						// So if we go to through another non-gameplay scene that isn't LOGIN, it means that
 						// we can safely reset
-						changes.CurrentScene !== SceneMode.LOGIN
+						scene !== SceneMode.LOGIN
 					) {
 						this.selectedDeckId = null;
 						// Reset the cached deck, as it should only be used when restarting the match

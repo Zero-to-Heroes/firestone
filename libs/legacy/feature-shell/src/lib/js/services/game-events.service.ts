@@ -8,7 +8,6 @@ import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/co
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
-import { MemoryUpdate } from '../models/memory/memory-update';
 import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
@@ -46,6 +45,8 @@ export class GameEvents {
 	}
 
 	async init() {
+		await this.scene.isReady();
+
 		this.gameStatus.inGame$$
 			.pipe(
 				filter((inGame) => inGame),
@@ -54,21 +55,14 @@ export class GameEvents {
 			.subscribe(async () => {
 				console.log('[game-events] init game events monitor');
 				this.initPlugin();
-				this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-					const changes: MemoryUpdate = event.data[0];
-					if (changes.CurrentScene) {
-						try {
-							console.log('emitting new scene event', changes.CurrentScene);
-							this.gameEventsEmitter.allEvents.next(
-								Object.assign(new GameEvent(), {
-									type: GameEvent.SCENE_CHANGED_MINDVISION,
-									additionalData: { scene: changes.CurrentScene },
-								} as GameEvent),
-							);
-						} catch (e) {
-							console.warn('missing scene enum', changes.CurrentScene);
-						}
-					}
+				this.scene.currentScene$$.subscribe((scene) => {
+					console.log('emitting new scene event', scene);
+					this.gameEventsEmitter.allEvents.next(
+						Object.assign(new GameEvent(), {
+							type: GameEvent.SCENE_CHANGED_MINDVISION,
+							additionalData: { scene: scene },
+						} as GameEvent),
+					);
 				});
 				// this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 				// 	this.gameEventsEmitter.allEvents.next(

@@ -10,9 +10,9 @@ import {
 import { BehaviorSubject, debounceTime, filter, take } from 'rxjs';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { GameStatusService } from '../game-status.service';
+import { SceneService } from '../game/scene.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { sleep } from '../utils';
 
@@ -55,6 +55,7 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 	private events: Events;
 	private localStorageService: LocalStorageService;
 	private gameStatus: GameStatusService;
+	private scene: SceneService;
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		super(windowManager, 'mercenariesMemoryCache', () => !!this.memoryCollectionInfo$$ && !!this.memoryMapInfo$$);
@@ -66,13 +67,14 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 	}
 
 	protected init() {
+		this.memoryCollectionInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesCollectionInfo>(null);
+		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo>(null);
+		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<null>(null);
 		this.memoryService = AppInjector.get(MemoryInspectionService);
 		this.events = AppInjector.get(Events);
 		this.localStorageService = AppInjector.get(LocalStorageService);
 		this.gameStatus = AppInjector.get(GameStatusService);
-		this.memoryCollectionInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesCollectionInfo>(null);
-		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo>(null);
-		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<null>(null);
+		this.scene = AppInjector.get(SceneService);
 
 		this.memoryCollectionInfo$$.onFirstSubscribe(() => {
 			this.internalSubscriber$$.subscribe();
@@ -98,6 +100,8 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 	}
 
 	private async initMemoryUpdateListener() {
+		await this.scene.isReady();
+
 		let processingUpdate = false;
 		this.triggerMemoryReading$$
 			.pipe(
@@ -113,21 +117,17 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 				processingUpdate = false;
 			});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
-			const changes: MemoryUpdate = event.data[0];
-			const newScene = changes.CurrentScene;
-			if (newScene) {
-				if (!this.shouldFetchMercenariesMemoryInfo(newScene)) {
-					this.previousScene = newScene;
-					return;
-				}
-
+		this.scene.currentScene$$.subscribe(async (newScene) => {
+			if (!this.shouldFetchMercenariesMemoryInfo(newScene)) {
 				this.previousScene = newScene;
-				// Because when we get into a new map, the old map info is present in the memory for a short while
-				if (newScene === SceneMode.LETTUCE_MAP) {
-					await sleep(2000);
-					this.triggerMemoryReading$$.next(true);
-				}
+				return;
+			}
+
+			this.previousScene = newScene;
+			// Because when we get into a new map, the old map info is present in the memory for a short while
+			if (newScene === SceneMode.LETTUCE_MAP) {
+				await sleep(2000);
+				this.triggerMemoryReading$$.next(true);
 			}
 		});
 	}

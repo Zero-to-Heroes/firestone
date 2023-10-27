@@ -3,9 +3,9 @@ import { QuestsInfo } from '@firestone-hs/reference-data';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { MemoryUpdate } from '../models/memory/memory-update';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
+import { SceneService } from './game/scene.service';
 import { ActiveQuestsUpdatedEvent } from './mainwindow/store/events/quests/active-quests-updated-event';
 import { ReferenceQuestsLoadedEvent } from './mainwindow/store/events/quests/reference-quests-loaded-event';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
@@ -29,12 +29,14 @@ export class QuestsService {
 		private readonly events: Events,
 		private readonly memory: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
+		private readonly scene: SceneService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
+		await this.scene.isReady();
 
 		// TODO: expose subject via the store, instead of using the common global state
 		combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.enableQuestsWidget)])
@@ -52,16 +54,12 @@ export class QuestsService {
 						map(([[locale], load]) => ({ locale })),
 					)
 					.subscribe(({ locale }) => this.loadReferenceQuests(locale));
-				this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
-					const changes: MemoryUpdate = data.data[0];
+				this.scene.currentScene$$.subscribe(async (scene) => {
 					// Assumption for now is that quests can only be completed during gameplay
 					// Also, quests are not updated live while playing
 					// TODO: doesn't account for rerolls
-					if (changes.CurrentScene) {
-						// this.previousScene = changes.CurrentScene;
-						const activeQuests = await this.memory.getActiveQuests();
-						this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));
-					}
+					const activeQuests = await this.memory.getActiveQuests();
+					this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));
 				});
 			});
 	}
