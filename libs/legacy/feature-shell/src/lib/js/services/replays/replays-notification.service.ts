@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { buildRankText, GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { distinctUntilChanged, filter, map, skip } from 'rxjs';
+import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsShowPostMatchStatsEvent } from '../battlegrounds/store/events/bgs-show-post-match-stats-event';
+import { GameStatusService } from '../game-status.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
@@ -22,20 +23,29 @@ export class ReplaysNotificationService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly gameStats: GameStatsLoaderService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.gameStats.isReady();
-		this.gameStats.gameStats$$
+
+		this.gameStatus.inGame$$
 			.pipe(
-				filter((stats) => !!stats?.stats?.length),
-				map((stats) => stats.stats[0]),
-				distinctUntilChanged((a, b) => a?.reviewId === b?.reviewId),
-				skip(1),
+				filter((inGame) => inGame),
+				take(1),
 			)
-			.subscribe((gameStat) => this.showNewMatchEndNotification(gameStat));
+			.subscribe(() => {
+				this.gameStats.gameStats$$
+					.pipe(
+						filter((stats) => !!stats?.stats?.length),
+						map((stats) => stats.stats[0]),
+						distinctUntilChanged((a, b) => a?.reviewId === b?.reviewId),
+						skip(1),
+					)
+					.subscribe((gameStat) => this.showNewMatchEndNotification(gameStat));
+			});
 	}
 
 	private async showNewMatchEndNotification(gameStat: GameStat) {

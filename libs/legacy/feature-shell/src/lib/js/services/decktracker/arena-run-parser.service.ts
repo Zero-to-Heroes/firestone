@@ -3,11 +3,13 @@ import { Input as ArenaRewards } from '@firestone-hs/api-arena-rewards/dist/sqs-
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { filter, take } from 'rxjs';
 import { ArenaInfo } from '../../models/arena-info';
 import { GameEvent } from '../../models/game-event';
 import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { GameStatusService } from '../game-status.service';
 import { SceneService } from '../game/scene.service';
 import { ArenaRewardsUpdatedEvent } from '../mainwindow/store/events/arena/arena-rewards-updated-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -46,53 +48,66 @@ export class ArenaRunParserService {
 		private api: ApiRunner,
 		private gamesStats: GameStatsLoaderService,
 		private scene: SceneService,
+		private gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.gamesStats.isReady();
-		this.gamesStats.gameStats$$.subscribe((newGameStats) => {
-			this.setLastArenaMatch(newGameStats?.stats);
-		});
 
-		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-			if (event.type === GameEvent.MATCH_METADATA && !event.additionalData.spectating && !this.spectating) {
-				this.currentGameType = event.additionalData.metaData.GameType;
-				this.debug(
-					'retrieved match meta data',
-					this.currentGameType,
-					[GameType.GT_ARENA].includes(this.currentGameType),
-				);
-				if ([GameType.GT_ARENA].includes(this.currentGameType)) {
-					this.handleArenaRunId();
-				}
-			} else if (event.type === GameEvent.SPECTATING) {
-				this.spectating = event.additionalData.spectating;
-			}
-		});
-		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
-			this.debug('Received new review id event', event);
-			const info: ManastormInfo = event.data[0];
-			if (info && info.type === 'new-empty-review') {
-				this.currentReviewId = info.reviewId;
-				this.debug('set reviewId');
-				// this.sendLootInfo();
-			}
-		});
+		this.gameStatus.inGame$$
+			.pipe(
+				filter((inGame) => inGame),
+				take(1),
+			)
+			.subscribe(() => {
+				this.gamesStats.gameStats$$.subscribe((newGameStats) => {
+					this.setLastArenaMatch(newGameStats?.stats);
+				});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-			this.debug('Received memory update', event);
-			const changes: MemoryUpdate = event.data[0];
-			if (changes.ArenaRewards?.length) {
-				this.debug('Handling rewards');
-				this.handleRewards(changes.ArenaRewards);
-			}
-		});
+				this.gameEvents.allEvents.subscribe((event: GameEvent) => {
+					if (
+						event.type === GameEvent.MATCH_METADATA &&
+						!event.additionalData.spectating &&
+						!this.spectating
+					) {
+						this.currentGameType = event.additionalData.metaData.GameType;
+						this.debug(
+							'retrieved match meta data',
+							this.currentGameType,
+							[GameType.GT_ARENA].includes(this.currentGameType),
+						);
+						if ([GameType.GT_ARENA].includes(this.currentGameType)) {
+							this.handleArenaRunId();
+						}
+					} else if (event.type === GameEvent.SPECTATING) {
+						this.spectating = event.additionalData.spectating;
+					}
+				});
+				this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
+					this.debug('Received new review id event', event);
+					const info: ManastormInfo = event.data[0];
+					if (info && info.type === 'new-empty-review') {
+						this.currentReviewId = info.reviewId;
+						this.debug('set reviewId');
+						// this.sendLootInfo();
+					}
+				});
 
-		setTimeout(() => {
-			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		});
+				this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+					this.debug('Received memory update', event);
+					const changes: MemoryUpdate = event.data[0];
+					if (changes.ArenaRewards?.length) {
+						this.debug('Handling rewards');
+						this.handleRewards(changes.ArenaRewards);
+					}
+				});
+
+				setTimeout(() => {
+					this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+				});
+			});
 	}
 
 	private async handleRewards(rewards: readonly Reward[]) {
