@@ -15,22 +15,24 @@ import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 @Component({
 	selector: 'app-bootstrap',
 	styleUrls: [`./app-bootstrap.component.scss`],
-	template: `<ng-container *ngIf="currentWindowName$ | async as currentWindowName">
-		<ng-container [ngSwitch]="currentWindowName">
-			<app-root *ngSwitchCase="'MainWindow'"></app-root>
-			<main-window *ngSwitchCase="'CollectionWindow'"></main-window>
-			<loading *ngSwitchCase="'LoadingWindow'"></loading>
-			<notifications *ngSwitchCase="'NotificationsWindow'"></notifications>
-			<settings *ngSwitchCase="'SettingsWindow'"></settings>
-			<battlegrounds *ngSwitchCase="'BattlegroundsWindow'"></battlegrounds>
-			<out-of-cards-callback *ngSwitchCase="'OutOfCardsAuthWindow'"></out-of-cards-callback>
-			<full-screen-overlays *ngSwitchCase="'FullScreenOverlaysWindow'"></full-screen-overlays>
-			<full-screen-overlays-clickthrough
-				*ngSwitchCase="'FullScreenOverlaysClickthroughWindow'"
-			></full-screen-overlays-clickthrough>
-			<lottery-window *ngSwitchCase="'LotteryWindow'"></lottery-window>
+	template: `
+		<ng-container *ngIf="currentWindowName$ | async as currentWindowName">
+			<ng-container [ngSwitch]="currentWindowName">
+				<app-root *ngSwitchCase="'MainWindow'"></app-root>
+				<main-window *ngSwitchCase="'CollectionWindow'"></main-window>
+				<loading *ngSwitchCase="'LoadingWindow'"></loading>
+				<notifications *ngSwitchCase="'NotificationsWindow'"></notifications>
+				<settings *ngSwitchCase="'SettingsWindow'"></settings>
+				<battlegrounds *ngSwitchCase="'BattlegroundsWindow'"></battlegrounds>
+				<out-of-cards-callback *ngSwitchCase="'OutOfCardsAuthWindow'"></out-of-cards-callback>
+				<full-screen-overlays *ngSwitchCase="'FullScreenOverlaysWindow'"></full-screen-overlays>
+				<full-screen-overlays-clickthrough
+					*ngSwitchCase="'FullScreenOverlaysClickthroughWindow'"
+				></full-screen-overlays-clickthrough>
+				<lottery-window *ngSwitchCase="'LotteryWindow'"></lottery-window>
+			</ng-container>
 		</ng-container>
-	</ng-container>`,
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {

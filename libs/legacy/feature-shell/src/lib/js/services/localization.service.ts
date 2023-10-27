@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { formatClass } from './hs-utils';
-import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
+import { PreferencesService } from './preferences.service';
 import { sleep } from './utils';
 
 @Injectable()
@@ -14,10 +14,10 @@ export class LocalizationService {
 
 	private translate: TranslateService;
 
-	private ready = false;
+	// private ready = false;
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
+		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 	) {}
@@ -25,7 +25,7 @@ export class LocalizationService {
 	// FIXME: should handle all the init logic here (or create a facade?), instead of having it be in app-bootstrap
 	public async initReady() {
 		return new Promise<void>(async (resolve) => {
-			while (!this.ready || !this.translate || !this.translate.store?.langs?.length) {
+			while (!this.translate || !this.translate.store?.langs?.length) {
 				await sleep(100);
 			}
 
@@ -33,24 +33,29 @@ export class LocalizationService {
 		});
 	}
 
-	public setReady(value: boolean) {
-		this.ready = value;
-	}
+	// public setReady(value: boolean) {
+	// 	this.ready = value;
+	// }
 
-	public async start() {
-		await this.store.initComplete();
-		this.translate = this.ow.getMainWindow().translateService;
-		this.store
-			.listen$(([main, nav, prefs]) => prefs?.locale)
-			.pipe(map(([pref]) => pref))
+	public async start(translateService: TranslateService) {
+		this.translate = translateService;
+		window['localizationService'] = this;
+
+		console.log('[localization] store is ready, starting localization service pref updates init');
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs?.locale),
+				distinctUntilChanged(),
+			)
 			.subscribe((pref) => this.setLocale(pref));
-		this.store
-			.listen$(([main, nav, prefs]) => prefs.collectionUseHighResImages)
-			.pipe(map(([pref]) => pref))
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs?.collectionUseHighResImages),
+				distinctUntilChanged(),
+			)
 			.subscribe((pref) => {
 				this.useHighResImages = pref;
 			});
-		window['localizationService'] = this;
 	}
 
 	public getTranslateService(): TranslateService {

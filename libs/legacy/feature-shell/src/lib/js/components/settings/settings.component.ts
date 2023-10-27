@@ -11,48 +11,55 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
 	selector: 'settings',
 	styleUrls: [`../../../css/component/settings/settings.component.scss`],
 	template: `
-		<window-wrapper [activeTheme]="'general'">
-			<section class="title-bar">
-				<div class="title" [owTranslate]="'settings.title'"></div>
-				<div class="controls">
-					<control-close [windowId]="thisWindowId" [shouldHide]="true"></control-close>
-				</div>
-			</section>
-			<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
-			</settings-app-selection>
-			<ng-container [ngSwitch]="selectedApp">
-				<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
-				<settings-achievements
-					*ngSwitchCase="'achievements'"
-					[selectedMenu]="selectedMenu"
-				></settings-achievements>
-				<settings-collection *ngSwitchCase="'collection'" [selectedMenu]="selectedMenu"></settings-collection>
-				<settings-decktracker
-					*ngSwitchCase="'decktracker'"
-					[selectedMenu]="selectedMenu"
-				></settings-decktracker>
-				<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
-				<settings-battlegrounds
-					*ngSwitchCase="'battlegrounds'"
-					[selectedMenu]="selectedMenu"
-				></settings-battlegrounds>
-				<settings-mercenaries
-					*ngSwitchCase="'mercenaries'"
-					[selectedMenu]="selectedMenu"
-				></settings-mercenaries>
-			</ng-container>
-			<settings-advanced-toggle></settings-advanced-toggle>
-			<settings-modal></settings-modal>
-		</window-wrapper>
+		<ng-container *ngIf="initReady">
+			<window-wrapper [activeTheme]="'general'">
+				<section class="title-bar">
+					<div class="title" [owTranslate]="'settings.title'"></div>
+					<div class="controls">
+						<control-close [windowId]="thisWindowId" [shouldHide]="true"></control-close>
+					</div>
+				</section>
+				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
+				</settings-app-selection>
+				<ng-container [ngSwitch]="selectedApp">
+					<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
+					<settings-achievements
+						*ngSwitchCase="'achievements'"
+						[selectedMenu]="selectedMenu"
+					></settings-achievements>
+					<settings-collection
+						*ngSwitchCase="'collection'"
+						[selectedMenu]="selectedMenu"
+					></settings-collection>
+					<settings-decktracker
+						*ngSwitchCase="'decktracker'"
+						[selectedMenu]="selectedMenu"
+					></settings-decktracker>
+					<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
+					<settings-battlegrounds
+						*ngSwitchCase="'battlegrounds'"
+						[selectedMenu]="selectedMenu"
+					></settings-battlegrounds>
+					<settings-mercenaries
+						*ngSwitchCase="'mercenaries'"
+						[selectedMenu]="selectedMenu"
+					></settings-mercenaries>
+				</ng-container>
+				<settings-advanced-toggle></settings-advanced-toggle>
+				<settings-modal></settings-modal>
+			</window-wrapper>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements AfterViewInit, OnDestroy {
+	initReady = true;
 	thisWindowId: string;
 	selectedApp = 'general';
 	selectedMenu: string;
@@ -61,7 +68,22 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private settingsSubscription: Subscription;
 
-	constructor(private debugService: DebugService, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private debugService: DebugService,
+		private ow: OverwolfService,
+		private cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
+		// this.init();
+	}
+
+	// private async init() {
+	// 	await this.i18n.init();
+	// 	this.initReady = true;
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
 	async ngAfterViewInit() {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;

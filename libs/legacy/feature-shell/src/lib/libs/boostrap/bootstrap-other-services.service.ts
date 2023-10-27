@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
@@ -25,14 +24,12 @@ import { GameModeDataService } from '../../js/services/game-mode-data.service';
 import { GameStatusService } from '../../js/services/game-status.service';
 import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
-import { LocalizationService } from '../../js/services/localization.service';
 import { LogRegisterService } from '../../js/services/log-register.service';
 import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
 import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
-import { PreferencesService } from '../../js/services/preferences.service';
 import { QuestsService } from '../../js/services/quests.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
 import { ReviewIdService } from '../../js/services/review-id.service';
@@ -88,9 +85,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_DuelsDecksProviderService: DuelsDecksProviderService,
 		private readonly init_MailsService: MailsService,
 		private readonly init_TavernBrawlService: TavernBrawlService,
-		private readonly init_LocalizationService: LocalizationService,
-		private readonly prefs: PreferencesService,
-		private readonly translate: TranslateService,
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
 		private readonly init_HearthArenaAnalyticsService: HearthArenaAnalyticsService,
@@ -100,20 +94,7 @@ export class BootstrapOtherServicesService {
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
-		window['translateService'] = this.translate;
-		await this.initLocalization();
 		this.modsBootstrap.init();
 		this.modsManager.init();
-	}
-
-	private async initLocalization() {
-		this.init_LocalizationService.start();
-		// this language will be used as a fallback when a translation isn't found in the current language
-		this.translate.setDefaultLang('enUS');
-		// Load the locales first, otherwise some windows will be displayed with missing text
-		const prefs = await this.prefs.getPreferences();
-		await this.translate.use(prefs.locale).toPromise();
-		this.init_LocalizationService.setReady(true);
-		await this.init_LocalizationService.initReady();
 	}
 }

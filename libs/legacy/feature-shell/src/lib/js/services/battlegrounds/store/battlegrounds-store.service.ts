@@ -4,7 +4,7 @@ import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parser
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -219,16 +219,24 @@ export class BattlegroundsStoreService {
 		deckEventBus.subscribe((event) => {
 			this.deckState = event?.state as GameState;
 		});
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		preferencesEventBus.subscribe((event) => {
-			if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
+
+		await this.prefs.isReady();
+		this.prefs.preferences$$
+			.pipe(
+				distinctUntilChanged(
+					(a, b) =>
+						a.twitchAccessToken === b.twitchAccessToken &&
+						a.twitchLoginName === b.twitchLoginName &&
+						a.twitchUserName === b.twitchUserName,
+				),
+			)
+			.subscribe((prefs) => {
 				console.log('[bgs-store] rebuilding event emitters');
 				this.buildEventEmitters();
-				return;
-			}
-			if (event?.preferences) {
-				this.handleDisplayPreferences(event.preferences);
-			}
+			});
+		this.prefs.preferences$$.subscribe((prefs) => {
+			console.debug('[bgs-store] prefs updated', prefs);
+			this.handleDisplayPreferences(prefs);
 		});
 	}
 

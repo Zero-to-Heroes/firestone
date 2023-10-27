@@ -72,7 +72,7 @@ export class BootstrapStoreServicesService {
 	}
 
 	private async initStore() {
-		this.store.start();
+		await this.store.start();
 		await this.store.initComplete();
 	}
 }

@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsAccessService } from '@firestone/battlegrounds/data-access';
 import { DiskCacheService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, skipWhile } from 'rxjs';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class BgsMetaHeroStatsService {
-	private requestLoad$$ = new BehaviorSubject<boolean>(true);
+	private requestLoad$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		private readonly diskCache: DiskCacheService,
@@ -19,7 +19,6 @@ export class BgsMetaHeroStatsService {
 	}
 
 	private init() {
-		console.log('[bgs-meta-hero] init');
 		combineLatest([
 			this.store.listenPrefs$(
 				(prefs) => prefs.bgsActiveTimeFilter,
@@ -28,7 +27,10 @@ export class BgsMetaHeroStatsService {
 			),
 			this.requestLoad$$,
 		])
-			.pipe(distinctUntilChanged())
+			.pipe(
+				skipWhile(([[timeFilter, mmrFilter, useMmrFilter], requestLoad]) => !requestLoad),
+				distinctUntilChanged(),
+			)
 			.subscribe(async ([[timeFilter, mmrFilter, useMmrFilter], requestLoad]) => {
 				console.debug('[bgs-meta-hero] loading meta hero stats', timeFilter, mmrFilter, useMmrFilter);
 				this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(null));

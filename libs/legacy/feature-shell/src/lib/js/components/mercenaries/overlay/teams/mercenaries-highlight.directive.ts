@@ -9,10 +9,9 @@ import {
 	OnDestroy,
 	Renderer2,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Preferences } from '../../../../models/preferences';
 import {
 	HighlightSelector,
@@ -50,15 +49,12 @@ export class MercenariesHighlightDirective
 
 	ngAfterContentInit() {
 		this.subscription$$ = this.store
-			.listenMercenariesHighlights$(
-				([selector, prefs]) =>
-					[selector, prefs] as [HighlightSelector, { name: string; preferences: Preferences }],
-			)
+			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
 			.pipe(
 				filter(([[selector, prefs]]) => !!selector && !!prefs),
 				map(
 					([[selector, prefs]]) =>
-						prefs.preferences.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
+						prefs.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
 				),
 				distinctUntilChanged(),
 				takeUntil(this.destroyed$),

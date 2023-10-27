@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
@@ -10,8 +10,13 @@ import {
 	DuelsTreasureStatTypeFilterType,
 } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType } from '@firestone/duels/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { BehaviorSubject, sampleTime } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -29,46 +34,55 @@ import {
 	MercenariesStarterFilterType,
 } from '../models/mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from '../models/mercenaries/personal-heroes-sort-criteria.type';
-import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
+import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericStorageService } from './generic-storage.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
-import { capitalizeFirstLetter, deepEqual } from './utils';
+import { capitalizeFirstLetter } from './utils';
 
 @Injectable()
-export class PreferencesService {
+export class PreferencesService extends AbstractFacadeService<PreferencesService> {
 	public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';
 	public static readonly DECKTRACKER_MATCH_OVERLAY_DISPLAY = 'DECKTRACKER_MATCH_OVERLAY_DISPLAY';
 	public static readonly DECKTRACKER_OVERLAY_SIZE = 'DECKTRACKER_OVERLAY_SIZE';
 	public static readonly TWITCH_CONNECTION_STATUS = 'TWITCH_CONNECTION_STATUS';
 
-	public preferences$$ = new BehaviorSubject<Preferences>(new Preferences());
+	public preferences$$: BehaviorSubject<Preferences>;
 
-	constructor(
-		private readonly storage: GenericStorageService,
-		@Optional() private readonly ow: OverwolfService, // private readonly api: ApiRunner,
-	) {
-		if (this.ow) {
-			this.setup();
-		}
+	private storage: GenericStorageService;
+	private ow: OverwolfService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'preferencesService', () => !!this.preferences$$);
 	}
 
-	private async setup() {
-		window['preferencesEventBus'] = this.preferences$$;
-		const currentWindow = await this.ow?.getCurrentWindow();
-		if (currentWindow?.name !== OverwolfService.MAIN_WINDOW) {
-			window['preferencesEventBus'] = null;
-		}
+	protected override assignSubjects() {
+		this.preferences$$ = this.mainInstance.preferences$$;
 	}
 
-	public init() {
-		if (this.ow) {
-			this.startPrefsSync();
-		}
+	protected async init() {
+		this.storage = AppInjector.get(GenericStorageService);
+		this.ow = AppInjector.get(OverwolfService);
+		this.preferences$$ = new BehaviorSubject<Preferences>(this.storage.getUserPreferences());
+
+		this.preferences$$.pipe(sampleTime(1500)).subscribe((prefs) => this.storage.saveUserPreferences(prefs));
 	}
 
-	public getPreferences(): Promise<Preferences> {
-		return this.storage.getUserPreferences();
+	public async getPreferences(): Promise<Preferences> {
+		await this.isReady();
+		return this.preferences$$.getValue();
+		// this.storage.getUserPreferences();
+	}
+
+	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
+		const finalPrefs = {
+			...userPrefs,
+			lastUpdateDate: new Date(),
+		};
+		// await this.storage.saveUserPreferences(finalPrefs);
+
+		this.preferences$$.next(finalPrefs);
+		return finalPrefs;
 	}
 
 	public async reset() {
@@ -612,21 +626,6 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
-	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
-		const finalPrefs = {
-			...userPrefs,
-			lastUpdateDate: new Date(),
-		};
-		await this.storage.saveUserPreferences(finalPrefs);
-
-		const eventBus: EventEmitter<any> = this.ow?.getMainWindow().preferencesEventBus;
-		eventBus?.next({
-			name: eventName,
-			preferences: finalPrefs,
-		});
-		return finalPrefs;
-	}
-
 	public async updateRemotePreferences() {
 		// if (!this.ow) {
 		// 	return;
@@ -674,39 +673,4 @@ export class PreferencesService {
 
 	private currentSyncDate: Date;
 	private lastSyncPrefs: Preferences;
-
-	private startPrefsSync() {
-		// console.warn('prefs are not synced for now');
-		return;
-		setInterval(async () => {
-			const userPrefs = await this.getPreferences();
-			if (
-				!!userPrefs.lastUpdateDate &&
-				(!this.currentSyncDate || userPrefs.lastUpdateDate.getTime() > this.currentSyncDate.getTime())
-			) {
-				const userPrefsLocal = new Preferences();
-				for (const prop in userPrefs) {
-					const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, userPrefsLocal, prop);
-					if (!meta && userPrefsLocal.hasOwnProperty(prop)) {
-						userPrefsLocal[prop] = userPrefs[prop];
-					}
-				}
-
-				const remotePrefsLocal = new Preferences();
-				for (const prop in this.lastSyncPrefs) {
-					const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, remotePrefsLocal, prop);
-					if (!meta && remotePrefsLocal.hasOwnProperty(prop)) {
-						remotePrefsLocal[prop] = this.lastSyncPrefs[prop];
-					}
-				}
-
-				if (!deepEqual(userPrefsLocal, remotePrefsLocal)) {
-					console.log('[preferences] updating remote prefs');
-					this.lastSyncPrefs = userPrefs;
-					this.currentSyncDate = userPrefs.lastUpdateDate;
-					await this.updateRemotePreferences();
-				}
-			}
-		}, 5 * 60 * 1000);
-	}
 }

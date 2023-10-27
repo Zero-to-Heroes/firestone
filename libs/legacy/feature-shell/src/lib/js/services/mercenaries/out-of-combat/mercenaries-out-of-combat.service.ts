@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../../models/preferences';
 import { BroadcastEvent, Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
+import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
@@ -20,9 +19,9 @@ export class MercenariesOutOfCombatService {
 
 	private internalStore$ = new BehaviorSubject<MercenariesOutOfCombatState>(new MercenariesOutOfCombatState());
 
-	private preferences$: Observable<Preferences>;
+	// private preferences$: Observable<Preferences>;
 	private events$: Observable<BroadcastEvent>;
-	private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
+	// private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
 
 	private parsers: { [eventType: string]: readonly MercenariesOutOfCombatParser[] };
 	private eventEmitters: ((state: MercenariesOutOfCombatState) => void)[] = [];
@@ -34,6 +33,7 @@ export class MercenariesOutOfCombatService {
 		private readonly ow: OverwolfService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly scene: SceneService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 		window['mercenariesOutOfCombatStore'] = this.store$;
@@ -78,13 +78,11 @@ export class MercenariesOutOfCombatService {
 		// So that we're sure that all services have been initialized
 		await this.store.initComplete();
 		await this.scene.isReady();
+		await this.prefs.isReady();
 
-		this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
-			.asObservable()
-			.pipe(map((theEvent) => theEvent.preferences as Preferences));
-		this.mainWindowState$ = (
-			this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<[MainWindowState, NavigationState]>
-		).asObservable();
+		// this.mainWindowState$ = (
+		// 	this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<[MainWindowState, NavigationState]>
+		// ).asObservable();
 		this.events$ = this.events.on(Events.MEMORY_UPDATE);
 
 		combineLatest([this.events$, this.scene.currentScene$$])
@@ -94,7 +92,7 @@ export class MercenariesOutOfCombatService {
 				concatMap(async ([event, currentScene]) => await this.processEvent(event, currentScene)),
 			)
 			.subscribe();
-		combineLatest(this.preferences$, this.internalStore$.asObservable(), this.scene.currentScene$$)
+		combineLatest(this.prefs.preferences$$, this.internalStore$.asObservable(), this.scene.currentScene$$)
 			.pipe(
 				concatMap(
 					async ([prefs, newState, currentScene]) => await this.emitState(newState, currentScene, prefs),

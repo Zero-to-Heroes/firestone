@@ -3,7 +3,6 @@ import { generateToken } from '@components/third-party/out-of-cards-callback.com
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../../js/models/preferences';
-import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { FirestoneAchievementsChallengeService } from '../../js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
@@ -32,8 +31,7 @@ export class AppStartupService {
 		private readonly store: MainWindowStoreService,
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
-		private readonly achievementsLoader: RawAchievementsLoaderService,
-		private readonly firestoneChallenges: FirestoneAchievementsChallengeService,
+		private readonly initFirestoneChallenges: FirestoneAchievementsChallengeService,
 		private readonly prefs: PreferencesService,
 		private readonly twitchAuth: TwitchAuthService,
 		private readonly oocAuth: OutOfCardsService,
@@ -137,8 +135,6 @@ export class AppStartupService {
 		const settingsWindow = await this.ow.getSettingsWindow(prefs);
 		await this.ow.hideWindow(settingsWindow.id);
 		setTimeout(() => this.addAnalytics());
-
-		this.prefs.init();
 	}
 
 	private async reloadWindows() {

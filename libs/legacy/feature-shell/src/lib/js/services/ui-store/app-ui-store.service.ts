@@ -73,6 +73,7 @@ import { CollectionBootstrapService } from '../mainwindow/store/collection-boots
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { PatchesConfigService } from '../patches-config.service';
+import { PreferencesService } from '../preferences.service';
 import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual, sleep } from '../utils';
@@ -84,15 +85,9 @@ export type GameStateSelector<T> = (gameState: GameState) => T;
 export type ModsConfigSelector<T> = (conf: ModsConfig) => T;
 export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
 export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
-export type MercenariesStateSelector<T> = (
-	state: [MercenariesBattleState, { name: string; preferences: Preferences }?],
-) => T;
-export type MercenariesOutOfCombatStateSelector<T> = (
-	state: [MercenariesOutOfCombatState, { name: string; preferences: Preferences }?],
-) => T;
-export type MercenariesHighlightsSelector<T> = (
-	state: [HighlightSelector, { name: string; preferences: Preferences }?],
-) => T;
+export type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
+export type MercenariesOutOfCombatStateSelector<T> = (state: [MercenariesOutOfCombatState, Preferences?]) => T;
+export type MercenariesHighlightsSelector<T> = (state: [HighlightSelector, Preferences?]) => T;
 
 @Injectable()
 export class AppUiStoreService extends Store<Preferences> {
@@ -100,7 +95,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private gameNativeState: BehaviorSubject<GameNativeState>;
-	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
+	private prefs: BehaviorSubject<Preferences>;
 	private deckStore: BehaviorSubject<{ state: GameState }>;
 	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
 	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
@@ -154,6 +149,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly allCards: CardsFacadeService,
 		private readonly ads: AdService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly prefsService: PreferencesService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -161,9 +157,11 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	// WARNING: All services used here should be called in BootstrapStoreServicesService to make sure they are booted up
 	// This is called after all constructors have been called, so everything should be filled
-	public start() {
+	public async start() {
+		await this.prefsService.isReady();
+
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
-		this.prefs = this.ow.getMainWindow().preferencesEventBus;
+		this.prefs = this.prefsService.preferences$$;
 		this.modsConfig = this.ow.getMainWindow().modsConfig;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
 		this.gameNativeState = this.ow.getMainWindow().gameNativeStateStore;
@@ -197,8 +195,8 @@ export class AppUiStoreService extends Store<Preferences> {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return combineLatest([this.mainStore, this.prefs]).pipe(
-			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs?.preferences),
-			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
+			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs),
+			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
@@ -208,8 +206,8 @@ export class AppUiStoreService extends Store<Preferences> {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
 		return this.prefs.pipe(
-			filter((prefs) => !!prefs?.preferences),
-			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
+			filter((prefs) => !!prefs),
+			map((prefs) => selectors.map((selector) => selector(prefs))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
@@ -251,8 +249,8 @@ export class AppUiStoreService extends Store<Preferences> {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
 		const result = combineLatest([this.battlegroundsStore, this.prefs]).pipe(
-			filter(([state, prefs]) => !!state && !!prefs?.preferences),
-			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
+			filter(([state, prefs]) => !!state && !!prefs),
+			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
@@ -263,7 +261,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
 		return combineLatest([this.mercenariesStore, this.prefs]).pipe(
-			filter(([state, prefs]) => !!prefs?.preferences),
+			filter(([state, prefs]) => !!prefs),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
@@ -274,7 +272,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }> {
 		return combineLatest([this.mercenariesOutOfCombatStore, this.prefs]).pipe(
-			filter(([state, prefs]) => !!state && !!prefs?.preferences),
+			filter(([state, prefs]) => !!state && !!prefs),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
@@ -285,7 +283,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
 		return combineLatest([this.mercenariesSynergiesStore, this.prefs]).pipe(
-			filter(([highlights, prefs]) => !!prefs?.preferences),
+			filter(([highlights, prefs]) => !!prefs),
 			map(([highlights, prefs]) => selectors.map((selector) => selector([highlights, prefs]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
