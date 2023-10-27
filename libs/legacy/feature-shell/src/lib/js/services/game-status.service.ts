@@ -1,35 +1,36 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
-export class GameStatusService {
-	public inGame$$ = new BehaviorSubject<boolean>(false);
+export class GameStatusService extends AbstractFacadeService<GameStatusService> {
+	public inGame$$: BehaviorSubject<boolean>;
 
 	private startListeners = [];
 	private exitListeners = [];
 
-	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
-		this.init();
+	private ow: OverwolfService;
+	private prefs: PreferencesService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'gameStatus', () => !!this.inGame$$);
 	}
 
-	public async onGameStart(callback) {
-		this.startListeners.push(callback);
-		if (await this.inGame()) {
-			callback();
-		}
+	protected override assignSubjects() {
+		this.inGame$$ = this.mainInstance.inGame$$;
 	}
 
-	public onGameExit(callback) {
-		this.exitListeners.push(callback);
-	}
+	protected async init() {
+		this.inGame$$ = new BehaviorSubject<boolean>(false);
+		this.ow = AppInjector.get(OverwolfService);
+		this.prefs = AppInjector.get(PreferencesService);
 
-	public async inGame(): Promise<boolean> {
-		return this.ow.inGame();
-	}
-
-	private async init() {
 		this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (this.ow.exitGame(res)) {
 				this.inGame$$.next(false);
@@ -48,6 +49,21 @@ export class GameStatusService {
 		if (await this.ow.inGame()) {
 			this.inGame$$.next(true);
 		}
+	}
+
+	public async onGameStart(callback) {
+		this.startListeners.push(callback);
+		if (await this.inGame()) {
+			callback();
+		}
+	}
+
+	public onGameExit(callback) {
+		this.exitListeners.push(callback);
+	}
+
+	public async inGame(): Promise<boolean> {
+		return this.ow.inGame();
 	}
 
 	private async updateExecutionPathInPrefs(executionPath: string) {
