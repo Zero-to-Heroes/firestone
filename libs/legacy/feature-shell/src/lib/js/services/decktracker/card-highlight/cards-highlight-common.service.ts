@@ -1429,6 +1429,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion, or(beast, dragon, murloc));
 			case CardIds.TheFistOfRaDen:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.TheGardensGrace:
+				return and(side(inputSide), or(inDeck, inHand), spell, holy);
 			case CardIds.ThePurator:
 				return and(side(inputSide), inDeck, minion, not(tribeless));
 			case CardIds.TheStonewright:
