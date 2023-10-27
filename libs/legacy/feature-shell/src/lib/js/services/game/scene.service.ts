@@ -47,6 +47,8 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		}
 
 		this.currentScene$$.next(scene);
-		this.lastNonGamePlayScene$$.next(scene === SceneMode.GAMEPLAY ? null : scene);
+		if (scene !== SceneMode.GAMEPLAY) {
+			this.lastNonGamePlayScene$$.next(scene);
+		}
 	}
 }
