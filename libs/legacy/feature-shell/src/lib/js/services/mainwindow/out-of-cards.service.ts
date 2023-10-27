@@ -21,10 +21,6 @@ export class OutOfCardsService {
 		private readonly i18n: LocalizationFacadeService,
 		// These are not needed for generating tokens
 		private allCards: CardsFacadeService,
-		// @Optional() private memory: MemoryInspectionService,
-		// @Optional() private events: Events,
-		// @Optional() private ow: OverwolfService,
-		// @Optional() private gameEvents: GameEventsEmitterService,
 		private notifs: OwNotificationsService,
 		private collectionManager: CollectionManager,
 		private readonly store: AppUiStoreFacadeService,
@@ -37,7 +33,7 @@ export class OutOfCardsService {
 	private init() {
 		combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.outOfCardsToken)])
 			.pipe(
-				filter(([inGame, token]) => inGame && !!token?.length),
+				filter(([inGame, [token]]) => inGame && !!token?.access_token?.length),
 				take(1),
 			)
 			.subscribe(() => {
@@ -50,11 +46,9 @@ export class OutOfCardsService {
 	}
 
 	private async initCollectionListener() {
-		if (this.collectionManager) {
-			this.collectionManager.collection$$.subscribe((collection) => {
-				this.uploadCollection(collection);
-			});
-		}
+		this.collectionManager.collection$$.subscribe((collection) => {
+			this.uploadCollection(collection);
+		});
 		console.log('[ooc-auth] handler init done');
 	}
 
