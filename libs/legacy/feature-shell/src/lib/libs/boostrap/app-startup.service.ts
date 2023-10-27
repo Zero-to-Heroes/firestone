@@ -98,7 +98,7 @@ export class AppStartupService {
 		const prefs = await this.prefs.getPreferences();
 		await this.ow.hideCollectionWindow(prefs);
 
-		this.store.stateUpdater.next(new CloseMainWindowEvent());
+		// this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
 		// TOOD: move this elsewhere
 		this.ow.addAppLaunchTriggeredListener(async (info) => {
