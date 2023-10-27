@@ -1525,12 +1525,13 @@ export class GameEvents {
 		if (existingLine.indexOf('tag=PLAYSTATE value=WON') !== -1) {
 			console.log('[game-events] [existing] received tag=PLAYSTATE value=WON log', existingLine);
 		}
+		this.existingLogLines.push(existingLine);
+
 		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1 || existingLine.includes('End Spectator Mode')) {
 			// Complete game, we don't handle it
 			console.log('[game-events] [existing] complete game, trashing all logs');
 			this.existingLogLines = [];
 		}
-		this.existingLogLines.push(existingLine);
 	}
 
 	private async triggerCatchUp() {
@@ -1562,6 +1563,7 @@ export class GameEvents {
 			return;
 		}
 		console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
+		// console.debug('[game-events] [existing] all events to enqueue', this.existingLogLines);
 
 		if (this.existingLogLines.length > 0) {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
