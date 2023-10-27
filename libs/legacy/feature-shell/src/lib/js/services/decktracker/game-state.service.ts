@@ -10,7 +10,7 @@ import { ReconnectStartParser } from '@services/decktracker/event-parser/reconne
 import { ShuffleDeckParser } from '@services/decktracker/event-parser/shuffle-deck-parser';
 import { SpecialCardPowerTriggeredParser } from '@services/decktracker/event-parser/special-card-power-triggered-parser';
 import { SphereOfSapienceParser } from '@services/decktracker/event-parser/special-cases/sphere-of-sapience-parser';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
@@ -185,35 +185,43 @@ export class GameStateService {
 		private readonly attackOnBoardService: AttackOnBoardService,
 		private readonly duelsRunService: DuelsDecksProviderService,
 	) {
-		this.eventParsers = this.buildEventParsers();
-		this.registerGameEvents();
-		this.buildEventEmitters();
+		this.init();
+	}
+
+	private async init() {
+		window['deckEventBus'] = this.deckEventBus;
+		window['deckUpdater'] = this.deckUpdater;
 		if (!this.ow) {
 			console.warn('[game-state] Could not find OW service');
 			return;
 		}
-		window['deckEventBus'] = this.deckEventBus;
-		window['deckUpdater'] = this.deckUpdater;
-		setTimeout(() => {
-			const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-			preferencesEventBus.subscribe(async (event) => {
-				if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-					this.buildEventEmitters();
-					return;
-				}
+
+		this.eventParsers = this.buildEventParsers();
+		this.registerGameEvents();
+		this.buildEventEmitters();
+
+		await this.prefs.isReady();
+		this.prefs.preferences$$
+			.pipe(
+				distinctUntilChanged(
+					(a, b) =>
+						a.twitchAccessToken === b.twitchAccessToken &&
+						a.twitchLoginName === b.twitchLoginName &&
+						a.twitchUserName === b.twitchUserName,
+				),
+			)
+			.subscribe(async (prefs) => {
+				this.buildEventEmitters();
 			});
-			this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
-				this.processingQueue.enqueue(event);
-			});
-			const decktrackerDisplayEventBus: BehaviorSubject<boolean> =
-				this.ow.getMainWindow().decktrackerDisplayEventBus;
-			decktrackerDisplayEventBus.subscribe((event) => {
-				if (this.showDecktrackerFromGameMode === event) {
-					return;
-				}
-				this.showDecktrackerFromGameMode = event;
-			});
-			this.i18n.init();
+		this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
+			this.processingQueue.enqueue(event);
+		});
+		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		decktrackerDisplayEventBus.subscribe((event) => {
+			if (this.showDecktrackerFromGameMode === event) {
+				return;
+			}
+			this.showDecktrackerFromGameMode = event;
 		});
 
 		if (process.env.NODE_ENV !== 'production') {
@@ -259,8 +267,9 @@ export class GameStateService {
 			.subscribe((event) =>
 				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
 			);
+
 		// Reset the deck if it exists
-		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
+		// this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
@@ -416,7 +425,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
