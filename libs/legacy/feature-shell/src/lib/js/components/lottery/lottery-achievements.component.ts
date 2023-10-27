@@ -16,24 +16,32 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 		'../../../css/component/lottery/lottery-achievements.component.scss',
 	],
 	template: `
-		<div class="main-content">
-			<ng-container *ngIf="inGame$ | async; else notInGame">
-				<div class="achievements" *ngIf="achievements$ | async as achievements; else emptyState">
-					<lottery-achievement
-						*ngFor="let achievement of achievements; trackBy: trackByFn"
-						class="achievement"
-						[achievement]="achievement"
-					></lottery-achievement>
-					<div class="button-container">
-						<button
-							class="button"
-							[owTranslate]="'app.lottery.achievements-reset-button'"
-							[helpTooltip]="'app.lottery.achievements-reset-button-tooltip' | owTranslate"
-							[helpTooltipClasses]="'general-theme'"
-							(click)="resetAchievements()"
-						></button>
+		<div
+			class="main-content"
+			*ngIf="{
+				inGame: inGame$ | async,
+				achievements: achievements$ | async
+			} as value"
+		>
+			<ng-container *ngIf="value.achievements?.length || value.inGame; else notInGame">
+				<ng-container *ngIf="value.achievements?.length; else emptyState">
+					<div class="achievements">
+						<lottery-achievement
+							*ngFor="let achievement of value.achievements; trackBy: trackByFn"
+							class="achievement"
+							[achievement]="achievement"
+						></lottery-achievement>
+						<div class="button-container">
+							<button
+								class="button"
+								[owTranslate]="'app.lottery.achievements-reset-button'"
+								[helpTooltip]="'app.lottery.achievements-reset-button-tooltip' | owTranslate"
+								[helpTooltipClasses]="'general-theme'"
+								(click)="resetAchievements()"
+							></button>
+						</div>
 					</div>
-				</div>
+				</ng-container>
 			</ng-container>
 			<ng-template #emptyState>
 				<div class="empty-state" [owTranslate]="'app.lottery.achievements-empty-state'"></div>

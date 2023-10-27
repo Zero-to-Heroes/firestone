@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, skipWhile, take, tap } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { GameStatusService } from '../game-status.service';
@@ -38,17 +38,20 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 	) {
-		this.init();
 		window['achievementsMonitor'] = this;
+		this.init();
 	}
 
-	private async init() {
-		await this.store.initComplete();
-
+	private init() {
 		this.achievementsProgressTracking$$.onFirstSubscribe(async () => {
+			console.debug('[achievements-live-progress-tracking] init');
+			await this.store.initComplete();
+
 			combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.showLottery)])
 				.pipe(
+					tap((info) => console.debug('[achievements-live-progress-tracking] will track?', info)),
 					filter(([inGame, [showLottery]]) => inGame && showLottery),
+					tap((info) => console.debug('[achievements-live-progress-tracking] will track 2', info)),
 					take(1),
 				)
 				.subscribe(async () => {
@@ -68,11 +71,12 @@ export class AchievementsLiveProgressTrackingService {
 					])
 						.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
 						.subscribe(async ([[pinnedAchievementIds], achievementsOnGameStart]) => {
-							console.debug(
-								'[achievements-monitor] pinnedAchievementIds',
-								pinnedAchievementIds,
-								achievementsOnGameStart,
-							);
+							// console.debug(
+							// 	'[achievements-live-progress-tracking] pinnedAchievementIds',
+							// 	pinnedAchievementIds,
+							// 	achievementsOnGameStart,
+							// 	this.refAchievements,
+							// );
 							const mappedAchiements: readonly { id: number; achievement: HsRefAchievement }[] =
 								pinnedAchievementIds
 									.map((id) => {
@@ -85,13 +89,13 @@ export class AchievementsLiveProgressTrackingService {
 									})
 									.filter((a) => !!a.id && !isNaN(a.id));
 							const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
-							console.debug(
-								'[achievements-monitor] completedAchievements',
-								completedAchievements,
-								mappedAchiements,
-								pinnedAchievementIds,
-								achievementsOnGameStart,
-							);
+							// console.debug(
+							// 	'[achievements-live-progress-tracking] completedAchievements',
+							// 	completedAchievements,
+							// 	mappedAchiements,
+							// 	pinnedAchievementIds,
+							// 	achievementsOnGameStart,
+							// );
 							this.store.send(
 								new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)),
 							);
@@ -111,12 +115,12 @@ export class AchievementsLiveProgressTrackingService {
 								progress,
 								achievementIdsToTrack,
 							);
-							console.debug(
-								'[achievements-monitor] emitting achievements progress',
-								finalAchievements,
-								achievementsOnGameStart,
-								progress,
-							);
+							// console.debug(
+							// 	'[achievements-live-progress-tracking] emitting achievements progress',
+							// 	finalAchievements,
+							// 	achievementsOnGameStart,
+							// 	progress,
+							// );
 							this.achievementsProgressTracking$$.next(finalAchievements);
 						});
 
@@ -132,19 +136,24 @@ export class AchievementsLiveProgressTrackingService {
 	): HsRefAchievement {
 		let currentAchievement = refAchievements.find((a) => a.id === id);
 		if (!currentAchievement) {
-			console.warn('[achievements-monitor] could not find achievement', id, refAchievements?.length);
+			console.warn(
+				'[achievements-live-progress-tracking] could not find achievement',
+				id,
+				refAchievements?.length,
+			);
+			console.debug('[achievements-live-progress-tracking] could not find achievement', id, refAchievements);
 			return null;
 		}
 
 		let currentCompletion = achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0;
-		//console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
+		//console.debug('[achievements-live-progress-tracking] currentAchievement', currentAchievement, currentCompletion);
 		while (currentCompletion > 0 && currentCompletion >= currentAchievement.quota) {
 			const nextStepId = currentAchievement.nextTierId;
 			currentAchievement = !!nextStepId ? refAchievements.find((a) => a.id === nextStepId) : null;
 			currentCompletion = !!nextStepId
 				? achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0
 				: 0;
-			//console.debug('[achievements-monitor] currentAchievement', currentAchievement, currentCompletion);
+			//console.debug('[achievements-live-progress-tracking] currentAchievement', currentAchievement, currentCompletion);
 		}
 		return currentAchievement;
 	}
@@ -175,7 +184,13 @@ export class AchievementsLiveProgressTrackingService {
 					rewardTrackXp: refAchievement?.rewardTrackXp,
 					hierarchy: buildAchievementHierarchy(id, groupedAchievements)?.categories?.map((c) => c.name),
 				};
-				console.debug('[achievements-monitor] built progress', result, quota, id, this.achievementQuotas);
+				// console.debug(
+				// 	'[achievements-live-progress-tracking] built progress',
+				// 	result,
+				// 	quota,
+				// 	id,
+				// 	this.achievementQuotas,
+				// );
 				return result;
 			}) ?? []
 		);
@@ -197,7 +212,7 @@ export class AchievementsLiveProgressTrackingService {
 		let currentAchievementProgress: HsAchievementsInfo = null;
 		const useIndexDetection = this.achievementIdsToTrack$$.value.every((id) => currentProgressIds.includes(id));
 		// console.debug(
-		// 	'[achievements-monitor] using index detection?',
+		// 	'[achievements-live-progress-tracking] using index detection?',
 		// 	useIndexDetection,
 		// 	this.achievementIdsToTrack,
 		// 	currentProgressIds,
@@ -215,7 +230,7 @@ export class AchievementsLiveProgressTrackingService {
 			// const currentProgressIds = currentAchievementProgress?.achievements?.map((a) => a.id);
 			// if (!arraysEqual([...currentProgressIds].sort(), [...this.achievementIdsToTrack])) {
 			// 	console.warn(
-			// 		'[achievements-monitor] wrong achievements returned, falling back to non-index detection',
+			// 		'[achievements-live-progress-tracking] wrong achievements returned, falling back to non-index detection',
 			// 		currentAchievementProgress,
 			// 		this.achievementIdsToTrack,
 			// 	);
@@ -226,7 +241,7 @@ export class AchievementsLiveProgressTrackingService {
 		}
 
 		const endTime = performance.now();
-		// console.debug('[achievements-monitor] got achievements progress', endTime - startTime, 'ms\n');
+		// console.debug('[achievements-live-progress-tracking] got achievements progress', endTime - startTime, 'ms\n');
 		this.currentAchievementsProgress$$.next(currentAchievementProgress?.achievements ?? []);
 	}
 
@@ -236,12 +251,24 @@ export class AchievementsLiveProgressTrackingService {
 			return;
 		}
 
-		this.achievementQuotas = {};
-		this.refLoaderService.refData$$.subscribe((refData) => {
-			this.refAchievements = refData?.achievements ?? [];
-			for (const ach of this.refAchievements) {
-				this.achievementQuotas[ach.id] = ach.quota;
-			}
+		return new Promise<void>((resolve) => {
+			this.achievementQuotas = {};
+			this.refLoaderService.refData$$
+				.pipe(
+					skipWhile((refData) => !refData?.achievements?.length),
+					take(1),
+				)
+				.subscribe((refData) => {
+					this.refAchievements = refData?.achievements ?? [];
+					for (const ach of this.refAchievements) {
+						this.achievementQuotas[ach.id] = ach.quota;
+					}
+					console.log(
+						'[achievements-live-progress-tracking] loaded ref achievements and built quotas',
+						this.refAchievements?.length,
+					);
+					resolve();
+				});
 		});
 		// this.refLoaderService.getLatestRefData();
 	}
@@ -252,7 +279,7 @@ export class AchievementsLiveProgressTrackingService {
 		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res)) {
-				this.achievementsOnGameStart$$.next([]);
+				// this.achievementsOnGameStart$$.next([]);
 			} else if ((await this.ow.inGame()) && res.gameChanged) {
 				if (!this.achievementsOnGameStart$$.value.length) {
 					await this.assignAchievementsOnGameStart();
@@ -272,7 +299,10 @@ export class AchievementsLiveProgressTrackingService {
 			return;
 		}
 
-		console.log('[achievements-monitor] assigning previous achievements', existingAchievements.length);
+		console.log(
+			'[achievements-live-progress-tracking] assigning previous achievements',
+			existingAchievements.length,
+		);
 		this.achievementsOnGameStart$$.next(existingAchievements);
 	}
 }
