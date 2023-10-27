@@ -24,19 +24,10 @@ export class StoreInitProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[store-init] populating store');
 		const prefs = await this.prefs.getPreferences();
-		// Whenever we move some data init to be async, we need to update this
-		// Ultimately we won't need that anymore once all the data is moved to an async init
-		const stateToUpdate = event.initialState.update({
-			// Hack - quests are not handled by the store init process
-			quests: currentState.quests,
-		});
-		const newState = currentState.update(stateToUpdate);
-		if (event.storeReady) {
-			console.log('[store-init] emitting STORE_READY event');
-			this.events.broadcast(Events.STORE_READY);
-		}
+		console.log('[store-init] emitting STORE_READY event');
+		this.events.broadcast(Events.STORE_READY);
 		const navState = await this.buildCurrentAppNavState(currentState, navigationState, prefs);
-		return [newState, navState];
+		return [currentState, navState];
 	}
 
 	private async buildCurrentAppNavState(

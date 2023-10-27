@@ -10,6 +10,10 @@ export class DecktrackerState {
 	// readonly config: ConstructedConfig;
 	readonly initComplete: boolean = false;
 
+	public static create(base: Partial<NonFunctionProperties<DecktrackerState>>): DecktrackerState {
+		return Object.assign(new DecktrackerState(), base);
+	}
+
 	public update(base: Partial<NonFunctionProperties<DecktrackerState>>): DecktrackerState {
 		return Object.assign(new DecktrackerState(), this, base);
 	}

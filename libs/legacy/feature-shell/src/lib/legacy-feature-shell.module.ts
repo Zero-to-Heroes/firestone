@@ -689,7 +689,6 @@ import { FirestoneAchievementsChallengeService } from './js/services/achievement
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
 import { ArenaRewardsService } from './js/services/arena/arena-rewards.service';
-import { ArenaStateBuilderService } from './js/services/arena/arena-state-builder.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
 import { BgsBattlePositioningService } from './js/services/battlegrounds/bgs-battle-positioning.service';
@@ -809,7 +808,6 @@ import { GameStatsLoaderService } from './js/services/stats/game/game-stats-load
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
 import { MatchStatsService } from './js/services/stats/match-stats.service';
-import { StatsStateBuilderService } from './js/services/stats/stats-state-builder.service';
 import { SystemTrayService } from './js/services/system-tray.service';
 import { TipService } from './js/services/tip.service';
 import { AppUiStoreFacadeService } from './js/services/ui-store/app-ui-store-facade.service';
@@ -1846,10 +1844,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsMetaStatsService,
 		DuelsUserRunsService,
 
-		ArenaStateBuilderService,
 		ArenaRewardsService,
-
-		StatsStateBuilderService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

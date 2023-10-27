@@ -14,10 +14,8 @@ import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels
 import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, skipWhile } from 'rxjs';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
-import { DuelsState } from '../../models/duels/duels-state';
-import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { Events } from '../events.service';
 import { HsGameMetaData, runLoop } from '../game-mode-data.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
@@ -30,7 +28,7 @@ const DUELS_RUN_DETAILS_URL = 'https://c3ewlwwljryrgtmeeqbwghb23y0xtltz.lambda-u
 
 @Injectable()
 export class DuelsStateBuilderService {
-	public isOnMainScreen = new BehaviorSubject<boolean>(false);
+	public isOnMainScreen = new BehaviorSubject<boolean>(null);
 	public duelsInfo$$ = new BehaviorSubject<DuelsInfo>(null);
 
 	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -86,11 +84,12 @@ export class DuelsStateBuilderService {
 		setTimeout(() => {
 			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
-			this.duelsInfo$$.subscribe((duelsInfo) => {
+			// Don't emit the initial value
+			this.duelsInfo$$.pipe(skipWhile((info) => info == null)).subscribe((duelsInfo) => {
 				this.mainWindowStateUpdater.next(new DuelsCurrentDeckEvent(duelsInfo?.DuelsDeck));
 			});
-			this.isOnMainScreen.subscribe((deck) => {
-				this.mainWindowStateUpdater.next(new DuelsIsOnMainScreenEvent(deck));
+			this.isOnMainScreen.pipe(skipWhile((info) => info == null)).subscribe((onMainScreen) => {
+				this.mainWindowStateUpdater.next(new DuelsIsOnMainScreenEvent(onMainScreen));
 			});
 		});
 	}
@@ -112,35 +111,6 @@ export class DuelsStateBuilderService {
 		}, 'duelsInfo');
 	}
 
-	public initState(
-		initialState: DuelsState,
-		// globalStats: DuelsStat,
-		// duelsRunInfo: readonly DuelsRunInfo[],
-		// duelsRewardsInfo: readonly DuelsRewardsInfo[],
-		// duelsConfig: DuelsConfig,
-		// leaderboard: DuelsLeaderboard,
-		// bucketsData: readonly DuelsBucketsData[],
-		// collectionState: BinderState,
-		// adventuresInfo: AdventuresInfo,
-		// currentDuelsMetaPatch?: PatchInfo,
-	): DuelsState {
-		const categories: readonly DuelsCategory[] = this.buildCategories();
-		return initialState.update({
-			categories: categories,
-			// globalStats: globalStats,
-			// config: duelsConfig,
-			// topDecks: topDecks,
-			// duelsRunInfos: duelsRunInfo,
-			// duelsRewardsInfo: duelsRewardsInfo,
-			// bucketsData: bucketsData,
-			// leaderboard: leaderboard,
-			// adventuresInfo: adventuresInfo,
-			// currentDuelsMetaPatch: currentDuelsMetaPatch,
-			loading: false,
-			initComplete: true,
-		});
-	}
-
 	private async loadTopDeckRunDetails(runId: string, deckId: number) {
 		const results: any = await this.api.callGetApi(`${DUELS_RUN_DETAILS_URL}/${runId}`);
 		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
@@ -151,82 +121,6 @@ export class DuelsStateBuilderService {
 				steps: steps,
 			} as DuelsDeckStat),
 		);
-	}
-
-	private buildCategories(): readonly DuelsCategory[] {
-		const result = [
-			DuelsCategory.create({
-				id: 'duels-runs',
-				name: this.i18n.translateString('app.duels.menu.my-runs'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-personal-decks',
-				name: this.i18n.translateString('app.duels.menu.my-decks'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-stats',
-				name: this.i18n.translateString('app.duels.menu.heroes'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-treasures',
-				name: this.i18n.translateString('app.duels.menu.treasures'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-top-decks',
-				name: this.i18n.translateString('app.duels.menu.high-win-decks'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-deck-details',
-				name: null,
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-personal-deck-details',
-				name: null,
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-leaderboard',
-				name: this.i18n.translateString('app.duels.menu.leaderboard'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-deckbuilder',
-				name: this.i18n.translateString('app.duels.menu.deckbuilder'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-			DuelsCategory.create({
-				id: 'duels-buckets',
-				name: this.i18n.translateString('app.duels.menu.buckets'),
-				enabled: true,
-				icon: undefined,
-				categories: null,
-			} as DuelsCategory),
-		];
-		return result;
 	}
 
 	private initDuelsInfoObservable() {

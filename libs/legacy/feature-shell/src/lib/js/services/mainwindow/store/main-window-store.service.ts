@@ -357,7 +357,7 @@ const MAX_HISTORY_SIZE = 30;
 @Injectable()
 export class MainWindowStoreService {
 	public stateUpdater = new EventEmitter<MainWindowStoreEvent>();
-	public state: MainWindowState = new MainWindowState();
+	public state: MainWindowState = null;
 	public navigationState = new NavigationState();
 
 	private navigationHistory = new NavigationHistory();
@@ -417,24 +417,10 @@ export class MainWindowStoreService {
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
 			this.processingQueue.enqueue(event);
 		});
-
-		// this.ow.addGameInfoUpdatedListener(async (res: any) => {
-		// 	if (this.ow.gameLaunched(res)) {
-		// 		// Do both so that it's hidden right away
-		// 		// const prefs = await this.prefs.getPreferences();
-		// 		// this.ow.hideCollectionWindow(prefs);
-		// 		// this.stateUpdater.next(new CloseMainWindowEvent());
-		// 		// Give a bit of time for memory info to be there?
-		// 		setTimeout(() => {
-		// 			this.populateStore(true);
-		// 		}, 2000);
-		// 	}
-		// });
-
-		// this.populateStore();
 	}
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
+		console.debug('handling events', eventQueue);
 		const event = eventQueue[0];
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
@@ -886,15 +872,10 @@ export class MainWindowStoreService {
 		return Map(processors);
 	}
 
-	public populateStore(onlyGameData = false) {
-		// if (!onlyGameData) {
-		console.log('sending populate store event');
-		this.storeBootstrap.initStore(this.state);
-		// } else {
-		// 	this.events.broadcast(Events.START_POPULATE_COLLECTION_STATE);
-		// }
-		// Launch events to start gathering data for the store
-		// this.stateUpdater.next(new PopulateStoreEvent());
-		// this.stateUpdater.next(new TriggerPopulateStoreEvent(onlyGameData));
+	public async init() {
+		console.log('building initial window state');
+		const prefs = await this.prefs.getPreferences();
+		this.state = this.storeBootstrap.buildInitialStore(prefs);
+		this.stateUpdater.next(new StoreInitEvent(this.state, false));
 	}
 }

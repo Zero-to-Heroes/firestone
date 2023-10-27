@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DuelsConfigService } from '@firestone/duels/general';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
+import { BattlegroundsQuestsService } from '../../js/services/battlegrounds/bgs-quests.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { ConstructedMetaDecksStateService } from '../../js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
@@ -61,6 +62,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_DuelsLeaderboardService: DuelsLeaderboardService,
 		private readonly init_DuelsMetaStatsService: DuelsMetaStatsService,
 		private readonly init_DuelsConfigService: DuelsConfigService,
+		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

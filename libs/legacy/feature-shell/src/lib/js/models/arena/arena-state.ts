@@ -6,13 +6,10 @@ import { ArenaTimeFilterType } from './arena-time-filter.type';
 export class ArenaState {
 	readonly loading: boolean = true;
 	readonly categories: readonly ArenaCategory[] = [];
-	// readonly currentArenaMetaPatch: PatchInfo;
-	// readonly rewards: readonly ArenaRewardInfo[] = [];
-
 	readonly activeHeroFilter: ArenaClassFilterType;
 	readonly activeTimeFilter: ArenaTimeFilterType;
 
-	public static create(base: ArenaState): ArenaState {
+	public static create(base: Partial<NonFunctionProperties<ArenaState>>): ArenaState {
 		return Object.assign(new ArenaState(), base);
 	}
 

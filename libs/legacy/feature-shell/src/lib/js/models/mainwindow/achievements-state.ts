@@ -7,6 +7,10 @@ import { VisualAchievementCategory } from '../visual-achievement-category';
 export class AchievementsState {
 	readonly filters: readonly FilterOption[];
 
+	public static create(base: Partial<NonFunctionProperties<AchievementsState>>): AchievementsState {
+		return Object.assign(new AchievementsState(), base);
+	}
+
 	public update(base: Partial<NonFunctionProperties<AchievementsState>>): AchievementsState {
 		return Object.assign(new AchievementsState(), this, base);
 	}

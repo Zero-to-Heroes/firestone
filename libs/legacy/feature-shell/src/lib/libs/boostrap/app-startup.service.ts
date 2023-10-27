@@ -46,7 +46,7 @@ export class AppStartupService {
 	public async init() {
 		console.log('[startup] essential services started, in doInit()');
 		// Do it after the localization has been initialized
-		this.store.populateStore();
+		await this.store.init();
 
 		if (!this.loadingWindowShown) {
 			console.log('[startup] initializing loading window');
