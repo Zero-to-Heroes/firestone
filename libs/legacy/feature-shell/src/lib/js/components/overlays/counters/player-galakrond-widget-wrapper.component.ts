@@ -33,11 +33,7 @@ export class PlayerGalakrondWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'galakrond';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerGalakrondCounter;
 		this.deckStateExtractor = (state) => state.playerDeck?.containsGalakrond(this.allCards);
-		super.ngAfterContentInit();
 	}
 }

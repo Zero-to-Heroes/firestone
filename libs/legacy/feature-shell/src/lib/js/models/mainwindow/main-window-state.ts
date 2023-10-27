@@ -1,5 +1,4 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { SceneMode } from '@firestone-hs/reference-data';
 import { AppInjector } from '@firestone/shared/framework/core';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
@@ -16,8 +15,8 @@ import { StatsState } from './stats/stats-state';
 import { StreamsState } from './streams/streams-state';
 
 export class MainWindowState {
-	readonly currentScene: SceneMode = null;
-	readonly lastNonGamePlayScene: SceneMode = null;
+	// readonly currentScene: SceneMode = null;
+	// readonly lastNonGamePlayScene: SceneMode = null;
 	// readonly currentUser: overwolf.profile.GetCurrentUserResult = null;
 	readonly showFtue: boolean = false;
 	readonly binder: BinderState = new BinderState();

@@ -34,13 +34,9 @@ export class PlayerMonstrousParrotWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'monstrousParrot';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMonstrousParrotCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard([CardIds.MonstrousParrot], { onlyLimited: prefValue === 'limited' }) &&
 			!!state?.playerDeck.lastDeathrattleTriggered;
-		super.ngAfterContentInit();
 	}
 }

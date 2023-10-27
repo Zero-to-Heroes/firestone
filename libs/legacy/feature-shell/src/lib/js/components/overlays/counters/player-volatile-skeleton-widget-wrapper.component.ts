@@ -35,9 +35,6 @@ export class PlayerVolatileSkeletonWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'volatileSkeleton';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerVolatileSkeletonCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(
@@ -49,7 +46,6 @@ export class PlayerVolatileSkeletonWidgetWrapperComponent
 			this.hasSecondarySkeletonActivator(state.playerDeck, {
 				onlyLimited: prefValue === 'limited',
 			});
-		super.ngAfterContentInit();
 	}
 
 	private hasSecondarySkeletonActivator(

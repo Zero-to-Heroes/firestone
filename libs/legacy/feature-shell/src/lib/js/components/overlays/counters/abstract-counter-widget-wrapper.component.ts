@@ -5,13 +5,15 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { BooleanWithLimited, Preferences } from '../../../models/preferences';
+import { SceneService } from '../../../services/game/scene.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { CounterType } from '../../game-counters/definitions/_counter-definition';
@@ -62,6 +64,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 
 	protected onBgs: boolean;
 
+	private scene: SceneService;
+
 	constructor(
 		protected readonly ow: OverwolfService,
 		protected readonly el: ElementRef,
@@ -71,17 +75,17 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
+		this.scene = AppInjector.get(SceneService);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest([
-			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				// Show from prefs
-				([main, nav, prefs]) => (this.prefExtractor ? this.prefExtractor(prefs) : true),
-			),
+			this.scene.currentScene$$,
+			this.store.listen$(([main, nav, prefs]) => (this.prefExtractor ? this.prefExtractor(prefs) : true)),
 			this.store.listenDeckState$(
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
@@ -94,7 +98,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 		]).pipe(
 			this.mapData(
 				([
-					[currentScene, displayFromPrefs],
+					currentScene,
+					[displayFromPrefs],
 					[gameStarted, gameEnded, isBgs, isMercs, deckState],
 					[bgState],
 					displayFromGameMode,
@@ -127,5 +132,9 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 			distinctUntilChanged(),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

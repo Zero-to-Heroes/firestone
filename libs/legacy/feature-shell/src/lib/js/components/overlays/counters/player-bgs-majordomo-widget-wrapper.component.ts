@@ -38,9 +38,6 @@ export class PlayerBgsMajordomoWidgetWrapperComponent
 		this.side = 'player';
 		this.activeCounter = 'bgsMajordomo';
 		this.onBgs = true;
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => {
 			return prefs.playerBgsMajordomoCounter;
 		};
@@ -64,7 +61,6 @@ export class PlayerBgsMajordomoWidgetWrapperComponent
 			const result = this.hasMajordomo(state.opponentDeck.board) || this.hasMajordomo(state.playerDeck.hand);
 			return elementalsPlayed > 0 && result;
 		};
-		super.ngAfterContentInit();
 	}
 
 	private hasMajordomo(zone: readonly DeckCard[]): boolean {

@@ -34,15 +34,11 @@ export class PlayerParrotMascotWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'parrotMascot';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerParrotMascotCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard([CardIds.ParrotMascot], {
 				excludesDeckInLimited: true,
 				onlyLimited: prefValue === 'limited',
 			});
-		super.ngAfterContentInit();
 	}
 }

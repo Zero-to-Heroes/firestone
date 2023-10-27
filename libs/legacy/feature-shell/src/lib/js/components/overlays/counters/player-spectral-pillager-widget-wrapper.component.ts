@@ -34,9 +34,6 @@ export class PlayerSpectralPillagerWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'spectralPillager';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerSpectralPillagerCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard(
@@ -46,6 +43,5 @@ export class PlayerSpectralPillagerWidgetWrapperComponent
 					excludesDeckInLimited: true,
 				},
 			);
-		super.ngAfterContentInit();
 	}
 }

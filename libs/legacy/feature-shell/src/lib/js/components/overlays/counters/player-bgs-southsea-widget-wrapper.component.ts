@@ -38,9 +38,6 @@ export class PlayerBgsSouthseaWidgetWrapperComponent
 		this.side = 'player';
 		this.activeCounter = 'bgsSouthsea';
 		this.onBgs = true;
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBgsSouthseaCounter;
 		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
 			const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
@@ -62,7 +59,6 @@ export class PlayerBgsSouthseaWidgetWrapperComponent
 				).length;
 			return piratesBought > 0 && this.hasSouthseaStrongarm(state.opponentDeck.board);
 		};
-		super.ngAfterContentInit();
 	}
 
 	private hasSouthseaStrongarm(zone: readonly DeckCard[]): boolean {

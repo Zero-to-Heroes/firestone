@@ -33,15 +33,11 @@ export class PlayerJadeWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'jadeGolem';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerJadeGolemCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(
 				(cardId: string) => this.allCards.getCard(cardId)?.referencedTags?.includes('JADE_GOLEM'),
 				{ onlyLimited: prefValue === 'limited' },
 			);
-		super.ngAfterContentInit();
 	}
 }

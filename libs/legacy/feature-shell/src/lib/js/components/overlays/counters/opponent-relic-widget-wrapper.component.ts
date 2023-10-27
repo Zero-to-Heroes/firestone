@@ -33,11 +33,7 @@ export class OpponentRelicWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'relic';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentRelicCounter;
 		this.deckStateExtractor = (state) => state.opponentDeck?.relicsPlayedThisMatch > 0;
-		super.ngAfterContentInit();
 	}
 }

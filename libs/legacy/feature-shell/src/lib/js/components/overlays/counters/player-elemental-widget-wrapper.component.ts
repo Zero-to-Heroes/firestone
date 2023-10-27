@@ -34,15 +34,11 @@ export class PlayerElementalWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'elemental';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerElementalCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard(
 				[CardIds.ManaCyclone, CardIds.GrandFinale, CardIds.Ozruk, CardIds.UnchainedGladiator],
 				{ onlyLimited: prefValue === 'limited' },
 			);
-		super.ngAfterContentInit();
 	}
 }

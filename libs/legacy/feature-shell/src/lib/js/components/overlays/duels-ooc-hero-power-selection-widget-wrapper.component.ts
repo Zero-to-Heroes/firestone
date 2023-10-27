@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { DungeonCrawlOptionType, SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -48,19 +49,20 @@ export class DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.duelsShowInfoOnHeroSelection),
-			this.store.listen$(
-				([main, prefs]) => main?.duels,
-				([main, nav]) => main.currentScene,
-			),
-		).pipe(
-			this.mapData(([[displayFromPrefs], [duels, currentScene]]) => {
+			this.store.listen$(([main, prefs]) => main?.duels),
+			this.scene.currentScene$$,
+		]).pipe(
+			this.mapData(([[displayFromPrefs], [duels], currentScene]) => {
 				return (
 					displayFromPrefs &&
 					currentScene === SceneMode.PVP_DUNGEON_RUN &&
@@ -69,6 +71,10 @@ export class DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	protected async doResize(): Promise<void> {

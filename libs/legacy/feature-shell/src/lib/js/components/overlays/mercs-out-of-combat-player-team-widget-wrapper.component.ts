@@ -10,8 +10,9 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -60,20 +61,23 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.mercenariesEnableOutOfCombatPlayerTeamWidget,
 				(prefs) => prefs.mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage,
 			),
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => !!state),
-		).pipe(
-			this.mapData(([[currentScene], [displayFromPrefs, displayFromPrefsVillage], [hasState]]) => {
+		]).pipe(
+			this.mapData(([currentScene, [displayFromPrefs, displayFromPrefsVillage], [hasState]]) => {
 				const scenes = [];
 				if (displayFromPrefs) {
 					scenes.push(SceneMode.LETTUCE_MAP);
@@ -85,6 +89,10 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	protected async reposition(cleanup?: () => void): Promise<{ left: number; top: number }> {

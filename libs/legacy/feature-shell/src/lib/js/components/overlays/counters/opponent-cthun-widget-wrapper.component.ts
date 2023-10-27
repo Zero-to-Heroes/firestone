@@ -33,11 +33,7 @@ export class OpponentCthunWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'cthun';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentCthunCounter;
 		this.deckStateExtractor = (state) => state?.opponentDeck?.containsCthun(this.allCards);
-		super.ngAfterContentInit();
 	}
 }

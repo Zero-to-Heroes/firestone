@@ -44,14 +44,10 @@ export class PlayerSpellWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'spells';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerSpellCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard(SPELL_COUNTER_CARD_IDS, {
 				onlyLimited: prefValue === 'limited',
 			});
-		super.ngAfterContentInit();
 	}
 }

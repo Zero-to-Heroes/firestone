@@ -10,6 +10,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -45,26 +46,26 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				// Show from prefs
-				([main, nav, prefs]) => prefs.bgsShowHeroSelectionAchievements,
-			),
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.store.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionAchievements),
 			this.store.listenBattlegrounds$(
 				([state, prefs]) => state?.inGame,
 				([state, prefs]) => !!state?.currentGame,
 				([state, prefs]) => state?.currentGame?.gameEnded,
 				([state, prefs]) => state?.heroSelectionDone,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[currentScene, displayFromPrefs], [inGame, isCurrentGame, gameEnded, heroSelectionDone]]) => {
+				([currentScene, [displayFromPrefs], [inGame, isCurrentGame, gameEnded, heroSelectionDone]]) => {
 					return (
 						inGame &&
 						isCurrentGame &&
@@ -77,6 +78,10 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 			),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	protected async doResize(): Promise<void> {

@@ -34,15 +34,11 @@ export class PlayerVanessaVanCleefWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'vanessaVanCleef';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerVanessaVanCleefCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard([CardIds.VanessaVancleefLegacy, CardIds.VanessaVancleef_CORE_CS3_005], {
 				onlyLimited: prefValue === 'limited',
 				excludesDeckInLimited: true,
 			}) && !!state.opponentDeck.cardsPlayedThisMatch?.length;
-		super.ngAfterContentInit();
 	}
 }

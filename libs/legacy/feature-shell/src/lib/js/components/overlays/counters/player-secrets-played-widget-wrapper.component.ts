@@ -34,9 +34,6 @@ export class PlayerSecretsPlayedWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'secretsPlayed';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerSecretsPlayedCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(
@@ -53,6 +50,5 @@ export class PlayerSecretsPlayedWidgetWrapperComponent
 					onlyLimited: prefValue === 'limited',
 				},
 			);
-		super.ngAfterContentInit();
 	}
 }

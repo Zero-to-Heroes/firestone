@@ -5,12 +5,14 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import {} from 'jszip';
 import { Observable, combineLatest } from 'rxjs';
 import { ShopMinion } from '../../services/battlegrounds/bgs-board-highlighter.service';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -48,20 +50,23 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
 		this.showWidget$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.scene.currentScene$$,
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
 				([state]) => state?.currentGame?.gameEnded,
 			),
 		]).pipe(
 			this.mapData(
-				([[currentScene], [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
+				([currentScene, [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
 			),
 			this.handleReposition(),
 		);
@@ -71,6 +76,10 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				return highlightedMinion;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByMinion(index: number, minion: ShopMinion) {

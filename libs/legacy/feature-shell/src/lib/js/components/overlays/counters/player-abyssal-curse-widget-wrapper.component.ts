@@ -35,9 +35,6 @@ export class PlayerAbyssalCurseWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'abyssalCurse';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAbyssalCurseCounter;
 		this.deckStateExtractor = (state) =>
 			!!state.playerDeck?.abyssalCurseHighestValue ||
@@ -45,6 +42,5 @@ export class PlayerAbyssalCurseWidgetWrapperComponent
 				state.playerDeck?.hand.filter((c) => c.cardId == CardIds.SirakessCultist_AbyssalCurseToken),
 				(c) => c.mainAttributeChange + 1,
 			);
-		super.ngAfterContentInit();
 	}
 }

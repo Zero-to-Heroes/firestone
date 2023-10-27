@@ -33,14 +33,10 @@ export class PlayerPogoWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'pogo';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerPogoCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard(POGO_CARD_IDS, {
 				onlyLimited: prefValue === 'limited',
 			});
-		super.ngAfterContentInit();
 	}
 }

@@ -5,11 +5,13 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { CardIds, SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -51,15 +53,17 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				// Show from prefs
 				([main, nav, prefs]) =>
 					(prefs.bgsEnableMinionListOverlay || prefs.bgsEnableTurnNumbertOverlay) && prefs.bgsFullToggle,
 			),
@@ -68,8 +72,8 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 				([state, prefs]) => !!state?.currentGame,
 				([state, prefs]) => state?.currentGame?.anomalies,
 			),
-		).pipe(
-			this.mapData(([[currentScene, displayFromPrefs], [inGame, isCurrentGame, anomalies]]) => {
+		]).pipe(
+			this.mapData(([currentScene, [displayFromPrefs], [inGame, isCurrentGame, anomalies]]) => {
 				return (
 					inGame &&
 					isCurrentGame &&
@@ -80,5 +84,9 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

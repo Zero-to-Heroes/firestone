@@ -33,11 +33,7 @@ export class OpponentWatchpostCounterWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'watchpost';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentWatchpostCounter;
 		this.deckStateExtractor = (deckState) => deckState?.opponentDeck?.watchpostsPlayedThisMatch > 0;
-		super.ngAfterContentInit();
 	}
 }

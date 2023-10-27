@@ -34,9 +34,6 @@ export class PlayerMulticasterWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'multicaster';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMulticasterCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard(
@@ -51,6 +48,5 @@ export class PlayerMulticasterWidgetWrapperComponent
 				],
 				{ onlyLimited: prefValue === 'limited' },
 			);
-		super.ngAfterContentInit();
 	}
 }

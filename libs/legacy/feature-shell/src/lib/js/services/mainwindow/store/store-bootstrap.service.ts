@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
@@ -89,21 +88,11 @@ export class StoreBootstrapService {
 
 		// Load all the initial data
 		const [
-			[
-				// socialShareUserInfo,
-				// currentUser,
-				currentScene,
-			],
 			[constructedConfig],
 			// [matchStats],
 			// [arenaRewards],
 			// [mercenariesCollection],
 		] = await Promise.all([
-			Promise.all([
-				// this.initializeSocialShareUserInfo(),
-				// this.userService.getCurrentUser(),
-				this.memory.getCurrentSceneFromMindVision(),
-			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
 			// Promise.all([this.gameStatsLoader.retrieveStats()]),
 			// Promise.all([this.arena.loadRewards()]),
@@ -179,8 +168,8 @@ export class StoreBootstrapService {
 		// the skeleton state has been created before
 		// So actually we should get rid of this big bootstrap thing, and only handle async store updates
 		const initialWindowState = windowStateForFtue.update({
-			currentScene: currentScene,
-			lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
+			// currentScene: currentScene,
+			// lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
 			// currentUser: currentUser,
 			showFtue: !prefs.ftue.hasSeenGlobalFtue,
 			// replays: replayState,

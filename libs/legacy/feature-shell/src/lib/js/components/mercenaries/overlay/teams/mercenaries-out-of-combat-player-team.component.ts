@@ -1,7 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenariesMapType, SceneMode } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { SceneService } from '@legacy-import/src/lib/js/services/game/scene.service';
 import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
 import { Observable, combineLatest } from 'rxjs';
@@ -14,8 +16,6 @@ import {
 } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-out-of-combat-player-team',
@@ -29,7 +29,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesOutOfCombatPlayerTeamComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
@@ -39,26 +39,27 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 	team$: Observable<MercenariesBattleTeam>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly scene: SceneService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.mercenariesMemoryCache.isReady();
 		await this.mercenariesReferenceData.isReady();
+		await this.scene.isReady();
 
 		this.team$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.scene.currentScene$$,
 			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesMemoryCache.memoryMapInfo$$,
 		]).pipe(
-			filter(([[currentScene], referenceData, mapInfo]) => !!referenceData),
-			this.mapData(([[currentScene], referenceData, refMapInfo]) => {
+			filter(([currentScene, referenceData, mapInfo]) => !!referenceData),
+			this.mapData(([currentScene, referenceData, refMapInfo]) => {
 				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
 				const result = MercenariesBattleTeam.create({
 					mercenaries:

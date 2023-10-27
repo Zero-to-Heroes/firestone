@@ -34,12 +34,8 @@ export class PlayerLibramWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'libram';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerLibramCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard([CardIds.LadyLiadrin], { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

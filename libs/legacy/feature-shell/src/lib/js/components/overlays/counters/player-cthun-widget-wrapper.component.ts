@@ -34,9 +34,6 @@ export class PlayerCthunWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'cthun';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerCthunCounter;
 		this.deckStateExtractor = (state, prefValue) => {
 			if (prefValue === 'limited') {
@@ -46,6 +43,5 @@ export class PlayerCthunWidgetWrapperComponent
 			}
 			return state?.playerDeck?.containsCthun(this.allCards);
 		};
-		super.ngAfterContentInit();
 	}
 }

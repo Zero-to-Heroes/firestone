@@ -34,13 +34,9 @@ export class OpponentLibramWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'libram';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentLibramCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck?.libramsPlayedThisMatch > 0 ||
 			state.opponentDeck?.hasRelevantCard([CardIds.LadyLiadrin], { onlyLimited: true });
-		super.ngAfterContentInit();
 	}
 }

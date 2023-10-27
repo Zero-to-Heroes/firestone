@@ -32,11 +32,7 @@ export class OpponentSpellWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'spells';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentSpellCounter;
 		this.deckStateExtractor = (state, prefValue) => state.opponentDeck?.spellsPlayedThisMatch?.length > 0;
-		super.ngAfterContentInit();
 	}
 }

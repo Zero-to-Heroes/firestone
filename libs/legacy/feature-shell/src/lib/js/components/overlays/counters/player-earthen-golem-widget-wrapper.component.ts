@@ -33,12 +33,8 @@ export class PlayerEarthenGolemWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'earthenGolem';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerEarthenGolemCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(EARTHEN_GOLEM_CARDS, { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

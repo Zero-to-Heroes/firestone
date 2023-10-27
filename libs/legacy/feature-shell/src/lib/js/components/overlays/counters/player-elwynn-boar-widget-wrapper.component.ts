@@ -34,15 +34,11 @@ export class PlayerElwynnBoarWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'elwynnBoar';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerElwynnBoarCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard([CardIds.ElwynnBoar], {
 				onlyLimited: prefValue === 'limited',
 				includesOtherZone: true,
 			});
-		super.ngAfterContentInit();
 	}
 }

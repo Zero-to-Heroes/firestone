@@ -5,10 +5,12 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -41,22 +43,27 @@ export class DuelsOocDeckSelectWidgetWrapperComponent
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.duelsShowOocDeckSelect),
-			this.store.listen$(
-				([main, nav]) => main.duels.isOnDuelsDeckBuildingLobbyScreen,
-				([main, nav]) => main.currentScene,
-			),
-		).pipe(
-			this.mapData(([[displayFromPrefs], [isOnDeckBuildingLobby, currentScene]]) => {
+			this.store.listen$(([main, nav]) => main.duels.isOnDuelsDeckBuildingLobbyScreen),
+			this.scene.currentScene$$,
+		]).pipe(
+			this.mapData(([[displayFromPrefs], [isOnDeckBuildingLobby], currentScene]) => {
 				return displayFromPrefs && isOnDeckBuildingLobby && currentScene === SceneMode.PVP_DUNGEON_RUN;
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

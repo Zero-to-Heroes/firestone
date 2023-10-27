@@ -12,6 +12,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -74,13 +75,16 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
 		this.showWidget$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.scene.currentScene$$,
 			this.store.listenDeckState$((state) => state.metadata),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
@@ -88,7 +92,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 		]).pipe(
 			this.mapData(
-				([[currentScene], [metadata], [inGame, playerCount]]) =>
+				([currentScene, [metadata], [inGame, playerCount]]) =>
 					isBattlegrounds(metadata.gameType) &&
 					currentScene === SceneMode.GAMEPLAY &&
 					inGame &&
@@ -117,6 +121,10 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			.pipe(this.mapData(([currentTurn]) => currentTurn));
 		this.showLastOpponentIcon$ = this.listenForBasicPref$((prefs) => prefs.bgsShowLastOpponentIconInOverlay);
 		this.opponentBoardMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableOpponentBoardMouseOver);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByFunction(index: number, player: BgsPlayer) {

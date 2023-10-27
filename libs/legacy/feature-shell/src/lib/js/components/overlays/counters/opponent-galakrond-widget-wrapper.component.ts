@@ -33,11 +33,7 @@ export class OpponentGalakrondWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'galakrond';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentGalakrondCounter;
 		this.deckStateExtractor = (state) => state.opponentDeck?.containsGalakrond(this.allCards);
-		super.ngAfterContentInit();
 	}
 }

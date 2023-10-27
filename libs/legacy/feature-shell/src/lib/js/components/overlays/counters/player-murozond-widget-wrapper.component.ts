@@ -34,9 +34,6 @@ export class PlayerMurozondTheInfiniteWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'murozondTheInfinite';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerMurozondTheInfiniteCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			prefValue === 'limited'
@@ -45,6 +42,5 @@ export class PlayerMurozondTheInfiniteWidgetWrapperComponent
 						CardIds.MurozondTheInfinite_DRG_090,
 						CardIds.MurozondTheInfinite_CORE_DRG_090,
 				  ]);
-		super.ngAfterContentInit();
 	}
 }

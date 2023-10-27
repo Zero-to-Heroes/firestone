@@ -34,9 +34,6 @@ export class OpponentMulticasterWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'multicaster';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentMulticasterCounter;
 		this.deckStateExtractor = (state) =>
 			(state.opponentDeck?.spellsPlayedThisMatch?.length > 0 &&
@@ -53,6 +50,5 @@ export class OpponentMulticasterWidgetWrapperComponent
 				],
 				{ onlyLimited: true },
 			);
-		super.ngAfterContentInit();
 	}
 }

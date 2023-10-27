@@ -7,8 +7,8 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { sumOnArray } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { sumOnArray } from '@services/utils';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
@@ -35,9 +35,6 @@ export class OpponentAbyssalCurseWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'abyssalCurse';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentAbyssalCurseCounter;
 		this.deckStateExtractor = (state) =>
 			!!state.opponentDeck?.abyssalCurseHighestValue ||
@@ -45,6 +42,5 @@ export class OpponentAbyssalCurseWidgetWrapperComponent
 				state.opponentDeck?.hand.filter((c) => c.cardId == CardIds.SirakessCultist_AbyssalCurseToken),
 				(c) => c.mainAttributeChange + 1,
 			);
-		super.ngAfterContentInit();
 	}
 }

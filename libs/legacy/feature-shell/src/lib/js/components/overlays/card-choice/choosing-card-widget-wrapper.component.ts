@@ -20,6 +20,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
+import { SceneService } from '../../../services/game/scene.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -79,20 +80,20 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
 		this.showWidget$ = combineLatest([
-			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				// Show from prefs
-				([main, nav, prefs]) => prefs.overlayEnableDiscoverHelp,
-			),
+			this.scene.currentScene$$,
+			this.store.listen$(([main, nav, prefs]) => prefs.overlayEnableDiscoverHelp),
 			this.store.listenDeckState$((deckState) => deckState?.playerDeck?.currentOptions),
 		]).pipe(
-			this.mapData(([[currentScene, displayFromPrefs], [currentOptions]]) => {
+			this.mapData(([currentScene, [displayFromPrefs], [currentOptions]]) => {
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -227,6 +228,10 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 					options?.some((o) => isBgQuestDiscover(o.source)) ? 'bgsQuest' : 'normal',
 				),
 			);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildFlag(option: CardOption, state: GameState): CardOptionFlag {

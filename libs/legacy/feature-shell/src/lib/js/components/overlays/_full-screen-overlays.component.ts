@@ -10,14 +10,15 @@ import {
 	Renderer2,
 	ViewChild,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
-import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { GameType } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, startWith } from 'rxjs/operators';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
+import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -162,28 +163,24 @@ export class FullScreenOverlaysComponent
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly init_DebugService: DebugService,
+		private readonly ow: OverwolfService,
 		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,
+		private readonly scene: SceneService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		const lastNonGamePlayScene$: Observable<SceneMode> = this.store
-			.listen$(([main, prefs]) => main.currentScene)
-			.pipe(
-				startWith([null]),
-				filter(([scene]) => scene !== SceneMode.GAMEPLAY),
-				this.mapData(([scene]) => scene),
-			);
-		this.activeTheme$ = combineLatest(
-			lastNonGamePlayScene$,
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.activeTheme$ = combineLatest([
+			this.scene.currentScene$$,
+			this.scene.lastNonGamePlayScene$$,
 			this.store.listenDeckState$((deckState) => deckState.metadata?.gameType),
-			this.store.listen$(([main]) => main.currentScene),
-		).pipe(
-			this.mapData(([nonGameplayScene, [gameType], [currentScene]]) => {
+		]).pipe(
+			this.mapData(([currentScene, nonGameplayScene, [gameType]]) => {
 				if (!gameType) {
 					if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {
 						return 'battlegrounds';
@@ -220,6 +217,10 @@ export class FullScreenOverlaysComponent
 				console.log('current focus', document.activeElement);
 			});
 		});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

@@ -32,10 +32,6 @@ export class PlayerCounterWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'attack';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAttackCounter;
-		super.ngAfterContentInit();
 	}
 }

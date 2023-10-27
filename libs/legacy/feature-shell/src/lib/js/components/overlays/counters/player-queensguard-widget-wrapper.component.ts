@@ -34,15 +34,11 @@ export class PlayerQueensguardWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'queensguard';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerQueensguardCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard([CardIds.Queensguard], {
 				onlyLimited: prefValue === 'limited',
 				excludesDeckInLimited: true,
 			});
-		super.ngAfterContentInit();
 	}
 }

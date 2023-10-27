@@ -5,15 +5,17 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.component';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
+import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.component';
 
 @Component({
 	selector: 'hs-quests-widget-wrapper',
@@ -47,32 +49,30 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.scene.lastNonGamePlayScene$$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				([main, nav, prefs]) => main.lastNonGamePlayScene,
 				// Show from prefs
 				([main, nav, prefs]) => prefs.hsShowQuestsWidget && prefs.enableQuestsWidget,
 				([main, nav, prefs]) => prefs.showQuestsInGame,
 				([main, nav, prefs]) => prefs.hsShowQuestsWidgetOnHub,
 				([main, nav, prefs]) => prefs.hsShowQuestsWidgetOnBg,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([
-					[
-						currentScene,
-						lastNonGamePlayScene,
-						displayFromPrefs,
-						showQuestsInGame,
-						hsShowQuestsWidgetOnHub,
-						hsShowQuestsWidgetOnBg,
-					],
+					currentScene,
+					lastNonGamePlayScene,
+					[displayFromPrefs, showQuestsInGame, hsShowQuestsWidgetOnHub, hsShowQuestsWidgetOnBg],
 				]) => {
 					if (!displayFromPrefs) {
 						return false;
@@ -115,5 +115,9 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 			),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

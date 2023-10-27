@@ -5,12 +5,14 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { PreferencesService } from '../../m../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
+import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -59,17 +61,19 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
-		this.showWidget$ = combineLatest(
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
 			this.store.listen$(
-				([main, nav, pref]) => main.currentScene,
-				// Show from prefs
 				([main, nav, pref]) => pref.opponentTracker,
 				([main, nav, pref]) => pref.decktrackerCloseOnGameEnd,
 			),
@@ -82,10 +86,11 @@ export class DecktrackerOpponentWidgetWrapperComponent
 				(deckState) => deckState?.opponentDeck?.totalCardsInZones(),
 			),
 			displayFromGameMode$,
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([
-					[currentScene, displayFromPrefs, decktrackerCloseOnGameEnd],
+					currentScene,
+					[displayFromPrefs, decktrackerCloseOnGameEnd],
 					[closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones],
 					displayFromGameMode,
 				]) => {
@@ -117,5 +122,9 @@ export class DecktrackerOpponentWidgetWrapperComponent
 					hideOpponentDecktrackerWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

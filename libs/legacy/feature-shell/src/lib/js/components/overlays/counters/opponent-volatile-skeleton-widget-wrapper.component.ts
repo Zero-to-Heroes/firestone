@@ -33,11 +33,7 @@ export class OpponentVolatileSkeletonWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'volatileSkeleton';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentVolatileSkeletonCounter;
 		this.deckStateExtractor = (state) => state.opponentDeck?.volatileSkeletonsDeadThisMatch > 0;
-		super.ngAfterContentInit();
 	}
 }

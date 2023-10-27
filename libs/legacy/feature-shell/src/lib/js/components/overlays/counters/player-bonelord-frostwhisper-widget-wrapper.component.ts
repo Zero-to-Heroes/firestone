@@ -33,11 +33,7 @@ export class PlayerBonelordFrostwhisperWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'bonelordFrostwhisper';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBonelordFrostwhisperCounter;
 		this.deckStateExtractor = (state) => state.playerDeck.bonelordFrostwhisperFirstTurnTrigger != null;
-		super.ngAfterContentInit();
 	}
 }

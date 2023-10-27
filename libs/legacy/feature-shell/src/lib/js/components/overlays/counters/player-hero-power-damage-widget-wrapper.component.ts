@@ -36,12 +36,8 @@ export class PlayerHeroPowerDamageWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'heroPowerDamage';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerHeroPowerDamageCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(HERO_POWER_DAMAGE_CARD_IDS, { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

@@ -5,11 +5,13 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { DeckCard } from '@models/decktracker/deck-card';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -47,24 +49,25 @@ export class PlayerHeroPowerWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				([main, nav, prefs]) => prefs.overlayHighlightRelatedCards,
-			),
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.store.listen$(([main, nav, prefs]) => prefs.overlayHighlightRelatedCards),
 			this.store.listenDeckState$(
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
 				(deckState) => deckState?.isBattlegrounds(),
 				(deckState) => deckState?.isMercenaries(),
 			),
-		).pipe(
-			this.mapData(([[currentScene, displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
+		]).pipe(
+			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;
 				}
@@ -83,5 +86,9 @@ export class PlayerHeroPowerWidgetWrapperComponent extends AbstractWidgetWrapper
 		this.heroPower$ = this.store
 			.listenDeckState$((state) => state.playerDeck?.heroPower)
 			.pipe(this.mapData(([heroPower]) => heroPower));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

@@ -34,14 +34,10 @@ export class PlayerOverdraftWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'overdraft';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerOverdraftCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			!!state.playerDeck?.hasRelevantCard([CardIds.OverdraftCore, CardIds.Overdraft], {
 				onlyLimited: prefValue === 'limited',
 			});
-		super.ngAfterContentInit();
 	}
 }

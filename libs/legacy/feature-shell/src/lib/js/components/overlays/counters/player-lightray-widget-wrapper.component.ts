@@ -33,12 +33,8 @@ export class PlayerLightrayWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'lightray';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerSpellCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard([CardIds.Lightray], { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

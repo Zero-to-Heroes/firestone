@@ -9,7 +9,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter, startWith, tap } from 'rxjs/operators';
+import { filter, startWith } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import {
 	BattleAbility,
@@ -17,6 +17,7 @@ import {
 	BattleMercenary,
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
+import { SceneService } from '../../../services/game/scene.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import {
@@ -82,6 +83,7 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 		private readonly i18n: LocalizationFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly scene: SceneService,
 	) {
 		super(store, cdr);
 	}
@@ -89,6 +91,7 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 	async ngAfterContentInit() {
 		await this.mercenariesCollection.isReady();
 		await this.mercenariesReferenceData.isReady();
+		await this.scene.isReady();
 
 		const team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
@@ -105,12 +108,12 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 				startWith(null),
 			);
 		const oocTeam$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.scene.currentScene$$,
 			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesCollection.memoryMapInfo$$,
 		]).pipe(
-			filter(([[currentScene], referenceData, mapInfo]) => !!referenceData?.mercenaryLevels),
-			this.mapData(([[currentScene], referenceData, refMapInfo]) => {
+			filter(([currentScene, referenceData, mapInfo]) => !!referenceData?.mercenaryLevels),
+			this.mapData(([currentScene, referenceData, refMapInfo]) => {
 				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
 				return MercenariesBattleTeam.create({
 					mercenaries:

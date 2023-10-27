@@ -38,9 +38,6 @@ export class PlayerBgsMagmalocWidgetWrapperComponent
 		this.side = 'player';
 		this.activeCounter = 'bgsMagmaloc';
 		this.onBgs = true;
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerBgsMagmalocCounter;
 		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
 			const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
@@ -54,7 +51,6 @@ export class PlayerBgsMagmalocWidgetWrapperComponent
 				this.hasMagmaloc(state.opponentDeck.board)
 			);
 		};
-		super.ngAfterContentInit();
 	}
 
 	private hasMagmaloc(zone: readonly DeckCard[]): boolean {

@@ -34,9 +34,6 @@ export class OpponentHeroPowerDamageWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'heroPowerDamage';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentHeroPowerDamageCounter;
 		this.deckStateExtractor = (state) => {
 			const isCorrectFormat =
@@ -47,6 +44,5 @@ export class OpponentHeroPowerDamageWidgetWrapperComponent
 				state.opponentDeck.hero?.classes?.includes(CardClass.MAGE)
 			);
 		};
-		super.ngAfterContentInit();
 	}
 }

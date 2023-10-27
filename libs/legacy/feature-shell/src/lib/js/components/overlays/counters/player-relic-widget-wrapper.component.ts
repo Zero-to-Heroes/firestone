@@ -34,9 +34,6 @@ export class PlayerRelicWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'relic';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerRelicCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard(
@@ -50,6 +47,5 @@ export class PlayerRelicWidgetWrapperComponent
 					onlyLimited: prefValue === 'limited',
 				},
 			);
-		super.ngAfterContentInit();
 	}
 }

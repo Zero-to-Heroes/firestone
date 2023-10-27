@@ -33,14 +33,10 @@ export class OpponentShockspitterWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'shockspitter';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentShockspitterCounter;
 		this.deckStateExtractor = (state) =>
 			state?.metadata?.formatType === GameFormat.FT_WILD &&
 			state?.opponentDeck?.heroAttacksThisMatch > 0 &&
 			state.opponentDeck.hero?.classes.includes(CardClass.HUNTER);
-		super.ngAfterContentInit();
 	}
 }

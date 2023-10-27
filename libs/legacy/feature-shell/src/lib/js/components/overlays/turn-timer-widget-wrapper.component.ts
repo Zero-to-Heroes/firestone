@@ -5,11 +5,13 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -51,22 +53,25 @@ export class TurnTimerWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
 			this.store.listenDeckState$(
 				(state) => state?.metadata?.gameType,
 				(state) => state?.gameStarted,
 				(state) => state?.gameEnded,
 			),
-			this.store.listen$(([main]) => main.currentScene),
+			this.scene.currentScene$$,
 			this.store.listenPrefs$((prefs) => prefs.showTurnTimer),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[gameType, gameStarted, gameEnded], [currentScene], [pref]]) =>
+				([[gameType, gameStarted, gameEnded], currentScene, [pref]]) =>
 					pref &&
 					gameStarted &&
 					!gameEnded &&
@@ -84,5 +89,9 @@ export class TurnTimerWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 			),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

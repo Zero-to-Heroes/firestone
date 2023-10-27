@@ -34,15 +34,11 @@ export class OpponentChaoticTendrilWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'chaoticTendril';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentChaoticTendrilCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.opponentDeck?.hasRelevantCard([CardIds.ChaoticTendril_YOG_514], {
 				onlyLimited: prefValue === 'limited',
 				includesOtherZone: true,
 			});
-		super.ngAfterContentInit();
 	}
 }

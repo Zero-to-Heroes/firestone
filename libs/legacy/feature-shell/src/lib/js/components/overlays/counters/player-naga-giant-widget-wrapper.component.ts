@@ -34,12 +34,8 @@ export class PlayerNagaGiantWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'nagaGiant';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerNagaGiantCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard([CardIds.NagaGiant], { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

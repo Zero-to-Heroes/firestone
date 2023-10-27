@@ -8,6 +8,7 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../../models/preferences';
 import { BroadcastEvent, Events } from '../../events.service';
+import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
@@ -32,6 +33,7 @@ export class MercenariesOutOfCombatService {
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly scene: SceneService,
 	) {
 		this.init();
 		window['mercenariesOutOfCombatStore'] = this.store$;
@@ -75,7 +77,8 @@ export class MercenariesOutOfCombatService {
 
 		// So that we're sure that all services have been initialized
 		await this.store.initComplete();
-		// setTimeout(() => {
+		await this.scene.isReady();
+
 		this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
 			.asObservable()
 			.pipe(map((theEvent) => theEvent.preferences as Preferences));
@@ -84,24 +87,17 @@ export class MercenariesOutOfCombatService {
 		).asObservable();
 		this.events$ = this.events.on(Events.MEMORY_UPDATE);
 
-		combineLatest(
-			this.events$,
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
-		)
+		combineLatest([this.events$, this.scene.currentScene$$])
 			.pipe(
 				distinctUntilChanged(),
 				filter(([event, currentScene]) => !!event),
-				concatMap(async ([event, [currentScene]]) => await this.processEvent(event, currentScene)),
+				concatMap(async ([event, currentScene]) => await this.processEvent(event, currentScene)),
 			)
 			.subscribe();
-		combineLatest(
-			this.preferences$,
-			this.internalStore$.asObservable(),
-			this.store.listen$(([main, nav, prefs]) => main.currentScene),
-		)
+		combineLatest(this.preferences$, this.internalStore$.asObservable(), this.scene.currentScene$$)
 			.pipe(
 				concatMap(
-					async ([prefs, newState, [currentScene]]) => await this.emitState(newState, currentScene, prefs),
+					async ([prefs, newState, currentScene]) => await this.emitState(newState, currentScene, prefs),
 				),
 			)
 			.subscribe();

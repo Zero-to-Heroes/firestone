@@ -6,6 +6,7 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
@@ -25,6 +26,7 @@ import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
 import { Observable, combineLatest, from } from 'rxjs';
+import { SceneService } from '../../../services/game/scene.service';
 
 @Component({
 	selector: 'current-session-widget',
@@ -202,20 +204,20 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
+		private readonly scene: SceneService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
 		const currentGameType$ = this.store
 			.listenDeckState$((state) => state?.metadata?.gameType)
 			.pipe(this.mapData(([gameType]) => gameType));
 		this.friendlyGameType$ = currentGameType$.pipe(this.mapData((gameType) => this.toFriendlyGameType(gameType)));
-		this.showWidget$ = combineLatest(
-			currentGameType$,
-			this.store.listen$(([main]) => main.currentScene),
-		).pipe(
-			this.mapData(([gameType, [currentScene]]) =>
+		this.showWidget$ = combineLatest(currentGameType$, this.scene.currentScene$$).pipe(
+			this.mapData(([gameType, currentScene]) =>
 				this.currentMode === 'battlegrounds'
 					? isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)
 					: false,
@@ -325,6 +327,10 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 					this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 				}
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	buildValue(value: number, decimals = 2): string {

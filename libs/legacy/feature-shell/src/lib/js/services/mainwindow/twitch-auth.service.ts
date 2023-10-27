@@ -23,6 +23,7 @@ import { GameEvent } from '../../models/game-event';
 import { MatchInfo } from '../../models/match-info';
 import { Preferences } from '../../models/preferences';
 import { GameStatusService } from '../game-status.service';
+import { SceneService } from '../game/scene.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -59,6 +60,7 @@ export class TwitchAuthService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
+		private readonly scene: SceneService,
 	) {
 		this.init();
 		window['deflate'] = (input, options) => {
@@ -71,6 +73,7 @@ export class TwitchAuthService {
 
 	private async init() {
 		await this.store.initComplete();
+		await this.scene.isReady();
 
 		this.gameStatus.inGame$$
 			.pipe(
@@ -106,7 +109,7 @@ export class TwitchAuthService {
 						})),
 					);
 				combineLatest([
-					this.store.listen$(([main, nav]) => main.currentScene),
+					this.scene.currentScene$$,
 					this.deckEvents,
 					this.bgEvents,
 					this.twitchAccessToken$,
@@ -115,7 +118,7 @@ export class TwitchAuthService {
 					.pipe(
 						sampleTime(2000),
 						distinctUntilChanged(),
-						map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
+						map(([currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
 							this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 						),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),

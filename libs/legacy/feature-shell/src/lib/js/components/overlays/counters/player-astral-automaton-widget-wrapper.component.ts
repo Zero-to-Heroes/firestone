@@ -33,15 +33,11 @@ export class PlayerAstralAutomatonWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'astralAutomaton';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAstralAutomatonCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard([CardIds.AstralAutomaton], {
 				onlyLimited: prefValue === 'limited',
 				includesOtherZone: true,
 			});
-		super.ngAfterContentInit();
 	}
 }

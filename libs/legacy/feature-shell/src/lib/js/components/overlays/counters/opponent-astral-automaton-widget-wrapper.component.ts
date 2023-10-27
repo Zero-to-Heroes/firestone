@@ -33,13 +33,9 @@ export class OpponentAstralAutomatonWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'astralAutomaton';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentAstralAutomatonCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck?.astralAutomatonsSummoned > 0 ||
 			state.opponentDeck?.hasRelevantCard([CardIds.AstralAutomaton], { onlyLimited: true });
-		super.ngAfterContentInit();
 	}
 }

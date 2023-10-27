@@ -33,11 +33,7 @@ export class OpponentBonelordFrostwhisperWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'bonelordFrostwhisper';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentBonelordFrostwhisperCounter;
 		this.deckStateExtractor = (state) => state.opponentDeck.bonelordFrostwhisperFirstTurnTrigger != null;
-		super.ngAfterContentInit();
 	}
 }

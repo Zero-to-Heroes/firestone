@@ -35,9 +35,6 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'corpseSpent';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerCorpseSpentCounter;
 		this.deckStateExtractor = (state) => {
 			if (state.opponentDeck.hero?.classes?.includes(CardClass.DEATHKNIGHT)) {
@@ -59,6 +56,5 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 			const groupedByRune = groupByFunction((rune: any) => rune.rune)(allRuneEntries);
 			return Object.keys(groupedByRune).length === 3;
 		};
-		super.ngAfterContentInit();
 	}
 }

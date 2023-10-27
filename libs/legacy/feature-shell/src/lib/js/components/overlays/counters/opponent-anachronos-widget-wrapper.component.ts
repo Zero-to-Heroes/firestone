@@ -33,11 +33,7 @@ export class OpponentAnachronosWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'anachronos';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentAnachronosCounter;
 		this.deckStateExtractor = (state) => !!state.opponentDeck.anachronosTurnsPlayed?.length;
-		super.ngAfterContentInit();
 	}
 }

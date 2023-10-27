@@ -5,11 +5,13 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
+import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -45,21 +47,23 @@ export class BgsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.scene.lastNonGamePlayScene$$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.currentScene,
-				([main, nav, prefs]) => main.lastNonGamePlayScene,
-				// Show from prefs
 				([main, nav, prefs]) => prefs.bgsShowQuestsWidget && prefs.enableQuestsWidget,
 				([main, nav, prefs]) => prefs.showQuestsInGame,
 			),
-		).pipe(
-			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs, showQuestsInGame]]) => {
+		]).pipe(
+			this.mapData(([currentScene, lastNonGamePlayScene, [displayFromPrefs, showQuestsInGame]]) => {
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -74,6 +78,10 @@ export class BgsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 

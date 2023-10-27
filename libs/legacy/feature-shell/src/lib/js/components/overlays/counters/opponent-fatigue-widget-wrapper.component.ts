@@ -34,13 +34,9 @@ export class OpponentFatigueWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'fatigue';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentFatigueCounter;
 		this.deckStateExtractor = (state) =>
 			!!state.opponentDeck?.fatigue ||
 			!!state.opponentDeck.deck?.find((c) => c.cardId === CardIds.CurseOfAgony_AgonyToken);
-		super.ngAfterContentInit();
 	}
 }

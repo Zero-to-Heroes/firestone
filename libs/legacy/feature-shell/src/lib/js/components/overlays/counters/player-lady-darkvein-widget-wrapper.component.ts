@@ -34,13 +34,9 @@ export class PlayerLadyDarkveinWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'ladyDarkvein';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerLadyDarkveinCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			!!state?.lastShadowSpellPlayed(this.allCards, this.side) &&
 			state.playerDeck.hasRelevantCard([CardIds.LadyDarkvein], { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

@@ -34,13 +34,9 @@ export class OpponentElwynnBoarWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'elwynnBoar';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentElwynnBoarCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck?.elwynnBoarsDeadThisMatch > 0 ||
 			state.opponentDeck?.hasRelevantCard([CardIds.ElwynnBoar], { onlyLimited: true });
-		super.ngAfterContentInit();
 	}
 }

@@ -33,12 +33,8 @@ export class PlayerChainedGuardianWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
 		this.activeCounter = 'chainedGuardian';
-	}
-
-	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerChainedGuardianCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard([CardIds.ChainedGuardian], { onlyLimited: prefValue === 'limited' });
-		super.ngAfterContentInit();
 	}
 }

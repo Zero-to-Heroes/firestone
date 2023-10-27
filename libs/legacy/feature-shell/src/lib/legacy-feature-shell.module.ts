@@ -752,6 +752,7 @@ import { GameEvents } from './js/services/game-events.service';
 import { GameModeDataService } from './js/services/game-mode-data.service';
 import { GameStatusService } from './js/services/game-status.service';
 import { GameNativeStateStoreService } from './js/services/game/game-native-state-store.service';
+import { SceneService } from './js/services/game/scene.service';
 import { GenericStorageService } from './js/services/generic-storage.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
@@ -1677,6 +1678,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationMockExecutorService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningMockExecutorService },
 
+		SceneService,
 		SetsService,
 		DebugService,
 		Events,
