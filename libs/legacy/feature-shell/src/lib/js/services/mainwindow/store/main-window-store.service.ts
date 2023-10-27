@@ -38,7 +38,6 @@ import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services
 import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { AchievementHistoryService } from '../../achievement/achievements-history.service';
 import { AchievementsStateManagerService } from '../../achievement/achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
@@ -183,12 +182,10 @@ import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowReplaysEvent } from './events/replays/show-replays-event';
 import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
-import { SceneChangedEvent } from './events/scene-changed-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
 import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
-import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { GamesFullClearEvent } from './events/stats/game-stats-full-clear-event';
 import { GamesFullRefreshEvent } from './events/stats/game-stats-full-refresh-event';
 import { GlobalStatsLoadedEvent } from './events/stats/global/global-stats-loaded-event';
@@ -337,12 +334,10 @@ import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-p
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
-import { SceneChangedProcessor } from './processors/scene-changed-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
-import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-clear-processor';
 import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
 import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-stats-loaded-processor';
@@ -416,14 +411,6 @@ export class MainWindowStoreService {
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
 
 		this.processors = this.buildProcessors();
-
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-			const changes: MemoryUpdate = event.data[0];
-			const newScene = changes.CurrentScene;
-			if (!!newScene) {
-				this.stateUpdater.next(new SceneChangedEvent(newScene));
-			}
-		});
 
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
 			this.processingQueue.enqueue(event);
@@ -565,7 +552,6 @@ export class MainWindowStoreService {
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor()],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
 			[LocalizationUpdateEvent.eventName(), new LocalizationUpdateProcessor(this.prefs, this.translate)],
-			[SceneChangedEvent.eventName(), new SceneChangedProcessor()],
 			[
 				// Quests
 				ReferenceQuestsLoadedEvent.eventName(),
@@ -630,7 +616,6 @@ export class MainWindowStoreService {
 
 			// Social
 			[StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor()],
-			[TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor()],
 			[ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
 			[CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor()],
 			[
