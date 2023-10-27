@@ -13,6 +13,7 @@ import {
 	bannedTwistCards,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { ConstructedConfigService } from '@legacy-import/src/lib/js/services/decktracker/constructed-config.service';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -176,11 +177,14 @@ export class ConstructedDeckbuilderCardsComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly constructedConfig: ConstructedConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.constructedConfig.isReady();
+
 		// this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
 		this.store
@@ -196,14 +200,14 @@ export class ConstructedDeckbuilderCardsComponent
 			});
 
 		this.allowedCards$ = combineLatest([
+			this.constructedConfig.config$$,
 			this.store.listen$(
-				([main, nav]) => main.decktracker.config,
 				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
 				([main, nav]) => main.decktracker.deckbuilder.currentClass,
 			),
 			from([this.allCards.getCards()]),
 		]).pipe(
-			this.mapData(([[config, currentFormat, currentClass], cards]) => {
+			this.mapData(([config, [currentFormat, currentClass], cards]) => {
 				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
 				const validSets =
 					currentFormat === 'classic'

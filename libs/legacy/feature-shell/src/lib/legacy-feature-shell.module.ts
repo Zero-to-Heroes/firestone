@@ -721,6 +721,7 @@ import { ArenaRunParserService } from './js/services/decktracker/arena-run-parse
 import { AttackOnBoardService } from './js/services/decktracker/attack-on-board.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
+import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { ConstructedMetaDecksStateService } from './js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DeckHandlerService } from './js/services/decktracker/deck-handler.service';
@@ -1782,6 +1783,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DecktrackerStateLoaderService,
 		DecksProviderService,
 		ConstructedMetaDecksStateService,
+		ConstructedConfigService,
 
 		EndGameListenerService,
 		EndGameUploaderService,

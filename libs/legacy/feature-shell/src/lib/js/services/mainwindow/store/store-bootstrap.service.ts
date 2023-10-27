@@ -86,20 +86,6 @@ export class StoreBootstrapService {
 		// TODO: Ideally, everything after this is handled as deferred subjects
 		// ==========================
 
-		// Load all the initial data
-		const [
-			[constructedConfig],
-			// [matchStats],
-			// [arenaRewards],
-			// [mercenariesCollection],
-		] = await Promise.all([
-			Promise.all([this.decktrackerStateLoader.loadConfig()]),
-			// Promise.all([this.gameStatsLoader.retrieveStats()]),
-			// Promise.all([this.arena.loadRewards()]),
-			// Promise.all([this.mercenariesMemory.getMercenariesMergedCollectionInfo()]),
-		]);
-		console.log('loaded info');
-
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
@@ -122,7 +108,7 @@ export class StoreBootstrapService {
 		const decktracker = this.decktrackerStateLoader.buildState(
 			windowStateForFtue.decktracker,
 			// newStatsState,
-			constructedConfig,
+			// constructedConfig,
 			currentRankedMetaPatch,
 			prefs,
 		);

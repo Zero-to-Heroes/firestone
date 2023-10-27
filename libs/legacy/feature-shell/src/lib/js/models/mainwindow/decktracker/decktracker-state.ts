@@ -1,5 +1,4 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { ConstructedConfig } from '../../decktracker/constructed-config';
 import { PatchInfo } from '../../patches';
 import { ConstructedDeckbuilder } from './constructed-deckbuilder';
 import { DeckFilters } from './deck-filters';
@@ -9,7 +8,7 @@ export class DecktrackerState {
 	readonly patch: PatchInfo;
 	readonly isLoading: boolean = true;
 	readonly deckbuilder: ConstructedDeckbuilder = new ConstructedDeckbuilder();
-	readonly config: ConstructedConfig;
+	// readonly config: ConstructedConfig;
 	readonly initComplete: boolean = false;
 
 	public update(base: Partial<NonFunctionProperties<DecktrackerState>>): DecktrackerState {
