@@ -1,10 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { filterDuelsTreasureStats } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { DuelsRun } from '../../../models/duels/duels-run';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildDuelsHeroTreasurePlayerStats, filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -32,14 +33,17 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 	hideLowData$: Observable<boolean>;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		const rawStats$ = combineLatest([
 			this.store.duelsRuns$(),
 			this.store.duelsMetaStats$(),
@@ -54,8 +58,8 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => main.duels?.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -71,8 +75,8 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 						heroPowerFilter,
 						sigTreasureFilter,
 						mmrFilter,
-						patch,
 					],
+					patch,
 				]) =>
 					[
 						filterDuelsTreasureStats(
@@ -126,6 +130,10 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 		);
 		this.sort$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroSortFilter);
 		this.hideLowData$ = this.listenForBasicPref$((prefs) => prefs.duelsHideStatsBelowThreshold);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onStatsClicked(stat: DuelsMetaStats) {

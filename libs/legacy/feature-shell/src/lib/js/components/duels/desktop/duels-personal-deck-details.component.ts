@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { SetCard } from '../../../models/set';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { DeckInfo, getCurrentDeck } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -100,11 +101,17 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 	currentDeck$: Observable<'initial' | 'final'> = this.currentDeck.asObservable();
 	currentRunIndex = new BehaviorSubject<number>(0);
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly patchesConfig: PatchesConfigService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(this.mapData(([runIds]) => runIds));
@@ -126,18 +133,19 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
 			filter(
-				([decks, topDecks, [deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]]) =>
+				([decks, topDecks, [deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode]]) =>
 					(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 			),
 			this.mapData(
 				([
 					decks,
 					topDecks,
-					[deckDetails, deckstring, deckId, timeFilter, heroesFilter, gameMode, duelsDeckDeletes, patch],
+					[deckDetails, deckstring, deckId, timeFilter, heroesFilter, gameMode, duelsDeckDeletes],
+					patch,
 				]) =>
 					getCurrentDeck(
 						decks,
@@ -154,12 +162,12 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 					),
 			),
 		);
-		this.decklist$ = combineLatest(
+		this.decklist$ = combineLatest([
 			this.deck$,
 			this.expandedRunIds$,
 			this.currentDeck$,
 			this.currentRunIndex.asObservable(),
-		).pipe(
+		]).pipe(
 			this.mapData(([deck, expandedRunIds, currentDeck, currentRunIndex]) => {
 				const result =
 					currentDeck === 'initial'
@@ -171,6 +179,10 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 				return result;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	changeCurrentDeck(event) {

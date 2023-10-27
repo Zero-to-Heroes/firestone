@@ -4,7 +4,6 @@ import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../models/arena/arena-state';
 import { ArenaCategory } from '../../models/mainwindow/arena/arena-category';
-import { PatchInfo } from '../../models/patches';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { PreferencesService } from '../preferences.service';
 
@@ -27,7 +26,7 @@ export class ArenaStateBuilderService {
 
 	public async initState(
 		initialState: ArenaState,
-		currentArenaMetaPatch: PatchInfo,
+		// currentArenaMetaPatch: PatchInfo,
 		// rewards: readonly ArenaRewardInfo[],
 	): Promise<ArenaState> {
 		const prefs = await this.prefs.getPreferences();
@@ -44,7 +43,7 @@ export class ArenaStateBuilderService {
 			loading: false,
 			activeHeroFilter: prefs.arenaActiveClassFilter,
 			activeTimeFilter: prefs.arenaActiveTimeFilter,
-			currentArenaMetaPatch: currentArenaMetaPatch,
+			// currentArenaMetaPatch: currentArenaMetaPatch,
 			// rewards: rewards,
 		});
 	}

@@ -42,6 +42,7 @@ import { AchievementHistoryService } from '../../achievement/achievements-histor
 import { AchievementsStateManagerService } from '../../achievement/achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../achievement/data/firestone-remote-achievements-loader.service';
+import { ArenaRewardsService } from '../../arena/arena-rewards.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
@@ -405,6 +406,7 @@ export class MainWindowStoreService {
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly gameStats: GameStatsLoaderService,
+		private readonly arenaRewards: ArenaRewardsService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -875,7 +877,7 @@ export class MainWindowStoreService {
 				new ArenaTimeFilterSelectedProcessor(this.prefs),
 			],
 			[ArenaClassFilterSelectedEvent.eventName(), new ArenaClassFilterSelectedProcessor(this.prefs)],
-			[ArenaRewardsUpdatedEvent.eventName(), new ArenaRewardsUpdatedProcessor()],
+			[ArenaRewardsUpdatedEvent.eventName(), new ArenaRewardsUpdatedProcessor(this.arenaRewards)],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],

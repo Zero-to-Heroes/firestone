@@ -73,6 +73,7 @@ export class StoreBootstrapService {
 
 	public async initStore(initialState: MainWindowState) {
 		await this.ready();
+
 		// First load for the FTUE
 		const prefs = await this.prefs.getPreferences();
 		const showFtue = !prefs.ftue.hasSeenGlobalFtue;
@@ -86,14 +87,10 @@ export class StoreBootstrapService {
 		// TODO: Ideally, everything after this is handled as deferred subjects
 		// ==========================
 
-		const patchConfig = await this.patchConfig.getConf();
-		const currentBattlegroundsMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
-			: null;
 		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(
 			windowStateForFtue.battlegrounds,
 			// bgsGlobalStats,
-			currentBattlegroundsMetaPatch,
+			// currentBattlegroundsMetaPatch,
 		);
 
 		const newStatsState = this.stats.initState(
@@ -102,14 +99,14 @@ export class StoreBootstrapService {
 			// matchStats,
 			//archetypesConfig, archetypesStats
 		);
-		const currentRankedMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
-			: null;
+		// const currentRankedMetaPatch = patchConfig?.patches
+		// 	? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
+		// 	: null;
 		const decktracker = this.decktrackerStateLoader.buildState(
 			windowStateForFtue.decktracker,
 			// newStatsState,
 			// constructedConfig,
-			currentRankedMetaPatch,
+			// currentRankedMetaPatch,
 			prefs,
 		);
 
@@ -122,9 +119,9 @@ export class StoreBootstrapService {
 			filters: AchievementsState.buildFilterOptions(this.i18n),
 		});
 
-		const currentDuelsMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
-			: null;
+		// const currentDuelsMetaPatch = patchConfig?.patches
+		// 	? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
+		// 	: null;
 		const duelsStats: DuelsState = this.duels.initState(
 			windowStateForFtue.duels,
 			// duelsGlobalStats,
@@ -135,15 +132,15 @@ export class StoreBootstrapService {
 			// duelsBucketsData,
 			// collectionState,
 			// adventuresInfo,
-			currentDuelsMetaPatch,
+			// currentDuelsMetaPatch,
 		);
 
-		const currentArenaMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
-			: null;
+		// const currentArenaMetaPatch = patchConfig?.patches
+		// 	? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
+		// 	: null;
 		const arenaState: ArenaState = await this.arena.initState(
 			windowStateForFtue.arena,
-			currentArenaMetaPatch,
+			// currentArenaMetaPatch,
 			// arenaRewards,
 		);
 
@@ -168,7 +165,7 @@ export class StoreBootstrapService {
 			mercenaries: windowStateForFtue.mercenaries,
 			// socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
-			patchConfig: patchConfig,
+			// patchConfig: patchConfig,
 			initComplete: true,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));

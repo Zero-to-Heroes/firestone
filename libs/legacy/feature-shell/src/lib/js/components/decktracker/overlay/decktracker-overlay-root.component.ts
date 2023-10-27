@@ -22,6 +22,7 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { Preferences } from '../../../models/preferences';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -163,6 +164,7 @@ export class DeckTrackerOverlayRootComponent
 		private renderer: Renderer2,
 		private events: Events,
 		private readonly cardsHighlight: CardsHighlightFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 		this.cardsHighlight.init();
@@ -183,7 +185,9 @@ export class DeckTrackerOverlayRootComponent
 		});
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.showDeckWinrate$ = this.listenForBasicPref$((preferences) => this.showDeckWinrateExtractor(preferences));
 		this.showMatchupWinrate$ = this.listenForBasicPref$((preferences) =>
 			this.showMatchupWinrateExtractor(preferences),
@@ -205,8 +209,8 @@ export class DeckTrackerOverlayRootComponent
 			this.store.listen$(
 				([main, nav, prefs]) => main.decktracker.filters.time,
 				([main, nav, prefs]) => main.decktracker.filters.rank,
-				([main, nav, prefs]) => main.decktracker.patch,
 			),
+			this.patchesConfig.currentConstructedMetaPatch$$,
 			this.store.gameStats$(),
 			this.store.decks$(),
 			this.store.listenPrefs$(
@@ -222,7 +226,8 @@ export class DeckTrackerOverlayRootComponent
 					showDeckWinrate,
 					showMatchupWinrate,
 					[deckstring, formatType],
-					[timeFilter, rankFilter, patch],
+					[timeFilter, rankFilter],
+					patch,
 					gameStats,
 					decks,
 					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
@@ -233,7 +238,8 @@ export class DeckTrackerOverlayRootComponent
 					showDeckWinrate,
 					showMatchupWinrate,
 					[deckstring, formatType],
-					[timeFilter, rankFilter, patch],
+					[timeFilter, rankFilter],
+					patch,
 					gameStats,
 					decks,
 					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
@@ -332,6 +338,10 @@ export class DeckTrackerOverlayRootComponent
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')

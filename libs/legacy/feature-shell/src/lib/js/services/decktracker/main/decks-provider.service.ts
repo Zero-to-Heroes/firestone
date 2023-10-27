@@ -15,6 +15,7 @@ import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { PatchInfo } from '../../../models/patches';
 import { classes } from '../../hs-utils';
+import { PatchesConfigService } from '../../patches-config.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual, groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
@@ -22,21 +23,24 @@ import { deepEqual, groupByFunction, removeFromArray, sumOnArray } from '../../u
 export class DecksProviderService {
 	public decks$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[]>(null);
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
+	) {
 		window['decksProvider'] = this;
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
+		await this.patchesConfig.isReady();
 
 		this.decks$.onFirstSubscribe(() => {
 			combineLatest([
 				this.store.gameStats$(),
-				this.store.listen$(
-					([main, nav]) => main.decktracker.filters,
-					([main, nav]) => main.decktracker.patch,
-				),
+				this.store.listen$(([main, nav]) => main.decktracker.filters),
+				this.patchesConfig.currentConstructedMetaPatch$$,
 				this.store.listenPrefs$(
 					(prefs) => prefs.constructedPersonalAdditionalDecks,
 					(prefs) => prefs.desktopDeckDeletes,
@@ -47,12 +51,13 @@ export class DecksProviderService {
 				),
 			])
 				.pipe(
-					filter(([stats, [filters, patch]]) => !!stats?.length && !!patch),
+					filter(([stats, [filters], patch]) => !!stats?.length && !!patch),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(
 						([
 							stats,
-							[filters, patch],
+							[filters],
+							patch,
 							[
 								constructedPersonalAdditionalDecks,
 								desktopDeckDeletes,

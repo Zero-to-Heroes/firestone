@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -11,6 +11,7 @@ import {
 	BgsHeroStratAuthor,
 	BgsHeroStratTip,
 } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-strategies.service';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -74,24 +75,25 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreCompone
 	private heroId$$ = new BehaviorSubject<string>(null);
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.strategies$ = combineLatest([
 			this.heroId$$.asObservable(),
-			this.store.listen$(
-				([main]) => main.battlegrounds.getMetaHeroStrategies(),
-				([main]) => main.patchConfig,
-			),
+			this.store.listen$(([main]) => main.battlegrounds.getMetaHeroStrategies()),
+			this.patchesConfig.config$$,
 		]).pipe(
-			filter(([heroId, [strats, patchConfig]]) => !!strats?.heroes?.length),
-			this.mapData(([heroId, [strats, patchConfig]]) => {
+			filter(([heroId, [strats], patchConfig]) => !!strats?.heroes?.length),
+			this.mapData(([heroId, [strats], patchConfig]) => {
 				console.debug('strats', strats);
 				const stratsForHero: readonly BgsHeroStratTip[] =
 					strats.heroes.find((h) => h.id === normalizeHeroCardId(heroId, this.allCards))?.tips ?? [];
@@ -169,6 +171,10 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreCompone
 				});
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 

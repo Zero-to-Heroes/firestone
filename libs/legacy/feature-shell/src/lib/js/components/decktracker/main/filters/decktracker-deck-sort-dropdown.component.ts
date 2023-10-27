@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sort.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -41,55 +43,62 @@ export class DecktrackerDeckSortDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
+		this.filter$ = combineLatest([
+			this.patchesConfig.currentConstructedMetaPatch$$,
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
-				([main, nav]) => main.decktracker.patch,
 				([main, nav]) => nav.navigationDecktracker.currentView,
-			)
-			.pipe(
-				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
-				this.mapData(([filter, patch, currentView]) => {
-					const options = [
-						{
-							value: 'last-played',
-							label: this.i18n.translateString('app.decktracker.filters.deck-sort.last-played'),
-						} as DeckSortOption,
-						{
-							value: 'games-played',
-							label: this.i18n.translateString('app.decktracker.filters.deck-sort.games-played'),
-						} as DeckSortOption,
-						{
-							value: 'winrate',
-							label: this.i18n.translateString('app.decktracker.filters.deck-sort.winrate'),
-						} as DeckSortOption,
-					];
-					return {
-						filter: filter,
-						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: ![
-							'deck-details',
-							'ladder-stats',
-							'ladder-ranking',
-							'constructed-deckbuilder',
-							'constructed-meta-decks',
-							'constructed-meta-deck-details',
-							'constructed-meta-archetypes',
-							'constructed-meta-archetype-details',
-						].includes(currentView),
-					};
-				}),
-			);
+			),
+		]).pipe(
+			filter(([patch, [filter, currentView]]) => !!filter && !!patch && !!currentView),
+			this.mapData(([patch, [filter, currentView]]) => {
+				const options = [
+					{
+						value: 'last-played',
+						label: this.i18n.translateString('app.decktracker.filters.deck-sort.last-played'),
+					} as DeckSortOption,
+					{
+						value: 'games-played',
+						label: this.i18n.translateString('app.decktracker.filters.deck-sort.games-played'),
+					} as DeckSortOption,
+					{
+						value: 'winrate',
+						label: this.i18n.translateString('app.decktracker.filters.deck-sort.winrate'),
+					} as DeckSortOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder: options.find((option) => option.value === filter)?.label,
+					visible: ![
+						'deck-details',
+						'ladder-stats',
+						'ladder-ranking',
+						'constructed-deckbuilder',
+						'constructed-meta-decks',
+						'constructed-meta-deck-details',
+						'constructed-meta-archetypes',
+						'constructed-meta-archetype-details',
+					].includes(currentView),
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

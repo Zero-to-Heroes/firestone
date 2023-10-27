@@ -1,4 +1,5 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -56,11 +57,17 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	deckInfo$: Observable<DeckInfo>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly patchesConfig: PatchesConfigService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.deckInfo$ = combineLatest([
 			this.store.duelsDecks$(),
 			this.store.duelsTopDecks$(),
@@ -72,8 +79,8 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
 			filter(
 				([decks, topDecks, [deckDetails, deckstring, deckId]]) =>
@@ -83,7 +90,8 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 				([
 					decks,
 					topDecks,
-					[deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, duelsDeckDeletes, patch],
+					[deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, duelsDeckDeletes],
+					patch,
 				]) =>
 					getCurrentDeck(
 						decks,
@@ -100,5 +108,9 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 					),
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

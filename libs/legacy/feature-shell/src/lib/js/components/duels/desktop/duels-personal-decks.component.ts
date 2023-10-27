@@ -1,10 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsDeckSortFilterType } from '@firestone/duels/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -36,12 +37,15 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionStoreCompon
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.decks$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
+		this.decks$ = combineLatest([
 			this.store.duelsDecks$(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
@@ -52,9 +56,9 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionStoreCompon
 				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckShowHiddenDecks,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
-		).pipe(
+			this.patchesConfig.currentDuelsMetaPatch$$,
+		]).pipe(
 			map(
 				([
 					decks,
@@ -67,8 +71,8 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionStoreCompon
 						hiddenCodes,
 						showHidden,
 						duelsDeckDeletes,
-						patch,
 					],
+					patch,
 				]) =>
 					decks
 						?.filter(
@@ -105,6 +109,10 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionStoreCompon
 			),
 			this.mapData((decks) => (!!decks?.length ? decks : null)),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByDeck(index: number, deck: DuelsDeckSummary): string {

@@ -10,6 +10,7 @@ import {
 import { Subscription, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { getDuelsMmrFilterNumber, topDeckApplyFilters } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -39,11 +40,17 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 	private sub$$: Subscription;
 	private iterator: IterableIterator<void>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly patchesConfig: PatchesConfigService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.sub$$ = combineLatest([
 			this.store.duelsTopDecks$(),
 			this.store.duelsMetaStats$(),
@@ -57,8 +64,8 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActivePassiveTreasuresFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		])
 			.pipe(
 				filter(
@@ -77,8 +84,8 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 							timeFilter,
 							dustFilter,
 							passivesFilter,
-							patch,
 						],
+						patch,
 					]) => {
 						const trueMmrFilter = getDuelsMmrFilterNumber(duelsMetaStats.mmrPercentiles, mmrFilter);
 						const result = topDecks
@@ -112,6 +119,10 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 					this.onScroll();
 				});
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')

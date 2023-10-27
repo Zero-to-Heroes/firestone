@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { GameStat } from '@firestone/stats/data-access';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { ChartData } from 'chart.js';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { PatchInfo } from '../../../../models/patches';
@@ -47,14 +48,17 @@ export class BattlegroundsPersonalStatsRatingComponent
 	regionSelected$: Observable<boolean>;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		// Force a region select only if multiple regions are available in the stats
 		this.regionSelected$ = combineLatest(
 			this.store.gameStats$(),
@@ -67,20 +71,20 @@ export class BattlegroundsPersonalStatsRatingComponent
 					(!!region && region !== 'all'),
 			),
 		);
-		this.value$ = combineLatest(
+		this.value$ = combineLatest([
 			this.store.gameStats$(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
-				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
 			),
-		).pipe(
+			this.patchesConfig.currentBattlegroundsMetaPatch$$,
+		]).pipe(
 			filter(
-				([stats, [timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]]) =>
+				([stats, [timeFilter, mmrFilter, mmrGroupFilter], currentBattlegroundsMetaPatch]) =>
 					!!stats && !!currentBattlegroundsMetaPatch,
 			),
-			this.mapData(([stats, [timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]]) => {
+			this.mapData(([stats, [timeFilter, mmrFilter, mmrGroupFilter], currentBattlegroundsMetaPatch]) => {
 				const relevantGames = stats
 					.filter((stat) => isBattlegrounds(stat.gameMode))
 					.filter((stat) => stat.playerRank);
@@ -93,6 +97,10 @@ export class BattlegroundsPersonalStatsRatingComponent
 				);
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildValue(

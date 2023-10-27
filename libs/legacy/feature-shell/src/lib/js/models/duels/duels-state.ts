@@ -5,7 +5,6 @@ import { DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-due
 import { ExtendedDuelsStatDecks } from '../../services/duels/duels-state-builder.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
-import { PatchInfo } from '../patches';
 import { DuelsDeckStat } from './duels-player-stats';
 
 export class DuelsState {
@@ -22,7 +21,7 @@ export class DuelsState {
 	// like the 12-wins additional data. If we store it directly in the deck stats,
 	// it will be erased every time we recompute everything from the global stats
 	readonly additionalDeckDetails: readonly DuelsDeckStat[] = [];
-	readonly currentDuelsMetaPatch: PatchInfo;
+	// readonly currentDuelsMetaPatch: PatchInfo;
 
 	readonly deckbuilder: DuelsDeckbuilder = new DuelsDeckbuilder();
 

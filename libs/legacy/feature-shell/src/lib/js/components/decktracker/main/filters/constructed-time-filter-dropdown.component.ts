@@ -5,9 +5,11 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { TimePeriod } from '@firestone-hs/constructed-deck-stats';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { formatPatch } from '@legacy-import/src/lib/js/services/utils';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
@@ -45,22 +47,25 @@ export class ConstructedTimeFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav]) => main.decktracker.patch),
+			this.patchesConfig.currentConstructedMetaPatch$$,
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksTimeFilter),
 		]).pipe(
-			filter(([[patch], [currentView], [filter]]) => !!currentView),
-			this.mapData(([[patch], [currentView], [filter]]) => {
+			filter(([patch, [currentView], [filter]]) => !!currentView),
+			this.mapData(([patch, [currentView], [filter]]) => {
 				const options: FilterOption[] = ['current-season', 'past-20', 'past-7', 'past-3', 'last-patch'].map(
 					(option) =>
 						({
@@ -82,6 +87,10 @@ export class ConstructedTimeFilterDropdownComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

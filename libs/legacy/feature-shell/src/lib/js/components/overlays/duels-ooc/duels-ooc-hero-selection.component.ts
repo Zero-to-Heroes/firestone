@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
 import { CardIds, ReferenceCard, allDuelsHeroes, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
@@ -19,6 +19,7 @@ import {
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
 	selector: 'duels-ooc-hero-selection',
@@ -55,17 +56,18 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		// Make sure the data for the last patch is available
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
 
-		this.patch$ = this.store
-			.listen$(([state]) => state.duels?.currentDuelsMetaPatch)
-			.pipe(this.mapData(([info]) => info));
+		this.patch$ = this.patchesConfig.currentDuelsMetaPatch$$.pipe(this.mapData((info) => info));
 
 		this.heroes$ = this.store
 			.listen$(([state, prefs]) => state?.duels?.heroOptionsDbfIds)
@@ -82,10 +84,10 @@ export class DuelsOutOfCombatHeroSelectionComponent
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
-			this.mapData(([allHeroCards, duelsTopDecks, duelsMetaStats, [mmrFilter, dustFilter, patch]]) => {
+			this.mapData(([allHeroCards, duelsTopDecks, duelsMetaStats, [mmrFilter, dustFilter], patch]) => {
 				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
 				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
 				const topDecks = (duelsTopDecks ?? [])
@@ -137,9 +139,9 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		const playerRuns$ = combineLatest([
 			allHeroCardIds$,
 			this.store.duelsRuns$(),
-			this.store.listen$(([main, nav]) => main.duels.currentDuelsMetaPatch),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
-			this.mapData(([allHeroCards, runs, [patch]]) => {
+			this.mapData(([allHeroCards, runs, patch]) => {
 				const duelsRuns = filterDuelsRuns(
 					runs,
 					'last-patch',
@@ -185,6 +187,10 @@ export class DuelsOutOfCombatHeroSelectionComponent
 					)?.stat,
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildDuelsHeroFullStat(

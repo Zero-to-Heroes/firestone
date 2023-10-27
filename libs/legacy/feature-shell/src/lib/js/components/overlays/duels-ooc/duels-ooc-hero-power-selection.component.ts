@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import { CardIds, ReferenceCard, allDuelsHeroes, duelsHeroConfigs } from '@firestone-hs/reference-data';
@@ -17,6 +17,7 @@ import {
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
 	selector: 'duels-ooc-hero-power-selection',
@@ -51,11 +52,14 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
 
 		this.heroPowers$ = this.store
@@ -74,10 +78,10 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				// ([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
-			this.mapData(([runs, duelsTopDecks, duelsMetaStats, allHeroPowerCards, [mmrFilter, dustFilter, patch]]) => {
+			this.mapData(([runs, duelsTopDecks, duelsMetaStats, allHeroPowerCards, [mmrFilter, dustFilter], patch]) => {
 				const duelStats = duelsMetaStats?.heroes;
 				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
 				return allHeroPowerCards
@@ -204,6 +208,10 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				} as DuelsHeroPowerInfo;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onMouseEnter(cardId: string) {

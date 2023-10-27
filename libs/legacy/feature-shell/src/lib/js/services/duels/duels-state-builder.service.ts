@@ -18,7 +18,6 @@ import { BehaviorSubject } from 'rxjs';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
 import { DuelsState } from '../../models/duels/duels-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
-import { PatchInfo } from '../../models/patches';
 import { Events } from '../events.service';
 import { HsGameMetaData, runLoop } from '../game-mode-data.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
@@ -123,7 +122,7 @@ export class DuelsStateBuilderService {
 		// bucketsData: readonly DuelsBucketsData[],
 		// collectionState: BinderState,
 		// adventuresInfo: AdventuresInfo,
-		currentDuelsMetaPatch?: PatchInfo,
+		// currentDuelsMetaPatch?: PatchInfo,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		return initialState.update({
@@ -136,7 +135,7 @@ export class DuelsStateBuilderService {
 			// bucketsData: bucketsData,
 			// leaderboard: leaderboard,
 			// adventuresInfo: adventuresInfo,
-			currentDuelsMetaPatch: currentDuelsMetaPatch,
+			// currentDuelsMetaPatch: currentDuelsMetaPatch,
 			loading: false,
 			initComplete: true,
 		});

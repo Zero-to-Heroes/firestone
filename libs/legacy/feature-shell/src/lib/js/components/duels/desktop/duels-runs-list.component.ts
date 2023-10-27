@@ -9,10 +9,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';
@@ -69,14 +70,17 @@ export class DuelsRunsListComponent extends AbstractSubscriptionStoreComponent i
 	private deckstring$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(this.mapData(([expandedRunIds]) => expandedRunIds));
@@ -87,12 +91,11 @@ export class DuelsRunsListComponent extends AbstractSubscriptionStoreComponent i
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-				// TODO: MMR filter
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 			this.deckstring$.asObservable(),
 		).pipe(
-			map(([runs, [timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => {
+			map(([runs, [timeFilter, classFilter, gameMode, duelsDeckDeletes], patch, deckstring]) => {
 				if (!runs?.length) {
 					return null;
 				}
@@ -140,6 +143,10 @@ export class DuelsRunsListComponent extends AbstractSubscriptionStoreComponent i
 			}),
 			takeUntil(this.destroyed$),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByRun(index: number, item: DuelsRun | HeaderInfo): string {

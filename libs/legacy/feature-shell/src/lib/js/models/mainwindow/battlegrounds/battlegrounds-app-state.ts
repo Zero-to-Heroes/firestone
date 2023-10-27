@@ -5,7 +5,6 @@ import { BgsHeroStrategies } from '../../../services/battlegrounds/bgs-meta-hero
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStatsForReview } from '../../battlegrounds/bgs-post-match-stats-for-review';
-import { PatchInfo } from '../../patches';
 import { BattlegroundsCategory } from './battlegrounds-category';
 import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-state';
 
@@ -14,7 +13,7 @@ export class BattlegroundsAppState {
 	readonly categories: readonly BattlegroundsCategory[] = [];
 	// Is this really useful apart from getting the tribes and mmr percentiles?
 	// readonly globalStats: BgsStats = new BgsStats();
-	readonly currentBattlegroundsMetaPatch: PatchInfo;
+	// readonly currentBattlegroundsMetaPatch: PatchInfo;
 	readonly customSimulationState: BgsCustomSimulationState = new BgsCustomSimulationState();
 
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];

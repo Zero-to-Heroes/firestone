@@ -5,10 +5,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { TimePeriod } from '@firestone/duels/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -44,27 +46,28 @@ export class DuelsTimeFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.timePeriods$ = this.store
-			.listen$(([main, nav]) => main.duels.currentDuelsMetaPatch)
-			.pipe(
-				this.mapData(([patch]) => {
-					return [
-						{ value: 'all-time' },
-						{ value: 'past-seven' },
-						{ value: 'past-three' },
-						{ value: 'last-patch', tooltip: formatPatch(patch, this.i18n) },
-					];
-				}),
-			);
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
+		this.timePeriods$ = this.patchesConfig.currentDuelsMetaPatch$$.pipe(
+			this.mapData((patch) => {
+				return [
+					{ value: 'all-time' },
+					{ value: 'past-seven' },
+					{ value: 'past-three' },
+					{ value: 'last-patch', tooltip: formatPatch(patch, this.i18n) },
+				];
+			}),
+		);
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveTimeFilter);
 		this.visible$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
@@ -81,6 +84,10 @@ export class DuelsTimeFilterDropdownComponent
 					].includes(categoryId),
 				),
 			);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

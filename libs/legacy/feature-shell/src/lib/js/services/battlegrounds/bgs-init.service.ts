@@ -4,7 +4,6 @@ import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { PatchInfo } from '../../models/patches';
 import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
 import { GameStatsLoaderService } from '../stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -68,7 +67,7 @@ export class BgsInitService {
 		initialState: BattlegroundsAppState,
 		// bgsGlobalStats: BgsStats,
 		// perfectGames: readonly GameStat[],
-		patch: PatchInfo,
+		// patch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
 		const categories: readonly BattlegroundsCategory[] = [
 			// BattlegroundsCategory.create({
@@ -107,7 +106,7 @@ export class BgsInitService {
 			// globalStats: bgsGlobalStats,
 			// perfectGames: perfectGames,
 			loading: false,
-			currentBattlegroundsMetaPatch: patch,
+			// currentBattlegroundsMetaPatch: patch,
 			initComplete: true,
 		});
 	}

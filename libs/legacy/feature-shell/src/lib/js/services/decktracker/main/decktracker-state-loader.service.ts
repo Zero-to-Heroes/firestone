@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
-import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 
 @Injectable()
@@ -10,7 +9,7 @@ export class DecktrackerStateLoaderService {
 	public buildState(
 		currentState: DecktrackerState,
 		// config: ConstructedConfig = null,
-		patch: PatchInfo = null,
+		// patch: PatchInfo = null,
 		prefs: Preferences = null,
 	): DecktrackerState {
 		const existingFilters = prefs?.desktopDeckFilters ?? currentState.filters ?? new DeckFilters();
@@ -23,11 +22,11 @@ export class DecktrackerStateLoaderService {
 			rankingGroup: existingFilters.rankingGroup ?? 'per-match',
 			rankingCategory: existingFilters.rankingCategory ?? 'leagues',
 		};
-		patch = patch || currentState.patch;
+		// patch = patch || currentState.patch;
 		return currentState.update({
 			filters: filters,
 			isLoading: false,
-			patch: patch,
+			// patch: patch,
 			// config: config ?? currentState.config,
 			initComplete: true,
 		});

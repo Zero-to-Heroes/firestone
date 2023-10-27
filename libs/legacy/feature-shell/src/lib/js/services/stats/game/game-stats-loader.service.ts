@@ -18,6 +18,7 @@ import { PatchInfo } from '../../../models/patches';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
+import { PatchesConfigService } from '../../patches-config.service';
 import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
 import { decode } from '../../utils';
@@ -37,6 +38,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private allCards: CardsFacadeService;
 	private diskCache: DiskCacheService;
 	private store: AppUiStoreService;
+	private patchesConfig: PatchesConfigService;
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
@@ -55,8 +57,10 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 		this.store = AppInjector.get(AppUiStoreService);
+		this.patchesConfig = AppInjector.get(PatchesConfigService);
 
 		await this.store.initComplete();
+		await this.patchesConfig.isReady();
 
 		this.gameStats$$.onFirstSubscribe(async () => {
 			console.debug('[game-stats-loader] first subscriber, loading stats', new Error().stack);
@@ -68,13 +72,10 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			await this.retrieveStats();
 		});
 
-		this.store
-			.listen$(([main]) => main.patchConfig?.patches)
-			.pipe(filter(([patches]) => !!patches?.length))
-			.subscribe(([patches]) => {
-				const lastPatch = patches[patches.length - 1];
-				this.patchInfo = lastPatch;
-			});
+		this.patchesConfig.config$$.pipe(filter((config) => !!config?.patches?.length)).subscribe((config) => {
+			const lastPatch = config.patches[config.patches.length - 1];
+			this.patchInfo = lastPatch;
+		});
 	}
 
 	public async addGame(game: GameStat) {

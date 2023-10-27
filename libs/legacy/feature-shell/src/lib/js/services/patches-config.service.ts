@@ -1,29 +1,82 @@
 import { Injectable } from '@angular/core';
-import { ApiRunner } from '@firestone/shared/framework/core';
-import { PatchesConfig } from '../models/patches';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { PatchInfo, PatchesConfig } from '../models/patches';
 
 const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json';
 
 @Injectable()
-export class PatchesConfigService {
-	private patchesConfig: PatchesConfig;
+export class PatchesConfigService extends AbstractFacadeService<PatchesConfigService> {
+	public config$$: SubscriberAwareBehaviorSubject<PatchesConfig | null>;
+	public currentBattlegroundsMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentConstructedMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentDuelsMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentArenaMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
 
-	constructor(private readonly api: ApiRunner) {}
+	private api: ApiRunner;
 
-	public async getConf(): Promise<PatchesConfig> {
-		await this.init();
-		return this.patchesConfig;
+	private internalSubject$$ = new SubscriberAwareBehaviorSubject<void>(null);
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'patchesConfig', () => !!this.config$$);
 	}
 
-	private async init() {
-		if (this.patchesConfig) {
-			return;
-		}
-		this.patchesConfig = await this.getPatchesConfig();
-		console.log('[patches-config] loaded patches config');
+	protected override assignSubjects() {
+		this.config$$ = this.mainInstance.config$$;
+		this.currentBattlegroundsMetaPatch$$ = this.mainInstance.currentBattlegroundsMetaPatch$$;
+		this.currentConstructedMetaPatch$$ = this.mainInstance.currentConstructedMetaPatch$$;
+		this.currentDuelsMetaPatch$$ = this.mainInstance.currentDuelsMetaPatch$$;
+		this.currentArenaMetaPatch$$ = this.mainInstance.currentArenaMetaPatch$$;
 	}
 
-	private async getPatchesConfig(): Promise<PatchesConfig> {
-		return this.api.callGetApi<PatchesConfig>(`${PATCHES_CONFIG_URL}`);
+	protected async init() {
+		this.config$$ = new SubscriberAwareBehaviorSubject<PatchesConfig | null>(null);
+		this.currentBattlegroundsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentConstructedMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentDuelsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentArenaMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.api = AppInjector.get(ApiRunner);
+
+		this.config$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
+		this.currentBattlegroundsMetaPatch$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
+		this.currentConstructedMetaPatch$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
+		this.currentDuelsMetaPatch$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
+		this.currentArenaMetaPatch$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
+
+		this.internalSubject$$.onFirstSubscribe(async () => {
+			const patchConfig: PatchesConfig | null = await this.api.callGetApi(PATCHES_CONFIG_URL);
+			console.log('[duels-config] loaded config');
+			this.config$$.next(patchConfig);
+			this.currentBattlegroundsMetaPatch$$.next(
+				patchConfig?.patches
+					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
+					: null,
+			);
+			this.currentConstructedMetaPatch$$.next(
+				patchConfig?.patches
+					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
+					: null,
+			);
+			this.currentDuelsMetaPatch$$.next(
+				patchConfig?.patches
+					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
+					: null,
+			);
+			this.currentArenaMetaPatch$$.next(
+				patchConfig?.patches
+					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
+					: null,
+			);
+		});
 	}
 }

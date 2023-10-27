@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import {
@@ -23,6 +23,7 @@ import {
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
 	selector: 'duels-ooc-signature-treasure-selection',
@@ -57,11 +58,14 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
 
 		this.signatureTreasures$ = this.store
@@ -94,8 +98,8 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				// ([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
 			filter(([selectedHeroPower]) => !!selectedHeroPower),
 			this.mapData(
@@ -105,7 +109,8 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 					runs,
 					duelsTopDecks,
 					duelsMetaStats,
-					[dustFilter, mmrFilter, patch],
+					[dustFilter, mmrFilter],
+					patch,
 				]) => {
 					const duelStats = duelsMetaStats?.heroes;
 					const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
@@ -253,6 +258,10 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				} as DuelsSignatureTreasureInfo;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private safeguardTimeout;

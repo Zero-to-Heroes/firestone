@@ -72,6 +72,7 @@ import { LotteryService } from '../lottery/lottery.service';
 import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
+import { PatchesConfigService } from '../patches-config.service';
 import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual, sleep } from '../utils';
@@ -152,6 +153,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ads: AdService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -453,6 +455,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
 	private async init() {
+		await this.patchesConfig.isReady();
 		// Has to be first, since other observables depend on it
 		this.initGameStats();
 		// Needs to be before duels stuff
@@ -641,8 +644,8 @@ export class AppUiStoreService extends Store<Preferences> {
 					([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 					([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
 					([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
-					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 				),
+				this.patchesConfig.currentDuelsMetaPatch$$,
 			])
 				.pipe(
 					map(
@@ -657,8 +660,8 @@ export class AppUiStoreService extends Store<Preferences> {
 								heroFilter,
 								heroPowerFilter,
 								sigTreasureFilter,
-								patch,
 							],
+							patch,
 						]) =>
 							[
 								filterDuelsHeroStats(
@@ -756,10 +759,8 @@ export class AppUiStoreService extends Store<Preferences> {
 
 		const playerBgGames$ = combineLatest([
 			this.gameStats,
-			this.listen$(
-				([main]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles ?? [],
-				([main]) => main.battlegrounds.currentBattlegroundsMetaPatch,
-			),
+			this.listen$(([main]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles ?? []),
+			this.patchesConfig.currentBattlegroundsMetaPatch$$,
 			this.listenPrefs$(
 				(prefs) => prefs.bgsActiveRankFilter,
 				(prefs) => prefs.bgsActiveTribesFilter,
@@ -773,7 +774,8 @@ export class AppUiStoreService extends Store<Preferences> {
 			map(
 				([
 					games,
-					[mmrPercentiles, patchInfo],
+					[mmrPercentiles],
+					patchInfo,
 					[rankFilter, tribesFilter, anomaliesFilter, timeFilter, useMmrFilter, useAnomalyFilter],
 				]) => {
 					console.debug('[bgs-2] rebuilding meta hero stats 2', arguments);

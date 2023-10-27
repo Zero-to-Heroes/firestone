@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { GameStat } from '@firestone/stats/data-access';
@@ -8,7 +15,9 @@ import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.t
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { PatchInfo } from '../../../models/patches';
+import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -44,27 +53,32 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 	runs$: Observable<(ArenaRun | HeaderInfo)[]>;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
+		private readonly arenaRewards: ArenaRewardsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+		await this.arenaRewards.isReady();
+
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
-		this.runs$ = combineLatest(
+		this.runs$ = combineLatest([
 			this.store.gameStats$(),
+			this.arenaRewards.arenaRewards$$,
 			this.store.listen$(
-				([main, nav]) => main.arena.rewards,
 				([main, nav]) => main.arena.activeTimeFilter,
 				([main, nav]) => main.arena.activeHeroFilter,
-				([main, nav]) => main.arena.currentArenaMetaPatch,
 			),
-		).pipe(
-			filter(([stats, [rewards, timeFilter, heroFilter, patch]]) => !!stats?.length),
-			this.mapData(([stats, [rewards, timeFilter, heroFilter, patch]]) => {
+			this.patchesConfig.currentArenaMetaPatch$$,
+		]).pipe(
+			filter(([stats, rewards, [timeFilter, heroFilter]]) => !!stats?.length),
+			this.mapData(([stats, rewards, [timeFilter, heroFilter], patch]) => {
 				const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena').filter((stat) => !!stat.runId);
 				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards);
 				const filteredRuns = arenaRuns
@@ -84,6 +98,10 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 				return flat;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByRun(index: number, item: ArenaRun) {

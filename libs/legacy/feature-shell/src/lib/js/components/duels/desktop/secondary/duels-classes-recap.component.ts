@@ -1,7 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { formatClass } from '../../../../services/hs-utils';
@@ -87,26 +88,29 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionStoreCompone
 	stat$: Observable<Stat>;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.stat$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
+		this.stat$ = combineLatest([
 			this.store.duelsRuns$(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
-		).pipe(
-			filter(([runs, [timeFilter, classFilter, gameMode, patch]]) => !!runs?.length),
-			map(([runs, [timeFilter, classFilter, gameMode, patch]]) =>
+			this.patchesConfig.currentDuelsMetaPatch$$,
+		]).pipe(
+			filter(([runs, [timeFilter, classFilter, gameMode]]) => !!runs?.length),
+			map(([runs, [timeFilter, classFilter, gameMode], patch]) =>
 				filterDuelsRuns(runs, timeFilter, classFilter, gameMode, null, patch, 0),
 			),
 			this.mapData((runs) => {
@@ -126,6 +130,10 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionStoreCompone
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildPlayerClass(

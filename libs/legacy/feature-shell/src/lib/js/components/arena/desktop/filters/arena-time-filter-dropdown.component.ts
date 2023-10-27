@@ -5,10 +5,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -47,53 +49,60 @@ export class ArenaTimeFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
+		this.filter$ = combineLatest([
+			this.patchesConfig.currentArenaMetaPatch$$,
+			this.store.listen$(
 				([main, nav]) => main.arena.activeTimeFilter,
-				([main, nav]) => main.arena.currentArenaMetaPatch,
 				([main, nav]) => nav.navigationArena.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, patch, selectedCategoryId]) => !!filter && !!patch && !!selectedCategoryId),
-				this.mapData(([filter, patch, selectedCategoryId]) => {
-					const options: TimeFilterOption[] = [
-						{
-							value: 'all-time',
-							label: this.i18n.translateString('app.arena.filters.time.past-100'),
-						} as TimeFilterOption,
-						{
-							value: 'last-patch',
-							label: this.i18n.translateString('app.arena.filters.time.last-patch'),
-							tooltip: formatPatch(patch, this.i18n),
-						} as TimeFilterOption,
-						{
-							value: 'past-seven',
-							label: this.i18n.translateString('app.arena.filters.time.past-seven'),
-						} as TimeFilterOption,
-						{
-							value: 'past-three',
-							label: this.i18n.translateString('app.arena.filters.time.past-three'),
-						} as TimeFilterOption,
-					];
-					return {
-						filter: filter,
-						options: options,
-						placeholder:
-							options.find((option) => option.value === filter)?.label ??
-							this.i18n.translateString('app.arena.filters.time.past-100'),
-						visible: true,
-					};
-				}),
-			);
+			),
+		]).pipe(
+			filter(([patch, [filter, selectedCategoryId]]) => !!filter && !!patch && !!selectedCategoryId),
+			this.mapData(([patch, [filter, selectedCategoryId]]) => {
+				const options: TimeFilterOption[] = [
+					{
+						value: 'all-time',
+						label: this.i18n.translateString('app.arena.filters.time.past-100'),
+					} as TimeFilterOption,
+					{
+						value: 'last-patch',
+						label: this.i18n.translateString('app.arena.filters.time.last-patch'),
+						tooltip: formatPatch(patch, this.i18n),
+					} as TimeFilterOption,
+					{
+						value: 'past-seven',
+						label: this.i18n.translateString('app.arena.filters.time.past-seven'),
+					} as TimeFilterOption,
+					{
+						value: 'past-three',
+						label: this.i18n.translateString('app.arena.filters.time.past-three'),
+					} as TimeFilterOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder:
+						options.find((option) => option.value === filter)?.label ??
+						this.i18n.translateString('app.arena.filters.time.past-100'),
+					visible: true,
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

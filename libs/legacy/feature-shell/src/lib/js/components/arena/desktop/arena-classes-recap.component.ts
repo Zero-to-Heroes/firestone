@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -9,6 +9,7 @@ import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.typ
 import { PatchInfo } from '../../../models/patches';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -109,24 +110,27 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 	stats$: Observable<StatInfo>;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.stats$ = combineLatest(
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
+		this.stats$ = combineLatest([
 			this.store.gameStats$(),
 			this.store.listen$(
 				([main, nav]) => main.arena.activeTimeFilter,
 				([main, nav]) => main.arena.activeHeroFilter,
-				([main, nav]) => main.arena.currentArenaMetaPatch,
 			),
-		).pipe(
-			this.mapData(([stats, [timeFilter, heroFilter, patch]]) => {
+			this.patchesConfig.currentArenaMetaPatch$$,
+		]).pipe(
+			this.mapData(([stats, [timeFilter, heroFilter], patch]) => {
 				const arenaMatches = stats?.filter((stat) => stat.gameMode === 'arena');
 				if (!arenaMatches.length) {
 					return null;
@@ -150,6 +154,10 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByMostPlayedClass(index: number, item: MostPlayedClass) {

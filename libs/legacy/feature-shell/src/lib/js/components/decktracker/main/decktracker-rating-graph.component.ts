@@ -1,8 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
@@ -11,6 +11,7 @@ import { PatchInfo } from '../../../models/patches';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -45,19 +46,22 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionStoreCo
 	regionSelected$: Observable<boolean>;
 
 	constructor(
-		private i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		// Force a region select only if multiple regions are available in the stats
-		this.regionSelected$ = combineLatest(
+		this.regionSelected$ = combineLatest([
 			this.store.gameStats$(),
 			this.store.listenPrefs$((prefs) => prefs.regionFilter),
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([gameStats, [region]]) =>
 					// Don't filter for only ranked games, so that the user can clearly understand what they are seeing
@@ -66,18 +70,18 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionStoreCo
 					(!!region && region !== 'all'),
 			),
 		);
-		this.value$ = combineLatest(
+		this.value$ = combineLatest([
 			this.store.gameStats$(),
 			this.store.listen$(
 				([main, nav]) => main.decktracker.filters.gameFormat,
 				([main, nav]) => main.decktracker.filters.time,
 				([main, nav]) => main.decktracker.filters.rankingGroup,
 				([main, nav]) => main.decktracker.filters.rankingCategory,
-				([main, nav]) => main.decktracker.patch,
 			),
-		).pipe(
+			this.patchesConfig.currentConstructedMetaPatch$$,
+		]).pipe(
 			map(
-				([stats, [gameFormat, time, rankingGroup, rankingCategory, patch]]) =>
+				([stats, [gameFormat, time, rankingGroup, rankingCategory], patch]) =>
 					[
 						stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => stat.playerRank),
 						gameFormat,
@@ -102,6 +106,10 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionStoreCo
 				this.buildValue(stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch),
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildValue(

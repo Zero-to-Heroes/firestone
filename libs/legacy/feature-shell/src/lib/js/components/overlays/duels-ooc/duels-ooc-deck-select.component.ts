@@ -16,7 +16,8 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
@@ -75,11 +76,14 @@ export class DuelsOutOfCombatDeckSelectComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.patchesConfig.isReady();
+
 		this.collection$ = this.store
 			.sets$()
 			.pipe(
@@ -102,20 +106,18 @@ export class DuelsOutOfCombatDeckSelectComponent
 		this.decks$ = combineLatest([
 			this.store.duelsRuns$(),
 			this.store.duelsTopDecks$(),
-			this.store.listen$(
-				([main, nav]) => main.duels.tempDuelsDeck,
-				([main, nav]) => main.duels.currentDuelsMetaPatch,
-			),
+			this.store.listen$(([main, nav]) => main.duels.tempDuelsDeck),
+			this.patchesConfig.currentDuelsMetaPatch$$,
 			this.store.listenPrefs$((prefs) => prefs.duelsActiveMmrFilter),
 		]).pipe(
 			filter(
-				([runs, groupedTopDecks, [tempDuelsDeck, patch], [mmrFilter]]) =>
+				([runs, groupedTopDecks, [tempDuelsDeck], patch, [mmrFilter]]) =>
 					tempDuelsDeck?.HeroCardId &&
 					tempDuelsDeck?.HeroPowerCardId &&
 					!!tempDuelsDeck?.DeckList?.length &&
 					!!groupedTopDecks?.length,
 			),
-			this.mapData(([runs, groupedTopDecks, [tempDuelsDeck, patch], [mmrFilter]]) => {
+			this.mapData(([runs, groupedTopDecks, [tempDuelsDeck], patch, [mmrFilter]]) => {
 				const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(tempDuelsDeck);
 				const lastPlayedDeck: DuelsDeckWidgetDeck = this.buildLastPlayedDeck(
 					runs,
@@ -146,6 +148,10 @@ export class DuelsOutOfCombatDeckSelectComponent
 				return [lastPlayedDeck, ...selectedTopDecks].filter((deck) => !!deck);
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onMouseEnter(i: number) {
