@@ -14,10 +14,10 @@ import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { HsGameMetaData } from './game-mode-data.service';
 import { GameStatusService } from './game-status.service';
+import { SceneService } from './game/scene.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
-import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { freeRegexp } from './utils';
 
@@ -35,7 +35,7 @@ export class GameEvents {
 		private readonly gameEventsPlugin: GameEventsPluginService,
 		private readonly events: Events,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
-		private readonly prefs: PreferencesService,
+		private readonly scene: SceneService,
 		private readonly store: MainWindowStoreService,
 		private readonly memoryService: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
@@ -1552,7 +1552,7 @@ export class GameEvents {
 		if (
 			lastLineTimestamp &&
 			Date.now() - lastLineTimestamp > 5 * 60 * 1000 &&
-			![SceneMode.GAMEPLAY].includes(await this.memoryService.getCurrentSceneFromMindVision())
+			![SceneMode.GAMEPLAY].includes(await this.scene.currentScene$$.getValueWithInit())
 		) {
 			console.log(
 				'[game-events] [existing] last line is too old, not doing anything',

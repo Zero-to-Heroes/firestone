@@ -8,6 +8,7 @@ import { GameEvent } from '../../models/game-event';
 import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { SceneService } from '../game/scene.service';
 import { ArenaRewardsUpdatedEvent } from '../mainwindow/store/events/arena/arena-rewards-updated-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
@@ -44,6 +45,7 @@ export class ArenaRunParserService {
 		private events: Events,
 		private api: ApiRunner,
 		private gamesStats: GameStatsLoaderService,
+		private scene: SceneService,
 	) {
 		this.init();
 	}
@@ -160,7 +162,7 @@ export class ArenaRunParserService {
 		}
 
 		// this.logDebug('blurring');
-		const currentScene = await this.memory.getCurrentSceneFromMindVision();
+		const currentScene = await this.scene.currentScene$$.getValueWithInit();
 		// this.logDebug('got current scene', currentScene);
 		if (currentScene !== SceneMode.DRAFT) {
 			return;

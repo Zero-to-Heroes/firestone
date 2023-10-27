@@ -21,6 +21,7 @@ import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { GameStatusService } from '../game-status.service';
+import { SceneService } from '../game/scene.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { getLogsDir } from '../log-utils.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -39,8 +40,8 @@ export class DeckParserService {
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 	private spectating: boolean;
 	private selectedDeckId: number;
-	private currentNonGamePlayScene: SceneMode;
-	private currentScene: SceneMode;
+	// private currentNonGamePlayScene: SceneMode;
+	// private currentScene: SceneMode;
 	private currentDeck: DeckInfo;
 
 	private deckTemplates: readonly DeckInfoFromMemory[];
@@ -56,6 +57,7 @@ export class DeckParserService {
 		private readonly duelsService: DuelsStateBuilderService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
+		private readonly scene: SceneService,
 	) {
 		this.init();
 		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
@@ -123,11 +125,11 @@ export class DeckParserService {
 			this.selectedDeckId,
 			deckFromMemory,
 			this.duelsDeck,
-			this.currentNonGamePlayScene,
+			this.scene.lastNonGamePlayScene$$.value,
 		);
+		const currentNonGamePlayScene = await this.scene.lastNonGamePlayScene$$.getValueWithInit();
 		const activeDeck =
-			(this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ??
-			deckFromMemory;
+			(currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ?? deckFromMemory;
 
 		console.log(
 			'[deck-parser] active deck',
@@ -135,7 +137,7 @@ export class DeckParserService {
 			this.isDeckLogged(metadata.scenarioId),
 			metadata.scenarioId,
 			ARENAS,
-			this.currentScene,
+			this.scene.currentScene$$.value,
 		);
 		let deckInfo: DeckInfo;
 
@@ -279,20 +281,10 @@ export class DeckParserService {
 					}
 				}
 			}
-			if (changes.CurrentScene) {
-				this.currentNonGamePlayScene =
-					!changes.CurrentScene || changes.CurrentScene === SceneMode.GAMEPLAY
-						? this.currentNonGamePlayScene
-						: changes.CurrentScene;
-				this.currentScene = changes.CurrentScene;
-			}
 		});
 
 		// Init fields that are normally populated from memory reading events
 		if (await this.gameStatus.inGame()) {
-			this.currentNonGamePlayScene =
-				this.currentNonGamePlayScene ?? (await this.memory.getCurrentSceneFromMindVision());
-			console.log('[deck-parser] initial scene', this.currentNonGamePlayScene, this.currentScene);
 			this.selectedDeckId = await this.memory.getSelectedDeckId();
 		}
 	}
@@ -454,11 +446,15 @@ export class DeckParserService {
 			return false;
 		}
 		// ...and that we are on the Duels screen
-		console.log('[deck-parser] current scene', this.currentNonGamePlayScene);
+		const [lastNonGamePlayScene, currentScene] = await Promise.all([
+			this.scene.lastNonGamePlayScene$$.getValueWithInit(),
+			this.scene.currentScene$$.getValueWithInit(),
+		]);
+		console.log('[deck-parser] current scene', lastNonGamePlayScene);
 		return (
-			this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ||
+			lastNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ||
 			// In case we launch the app mid-game
-			(this.currentScene === SceneMode.GAMEPLAY && [GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(gameType))
+			(currentScene === SceneMode.GAMEPLAY && [GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(gameType))
 		);
 	}
 }
