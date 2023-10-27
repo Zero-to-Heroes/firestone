@@ -539,6 +539,7 @@ import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/s
 import {
 	CardsFacadeService,
 	ILocalizationService,
+	PLAUSIBLE_DOMAIN,
 	SharedFrameworkCoreModule,
 	setAppInjector,
 } from '@firestone/shared/framework/core';
@@ -1677,6 +1678,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationMockExecutorService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningMockExecutorService },
+		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SceneService,
 		SetsService,

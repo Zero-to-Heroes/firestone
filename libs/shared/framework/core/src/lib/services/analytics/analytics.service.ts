@@ -1,13 +1,17 @@
-import { Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import { sleep, uuid } from '@firestone/shared/framework/common';
 import Plausible from 'plausible-tracker';
 import { OverwolfService } from '../overwolf.service';
 
+export const PLAUSIBLE_DOMAIN = new InjectionToken<string>('plausible.domain');
 @Injectable()
 export class AnalyticsService {
 	private plausible: ReturnType<typeof Plausible>;
 
-	constructor(@Optional() private readonly ow: OverwolfService) {
+	constructor(
+		@Optional() private readonly ow: OverwolfService,
+		@Inject(PLAUSIBLE_DOMAIN) private readonly domain: string,
+	) {
 		this.init();
 	}
 
@@ -15,7 +19,7 @@ export class AnalyticsService {
 		const currentWindow = await this.ow?.getCurrentWindow();
 		if (!currentWindow || currentWindow?.name === OverwolfService.MAIN_WINDOW) {
 			this.plausible = Plausible({
-				domain: 'firestoneapp.gg-app',
+				domain: this.domain,
 				trackLocalhost: true,
 				apiHost: 'https://apps.zerotoheroes.com',
 			});
