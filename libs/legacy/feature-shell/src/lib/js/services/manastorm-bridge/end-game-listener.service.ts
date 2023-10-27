@@ -216,7 +216,7 @@ export class EndGameListenerService {
 									gameSettings: gameSettings,
 								} as UploadInfo),
 						),
-						tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
+						// tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
 						// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
 						// the current game) or the reviewId changed (to mark the start)
 						distinctUntilChanged((a, b) => {
@@ -224,12 +224,12 @@ export class EndGameListenerService {
 							return a?.reviewId === b?.reviewId && a?.gameEnded?.ended === b?.gameEnded?.ended;
 						}),
 						filter((info) => !!info.reviewId && info.gameEnded.ended),
-						tap((info) =>
-							console.debug(
-								'[manastorm-bridge] end game, uploading? spectating=',
-								info.gameEnded.spectating,
-							),
-						),
+						// tap((info) =>
+						// 	console.debug(
+						// 		'[manastorm-bridge] end game, uploading? spectating=',
+						// 		info.gameEnded.spectating,
+						// 	),
+						// ),
 						filter((info) => !info.gameEnded.spectating),
 						tap((info) =>
 							console.debug(
