@@ -67,6 +67,12 @@
 		align-items: center;
 		justify-content: center;
 
+		.label {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
 		.value {
 			display: flex;
 			font-size: 14px;
@@ -87,6 +93,7 @@
 
 		.wins {
 			color: #61ff47;
+			display: flex;
 
 			&:after {
 				content: '-';
@@ -97,10 +104,12 @@
 		}
 		.losses {
 			color: #ff4747;
+			display: flex;
 		}
 
 		.top-1 {
 			color: #61ff47;
+			display: flex;
 
 			&:after {
 				content: '-';
