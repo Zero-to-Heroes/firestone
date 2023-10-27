@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
@@ -43,19 +43,13 @@ export class LotteryWidgetControllerService {
 		);
 		await this.setInitialOverlayValue();
 		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
-			.pipe(
-				tap((info) => console.debug('[lottery-widget] should show overlay?', info)),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			)
+			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
 			.subscribe(async ([[lotteryOverlay], visible]) => {
 				this.shouldShowOverlay$$.next(visible && lotteryOverlay);
 			});
 
 		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
-			.pipe(
-				tap((info) => console.debug('[lottery-widget] should show window?', info)),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			)
+			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
 			.subscribe(async ([[lotteryOverlay], visible]) => {
 				// console.debug('[lottery-widget] setting visibility', visible);
 				const lotteryWindow = await this.ow.obtainDeclaredWindow(OverwolfService.LOTTERY_WINDOW);
@@ -76,7 +70,6 @@ export class LotteryWidgetControllerService {
 			filter((event) => event?.name === 'lottery-visibility-changed'),
 			map((event) => event.data.visible as 'hidden' | 'partial' | 'full'),
 			distinctUntilChanged(),
-			tap((info) => console.debug('[lottery-widget] ad visible?', info)),
 			map((visible) => visible === 'full' || visible === 'partial'),
 			startWith(true),
 		);
@@ -84,13 +77,11 @@ export class LotteryWidgetControllerService {
 		this.store.eventBus$$
 			.pipe(
 				filter((event) => event?.name === 'lottery-closed'),
-				tap((info) => console.log('[lottery-widget] received close event', info)),
 				distinctUntilChanged(),
 			)
 			.subscribe(() => this.closedByUser$$.next(true));
 
 		combineLatest([displayWidgetFromData$, adVisible$]).subscribe(([displayWidget, adVisible]) => {
-			console.debug('[lottery-widget] should track?', displayWidget, adVisible);
 			this.shouldTrack$$.next(displayWidget && adVisible);
 		});
 

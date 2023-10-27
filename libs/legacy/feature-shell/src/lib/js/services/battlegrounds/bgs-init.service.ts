@@ -6,7 +6,6 @@ import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events
 import { GameStatsLoaderService } from '../stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
-import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 
 const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json';
 
@@ -27,11 +26,6 @@ export class BgsInitService {
 
 	private async init() {
 		await this.gameStats.isReady();
-		// TODO: can we defer this?
-		this.gameStats.gameStats$$.subscribe((newGameStats) => {
-			console.debug('[bgs-init] match stats updated');
-			this.bgsStateUpdater?.next(new BgsStatUpdateEvent(newGameStats));
-		});
 		setTimeout(() => {
 			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
 		});

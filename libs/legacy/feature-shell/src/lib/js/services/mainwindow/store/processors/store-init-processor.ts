@@ -22,11 +22,10 @@ export class StoreInitProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('[store-init] populating store');
 		const prefs = await this.prefs.getPreferences();
-		console.log('[store-init] emitting STORE_READY event');
-		this.events.broadcast(Events.STORE_READY);
 		const navState = await this.buildCurrentAppNavState(currentState, navigationState, prefs);
+		console.debug('[store-init] emitting STORE_READY event');
+		this.events.broadcast(Events.STORE_READY);
 		return [currentState, navState];
 	}
 

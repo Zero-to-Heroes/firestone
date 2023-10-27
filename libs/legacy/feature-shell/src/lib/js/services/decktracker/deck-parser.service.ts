@@ -14,6 +14,7 @@ import {
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
+import { distinctUntilChanged } from 'rxjs';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
@@ -233,7 +234,7 @@ export class DeckParserService {
 				}
 			}
 		});
-		this.duelsService.duelsInfo$$.subscribe((duelsInfo) => {
+		this.duelsService.duelsInfo$$.pipe(distinctUntilChanged()).subscribe((duelsInfo) => {
 			console.debug('[duels] got deck', duelsInfo);
 			this.duelsDeck = duelsInfo?.DuelsDeck;
 		});
@@ -261,7 +262,6 @@ export class DeckParserService {
 			}
 		});
 
-		console.debug('[deck-parser] scene', this.scene);
 		this.scene.currentScene$$.subscribe(async (scene) => {
 			// Resetting the selectedDeckId if empty means that if a memory update reset occurs while on
 			// the deck selection screen, or simply that another memory update event occurs (which

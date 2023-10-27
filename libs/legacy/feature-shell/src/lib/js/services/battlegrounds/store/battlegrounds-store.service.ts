@@ -11,7 +11,6 @@ import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { Preferences } from '../../../models/preferences';
 import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
@@ -62,7 +61,6 @@ import { BgsShowPostMatchStatsParser } from './event-parsers/bgs-show-post-match
 import { BgsSpectatingParser } from './event-parsers/bgs-spectating-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
-import { BgsStatUpdateParser } from './event-parsers/bgs-stat-update-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
 import { BgsToggleHighlightMechanicsOnBoardParser } from './event-parsers/bgs-toggle-highlight-mechanics-on-board-parser';
 import { BgsToggleHighlightMinionOnBoardParser } from './event-parsers/bgs-toggle-highlight-minion-on-board-parser';
@@ -200,7 +198,7 @@ export class BattlegroundsStoreService {
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
 			this.handleHotkeyPressed();
 		});
-		this.handleDisplayPreferences();
+		// this.handleDisplayPreferences();
 		this.gameStatus.onGameExit(() => {
 			if (this.memoryInterval) {
 				clearInterval(this.memoryInterval);
@@ -236,7 +234,7 @@ export class BattlegroundsStoreService {
 			});
 		this.prefs.preferences$$.subscribe((prefs) => {
 			console.debug('[bgs-store] prefs updated', prefs);
-			this.handleDisplayPreferences(prefs);
+			this.updateOverlay();
 		});
 	}
 
@@ -574,7 +572,7 @@ export class BattlegroundsStoreService {
 	private async buildEventEmitters() {
 		const result = [(state) => this.battlegroundsStoreEventBus.next(state)];
 		const prefs = await this.prefs.getPreferences();
-		console.log('[bgs-store] is logged in to Twitch?', !!prefs.twitchAccessToken);
+		// console.log('[bgs-store] is logged in to Twitch?', !!prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {
@@ -588,15 +586,17 @@ export class BattlegroundsStoreService {
 		this.eventEmitters = result;
 	}
 
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		await Promise.all(this.overlayHandlers.map((handler) => handler.handleDisplayPreferences(preferences)));
-		this.updateOverlay();
-	}
+	// private async handleDisplayPreferences(preferences: Preferences = null) {
+	// 	// preferences = preferences || (await this.prefs.getPreferences());
+	// 	// await Promise.all(this.overlayHandlers.map((handler) => handler.handleDisplayPreferences(preferences)));
+	// 	this.updateOverlay();
+	// }
 
 	private async updateOverlay() {
 		if (this.overlayHandlers?.length) {
+			const start = Date.now();
 			await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(this.state)));
+			console.debug('[bgs-store] overlay updated in', Date.now() - start, 'ms');
 		}
 		if (this.state.forceOpen) {
 			this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
@@ -610,7 +610,6 @@ export class BattlegroundsStoreService {
 			new BgsGameSettingsParser(this.allCards),
 			// new BattlegroundsResetBattleStateParser(),
 			// new BgsInitParser(this.prefs, this.i18n),
-			new BgsStatUpdateParser(this.allCards, this.patchesService),
 			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs, this.i18n),
 			new BgsHeroSelectedParser(this.allCards, this.i18n),
 			new BgsNextOpponentParser(this.i18n, this.allCards),

@@ -1,5 +1,4 @@
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { PreferencesService } from '../../../preferences.service';
 import { isWindowClosed } from '../../../utils';
@@ -8,7 +7,6 @@ import { BattlegroundsOverlay } from './battlegrounds-overlay';
 
 export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 	private closedByUser: boolean;
-	private bgsActive = true;
 
 	constructor(private readonly prefs: PreferencesService, private readonly ow: OverwolfService) {}
 
@@ -20,12 +18,9 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		}
 	}
 
-	public async handleDisplayPreferences(preferences: Preferences) {
-		this.bgsActive = preferences.bgsEnableApp && preferences.bgsFullToggle;
-	}
-
 	public async updateOverlay(state: BattlegroundsState) {
 		const prefs = await this.prefs.getPreferences();
+		const bgsActive = prefs.bgsEnableApp && prefs.bgsFullToggle;
 		const windowId = prefs.bgsUseOverlay
 			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
 			: OverwolfService.BATTLEGROUNDS_WINDOW;
@@ -38,7 +33,7 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		if (state?.forceOpen) {
 			this.closedByUser = false;
 		}
-		if (this.bgsActive && state?.forceOpen) {
+		if (bgsActive && state?.forceOpen) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
 				// 	'[bgs-main-window] restoring window',

@@ -47,7 +47,7 @@ export class AppStartupService {
 		await this.store.init();
 
 		if (!this.loadingWindowShown) {
-			console.log('[startup] initializing loading window');
+			console.debug('[startup] initializing loading window');
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
 			this.loadingWindowId = window.id;
 			// await this.ow.restoreWindow(this.loadingWindowId);

@@ -4,12 +4,10 @@ import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import { Preferences } from '../../../models/preferences';
 import { BroadcastEvent, Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
-import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
 import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 
@@ -25,7 +23,6 @@ export class MercenariesOutOfCombatService {
 
 	private parsers: { [eventType: string]: readonly MercenariesOutOfCombatParser[] };
 	private eventEmitters: ((state: MercenariesOutOfCombatState) => void)[] = [];
-	private overlayHandlers: MercenariesOutOfCombatOverlayHandler[];
 
 	constructor(
 		private readonly events: Events,
@@ -60,20 +57,16 @@ export class MercenariesOutOfCombatService {
 
 	private async emitState(
 		newState: MercenariesOutOfCombatState,
-		currentScene: SceneMode,
-		preferences: Preferences,
+		// currentScene: SceneMode,
+		// preferences: Preferences,
 	): Promise<void> {
-		console.debug('[mercenaries-ooc-store] emitting new state', newState, currentScene, preferences);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
-		await Promise.all(
-			this.overlayHandlers.map((handler) => handler.updateOverlay(newState, currentScene, preferences)),
-		);
+		console.debug('[mercenaries-ooc-store] emitting new state', newState);
 	}
 
 	private async init() {
 		this.registerParser();
 		this.buildEventEmitters();
-		this.buildOverlayHandlers();
 
 		// So that we're sure that all services have been initialized
 		await this.store.initComplete();
@@ -92,13 +85,9 @@ export class MercenariesOutOfCombatService {
 				concatMap(async ([event, currentScene]) => await this.processEvent(event, currentScene)),
 			)
 			.subscribe();
-		combineLatest(this.prefs.preferences$$, this.internalStore$.asObservable(), this.scene.currentScene$$)
-			.pipe(
-				concatMap(
-					async ([prefs, newState, currentScene]) => await this.emitState(newState, currentScene, prefs),
-				),
-			)
-			.subscribe();
+		combineLatest([this.internalStore$.asObservable()]).subscribe(
+			async ([newState]) => await this.emitState(newState),
+		);
 		// });
 	}
 
@@ -110,10 +99,6 @@ export class MercenariesOutOfCombatService {
 	private buildEventEmitters() {
 		const result = [(state: MercenariesOutOfCombatState) => this.store$.next(state)];
 		this.eventEmitters = result;
-	}
-
-	private buildOverlayHandlers() {
-		this.overlayHandlers = [];
 	}
 
 	private registerParser() {
