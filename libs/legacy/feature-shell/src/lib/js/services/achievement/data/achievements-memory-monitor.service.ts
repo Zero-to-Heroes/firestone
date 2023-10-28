@@ -39,6 +39,7 @@ export class AchievementsMemoryMonitor {
 		});
 		this.achievementCategories$$.onFirstSubscribe(async () => {
 			console.log('[achievements-memory-monitor] init achievementCategories');
+			console.debug('[achievements-memory-monitor] init achievementCategories', new Error().stack);
 			this.initAchievements();
 		});
 	}

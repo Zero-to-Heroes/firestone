@@ -39,7 +39,7 @@ export class AdService {
 	public async shouldDisplayAds(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return true;
+			return false;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
@@ -67,7 +67,7 @@ export class AdService {
 	public async hasPremiumSub(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return false;
+			return true;
 		}
 		const shouldDisplayAds = await this.shouldDisplayAds();
 		return !shouldDisplayAds;
