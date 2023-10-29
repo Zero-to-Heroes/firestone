@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -6,11 +7,10 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class GameStatusService extends AbstractFacadeService<GameStatusService> {
-	public inGame$$: BehaviorSubject<boolean>;
+	public inGame$$: SubscriberAwareBehaviorSubject<boolean>;
 
 	private startListeners = [];
 	private exitListeners = [];
@@ -27,9 +27,14 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	protected async init() {
-		this.inGame$$ = new BehaviorSubject<boolean>(false);
+		this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean>(null);
 		this.ow = AppInjector.get(OverwolfService);
 		this.prefs = AppInjector.get(PreferencesService);
+
+		this.inGame$$.onFirstSubscribe(async () => {
+			const inGame = await this.ow.inGame();
+			this.inGame$$.next(inGame);
+		});
 
 		this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (this.ow.exitGame(res)) {
@@ -46,9 +51,9 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		const gameInfo = await this.ow.getRunningGameInfo();
 		this.updateExecutionPathInPrefs(gameInfo?.executionPath);
 
-		if (await this.ow.inGame()) {
-			this.inGame$$.next(true);
-		}
+		// if (await this.ow.inGame()) {
+		// 	this.inGame$$.next(true);
+		// }
 	}
 
 	public async onGameStart(callback) {
@@ -63,7 +68,8 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	public async inGame(): Promise<boolean> {
-		return this.ow.inGame();
+		await this.isReady();
+		return this.inGame$$.getValueWithInit();
 	}
 
 	private async updateExecutionPathInPrefs(executionPath: string) {
