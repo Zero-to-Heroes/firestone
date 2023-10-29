@@ -70,7 +70,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						<div class="cell cards">
 							<span
 								[owTranslate]="'app.decktracker.meta.cards-header'"
-								[helpTooltip]="'app.decktracker.meta.cards-header-tooltip' | owTranslate"
+								[helpTooltip]="'app.decktracker.meta.core-cards-header-tooltip' | owTranslate"
 							></span>
 						</div>
 					</div>
