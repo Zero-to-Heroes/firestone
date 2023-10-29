@@ -32,7 +32,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						*ngIf="value.deckGroups?.length"
 						class="runs-list"
 						[items]="value.deckGroups"
-						[bufferAmount]="15"
+						[bufferAmount]="6"
 						[attr.aria-label]="'Duels recent top decks'"
 						role="list"
 						scrollable
