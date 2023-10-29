@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { DuelsTopDeckService } from '@legacy-import/src/lib/js/services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -61,16 +62,18 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent 
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.duelsTopDecks.isReady();
 
 		this.deckInfo$ = combineLatest([
 			this.store.duelsDecks$(),
-			this.store.duelsTopDecks$(),
+			this.duelsTopDecks.topDeck$$,
 			this.store.listen$(
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,

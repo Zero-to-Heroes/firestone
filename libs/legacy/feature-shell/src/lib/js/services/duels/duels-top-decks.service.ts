@@ -3,7 +3,13 @@ import { Injectable } from '@angular/core';
 import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
-import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
 	combineLatest,
@@ -25,26 +31,37 @@ const DUELS_GLOBAL_STATS_DECKS =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
 
 @Injectable()
-export class DuelsTopDeckService {
-	public topDeck$$ = new SubscriberAwareBehaviorSubject<readonly DuelsGroupedDecks[]>([]);
+export class DuelsTopDeckService extends AbstractFacadeService<DuelsTopDeckService> {
+	public topDeck$$: SubscriberAwareBehaviorSubject<readonly DuelsGroupedDecks[]>;
 
 	private remoteTopDeckStats$$: BehaviorSubject<ExtendedDuelsStatDecks | null> =
 		new BehaviorSubject<ExtendedDuelsStatDecks | null>(null);
 	private loadingInitialData = false;
 
-	constructor(
-		private readonly api: ApiRunner,
-		private readonly setsManager: SetsManagerService,
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-	) {
-		this.init();
-		window['duelsTopDeckService'] = this;
+	private api: ApiRunner;
+	private setsManager: SetsManagerService;
+	private allCards: CardsFacadeService;
+	private i18n: LocalizationFacadeService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'duelsTopDecks', () => !!this.topDeck$$);
 	}
 
-	private async init() {
+	protected override assignSubjects() {
+		this.topDeck$$ = this.mainInstance.topDeck$$;
+	}
+
+	protected async init() {
+		this.topDeck$$ = new SubscriberAwareBehaviorSubject<readonly DuelsGroupedDecks[] | null>(null);
+		this.api = AppInjector.get(ApiRunner);
+		this.setsManager = AppInjector.get(SetsManagerService);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.i18n = AppInjector.get(LocalizationFacadeService);
+
 		this.topDeck$$.onFirstSubscribe(() => {
-			const sets$ = this.setsManager.sets$$.asObservable();
+			console.log('[duels-top-deck] init');
+
+			const sets$ = this.setsManager.sets$$;
 			const debouncedSets$ = concat(sets$.pipe(take(1)), sets$.pipe(skip(1), debounceTime(2000))).pipe(
 				distinctUntilChanged(),
 			);

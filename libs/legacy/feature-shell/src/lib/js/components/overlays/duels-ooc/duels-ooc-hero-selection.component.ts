@@ -19,6 +19,7 @@ import {
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
@@ -57,12 +58,14 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.duelsTopDecks.isReady();
 
 		// Make sure the data for the last patch is available
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
@@ -79,7 +82,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 
 		const topDecks$ = combineLatest([
 			allHeroCardIds$,
-			this.store.duelsTopDecks$(),
+			this.duelsTopDecks.topDeck$$,
 			this.store.duelsMetaStats$(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,

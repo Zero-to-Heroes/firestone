@@ -9,9 +9,11 @@
 .duels-filters {
 	display: flex;
 	flex-wrap: wrap;
+	row-gap: 5px;
 	margin-bottom: 0;
 	width: 100%;
 	position: relative;
+	margin-bottom: 15px;
 	// Until all filters are refactored
 	min-height: 0;
 
@@ -19,18 +21,17 @@
 	.filter {
 		// So that the margin is not applied if the filter is not displayed (no ng-select element)
 		::ng-deep filter-dropdown ng-select {
-			margin-bottom: 15px;
+			margin-bottom: 0;
 		}
 	}
 
 	preference-toggle {
-		margin-bottom: 15px;
+		margin-bottom: 0;
 	}
 }
 
 .deck-search {
-    width: 155px;
-
+	width: 155px;
 }
 
 .hide-below-threshold-link,

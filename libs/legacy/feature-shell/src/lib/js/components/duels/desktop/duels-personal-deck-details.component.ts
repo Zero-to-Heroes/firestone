@@ -3,6 +3,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { SetCard } from '../../../models/set';
+import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { DeckInfo, getCurrentDeck } from '../../../services/ui-store/duels-ui-helper';
@@ -105,12 +106,14 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.duelsTopDecks.isReady();
 
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
@@ -124,7 +127,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionStore
 		);
 		this.deck$ = combineLatest([
 			this.store.duelsDecks$(),
-			this.store.duelsTopDecks$(),
+			this.duelsTopDecks.topDeck$$,
 			this.store.listen$(
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,

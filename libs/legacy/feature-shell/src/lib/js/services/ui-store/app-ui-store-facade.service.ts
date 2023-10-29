@@ -20,7 +20,6 @@ import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
-import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsBucketsData } from '../../models/duels/duels-state';
@@ -147,9 +146,9 @@ export class AppUiStoreFacadeService {
 		return this.store.duelsDecks$();
 	}
 
-	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-		return this.store.duelsTopDecks$();
-	}
+	// public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+	// 	return this.store.duelsTopDecks$();
+	// }
 
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
 		return this.store.duelsRuns$();

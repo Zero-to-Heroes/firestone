@@ -23,6 +23,7 @@ import {
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
@@ -59,12 +60,14 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.duelsTopDecks.isReady();
 
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
 
@@ -91,7 +94,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 			this.signatureTreasures$,
 			selectedHeroPower$,
 			this.store.duelsRuns$(),
-			this.store.duelsTopDecks$(),
+			this.duelsTopDecks.topDeck$$,
 			this.store.duelsMetaStats$(),
 			this.store.listen$(
 				// ([main, nav]) => main.duels.globalStats?.heroes,

@@ -17,6 +17,7 @@ import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
@@ -77,12 +78,14 @@ export class DuelsOutOfCombatDeckSelectComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.duelsTopDecks.isReady();
 
 		this.collection$ = this.store
 			.sets$()
@@ -105,7 +108,7 @@ export class DuelsOutOfCombatDeckSelectComponent
 			);
 		this.decks$ = combineLatest([
 			this.store.duelsRuns$(),
-			this.store.duelsTopDecks$(),
+			this.duelsTopDecks.topDeck$$,
 			this.store.listen$(([main, nav]) => main.duels.tempDuelsDeck),
 			this.patchesConfig.currentDuelsMetaPatch$$,
 			this.store.listenPrefs$((prefs) => prefs.duelsActiveMmrFilter),

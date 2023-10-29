@@ -32,7 +32,6 @@ import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { GameState } from '../../models/decktracker/game-state';
-import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
@@ -64,7 +63,6 @@ import { DuelsBucketsService } from '../duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { DuelsLeaderboardService } from '../duels/duels-leaderboard.service';
 import { DuelsMetaStatsService } from '../duels/duels-meta-stats.service';
-import { DuelsTopDeckService } from '../duels/duels-top-decks.service';
 import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
@@ -76,7 +74,7 @@ import { PatchesConfigService } from '../patches-config.service';
 import { PreferencesService } from '../preferences.service';
 import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
-import { arraysEqual, sleep } from '../utils';
+import { arraysEqual } from '../utils';
 import { filterBgsMatchStats } from './bgs-ui-helper';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
@@ -110,7 +108,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsHeroStats = new SubscriberAwareBehaviorSubject<readonly DuelsHeroPlayerStat[]>([]);
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
-	private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
+	// private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
 	private duelsAdventureInfo: Observable<AdventuresInfo>;
 	private duelsBuckets: Observable<readonly DuelsBucketsData[]>;
 	private duelsMetaStats: Observable<DuelsStat>;
@@ -310,9 +308,9 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.duelsDecks;
 	}
 
-	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-		return this.duelsTopDecks;
-	}
+	// public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+	// 	return this.duelsTopDecks;
+	// }
 
 	public duelsAdventureInfo$(): Observable<AdventuresInfo> {
 		return this.duelsAdventureInfo;
@@ -506,7 +504,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.currentConstructedMetaArchetype = (
 			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
 		).currentConstructedMetaArchetype$$;
-		await this.initDuelsTopDecks();
+		// this.duelsTopDecks = (this.ow.getMainWindow().duelsTopDeckService as DuelsTopDeckService).topDeck$$;
 		this.initialized = true;
 	}
 
@@ -602,13 +600,6 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initDuelsDecks() {
 		this.duelsDecks = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsDecks$$;
-	}
-
-	private async initDuelsTopDecks() {
-		while (!this.duelsTopDecks) {
-			this.duelsTopDecks = (this.ow.getMainWindow().duelsTopDeckService as DuelsTopDeckService).topDeck$$;
-			await sleep(50);
-		}
 	}
 
 	private initDuelsRuns() {
