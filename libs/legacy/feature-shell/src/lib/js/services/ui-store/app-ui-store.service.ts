@@ -781,7 +781,7 @@ export class AppUiStoreService extends Store<Preferences> {
 						!mmrPercentiles?.length || !rankFilter || !useMmrFilter
 							? 0
 							: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
-					const bgGames = games
+					const bgGames = (games ?? [])
 						.filter((g) => isBattlegrounds(g.gameMode))
 						.filter(
 							(g) =>
