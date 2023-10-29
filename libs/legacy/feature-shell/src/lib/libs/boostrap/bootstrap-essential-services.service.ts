@@ -31,7 +31,7 @@ export class BootstrapEssentialServicesService {
 		await this.initLocalization();
 		// Init is started in the constructor, but we make sure that all cards are properly retrieved before moving forward
 		await this.initCardsService.init();
-		this.init_OWUtilsService.initialize();
+		// this.init_OWUtilsService.initialize();
 	}
 
 	private async initLocalization() {

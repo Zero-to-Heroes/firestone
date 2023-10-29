@@ -1,10 +1,68 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, WindowManagerService } from '@firestone/shared/framework/core';
 
 declare let OverwolfPlugin: any;
 
 @Injectable()
 export class OwUtilsService {
+	private readonly serviceName = 'ow-utils';
+
+	private internalService: OwUtilsServiceInternal;
+
+	constructor(protected readonly windowManager: WindowManagerService) {
+		this.initFacade();
+	}
+
+	private async initFacade() {
+		const isMainWindow = await this.windowManager.isMainWindow();
+		if (isMainWindow) {
+			this.internalService = new OwUtilsServiceInternal();
+			this.internalService.initialize();
+			window[this.serviceName] = this.internalService;
+		} else {
+			const mainWindow = await this.windowManager.getMainWindow();
+			this.internalService = mainWindow[this.serviceName];
+		}
+	}
+
+	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
+		return this.internalService.flashWindow(windowName);
+	}
+
+	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string, any]> {
+		return this.internalService.captureWindow(windowName, copyToClipboard);
+	}
+
+	public async captureActiveWindow(): Promise<[string, any]> {
+		return this.internalService.captureActiveWindow();
+	}
+
+	public async deleteFileOrFolder(path: string): Promise<void> {
+		return this.internalService.deleteFileOrFolder(path);
+	}
+
+	public async copyFile(sourcePath: string, destinationDirectory: string): Promise<void> {
+		return this.internalService.copyFile(sourcePath, destinationDirectory);
+	}
+
+	public async copyFiles(sourceDirectory: string, destinationDirectory: string): Promise<void> {
+		return this.internalService.copyFiles(sourceDirectory, destinationDirectory);
+	}
+
+	public async downloadAndUnzipFile(fileUrl: string, path: string): Promise<void> {
+		return this.internalService.downloadAndUnzipFile(fileUrl, path);
+	}
+
+	public async downloadFileTo(fileUrl: string, path: string, targetFileName): Promise<boolean> {
+		return this.internalService.downloadFileTo(fileUrl, path, targetFileName);
+	}
+
+	public async get() {
+		return this.internalService.get();
+	}
+}
+
+class OwUtilsServiceInternal {
 	private plugin: any;
 	initialized = false;
 
@@ -107,7 +165,7 @@ export class OwUtilsService {
 
 	public async downloadAndUnzipFile(fileUrl: string, path: string): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
-			console.log('[ow-utils] downloadAndUnzipFile-ing', fileUrl, path);
+			console.log('[ow-utils] downloadAndUnzipFile-ing', fileUrl, path, this);
 			const plugin = await this.get();
 			try {
 				plugin.downloadAndUnzipFile(fileUrl, path, (status, message) => {
