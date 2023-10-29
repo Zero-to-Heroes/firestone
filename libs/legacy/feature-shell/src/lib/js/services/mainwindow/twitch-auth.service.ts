@@ -75,6 +75,30 @@ export class TwitchAuthService {
 		await this.store.initComplete();
 		await this.scene.isReady();
 
+		this.stateUpdater.subscribe((twitchInfo: any) => {
+			console.log('[twitch-auth] received access token', !!twitchInfo);
+			this.saveAccessToken(twitchInfo.access_token);
+		});
+		this.store.listenPrefs$((prefs) => prefs.twitchDelay).subscribe(([delay]) => (this.twitchDelay = delay));
+		this.twitchAccessToken$ = this.store
+			.listenPrefs$((prefs) => prefs.twitchAccessToken)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+			);
+		this.streamerPrefs$ = this.store
+			.listenPrefs$(
+				(prefs) => prefs.bgsHideSimResultsOnRecruit,
+				(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+			)
+			.pipe(
+				distinctUntilChanged(),
+				map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
+					bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
+					bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
+				})),
+			);
+
 		this.gameStatus.inGame$$
 			.pipe(
 				filter((inGame) => inGame),
@@ -82,32 +106,6 @@ export class TwitchAuthService {
 			)
 			.subscribe(async () => {
 				console.log('[twitch-auth] init');
-				this.stateUpdater.subscribe((twitchInfo: any) => {
-					console.log('[twitch-auth] received access token', !!twitchInfo);
-					this.saveAccessToken(twitchInfo.access_token);
-				});
-
-				this.store
-					.listenPrefs$((prefs) => prefs.twitchDelay)
-					.subscribe(([delay]) => (this.twitchDelay = delay));
-				this.twitchAccessToken$ = this.store
-					.listenPrefs$((prefs) => prefs.twitchAccessToken)
-					.pipe(
-						map(([pref]) => pref),
-						distinctUntilChanged(),
-					);
-				this.streamerPrefs$ = this.store
-					.listenPrefs$(
-						(prefs) => prefs.bgsHideSimResultsOnRecruit,
-						(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
-					)
-					.pipe(
-						distinctUntilChanged(),
-						map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
-							bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
-							bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
-						})),
-					);
 				combineLatest([
 					this.scene.currentScene$$,
 					this.deckEvents,
