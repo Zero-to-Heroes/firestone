@@ -32,7 +32,7 @@ export class BgsMetaHeroStatsService {
 				distinctUntilChanged(),
 			)
 			.subscribe(async ([[timeFilter, mmrFilter, useMmrFilter], requestLoad]) => {
-				console.debug('[bgs-meta-hero] loading meta hero stats', timeFilter, mmrFilter, useMmrFilter);
+				console.log('[bgs-meta-hero] loading meta hero stats', timeFilter, mmrFilter, useMmrFilter);
 				this.store.send(new BattlegroundsMetaHeroStatsLoadedEvent(null));
 				const mmr = useMmrFilter ? mmrFilter : 100;
 				const stats = await this.access.loadMetaHeroStats(timeFilter, mmr);
