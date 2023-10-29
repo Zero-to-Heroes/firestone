@@ -126,7 +126,7 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	private async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<DeckStats> {
-		const fileName = `${format}/${time}/${rank}/overview.gz.json`;
+		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load deck stats', url, format, time, rank);
 		const resultStr = await this.api.get(url);
@@ -147,7 +147,7 @@ export class ConstructedMetaDecksStateService {
 		rank: RankBracket,
 	): Promise<DeckStat> {
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
-		const fileName = `${format}/${time}/${rank}/deck/${deckId}.gz.json`;
+		const fileName = `${format}/${rank}/${time}/deck/${deckId}.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
 		const resultStr = await this.api.get(url);
@@ -162,7 +162,7 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	private async loadNewArchetypes(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<ArchetypeStats> {
-		const fileName = `${format}/${time}/${rank}/overview.gz.json`;
+		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load archetype stats', url, format, time, rank);
 		const resultStr = await this.api.get(url);
@@ -182,7 +182,7 @@ export class ConstructedMetaDecksStateService {
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<ArchetypeStat> {
-		const fileName = `${format}/${time}/${rank}/archetype/${archetypeId}.gz.json`;
+		const fileName = `${format}/${rank}/${time}/archetype/${archetypeId}.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for archetype', url, format, time, rank, archetypeId);
 		const resultStr = await this.api.get(url);
