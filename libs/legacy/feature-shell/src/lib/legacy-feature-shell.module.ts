@@ -638,7 +638,6 @@ import { TwitchBgsHeroOverviewComponent } from './js/components/decktracker/over
 import { FilterComponent } from './js/components/filter.component';
 import { FsFilterDropdownComponent } from './js/components/fs-filter-dropdown.component';
 import { HotkeyComponent } from './js/components/hotkey.component';
-import { InfiniteScrollComponent } from './js/components/infinite-scroll.component';
 import { SecondaryDefaultComponent } from './js/components/main-window/secondary-default.component';
 import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
@@ -932,7 +931,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceDropdownComponent,
 		PreferenceYNLimitedComponent,
 
-		InfiniteScrollComponent,
 		FilterComponent,
 		SafeHtmlPipe,
 		OwTranslatePipe,
@@ -1042,7 +1040,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DoubleClickDirective,
 		OwTranslateDirective,
 
-		InfiniteScrollComponent,
 		FilterComponent,
 		SafeHtmlPipe,
 		OwTranslatePipe,
