@@ -133,6 +133,7 @@ export const giftCreators = [
 	CardIds.DarkPeddler_WON_096,
 	CardIds.DarkPeddler,
 	CardIds.DeathbringerSaurfangCore_RLK_082,
+	CardIds.TheLichKing_DeathGripToken,
 	CardIds.DeathstalkerRexxar_BuildABeast,
 	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
@@ -472,6 +473,7 @@ export const giftCreators = [
 	CardIds.RunesOfDarkness_YOG_511,
 	CardIds.RunicAdornment,
 	CardIds.RunicHelmTavernBrawl,
+	CardIds.RunicHelm_RunicHelmTavernBrawlEnchantment,
 	CardIds.RuniTimeExplorer_ValdrakkenToken_WON_053t5,
 	CardIds.RuniTimeExplorer_WON_053,
 	CardIds.SandwaspQueen,

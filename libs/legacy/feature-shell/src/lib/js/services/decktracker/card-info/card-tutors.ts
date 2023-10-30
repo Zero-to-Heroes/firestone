@@ -139,6 +139,7 @@ export const tutors = [
 	CardIds.SeafloorGateway_Story_11_SeafloorGatewayPuzzle,
 	CardIds.SeafloorGateway_TSC_055,
 	CardIds.SecretPassage_SecretEntranceEnchantment,
+	CardIds.SecretStudiesTavernBrawl,
 	CardIds.SeekGuidance_DiscoverTheVoidShardToken,
 	CardIds.SeekGuidance,
 	CardIds.SenseDemonsLegacy_EX1_317,

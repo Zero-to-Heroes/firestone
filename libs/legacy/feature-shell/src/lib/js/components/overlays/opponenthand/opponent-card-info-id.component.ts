@@ -113,6 +113,8 @@ export class OpponentCardInfoIdComponent {
 				return CardIds.DivineIlluminationTavernBrawl;
 			case CardIds.Melomania_MelomaniaEnchantment:
 				return CardIds.Melomania;
+			case CardIds.RunicHelmTavernBrawl:
+				return CardIds.RunicHelm_RunicHelmTavernBrawlEnchantment;
 		}
 
 		// The base case
