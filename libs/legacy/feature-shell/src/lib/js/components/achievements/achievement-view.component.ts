@@ -102,7 +102,9 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
 			),
 		);
-		this.canPin$ = this.achievement$.pipe(this.mapData((achievement) => !achievement.isFullyCompleted()));
+		this.canPin$ = this.achievement$.pipe(
+			this.mapData((achievement) => !!achievement.hsAchievementId && !achievement.isFullyCompleted()),
+		);
 		this.isPinned$ = combineLatest([this.achievement$, this.pinnedAchievements$$]).pipe(
 			this.mapData(([achievement, pinnedAchievements]) =>
 				pinnedAchievements.includes(achievement.hsAchievementId),
