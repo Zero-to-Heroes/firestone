@@ -178,17 +178,27 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	// console.debug('building attribute change', card);
 	// If the card is played by an effect (eg Manaling), it's possible that the creatorCard
 	// doesn't have the correct id
-	if (creatorCard?.cardId === CardIds.Ignite || newCardId === CardIds.Ignite) {
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.Ignite)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	if (creatorCard?.cardId === CardIds.Bottomfeeder || newCardId === CardIds.Bottomfeeder) {
+	if (
+		isCorrectCardId(creatorCard, newCardId, CardIds.RenosMagicalTorch) ||
+		isCorrectCardId(creatorCard, newCardId, CardIds.RenosMagicalTorchTavernBrawl)
+	) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	if (creatorCard?.cardId === CardIds.StudentOfTheStars || newCardId === CardIds.StudentOfTheStars) {
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.Bottomfeeder)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	if (creatorCard?.cardId === CardIds.SunscaleRaptor || newCardId === CardIds.SunscaleRaptor) {
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.StudentOfTheStars)) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
+	}
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.SunscaleRaptor)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
 	return null;
+};
+
+const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds): boolean => {
+	return creatorCard?.cardId === target || newCardId === target;
 };
