@@ -33,7 +33,7 @@ export class CardsFacadeService {
 	private async init() {
 		// eslint-disable-next-line no-async-promise-executor
 		return new Promise<void>(async (resolve, reject) => {
-			let retriesLeft = 50;
+			let retriesLeft = 150;
 			this.service = this.ow?.getMainWindow()?.cards;
 			while (!this.service && this.ow && retriesLeft >= 0) {
 				await sleep(500);
