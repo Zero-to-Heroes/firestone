@@ -658,4 +658,7 @@ export const giftCreators = [
 	CardIds.FloSlatebrandTavernBrawl,
 	CardIds.DinoTrackingTavernBrawl,
 	CardIds.BlazingInvocation,
+	CardIds.Spyglass_GILA_811,
+	CardIds.SpyglassTavernBrawl,
+	CardIds.RingOfPhaseshifting_RingOfPhaseshiftingTavernBrawlEnchantment,
 ];
