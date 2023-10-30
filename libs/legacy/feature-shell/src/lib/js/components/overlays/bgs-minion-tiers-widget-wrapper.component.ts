@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, SceneMode } from '@firestone-hs/reference-data';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Preferences } from '../../models/preferences';
@@ -70,17 +70,10 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.store.listenBattlegrounds$(
 				([state, prefs]) => state?.inGame,
 				([state, prefs]) => !!state?.currentGame,
-				([state, prefs]) => state?.currentGame?.anomalies,
 			),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [inGame, isCurrentGame, anomalies]]) => {
-				return (
-					inGame &&
-					isCurrentGame &&
-					displayFromPrefs &&
-					currentScene === SceneMode.GAMEPLAY &&
-					!anomalies?.includes(CardIds.TavernSpecial_BG27_Anomaly_103)
-				);
+			this.mapData(([currentScene, [displayFromPrefs], [inGame, isCurrentGame]]) => {
+				return inGame && isCurrentGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
 			this.handleReposition(),
 		);
