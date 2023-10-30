@@ -195,4 +195,7 @@ export const tutors = [
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion_CFM_806,
+	CardIds.SrExcavator,
+	CardIds.SrExcavatorTavernBrawl,
+	CardIds.TheStoneOfJordanTavernBrawlToken,
 ];
