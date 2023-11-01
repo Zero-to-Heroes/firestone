@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -128,6 +128,10 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 		);
 		[this.constructedValue$, this.constructedLabel$, this.constructedTooltip$] =
 			this.lotteryInfo(constructedStatKey$);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	login() {
