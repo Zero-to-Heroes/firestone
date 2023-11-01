@@ -513,6 +513,7 @@ export const giftCreators = [
 	CardIds.Shadowcasting101_Shadowcasting101TavernBrawlEnchantment_PVPDR_AV_Passive04e1,
 	CardIds.ShadowCouncil_BT_306,
 	CardIds.ShadowVisions,
+	CardIds.ShakuTheCollector,
 	CardIds.ShiftingShade,
 	CardIds.Shimmerfly,
 	CardIds.ShockHopper_YOG_524,
