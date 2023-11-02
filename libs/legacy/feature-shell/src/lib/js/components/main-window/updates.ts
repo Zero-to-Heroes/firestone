@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.4.13',
+		version: '12.4.17',
 		force: false,
 		sections: [
 			// {
@@ -43,30 +43,21 @@ export const updates: readonly Update[] = [
 			// 	This first phase focuses on making the app load faster when on desktop (i.e. HS is not running).
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Try and fix an issue where the run ID in duels was not always consistent across games of the same run, which messed up with the "high-wins decks" detection. IMPORTANT: the first game started after updating the app to 12.4.13 (or later) will be in a new run. Sorry about the inconvenience.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the tracker would get confused when starting the app in-game, or when handling some kinds of disconnects.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'duels',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Try and fix an issue where the run ID in duels was not always consistent across games of the same run, which messed up with the "high-wins decks" detection. IMPORTANT: the first game started after updating the app to 12.4.13 (or later) will be in a new run. Sorry about the inconvenience.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -76,25 +67,16 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where you couldn't login to Twitch while HS was not running (Community Contribution).`,
+								text: `Fix an issue where the lottery widget wouldn't show any information anymore. The points were still being collected, just not shown in the UI.`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue with Diremuck Forager (Community Contribution).`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where achievements live tracking would not always work properly, or would sometimes reset unexpectedly (Community Contribution).`,
+								text: `Fix an issue where some meta deck details would not be updated (the "overview" part would still be ok).`,
 							},
 						],
 					},
