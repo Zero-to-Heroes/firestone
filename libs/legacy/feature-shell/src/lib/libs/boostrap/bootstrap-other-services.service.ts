@@ -12,6 +12,7 @@ import { CollectionManager } from '../../js/services/collection/collection-manag
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
 import { ArenaRunParserService } from '../../js/services/decktracker/arena-run-parser.service';
 import { CardsHighlightService } from '../../js/services/decktracker/card-highlight/cards-highlight.service';
+import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DeckParserService } from '../../js/services/decktracker/deck-parser.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
@@ -88,6 +89,7 @@ export class BootstrapOtherServicesService {
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
 		private readonly init_HearthArenaAnalyticsService: HearthArenaAnalyticsService,
+		private readonly init_ConstructedConfigService: ConstructedConfigService,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,
