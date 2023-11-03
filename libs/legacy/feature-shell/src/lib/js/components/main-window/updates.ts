@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.4.17',
+		version: '12.4.18',
 		force: false,
 		sections: [
 			// {
@@ -63,20 +63,20 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the lottery widget wouldn't show any information anymore. The points were still being collected, just not shown in the UI.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where some meta deck details would not be updated (the "overview" part would still be ok).`,
+								text: `Fix an issue where the deckbuilder would not show up anymore.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where some data was sent incorrectly to the server during the run, leading to runs being categorized as "Casual" instead of "Heroic", thus preventing them from appearing in the high-wins list.`,
 							},
 						],
 					},
