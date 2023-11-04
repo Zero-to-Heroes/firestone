@@ -20,6 +20,7 @@ export class NewPackProcessor implements Processor {
 			creationDate: Date.now(),
 			boosterId: event.boosterId,
 			setId: event.setId,
+			cardsJson: event.packCards,
 			cards: event.packCards.map((card) => {
 				const result: CardPackResult = {
 					cardId: card.cardId,

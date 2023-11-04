@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
-import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
@@ -35,16 +35,31 @@ export class PackStatsService {
 			return localPackResult.packs;
 		}
 
+		const packs: readonly PackResult[] = await this.loadPacksFromRemote();
+		return packs;
+	}
+
+	public async refreshPackStats() {
+		const packs: readonly PackResult[] = await this.loadPacksFromRemote();
+		this.store.send(new CollectionPacksUpdatedEvent(packs));
+	}
+
+	private async loadPacksFromRemote(): Promise<readonly PackResult[]> {
 		const user = await this.ow.getCurrentUser();
 		const input = {
 			userId: user.userId,
 			userName: user.username,
 		};
-		const data: any = (await this.api.callPostApi<any>(PACKS_RETRIEVE_URL, input)) ?? [];
+		const data: { results: readonly PackResult[] } = await this.api.callPostApi<{ results: readonly PackResult[] }>(
+			PACKS_RETRIEVE_URL,
+			input,
+		);
 		const packs: readonly PackResult[] = (data.results ?? [])
+			.map((pack) => this.buildPackResult(pack))
+			.filter((pack) => !!pack.cards?.length)
 			// Because of how pack logging used to work, when you received the 5 galakrond cards,
 			// the app flagged that as a new pack
-			?.filter((pack: PackResult) => !this.isPackAllGalakronds(pack))
+			.filter((pack) => !this.isPackAllGalakronds(pack))
 			.map((pack: PackResult) => {
 				if (!!pack.boosterId) {
 					return pack;
@@ -59,32 +74,40 @@ export class PackStatsService {
 			packs: packs,
 		};
 		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
-		return newPackResults.packs;
+		return packs;
 	}
 
-	public async refreshPackStats() {
-		const user = await this.ow.getCurrentUser();
-		const input = {
-			userId: user.userId,
-			userName: user.username,
+	private buildPackResult(pack: PackResult): PackResult {
+		// console.debug('[pack-stats] building pack', pack);
+		return {
+			...pack,
+			cards: !!pack.cards?.length ? pack.cards : this.buildCards(pack.cardsJson),
 		};
-		const data: any = (await this.api.callPostApi<any>(PACKS_RETRIEVE_URL, input)) ?? [];
-		const packs: readonly PackResult[] =
-			data.results
-				// Because of how pack logging used to work, when you received the 5 galakrond cards,
-				// the app flagged that as a new pack
-				?.filter((pack) => !this.isPackAllGalakronds(pack)) ?? [];
-		const newPackResults: LocalPackStats = {
-			lastUpdateDate: new Date(),
-			packs: packs,
+	}
+
+	private buildCards(cards: readonly PackCardInfo[]): readonly CardPackResult[] {
+		return cards.map((card) => this.buildCard(card));
+	}
+
+	private buildCard(card: PackCardInfo): CardPackResult {
+		return {
+			...card,
+			cardRarity: (this.allCards.getCard(card.cardId).rarity?.toLowerCase() ??
+				this.allCards.getCard(card.mercenaryCardId)?.rarity?.toLowerCase()) as
+				| 'common'
+				| 'rare'
+				| 'epic'
+				| 'legendary',
+			cardType: card.cardType as 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE',
 		};
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
-		this.store.send(new CollectionPacksUpdatedEvent(newPackResults.packs));
 	}
 
 	private async publishPackStat(event: any) {
 		const setId = event.data[0];
 		const cards: readonly InternalCardInfo[] = event.data[1];
+		if (!cards?.length) {
+			return;
+		}
 		const boosterId: BoosterType = event.data[2];
 		const user = await this.ow.getCurrentUser();
 		const statEvent = {
@@ -93,20 +116,21 @@ export class PackStatsService {
 			boosterId: boosterId,
 			userId: user.userId,
 			userName: user.username,
+			cardsJson: cards,
 		};
-		for (let i = 0; i < cards.length; i++) {
-			statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId?.toLowerCase();
-			statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType?.toLowerCase();
-			const dbCard = this.allCards.getCard(cards[i].cardId);
-			statEvent['card' + (i + 1) + 'Rarity'] =
-				dbCard?.rarity?.toLowerCase() ??
-				this.allCards.getCard(cards[i].mercenaryCardId)?.rarity?.toLowerCase() ??
-				'free';
-			statEvent['card' + (i + 1) + 'CurrencyAmount'] = cards[i].currencyAmount;
-			statEvent['card' + (i + 1) + 'MercenaryCardId'] = cards[i].mercenaryCardId;
-			statEvent['card' + (i + 1) + 'IsNew'] = cards[i].isNew;
-			statEvent['card' + (i + 1) + 'IsSecondCopy'] = cards[i].isSecondCopy;
-		}
+		// for (let i = 0; i < cards.length; i++) {
+		// 	statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId?.toLowerCase();
+		// 	statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType?.toLowerCase();
+		// 	const dbCard = this.allCards.getCard(cards[i].cardId);
+		// 	statEvent['card' + (i + 1) + 'Rarity'] =
+		// 		dbCard?.rarity?.toLowerCase() ??
+		// 		this.allCards.getCard(cards[i].mercenaryCardId)?.rarity?.toLowerCase() ??
+		// 		'free';
+		// 	statEvent['card' + (i + 1) + 'CurrencyAmount'] = cards[i].currencyAmount;
+		// 	statEvent['card' + (i + 1) + 'MercenaryCardId'] = cards[i].mercenaryCardId;
+		// 	statEvent['card' + (i + 1) + 'IsNew'] = cards[i].isNew;
+		// 	statEvent['card' + (i + 1) + 'IsSecondCopy'] = cards[i].isSecondCopy;
+		// }
 		console.debug('[pack-stats] publishing pack stat', statEvent);
 		this.api.callPostApi(PACKS_UPDATE_URL, statEvent);
 		this.updateLocalPackStats(boosterId, setId, cards);
@@ -123,26 +147,11 @@ export class PackStatsService {
 
 		const newPack: PackResult = {
 			id: 0,
-			boosterId: boosterId as any,
+			boosterId: boosterId,
 			creationDate: Date.now(),
 			setId: setId,
-			cards: cards.map((card) => {
-				const result: CardPackResult = {
-					cardId: card.cardId,
-					cardRarity: (this.allCards.getCard(card.cardId).rarity?.toLowerCase() ??
-						this.allCards.getCard(card.mercenaryCardId)?.rarity?.toLowerCase()) as
-						| 'common'
-						| 'rare'
-						| 'epic'
-						| 'legendary',
-					cardType: card.cardType as 'NORMAL' | 'GOLDEN',
-					currencyAmount: card.currencyAmount,
-					mercenaryCardId: card.mercenaryCardId,
-					isNew: card.isNew,
-					isSecondCopy: card.isSecondCopy,
-				};
-				return result;
-			}),
+			cards: this.buildCards(cards),
+			cardsJson: cards,
 		};
 		const newPackResults: LocalPackStats = {
 			...localPackResult,
