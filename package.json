@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "12.4.19",
+	"version": "12.5.0",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",

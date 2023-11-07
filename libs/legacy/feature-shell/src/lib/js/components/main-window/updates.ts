@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.4.18',
+		version: '12.5.0',
 		force: false,
 		sections: [
 			// {
@@ -43,45 +43,45 @@ export const updates: readonly Update[] = [
 			// 	This first phase focuses on making the app load faster when on desktop (i.e. HS is not running).
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'duels',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Try and fix an issue where the run ID in duels was not always consistent across games of the same run, which messed up with the "high-wins decks" detection. IMPORTANT: the first game started after updating the app to 12.4.13 (or later) will be in a new run. Sorry about the inconvenience.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
 			{
-				type: 'minor',
-				header: 'Minor updates',
+				type: 'main',
+				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'general',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the deckbuilder would not show up anymore.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where some data was sent incorrectly to the server during the run, leading to runs being categorized as "Casual" instead of "Heroic", thus preventing them from appearing in the high-wins list.`,
+								text: `The app has been updated for Hearthstone patch 28.0.`,
 							},
 						],
 					},
 				],
 			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where the deckbuilder would not show up anymore.`,
+			// 				},
+			// 			],
+			// 		},
+			// 		{
+			// 			category: 'duels',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where some data was sent incorrectly to the server during the run, leading to runs being categorized as "Casual" instead of "Heroic", thus preventing them from appearing in the high-wins list.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
