@@ -63,7 +63,7 @@ export class ConstructedMetaArchetypeDetailsCardsComponent
 		this.deck$$.pipe(this.mapData((deck) => deck)).subscribe((deck) => {
 			this.archetypeCoreCards = buildCardVariations(
 				deck?.archetypeCoreCards,
-				deck.sideboards ?? [],
+				deck?.sideboards ?? [],
 				this.allCards,
 			);
 			const archetypeCoreCardsNumber = this.archetypeCoreCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);

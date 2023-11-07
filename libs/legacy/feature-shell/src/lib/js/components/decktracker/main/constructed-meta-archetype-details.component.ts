@@ -43,7 +43,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 		]).pipe(
 			this.mapData(([stat, [conservativeEstimate]]) => {
 				if (!stat) {
-					return null;
+					return stat === null ? null : undefined;
 				}
 
 				const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);

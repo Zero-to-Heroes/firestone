@@ -21,117 +21,135 @@ import { ConstructedMatchupDetails } from './constructed-meta-deck-details-match
 	selector: 'constructed-meta-deck-details-view',
 	styleUrls: [`../../../../css/component/decktracker/main/constructed-meta-deck-details-view.component.scss`],
 	template: `
-		<div class="constructed-meta-deck-details-view" *ngIf="deckName">
-			<div class="cartouche">
-				<div class="player-class">
-					<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
-				</div>
-				<div class="general-info">
-					<div class="deck-name">{{ deckName }}</div>
-					<div class="deck-type label-value">
-						<div class="label" [owTranslate]="'app.decktracker.meta.deck-type-header'"></div>
-						<div class="value">{{ deckType }}</div>
-					</div>
-					<div class="format label-value">
-						<div class="label" [owTranslate]="'app.decktracker.meta.deck-format-header'"></div>
-						<div class="value">{{ format }}</div>
-					</div>
-					<div class="games label-value">
-						<div class="label" [owTranslate]="'app.decktracker.meta.games-header'"></div>
-						<div class="value">{{ gamesPlayed }}</div>
-					</div>
-					<div class="winrate label-value">
-						<div class="label" [owTranslate]="'app.decktracker.meta.winrate-header'"></div>
-						<div class="value">{{ winrate }}</div>
-					</div>
-				</div>
-				<div class="buttons">
-					<copy-deckstring
-						*ngIf="deckstring"
-						class="button copy-deckstring"
-						[deckstring]="deckstring"
-						[deckName]="deckName"
-						[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
-						[origin]="'constructed-meta-decks'"
-					></copy-deckstring>
-					<div class="button view-online" (click)="viewOnline()" *ngIf="deckstring">
-						<div class="icon">
-							<svg class="svg-icon-fill">
-								<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-							</svg>
+		<ng-container *ngIf="!missing; else emptyState">
+			<with-loading [isLoading]="loading">
+				<div class="constructed-meta-deck-details-view">
+					<div class="cartouche">
+						<div class="player-class">
+							<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
 						</div>
-						<div
-							class="text"
-							[owTranslate]="'app.decktracker.meta.deck.view-online-button'"
-							[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
-						></div>
-					</div>
-					<div class="button view-decks" (click)="viewDecks()" *ngIf="!isDeck">
-						<div class="icon">
-							<svg class="svg-icon-fill">
-								<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-							</svg>
-						</div>
-						<div
-							class="text"
-							[owTranslate]="'app.decktracker.meta.deck.view-decks-button'"
-							[helpTooltip]="'app.decktracker.meta.deck.view-decks-button-tooltip' | owTranslate"
-						></div>
-					</div>
-				</div>
-			</div>
-			<div class="details-container">
-				<ul class="tabs">
-					<ng-container *ngFor="let tab of tabs$ | async">
-						<li
-							*ngIf="!tab.restricted || tab.restricted === (isDeck ? 'deck' : 'archetype')"
-							class="tab"
-							[ngClass]="{ selected: tab.selected }"
-							premiumSetting
-							[premiumSettingEnabled]="tab.isPremium"
-							(click)="selectTab(tab)"
-						>
-							<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
-								<svg>
-									<use xlink:href="assets/svg/sprite.svg#lock" />
-								</svg>
+						<div class="general-info">
+							<div class="deck-name">{{ deckName }}</div>
+							<div class="deck-type label-value">
+								<div class="label" [owTranslate]="'app.decktracker.meta.deck-type-header'"></div>
+								<div class="value">{{ deckType }}</div>
 							</div>
-							<div class="text" [owTranslate]="tab.name" [helpTooltip]="tab.tooltip"></div>
-						</li>
-					</ng-container>
-				</ul>
-				<div class="details" *ngIf="{ selectedTab: selectedTab$ | async } as value">
-					<constructed-meta-deck-details-cards
-						*ngIf="value.selectedTab === 'cards' && isDeck"
-						[deck]="deck"
-						[collection]="collection"
-					></constructed-meta-deck-details-cards>
-					<constructed-meta-archetype-details-cards
-						*ngIf="value.selectedTab === 'cards' && !isDeck"
-						[deck]="deck"
-						[collection]="collection"
-					></constructed-meta-archetype-details-cards>
-					<constructed-meta-deck-details-card-stats
-						*ngIf="value.selectedTab === 'card-stats'"
-						[cards]="cards"
-						[isDeck]="isDeck"
-						[showRelativeInfo]="showRelativeInfo"
-						[deckWinrate]="winrateNumber"
-						[totalGames]="gamesPlayedNumber"
-					></constructed-meta-deck-details-card-stats>
-					<constructed-meta-deck-details-matchups
-						*ngIf="value.selectedTab === 'matchups'"
-						[matchupDetails]="matchupInfo"
-					></constructed-meta-deck-details-matchups>
+							<div class="format label-value">
+								<div class="label" [owTranslate]="'app.decktracker.meta.deck-format-header'"></div>
+								<div class="value">{{ format }}</div>
+							</div>
+							<div class="games label-value">
+								<div class="label" [owTranslate]="'app.decktracker.meta.games-header'"></div>
+								<div class="value">{{ gamesPlayed }}</div>
+							</div>
+							<div class="winrate label-value">
+								<div class="label" [owTranslate]="'app.decktracker.meta.winrate-header'"></div>
+								<div class="value">{{ winrate }}</div>
+							</div>
+						</div>
+						<div class="buttons">
+							<copy-deckstring
+								*ngIf="deckstring"
+								class="button copy-deckstring"
+								[deckstring]="deckstring"
+								[deckName]="deckName"
+								[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
+								[origin]="'constructed-meta-decks'"
+							></copy-deckstring>
+							<div class="button view-online" (click)="viewOnline()" *ngIf="deckstring">
+								<div class="icon">
+									<svg class="svg-icon-fill">
+										<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
+									</svg>
+								</div>
+								<div
+									class="text"
+									[owTranslate]="'app.decktracker.meta.deck.view-online-button'"
+									[helpTooltip]="'app.decktracker.meta.deck.view-online-button-tooltip' | owTranslate"
+								></div>
+							</div>
+							<div class="button view-decks" (click)="viewDecks()" *ngIf="!isDeck">
+								<div class="icon">
+									<svg class="svg-icon-fill">
+										<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
+									</svg>
+								</div>
+								<div
+									class="text"
+									[owTranslate]="'app.decktracker.meta.deck.view-decks-button'"
+									[helpTooltip]="'app.decktracker.meta.deck.view-decks-button-tooltip' | owTranslate"
+								></div>
+							</div>
+						</div>
+					</div>
+					<div class="details-container">
+						<ul class="tabs">
+							<ng-container *ngFor="let tab of tabs$ | async">
+								<li
+									*ngIf="!tab.restricted || tab.restricted === (isDeck ? 'deck' : 'archetype')"
+									class="tab"
+									[ngClass]="{ selected: tab.selected }"
+									premiumSetting
+									[premiumSettingEnabled]="tab.isPremium"
+									(click)="selectTab(tab)"
+								>
+									<div
+										class="premium-lock"
+										[helpTooltip]="'settings.global.locked-tooltip' | owTranslate"
+									>
+										<svg>
+											<use xlink:href="assets/svg/sprite.svg#lock" />
+										</svg>
+									</div>
+									<div class="text" [owTranslate]="tab.name" [helpTooltip]="tab.tooltip"></div>
+								</li>
+							</ng-container>
+						</ul>
+						<div class="details" *ngIf="{ selectedTab: selectedTab$ | async } as value">
+							<constructed-meta-deck-details-cards
+								*ngIf="value.selectedTab === 'cards' && isDeck"
+								[deck]="deck"
+								[collection]="collection"
+							></constructed-meta-deck-details-cards>
+							<constructed-meta-archetype-details-cards
+								*ngIf="value.selectedTab === 'cards' && !isDeck"
+								[deck]="deck"
+								[collection]="collection"
+							></constructed-meta-archetype-details-cards>
+							<constructed-meta-deck-details-card-stats
+								*ngIf="value.selectedTab === 'card-stats'"
+								[cards]="cards"
+								[isDeck]="isDeck"
+								[showRelativeInfo]="showRelativeInfo"
+								[deckWinrate]="winrateNumber"
+								[totalGames]="gamesPlayedNumber"
+							></constructed-meta-deck-details-card-stats>
+							<constructed-meta-deck-details-matchups
+								*ngIf="value.selectedTab === 'matchups'"
+								[matchupDetails]="matchupInfo"
+							></constructed-meta-deck-details-matchups>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+			</with-loading>
+		</ng-container>
+
+		<ng-template #emptyState>
+			<battlegrounds-empty-state
+				[subtitle]="'app.decktracker.meta.deck.no-data-empty-state-title' | owTranslate"
+				[emptyStateIcon]="'assets/svg/ftue/decktracker.svg'"
+				class="empty-state"
+			></battlegrounds-empty-state>
+		</ng-template>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tabs$: Observable<readonly Tab[]>;
 	selectedTab$: Observable<TabType>;
+
+	loading: boolean;
+	missing: boolean;
 
 	deck: ConstructedDeckDetails;
 	isDeck: boolean;
@@ -154,7 +172,13 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	@Input() showRelativeInfo: boolean;
 
 	@Input() set input(value: ConstructedDeckDetails) {
-		//console.debug('[debug] input', value);
+		console.debug('[debug] input', value);
+		this.loading = value === undefined;
+		this.missing = value === null;
+		if (!value) {
+			return;
+		}
+
 		this.isDeck = value?.type === 'deck';
 		this.deck = value;
 		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value?.heroCardClass}.png`;

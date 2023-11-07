@@ -25,7 +25,7 @@ export class ConstructedMetaDeckDetailsComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
-	deckDetails$: Observable<ConstructedDeckDetails>;
+	deckDetails$: Observable<ConstructedDeckDetails | null | undefined>;
 	collection$: Observable<readonly Card[]>;
 	hasPremiumAccess$: Observable<boolean>;
 	showRelativeInfo$: Observable<boolean>;
@@ -53,7 +53,10 @@ export class ConstructedMetaDeckDetailsComponent
 			this.mapData(([stat, [conservativeEstimate]]) => {
 				console.debug('deckStat', stat);
 				if (!stat) {
-					return null;
+					// Keep the null / undefined
+					// null = no data
+					// undefined = loading
+					return stat === null ? null : undefined;
 				}
 
 				const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);

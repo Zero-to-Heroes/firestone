@@ -21,7 +21,7 @@ const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/ap
 @Injectable()
 export class ConstructedMetaDecksStateService {
 	public constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<DeckStats>(null);
-	public currentConstructedMetaDeck$$ = new BehaviorSubject<DeckStat>(null);
+	public currentConstructedMetaDeck$$ = new BehaviorSubject<DeckStat>(undefined);
 	public constructedMetaArchetypes$$ = new SubscriberAwareBehaviorSubject<ArchetypeStats>(null);
 	public currentConstructedMetaArchetype$$ = new BehaviorSubject<ArchetypeStat>(null);
 
@@ -77,7 +77,7 @@ export class ConstructedMetaDecksStateService {
 				),
 			)
 			.subscribe(async ([[deckstring], [rankFilter, timeFilter, formatFilter]]) => {
-				this.currentConstructedMetaDeck$$.next(null);
+				this.currentConstructedMetaDeck$$.next(undefined);
 				if (deckstring?.length) {
 					const deck = await this.loadNewDeckDetails(deckstring, formatFilter, timeFilter, rankFilter);
 					this.currentConstructedMetaDeck$$.next(deck);
@@ -118,7 +118,7 @@ export class ConstructedMetaDecksStateService {
 				),
 			)
 			.subscribe(async ([[archetypeId], [rankFilter, timeFilter, formatFilter]]) => {
-				this.currentConstructedMetaArchetype$$.next(null);
+				this.currentConstructedMetaArchetype$$.next(undefined);
 				if (archetypeId > 0) {
 					const deck = await this.loadNewArchetypeDetails(archetypeId, formatFilter, timeFilter, rankFilter);
 					this.currentConstructedMetaArchetype$$.next(deck);
@@ -146,14 +146,14 @@ export class ConstructedMetaDecksStateService {
 		format: GameFormat,
 		time: TimePeriod,
 		rank: RankBracket,
-	): Promise<DeckStat> {
+	): Promise<DeckStat | null> {
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const fileName = `${format}/${rank}/${time}/${deckId}`;
 		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
 		const resultStr = await this.api.get(url);
 		if (!resultStr?.length) {
-			console.error('could not load meta decks', format, time, rank, url);
+			console.error('could not load meta deck', format, time, rank, url);
 			return null;
 		}
 

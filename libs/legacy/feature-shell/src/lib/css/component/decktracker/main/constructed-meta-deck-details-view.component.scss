@@ -4,6 +4,7 @@
 	flex-direction: column;
 	color: var(--default-text-color);
 	min-height: 0;
+	flex-grow: 1;
 }
 
 .constructed-meta-deck-details-view {
@@ -172,6 +173,11 @@
 			}
 		}
 	}
+}
+
+.empty-state {
+	flex-grow: 1;
+	display: flex;
 }
 // @media (max-width: 1690px) {
 // 	.constructed-meta-deck-summary {
