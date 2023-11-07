@@ -161,6 +161,8 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.AzsharanVessel:
 		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
 		case CardIds.Bottomfeeder:
+		case CardIds.DisposalAssistant_WW_041:
+		case CardIds.SludgeOnWheels_WW_043:
 			return DeckCard.deckIndexFromBottom++;
 	}
 	return undefined;

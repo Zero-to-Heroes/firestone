@@ -165,6 +165,7 @@ export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
 export const discover = hasMechanic(GameTag.DISCOVER);
 export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
 export const dredge = hasMechanic(GameTag.DREDGE);
+export const excavate = hasMechanic(GameTag.EXCAVATE);
 export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
@@ -173,9 +174,11 @@ export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
 export const overload = hasMechanic(GameTag.OVERLOAD);
+export const quickdraw = hasMechanic(GameTag.QUICKDRAW);
 export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
+export const tradeable = hasMechanic(GameTag.TRADEABLE);
 export const windfury = hasMechanic(GameTag.WINDFURY);
 
 export const isSi7 = (input: SelectorInput): boolean =>
