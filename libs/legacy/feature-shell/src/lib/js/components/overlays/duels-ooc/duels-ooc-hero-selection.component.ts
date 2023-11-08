@@ -2,8 +2,8 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
 import { CardIds, ReferenceCard, allDuelsHeroes, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
-import { filterDuelsHeroStats } from '@firestone/duels/data-access';
-import { uuidShort } from '@firestone/shared/framework/common';
+import { DuelsTimeFilterType, filterDuelsHeroStats } from '@firestone/duels/data-access';
+import { sortByProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
@@ -13,12 +13,12 @@ import {
 	buildDuelsHeroPlayerStats,
 	filterDuelsRuns,
 	getDuelsMmrFilterNumber,
-	mergeDuelsHeroPlayerStats,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 
@@ -39,6 +39,7 @@ import { PatchesConfigService } from '../../../services/patches-config.service';
 			*ngIf="heroInfo$ | async as heroInfo"
 			[heroInfo]="heroInfo"
 			[patch]="patch$ | async"
+			[timeFrame]="timeFrame$ | async"
 		></duels-hero-info>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,6 +51,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 	heroes$: Observable<readonly ReferenceCard[]>;
 	heroInfo$: Observable<DuelsHeroInfo>;
 	patch$: Observable<PatchInfo>;
+	timeFrame$: Observable<DuelsTimeFilterType>;
 
 	private selectedHeroCardId = new BehaviorSubject<string>(null);
 
@@ -71,7 +73,6 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
 
 		this.patch$ = this.patchesConfig.currentDuelsMetaPatch$$.pipe(this.mapData((info) => info));
-
 		this.heroes$ = this.store
 			.listen$(([state, prefs]) => state?.duels?.heroOptionsDbfIds)
 			.pipe(
@@ -79,65 +80,6 @@ export class DuelsOutOfCombatHeroSelectionComponent
 				this.mapData(([heroDbfIds]) => heroDbfIds.map((dbfId) => this.allCards.getCardFromDbfId(dbfId))),
 			);
 		const allHeroCardIds$ = this.heroes$.pipe(this.mapData((heroes) => heroes.map((hero) => hero.id)));
-
-		const topDecks$ = combineLatest([
-			allHeroCardIds$,
-			this.duelsTopDecks.topDeck$$,
-			this.store.duelsMetaStats$(),
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-			),
-			this.patchesConfig.currentDuelsMetaPatch$$,
-		]).pipe(
-			this.mapData(([allHeroCards, duelsTopDecks, duelsMetaStats, [mmrFilter, dustFilter], patch]) => {
-				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
-				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
-				const topDecks = (duelsTopDecks ?? [])
-					.map((deck) =>
-						topDeckApplyFilters(
-							deck,
-							trueMmrFilter,
-							allDuelsHeroes,
-							[],
-							[],
-							'last-patch',
-							dustFilter,
-							null,
-							patch,
-						),
-					)
-					.filter((group) => group.decks.length > 0)
-					.flatMap((group) => group.decks)
-					.filter((deck) =>
-						allHeroCards.some(
-							(heroCardId) =>
-								normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(heroCardId),
-						),
-					);
-				return topDecks;
-			}),
-		);
-
-		const duelsHeroStats$ = combineLatest([allHeroCardIds$, this.store.duelsMetaStats$()]).pipe(
-			this.mapData(([allHeroCards, duelStats]) => {
-				const duelsHeroStats = filterDuelsHeroStats(
-					duelStats?.heroes,
-					allHeroCards as CardIds[],
-					null,
-					null,
-					'hero',
-					this.allCards,
-					null,
-				);
-				console.debug('duelsHeroStats', duelsHeroStats, duelStats);
-				return duelsHeroStats.filter((stat) =>
-					allHeroCards.some(
-						(heroCardId) => normalizeDuelsHeroCardId(stat.hero) === normalizeDuelsHeroCardId(heroCardId),
-					),
-				);
-			}),
-		);
 
 		const playerRuns$ = combineLatest([
 			allHeroCardIds$,
@@ -166,29 +108,96 @@ export class DuelsOutOfCombatHeroSelectionComponent
 			}),
 		);
 
-		const duelsHeroFullStats$ = combineLatest([allHeroCardIds$, topDecks$, duelsHeroStats$, playerRuns$]).pipe(
-			this.mapData(([allHeroCardIds, topDecks, duelsHeroStats, playerRuns]) => {
-				const enrichedStats = buildDuelsHeroPlayerStats(duelsHeroStats, 'hero', playerRuns);
-				return allHeroCardIds.map((cardId) => {
-					const enrichedStatsForHero = enrichedStats.filter(
-						(s) => normalizeDuelsHeroCardId(s.cardId) === normalizeDuelsHeroCardId(cardId),
-					);
-					const topDecksForHero = topDecks.filter(
-						(deck) => normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(cardId),
-					);
-					return this.buildDuelsHeroFullStat(cardId, enrichedStatsForHero, topDecksForHero);
-				});
+		const mmrFilter$ = combineLatest([
+			this.store.duelsMetaStats$(),
+			this.store.listen$(([main, nav, prefs]) => prefs.duelsActiveMmrFilter),
+		]).pipe(
+			this.mapData(([duelsMetaStats, [mmrFilter]]) => {
+				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
+				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+				return trueMmrFilter;
 			}),
 		);
 
-		this.heroInfo$ = combineLatest([this.selectedHeroCardId.asObservable(), duelsHeroFullStats$]).pipe(
-			this.mapData(
-				([currentHeroCardId, allStats]) =>
-					allStats.find(
-						(stat) =>
-							normalizeDuelsHeroCardId(stat?.cardId) === normalizeDuelsHeroCardId(currentHeroCardId),
-					)?.stat,
-			),
+		const topDecks$ = combineLatest([
+			this.duelsTopDecks.topDeck$$,
+			allHeroCardIds$,
+			mmrFilter$,
+			this.patchesConfig.currentDuelsMetaPatch$$,
+		]).pipe(
+			this.mapData(([duelsTopDecks, allHeroCardIds, mmrFilter, patch]) => {
+				let period: DuelsTimeFilterType = 'last-patch';
+				let topDeckStatsForHeroes = this.buildTopDeckStatsForHeroes(
+					allHeroCardIds,
+					duelsTopDecks,
+					mmrFilter,
+					allDuelsHeroes,
+					period,
+					patch,
+				);
+				console.debug('top decks for last patch', topDeckStatsForHeroes);
+				if (topDeckStatsForHeroes.some((stat) => stat.topDecks.length === 0)) {
+					period = 'past-seven';
+					topDeckStatsForHeroes = this.buildTopDeckStatsForHeroes(
+						allHeroCardIds,
+						duelsTopDecks,
+						mmrFilter,
+						allDuelsHeroes,
+						period,
+						patch,
+					);
+					console.debug('top decks for past seven', topDeckStatsForHeroes);
+				}
+				console.debug('built top deck stats', topDeckStatsForHeroes);
+				return { decks: topDeckStatsForHeroes, period: period };
+			}),
+		);
+		this.timeFrame$ = topDecks$.pipe(this.mapData((topDecks) => topDecks.period));
+
+		const metaHeroStats$ = combineLatest([this.store.duelsMetaStats$(), allHeroCardIds$, playerRuns$]).pipe(
+			this.mapData(([duelsMetaStats, allHeroCardIds, playerRuns]) => {
+				// Build stats like winrate
+				const duelsHeroStats = filterDuelsHeroStats(
+					duelsMetaStats?.heroes,
+					allHeroCardIds as CardIds[],
+					null,
+					null,
+					'hero',
+					this.allCards,
+					null,
+				)
+					.filter((stat) =>
+						allHeroCardIds.some(
+							(heroCardId) =>
+								normalizeDuelsHeroCardId(stat.hero) === normalizeDuelsHeroCardId(heroCardId),
+						),
+					)
+					.filter((stat) => stat.date === 'last-patch');
+				const enrichedStats: readonly DuelsHeroPlayerStat[] = buildDuelsHeroPlayerStats(
+					duelsHeroStats,
+					'hero',
+					playerRuns,
+				);
+				return enrichedStats;
+			}),
+		);
+
+		this.heroInfo$ = combineLatest([this.selectedHeroCardId.asObservable(), metaHeroStats$, topDecks$]).pipe(
+			this.mapData(([currentHeroCardId, duelsMetaStats, topDecks]) => {
+				if (!currentHeroCardId || !topDecks?.decks?.length) {
+					return null;
+				}
+
+				// The top decks
+				const topDecksForHero = topDecks.decks.find(
+					(d) => normalizeDuelsHeroCardId(d.cardId) === normalizeDuelsHeroCardId(currentHeroCardId),
+				)?.topDecks;
+				const metaStatsForHero = duelsMetaStats.find(
+					(s) => normalizeDuelsHeroCardId(s.cardId) === normalizeDuelsHeroCardId(currentHeroCardId),
+				);
+				const result = this.buildDuelsHeroFullStat(currentHeroCardId, metaStatsForHero, topDecksForHero);
+				return result?.stat;
+			}),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -196,15 +205,63 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		}
 	}
 
+	private buildTopDeckStatsForHeroes(
+		allHeroCardIds: string[],
+		duelsTopDecks: readonly DuelsGroupedDecks[],
+		trueMmrFilter: number,
+		allDuelsHeroes: CardIds[],
+		timeFilter: DuelsTimeFilterType,
+		patch: PatchInfo,
+	) {
+		const topDecks = this.buildTopDecks(
+			allHeroCardIds,
+			duelsTopDecks,
+			trueMmrFilter,
+			allDuelsHeroes,
+			timeFilter,
+			patch,
+		);
+		const topDeckStatsForHeroes = allHeroCardIds.map((cardId) => {
+			const topDecksForHero = topDecks
+				.filter((deck) => normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(cardId))
+				.sort(sortByProperties((a: DuelsDeckStat) => [a.dustCost, a.wins]));
+			return {
+				cardId: cardId,
+				topDecks: topDecksForHero,
+			};
+		});
+		return topDeckStatsForHeroes;
+	}
+
+	private buildTopDecks(
+		allHeroCards: readonly string[],
+		duelsTopDecks: readonly DuelsGroupedDecks[],
+		trueMmrFilter: number,
+		allDuelsHeroes: CardIds[],
+		timeFilter: DuelsTimeFilterType,
+		patch: PatchInfo,
+	) {
+		return (duelsTopDecks ?? [])
+			.map((deck) =>
+				topDeckApplyFilters(deck, trueMmrFilter, allDuelsHeroes, [], [], timeFilter, null, null, patch),
+			)
+			.filter((group) => group.decks.length > 0)
+			.flatMap((group) => group.decks)
+			.filter((deck) =>
+				allHeroCards.some(
+					(heroCardId) => normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(heroCardId),
+				),
+			);
+	}
+
 	private buildDuelsHeroFullStat(
 		cardId: string,
-		enrichedStatsForHero: readonly DuelsHeroPlayerStat[],
+		stat: DuelsHeroPlayerStat,
 		topDecksForHero: readonly DuelsDeckStat[],
 	): {
 		cardId: string;
 		stat: DuelsHeroInfo;
 	} {
-		const stat: DuelsHeroPlayerStat = mergeDuelsHeroPlayerStats(enrichedStatsForHero, cardId);
 		console.debug('handling hero', this.allCards.getCard(cardId).name, cardId, stat);
 		if (!stat) {
 			return this.buildEmptyStat(cardId);
