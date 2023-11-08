@@ -31,7 +31,7 @@ export class DuelsState {
 	readonly isOnDuelsDeckBuildingLobbyScreen: boolean;
 	readonly treasureSelection: TreasureSelection;
 	readonly currentOption: DungeonCrawlOptionType;
-	readonly heroOptionsDbfIds: readonly number[];
+	readonly heroOptions: readonly MemoryDuelsHeroPowerOption[];
 	readonly heroPowerOptions: readonly MemoryDuelsHeroPowerOption[];
 	readonly signatureTreasureOptions: readonly MemoryDuelsHeroPowerOption[];
 	// readonly adventuresInfo: AdventuresInfo;

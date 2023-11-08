@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { FeatureFlags } from '@services/feature-flags';
 import { Observable, combineLatest } from 'rxjs';
 import { SceneService } from '../../services/game/scene.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -64,12 +63,7 @@ export class DuelsOutOfCombatHeroSelectionWidgetWrapperComponent
 			this.scene.currentScene$$,
 		]).pipe(
 			this.mapData(([[displayFromPrefs], [duels], currentScene]) => {
-				return (
-					FeatureFlags.ENABLE_DUELS_OOC &&
-					displayFromPrefs &&
-					currentScene === SceneMode.PVP_DUNGEON_RUN &&
-					!!duels.heroOptionsDbfIds?.length
-				);
+				return displayFromPrefs && currentScene === SceneMode.PVP_DUNGEON_RUN && !!duels.heroOptions?.length;
 			}),
 			this.handleReposition(),
 		);

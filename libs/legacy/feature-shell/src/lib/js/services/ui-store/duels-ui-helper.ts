@@ -340,7 +340,9 @@ const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {
 };
 
 const topDeckHeroFilter = (deck: DuelsDeckStat, filters: DuelsHeroFilterType): boolean => {
-	return !filters?.length || filters.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
+	const result =
+		!filters?.length || filters.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
+	return result;
 };
 
 const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filters: readonly string[]): boolean => {

@@ -2,10 +2,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import { CardIds, ReferenceCard, allDuelsHeroes, duelsHeroConfigs } from '@firestone-hs/reference-data';
-import { filterDuelsHeroStats } from '@firestone/duels/data-access';
+import { DuelsTimeFilterType, filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import {
@@ -17,6 +16,9 @@ import {
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DuelsRun } from '../../../models/duels/duels-run';
+import { DuelsState } from '../../../models/duels/duels-state';
+import { PatchInfo } from '../../../models/patches';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 
@@ -24,7 +26,7 @@ import { PatchesConfigService } from '../../../services/patches-config.service';
 	selector: 'duels-ooc-hero-power-selection',
 	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-hero-power-selection.component.scss'],
 	template: `
-		<div class="container" *ngIf="heroPowers$ | async as heroPowers">
+		<div class="container" *ngIf="optionCards$ | async as heroPowers">
 			<div class="cell" *ngFor="let heroPower of heroPowers; trackBy: trackByFn">
 				<div
 					class="empty-card"
@@ -44,10 +46,15 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
-	heroPowers$: Observable<readonly ReferenceCard[]>;
+	optionCards$: Observable<readonly ReferenceCard[]>;
 	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
+	patch$: Observable<PatchInfo>;
+	timeFrame$: Observable<DuelsTimeFilterType>;
 
-	private selectedHeroPowerCardId = new BehaviorSubject<string>(null);
+	protected optionsExtractor: (state: DuelsState) => readonly (string | number)[];
+	protected isValidRun: (run: DuelsRun, optionCardIds: readonly string[]) => boolean;
+
+	private selectedOptionCardId = new BehaviorSubject<string>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -57,25 +64,62 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 		private readonly duelsTopDecks: DuelsTopDeckService,
 	) {
 		super(store, cdr);
+		this.optionsExtractor = (state) => state?.heroPowerOptions?.map((o) => o.DatabaseId);
+		this.isValidRun = (run, optionCardIds) =>
+			optionCardIds.some((heroPowerCardId) => run.heroPowerCardId === heroPowerCardId);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
 		await this.duelsTopDecks.isReady();
 
-		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
-
-		this.heroPowers$ = this.store
-			.listen$(([state, prefs]) => state?.duels?.heroPowerOptions)
+		this.patch$ = this.patchesConfig.currentDuelsMetaPatch$$.pipe(this.mapData((info) => info));
+		this.optionCards$ = this.store
+			.listen$(([state, prefs]) => this.optionsExtractor(state?.duels))
 			.pipe(
 				filter(([options]) => !!options?.length),
-				this.mapData(([options]) => options.map((option) => this.allCards.getCardFromDbfId(option.DatabaseId))),
+				this.mapData(([options]) => options.map((option) => this.allCards.getCard(option))),
 			);
+		const optionCardIds = this.optionCards$.pipe(this.mapData((options) => options.map((option) => option.id)));
+
+		const playerRuns$ = combineLatest([
+			optionCardIds,
+			this.store.duelsRuns$(),
+			this.patchesConfig.currentDuelsMetaPatch$$,
+		]).pipe(
+			this.mapData(([optionCardIds, runs, patch]) => {
+				const duelsRuns = filterDuelsRuns(
+					runs,
+					'last-patch',
+					allDuelsHeroes,
+					'all',
+					null,
+					patch,
+					0,
+					[],
+					[],
+					'hero',
+				);
+				return duelsRuns.filter((run) => this.isValidRun(run, optionCardIds));
+			}),
+		);
+
+		const mmrFilter$ = combineLatest([
+			this.store.duelsMetaStats$(),
+			this.store.listen$(([main, nav, prefs]) => prefs.duelsActiveMmrFilter),
+		]).pipe(
+			this.mapData(([duelsMetaStats, [mmrFilter]]) => {
+				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
+				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+				return trueMmrFilter;
+			}),
+		);
+
 		const allStats$ = combineLatest([
 			this.store.duelsRuns$(),
 			this.duelsTopDecks.topDeck$$,
 			this.store.duelsMetaStats$(),
-			this.heroPowers$,
+			this.optionCards$,
 			this.store.listen$(
 				// ([main, nav]) => main.duels.globalStats?.heroes,
 				// ([main, nav]) => main.duels.globalStats?.mmrPercentiles,
@@ -181,7 +225,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 					});
 			}),
 		);
-		this.heroPowerInfo$ = combineLatest(this.selectedHeroPowerCardId.asObservable(), allStats$).pipe(
+		this.heroPowerInfo$ = combineLatest(this.selectedOptionCardId.asObservable(), allStats$).pipe(
 			this.mapData(([currentHeroPowerCardId, allStats]) => {
 				if (!currentHeroPowerCardId) {
 					return null;
@@ -220,12 +264,12 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 	async onMouseEnter(cardId: string) {
 		// this.selectedHeroPowerCardId.next(null);
 		// await sleep(100);
-		this.selectedHeroPowerCardId.next(cardId);
+		this.selectedOptionCardId.next(cardId);
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {
 		if (!event.shiftKey) {
-			this.selectedHeroPowerCardId.next(null);
+			this.selectedOptionCardId.next(null);
 		}
 	}
 

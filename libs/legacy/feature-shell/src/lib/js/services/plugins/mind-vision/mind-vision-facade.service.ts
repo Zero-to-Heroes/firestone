@@ -201,8 +201,8 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getDuelsHeroOptions(): Promise<readonly number[]> {
-		return new Promise<readonly number[]>(async (resolve) => {
+	public async getDuelsHeroOptions(): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+		return new Promise<readonly MemoryDuelsHeroPowerOption[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
 				plugin.getDuelsHeroOptions((info) => {

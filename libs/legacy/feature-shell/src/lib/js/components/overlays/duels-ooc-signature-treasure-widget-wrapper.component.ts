@@ -63,6 +63,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent
 			this.scene.currentScene$$,
 		]).pipe(
 			this.mapData(([[displayFromPrefs], [duels], currentScene]) => {
+				return false;
 				return (
 					displayFromPrefs &&
 					currentScene === SceneMode.PVP_DUNGEON_RUN &&

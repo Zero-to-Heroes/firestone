@@ -245,7 +245,10 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getDuelsDeckFromCollectionOperation.call());
 	}
 
-	public async getDuelsHeroOptions(forceReset = false, numberOfRetries = 1): Promise<readonly number[]> {
+	public async getDuelsHeroOptions(
+		forceReset = false,
+		numberOfRetries = 1,
+	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
 		return this.mindVision.callMindVision(() => this.getDuelsHeroOptionsOperation.call(numberOfRetries));
 	}
 
