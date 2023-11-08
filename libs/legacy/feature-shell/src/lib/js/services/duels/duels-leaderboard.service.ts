@@ -24,8 +24,9 @@ export class DuelsLeaderboardService {
 				userName: user.username,
 			};
 			const results: any = await this.api.callPostApi(DUELS_LEADERBOARD_URL, input);
-			console.log('[duels-state-builder] loaded leaderboard', results?.results?.heroic?.length);
-			return results?.results;
+			console.log('[duels-leaderboard] loaded leaderboard', results?.results?.heroic?.length);
+			console.debug('[duels-leaderboard] loaded leaderboard', results);
+			this.duelsLeaderboard$$.next(results?.results);
 		});
 	}
 }
