@@ -767,7 +767,6 @@ export class AppUiStoreService extends Store<Preferences> {
 					patchInfo,
 					[rankFilter, tribesFilter, anomaliesFilter, timeFilter, useMmrFilter, useAnomalyFilter],
 				]) => {
-					console.debug('[bgs-2] rebuilding meta hero stats 2', arguments);
 					const targetRank: number =
 						!mmrPercentiles?.length || !rankFilter || !useMmrFilter
 							? 0
@@ -787,6 +786,13 @@ export class AppUiStoreService extends Store<Preferences> {
 								anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a)),
 						);
 					const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
+					console.debug(
+						'[bgs-2] rebuilding meta hero stats 2',
+						bgGames,
+						afterFilter,
+						anomaliesFilter,
+						useAnomalyFilter,
+					);
 					return afterFilter;
 				},
 			),

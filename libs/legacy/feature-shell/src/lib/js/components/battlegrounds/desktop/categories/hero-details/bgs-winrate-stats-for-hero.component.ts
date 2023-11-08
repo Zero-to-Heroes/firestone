@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
@@ -71,7 +71,10 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreCo
 			.map((postMatch) => postMatch.stats.battleResultHistory)
 			.filter((stats) => stats && stats.length) as (readonly BattleResultHistory[])[];
 
-		const maxTurn = Math.max(...heroStatsOverTurn.map((stats) => stats[stats.length - 1].turn));
+		const allTurns = heroStatsOverTurn
+			.flatMap((stats) => stats.map((stat) => stat.turn))
+			.filter((turn) => !isNaN(turn));
+		const maxTurn = Math.max(...allTurns);
 		const your =
 			maxTurn <= 0
 				? []
