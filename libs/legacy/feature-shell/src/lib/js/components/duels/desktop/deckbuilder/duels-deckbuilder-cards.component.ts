@@ -232,7 +232,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentClasses),
 		]).pipe(
 			this.mapData(([buckets, [currentClasses]]) => {
-				return buckets.map((bucket) => {
+				return buckets?.map((bucket) => {
 					const cardsForClass = bucket.cards.filter((card) => {
 						const refCard = this.allCards.getCard(card.cardId);
 						return (
@@ -422,7 +422,8 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 				50,
 			),
 		);
-		this.possibleBuckets$ = combineLatest(allBuckets$, this.currentDeckCards$).pipe(
+		this.possibleBuckets$ = combineLatest([allBuckets$, this.currentDeckCards$]).pipe(
+			tap((info) => console.debug('computing possible buckets', info)),
 			this.mapData(([validBuckets, deckCardIds]) => {
 				// Handle the cases of Core cards also present in the buckets
 				const deckCardIdsWithDuplicates =
@@ -451,6 +452,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 					.sort(sortByProperties((b) => [b.bucketName]));
 				return result;
 			}),
+			tap((info) => console.debug('computed possible buckets', info)),
 			// Clean up eye icon for removed buckets
 			tap((buckets: readonly BucketData[]) => {
 				const activeBucketIds = this.toggledBucketFilters.value;
