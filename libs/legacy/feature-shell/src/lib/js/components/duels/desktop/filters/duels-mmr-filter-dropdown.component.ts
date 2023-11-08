@@ -17,7 +17,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			class="duels-rank-filter-dropdown"
 			[mmrPercentiles]="mmrPercentiles$ | async"
 			[currentFilter]="currentFilter$ | async"
-			[visible]="true"
+			[visible]="visible$ | async"
 			(valueSelected)="onSelected($event)"
 		></duels-rank-filter-dropdown-view>
 	`,
@@ -47,7 +47,18 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionStoreCo
 			.pipe(
 				filter(([categoryId]) => !!categoryId),
 				this.mapData(([categoryId]) =>
-					['duels-stats', 'duels-treasures', 'duels-top-decks'].includes(categoryId),
+					[
+						'duels-runs',
+						'duels-stats',
+						'duels-treasures',
+						'duels-personal-decks',
+						'duels-personal-deck-details',
+						'duels-top-decks',
+						// 'duels-leaderboard',
+						// 'duels-deckbuilder',
+						// 'duels-buckets',
+						// 'duels-deck-details',
+					].includes(categoryId),
 				),
 			);
 	}
