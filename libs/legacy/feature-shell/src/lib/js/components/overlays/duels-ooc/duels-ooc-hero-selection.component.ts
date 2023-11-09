@@ -166,31 +166,6 @@ export class DuelsOutOfCombatHeroSelectionComponent
 			this.mapData((info) => info),
 		);
 
-		const playerRuns$ = combineLatest([
-			optionCardIds$,
-			validOptions$,
-			this.store.duelsRuns$(),
-			this.patchesConfig.currentDuelsMetaPatch$$,
-		]).pipe(
-			filter(([optionCardIds, validOptions, runs, patch]) => !!validOptions),
-			this.mapData(([optionCardIds, validOptions, runs, patch]) => {
-				const duelsRuns = filterDuelsRuns(
-					runs,
-					'last-patch',
-					validOptions.validHeroes as CardIds[],
-					'all',
-					null,
-					patch,
-					0,
-					validOptions.validHeroPowers as CardIds[],
-					validOptions.validSignatureTreasures as CardIds[],
-				);
-				return duelsRuns;
-			}),
-			shareReplay(1),
-			this.mapData((info) => info),
-		);
-
 		const mmrFilter$ = combineLatest([
 			this.store.duelsMetaStats$(),
 			this.store.listen$(([main, nav, prefs]) => prefs.duelsActiveMmrFilter),
@@ -206,14 +181,16 @@ export class DuelsOutOfCombatHeroSelectionComponent
 
 		const topDecks$ = combineLatest([
 			this.duelsTopDecks.topDeck$$,
+			optionCardIds$,
 			validOptions$,
 			mmrFilter$,
 			this.stage$$,
 			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
-			this.mapData(([duelsTopDecks, validOptions, mmrFilter, stage, patch]) => {
+			this.mapData(([duelsTopDecks, optionCardIds, validOptions, mmrFilter, stage, patch]) => {
 				let period: DuelsTimeFilterType = 'last-patch';
 				let topDeckStatsForHeroes = buildTopDeckStatsForHeroes(
+					optionCardIds,
 					validOptions.validHeroes,
 					validOptions.validHeroPowers,
 					validOptions.validSignatureTreasures,
@@ -223,9 +200,11 @@ export class DuelsOutOfCombatHeroSelectionComponent
 					patch,
 					stage,
 				);
+				console.debug('top tops', period, validOptions.validHeroes, topDeckStatsForHeroes);
 				if (!topDeckStatsForHeroes.length || topDeckStatsForHeroes.some((stat) => stat.topDecks.length === 0)) {
 					period = 'past-seven';
 					topDeckStatsForHeroes = buildTopDeckStatsForHeroes(
+						optionCardIds,
 						validOptions.validHeroes,
 						validOptions.validHeroPowers,
 						validOptions.validSignatureTreasures,
@@ -235,6 +214,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 						patch,
 						stage,
 					);
+					console.debug('top tops', period, topDeckStatsForHeroes);
 				}
 				return { decks: topDeckStatsForHeroes, period: period };
 			}),
@@ -243,13 +223,40 @@ export class DuelsOutOfCombatHeroSelectionComponent
 		);
 		this.timeFrame$ = topDecks$.pipe(this.mapData((topDecks) => topDecks.period));
 
+		const playerRuns$ = combineLatest([
+			optionCardIds$,
+			validOptions$,
+			this.store.duelsRuns$(),
+			this.patchesConfig.currentDuelsMetaPatch$$,
+			this.timeFrame$,
+		]).pipe(
+			filter(([optionCardIds, validOptions, runs, patch]) => !!validOptions),
+			this.mapData(([optionCardIds, validOptions, runs, patch, timeFrame]) => {
+				const duelsRuns = filterDuelsRuns(
+					runs,
+					timeFrame,
+					validOptions.validHeroes as CardIds[],
+					'all',
+					null,
+					patch,
+					0,
+					validOptions.validHeroPowers as CardIds[],
+					validOptions.validSignatureTreasures as CardIds[],
+				);
+				return duelsRuns;
+			}),
+			shareReplay(1),
+			this.mapData((info) => info),
+		);
+
 		const metaHeroStats$ = combineLatest([
 			this.store.duelsMetaStats$(),
 			this.stage$$,
 			validOptions$,
 			playerRuns$,
+			this.timeFrame$, // TODO: retrieve the stats for the correct timeframe
 		]).pipe(
-			this.mapData(([duelsMetaStats, stage, validOptions, playerRuns]) => {
+			this.mapData(([duelsMetaStats, stage, validOptions, playerRuns, timeFrame]) => {
 				// Build stats like winrate
 				const duelsHeroStats = filterDuelsHeroStats(
 					duelsMetaStats?.heroes,
@@ -259,7 +266,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 					stage,
 					this.allCards,
 					null,
-				).filter((stat) => stat.date === 'last-patch');
+				);
 				const enrichedStats: readonly DuelsHeroPlayerStat[] = buildDuelsHeroPlayerStats(
 					duelsHeroStats,
 					stage,
@@ -418,6 +425,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 }
 
 export const buildTopDeckStatsForHeroes = (
+	optionCardIds: readonly string[],
 	allHeroCardIds: readonly string[],
 	allHeroPowerCardIds: readonly string[],
 	allSigTreasureCardIds: readonly string[],
@@ -440,10 +448,11 @@ export const buildTopDeckStatsForHeroes = (
 	const keyExtractor = (d: DuelsDeckStat) =>
 		stage === 'hero' ? d.heroCardId : stage === 'hero-power' ? d.heroPowerCardId : d.signatureTreasureCardId;
 	const groupedByOption = groupByFunction(keyExtractor)(topDecks);
-	const result = Object.keys(groupedByOption).map((option) => {
+	const result = optionCardIds.map((option) => {
+		const decksForOption = groupedByOption[option] ?? [];
 		return {
 			cardId: option,
-			topDecks: [...groupedByOption[option]].sort(sortByProperties((a: DuelsDeckStat) => [a.dustCost, a.wins])),
+			topDecks: [...decksForOption].sort(sortByProperties((a: DuelsDeckStat) => [a.dustCost, a.wins])),
 		};
 	});
 	return result;
