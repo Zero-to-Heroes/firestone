@@ -14,6 +14,8 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 	private memory: MemoryInspectionService;
 	private events: Events;
 
+	private internalSubscriber$$ = new SubscriberAwareBehaviorSubject<void>(null);
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'sceneService', () => !!this.currentScene$$ && !!this.lastNonGamePlayScene$$);
 	}
@@ -30,8 +32,22 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		this.events = AppInjector.get(Events);
 
 		this.currentScene$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+		});
+		this.lastNonGamePlayScene$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+		});
+
+		this.internalSubscriber$$.onFirstSubscribe(async () => {
+			console.debug('[scene-service] init');
 			const scene = await this.memory.getCurrentSceneFromMindVision();
+			console.debug('[scene-service] init - got scene', scene);
 			this.updateScene(scene);
+			console.debug(
+				'[scene-service] init - updated scene',
+				this.currentScene$$.value,
+				this.lastNonGamePlayScene$$.value,
+			);
 
 			this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 				const changes: MemoryUpdate = event.data[0];
@@ -49,6 +65,8 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		this.currentScene$$.next(scene);
 		if (scene !== SceneMode.GAMEPLAY) {
 			this.lastNonGamePlayScene$$.next(scene);
+		} else if (this.lastNonGamePlayScene$$.value === null) {
+			this.lastNonGamePlayScene$$.next(undefined);
 		}
 	}
 }

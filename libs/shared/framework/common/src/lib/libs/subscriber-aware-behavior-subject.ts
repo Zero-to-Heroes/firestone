@@ -20,7 +20,7 @@ export class SubscriberAwareBehaviorSubject<T> extends BehaviorSubject<T> {
 		// console.debug('getting value', new Error().stack);
 		this.triggerListeners();
 		let value = super.getValue();
-		while (value == uninitializedValue) {
+		while (value === uninitializedValue) {
 			await sleep(timeToWaitBetweenChecksInMs);
 			value = super.getValue();
 		}

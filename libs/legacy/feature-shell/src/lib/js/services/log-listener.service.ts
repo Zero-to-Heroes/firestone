@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
-import { Subject, distinctUntilChanged } from 'rxjs';
+import { Subject, distinctUntilChanged, filter } from 'rxjs';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
 import { LogUtilsService, getLogsDir } from './log-utils.service';
@@ -55,13 +55,18 @@ export class LogListenerService {
 	async configureLogListeners() {
 		// this.gameStatus.onGameStart(() => this.startLogRegister());
 		// this.gameStatus.onGameExit(() => this.stopLogRegister());
-		this.logUtils.logsDirRoot$$.pipe(distinctUntilChanged()).subscribe(async (logsDirRoot) => {
-			console.debug('[log-listener] [' + this.logFile + '] New logs dir root', logsDirRoot);
-			this.stopLogRegister();
-			this.callback('truncated');
-			await sleep(100);
-			this.startLogRegister();
-		});
+		this.logUtils.logsDirRoot$$
+			.pipe(
+				filter((dir) => !!dir),
+				distinctUntilChanged(),
+			)
+			.subscribe(async (logsDirRoot) => {
+				console.debug('[log-listener] [' + this.logFile + '] New logs dir root', logsDirRoot);
+				this.stopLogRegister();
+				this.callback('truncated');
+				await sleep(100);
+				this.startLogRegister();
+			});
 		// this.startLogRegister();
 	}
 
@@ -69,6 +74,10 @@ export class LogListenerService {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		const prefs = await this.prefs.getPreferences();
 		const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
+		if (logsDir == null) {
+			return;
+		}
+
 		console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
 		this.logsLocation = `${logsDir}\\${this.logFile}`;
 		console.debug('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
