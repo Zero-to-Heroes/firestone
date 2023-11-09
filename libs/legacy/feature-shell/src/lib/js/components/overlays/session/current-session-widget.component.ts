@@ -216,7 +216,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 			.listenDeckState$((state) => state?.metadata?.gameType)
 			.pipe(this.mapData(([gameType]) => gameType));
 		this.friendlyGameType$ = currentGameType$.pipe(this.mapData((gameType) => this.toFriendlyGameType(gameType)));
-		this.showWidget$ = combineLatest(currentGameType$, this.scene.currentScene$$).pipe(
+		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$]).pipe(
 			this.mapData(([gameType, currentScene]) =>
 				this.currentMode === 'battlegrounds'
 					? isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)
@@ -257,8 +257,10 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 		).pipe(
 			this.mapData(([[sessionStartDate], stats]) => {
 				// Newest game first
-				return stats.filter(
-					(stat) => !sessionStartDate || stat.creationTimestamp >= sessionStartDate.getTime(),
+				return (
+					stats?.filter(
+						(stat) => !sessionStartDate || stat.creationTimestamp >= sessionStartDate.getTime(),
+					) ?? []
 				);
 			}),
 		);
@@ -270,11 +272,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 		// So that a rank is displayed even though we have just reset the session widget
 		this.lastGame$ = combineLatest(lastGames$, lastModeGames$).pipe(
 			this.mapData(([games, gamesForMode]) => {
-				const lastGame = games[0] ?? gamesForMode[0];
+				const lastGame = games?.[0] ?? gamesForMode?.[0];
 				return !!lastGame ? lastGame.update({ playerRank: lastGame.newPlayerRank }) : null;
 			}),
 		);
-		this.deltaRank$ = combineLatest(lastGames$, currentGameType$).pipe(
+		this.deltaRank$ = combineLatest([lastGames$, currentGameType$]).pipe(
 			this.mapData(([games, currentGameType]) => {
 				let startingRank: number = null;
 				for (const game of [...games].reverse()) {
