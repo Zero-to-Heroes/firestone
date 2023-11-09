@@ -28,8 +28,10 @@ export class DuelsOocDeckSelectWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit
 {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.92;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.58;
+	// protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.92;
+	// protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.86;
+	protected defaultPositionLeftProvider = null;
+	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();

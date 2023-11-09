@@ -298,7 +298,7 @@ const getTopDeck = (
 	};
 };
 
-export const topDeckApplyFilters = (
+export const topDeckGroupApplyFilters = (
 	grouped: DuelsGroupedDecks,
 	mmrFilter: number,
 	heroFilter: DuelsHeroFilterType,
@@ -312,16 +312,42 @@ export const topDeckApplyFilters = (
 ): DuelsGroupedDecks => {
 	return {
 		...grouped,
-		decks: grouped.decks
-			.filter((deck) => topDeckStringFilter(deck, searchString))
-			.filter((deck) => topDeckMmrFilter(deck, mmrFilter))
-			.filter((deck) => topDeckHeroFilter(deck, heroFilter))
-			.filter((deck) => topDeckHeroPowerFilter(deck, heroPowerFilter))
-			.filter((deck) => topDeckSigTreasureFilter(deck, sigTreasureFilter))
-			.filter((deck) => topDeckTimeFilter(deck, timeFilter, patch))
-			.filter((deck) => topDeckDustFilter(deck, dustFilter))
-			.filter((deck) => topDeckPassivesFilter(deck, passivesFilter)),
+		decks: topDeckApplyFilters(
+			grouped.decks,
+			mmrFilter,
+			heroFilter,
+			heroPowerFilter,
+			sigTreasureFilter,
+			timeFilter,
+			dustFilter,
+			passivesFilter,
+			patch,
+			searchString,
+		),
 	};
+};
+
+export const topDeckApplyFilters = (
+	decks: readonly DuelsDeckStat[],
+	mmrFilter: number,
+	heroFilter: DuelsHeroFilterType,
+	heroPowerFilter: readonly string[],
+	sigTreasureFilter: readonly string[],
+	timeFilter: DuelsTimeFilterType,
+	dustFilter: DuelsTopDecksDustFilterType,
+	passivesFilter: readonly string[],
+	patch: PatchInfo,
+	searchString: string = null,
+): readonly DuelsDeckStat[] => {
+	return (decks ?? [])
+		.filter((deck) => topDeckStringFilter(deck, searchString))
+		.filter((deck) => topDeckMmrFilter(deck, mmrFilter))
+		.filter((deck) => topDeckHeroFilter(deck, heroFilter))
+		.filter((deck) => topDeckHeroPowerFilter(deck, heroPowerFilter))
+		.filter((deck) => topDeckSigTreasureFilter(deck, sigTreasureFilter))
+		.filter((deck) => topDeckTimeFilter(deck, timeFilter, patch))
+		.filter((deck) => topDeckDustFilter(deck, dustFilter))
+		.filter((deck) => topDeckPassivesFilter(deck, passivesFilter));
 };
 
 const topDeckStringFilter = (deck: DuelsDeckStat, searchString: string): boolean => {

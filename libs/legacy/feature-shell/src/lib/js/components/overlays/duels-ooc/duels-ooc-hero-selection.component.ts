@@ -12,7 +12,7 @@ import {
 	buildDuelsHeroPlayerStats,
 	filterDuelsRuns,
 	getDuelsMmrFilterNumber,
-	topDeckApplyFilters,
+	topDeckGroupApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { deepEqual } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -470,7 +470,7 @@ const buildTopDecks = (
 	return (
 		(duelsTopDecks ?? [])
 			.map((deck) =>
-				topDeckApplyFilters(
+				topDeckGroupApplyFilters(
 					deck,
 					trueMmrFilter,
 					allHeroCards as CardIds[],

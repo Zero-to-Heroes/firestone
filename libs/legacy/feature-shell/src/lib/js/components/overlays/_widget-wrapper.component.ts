@@ -71,20 +71,23 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
 
 		// First position the widget based on the prefs
+		// For static widgets, we can decide to not use javascript positioning and do everything with CSS
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
-		if (!positionFromPrefs) {
+		if (!positionFromPrefs && this.defaultPositionLeftProvider && this.defaultPositionTopProvider) {
 			positionFromPrefs = {
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
 		}
-		this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
-		this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
+		if (positionFromPrefs) {
+			this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
+			this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
 
-		// Then make sure it fits inside the bounds
-		// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
-		if (this.forceKeepInBounds) {
-			this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+			// Then make sure it fits inside the bounds
+			// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
+			if (this.forceKeepInBounds) {
+				this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+			}
 		}
 
 		if (cleanup) {
@@ -122,7 +125,9 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		return boundPositionFromPrefs;
 	}
 
-	startDragging() {}
+	startDragging() {
+		// Do nothing for now
+	}
 
 	async stopDragging() {
 		// Do nothing for now

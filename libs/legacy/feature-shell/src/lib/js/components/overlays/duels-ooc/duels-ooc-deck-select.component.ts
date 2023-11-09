@@ -1,21 +1,20 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
-import { CardIds, allDuelsSignatureTreasures, isPassive } from '@firestone-hs/reference-data';
+import { CardIds, isPassive } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
-import { DuelsDeck } from '@models/memory/memory-duels';
 import { SetCard } from '@models/set';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
-import { groupByFunction, sortByProperties } from '@services/utils';
-import { Observable, combineLatest } from 'rxjs';
+import { getDuelsMmrFilterNumber, topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
+import { deepEqual, groupByFunction, sortByProperties } from '@services/utils';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, shareReplay, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
@@ -24,11 +23,31 @@ import { PatchesConfigService } from '../../../services/patches-config.service';
 	selector: 'duels-ooc-deck-select',
 	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-deck-select.component.scss'],
 	template: `
-		<div class="container">
-			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDeck: tempDuelsDeck$ | async } as value">
+		<ng-container *ngIf="{ collection: collection$ | async, heroLoadout: heroLoadout$ | async } as value">
+			<div class="container" *ngIf="value.heroLoadout">
+				<div class="deck-container explore-decks-widget">
+					<div
+						class="vignette"
+						[ngClass]="{ inactive: currentActiveDeck != null }"
+						(click)="exploreDecks(value.heroLoadout)"
+						[helpTooltip]="'duels.deck-select.explore-decks-tooltip' | owTranslate"
+					>
+						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
+					</div>
+				</div>
+				<div class="deck-container build-decks-widget">
+					<div
+						class="vignette"
+						[ngClass]="{ inactive: currentActiveDeck != null }"
+						(click)="buildDeck(value.heroLoadout)"
+						[helpTooltip]="'duels.deck-select.build-deck-tooltip' | owTranslate"
+					>
+						<div class="icon" inlineSVG="assets/svg/loot.svg"></div>
+					</div>
+				</div>
 				<ng-container *ngIf="decks$ | async as decks">
 					<duels-deck-widget
-						class="deck-container item-{{ i }}"
+						class="deck-container "
 						[ngClass]="{ inactive: currentActiveDeck != null && currentActiveDeck !== i }"
 						*ngFor="let deck of decks; let i = index; trackBy: trackByDeckFn"
 						[deck]="deck"
@@ -38,28 +57,8 @@ import { PatchesConfigService } from '../../../services/patches-config.service';
 					>
 					</duels-deck-widget>
 				</ng-container>
-				<div class="deck-container item-3 explore-decks-widget" *ngIf="value.tempDuelsDeck">
-					<div
-						class="vignette"
-						[ngClass]="{ inactive: currentActiveDeck != null }"
-						(click)="exploreDecks(value.tempDuelsDeck)"
-						[helpTooltip]="'duels.deck-select.explore-decks-tooltip' | owTranslate"
-					>
-						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
-					</div>
-				</div>
-				<div class="deck-container item-4 build-decks-widget">
-					<div
-						class="vignette"
-						[ngClass]="{ inactive: currentActiveDeck != null }"
-						(click)="buildDeck(value.tempDuelsDeck)"
-						[helpTooltip]="'duels.deck-select.build-deck-tooltip' | owTranslate"
-					>
-						<div class="icon" inlineSVG="assets/svg/loot.svg"></div>
-					</div>
-				</div>
-			</ng-container>
-		</div>
+			</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -69,7 +68,7 @@ export class DuelsOutOfCombatDeckSelectComponent
 {
 	decks$: Observable<readonly DuelsDeckWidgetDeck[]>;
 	collection$: Observable<readonly SetCard[]>;
-	tempDuelsDeck$: Observable<DuelsDeck>;
+	heroLoadout$: Observable<HeroLoadout>;
 
 	currentActiveDeck: number;
 
@@ -87,62 +86,126 @@ export class DuelsOutOfCombatDeckSelectComponent
 		await this.patchesConfig.isReady();
 		await this.duelsTopDecks.isReady();
 
-		this.collection$ = this.store
-			.sets$()
-			.pipe(
-				this.mapData(
-					(allSets) =>
-						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
-				),
-			);
-		this.tempDuelsDeck$ = this.store
-			.listen$(([main, nav]) => main.duels.tempDuelsDeck)
-			.pipe(
-				filter(
-					([tempDuelsDeck]) =>
-						tempDuelsDeck?.HeroCardId &&
-						tempDuelsDeck?.HeroPowerCardId &&
-						!!tempDuelsDeck?.DeckList?.length,
-				),
-				this.mapData(([tempDuelsDeck]) => tempDuelsDeck),
-			);
-		this.decks$ = combineLatest([
-			this.store.duelsRuns$(),
+		this.collection$ = this.store.sets$().pipe(
+			this.mapData(
+				(allSets) => allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
+			),
+			shareReplay(1),
+			this.mapData((info) => info),
+		);
+
+		this.heroLoadout$ = combineLatest([
+			this.store.listen$(
+				([state]) => state.duels?.heroOptions,
+				([state]) => state.duels?.heroPowerOptions,
+				([state]) => state.duels?.signatureTreasureOptions,
+			),
+		]).pipe(
+			debounceTime(200),
+			distinctUntilChanged((a, b) => {
+				return deepEqual(a, b);
+			}),
+			this.mapData(([[heroOptions, heroPowerOptions, signatureTreasureOptions]]) => {
+				const selectedHero = heroOptions?.find((option) => option.Selected);
+				const selectedHeroPower = heroPowerOptions?.find((option) => option.Selected);
+				const selectedSignatureTreasure = signatureTreasureOptions?.find((option) => option.Selected);
+				return {
+					heroCardId: this.allCards.getCard(selectedHero?.DatabaseId).id,
+					heroPowerCardId: this.allCards.getCard(selectedHeroPower?.DatabaseId).id,
+					signatureTreasureCardId: this.allCards.getCard(selectedSignatureTreasure?.DatabaseId).id,
+				};
+			}),
+			shareReplay(1),
+			tap((info) => console.debug('[duels-ooc-deck-select] hero loadout', info)),
+			this.mapData((info) => info),
+		);
+
+		const mmrFilter$ = combineLatest([
+			this.store.duelsMetaStats$(),
+			this.store.listen$(([main, nav, prefs]) => prefs.duelsActiveMmrFilter),
+		]).pipe(
+			this.mapData(([duelsMetaStats, [mmrFilter]]) => {
+				const mmrPercentiles = duelsMetaStats?.mmrPercentiles;
+				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+				return trueMmrFilter;
+			}),
+			shareReplay(1),
+			this.mapData((info) => info),
+		);
+
+		// this.tempDuelsDeck$ = this.store
+		// 	.listen$(([main, nav]) => main.duels.tempDuelsDeck)
+		// 	.pipe(
+		// 		tap((info) => console.debug('[duels-ooc-deck-select] tempDuelsDeck 0', info)),
+		// 		filter(
+		// 			([tempDuelsDeck]) =>
+		// 				tempDuelsDeck?.HeroCardId &&
+		// 				tempDuelsDeck?.HeroPowerCardId &&
+		// 				!!tempDuelsDeck?.DeckList?.length,
+		// 		),
+		// 		tap((info) => console.debug('[duels-ooc-deck-select] tempDuelsDeck', info)),
+		// 		this.mapData(([tempDuelsDeck]) => tempDuelsDeck),
+		// 	);
+
+		const topDecks$ = combineLatest([
 			this.duelsTopDecks.topDeck$$,
-			this.store.listen$(([main, nav]) => main.duels.tempDuelsDeck),
+			this.heroLoadout$,
 			this.patchesConfig.currentDuelsMetaPatch$$,
-			this.store.listenPrefs$((prefs) => prefs.duelsActiveMmrFilter),
+			mmrFilter$,
 		]).pipe(
 			filter(
-				([runs, groupedTopDecks, [tempDuelsDeck], patch, [mmrFilter]]) =>
-					tempDuelsDeck?.HeroCardId &&
-					tempDuelsDeck?.HeroPowerCardId &&
-					!!tempDuelsDeck?.DeckList?.length &&
-					!!groupedTopDecks?.length,
+				([topDecks, heroLoadout, patch]) =>
+					heroLoadout?.heroCardId && heroLoadout?.heroPowerCardId && !!topDecks?.length,
 			),
-			this.mapData(([runs, groupedTopDecks, [tempDuelsDeck], patch, [mmrFilter]]) => {
-				const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(tempDuelsDeck);
+			this.mapData(([allTopDecks, heroLoadout, patch, mmrFilter]) => {
+				let period: DuelsTimeFilterType = 'last-patch';
+				const allDecks = allTopDecks?.flatMap((group) => group.decks);
+				let topDecks = topDeckApplyFilters(
+					allDecks,
+					mmrFilter,
+					[heroLoadout.heroCardId as CardIds],
+					[heroLoadout.heroPowerCardId],
+					[heroLoadout.signatureTreasureCardId],
+					period,
+					'all',
+					null,
+					patch,
+				);
+				console.debug('top tops', period, heroLoadout, topDecks);
+				if (topDecks.length < 3) {
+					period = 'past-seven';
+					(topDecks = topDeckApplyFilters(
+						allDecks,
+						mmrFilter,
+						[heroLoadout.heroCardId as CardIds],
+						[heroLoadout.heroPowerCardId],
+						[heroLoadout.signatureTreasureCardId],
+						period,
+						'all',
+						null,
+						patch,
+					)),
+						console.debug('top tops', period, topDecks);
+				}
+				return topDecks;
+			}),
+		);
+
+		this.decks$ = combineLatest([this.store.duelsRuns$(), topDecks$, this.heroLoadout$]).pipe(
+			filter(
+				([runs, topDecks, heroLoadout]) =>
+					heroLoadout?.heroCardId && heroLoadout?.heroPowerCardId && !!topDecks?.length,
+			),
+			this.mapData(([runs, topDecks, heroLoadout]) => {
+				const { heroCardId, heroPowerCardId, signatureTreasureCardId } = heroLoadout;
 				const lastPlayedDeck: DuelsDeckWidgetDeck = this.buildLastPlayedDeck(
 					runs,
 					heroCardId,
 					heroPowerCardId,
 					signatureTreasureCardId,
 				);
-				const filteredTopDecks = groupedTopDecks.map((group) =>
-					topDeckApplyFilters(
-						group,
-						mmrFilter,
-						[heroCardId as CardIds],
-						[heroPowerCardId],
-						[signatureTreasureCardId],
-						'last-patch',
-						'all',
-						null,
-						patch,
-					),
-				);
 				const selectedTopDecks: readonly DuelsDeckWidgetDeck[] = this.buildTopDecks(
-					filteredTopDecks,
+					topDecks,
 					heroCardId,
 					heroPowerCardId,
 					signatureTreasureCardId,
@@ -171,35 +234,18 @@ export class DuelsOutOfCombatDeckSelectComponent
 		}
 	}
 
-	exploreDecks(referenceDeck: DuelsDeck) {
-		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
+	exploreDecks(heroLoadout: HeroLoadout) {
+		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = heroLoadout;
 		this.store.send(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 
-	buildDeck(referenceDeck: DuelsDeck) {
-		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
+	buildDeck(heroLoadout: HeroLoadout) {
+		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = heroLoadout;
 		this.store.send(new DuelsBuildDeckEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 
-	private extractPickInfos(tempDuelsDeck: DuelsDeck): {
-		heroCardId: string;
-		heroPowerCardId: string;
-		signatureTreasureCardId: string;
-	} {
-		const heroCardId = tempDuelsDeck.HeroCardId;
-		const heroPowerCardId = tempDuelsDeck.HeroPowerCardId;
-		const signatureTreasureCardId = tempDuelsDeck.DeckList.find((cardId) =>
-			allDuelsSignatureTreasures.includes(cardId as CardIds),
-		);
-		return {
-			heroCardId,
-			heroPowerCardId,
-			signatureTreasureCardId,
-		};
-	}
-
 	private buildTopDecks(
-		topDecks: readonly DuelsGroupedDecks[],
+		topDecks: readonly DuelsDeckStat[],
 		heroCardId: string,
 		heroPowerCardId: string,
 		signatureTreasureCardId: string,
@@ -210,7 +256,6 @@ export class DuelsOutOfCombatDeckSelectComponent
 		}
 
 		const candidates = topDecks
-			.flatMap((deck) => deck.decks)
 			.filter((deck) => deck.heroCardId === heroCardId)
 			.filter((deck) => deck.heroPowerCardId === heroPowerCardId)
 			.filter((deck) => deck.signatureTreasureCardId === signatureTreasureCardId);
@@ -305,4 +350,10 @@ export class DuelsOutOfCombatDeckSelectComponent
 	trackByDeckFn(index: number, item: DuelsDeckWidgetDeck) {
 		return item.id;
 	}
+}
+
+interface HeroLoadout {
+	heroCardId: string;
+	heroPowerCardId: string;
+	signatureTreasureCardId: string;
 }

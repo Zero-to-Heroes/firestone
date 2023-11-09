@@ -13,12 +13,12 @@ export class DuelsIsOnDeckBuildingLobbyScreenProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const tempDuelsDeck = event.value ? await this.memory.getDuelsDeck() : null;
+		// const tempDuelsDeck = event.value ? await this.memory.getDuelsDeck() : null;
 		return [
 			currentState?.update({
 				duels: currentState.duels?.update({
 					isOnDuelsDeckBuildingLobbyScreen: event.value,
-					tempDuelsDeck: tempDuelsDeck,
+					// tempDuelsDeck: tempDuelsDeck,
 				}),
 			}),
 			null,

@@ -13,7 +13,7 @@ import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { getDuelsMmrFilterNumber, topDeckApplyFilters } from '../../../services/ui-store/duels-ui-helper';
+import { getDuelsMmrFilterNumber, topDeckGroupApplyFilters } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -101,7 +101,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 					const trueMmrFilter = getDuelsMmrFilterNumber(duelsMetaStats.mmrPercentiles, mmrFilter);
 					const result = topDecks
 						.map((deck) =>
-							topDeckApplyFilters(
+							topDeckGroupApplyFilters(
 								deck,
 								trueMmrFilter,
 								classFilter,

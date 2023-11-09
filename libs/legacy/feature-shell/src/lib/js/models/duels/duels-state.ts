@@ -1,7 +1,7 @@
 import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsDeckbuilder } from '@models/duels/duels-deckbuilder';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
-import { DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
+import { MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { ExtendedDuelsStatDecks } from '../../services/duels/duels-state-builder.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
@@ -26,7 +26,7 @@ export class DuelsState {
 	readonly deckbuilder: DuelsDeckbuilder = new DuelsDeckbuilder();
 
 	readonly currentDuelsDeck: DeckInfoFromMemory;
-	readonly tempDuelsDeck: DuelsDeck;
+	// readonly tempDuelsDeck: DuelsDeck;
 	readonly isOnDuelsMainScreen: boolean;
 	readonly isOnDuelsDeckBuildingLobbyScreen: boolean;
 	readonly treasureSelection: TreasureSelection;
