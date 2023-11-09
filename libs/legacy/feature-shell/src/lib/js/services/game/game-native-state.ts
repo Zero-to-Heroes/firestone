@@ -2,6 +2,7 @@ import { NonFunctionProperties } from '../utils';
 
 export class GameNativeState {
 	readonly isFriendsListOpen: boolean;
+	readonly isDuelsChoosingHero: boolean;
 
 	public static create(base: Partial<NonFunctionProperties<GameNativeState>>): GameNativeState {
 		return Object.assign(new GameNativeState(), base);

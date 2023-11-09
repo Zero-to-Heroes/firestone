@@ -2,56 +2,77 @@
 	display: flex;
 }
 
-.container {
-	width: 65vh;
-	height: 100%;
-	padding-top: 14vh;
-	padding-bottom: 7vh;
-	flex-shrink: 0;
+.root {
 	display: flex;
-	flex-wrap: wrap;
 
-	.cell {
-		height: 22vh;
-		width: 14vh;
-		flex-grow: 0;
+	.container {
+		position: relative;
+		display: grid;
+		padding: 0;
 		flex-shrink: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 
-		&:nth-child(1) {
-			margin-left: 3.5vh;
+		.cell {
+			flex-grow: 0;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
-		&:nth-child(2) {
-			margin-left: 9vh;
-		}
-		&:nth-child(3) {
-			margin-left: 9vh;
-		}
-		&:nth-child(4) {
-			margin-top: 5vh;
-			margin-left: 3.5vh;
-		}
-		&:nth-child(5) {
-			margin-top: 5vh;
-			margin-left: 9vh;
-		}
-		&:nth-child(6) {
-			margin-top: 5vh;
-			margin-left: 9vh;
+
+		.empty-card {
+			background: rgba(255, 255, 255, 0.01);
+			width: 91%;
+			height: 91%;
 		}
 	}
 
-	.empty-card {
-		background: rgba(255, 255, 255, 0.01);
-		width: 91%;
-		height: 91%;
+	&.hero .container {
+		grid-template-rows: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
+		gap: 4vh;
+		width: 65vh;
+		height: 49vh;
+		left: 8vh;
+		top: 14vh;
 	}
-}
 
-duels-hero-info {
-	margin-left: 12vh;
-	width: 40vh;
-	margin-bottom: 4vh;
+	&.hero-power .container {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 5vh;
+		width: 80vh;
+		height: 35vh;
+		left: 8vh;
+		top: 11vh;
+	}
+
+	&.signature-treasure .container {
+		grid-template-rows: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
+		gap: 4vh;
+		width: 59vh;
+		height: 39vh;
+		left: 19vh;
+		top: 5vh;
+	}
+
+	&.hero {
+		.details {
+			margin-left: 19vh;
+			width: 40vh;
+			margin-bottom: 4vh;
+		}
+	}
+
+	&.hero-power,
+	&.signature-treasure {
+		flex-direction: column;
+
+		.details {
+			margin-left: 3vh;
+			height: 30vh;
+			margin-top: auto;
+			margin-bottom: 0;
+			width: 90vh;
+		}
+	}
 }

@@ -101,7 +101,7 @@ export class DuelsHeroInfoComponent extends AbstractSubscriptionComponent implem
 	statsPeriodText$: Observable<string>;
 
 	@Input() set heroInfo(value: DuelsHeroInfo) {
-		this.heroPortrait = this.i18n.getCardImage(value.cardId, { isHighRes: true, isHeroSkin: true });
+		this.heroPortrait = this.i18n.getCardImage(value.heroCardId, { isHighRes: true, isHeroSkin: true });
 		this.name = value.name;
 		this.globalWinrate = value.globalWinrate;
 		this.playerWinrate = value.playerWinrate;

@@ -12,7 +12,7 @@ export class GetDuelsSignatureTreasureOptionsOperation extends MindVisionOperati
 			ow,
 			'getDuelsSignatureTreasureOptions',
 			(forceReset?: boolean) => mindVision.getDuelsSignatureTreasureOptions(),
-			(info) => false,
+			(info: readonly MemoryDuelsHeroPowerOption[]) => info.some((option) => option.DatabaseId === 0),
 			(info) => info,
 			3,
 			1500,

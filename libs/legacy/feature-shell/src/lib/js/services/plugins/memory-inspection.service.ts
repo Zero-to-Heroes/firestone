@@ -245,24 +245,15 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getDuelsDeckFromCollectionOperation.call());
 	}
 
-	public async getDuelsHeroOptions(
-		forceReset = false,
-		numberOfRetries = 1,
-	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+	public async getDuelsHeroOptions(numberOfRetries = 1): Promise<readonly MemoryDuelsHeroPowerOption[]> {
 		return this.mindVision.callMindVision(() => this.getDuelsHeroOptionsOperation.call(numberOfRetries));
 	}
 
-	public async getDuelsHeroPowerOptions(
-		forceReset = false,
-		numberOfRetries = 1,
-	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+	public async getDuelsHeroPowerOptions(numberOfRetries = 1): Promise<readonly MemoryDuelsHeroPowerOption[]> {
 		return this.mindVision.callMindVision(() => this.getDuelsHeroPowerOptionsOperation.call(numberOfRetries));
 	}
 
-	public async getDuelsSignatureTreasureOptions(
-		forceReset = false,
-		numberOfRetries = 1,
-	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+	public async getDuelsSignatureTreasureOptions(numberOfRetries = 1): Promise<readonly MemoryDuelsHeroPowerOption[]> {
 		return this.mindVision.callMindVision(() =>
 			this.getDuelsSignatureTreasureOptionsOperation.call(numberOfRetries),
 		);

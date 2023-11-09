@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
+import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
@@ -116,10 +116,10 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsSignatureTreasureInfoComponent {
-	@Input() set signatureTreasureInfo(value: DuelsSignatureTreasureInfo) {
+	@Input() set signatureTreasureInfo(value: DuelsHeroInfo) {
 		this.heroPortrait = this.i18n.getCardImage(value.heroCardId, { isHighRes: true, isHeroSkin: true });
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroPowerCardId}.jpg`;
-		this.signatureTreasureImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
+		this.signatureTreasureImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.signatureTreasureCardId}.jpg`;
 		this.name = value.name;
 		this.globalWinrate = value.globalWinrate;
 		this.playerWinrate = value.playerWinrate;

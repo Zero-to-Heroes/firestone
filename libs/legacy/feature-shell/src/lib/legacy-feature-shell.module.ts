@@ -310,18 +310,14 @@ import { DuelsDecktrackerOocWidgetWrapperComponent } from './js/components/overl
 import { DuelsMaxLifeOpponentWidgetWrapperComponent } from './js/components/overlays/duels-max-life-player-widget-wrapper.component';
 import { DuelsMaxLifeWidgetComponent } from './js/components/overlays/duels-max-life/duels-max-life-widget.component';
 import { DuelsOocDeckSelectWidgetWrapperComponent } from './js/components/overlays/duels-ooc-deck-select-widget-wrapper.component';
-import { DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent } from './js/components/overlays/duels-ooc-hero-power-selection-widget-wrapper.component';
 import { DuelsOutOfCombatHeroSelectionWidgetWrapperComponent } from './js/components/overlays/duels-ooc-hero-selection-widget-wrapper.component';
-import { DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent } from './js/components/overlays/duels-ooc-signature-treasure-widget-wrapper.component';
 import { DuelsOutOfCombatTreasureSelectionWidgetWrapperComponent } from './js/components/overlays/duels-ooc-treasure-selection-widget-wrapper.component';
 import { DuelsDeckWidgetComponent } from './js/components/overlays/duels-ooc/duels-deck-widget.component';
 import { DuelsDecktrackerOocComponent } from './js/components/overlays/duels-ooc/duels-decktracker-ooc.component';
 import { DuelsHeroInfoComponent } from './js/components/overlays/duels-ooc/duels-hero-info.component';
 import { DuelsHeroPowerInfoComponent } from './js/components/overlays/duels-ooc/duels-hero-power-info.component';
 import { DuelsOutOfCombatDeckSelectComponent } from './js/components/overlays/duels-ooc/duels-ooc-deck-select.component';
-import { DuelsOutOfCombatHeroPowerSelectionComponent } from './js/components/overlays/duels-ooc/duels-ooc-hero-power-selection.component';
 import { DuelsOutOfCombatHeroSelectionComponent } from './js/components/overlays/duels-ooc/duels-ooc-hero-selection.component';
-import { DuelsOutOfCombatSignatureTreasureSelectionComponent } from './js/components/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component';
 import { DuelsOutOfCombatTreasureSelectionComponent } from './js/components/overlays/duels-ooc/duels-ooc-treasure-selection.component';
 import { DuelsSignatureTreasureInfoComponent } from './js/components/overlays/duels-ooc/duels-signature-treasure-info.component';
 import { HsQuestsWidgetWrapperComponent } from './js/components/overlays/hs-quests-widget-wrapper.component';
@@ -1492,11 +1488,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsOutOfCombatHeroSelectionWidgetWrapperComponent,
 		DuelsOutOfCombatHeroSelectionComponent,
 		DuelsHeroInfoComponent,
-		DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent,
-		DuelsOutOfCombatHeroPowerSelectionComponent,
 		DuelsHeroPowerInfoComponent,
-		DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent,
-		DuelsOutOfCombatSignatureTreasureSelectionComponent,
 		DuelsSignatureTreasureInfoComponent,
 		DuelsOocDeckSelectWidgetWrapperComponent,
 		DuelsOutOfCombatDeckSelectComponent,

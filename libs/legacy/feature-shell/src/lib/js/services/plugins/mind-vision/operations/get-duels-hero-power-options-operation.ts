@@ -12,7 +12,7 @@ export class GetDuelsHeroPowerOptionsOperation extends MindVisionOperationFacade
 			ow,
 			'getDuelsHeroPowerOptions',
 			(forceReset?: boolean) => mindVision.getDuelsHeroPowerOptions(),
-			(info) => false,
+			(info: readonly MemoryDuelsHeroPowerOption[]) => info.some((option) => option.DatabaseId === 0),
 			(info) => info,
 			3,
 			1500,

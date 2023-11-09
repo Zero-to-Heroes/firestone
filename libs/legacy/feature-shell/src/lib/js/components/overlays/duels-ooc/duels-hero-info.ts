@@ -1,5 +1,7 @@
 export interface DuelsHeroInfo {
-	readonly cardId: string;
+	readonly heroCardId: string;
+	readonly heroPowerCardId: string;
+	readonly signatureTreasureCardId: string;
 	readonly name: string;
 	readonly globalTotalMatches: number;
 	readonly globalWinrate: number;
@@ -23,8 +25,9 @@ export interface DuelsHeroInfoTopDeck {
 }
 
 export interface DuelsHeroPowerInfo {
-	readonly cardId: string;
 	readonly heroCardId: string;
+	readonly heroPowerCardId: string;
+	readonly signatureTreasureCardId: string;
 	readonly name: string;
 	readonly globalTotalMatches: number;
 	readonly globalWinrate: number;
@@ -36,9 +39,9 @@ export interface DuelsHeroPowerInfo {
 }
 
 export interface DuelsSignatureTreasureInfo {
-	readonly cardId: string;
 	readonly heroCardId: string;
 	readonly heroPowerCardId: string;
+	readonly signatureTreasureCardId: string;
 	readonly name: string;
 	readonly globalTotalMatches: number;
 	readonly globalWinrate: number;
