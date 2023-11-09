@@ -33,55 +33,72 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.5.0',
+		version: '12.5.1',
 		force: false,
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `This release for now mostly contains technical updates. I'm trying to make the app load faster, and decrease the memory it uses overall, especially if you're only using one or two modes. It will take a while to get there, so expect the improvements to be very gradual. </br>
-			// 	This first phase focuses on making the app load faster when on desktop (i.e. HS is not running).
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `It's giveaway time! I will soon announce a couple of giveaways on Twitter, so make sure to follow me there if you want to participate: https://twitter.com/ZerotoHeroes_HS
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `The app has been updated for Hearthstone patch 28.0.`,
+								text: `Fix an issue where the tracker would get stuck if the app was started while a game was already in progress.`,
 							},
 						],
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the deckbuilder would not show up anymore.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'duels',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where some data was sent incorrectly to the server during the run, leading to runs being categorized as "Casual" instead of "Heroic", thus preventing them from appearing in the high-wins list.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where Azerite Vein would be greyed out in the secrets helper even when your hand is full.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Hunter of Gatherers could crash the simulator.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `When choosing a hero / hero power / signature treasure, if there is no data for the "last patch" time period, it will automatically extend the time range to be able to show you something in the overlay.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'content',
+								text: `Add missing packs.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
