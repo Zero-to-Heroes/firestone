@@ -61,6 +61,7 @@ export class TriggerOnCardPlaySecretsParser implements EventParser {
 
 		const isCardPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isCardPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
+		const otherDeck = isCardPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const secretsWeCantRuleOut = [];
 
@@ -68,7 +69,7 @@ export class TriggerOnCardPlaySecretsParser implements EventParser {
 		const turnEnteredHand = cardPlayed?.card?.metaInfo?.turnAtWhichCardEnteredHand;
 		const currentTurn = currentState.currentTurn;
 
-		if (turnEnteredHand !== currentTurn) {
+		if (turnEnteredHand !== currentTurn || otherDeck.hand.length === 10) {
 			secretsWeCantRuleOut.push(CardIds.AzeriteVein_WW_422);
 		}
 
