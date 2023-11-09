@@ -70,8 +70,6 @@ export class DuelsStateBuilderService {
 				this.mainWindowStateUpdater.next(
 					new DuelsIsOnDeckBuildingLobbyScreenEvent(changes.IsDuelsDeckBuildingLobbyScreen),
 				);
-				// this.mainWindowStateUpdater.next(new DuelsChoosingHeroEvent(true));
-				// this.mainWindowStateUpdater.next(new DuelsCurrentOptionEvent(DungeonCrawlOptionType.DECK));
 			}
 
 			if (changes.DuelsCurrentOptionSelection != null) {

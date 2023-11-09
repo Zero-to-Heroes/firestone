@@ -59,7 +59,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// );
 		// Because of Tome Tampering
 		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
-		console.debug('[create-card-in-deck]', 'card added', card);
+		// console.debug('[create-card-in-deck]', 'card added', card);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		const newCardId = cardId ?? card?.cardId;
 		card = (card ?? DeckCard.create())
@@ -82,7 +82,7 @@ export class CreateCardInDeckParser implements EventParser {
 				relatedCardIds: this.buildRelatedCardIds(newCardId, deck, card?.relatedCardIds),
 			});
 
-		console.debug('[create-card-in-deck]', 'adding card', card);
+		// console.debug('[create-card-in-deck]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
