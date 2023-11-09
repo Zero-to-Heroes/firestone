@@ -1,3 +1,4 @@
+import { DungeonCrawlOptionType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
@@ -34,15 +35,17 @@ export class DuelsCurrentOptionParser implements Processor {
 			heroOptions,
 			heroPowerOptions,
 			signatureTreasureOptions,
+			duelsInfo,
 		);
 		const newState = currentState.update({
 			duels: currentState.duels.update({
 				currentOption: event.option,
-				treasureSelection: treasures?.length
-					? {
-							treasures: treasures.map((option) => this.allCards.getCardFromDbfId(option)),
-					  }
-					: null,
+				treasureSelection:
+					treasures?.length && event.option === DungeonCrawlOptionType.TREASURE
+						? {
+								treasures: treasures.map((option) => this.allCards.getCardFromDbfId(option)),
+						  }
+						: null,
 				heroOptions: heroOptions,
 				heroPowerOptions: heroPowerOptions,
 				signatureTreasureOptions: signatureTreasureOptions,
