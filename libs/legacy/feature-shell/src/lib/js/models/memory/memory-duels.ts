@@ -33,10 +33,10 @@ export interface OptionBundle {
 
 export interface MemoryDuelsHeroPowerOption {
 	readonly DatabaseId: number;
-	readonly Enabled: boolean;
-	readonly Visible: boolean;
-	readonly Completed: boolean;
-	readonly Locked: boolean;
+	readonly Enabled?: boolean;
+	readonly Visible?: boolean;
+	readonly Completed?: boolean;
+	readonly Locked?: boolean;
 	readonly Selected: boolean;
 }
 

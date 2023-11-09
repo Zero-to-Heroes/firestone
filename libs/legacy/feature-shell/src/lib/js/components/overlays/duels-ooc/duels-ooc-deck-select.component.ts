@@ -211,7 +211,7 @@ export class DuelsOutOfCombatDeckSelectComponent
 					signatureTreasureCardId,
 					!!lastPlayedDeck ? 2 : 3,
 				);
-				return [lastPlayedDeck, ...selectedTopDecks].filter((deck) => !!deck);
+				return [lastPlayedDeck, ...selectedTopDecks];
 			}),
 		);
 
@@ -297,11 +297,8 @@ export class DuelsOutOfCombatDeckSelectComponent
 		heroPowerCardId: string,
 		signatureTreasureCardId: string,
 	): DuelsDeckWidgetDeck {
-		if (!runs?.length) {
-			return null;
-		}
-
-		const runsWithSteps = runs.filter((run) => run.heroCardId === heroCardId).filter((run) => !!run.steps?.length);
+		const runsWithSteps =
+			runs?.filter((run) => run.heroCardId === heroCardId).filter((run) => !!run.steps?.length) ?? [];
 		let validRuns = runsWithSteps
 			.filter((run) => run.heroPowerCardId === heroPowerCardId)
 			.filter((run) => run.signatureTreasureCardId === signatureTreasureCardId)
@@ -316,7 +313,10 @@ export class DuelsOutOfCombatDeckSelectComponent
 		}
 		const candidate = validRuns[0];
 		if (!candidate) {
-			return null;
+			return {
+				id: 'personal-deck',
+				isLastPersonalDeck: true,
+			} as DuelsDeckWidgetDeck;
 		}
 
 		const runReplays = candidate.steps

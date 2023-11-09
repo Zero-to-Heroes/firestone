@@ -29,6 +29,12 @@ export class DuelsCurrentOptionParser implements Processor {
 		const signatureTreasureOptions = await this.memory.getDuelsSignatureTreasureOptions(10);
 		// event.option === DungeonCrawlOptionType.TREASURE_SATCHEL ? await this.getSignatureTreasureOptions() : null;
 
+		console.debug(
+			'[duels-current-option-parser] updated pick infos',
+			heroOptions,
+			heroPowerOptions,
+			signatureTreasureOptions,
+		);
 		const newState = currentState.update({
 			duels: currentState.duels.update({
 				currentOption: event.option,

@@ -1,30 +1,26 @@
 .duels-deck-widget {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
+	aspect-ratio: 1;
+	position: relative;
 
 	.vignette {
 		position: relative;
-
-		.game-mode {
-			width: 10vh;
-			height: 10vh;
-			position: relative;
-			transition: all 0.2s linear;
-		}
+		height: 100%;
+		aspect-ratio: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.8;
 
 		.rank-text {
-			position: absolute;
-			top: -1vh;
-			left: 0;
-			width: 100%;
-			height: 100%;
 			align-items: center;
 			justify-content: center;
 			display: flex;
-			text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000,
-				1px 1px 0 #000;
-			color: white;
-			font-size: 3vh;
+			color: var(--color-1);
+			font-size: 1.6vh;
 			width: 100%;
 			text-align: center;
 			font-family: Passion One;
@@ -33,27 +29,20 @@
 
 		.result {
 			width: 100%;
-			font-size: 2.5vh;
-			line-height: 1.8vh;
+			font-size: 1.3vh;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			font-family: Open Sans;
-			height: 4vh;
-			color: var(--default-text-color);
-			position: absolute;
-			top: 4.5vh;
+			color: var(--color-1);
 			font-family: Passion One;
-			text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000,
-				1px 1px 0 #000;
 			pointer-events: none;
+		}
 
-			.wins {
-				color: #61ff47;
-			}
-
-			.losses {
-				color: #ff4747;
+		&.missing {
+			.rank-text {
+				font-family: Open Sans;
+				font-size: 1vh;
 			}
 		}
 	}
@@ -67,38 +56,41 @@
 		justify-content: center;
 
 		.treasure {
-			width: 30px;
-			height: 30px;
-			clip-path: circle(10px at 50% 50%);
+			width: 3vh;
+			clip-path: circle(0.7vh at 50% 50%);
 			transform: scale(1.5);
-			margin-right: 5px;
+			aspect-ratio: 1;
+
+			&:first-child {
+				margin-right: -0.5vh;
+			}
 		}
 	}
 
 	.deck-list-container {
-		display: none;
-		bottom: -6vh;
-		background: rgba(255, 255, 255, 0.01);
+		bottom: 0;
 		position: absolute;
 		left: auto;
-		padding: 3vh;
 		z-index: 9;
 		flex-direction: column;
 		transform: scale(0.8);
 		transform-origin: bottom;
-		width: 256px;
+		width: 310px;
+		left: -9vh;
+		bottom: 7vh;
+		background: var(--color-6);
+		padding: 2vh;
+		padding-top: 1vh;
+		border-radius: 15px;
+		display: none;
+
+		.deck-list {
+			left: 0;
+		}
 	}
 
 	.deck-list {
 		max-height: 80vh;
-	}
-
-	.initial-list {
-		left: -24vh;
-	}
-
-	.final-list {
-		right: -24vh;
 	}
 
 	.personal-deck-text {
@@ -119,17 +111,18 @@
 
 	.dust-cost {
 		display: flex;
-		color: var(--default-text-color);
-		background: var(--color-5);
+		color: var(--color-2);
 		align-items: center;
+		width: 100%;
+		justify-content: center;
+		margin-bottom: 1vh;
 
 		.dust-icon {
-			width: 4vh;
-			height: 4vh;
-			margin-left: 0.5vh;
+			width: 3vh;
+			height: 3vh;
 		}
 		.value {
-			font-size: 2vh;
+			font-size: 1.5vh;
 		}
 	}
 

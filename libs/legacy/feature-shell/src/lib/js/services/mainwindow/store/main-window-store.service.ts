@@ -832,7 +832,7 @@ export class MainWindowStoreService {
 			[DuelsIsOnMainScreenEvent.eventName(), new DuelsIsOnMainScreenProcessor()],
 			[
 				DuelsIsOnDeckBuildingLobbyScreenEvent.eventName(),
-				new DuelsIsOnDeckBuildingLobbyScreenProcessor(this.memoryReading),
+				new DuelsIsOnDeckBuildingLobbyScreenProcessor(this.memoryReading, this.cards),
 			],
 			[DuelsCurrentOptionEvent.eventName(), new DuelsCurrentOptionParser(this.cards, this.memoryReading)],
 			[

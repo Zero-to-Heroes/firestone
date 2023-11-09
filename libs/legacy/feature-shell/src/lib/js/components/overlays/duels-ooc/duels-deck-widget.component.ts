@@ -20,14 +20,21 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					[cardTooltip]="treasureCardId"
 				/>
 			</div>
-			<div class="vignette" (click)="copyDeckCode()" [helpTooltip]="copyTooltip">
-				<img class="game-mode" [src]="gameModeImage" />
-				<div class="rank-text" *ngIf="rankText">{{ rankText }}</div>
+			<div
+				class="vignette"
+				*ngIf="rankText && !!wins && !!losses"
+				(click)="copyDeckCode()"
+				[helpTooltip]="copyTooltip"
+			>
+				<div class="rank-text">{{ rankText }}</div>
 				<div class="result">
 					<div class="wins">{{ wins }}</div>
 					<div class="separator">-</div>
 					<div class="losses">{{ losses }}</div>
 				</div>
+			</div>
+			<div class="vignette missing" *ngIf="!rankText" [helpTooltip]="missingDeckTooltip">
+				<div class="rank-text">{{ missingDeckText }}</div>
 			</div>
 			<div class="screen-capture-effect" *ngIf="screenCaptureOn" [@screenCapture]></div>
 			<div
@@ -36,7 +43,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				[owTranslate]="'duels.deck-select.personal-deck-text'"
 			></div>
 
-			<div class="deck-list-container  initial-list">
+			<div class="deck-list-container initial-list" *ngIf="initialDeck?.length">
 				<div class="dust-cost">
 					<svg class="dust-icon svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#dust" />
@@ -59,9 +66,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				<deck-list-static class="deck-list" [deckstring]="initialDecklist" [collection]="collection">
 				</deck-list-static>
 			</div>
-			<div class="deck-list-container final-list">
-				<deck-list-static class="deck-list" [deckstring]="finalDecklist"> </deck-list-static>
-			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -81,14 +85,24 @@ export class DuelsDeckWidgetComponent {
 			value.type === 'duels'
 				? 'assets/images/deck/ranks/casual_duels.png'
 				: 'assets/images/deck/ranks/heroic_duels.png';
-		this.rankText = value.mmr == null ? '0' : `${value.mmr}`;
-		this.treasureCardIds = value.treasureCardIds ?? [];
-		this.wins = value.wins;
-		this.losses = value.losses;
-		this.initialDecklist = value.initialDeckList;
-		this.finalDecklist = value.finalDeckList;
-		this.isLastPersonalDeck = value.isLastPersonalDeck;
-		this.dustCost = value.dustCost;
+		if (value.mmr == null) {
+			if (value.isLastPersonalDeck) {
+				this.missingDeckText = this.i18n.translateString('app.duels.deck-stat.no-personal-deck');
+				this.missingDeckTooltip = this.i18n.translateString('app.duels.deck-stat.no-personal-deck-tooltip');
+			} else {
+				this.missingDeckText = this.i18n.translateString('app.duels.deck-stat.no-meta-deck');
+				this.missingDeckTooltip = this.i18n.translateString('app.duels.deck-stat.no-meta-deck-tooltip');
+			}
+		} else {
+			this.rankText = `${value.mmr}`;
+			this.treasureCardIds = value.treasureCardIds ?? [];
+			this.wins = value.wins;
+			this.losses = value.losses;
+			this.initialDecklist = value.initialDeckList;
+			this.finalDecklist = value.finalDeckList;
+			this.isLastPersonalDeck = value.isLastPersonalDeck;
+			this.dustCost = value.dustCost;
+		}
 	}
 
 	gameModeImage: string;
@@ -102,6 +116,8 @@ export class DuelsDeckWidgetComponent {
 	finalDecklist: string;
 	isLastPersonalDeck: boolean;
 	dustCost: number;
+	missingDeckText: string;
+	missingDeckTooltip: string;
 
 	private defaultCopyTooltip = this.i18n.translateString('duels.deck-select.copy-deck-tooltip');
 
