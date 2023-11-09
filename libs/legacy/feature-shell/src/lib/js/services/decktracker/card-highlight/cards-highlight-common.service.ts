@@ -925,6 +925,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, murloc);
 			case CardIds.IceRevenant:
 				return and(side(inputSide), inDeck, spell, frost);
+			case CardIds.IdolsOfEluneTavernBrawl:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.IgnisTheEternalFlame:
 				return and(side(inputSide), or(inDeck, inHand), forge);
 			case CardIds.ImpCredibleTrousersTavernBrawl:
@@ -1445,6 +1447,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.SunstridersCrownTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.SuperchargeTavernBrawl:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.SwinetuskShank:
 				return and(
 					side(inputSide),
