@@ -136,6 +136,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 							!!pack.set ||
 							pack.packType === BoosterType.CLASSIC ||
 							pack.packType === BoosterType.WILD_PACK ||
+							pack.packType === BoosterType.WILD_WEST2 ||
 							pack.packType === BoosterType.STANDARD_PACK,
 					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
