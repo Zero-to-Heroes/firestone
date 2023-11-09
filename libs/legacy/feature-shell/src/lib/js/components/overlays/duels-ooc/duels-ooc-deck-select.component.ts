@@ -45,11 +45,11 @@ import { PatchesConfigService } from '../../../services/patches-config.service';
 						<div class="icon" inlineSVG="assets/svg/loot.svg"></div>
 					</div>
 				</div>
-				<ng-container *ngIf="decks$ | async as decks">
+				<ng-container>
 					<duels-deck-widget
 						class="deck-container "
 						[ngClass]="{ inactive: currentActiveDeck != null && currentActiveDeck !== i }"
-						*ngFor="let deck of decks; let i = index; trackBy: trackByDeckFn"
+						*ngFor="let deck of decks$ | async; let i = index; trackBy: trackByDeckFn"
 						[deck]="deck"
 						[collection]="value.collection"
 						(mouseenter)="onMouseEnter(i)"
@@ -192,10 +192,7 @@ export class DuelsOutOfCombatDeckSelectComponent
 		);
 
 		this.decks$ = combineLatest([this.store.duelsRuns$(), topDecks$, this.heroLoadout$]).pipe(
-			filter(
-				([runs, topDecks, heroLoadout]) =>
-					heroLoadout?.heroCardId && heroLoadout?.heroPowerCardId && !!topDecks?.length,
-			),
+			filter(([runs, topDecks, heroLoadout]) => !!heroLoadout?.heroCardId && !!heroLoadout?.heroPowerCardId),
 			this.mapData(([runs, topDecks, heroLoadout]) => {
 				const { heroCardId, heroPowerCardId, signatureTreasureCardId } = heroLoadout;
 				const lastPlayedDeck: DuelsDeckWidgetDeck = this.buildLastPlayedDeck(
@@ -251,14 +248,11 @@ export class DuelsOutOfCombatDeckSelectComponent
 		signatureTreasureCardId: string,
 		numberOfDecks: number,
 	): readonly DuelsDeckWidgetDeck[] {
-		if (!topDecks?.length) {
-			return [];
-		}
-
-		const candidates = topDecks
-			.filter((deck) => deck.heroCardId === heroCardId)
-			.filter((deck) => deck.heroPowerCardId === heroPowerCardId)
-			.filter((deck) => deck.signatureTreasureCardId === signatureTreasureCardId);
+		const candidates =
+			topDecks
+				?.filter((deck) => deck.heroCardId === heroCardId)
+				.filter((deck) => deck.heroPowerCardId === heroPowerCardId)
+				.filter((deck) => deck.signatureTreasureCardId === signatureTreasureCardId) ?? [];
 		// Remove duplicates
 		const groupedDecks = groupByFunction(
 			(deck: DuelsDeckStat) => `${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
@@ -269,25 +263,31 @@ export class DuelsOutOfCombatDeckSelectComponent
 		const sortedCandidates = uniqueDecks.sort(
 			sortByProperties((deck: DuelsDeckStat) => [deck.dustCost, -new Date(deck.runStartDate).getTime()]),
 		);
-		if (!sortedCandidates.length) {
-			return [];
-		}
 
-		const result: readonly DuelsDeckWidgetDeck[] = sortedCandidates.slice(0, numberOfDecks).map((candidate) => ({
-			id: '' + candidate.id,
-			heroCardId: heroCardId,
-			heroPowerCardId: heroPowerCardId,
-			signatureTreasureCardId: signatureTreasureCardId,
-			initialDeckList: candidate.decklist,
-			finalDeckList: candidate.finalDecklist,
-			mmr: candidate.rating,
-			type: 'paid-duels',
-			wins: candidate.wins,
-			losses: candidate.losses,
-			treasureCardIds: candidate.treasuresCardIds.filter((cardId) => isPassive(cardId, this.allCards)),
-			isLastPersonalDeck: false,
-			dustCost: candidate.dustCost,
-		}));
+		const finalTopDecks: readonly DuelsDeckWidgetDeck[] = sortedCandidates
+			.slice(0, numberOfDecks)
+			.map((candidate) => ({
+				id: '' + candidate.id,
+				heroCardId: heroCardId,
+				heroPowerCardId: heroPowerCardId,
+				signatureTreasureCardId: signatureTreasureCardId,
+				initialDeckList: candidate.decklist,
+				finalDeckList: candidate.finalDecklist,
+				mmr: candidate.rating,
+				type: 'paid-duels',
+				wins: candidate.wins,
+				losses: candidate.losses,
+				treasureCardIds: candidate.treasuresCardIds.filter((cardId) => isPassive(cardId, this.allCards)),
+				isLastPersonalDeck: false,
+				dustCost: candidate.dustCost,
+			}));
+		const result: DuelsDeckWidgetDeck[] = [...finalTopDecks];
+		for (let i = result.length; i < numberOfDecks; i++) {
+			result.push({
+				id: `top-deck-${i}`,
+				isLastPersonalDeck: false,
+			} as DuelsDeckWidgetDeck);
+		}
 		return result;
 	}
 
