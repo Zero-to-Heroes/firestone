@@ -144,6 +144,12 @@
 			display: flex;
 		}
 	}
+
+	&.personal {
+		.vignette .rank-text {
+			font-size: 1.2vh;
+		}
+	}
 }
 
 .screen-capture-effect {

@@ -110,11 +110,19 @@ export class DuelsOutOfCombatHeroSelectionComponent
 				const selectedHero = heroOptions?.find((option) => option.Selected);
 				const selectedHeroPower = heroPowerOptions?.find((option) => option.Selected);
 				const selectedSignatureTreasure = signatureTreasureOptions?.find((option) => option.Selected);
-				return {
+				const result = {
 					heroCardId: selectedHero?.DatabaseId,
 					heroPowerCardId: selectedHeroPower?.DatabaseId,
 					signatureTreasureCardId: selectedSignatureTreasure?.DatabaseId,
 				};
+				console.debug(
+					'[duels-ooc-hero-selection] hero loadout',
+					result,
+					heroOptions,
+					heroPowerOptions,
+					signatureTreasureOptions,
+				);
+				return result;
 			}),
 			shareReplay(1),
 			this.mapData((info) => info),
@@ -137,7 +145,11 @@ export class DuelsOutOfCombatHeroSelectionComponent
 			}),
 		);
 		const optionCardIds$ = this.optionCards$.pipe(
-			this.mapData((options) => options?.map((option) => option.id) ?? []),
+			this.mapData((options) => {
+				const result = options?.map((option) => option.id) ?? [];
+				console.debug('[duels-ooc-hero-selection] option card ids', result);
+				return result;
+			}),
 		);
 
 		const validOptions$ = combineLatest([optionCardIds$, this.stage$$, heroLoadout$]).pipe(
@@ -156,11 +168,13 @@ export class DuelsOutOfCombatHeroSelectionComponent
 				)
 					.map((id) => this.allCards.getCard(id).id)
 					.filter((id) => !!id);
-				return {
+				const result = {
 					validHeroes,
 					validHeroPowers,
 					validSignatureTreasures,
 				};
+				console.debug('[duels-ooc-hero-selection] valid options', result, stage);
+				return result;
 			}),
 			shareReplay(1),
 			this.mapData((info) => info),
@@ -200,7 +214,7 @@ export class DuelsOutOfCombatHeroSelectionComponent
 					patch,
 					stage,
 				);
-				console.debug('top tops', period, validOptions.validHeroes, topDeckStatsForHeroes);
+				console.debug('top tops', period, validOptions, topDeckStatsForHeroes);
 				if (!topDeckStatsForHeroes.length || topDeckStatsForHeroes.some((stat) => stat.topDecks.length === 0)) {
 					period = 'past-seven';
 					topDeckStatsForHeroes = buildTopDeckStatsForHeroes(

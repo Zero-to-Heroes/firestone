@@ -11,7 +11,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 	selector: 'duels-deck-widget',
 	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-deck-widget.component.scss'],
 	template: `
-		<div class="duels-deck-widget">
+		<div class="duels-deck-widget" [ngClass]="{ personal: isLastPersonalDeck }">
 			<div class="treasures-container">
 				<img
 					class="treasure"
@@ -20,7 +20,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					[cardTooltip]="treasureCardId"
 				/>
 			</div>
-			<div class="vignette" *ngIf="rankText && !!wins && !!losses" (click)="copyDeckCode()">
+			<div class="vignette" *ngIf="rankText && wins != null && losses != null" (click)="copyDeckCode()">
 				<div class="rank-text">{{ rankText }}</div>
 				<div class="result">
 					<div class="wins">{{ wins }}</div>
@@ -32,12 +32,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				<div class="rank-text">{{ missingDeckText }}</div>
 			</div>
 			<div class="screen-capture-effect" *ngIf="screenCaptureOn" [@screenCapture]></div>
-			<div
-				class="personal-deck-text"
-				*ngIf="isLastPersonalDeck"
-				[owTranslate]="'duels.deck-select.personal-deck-text'"
-			>
-			</div>
 
 			<div class="deck-list-container initial-list" *ngIf="initialDeck?.length">
 				<div class="dust-cost">
@@ -77,6 +71,7 @@ export class DuelsDeckWidgetComponent {
 	@Input() collection: readonly SetCard[];
 
 	@Input() set deck(value: DuelsDeckWidgetDeck) {
+		console.debug('setting deck', value);
 		this.initialDeck = value.initialDeckList;
 		this.gameModeImage =
 			value.type === 'duels'
@@ -91,7 +86,9 @@ export class DuelsDeckWidgetComponent {
 				this.missingDeckTooltip = this.i18n.translateString('app.duels.deck-stat.no-meta-deck-tooltip');
 			}
 		} else {
-			this.rankText = `${value.mmr}`;
+			this.rankText = value.isLastPersonalDeck
+				? `${this.i18n.translateString('duels.deck-select.personal-deck-text')}`
+				: `${value.mmr}`;
 			this.treasureCardIds = value.treasureCardIds ?? [];
 			this.wins = value.wins;
 			this.losses = value.losses;
