@@ -239,7 +239,7 @@ export class CardsMonitorService {
 			const cardId = data[0].CardId;
 			const type = cardPremiumToCardType(data[0].Premium);
 			const cardInCollection = collection.find((c) => c.id === cardId);
-			const existingCount = data[0].Premium ? cardInCollection.premiumCount : cardInCollection.count;
+			const existingCount = (data[0].Premium ? cardInCollection?.premiumCount : cardInCollection?.count) ?? 0;
 
 			for (let i = existingCount; i < existingCount + data.length; i++) {
 				this.handleNotification(cardId, type, i + 1, showNotifs);
