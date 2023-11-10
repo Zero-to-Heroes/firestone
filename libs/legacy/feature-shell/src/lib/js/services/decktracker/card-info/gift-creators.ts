@@ -651,6 +651,8 @@ export const giftCreators = [
 	CardIds.ToothOfNefarian,
 	CardIds.Toshley,
 	CardIds.TrainingSession_NX2_029,
+	CardIds.TrainingSession_TrainingSessionEnchantment,
+	CardIds.TrainingSession_TrainingSessionAchieveEnchantment,
 	CardIds.TramMechanic_WW_044,
 	CardIds.TransferStudent_TransferStudentToken_SCH_199t19,
 	CardIds.TransferStudent_TransferStudentToken_SCH_199t6,
