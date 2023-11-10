@@ -331,6 +331,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'excavate',
+			field: 'playerExcavateCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.excavate-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.excavate-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'chaoticTendril',
 			field: 'playerChaoticTendrilCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-label'),

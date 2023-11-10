@@ -1,4 +1,4 @@
-import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ShortCard } from '@models/decktracker/game-state';
 import { NonFunctionProperties } from '@services/utils';
@@ -278,6 +278,63 @@ export class DeckState {
 			.some((cardId) =>
 				Array.isArray(cardIds) ? cardIds.includes(cardId as CardIds) : (cardIds as any)(cardId),
 			);
+	}
+
+	public hasRelevantMechanics(
+		allCards: CardsFacadeService,
+		mechanics: readonly GameTag[],
+		options?: {
+			excludesDeckInLimited?: boolean;
+			onlyLimited?: boolean;
+			includesOtherZone?: boolean;
+		},
+	) {
+		if (
+			this.hasRelevantMechanicsLimited(
+				allCards,
+				mechanics,
+				options?.onlyLimited ? !options.excludesDeckInLimited : true,
+			)
+		) {
+			return true;
+		}
+
+		if (options?.onlyLimited) {
+			return false;
+		}
+
+		let updatedPool = [...this.deckList, ...this.board];
+		if (options?.includesOtherZone) {
+			updatedPool = updatedPool.concat(this.otherZone.filter((card) => card.zone !== 'SETASIDE'));
+		}
+		return updatedPool
+			.map((card) => card.cardId)
+			.concat(this.getCardsInSideboards())
+			.map((card) => allCards.getCard(card))
+			.some((card) => card.mechanics?.some((mec) => mechanics.includes(GameTag[mec])));
+	}
+
+	private hasRelevantMechanicsLimited(
+		allCards: CardsFacadeService,
+		mechanics: readonly GameTag[],
+		includesDeck = true,
+	) {
+		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
+		if (includesDeck) {
+			pool = pool.concat(this.deck.map((card) => card.cardId));
+		}
+		// console.debug(
+		// 	'checking for relevant card 2',
+		// 	cardIds instanceof Array ? cardIds.join('') : cardIds,
+		// 	// pool.join(', '),
+		// 	excludesDeck,
+		// 	cardIds instanceof Array,
+		// 	pool.concat(!excludesDeck ? this.getCardsInSideboards() : []).join(', '),
+		// );
+		return pool
+			.concat(includesDeck ? this.getCardsInSideboards() : [])
+			.map((card) => allCards.getCard(card))
+			.some((card) => card.mechanics?.some((mec) => mechanics.includes(GameTag[mec])));
 	}
 
 	public hasMurozondTheInfinite() {

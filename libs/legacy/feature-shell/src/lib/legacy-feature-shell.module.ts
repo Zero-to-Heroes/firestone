@@ -513,8 +513,10 @@ import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/d
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
+import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
+import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
@@ -1541,6 +1543,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerExcavateWidgetWrapperComponent,
 		PlayerChaoticTendrilWidgetWrapperComponent,
 		PlayerSecretsPlayedWidgetWrapperComponent,
 		PlayerLightrayWidgetWrapperComponent,
@@ -1584,6 +1587,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentMulticasterWidgetWrapperComponent,
 		OpponentChaoticTendrilWidgetWrapperComponent,
 		OpponentSpellWidgetWrapperComponent,
+		OpponentExcavateWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

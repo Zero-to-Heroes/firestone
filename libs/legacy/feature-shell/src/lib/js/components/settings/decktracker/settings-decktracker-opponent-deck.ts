@@ -399,6 +399,13 @@ export class SettingsDecktrackerOpponentDeckComponent
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.corpse-spent-tooltip'),
 		},
+		{
+			id: 'excavate',
+			field: 'opponentExcavateCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.excavate-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.excavate-tooltip'),
+			showLimitedOption: true,
+		},
 	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(

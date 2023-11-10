@@ -92,6 +92,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-excavate-widget-wrapper></player-excavate-widget-wrapper>
 			<player-chaotic-tendril-widget-wrapper></player-chaotic-tendril-widget-wrapper>
 			<player-secrets-played-widget-wrapper></player-secrets-played-widget-wrapper>
 			<player-lightray-widget-wrapper></player-lightray-widget-wrapper>
@@ -136,6 +137,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-multicaster-widget-wrapper></opponent-multicaster-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-spell-widget-wrapper></opponent-spell-widget-wrapper>
+			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
