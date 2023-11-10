@@ -16,7 +16,7 @@ export class DuelsIsOnDeckBuildingLobbyScreenProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const tempDuelsDeck = event.value ? await this.memory.getDuelsDeck() : null;
 		let newDuels = currentState.duels;
-		if (tempDuelsDeck) {
+		if (tempDuelsDeck && !!tempDuelsDeck.DeckList?.length) {
 			newDuels = newDuels?.update({
 				heroOptions: [{ DatabaseId: this.allCards.getCard(tempDuelsDeck.HeroCardId).dbfId, Selected: true }],
 				heroPowerOptions: [
