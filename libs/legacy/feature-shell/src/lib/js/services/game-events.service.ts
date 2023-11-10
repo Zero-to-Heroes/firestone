@@ -548,7 +548,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_BUFFED_IN_HAND, gameEvent, {
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
-						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
+						buffCardIds: gameEvent.Value.AdditionalProps.BuffCardIds,
 					}),
 				);
 				break;

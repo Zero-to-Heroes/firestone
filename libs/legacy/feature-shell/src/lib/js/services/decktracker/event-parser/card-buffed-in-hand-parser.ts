@@ -13,9 +13,16 @@ export class CardBuffedInHandParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
-		const buffCardId = gameEvent.additionalData.buffCardId;
-		return handleBuff(currentState, gameEvent, buffingEntityCardId, buffCardId, this.helper);
+		try {
+			const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
+			const buffCardIds = gameEvent.additionalData.buffCardId;
+			return handleBuff(currentState, gameEvent, buffingEntityCardId, buffCardIds, this.helper);
+		} catch (e) {
+			// Safeguard in case the C# plugin isn't updated at the same time as the JS part
+			// and still returns single cardIds
+			console.warn('Could not process card buffed in hand event', e);
+			return currentState;
+		}
 	}
 
 	event(): string {
@@ -27,14 +34,22 @@ export const handleBuff = (
 	currentState: GameState,
 	gameEvent: GameEvent,
 	buffingEntityCardId: string,
-	buffCardId: string,
+	buffCardIds: readonly string[],
 	helper: DeckManipulationHelper,
 ) => {
+	if (!buffCardIds?.length) {
+		return currentState;
+	}
+
 	const [, controllerId, localPlayer, entityId] = gameEvent.parse();
 	const isPlayer = controllerId === localPlayer.PlayerId;
 	const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 	const cardInHand = helper.findCardInZone(deck.hand, null, entityId);
-	return handleSingleCardBuffInHand(currentState, gameEvent, buffingEntityCardId, buffCardId, helper, cardInHand);
+	let newState = currentState;
+	for (const buffCardId of buffCardIds) {
+		newState = handleSingleCardBuffInHand(newState, gameEvent, buffingEntityCardId, buffCardId, helper, cardInHand);
+	}
+	return newState;
 };
 
 export const handleSingleCardBuffInHand = (
