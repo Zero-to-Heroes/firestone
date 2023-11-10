@@ -20,12 +20,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					[cardTooltip]="treasureCardId"
 				/>
 			</div>
-			<div
-				class="vignette"
-				*ngIf="rankText && !!wins && !!losses"
-				(click)="copyDeckCode()"
-				[helpTooltip]="copyTooltip"
-			>
+			<div class="vignette" *ngIf="rankText && !!wins && !!losses" (click)="copyDeckCode()">
 				<div class="rank-text">{{ rankText }}</div>
 				<div class="result">
 					<div class="wins">{{ wins }}</div>
@@ -41,7 +36,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				class="personal-deck-text"
 				*ngIf="isLastPersonalDeck"
 				[owTranslate]="'duels.deck-select.personal-deck-text'"
-			></div>
+			>
+			</div>
 
 			<div class="deck-list-container initial-list" *ngIf="initialDeck?.length">
 				<div class="dust-cost">
@@ -65,6 +61,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				</div>
 				<deck-list-static class="deck-list" [deckstring]="initialDecklist" [collection]="collection">
 				</deck-list-static>
+				<div class="text">{{ copyTooltip }}</div>
 			</div>
 		</div>
 	`,
@@ -102,6 +99,10 @@ export class DuelsDeckWidgetComponent {
 			this.finalDecklist = value.finalDeckList;
 			this.isLastPersonalDeck = value.isLastPersonalDeck;
 			this.dustCost = value.dustCost;
+			this.copyTooltip = value.isLastPersonalDeck
+				? this.i18n.translateString('duels.deck-select.copy-personal-deck-tooltip')
+				: this.i18n.translateString('duels.deck-select.copy-deck-tooltip');
+			this.defaultCopyTooltip = this.copyTooltip;
 		}
 	}
 
@@ -119,9 +120,8 @@ export class DuelsDeckWidgetComponent {
 	missingDeckText: string;
 	missingDeckTooltip: string;
 
-	private defaultCopyTooltip = this.i18n.translateString('duels.deck-select.copy-deck-tooltip');
-
-	copyTooltip = this.defaultCopyTooltip;
+	copyTooltip: string;
+	private defaultCopyTooltip: string;
 
 	constructor(
 		private readonly ow: OverwolfService,
