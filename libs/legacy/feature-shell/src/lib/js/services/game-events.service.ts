@@ -803,6 +803,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'EXCAVATE_TIER_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.EXCAVATE_TIER_CHANGED, gameEvent, {
+						currentTier: gameEvent.Value.AdditionalProps.CurrentTier,
+						maxTier: gameEvent.Value.AdditionalProps.MaxTier,
+					}),
+				);
+				break;
 			case 'CORPSES_SPENT_THIS_GAME_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED, gameEvent, {

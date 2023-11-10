@@ -73,6 +73,7 @@ import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
 import { EntityUpdateParser } from './event-parser/entity-update-parser';
 import { EventParser } from './event-parser/event-parser';
+import { ExcavateTierParser } from './event-parser/excavate-tier-parser';
 import { FatigueParser } from './event-parser/fatigue-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
@@ -553,6 +554,7 @@ export class GameStateService {
 			[GameEvent.END_OF_ECHO_IN_HAND]: [new EndOfEchoInHandParser(this.helper)],
 			[GameEvent.ENTITY_CHOSEN]: [new EntityChosenParser(this.helper), new SphereOfSapienceParser(this.helper)],
 			[GameEvent.ENTITY_UPDATE]: [new EntityUpdateParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.EXCAVATE_TIER_CHANGED]: [new ExcavateTierParser()],
 			[GameEvent.FATIGUE_DAMAGE]: [new FatigueParser()],
 			[GameEvent.FIRST_PLAYER]: [new FirstPlayerParser()],
 			[GameEvent.GALAKROND_INVOKED]: [new GalakrondInvokedParser()],
