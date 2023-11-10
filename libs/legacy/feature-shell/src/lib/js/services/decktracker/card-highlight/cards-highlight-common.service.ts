@@ -806,6 +806,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 						CardIds.ContagionConcoctionTavernBrawl,
 					),
 				);
+			case CardIds.GiantAnaconda:
+				return and(side(inputSide), or(inDeck, inHand), minion, attackGreaterThan(4));
 			case CardIds.Gigantotem:
 				return and(side(inputSide), or(inDeck, inHand), totem);
 			case CardIds.Glaivetar:
