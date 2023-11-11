@@ -4,8 +4,7 @@
 
 Firestone is an app you run on Overwolf alongside Hearthstone (like HearthArena).
 
-See the main [imgur album](https://imgur.com/a/hLz4ORp)
-And [the screenshots](https://imgur.com/a/9mYoN05) for battlegrounds personal stats are
+See the [list of features](https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features) and the list of [premium-exclusive features](https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads).
 
 # Contributing
 
@@ -16,4 +15,3 @@ More information [here](https://github.com/Zero-to-Heroes/firestone/blob/master/
 -   The app can be downloaded from here: https://www.overwolf.com/app/sebastien_tromp-firestone
 -   If you want to come and say hi on Discord: https://discord.gg/vKeB3gnKTy
 -   Stay up-to-date with what we're doing and bugs found on Twitter: https://twitter.com/ZerotoHeroes_HS
--   An imgur album with more screenshots: https://imgur.com/a/hLz4ORp
