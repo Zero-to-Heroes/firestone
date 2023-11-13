@@ -388,7 +388,7 @@ export const giftCreators = [
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
 	CardIds.Marshspawn_BT_115,
-	CardIds.MarvelousMyceliumTavernBrawlToken,
+	// CardIds.MarvelousMyceliumTavernBrawlToken, // Because of an info leak
 	CardIds.MechagnomeGuide_MechagnomeGuideToken,
 	CardIds.MechagnomeGuide,
 	CardIds.MechanicalYeti,
