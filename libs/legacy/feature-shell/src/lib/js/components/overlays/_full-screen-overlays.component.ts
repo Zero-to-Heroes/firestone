@@ -175,7 +175,9 @@ export class FullScreenOverlaysComponent
 	}
 
 	async ngAfterContentInit() {
+		console.debug('full screen getting ready');
 		await this.scene.isReady();
+		console.debug('full screen ready');
 
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
@@ -200,32 +202,13 @@ export class FullScreenOverlaysComponent
 			}),
 		);
 
-		this.ow.addKeyDownListener(async (info) => {
-			return;
-			// F11
-			if (info.key === '122') {
-				await this.ow.bringToFront(this.windowId, true);
-				const element: HTMLElement = this.renderer.selectRootElement('#container', true);
-				const focusable = this.el.nativeElement.querySelectorAll('.root');
-				const element2 = focusable[0];
-				setTimeout(() => {
-					element.focus();
-					element.click();
-					element2.focus();
-					element2.click();
-				});
-			}
-			setTimeout(() => {
-				console.log('current focus', document.activeElement);
-			});
-		});
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	async ngAfterViewInit() {
+		console.debug('full screen ngAfterViewInit');
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
@@ -252,7 +235,9 @@ export class FullScreenOverlaysComponent
 		const gameHeight = gameInfo.height;
 		const height = gameHeight;
 		const width = gameWidth;
+		console.debug('full screen change window size', width, height, gameWidth, gameHeight, gameInfo, this.windowId);
 		await this.ow.changeWindowSize(this.windowId, width, height);
+		console.debug('full screen change window position');
 		await this.ow.changeWindowPosition(this.windowId, 0, 0);
 		window.dispatchEvent(new Event('window-resize'));
 	}
