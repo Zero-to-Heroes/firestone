@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, filter, shareReplay } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { LotteryConfigResourceStatType } from '../../services/lottery/lottery.model';
+import { LotteryConfigResourceStatType, LotteryState } from '../../services/lottery/lottery.model';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { UserService } from '../../services/user.service';
 
@@ -109,25 +109,33 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 			this.mapData((currentUser) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
 		);
 
-		this.totalPoints$ = this.store
-			.lottery$()
-			.pipe(this.mapData((lottery) => lottery.currentPoints().toLocaleString(this.i18n.formatCurrentLocale())));
-
-		const resourceStatKey$ = this.store.lottery$().pipe(this.mapData((lottery) => lottery.resourceStatKey()));
-		[this.resourcesValue$, this.resourcesLabel$, this.resourcesTooltip$] = this.lotteryInfo(resourceStatKey$);
-
-		const battlegroundsStatsKey$ = this.store
-			.lottery$()
-			.pipe(this.mapData((lottery) => lottery.battlegroundsStatKey()));
-		[this.battlegroundsValue$, this.battlegroundsLabel$, this.battlegroundsTooltip$] =
-			this.lotteryInfo(battlegroundsStatsKey$);
-
-		const constructedStatKey$ = this.store.lottery$().pipe(
-			// tap((lottery) => console.debug('[lottery] data in lottery widget', lottery, lottery.constructedStatKey())),
-			this.mapData((lottery) => lottery.constructedStatKey()),
+		const lottery$ = this.store.lottery$().pipe(
+			filter((lottery) => !!lottery),
+			shareReplay(1),
+			this.mapData((info) => info),
 		);
-		[this.constructedValue$, this.constructedLabel$, this.constructedTooltip$] =
-			this.lotteryInfo(constructedStatKey$);
+
+		this.totalPoints$ = lottery$.pipe(
+			this.mapData((lottery) => lottery.currentPoints().toLocaleString(this.i18n.formatCurrentLocale())),
+		);
+
+		const resourceStatKey$ = lottery$.pipe(this.mapData((lottery) => lottery.resourceStatKey()));
+		[this.resourcesValue$, this.resourcesLabel$, this.resourcesTooltip$] = this.lotteryInfo(
+			lottery$,
+			resourceStatKey$,
+		);
+
+		const battlegroundsStatsKey$ = lottery$.pipe(this.mapData((lottery) => lottery.battlegroundsStatKey()));
+		[this.battlegroundsValue$, this.battlegroundsLabel$, this.battlegroundsTooltip$] = this.lotteryInfo(
+			lottery$,
+			battlegroundsStatsKey$,
+		);
+
+		const constructedStatKey$ = lottery$.pipe(this.mapData((lottery) => lottery.constructedStatKey()));
+		[this.constructedValue$, this.constructedLabel$, this.constructedTooltip$] = this.lotteryInfo(
+			lottery$,
+			constructedStatKey$,
+		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -139,16 +147,17 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 	}
 
 	private lotteryInfo(
+		lottery$: Observable<LotteryState>,
 		statKey$: Observable<LotteryConfigResourceStatType>,
 	): [Observable<string>, Observable<string>, Observable<string>] {
 		return [
-			combineLatest([statKey$, this.store.lottery$()]).pipe(
+			combineLatest([statKey$, lottery$]).pipe(
 				this.mapData(([statKey, lottery]) =>
 					lottery.statValue(statKey).toLocaleString(this.i18n.formatCurrentLocale()),
 				),
 			),
 			statKey$.pipe(this.mapData((key) => this.i18n.translateString(`app.lottery.lottery.stats.${key}-label`))),
-			combineLatest([statKey$, this.store.lottery$()]).pipe(
+			combineLatest([statKey$, lottery$]).pipe(
 				this.mapData(([key, lottery]) =>
 					this.i18n.translateString(`app.lottery.lottery.stats.${key}-tooltip`, {
 						pointsGained: lottery.pointsGainedForStat(key),
