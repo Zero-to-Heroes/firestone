@@ -237,6 +237,54 @@ export class DeckManipulationHelper {
 		);
 	}
 
+	public trueFindCardInZone(
+		zone: readonly DeckCard[],
+		cardId: string,
+		entityId: number,
+		normalizeUpgradedCards = true,
+	): DeckCard {
+		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
+		if (entityId) {
+			const found = zone.find((card) => card.entityId === entityId);
+			if (found && cardId) {
+				return found;
+			} else if (found) {
+				return found;
+			}
+			if (cardId) {
+				const idByCardId = zone.find((card) => {
+					const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+					return refCardId === normalizedCardId && !card.entityId;
+				});
+				if (idByCardId) {
+					return idByCardId;
+				}
+			}
+		}
+		if (!cardId) {
+			return null;
+		}
+
+		const found =
+			// Avoid picking card at the bottom of the deck first if possible
+			zone.find((card) => {
+				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+				return refCardId === normalizedCardId && !card.entityId && card.positionFromBottom == null;
+			}) ??
+			zone.find((card) => {
+				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+				return refCardId === normalizedCardId && !card.entityId;
+			}) ??
+			// Without this, we can't draw cards that were specifically put back in our deck with special attributes
+			// (like Fizzle's Snapshot).
+			// I'm not sure what the issue could be in this case, so wait and see if this causes an info leak of some sort?
+			zone.find((card) => {
+				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+				return refCardId === normalizedCardId;
+			});
+		return found;
+	}
+
 	// Warning: this also update the card, so is not suitable for a pure "find" request
 	public findCardInZone(
 		zone: readonly DeckCard[],
@@ -283,7 +331,6 @@ export class DeckManipulationHelper {
 					return null;
 				} else {
 					// Empty card Id
-
 					return DeckCard.create({
 						entityId: entityId,
 					} as DeckCard);

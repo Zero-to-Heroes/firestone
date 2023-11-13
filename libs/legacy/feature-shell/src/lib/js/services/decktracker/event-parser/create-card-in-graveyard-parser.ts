@@ -34,11 +34,15 @@ export class CreateCardInGraveyardParser implements EventParser {
 
 		// When reconnecting, it can happen that a minion that died when we were reconnecting is now created
 		// directly in the graveyard
-		const { zone: existingZone, card: existingCard } = deck.findCard(entityId);
+		const { zone: existingZone, card: existingCard } = deck.findCard(entityId) ?? { zone: null, card: null };
 
 		let board = deck.board;
-		if (existingCard && existingZone === 'board') {
+		if (!!existingCard && existingZone === 'board') {
 			board = this.helper.removeSingleCardFromZone(board ?? [], existingCard.cardId, existingCard.entityId)[0];
+		}
+		let hand = deck.hand;
+		if (!!existingCard && existingZone === 'hand') {
+			hand = this.helper.removeSingleCardFromZone(hand ?? [], existingCard.cardId, existingCard.entityId)[0];
 		}
 
 		const cardWithDefault = DeckCard.create({
@@ -64,6 +68,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 			otherZone: newOther,
 			deck: newDeck,
 			board: board,
+			hand: hand,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
