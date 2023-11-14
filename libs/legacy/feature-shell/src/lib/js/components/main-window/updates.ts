@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.5.3',
+		version: '12.5.4',
 		force: false,
 		sections: [
 			// {
@@ -67,6 +67,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add an Excavate counter.`,
+							},
+							{
+								type: 'bug',
+								text: `Try to improve handling of disconnects.`,
 							},
 						],
 					},
