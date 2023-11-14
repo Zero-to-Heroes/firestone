@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.5.4',
+		version: '12.5.5',
 		force: false,
 		sections: [
 			// {
@@ -71,6 +71,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Try to improve handling of disconnects.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue when spectating two players at the same time (Community Report!).`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a couple of simulation issues with Diremuck Forager (Community Report!).`,
 							},
 						],
 					},
