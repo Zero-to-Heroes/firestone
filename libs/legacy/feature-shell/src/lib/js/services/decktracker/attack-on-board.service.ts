@@ -18,6 +18,17 @@ export class AttackOnBoardService {
 			.filter((entity) => entity)
 			.filter((entity) => this.canAttack(entity, deck.isActivePlayer))
 			.filter((entity) => entity.attack > 0);
+		// console.debug(
+		// 	'[attack-on-board] entitiesOnBoardThatCanAttack',
+		// 	entitiesOnBoardThatCanAttack,
+		// 	deck.board
+		// 		.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
+		// 		.filter((entity) => entity),
+		// 	deck.board
+		// 		.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
+		// 		.filter((entity) => entity)
+		// 		.filter((entity) => this.canAttack(entity, deck.isActivePlayer)),
+		// );
 		const totalAttackOnBoard = entitiesOnBoardThatCanAttack
 			.map(
 				(entity) =>
@@ -45,10 +56,18 @@ export class AttackOnBoardService {
 		// 	this.windfuryMultiplier(playerFromTracker.Hero),
 		// 	playerFromTracker?.Weapon?.durability,
 		// );
-		return {
+		const result = {
 			board: totalAttackOnBoard,
 			hero: heroAttack,
 		} as AttackOnBoard;
+		// console.debug(
+		// 	'[attack-on-board] computed attack on board',
+		// 	result,
+		// 	totalAttackOnBoard,
+		// 	heroAttack,
+		// 	entitiesOnBoardThatCanAttack,
+		// );
+		return result;
 	}
 
 	private isSilenced(entityId: number, board: readonly EntityGameState[]): boolean {
@@ -116,6 +135,16 @@ export class AttackOnBoardService {
 				// Ignore rush minions in the attack counter
 				hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) &&
 			!hasTag(entity, GameTag.CHARGE);
+		// console.debug(
+		// 	'[attack-on-board] canAttack',
+		// 	entity.cardId,
+		// 	entity,
+		// 	isDormant,
+		// 	cantAttack,
+		// 	isFrozen,
+		// 	canTitanAttack,
+		// 	hasSummoningSickness,
+		// );
 		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack && canTitanAttack;
 	}
 }

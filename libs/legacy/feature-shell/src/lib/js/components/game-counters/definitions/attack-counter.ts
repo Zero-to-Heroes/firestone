@@ -29,6 +29,7 @@ export class AttackCounterDefinition implements CounterDefinition<GameState, num
 	public select(gameState: GameState): number {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const totalAttackOnBoard = (deck.totalAttackOnBoard?.board || 0) + (deck.totalAttackOnBoard?.hero || 0);
+		// console.debug('attack on board', totalAttackOnBoard, deck.totalAttackOnBoard, deck);
 		return totalAttackOnBoard;
 	}
 
