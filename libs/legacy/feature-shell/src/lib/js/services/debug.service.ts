@@ -38,7 +38,7 @@ export class DebugService {
 							}
 							return value;
 						}) || '';
-					argsString += (shouldFormat ? argAsString.substring(0, 1000) : argAsString) + ' | ';
+					argsString += (shouldFormat ? argAsString.substring(0, 5000) : argAsString) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldConsoleLogFunc.apply(console, [argsString]);
