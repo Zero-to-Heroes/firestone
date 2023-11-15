@@ -471,6 +471,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					spell,
 					or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)),
 				);
+			case CardIds.Barnes:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.BartendOBot_WW_408:
 				return and(side(inputSide), inDeck, outcast);
 			case CardIds.Battlepickaxe_WW_347:
