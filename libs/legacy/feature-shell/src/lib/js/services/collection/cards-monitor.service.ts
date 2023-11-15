@@ -100,7 +100,9 @@ export class CardsMonitorService {
 		// When opening multiple catch-up packs, we don't go through the mass open packs flow
 		if (!!changes.MassOpenedPacks?.length || changes.OpenedPacks?.length > 1) {
 			const packs = changes.MassOpenedPacks?.length > 0 ? changes.MassOpenedPacks : changes.OpenedPacks;
-			const allCards = (await Promise.all(packs.flatMap((pack) => this.handleNewPack(pack)))).flat();
+			const allCards = (
+				await Promise.all(packs.flatMap((pack) => this.handleNewPack(pack, { skipPlayerInput: true })))
+			).flat();
 			console.debug('[cards-monitor] handling mass pack opening', allCards);
 			// Only show info for total dust, and new epic / legs
 			const totalDustValues = allCards
@@ -121,7 +123,10 @@ export class CardsMonitorService {
 			}
 		} else if (changes.OpenedPacks?.length === 1) {
 			for (const pack of changes.OpenedPacks) {
-				await this.handleNewPack(pack, isCatchupPack(pack.BoosterId));
+				await this.handleNewPack(pack, {
+					skipPlayerInput: isCatchupPack(pack.BoosterId),
+					showNotifs: isCatchupPack(pack.BoosterId),
+				});
 			}
 		}
 		// Cards received outside of packs
@@ -131,7 +136,7 @@ export class CardsMonitorService {
 		this.packNotificationQueue.next(false);
 	}
 
-	private async handleNewPack(pack: PackInfo, showNotifs = false) {
+	private async handleNewPack(pack: PackInfo, options: { skipPlayerInput?: boolean; showNotifs?: boolean } = {}) {
 		console.debug('[cards-monitor] handling new pack', pack);
 		const boosterId = pack.BoosterId;
 		// Get the collection as it was before opening cards
@@ -170,13 +175,13 @@ export class CardsMonitorService {
 		const setId = boosterIdToSetId(boosterId) || this.cards.getCard(packCards[0]?.cardId)?.set?.toLowerCase();
 		console.debug('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
-		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
+		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId, options.skipPlayerInput);
 		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
 
 		// Don't show notifs for Merc packs, at least for now.
 		// Would showing the total number of coins be interesting? It would feel very
 		// spammy I think
-		if (boosterId !== BoosterType.MERCENARIES && showNotifs) {
+		if (boosterId !== BoosterType.MERCENARIES && options?.showNotifs) {
 			// Only show info for total dust, and new epic / legs
 			const totalDustValues = packCards
 				.filter((card) => !card.isNew && !card.isSecondCopy)

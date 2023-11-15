@@ -27,11 +27,17 @@ export class PackMonitor {
 		});
 
 		this.events.on(Events.NEW_PACK).subscribe(async (event) => {
-			// console.log('[pack-monitor] resetting cards for new pack');
+			console.debug('[pack-monitor] resetting cards for new pack', event, event.data[4]);
 			const packCards: readonly InternalCardInfo[] = event.data[1];
 			if (event.data[2] === BoosterType.MERCENARIES) {
 				return;
 			}
+			// skipPlayerInput
+			if (event.data[3]) {
+				console.debug('[pack-monitor] skipping player input');
+				return;
+			}
+
 			this.unrevealedCards = packCards.map((card) => {
 				const dbCard = this.cards.getCard(card.cardId);
 				return {
