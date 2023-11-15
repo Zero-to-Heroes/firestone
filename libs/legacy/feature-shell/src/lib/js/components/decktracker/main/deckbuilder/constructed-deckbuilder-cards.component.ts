@@ -321,19 +321,11 @@ export class ConstructedDeckbuilderCardsComponent
 		this.maxCardsInDeck$ = combineLatest([
 			this.store.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat),
 			this.currentDeckCards$,
-		]).pipe(
-			this.mapData(([[currentFormat], cards]) =>
-				currentFormat === 'twist' || cards?.includes(CardIds.PrinceRenathal) ? 40 : 30,
-			),
-		);
+		]).pipe(this.mapData(([[currentFormat], cards]) => (cards?.includes(CardIds.PrinceRenathal) ? 40 : 30)));
 		this.minCardsInDeck$ = combineLatest([
 			this.store.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat),
 			this.currentDeckCards$,
-		]).pipe(
-			this.mapData(([[currentFormat], cards]) =>
-				currentFormat !== 'twist' && cards?.includes(CardIds.PrinceRenathal) ? 40 : 30,
-			),
-		);
+		]).pipe(this.mapData(([[currentFormat], cards]) => (cards?.includes(CardIds.PrinceRenathal) ? 40 : 30)));
 
 		this.deckValid$ = combineLatest([this.currentDeckCards$, this.maxCardsInDeck$, this.minCardsInDeck$]).pipe(
 			this.mapData(([cards, maxCards, minCards]) => {
