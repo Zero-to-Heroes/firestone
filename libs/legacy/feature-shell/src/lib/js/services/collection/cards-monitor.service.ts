@@ -165,7 +165,7 @@ export class CardsMonitorService {
 			}
 		});
 
-		const setId = boosterIdToSetId(boosterId) || this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase();
+		const setId = boosterIdToSetId(boosterId) || this.cards.getCard(packCards[0]?.cardId)?.set?.toLowerCase();
 		console.debug('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
@@ -226,10 +226,11 @@ export class CardsMonitorService {
 
 	private async handleNewCards(newCards: readonly CardPackInfo[], showNotifs = true) {
 		// Put in place a protection to avoid renotifying the whole initial collection
-		if (newCards?.length && newCards.length > 30) {
-			console.warn('[card-parser] not processing cards, too many', newCards.length);
-			return;
-		}
+		// With catch-up packs, this is in fact not working now
+		// if (newCards?.length && newCards.length > 30) {
+		// 	console.warn('[card-parser] not processing cards, too many', newCards.length);
+		// 	return;
+		// }
 
 		const groupedBy: { [key: string]: readonly CardPackInfo[] } = groupByFunction(
 			(card: CardPackInfo) => card.CardId + card.Premium,
@@ -296,7 +297,7 @@ export const cardPremiumToCardType = (premium: number): CollectionCardType => {
 	}
 };
 
-export const cardTypeToPremium = (cardType: CollectionCardType): number => {
+export const cardTypeToPremium = (cardType: CollectionCardType, info?: any): number => {
 	switch (cardType) {
 		case 'NORMAL':
 			return 0;
@@ -307,7 +308,7 @@ export const cardTypeToPremium = (cardType: CollectionCardType): number => {
 		case 'SIGNATURE':
 			return 3;
 		default:
-			console.warn('unknown card type', cardType);
+			console.warn('unknown card type', cardType, info);
 			return 0;
 	}
 };

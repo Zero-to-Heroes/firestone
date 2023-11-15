@@ -57,7 +57,7 @@ export class CollectionBootstrapService {
 	private buildCardHistory(card: CardPackResult, creationTimestamp: number): CardHistory {
 		const result: CardHistory = {
 			cardId: card.cardId,
-			premium: cardTypeToPremium(card.cardType),
+			premium: cardTypeToPremium(card.cardType, card),
 			isNewCard: card.isNew || card.isSecondCopy,
 			relevantCount: card.isNew ? 1 : card.isSecondCopy ? 2 : -1,
 			creationTimestamp: creationTimestamp,
