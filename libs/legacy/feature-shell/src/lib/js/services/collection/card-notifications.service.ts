@@ -15,6 +15,7 @@ export class CardNotificationsService {
 	) {}
 
 	public async createNewCardToast(cardId: string, isSecondCopy: boolean, type: CollectionCardType) {
+		console.debug('[card-notification] creating new card toast', cardId, isSecondCopy, type);
 		const dbCard = this.cards.getCard(cardId);
 		if (!dbCard) {
 			console.warn('[card-notification] missing card', cardId);
@@ -44,7 +45,7 @@ export class CardNotificationsService {
 						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
 						: '',
 			  });
-		// console.log('[card-notification] displaying new card toast notification for', cardName);
+		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
 		const clickText = this.i18n.translateString('app.collection.card-history.click-to-expand');

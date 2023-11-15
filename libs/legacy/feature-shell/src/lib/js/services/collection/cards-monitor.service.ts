@@ -97,10 +97,10 @@ export class CardsMonitorService {
 			return;
 		}
 
-		if (changes.MassOpenedPacks) {
-			const allCards = (
-				await Promise.all(changes.MassOpenedPacks.flatMap((pack) => this.handleNewPack(pack)))
-			).flat();
+		// When opening multiple catch-up packs, we don't go through the mass open packs flow
+		if (!!changes.MassOpenedPacks?.length || changes.OpenedPacks?.length > 1) {
+			const packs = changes.MassOpenedPacks?.length > 0 ? changes.MassOpenedPacks : changes.OpenedPacks;
+			const allCards = (await Promise.all(packs.flatMap((pack) => this.handleNewPack(pack)))).flat();
 			console.debug('[cards-monitor] handling mass pack opening', allCards);
 			// Only show info for total dust, and new epic / legs
 			const totalDustValues = allCards
@@ -119,17 +119,19 @@ export class CardsMonitorService {
 			for (const card of newCards) {
 				this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType);
 			}
-		} else if (changes.OpenedPack) {
-			this.handleNewPack(changes.OpenedPack);
+		} else if (changes.OpenedPacks?.length === 1) {
+			for (const pack of changes.OpenedPacks) {
+				await this.handleNewPack(pack, isCatchupPack(pack.BoosterId));
+			}
 		}
 		// Cards received outside of packs
 		else if (changes?.NewCards) {
-			this.handleNewCards(changes.NewCards, !changes.OpenedPack);
+			this.handleNewCards(changes.NewCards, !changes.OpenedPacks?.length);
 		}
 		this.packNotificationQueue.next(false);
 	}
 
-	private async handleNewPack(pack: PackInfo) {
+	private async handleNewPack(pack: PackInfo, showNotifs = false) {
 		console.debug('[cards-monitor] handling new pack', pack);
 		const boosterId = pack.BoosterId;
 		// Get the collection as it was before opening cards
@@ -174,30 +176,48 @@ export class CardsMonitorService {
 		// Don't show notifs for Merc packs, at least for now.
 		// Would showing the total number of coins be interesting? It would feel very
 		// spammy I think
-		if (boosterId !== BoosterType.MERCENARIES) {
-			const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
-				(card: InternalCardInfo) => card.cardId + card.cardType,
-			)(packCards);
-			for (const data of Object.values(groupedBy)) {
-				const cardId = data[0].cardId;
-				const type = data[0].cardType;
-				const cardInCollection = collection.find((c) => c.id === cardId);
-				const existingCount = !cardInCollection
-					? 0
-					: data[0].cardType === 'NORMAL'
-					? cardInCollection.count
-					: data[0].cardType === 'GOLDEN'
-					? cardInCollection.premiumCount
-					: data[0].cardType === 'DIAMOND'
-					? cardInCollection.diamondCount
-					: data[0].cardType === 'SIGNATURE'
-					? cardInCollection.signatureCount
-					: 0;
-
-				for (let i = existingCount; i < existingCount + data.length; i++) {
-					this.handleNotification(cardId, type, i + 1, false);
-				}
+		if (boosterId !== BoosterType.MERCENARIES && showNotifs) {
+			// Only show info for total dust, and new epic / legs
+			const totalDustValues = packCards
+				.filter((card) => !card.isNew && !card.isSecondCopy)
+				.map((card) => dustFor(this.cards.getCard(card.cardId)?.rarity, card.cardType));
+			const totalDust = totalDustValues.reduce((a, b) => a + b, 0);
+			const newCards = packCards
+				.filter((card) => card.isNew || card.isSecondCopy)
+				.filter(
+					(card) =>
+						['legendary', 'epic'].includes(this.cards.getCard(card.cardId)?.rarity?.toLowerCase()) ||
+						card.cardType !== 'NORMAL',
+				);
+			console.debug('[cards-monitor] sending notifs for new cards and dust', totalDust, newCards);
+			this.notifications.createDustToast(totalDust, totalDustValues.length);
+			for (const card of newCards) {
+				this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType);
 			}
+
+			// const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
+			// 	(card: InternalCardInfo) => card.cardId + card.cardType,
+			// )(packCards);
+			// for (const data of Object.values(groupedBy)) {
+			// 	const cardId = data[0].cardId;
+			// 	const type = data[0].cardType;
+			// 	const cardInCollection = collection.find((c) => c.id === cardId);
+			// 	const existingCount = !cardInCollection
+			// 		? 0
+			// 		: data[0].cardType === 'NORMAL'
+			// 		? cardInCollection.count
+			// 		: data[0].cardType === 'GOLDEN'
+			// 		? cardInCollection.premiumCount
+			// 		: data[0].cardType === 'DIAMOND'
+			// 		? cardInCollection.diamondCount
+			// 		: data[0].cardType === 'SIGNATURE'
+			// 		? cardInCollection.signatureCount
+			// 		: 0;
+
+			// 	for (let i = existingCount; i < existingCount + data.length; i++) {
+			// 		this.handleNotification(cardId, type, i + 1, showNotifs);
+			// 	}
+			// }
 		}
 
 		return packCards;
@@ -311,4 +331,8 @@ export const cardTypeToPremium = (cardType: CollectionCardType, info?: any): num
 			console.warn('unknown card type', cardType, info);
 			return 0;
 	}
+};
+
+export const isCatchupPack = (boosterId: BoosterType): boolean => {
+	return [BoosterType.WILD_WEST2].includes(boosterId);
 };

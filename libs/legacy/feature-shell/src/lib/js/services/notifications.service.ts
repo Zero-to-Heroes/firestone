@@ -46,14 +46,16 @@ export class OwNotificationsService {
 	// This directly share JS objects, without stringifying them, so it lets us do some
 	// fancy stuff
 	public async emitNewNotification(htmlMessage: Message, bypassPrefs = false) {
+		console.debug('[notifications] getting ready to emit new notification', htmlMessage);
 		if (!bypassPrefs && !(await this.prefs.getPreferences()).setAllNotifications) {
-			console.log('not showing any notification');
+			console.debug('[notifications] not showing any notification');
 			return;
 		}
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
 				throw new Error('NotificationsWindow was not identified at app start');
 			} else {
+				console.debug('[notifications] retrying', this.retriesLeft, htmlMessage);
 				this.retriesLeft--;
 				setTimeout(() => {
 					this.emitNewNotification(htmlMessage);

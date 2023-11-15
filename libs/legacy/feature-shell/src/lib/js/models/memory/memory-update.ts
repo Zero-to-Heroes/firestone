@@ -36,7 +36,7 @@ export interface MemoryUpdate {
 	readonly IsDuelsRewardsPending: boolean;
 
 	// These are not populated by the regular info updates, as they are costly to compute
-	readonly OpenedPack: PackInfo;
+	readonly OpenedPacks: readonly PackInfo[];
 	readonly MassOpenedPacks: readonly PackInfo[];
 	readonly NewCards: readonly CardPackInfo[];
 }
