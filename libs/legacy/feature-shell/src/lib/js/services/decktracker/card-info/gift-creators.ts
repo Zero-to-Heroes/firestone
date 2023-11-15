@@ -101,6 +101,7 @@ export const giftCreators = [
 	CardIds.Burgle_AT_033,
 	CardIds.Burgle_WON_071,
 	CardIds.BurglyBully,
+	CardIds.BurrowBuster_WW_002,
 	CardIds.CabalistsTome_WON_037,
 	CardIds.CabalistsTome,
 	CardIds.CactusConstruct_WW_818,
