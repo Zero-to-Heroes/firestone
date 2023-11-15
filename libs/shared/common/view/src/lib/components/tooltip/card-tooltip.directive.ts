@@ -151,7 +151,7 @@ export class CardTooltipDirective implements OnDestroy {
 		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
 		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 		// Pass content to tooltip component instance
-		this.tooltipRef.instance.opacity = 0;
+		// this.tooltipRef.instance.opacity = 0;
 		this.tooltipRef.instance.additionalClass = this.cardTooltipClass;
 		const relatedCards = !shouldShowRelatedCards
 			? []
@@ -183,17 +183,18 @@ export class CardTooltipDirective implements OnDestroy {
 
 		await this.reposition(this.tooltipRef);
 		// await sleep(20);
-		if (this.tooltipRef) {
-			try {
-				this.tooltipRef.instance.opacity = 1;
-			} catch (e) {
-				console.log('tooltipRef was alredy destroyed when setting opacity for card toltip');
-			}
-		}
+		// if (this.tooltipRef) {
+		// 	try {
+		// 		this.tooltipRef.instance.opacity = 1;
+		// 	} catch (e) {
+		// 		console.log('tooltipRef was alredy destroyed when setting opacity for card toltip');
+		// 	}
+		// }
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave(willBeDestroyed = false) {
+		// return;
 		this.positionStrategyDirty = true;
 
 		if (this.overlayRef) {

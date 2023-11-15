@@ -3,6 +3,11 @@
 	min-width: 250px;
 	min-height: 400px;
 	pointer-events: none;
+	position: relative;
+}
+
+.container {
+	display: flex;
 }
 
 // Because automatic tooltip positioning doesn't always work very well and sometimes

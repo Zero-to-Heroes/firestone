@@ -6,8 +6,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ComponentRef,
+	ElementRef,
 	Input,
 	OnDestroy,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import {
@@ -15,15 +17,18 @@ import {
 	IPreferences,
 	Store,
 	groupByFunction,
+	sleep,
 } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { deepEqual } from '@legacy-import/src/lib/js/services/utils';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
 	styleUrls: [`./card-tooltip.component.scss`],
 	template: `
-		<ng-container
+		<div
+			class="container"
 			*ngIf="{
 				cards: cards$ | async,
 				relatedCards: relatedCards$ | async,
@@ -71,7 +76,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					</div>
 				</div>
 			</div>
-		</ng-container>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -111,9 +116,9 @@ export class CardTooltipComponent
 	@Input() set displayBuffs(value: boolean) {
 		this.displayBuffs$$.next(value);
 	}
-	@Input() set opacity(value: number) {
-		this.opacity$$.next(value);
-	}
+	// @Input() set opacity(value: number) {
+	// 	this.opacity$$.next(value);
+	// }
 	@Input() set cardTooltipCard(value: {
 		cardId: string;
 		buffCardIds?: readonly string[];
@@ -149,6 +154,9 @@ export class CardTooltipComponent
 	private opacity$$ = new BehaviorSubject<number>(0);
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 
+	private keepInBound$$ = new BehaviorSubject<number>(null);
+	private resizeObserver: ResizeObserver;
+
 	private timeout;
 
 	constructor(
@@ -160,14 +168,25 @@ export class CardTooltipComponent
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 		// FIXME: For some reason, lifecycle methods are not called systematically
-		setTimeout(() => this.ngAfterContentInit(), 50);
+		// setTimeout(() => this.ngAfterContentInit(), 50);
 	}
 
 	ngAfterViewInit(): void {
-		this.timeout = setTimeout(() => this.viewRef?.destroy(), 30_000);
+		let i = 0;
+		this.resizeObserver =
+			this.resizeObserver ??
+			new ResizeObserver((entries) => {
+				console.debug('resize observer', ++i);
+				this.keepInBound$$.next(i);
+			});
+
+		this.resizeObserver.observe(this.el.nativeElement);
 	}
 
 	override ngOnDestroy(): void {
@@ -175,13 +194,24 @@ export class CardTooltipComponent
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 		}
+		if (this.resizeObserver) {
+			this.resizeObserver.disconnect();
+		}
 	}
 
 	ngAfterContentInit(): void {
-		setTimeout(() => this.ngAfterViewInit(), 10);
+		// setTimeout(() => this.ngAfterViewInit(), 10);
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
 		this.opacity$ = this.opacity$$.asObservable();
+		this.keepInBound$$
+			.pipe(
+				filter((trigger) => !!trigger),
+				// debounceTime(10),
+				tap((info) => console.debug('keep in bound', info)),
+				this.mapData((info) => info),
+			)
+			.subscribe(() => this.keepInBounds());
 		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
 			this.localized$$.asObservable(),
@@ -191,6 +221,7 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		]).pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
 					return relatedCardIds.map((cardId) => {
@@ -212,6 +243,8 @@ export class CardTooltipComponent
 				null,
 				0,
 			),
+			// tap((info) => this.keepInBound$$.next(true)),
+			this.mapData((info) => info as readonly InternalCard[]),
 		);
 		this.cards$ = combineLatest([
 			this.cardIds$$.asObservable(),
@@ -226,6 +259,7 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		]).pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, [locale, highRes]]) => {
 					return (
@@ -266,6 +300,8 @@ export class CardTooltipComponent
 				null,
 				0,
 			),
+			// tap((info) => this.keepInBound$$.next(true)),
+			this.mapData((info) => info),
 		);
 		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -276,6 +312,61 @@ export class CardTooltipComponent
 	trackByFn(index, item: InternalCard) {
 		return item.cardId;
 	}
+
+	private async keepInBounds() {
+		let widgetRect = this.getRect();
+		console.debug('widgetRect', widgetRect);
+		while (!(widgetRect = this.getRect())?.width) {
+			console.debug('widgetRect 2', widgetRect);
+			await sleep(50);
+		}
+
+		const gameInfo = await this.ow.getRunningGameInfo();
+
+		const gameWidth = gameInfo.width;
+		const gameHeight = gameInfo.height;
+
+		const currentTopOffset = parseInt(this.el.nativeElement.style.top?.replace('px', '')) || 0;
+		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
+		const newTopOffset =
+			widgetRect.top < 0
+				? -widgetRect.top
+				: widgetRect.top + widgetRect.height > gameHeight
+				? gameHeight - widgetRect.top - widgetRect.height
+				: 0;
+		const newLeftOffset =
+			widgetRect.left < 0
+				? -widgetRect.left
+				: widgetRect.left + widgetRect.width > gameWidth
+				? gameWidth - widgetRect.left - widgetRect.width
+				: 0;
+		if (newTopOffset === 0 && newLeftOffset === 0) {
+			this.opacity$$.next(1);
+			return;
+		}
+
+		const topOffset = currentTopOffset + newTopOffset;
+		const leftOffset = currentLeftOffset + newLeftOffset;
+		this.renderer.setStyle(this.el.nativeElement, 'left', leftOffset + 'px');
+		this.renderer.setStyle(this.el.nativeElement, 'top', topOffset + 'px');
+		console.debug('set tooltip position', leftOffset, topOffset, widgetRect, gameInfo);
+		console.debug(
+			'set tooltip position 2',
+			topOffset,
+			currentTopOffset,
+			newTopOffset,
+			widgetRect.top,
+			widgetRect.height,
+			gameHeight,
+		);
+		this.opacity$$.next(1);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private getRect = () => this.el.nativeElement.querySelector('.container')?.getBoundingClientRect();
 }
 
 interface InternalCard {
