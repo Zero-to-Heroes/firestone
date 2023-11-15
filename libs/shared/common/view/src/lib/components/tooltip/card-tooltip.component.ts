@@ -7,9 +7,11 @@ import {
 	Component,
 	ComponentRef,
 	ElementRef,
+	HostListener,
 	Input,
 	OnDestroy,
 	Renderer2,
+	ViewChild,
 	ViewRef,
 } from '@angular/core';
 import {
@@ -69,7 +71,12 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 				[ngStyle]="{ opacity: value.opacity }"
 			>
 				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards?.length > 6 }">
-					<div class="related-cards">
+					<div class="related-cards" #relatedCards>
+						<div
+							*ngIf="hasScrollbar"
+							class="scrollbar-text"
+							[fsTranslate]="'decktracker.card-tooltip-scroll-text'"
+						></div>
 						<div class="related-card" *ngFor="let card of value.relatedCards">
 							<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
 						</div>
@@ -85,12 +92,15 @@ export class CardTooltipComponent
 	implements AfterViewInit, OnDestroy, AfterContentInit
 {
 	public viewRef: ComponentRef<CardTooltipComponent>;
+	@ViewChild('relatedCards') relatedCards: ElementRef;
 
 	cards$: Observable<readonly InternalCard[]>;
 	relatedCards$: Observable<readonly InternalCard[]>;
 	relativePosition$: Observable<'left' | 'right'>;
 	displayBuffs$: Observable<boolean>;
 	opacity$: Observable<number>;
+
+	hasScrollbar: boolean;
 
 	@Input() set cardId(value: string) {
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
@@ -177,13 +187,20 @@ export class CardTooltipComponent
 		// setTimeout(() => this.ngAfterContentInit(), 50);
 	}
 
+	@HostListener('document:keydown', ['$event'])
+	onKeyDown(event: KeyboardEvent) {
+		console.debug('handling keydown', event.key);
+		if (event.key === 'q') {
+			this.viewRef?.destroy();
+		}
+	}
+
 	ngAfterViewInit(): void {
 		let i = 0;
 		this.resizeObserver =
 			this.resizeObserver ??
 			new ResizeObserver((entries) => {
-				console.debug('resize observer', ++i);
-				this.keepInBound$$.next(i);
+				this.keepInBound$$.next(++i);
 			});
 
 		this.resizeObserver.observe(this.el.nativeElement);
@@ -315,9 +332,9 @@ export class CardTooltipComponent
 
 	private async keepInBounds() {
 		let widgetRect = this.getRect();
-		console.debug('widgetRect', widgetRect);
+		// console.debug('widgetRect', widgetRect);
 		while (!(widgetRect = this.getRect())?.width) {
-			console.debug('widgetRect 2', widgetRect);
+			// console.debug('widgetRect 2', widgetRect);
 			await sleep(50);
 		}
 
@@ -340,26 +357,28 @@ export class CardTooltipComponent
 				: widgetRect.left + widgetRect.width > gameWidth
 				? gameWidth - widgetRect.left - widgetRect.width
 				: 0;
-		if (newTopOffset === 0 && newLeftOffset === 0) {
-			this.opacity$$.next(1);
-			return;
-		}
 
-		const topOffset = currentTopOffset + newTopOffset;
-		const leftOffset = currentLeftOffset + newLeftOffset;
-		this.renderer.setStyle(this.el.nativeElement, 'left', leftOffset + 'px');
-		this.renderer.setStyle(this.el.nativeElement, 'top', topOffset + 'px');
-		console.debug('set tooltip position', leftOffset, topOffset, widgetRect, gameInfo);
-		console.debug(
-			'set tooltip position 2',
-			topOffset,
-			currentTopOffset,
-			newTopOffset,
-			widgetRect.top,
-			widgetRect.height,
-			gameHeight,
-		);
+		if (newTopOffset !== 0 || newLeftOffset === 0) {
+			const topOffset = currentTopOffset + newTopOffset;
+			const leftOffset = currentLeftOffset + newLeftOffset;
+			this.renderer.setStyle(this.el.nativeElement, 'left', leftOffset + 'px');
+			this.renderer.setStyle(this.el.nativeElement, 'top', topOffset + 'px');
+			// console.debug('set tooltip position', leftOffset, topOffset, widgetRect, gameInfo);
+			// console.debug(
+			// 	'set tooltip position 2',
+			// 	topOffset,
+			// 	currentTopOffset,
+			// 	newTopOffset,
+			// 	widgetRect.top,
+			// 	widgetRect.height,
+			// 	gameHeight,
+			// );
+		}
 		this.opacity$$.next(1);
+
+		const element = this.relatedCards?.nativeElement;
+		this.hasScrollbar = !!element && element.scrollHeight > element.clientHeight;
+		// console.debug('has scrollbar', this.hasScrollbar, element, this.relatedCards);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

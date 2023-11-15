@@ -49,6 +49,15 @@
 		padding-right: 15px;
 		padding-bottom: 25px;
 
+		.scrollbar-text {
+			color: var(--color-1);
+			font-size: 12px;
+			display: block;
+			width: 100%;
+			text-align: center;
+			margin-top: 5px;
+		}
+
 		img {
 			width: 190px;
 			height: auto;

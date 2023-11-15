@@ -192,6 +192,14 @@ export class CardTooltipDirective implements OnDestroy {
 		// }
 	}
 
+	// @HostListener('document:keydown', ['$event'])
+	// onKeyDown(event: KeyboardEvent) {
+	// 	console.debug('handling keydown', event.key);
+	// 	if (event.key === 'Shift') {
+	// 		this.onMouseLeave(null);
+	// 	}
+	// }
+
 	@HostListener('mouseleave', ['$event'])
 	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
 		if (event?.shiftKey) {
