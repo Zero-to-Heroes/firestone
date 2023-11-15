@@ -127,7 +127,7 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.onMouseLeave(true);
+		this.onMouseLeave(null, true);
 	}
 
 	@HostListener('mouseenter')
@@ -192,9 +192,12 @@ export class CardTooltipDirective implements OnDestroy {
 		// }
 	}
 
-	@HostListener('mouseleave')
-	onMouseLeave(willBeDestroyed = false) {
-		// return;
+	@HostListener('mouseleave', ['$event'])
+	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
+		if (event?.shiftKey) {
+			return;
+		}
+
 		this.positionStrategyDirty = true;
 
 		if (this.overlayRef) {

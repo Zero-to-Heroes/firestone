@@ -43,11 +43,10 @@
 		flex-wrap: wrap;
 		max-width: 550px;
 		max-height: 800px;
-		overflow: hidden;
-		// overflow: auto;
-		// pointer-events: all;
+		overflow: auto;
+		pointer-events: all;
 		height: auto;
-		padding-right: 25px;
+		padding-right: 15px;
 		padding-bottom: 25px;
 
 		img {
