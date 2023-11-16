@@ -524,7 +524,7 @@ export class GameStateService {
 			[GameEvent.CARD_PLAYED]: [
 				new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
 				new PogoPlayedParser(),
-				new SpecificSummonsParser(),
+				new SpecificSummonsParser(this.allCards),
 			],
 			[GameEvent.CARD_REMOVED_FROM_BOARD]: [new CardRemovedFromBoardParser(this.helper)],
 			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
@@ -579,11 +579,11 @@ export class GameStateService {
 			[GameEvent.MINION_ON_BOARD_ATTACK_UPDATED]: [new MinionOnBoardAttackUpdatedParser(this.helper)],
 			[GameEvent.MINION_SUMMONED_FROM_HAND]: [
 				new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
-				new SpecificSummonsParser(),
+				new SpecificSummonsParser(this.allCards),
 			],
 			[GameEvent.MINION_SUMMONED]: [
 				new MinionSummonedParser(this.helper, this.allCards, this.i18n),
-				new SpecificSummonsParser(),
+				new SpecificSummonsParser(this.allCards),
 			],
 			[GameEvent.MINIONS_DIED]: [new MinionDiedParser(this.helper)],
 			[GameEvent.MULLIGAN_DEALING]: [new MulliganOverParser()],

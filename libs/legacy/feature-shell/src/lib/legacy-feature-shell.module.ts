@@ -516,7 +516,9 @@ import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overla
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
+import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
+import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
@@ -1528,6 +1530,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerChainedGuardianWidgetWrapperComponent,
 		PlayerEarthenGolemWidgetWrapperComponent,
 		PlayerTreantWidgetWrapperComponent,
+		PlayerDragonsSummonedWidgetWrapperComponent,
 		PlayerLibramWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,
@@ -1553,6 +1556,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerAsvedonWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
 		PlayerNagaGiantWidgetWrapperComponent,
+		PlayerGardensGraceWidgetWrapperComponent,
 		PlayerAnachronosWidgetWrapperComponent,
 		PlayerBonelordFrostwhisperWidgetWrapperComponent,
 		PlayerShockspitterWidgetWrapperComponent,

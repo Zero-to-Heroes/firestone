@@ -336,6 +336,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerTreantCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerDragonsSummonedCounter: BooleanWithLimited = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerDragonsSummonedCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerChainedGuardianCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerChainedGuardianCounterWidgetPosition: { left: number; top: number };
@@ -485,6 +489,10 @@ export class Preferences implements IPreferences {
 	readonly playerNagaGiantCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerNagaGiantCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerGardensGraceCounter: BooleanWithLimited = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerGardensGraceCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerAnachronosCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

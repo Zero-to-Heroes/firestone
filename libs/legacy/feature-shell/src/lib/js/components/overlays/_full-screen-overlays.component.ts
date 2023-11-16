@@ -102,6 +102,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-asvedon-widget-wrapper></player-asvedon-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
 			<player-naga-giant-widget-wrapper></player-naga-giant-widget-wrapper>
+			<player-gardens-grace-widget-wrapper></player-gardens-grace-widget-wrapper>
 			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
 			<player-bonelord-frostwhisper-widget-wrapper></player-bonelord-frostwhisper-widget-wrapper>
 			<player-shockspitter-widget-wrapper></player-shockspitter-widget-wrapper>
@@ -116,6 +117,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-relic-widget-wrapper></player-relic-widget-wrapper>
 			<player-chained-guardian-widget-wrapper></player-chained-guardian-widget-wrapper>
 			<player-treant-widget-wrapper></player-treant-widget-wrapper>
+			<player-dragons-summoned-widget-wrapper></player-dragons-summoned-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>

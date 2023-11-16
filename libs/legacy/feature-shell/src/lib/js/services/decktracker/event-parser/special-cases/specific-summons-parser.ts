@@ -1,4 +1,5 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
@@ -29,33 +30,46 @@ export const TREANT_CARD_IDS = [
 
 const PROCESSORS = [
 	{
-		cardIds: [CardIds.AstralAutomaton],
+		cardSelector: (card: ReferenceCard) => [CardIds.AstralAutomaton].includes(card?.id as CardIds),
 		updater: (deck: DeckState): DeckState =>
 			deck.update({ astralAutomatonsSummoned: (deck.astralAutomatonsSummoned ?? 0) + 1 }),
 	},
 	{
-		cardIds: [CardIds.StoneheartKing_EarthenGolemToken],
+		cardSelector: (card: ReferenceCard) => [CardIds.StoneheartKing_EarthenGolemToken].includes(card?.id as CardIds),
 		updater: (deck: DeckState): DeckState =>
 			deck.update({ earthenGolemsSummoned: (deck.earthenGolemsSummoned ?? 0) + 1 }),
 	},
 	{
-		cardIds: TREANT_CARD_IDS,
+		cardSelector: (card: ReferenceCard) => TREANT_CARD_IDS.includes(card?.id as CardIds),
 		updater: (deck: DeckState): DeckState => deck.update({ treantsSummoned: (deck.treantsSummoned ?? 0) + 1 }),
 	},
+	{
+		cardSelector: (card: ReferenceCard) => card?.races?.includes(Race[Race.DRAGON]),
+		updater: (deck: DeckState): DeckState => deck.update({ dragonsSummoned: (deck.dragonsSummoned ?? 0) + 1 }),
+	},
 ];
-const CARD_IDS = PROCESSORS.flatMap((p) => p.cardIds);
-
 export class SpecificSummonsParser implements EventParser {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state && CARD_IDS.includes(gameEvent.cardId as CardIds);
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [, controllerId, localPlayer] = gameEvent.parse();
+		const refCard = this.allCards.getCard(gameEvent.cardId);
+		const processors = PROCESSORS.filter((p) => p.cardSelector(refCard));
+		console.debug('processor', gameEvent.type, gameEvent, processors);
+		if (!processors?.length) {
+			return currentState;
+		}
+
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const processor = PROCESSORS.find((p) => p.cardIds.includes(gameEvent.cardId as CardIds));
-		const newPlayerDeck = processor.updater(deck);
+		let newPlayerDeck = deck;
+		for (const processor of processors) {
+			newPlayerDeck = processor.updater(newPlayerDeck);
+		}
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

@@ -27,12 +27,14 @@ import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
+import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { EarthenGolemCounterDefinition } from './definitions/earthen-golem-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { ExcavateCounterDefinition } from './definitions/excavate-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
+import { GardensGraceCounterDefinition } from './definitions/gardens-grace-counter';
 import { GreySageParrotCounterDefinition } from './definitions/grey-sage-parrot-counter';
 import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damage-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
@@ -162,6 +164,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return EarthenGolemCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'treant':
 				return TreantCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'dragonsSummoned':
+				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'spells':
 				return SpellCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':
@@ -204,6 +208,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MurozondTheInfiniteCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'nagaGiant':
 				return NagaGiantCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'gardensGrace':
+				return GardensGraceCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'anachronos':
 				return AnachronosCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bonelordFrostwhisper':

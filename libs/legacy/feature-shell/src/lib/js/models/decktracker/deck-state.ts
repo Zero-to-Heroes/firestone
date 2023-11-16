@@ -73,6 +73,7 @@ export class DeckState {
 	readonly astralAutomatonsSummoned: number = 0;
 	readonly earthenGolemsSummoned: number = 0;
 	readonly treantsSummoned: number = 0;
+	readonly dragonsSummoned: number = 0;
 	readonly fatigue: number = 0;
 	readonly overloadedCrystals: number = 0;
 	readonly corpsesSpent: number = 0;
@@ -81,6 +82,7 @@ export class DeckState {
 	readonly uniqueSpellSchools: readonly string[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly manaSpentOnSpellsThisMatch: number = 0;
+	readonly manaSpentOnHolySpellsThisMatch: number = 0;
 	readonly watchpostsPlayedThisMatch: number = 0;
 	readonly libramsPlayedThisMatch: number = 0;
 	readonly chaoticTendrilsPlayedThisMatch: number = 0;

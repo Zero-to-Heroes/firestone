@@ -215,6 +215,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'dragonsSummoned',
+			field: 'playerDragonsSummonedCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'jade',
 			field: 'playerJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
@@ -398,6 +405,13 @@ export class SettingsDecktrackerYourDeckComponent
 			field: 'playerNagaGiantCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.naga-giant-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.naga-giant-tooltip'),
+			showLimitedOption: true,
+		},
+		{
+			id: 'gardensGrace',
+			field: 'playerGardensGraceCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.gardens-grace-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.gardens-grace-tooltip'),
 			showLimitedOption: true,
 		},
 		{
