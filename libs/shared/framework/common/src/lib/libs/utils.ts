@@ -1,3 +1,5 @@
+import equal from 'deep-equal';
+
 export const groupByFunction =
 	<T>(keyExtractor: (obj: T) => string | number) =>
 	(array: readonly T[]): { [key: string]: readonly T[] } => {
@@ -9,6 +11,11 @@ export const groupByFunction =
 			return objectsByKeyValue;
 		}, {});
 	};
+
+export const deepEqual = (a, b) =>
+	equal(a, b, {
+		strict: false,
+	});
 
 export const arraysEqual = (a: readonly any[] | any, b: readonly any[] | any): boolean => {
 	if (a == null && b == null) {

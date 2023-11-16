@@ -18,11 +18,11 @@ import {
 	AbstractSubscriptionStoreComponent,
 	IPreferences,
 	Store,
+	deepEqual,
 	groupByFunction,
 	sleep,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { deepEqual } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 
 @Component({
