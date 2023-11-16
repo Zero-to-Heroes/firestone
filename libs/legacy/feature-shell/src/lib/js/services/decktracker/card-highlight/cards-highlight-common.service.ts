@@ -715,8 +715,6 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), dredge);
 			case CardIds.EerieStoneTavernBrawl:
 				return and(side(inputSide), spell, shadow);
-			case CardIds.EerieStoneTavernBrawl:
-				return and(side(inputSide), spell, shadow);
 			case CardIds.ElementalEvocation:
 				return and(side(inputSide), or(inHand, inDeck), elemental);
 			case CardIds.ElderNadox:
