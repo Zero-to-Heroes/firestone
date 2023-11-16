@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } fro
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { Observable, UnaryFunction, pipe } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -43,8 +43,10 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {
 		return pipe(
+			distinctUntilChanged(),
 			switchMap(async (visible: boolean) => {
 				if (visible) {
+					console.debug('repositioning', this);
 					const repositioned = await this.reposition();
 				}
 				return visible;
