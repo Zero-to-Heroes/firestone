@@ -111,6 +111,8 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.SoulJuggler_TB_BaconUps_075:
 		case CardIds.WrathWeaver_BGS_004:
 		case CardIds.WrathWeaver_TB_BaconUps_079:
+		case CardIds.CultistSthara_BG27_081:
+		case CardIds.CultistSthara_BG27_081_G:
 			return [Race.DEMON, ...cardRaces];
 		case CardIds.SeafoodSlinger_BG21_011:
 		case CardIds.SeafoodSlinger_BG21_011_G:
