@@ -520,6 +520,7 @@ import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlay
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
+import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
 import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
@@ -1546,6 +1547,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerTramHeistWidgetWrapperComponent,
 		PlayerExcavateWidgetWrapperComponent,
 		PlayerChaoticTendrilWidgetWrapperComponent,
 		PlayerSecretsPlayedWidgetWrapperComponent,

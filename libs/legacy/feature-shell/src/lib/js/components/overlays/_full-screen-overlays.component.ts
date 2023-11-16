@@ -92,6 +92,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-tram-heist-widget-wrapper></player-tram-heist-widget-wrapper>
 			<player-excavate-widget-wrapper></player-excavate-widget-wrapper>
 			<player-chaotic-tendril-widget-wrapper></player-chaotic-tendril-widget-wrapper>
 			<player-secrets-played-widget-wrapper></player-secrets-played-widget-wrapper>

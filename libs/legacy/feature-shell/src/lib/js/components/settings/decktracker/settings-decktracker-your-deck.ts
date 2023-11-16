@@ -338,6 +338,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'tramHeist',
+			field: 'playerTramHeistCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'excavate',
 			field: 'playerExcavateCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.excavate-label'),

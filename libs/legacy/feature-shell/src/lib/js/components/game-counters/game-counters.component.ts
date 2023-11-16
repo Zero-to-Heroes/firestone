@@ -56,6 +56,7 @@ import { ShockspitterCounterDefinition } from './definitions/shockspitter-counte
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
+import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
 import { TreantCounterDefinition } from './definitions/treant-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
@@ -188,6 +189,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'tramHeist':
+				return TramHeistCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'excavate':
 				return ExcavateCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'chaoticTendril':
