@@ -5,7 +5,7 @@ import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achi
 import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
 import { BgsBestUserStatsService } from '../../js/services/battlegrounds/bgs-best-user-stats.service';
-import { BgsInitService } from '../../js/services/battlegrounds/bgs-init.service';
+import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
@@ -69,7 +69,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_endGameListenerService: EndGameListenerService,
 		private readonly init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private readonly init_ReplaysNotificationService: ReplaysNotificationService,
-		private readonly init_BgsInitService: BgsInitService,
+		private readonly init_BgsInitService: BgsPerfectGamesService,
 		private readonly init_BgsBestUserStatsService: BgsBestUserStatsService,
 		private readonly init_HsClientConfig: HsClientConfigService,
 		private readonly init_LogRegisterService: LogRegisterService,

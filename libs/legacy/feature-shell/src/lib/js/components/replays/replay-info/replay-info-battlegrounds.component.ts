@@ -124,6 +124,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	@Input() displayTime = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
+		console.debug('setting replay', value);
 		this.replayInfo = value;
 		this.updateInfo();
 	}
@@ -162,6 +163,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	}
 
 	showReplay() {
+		console.debug('showing replay', this.reviewId);
 		this.store.send(new ShowReplayEvent(this.reviewId));
 	}
 

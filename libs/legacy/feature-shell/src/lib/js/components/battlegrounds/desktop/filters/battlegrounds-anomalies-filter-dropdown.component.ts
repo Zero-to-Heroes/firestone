@@ -89,6 +89,7 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 							'bgs-category-simulator',
 							'bgs-category-personal-rating',
 							'bgs-category-meta-quests',
+							'bgs-category-perfect-games',
 						].includes(categoryId),
 				),
 			);

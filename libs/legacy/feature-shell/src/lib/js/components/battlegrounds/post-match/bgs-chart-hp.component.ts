@@ -363,7 +363,14 @@ export class BgsChartHpComponent {
 			this._stats.hpOverTurn,
 		);
 		const hpOverTurn = {};
+		console.debug(
+			'built player order',
+			playerOrder,
+			this._stats.leaderboardPositionOverTurn,
+			this._stats.hpOverTurn,
+		);
 		for (const playerId of playerOrder) {
+			console.debug('handling playerId', playerId);
 			hpOverTurn[playerId] = this._stats.hpOverTurn[playerId];
 		}
 		const hpOverTurnDebug = {};

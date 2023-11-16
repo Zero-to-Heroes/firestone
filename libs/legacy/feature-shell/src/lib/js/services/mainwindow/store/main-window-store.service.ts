@@ -44,6 +44,7 @@ import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-m
 import { FirestoneRemoteAchievementsLoaderService } from '../../achievement/data/firestone-remote-achievements-loader.service';
 import { ArenaRewardsService } from '../../arena/arena-rewards.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
+import { BgsPerfectGamesService } from '../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { CollectionStorageService } from '../../collection/collection-storage.service';
@@ -80,7 +81,6 @@ import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filt
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from './events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { BattlegroundsMetaHeroStrategiesLoadedEvent } from './events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
-import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs-perfect-games-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
@@ -218,7 +218,6 @@ import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-h
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BattlegroundsMetaHeroStatsLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-stats-loaded-processor';
 import { BattlegroundsMetaHeroStrategiesLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-strategies-loaded-processor';
-import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegrounds/bgs-perfect-games-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
@@ -403,6 +402,7 @@ export class MainWindowStoreService {
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly arenaRewards: ArenaRewardsService,
+		private readonly bgsPerfectGames: BgsPerfectGamesService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -621,16 +621,22 @@ export class MainWindowStoreService {
 			[
 				// Replays
 				ShowReplayEvent.eventName(),
-				new ShowReplayProcessor(this.bgsRunStatsService, this.i18n, this.gameStats),
+				new ShowReplayProcessor(this.bgsRunStatsService, this.i18n, this.gameStats, this.bgsPerfectGames),
 			],
 			[ShowReplaysEvent.eventName(), new ShowReplaysProcessor(this.prefs)],
 			[
 				TriggerShowMatchStatsEvent.eventName(),
-				new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs, this.i18n, this.gameStats),
+				new TriggerShowMatchStatsProcessor(
+					this.bgsRunStatsService,
+					this.prefs,
+					this.i18n,
+					this.gameStats,
+					this.bgsPerfectGames,
+				),
 			],
 			[
 				ShowMatchStatsEvent.eventName(),
-				new ShowMatchStatsProcessor(this.prefs, this.i18n, this.cards, this.gameStats),
+				new ShowMatchStatsProcessor(this.prefs, this.i18n, this.cards, this.gameStats, this.bgsPerfectGames),
 			],
 			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
 			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
@@ -717,7 +723,6 @@ export class MainWindowStoreService {
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),
 				new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
 			],
-			[BattlegroundsPerfectGamesLoadedEvent.eventName(), new BattlegroundsPerfectGamesLoadedProcessor()],
 			[BattlegroundsMetaHeroStatsLoadedEvent.eventName(), new BattlegroundsMetaHeroStatsLoadedProcessor()],
 			[
 				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),

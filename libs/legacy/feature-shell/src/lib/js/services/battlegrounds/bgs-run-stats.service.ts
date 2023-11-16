@@ -51,6 +51,7 @@ export class BgsRunStatsService {
 		);
 		const result = results && results.length > 0 ? results[0] : null;
 		console.log('[bgs-run-stats] post-match results for review', reviewId, results && results.length > 0);
+		console.debug('[bgs-run-stats] post-match results for review', results);
 		this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, result?.stats));
 	}
 

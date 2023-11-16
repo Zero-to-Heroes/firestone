@@ -1,6 +1,5 @@
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { AppInjector } from '@firestone/shared/framework/core';
-import { GameStat } from '@firestone/stats/data-access';
 import { BgsHeroStrategies } from '../../../services/battlegrounds/bgs-meta-hero-strategies.service';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
@@ -19,13 +18,8 @@ export class BattlegroundsAppState {
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
 	readonly lastHeroPostMatchStatsHeroId: string;
 
-	// Use the getters
-	// See decktracker-state.ts for more info
-	readonly perfectGames: readonly GameStat[] = undefined;
 	readonly metaHeroStats: BgsHeroStatsV2 = undefined;
 	readonly metaHeroStrategies: BgsHeroStrategies = undefined;
-
-	// readonly initComplete: boolean = false;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
@@ -33,20 +27,6 @@ export class BattlegroundsAppState {
 
 	public update(base: Partial<NonFunctionProperties<BattlegroundsAppState>>): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), this, base);
-	}
-
-	public getPerfectGames(): readonly GameStat[] {
-		// if (!this.initComplete) {
-		// 	return this.perfectGames;
-		// }
-		if (this.perfectGames === undefined) {
-			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
-			if (service) {
-				(this.perfectGames as readonly GameStat[]) = [];
-				service.requestLoad('battlegrounds-perfect-games');
-			}
-		}
-		return this.perfectGames;
 	}
 
 	public getMetaHeroStats(): BgsHeroStatsV2 {
@@ -76,9 +56,5 @@ export class BattlegroundsAppState {
 			}
 		}
 		return this.metaHeroStrategies;
-	}
-
-	public findReplay(reviewId: string): GameStat {
-		return [...(this.perfectGames ?? [])].find((replay) => replay.reviewId === reviewId);
 	}
 }

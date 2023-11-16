@@ -3,6 +3,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
+import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
 import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { ShowReplayEvent } from '../../events/replays/show-replay-event';
@@ -13,6 +14,7 @@ export class ShowReplayProcessor implements Processor {
 		private readonly bgsRunStats: BgsRunStatsService,
 		private readonly i18n: LocalizationService,
 		private readonly gameStats: GameStatsLoaderService,
+		private readonly perfectGames: BgsPerfectGamesService,
 	) {}
 
 	public async process(
@@ -22,7 +24,11 @@ export class ShowReplayProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const gameStats = await this.gameStats.gameStats$$.getValueWithInit();
-		const selectedInfo = gameStats?.stats?.find((replay) => replay.reviewId === event.reviewId);
+		const selectedInfo =
+			gameStats?.stats?.find((replay) => replay.reviewId === event.reviewId) ??
+			(await this.perfectGames.perfectGames$$.getValueWithInit())?.find(
+				(replay) => replay.reviewId === event.reviewId,
+			);
 		if (!selectedInfo) {
 			console.warn('Could not find selected info for replay', event.reviewId);
 			return [currentState, navigationState];

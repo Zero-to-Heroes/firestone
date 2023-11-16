@@ -84,6 +84,7 @@ const buildAppValue = (appVersion: string): number => {
 	return 1000 * major + 100 * minor + patch;
 };
 
+/** @deprecated */
 export const deepEqual = (a, b) =>
 	equal(a, b, {
 		strict: false,

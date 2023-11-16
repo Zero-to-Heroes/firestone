@@ -5,6 +5,7 @@ import { NavigationReplays } from '../../../../../models/mainwindow/navigation/n
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { Preferences } from '../../../../../models/preferences';
+import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
 import { PreferencesService } from '../../../../preferences.service';
 import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
@@ -17,6 +18,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
 		private readonly gameStats: GameStatsLoaderService,
+		private readonly perfectGames: BgsPerfectGamesService,
 	) {}
 
 	public async process(
@@ -40,8 +42,17 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 
 		const prefs: Preferences = await this.prefs.getPreferences();
 		this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
-		const gameStats = await this.gameStats.gameStats$$.getValueWithInit();
-		const selectedInfo = gameStats?.stats?.find((replay) => replay.reviewId === event.reviewId);
+		const selectedInfo =
+			(await this.gameStats.gameStats$$.getValueWithInit())?.stats?.find(
+				(replay) => replay.reviewId === event.reviewId,
+			) ??
+			(await this.perfectGames.perfectGames$$.getValueWithInit())?.find(
+				(replay) => replay.reviewId === event.reviewId,
+			);
+		if (!selectedInfo) {
+			console.error('Could not find selected info for replay', event.reviewId);
+			return [null, null];
+		}
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
