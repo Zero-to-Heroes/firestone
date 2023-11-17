@@ -10,7 +10,6 @@ import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
-import { ArenaRunParserService } from '../../js/services/decktracker/arena-run-parser.service';
 import { CardsHighlightService } from '../../js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DeckParserService } from '../../js/services/decktracker/deck-parser.service';
@@ -64,7 +63,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_DuelsRewardsService: DuelsRewardsService,
 		private readonly init_DuelsRunIdService: DuelsRunIdService,
 		private readonly init_ReviewIdService: ReviewIdService,
-		private readonly init_arenaRunService: ArenaRunParserService,
 		private readonly init_decktrackerDisplayService: OverlayDisplayService,
 		private readonly init_endGameListenerService: EndGameListenerService,
 		private readonly init_GlobalStatsNotifierService: GlobalStatsNotifierService,

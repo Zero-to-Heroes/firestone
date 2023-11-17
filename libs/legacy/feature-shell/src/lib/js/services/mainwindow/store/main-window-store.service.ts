@@ -73,7 +73,6 @@ import { FilterShownAchievementsEvent } from './events/achievements/filter-shown
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
 import { ArenaClassFilterSelectedEvent } from './events/arena/arena-class-filter-selected-event';
-import { ArenaRewardsUpdatedEvent } from './events/arena/arena-rewards-updated-event';
 import { ArenaTimeFilterSelectedEvent } from './events/arena/arena-time-filter-selected-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { BgsBestStatsLoadedEvent } from './events/battlegrounds/bgs-best-stats-loaded-event';
@@ -210,7 +209,6 @@ import { FilterShownAchievementsProcessor } from './processors/achievements/filt
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
 import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-class-filter-selected-processor';
-import { ArenaRewardsUpdatedProcessor } from './processors/arena/arena-rewards-updated-processor';
 import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsBestStatsLoadedProcessor } from './processors/battlegrounds/bgs-best-stats-loaded-processor';
@@ -861,7 +859,6 @@ export class MainWindowStoreService {
 				new ArenaTimeFilterSelectedProcessor(this.prefs),
 			],
 			[ArenaClassFilterSelectedEvent.eventName(), new ArenaClassFilterSelectedProcessor(this.prefs)],
-			[ArenaRewardsUpdatedEvent.eventName(), new ArenaRewardsUpdatedProcessor(this.arenaRewards)],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],

@@ -2,11 +2,23 @@ import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Input } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, filter } from 'rxjs';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs';
+import { ArenaInfo } from '../../models/arena-info';
+import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
+import { Events } from '../events.service';
+import { ReviewIdService } from '../review-id.service';
 import { UserService } from '../user.service';
+import { ArenaInfoService } from './arena-info.service';
 
 const REWARDS_RETRIEVE_URL = 'https://b763ob2h6h3ewimg7ztsl72p240qvfyr.lambda-url.us-west-2.on.aws/';
+const UPDATE_URL = 'https://5ko26odaiczaspuvispnw3iv3e0kthll.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsService> {
@@ -14,6 +26,10 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 
 	private api: ApiRunner;
 	private userService: UserService;
+	private events: Events;
+	private arenaInfoService: ArenaInfoService;
+	private reviewIdService: ReviewIdService;
+	private ow: OverwolfService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'arenaRewards', () => !!this.arenaRewards$$);
@@ -27,6 +43,10 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.arenaRewards$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRewardInfo[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.userService = AppInjector.get(UserService);
+		this.events = AppInjector.get(Events);
+		this.arenaInfoService = AppInjector.get(ArenaInfoService);
+		this.reviewIdService = AppInjector.get(ReviewIdService);
+		this.ow = AppInjector.get(OverwolfService);
 
 		this.arenaRewards$$.onFirstSubscribe(async () => {
 			this.userService.user$$
@@ -43,6 +63,18 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 					this.arenaRewards$$.next(result);
 				});
 		});
+
+		this.events
+			.on(Events.MEMORY_UPDATE)
+			.pipe(
+				map((event) => event.data[0] as MemoryUpdate),
+				filter((changes) => !!changes.ArenaRewards?.length),
+				withLatestFrom(this.arenaInfoService.arenaInfo$$, this.reviewIdService.reviewId$),
+				filter(([changes, arenaInfo, reviewId]) => !!arenaInfo?.runId),
+			)
+			.subscribe(([changes, arenaInfo, reviewId]) => {
+				this.handleRewards(changes.ArenaRewards, arenaInfo, reviewId);
+			});
 	}
 
 	public async addRewards(rewards: Input) {
@@ -54,6 +86,24 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 
 		const newRewards: readonly ArenaRewardInfo[] = [...(currentRewards ?? []), ...this.buildRewards(rewards)];
 		this.arenaRewards$$.next(newRewards);
+	}
+
+	private async handleRewards(rewards: readonly Reward[], arenaInfo: ArenaInfo, reviewId: string) {
+		const user = await this.ow.getCurrentUser();
+		const rewardsInput: Input = {
+			userId: user.userId,
+			userName: user.username,
+			type: 'arena',
+			reviewId: reviewId,
+			runId: arenaInfo.runId,
+			rewards: rewards,
+			currentWins: arenaInfo.wins,
+			currentLosses: arenaInfo.losses,
+			appVersion: process.env.APP_VERSION,
+		};
+		console.log('[arena-rewards] sending rewards info', rewardsInput);
+		this.addRewards(rewardsInput);
+		this.api.callPostApi(UPDATE_URL, rewardsInput);
 	}
 
 	private buildRewards(input: Input): readonly ArenaRewardInfo[] {

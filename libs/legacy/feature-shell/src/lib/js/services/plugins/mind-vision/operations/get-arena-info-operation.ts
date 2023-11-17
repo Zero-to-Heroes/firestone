@@ -10,12 +10,12 @@ export class GetArenaInfoOperation extends MindVisionOperationFacade<ArenaInfo> 
 			'getArenaInfo',
 			() => mindVision.getArenaInfo(),
 			(arenaInfo) => arenaInfo.Wins == null || arenaInfo.Wins < 0 || !arenaInfo.HeroCardId,
-			(arenaInfo) =>
-				Object.assign(new ArenaInfo(), {
-					wins: arenaInfo.Wins,
-					losses: arenaInfo.Losses,
-					heroCardId: arenaInfo.HeroCardId,
-				} as ArenaInfo),
+			(arenaInfo) => ({
+				wins: arenaInfo.Wins,
+				losses: arenaInfo.Losses,
+				heroCardId: arenaInfo.HeroCardId,
+				runId: arenaInfo.Deck?.Id,
+			}),
 		);
 	}
 }

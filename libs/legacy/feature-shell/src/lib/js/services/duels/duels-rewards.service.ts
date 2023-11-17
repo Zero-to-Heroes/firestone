@@ -38,7 +38,6 @@ export class DuelsRewardsService {
 				map((event) => event.data[0] as MemoryUpdate),
 				filter((changes) => changes.IsDuelsRewardsPending),
 				withLatestFrom(
-					// this.duelsRunIdService.duelsRunId$,
 					this.duelsRunIdService.lastDuelsGame$,
 					this.duelsState.duelsInfo$$,
 					this.reviewIdService.reviewId$,

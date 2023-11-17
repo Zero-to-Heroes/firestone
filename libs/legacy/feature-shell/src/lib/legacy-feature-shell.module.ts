@@ -688,6 +688,8 @@ import { RawAchievementsLoaderService } from './js/services/achievement/data/raw
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
+import { ArenaInfoService } from './js/services/arena/arena-info.service';
+import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { ArenaRewardsService } from './js/services/arena/arena-rewards.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
@@ -716,7 +718,6 @@ import { SetsManagerService } from './js/services/collection/sets-manager.servic
 import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
 import { AiDeckService } from './js/services/decktracker/ai-deck-service.service';
-import { ArenaRunParserService } from './js/services/decktracker/arena-run-parser.service';
 import { AttackOnBoardService } from './js/services/decktracker/attack-on-board.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
@@ -1829,7 +1830,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsRunIdService,
 		DuelsDecksProviderService,
 		ReviewIdService,
-		ArenaRunParserService,
 		GameStateService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,
@@ -1844,6 +1844,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsUserRunsService,
 
 		ArenaRewardsService,
+		ArenaInfoService,
+		ArenaLastMatchService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

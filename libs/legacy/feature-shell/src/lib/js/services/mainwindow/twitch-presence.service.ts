@@ -11,6 +11,7 @@ import { DuelsInfo } from '../../models/memory/memory-duels';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
 import { Rank } from '../../models/player-info';
+import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels } from '../duels/duels-utils';
@@ -32,6 +33,7 @@ export class TwitchPresenceService {
 		private readonly ow: OverwolfService,
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly duelsState: DuelsStateBuilderService,
+		private readonly arenaInfo: ArenaInfoService,
 	) {
 		this.init();
 	}
@@ -45,11 +47,7 @@ export class TwitchPresenceService {
 			startWith(null),
 		);
 		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable();
-		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.ARENA_INFO),
-			map((event) => event.additionalData.arenaInfo as ArenaInfo),
-			startWith(null),
-		);
+		const arenaInfo$ = this.arenaInfo.arenaInfo$$;
 		const mercsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MERCENARIES_INFO),
 			map((event) => event.additionalData.mercsInfo as MemoryMercenariesInfo),

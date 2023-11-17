@@ -13,7 +13,6 @@ import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-in
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
-import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsLootParserService } from '../duels/duels-loot-parser.service';
 import { isDuels } from '../duels/duels-utils';
@@ -55,7 +54,6 @@ export class EndGameUploaderService {
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
 		private dungeonLootParser: DuelsLootParserService,
-		private arenaService: ArenaRunParserService,
 		private logService: LogsUploaderService,
 		private mainWindowStore: MainWindowStoreService,
 		private readonly bgsStore: BattlegroundsStoreService,
@@ -382,7 +380,7 @@ export class EndGameUploaderService {
 		if (isDuels(game.gameMode)) {
 			game.runId = info.duelsRunId;
 		} else if (game.gameMode === 'arena') {
-			game.runId = this.arenaService.currentArenaRunId;
+			game.runId = info.arenaInfo.runId;
 		}
 
 		game.lotteryPoints = info.lotteryPoints;

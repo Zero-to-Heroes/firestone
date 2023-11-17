@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { filter } from 'rxjs/operators';
 import { GameEvent } from '../models/game-event';
+import { ArenaInfoService } from './arena/arena-info.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DuelsStateBuilderService } from './duels/duels-state-builder.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
@@ -15,6 +16,7 @@ export class GameModeDataService {
 		private readonly memoryService: MemoryInspectionService,
 		private readonly deckParser: DeckParserService,
 		private readonly duelsState: DuelsStateBuilderService,
+		private readonly arenaInfo: ArenaInfoService,
 	) {
 		this.init();
 	}
@@ -46,7 +48,7 @@ export class GameModeDataService {
 				return;
 			case GameType.GT_ARENA:
 				this.triggerRankMatchInfoRetrieve();
-				this.triggerArenaInfoRetrieve(spectating);
+				this.arenaInfo.triggerArenaInfoRetrieve(spectating);
 				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			case GameType.GT_MERCENARIES_PVP:
@@ -119,27 +121,6 @@ export class GameModeDataService {
 			}
 			return false;
 		}, 'mercsInfo');
-	}
-
-	private async triggerArenaInfoRetrieve(spectating: boolean) {
-		if (spectating) {
-			return;
-		}
-		await runLoop(async () => {
-			const arenaInfo = await this.memoryService.getArenaInfo();
-			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.ARENA_INFO,
-						additionalData: {
-							arenaInfo: arenaInfo,
-						},
-					} as GameEvent),
-				);
-				return true;
-			}
-			return false;
-		}, 'arenaInfo');
 	}
 
 	private async triggerRankMatchInfoRetrieve() {

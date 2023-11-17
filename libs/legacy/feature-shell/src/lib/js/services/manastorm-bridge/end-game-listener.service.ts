@@ -3,12 +3,12 @@ import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.comp
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
-import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MatchInfo } from '../../models/match-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
+import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
@@ -42,6 +42,7 @@ export class EndGameListenerService {
 		private readonly lottery: LotteryService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
+		private readonly arenaInfo: ArenaInfoService,
 	) {
 		this.init();
 	}
@@ -81,11 +82,7 @@ export class EndGameListenerService {
 				);
 				const duelsInfo$ = this.duelsState.duelsInfo$$;
 				const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
-				const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-					filter((event) => event.type === GameEvent.ARENA_INFO),
-					map((event) => event.additionalData.arenaInfo as ArenaInfo),
-					startWith(null),
-				);
+				const arenaInfo$ = this.arenaInfo.arenaInfo$$;
 
 				await this.mercsMemoryCache.isReady();
 				const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$$.pipe(startWith(null));
