@@ -610,6 +610,7 @@ export const giftCreators = [
 	CardIds.SubmergedSpacerock,
 	CardIds.SummerFlowerchild,
 	CardIds.SunkenSweeper,
+	CardIds.AzsharanSweeper_SunkenSweeperToken,
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
 	CardIds.SuspiciousPeddler,
