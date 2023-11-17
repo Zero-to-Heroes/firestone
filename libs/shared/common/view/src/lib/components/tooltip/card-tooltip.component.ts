@@ -194,6 +194,15 @@ export class CardTooltipComponent
 		}
 	}
 
+	@HostListener('window:click', ['$event'])
+	onMouseDown(event: MouseEvent) {
+		console.debug('handling click', event, this.viewRef, this.el.nativeElement);
+		// If the click happens outside of the tooltip, we close it
+		if (!this.el.nativeElement.contains(event.target)) {
+			this.viewRef.destroy();
+		}
+	}
+
 	ngAfterViewInit(): void {
 		let i = 0;
 		this.resizeObserver =
