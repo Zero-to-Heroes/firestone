@@ -59,7 +59,7 @@ export class BattlegroundsPerfectGamesComponent
 			),
 			this.mapData(([perfectGames, [mmrPercentiles, rankFilter, heroFilter]]) => {
 				const mmrThreshold = getMmrThreshold(rankFilter, mmrPercentiles);
-				return this.applyFilters(perfectGames ?? [], mmrThreshold, heroFilter).slice(0, 1);
+				return this.applyFilters(perfectGames ?? [], mmrThreshold, heroFilter);
 			}),
 			tap((filteredReplays) => console.debug('[perfect-games] filtered replays', filteredReplays)),
 		);
