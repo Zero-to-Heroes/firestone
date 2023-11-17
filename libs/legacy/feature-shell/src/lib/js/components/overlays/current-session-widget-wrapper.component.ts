@@ -5,11 +5,15 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { PreferencesService } from '../../m../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
+import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
+import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -52,13 +56,24 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidgetBgs)).pipe(
-			this.mapData(([[displayBgs]]) => displayBgs),
+	async ngAfterContentInit() {
+		await this.scene.isReady();
+		await this.prefs.isReady();
+
+		const currentGameType$ = this.store
+			.listenDeckState$((state) => state?.metadata?.gameType)
+			.pipe(this.mapData(([gameType]) => gameType));
+		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
+			this.mapData(
+				([gameType, currentScene, prefs]) =>
+					prefs.showCurrentSessionWidgetBgs &&
+					(isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)),
+			),
 			this.handleReposition(),
 		);
 		this.hidden$ = combineLatest(
@@ -70,5 +85,9 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
