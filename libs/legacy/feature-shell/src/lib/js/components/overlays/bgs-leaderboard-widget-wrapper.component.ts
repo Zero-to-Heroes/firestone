@@ -52,11 +52,11 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => 0;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.15;
+	protected defaultPositionLeftProvider = null;
+	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
-	protected getRect = () => this.el.nativeElement.querySelector('.bgs-leaderboard')?.getBoundingClientRect();
+	protected getRect = null;
 
 	showWidget$: Observable<boolean>;
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
@@ -129,18 +129,5 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 
 	trackByFunction(index: number, player: BgsPlayer) {
 		return player.cardId;
-	}
-
-	protected async doResize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameHeight = gameInfo.height;
-		this.windowWidth = gameHeight * 1.12;
-		this.windowHeight = gameHeight * 0.4;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

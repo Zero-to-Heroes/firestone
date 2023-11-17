@@ -44,8 +44,8 @@ import { BoardCardOverlay } from './board/board-card-overlay';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.15;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.3;
+	protected defaultPositionLeftProvider = null;
+	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.board-container')?.getBoundingClientRect();
@@ -130,19 +130,6 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 			side: side,
 			playOrder: playerCard.playTiming,
 		}));
-	}
-
-	protected async doResize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameHeight = gameInfo.height;
-		this.windowWidth = gameHeight * 1.12;
-		this.windowHeight = gameHeight * 0.4;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
 

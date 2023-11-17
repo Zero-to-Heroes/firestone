@@ -31,7 +31,7 @@ import { buildBasicCardChoiceValue, buildBgsQuestCardChoiceValue } from './card-
 	selector: 'choosing-card-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/card-choice/choosing-card-widget-wrapper.component.scss'],
 	template: `
-		<ng-container *ngIf="showWidget$ | async">
+		<div class="container" *ngIf="showWidget$ | async">
 			<div
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
@@ -53,16 +53,16 @@ import { buildBasicCardChoiceValue, buildBgsQuestCardChoiceValue } from './card-
 					</ng-container>
 				</ng-container>
 			</div>
-		</ng-container>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => 0;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.28;
+	protected defaultPositionLeftProvider = null;
+	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
-	protected getRect = () => this.el.nativeElement.querySelector('.board-container')?.getBoundingClientRect();
+	protected getRect = null;
 
 	showWidget$: Observable<boolean>;
 	options$: Observable<readonly CardChoiceOption[]>;
@@ -284,19 +284,6 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				return 'value';
 		}
 		return null;
-	}
-
-	protected async doResize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameHeight = gameInfo.height;
-		this.windowWidth = gameHeight * 1.12;
-		this.windowHeight = gameHeight * 0.4;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
 

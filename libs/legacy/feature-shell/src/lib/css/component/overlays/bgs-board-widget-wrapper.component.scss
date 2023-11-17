@@ -1,13 +1,13 @@
 :host {
-	height: 17vh;
-	top: 29.5%;
-	width: 112vh;
 	z-index: -1;
 }
 
 .board-container {
-	height: 100%;
-	width: 100%;
+	height: 17vh;
+	width: 112vh;
+	top: 29.5vh;
+	left: 15vh;
+	position: relative;
 	display: flex;
 }
 

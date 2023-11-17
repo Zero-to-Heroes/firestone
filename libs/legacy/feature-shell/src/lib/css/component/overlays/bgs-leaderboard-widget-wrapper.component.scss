@@ -1,13 +1,10 @@
-:host {
-	height: 73%;
-	width: 11%;
-	left: 1%;
-	top: 15%;
-}
-
 .bgs-leaderboard {
-	width: 100%;
-	height: 100%;
+	height: 73vh;
+	width: 15vh;
+	left: 0;
+	top: 15vh;
+	position: relative;
+
 	display: flex;
 	flex-direction: column;
 	z-index: 1;

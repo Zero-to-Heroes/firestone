@@ -17,7 +17,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'bgs-hero-selection-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/background-widget.component.scss'],
+	styleUrls: ['../../../css/component/overlays/bgs-hero-selection-widget-wrapper.component.scss'],
 	template: `
 		<bgs-hero-selection-overlay
 			class="widget"
@@ -29,11 +29,11 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.15;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight / 3;
+	protected defaultPositionLeftProvider = null;
+	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
-	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected getRect = null;
 
 	showWidget$: Observable<boolean>;
 	windowWidth: number;

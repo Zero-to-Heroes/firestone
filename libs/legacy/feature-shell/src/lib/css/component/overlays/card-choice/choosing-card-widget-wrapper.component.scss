@@ -1,8 +1,16 @@
-:host {
+.container {
+	position: relative;
+	left: 0;
+	top: 28vh;
+	width: 112vh;
 	height: 40vh;
-	width: 140vh;
 	pointer-events: none;
 }
+
+// :host {
+// 	width: 140vh;
+// 	pointer-events: none;
+// }
 
 .choosing-card-container {
 	display: flex;

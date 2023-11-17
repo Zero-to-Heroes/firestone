@@ -30,11 +30,11 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerHeroPowerWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.8;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.71;
+	protected defaultPositionLeftProvider = null;
+	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
-	protected getRect = () => this.el.nativeElement.querySelector('.hero-power-container')?.getBoundingClientRect();
+	protected getRect = null;
 
 	showWidget$: Observable<boolean>;
 	heroPower$: Observable<DeckCard>;
