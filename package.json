@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "12.5.11",
+	"version": "12.5.18",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -10,7 +10,7 @@
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
 		"build": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
-		"build-local": "rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
+		"build-local": "nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
 		"upload-web": "npx ts-node ./build-tools/upload-website.ts",
 		"build-web": "rm -rf node_modules/.cache/nx && nx build website --configuration=production --source-map && npm run upload-web",
 		"dev-twitch": "set IS_TWITCH=true&& nx build twitch-extension --configuration=development --watch",
