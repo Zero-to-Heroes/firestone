@@ -81,7 +81,7 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	}
 
 	showFeatures() {
-		this.ow.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads');
+		this.ow.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features');
 		this.analytics.trackEvent('show-premium-features');
 	}
 

@@ -13,7 +13,7 @@ import { loginUrl } from './authentication.service';
 			</div>
 			<div class="premium-description">
 				To see all the benefits you get by having a premium account,
-				<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads" target="_blank"
+				<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features" target="_blank"
 					>check the wiki</a
 				>
 			</div>

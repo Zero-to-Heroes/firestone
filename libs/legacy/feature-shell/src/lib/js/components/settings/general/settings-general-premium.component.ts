@@ -34,7 +34,7 @@ export class SettingsGeneralPremiumComponent extends AbstractSubscriptionStoreCo
 		this.text1$ = this.listenForBasicPref$((prefs) => prefs.locale).pipe(
 			this.mapData((locale) =>
 				this.i18n.translateString('settings.general.premium.text-1', {
-					link: `<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Premium-vs-ads" target="_blank">${this.i18n.translateString(
+					link: `<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features" target="_blank">${this.i18n.translateString(
 						'settings.general.premium.link',
 					)}</a>`,
 				}),
