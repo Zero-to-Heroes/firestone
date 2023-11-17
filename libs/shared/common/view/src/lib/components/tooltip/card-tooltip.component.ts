@@ -20,10 +20,9 @@ import {
 	Store,
 	deepEqual,
 	groupByFunction,
-	sleep,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -220,15 +219,31 @@ export class CardTooltipComponent
 		// setTimeout(() => this.ngAfterViewInit(), 10);
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
-		this.opacity$ = this.opacity$$.asObservable();
+		this.opacity$ = this.opacity$$;
 		this.keepInBound$$
 			.pipe(
 				filter((trigger) => !!trigger),
-				// debounceTime(10),
-				tap((info) => console.debug('keep in bound', info)),
-				this.mapData((info) => info),
+				// tap((info) => console.debug('keep in bound', info)),
+				this.mapData(
+					(info) => {
+						const widgetRect = this.getRect();
+						// console.debug('widgetRect', widgetRect);
+						return {
+							height: widgetRect?.height,
+							width: widgetRect?.width,
+							top: widgetRect?.top,
+							left: widgetRect?.left,
+						};
+					},
+					null,
+					0,
+				),
+				distinctUntilChanged((a, b) => {
+					// console.debug('comparing', a, b);
+					return a.height === b.height && a.width === b.width && a.top === b.top && a.left === b.left;
+				}),
 			)
-			.subscribe(() => this.keepInBounds());
+			.subscribe((bounds) => this.keepInBounds(bounds.top, bounds.left, bounds.height, bounds.width));
 		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
 			this.localized$$.asObservable(),
@@ -260,8 +275,6 @@ export class CardTooltipComponent
 				null,
 				0,
 			),
-			// tap((info) => this.keepInBound$$.next(true)),
-			this.mapData((info) => info as readonly InternalCard[]),
 		);
 		this.cards$ = combineLatest([
 			this.cardIds$$.asObservable(),
@@ -317,8 +330,6 @@ export class CardTooltipComponent
 				null,
 				0,
 			),
-			// tap((info) => this.keepInBound$$.next(true)),
-			this.mapData((info) => info),
 		);
 		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -330,40 +341,25 @@ export class CardTooltipComponent
 		return item.cardId;
 	}
 
-	private async keepInBounds() {
-		let widgetRect = this.getRect();
-		// console.debug('widgetRect', widgetRect);
-		while (!(widgetRect = this.getRect())?.width) {
-			// console.debug('widgetRect 2', widgetRect);
-			await sleep(50);
-		}
-
+	private async keepInBounds(top: number, left: number, height: number, width: number) {
+		// console.debug('keeping in bounds', top, left, height, width);
 		const gameInfo = await this.ow.getRunningGameInfo();
+		// console.debug('after game info', gameInfo);
 
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 
 		const currentTopOffset = parseInt(this.el.nativeElement.style.top?.replace('px', '')) || 0;
 		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
-		const newTopOffset =
-			widgetRect.top < 0
-				? -widgetRect.top
-				: widgetRect.top + widgetRect.height > gameHeight
-				? gameHeight - widgetRect.top - widgetRect.height
-				: 0;
-		const newLeftOffset =
-			widgetRect.left < 0
-				? -widgetRect.left
-				: widgetRect.left + widgetRect.width > gameWidth
-				? gameWidth - widgetRect.left - widgetRect.width
-				: 0;
+		const newTopOffset = top < 0 ? -top : top + height > gameHeight ? gameHeight - top - height : 0;
+		const newLeftOffset = left < 0 ? -left : left + width > gameWidth ? gameWidth - left - width : 0;
 
 		if (newTopOffset !== 0 || newLeftOffset === 0) {
 			const topOffset = currentTopOffset + newTopOffset;
 			const leftOffset = currentLeftOffset + newLeftOffset;
 			this.renderer.setStyle(this.el.nativeElement, 'left', leftOffset + 'px');
 			this.renderer.setStyle(this.el.nativeElement, 'top', topOffset + 'px');
-			// console.debug('set tooltip position', leftOffset, topOffset, widgetRect, gameInfo);
+			// console.debug('set tooltip position', leftOffset, topOffset, gameInfo);
 			// console.debug(
 			// 	'set tooltip position 2',
 			// 	topOffset,
@@ -374,6 +370,7 @@ export class CardTooltipComponent
 			// 	gameHeight,
 			// );
 		}
+		// console.debug('showing tooltip');
 		this.opacity$$.next(1);
 
 		const element = this.relatedCards?.nativeElement;
