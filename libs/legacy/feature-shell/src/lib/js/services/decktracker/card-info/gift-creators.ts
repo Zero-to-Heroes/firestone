@@ -663,6 +663,7 @@ export const giftCreators = [
 	CardIds.TrainingSession_NX2_029,
 	CardIds.TrainingSession_TrainingSessionEnchantment,
 	CardIds.TrainingSession_TrainingSessionAchieveEnchantment,
+	CardIds.TramHeist_WW_053,
 	CardIds.TramMechanic_WW_044,
 	CardIds.TransferStudent_TransferStudentToken_SCH_199t19,
 	CardIds.TransferStudent_TransferStudentToken_SCH_199t6,
