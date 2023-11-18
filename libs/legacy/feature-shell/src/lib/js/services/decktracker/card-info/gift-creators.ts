@@ -67,6 +67,7 @@ export const giftCreators = [
 	CardIds.BazaarMugger,
 	CardIds.BenevolentBanker_WW_384,
 	CardIds.BeOurGuestTavernBrawl,
+	CardIds.BlackSoulstoneTavernBrawl,
 	CardIds.BlastCharge_WW_380,
 	CardIds.BlastFromThePast_WON_115,
 	CardIds.BlastWave,
