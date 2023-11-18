@@ -353,11 +353,13 @@ export class CardTooltipComponent
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
 		// console.debug('keeping in bounds', top, left, height, width);
 		const gameInfo = await this.ow.getRunningGameInfo();
-		// console.debug('after game info', gameInfo);
+		if (!gameInfo) {
+			this.opacity$$.next(1);
+			return;
+		}
 
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
-
 		const currentTopOffset = parseInt(this.el.nativeElement.style.top?.replace('px', '')) || 0;
 		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
 		const newTopOffset = top < 0 ? -top : top + height > gameHeight ? gameHeight - top - height : 0;
