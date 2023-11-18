@@ -364,7 +364,6 @@ export class CardTooltipComponent
 		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
 		const newTopOffset = top < 0 ? -top : top + height > gameHeight ? gameHeight - top - height : 0;
 		const newLeftOffset = left < 0 ? -left : left + width > gameWidth ? gameWidth - left - width : 0;
-
 		if (newTopOffset !== 0 || newLeftOffset === 0) {
 			const topOffset = currentTopOffset + newTopOffset;
 			const leftOffset = currentLeftOffset + newLeftOffset;
