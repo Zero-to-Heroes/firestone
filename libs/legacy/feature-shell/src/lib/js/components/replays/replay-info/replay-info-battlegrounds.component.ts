@@ -124,7 +124,6 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	@Input() displayTime = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
-		console.debug('setting replay', value);
 		this.replayInfo = value;
 		this.updateInfo();
 	}
@@ -163,7 +162,6 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	}
 
 	showReplay() {
-		console.debug('showing replay', this.reviewId);
 		this.store.send(new ShowReplayEvent(this.reviewId));
 	}
 
@@ -208,11 +206,15 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 				icon: getTribeIcon(race),
 				tooltip: getTribeName(race, this.i18n),
 			}));
-		this.anomalies = [...(this.replayInfo.bgsAnomalies ?? [])].sort().map((anomaly) => ({
-			cardId: anomaly,
-			icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
-			tooltip: this.allCards.getCard(anomaly).name,
-		}));
+		this.anomalies = [...(this.replayInfo.bgsAnomalies ?? [])].sort().map((anomaly) => {
+			const refCard = this.allCards.getCard(anomaly);
+			return {
+				cardId: anomaly,
+				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
+				tooltip: refCard.name,
+			};
+		});
+		// console.debug('setting replay', this.availableTribes, this.anomalies);
 		this.tribesTooltip = this.i18n.translateString('app.replays.replay-info.bgs-available-tribes-tooltip', {
 			value: this.availableTribes.map((tribe) => tribe.tooltip).join(', '),
 		});

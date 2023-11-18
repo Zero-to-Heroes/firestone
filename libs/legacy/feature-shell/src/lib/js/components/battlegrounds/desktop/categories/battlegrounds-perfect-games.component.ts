@@ -6,8 +6,11 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
+import { deepEqual } from '@firestone/shared/framework/common';
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-perfect-games.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -38,28 +41,41 @@ export class BattlegroundsPerfectGamesComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly perfectGames: BgsPerfectGamesService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.perfectGames.isReady();
+		await this.prefs.isReady();
 
+		const filters$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) => ({
+					rankFilter: prefs.bgsActiveRankFilter,
+					heroFilter: prefs.bgsActiveHeroFilter,
+					anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+					tribesFilter: prefs.bgsActiveTribesFilter,
+				}),
+				(a, b) => deepEqual(a, b),
+			),
+		);
 		this.replays$ = combineLatest([
 			this.perfectGames.perfectGames$$,
-			this.store.listen$(
-				([main, nav]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles,
-				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
-				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
-			),
+			this.store.listen$(([main, nav]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles),
+			filters$,
 		]).pipe(
-			filter(
-				([perfectGames, [mmrPercentiles, rankFilter, heroFilter]]) =>
-					!!perfectGames?.length && !!mmrPercentiles?.length,
-			),
-			this.mapData(([perfectGames, [mmrPercentiles, rankFilter, heroFilter]]) => {
-				const mmrThreshold = getMmrThreshold(rankFilter, mmrPercentiles);
-				return this.applyFilters(perfectGames ?? [], mmrThreshold, heroFilter);
+			filter(([perfectGames, [mmrPercentiles]]) => !!perfectGames?.length && !!mmrPercentiles?.length),
+			this.mapData(([perfectGames, [mmrPercentiles], filters]) => {
+				const mmrThreshold = getMmrThreshold(filters.rankFilter, mmrPercentiles);
+				return this.applyFilters(
+					perfectGames ?? [],
+					mmrThreshold,
+					filters.heroFilter,
+					filters.tribesFilter,
+					filters.anomaliesFilter,
+				);
 			}),
 			tap((filteredReplays) => console.debug('[perfect-games] filtered replays', filteredReplays)),
 		);
@@ -69,10 +85,32 @@ export class BattlegroundsPerfectGamesComponent
 		}
 	}
 
-	private applyFilters(replays: readonly GameStat[], rankFilter: number, heroFilter: string): readonly GameStat[] {
+	private applyFilters(
+		replays: readonly GameStat[],
+		rankFilter: number,
+		heroFilter: string,
+		tribesFilter: readonly Race[],
+		anomaliesFilter: readonly string[],
+	): readonly GameStat[] {
 		return replays
 			.filter((replay) => this.rankFilter(replay, rankFilter))
-			.filter((replay) => this.heroFilter(replay, heroFilter));
+			.filter((replay) => this.heroFilter(replay, heroFilter))
+			.filter((replay) => this.tribesFilter(replay, tribesFilter))
+			.filter((replay) => this.anomaliesFilter(replay, anomaliesFilter));
+	}
+
+	private tribesFilter(stat: GameStat, tribesFilter: readonly Race[]) {
+		if (!tribesFilter?.length || tribesFilter.length === ALL_BG_RACES.length) {
+			return true;
+		}
+		return tribesFilter.every((tribe) => stat.bgsAvailableTribes?.includes(tribe));
+	}
+
+	private anomaliesFilter(stat: GameStat, anomaliesFilter: readonly string[]) {
+		if (!anomaliesFilter?.length) {
+			return true;
+		}
+		return anomaliesFilter.some((anomaly) => stat.bgsAnomalies?.includes(anomaly));
 	}
 
 	private rankFilter(stat: GameStat, rankFilter: number) {

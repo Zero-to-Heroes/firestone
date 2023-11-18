@@ -32,6 +32,7 @@ export class OpponentCardInfosComponent {
 	constructor(private ow: OverwolfService) {}
 
 	@Input() set cards(value: readonly DeckCard[]) {
+		console.debug('setting opponent cards', value);
 		this._cards = value;
 	}
 

@@ -13,8 +13,20 @@
 	::ng-deep replays-list-view {
 		replay-info .replay-info {
 			height: 60px;
-			.warband.warband bgs-board {
-				top: -3px;
+			.warband.warband {
+				border-right: none;
+				bgs-board {
+					top: -3px;
+				}
+			}
+			.tribes.tribes {
+				display: inherit;
+				.item:not(:last-child) {
+					margin-right: -10px;
+				}
+			}
+			.time.time {
+				display: none;
 			}
 		}
 	}
