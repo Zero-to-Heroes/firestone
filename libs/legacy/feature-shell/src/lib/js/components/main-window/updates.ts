@@ -33,15 +33,17 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.5.5',
+		version: '12.5.19',
 		force: false,
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `It's giveaway time! I will soon announce a couple of giveaways on Twitter, so make sure to follow me there if you want to participate: https://twitter.com/ZerotoHeroes_HS
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `Someone from the community found out that Firestone might cause game animations stutters when the game's FPS were uncapped.<br/><br/>
+				To fix this, edit the options.txt file in %localappdata%\Blizzard\Hearthstone and add targetframerate=60 (or another value).<br/><br/>				
+				Let me know if that helps!
+				`,
+			},
 			// {
 			// 	type: 'main',
 			// 	header: 'Main updates',
@@ -66,15 +68,19 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add an Excavate counter.`,
+								text: `You can now leave the "related card" popup open for certain cards (like cards that Excavate) by holding the "Shift" key as you mouse out of the card in the tracker. That will let you scroll through all the options in the window.`,
+							},
+							{
+								type: 'feature',
+								text: `Add new counters (Tram Heist, The Garden's Grace, Dragons Summoned) and improve the Excavate counter.`,
 							},
 							{
 								type: 'bug',
-								text: `Try to improve handling of disconnects.`,
+								text: `Fix an issue where cards created by enchantments would appear as a broken image.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue when spectating two players at the same time (Community Report!).`,
+								text: `Remove the flicker that could sometimes happen when mousing over cards in the tracker.`,
 							},
 						],
 					},
@@ -82,17 +88,38 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `The perfect games tab is finally fully restored! And it has been enhanced with tribes/anomalies filters.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix a couple of simulation issues with Diremuck Forager (Community Report!).`,
+								text: `Fix an issue where Cultist S'Thara would appear in the minions list when demons are banned.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue with Golden Niuzao.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'collection',
 						details: [
 							{
-								type: 'ui',
-								text: `The look and feel for the quick deck select when starting a Duels has been streamlined.`,
+								type: 'feature',
+								text: `Add proper support for catch-up pack openings.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where using Mass Opening would sometimes not properly track all cards/packs.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'misc',
+								text: `Miscellaneous improvements that should reduce CPU usage of the app while playing the game.`,
 							},
 						],
 					},
