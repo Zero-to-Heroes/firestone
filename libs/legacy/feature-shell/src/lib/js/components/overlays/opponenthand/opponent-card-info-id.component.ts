@@ -45,10 +45,10 @@ export class OpponentCardInfoIdComponent {
 	@Input() displayBuff: boolean;
 
 	@Input() set card(value: DeckCard) {
-		console.debug('setting card', value, value.lastAffectedByCardId || value.creatorCardId);
+		// console.debug('setting card', value, value.lastAffectedByCardId || value.creatorCardId);
 		// Keep the || to handle empty card id
 		const realCardId = this.normalizeEnchantment(value.cardId, value.lastAffectedByCardId || value.creatorCardId);
-		console.debug('realCardId', realCardId);
+		// console.debug('realCardId', realCardId);
 		// const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
 		this.createdBy =
 			!value.cardId && !!value.creatorCardId && publicCardCreators.includes(value.creatorCardId as CardIds);
@@ -65,15 +65,15 @@ export class OpponentCardInfoIdComponent {
 
 		this.cardId =
 			realCardId || (this.createdBy && value.creatorCardId) || (this.drawnBy && value.lastAffectedByCardId);
-		console.debug(
-			'this.cardId',
-			this.cardId,
-			realCardId,
-			this.createdBy,
-			value.creatorCardId,
-			this.drawnBy,
-			value.lastAffectedByCardId,
-		);
+		// console.debug(
+		// 	'this.cardId',
+		// 	this.cardId,
+		// 	realCardId,
+		// 	this.createdBy,
+		// 	value.creatorCardId,
+		// 	this.drawnBy,
+		// 	value.lastAffectedByCardId,
+		// );
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
@@ -101,18 +101,20 @@ export class OpponentCardInfoIdComponent {
 	// info in our internal model that reflects the actual game state, it's better to show the
 	// user the actual card
 	private normalizeEnchantment(cardId: string, creatorCardId: string): string {
-		console.debug('normalizing enchantment', cardId, creatorCardId);
+		// console.debug('normalizing enchantment', cardId, 'creator', creatorCardId);
 		if (!!cardId?.length) {
 			return cardId;
 		}
 
+		// The cardId matches an actual card, and is not an enchantment
 		const card = this.allCards.getCard(cardId);
-		console.debug('card', card);
-		if (card.type !== 'Enchantment') {
+		// console.debug('card', card);
+		if (!!card.id && card.type !== 'Enchantment') {
 			return cardId;
 		}
 
 		// Manual exceptions
+		// Probably useless now that we have the regex
 		switch (creatorCardId) {
 			case CardIds.DrawOffensivePlayTavernBrawlEnchantment:
 				return CardIds.OffensivePlayTavernBrawl;
@@ -135,7 +137,7 @@ export class OpponentCardInfoIdComponent {
 		// The base case
 		const regex = /(.*)e\d*$/;
 		const match = regex.exec(creatorCardId);
-		console.debug('going into regex ', creatorCardId, match, regex);
+		// console.debug('going into regex ', creatorCardId, match, regex);
 		if (!!match) {
 			const rootCardId = match[1];
 			return rootCardId;
