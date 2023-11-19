@@ -78,7 +78,7 @@ export class EndGameListenerService {
 							  }
 							: deck,
 					),
-					tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
+					tap((info) => console.log('[manastorm-bridge] playerDeck', info)),
 				);
 				const duelsInfo$ = this.duelsState.duelsInfo$$;
 				const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
