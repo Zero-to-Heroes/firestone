@@ -127,6 +127,7 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	private async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<DeckStats> {
+		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load deck stats', url, format, time, rank);
@@ -147,6 +148,7 @@ export class ConstructedMetaDecksStateService {
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat | null> {
+		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const fileName = `${format}/${rank}/${time}/${deckId}`;
 		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}/${fileName}`;
@@ -163,6 +165,7 @@ export class ConstructedMetaDecksStateService {
 	}
 
 	private async loadNewArchetypes(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<ArchetypeStats> {
+		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load archetype stats', url, format, time, rank);
@@ -183,6 +186,7 @@ export class ConstructedMetaDecksStateService {
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<ArchetypeStat> {
+		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const fileName = `${format}/${rank}/${time}/archetype/${archetypeId}.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for archetype', url, format, time, rank, archetypeId);
