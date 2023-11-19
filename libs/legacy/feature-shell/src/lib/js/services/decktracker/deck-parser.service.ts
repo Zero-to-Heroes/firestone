@@ -137,7 +137,6 @@ export class DeckParserService {
 			activeDeck,
 			this.isDeckLogged(metadata.scenarioId),
 			metadata.scenarioId,
-			ARENAS,
 			this.scene.currentScene$$.value,
 		);
 		let deckInfo: DeckInfo;
