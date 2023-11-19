@@ -33,7 +33,7 @@ export class MulticasterCounterDefinition implements CounterDefinition<GameState
 	}
 
 	public emit(uniqueSpellSchools: readonly string[]): NonFunctionProperties<MulticasterCounterDefinition> {
-		const totalCardsToDraw = uniqueSpellSchools?.length;
+		const totalCardsToDraw = uniqueSpellSchools?.length || 0;
 		const tooltip = this.i18n.translateString(`counters.multicaster.${this.side}`, {
 			cardsTotal: totalCardsToDraw,
 			schools: uniqueSpellSchools
