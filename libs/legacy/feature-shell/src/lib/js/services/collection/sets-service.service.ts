@@ -52,18 +52,21 @@ export class SetsService {
 			searchString = searchString.replace('extra', 'cards:extra -set:legacy -set:vanilla -set:core -rarity:free');
 		}
 
+		const fragments = buildFragments(searchString);
 		const filterFunctions = [];
-
-		const fragments = searchString.includes(' ') ? searchString.split(' ') : [searchString];
+		// const fragments = searchString.includes(' ') ? searchString.split(' ') : [searchString];
+		console.debug('fragments', fragments);
 		let nameSearch = searchString;
 		let collectibleOnly = true;
 		for (const fragment of fragments) {
+			console.debug('fragment', fragment);
 			if (fragment.includes('text:') && fragment.split('text:')[1]) {
-				const textToFind = fragment.split('text:')[1].trim().toLowerCase();
+				const textToFind = fragment.split('text:')[1].replaceAll('"', '').trim().toLowerCase();
+				console.debug('textToFind', textToFind);
 				filterFunctions.push((card) => card.text && card.text.toLowerCase().includes(textToFind));
 			}
 			if (fragment.includes('name:') && fragment.split('name:')[1]) {
-				const textToFind = fragment.split('name:')[1].trim().toLowerCase();
+				const textToFind = fragment.split('name:')[1].replaceAll('"', '').trim().toLowerCase();
 				filterFunctions.push((card) => {
 					return card.name && card.name.toLowerCase().includes(textToFind);
 				});
@@ -237,3 +240,39 @@ export class SetsService {
 			);
 	}
 }
+
+const buildFragments = (searchString: string): readonly string[] => {
+	const fragments: string[] = [];
+	const words = searchString.split(' ');
+	let isCapturing = false;
+	let captured = '';
+
+	console.debug('words', searchString, words);
+	for (const word of words) {
+		console.debug('word', word);
+		if (word.includes('"') && !isCapturing) {
+			isCapturing = true;
+			captured += word;
+			console.debug('captured', captured);
+		} else if (word.includes('"') && isCapturing) {
+			isCapturing = false;
+			captured += ` ${word}`;
+			fragments.push(captured);
+			captured = '';
+			console.debug('fragment with captured', fragments);
+		} else if (isCapturing) {
+			captured += ` ${word}`;
+			console.debug('captured append', captured);
+		} else {
+			fragments.push(word);
+			console.debug('simple fragment', fragments);
+		}
+	}
+
+	if (captured) {
+		fragments.push(captured);
+		console.debug('adding rest', captured);
+	}
+
+	return fragments;
+};
