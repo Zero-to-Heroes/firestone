@@ -1,10 +1,7 @@
 // import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 // import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
-import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
-import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
 
-import { AppInjector } from '@firestone/shared/framework/core';
 import { StatsCategory } from './stats-category';
 import { StatsFilters } from './stats-filters';
 
@@ -17,7 +14,7 @@ export class StatsState {
 	// readonly archetypesConfig: readonly ArchetypeConfig[];
 	// readonly archetypesStats: ArchetypeStats;
 
-	readonly bestBgsUserStats: readonly BgsBestStat[] = undefined;
+	// readonly bestBgsUserStats: readonly BgsBestStat[] = undefined;
 
 	readonly initComplete: boolean = false;
 
@@ -27,21 +24,6 @@ export class StatsState {
 
 	public update(base: Partial<NonFunctionProperties<StatsState>>): StatsState {
 		return Object.assign(new StatsState(), this, base);
-	}
-
-	public getBestBgsUserStats(): readonly BgsBestStat[] {
-		if (!this.initComplete) {
-			return this.bestBgsUserStats;
-		}
-		if (this.bestBgsUserStats === undefined) {
-			console.log('bestBgsUserStats not initialized yet');
-			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
-			if (service) {
-				(this.bestBgsUserStats as readonly BgsBestStat[]) = [];
-				service.requestLoad('user-bgs-best-stats');
-			}
-		}
-		return this.bestBgsUserStats;
 	}
 
 	// public updateBgsPostMatchStats(

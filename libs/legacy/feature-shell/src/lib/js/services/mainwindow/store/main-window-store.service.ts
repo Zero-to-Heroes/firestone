@@ -75,7 +75,6 @@ import { ShowAchievementDetailsEvent } from './events/achievements/show-achievem
 import { ArenaClassFilterSelectedEvent } from './events/arena/arena-class-filter-selected-event';
 import { ArenaTimeFilterSelectedEvent } from './events/arena/arena-time-filter-selected-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
-import { BgsBestStatsLoadedEvent } from './events/battlegrounds/bgs-best-stats-loaded-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BattlegroundsMetaHeroStatsLoadedEvent } from './events/battlegrounds/bgs-meta-hero-stats-loaded-event';
@@ -211,7 +210,6 @@ import { ShowAchievementDetailsProcessor } from './processors/achievements/show-
 import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-class-filter-selected-processor';
 import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
-import { BgsBestStatsLoadedProcessor } from './processors/battlegrounds/bgs-best-stats-loaded-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BattlegroundsMetaHeroStatsLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-stats-loaded-processor';
@@ -682,7 +680,6 @@ export class MainWindowStoreService {
 			],
 			// Battlegrounds
 			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],
-			[BgsBestStatsLoadedEvent.eventName(), new BgsBestStatsLoadedProcessor()],
 			[BgsTimeFilterSelectedEvent.eventName(), new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater)],
 			[
 				BgsTribesFilterSelectedEvent.eventName(),

@@ -1,5 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
+import { BgsBestUserStatsService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-best-user-stats.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -158,18 +159,26 @@ export class BattlegroundsPersonalStatsStatsComponent
 {
 	value$: Observable<Value>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly bgsBgsUserStats: BgsBestUserStatsService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.value$ = this.store
-			.listen$(([main, nav]) => main.stats.getBestBgsUserStats())
-			.pipe(
-				filter(([stats]) => !!stats?.length),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				this.mapData(([stats]) => this.buildValue(stats)),
-			);
+	async ngAfterContentInit() {
+		await this.bgsBgsUserStats.isReady();
+
+		this.value$ = this.bgsBgsUserStats.bestStats$$.pipe(
+			filter((stats) => !!stats?.length),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			this.mapData((stats) => this.buildValue(stats)),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildValue(stats: readonly BgsBestStat[]): Value {

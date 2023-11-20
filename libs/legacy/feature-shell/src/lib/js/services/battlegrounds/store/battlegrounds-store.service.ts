@@ -179,7 +179,7 @@ export class BattlegroundsStoreService {
 			if (info && info.type === 'new-review' && this.state?.inGame && !!this.state.currentGame) {
 				const currentGame = this.state.currentGame;
 				console.debug('[bgs-store] will trigger START_BGS_RUN_STATS');
-				const bestBgsUserStats = await this.bgsUserStatsService.loadBgsBestUserStats();
+				const bestBgsUserStats = await this.bgsUserStatsService.bestStats$$.getValueWithInit();
 				this.events.broadcast(
 					Events.START_BGS_RUN_STATS,
 					info.reviewId,
