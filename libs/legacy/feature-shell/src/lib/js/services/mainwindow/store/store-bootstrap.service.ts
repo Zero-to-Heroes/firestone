@@ -21,7 +21,10 @@ export class StoreBootstrapService {
 				filters: AchievementsState.buildFilterOptions(this.i18n),
 			}),
 			arena: ArenaState.create({
-				categories: [{ id: 'arena-runs', name: this.i18n.translateString('app.arena.menu.my-runs') }],
+				categories: [
+					{ id: 'arena-runs', name: this.i18n.translateString('app.arena.menu.my-runs') },
+					{ id: 'class-tier-list', name: this.i18n.translateString('app.arena.menu.class-tier-list') },
+				],
 				loading: false,
 				activeHeroFilter: prefs.arenaActiveClassFilter,
 				activeTimeFilter: prefs.arenaActiveTimeFilter,

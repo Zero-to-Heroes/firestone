@@ -1,1 +1,1 @@
-export type ArenaCategoryType = 'arena-runs';
+export type ArenaCategoryType = 'arena-runs' | 'class-tier-list';

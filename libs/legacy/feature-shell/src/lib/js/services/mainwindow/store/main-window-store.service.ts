@@ -208,6 +208,7 @@ import { FilterShownAchievementsProcessor } from './processors/achievements/filt
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
 import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-class-filter-selected-processor';
+import { ArenaSelectCategoryEvent, ArenaSelectCategoryProcessor } from './processors/arena/arena-select-category';
 import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
@@ -850,12 +851,10 @@ export class MainWindowStoreService {
 			],
 			[DuelsDeckbuilderSaveDeckEvent.eventName(), new DuelsDeckbuilderSaveDeckProcessor(this.prefs)],
 			[DuelsDeckbuilderImportDeckEvent.eventName(), new DuelsDeckbuilderImportDeckProcessor(this.cards)],
-			[
-				// Arena
-				ArenaTimeFilterSelectedEvent.eventName(),
-				new ArenaTimeFilterSelectedProcessor(this.prefs),
-			],
+			// Arena
+			[ArenaTimeFilterSelectedEvent.eventName(), new ArenaTimeFilterSelectedProcessor(this.prefs)],
 			[ArenaClassFilterSelectedEvent.eventName(), new ArenaClassFilterSelectedProcessor(this.prefs)],
+			[ArenaSelectCategoryEvent.eventName(), new ArenaSelectCategoryProcessor()],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],

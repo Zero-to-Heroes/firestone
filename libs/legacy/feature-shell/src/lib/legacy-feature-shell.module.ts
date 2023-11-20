@@ -528,6 +528,7 @@ import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stat
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
+import { ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
@@ -871,6 +872,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementsViewModule,
 		AchievementsDataAccessModule,
 		DuelsGeneralModule,
+		ArenaCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

@@ -1,3 +1,4 @@
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { ArenaCategoryType } from '../arena/arena-category.type';
 
 export class NavigationArena {
@@ -5,7 +6,7 @@ export class NavigationArena {
 	readonly menuDisplayType: 'menu' | 'breadcrumbs' = 'menu';
 	readonly expandedRunIds: readonly string[];
 
-	public update(base: NavigationArena): NavigationArena {
+	public update(base: Partial<NonFunctionProperties<NavigationArena>>): NavigationArena {
 		return Object.assign(new NavigationArena(), this, base);
 	}
 

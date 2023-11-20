@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Observable } from 'rxjs';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
 import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
+import { ArenaSelectCategoryEvent } from '../../../services/mainwindow/store/processors/arena/arena-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -29,6 +30,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						</ul>
 						<arena-filters> </arena-filters>
 						<arena-runs-list *ngIf="category.value?.id === 'arena-runs'"> </arena-runs-list>
+						<arena-class-tier-list *ngIf="category.value?.id === 'class-tier-list'">
+						</arena-class-tier-list>
 					</div>
 				</with-loading>
 			</section>
@@ -70,8 +73,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	selectCategory(categoryId: ArenaCategoryType) {
-		// Only one category for now
-		// this.stateUpdater.next(new ArenaSelectCategoryEvent(categoryId));
+		this.store.send(new ArenaSelectCategoryEvent(categoryId));
 	}
 
 	trackByFn(index: number, item: ArenaCategory) {
