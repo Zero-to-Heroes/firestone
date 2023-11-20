@@ -13,6 +13,7 @@ import { CheckboxComponent } from './components/input/checkbox.component';
 import { NumericInputWithArrowsComponent } from './components/input/numeric-input-with-arrows.component';
 import { TextInputComponent } from './components/input/text-input.component';
 import { ProgressBarComponent } from './components/misc/progress-bar.component';
+import { ScrollableDirective } from './components/misc/scrollable.directive';
 import { SortableLabelComponent } from './components/table/sortable-table-label.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
@@ -44,6 +45,8 @@ const components = [
 	ProgressBarComponent,
 
 	ToggleViewComponent,
+
+	ScrollableDirective,
 ];
 
 @NgModule({

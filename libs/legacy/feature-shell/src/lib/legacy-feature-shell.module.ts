@@ -674,7 +674,6 @@ import { OwTranslatePipe } from './js/directives/ow-translate.pipe';
 import { PulseDirective } from './js/directives/pulse.directive';
 import { RippleOnClickDirective } from './js/directives/ripple-on-click.directive';
 import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over.directive';
-import { ScrollableDirective } from './js/directives/scrollable.directive';
 import { SafeHtmlPipe } from './js/pipes/safe-html.pipe';
 import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
 import { AchievementHistoryService } from './js/services/achievement/achievements-history.service';
@@ -922,7 +921,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BindCssVariableDirective,
 		GrowOnClickDirective,
 		RippleOnClickDirective,
-		ScrollableDirective,
 		NgxCacheIfDirective,
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
@@ -1038,7 +1036,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BindCssVariableDirective,
 		GrowOnClickDirective,
 		RippleOnClickDirective,
-		ScrollableDirective,
 		NgxCacheIfDirective,
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
