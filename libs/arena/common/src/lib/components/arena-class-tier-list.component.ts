@@ -96,7 +96,6 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 			return [];
 		}
 
-		const totalClasses = stats.length;
 		const result: WinsDistribution[] = [];
 		const totalGames = stats
 			.flatMap((stat) => stat.winsDistribution)
@@ -146,7 +145,7 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 			const distribution = winsDistributionInPercents.find((dist) => dist.wins === i);
 			const averageForWins = averageWinsDistribution.find((dist) => dist.wins === i) as WinsDistribution;
 			const delta = distribution ? distribution.total / averageForWins.total : 0;
-			result.push({ wins: i, total: delta });
+			result.push({ wins: i, total: 100 * delta });
 		}
 		console.debug(
 			'placementDistribution',
