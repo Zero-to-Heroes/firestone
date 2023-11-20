@@ -44,21 +44,21 @@ export const updates: readonly Update[] = [
 				Let me know if that helps!
 				`,
 			},
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the tracker would get stuck if the app was started while a game was already in progress.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the app could have trouble selecting the correct deck when playing Twist.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -107,6 +107,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add proper support for catch-up pack openings.`,
+							},
+							{
+								type: 'feature',
+								text: `You can now use quotes to search for an exact string in a card's text (e.g. text:"your deck").`,
 							},
 							{
 								type: 'bug',
