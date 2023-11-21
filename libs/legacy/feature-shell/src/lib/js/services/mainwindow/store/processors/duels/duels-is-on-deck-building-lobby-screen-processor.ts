@@ -3,6 +3,7 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { findSignatureTreasure } from '../../../../duels/duels-run-id.service';
 import { Processor } from '../processor';
 
 export class DuelsIsOnDeckBuildingLobbyScreenProcessor implements Processor {
@@ -23,7 +24,11 @@ export class DuelsIsOnDeckBuildingLobbyScreenProcessor implements Processor {
 					{ DatabaseId: this.allCards.getCard(tempDuelsDeck.HeroPowerCardId).dbfId, Selected: true },
 				],
 				signatureTreasureOptions: [
-					{ DatabaseId: this.allCards.getCard(tempDuelsDeck.DeckList?.[0]).dbfId, Selected: true },
+					{
+						DatabaseId: this.allCards.getCard(findSignatureTreasure(tempDuelsDeck.DeckList, this.allCards))
+							.dbfId,
+						Selected: true,
+					},
 				],
 			});
 		}
