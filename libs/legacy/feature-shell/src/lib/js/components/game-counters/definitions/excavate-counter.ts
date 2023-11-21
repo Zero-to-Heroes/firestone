@@ -41,7 +41,7 @@ export class ExcavateCounterDefinition
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return {
 			// It is 0-based in the logs
-			currentTier: deck.currentExcavateTier + 1,
+			currentTier: deck.currentExcavateTier,
 			maxTier: deck.maxExcavateTier + 1,
 			playerClasses: deck.hero?.classes,
 		};
@@ -57,8 +57,9 @@ export class ExcavateCounterDefinition
 		const tooltip = this.i18n.translateString(`counters.excavate.${this.side}`, {
 			value: excavate.currentTier,
 			maxTier: maxTier,
+			nextTier: nextTier,
 		});
-		const nextTierExcavateTreasures = buildExcavateTreasures(excavate.currentTier, excavate.playerClasses);
+		const nextTierExcavateTreasures = buildExcavateTreasures(nextTier, excavate.playerClasses);
 		console.debug('showing excavate counter', nextTier, excavate, nextTierExcavateTreasures, nextTier);
 		return {
 			type: 'excavate',
