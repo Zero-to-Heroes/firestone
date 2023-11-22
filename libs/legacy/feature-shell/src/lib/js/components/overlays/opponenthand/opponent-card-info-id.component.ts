@@ -113,6 +113,10 @@ export class OpponentCardInfoIdComponent {
 			return cardId;
 		}
 
+		if (!creatorCardId) {
+			return null;
+		}
+
 		// Manual exceptions
 		// Probably useless now that we have the regex
 		switch (creatorCardId) {
