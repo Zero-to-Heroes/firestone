@@ -14,7 +14,10 @@ export class ExcavateTierParser implements EventParser {
 		const newPlayerDeck = deck.update({
 			currentExcavateTier: gameEvent.additionalData.currentTier,
 			maxExcavateTier: gameEvent.additionalData.maxTier,
-			totalExcavates: deck.totalExcavates + 1,
+			totalExcavates:
+				gameEvent.additionalData.currentTier === deck.totalExcavates
+					? deck.totalExcavates
+					: deck.totalExcavates + 1,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

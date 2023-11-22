@@ -35,10 +35,14 @@ export class OpponentExcavateWidgetWrapperComponent
 		this.side = 'opponent';
 		this.activeCounter = 'excavate';
 		this.prefExtractor = (prefs) => prefs.opponentExcavateCounter;
-		this.deckStateExtractor = (state, prefValue) =>
-			state.opponentDeck?.hasRelevantMechanics(this.allCards, [GameTag.EXCAVATE], {
-				onlyLimited: prefValue === 'limited',
-				excludesDeckInLimited: true,
-			}) || state.opponentDeck.currentExcavateTier > 0;
+		this.deckStateExtractor = (state, prefValue) => {
+			return (
+				state.opponentDeck.currentExcavateTier > 0 ||
+				state.opponentDeck.hasRelevantMechanics(this.allCards, [GameTag.EXCAVATE], {
+					onlyLimited: prefValue === 'limited',
+					excludesDeckInLimited: true,
+				})
+			);
+		};
 	}
 }
