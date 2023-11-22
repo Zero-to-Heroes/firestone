@@ -540,6 +540,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.CatrinaMuerteCore:
 			case CardIds.CatrinaMuerte:
 				return and(side(inputSide), inGraveyard, undead, minion);
+			case CardIds.CattleRustler_WW_351:
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.CenarionHold_WON_015:
 				return and(side(inputSide), or(inHand, inDeck), chooseOne);
 			case CardIds.ChainedGuardian:
