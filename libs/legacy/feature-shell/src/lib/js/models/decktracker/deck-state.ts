@@ -100,6 +100,7 @@ export class DeckState {
 	readonly plaguesShuffledIntoEnemyDeck: number = 0;
 	readonly currentExcavateTier: number = 0;
 	readonly maxExcavateTier: number = 0;
+	readonly totalExcavates: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

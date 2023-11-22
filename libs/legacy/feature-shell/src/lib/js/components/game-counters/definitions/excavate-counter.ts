@@ -13,7 +13,10 @@ import { CounterDefinition } from './_counter-definition';
 
 export class ExcavateCounterDefinition
 	implements
-		CounterDefinition<GameState, { currentTier: number; maxTier: number; playerClasses: readonly CardClass[] }>
+		CounterDefinition<
+			GameState,
+			{ currentTier: number; maxTier: number; totalExcavates: number; playerClasses: readonly CardClass[] }
+		>
 {
 	readonly type = 'excavate';
 	readonly value: number | string;
@@ -37,19 +40,26 @@ export class ExcavateCounterDefinition
 		return new ExcavateCounterDefinition(side, allCards, i18n);
 	}
 
-	public select(gameState: GameState): { currentTier: number; maxTier: number; playerClasses: readonly CardClass[] } {
+	public select(gameState: GameState): {
+		currentTier: number;
+		maxTier: number;
+		totalExcavates: number;
+		playerClasses: readonly CardClass[];
+	} {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return {
 			// It is 0-based in the logs
 			currentTier: deck.currentExcavateTier,
 			maxTier: deck.maxExcavateTier + 1,
 			playerClasses: deck.hero?.classes,
+			totalExcavates: deck.totalExcavates,
 		};
 	}
 
 	public emit(excavate: {
 		currentTier: number;
 		maxTier: number;
+		totalExcavates: number;
 		playerClasses: readonly CardClass[];
 	}): NonFunctionProperties<ExcavateCounterDefinition> {
 		const maxTier = excavate.maxTier;
@@ -58,6 +68,7 @@ export class ExcavateCounterDefinition
 			value: excavate.currentTier,
 			maxTier: maxTier,
 			nextTier: nextTier,
+			totalExcavates: excavate.totalExcavates,
 		});
 		const nextTierExcavateTreasures = buildExcavateTreasures(nextTier, excavate.playerClasses);
 		console.debug('showing excavate counter', nextTier, excavate, nextTierExcavateTreasures, nextTier);
