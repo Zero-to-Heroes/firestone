@@ -153,6 +153,7 @@ export const tutors = [
 	CardIds.SeekGuidance,
 	CardIds.SenseDemonsLegacy_EX1_317,
 	CardIds.SenseDemonsVanilla_VAN_EX1_317,
+	CardIds.SesselieOfTheFaeCourt_REV_319,
 	CardIds.SharpEyedSeeker,
 	CardIds.ShroudOfConcealment,
 	CardIds.SigilOfAlacrity,
