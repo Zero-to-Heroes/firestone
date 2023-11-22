@@ -55,7 +55,8 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 
 		this.internalSubject$$.onFirstSubscribe(async () => {
 			const patchConfig: PatchesConfig | null = await this.api.callGetApi(PATCHES_CONFIG_URL);
-			console.log('[duels-config] loaded config');
+			console.log('[patch-config] loaded config');
+			console.debug('[patch-config] loaded config', patchConfig);
 			this.config$$.next(patchConfig);
 			this.currentBattlegroundsMetaPatch$$.next(
 				patchConfig?.patches

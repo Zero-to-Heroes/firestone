@@ -26,8 +26,6 @@ export class StoreBootstrapService {
 					{ id: 'class-tier-list', name: this.i18n.translateString('app.arena.menu.class-tier-list') },
 				],
 				loading: false,
-				activeHeroFilter: prefs.arenaActiveClassFilter,
-				activeTimeFilter: prefs.arenaActiveTimeFilter,
 			}),
 			decktracker: DecktrackerState.create({
 				filters: {

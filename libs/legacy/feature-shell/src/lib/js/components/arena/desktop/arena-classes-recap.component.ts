@@ -10,6 +10,7 @@ import { PatchInfo } from '../../../models/patches';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
+import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -115,18 +116,20 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.prefs.isReady();
 
 		this.stats$ = combineLatest([
 			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav]) => main.arena.activeTimeFilter,
-				([main, nav]) => main.arena.activeHeroFilter,
+			this.prefs.preferences$(
+				(prefs) => prefs.arenaActiveTimeFilter,
+				(prefs) => prefs.arenaActiveClassFilter,
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
 		]).pipe(

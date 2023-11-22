@@ -1,20 +1,12 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-} from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
 import { classes, formatClass } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { ArenaClassFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-class-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
@@ -38,26 +30,23 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaClassFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(([main, nav]) => main.arena.activeHeroFilter)
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
+		this.filter$ = this.prefs
+			.preferences$((prefs) => prefs.arenaActiveClassFilter)
 			.pipe(
 				filter(([filter]) => !!filter),
 				this.mapData(([filter]) => {
@@ -78,14 +67,19 @@ export class ArenaClassFilterDropdownComponent
 					};
 				}),
 			);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	onSelected(option: IOption) {
-		this.stateUpdater.next(new ArenaClassFilterSelectedEvent((option as ClassFilterOption).value));
+	async onSelected(option: IOption) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			arenaActiveClassFilter: option.value as ArenaClassFilterType,
+		};
+		this.prefs.savePreferences(newPrefs);
 	}
 }
 

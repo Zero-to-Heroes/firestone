@@ -1,13 +1,9 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { ArenaCategory } from '../mainwindow/arena/arena-category';
-import { ArenaClassFilterType } from './arena-class-filter.type';
-import { ArenaTimeFilterType } from './arena-time-filter.type';
 
 export class ArenaState {
 	readonly loading: boolean = true;
 	readonly categories: readonly ArenaCategory[] = [];
-	readonly activeHeroFilter: ArenaClassFilterType;
-	readonly activeTimeFilter: ArenaTimeFilterType;
 
 	public static create(base: Partial<NonFunctionProperties<ArenaState>>): ArenaState {
 		return Object.assign(new ArenaState(), base);

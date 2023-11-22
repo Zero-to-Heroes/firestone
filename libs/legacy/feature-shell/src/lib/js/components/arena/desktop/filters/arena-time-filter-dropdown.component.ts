@@ -1,30 +1,16 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { ArenaTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-time-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
-/** This approach seems to be the cleanest way to properly narrow down the values needed from
- * the state. The other approaches are cool and data-driven, but as of now they seem more
- * difficult to implement with a store approach. The other filters might have to be refactored
- * to this approach
- */
 @Component({
 	selector: 'arena-time-filter-dropdown',
 	styleUrls: [],
@@ -40,36 +26,29 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaTimeFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
+		await this.prefs.isReady();
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentArenaMetaPatch$$,
-			this.store.listen$(
-				([main, nav]) => main.arena.activeTimeFilter,
-				([main, nav]) => nav.navigationArena.selectedCategoryId,
-			),
+			this.prefs.preferences$((prefs) => prefs.arenaActiveTimeFilter),
 		]).pipe(
-			filter(([patch, [filter, selectedCategoryId]]) => !!filter && !!patch && !!selectedCategoryId),
-			this.mapData(([patch, [filter, selectedCategoryId]]) => {
+			filter(([patch, [filter]]) => !!filter && !!patch),
+			this.mapData(([patch, [filter]]) => {
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',
@@ -77,7 +56,9 @@ export class ArenaTimeFilterDropdownComponent
 					} as TimeFilterOption,
 					{
 						value: 'last-patch',
-						label: this.i18n.translateString('app.arena.filters.time.last-patch'),
+						label: this.i18n.translateString('app.global.filters.time-patch', {
+							value: patch.version,
+						}),
 						tooltip: formatPatch(patch, this.i18n),
 					} as TimeFilterOption,
 					{
@@ -105,12 +86,13 @@ export class ArenaTimeFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	onSelected(option: IOption) {
-		this.stateUpdater.next(new ArenaTimeFilterSelectedEvent((option as TimeFilterOption).value));
+	async onSelected(option: IOption) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			arenaActiveTimeFilter: option.value as ArenaTimeFilterType,
+		};
+		this.prefs.savePreferences(newPrefs);
 	}
 }
 

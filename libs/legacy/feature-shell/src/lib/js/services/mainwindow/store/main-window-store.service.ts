@@ -72,8 +72,6 @@ import { ChangeVisibleAchievementEvent } from './events/achievements/change-visi
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
-import { ArenaClassFilterSelectedEvent } from './events/arena/arena-class-filter-selected-event';
-import { ArenaTimeFilterSelectedEvent } from './events/arena/arena-time-filter-selected-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
@@ -207,9 +205,7 @@ import { ChangeVisibleAchievementProcessor } from './processors/achievements/cha
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
-import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-class-filter-selected-processor';
 import { ArenaSelectCategoryEvent, ArenaSelectCategoryProcessor } from './processors/arena/arena-select-category';
-import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
@@ -852,8 +848,6 @@ export class MainWindowStoreService {
 			[DuelsDeckbuilderSaveDeckEvent.eventName(), new DuelsDeckbuilderSaveDeckProcessor(this.prefs)],
 			[DuelsDeckbuilderImportDeckEvent.eventName(), new DuelsDeckbuilderImportDeckProcessor(this.cards)],
 			// Arena
-			[ArenaTimeFilterSelectedEvent.eventName(), new ArenaTimeFilterSelectedProcessor(this.prefs)],
-			[ArenaClassFilterSelectedEvent.eventName(), new ArenaClassFilterSelectedProcessor(this.prefs)],
 			[ArenaSelectCategoryEvent.eventName(), new ArenaSelectCategoryProcessor()],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],

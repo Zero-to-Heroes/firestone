@@ -10,13 +10,8 @@ import {
 	DuelsTreasureStatTypeFilterType,
 } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType } from '@firestone/duels/view';
-import {
-	AbstractFacadeService,
-	AppInjector,
-	OverwolfService,
-	WindowManagerService,
-} from '@firestone/shared/framework/core';
-import { BehaviorSubject, sampleTime } from 'rxjs';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, filter, map, sampleTime, shareReplay } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -40,6 +35,8 @@ import { GenericStorageService } from './generic-storage.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { capitalizeFirstLetter } from './utils';
 
+export type PrefsSelector<P extends Preferences, T> = (prefs: P) => T;
+
 @Injectable()
 export class PreferencesService extends AbstractFacadeService<PreferencesService> {
 	public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';
@@ -50,7 +47,6 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 	public preferences$$: BehaviorSubject<Preferences>;
 
 	private storage: GenericStorageService;
-	private ow: OverwolfService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'preferencesService', () => !!this.preferences$$);
@@ -62,10 +58,19 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 
 	protected async init() {
 		this.storage = AppInjector.get(GenericStorageService);
-		this.ow = AppInjector.get(OverwolfService);
 		this.preferences$$ = new BehaviorSubject<Preferences>(this.storage.getUserPreferences());
 
 		this.preferences$$.pipe(sampleTime(1500)).subscribe((prefs) => this.storage.saveUserPreferences(prefs));
+	}
+
+	public preferences$<S extends PrefsSelector<Preferences, any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
+		return this.preferences$$.pipe(
+			filter((prefs) => !!prefs),
+			map((prefs) => selectors.map((selector) => selector(prefs))),
+			shareReplay(1),
+		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
 	}
 
 	public async getPreferences(): Promise<Preferences> {

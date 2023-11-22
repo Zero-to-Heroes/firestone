@@ -18,6 +18,7 @@ import { PatchInfo } from '../../../models/patches';
 import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
+import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -58,6 +59,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly arenaRewards: ArenaRewardsService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
@@ -65,15 +67,16 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
 		await this.arenaRewards.isReady();
+		await this.prefs.isReady();
 
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
 		this.runs$ = combineLatest([
 			this.store.gameStats$(),
 			this.arenaRewards.arenaRewards$$,
-			this.store.listen$(
-				([main, nav]) => main.arena.activeTimeFilter,
-				([main, nav]) => main.arena.activeHeroFilter,
+			this.prefs.preferences$(
+				(prefs) => prefs.arenaActiveTimeFilter,
+				(prefs) => prefs.arenaActiveClassFilter,
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
 		]).pipe(

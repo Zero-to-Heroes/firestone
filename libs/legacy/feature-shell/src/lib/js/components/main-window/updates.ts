@@ -33,32 +33,30 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.5.19',
+		version: '12.5.23',
 		force: false,
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
-				text: `Someone from the community found out that Firestone might cause game animations stutters when the game's FPS were uncapped.<br/><br/>
-				To fix this, edit the options.txt file in %localappdata%\Blizzard\Hearthstone and add targetframerate=60 (or another value).<br/><br/>				
-				Let me know if that helps!
+				text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 				`,
 			},
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the app could have trouble selecting the correct deck when playing Twist.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where the app could have trouble selecting the correct deck when playing Twist.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -68,19 +66,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `You can now leave the "related card" popup open for certain cards (like cards that Excavate) by holding the "Shift" key as you mouse out of the card in the tracker. That will let you scroll through all the options in the window.`,
-							},
-							{
-								type: 'feature',
-								text: `Add new counters (Tram Heist, The Garden's Grace, Dragons Summoned) and improve the Excavate counter.`,
+								text: `Due to popular feedback, change (once again!) how the Excavate counter works. It will now start at 0, instead of 1. It will also tell you how many times in total you have excavated in its tooltip.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where cards created by enchantments would appear as a broken image.`,
-							},
-							{
-								type: 'bug',
-								text: `Remove the flicker that could sometimes happen when mousing over cards in the tracker.`,
+								text: `Fix the attack counter not taking mega-windfury into account.`,
 							},
 						],
 					},
@@ -88,16 +78,30 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'bug',
+								text: `Fix a sim issue with Wax Warband, Queen Wagtoggle's hero power.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
 								type: 'feature',
-								text: `The perfect games tab is finally fully restored! And it has been enhanced with tribes/anomalies filters.`,
+								text: `Add a Class Tier List tab. I am also trying to show in some way the disparity between the wins ditribution of each class, but I am not sure yet how to do it in a way that is easy to understand. Simply showing the total number of wins on a bar graph doesn't work well, because of how many more low-wins there are than high-wins. I've settled for showing how much each class differs from the *average* at each win count. Let me know if you have any feedback on this.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where Cultist S'Thara would appear in the minions list when demons are banned.`,
+								type: 'misc',
+								text: `I have reworked how the internal Run ID is computed, which should make it more robust in the future, and also make it work even if you play a game on mobile between two PC games. Unfortunately, this means that after this update, your first match will be part of a new run, which might break your stats. Once again, sorry about that.`,
 							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
 							{
 								type: 'bug',
-								text: `Fix a simulation issue with Golden Niuzao.`,
+								text: `Fix an issue where it would sometimes not offer you high-wins decks (or even your last deck) to copy after selecting your hero / hero power / signature treasure combination.`,
 							},
 						],
 					},
@@ -105,25 +109,8 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'feature',
-								text: `Add proper support for catch-up pack openings.`,
-							},
-							{
-								type: 'feature',
-								text: `You can now use quotes to search for an exact string in a card's text (e.g. text:"your deck").`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where using Mass Opening would sometimes not properly track all cards/packs.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'misc',
-								text: `Miscellaneous improvements that should reduce CPU usage of the app while playing the game.`,
+								text: `Fix an issue where some data (like all-time packs opened) would not refresh.`,
 							},
 						],
 					},
