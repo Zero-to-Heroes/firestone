@@ -600,6 +600,7 @@ export const giftCreators = [
 	CardIds.SnakeEyes_WW_400,
 	CardIds.SnakeOilSeller_WW_332,
 	CardIds.SneakyDelinquent,
+	CardIds.SonyaShadowdancer,
 	CardIds.SoothsayersCaravan,
 	CardIds.SootSpewer_WON_033,
 	CardIds.SootSpewer,
