@@ -1,3 +1,4 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
@@ -8,7 +9,6 @@ import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/
 import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../preferences.service';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { Processor } from './processor';
 

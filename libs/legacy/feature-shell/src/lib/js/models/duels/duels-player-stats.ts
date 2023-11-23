@@ -1,9 +1,9 @@
 import { DeckStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsCombinedHeroStat } from '@firestone/duels/data-access';
+import { DuelsDeckSummary } from '@firestone/duels/general';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsGroupedDecks } from './duels-grouped-decks';
-import { DuelsDeckSummary } from './duels-personal-deck';
 
 export interface DuelsPlayerStats {
 	readonly heroStats: readonly DuelsHeroPlayerStat[];

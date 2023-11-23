@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
-import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class OwNotificationsService {

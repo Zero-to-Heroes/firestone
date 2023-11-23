@@ -8,10 +8,10 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, interval, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { LotteryTabType } from './lottery-navigation.component';
 

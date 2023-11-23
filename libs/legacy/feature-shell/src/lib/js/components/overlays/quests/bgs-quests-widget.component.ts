@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
-import { Preferences } from '../../../models/preferences';
+import { Preferences } from '@firestone/shared/common/service';
 
 @Component({
 	selector: 'bgs-quests-widget',

@@ -10,9 +10,9 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { Preferences } from '@firestone/shared/common/service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { Preferences } from '../../../../models/preferences';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 import { TwitchPreferencesService } from './twitch-preferences.service';

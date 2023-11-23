@@ -9,10 +9,10 @@ import {
 	OnDestroy,
 	Renderer2,
 } from '@angular/core';
+import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { Preferences } from '../../../../models/preferences';
 import {
 	HighlightSelector,
 	MercenariesSynergiesHighlightService,

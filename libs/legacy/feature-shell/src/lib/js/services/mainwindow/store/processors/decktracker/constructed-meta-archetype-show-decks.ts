@@ -1,8 +1,7 @@
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { PreferencesService } from '../../../../preferences.service';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 
 export class ConstructedMetaArchetypeShowDecksEvent implements MainWindowStoreEvent {

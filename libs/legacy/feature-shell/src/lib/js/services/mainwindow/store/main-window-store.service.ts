@@ -1,6 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
+import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
+import { DuelsPersonalDecksService } from '@firestone/duels/general';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -60,7 +63,6 @@ import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
-import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
@@ -396,6 +398,8 @@ export class MainWindowStoreService {
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly arenaRewards: ArenaRewardsService,
 		private readonly bgsPerfectGames: BgsPerfectGamesService,
+		private readonly duelsPersonalDecksService: DuelsPersonalDecksService,
+		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -652,7 +656,10 @@ export class MainWindowStoreService {
 			[ChangeDeckSortEvent.eventName(), new ChangeDeckSortProcessor(this.prefs)],
 			[HideDeckSummaryEvent.eventName(), new HideDeckSummaryProcessor(this.prefs)],
 			[DecktrackerResetDeckStatsEvent.eventName(), new DecktrackerResetDeckStatsProcessor(this.prefs)],
-			[DecktrackerDeleteDeckEvent.eventName(), new DecktrackerDeleteDeckProcessor(this.prefs, this.gameStats)],
+			[
+				DecktrackerDeleteDeckEvent.eventName(),
+				new DecktrackerDeleteDeckProcessor(this.prefs, this.gameStats, this.constructedPersonalDeckService),
+			],
 			[RestoreDeckSummaryEvent.eventName(), new RestoreDeckSummaryProcessor(this.prefs)],
 			[ToggleShowHiddenDecksEvent.eventName(), new ToggleShowHiddenDecksProcessor(this.prefs)],
 			[ConstructedDeckbuilderGoBackEvent.eventName(), new ConstructedDeckbuilderGoBackProcessor()],
@@ -661,7 +668,10 @@ export class MainWindowStoreService {
 				new ConstructedDeckbuilderFormatSelectedProcessor(),
 			],
 			[ConstructedDeckbuilderClassSelectedEvent.eventName(), new ConstructedDeckbuilderClassSelectedProcessor()],
-			[ConstructedDeckbuilderSaveDeckEvent.eventName(), new ConstructedDeckbuilderSaveDeckProcessor(this.prefs)],
+			[
+				ConstructedDeckbuilderSaveDeckEvent.eventName(),
+				new ConstructedDeckbuilderSaveDeckProcessor(this.prefs, this.constructedPersonalDeckService),
+			],
 			[
 				ConstructedDeckbuilderImportDeckEvent.eventName(),
 				new ConstructedDeckbuilderImportDeckProcessor(this.cards),
@@ -812,7 +822,10 @@ export class MainWindowStoreService {
 				DuelsHidePersonalDeckSummaryEvent.eventName(),
 				new DuelsHidePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
 			],
-			[DuelsDeletePersonalDeckSummaryEvent.eventName(), new DuelsDeletePersonalDeckSummaryProcessor(this.prefs)],
+			[
+				DuelsDeletePersonalDeckSummaryEvent.eventName(),
+				new DuelsDeletePersonalDeckSummaryProcessor(this.prefs, this.duelsPersonalDecksService),
+			],
 			[
 				DuelsRestorePersonalDeckSummaryEvent.eventName(),
 				new DuelsRestorePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
@@ -845,7 +858,10 @@ export class MainWindowStoreService {
 				DuelsDeckbuilderSignatureTreasureSelectedEvent.eventName(),
 				new DuelsDeckbuilderSignatureTreasureSelectedProcessor(this.cards),
 			],
-			[DuelsDeckbuilderSaveDeckEvent.eventName(), new DuelsDeckbuilderSaveDeckProcessor(this.prefs)],
+			[
+				DuelsDeckbuilderSaveDeckEvent.eventName(),
+				new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsPersonalDecksService),
+			],
 			[DuelsDeckbuilderImportDeckEvent.eventName(), new DuelsDeckbuilderImportDeckProcessor(this.cards)],
 			// Arena
 			[ArenaSelectCategoryEvent.eventName(), new ArenaSelectCategoryProcessor()],

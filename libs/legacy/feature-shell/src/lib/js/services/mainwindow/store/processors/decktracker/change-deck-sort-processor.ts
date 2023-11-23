@@ -1,7 +1,7 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { DeckFilters } from '../../../../../models/mainwindow/decktracker/deck-filters';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { ChangeDeckSortEvent } from '../../events/decktracker/change-deck-sort-event';
 import { Processor } from '../processor';
 

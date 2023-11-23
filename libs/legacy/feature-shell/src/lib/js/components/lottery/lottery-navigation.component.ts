@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { Preferences } from '../../models/preferences';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({

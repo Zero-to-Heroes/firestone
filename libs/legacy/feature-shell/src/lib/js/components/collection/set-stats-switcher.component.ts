@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CollectionSetStatsTypeFilterType } from '@firestone/shared/common/service';
 import { Observable, combineLatest, debounceTime } from 'rxjs';
-import { CollectionSetStatsTypeFilterType } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

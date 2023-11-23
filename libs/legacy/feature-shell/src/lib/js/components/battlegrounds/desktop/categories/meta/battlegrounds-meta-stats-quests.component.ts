@@ -5,9 +5,9 @@ import {
 	buildQuestRewardStats,
 	buildQuestStats,
 } from '@firestone/battlegrounds/data-access';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsQuestActiveTabType } from '@legacy-import/src/lib/js/models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';

@@ -3,7 +3,7 @@ import { LocalStorageService } from '@firestone/shared/framework/core';
 import { Preferences } from '../models/preferences';
 
 @Injectable()
-export class GenericStorageService {
+export class PreferencesStorageService {
 	constructor(private readonly localStorageService: LocalStorageService) {}
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {

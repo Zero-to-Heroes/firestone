@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Preferences } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
@@ -7,7 +8,6 @@ import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
-import { Preferences } from '../../../models/preferences';
 
 @Injectable()
 export class StoreBootstrapService {

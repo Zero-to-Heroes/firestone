@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { BehaviorSubject } from 'rxjs';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
 

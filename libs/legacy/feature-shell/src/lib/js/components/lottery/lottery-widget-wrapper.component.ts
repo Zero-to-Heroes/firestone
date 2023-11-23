@@ -7,10 +7,9 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { AbstractWidgetWrapperComponent } from '@components/overlays/_widget-wrapper.component';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { Preferences } from '../../models/preferences';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({

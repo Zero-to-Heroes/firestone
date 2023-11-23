@@ -8,10 +8,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { PreferencesService } from '../../m../../services/preferences.service';
-import { Preferences } from '../../models/preferences';
 import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
 import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

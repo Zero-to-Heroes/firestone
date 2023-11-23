@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -6,7 +7,6 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 
 @Injectable()
 export class GameStatusService extends AbstractFacadeService<GameStatusService> {

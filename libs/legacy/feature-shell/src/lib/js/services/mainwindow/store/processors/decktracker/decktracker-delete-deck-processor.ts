@@ -1,13 +1,18 @@
+import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDecktracker } from '../../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { DecktrackerDeleteDeckEvent } from '../../events/decktracker/decktracker-delete-deck-event';
 import { Processor } from '../processor';
 
 export class DecktrackerDeleteDeckProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService, private readonly gamesLoader: GameStatsLoaderService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly gamesLoader: GameStatsLoaderService,
+		private readonly constructedPersonalDecks: ConstructedPersonalDecksService,
+	) {}
 
 	public async process(
 		event: DecktrackerDeleteDeckEvent,
@@ -15,21 +20,7 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const currentPrefs = await this.prefs.getPreferences();
-		const existingPersonalDeck = currentPrefs.constructedPersonalAdditionalDecks
-			.filter((d) => d.deckstring)
-			.find((d) => d.deckstring === event.deckstring);
-
-		// If the deck has only been created via the deckbuilder and has not been played yet,
-		// we simply remove it
-		// That way, we can easily add it again
-		if (existingPersonalDeck) {
-			const newPersonalDecks = currentPrefs.constructedPersonalAdditionalDecks.filter(
-				(d) => d.deckstring !== event.deckstring,
-			);
-			const newPrefs = { ...currentPrefs, constructedPersonalAdditionalDecks: newPersonalDecks };
-			await this.prefs.savePreferences(newPrefs);
-		}
+		await this.constructedPersonalDecks.deleteDeck(event.deckstring);
 
 		// If no games were played with the deck, no need to change anything
 		const gameStats = await this.gamesLoader.gameStats$$.getValueWithInit();
@@ -45,6 +36,7 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 			];
 		}
 
+		const currentPrefs = await this.prefs.getPreferences();
 		const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[event.deckstring] ?? [];
 		console.log('[deck-delete] deletedDeckDates', event.deckstring, deletedDeckDates);
 		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];

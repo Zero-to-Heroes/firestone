@@ -1,7 +1,6 @@
 import { EventEmitter } from '@angular/core';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';

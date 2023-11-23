@@ -7,8 +7,8 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { DuelsMetaStatsViewComponent } from '@firestone/duels/view';
+import { Preferences } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Preferences } from '@models/preferences';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -18,7 +19,6 @@ import { PatchInfo } from '../../../models/patches';
 import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
-import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

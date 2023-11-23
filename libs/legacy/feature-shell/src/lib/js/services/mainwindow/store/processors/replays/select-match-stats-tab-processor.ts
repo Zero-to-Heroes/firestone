@@ -1,8 +1,8 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { BgsStatsFilterId } from '../../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { SelectMatchStatsTabEvent } from '../../events/replays/select-match-stats-tab-event';
 import { Processor } from '../processor';
 

@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { TwitchAuthService, TWITCH_LOGIN_URL } from '../../../services/mainwindow/twitch-auth.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

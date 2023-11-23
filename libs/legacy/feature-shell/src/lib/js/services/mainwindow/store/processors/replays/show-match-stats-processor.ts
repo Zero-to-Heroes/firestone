@@ -1,5 +1,6 @@
 import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { BgsPlayer } from '../../../../../models/battlegrounds/bgs-player';
@@ -10,7 +11,6 @@ import { NavigationReplays } from '../../../../../models/mainwindow/navigation/n
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
-import { PreferencesService } from '../../../../preferences.service';
 import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
 import { Processor } from '../processor';

@@ -1,7 +1,7 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CurrentAppType } from '../../../../../models/mainwindow/current-app.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { NextFtueEvent } from '../../events/ftue/next-ftue-event';
 import { Processor } from '../processor';
 

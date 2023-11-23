@@ -1,3 +1,4 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -5,11 +6,10 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { OwUtilsService } from '../../../plugins/ow-utils.service';
-import { PreferencesService } from '../../../preferences.service';
-import { BgsHeroSelectionEvent } from '../events/bgs-hero-selection-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
-import { BgsGlobalInfoUpdatedParser } from './bgs-global-info-updated-parser';
+import { BgsHeroSelectionEvent } from '../events/bgs-hero-selection-event';
 import { EventParser } from './_event-parser';
+import { BgsGlobalInfoUpdatedParser } from './bgs-global-info-updated-parser';
 
 export class BgsHeroSelectionParser implements EventParser {
 	constructor(

@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { Observable, combineLatest, filter, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

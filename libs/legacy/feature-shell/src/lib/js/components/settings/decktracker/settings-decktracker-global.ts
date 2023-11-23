@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
 
 @Component({

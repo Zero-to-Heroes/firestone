@@ -1,10 +1,10 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaDirection,
 } from '../../../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { PreferencesService } from '../../../../preferences.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { Processor } from '../processor';
 

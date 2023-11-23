@@ -532,6 +532,7 @@ import { ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
+import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
@@ -755,7 +756,6 @@ import { GameModeDataService } from './js/services/game-mode-data.service';
 import { GameStatusService } from './js/services/game-status.service';
 import { GameNativeStateStoreService } from './js/services/game/game-native-state-store.service';
 import { SceneService } from './js/services/game/scene.service';
-import { GenericStorageService } from './js/services/generic-storage.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
@@ -793,7 +793,6 @@ import { MindVisionFacadeService } from './js/services/plugins/mind-vision/mind-
 import { MindVisionStateMachineService } from './js/services/plugins/mind-vision/mind-vision-state-machine.service';
 import { OwUtilsService } from './js/services/plugins/ow-utils.service';
 import { SimpleIOService } from './js/services/plugins/simple-io.service';
-import { PreferencesService } from './js/services/preferences.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
@@ -872,6 +871,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementsDataAccessModule,
 		DuelsGeneralModule,
 		ArenaCommonModule,
+		ConstructedCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -1682,12 +1682,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SetsService,
 		DebugService,
 		Events,
-		GenericStorageService,
 		LogsUploaderService,
 		MemoryInspectionService,
 		// OverwolfService,
 		OwNotificationsService,
-		PreferencesService,
 		S3FileUploadService,
 		SimpleIOService,
 		BugReportService,

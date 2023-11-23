@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { DeckSummary } from '@firestone/constructed/common';
+import { Observable, combineLatest } from 'rxjs';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

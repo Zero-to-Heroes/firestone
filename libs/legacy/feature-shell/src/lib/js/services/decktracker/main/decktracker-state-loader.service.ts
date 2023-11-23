@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { Preferences } from '@firestone/shared/common/service';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
-import { Preferences } from '../../../models/preferences';
 
 @Injectable()
 export class DecktrackerStateLoaderService {

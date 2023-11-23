@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
+import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-state';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,7 +19,6 @@ import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { DeckCard } from '../../../../models/decktracker/deck-card';
 import { GameState } from '../../../../models/decktracker/game-state';
-import { Preferences } from '../../../../models/preferences';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import fakeState from './gameState.json';

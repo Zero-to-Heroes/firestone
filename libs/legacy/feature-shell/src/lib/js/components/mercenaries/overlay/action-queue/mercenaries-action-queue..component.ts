@@ -9,10 +9,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { Preferences } from '@firestone/shared/common/service';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { Preferences } from '../../../../models/preferences';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

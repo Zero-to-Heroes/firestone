@@ -1,12 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { boosterIdToSetId } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { dustFor, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';

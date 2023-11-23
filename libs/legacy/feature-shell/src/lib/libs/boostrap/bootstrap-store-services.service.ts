@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ArenaClassStatsService } from '@firestone/arena/common';
-import { DuelsConfigService } from '@firestone/duels/general';
+import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
+import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
@@ -23,7 +25,6 @@ import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { PreferencesService } from '../../js/services/preferences.service';
 import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
@@ -67,6 +68,8 @@ export class BootstrapStoreServicesService {
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		private readonly init_BgsPerfectGamesService: BgsPerfectGamesService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
+		private readonly init_duelsPersonalDecksService: DuelsPersonalDecksService,
+		private readonly init_constructedPersonalDeckService: ConstructedPersonalDecksService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

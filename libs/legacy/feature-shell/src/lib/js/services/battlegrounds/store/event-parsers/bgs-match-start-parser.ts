@@ -1,5 +1,6 @@
 import { BgsPlayer } from '@firestone-hs/hs-replay-xml-parser';
 import { GameTag, Race } from '@firestone-hs/reference-data';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { BgsFaceOffWithSimulation } from '@legacy-import/src/lib/js/models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '@legacy-import/src/lib/js/models/battlegrounds/bgs-panel';
 import { BgsHeroSelectionOverviewPanel } from '@legacy-import/src/lib/js/models/battlegrounds/hero-selection/bgs-hero-selection-overview';
@@ -9,9 +10,7 @@ import { BgsPostMatchStatsPanel } from '@legacy-import/src/lib/js/models/battleg
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { Preferences } from '../../../../models/preferences';
 import { GameStateService } from '../../../decktracker/game-state.service';
-import { PreferencesService } from '../../../preferences.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsMatchStartEvent } from '../events/bgs-match-start-event';
 import { EventParser } from './_event-parser';

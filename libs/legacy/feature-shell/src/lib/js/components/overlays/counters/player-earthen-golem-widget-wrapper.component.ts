@@ -6,8 +6,8 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 import { EARTHEN_GOLEM_CARDS } from './opponent-earthen-golem-widget-wrapper.component';

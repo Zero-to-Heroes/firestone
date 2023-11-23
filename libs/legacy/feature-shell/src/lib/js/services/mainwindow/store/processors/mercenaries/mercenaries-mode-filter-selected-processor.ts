@@ -1,6 +1,6 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { MercenariesModeFilterSelectedEvent } from '../../events/mercenaries/mercenaries-mode-filter-selected-event';
 import { Processor } from '../processor';
 

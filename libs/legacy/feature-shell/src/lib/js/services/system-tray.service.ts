@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';
-import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class SystemTrayService {

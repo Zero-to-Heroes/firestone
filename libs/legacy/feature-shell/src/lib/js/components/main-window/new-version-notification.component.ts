@@ -8,11 +8,10 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Preferences } from '../../models/preferences';
-import { PreferencesService } from '../../services/preferences.service';
 import { capitalizeFirstLetter, isVersionBefore } from '../../services/utils';
-import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './updates';
+import { Update, UpdateSectionItem, UpdateSectionItemDetails, updates } from './updates';
 
 @Component({
 	selector: 'new-version-notification',

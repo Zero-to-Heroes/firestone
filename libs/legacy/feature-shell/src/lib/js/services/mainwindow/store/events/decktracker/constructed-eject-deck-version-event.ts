@@ -1,4 +1,4 @@
-import { DeckSummary } from '../../../../../models/mainwindow/decktracker/deck-summary';
+import { DeckSummary } from '@firestone/constructed/common';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ConstructedEjectDeckVersionEvent implements MainWindowStoreEvent {

@@ -8,9 +8,9 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'preference-slider',

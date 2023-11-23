@@ -3,6 +3,17 @@ import { Injectable } from '@angular/core';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import {
+	DuelsDeckStatInfo,
+	DuelsDeckSummary,
+	DuelsDeckSummaryForType,
+	DuelsPersonalDecksService,
+	DuelsRun,
+	HeroPowerDuelsDeckStatInfo,
+	LootDuelsDeckStatInfo,
+	SignatureTreasureDuelsDeckStatInfo,
+	TreasureDuelsDeckStatInfo,
+} from '@firestone/duels/general';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -10,16 +21,6 @@ import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { combineLatest, concat } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { sanitizeDeckDefinition, sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
-import {
-	DuelsDeckStatInfo,
-	DuelsDeckSummary,
-	DuelsDeckSummaryForType,
-	HeroPowerDuelsDeckStatInfo,
-	LootDuelsDeckStatInfo,
-	SignatureTreasureDuelsDeckStatInfo,
-	TreasureDuelsDeckStatInfo,
-} from '../../models/duels/duels-personal-deck';
-import { DuelsRun } from '../../models/duels/duels-run';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -36,6 +37,7 @@ export class DuelsDecksProviderService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly duelsUserRuns: DuelsUserRunsService,
+		private readonly duelsPersonalDecks: DuelsPersonalDecksService,
 	) {
 		window['duelsDecksProvider'] = this;
 		this.init();
@@ -43,6 +45,8 @@ export class DuelsDecksProviderService {
 
 	private async init() {
 		await this.store.initComplete();
+		await this.duelsPersonalDecks.isReady();
+
 		this.duelsRuns$$.onFirstSubscribe(() => {
 			console.log('[duels-runs] init duels runs');
 			// The idea is to compute the initial value, whatever the most recent game is, and
@@ -100,15 +104,13 @@ export class DuelsDecksProviderService {
 			console.log('[duels-decks] init duels decks');
 			combineLatest([
 				this.duelsRuns$$.asObservable(),
-				this.store.listenPrefs$(
-					(prefs) => prefs.duelsPersonalAdditionalDecks,
-					(prefs) => prefs.duelsPersonalDeckNames,
-				),
+				this.duelsPersonalDecks.decks$$,
+				this.store.listenPrefs$((prefs) => prefs.duelsPersonalDeckNames),
 			])
 				.pipe(
 					distinctUntilChanged((a, b) => arraysEqual(a, b)),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
-					map(([runs, [duelsPersonalAdditionalDecks, duelsPersonalDeckNames]]) =>
+					map(([runs, duelsPersonalAdditionalDecks, [duelsPersonalDeckNames]]) =>
 						this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks, duelsPersonalDeckNames),
 					),
 				)

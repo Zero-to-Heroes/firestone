@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { Preferences } from '@firestone/shared/common/service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { Preferences } from '../../models/preferences';
 import { GameStatusService } from '../game-status.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 

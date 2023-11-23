@@ -1,7 +1,7 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
-import { PreferencesService } from '../../../../preferences.service';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../events/duels/duels-treasure-passive-type-filter-selected-event';
 import { Processor } from '../processor';
 

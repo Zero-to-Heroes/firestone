@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { OwUtilsService } from '@legacy-import/src/lib/js/services/plugins/ow-utils.service';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { BehaviorSubject } from 'rxjs';

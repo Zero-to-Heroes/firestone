@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenariesMapType, SceneMode } from '@firestone-hs/reference-data';
+import { Preferences } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -14,7 +15,6 @@ import {
 	BattleMercenary,
 	MercenariesBattleTeam,
 } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { Preferences } from '../../../../models/preferences';
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
 
 @Component({

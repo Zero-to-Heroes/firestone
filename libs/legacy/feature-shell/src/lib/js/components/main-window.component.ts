@@ -9,13 +9,13 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
-import { PreferencesService } from '../services/preferences.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 

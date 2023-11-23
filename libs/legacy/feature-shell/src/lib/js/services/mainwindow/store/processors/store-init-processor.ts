@@ -1,9 +1,8 @@
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
-import { Preferences } from '../../../../models/preferences';
 import { Events } from '../../../events.service';
-import { PreferencesService } from '../../../preferences.service';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { StoreInitEvent } from '../events/store-init-event';
 import { ChangeVisibleApplicationProcessor } from './change-visible-application-processor';

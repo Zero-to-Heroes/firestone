@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -38,7 +38,7 @@ export class CardTradedParser implements EventParser {
 		// could possibly have an info leak
 		const cardWithoutInfluence = card
 			? card.update({
-					entityId: card.entityId ,
+					entityId: card.entityId,
 					lastAffectedByCardId: undefined,
 					mainAttributeChange: buildAttributeChange(card),
 					positionFromTop: undefined,

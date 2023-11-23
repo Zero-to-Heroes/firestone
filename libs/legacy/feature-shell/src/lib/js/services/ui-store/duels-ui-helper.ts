@@ -10,12 +10,11 @@ import {
 	buildDuelsCombinedHeroStats,
 	getGroupingKeyForHeroStat as groupingKey,
 } from '@firestone/duels/data-access';
+import { DuelsDeckSummary, DuelsRun } from '@firestone/duels/general';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsTopDecksDustFilterType } from '@models/duels/duels-types';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
-import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat, DuelsHeroPlayerStat } from '../../models/duels/duels-player-stats';
-import { DuelsRun } from '../../models/duels/duels-run';
 import { PatchInfo } from '../../models/patches';
 import { sumOnArray } from '../utils';
 

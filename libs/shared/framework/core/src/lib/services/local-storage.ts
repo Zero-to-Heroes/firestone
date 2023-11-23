@@ -29,6 +29,8 @@ export class LocalStorageService {
 	public static LOCAL_DISK_CACHE_SHOULD_REBUILD = 'local-disk-cache-should-rebuild';
 	public static FIRESTONE_SESSION_TOKEN = 'firestone-session-token';
 	public static LOTTERY_STATE = 'lottery-state';
+	public static DUELS_PERSONAL_DECKS = 'duels-personal-decks';
+	public static CONSTRUCTED_PERSONAL_DECKS = 'constructed-personal-decks';
 
 	private cache = {};
 

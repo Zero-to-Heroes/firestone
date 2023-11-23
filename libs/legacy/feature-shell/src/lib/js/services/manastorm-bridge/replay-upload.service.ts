@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';
 import { Events } from '../events.service';
-import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
 import { GameForUpload } from './game-for-upload';
 

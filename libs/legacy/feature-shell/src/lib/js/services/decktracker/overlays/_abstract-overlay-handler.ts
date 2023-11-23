@@ -1,9 +1,8 @@
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
-import { Preferences } from '../../../models/preferences';
-import { PreferencesService } from '../../preferences.service';
 import { isWindowClosed } from '../../utils';
 import { OverlayHandler } from './overlay-handler';
 

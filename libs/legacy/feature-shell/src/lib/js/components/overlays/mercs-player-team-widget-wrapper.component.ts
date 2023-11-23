@@ -7,11 +7,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, tap } from 'rxjs';
-import { Preferences } from '../../models/preferences';
-import { PreferencesService } from '../../services/preferences.service';
+import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 

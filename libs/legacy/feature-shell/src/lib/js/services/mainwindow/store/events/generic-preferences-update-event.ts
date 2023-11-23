@@ -1,4 +1,4 @@
-import { Preferences } from '../../../../models/preferences';
+import { Preferences } from '@firestone/shared/common/service';
 import { MainWindowStoreEvent } from './main-window-store-event';
 
 export class GenericPreferencesUpdateEvent implements MainWindowStoreEvent {

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { distinctUntilChanged, map, skip } from 'rxjs';
 import { CARDS_VERSION } from './hs-utils';
-import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class CardsInitService {

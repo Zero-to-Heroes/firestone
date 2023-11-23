@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
 import { Subject, distinctUntilChanged, filter } from 'rxjs';
 import { Events } from './events.service';
 import { GameStatusService } from './game-status.service';
 import { LogUtilsService, getLogsDir } from './log-utils.service';
-import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class LogListenerService {

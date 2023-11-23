@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { BgsBattlePositioningExecutorService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattleSimulationExecutorService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-simulation-executor.service';
@@ -10,7 +11,7 @@ import { BgsBattleSimulationWorkerService } from './impl/bgs-battle-simulation-w
 
 @NgModule({
 	declarations: [AppBoostrapperComponent],
-	imports: [BrowserModule, LegacyFeatureShellModule, SharedFrameworkCoreModule],
+	imports: [BrowserModule, LegacyFeatureShellModule, SharedFrameworkCoreModule, SharedCommonServiceModule],
 	providers: [
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationWorkerService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningWorkerService },

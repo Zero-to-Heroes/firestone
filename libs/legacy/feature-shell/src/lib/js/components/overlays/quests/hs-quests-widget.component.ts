@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { Preferences } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { Preferences } from '../../../models/preferences';
 
 @Component({
 	selector: 'hs-quests-widget',

@@ -1,7 +1,7 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
-import { PreferencesService } from '../../../../preferences.service';
 import { DuelsHidePersonalDeckSummaryEvent } from '../../events/duels/duels-hide-personal-deck-summary-event';
 import { Processor } from '../processor';
 

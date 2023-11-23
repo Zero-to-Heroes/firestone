@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { Achievement } from '../../models/achievement';
 import { Events } from '../events.service';
 import { Message, OwNotificationsService } from '../notifications.service';
-import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
 
 @Injectable()

@@ -1,3 +1,4 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState, TurnTiming } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
@@ -5,7 +6,6 @@ import { GameEvent } from '../../../models/game-event';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { OwUtilsService } from '../../plugins/ow-utils.service';
-import { PreferencesService } from '../../preferences.service';
 import { EventParser } from './event-parser';
 
 export class NewTurnParser implements EventParser {

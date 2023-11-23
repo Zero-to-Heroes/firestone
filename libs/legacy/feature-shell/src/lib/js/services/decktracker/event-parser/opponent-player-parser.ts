@@ -1,4 +1,5 @@
 import { CardClass } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
@@ -7,7 +8,6 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
-import { PreferencesService } from '../../preferences.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { DeckHandlerService } from '../deck-handler.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

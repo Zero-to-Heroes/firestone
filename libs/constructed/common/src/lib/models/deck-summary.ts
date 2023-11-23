@@ -1,5 +1,4 @@
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
-import { MatchupStat } from '../stats/matchup-stat';
 
 export interface DeckSummary {
 	readonly deckstring: string;
@@ -23,4 +22,14 @@ export interface DeckSummary {
 export interface DeckSummaryVersion extends DeckSummary {
 	readonly differentCards: readonly string[];
 	readonly backgroundImage: string;
+}
+
+export interface MatchupStat {
+	readonly opponentClass: string;
+	readonly totalGames: number;
+	readonly totalWins: number;
+	readonly totalGamesFirst: number;
+	readonly totalGamesCoin: number;
+	readonly totalWinsFirst: number;
+	readonly totalWinsCoin: number;
 }

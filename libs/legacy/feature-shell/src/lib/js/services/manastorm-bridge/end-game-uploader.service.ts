@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race, TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { MatchInfo } from '../../models/match-info';

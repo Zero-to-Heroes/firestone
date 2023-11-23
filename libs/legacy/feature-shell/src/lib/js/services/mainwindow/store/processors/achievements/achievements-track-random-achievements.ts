@@ -1,10 +1,10 @@
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { shuffleArray, sortByProperties } from '@firestone/shared/framework/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from '../../../../achievement/data/achievements-memory-monitor.service';
-import { PreferencesService } from '../../../../preferences.service';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 import { Processor } from '../processor';
 

@@ -1,67 +1,55 @@
-import { LotteryTabType } from '@components/lottery/lottery-navigation.component';
 import { GameFormat, RankBracket, TimePeriod } from '@firestone-hs/constructed-deck-stats';
 import { BnetRegion, Race, allDuelsHeroes } from '@firestone-hs/reference-data';
-import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
-import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
-import {
-	DuelsGameModeFilterType,
-	DuelsHeroFilterType,
-	DuelsStatTypeFilterType,
-	DuelsTimeFilterType,
-	DuelsTreasureStatTypeFilterType,
-} from '@firestone/duels/data-access';
-import { DuelsDeckSortFilterType, DuelsHeroSortFilterType } from '@firestone/duels/view';
 import { IPreferences } from '@firestone/shared/framework/common';
-import { StatGameFormatType } from '@firestone/stats/data-access';
-import { DuelsDeckSummary } from '@models/duels/duels-personal-deck';
 import 'reflect-metadata';
-import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
-import { ArenaClassFilterType } from './arena/arena-class-filter.type';
-import { ArenaTimeFilterType } from './arena/arena-time-filter.type';
-import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
 import {
+	AchievementsCompletedFilterType,
+	ArenaClassFilterType,
+	ArenaTimeFilterType,
+	BgsActiveTimeFilterType,
+	BgsHeroSortFilterType,
+	BgsQuestActiveTabType,
+	BgsRankFilterType,
+	BgsStatsFilterId,
 	CollectionCardClassFilterType,
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 	CollectionPortraitCategoryFilter,
 	CollectionPortraitOwnedFilter,
-} from './collection/filter-types';
-import { ConstructedMetaDecksDustFilterType } from './constructed/constructed-meta-decks';
-import { DuelsTopDecksDustFilterType } from './duels/duels-types';
-import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
-import { BgsQuestActiveTabType, BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
-import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-type';
-import { CurrentAppType } from './mainwindow/current-app.type';
-import { DeckFilters } from './mainwindow/decktracker/deck-filters';
-import { DeckSummary } from './mainwindow/decktracker/deck-summary';
-import { ConstructedDeckVersions } from './mainwindow/decktracker/decktracker-state';
-import { ConstructedStatsTab } from './mainwindow/decktracker/decktracker-view.type';
-import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
-import {
+	ConstructedDeckVersions,
+	ConstructedMetaDecksDustFilterType,
+	ConstructedStatsTab,
+	CurrentAppType,
+	DeckFilters,
+	DuelsDeckSortFilterType,
+	DuelsGameModeFilterType,
+	DuelsHeroFilterType,
+	DuelsHeroSortFilterType,
+	DuelsStatTypeFilterType,
+	DuelsTimeFilterType,
+	DuelsTopDecksDustFilterType,
+	DuelsTreasureStatTypeFilterType,
+	Ftue,
+	LotteryTabType,
 	MercenariesFullyUpgradedFilterType,
 	MercenariesHeroLevelFilterType,
 	MercenariesModeFilterType,
 	MercenariesOwnedFilterType,
+	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
 	MercenariesStarterFilterType,
-} from './mercenaries/mercenaries-filter-types';
-import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
-import { Ftue } from './preferences/ftue';
+	MmrGroupFilterType,
+	StatGameFormatType,
+	StatsXpGraphSeasonFilterType,
+} from './pref-model';
+import { OutOfCardsToken } from './unfit-pref-model';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
 
 export class Preferences implements IPreferences {
-	public static deserialize(input: Preferences): Preferences {
-		return {
-			...input,
-			lastUpdateDate: input.lastUpdateDate ? new Date(input.lastUpdateDate) : null,
-			currentSessionStartDate: input.currentSessionStartDate ? new Date(input.currentSessionStartDate) : null,
-		};
-	}
-
-	readonly lastUpdateDate: Date;
+	readonly lastUpdateDate: Date | null;
 	readonly id: number = 1;
 
 	readonly locale: string = 'enUS';
@@ -72,8 +60,8 @@ export class Preferences implements IPreferences {
 	readonly modsEnabled: boolean;
 	readonly disableLocalCache: boolean;
 
-	readonly showLottery: boolean = null;
-	readonly lotteryOverlay: boolean = null;
+	readonly showLottery: boolean | null = null;
+	readonly lotteryOverlay: boolean | null = null;
 	readonly lotteryCurrentModule: LotteryTabType = 'lottery';
 	readonly lotteryShowHiddenWindowNotification: boolean = true;
 	readonly lotteryPosition: { left: number; top: number };
@@ -108,7 +96,7 @@ export class Preferences implements IPreferences {
 	readonly hideCurrentSessionWidgetWhenFriendsListIsOpen: boolean = true;
 	readonly showTurnTimer: boolean = true;
 	readonly showTurnTimerMatchLength: boolean = true;
-	readonly currentSessionStartDate: Date = null;
+	readonly currentSessionStartDate: Date | null = null;
 	readonly sessionWidgetShowGroup: boolean = true;
 	readonly sessionWidgetShowMatches: boolean = true;
 	readonly sessionWidgetNumberOfMatchesToShow: number = 5;
@@ -162,7 +150,7 @@ export class Preferences implements IPreferences {
 
 	readonly collectionPityTimerResets: { [packId: string]: number } = {};
 
-	readonly desktopDeckFilters: DeckFilters;
+	readonly desktopDeckFilters: DeckFilters = new DeckFilters();
 	readonly desktopDeckShowHiddenDecks: boolean = false;
 	readonly desktopDeckHiddenDeckCodes: readonly string[] = [];
 	readonly desktopDeckShowMatchupAsPercentages: boolean = true;
@@ -171,7 +159,6 @@ export class Preferences implements IPreferences {
 	// When impementing this for other areas, don't forget to update the prefs update in app-bootstrap
 	readonly desktopDeckStatsReset: { [deckstring: string]: readonly number[] } = {};
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
-	readonly constructedPersonalAdditionalDecks: readonly DeckSummary[] = [];
 	readonly constructedDeckVersions: readonly ConstructedDeckVersions[] = [];
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
 	readonly constructedDecksSearchString: string;
@@ -565,11 +552,11 @@ export class Preferences implements IPreferences {
 	readonly replaysFilterOpponentClass: string;
 	readonly replaysShowClassIcon: boolean = false;
 	readonly replaysShowMercDetails: boolean = true;
-	readonly replaysActiveGameModeFilter: string = null;
+	readonly replaysActiveGameModeFilter: string | null = null;
 	readonly replaysActiveDeckstringsFilter: readonly string[] = [];
-	readonly replaysActiveBgHeroFilter: string = null;
-	readonly replaysActivePlayerClassFilter: string = null;
-	readonly replaysActiveOpponentClassFilter: string = null;
+	readonly replaysActiveBgHeroFilter: string | null = null;
+	readonly replaysActivePlayerClassFilter: string | null = null;
+	readonly replaysActiveOpponentClassFilter: string | null = null;
 
 	readonly bgsFullToggle = true;
 	readonly bgsEnableApp = true;
@@ -688,7 +675,6 @@ export class Preferences implements IPreferences {
 	readonly duelsOocTrackerPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocDeckSelectPosition: { left: number; top: number };
-	readonly duelsPersonalAdditionalDecks: readonly DuelsDeckSummary[] = [];
 	readonly duelsDeckbuilderShowBuckets: boolean;
 	readonly duelsDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 
@@ -750,6 +736,7 @@ export class Preferences implements IPreferences {
 	readonly twitchDelay: number = 0;
 	readonly appearOnLiveStreams: boolean = true;
 
+	// TODO: move somewhere else
 	readonly outOfCardsToken: OutOfCardsToken;
 	readonly outOfCardsShowNotifOnSync: boolean = false;
 
@@ -757,6 +744,14 @@ export class Preferences implements IPreferences {
 	readonly hearthstoneDecksSync: boolean = true;
 
 	readonly ftue: Ftue = new Ftue();
+
+	public static deserialize(input: Preferences): Preferences {
+		return {
+			...input,
+			lastUpdateDate: input.lastUpdateDate ? new Date(input.lastUpdateDate) : null,
+			currentSessionStartDate: input.currentSessionStartDate ? new Date(input.currentSessionStartDate) : null,
+		};
+	}
 }
 
 export type CollectionSetStatsTypeFilterType = 'cards-stats' | 'cards-history';

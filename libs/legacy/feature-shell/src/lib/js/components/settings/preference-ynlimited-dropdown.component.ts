@@ -6,11 +6,10 @@ import {
 	Input,
 	OnDestroy,
 } from '@angular/core';
+import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { BooleanWithLimited } from '../../models/preferences';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

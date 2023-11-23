@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';

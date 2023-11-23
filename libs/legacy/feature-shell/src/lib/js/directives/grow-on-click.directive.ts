@@ -1,6 +1,6 @@
 import { animate, AnimationBuilder, AnimationMetadata, AnimationPlayer, style } from '@angular/animations';
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { PreferencesService } from '../services/preferences.service';
+import { PreferencesService } from '@firestone/shared/common/service';
 
 @Directive({
 	selector: '[growOnClick]',

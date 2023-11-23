@@ -1,39 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
-import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
-import {
-	DuelsGameModeFilterType,
-	DuelsHeroFilterType,
-	DuelsStatTypeFilterType,
-	DuelsTimeFilterType,
-	DuelsTreasureStatTypeFilterType,
-} from '@firestone/duels/data-access';
-import { DuelsHeroSortFilterType } from '@firestone/duels/view';
+import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter, map, sampleTime, shareReplay } from 'rxjs';
-import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
-import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
-import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { DuelsTopDecksDustFilterType } from '../models/duels/duels-types';
-import { CurrentAppType } from '../models/mainwindow/current-app.type';
-import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
-import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
-import { StatsXpGraphSeasonFilterType } from '../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
+	ArenaClassFilterType,
+	ArenaTimeFilterType,
+	BgsActiveTimeFilterType,
+	BgsHeroSortFilterType,
+	BgsStatsFilterId,
+	CurrentAppType,
+	DeckFilters,
+	DuelsGameModeFilterType,
+	DuelsHeroFilterType,
+	DuelsHeroSortFilterType,
+	DuelsStatTypeFilterType,
+	DuelsTimeFilterType,
+	DuelsTopDecksDustFilterType,
+	DuelsTreasureStatTypeFilterType,
+	Ftue,
 	MercenariesHeroLevelFilterType,
 	MercenariesModeFilterType,
+	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
 	MercenariesStarterFilterType,
-} from '../models/mercenaries/mercenaries-filter-types';
-import { MercenariesPersonalHeroesSortCriteria } from '../models/mercenaries/personal-heroes-sort-criteria.type';
+	ReplaysFilterCategoryType,
+	StatsXpGraphSeasonFilterType,
+} from '../models/pref-model';
 import { Preferences } from '../models/preferences';
-import { Ftue } from '../models/preferences/ftue';
-import { GenericStorageService } from './generic-storage.service';
-import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
-import { capitalizeFirstLetter } from './utils';
+import { OutOfCardsToken } from '../models/unfit-pref-model';
+import { PreferencesStorageService } from './preferences-storage.service';
 
 export type PrefsSelector<P extends Preferences, T> = (prefs: P) => T;
 
@@ -46,7 +44,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 
 	public preferences$$: BehaviorSubject<Preferences>;
 
-	private storage: GenericStorageService;
+	private storage: PreferencesStorageService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'preferencesService', () => !!this.preferences$$);
@@ -57,7 +55,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 	}
 
 	protected async init() {
-		this.storage = AppInjector.get(GenericStorageService);
+		this.storage = AppInjector.get(PreferencesStorageService);
 		this.preferences$$ = new BehaviorSubject<Preferences>(this.storage.getUserPreferences());
 
 		this.preferences$$.pipe(sampleTime(1500)).subscribe((prefs) => this.storage.saveUserPreferences(prefs));
@@ -675,7 +673,4 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 	private buildCounterPropertyName(activeCounter: string, side: string): string {
 		return side + capitalizeFirstLetter(activeCounter) + 'CounterWidgetPosition';
 	}
-
-	private currentSyncDate: Date;
-	private lastSyncPrefs: Preferences;
 }

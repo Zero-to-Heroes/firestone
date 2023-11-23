@@ -7,8 +7,8 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { DeckSummary } from '@firestone/constructed/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';

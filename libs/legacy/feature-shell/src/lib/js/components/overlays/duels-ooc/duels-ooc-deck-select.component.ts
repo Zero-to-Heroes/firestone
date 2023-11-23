@@ -4,10 +4,10 @@ import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-w
 import { CardIds, isPassive } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsTimeFilterType } from '@firestone/duels/data-access';
+import { DuelsRun } from '@firestone/duels/general';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsDeckStat } from '@models/duels/duels-player-stats';
-import { DuelsRun } from '@models/duels/duels-run';
 import { SetCard } from '@models/set';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';

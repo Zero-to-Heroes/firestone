@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { RankFilterOption } from '@firestone/battlegrounds/view';
-import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';

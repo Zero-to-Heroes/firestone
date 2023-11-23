@@ -1,9 +1,9 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsDecksProviderService } from '../../../../duels/duels-decks-provider.service';
 import { LocalizationService } from '../../../../localization.service';
-import { PreferencesService } from '../../../../preferences.service';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../events/duels/duels-view-personal-deck-details-event';
 import { Processor } from '../processor';
 

@@ -1,8 +1,7 @@
 import { CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
-import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
-import { Preferences } from '@models/preferences';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
 

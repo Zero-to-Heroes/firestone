@@ -6,11 +6,10 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
-import { Preferences } from '../../models/preferences';
+import { Observable, combineLatest } from 'rxjs';
 import { isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 

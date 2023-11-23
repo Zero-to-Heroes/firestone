@@ -1,8 +1,7 @@
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { TranslateService } from '@ngx-translate/core';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
-import { Preferences } from '../../../../models/preferences';
-import { PreferencesService } from '../../../preferences.service';
 import { LocalizationUpdateEvent } from '../events/localization-update-event';
 import { Processor } from './processor';
 

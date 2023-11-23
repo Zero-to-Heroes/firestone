@@ -1,7 +1,7 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { ChangeMatchStatsNumberOfTabsEvent } from '../../events/replays/change-match-stats-number-of-tabs-event';
 import { Processor } from '../processor';
 

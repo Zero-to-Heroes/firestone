@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
-import { PreferencesService } from '../../../services/preferences.service';
+import { PreferencesService } from '@firestone/shared/common/service';
 
 @Component({
 	selector: 'modal-video-settings-changed',

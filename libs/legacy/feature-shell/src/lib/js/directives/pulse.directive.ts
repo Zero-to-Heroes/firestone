@@ -1,7 +1,7 @@
 import { animate, AnimationBuilder, AnimationMetadata, AnimationPlayer, style } from '@angular/animations';
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { FtueKey } from '../models/preferences/ftue';
-import { PreferencesService } from '../services/preferences.service';
 
 @Directive({
 	selector: '[pulse]',

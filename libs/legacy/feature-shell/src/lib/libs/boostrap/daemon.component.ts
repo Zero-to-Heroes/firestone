@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../js/services/debug.service';
-import { PreferencesService } from '../../js/services/preferences.service';
 import { AppBootstrapService } from './app-bootstrap.service';
 
 @Component({

@@ -1,8 +1,8 @@
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
 import { ConstructedDeckVersions } from '../../../../../models/mainwindow/decktracker/decktracker-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { ConstructedNewDeckVersionEvent } from '../../events/decktracker/constructed-new-deck-version-event';
 
 export class ConstructedNewDeckVersionProcessor implements Processor {

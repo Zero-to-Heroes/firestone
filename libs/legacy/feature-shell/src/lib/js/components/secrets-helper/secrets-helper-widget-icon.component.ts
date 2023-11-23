@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../models/game-event';
-import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'secrets-helper-widget-icon',

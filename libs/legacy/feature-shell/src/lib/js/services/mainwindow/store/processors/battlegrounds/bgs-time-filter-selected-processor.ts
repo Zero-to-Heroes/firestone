@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PreferencesService } from '../../../../preferences.service';
 import { BgsTimeFilterSelectedEvent } from '../../events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 import { Processor } from '../processor';

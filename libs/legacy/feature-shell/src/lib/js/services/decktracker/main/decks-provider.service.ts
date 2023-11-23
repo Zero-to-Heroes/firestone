@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
+import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
@@ -9,7 +10,6 @@ import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
-import { DeckSummary, DeckSummaryVersion } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
@@ -27,6 +27,7 @@ export class DecksProviderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly constructedPersonalDecks: ConstructedPersonalDecksService,
 	) {
 		window['decksProvider'] = this;
 		this.init();
@@ -35,14 +36,15 @@ export class DecksProviderService {
 	private async init() {
 		await this.store.initComplete();
 		await this.patchesConfig.isReady();
+		await this.constructedPersonalDecks.isReady();
 
 		this.decks$.onFirstSubscribe(() => {
 			combineLatest([
 				this.store.gameStats$(),
 				this.store.listen$(([main, nav]) => main.decktracker.filters),
 				this.patchesConfig.currentConstructedMetaPatch$$,
+				this.constructedPersonalDecks.decks$$,
 				this.store.listenPrefs$(
-					(prefs) => prefs.constructedPersonalAdditionalDecks,
 					(prefs) => prefs.desktopDeckDeletes,
 					(prefs) => prefs.desktopDeckHiddenDeckCodes,
 					(prefs) => prefs.constructedDeckVersions,
@@ -58,8 +60,8 @@ export class DecksProviderService {
 							stats,
 							[filters],
 							patch,
+							constructedPersonalAdditionalDecks,
 							[
-								constructedPersonalAdditionalDecks,
 								desktopDeckDeletes,
 								desktopDeckHiddenDeckCodes,
 								constructedDeckVersions,

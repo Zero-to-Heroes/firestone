@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
+import { Preferences } from '@firestone/shared/common/service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { Preferences } from '../../../models/preferences';
 
 @Component({
 	selector: 'quests-widget-view',

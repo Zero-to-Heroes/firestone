@@ -1,4 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
@@ -8,7 +9,6 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
 import { GameEvent } from '../../../models/game-event';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { PreferencesService } from '../../preferences.service';
 import { DeckHandlerService } from '../deck-handler.service';
 import { DeckInfo, DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
