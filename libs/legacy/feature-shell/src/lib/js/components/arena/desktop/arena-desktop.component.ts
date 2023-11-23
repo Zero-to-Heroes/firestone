@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ArenaCategory, ArenaCategoryType } from '@firestone/arena/common';
 import { Observable } from 'rxjs';
-import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
-import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
 import { ArenaSelectCategoryEvent } from '../../../services/mainwindow/store/processors/arena/arena-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

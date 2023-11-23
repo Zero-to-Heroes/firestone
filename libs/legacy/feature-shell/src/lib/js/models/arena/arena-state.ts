@@ -1,5 +1,5 @@
+import { ArenaCategory } from '@firestone/arena/common';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { ArenaCategory } from '../mainwindow/arena/arena-category';
 
 export class ArenaState {
 	readonly loading: boolean = true;

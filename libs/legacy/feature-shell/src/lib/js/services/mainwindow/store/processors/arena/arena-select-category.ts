@@ -1,4 +1,4 @@
-import { ArenaCategoryType } from '@legacy-import/src/lib/js/models/mainwindow/arena/arena-category.type';
+import { ArenaCategoryType } from '@firestone/arena/common';
 import { MainWindowState } from '@legacy-import/src/lib/js/models/mainwindow/main-window-state';
 import { NavigationState } from '@legacy-import/src/lib/js/models/mainwindow/navigation/navigation-state';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';

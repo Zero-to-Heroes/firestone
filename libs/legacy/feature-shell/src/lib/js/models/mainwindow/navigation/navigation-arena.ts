@@ -1,5 +1,5 @@
+import { ArenaCategoryType } from '@firestone/arena/common';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { ArenaCategoryType } from '../arena/arena-category.type';
 
 export class NavigationArena {
 	readonly selectedCategoryId: ArenaCategoryType = 'arena-runs';
