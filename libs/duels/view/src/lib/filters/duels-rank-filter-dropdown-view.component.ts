@@ -11,7 +11,7 @@ import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({

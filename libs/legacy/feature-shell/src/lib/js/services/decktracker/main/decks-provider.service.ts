@@ -73,7 +73,7 @@ export class DecksProviderService {
 								stats,
 								filters,
 								patch,
-								constructedPersonalAdditionalDecks,
+								constructedPersonalAdditionalDecks ?? [],
 								desktopDeckDeletes,
 								desktopDeckStatsReset,
 								desktopDeckHiddenDeckCodes,

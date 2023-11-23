@@ -111,7 +111,7 @@ export class DuelsDecksProviderService {
 					distinctUntilChanged((a, b) => arraysEqual(a, b)),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(([runs, duelsPersonalAdditionalDecks, [duelsPersonalDeckNames]]) =>
-						this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks, duelsPersonalDeckNames),
+						this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks ?? [], duelsPersonalDeckNames),
 					),
 				)
 				.subscribe(this.duelsDecks$$);
