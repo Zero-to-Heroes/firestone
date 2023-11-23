@@ -72,7 +72,11 @@ export class QuestPlayedFromHandParser implements EventParser {
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
 			})
-			.updateSpellsPlayedThisMatch(isCardCountered ? null : cardWithZone, this.allCards);
+			.updateSpellsPlayedThisMatch(
+				isCardCountered ? null : cardWithZone,
+				this.allCards,
+				gameEvent.additionalData.cost,
+			);
 
 		const newCardPlayedThisMatch: ShortCard = {
 			entityId: cardWithZone.entityId,

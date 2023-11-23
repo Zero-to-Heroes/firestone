@@ -1,4 +1,4 @@
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ShortCard } from '@models/decktracker/game-state';
 import { NonFunctionProperties } from '@services/utils';
@@ -136,7 +136,7 @@ export class DeckState {
 		return Object.assign(new DeckState(), this, value);
 	}
 
-	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService): DeckState {
+	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService, cardCost: number): DeckState {
 		if (!spell) {
 			return this;
 		}
@@ -155,9 +155,19 @@ export class DeckState {
 					.filter((spellSchool) => !!spellSchool),
 			),
 		];
+
+		let manaSpentOnSpellsThisMatch = this.manaSpentOnSpellsThisMatch;
+		let manaSpentOnHolySpellsThisMatch = this.manaSpentOnHolySpellsThisMatch;
+		const manaCost = cardCost ?? 0;
+		manaSpentOnSpellsThisMatch += manaCost;
+		if (refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY])) {
+			manaSpentOnHolySpellsThisMatch += manaCost;
+		}
 		return this.update({
 			spellsPlayedThisMatch: spellsPlayedThisMatch,
 			uniqueSpellSchools: uniqueSpellSchools,
+			manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
+			manaSpentOnHolySpellsThisMatch: manaSpentOnHolySpellsThisMatch,
 		});
 	}
 

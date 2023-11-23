@@ -1,4 +1,4 @@
-import { CardIds, LIBRAM_IDS, Race, ReferenceCard, SpellSchool, WATCH_POST_IDS } from '@firestone-hs/reference-data';
+import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
@@ -171,16 +171,6 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
-		let manaSpentOnSpellsThisMatch = deck.manaSpentOnSpellsThisMatch;
-		let manaSpentOnHolySpellsThisMatch = deck.manaSpentOnHolySpellsThisMatch;
-		if (refCard?.type === 'Spell') {
-			const manaCost = gameEvent.additionalData.cost ?? 0;
-			manaSpentOnSpellsThisMatch += manaCost;
-			if (refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY])) {
-				manaSpentOnHolySpellsThisMatch += manaCost;
-			}
-		}
-
 		const newPlayerDeck = deck
 			.update({
 				hand: handAfterCardsLinks,
@@ -191,8 +181,8 @@ export class CardPlayedFromHandParser implements EventParser {
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardToAdd] as readonly DeckCard[]),
 				globalEffects: newGlobalEffects,
-				manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
-				manaSpentOnHolySpellsThisMatch: manaSpentOnHolySpellsThisMatch,
+				// manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
+				// manaSpentOnHolySpellsThisMatch: manaSpentOnHolySpellsThisMatch,
 				watchpostsPlayedThisMatch:
 					deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
 				libramsPlayedThisMatch:
@@ -202,7 +192,11 @@ export class CardPlayedFromHandParser implements EventParser {
 					(!isCardCountered && refCard.id === CardIds.ChaoticTendril_YOG_514 ? 1 : 0),
 				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 			})
-			.updateSpellsPlayedThisMatch(isCardCountered ? null : cardToAdd, this.allCards);
+			.updateSpellsPlayedThisMatch(
+				isCardCountered ? null : cardToAdd,
+				this.allCards,
+				gameEvent.additionalData.cost,
+			);
 		// console.debug('newPlayerDeck', newPlayerDeck);
 
 		const newCardPlayedThisMatch: ShortCard = {

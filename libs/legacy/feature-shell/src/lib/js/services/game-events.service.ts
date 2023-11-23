@@ -581,6 +581,7 @@ export class GameEvents {
 							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.PlayerClass
 								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 								: null,
+						cost: gameEvent.Value.AdditionalProps?.Cost,
 					}),
 				);
 				break;
@@ -665,6 +666,7 @@ export class GameEvents {
 							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.PlayerClass
 								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 								: null,
+						cost: gameEvent.Value.AdditionalProps?.Cost,
 					}),
 				);
 				break;

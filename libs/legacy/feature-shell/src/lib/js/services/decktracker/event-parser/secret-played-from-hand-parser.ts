@@ -96,6 +96,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			.updateSpellsPlayedThisMatch(
 				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY ? null : cardWithZone,
 				this.allCards,
+				gameEvent.additionalData.cost,
 			);
 
 		const newCardPlayedThisMatch: ShortCard = {
