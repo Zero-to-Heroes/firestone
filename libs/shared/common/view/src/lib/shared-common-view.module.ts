@@ -6,6 +6,7 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SelectModule } from 'ng-select';
+import { CardTileComponent } from './components/card/card-tile.component';
 import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.component';
 import { FilterDropdownMultiselectComponent } from './components/dropdown/filter-dropdown-multiselect.component';
 import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
@@ -30,6 +31,7 @@ const components = [
 	HelpTooltipDirective,
 	HelpTooltipComponent,
 	CachedComponentTooltipDirective,
+	CardTileComponent,
 
 	FilterDropdownComponent,
 	FilterDropdownMultiselectComponent,

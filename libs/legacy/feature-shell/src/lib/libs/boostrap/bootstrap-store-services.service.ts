@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ArenaClassStatsService } from '@firestone/arena/common';
+import { ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
 import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -68,6 +68,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		private readonly init_BgsPerfectGamesService: BgsPerfectGamesService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
+		private readonly init_ArenaCardStatsService: ArenaCardStatsService,
 		private readonly init_duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly init_constructedPersonalDeckService: ConstructedPersonalDecksService,
 		// Other dependencies

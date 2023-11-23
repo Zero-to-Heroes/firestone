@@ -24,6 +24,7 @@ export class StoreBootstrapService {
 				categories: [
 					{ id: 'arena-runs', name: this.i18n.translateString('app.arena.menu.my-runs') },
 					{ id: 'class-tier-list', name: this.i18n.translateString('app.arena.menu.class-tier-list') },
+					{ id: 'card-stats', name: this.i18n.translateString('app.arena.menu.card-stats') },
 				],
 				loading: false,
 			}),

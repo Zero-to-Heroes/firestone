@@ -31,6 +31,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						<arena-runs-list *ngIf="category.value?.id === 'arena-runs'"> </arena-runs-list>
 						<arena-class-tier-list *ngIf="category.value?.id === 'class-tier-list'">
 						</arena-class-tier-list>
+						<arena-card-stats *ngIf="category.value?.id === 'card-stats'"> </arena-card-stats>
 					</div>
 				</with-loading>
 			</section>
