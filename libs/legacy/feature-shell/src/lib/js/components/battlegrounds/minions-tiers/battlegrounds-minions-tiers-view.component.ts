@@ -552,6 +552,10 @@ const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string
 		return [CardIds.Dreadbeard_BG27_011, CardIds.Dreadbeard_BG27_011_G].includes(card.id as CardIds);
 	} else if (anomalies.includes(CardIds.TavernSpecial_BG27_Anomaly_103)) {
 		return [CardIds.SeabornSummoner_BG27_012, CardIds.SeabornSummoner_BG27_012_G].includes(card.id as CardIds);
+	} else if (anomalies.includes(CardIds.ValuationInflation_BG27_Anomaly_556)) {
+		return [CardIds.TreasureSeekerElise_BG23_353, CardIds.TreasureSeekerElise_BG23_353_G].includes(
+			card.id as CardIds,
+		);
 	}
 	return false;
 };
