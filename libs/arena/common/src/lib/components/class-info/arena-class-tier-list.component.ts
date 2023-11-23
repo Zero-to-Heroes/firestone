@@ -7,7 +7,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, shareReplay, startWith, tap } from 'rxjs';
-import { ArenaClassStatsService } from '../services/arena-class-stats.service';
+import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import { ArenaClassInfo, ArenaClassTier } from './model';
 
 @Component({
