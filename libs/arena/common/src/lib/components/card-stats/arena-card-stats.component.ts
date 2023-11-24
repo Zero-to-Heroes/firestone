@@ -87,9 +87,15 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 
 		console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
-		this.cards$ = combineLatest([this.arenaCardStats.cardStats$$, this.sortCriteria$$]).pipe(
+		this.cards$ = combineLatest([
+			this.arenaCardStats.cardStats$$,
+			this.arenaCardStats.searchString$$,
+			this.sortCriteria$$,
+		]).pipe(
 			tap((info) => console.debug('[arena-card-stats] received info', info)),
-			this.mapData(([stats, sortCriteria]) => this.buildCardStats(stats, sortCriteria)),
+			this.mapData(([stats, searchString, sortCriteria]) =>
+				this.buildCardStats(stats, searchString, sortCriteria),
+			),
 			shareReplay(1),
 			this.mapData((stats) => stats),
 		);
@@ -110,12 +116,18 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 
 	private buildCardStats(
 		stats: readonly ArenaCardStat[] | null | undefined,
+		searchString: string | undefined,
 		sortCriteria: SortCriteria<ColumnSortType>,
 	): ArenaCardStatInfo[] {
 		return (
 			stats
 				?.filter((stat) => stat.stats?.drawn > 100)
-				?.map((stat) => this.buildCardStat(stat))
+				.filter(
+					(stat) =>
+						!searchString?.length ||
+						this.allCards.getCard(stat.cardId)?.name?.toLowerCase().includes(searchString.toLowerCase()),
+				)
+				.map((stat) => this.buildCardStat(stat))
 				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? []
 		);
 		// .sort(sortByProperties((a: ArenaCardStatInfo) => [-(a.drawWinrate ?? 0)])) ?? []

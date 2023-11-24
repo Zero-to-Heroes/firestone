@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { ArenaCardSearchComponent } from './components/card-stats/arena-card-search.component';
 import { ArenaCardStatItemComponent } from './components/card-stats/arena-card-stat-item.component';
 import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stats.component';
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
@@ -17,6 +18,7 @@ const components = [
 	ArenaClassInfoComponent,
 	ArenaCardStatsComponent,
 	ArenaCardStatItemComponent,
+	ArenaCardSearchComponent,
 ];
 @NgModule({
 	imports: [CommonModule, VirtualScrollerModule, SharedFrameworkCoreModule, SharedCommonViewModule],

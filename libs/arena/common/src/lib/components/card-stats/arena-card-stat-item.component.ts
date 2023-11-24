@@ -22,7 +22,7 @@ export class ArenaCardStatItemComponent {
 		this.drawTotal =
 			value.drawnTotal == null ? '-' : value.drawnTotal.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
 		this.drawnWinrate = value.drawWinrate == null ? '-' : (100 * value.drawWinrate).toFixed(1) + '%';
-		console.debug('setting stat', value);
+		// console.debug('setting stat', value);
 	}
 
 	cardId: string;

@@ -15,12 +15,15 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
 			<arena-time-filter-dropdown class="filter time-filter"></arena-time-filter-dropdown>
 			<arena-class-filter-dropdown class="filter class-filter"></arena-class-filter-dropdown>
+			<!-- Do it here because for now the current view is in the store -->
+			<arena-card-search class="filter card-search" *ngIf="showArenaCardSearch$ | async"></arena-card-search>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
+	showArenaCardSearch$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -30,5 +33,8 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 		this.showRegionFilter$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId)
 			.pipe(this.mapData(([currentView]) => ['arena-runs'].includes(currentView)));
+		this.showArenaCardSearch$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId)
+			.pipe(this.mapData(([currentView]) => ['card-stats'].includes(currentView)));
 	}
 }

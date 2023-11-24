@@ -48,7 +48,7 @@ export class ArenaClassInfoComponent {
 			})),
 		};
 		this.placementChartData = [globalPlacementChartData];
-		console.debug('setting stat', value, this.placementChartData);
+		// console.debug('setting stat', value, this.placementChartData);
 	}
 
 	icon: string;

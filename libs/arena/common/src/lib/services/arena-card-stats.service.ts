@@ -3,12 +3,14 @@ import { ArenaCardStat, ArenaCardStats } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 
 const ARENA_CARD_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/cards/%timePeriod%/%context%.gz.json`;
 
 @Injectable()
 export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsService> {
 	public cardStats$$: SubscriberAwareBehaviorSubject<readonly ArenaCardStat[] | null | undefined>;
+	public searchString$$: BehaviorSubject<string | undefined>;
 
 	private api: ApiRunner;
 	private prefs: PreferencesService;
@@ -19,10 +21,12 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 
 	protected override assignSubjects() {
 		this.cardStats$$ = this.mainInstance.cardStats$$;
+		this.searchString$$ = this.mainInstance.searchString$$;
 	}
 
 	protected async init() {
 		this.cardStats$$ = new SubscriberAwareBehaviorSubject<readonly ArenaCardStat[] | null | undefined>(null);
+		this.searchString$$ = new BehaviorSubject<string | undefined>(undefined);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 
@@ -51,5 +55,13 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 					this.cardStats$$.next(result?.stats);
 				});
 		});
+	}
+
+	public newSearchString(newText: string) {
+		this.mainInstance.newSearchStringInternal(newText);
+	}
+
+	private async newSearchStringInternal(newText: string) {
+		this.searchString$$.next(newText);
 	}
 }
