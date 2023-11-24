@@ -31,8 +31,11 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			await this.prefs.isReady();
 
 			this.prefs
-				.preferences$((prefs) => prefs.arenaActiveTimeFilter)
-				.subscribe(async ([timeFilter]) => {
+				.preferences$(
+					(prefs) => prefs.arenaActiveTimeFilter,
+					(prefs) => prefs.arenaActiveClassFilter,
+				)
+				.subscribe(async ([timeFilter, classFilter]) => {
 					const timePeriod =
 						timeFilter === 'all-time'
 							? 'past-20'
@@ -41,7 +44,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 							: timeFilter === 'past-three'
 							? 'past-3'
 							: timeFilter;
-					const context = 'global';
+					const context = classFilter === 'all' || classFilter == null ? 'global' : classFilter;
 					const url = ARENA_CARD_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context);
 					const result: ArenaCardStats | null = await this.api.callGetApi(url);
 					console.log('[arena-card-stats] loaded duels config');

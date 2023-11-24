@@ -41,13 +41,15 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreC
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
 		await this.prefs.isReady();
+		await this.store.initComplete();
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentArenaMetaPatch$$,
 			this.prefs.preferences$((prefs) => prefs.arenaActiveTimeFilter),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId),
 		]).pipe(
-			filter(([patch, [filter]]) => !!filter && !!patch),
-			this.mapData(([patch, [filter]]) => {
+			filter(([patch, [filter], [selectedCategoryId]]) => !!filter && !!patch),
+			this.mapData(([patch, [filter], [selectedCategoryId]]) => {
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',
@@ -75,7 +77,7 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreC
 					placeholder:
 						options.find((option) => option.value === filter)?.label ??
 						this.i18n.translateString('app.arena.filters.time.past-100'),
-					visible: true,
+					visible: ['arena-runs', 'class-tier-list', 'card-stats'].includes(selectedCategoryId),
 				};
 			}),
 		);

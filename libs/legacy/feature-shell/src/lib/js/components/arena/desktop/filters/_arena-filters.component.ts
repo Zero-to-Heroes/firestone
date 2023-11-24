@@ -29,6 +29,6 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 	ngAfterContentInit() {
 		this.showRegionFilter$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId)
-			.pipe(this.mapData(([currentView]) => true));
+			.pipe(this.mapData(([currentView]) => ['arena-runs'].includes(currentView)));
 	}
 }

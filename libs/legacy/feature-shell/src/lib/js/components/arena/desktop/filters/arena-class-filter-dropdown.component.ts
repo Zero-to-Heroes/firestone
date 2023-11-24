@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
 import { classes, formatClass } from '../../../../services/hs-utils';
@@ -43,29 +43,31 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
+		await this.store.initComplete();
 
-		this.filter$ = this.prefs
-			.preferences$((prefs) => prefs.arenaActiveClassFilter)
-			.pipe(
-				filter(([filter]) => !!filter),
-				this.mapData(([filter]) => {
-					const options = ['all', ...(classes as ArenaClassFilterType[])].map(
-						(option) =>
-							({
-								value: option,
-								label: formatClass(option, this.i18n),
-							} as ClassFilterOption),
-					);
-					return {
-						filter: filter,
-						options: options,
-						placeholder:
-							options.find((option) => option.value === filter)?.label ??
-							this.i18n.translateString('global.class.all'),
-						visible: true,
-					};
-				}),
-			);
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId),
+			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
+		]).pipe(
+			filter(([[selectedCategoryId], [filter]]) => !!filter),
+			this.mapData(([[selectedCategoryId], [filter]]) => {
+				const options = ['all', ...(classes as ArenaClassFilterType[])].map(
+					(option) =>
+						({
+							value: option,
+							label: formatClass(option, this.i18n),
+						} as ClassFilterOption),
+				);
+				return {
+					filter: filter,
+					options: options,
+					placeholder:
+						options.find((option) => option.value === filter)?.label ??
+						this.i18n.translateString('global.class.all'),
+					visible: ['arena-runs', 'card-stats'].includes(selectedCategoryId),
+				};
+			}),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
