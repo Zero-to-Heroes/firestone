@@ -673,6 +673,9 @@ export class GameEvents {
 			case 'QUEST_DESTROYED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.QUEST_DESTROYED, gameEvent));
 				break;
+			case 'REMOVE_FROM_HISTORY':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.REMOVE_FROM_HISTORY, gameEvent));
+				break;
 			case 'DEATHRATTLE_TRIGGERED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DEATHRATTLE_TRIGGERED, gameEvent));
 				break;

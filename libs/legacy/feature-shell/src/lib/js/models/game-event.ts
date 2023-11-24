@@ -71,6 +71,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly QUEST_PLAYED = 'QUEST_PLAYED';
 	public static readonly QUEST_DESTROYED = 'QUEST_DESTROYED';
 	public static readonly QUEST_COMPLETED = 'QUEST_COMPLETED';
+	public static readonly REMOVE_FROM_HISTORY = 'REMOVE_FROM_HISTORY';
 	public static readonly DEATHRATTLE_TRIGGERED = 'DEATHRATTLE_TRIGGERED';
 	public static readonly CARD_DRAW_FROM_DECK = 'CARD_DRAW_FROM_DECK';
 	public static readonly RECEIVE_CARD_IN_HAND = 'RECEIVE_CARD_IN_HAND';
