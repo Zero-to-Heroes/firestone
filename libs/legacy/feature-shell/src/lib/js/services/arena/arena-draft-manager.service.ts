@@ -9,21 +9,28 @@ import { Events } from '../events.service';
 export class ArenaDraftManagerService extends AbstractFacadeService<ArenaDraftManagerService> {
 	public currentStep$$: SubscriberAwareBehaviorSubject<DraftSlotType | null>;
 	public heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 
 	private events: Events;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'arenaDraftManager', () => !!this.currentStep$$ && !!this.heroOptions$$);
+		super(
+			windowManager,
+			'arenaDraftManager',
+			() => !!this.currentStep$$ && !!this.heroOptions$$ && !!this.cardOptions$$,
+		);
 	}
 
 	protected override assignSubjects() {
 		this.currentStep$$ = this.mainInstance.currentStep$$;
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
+		this.cardOptions$$ = this.mainInstance.cardOptions$$;
 	}
 
 	protected async init() {
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.events = AppInjector.get(Events);
 
 		this.currentStep$$.onFirstSubscribe(async () => {
@@ -37,9 +44,15 @@ export class ArenaDraftManagerService extends AbstractFacadeService<ArenaDraftMa
 					if (changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_HERO) {
 						this.heroOptions$$.next(null);
 					}
+					if (changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_CARD) {
+						this.cardOptions$$.next(null);
+					}
 				}
 				if (!!changes.ArenaHeroOptions?.length) {
 					this.heroOptions$$.next(changes.ArenaHeroOptions);
+				}
+				if (!!changes.ArenaCardOptions?.length) {
+					this.cardOptions$$.next(changes.ArenaCardOptions);
 				}
 			});
 		});

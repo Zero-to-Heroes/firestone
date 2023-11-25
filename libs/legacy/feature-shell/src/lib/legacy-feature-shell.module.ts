@@ -512,6 +512,7 @@ import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@componen
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
@@ -1501,6 +1502,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsOutOfCombatDeckSelectComponent,
 		DuelsDeckWidgetComponent,
 		ArenaHeroSelectionWidgetWrapperComponent,
+		ArenaCardSelectionWidgetWrapperComponent,
 
 		LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,

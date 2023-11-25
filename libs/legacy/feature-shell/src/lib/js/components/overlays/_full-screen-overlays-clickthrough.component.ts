@@ -51,6 +51,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<duels-ooc-hero-selection-widget-wrapper></duels-ooc-hero-selection-widget-wrapper>
 
 			<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
+			<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
