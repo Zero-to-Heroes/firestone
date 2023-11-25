@@ -9,6 +9,8 @@ import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stat
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
 import { ArenaClassTierListTierComponent } from './components/class-info/arena-class-tier-list-tier.component';
 import { ArenaClassTierListComponent } from './components/class-info/arena-class-tier-list.component';
+import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
+import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 
@@ -19,6 +21,8 @@ const components = [
 	ArenaCardStatsComponent,
 	ArenaCardStatItemComponent,
 	ArenaCardSearchComponent,
+	ArenaHeroSelectionComponent,
+	ArenaHeroOptionComponent,
 ];
 @NgModule({
 	imports: [CommonModule, VirtualScrollerModule, SharedFrameworkCoreModule, SharedCommonViewModule],

@@ -8,5 +8,5 @@
 		"types": []
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-	"include": ["**/*.ts"]
+	"include": ["**/*.ts", "../../legacy/feature-shell/src/lib/js/services/arena/arena-draft-manager.service.ts"]
 }

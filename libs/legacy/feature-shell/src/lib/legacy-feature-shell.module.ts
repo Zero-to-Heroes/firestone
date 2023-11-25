@@ -512,6 +512,7 @@ import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@componen
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
@@ -689,6 +690,7 @@ import { RawAchievementsLoaderService } from './js/services/achievement/data/raw
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
+import { ArenaDraftManagerService } from './js/services/arena/arena-draft-manager.service';
 import { ArenaInfoService } from './js/services/arena/arena-info.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { ArenaRewardsService } from './js/services/arena/arena-rewards.service';
@@ -1498,6 +1500,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsOocDeckSelectWidgetWrapperComponent,
 		DuelsOutOfCombatDeckSelectComponent,
 		DuelsDeckWidgetComponent,
+		ArenaHeroSelectionWidgetWrapperComponent,
 
 		LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,
@@ -1843,6 +1846,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaRewardsService,
 		ArenaInfoService,
 		ArenaLastMatchService,
+		ArenaDraftManagerService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

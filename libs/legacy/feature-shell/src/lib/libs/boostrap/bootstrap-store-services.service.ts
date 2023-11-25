@@ -4,6 +4,7 @@ import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
+import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsQuestsService } from '../../js/services/battlegrounds/bgs-quests.service';
@@ -69,6 +70,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BgsPerfectGamesService: BgsPerfectGamesService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
 		private readonly init_ArenaCardStatsService: ArenaCardStatsService,
+		private readonly init_ArenaDraftManagerService: ArenaDraftManagerService,
 		private readonly init_duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly init_constructedPersonalDeckService: ConstructedPersonalDecksService,
 		// Other dependencies

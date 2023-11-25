@@ -727,6 +727,7 @@ export class Preferences implements IPreferences {
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
+	readonly arenaShowHeroSelectionOverlay: boolean = true;
 
 	readonly statsXpGraphSeasonFilter: StatsXpGraphSeasonFilterType = 'all-seasons';
 

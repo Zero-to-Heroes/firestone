@@ -5,6 +5,8 @@ export * from './lib/components/card-stats/arena-card-stats.component';
 export * from './lib/components/class-info/arena-class-info.component';
 export * from './lib/components/class-info/arena-class-tier-list-tier.component';
 export * from './lib/components/class-info/arena-class-tier-list.component';
+export * from './lib/components/overlays/arena-hero-option.component';
+export * from './lib/components/overlays/arena-hero-selection.component';
 export * from './lib/models/arena-category';
 export * from './lib/services/arena-card-stats.service';
 export * from './lib/services/arena-class-stats.service';

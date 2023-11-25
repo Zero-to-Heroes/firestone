@@ -67,8 +67,7 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 					averageWinsDistribution,
 					averageWinsDistribution.map((d) => d.total).reduce((a, b) => a + b, 0),
 				);
-				const classInfos = this.buildClassInfos(stats, averageWinsDistribution);
-				return this.buildTiers(classInfos);
+				return buildArenaClassInfoTiers(stats, averageWinsDistribution, this.i18n);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),
@@ -112,103 +111,16 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		}
 		return result;
 	}
-
-	private buildClassInfos(
-		stats: readonly ArenaClassStat[] | null | undefined,
-		averageWinsDistribution: readonly WinsDistribution[],
-	): readonly ArenaClassInfo[] | null | undefined {
-		if (!stats?.length) {
-			return stats === null ? null : undefined;
-		}
-
-		return stats.map((stat) => {
-			const result: ArenaClassInfo = {
-				playerClass: stat.playerClass,
-				dataPoints: stat.totalGames,
-				winrate: stat.totalsWins / stat.totalGames,
-				placementDistribution: this.buildPlacementDistribution(stat.winsDistribution, averageWinsDistribution),
-			};
-			return result;
-		});
-	}
-
-	private buildPlacementDistribution(
-		winsDistribution: readonly WinsDistribution[],
-		averageWinsDistribution: readonly WinsDistribution[],
-	): readonly WinsDistribution[] {
-		winsDistribution = [...winsDistribution].sort(sortByProperties((d: WinsDistribution) => [d.wins]));
-		const totalGames = winsDistribution.map((dist) => dist.total).reduce((a, b) => a + b, 0);
-		const winsDistributionInPercents = winsDistribution.map((d) => ({ wins: d.wins, total: d.total / totalGames }));
-		// Build the placement distrubtion for wins ranging from 0 to 12
-		const result: WinsDistribution[] = [];
-		for (let i = 0; i <= 12; i++) {
-			const distribution = winsDistributionInPercents.find((dist) => dist.wins === i);
-			const averageForWins = averageWinsDistribution.find((dist) => dist.wins === i) as WinsDistribution;
-			const delta = distribution ? distribution.total / averageForWins.total : 0;
-			result.push({ wins: i, total: 100 * delta });
-		}
-		console.debug(
-			'placementDistribution',
-			result,
-			winsDistributionInPercents,
-			averageWinsDistribution,
-			winsDistribution,
-		);
-		return result;
-	}
-
-	private buildTiers(
-		stats: readonly ArenaClassInfo[] | null | undefined,
-	): readonly ArenaClassTier[] | null | undefined {
-		console.debug('buildTiers', stats);
-		if (stats == null) {
-			return stats === null ? null : undefined;
-		}
-
-		const heroStats = [...stats].sort(sortByProperties((s) => [-s.winrate]));
-		console.debug('heroStats', heroStats);
-		const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.winrate));
-
-		return [
-			{
-				id: 'S',
-				label: this.i18n.translateString('app.arena.class-tier-list.tier', { value: 'S' }),
-				tooltip: this.i18n.translateString('app.duels.stats.tier-s-tooltip'),
-				items: filterItems(heroStats, mean + 3 * standardDeviation, 1),
-			},
-			{
-				id: 'A',
-				label: this.i18n.translateString('app.arena.class-tier-list.tier', { value: 'A' }),
-				tooltip: this.i18n.translateString('app.duels.stats.tier-a-tooltip'),
-				items: filterItems(heroStats, mean + 1 * standardDeviation, mean + 3 * standardDeviation),
-			},
-			{
-				id: 'B',
-				label: this.i18n.translateString('app.arena.class-tier-list.tier', { value: 'B' }),
-				tooltip: this.i18n.translateString('app.duels.stats.tier-b-tooltip'),
-				items: filterItems(heroStats, mean, mean + 1 * standardDeviation),
-			},
-			{
-				id: 'C',
-				label: this.i18n.translateString('app.arena.class-tier-list.tier', { value: 'C' }),
-				tooltip: this.i18n.translateString('app.duels.stats.tier-c-tooltip'),
-				items: filterItems(heroStats, mean - standardDeviation, mean),
-			},
-			{
-				id: 'D',
-				label: this.i18n.translateString('app.arena.class-tier-list.tier', { value: 'D' }),
-				tooltip: this.i18n.translateString('app.duels.stats.tier-d-tooltip'),
-				items: filterItems(heroStats, mean - 2 * standardDeviation, mean - standardDeviation),
-			},
-			{
-				id: 'E',
-				label: this.i18n.translateString('app.arena.class-tier-list.tier', { value: 'E' }),
-				tooltip: this.i18n.translateString('app.duels.stats.tier-e-tooltip'),
-				items: filterItems(heroStats, 0, mean - 2 * standardDeviation),
-			},
-		].filter((tier) => tier.items?.length);
-	}
 }
+
+export const buildArenaClassInfoTiers = (
+	stats: readonly ArenaClassStat[] | null | undefined,
+	averageWinsDistribution: readonly WinsDistribution[] | null,
+	i18n: ILocalizationService,
+): readonly ArenaClassTier[] | null | undefined => {
+	const classInfos = buildClassInfos(stats, averageWinsDistribution);
+	return buildTiers(classInfos, i18n);
+};
 
 export const filterItems = (
 	stats: readonly ArenaClassInfo[],
@@ -216,4 +128,105 @@ export const filterItems = (
 	upper: number,
 ): readonly ArenaClassInfo[] => {
 	return stats.filter((stat) => stat.winrate).filter((stat) => stat.winrate >= threshold && stat.winrate < upper);
+};
+
+const buildClassInfos = (
+	stats: readonly ArenaClassStat[] | null | undefined,
+	averageWinsDistribution: readonly WinsDistribution[] | null,
+): readonly ArenaClassInfo[] | null | undefined => {
+	if (!stats?.length) {
+		return stats === null ? null : undefined;
+	}
+
+	return stats.map((stat) => {
+		const result: ArenaClassInfo = {
+			playerClass: stat.playerClass,
+			dataPoints: stat.totalGames,
+			winrate: stat.totalsWins / stat.totalGames,
+			placementDistribution: buildPlacementDistribution(stat.winsDistribution, averageWinsDistribution),
+		};
+		return result;
+	});
+};
+
+const buildPlacementDistribution = (
+	winsDistribution: readonly WinsDistribution[],
+	averageWinsDistribution: readonly WinsDistribution[] | null,
+): readonly WinsDistribution[] => {
+	if (!averageWinsDistribution?.length) {
+		return winsDistribution;
+	}
+
+	winsDistribution = [...winsDistribution].sort(sortByProperties((d: WinsDistribution) => [d.wins]));
+	const totalGames = winsDistribution.map((dist) => dist.total).reduce((a, b) => a + b, 0);
+	const winsDistributionInPercents = winsDistribution.map((d) => ({ wins: d.wins, total: d.total / totalGames }));
+	// Build the placement distrubtion for wins ranging from 0 to 12
+	const result: WinsDistribution[] = [];
+	for (let i = 0; i <= 12; i++) {
+		const distribution = winsDistributionInPercents.find((dist) => dist.wins === i);
+		const averageForWins = averageWinsDistribution.find((dist) => dist.wins === i) as WinsDistribution;
+		const delta = distribution ? distribution.total / averageForWins.total : 0;
+		result.push({ wins: i, total: 100 * delta });
+	}
+	console.debug(
+		'placementDistribution',
+		result,
+		winsDistributionInPercents,
+		averageWinsDistribution,
+		winsDistribution,
+	);
+	return result;
+};
+
+const buildTiers = (
+	stats: readonly ArenaClassInfo[] | null | undefined,
+	i18n: ILocalizationService,
+): readonly ArenaClassTier[] | null | undefined => {
+	console.debug('buildTiers', stats);
+	if (stats == null) {
+		return stats === null ? null : undefined;
+	}
+
+	const heroStats = [...stats].sort(sortByProperties((s) => [-s.winrate]));
+	console.debug('heroStats', heroStats);
+	const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.winrate));
+
+	return [
+		{
+			id: 'S',
+			label: i18n.translateString('app.arena.class-tier-list.tier', { value: 'S' }),
+			tooltip: i18n.translateString('app.duels.stats.tier-s-tooltip'),
+			items: filterItems(heroStats, mean + 3 * standardDeviation, 1),
+		},
+		{
+			id: 'A',
+			label: i18n.translateString('app.arena.class-tier-list.tier', { value: 'A' }),
+			tooltip: i18n.translateString('app.duels.stats.tier-a-tooltip'),
+			items: filterItems(heroStats, mean + 1 * standardDeviation, mean + 3 * standardDeviation),
+		},
+		{
+			id: 'B',
+			label: i18n.translateString('app.arena.class-tier-list.tier', { value: 'B' }),
+			tooltip: i18n.translateString('app.duels.stats.tier-b-tooltip'),
+			items: filterItems(heroStats, mean, mean + 1 * standardDeviation),
+		},
+		{
+			id: 'C',
+			label: i18n.translateString('app.arena.class-tier-list.tier', { value: 'C' }),
+			tooltip: i18n.translateString('app.duels.stats.tier-c-tooltip'),
+			items: filterItems(heroStats, mean - standardDeviation, mean),
+		},
+		{
+			id: 'D',
+			label: i18n.translateString('app.arena.class-tier-list.tier', { value: 'D' }),
+			tooltip: i18n.translateString('app.duels.stats.tier-d-tooltip'),
+			items: filterItems(heroStats, mean - 2 * standardDeviation, mean - standardDeviation),
+		},
+		{
+			id: 'E',
+			label: i18n.translateString('app.arena.class-tier-list.tier', { value: 'E' }),
+			tooltip: i18n.translateString('app.duels.stats.tier-e-tooltip'),
+			items: filterItems(heroStats, 0, mean - 2 * standardDeviation),
+		},
+	].filter((tier) => tier.items?.length);
 };
