@@ -1481,6 +1481,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), notInInitialDeck, effectiveCostMore(1));
 			case CardIds.TaintedRemnant_YOG_519:
 				return and(side(inputSide), or(inDeck, inHand), elemental);
+			case CardIds.TakeToTheSkies_WW_816:
+				return and(side(inputSide), inDeck, dragon);
 			case CardIds.TamsinsPhylactery:
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.TangledWrath:
