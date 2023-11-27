@@ -31,6 +31,7 @@ import { ArenaCardOption } from './model';
 				class="option"
 				*ngFor="let option of options$ | async; trackBy: trackByFn"
 				[card]="option"
+				[pickNumber]="(pickNumber$ | async)!"
 				(mouseenter)="onMouseEnter(option.cardId)"
 				(mouseleave)="onMouseLeave(option.cardId, $event)"
 			>
@@ -41,6 +42,7 @@ import { ArenaCardOption } from './model';
 })
 export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showing$: Observable<boolean>;
+	pickNumber$: Observable<number>;
 	options$: Observable<readonly ArenaCardOption[]>;
 
 	constructor(
@@ -79,6 +81,10 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			),
 		);
 		this.showing$ = this.options$.pipe(this.mapData((options) => options.length > 0));
+		this.pickNumber$ = this.draftManager.currentDeck$$.pipe(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			this.mapData((deck: any /*DeckInfoFromMemory*/) => deck?.DeckList?.length ?? 0),
+		);
 
 		this.cardsHighlightService.initForDuels();
 

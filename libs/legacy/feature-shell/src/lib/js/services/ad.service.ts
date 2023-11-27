@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
 	AbstractFacadeService,
 	AppInjector,
+	IAdsService,
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -9,7 +10,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
 @Injectable()
-export class AdService extends AbstractFacadeService<AdService> {
+export class AdService extends AbstractFacadeService<AdService> implements IAdsService {
 	public showAds$$: BehaviorSubject<boolean>;
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
@@ -63,7 +64,7 @@ export class AdService extends AbstractFacadeService<AdService> {
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return false;
+			return true;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
@@ -95,7 +96,7 @@ export class AdService extends AbstractFacadeService<AdService> {
 	private async hasPremiumSubInternal(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return true;
+			return false;
 		}
 		const shouldDisplayAds = await this.shouldDisplayAds();
 		return !shouldDisplayAds;

@@ -547,6 +547,7 @@ import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
 import {
+	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
 	ILocalizationService,
@@ -1695,6 +1696,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningMockExecutorService },
 		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useClass: CardsHighlightFacadeService },
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useClass: ArenaDraftManagerService },
+		{ provide: ADS_SERVICE_TOKEN, useClass: AdService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SceneService,

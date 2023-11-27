@@ -1,0 +1,22 @@
+:host {
+	height: 3vh;
+}
+
+.info-premium {
+	border-radius: 15px;
+	background: var(--default-title-color);
+	color: var(--color-common-2-dark);
+	height: 100%;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+
+	.premium-lock {
+		height: 100%;
+		aspect-ratio: 1;
+		margin-right: 10px;
+	}
+
+	.text {
+	}
+}

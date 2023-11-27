@@ -4,6 +4,7 @@ export * from './lib/localization/fs-translate.directive';
 export * from './lib/localization/fs-translate.pipe';
 export * from './lib/localization/localization.service';
 export * from './lib/services/abstract-facade-service';
+export * from './lib/services/ads-service.interface';
 export * from './lib/services/analytics/analytics.service';
 export * from './lib/services/api-runner';
 export * from './lib/services/app-injector';
