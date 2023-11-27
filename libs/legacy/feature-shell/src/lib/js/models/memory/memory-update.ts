@@ -25,6 +25,7 @@ export interface MemoryUpdate {
 	readonly ArenaRewards: readonly Reward[];
 	readonly ArenaHeroOptions: readonly string[];
 	readonly ArenaCardOptions: readonly string[];
+	readonly ArenaCurrentCardsInDeck: number;
 
 	// true means the treasure selection has started, null means nothing changed, and false means it has ended
 	readonly MercenariesTreasureSelectionIndex: number;

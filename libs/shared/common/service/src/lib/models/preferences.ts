@@ -727,8 +727,14 @@ export class Preferences implements IPreferences {
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
+	// TODO: add settings
 	readonly arenaShowHeroSelectionOverlay: boolean = true;
 	readonly arenaShowCardSelectionOverlay: boolean = true;
+	readonly arenaShowOocTracker: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly arenaOocTrackerScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly arenaOocTrackerPosition: { left: number; top: number };
 
 	readonly statsXpGraphSeasonFilter: StatsXpGraphSeasonFilterType = 'all-seasons';
 

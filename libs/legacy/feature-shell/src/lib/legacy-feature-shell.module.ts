@@ -513,7 +513,9 @@ import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/d
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
+import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
+import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
@@ -1503,6 +1505,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsDeckWidgetComponent,
 		ArenaHeroSelectionWidgetWrapperComponent,
 		ArenaCardSelectionWidgetWrapperComponent,
+		ArenaDecktrackerOocWidgetWrapperComponent,
+		ArenaDecktrackerOocComponent,
 
 		LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,

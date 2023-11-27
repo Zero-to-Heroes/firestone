@@ -30,6 +30,7 @@ import { GetAchievementCategoriesOperation } from './mind-vision/operations/get-
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';
 import { GetActiveQuestsOperation, MemoryQuestsLog } from './mind-vision/operations/get-active-quests-operation';
+import { GetArenaDeckOperation } from './mind-vision/operations/get-arena-deck-operation';
 import { GetArenaInfoOperation } from './mind-vision/operations/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/operations/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/operations/get-battlegrounds-info-operation';
@@ -88,6 +89,7 @@ export class MemoryInspectionService {
 	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVisionFacade, this.ow);
 	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
+	private getArenaDeckOperation = new GetArenaDeckOperation(this.mindVisionFacade, this.ow);
 	private getAdventuresInfoOperation = new GetAdventuresInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsDeckOperation = new GetDuelsDeckOperation(this.mindVisionFacade, this.ow);
@@ -227,6 +229,10 @@ export class MemoryInspectionService {
 
 	public async getArenaInfo(): Promise<ArenaInfo> {
 		return this.mindVision.callMindVision(() => this.getArenaInfoOperation.call());
+	}
+
+	public async getArenaDeck(): Promise<DeckInfoFromMemory> {
+		return this.mindVision.callMindVision(() => this.getArenaDeckOperation.call());
 	}
 
 	public async getAdventuresInfo(): Promise<AdventuresInfo> {

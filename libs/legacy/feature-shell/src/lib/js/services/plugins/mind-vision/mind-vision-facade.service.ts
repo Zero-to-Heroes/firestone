@@ -301,6 +301,20 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	public async getArenaDeck(): Promise<DeckInfoFromMemory> {
+		return new Promise<DeckInfoFromMemory>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getArenaDeck((deck) => {
+					resolve(deck ? JSON.parse(deck) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getArenaDeck', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getActiveDeck(selectedDeckId: number, forceReset = false): Promise<any> {
 		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();

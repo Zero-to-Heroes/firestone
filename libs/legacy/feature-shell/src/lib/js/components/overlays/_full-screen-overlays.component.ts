@@ -74,6 +74,9 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
 			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
 
+			<!-- Arena -->
+			<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
+
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>
 			<player-watchpost-widget-wrapper></player-watchpost-widget-wrapper>
