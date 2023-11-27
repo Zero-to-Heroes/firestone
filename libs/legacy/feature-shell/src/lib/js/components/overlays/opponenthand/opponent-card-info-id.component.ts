@@ -106,15 +106,9 @@ export class OpponentCardInfoIdComponent {
 			return cardId;
 		}
 
-		// The cardId matches an actual card, and is not an enchantment
-		const card = this.allCards.getCard(cardId);
-		// console.debug('card', card);
-		if (!!card.id && card.type !== 'Enchantment') {
-			return cardId;
-		}
-
-		if (!creatorCardId) {
-			return null;
+		// Only try to normalize enchantments
+		if (this.allCards.getCard(creatorCardId).type !== 'Enchantment') {
+			return creatorCardId;
 		}
 
 		// Manual exceptions
