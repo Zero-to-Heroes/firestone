@@ -12,3 +12,4 @@ export * from './lib/components/overlays/arena-hero-selection.component';
 export * from './lib/models/arena-category';
 export * from './lib/services/arena-card-stats.service';
 export * from './lib/services/arena-class-stats.service';
+export * from './lib/services/arena-draft-manager.interface';

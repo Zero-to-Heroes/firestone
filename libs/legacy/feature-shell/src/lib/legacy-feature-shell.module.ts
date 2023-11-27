@@ -532,7 +532,7 @@ import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stat
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
-import { ArenaCommonModule } from '@firestone/arena/common';
+import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
@@ -544,6 +544,7 @@ import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
 import {
+	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
 	ILocalizationService,
 	PLAUSIBLE_DOMAIN,
@@ -1685,6 +1686,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationMockExecutorService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningMockExecutorService },
+		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useClass: CardsHighlightFacadeService },
+		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useClass: ArenaDraftManagerService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SceneService,

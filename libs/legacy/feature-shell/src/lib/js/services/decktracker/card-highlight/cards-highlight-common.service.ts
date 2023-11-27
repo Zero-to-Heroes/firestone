@@ -1339,6 +1339,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SilvermoonFarstrider_RLK_826:
 				return and(side(inputSide), or(inDeck, inHand), spell, arcane);
+			case CardIds.SilvermoonPortal:
+			case CardIds.SilvermoonPortal_WON_309:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.SinisterSoulcage_YOG_513:
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SketchyInformation:

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
+
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { Handler, SelectorOptions } from './cards-highlight-common.service';
 
 @Injectable()
-export class CardsHighlightFacadeService {
+export class CardsHighlightFacadeService implements ICardsHighlightService {
 	private service: CardsHighlightService;
 
 	constructor(private readonly ow: OverwolfService) {

@@ -1,9 +1,19 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { ArenaDraftManagerService } from '@legacy-import/src/lib/js/services/arena/arena-draft-manager.service';
 import { Observable, combineLatest, shareReplay, tap } from 'rxjs';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
+import {
+	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
+	IArenaDraftManagerService,
+} from '../../services/arena-draft-manager.interface';
 import { buildArenaClassInfoTiers } from '../class-info/arena-class-tier-list.component';
 import { ArenaHeroOption } from './model';
 
@@ -24,7 +34,7 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly draftManager: ArenaDraftManagerService,
+		@Inject(ARENA_DRAFT_MANAGER_SERVICE_TOKEN) private readonly draftManager: IArenaDraftManagerService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
