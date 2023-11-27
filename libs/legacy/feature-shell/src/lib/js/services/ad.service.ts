@@ -1,19 +1,39 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
 @Injectable()
-export class AdService {
-	public showAds$$ = new BehaviorSubject<boolean>(true);
-	public enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
-	public hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
+export class AdService extends AbstractFacadeService<AdService> {
+	public showAds$$: BehaviorSubject<boolean>;
+	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
+	public hasPremiumSub$$: BehaviorSubject<boolean>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
-		this.init();
+	private ow: OverwolfService;
+	private store: AppUiStoreFacadeService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'adsService', () => !!this.showAds$$);
 	}
 
-	private async init() {
+	protected override assignSubjects() {
+		this.showAds$$ = this.mainInstance.showAds$$;
+		this.enablePremiumFeatures$$ = this.mainInstance.enablePremiumFeatures$$;
+		this.hasPremiumSub$$ = this.mainInstance.hasPremiumSub$$;
+	}
+
+	protected async init() {
+		this.showAds$$ = new BehaviorSubject<boolean>(true);
+		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
+		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
+		this.ow = AppInjector.get(OverwolfService);
+		this.store = AppInjector.get(AppUiStoreFacadeService);
+
 		this.ow.onSubscriptionChanged(async (event) => {
 			console.log('[ads] subscription changed', event);
 			const showAds = await this.shouldDisplayAds();
@@ -37,9 +57,13 @@ export class AdService {
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
+		return this.mainInstance.shouldDisplayAdsInternal();
+	}
+
+	public async shouldDisplayAdsInternal(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return true;
+			return false;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
@@ -65,9 +89,13 @@ export class AdService {
 	}
 
 	public async hasPremiumSub(): Promise<boolean> {
+		return this.mainInstance.hasPremiumSubInternal();
+	}
+
+	private async hasPremiumSubInternal(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return false;
+			return true;
 		}
 		const shouldDisplayAds = await this.shouldDisplayAds();
 		return !shouldDisplayAds;
