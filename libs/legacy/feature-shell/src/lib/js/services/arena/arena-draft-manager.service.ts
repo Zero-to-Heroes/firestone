@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { combineLatest, map } from 'rxjs';
+import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
@@ -18,6 +26,10 @@ export class ArenaDraftManagerService extends AbstractFacadeService<ArenaDraftMa
 	private events: Events;
 	private scene: SceneService;
 	private memory: MemoryInspectionService;
+	private prefs: PreferencesService;
+	private allCards: CardsFacadeService;
+
+	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
@@ -32,6 +44,7 @@ export class ArenaDraftManagerService extends AbstractFacadeService<ArenaDraftMa
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
+		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
 
 	protected async init() {
@@ -42,8 +55,24 @@ export class ArenaDraftManagerService extends AbstractFacadeService<ArenaDraftMa
 		this.events = AppInjector.get(Events);
 		this.scene = AppInjector.get(SceneService);
 		this.memory = AppInjector.get(MemoryInspectionService);
+		this.prefs = AppInjector.get(PreferencesService);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
 		this.currentStep$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+		});
+		this.heroOptions$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+		});
+		this.cardOptions$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+		});
+		this.currentDeck$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+		});
+
+		this.internalSubscriber$$.onFirstSubscribe(async () => {
 			await this.scene.isReady();
 			console.debug('[arena-draft-maanger] init');
 
@@ -78,6 +107,26 @@ export class ArenaDraftManagerService extends AbstractFacadeService<ArenaDraftMa
 					this.currentDeck$$.next(arenaDeck);
 				}
 			});
+
+			combineLatest([this.scene.currentScene$$, this.currentStep$$, this.currentDeck$$])
+				.pipe(
+					map(([scene, step, deck]) =>
+						scene == SceneMode.DRAFT && step === DraftSlotType.DRAFT_SLOT_CARD ? deck?.HeroCardId : null,
+					),
+				)
+				.subscribe(async (heroCardId) => {
+					if (!!heroCardId?.length) {
+						const playerClass = this.allCards.getCard(heroCardId).classes?.[0];
+						if (!!playerClass?.length) {
+							const prefs = await this.prefs.getPreferences();
+							const newPrefs: Preferences = {
+								...prefs,
+								arenaActiveClassFilter: playerClass.toLowerCase() as ArenaClassFilterType,
+							};
+							await this.prefs.savePreferences(newPrefs);
+						}
+					}
+				});
 		});
 	}
 }

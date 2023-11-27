@@ -42,7 +42,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		// TODO: load the context of the current class
 		// So this means storing somewhere the current draft info (including the decklist)
 		// this.updateClassContext();
-
 		this.options$ = combineLatest([this.draftManager.cardOptions$$, this.arenaCardStats.cardStats$$]).pipe(
 			this.mapData(
 				([options, stats]) =>
