@@ -3,13 +3,16 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	HostListener,
 	OnDestroy,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -54,12 +57,16 @@ export class ArenaDecktrackerOocComponent
 		private readonly cardsHighlight: CardsHighlightFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly draftManager: ArenaDraftManagerService,
+		private readonly prefs: PreferencesService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.draftManager.isReady();
+		await this.prefs.isReady();
 
 		this.deckstring$ = this.draftManager.currentDeck$$.pipe(
 			tap((deck) => console.debug('[arena-decktracker-ooc] new deck', deck)),
@@ -90,6 +97,17 @@ export class ArenaDecktrackerOocComponent
 				return encode(deckDefinition);
 			}),
 		);
+
+		this.prefs
+			.preferences$((prefs) => prefs.arenaOocTrackerScale)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((scale) => {
+				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
+				this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			});
 		this.cardsHighlight.initForDuels();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

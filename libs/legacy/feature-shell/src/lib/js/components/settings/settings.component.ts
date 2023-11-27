@@ -37,6 +37,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 						*ngSwitchCase="'collection'"
 						[selectedMenu]="selectedMenu"
 					></settings-collection>
+					<settings-arena *ngSwitchCase="'arena'" [selectedMenu]="selectedMenu"></settings-arena>
 					<settings-decktracker
 						*ngSwitchCase="'decktracker'"
 						[selectedMenu]="selectedMenu"

@@ -20,12 +20,15 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			>
 				<span [owTranslate]="'settings.menu.battlegrounds'"></span>
 			</li>
+			<li [ngClass]="{ selected: selectedApp === 'arena' }" (mousedown)="changeSelection('arena')">
+				<span [owTranslate]="'settings.menu.arena'"></span>
+			</li>
 			<li [ngClass]="{ selected: selectedApp === 'mercenaries' }" (mousedown)="changeSelection('mercenaries')">
 				<span [owTranslate]="'settings.menu.mercenaries'"></span>
 			</li>
-			<li [ngClass]="{ selected: selectedApp === 'replays' }" (mousedown)="changeSelection('replays')">
+			<!-- <li [ngClass]="{ selected: selectedApp === 'replays' }" (mousedown)="changeSelection('replays')">
 				<span [owTranslate]="'settings.menu.replays'"></span>
-			</li>
+			</li> -->
 			<li [ngClass]="{ selected: selectedApp === 'collection' }" (mousedown)="changeSelection('collection')">
 				<span [owTranslate]="'settings.menu.collection'"></span>
 			</li>

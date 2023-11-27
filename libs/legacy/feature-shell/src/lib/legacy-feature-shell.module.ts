@@ -525,6 +525,9 @@ import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/count
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
+import { SettingsArenaGeneralComponent } from '@components/settings/arena/settings-arena-general';
+import { SettingsArenaMenuComponent } from '@components/settings/arena/settings-arena-menu.component';
+import { SettingsArenaComponent } from '@components/settings/arena/settings-arena.component';
 import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
@@ -1626,6 +1629,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,
 		SettingsCollectionNotificationComponent,
+
+		SettingsArenaComponent,
+		SettingsArenaMenuComponent,
+		SettingsArenaGeneralComponent,
 
 		SettingsAchievementsComponent,
 		SettingsAchievementsMenuComponent,
