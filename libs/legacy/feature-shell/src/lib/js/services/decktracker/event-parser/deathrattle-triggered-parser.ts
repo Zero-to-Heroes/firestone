@@ -5,6 +5,7 @@ import { DeckManipulationHelper } from '@legacy-import/src/lib/js/services/deckt
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { deathrattleGlobalEffectCards } from '../../hs-utils';
 import { EventParser } from './event-parser';
 
 export class DeathrattleTriggeredParser implements EventParser {
@@ -24,8 +25,7 @@ export class DeathrattleTriggeredParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		let newGlobalEffects = deck.globalEffects;
-		let bonelordFrostwhisperFirstTurnTrigger = deck.bonelordFrostwhisperFirstTurnTrigger;
-		if (cardId === CardIds.BonelordFrostwhisper) {
+		if (deathrattleGlobalEffectCards.includes(cardId as CardIds)) {
 			const refCard = this.allCards.getCard(cardId);
 			const card = DeckCard.create({
 				entityId: null,
@@ -36,9 +36,12 @@ export class DeathrattleTriggeredParser implements EventParser {
 				zone: null,
 			} as DeckCard);
 			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
+		}
+
+		let bonelordFrostwhisperFirstTurnTrigger = deck.bonelordFrostwhisperFirstTurnTrigger;
+		if (cardId === CardIds.BonelordFrostwhisper) {
 			bonelordFrostwhisperFirstTurnTrigger =
 				deck.bonelordFrostwhisperFirstTurnTrigger || currentState.gameTagTurnNumber;
-			console.debug('global effects', bonelordFrostwhisperFirstTurnTrigger, newGlobalEffects, cardId);
 		}
 		const newPlayerDeck = deck.update({
 			lastDeathrattleTriggered: cardId,

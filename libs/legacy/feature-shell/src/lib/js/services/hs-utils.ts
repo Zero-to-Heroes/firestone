@@ -146,9 +146,13 @@ export const battlecryGlobalEffectCards = [
 	CardIds.WyrmrestPurifier,
 ];
 
+export const deathrattleGlobalEffectCards = [CardIds.BonelordFrostwhisper, CardIds.UnluckyPowderman_WW_367];
+
 export const startOfGameGlobalEffectCards = [
 	CardIds.GennGreymane_GIL_692,
 	CardIds.BakuTheMooneater,
+	CardIds.DarkbishopBenedictus,
+	CardIds.DarkbishopBenedictusCore,
 	CardIds.PrinceRenathal,
 	CardIds.ChogallTwilightChieftain_YOG_530,
 ];
@@ -156,6 +160,7 @@ export const startOfGameGlobalEffectCards = [
 export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
 	...startOfGameGlobalEffectCards,
+	...deathrattleGlobalEffectCards,
 	CardIds.BestialMadness_YOG_505,
 	CardIds.BlackrockNRoll,
 	CardIds.CelestialAlignment,
