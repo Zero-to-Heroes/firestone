@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '12.5.26',
+		version: '13.0.0',
 		force: false,
 		sections: [
 			// {
@@ -47,20 +47,28 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an info leak where Tradeable cards traded back to deck would be revealed when drawn.`,
-							},
-						],
-					},
-					{
 						category: 'arena',
 						details: [
 							{
 								type: 'feature',
 								text: `Added a "Card Stats" tab. For now I'm only showing the "Drawn winrate" stat, which is probably the one that is the most correlated to how strong a card is, and will be useful to display in the overlay during the draft picks. That said, let me know if you're interested in seeing other stats on this tab :)`,
+							},
+							{
+								type: 'feature',
+								text: `Premium users can now see the card stats directly as an overlay while drafting (for now, this includes the Drawn Winrate, and will probably evolve to include more stats in the future). The first pick of each draft is free for all users though :)`,
+							},
+							{
+								type: 'feature',
+								text: `You can now see the synergies each option of the draft has with your deck, simply by mousing over each card. If you're played Duels with Firestone before, it works the exact same way as the Treasures synergies highlights.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an info leak where Tradeable cards traded back to deck would be revealed when drawn.`,
 							},
 						],
 					},
@@ -85,6 +93,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where holy secrets / quests / sigils / auras (like Crusader's Aura) would not count towards the cost reduction for Garden's Grace.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some card images would not show properly on the opponent's hand.`,
+							},
 						],
 					},
 					{
@@ -97,15 +109,6 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where Argent Braggart would not appear in the Tier 7 minions list.`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'feature',
-								text: `Added a "Card Stats" tab. For now I'm only showing the "Drawn winrate" stat, which is probably the one that is the most correlated to how strong a card is, and will be useful to display in the overlay during the draft picks. That said, let me know if you're interested in seeing other stats on this tab :)`,
 							},
 						],
 					},
