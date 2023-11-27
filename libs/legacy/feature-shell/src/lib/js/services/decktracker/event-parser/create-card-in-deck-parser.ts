@@ -39,7 +39,7 @@ export class CreateCardInDeckParser implements EventParser {
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
 		);
 		const positionFromTop = buildPositionFromTop(deck, gameEvent.additionalData.creatorCardId);
-		// console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
+		console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
 		const creatorEntityId =
 			gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId
@@ -49,17 +49,18 @@ export class CreateCardInDeckParser implements EventParser {
 			? // Because sometimes the entityId is reversed in the Other zone
 			  deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card
 			: null;
-		// console.debug(
-		// 	'[create-card-in-deck]',
-		// 	'creatorEntity',
-		// 	creatorEntity,
-		// 	gameEvent.additionalData.creatorEntityId,
-		// 	gameEvent.additionalData.influencedByEntityId,
-		// 	deck,
-		// );
+		console.debug(
+			'[create-card-in-deck]',
+			'creatorEntity',
+			creatorEntity,
+			gameEvent.additionalData.creatorEntityId,
+			gameEvent.additionalData.influencedByEntityId,
+			deck,
+		);
 		// Because of Tome Tampering
-		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
-		// console.debug('[create-card-in-deck]', 'card added', card);
+		// eslint-disable-next-line prefer-const
+		let { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
+		console.debug('[create-card-in-deck]', 'card added', card, zone);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		const newCardId = cardId ?? card?.cardId;
 		card = (card ?? DeckCard.create())
@@ -77,19 +78,22 @@ export class CreateCardInDeckParser implements EventParser {
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
 				createdByJoust: createdByJoust,
+				temporaryCard: false,
 			} as DeckCard)
 			.update({
 				relatedCardIds: this.buildRelatedCardIds(newCardId, deck, card?.relatedCardIds),
 			});
 
-		// console.debug('[create-card-in-deck]', 'adding card', card);
+		console.debug('[create-card-in-deck]', 'adding card', card);
 
-		const previousDeck = deck.deck;
+		// The initial card might be found in the other zone, so we remove it before adding it back
+		const deckWithoutCard = this.helper.removeCardFromDeck(deck, entityId);
+		const previousDeck = deckWithoutCard.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
-		const newPlayerDeck = deck.update({
+		const newPlayerDeck = deckWithoutCard.update({
 			deck: newDeck,
 		});
-		// console.debug('[create-card-in-deck]', 'newPlayerDeck', newPlayerDeck);
+		console.debug('[create-card-in-deck]', 'newPlayerDeck', newPlayerDeck);
 
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);

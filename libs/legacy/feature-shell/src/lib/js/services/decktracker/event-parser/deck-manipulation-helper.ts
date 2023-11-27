@@ -416,6 +416,15 @@ export class DeckManipulationHelper {
 		return deck;
 	}
 
+	public removeCardFromDeck(deck: DeckState, entityId: number): DeckState {
+		return deck.update({
+			board: deck.board.filter((card) => card.entityId !== entityId),
+			deck: deck.deck.filter((card) => card.entityId !== entityId),
+			otherZone: deck.otherZone.filter((card) => card.entityId !== entityId),
+			hand: deck.hand.filter((card) => card.entityId !== entityId),
+		});
+	}
+
 	public replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
 		const cardIndex = zone.map((card) => card.entityId).indexOf(newCard.entityId);
 		const newZone = [...zone];
