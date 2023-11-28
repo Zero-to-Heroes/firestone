@@ -4,6 +4,7 @@ import { Coin } from '../../../models/coin';
 import { CoinInfo } from '../../../models/memory/coin-info';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
+import { SceneService } from '../../game/scene.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
@@ -20,11 +21,12 @@ export class CoinsInternalService extends AbstractCollectionInternalService<Coin
 
 	constructor(
 		protected readonly events: Events,
+		protected readonly scene: SceneService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly allCards: CardsFacadeService,
 	) {
-		super(events);
+		super(events, scene);
 	}
 
 	protected override async preInit(): Promise<void> {

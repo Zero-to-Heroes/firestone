@@ -2,6 +2,7 @@ import { ApiRunner } from '@firestone/shared/framework/core';
 import { CardBack } from '../../../models/card-back';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
+import { SceneService } from '../../game/scene.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
@@ -20,11 +21,12 @@ export class CardBacksInternalService extends AbstractCollectionInternalService<
 
 	constructor(
 		protected readonly events: Events,
+		protected readonly scene: SceneService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly api: ApiRunner,
 	) {
-		super(events);
+		super(events, scene);
 	}
 
 	protected async preInit(): Promise<void> {

@@ -9,6 +9,7 @@ import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { Events } from '../events.service';
+import { SceneService } from '../game/scene.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
 import { AllTimeBoostersInternalService } from './details/all-time-boosters';
@@ -40,14 +41,15 @@ export class CollectionManager {
 		readonly allCards: CardsFacadeService,
 		readonly memoryReading: MemoryInspectionService,
 		readonly db: CollectionStorageService,
+		readonly scene: SceneService,
 		// private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
 	) {
-		this.cardsIS = new CardsInternalService(events, memoryReading, db);
-		this.cardBacksIS = new CardBacksInternalService(events, memoryReading, db, api);
-		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, memoryReading, db);
-		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, memoryReading, db);
-		this.coinsIS = new CoinsInternalService(events, memoryReading, db, this.allCards);
+		this.cardsIS = new CardsInternalService(events, scene, memoryReading, db);
+		this.cardBacksIS = new CardBacksInternalService(events, scene, memoryReading, db, api);
+		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, scene, memoryReading, db);
+		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, scene, memoryReading, db);
+		this.coinsIS = new CoinsInternalService(events, scene, memoryReading, db, this.allCards);
 
 		this.collection$$ = this.cardsIS.collection$$;
 		this.cardBacks$$ = this.cardBacksIS.collection$$;
