@@ -520,6 +520,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.Breakdance:
 				return and(side(inputSide), or(inDeck, inHand), minion);
+			case CardIds.BreathOfDreams:
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.BronzeSignetTavernBrawl:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.BunnyStomper_WW_435:
@@ -918,6 +920,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell, holy);
 			case CardIds.HopeOfQuelthalas:
 				return and(side(inputSide), or(inDeck, inHand, inPlay), minion);
+			case CardIds.HornOfWrathion:
+				return and(side(inputSide), inDeck, dragon);
 			case CardIds.HotStreak:
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.Hullbreaker:
