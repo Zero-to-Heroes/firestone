@@ -73,12 +73,16 @@ export class CreateCardInDeckParser implements EventParser {
 				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
 				manaCost: this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
 				rarity: cardData?.rarity?.toLowerCase(),
-				creatorCardId: gameEvent.additionalData.creatorCardId,
+				creatorCardId:
+					creatorEntity?.cardId ??
+					gameEvent.additionalData.creatorCardId ??
+					gameEvent.additionalData.influencedByEntityId,
 				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
 				createdByJoust: createdByJoust,
 				temporaryCard: false,
+				zone: undefined,
 			} as DeckCard)
 			.update({
 				relatedCardIds: this.buildRelatedCardIds(newCardId, deck, card?.relatedCardIds),
