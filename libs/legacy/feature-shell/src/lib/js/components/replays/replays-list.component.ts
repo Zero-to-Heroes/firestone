@@ -3,7 +3,7 @@ import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-da
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -25,6 +25,12 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				<replays-deckstring-filter-dropdown class="filter"></replays-deckstring-filter-dropdown>
 				<replays-bg-hero-filter-dropdown class="filter"></replays-bg-hero-filter-dropdown>
 				<replays-player-class-filter-dropdown class="filter"></replays-player-class-filter-dropdown>
+				<fs-text-input
+					class="opponent-search"
+					(fsModelUpdate)="onOpponentNameChanged($event)"
+					[placeholder]="'app.replays.filters.opponent-search.placeholder' | fsTranslate"
+				>
+				</fs-text-input>
 				<replays-icon-toggle
 					class="icon-toggle"
 					[ngClass]="{ absolute: !(replaysIconToggleAbsolutePosition$ | async) }"
@@ -47,6 +53,8 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	replays$: Observable<readonly GameStat[]>;
 
 	scrollDebounceTime = 0;
+
+	private opponentSearchString$$ = new BehaviorSubject<string>(undefined);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -83,7 +91,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 					].includes(gameModeFilter) || gameModeFilter?.startsWith('mercenaries'),
 			),
 		);
-		this.replays$ = combineLatest(
+		this.replays$ = combineLatest([
 			this.store.gameStats$(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
@@ -92,12 +100,14 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 				([main, nav, prefs]) => prefs.replaysActivePlayerClassFilter,
 				([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
 			),
-		).pipe(
+			this.opponentSearchString$$,
+		]).pipe(
 			filter(([gameStats, [other]]) => !!gameStats?.length),
 			this.mapData(
 				([
 					gameStats,
 					[gameModeFilter, bgHeroFilter, deckstringsFilter, playerClassFilter, opponentClassFilter],
+					opponentSearchString,
 				]) => {
 					return this.applyFilters(
 						gameStats ?? [],
@@ -106,6 +116,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 						deckstringsFilter,
 						playerClassFilter,
 						opponentClassFilter,
+						opponentSearchString,
 					);
 				},
 			),
@@ -119,6 +130,10 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		}
 	}
 
+	onOpponentNameChanged(searchString: string) {
+		this.opponentSearchString$$.next(searchString);
+	}
+
 	private applyFilters(
 		replays: readonly GameStat[],
 		gameModeFilter: string,
@@ -126,14 +141,20 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		deckstringsFilter: readonly string[],
 		playerClassFilter: string,
 		opponentClassFilter: string,
+		opponentSearchString: string,
 	): readonly GameStat[] {
 		const result = replays
 			.filter((replay) => this.gameModeFilter(replay, gameModeFilter))
 			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter, gameModeFilter))
 			.filter((replay) => this.deckstringFilter(replay, deckstringsFilter, gameModeFilter))
 			.filter((replay) => this.playerClassFilter(replay, playerClassFilter, gameModeFilter))
-			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter, gameModeFilter));
+			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter, gameModeFilter))
+			.filter((replay) => this.opponentNameFilter(replay, opponentSearchString));
 		return result;
+	}
+
+	private opponentNameFilter(stat: GameStat, filter: string): boolean {
+		return !filter || stat.opponentName?.toLowerCase().includes(filter.toLowerCase());
 	}
 
 	private playerClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {

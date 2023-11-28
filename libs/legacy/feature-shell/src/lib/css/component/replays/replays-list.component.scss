@@ -73,9 +73,12 @@
 	z-index: 10;
 
 	.filter {
-		margin-right: 8px;
 		::ng-deep .filter {
 			width: 163px;
+		}
+		// So that filters that are not visible don't take up space
+		::ng-deep filter-dropdown ng-select {
+			margin-right: 8px;
 		}
 	}
 
@@ -84,11 +87,10 @@
 		margin-right: 25px;
 	}
 
-	// .icon-toggle {
-	// 	position: absolute;
-	// 	bottom: -15px;
-	// 	right: 25px;
-	// }
+	.opponent-search {
+		position: relative;
+		top: 1px;
+	}
 }
 
 .loading {
