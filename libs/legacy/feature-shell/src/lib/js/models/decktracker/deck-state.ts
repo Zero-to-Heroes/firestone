@@ -137,11 +137,13 @@ export class DeckState {
 	}
 
 	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService, cardCost: number): DeckState {
+		console.debug('considering', spell, cardCost);
 		if (!spell) {
 			return this;
 		}
 
 		const refCard = allCards.getCard(spell.cardId);
+		console.debug('refCard', refCard, refCard.type?.toUpperCase(), CardType[CardType.SPELL]);
 		if (refCard.type?.toUpperCase() !== CardType[CardType.SPELL]) {
 			return this;
 		}
@@ -160,6 +162,12 @@ export class DeckState {
 		let manaSpentOnHolySpellsThisMatch = this.manaSpentOnHolySpellsThisMatch;
 		const manaCost = cardCost ?? 0;
 		manaSpentOnSpellsThisMatch += manaCost;
+		console.debug(
+			'is holy',
+			refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]),
+			refCard?.spellSchool,
+			manaCost,
+		);
 		if (refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY])) {
 			manaSpentOnHolySpellsThisMatch += manaCost;
 		}
