@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.0.0',
+		version: '13.0.1',
 		force: false,
 		sections: [
 			// {
@@ -97,6 +97,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where some card images would not show properly on the opponent's hand.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some cards would disappear once moving to the Other zone.`,
+							},
 						],
 					},
 					{
@@ -109,6 +113,37 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where Argent Braggart would not appear in the Tier 7 minions list.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the All-Time stats would disappear when closing the app.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the sideboard from ETC would not be properly registered in the High-Wins decks tab.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'misc',
+								text: `Force refresh of some memory reading elements (like all-time packs) when going to the collection manager.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `Force refresh of some memory reading elements (like all-time packs) when going to the collection manager.`,
 							},
 						],
 					},
