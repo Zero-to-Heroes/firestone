@@ -47,6 +47,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `App has been updated for patch 28.0.3`,
+							},
+						],
+					},
+					{
 						category: 'arena',
 						details: [
 							{
@@ -143,7 +152,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Force refresh of some memory reading elements (like all-time packs) when going to the collection manager.`,
+								text: `Add a search box to show only games against a specific opponent.`,
 							},
 						],
 					},
