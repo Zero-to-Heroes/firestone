@@ -32,6 +32,8 @@ export class InternalProfileBattlegroundsService {
 
 		// Only sync info when going into a BG scene
 		this.bgFullTimeStatsByHero$$.onFirstSubscribe(() => {
+			this.initLocalCache();
+
 			// Don't require premium sub here, as the info is also used elsewhere (on the app's profile)
 			this.sceneService.currentScene$$
 				.pipe(
@@ -40,7 +42,6 @@ export class InternalProfileBattlegroundsService {
 				)
 				.subscribe(() => {
 					this.initBattlegrounds();
-					this.initLocalCache();
 				});
 		});
 	}
