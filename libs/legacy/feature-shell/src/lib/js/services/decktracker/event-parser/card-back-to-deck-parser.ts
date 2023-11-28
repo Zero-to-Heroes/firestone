@@ -59,6 +59,8 @@ export class CardBackToDeckParser implements EventParser {
 					positionFromTop: undefined,
 					positionFromBottom: undefined,
 					dredged: undefined,
+					temporaryCard: false,
+					zone: undefined,
 			  } as DeckCard)
 			: card;
 		const cardWithInfluenceBack = cardWithoutInfluence.update({
