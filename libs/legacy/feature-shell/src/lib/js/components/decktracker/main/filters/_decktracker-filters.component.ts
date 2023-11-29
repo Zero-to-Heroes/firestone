@@ -45,6 +45,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
+			<constructed-meta-deck-card-search
+				class="filter search"
+				*ngIf="showMetaDeckCardSearch$ | async"
+			></constructed-meta-deck-card-search>
 
 			<div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
 				<svg>
@@ -76,6 +80,7 @@ export class DecktrackerFiltersComponent
 	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
 	showUseConservativeWinrateLink$: Observable<boolean>;
+	showMetaDeckCardSearch$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
@@ -99,6 +104,12 @@ export class DecktrackerFiltersComponent
 				this.mapData(([currentView]) =>
 					['decks', 'ladder-stats', 'ladder-ranking', 'replays', 'deck-details'].includes(currentView),
 				),
+			);
+		this.showMetaDeckCardSearch$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(([currentView]) => ['constructed-meta-decks'].includes(currentView)),
 			);
 		this.showHiddenDecksLink$ = this.store
 			.listen$(

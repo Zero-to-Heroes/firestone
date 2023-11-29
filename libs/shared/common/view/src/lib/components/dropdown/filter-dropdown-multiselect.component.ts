@@ -18,7 +18,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'filter-dropdown-multiselect',
@@ -145,6 +145,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			)
 			.subscribe((tempSelected) => this.tempSelected$.next(tempSelected));
 		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
+			tap(([options, selected]) => console.debug('[multiselect] showing text', options, selected)),
 			filter(([options, selected]) => !!options?.length),
 			this.mapData(([options, selected]) => {
 				if (!selected?.length || selected.length === options.length) {
@@ -156,6 +157,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 						.filter((option) => !!option)
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				);
+				console.debug('[multiselect] showing text', result, selected);
 				return result;
 			}),
 		);

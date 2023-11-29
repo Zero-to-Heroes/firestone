@@ -146,6 +146,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		});
 		this.decks$ = combineLatest([
 			this.constructedMetaStats.constructedMetaDecks$$,
+			this.constructedMetaStats.cardSearch$$,
 			this.sortCriteria$$,
 			collectionCache$,
 			this.store.listenPrefs$(
@@ -160,6 +161,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			this.mapData(
 				([
 					stats,
+					cardSearch,
 					sortCriteria,
 					collection,
 					[conservativeEstimate, sampleSize, dust, playerClasses, archetypes],
@@ -170,6 +172,10 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 						.filter((stat) => stat.totalGames >= sampleSize)
 						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
 						.filter((stat) => !archetypes?.length || archetypes.includes(stat.archetypeId))
+						.filter(
+							(stat) =>
+								!cardSearch?.length || cardSearch.every((card) => stat.allCardsInDeck.includes(card)),
+						)
 						.map((stat) => {
 							// enhancedCounter++;
 							// console.debug('enhancedCounter', enhancedCounter);

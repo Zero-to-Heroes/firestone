@@ -8,6 +8,7 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
@@ -20,16 +21,19 @@ const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/ap
 
 @Injectable()
 export class ConstructedMetaDecksStateService extends AbstractFacadeService<ConstructedMetaDecksStateService> {
-	public constructedMetaDecks$$: SubscriberAwareBehaviorSubject<DeckStats>;
+	public constructedMetaDecks$$: SubscriberAwareBehaviorSubject<ExtendedDeckStats>;
 	public currentConstructedMetaDeck$$: BehaviorSubject<DeckStat>;
 	public constructedMetaArchetypes$$: SubscriberAwareBehaviorSubject<ArchetypeStats>;
 	public currentConstructedMetaArchetype$$: BehaviorSubject<ArchetypeStat>;
+	public allCardsInDeck$$: SubscriberAwareBehaviorSubject<readonly string[]>;
+	public cardSearch$$: BehaviorSubject<readonly string[]>;
 
 	private triggerLoadDecks$$ = new BehaviorSubject<boolean>(false);
 	private triggerLoadArchetypes$$ = new BehaviorSubject<boolean>(false);
 
 	private api: ApiRunner;
 	private store: AppUiStoreFacadeService;
+	private prefs: PreferencesService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'constructedMetaDecks', () => !!this.constructedMetaDecks$$);
@@ -40,28 +44,38 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		this.currentConstructedMetaDeck$$ = this.mainInstance.currentConstructedMetaDeck$$;
 		this.constructedMetaArchetypes$$ = this.mainInstance.constructedMetaArchetypes$$;
 		this.currentConstructedMetaArchetype$$ = this.mainInstance.currentConstructedMetaArchetype$$;
+		this.allCardsInDeck$$ = this.mainInstance.allCardsInDeck$$;
+		this.cardSearch$$ = this.mainInstance.cardSearch$$;
 	}
 
 	protected async init() {
-		this.constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<DeckStats | null>(null);
+		this.constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<ExtendedDeckStats | null>(null);
 		this.currentConstructedMetaDeck$$ = new SubscriberAwareBehaviorSubject<DeckStat | null>(null);
 		this.constructedMetaArchetypes$$ = new SubscriberAwareBehaviorSubject<ArchetypeStats | null>(null);
 		this.currentConstructedMetaArchetype$$ = new SubscriberAwareBehaviorSubject<ArchetypeStat | null>(null);
+		this.allCardsInDeck$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
+		this.prefs = AppInjector.get(PreferencesService);
 		this.store = AppInjector.get(AppUiStoreFacadeService);
 
 		await this.store.initComplete();
+		await this.prefs.isReady();
 
 		this.constructedMetaDecks$$.onFirstSubscribe(async () => {
 			this.triggerLoadDecks$$.next(true);
+			this.constructedMetaDecks$$.subscribe((decks) => this.buildAllCardsInDecks(decks));
 		});
 		this.constructedMetaArchetypes$$.onFirstSubscribe(async () => {
 			this.triggerLoadArchetypes$$.next(true);
 		});
+		this.allCardsInDeck$$.onFirstSubscribe(async () => {
+			this.triggerLoadDecks$$.next(true);
+		});
 
 		combineLatest([
 			this.triggerLoadDecks$$,
-			this.store.listenPrefs$(
+			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksRankFilter2,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
 				(prefs) => prefs.constructedMetaDecksFormatFilter,
@@ -80,7 +94,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			});
 		combineLatest([
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaDeck),
-			this.store.listenPrefs$(
+			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksRankFilter2,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
 				(prefs) => prefs.constructedMetaDecksFormatFilter,
@@ -102,7 +116,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		combineLatest([
 			this.triggerLoadArchetypes$$,
-			this.store.listenPrefs$(
+			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksRankFilter2,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
 				(prefs) => prefs.constructedMetaDecksFormatFilter,
@@ -121,7 +135,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			});
 		combineLatest([
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaArchetype),
-			this.store.listenPrefs$(
+			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksRankFilter2,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
 				(prefs) => prefs.constructedMetaDecksFormatFilter,
@@ -142,7 +156,21 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			});
 	}
 
-	private async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<DeckStats> {
+	public newCardSearch(search: readonly string[]) {
+		this.mainInstance.newCardSearchInternal(search);
+	}
+
+	private newCardSearchInternal(search: readonly string[]) {
+		this.cardSearch$$.next(search);
+	}
+
+	private buildAllCardsInDecks(decks: ExtendedDeckStats) {
+		const allCards = decks?.deckStats.flatMap((d) => d.allCardsInDeck);
+		const uniqueCards = [...new Set(allCards)];
+		this.allCardsInDeck$$.next(uniqueCards);
+	}
+
+	private async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<ExtendedDeckStats> {
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
@@ -155,7 +183,20 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		const stats: DeckStats = JSON.parse(resultStr);
 		console.log('[constructed-meta-decks] loaded meta decks', format, time, rank, stats?.dataPoints);
-		return stats;
+		if (!stats) {
+			return stats as ExtendedDeckStats;
+		}
+
+		console.debug('[constructed-meta-decks] will load all cards in decks');
+		const result: ExtendedDeckStats = {
+			...stats,
+			deckStats: stats.deckStats.map((deck) => ({
+				...deck,
+				allCardsInDeck: [...(deck.cardVariations?.added ?? []), ...(deck.archetypeCoreCards ?? [])],
+			})),
+		};
+		console.debug('[constructed-meta-decks] done loading all cards in decks');
+		return result;
 	}
 
 	private async loadNewDeckDetails(
@@ -216,4 +257,12 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		console.debug('[constructed-meta-decks] loaded archetype', format, time, rank, deck?.totalGames);
 		return deck;
 	}
+}
+
+export interface ExtendedDeckStats extends DeckStats {
+	deckStats: readonly ExtendedDeckStat[];
+}
+
+export interface ExtendedDeckStat extends DeckStat {
+	allCardsInDeck: readonly string[];
 }
