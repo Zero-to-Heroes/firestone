@@ -21,6 +21,7 @@ export class SetsManagerService {
 		this.sets$$.onFirstSubscribe(() => {
 			this.allSets = this.setsService.getAllSets();
 			this.collectionManager.collection$$.pipe(debounceTime(1000)).subscribe((collection) => {
+				collection = collection ?? [];
 				const newSets = this.allSets.map((set) => this.buildSet(collection, set));
 				console.debug('[sets-manager] new sets', collection.length, newSets);
 				this.sets$$.next(newSets);

@@ -142,7 +142,7 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedCardBackId),
 		]).pipe(
 			this.mapData(([cardBacks, [selectedCardBackId]]) =>
-				cardBacks.find((cardBack) => cardBack.id === selectedCardBackId),
+				cardBacks?.find((cardBack) => cardBack.id === selectedCardBackId),
 			),
 		);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));

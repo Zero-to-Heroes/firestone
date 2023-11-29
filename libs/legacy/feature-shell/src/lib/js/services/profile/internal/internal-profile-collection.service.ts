@@ -94,12 +94,14 @@ export class InternalProfileCollectionService {
 			filter(([premium, sets]) => premium),
 			debounceTime(2000),
 			map(([premium, boosters]) => {
-				return boosters.map((booster) => {
-					return {
-						id: booster.packType,
-						totalObtained: booster.totalObtained,
-					} as ProfilePackStat;
-				});
+				return (
+					boosters?.map((booster) => {
+						return {
+							id: booster.packType,
+							totalObtained: booster.totalObtained,
+						} as ProfilePackStat;
+					}) ?? []
+				);
 			}),
 		);
 		boostersToUpload$

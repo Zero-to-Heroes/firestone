@@ -122,9 +122,12 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 				([ownedBgsHeroSkins, collection, mercenariesCollection, mercenariesReferenceData, category]) => {
 					switch (category) {
 						case 'collectible':
-							return this.buildCollectibleHeroPortraits(collection, this.allCards.getCards());
+							return this.buildCollectibleHeroPortraits(collection ?? [], this.allCards.getCards());
 						case 'battlegrounds':
-							return this.buildBattlegroundsHeroPortraits(ownedBgsHeroSkins, this.allCards.getCards());
+							return this.buildBattlegroundsHeroPortraits(
+								ownedBgsHeroSkins ?? [],
+								this.allCards.getCards(),
+							);
 						case 'mercenaries':
 							return this.buildMercenariesHeroPortraits(
 								mercenariesCollection?.Mercenaries ?? [],

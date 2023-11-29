@@ -76,7 +76,7 @@ export class TavernBrawlMetaComponent
 						.filter((stat) => !!stat.playerClass)
 						.map((stat) => {
 							let buildableDecks: readonly DeckStat[] = stat.bestDecks.filter((decklist) =>
-								this.canBuild(decklist, info.collection),
+								this.canBuild(decklist, info.collection ?? []),
 							);
 							const hasBuildableDecks = buildableDecks?.length > 0;
 							if (!buildableDecks?.length) {

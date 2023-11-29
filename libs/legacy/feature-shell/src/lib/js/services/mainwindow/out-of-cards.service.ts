@@ -64,7 +64,7 @@ export class OutOfCardsService {
 
 		console.log('[ooc-auth] starting collection sync');
 		// Read the memory, as if we can't access it we're not really interested in uploading a new version
-		collection = await this.collectionManager?.collection$$.getValueWithInit();
+		// collection = await this.collectionManager?.collection$$.getValueWithInit();
 		if (!collection?.length) {
 			console.log('[ooc-auth] collection from memory is empty, not synchronizing it');
 			return;

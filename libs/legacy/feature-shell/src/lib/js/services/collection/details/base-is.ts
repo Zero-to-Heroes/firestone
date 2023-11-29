@@ -6,7 +6,7 @@ import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 
 export abstract class AbstractCollectionInternalService<T, U = T> {
-	public collection$$ = new SubscriberAwareBehaviorSubject<readonly T[]>([]);
+	public collection$$ = new SubscriberAwareBehaviorSubject<readonly T[]>(null);
 
 	protected abstract type: () => string;
 	protected abstract memoryInfoCountExtractor: (update: MemoryUpdate) => number;

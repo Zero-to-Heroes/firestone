@@ -74,7 +74,7 @@ export class TheCoinsComponent extends AbstractSubscriptionStoreComponent implem
 					this.cdr.detectChanges();
 				}
 			});
-		const coins$ = this.store.coins$().pipe(this.mapData((coins) => this.buildCoins(coins)));
+		const coins$ = this.store.coins$().pipe(this.mapData((coins) => this.buildCoins(coins ?? [])));
 		this.total$ = coins$.pipe(this.mapData((coins) => coins.length));
 		this.unlocked$ = coins$.pipe(this.mapData((coins) => coins.filter((item) => item.numberOwned > 0).length));
 		this.shownCards$ = combineLatest(this.cardsOwnedActiveFilter$$.asObservable(), coins$).pipe(
