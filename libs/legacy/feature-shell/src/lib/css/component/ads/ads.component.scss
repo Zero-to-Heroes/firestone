@@ -1,9 +1,9 @@
 :host {
 	width: 400px;
 	height: 100%;
-    z-index: 99999999;
+	z-index: 99999999;
 	pointer-events: none;
-	padding-top: 15px;
+	padding-top: 0px;
 	padding-bottom: 15px;
 	margin-right: 15px;
 }
@@ -17,7 +17,8 @@
 
 .ad-container {
 	width: 400px;
-	height: 300px;
+	height: 600px;
+	flex-shrink: 0;
 	background: rgba(255, 255, 255, 0.08);
 	position: relative;
 	pointer-events: all;
@@ -32,19 +33,19 @@
 		}
 	}
 
-	&.top-ads {
-		height: 275px;
-		min-height: 275px;
-		max-height: 275px;
+	// &.top-ads {
+	// 	height: 275px;
+	// 	min-height: 275px;
+	// 	max-height: 275px;
 
-		single-ad {
-			width: 300px;
-			height: 250px;
-			min-height: 250px;
-			max-height: 250px;
-			display: flex;
-		}
-	}
+	// 	single-ad {
+	// 		width: 300px;
+	// 		height: 250px;
+	// 		min-height: 250px;
+	// 		max-height: 250px;
+	// 		display: flex;
+	// 	}
+	// }
 }
 
 .banner-container {

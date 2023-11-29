@@ -4,7 +4,6 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
-	Input,
 	OnDestroy,
 	Output,
 } from '@angular/core';
@@ -18,12 +17,8 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	styleUrls: [`../../../css/component/ads/ads.component.scss`],
 	template: `
 		<div class="ads">
-			<div class="ad-container top-ads" *ngIf="showTopAd">
-				<single-ad [adId]="'top'" [adSize]="topAdSize"></single-ad>
-			</div>
-
 			<div class="banner-container">
-				<div class="unlock-premium-banner" (click)="showSubscription()" *ngIf="showTopAd">
+				<div class="unlock-premium-banner" (click)="showSubscription()">
 					<div class="background"></div>
 					<div class="background-gradient"></div>
 					<div class="content">
@@ -41,10 +36,12 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				></div>
 			</div>
 
+			<!-- In large layouts -->
 			<div class="ad-container bottom-ads">
 				<single-ad
-					[adId]="'bottom'"
-					[tip]="showBottomTip"
+					[adId]="'double'"
+					[adSize]="doubleAdSize"
+					[tip]="true"
 					(adVisibility)="onAdVisibilityChanged($event)"
 				></single-ad>
 			</div>
@@ -55,11 +52,8 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 export class AdsComponent extends AbstractSubscriptionStoreComponent implements OnDestroy {
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
-	@Input() showTopAd = false;
-
 	showBottomTip = FeatureFlags.APP_TIPS;
-
-	topAdSize = { width: 300, height: 250 };
+	doubleAdSize = { width: 400, height: 600 };
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,

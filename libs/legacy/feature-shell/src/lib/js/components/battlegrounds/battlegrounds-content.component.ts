@@ -45,7 +45,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				</ng-container>
 			</section>
 		</div>
-		<ads *ngIf="showAds$ | async" [showTopAd]="true"></ads>
+		<ads *ngIf="showAds$ | async"></ads>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

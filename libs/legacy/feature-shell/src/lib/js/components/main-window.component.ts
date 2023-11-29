@@ -91,7 +91,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 						<streams-desktop class="main-section" *ngIf="value.currentApp === 'streams'"> </streams-desktop>
 					</section>
 				</div>
-				<ads *ngIf="value.showAds" [showTopAd]="true"></ads>
+				<ads *ngIf="value.showAds"></ads>
 			</section>
 			<ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue>
 			<new-version-notification
