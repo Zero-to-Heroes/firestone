@@ -703,6 +703,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), dragon);
 			case CardIds.DragonboneRitualTavernBrawl:
 				return and(side(inputSide), dragon);
+			case CardIds.Dragoncaster:
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.DragonConsort:
 				return and(side(inputSide), or(inHand, inDeck), dragon);
 			case CardIds.DragonGolem_WW_822:
@@ -1061,6 +1063,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.LoveEverlasting:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.MadScientist:
+				return and(side(inputSide), inDeck, secret);
 			case CardIds.MagathaBaneOfMusic:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.MagisterDawngrasp_AV_200:
@@ -1075,6 +1079,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Malorne:
 			case CardIds.Malorne_WON_011:
 				return and(side(inputSide), or(inDeck, inHand), beast);
+			case CardIds.MalygosAspectOfMagic:
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.MalygosTheSpellweaverCore:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.MarkOfScorn:
