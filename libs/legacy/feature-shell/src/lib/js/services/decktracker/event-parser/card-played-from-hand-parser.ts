@@ -6,6 +6,7 @@ import { GameEvent } from '../../../models/game-event';
 import {
 	COUNTERSPELLS,
 	battlecryGlobalEffectCards,
+	deathrattleGlobalEffectCards,
 	globalEffectCards,
 	hasRace,
 	startOfGameGlobalEffectCards,
@@ -134,7 +135,8 @@ export class CardPlayedFromHandParser implements EventParser {
 		if (
 			!isCardCountered &&
 			globalEffectCards.includes(card?.cardId as CardIds) &&
-			!startOfGameGlobalEffectCards.includes(card?.cardId as CardIds)
+			!startOfGameGlobalEffectCards.includes(card?.cardId as CardIds) &&
+			!deathrattleGlobalEffectCards.includes(card?.cardId as CardIds)
 		) {
 			let numberOfGlobalEffectsToAdd = 1;
 			if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && hasBrann) {

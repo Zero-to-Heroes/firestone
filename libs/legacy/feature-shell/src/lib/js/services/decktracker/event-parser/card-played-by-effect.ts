@@ -4,7 +4,12 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { battlecryGlobalEffectCards, COUNTERSPELLS, globalEffectCards } from '../../hs-utils';
+import {
+	battlecryGlobalEffectCards,
+	COUNTERSPELLS,
+	deathrattleGlobalEffectCards,
+	globalEffectCards,
+} from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -80,7 +85,8 @@ export class CardPlayedByEffectParser implements EventParser {
 			!isCardCountered &&
 			globalEffectCards.includes(cardId as CardIds) &&
 			// Battlecries don't trigger in this case
-			!battlecryGlobalEffectCards.includes(cardId as CardIds)
+			!battlecryGlobalEffectCards.includes(cardId as CardIds) &&
+			!deathrattleGlobalEffectCards.includes(cardId as CardIds)
 		) {
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
