@@ -96,7 +96,9 @@ export class DecktrackerFiltersComponent
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
 			.pipe(
 				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView !== 'constructed-deckbuilder'),
+				this.mapData(([currentView]) =>
+					['decks', 'ladder-stats', 'ladder-ranking', 'replays', 'deck-details'].includes(currentView),
+				),
 			);
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
