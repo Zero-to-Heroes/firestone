@@ -1,7 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
+import { ConstructedMetaDecksStateService } from '@legacy-import/src/lib/js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { Observable, combineLatest, filter, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -41,11 +42,15 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.constructedMetaStats.isReady();
+		await this.prefs.isReady();
+
 		this.visible$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
 			.pipe(
@@ -53,7 +58,7 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 					['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
 				),
 			);
-		this.options$ = this.store.constructedMetaDecks$().pipe(
+		this.options$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
 			filter((decks) => !!decks?.deckStats?.length),
 			this.mapData((decks) => {
 				const archetypes = decks.deckStats.flatMap((stat) => ({
@@ -85,7 +90,7 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 			}),
 		);
 		this.filter$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksArchetypeFilter),
+			this.prefs.preferences$((prefs) => prefs.constructedMetaDecksArchetypeFilter),
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 		]).pipe(
 			tap((filter) => console.debug('[archetype-filter] filter', filter)),
@@ -94,6 +99,10 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 				placeholder: this.i18n.translateString(`app.decktracker.filters.archetype-filter.all`),
 			})),
 		) as any;
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: readonly string[]) {

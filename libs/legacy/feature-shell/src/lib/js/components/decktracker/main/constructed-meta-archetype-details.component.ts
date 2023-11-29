@@ -1,6 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { Observable, combineLatest } from 'rxjs';
+import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
@@ -30,15 +32,22 @@ export class ConstructedMetaArchetypeDetailsComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.constructedMetaStats.isReady();
+		await this.prefs.isReady();
+
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
-		this.showRelativeInfo$ = this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksShowRelativeInfo);
+		this.showRelativeInfo$ = this.prefs
+			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo)
+			.pipe(this.mapData(([showRelativeInfo]) => showRelativeInfo));
 		this.deckDetails$ = combineLatest([
-			this.store.currentConstructedMetaArchetype$(),
+			this.constructedMetaStats.currentConstructedMetaArchetype$$,
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
 		]).pipe(
 			this.mapData(([stat, [conservativeEstimate]]) => {
@@ -68,5 +77,9 @@ export class ConstructedMetaArchetypeDetailsComponent
 				return result;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

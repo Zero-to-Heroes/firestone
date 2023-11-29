@@ -12,6 +12,7 @@ export abstract class AbstractSubscriptionStoreComponent extends AbstractSubscri
 		super(cdr);
 	}
 
+	/** @deprecated use PreferencesService.preferences$() instead */
 	protected listenForBasicPref$<T>(selector: (prefs: Preferences) => T, ...logArgs: any[]) {
 		return this.store.listenPrefs$((prefs) => selector(prefs)).pipe(this.mapData(([pref]) => pref));
 	}

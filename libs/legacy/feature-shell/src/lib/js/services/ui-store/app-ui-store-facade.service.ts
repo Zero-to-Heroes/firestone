@@ -9,7 +9,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { ArchetypeStat, ArchetypeStats, DeckStat, DeckStats } from '@firestone-hs/constructed-deck-stats';
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
@@ -267,22 +266,6 @@ export class AppUiStoreFacadeService {
 
 	public highlightedBgsMinions$(): Observable<readonly ShopMinion[]> {
 		return this.store.highlightedBgsMinions$();
-	}
-
-	public constructedMetaDecks$(): Observable<DeckStats> {
-		return this.store.constructedMetaDecks$();
-	}
-
-	public currentConstructedMetaDeck$(): Observable<DeckStat> {
-		return this.store.currentConstructedMetaDeck$();
-	}
-
-	public constructedMetaArchetypes$(): Observable<ArchetypeStats> {
-		return this.store.constructedMetaArchetypes$();
-	}
-
-	public currentConstructedMetaArchetype$(): Observable<ArchetypeStat> {
-		return this.store.currentConstructedMetaArchetype$();
 	}
 
 	public send(event: MainWindowStoreEvent) {

@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Card } from '../../../models/card';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
+import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -112,11 +113,14 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.constructedMetaStats.isReady();
+
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		this.showStandardDeviation$ = this.listenForBasicPref$(
 			(prefs) => !prefs.constructedMetaDecksUseConservativeWinrate,
@@ -141,7 +145,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			ownedCardIdsCache = {};
 		});
 		this.decks$ = combineLatest([
-			this.store.constructedMetaDecks$(),
+			this.constructedMetaStats.constructedMetaDecks$$,
 			this.sortCriteria$$,
 			collectionCache$,
 			this.store.listenPrefs$(
@@ -177,6 +181,10 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 				},
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onSortClick(rawCriteria: string) {

@@ -9,7 +9,7 @@ import {
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
+import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -19,21 +19,37 @@ const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rd
 const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/archetypes';
 
 @Injectable()
-export class ConstructedMetaDecksStateService {
-	public constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<DeckStats>(null);
-	public currentConstructedMetaDeck$$ = new BehaviorSubject<DeckStat>(undefined);
-	public constructedMetaArchetypes$$ = new SubscriberAwareBehaviorSubject<ArchetypeStats>(null);
-	public currentConstructedMetaArchetype$$ = new BehaviorSubject<ArchetypeStat>(null);
+export class ConstructedMetaDecksStateService extends AbstractFacadeService<ConstructedMetaDecksStateService> {
+	public constructedMetaDecks$$: SubscriberAwareBehaviorSubject<DeckStats>;
+	public currentConstructedMetaDeck$$: BehaviorSubject<DeckStat>;
+	public constructedMetaArchetypes$$: SubscriberAwareBehaviorSubject<ArchetypeStats>;
+	public currentConstructedMetaArchetype$$: BehaviorSubject<ArchetypeStat>;
 
 	private triggerLoadDecks$$ = new BehaviorSubject<boolean>(false);
 	private triggerLoadArchetypes$$ = new BehaviorSubject<boolean>(false);
 
-	constructor(private readonly api: ApiRunner, private readonly store: AppUiStoreFacadeService) {
-		window['constructedMetaDecks'] = this;
-		this.init();
+	private api: ApiRunner;
+	private store: AppUiStoreFacadeService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'constructedMetaDecks', () => !!this.constructedMetaDecks$$);
 	}
 
-	private async init() {
+	protected override assignSubjects() {
+		this.constructedMetaDecks$$ = this.mainInstance.constructedMetaDecks$$;
+		this.currentConstructedMetaDeck$$ = this.mainInstance.currentConstructedMetaDeck$$;
+		this.constructedMetaArchetypes$$ = this.mainInstance.constructedMetaArchetypes$$;
+		this.currentConstructedMetaArchetype$$ = this.mainInstance.currentConstructedMetaArchetype$$;
+	}
+
+	protected async init() {
+		this.constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<DeckStats | null>(null);
+		this.currentConstructedMetaDeck$$ = new SubscriberAwareBehaviorSubject<DeckStat | null>(null);
+		this.constructedMetaArchetypes$$ = new SubscriberAwareBehaviorSubject<ArchetypeStats | null>(null);
+		this.currentConstructedMetaArchetype$$ = new SubscriberAwareBehaviorSubject<ArchetypeStat | null>(null);
+		this.api = AppInjector.get(ApiRunner);
+		this.store = AppInjector.get(AppUiStoreFacadeService);
+
 		await this.store.initComplete();
 
 		this.constructedMetaDecks$$.onFirstSubscribe(async () => {

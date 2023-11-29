@@ -19,7 +19,6 @@ import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } fro
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { ArchetypeStat, ArchetypeStats, DeckStat, DeckStats } from '@firestone-hs/constructed-deck-stats';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
@@ -56,7 +55,6 @@ import { BattlegroundsQuestsService } from '../battlegrounds/bgs-quests.service'
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
-import { ConstructedMetaDecksStateService } from '../decktracker/constructed-meta-decks-state-builder.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { DuelsAdventureInfoService } from '../duels/duels-adventure-info.service';
 import { DuelsBucketsService } from '../duels/duels-buckets.service';
@@ -132,10 +130,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
 	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
 	private highlightedBgsMinions: Observable<readonly ShopMinion[]>;
-	private constructedMetaDecks: Observable<DeckStats>;
-	private currentConstructedMetaDeck: Observable<DeckStat>;
-	private constructedMetaArchetypes: Observable<ArchetypeStats>;
-	private currentConstructedMetaArchetype: Observable<ArchetypeStat>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -427,22 +421,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.highlightedBgsMinions;
 	}
 
-	public constructedMetaDecks$(): Observable<DeckStats> {
-		return this.constructedMetaDecks;
-	}
-
-	public currentConstructedMetaDeck$(): Observable<DeckStat> {
-		return this.currentConstructedMetaDeck;
-	}
-
-	public constructedMetaArchetypes$(): Observable<ArchetypeStats> {
-		return this.constructedMetaArchetypes;
-	}
-
-	public currentConstructedMetaArchetype$(): Observable<ArchetypeStat> {
-		return this.currentConstructedMetaArchetype;
-	}
-
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -491,19 +469,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initPackStats();
 		this.initCardsHistory();
 		this.initHighlightedBgsMinions();
-		this.constructedMetaDecks = (
-			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
-		).constructedMetaDecks$$;
-		this.currentConstructedMetaDeck = (
-			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
-		).currentConstructedMetaDeck$$;
-		this.constructedMetaArchetypes = (
-			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
-		).constructedMetaArchetypes$$;
-		this.currentConstructedMetaArchetype = (
-			this.ow.getMainWindow().constructedMetaDecks as ConstructedMetaDecksStateService
-		).currentConstructedMetaArchetype$$;
-		// this.duelsTopDecks = (this.ow.getMainWindow().duelsTopDeckService as DuelsTopDeckService).topDeck$$;
 		this.initialized = true;
 	}
 

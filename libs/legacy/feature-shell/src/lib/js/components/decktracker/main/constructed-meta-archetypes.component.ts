@@ -1,11 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { formatGamesCount } from './constructed-meta-decks.component';
 
 @Component({
@@ -86,7 +87,7 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	archetypes$: Observable<EnhancedArchetypeStat[]>;
 	showStandardDeviation$: Observable<boolean>;
@@ -97,22 +98,26 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 	});
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.constructedMetaStats.isReady();
+		await this.prefs.isReady();
+
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
-		this.showStandardDeviation$ = this.listenForBasicPref$(
-			(prefs) => !prefs.constructedMetaDecksUseConservativeWinrate,
-		);
+		this.showStandardDeviation$ = this.prefs
+			.preferences$((prefs) => !prefs.constructedMetaDecksUseConservativeWinrate)
+			.pipe(this.mapData(([pref]) => pref));
 		this.archetypes$ = combineLatest([
 			this.sortCriteria$$,
-			this.store.constructedMetaArchetypes$(),
-			this.store.listenPrefs$(
+			this.constructedMetaStats.constructedMetaArchetypes$$,
+			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
 				(prefs) => prefs.constructedMetaArchetypesSampleSizeFilter,
 				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
@@ -137,6 +142,10 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionStor
 					.sort((a, b) => this.sortArchetypes(a, b, sortCriteria)),
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onSortClick(rawCriteria: string) {
