@@ -1061,6 +1061,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.LoveEverlasting:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.MagathaBaneOfMusic:
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.MagisterDawngrasp_AV_200:
 				return and(side(inputSide), inOther, spell, hasSpellSchool, spellPlayedThisMatch);
 			case CardIds.MagisterUnchainedTavernBrawlToken:
@@ -1564,7 +1566,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inGraveyard, paladin, minion, attackGreaterThan(1), attackLessThan(5));
 			case CardIds.TyrsTears:
 			case CardIds.TyrsTears_TyrsTearsToken:
-				return and(side(inputSide), inGraveyard, paladin, minion);
+				return and(side(inputSide), inGraveyard, currentClass, minion);
 			case CardIds.Tuskpiercer:
 				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.TwilightDeceptor:
