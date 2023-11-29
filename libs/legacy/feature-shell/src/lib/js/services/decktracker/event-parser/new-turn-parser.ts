@@ -76,13 +76,14 @@ export class NewTurnParser implements EventParser {
 			turnTimings: opponentTurnTimings,
 		} as DeckState);
 
-		return Object.assign(new GameState(), currentState, {
+		const startOfTurnState = currentState.update({
 			currentTurn: currentTurn,
 			gameTagTurnNumber: gameTurnNumber,
 			playerDeck: playerDeck,
 			opponentDeck: opponentDeck,
 			mulliganOver: currentState.mulliganOver || numericTurn >= 2,
-		} as GameState);
+		});
+		return startOfTurnState;
 	}
 
 	event(): string {

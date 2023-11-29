@@ -1,3 +1,4 @@
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
@@ -24,14 +25,17 @@ export class MainStepReadyParser implements EventParser {
 			!currentState.playerDeck.turnTimings.length && !currentState.playerDeck.turnTimings.length
 				? buildTurnTimings(currentTurn, isPlayerActive, gameEvent.additionalData.timestamp, currentState)
 				: [currentState.playerDeck.turnTimings, currentState.opponentDeck.turnTimings];
+
 		return Object.assign(new GameState(), currentState, {
 			mulliganOver: true,
 			currentTurn: currentTurn,
 			playerDeck: currentState.playerDeck.update({
 				turnTimings: playerTurnTimings,
+				cardsInStartingHand: currentState.playerDeck.hand.map((card) => ({ ...card } as DeckCard)),
 			}),
 			opponentDeck: currentState.opponentDeck.update({
 				turnTimings: opponentTurnTimings,
+				cardsInStartingHand: currentState.opponentDeck.hand.map((card) => ({ ...card } as DeckCard)),
 			}),
 		} as GameState);
 	}

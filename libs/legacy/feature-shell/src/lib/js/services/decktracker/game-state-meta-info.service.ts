@@ -51,20 +51,13 @@ export class GameStateMetaInfoService {
 		currentTurn: number | 'mulligan',
 		removeBottomInfo: boolean,
 	): readonly DeckCard[] {
-		return zone.map((card) =>
-			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined
-				? this.updateCardInHand(card, currentTurn, removeBottomInfo)
-				: card,
-		);
+		return zone.map((card) => this.updateCardInHand(card, currentTurn, removeBottomInfo));
 	}
 
 	private updateCardInHand(card: DeckCard, currentTurn: number | 'mulligan', removeBottomInfo: boolean): DeckCard {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
-			turnAtWhichCardEnteredCurrentZone: currentTurn,
-			turnAtWhichCardEnteredHand:
-				card.metaInfo.turnAtWhichCardEnteredHand == null
-					? currentTurn
-					: card.metaInfo.turnAtWhichCardEnteredHand,
+			turnAtWhichCardEnteredCurrentZone: card.metaInfo.turnAtWhichCardEnteredCurrentZone ?? currentTurn,
+			turnAtWhichCardEnteredHand: card.metaInfo.turnAtWhichCardEnteredHand ?? currentTurn,
 		} as CardMetaInfo);
 		return card.update({
 			metaInfo: newMeta,
