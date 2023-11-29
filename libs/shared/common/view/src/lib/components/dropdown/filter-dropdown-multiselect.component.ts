@@ -49,8 +49,15 @@ import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators'
 					(ngModelChange)="onCurrentSearchChanged($event)"
 					(mousedown)="preventDrag($event)"
 				/>
-				<div class="choices" scrollable>
-					<div class="option" *ngFor="let option of value.workingOptions; trackBy: trackByFn">
+				<virtual-scroller
+					#scroll
+					[items]="value.workingOptions!"
+					[bufferAmount]="25"
+					role="list"
+					class="choices"
+					scrollable
+				>
+					<div class="option" *ngFor="let option of scroll.viewPortItems; trackBy: trackByFn">
 						<checkbox
 							[label]="option.label"
 							[value]="option.selected"
@@ -59,7 +66,7 @@ import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators'
 							(valueChanged)="select(option, $event)"
 						></checkbox>
 					</div>
-				</div>
+				</virtual-scroller>
 				<div class="controls">
 					<div
 						class="button clear"
@@ -112,7 +119,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	@Input() debounceTime = 200;
 
 	valueText$: Observable<string>;
-	workingOptions$: Observable<readonly InternalOption[]>;
+	workingOptions$: Observable<InternalOption[]>;
 	validSelection$: Observable<boolean>;
 	currentSearch$: Observable<string>;
 

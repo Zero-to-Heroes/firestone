@@ -80,6 +80,12 @@
 			max-height: 500px;
 			overflow: scroll;
 
+			::ng-deep {
+				.scrollable-content {
+					position: inherit;
+				}
+			}
+
 			&::-webkit-scrollbar {
 				width: 5px;
 				height: 0; // Always hide horizontal scrollbars
