@@ -245,6 +245,7 @@ export const giftCreators = [
 	CardIds.FirstDayOfSchool,
 	CardIds.FirstFlame,
 	CardIds.FirstWishTavernBrawl,
+	CardIds.Fishflinger,
 	CardIds.FishyFlyer,
 	CardIds.FlameBehemoth,
 	CardIds.FlameGeyser,
