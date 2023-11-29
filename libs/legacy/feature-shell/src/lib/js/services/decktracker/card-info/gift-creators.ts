@@ -24,6 +24,8 @@ export const giftCreators = [
 	CardIds.ApothecaryHelbrim,
 	CardIds.ArcaneBreath,
 	CardIds.ArcaneBrilliance,
+	CardIds.ArcaneFluxTavernBrawl,
+	CardIds.ArcaneFlux_ArcaneFluxTavernBrawlEnchantment,
 	CardIds.ArcaneQuiver_RLK_817,
 	CardIds.ArcaneQuiver_RLK_Prologue_RLK_817,
 	CardIds.ArcaneWyrm,
