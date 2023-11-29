@@ -11,6 +11,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		justify-content: flex-start;
 		background-color: var(--ads-background-color);
 		flex-direction: column;
 		padding: 30px;
@@ -20,6 +21,7 @@
 		.logo {
 			width: 109px;
 			height: 154px;
+			height: 300px;
 			color: var(--ads-color);
 			--icon-color: var(--ads-color);
 		}
