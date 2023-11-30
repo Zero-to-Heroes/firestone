@@ -58,8 +58,9 @@ export class ConstructedMetaDeckCardSearchComponent extends AbstractSubscription
 			}),
 		);
 		this.filter$ = this.constructedMetaStats.cardSearch$$.pipe(
+			tap((filter) => console.debug('[multiselect] before setting filter', filter)),
 			this.mapData((filter) => ({
-				selected: filter.map((a) => '' + a),
+				selected: filter?.map((a) => '' + a) ?? [],
 				placeholder: this.i18n.translateString(`app.decktracker.filters.card-filter.all`),
 			})),
 			tap((filter) => console.debug('[multiselect] setting filter', filter)),
