@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.0.1',
+		version: '13.0.4',
 		force: false,
 		sections: [
 			// {
@@ -42,47 +42,21 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `App has been updated for patch 28.0.3`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'feature',
-								text: `Added a "Card Stats" tab. For now I'm only showing the "Drawn winrate" stat, which is probably the one that is the most correlated to how strong a card is, and will be useful to display in the overlay during the draft picks. That said, let me know if you're interested in seeing other stats on this tab :)`,
-							},
-							{
-								type: 'feature',
-								text: `Premium users can now see the card stats directly as an overlay while drafting (for now, this includes the Drawn Winrate, and will probably evolve to include more stats in the future). The first pick of each draft is free for all users though :)`,
-							},
-							{
-								type: 'feature',
-								text: `You can now see the synergies each option of the draft has with your deck, simply by mousing over each card. If you're played Duels with Firestone before, it works the exact same way as the Treasures synergies highlights.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an info leak where Tradeable cards traded back to deck would be revealed when drawn.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'general',
+			// 			details: [
+			// 				{
+			// 					type: 'content',
+			// 					text: `App has been updated for patch 28.0.3`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -91,24 +65,28 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `The fake burned cards created by Symphony of Sins won't appear anymore.`,
+								type: 'feature',
+								text: `Mousing over Starlight Whelp (and Hex Lord Malacrass) in the tracker now shows your starting hand as related cards.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where playing a Chaotic Tendril with Brann in play would only increment the counter once.`,
+								text: `Fix an issue where Azerite Vein would not be correctly greyed out from the secrets helper.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where holy secrets / quests / sigils / auras (like Crusader's Aura) would not count towards the cost reduction for Garden's Grace.`,
+								text: `Fix an issue where some secrets created in-game (e.g. by Reliquary Researcher) would not be correctly flagged as "gifts".`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some card images would not show properly on the opponent's hand.`,
+								text: `Fix an issue where the "card search" field would not appear when viewing the Meta Decks tab.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some cards would disappear once moving to the Other zone.`,
+								text: `Fix an issue where some deathrattle global effects (like Unlucky Powderman) would also appear when playing the card.`,
+							},
+							{
+								type: 'ui',
+								text: `The Spell School widget now shows each spell school on a separate line, to make it easier to read. Let me know what you think of the change!`,
 							},
 						],
 					},
@@ -116,25 +94,12 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'content',
-								text: `Remove Treasure-Seeker Elise from the minions list when playing with the Value Inflation anomaly.`,
+								type: 'bug',
+								text: `Fix a sim issue with Flying Feathermane.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Argent Braggart would not appear in the Tier 7 minions list.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the All-Time stats would disappear when closing the app.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the sideboard from ETC would not be properly registered in the High-Wins decks tab.`,
+								text: `Fix a sim issue with Diremuck Forager.`,
 							},
 						],
 					},
@@ -142,17 +107,17 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'misc',
-								text: `Force refresh of some memory reading elements (like all-time packs) when going to the collection manager.`,
+								type: 'bug',
+								text: `Fix cards being flagged as "new" when opening packs before opening the Collection tab in Firestone.`,
 							},
 						],
 					},
 					{
-						category: 'replays',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a search box to show only games against a specific opponent.`,
+								type: 'ui',
+								text: `Change the ads layout to put the "go premium" banner at the top.`,
 							},
 						],
 					},
