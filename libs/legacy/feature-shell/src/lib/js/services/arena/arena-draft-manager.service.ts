@@ -82,7 +82,7 @@ export class ArenaDraftManagerService
 
 			this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
 				const changes: MemoryUpdate = event.data[0];
-				if (changes.ArenaDraftStep) {
+				if (changes.ArenaDraftStep != null) {
 					this.currentStep$$.next(changes.ArenaDraftStep);
 
 					if (changes.ArenaDraftStep != null && changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_HERO) {
