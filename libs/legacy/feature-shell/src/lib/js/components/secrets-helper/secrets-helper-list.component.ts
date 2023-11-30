@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { uuidShort } from '@firestone/shared/framework/common';
+import { sortByProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BoardSecret } from '../../models/decktracker/board-secret';
@@ -102,20 +102,8 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 				const refOption = options[0].update({
 					isValidOption: validOption,
 				} as SecretOption);
-				return { index: index, data: refOption };
+				return refOption;
 			})
-			.sort((a, b) => {
-				if (this.cardsGoToBottom) {
-					if (a.data.isValidOption && !b.data.isValidOption) {
-						return -1;
-					}
-					if (!a.data.isValidOption && b.data.isValidOption) {
-						return 1;
-					}
-				}
-				return a.index - b.index;
-			})
-			.map((refOption) => refOption.data)
 			.map((refOption) => {
 				const dbCard = this.allCards.getCard(refOption.cardId);
 				return VisualDeckCard.create({
@@ -127,7 +115,8 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 					classes: dbCard.classes?.map((c) => CardClass[c]) ?? [],
 					internalEntityIds: [uuidShort()],
 				});
-			});
+			})
+			.sort(sortByProperties((option) => [option.highlight === 'dim' ? 1 : 0, option.cardName]));
 
 		return reducedOptions.map((c) => VisualDeckCard.create(c));
 	}
