@@ -65,11 +65,21 @@ export class TriggerOnCardPlaySecretsParser implements EventParser {
 
 		const secretsWeCantRuleOut = [];
 
-		const cardPlayed = deckWithSecretToCheck.findCard(entityId);
+		const cardPlayed = otherDeck.findCard(entityId);
 		const turnEnteredHand = cardPlayed?.card?.metaInfo?.turnAtWhichCardEnteredHand;
 		const currentTurn = currentState.currentTurn;
+		console.debug(
+			'[trigger-on-spell-play] entityId',
+			entityId,
+			'cardPlayed',
+			cardPlayed,
+			'turnEnteredHand',
+			turnEnteredHand,
+			'currentTurn',
+			currentTurn,
+		);
 
-		if (turnEnteredHand !== currentTurn || otherDeck.hand.length === 10) {
+		if (turnEnteredHand !== currentTurn || deckWithSecretToCheck.hand.length === 10) {
 			secretsWeCantRuleOut.push(CardIds.AzeriteVein_WW_422);
 		}
 
