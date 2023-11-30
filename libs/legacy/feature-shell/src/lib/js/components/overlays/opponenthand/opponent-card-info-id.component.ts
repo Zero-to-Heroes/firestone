@@ -50,8 +50,7 @@ export class OpponentCardInfoIdComponent {
 		const realCardId = this.normalizeEnchantment(value.cardId, value.lastAffectedByCardId || value.creatorCardId);
 		// console.debug('realCardId', realCardId);
 		// const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
-		this.createdBy =
-			!value.cardId && !!value.creatorCardId && publicCardCreators.includes(value.creatorCardId as CardIds);
+		this.createdBy = !value.cardId && !!value.creatorCardId;
 		this.drawnBy =
 			!value.cardId &&
 			!!value.lastAffectedByCardId &&

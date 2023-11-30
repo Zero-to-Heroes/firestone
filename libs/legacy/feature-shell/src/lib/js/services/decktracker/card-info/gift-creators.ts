@@ -452,6 +452,7 @@ export const giftCreators = [
 	CardIds.MysteryWinner,
 	CardIds.MysticalMirage_ULDA_035,
 	CardIds.NatureStudies_SCH_333,
+	CardIds.RenoLoneRanger_NatureBullet_WW_0700p5,
 	CardIds.NecroticMortician,
 	CardIds.Nefarian_BRM_030,
 	CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
