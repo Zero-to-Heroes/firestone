@@ -34,13 +34,19 @@ export class MulticasterCounterDefinition implements CounterDefinition<GameState
 
 	public emit(uniqueSpellSchools: readonly string[]): NonFunctionProperties<MulticasterCounterDefinition> {
 		const totalCardsToDraw = uniqueSpellSchools?.length || 0;
-		const tooltip = this.i18n.translateString(`counters.multicaster.${this.side}`, {
-			cardsTotal: totalCardsToDraw,
-			schools:
-				uniqueSpellSchools
-					?.map((spellSchool) => this.i18n.translateString('global.spellschool.' + spellSchool.toLowerCase()))
-					?.join(', ') || 0,
-		});
+		const tooltip = !!uniqueSpellSchools?.length
+			? this.i18n.translateString(`counters.multicaster.${this.side}-new`, {
+					cardsTotal: totalCardsToDraw,
+					schools:
+						'<br/>' +
+						uniqueSpellSchools
+							?.map((spellSchool) =>
+								this.i18n.translateString('global.spellschool.' + spellSchool.toLowerCase()),
+							)
+							.sort()
+							?.join('<br/>'),
+			  })
+			: this.i18n.translateString(`counters.multicaster.${this.side}`);
 		return {
 			type: 'multicaster',
 			value: `${totalCardsToDraw}`,
