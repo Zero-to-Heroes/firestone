@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.0.4',
+		version: '13.0.5',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,21 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'general',
-			// 			details: [
-			// 				{
-			// 					type: 'content',
-			// 					text: `App has been updated for patch 28.0.3`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the card winrate bubbles would not disappear after finishing the draft.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
