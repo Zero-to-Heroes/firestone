@@ -1055,6 +1055,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
 				return and(side(inputSide), inDeck, beast);
+			case CardIds.LoadTheChamber_WW_409:
+				return and(side(inputSide), or(inDeck, inHand), or(naga, and(fel, spell), weapon));
 			case CardIds.LockAndLoad_AT_061:
 			case CardIds.LockAndLoad_CORE_AT_061:
 			case CardIds.LockAndLoad_WON_023:
