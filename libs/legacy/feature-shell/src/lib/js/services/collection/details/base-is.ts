@@ -61,16 +61,16 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 						console.debug(
 							`[collection-manager] [${this.type()}] updating collection`,
 							newCount,
-							collection.length,
-							updated.length,
+							collection?.length,
+							updated?.length,
 						);
 						this.collection$$.next(updated);
 					}
 				});
-			this.collection$$.pipe(filter((collection) => !!collection.length)).subscribe(async (collection) => {
+			this.collection$$.pipe(filter((collection) => !!collection?.length)).subscribe(async (collection) => {
 				console.debug(
 					`[collection-manager] [${this.type()}] updating collection in db`,
-					collection.length,
+					collection?.length,
 					collection,
 				);
 				await this.localDbSaveOperation(collection);
