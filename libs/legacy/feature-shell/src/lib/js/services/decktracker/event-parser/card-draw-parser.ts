@@ -12,6 +12,7 @@ import {
 	supportedAdditionalData,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { tutors } from '../card-info/card-tutors';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -87,7 +88,15 @@ export class CardDrawParser implements EventParser {
 		// 	[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
 		// );
 
-		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId ?? card.lastAffectedByCardId;
+		// This is more and more spaghetti. TODO: clean this up, my future self!
+		// This has been introduced because some cards leak info in the logs (tradeable cards traded back to deck)
+		// So the C# parser hides some info when emitting the "CARD_DRAW_FROM_DECK" event, but the info isn't removed
+		// from the state in the app.
+		// So we use this flag to know whether we should display something
+		const drawnByCardId = gameEvent.additionalData.drawnByCardId;
+		const isDrawnByCardIdPublic = tutors.includes(drawnByCardId);
+		console.debug('isDrawnByCardIdPublic', isDrawnByCardIdPublic, drawnByCardId);
+		const lastInfluencedByCardId = gameEvent.additionalData.lastInfluencedByCardId ?? card.lastAffectedByCardId;
 
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
 			gameEvent.additionalData?.lastInfluencedByCardId,
@@ -117,7 +126,7 @@ export class CardDrawParser implements EventParser {
 			// (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
 			// This field is only used to flag "created by", so we should be fine even with tradeable cards
 			publicCardCreators.includes(lastInfluencedByCardId);
-		// console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic, isCreatorPublic);
+		console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic, isCreatorPublic);
 
 		// When the card should be known (created on top of deck) by we don't know the details (eg Merch Seller, or Dredge),
 		// we still want to surface the information we know
@@ -127,7 +136,11 @@ export class CardDrawParser implements EventParser {
 			creatorCardId: isCreatorPublic ? creatorCardId ?? card.creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) ?? card?.cardName : undefined,
-			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId ?? card.lastAffectedByCardId : undefined,
+			lastAffectedByCardId: isCreatorPublic
+				? lastInfluencedByCardId ?? card.lastAffectedByCardId ?? drawnByCardId
+				: isDrawnByCardIdPublic
+				? drawnByCardId
+				: undefined,
 			manaCost: isCardInfoPublic ? card.manaCost ?? card.manaCost : null,
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 		} as DeckCard);
