@@ -1,3 +1,4 @@
+import { COIN_IDS, CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -31,11 +32,15 @@ export class MainStepReadyParser implements EventParser {
 			currentTurn: currentTurn,
 			playerDeck: currentState.playerDeck.update({
 				turnTimings: playerTurnTimings,
-				cardsInStartingHand: currentState.playerDeck.hand.map((card) => ({ ...card } as DeckCard)),
+				cardsInStartingHand: currentState.playerDeck.hand
+					.map((card) => ({ ...card } as DeckCard))
+					.filter((card) => !COIN_IDS.includes(card.cardId as CardIds)),
 			}),
 			opponentDeck: currentState.opponentDeck.update({
 				turnTimings: opponentTurnTimings,
-				cardsInStartingHand: currentState.opponentDeck.hand.map((card) => ({ ...card } as DeckCard)),
+				cardsInStartingHand: currentState.opponentDeck.hand
+					.map((card) => ({ ...card } as DeckCard))
+					.filter((card) => !COIN_IDS.includes(card.cardId as CardIds)),
 			}),
 		} as GameState);
 	}
