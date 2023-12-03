@@ -558,6 +558,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.ClassActionLawyer:
 				return and(side(inputSide), inDeck, neutral);
+			case CardIds.ClericOfScales:
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.ClickClocker:
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.ClockworkAssistant_GILA_907:
@@ -1132,6 +1134,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), spell, nature, dealsDamage);
 			case CardIds.NerubianVizier:
 				return and(side(inputSide), or(inDeck, inHand), minion, undead);
+			case CardIds.NecriumApothecary:
+				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.NzothGodOfTheDeep:
 				return and(side(inputSide), inGraveyard, minion, (input: SelectorInput) => !!input.card?.races?.length);
 			case CardIds.NzothTheCorruptor:
@@ -1329,6 +1333,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inHand, inDeck), pirate);
 			case CardIds.SharpEyedSeeker:
 				return and(side(inputSide), inDeck, notInInitialDeck);
+			case CardIds.Shattershambler:
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.SheldrasMoontree:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ShipsCannon:
