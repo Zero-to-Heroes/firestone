@@ -1580,7 +1580,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inGraveyard, paladin, minion, attackGreaterThan(1), attackLessThan(5));
 			case CardIds.TyrsTears:
 			case CardIds.TyrsTears_TyrsTearsToken:
-				return and(side(inputSide), inGraveyard, currentClass, minion);
+				return and(side(inputSide), or(inDeck, inHand, inGraveyard), currentClass, minion);
 			case CardIds.Tuskpiercer:
 				return and(side(inputSide), inDeck, deathrattle);
 			case CardIds.TwilightDeceptor:
