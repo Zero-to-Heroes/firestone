@@ -27,7 +27,9 @@ export class CardCreatorChangedParser implements EventParser {
 
 		// See receive-card-in-hand-parser
 		const isSpecialCasePublic =
-			!isPlayer && !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId as CardIds);
+			!isPlayer &&
+			// There isn't a whitelist here, because the CREATOR_CHANGED event assumes the info is public
+			!forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId as CardIds);
 		// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(gameEvent.additionalData.creatorCardId as CardIds));
 		const isCardInfoPublic = isPlayer || isSpecialCasePublic;
 		const newCardInHand = cardInHand
