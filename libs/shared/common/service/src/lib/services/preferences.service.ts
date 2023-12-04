@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
+import { arraysEqual, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, filter, map, sampleTime, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, distinctUntilChanged, filter, map, sampleTime, shareReplay } from 'rxjs';
 import {
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
@@ -67,6 +67,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		return this.preferences$$.pipe(
 			filter((prefs) => !!prefs),
 			map((prefs) => selectors.map((selector) => selector(prefs))),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
 	}
