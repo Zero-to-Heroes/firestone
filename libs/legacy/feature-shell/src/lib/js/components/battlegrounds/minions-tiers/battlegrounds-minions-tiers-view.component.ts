@@ -390,7 +390,7 @@ const buildMechanicsTiers = (
 	const mechanicalTiers: Tier[] = [
 		{
 			tavernTier: 'B',
-			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BATTLECRY])),
+			cards: cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.BATTLECRY)),
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.BATTLECRY].toLowerCase()}`),
@@ -399,7 +399,7 @@ const buildMechanicsTiers = (
 		},
 		{
 			tavernTier: 'D',
-			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])),
+			cards: cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.DEATHRATTLE)),
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.DEATHRATTLE].toLowerCase()}`),
@@ -409,7 +409,7 @@ const buildMechanicsTiers = (
 		{
 			tavernTier: 'DS',
 			cards: [
-				...cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
+				...cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.DIVINE_SHIELD)),
 				cardsInGame.find((c) => c.id === CardIds.Glowscale_BG23_008),
 			],
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
@@ -420,7 +420,7 @@ const buildMechanicsTiers = (
 		},
 		{
 			tavernTier: 'T',
-			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.TAUNT])),
+			cards: cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.TAUNT)),
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.TAUNT].toLowerCase()}`),
@@ -429,7 +429,7 @@ const buildMechanicsTiers = (
 		},
 		{
 			tavernTier: 'E',
-			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.END_OF_TURN])),
+			cards: cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.END_OF_TURN)),
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.END_OF_TURN].toLowerCase()}`),
@@ -438,7 +438,7 @@ const buildMechanicsTiers = (
 		},
 		{
 			tavernTier: 'R',
-			cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.REBORN])),
+			cards: cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.REBORN)),
 			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.REBORN].toLowerCase()}`),
@@ -458,6 +458,9 @@ const buildMechanicsTiers = (
 
 	return mechanicalTiers;
 };
+
+const isInMechanicalTier = (card: ReferenceCard, mechanic: GameTag): boolean =>
+	card.mechanics?.includes(GameTag[mechanic]) || card.referencedTags?.includes(GameTag[mechanic]);
 
 const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {
 	if (anomalies.includes(CardIds.UncompensatedUpset_BG27_Anomaly_721)) {
