@@ -49,21 +49,29 @@ export class CardBackToDeckParser implements EventParser {
 		// that goes back, and so we don't add them once again
 		const shouldKeepDeckAsIs = deck.deckstring && card?.inInitialDeck && !card?.cardId;
 
+		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
+		// the enchantments, cost reduction, etc.
+		const refCard = this.allCards.getCard(card.cardId);
+		const cardWithInfoReset = card?.update({
+			manaCost: refCard?.cost ?? card?.manaCost,
+			actualManaCost: refCard?.cost ?? card?.manaCost,
+			buffCardIds: [],
+			buffingEntityCardIds: [],
+			// linkedEntityIds: [],
+		});
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
 		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
 		// could possibly have an info leak
-		const cardWithoutInfluence = card
-			? card.update({
-					entityId: card.entityId,
-					lastAffectedByCardId: undefined,
-					positionFromTop: undefined,
-					positionFromBottom: undefined,
-					dredged: undefined,
-					temporaryCard: false,
-					zone: undefined,
-			  } as DeckCard)
-			: card;
-		const cardWithInfluenceBack = cardWithoutInfluence.update({
+		const cardWithoutInfluence = cardWithInfoReset?.update({
+			entityId: cardWithInfoReset.entityId,
+			lastAffectedByCardId: undefined,
+			positionFromTop: undefined,
+			positionFromBottom: undefined,
+			dredged: undefined,
+			temporaryCard: false,
+			zone: undefined,
+		} as DeckCard);
+		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
 		});
 		const cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
