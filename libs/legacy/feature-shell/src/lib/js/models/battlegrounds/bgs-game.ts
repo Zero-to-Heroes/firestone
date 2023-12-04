@@ -21,6 +21,7 @@ export class BgsGame {
 	readonly hasPrizes: boolean;
 	readonly hasQuests: boolean;
 	readonly hasBuddies: boolean;
+	readonly hasSpells: boolean;
 	readonly anomalies: readonly string[];
 
 	readonly lastOpponentCardId: string;

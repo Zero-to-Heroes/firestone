@@ -163,6 +163,7 @@ export class EndGameUploaderService {
 			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 			game.hasBgsPrizes = info.gameSettings?.battlegroundsPrizes;
+			game.hasBgsSpells = info.gameSettings?.battlegroundsSpells;
 			game.bgsAnomalies = info.gameSettings?.battlegroundsAnomalies;
 			game.bgBattleOdds = info.bgBattleOdds;
 		} else if (isMercenaries(game.gameMode)) {
@@ -480,6 +481,7 @@ export interface UploadInfo {
 	bgInfo: BattlegroundsInfo;
 	gameSettings: {
 		battlegroundsPrizes: boolean;
+		battlegroundsSpells: boolean;
 		battlegroundsQuests: boolean;
 		battlegroundsAnomalies: readonly string[];
 	};

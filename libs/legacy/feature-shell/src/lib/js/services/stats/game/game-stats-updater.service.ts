@@ -105,12 +105,13 @@ export class GameStatsUpdaterService {
 			bgsAvailableTribes: game.availableTribes,
 			bgsBannedTribes: game.bannedTribes,
 			bgsHasPrizes: game.hasBgsPrizes,
+			bgsHasSpells: game.hasBgsSpells,
 			bgsHasQuests: replay.hasBgsQuests,
 			bgsHeroQuests: quests.map((q) => q.questCardId) as readonly string[],
 			bgsQuestsCompletedTimings: quests.map((q) => q.turnCompleted) as readonly number[],
 			bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],
 			bgsAnomalies: game.bgsAnomalies,
-		} as GameStat);
+		});
 
 		if (!isMercenaries(game.gameMode)) {
 			return firstGame;

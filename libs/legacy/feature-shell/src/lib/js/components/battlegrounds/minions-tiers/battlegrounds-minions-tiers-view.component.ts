@@ -18,7 +18,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { compareTribes, getBuddy, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
+import { compareTribes, getBuddy, getEffectiveTribes, isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-view',
@@ -230,6 +230,7 @@ export const buildTiers = (
 	playerCardId: string,
 	allPlayerCardIds: readonly string[],
 	hasBuddies: boolean,
+	hasSpells: boolean,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
@@ -313,14 +314,18 @@ export const buildTiers = (
 	const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 		tavernTier: parseInt(tierLevel),
 		cards: groupedByTier[tierLevel],
-		groupingFunction: (card: ExtendedReferenceCard) =>
-			getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
+		groupingFunction: (card: ExtendedReferenceCard) => {
+			if (hasSpells && isBgsSpell(card)) {
+				return ['spell'];
+			}
+			return getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
 				(t) =>
 					!availableTribes?.length ||
 					availableTribes.includes(Race[t]) ||
 					Race[t] === Race.BLANK ||
 					Race[t] === Race.ALL,
-			),
+			);
+		},
 		type: 'standard',
 	}));
 	const mechanicsTiers = showMechanicsTiers ? buildMechanicsTiers(filteredCards, buddies, i18n) : [];

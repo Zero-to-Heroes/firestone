@@ -142,6 +142,7 @@ export class GameEvents {
 						type: GameEvent.GAME_SETTINGS,
 						additionalData: {
 							battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
+							battlegroundsSpells: gameEvent.Value?.BattlegroundsSpells,
 							battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
 							battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
 							battlegroundsAnomalies:

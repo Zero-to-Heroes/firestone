@@ -37,6 +37,7 @@ export class GameStat {
 	readonly bgsPerfectGame: boolean;
 	readonly levelAfterMatch: string;
 	readonly bgsHasPrizes: boolean;
+	readonly bgsHasSpells: boolean;
 	readonly bgsHasQuests: boolean;
 	readonly bgsHeroQuests: readonly string[];
 	readonly bgsAnomalies: readonly string[];

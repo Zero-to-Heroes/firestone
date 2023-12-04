@@ -53,6 +53,7 @@ const normalizeHeroCardIdAfterSkin = (heroCardId: string, allCards: CardsFacadeS
 
 export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
+	hasSpells: boolean,
 	allCards: CardsFacadeService,
 ): readonly ReferenceCard[] => {
 	const result = allCards
@@ -153,6 +154,11 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		default:
 			return getEffectiveTribesEnum(card);
 	}
+};
+
+export const isBgsSpell = (card: ReferenceCard): boolean => {
+	return false;
+	// return card.id.length % 2 === 0;
 };
 
 export const getEffectiveTribes = (

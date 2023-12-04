@@ -195,6 +195,31 @@
 				display: flex;
 				align-items: center;
 			}
+
+			.gold-cost {
+				height: 100%;
+				margin-right: 5px;
+				margin-left: -7px;
+				position: relative;
+
+				.cost {
+					position: absolute;
+					top: 0;
+					left: 1px;
+					width: 100%;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-family: Passion One;
+					font-style: normal;
+					font-weight: normal;
+					font-size: 15px;
+					text-align: center;
+					text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000,
+						1px 1px 0 #000;
+				}
+			}
 		}
 	}
 }

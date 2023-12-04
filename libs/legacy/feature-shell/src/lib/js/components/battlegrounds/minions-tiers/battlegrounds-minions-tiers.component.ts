@@ -88,6 +88,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.store.listenBattlegrounds$(
 				([main, prefs]) => main?.currentGame?.availableRaces,
 				([main, prefs]) => main?.currentGame?.hasBuddies,
+				([main, prefs]) => main?.currentGame?.hasSpells,
 				([main, prefs]) => main?.currentGame?.anomalies,
 				([main, prefs]) => main?.currentGame?.getMainPlayer()?.cardId,
 				([main, prefs]) => main?.currentGame?.players?.map((p) => p.cardId),
@@ -98,13 +99,14 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.mapData(
 				([
 					[showMechanicsTiers, showTribeTiers, bgsGroupMinionsIntoTheirTribeGroup],
-					[races, hasBuddies, anomalies, playerCardId, allPlayersCardIds],
+					[races, hasBuddies, hasSpells, anomalies, playerCardId, allPlayersCardIds],
 				]) => {
+					// hasSpells = true;
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
-					const cardsInGame = getAllCardsInGame(races, this.allCards);
+					const cardsInGame = getAllCardsInGame(races, hasSpells, this.allCards);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,
@@ -116,6 +118,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						normalizedCardId,
 						allPlayerCardIds,
 						hasBuddies,
+						hasSpells,
 						this.i18n,
 						this.allCards,
 					);

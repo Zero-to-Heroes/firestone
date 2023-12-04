@@ -12,6 +12,7 @@ import { GameTag, Race } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, distinctUntilChanged } from 'rxjs';
+import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsToggleHighlightMechanicsOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-mechanics-on-board-event';
 import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
@@ -60,7 +61,16 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 						(click)="clickMinion(minion)"
 					>
 						<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
-						<div class="name">{{ minion.name }}</div>
+						<div class="name">
+							<div class="gold-cost" *ngIf="minion.goldCost != null">
+								<img
+									class="icon"
+									src="https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/coin_mana.png"
+								/>
+								<div class="cost">{{ minion.goldCost }}</div>
+							</div>
+							{{ minion.name }}
+						</div>
 						<div class="highlight-buttons">
 							<div
 								class="highlight-minion-button"
@@ -293,6 +303,7 @@ export class BattlegroundsMinionsGroupComponent
 									hasEndOfTurn && group.highlightedMechanics.includes(GameTag.END_OF_TURN),
 								rebornHighlight: hasReborn && group.highlightedMechanics.includes(GameTag.REBORN),
 								techLevel: card.techLevel,
+								goldCost: isBgsSpell(card) ? card.cost : null,
 								hasBattlecry: hasBattlecry,
 								hasDeathrattle: hasDeathrattle,
 								hasTaunt: hasTaunt,
@@ -478,6 +489,7 @@ interface Minion {
 	readonly name: string;
 	readonly banned?: boolean;
 	readonly techLevel?: number;
+	readonly goldCost: number;
 	readonly highlighted: boolean;
 	readonly hasTaunt?: boolean;
 	readonly hasEndOfTurn?: boolean;
