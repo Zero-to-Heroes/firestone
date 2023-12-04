@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.0.5',
+		version: '13.0.7',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,21 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the card winrate bubbles would not disappear after finishing the draft.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'arena',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where the card winrate bubbles would not disappear after finishing the draft.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -65,59 +65,20 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Mousing over Starlight Whelp (and Hex Lord Malacrass) in the tracker now shows your starting hand as related cards.`,
+								type: 'bug',
+								text: `Fix an issue where dredge could mess up the order of existing cards at the bottom of the deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Azerite Vein would not be correctly greyed out from the secrets helper.`,
+								text: `Now properly reset cost / buffs when sending back card to deck (unless it is traded back to deck).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some secrets created in-game (e.g. by Reliquary Researcher) would not be correctly flagged as "gifts".`,
+								text: `Fix an issue with The Coin being flagged as in starting hand for Starlight Whelp's oracle.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the "card search" field would not appear when viewing the Meta Decks tab.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some deathrattle global effects (like Unlucky Powderman) would also appear when playing the card.`,
-							},
-							{
-								type: 'ui',
-								text: `The Spell School widget now shows each spell school on a separate line, to make it easier to read. Let me know what you think of the change!`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Flying Feathermane.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Diremuck Forager.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix cards being flagged as "new" when opening packs before opening the Collection tab in Firestone.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'ui',
-								text: `Change the ads layout to put the "go premium" banner at the top.`,
+								text: `Fix some info leaks when specific tutors (like Volumne Up) drawing cards that were traded back to deck.`,
 							},
 						],
 					},
