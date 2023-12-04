@@ -982,6 +982,13 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell, chooseOne);
 			case CardIds.JewelOfNzoth:
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
+			case CardIds.JuicyPsychmelon:
+				return and(
+					side(inputSide),
+					inDeck,
+					minion,
+					or(effectiveCostEqual(7), effectiveCostEqual(8), effectiveCostEqual(9), effectiveCostEqual(10)),
+				);
 			case CardIds.JungleJammer:
 				return and(side(inputSide), or(inHand, inDeck), spell);
 			case CardIds.K90tron:

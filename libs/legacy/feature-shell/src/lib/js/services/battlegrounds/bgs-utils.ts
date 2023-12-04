@@ -1,5 +1,6 @@
 import {
 	CardIds,
+	CardType,
 	GameTag,
 	GameType,
 	NON_BUYABLE_MINION_IDS,
@@ -61,6 +62,7 @@ export const getAllCardsInGame = (
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
+		.filter((card) => hasSpells || card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_SPELL])
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
 			if (!availableTribes?.length) {
@@ -157,8 +159,7 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 };
 
 export const isBgsSpell = (card: ReferenceCard): boolean => {
-	return false;
-	// return card.id.length % 2 === 0;
+	return card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL];
 };
 
 export const getEffectiveTribes = (
@@ -413,6 +414,12 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 483;
 		case CardIds.ThorimStormlord_BG27_HERO_801:
 			return 514;
+		case CardIds.SnakeEyes_BG28_HERO_400:
+			return 831;
+		case CardIds.TaethelanBloodwatcher_BG28_HERO_800:
+			return 832;
+		case CardIds.DoctorHollidae_BG28_HERO_801:
+			return 833;
 		// case CardIds.Diablo:
 		// 	return;
 		default:

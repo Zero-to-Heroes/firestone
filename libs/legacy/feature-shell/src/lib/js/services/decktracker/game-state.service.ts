@@ -427,7 +427,14 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			console.debug(
+				'[game-state] emitting event',
+				emittedEvent.event.name,
+				gameEvent.entityId,
+				gameEvent.cardId,
+				gameEvent,
+				emittedEvent.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -587,7 +594,7 @@ export class GameStateService {
 				new MinionSummonedParser(this.helper, this.allCards, this.i18n),
 				new SpecificSummonsParser(this.allCards),
 			],
-			[GameEvent.MINIONS_DIED]: [new MinionDiedParser(this.helper)],
+			[GameEvent.MINIONS_DIED]: [new MinionDiedParser(this.helper, this.allCards)],
 			[GameEvent.MULLIGAN_DEALING]: [new MulliganOverParser()],
 			[GameEvent.OPPONENT]: [
 				new OpponentPlayerParser(

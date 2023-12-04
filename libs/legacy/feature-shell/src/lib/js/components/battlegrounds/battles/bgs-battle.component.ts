@@ -229,6 +229,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 								EternalKnightsDeadThisGame:
 									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo
 										?.EternalKnightsDeadThisGame,
+								TavernSpellsCastThisGame:
+									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.TavernSpellsCastThisGame,
 								UndeadAttackBonus:
 									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.UndeadAttackBonus,
 								ChoralAttackBuff:
@@ -259,6 +261,9 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 								EternalKnightsDeadThisGame:
 									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo
 										?.EternalKnightsDeadThisGame,
+								TavernSpellsCastThisGame:
+									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo
+										?.TavernSpellsCastThisGame,
 								UndeadAttackBonus:
 									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.UndeadAttackBonus,
 								ChoralAttackBuff:

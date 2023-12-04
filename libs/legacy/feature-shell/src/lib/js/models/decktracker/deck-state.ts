@@ -96,6 +96,8 @@ export class DeckState {
 	readonly heroAttacksThisMatch: number = 0;
 	readonly minionsDeadSinceLastTurn: readonly ShortCard[] = [];
 	readonly minionsDeadThisTurn: readonly ShortCard[] = [];
+	readonly minionsDeadThisMatch: readonly ShortCard[] = [];
+	readonly lastDeathrattleMinionDead: ShortCard;
 	readonly anachronosTurnsPlayed: readonly number[] = [];
 	readonly bonelordFrostwhisperFirstTurnTrigger: number = null;
 	readonly plaguesShuffledIntoEnemyDeck: number = 0;

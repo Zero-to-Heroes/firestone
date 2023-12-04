@@ -179,6 +179,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				hand: hand,
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
+					TavernSpellsCastThisGame: playerBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
 					UndeadAttackBonus: playerBoard.globalInfo?.UndeadAttackBonus ?? 0,
 					ChoralAttackBuff: playerBoard.globalInfo?.ChoralAttackBuff ?? 0,
 					ChoralHealthBuff: playerBoard.globalInfo?.ChoralHealthBuff ?? 0,

@@ -37,6 +37,6 @@ export class PlayerMonstrousParrotWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.playerMonstrousParrotCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck.hasRelevantCard([CardIds.MonstrousParrot], { onlyLimited: prefValue === 'limited' }) &&
-			!!state?.playerDeck.lastDeathrattleTriggered;
+			!!state.playerDeck.lastDeathrattleMinionDead;
 	}
 }

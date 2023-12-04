@@ -1,6 +1,6 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { MinionsDiedEvent } from '../../../models/mainwindow/game-events/minions-died-event';
@@ -8,7 +8,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class MinionDiedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -34,7 +34,8 @@ export class MinionDiedParser implements EventParser {
 
 			const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];
 			const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
-			const newPlayerDeck = Object.assign(new DeckState(), deck, {
+			const refCard = this.allCards.getCard(cardId);
+			const newPlayerDeck = deck.update({
 				board: newBoard,
 				otherZone: newOther,
 				elwynnBoarsDeadThisMatch: deck.elwynnBoarsDeadThisMatch + (cardId === CardIds.ElwynnBoar ? 1 : 0),
@@ -48,7 +49,11 @@ export class MinionDiedParser implements EventParser {
 					...deck.minionsDeadThisTurn,
 					{ cardId: cardId, entityId: entityId },
 				] as readonly ShortCard[],
-			} as DeckState);
+				minionsDeadThisMatch: [...deck.minionsDeadThisMatch, { cardId: cardId, entityId: entityId }],
+				lastDeathrattleMinionDead: refCard.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])
+					? { cardId, entityId }
+					: deck.lastDeathrattleMinionDead,
+			});
 			result = Object.assign(new GameState(), result, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 			});

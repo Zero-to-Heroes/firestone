@@ -127,7 +127,15 @@ export class BattlegroundsMinionsListComponent
 							highlightedMechanics: highlightedMechanics || [],
 						};
 					})
-					.sort((a, b) => compareTribes(a.tribe, b.tribe, this.i18n));
+					.sort((a, b) => {
+						if (a.tribe === 'spell') {
+							return -1;
+						}
+						if (b.tribe === 'spell') {
+							return 1;
+						}
+						return compareTribes(a.tribe, b.tribe, this.i18n);
+					});
 			}),
 		);
 	}

@@ -40,6 +40,7 @@ export class BgsCustomSimulationState {
 						heroPowerInfo: 0,
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
+							TavernSpellsCastThisGame: 0,
 							UndeadAttackBonus: 0,
 							ChoralAttackBuff: 0,
 							ChoralHealthBuff: 0,
@@ -61,6 +62,7 @@ export class BgsCustomSimulationState {
 						heroPowerInfo: 0,
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
+							TavernSpellsCastThisGame: 0,
 							UndeadAttackBonus: 0,
 							ChoralAttackBuff: 0,
 							ChoralHealthBuff: 0,

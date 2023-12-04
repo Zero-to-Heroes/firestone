@@ -31,7 +31,7 @@ export class MonstrousParrotCounterDefinition implements CounterDefinition<GameS
 
 	public select(gameState: GameState): string {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.lastDeathrattleTriggered;
+		return deck.lastDeathrattleMinionDead?.cardId;
 	}
 
 	public emit(lastDeathrattleCardId: string): NonFunctionProperties<MonstrousParrotCounterDefinition> {

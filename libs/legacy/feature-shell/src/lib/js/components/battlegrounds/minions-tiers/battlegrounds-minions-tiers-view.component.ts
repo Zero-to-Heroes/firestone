@@ -379,7 +379,9 @@ const buildTribeTiers = (
 			};
 			return result;
 		})
-		.sort((a, b) => compareTribes(a.tavernTier as Race, b.tavernTier as Race, i18n));
+		.sort((a, b) => {
+			return compareTribes(a.tavernTier as Race, b.tavernTier as Race, i18n);
+		});
 };
 
 const buildMechanicsTiers = (
