@@ -1361,7 +1361,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ShroudOfConcealment:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.Shudderwock_GIL_820:
-				return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), minion, battlecry);
+				return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry);
 			case CardIds.SicklyGrimewalker_YOG_512:
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SilvermoonFarstrider_RLK_826:
