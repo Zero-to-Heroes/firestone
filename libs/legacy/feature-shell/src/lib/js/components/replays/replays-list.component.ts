@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -25,6 +26,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				<replays-deckstring-filter-dropdown class="filter"></replays-deckstring-filter-dropdown>
 				<replays-bg-hero-filter-dropdown class="filter"></replays-bg-hero-filter-dropdown>
 				<replays-player-class-filter-dropdown class="filter"></replays-player-class-filter-dropdown>
+				<replays-opponent-class-filter-dropdown class="filter"></replays-opponent-class-filter-dropdown>
 				<fs-text-input
 					class="opponent-search"
 					(fsModelUpdate)="onOpponentNameChanged($event)"
@@ -61,11 +63,14 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
 		this.showUseClassIconsToggle$ = this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter).pipe(
 			this.mapData(
 				(gameModeFilter) =>
@@ -93,12 +98,12 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		);
 		this.replays$ = combineLatest([
 			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
-				([main, nav, prefs]) => prefs.replaysActiveBgHeroFilter,
-				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
-				([main, nav, prefs]) => prefs.replaysActivePlayerClassFilter,
-				([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
+			this.prefs.preferences$(
+				(prefs) => prefs.replaysActiveGameModeFilter,
+				(prefs) => prefs.replaysActiveBgHeroFilter,
+				(prefs) => prefs.replaysActiveDeckstringsFilter,
+				(prefs) => prefs.replaysActivePlayerClassFilter,
+				(prefs) => prefs.replaysActiveOpponentClassFilter,
 			),
 			this.opponentSearchString$$,
 		]).pipe(
@@ -121,6 +126,10 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 				},
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onScrolling(scrolling: boolean) {
@@ -158,7 +167,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private playerClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
-		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(gameModeFilter)) {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist', 'ranked'].includes(gameModeFilter)) {
 			return true;
 		}
 		if (stat.gameMode !== 'ranked') {
@@ -169,7 +178,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private opponentClassFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
-		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(gameModeFilter)) {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist', 'ranked'].includes(gameModeFilter)) {
 			return true;
 		}
 		if (stat.gameMode !== 'ranked') {
@@ -180,7 +189,7 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private deckstringFilter(stat: GameStat, filter: readonly string[], gameModeFilter: string): boolean {
-		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist'].includes(gameModeFilter)) {
+		if (!['ranked-standard', 'ranked-wild', 'ranked-classic', 'ranked-twist', 'ranked'].includes(gameModeFilter)) {
 			return true;
 		}
 

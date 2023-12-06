@@ -63,16 +63,7 @@ export class ReplaysOpponentClassFilterDropdownComponent
 				this.mapData(([filter, gameModeFilter]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible:
-						[
-							null,
-							undefined,
-							'battlegrounds',
-							'practice',
-							'mercenaries-all',
-							'mercenaries-pve',
-							'mercenaries-pvp',
-						].includes(gameModeFilter) || gameModeFilter?.startsWith('mercenaries'),
+					visible: ['ranked', 'ranked-standard', 'ranked-wild'].includes(gameModeFilter),
 				})),
 			);
 	}
