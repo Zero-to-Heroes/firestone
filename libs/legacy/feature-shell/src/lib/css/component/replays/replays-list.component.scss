@@ -71,6 +71,8 @@
 	transition: margin 0.4s ease-in-out;
 	position: relative;
 	z-index: 10;
+	flex-wrap: wrap;
+	row-gap: 10px;
 
 	.filter {
 		::ng-deep .filter {
@@ -78,6 +80,9 @@
 		}
 		// So that filters that are not visible don't take up space
 		::ng-deep filter-dropdown ng-select {
+			margin-right: 8px;
+		}
+		::ng-deep filter-dropdown-multiselect .filter-dropdown-multiselect {
 			margin-right: 8px;
 		}
 	}
@@ -89,7 +94,7 @@
 
 	.opponent-search {
 		position: relative;
-		top: 1px;
+		top: 0.5px;
 	}
 }
 
