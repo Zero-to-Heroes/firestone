@@ -99,7 +99,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 					.map((boosterId: BoosterType) => {
 						const packsForBoosterId = packStats?.filter((p) => p.boosterId === boosterId);
 						const packFromMemory = packsFromMemory?.find((p) => p.packType === boosterId);
-						const totalPacksReceived = packFromMemory?.totalObtained;
+						const totalPacksReceived = packFromMemory?.totalObtained ?? 0;
 						const unopenedPacks = packFromMemory?.unopened ?? 0;
 						const openedPacks = totalPacksReceived - unopenedPacks;
 						const pityTimerReset = collectionPityTimerResets[boosterId];
@@ -239,6 +239,14 @@ const buildPityTimer = (
 			  !hasAlreadyOpenedLegendary
 			? 10
 			: LEGENDARY_PITY_TIMER;
+	console.debug(
+		'pity timer value',
+		boosterId,
+		type,
+		valueIfNoPacksOpened,
+		totalOpenedPacks,
+		hasAlreadyOpenedLegendary,
+	);
 	for (let i = 0; i < openedPacks.length; i++) {
 		if (pityTimerReset != null && new Date(openedPacks[i].creationDate).getTime() < pityTimerReset) {
 			break;
