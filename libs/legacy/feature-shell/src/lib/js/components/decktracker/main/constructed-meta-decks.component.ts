@@ -4,7 +4,7 @@ import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, startWith } from 'rxjs/operators';
 import { Card } from '../../../models/card';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
@@ -127,6 +127,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		);
 		this.collection$ = this.store.collection$().pipe(
 			filter((collection) => !!collection),
+			startWith([]),
 			debounceTime(500),
 			this.mapData((collection) => collection),
 		);
