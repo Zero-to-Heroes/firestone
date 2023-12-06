@@ -11,6 +11,7 @@ import {
 	ScenarioId,
 	SceneMode,
 } from '@firestone-hs/reference-data';
+import { MemoryUpdate } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -19,7 +20,6 @@ import { distinctUntilChanged } from 'rxjs';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { GameStatusService } from '../game-status.service';

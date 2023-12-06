@@ -1,8 +1,8 @@
 import { COIN_IDS, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { MemoryUpdate } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Coin } from '../../../models/coin';
 import { CoinInfo } from '../../../models/memory/coin-info';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';

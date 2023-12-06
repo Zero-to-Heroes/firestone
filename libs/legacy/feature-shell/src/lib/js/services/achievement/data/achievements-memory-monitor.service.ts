@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { MemoryUpdate } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';

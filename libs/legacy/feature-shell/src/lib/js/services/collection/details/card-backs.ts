@@ -1,6 +1,6 @@
+import { MemoryUpdate } from '@firestone/memory';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { CardBack } from '../../../models/card-back';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';

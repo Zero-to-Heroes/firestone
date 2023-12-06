@@ -1,7 +1,7 @@
 import { SceneMode } from '@firestone-hs/reference-data';
+import { MemoryUpdate } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { debounceTime, distinctUntilChanged, filter, map, merge, tap, throttleTime } from 'rxjs';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 

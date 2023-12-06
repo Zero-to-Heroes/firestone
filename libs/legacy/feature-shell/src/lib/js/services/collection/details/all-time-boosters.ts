@@ -1,5 +1,5 @@
 import { PackInfo } from '@firestone/collection/view';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
+import { MemoryUpdate } from '@firestone/memory';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';

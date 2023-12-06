@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { IArenaDraftManagerService } from '@firestone/arena/common';
+import { MemoryUpdate } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -12,7 +13,6 @@ import {
 import { combineLatest, map } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { SceneService } from '../game/scene.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';

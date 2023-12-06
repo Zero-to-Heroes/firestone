@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { MemoryUpdate } from '@firestone/memory';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
-import { MemoryUpdate } from '@models/memory/memory-update';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OwNotificationsService } from '@services/notifications.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
@@ -32,8 +32,10 @@ export class MindVisionStateMachineService {
 		if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
 			console.warn('[mind-vision] memory update is reset', changesToBroadcast);
 			this.performAction(Action.RESET);
+		} else {
+			this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
+			this.mindVisionFacade.memoryUpdates$$.next(changesToBroadcast);
 		}
-		this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
 	};
 
 	private dispatcher = async (action: Action) => {

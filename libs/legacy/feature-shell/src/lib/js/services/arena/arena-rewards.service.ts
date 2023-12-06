@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Input } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
+import { MemoryUpdate, Reward } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -11,7 +12,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs';
 import { ArenaInfo } from '../../models/arena-info';
-import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { ReviewIdService } from '../review-id.service';
 import { UserService } from '../user.service';

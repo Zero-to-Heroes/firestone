@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Board } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { IMemoryReadingService, MemoryUpdate } from '@firestone/memory';
 import { ArenaInfo } from '@models/arena-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
 import { CoinInfo } from '@models/memory/coin-info';
 import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
-import { MemoryUpdate } from '@models/memory/memory-update';
 import { RewardsTrackInfos } from '@models/rewards-track-info';
+import { BehaviorSubject } from 'rxjs';
 import { DeckInfoFromMemory } from '../../../models/mainwindow/decktracker/deck-info-from-memory';
 import { InternalHsAchievementsCategory } from './operations/get-achievements-categories-operation';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
@@ -20,7 +21,9 @@ declare let OverwolfPlugin: any;
 // Should not be called from outside its package.
 // Use MindVisionStateMachine instead
 @Injectable()
-export class MindVisionFacadeService {
+export class MindVisionFacadeService implements IMemoryReadingService {
+	public memoryUpdates$$ = new BehaviorSubject<MemoryUpdate>(null);
+
 	public globalEventListener: (first: string, second: string) => Promise<void>;
 	public memoryUpdateListener: (changes: string | 'reset') => Promise<void>;
 

@@ -258,6 +258,10 @@
 			"ow-utils": {
 				"file": "Files/plugins/OwUtils.dll",
 				"class": "OwUtils.OwUtilsPlugin"
+			},
+			"DiscordRPCPlugin": {
+				"file": "Files/plugins/DiscordRPCPlugin.dll",
+				"class": "overwolf.plugins.DiscordRPCPlugin"
 			}
 		},
 		"hotkeys": {

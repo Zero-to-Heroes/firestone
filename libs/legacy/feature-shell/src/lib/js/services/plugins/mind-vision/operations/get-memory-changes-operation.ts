@@ -1,5 +1,5 @@
+import { MemoryUpdate } from '@firestone/memory';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { MemoryUpdate } from '@models/memory/memory-update';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
 

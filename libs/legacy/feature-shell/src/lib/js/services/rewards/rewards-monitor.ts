@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { MemoryUpdate } from '@firestone/memory';
 import { filter, take } from 'rxjs';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';

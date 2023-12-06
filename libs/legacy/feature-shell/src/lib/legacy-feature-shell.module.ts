@@ -541,9 +541,11 @@ import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-acc
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
+import { DiscordModule } from '@firestone/discord';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
+import { MEMORY_READING_SERVICE_TOKEN, MemoryModule } from '@firestone/memory';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
@@ -883,6 +885,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsGeneralModule,
 		ArenaCommonModule,
 		ConstructedCommonModule,
+		DiscordModule,
+		MemoryModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -1694,11 +1698,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 	],
 	providers: [
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
+		// Why??
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationMockExecutorService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningMockExecutorService },
-		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useClass: CardsHighlightFacadeService },
-		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useClass: ArenaDraftManagerService },
-		{ provide: ADS_SERVICE_TOKEN, useClass: AdService },
+		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useExisting: CardsHighlightFacadeService },
+		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
+		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
+		{ provide: MEMORY_READING_SERVICE_TOKEN, useExisting: MindVisionFacadeService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SceneService,

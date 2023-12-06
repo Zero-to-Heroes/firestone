@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { MemoryUpdate } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, filter } from 'rxjs';
 import { CardHistory } from '../../../models/card-history';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { cardTypeToPremium } from '../../collection/cards-monitor.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { Events } from '../../events.service';

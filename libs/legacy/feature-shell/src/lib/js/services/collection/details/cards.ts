@@ -1,5 +1,5 @@
+import { MemoryUpdate } from '@firestone/memory';
 import { Card } from '../../../models/card';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';

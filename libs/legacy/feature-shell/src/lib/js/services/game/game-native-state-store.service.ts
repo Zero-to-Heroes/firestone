@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { MemoryUpdate } from '@firestone/memory';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { BroadcastEvent, Events } from '../events.service';
 import { GameNativeState } from './game-native-state';
 

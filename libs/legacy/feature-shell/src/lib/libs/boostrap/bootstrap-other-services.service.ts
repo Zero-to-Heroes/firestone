@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DiscordPresenceManagerService } from '@firestone/discord';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
@@ -88,6 +89,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_SystemTrayService: SystemTrayService,
 		private readonly init_HearthArenaAnalyticsService: HearthArenaAnalyticsService,
 		private readonly init_ConstructedConfigService: ConstructedConfigService,
+		private readonly init_DiscordPresenceManagerService: DiscordPresenceManagerService,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,

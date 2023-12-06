@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
+import { MemoryUpdate } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
@@ -7,7 +8,6 @@ import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MatchInfo } from '../../models/match-info';
-import { MemoryUpdate } from '../../models/memory/memory-update';
 import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
