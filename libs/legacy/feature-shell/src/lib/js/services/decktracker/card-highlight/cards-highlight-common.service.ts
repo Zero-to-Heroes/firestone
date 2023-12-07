@@ -1458,7 +1458,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.StarvingTavernBrawl:
 				return and(side(inputSide), minion, beast);
 			case CardIds.Steamcleaner:
-				return notInInitialDeck;
+				return and(notInInitialDeck, inDeck);
 			case CardIds.SteamGuardian:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.StewardOfDarkshire_OG_310:
