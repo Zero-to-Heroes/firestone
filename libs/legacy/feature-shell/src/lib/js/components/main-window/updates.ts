@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.0.7',
+		version: '13.0.11',
 		force: false,
 		sections: [
 			// {
@@ -62,23 +62,24 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where dredge could mess up the order of existing cards at the bottom of the deck.`,
+								type: 'feature',
+								text: `Add an option to show the spells at the bottom of the minions list.`,
 							},
 							{
 								type: 'bug',
-								text: `Now properly reset cost / buffs when sending back card to deck (unless it is traded back to deck).`,
+								text: `Fix a sim issue that would occur rarely with Diremuck Forager.`,
 							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue with The Coin being flagged as in starting hand for Starlight Whelp's oracle.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix some info leaks when specific tutors (like Volumne Up) drawing cards that were traded back to deck.`,
+								type: 'feature',
+								text: `Add a dropdown to filter by opponent class for ranked games.`,
 							},
 						],
 					},
