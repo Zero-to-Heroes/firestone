@@ -15,8 +15,8 @@ import { CardClass } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, share, takeUntil } from 'rxjs/operators';
+import { Observable, combineLatest, shareReplay } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
@@ -195,7 +195,24 @@ export class DeckTrackerOverlayRootComponent
 
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
-			.pipe(this.mapData(([gameState]) => (!gameState ? null : this.deckExtractor(gameState))));
+			.pipe(
+				this.mapData(([gameState]) => {
+					const deck = !gameState ? null : this.deckExtractor(gameState);
+					return deck;
+				}),
+				shareReplay(1),
+				takeUntil(this.destroyed$),
+			);
+		// For debug only
+		this.deck$
+			.pipe(
+				this.mapData((deck) => deck?.deckstring),
+				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((deckstring) => {
+				console.log('[deck-tracker] using deck', deckstring, 'for player', this.player);
+			});
 		this.showTotalCardsInZone$ = this.store
 			.listenDeckState$((gameState) => gameState.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => this.showTotalCardsInZoneExtractor(currentTurn !== 'mulligan')));
@@ -262,7 +279,7 @@ export class DeckTrackerOverlayRootComponent
 					return result;
 				},
 			),
-			share(),
+			shareReplay(1),
 		);
 
 		this.matchupStatsRecap$ = combineLatest([
