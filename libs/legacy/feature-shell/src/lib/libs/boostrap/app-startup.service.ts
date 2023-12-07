@@ -1,8 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { generateToken } from '@components/third-party/out-of-cards-callback.component';
-import { FORCE_LOCAL_PROP, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { FORCE_LOCAL_PROP, GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
-import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { FirestoneAchievementsChallengeService } from '../../js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';

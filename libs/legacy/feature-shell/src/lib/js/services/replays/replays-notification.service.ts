@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { buildRankText, GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsShowPostMatchStatsEvent } from '../battlegrounds/store/events/bgs-show-post-match-stats-event';
-import { GameStatusService } from '../game-status.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { RewardMonitorService, XpForGameInfo } from '../rewards/rewards-monitor';

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { combineLatest, filter, take } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { GameStatusService } from '../game-status.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { ProcessingQueue } from '../processing-queue.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

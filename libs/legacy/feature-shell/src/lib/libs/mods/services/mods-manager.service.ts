@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { ApiRunner } from '@firestone/shared/framework/core';
-import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';

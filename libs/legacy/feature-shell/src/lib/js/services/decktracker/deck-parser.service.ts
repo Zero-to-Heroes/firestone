@@ -12,7 +12,7 @@ import {
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { MemoryUpdate } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -22,7 +22,6 @@ import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { GameStatusService } from '../game-status.service';
 import { SceneService } from '../game/scene.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { getLogsDir } from '../log-utils.service';

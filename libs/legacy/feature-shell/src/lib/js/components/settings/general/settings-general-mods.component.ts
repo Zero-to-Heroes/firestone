@@ -6,7 +6,7 @@ import {
 	Component,
 	ViewRef,
 } from '@angular/core';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { ModConfig, ModsConfig, toModVersion } from '@legacy-import/src/lib/libs/mods/model/mods-config';
@@ -15,7 +15,6 @@ import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/se
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, filter } from 'rxjs';
-import { GameStatusService } from '../../../services/game-status.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

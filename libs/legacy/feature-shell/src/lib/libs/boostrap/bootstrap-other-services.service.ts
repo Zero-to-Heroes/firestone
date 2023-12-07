@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
@@ -22,7 +23,6 @@ import { DuelsLootParserService } from '../../js/services/duels/duels-loot-parse
 import { DuelsRewardsService } from '../../js/services/duels/duels-rewards.service';
 import { DuelsRunIdService } from '../../js/services/duels/duels-run-id.service';
 import { GameModeDataService } from '../../js/services/game-mode-data.service';
-import { GameStatusService } from '../../js/services/game-status.service';
 import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
 import { LogRegisterService } from '../../js/services/log-register.service';

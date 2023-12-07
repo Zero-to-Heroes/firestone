@@ -766,7 +766,6 @@ import { Events } from './js/services/events.service';
 import { GameEventsEmitterService } from './js/services/game-events-emitter.service';
 import { GameEvents } from './js/services/game-events.service';
 import { GameModeDataService } from './js/services/game-mode-data.service';
-import { GameStatusService } from './js/services/game-status.service';
 import { GameNativeStateStoreService } from './js/services/game/game-native-state-store.service';
 import { SceneService } from './js/services/game/scene.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
@@ -1756,7 +1755,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		StoreBootstrapService,
 		UserService,
 		LazyDataInitService,
-		GameStatusService,
 		QuestsService,
 		LiveStreamsService,
 		SystemTrayService,

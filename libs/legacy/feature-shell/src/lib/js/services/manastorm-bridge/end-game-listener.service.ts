@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
 import { MemoryUpdate } from '@firestone/memory';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
@@ -17,7 +18,6 @@ import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
-import { GameStatusService } from '../game-status.service';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';

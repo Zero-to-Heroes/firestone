@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, skipWhile, take, tap } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { GameStatusService } from '../game-status.service';
 import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

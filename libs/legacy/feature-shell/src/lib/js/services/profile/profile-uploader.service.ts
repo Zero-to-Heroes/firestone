@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '@firestone-hs/api-user-profile';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner, DiskCacheService } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, skip, take } from 'rxjs';
-import { GameStatusService } from '../game-status.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';

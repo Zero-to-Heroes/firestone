@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filter, take } from 'rxjs';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
@@ -12,7 +13,6 @@ import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { HsGameMetaData } from './game-mode-data.service';
-import { GameStatusService } from './game-status.service';
 import { SceneService } from './game/scene.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';

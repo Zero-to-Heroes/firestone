@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -7,13 +6,14 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class GameStatusService extends AbstractFacadeService<GameStatusService> {
-	public inGame$$: SubscriberAwareBehaviorSubject<boolean>;
+	public inGame$$: SubscriberAwareBehaviorSubject<boolean | null>;
 
-	private startListeners = [];
-	private exitListeners = [];
+	private startListeners: any[] = [];
+	private exitListeners: any[] = [];
 
 	private ow: OverwolfService;
 	private prefs: PreferencesService;
@@ -27,7 +27,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	protected async init() {
-		this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean>(null);
+		this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
 		this.ow = AppInjector.get(OverwolfService);
 		this.prefs = AppInjector.get(PreferencesService);
 
@@ -39,12 +39,12 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (this.ow.exitGame(res)) {
 				this.inGame$$.next(false);
-				this.exitListeners.forEach((cb) => cb(res));
+				this.exitListeners.forEach((cb: any) => cb(res));
 			} else if ((await this.ow.inGame()) && (res.gameChanged || res.runningChanged)) {
 				this.inGame$$.next(true);
 				console.debug('[game-status] game launched', res);
-				this.startListeners.forEach((cb) => cb(res));
-				this.updateExecutionPathInPrefs(res.gameInfo?.executionPath);
+				this.startListeners.forEach((cb: any) => cb(res));
+				this.updateExecutionPathInPrefs(res.gameInfo?.executionPath ?? '');
 			}
 		});
 
@@ -56,14 +56,14 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		// }
 	}
 
-	public async onGameStart(callback) {
+	public async onGameStart(callback: any) {
 		this.startListeners.push(callback);
 		if (await this.inGame()) {
 			callback();
 		}
 	}
 
-	public onGameExit(callback) {
+	public onGameExit(callback: any) {
 		this.exitListeners.push(callback);
 	}
 

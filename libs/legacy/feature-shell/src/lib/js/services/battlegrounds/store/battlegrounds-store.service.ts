@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
@@ -16,7 +16,6 @@ import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { GameEvents } from '../../game-events.service';
-import { GameStatusService } from '../../game-status.service';
 import { LogsUploaderService } from '../../logs-uploader.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
