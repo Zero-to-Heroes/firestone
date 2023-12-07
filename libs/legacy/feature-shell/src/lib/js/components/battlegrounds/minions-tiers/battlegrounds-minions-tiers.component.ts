@@ -41,6 +41,7 @@ import { Tier, buildTiers } from './battlegrounds-minions-tiers-view.component';
 				[enableMouseOver]="enableMouseOver$ | async"
 				[showGoldenCards]="showGoldenCards$ | async"
 				[showTurnNumber]="showTurnNumber$ | async"
+				[showSpellsAtBottom]="showSpellsAtBottom$ | async"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -65,6 +66,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showTurnNumber$: Observable<boolean>;
 	enableMouseOver$: Observable<boolean>;
 	showGoldenCards$: Observable<boolean>;
+	showSpellsAtBottom$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -147,6 +149,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.showTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableTurnNumbertOverlay);
 		this.enableMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListMouseOver);
 		this.showGoldenCards$ = this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowGoldenCard);
+		this.showSpellsAtBottom$ = this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowSpellsAtBottom);
 		this.listenForBasicPref$((prefs) => prefs.bgsMinionsListScale).subscribe((scale) => {
 			// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
 			const element = this.el.nativeElement.querySelector('.scalable');

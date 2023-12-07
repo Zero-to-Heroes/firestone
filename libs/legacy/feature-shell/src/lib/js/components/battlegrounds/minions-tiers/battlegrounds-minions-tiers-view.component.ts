@@ -102,6 +102,7 @@ import { compareTribes, getBuddy, getEffectiveTribes, isBgsSpell } from '../../.
 							[highlightedTribes]="highlightedTribes"
 							[highlightedMechanics]="highlightedMechanics"
 							[showGoldenCards]="showGoldenCards"
+							[showSpellsAtBottom]="showSpellsAtBottom"
 						></bgs-minions-list>
 					</ng-container>
 				</ng-container>
@@ -128,6 +129,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 	@Input() showMechanicsTiers: boolean;
 	@Input() enableMouseOver: boolean;
 	@Input() showGoldenCards: boolean;
+	@Input() showSpellsAtBottom: boolean;
 
 	@Input() set tiers(value: readonly Tier[]) {
 		if (!value) {

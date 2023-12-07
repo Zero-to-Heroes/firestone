@@ -77,6 +77,10 @@ export class BattlegroundsMinionsListComponent
 		this.highlightedMechanics$$.next(value ?? []);
 	}
 
+	@Input() set showSpellsAtBottom(value: boolean) {
+		this.showSpellsAtBottom$$.next(value);
+	}
+
 	@Input() showTribesHighlight: boolean;
 	@Input() showBattlecryHighlight: boolean;
 	@Input() showGoldenCards: boolean;
@@ -86,6 +90,7 @@ export class BattlegroundsMinionsListComponent
 	highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 	highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 	highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
+	showSpellsAtBottom$$ = new BehaviorSubject<boolean>(false);
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -104,39 +109,60 @@ export class BattlegroundsMinionsListComponent
 			this.highlightedMinions$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
 			this.highlightedTribes$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
 			this.highlightedMechanics$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
+			this.showSpellsAtBottom$$.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b))),
 		]).pipe(
 			filter(
-				([cards, groupingFunction, highlightedMinions, highlightedTribes, highlightedMechanics]) =>
-					!!cards && !!groupingFunction,
+				([
+					cards,
+					groupingFunction,
+					highlightedMinions,
+					highlightedTribes,
+					highlightedMechanics,
+					showSpellsAtBottom,
+				]) => !!cards && !!groupingFunction,
 			),
 			debounceTime(50),
-			this.mapData(([cards, groupingFunction, highlightedMinions, highlightedTribes, highlightedMechanics]) => {
-				const groupedByTribe = multiGroupByFunction(groupingFunction)(cards);
-				return Object.keys(groupedByTribe)
-					.map((tribeString) => {
-						return {
-							tribe: isNaN(+tribeString) ? Race[tribeString] : null,
-							title: isNaN(+tribeString)
-								? this.i18n.translateString(`global.tribe.${tribeString.toLowerCase()}`)
-								: this.i18n.translateString(`app.battlegrounds.filters.tier.tier`, {
-										value: tribeString,
-								  }),
-							minions: groupedByTribe[tribeString],
-							highlightedMinions: highlightedMinions || [],
-							highlightedTribes: highlightedTribes || [],
-							highlightedMechanics: highlightedMechanics || [],
-						};
-					})
-					.sort((a, b) => {
-						if (a.tribe === 'spell') {
-							return -1;
-						}
-						if (b.tribe === 'spell') {
-							return 1;
-						}
-						return compareTribes(a.tribe, b.tribe, this.i18n);
-					});
-			}),
+			this.mapData(
+				([
+					cards,
+					groupingFunction,
+					highlightedMinions,
+					highlightedTribes,
+					highlightedMechanics,
+					showSpellsAtBottom,
+				]) => {
+					const groupedByTribe = multiGroupByFunction(groupingFunction)(cards);
+					return Object.keys(groupedByTribe)
+						.map((tribeString) => {
+							return {
+								tribe:
+									tribeString?.toLowerCase() === 'spell'
+										? 'spell'
+										: isNaN(+tribeString)
+										? Race[tribeString]
+										: null,
+								title: isNaN(+tribeString)
+									? this.i18n.translateString(`global.tribe.${tribeString.toLowerCase()}`)
+									: this.i18n.translateString(`app.battlegrounds.filters.tier.tier`, {
+											value: tribeString,
+									  }),
+								minions: groupedByTribe[tribeString],
+								highlightedMinions: highlightedMinions || [],
+								highlightedTribes: highlightedTribes || [],
+								highlightedMechanics: highlightedMechanics || [],
+							};
+						})
+						.sort((a, b) => {
+							if (a.tribe === 'spell') {
+								return showSpellsAtBottom ? 1 : -1;
+							}
+							if (b.tribe === 'spell') {
+								return showSpellsAtBottom ? -1 : 1;
+							}
+							return compareTribes(a.tribe, b.tribe, this.i18n);
+						});
+				},
+			),
 		);
 	}
 

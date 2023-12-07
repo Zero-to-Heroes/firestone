@@ -246,6 +246,14 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					field="bgsMinionListShowSpellsAtBottom"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-spells-at-bottom-label' | owTranslate"
+					[tooltip]="
+						'settings.battlegrounds.overlay.minions-list-show-spells-at-bottom-tooltip' | owTranslate
+					"
+				></preference-toggle>
 				<div class="slider-label" [owTranslate]="'settings.global.widget-size-label'"></div>
 				<preference-slider
 					class="minions-list-size-slider"
