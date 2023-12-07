@@ -366,7 +366,7 @@ export const giftCreators = [
 	CardIds.Kazakus_SuperiorPotionToken,
 	CardIds.KazakusGolemShaper,
 	CardIds.KeywardenIvory,
-	// CardIds.KidnapSack_KidnapSackToken,
+	CardIds.Kidnap_KidnappersSackToken,
 	CardIds.KingMukla_CORE_EX1_014,
 	CardIds.KingMuklaLegacy,
 	CardIds.KingMuklaVanilla,
