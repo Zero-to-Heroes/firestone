@@ -1,8 +1,6 @@
-import { MemoryUpdate } from '@firestone/memory';
-import { Card } from '../../../models/card';
+import { Card, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 
@@ -17,9 +15,10 @@ export class CardsInternalService extends AbstractCollectionInternalService<Card
 	constructor(
 		protected readonly events: Events,
 		protected readonly scene: SceneService,
+		protected readonly memoryUpdates: MemoryUpdatesService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 	) {
-		super(events, scene);
+		super(events, scene, memoryUpdates);
 	}
 }

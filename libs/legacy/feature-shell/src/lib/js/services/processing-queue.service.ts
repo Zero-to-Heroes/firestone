@@ -1,3 +1,4 @@
+/** @deprecated */
 export class ProcessingQueue<T> {
 	private eventQueue: readonly T[] = [];
 	private pendingQueue: readonly T[] = [];

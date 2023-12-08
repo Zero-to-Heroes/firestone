@@ -1,11 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { Card } from '@firestone/memory';
+import { GameStatusService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, filter, take } from 'rxjs';
-import { Card } from '../../models/card';
 import { CollectionManager } from '../collection/collection-manager.service';
-import { OwNotificationsService } from '../notifications.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const COLLECTION_UPLOAD = `https://outof.games/api/hearthstone/collection/import/`;

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';
 import { getGameBaseDir } from './log-utils.service';
-import { OwNotificationsService } from './notifications.service';
 
 @Injectable()
 export class HsClientConfigService {

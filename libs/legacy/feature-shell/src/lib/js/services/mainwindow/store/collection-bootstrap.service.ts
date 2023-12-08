@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
-import { MemoryUpdate } from '@firestone/memory';
+import { MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, filter } from 'rxjs';
 import { CardHistory } from '../../../models/card-history';
 import { cardTypeToPremium } from '../../collection/cards-monitor.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
-import { Events } from '../../events.service';
 
 @Injectable()
 export class CollectionBootstrapService {
 	public packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[]>([]);
 	public cardHistory$$ = new BehaviorSubject<readonly CardHistory[]>([]);
 
-	constructor(private readonly events: Events, private readonly collectionManager: CollectionManager) {
+	constructor(
+		private readonly memoryUpdates: MemoryUpdatesService,
+		private readonly collectionManager: CollectionManager,
+	) {
 		window['collectionBootstrap'] = this;
 		this.init();
 	}
@@ -24,8 +26,7 @@ export class CollectionBootstrapService {
 	}
 
 	private async init() {
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-			const changes: MemoryUpdate = event.data[0];
+		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.CollectionInit) {
 				console.debug('[collection-bootstrap] collection init detected in memory updates');
 				this.initCollectionState();

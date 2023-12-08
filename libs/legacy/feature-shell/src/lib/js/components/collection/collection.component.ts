@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { CardBack } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { CardBack } from '../../models/card-back';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

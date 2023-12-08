@@ -1,23 +1,16 @@
 import { SceneMode } from '@firestone-hs/reference-data';
 import { MemoryUpdate } from '@firestone/memory';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesOutOfCombatState } from '../../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import { BroadcastEvent, Events } from '../../../events.service';
 import { MercenariesOutOfCombatParser } from './_mercenaries-out-of-combat-parser';
 
 export class MercenariesTreasureSelectionParser implements MercenariesOutOfCombatParser {
-	constructor(private readonly allCards: CardsFacadeService) {}
-
-	public eventType = () => Events.MEMORY_UPDATE;
-
 	public applies = (state: MercenariesOutOfCombatState) => !!state;
 
 	async parse(
 		state: MercenariesOutOfCombatState,
-		event: BroadcastEvent,
+		changes: MemoryUpdate,
 		currentScene: SceneMode,
 	): Promise<MercenariesOutOfCombatState> {
-		const changes: MemoryUpdate = event.data[0];
 		if (changes.MercenariesTreasureSelectionIndex != null && changes.MercenariesPendingTreasureSelection) {
 			const result = state.update({
 				treasureSelection: {

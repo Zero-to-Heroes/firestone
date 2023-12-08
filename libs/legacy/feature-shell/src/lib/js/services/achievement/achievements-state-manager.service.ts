@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HsAchievementInfo } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ApiRunner } from '@firestone/shared/framework/core';
@@ -9,7 +10,6 @@ import { IndexedVisualAchievement } from '../../models/indexed-visual-achievemen
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { deepEqual } from '../utils';
-import { HsAchievementInfo } from './achievements-info';
 import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
 import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
 import { RawAchievementsLoaderService } from './data/raw-achievements-loader.service';

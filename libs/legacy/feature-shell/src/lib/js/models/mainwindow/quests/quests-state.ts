@@ -1,7 +1,7 @@
 import { QuestsInfo } from '@firestone-hs/reference-data';
+import { MemoryQuestsLog } from '@firestone/memory';
 import { AppInjector } from '@firestone/shared/framework/core';
 import { LazyDataInitService } from '../../../services/lazy-data-init.service';
-import { MemoryQuestsLog } from '../../../services/plugins/mind-vision/operations/get-active-quests-operation';
 import { NonFunctionProperties } from '../../../services/utils';
 
 export class QuestsState {

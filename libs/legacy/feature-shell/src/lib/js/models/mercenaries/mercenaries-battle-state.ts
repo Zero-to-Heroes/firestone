@@ -1,7 +1,7 @@
 import { GameType, Zone } from '@firestone-hs/reference-data';
+import { MemoryMercenariesInfo } from '@firestone/memory';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../services/utils';
-import { MemoryMercenariesInfo } from '../memory/memory-mercenaries-info';
 
 export class MercenariesBattleState {
 	readonly spectating: boolean;

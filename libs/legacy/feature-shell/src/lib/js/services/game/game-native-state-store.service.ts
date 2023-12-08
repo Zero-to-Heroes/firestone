@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { MemoryUpdate } from '@firestone/memory';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
+import { BehaviorSubject } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
-import { BroadcastEvent, Events } from '../events.service';
 import { GameNativeState } from './game-native-state';
 
 @Injectable()
 export class GameNativeStateStoreService {
 	public store$ = new BehaviorSubject<GameNativeState>(GameNativeState.create({}));
 
-	private events$: Observable<BroadcastEvent>;
-
-	constructor(private readonly events: Events) {
+	constructor(private readonly memoryUpdates: MemoryUpdatesService) {
 		this.init();
 		window['gameNativeStateStore'] = this.store$;
 	}
 
-	private async processEvent(event: BroadcastEvent): Promise<void> {
+	private async processChanges(changes: MemoryUpdate): Promise<void> {
 		try {
-			const changes = event.data[0] as MemoryUpdate;
 			if (changes.isFriendsListOpen != null) {
 				this.store$.next(
 					this.store$.value.update({
@@ -33,18 +29,16 @@ export class GameNativeStateStoreService {
 				);
 			}
 		} catch (e) {
-			console.error('[game-native-state] could not process event', event.key, event, e);
+			console.error('[game-native-state] could not process event', e);
 		}
 	}
 
 	private async init() {
-		this.events$ = this.events.on(Events.MEMORY_UPDATE);
-
-		combineLatest(this.events$)
+		this.memoryUpdates.memoryUpdates$$
 			.pipe(
 				distinctUntilChanged(),
-				filter(([event]) => !!event),
-				concatMap(async ([event]) => await this.processEvent(event)),
+				filter((changes) => !!changes),
+				concatMap(async (changes) => await this.processChanges(changes)),
 			)
 			.subscribe();
 	}

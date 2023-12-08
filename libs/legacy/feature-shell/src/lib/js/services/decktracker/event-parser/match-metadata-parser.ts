@@ -1,7 +1,7 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckSideboard, DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';

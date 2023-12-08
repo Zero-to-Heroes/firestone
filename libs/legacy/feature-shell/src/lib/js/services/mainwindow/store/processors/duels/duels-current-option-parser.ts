@@ -1,10 +1,10 @@
 import { DungeonCrawlOptionType } from '@firestone-hs/reference-data';
+import { MemoryInspectionService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 
 export class DuelsCurrentOptionParser implements Processor {
 	constructor(private readonly allCards: CardsFacadeService, private readonly memory: MemoryInspectionService) {}

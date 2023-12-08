@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { AdventuresInfo, MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { LocalStorageService } from '@firestone/shared/framework/core';
-import { AdventuresInfo } from '@models/memory/memory-duels';
-import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { distinctUntilChanged, filter } from 'rxjs';
 
 @Injectable()

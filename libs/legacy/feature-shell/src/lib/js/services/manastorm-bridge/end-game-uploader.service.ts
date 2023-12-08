@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race, TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
+import {
+	ArenaInfo,
+	BattlegroundsInfo,
+	DuelsInfo,
+	MatchInfo,
+	MemoryMercenariesCollectionInfo,
+	MemoryMercenariesInfo,
+	MemoryTeam,
+} from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
-import { ArenaInfo } from '../../models/arena-info';
-import { BattlegroundsInfo } from '../../models/battlegrounds-info';
-import { MatchInfo } from '../../models/match-info';
-import { DuelsInfo } from '../../models/memory/memory-duels';
-import { MemoryMercenariesCollectionInfo, MemoryTeam } from '../../models/memory/memory-mercenaries-collection-info';
-import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';

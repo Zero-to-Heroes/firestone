@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
-import { MemoryUpdate } from '@firestone/memory';
+import { DuelsInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
-import { DuelsInfo } from '../../models/memory/memory-duels';
+import { filter, withLatestFrom } from 'rxjs/operators';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
-import { Events } from '../events.service';
 import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ReviewIdService } from '../review-id.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { DUNGEON_LOOT_INFO_URL } from './duels-loot-parser.service';
@@ -19,7 +16,7 @@ export class DuelsRewardsService {
 	constructor(
 		private memory: MemoryInspectionService,
 		private ow: OverwolfService,
-		private events: Events,
+		private memoryUpdates: MemoryUpdatesService,
 		private api: ApiRunner,
 		private readonly duelsState: DuelsStateBuilderService,
 		private readonly store: AppUiStoreFacadeService,
@@ -32,10 +29,8 @@ export class DuelsRewardsService {
 	private async init() {
 		await this.store.initComplete();
 
-		this.events
-			.on(Events.MEMORY_UPDATE)
+		this.memoryUpdates.memoryUpdates$$
 			.pipe(
-				map((event) => event.data[0] as MemoryUpdate),
 				filter((changes) => changes.IsDuelsRewardsPending),
 				withLatestFrom(
 					this.duelsRunIdService.lastDuelsGame$,

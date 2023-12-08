@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MemoryInspectionService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
+import { Requirement } from '../requirements/_requirement';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
 import { BattlegroundsHeroSelectedReq } from '../requirements/battlegrounds-hero-selected-req';
 import { BattlegroundsFinishReq } from '../requirements/battlegrounds/battlegrounds-finish-req';
@@ -65,7 +66,6 @@ import { TotalHeroHealReq } from '../requirements/total-hero-heal-req';
 import { TotalMinionsSummonedReq } from '../requirements/total-minions-summoned-req';
 import { WinAgsinstClassInRankedStandardInLimitedTimeReq } from '../requirements/win-against-class-in-ranked-standard-in-limited-time-req';
 import { WinStreakReq } from '../requirements/win-streak-req';
-import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 import { GenericChallenge } from './generic-challenge';
 

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardBack } from '@firestone/memory';
 import { Observable } from 'rxjs';
-import { CardBack } from '../../models/card-back';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InternalCardBack } from './internal-card-back';

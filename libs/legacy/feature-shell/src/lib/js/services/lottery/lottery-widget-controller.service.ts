@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { OwNotificationsService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs';
-import { OwNotificationsService } from '../notifications.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()

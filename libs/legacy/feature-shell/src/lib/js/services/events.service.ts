@@ -8,7 +8,7 @@ export interface BroadcastEvent {
 
 export class Events {
 	public static readonly STORE_READY = 'EVENTS_STORE_READY';
-	public static readonly MEMORY_UPDATE = 'MEMORY_UPDATEd';
+	// public static readonly MEMORY_UPDATE = 'MEMORY_UPDATEd';
 
 	public static readonly NO_LOG_FILE = 'no-log-file';
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';

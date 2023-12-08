@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
-import { MemoryUpdate } from '@firestone/memory';
+import { MemoryInspectionService, MemoryUpdatesService, RewardsTrackInfo } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { filter, take } from 'rxjs';
-import { RewardsTrackInfo } from '../../models/rewards-track-info';
-import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { Season } from '../stats/xp/xp-tables/_season';
 import { Season6 } from '../stats/xp/xp-tables/season-6';
 import { sleep } from '../utils';
@@ -20,10 +17,10 @@ export class RewardMonitorService {
 	private xpForGameInfo: XpForGameInfo;
 
 	constructor(
-		private readonly events: Events,
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
+		private readonly memoryUpdates: MemoryUpdatesService,
 	) {
 		this.init();
 	}
@@ -104,8 +101,7 @@ export class RewardMonitorService {
 				this.gameEvents.onGameStart.subscribe(() => {
 					this.xpForGameInfo = null;
 				});
-				this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
-					const changes: MemoryUpdate = data.data[0];
+				this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 					if (changes?.XpChanges?.length) {
 						console.debug('[rewards-monitor] received xp changes', changes.XpChanges);
 						// If there are multiple causes for XP changes, like game end + quest, we

@@ -9,6 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { Message } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Notification, NotificationType, NotificationsService } from 'angular2-notifications';
 import { Observable } from 'rxjs';
@@ -16,7 +17,6 @@ import { filter, map } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
-import { Message } from '../services/notifications.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 
 @Component({

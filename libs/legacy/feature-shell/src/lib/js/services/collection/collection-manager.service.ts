@@ -3,14 +3,12 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 
 import { PackInfo } from '@firestone/collection/view';
+import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
-import { Card } from '../../models/card';
-import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { Events } from '../events.service';
 import { SceneService } from '../game/scene.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
 import { AllTimeBoostersInternalService } from './details/all-time-boosters';
 import { BgHeroSkinsInternalService } from './details/bg-hero-skins';
@@ -42,14 +40,15 @@ export class CollectionManager {
 		readonly memoryReading: MemoryInspectionService,
 		readonly db: CollectionStorageService,
 		readonly scene: SceneService,
+		readonly memoryUpdates: MemoryUpdatesService,
 		// private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
 	) {
-		this.cardsIS = new CardsInternalService(events, scene, memoryReading, db);
-		this.cardBacksIS = new CardBacksInternalService(events, scene, memoryReading, db, api);
-		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, scene, memoryReading, db);
-		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, scene, memoryReading, db);
-		this.coinsIS = new CoinsInternalService(events, scene, memoryReading, db, this.allCards);
+		this.cardsIS = new CardsInternalService(events, scene, memoryUpdates, memoryReading, db);
+		this.cardBacksIS = new CardBacksInternalService(events, scene, memoryUpdates, memoryReading, db, api);
+		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, scene, memoryUpdates, memoryReading, db);
+		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, scene, memoryUpdates, memoryReading, db);
+		this.coinsIS = new CoinsInternalService(events, scene, memoryUpdates, memoryReading, db, this.allCards);
 
 		this.collection$$ = this.cardsIS.collection$$;
 		this.cardBacks$$ = this.cardBacksIS.collection$$;

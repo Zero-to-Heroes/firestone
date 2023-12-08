@@ -1,4 +1,4 @@
-import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
+import { DeckInfoFromMemory } from '@firestone/memory';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsCurrentDeckEvent implements MainWindowStoreEvent {

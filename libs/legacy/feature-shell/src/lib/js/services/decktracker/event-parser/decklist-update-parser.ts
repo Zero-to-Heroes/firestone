@@ -1,5 +1,5 @@
+import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckSideboard, DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';

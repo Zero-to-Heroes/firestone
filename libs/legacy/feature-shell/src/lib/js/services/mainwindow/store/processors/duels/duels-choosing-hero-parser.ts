@@ -1,9 +1,9 @@
+import { MemoryInspectionService } from '@firestone/memory';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { sleep } from '@services/utils';
 
 export class DuelsChoosingHeroParser implements Processor {

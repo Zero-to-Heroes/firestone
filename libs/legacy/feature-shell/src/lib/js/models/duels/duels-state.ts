@@ -1,7 +1,6 @@
 import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
+import { DeckInfoFromMemory, MemoryDuelsHeroPowerOption } from '@firestone/memory';
 import { DuelsDeckbuilder } from '@models/duels/duels-deckbuilder';
-import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
-import { MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { ExtendedDuelsStatDecks } from '../../services/duels/duels-state-builder.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';

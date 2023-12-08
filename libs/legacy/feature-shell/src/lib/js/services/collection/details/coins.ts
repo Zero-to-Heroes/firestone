@@ -1,11 +1,9 @@
 import { COIN_IDS, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { MemoryUpdate } from '@firestone/memory';
+import { CoinInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Coin } from '../../../models/coin';
-import { CoinInfo } from '../../../models/memory/coin-info';
 import { Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 
@@ -22,11 +20,12 @@ export class CoinsInternalService extends AbstractCollectionInternalService<Coin
 	constructor(
 		protected readonly events: Events,
 		protected readonly scene: SceneService,
+		protected readonly memoryUpdates: MemoryUpdatesService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly allCards: CardsFacadeService,
 	) {
-		super(events, scene);
+		super(events, scene, memoryUpdates);
 	}
 
 	protected override async preInit(): Promise<void> {

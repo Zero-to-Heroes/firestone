@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
+import { MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
@@ -8,7 +9,6 @@ import { Events } from './events.service';
 import { SceneService } from './game/scene.service';
 import { ActiveQuestsUpdatedEvent } from './mainwindow/store/events/quests/active-quests-updated-event';
 import { ReferenceQuestsLoadedEvent } from './mainwindow/store/events/quests/reference-quests-loaded-event';
-import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
 const REFERENCE_QUESTS_URL = 'https://static.firestoneapp.com/data/quests/quests-data_%locale%.gz.json';

@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Sideboard } from '@firestone-hs/deckstrings';
+import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';

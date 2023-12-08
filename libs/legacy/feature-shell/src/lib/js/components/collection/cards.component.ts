@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { Card } from '@firestone/memory';
 import {
 	CollectionCardClassFilterType,
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 } from '@models/collection/filter-types';
 import { Observable, combineLatest } from 'rxjs';
-import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../services/utils';

@@ -16,7 +16,6 @@ import { HsGameMetaData } from './game-mode-data.service';
 import { SceneService } from './game/scene.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
-import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { freeRegexp } from './utils';
 
@@ -36,7 +35,6 @@ export class GameEvents {
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly scene: SceneService,
 		private readonly store: MainWindowStoreService,
-		private readonly memoryService: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameState: GameStateService,

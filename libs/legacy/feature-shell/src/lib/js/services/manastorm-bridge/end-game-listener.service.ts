@@ -1,26 +1,22 @@
 import { Injectable } from '@angular/core';
 import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
-import { MemoryUpdate } from '@firestone/memory';
+import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
-import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
-import { MatchInfo } from '../../models/match-info';
 import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels } from '../duels/duels-utils';
-import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ReviewIdService } from '../review-id.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
@@ -31,7 +27,7 @@ export class EndGameListenerService {
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly events: Events,
+		private readonly memoryUpdates: MemoryUpdatesService,
 		private readonly endGameUploader: EndGameUploaderService,
 		private readonly mercsMemoryCache: MercenariesMemoryCacheService,
 		private readonly memoryInspection: MemoryInspectionService,
@@ -100,8 +96,7 @@ export class EndGameListenerService {
 				);
 				// This is triggered really early: as soon as the GameState match is over (no need to wait for
 				// the final combat animations)
-				const bgNewRating$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-					map((event) => event.data[0] as MemoryUpdate),
+				const bgNewRating$ = this.memoryUpdates.memoryUpdates$$.pipe(
 					filter((changes) => !!changes.BattlegroundsNewRating),
 					map((changes) => changes.BattlegroundsNewRating),
 					startWith(null),

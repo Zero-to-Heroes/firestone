@@ -3,7 +3,8 @@ import { AchievementsRefLoaderService } from '@firestone/achievements/data-acces
 import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { DuelsPersonalDecksService } from '@firestone/duels/general';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { MemoryInspectionService } from '@firestone/memory';
+import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -61,8 +62,6 @@ import { DuelsTopDeckService } from '../../duels/duels-top-decks.service';
 import { DuelsUserRunsService } from '../../duels/duels-user-runs.service';
 import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
-import { OwNotificationsService } from '../../notifications.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';

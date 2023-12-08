@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { IArenaDraftManagerService } from '@firestone/arena/common';
-import { MemoryUpdate } from '@firestone/memory';
+import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -12,10 +12,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { combineLatest, map } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
-import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
-import { Events } from '../events.service';
 import { SceneService } from '../game/scene.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 @Injectable()
 export class ArenaDraftManagerService
@@ -27,7 +24,7 @@ export class ArenaDraftManagerService
 	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 
-	private events: Events;
+	private memoryUpdates: MemoryUpdatesService;
 	private scene: SceneService;
 	private memory: MemoryInspectionService;
 	private prefs: PreferencesService;
@@ -56,7 +53,7 @@ export class ArenaDraftManagerService
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
-		this.events = AppInjector.get(Events);
+		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.prefs = AppInjector.get(PreferencesService);
@@ -80,8 +77,7 @@ export class ArenaDraftManagerService
 			await this.scene.isReady();
 			console.debug('[arena-draft-maanger] init');
 
-			this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
-				const changes: MemoryUpdate = event.data[0];
+			this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 				if (changes.ArenaDraftStep != null) {
 					this.currentStep$$.next(changes.ArenaDraftStep);
 

@@ -7,10 +7,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { MemoryVisitor } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
-import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import {
 	BattleAbility,
 	BattleEquipment,

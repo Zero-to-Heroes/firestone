@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
+import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { AttackParser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/attack-parser';
@@ -24,7 +25,6 @@ import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { OwUtilsService } from '../plugins/ow-utils.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { uuid } from '../utils';

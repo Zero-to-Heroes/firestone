@@ -739,6 +739,8 @@ export class Preferences implements IPreferences {
 
 	readonly statsXpGraphSeasonFilter: StatsXpGraphSeasonFilterType = 'all-seasons';
 
+	readonly discordRichPresence: boolean = true;
+
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
 	readonly twitchLoginName: string;

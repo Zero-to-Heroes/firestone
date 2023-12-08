@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import { BroadcastEvent, Events } from '../../events.service';
 import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
@@ -17,17 +16,11 @@ export class MercenariesOutOfCombatService {
 
 	private internalStore$ = new BehaviorSubject<MercenariesOutOfCombatState>(new MercenariesOutOfCombatState());
 
-	// private preferences$: Observable<Preferences>;
-	private events$: Observable<BroadcastEvent>;
-	// private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
-
-	private parsers: { [eventType: string]: readonly MercenariesOutOfCombatParser[] };
+	private parsers: readonly MercenariesOutOfCombatParser[] = [];
 	private eventEmitters: ((state: MercenariesOutOfCombatState) => void)[] = [];
 
 	constructor(
-		private readonly events: Events,
-		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
+		private readonly memoryUpdates: MemoryUpdatesService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly scene: SceneService,
 		private readonly prefs: PreferencesService,
@@ -36,22 +29,17 @@ export class MercenariesOutOfCombatService {
 		window['mercenariesOutOfCombatStore'] = this.store$;
 	}
 
-	private async processEvent(event: BroadcastEvent, currentScene: SceneMode): Promise<void> {
+	private async processEvent(changes: MemoryUpdate, currentScene: SceneMode): Promise<void> {
 		try {
-			const parsers = this.getParsersFor(event.key, this.internalStore$.value);
-			if (!parsers?.length) {
-				return;
-			}
-
 			let state = this.internalStore$.value;
-			for (const parser of parsers) {
-				state = await parser.parse(state, event, currentScene);
+			for (const parser of this.parsers) {
+				state = await parser.parse(state, changes, currentScene);
 			}
 			if (state !== this.internalStore$.value) {
 				this.internalStore$.next(state);
 			}
 		} catch (e) {
-			console.error('[mercenaries-ooc-store] could not process event', event.key, event, e);
+			console.error('[mercenaries-ooc-store] could not process event', e);
 		}
 	}
 
@@ -73,16 +61,11 @@ export class MercenariesOutOfCombatService {
 		await this.scene.isReady();
 		await this.prefs.isReady();
 
-		// this.mainWindowState$ = (
-		// 	this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<[MainWindowState, NavigationState]>
-		// ).asObservable();
-		this.events$ = this.events.on(Events.MEMORY_UPDATE);
-
-		combineLatest([this.events$, this.scene.currentScene$$])
+		combineLatest([this.memoryUpdates.memoryUpdates$$, this.scene.currentScene$$])
 			.pipe(
 				distinctUntilChanged(),
-				filter(([event, currentScene]) => !!event),
-				concatMap(async ([event, currentScene]) => await this.processEvent(event, currentScene)),
+				filter(([changes, currentScene]) => !!changes),
+				concatMap(async ([changes, currentScene]) => await this.processEvent(changes, currentScene)),
 			)
 			.subscribe();
 		combineLatest([this.internalStore$.asObservable()]).subscribe(
@@ -91,26 +74,12 @@ export class MercenariesOutOfCombatService {
 		// });
 	}
 
-	private getParsersFor(type: string, state: MercenariesOutOfCombatState): readonly MercenariesOutOfCombatParser[] {
-		const candidates = this.parsers[type];
-		return candidates?.filter((parser) => parser.applies(state));
-	}
-
 	private buildEventEmitters() {
 		const result = [(state: MercenariesOutOfCombatState) => this.store$.next(state)];
 		this.eventEmitters = result;
 	}
 
 	private registerParser() {
-		const parsers: readonly MercenariesOutOfCombatParser[] = [
-			new MercenariesTreasureSelectionParser(this.allCards),
-		];
-		this.parsers = {};
-		for (const parser of parsers) {
-			if (!this.parsers[parser.eventType()]) {
-				this.parsers[parser.eventType()] = [];
-			}
-			this.parsers[parser.eventType()] = [...this.parsers[parser.eventType()], parser];
-		}
+		this.parsers = [new MercenariesTreasureSelectionParser()];
 	}
 }

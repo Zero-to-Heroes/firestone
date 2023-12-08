@@ -1,5 +1,5 @@
+import { Card } from '@firestone/memory';
 import { LocalizationService } from '@services/localization.service';
-import { Card } from '../../../../../models/card';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';

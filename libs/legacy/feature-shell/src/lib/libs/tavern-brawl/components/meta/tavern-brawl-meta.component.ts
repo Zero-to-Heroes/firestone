@@ -2,13 +2,13 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
+import { Card } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Card } from '../../../../js/models/card';
 
 @Component({
 	selector: 'tavern-brawl-meta',

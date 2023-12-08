@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { DuelsInfo } from '@firestone/memory';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Events } from '@legacy-import/src/lib/js/services/events.service';
 import { GameForUpload } from '@legacy-import/src/lib/js/services/manastorm-bridge/game-for-upload';
 import { distinctUntilChanged, filter, map, tap, withLatestFrom } from 'rxjs/operators';
-import { DuelsInfo } from '../../models/memory/memory-duels';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
 import { ReviewIdService } from '../review-id.service';

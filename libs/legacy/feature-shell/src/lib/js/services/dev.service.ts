@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
 import { CardIds, ReferenceCard, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
+import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { sortByProperties } from '@services/utils';
@@ -22,7 +23,6 @@ import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
-import { MemoryInspectionService } from './plugins/memory-inspection.service';
 // const HEARTHSTONE_GAME_ID = 9898;
 
 // declare var overwolf: any;

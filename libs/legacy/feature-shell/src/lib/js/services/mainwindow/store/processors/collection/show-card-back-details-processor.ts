@@ -1,4 +1,4 @@
-import { CardBack } from '../../../../../models/card-back';
+import { CardBack } from '@firestone/memory';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';

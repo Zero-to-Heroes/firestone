@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { LocalizationService } from '../../js/services/localization.service';
-import { OwNotificationsService } from '../../js/services/notifications.service';
 import { OwUtilsService } from '../../js/services/plugins/ow-utils.service';
 import { SettingsCommunicationService } from '../../js/services/settings/settings-communication.service';
 

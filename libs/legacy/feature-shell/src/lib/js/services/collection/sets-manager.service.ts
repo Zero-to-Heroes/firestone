@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Card } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { debounceTime } from 'rxjs';
-import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { CollectionManager } from './collection-manager.service';
 import { SetsService } from './sets-service.service';

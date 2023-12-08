@@ -6,13 +6,12 @@ import {
 	getDefaultHeroDbfIdForClass,
 	normalizeDuelsHeroCardId,
 } from '@firestone-hs/reference-data';
+import { MemoryInspectionService, MemoryPlayerRecord } from '@firestone/memory';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
-import { MemoryPlayerRecord } from '../../plugins/mind-vision/operations/get-profile-info-operation';
 
 class HeroSkinAchievements {
 	readonly Golden500Win: number;

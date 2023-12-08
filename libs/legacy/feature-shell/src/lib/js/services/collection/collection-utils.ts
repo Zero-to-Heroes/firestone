@@ -1,23 +1,9 @@
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { Card } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Card, totalOwned } from '../../models/card';
+import { totalOwned } from '../../models/card';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
-
-// export const deckDustCost = (
-// 	cards: readonly { quantity: number; cardId: string }[],
-// 	collection: readonly Card[],
-// 	allCards: CardsFacadeService,
-// ): number => {
-// 	return cards
-// 		.map((card) => {
-// 			const owned = getOwnedForDeckBuilding(card.cardId, collection ?? [], allCards);
-// 			const missingQuantity = Math.max(0, card.quantity - owned);
-// 			const rarity = allCards.getCard(card.cardId)?.rarity;
-// 			return dustToCraftFor(rarity) * missingQuantity;
-// 		})
-// 		.reduce((a, b) => a + b, 0);
-// };
 
 export const getOwnedForDeckBuilding = (
 	cardId: string,

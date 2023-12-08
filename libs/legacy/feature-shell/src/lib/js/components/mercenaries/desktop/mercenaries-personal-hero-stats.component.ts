@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
+import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
-import { MemoryMercenary } from '../../../models/memory/memory-mercenaries-info';
 import {
 	MercenariesFullyUpgradedFilterType,
 	MercenariesOwnedFilterType,

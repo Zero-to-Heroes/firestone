@@ -11,7 +11,7 @@ import {
 	ScenarioId,
 	SceneMode,
 } from '@firestone-hs/reference-data';
-import { MemoryUpdate } from '@firestone/memory';
+import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -19,13 +19,10 @@ import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.se
 import { distinctUntilChanged } from 'rxjs';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
-import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
-import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { SceneService } from '../game/scene.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { getLogsDir } from '../log-utils.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { DeckHandlerService } from './deck-handler.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json`;
@@ -48,7 +45,7 @@ export class DeckParserService {
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly events: Events,
+		private readonly memoryUpdates: MemoryUpdatesService,
 		private readonly memory: MemoryInspectionService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
@@ -237,13 +234,12 @@ export class DeckParserService {
 			this.duelsDeck = duelsInfo?.DuelsDeck;
 		});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
+		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (this.spectating) {
 				console.log('[deck-parser] spectating, not registering memory update');
 				return;
 			}
 
-			const changes: MemoryUpdate = data.data[0];
 			if (changes.SelectedDeckId) {
 				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
 				this.selectedDeckId = changes.SelectedDeckId;

@@ -1,4 +1,4 @@
-import { CardBack } from '../../models/card-back';
+import { CardBack } from '@firestone/memory';
 
 export interface InternalCardBack extends CardBack {
 	image: string;

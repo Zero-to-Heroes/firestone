@@ -545,7 +545,7 @@ import { DiscordModule } from '@firestone/discord';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
-import { MEMORY_READING_SERVICE_TOKEN, MemoryModule } from '@firestone/memory';
+import { MemoryModule } from '@firestone/memory';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
@@ -797,12 +797,8 @@ import { MercenariesMemoryCacheService } from './js/services/mercenaries/mercena
 import { MercenariesReferenceDataService } from './js/services/mercenaries/mercenaries-reference-data.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { OwNotificationsService } from './js/services/notifications.service';
 import { PatchesConfigService } from './js/services/patches-config.service';
 import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
-import { MemoryInspectionService } from './js/services/plugins/memory-inspection.service';
-import { MindVisionFacadeService } from './js/services/plugins/mind-vision/mind-vision-facade.service';
-import { MindVisionStateMachineService } from './js/services/plugins/mind-vision/mind-vision-state-machine.service';
 import { OwUtilsService } from './js/services/plugins/ow-utils.service';
 import { SimpleIOService } from './js/services/plugins/simple-io.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
@@ -1703,7 +1699,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useExisting: CardsHighlightFacadeService },
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
-		{ provide: MEMORY_READING_SERVICE_TOKEN, useExisting: MindVisionFacadeService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SceneService,
@@ -1711,9 +1706,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DebugService,
 		Events,
 		LogsUploaderService,
-		MemoryInspectionService,
-		// OverwolfService,
-		OwNotificationsService,
 		S3FileUploadService,
 		SimpleIOService,
 		BugReportService,
@@ -1736,8 +1728,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CollectionManager,
 		SetsManagerService,
 		CollectionStorageService,
-		MindVisionFacadeService,
-		MindVisionStateMachineService,
 		OwUtilsService,
 		HotkeyService,
 		CardsHighlightService,

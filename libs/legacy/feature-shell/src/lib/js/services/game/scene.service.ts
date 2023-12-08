@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryUpdate } from '@firestone/memory';
+import { MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { Events } from '../events.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 @Injectable()
 export class SceneService extends AbstractFacadeService<SceneService> {
@@ -12,7 +10,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 	public lastNonGamePlayScene$$: SubscriberAwareBehaviorSubject<SceneMode | null>;
 
 	private memory: MemoryInspectionService;
-	private events: Events;
+	private memoryUpdates: MemoryUpdatesService;
 
 	private internalSubscriber$$ = new SubscriberAwareBehaviorSubject<void>(null);
 
@@ -29,7 +27,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		this.currentScene$$ = new SubscriberAwareBehaviorSubject<SceneMode | null>(null);
 		this.lastNonGamePlayScene$$ = new SubscriberAwareBehaviorSubject<SceneMode | null>(null);
 		this.memory = AppInjector.get(MemoryInspectionService);
-		this.events = AppInjector.get(Events);
+		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 
 		this.currentScene$$.onFirstSubscribe(async () => {
 			this.internalSubscriber$$.subscribe();
@@ -49,8 +47,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 				this.lastNonGamePlayScene$$.value,
 			);
 
-			this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-				const changes: MemoryUpdate = event.data[0];
+			this.memoryUpdates.memoryUpdates$$.subscribe((changes) => {
 				const newScene = changes.CurrentScene;
 				this.updateScene(newScene);
 			});

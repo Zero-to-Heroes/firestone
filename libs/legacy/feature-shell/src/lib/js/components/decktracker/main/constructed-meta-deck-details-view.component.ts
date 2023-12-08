@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { ConstructedCardData, ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
+import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Card } from '../../../models/card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaArchetypeShowDecksEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-decks';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

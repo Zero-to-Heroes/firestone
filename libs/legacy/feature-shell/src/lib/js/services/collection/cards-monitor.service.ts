@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BoosterType, boosterIdToSetId } from '@firestone-hs/reference-data';
-import { CardPackInfo, MemoryUpdate, PackInfo } from '@firestone/memory';
+import { CardPackInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, PackInfo } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -17,7 +17,6 @@ import {
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
 } from '../mercenaries/mercenaries-reference-data.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
@@ -41,6 +40,7 @@ export class CardsMonitorService {
 		private readonly memoryService: MemoryInspectionService,
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly memoryUpdates: MemoryUpdatesService,
 	) {
 		this.init();
 	}
@@ -49,8 +49,7 @@ export class CardsMonitorService {
 		await sleep(1);
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.mainWindowStore = this.ow.getMainWindow().mainWindowStoreMerged;
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
-			const changes: MemoryUpdate = event.data[0];
+		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.IsOpeningPack) {
 				this.packNotificationQueue.next(true);
 			}

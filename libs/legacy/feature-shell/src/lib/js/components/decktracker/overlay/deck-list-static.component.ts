@@ -8,6 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { Card } from '@firestone/memory';
 import {
 	AbstractSubscriptionStoreComponent,
 	IPreferences,
@@ -19,7 +20,6 @@ import {
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
-import { Card } from '../../../models/card';
 import { SetCard } from '../../../models/set';
 import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';

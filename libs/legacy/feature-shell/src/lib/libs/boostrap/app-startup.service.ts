@@ -1,6 +1,12 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { generateToken } from '@components/third-party/out-of-cards-callback.component';
-import { FORCE_LOCAL_PROP, GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import {
+	FORCE_LOCAL_PROP,
+	GameStatusService,
+	OwNotificationsService,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { FirestoneAchievementsChallengeService } from '../../js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from '../../js/services/ad.service';
@@ -12,7 +18,6 @@ import { MainWindowStoreEvent } from '../../js/services/mainwindow/store/events/
 import { ShowMainWindowEvent } from '../../js/services/mainwindow/store/events/show-main-window-event';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.service';
-import { OwNotificationsService } from '../../js/services/notifications.service';
 
 @Injectable()
 export class AppStartupService {

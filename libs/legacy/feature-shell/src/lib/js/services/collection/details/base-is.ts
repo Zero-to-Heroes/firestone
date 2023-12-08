@@ -1,5 +1,5 @@
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryUpdate } from '@firestone/memory';
+import { MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { debounceTime, distinctUntilChanged, filter, map, merge, tap, throttleTime } from 'rxjs';
 import { Events } from '../../events.service';
@@ -15,7 +15,11 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 	protected abstract localDbRetrieveOperation: () => Promise<readonly T[]>;
 	protected abstract localDbSaveOperation: (collection: readonly T[]) => Promise<any>;
 
-	constructor(protected readonly events: Events, protected readonly scene: SceneService) {
+	constructor(
+		protected readonly events: Events,
+		protected readonly scene: SceneService,
+		protected readonly memoryUpdates: MemoryUpdatesService,
+	) {
 		this.init();
 	}
 
@@ -39,10 +43,9 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 			// So that the protected methods are initialized in the child class
 			// await sleep(1);
 			await this.preInit();
-			const collectionUpdate$ = this.events.on(Events.MEMORY_UPDATE).pipe(
-				filter((event) => this.memoryInfoCountExtractor(event.data[0]) != null),
-				map((event) => {
-					const changes: MemoryUpdate = event.data[0];
+			const collectionUpdate$ = this.memoryUpdates.memoryUpdates$$.pipe(
+				filter((changes) => this.memoryInfoCountExtractor(changes) != null),
+				map((changes) => {
 					return this.memoryInfoCountExtractor(changes);
 				}),
 				distinctUntilChanged(),

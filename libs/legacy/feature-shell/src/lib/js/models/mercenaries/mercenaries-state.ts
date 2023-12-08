@@ -1,5 +1,5 @@
+import { MemoryVisitor } from '@firestone/memory';
 import { NonFunctionProperties } from '../../services/utils';
-import { MemoryVisitor } from '../memory/memory-mercenaries-collection-info';
 import { MercenariesCategoryId } from './mercenary-category-id.type';
 // import { MercenaryGlobalStats } from './mercenary-info';
 

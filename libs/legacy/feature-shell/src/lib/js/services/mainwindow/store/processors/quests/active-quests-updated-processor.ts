@@ -1,9 +1,8 @@
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { MemoryInspectionService, RewardsTrackInfo } from '@firestone/memory';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { RewardsTrackInfo } from '../../../../../models/rewards-track-info';
-import { MemoryInspectionService } from '../../../../plugins/memory-inspection.service';
 import { ActiveQuestsUpdatedEvent } from '../../events/quests/active-quests-updated-event';
 
 export class ActiveQuestsUpdatedProcessor implements Processor {

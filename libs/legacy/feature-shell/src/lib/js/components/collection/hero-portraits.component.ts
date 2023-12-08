@@ -7,12 +7,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
+import { Card, CardBack, MemoryMercenary } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { Card } from '../../models/card';
-import { CardBack } from '../../models/card-back';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
-import { MemoryMercenary } from '../../models/memory/memory-mercenaries-info';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PackInfo } from '@firestone/collection/view';
+import { Card, CardBack } from '@firestone/memory';
 import { DiskCacheService, LocalStorageService } from '@firestone/shared/framework/core';
-import { Card } from '../../models/card';
-import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 

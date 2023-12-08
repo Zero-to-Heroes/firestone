@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
@@ -20,7 +21,6 @@ import { LogsUploaderService } from '../../logs-uploader.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { PatchesConfigService } from '../../patches-config.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';

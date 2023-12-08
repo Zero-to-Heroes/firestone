@@ -1,4 +1,4 @@
-import { MemoryQuestsLog } from '../../../../plugins/mind-vision/operations/get-active-quests-operation';
+import { MemoryQuestsLog } from '@firestone/memory';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ActiveQuestsUpdatedEvent implements MainWindowStoreEvent {

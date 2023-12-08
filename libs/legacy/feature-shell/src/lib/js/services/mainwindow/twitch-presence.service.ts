@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
+import { ArenaInfo, DuelsInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
-import { ArenaInfo } from '../../models/arena-info';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
-import { MatchInfo } from '../../models/match-info';
-import { DuelsInfo } from '../../models/memory/memory-duels';
-import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
-import { Rank } from '../../models/player-info';
 import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';

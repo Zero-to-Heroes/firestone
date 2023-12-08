@@ -1,4 +1,4 @@
-import { BattlegroundsInfo } from '../../../../models/battlegrounds-info';
+import { BattlegroundsInfo } from '@firestone/memory';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsGlobalInfoUpdatedEvent extends BattlegroundsStoreEvent {

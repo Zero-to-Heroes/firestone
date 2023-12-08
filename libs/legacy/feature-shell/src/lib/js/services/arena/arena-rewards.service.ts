@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Input } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
-import { MemoryUpdate, Reward } from '@firestone/memory';
+import { ArenaInfo, MemoryUpdatesService, Reward } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -10,9 +10,7 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, filter, map, withLatestFrom } from 'rxjs';
-import { ArenaInfo } from '../../models/arena-info';
-import { Events } from '../events.service';
+import { distinctUntilChanged, filter, withLatestFrom } from 'rxjs';
 import { ReviewIdService } from '../review-id.service';
 import { UserService } from '../user.service';
 import { ArenaInfoService } from './arena-info.service';
@@ -26,7 +24,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 
 	private api: ApiRunner;
 	private userService: UserService;
-	private events: Events;
+	private memoryUpdates: MemoryUpdatesService;
 	private arenaInfoService: ArenaInfoService;
 	private reviewIdService: ReviewIdService;
 	private ow: OverwolfService;
@@ -43,7 +41,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.arenaRewards$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRewardInfo[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.userService = AppInjector.get(UserService);
-		this.events = AppInjector.get(Events);
+		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.arenaInfoService = AppInjector.get(ArenaInfoService);
 		this.reviewIdService = AppInjector.get(ReviewIdService);
 		this.ow = AppInjector.get(OverwolfService);
@@ -64,10 +62,8 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 				});
 		});
 
-		this.events
-			.on(Events.MEMORY_UPDATE)
+		this.memoryUpdates.memoryUpdates$$
 			.pipe(
-				map((event) => event.data[0] as MemoryUpdate),
 				filter((changes) => !!changes.ArenaRewards?.length),
 				withLatestFrom(this.arenaInfoService.arenaInfo$$, this.reviewIdService.reviewId$),
 				filter(([changes, arenaInfo, reviewId]) => !!arenaInfo?.runId),

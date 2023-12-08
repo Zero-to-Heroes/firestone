@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HsAchievementsInfo } from '@firestone/memory';
 import { LocalStorageService } from '@firestone/shared/framework/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { HsAchievementsInfo } from './achievements-info';
 
 @Injectable()
 export class AchievementsStorageService {

@@ -15,6 +15,7 @@ import {
 import { MercenariesTeamDefinition, MercenaryDefinition, encodeMercs } from '@firestone-hs/deckstrings';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
+import { MemoryMercenariesCollectionInfo } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -22,7 +23,6 @@ import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/service
 import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
-import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { getShortMercHeroName, isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';

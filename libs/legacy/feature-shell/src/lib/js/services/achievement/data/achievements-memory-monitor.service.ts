@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { MemoryUpdate } from '@firestone/memory';
+import {
+	HsAchievementCategory,
+	HsAchievementInfo,
+	MemoryInspectionService,
+	MemoryUpdatesService,
+} from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
-import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
-import { HsAchievementCategory, HsAchievementInfo } from '../achievements-info';
 import { AchievementsStorageService } from '../achievements-storage.service';
 
 @Injectable()
@@ -18,6 +21,7 @@ export class AchievementsMemoryMonitor {
 
 	constructor(
 		private readonly events: Events,
+		private readonly memoryUpdates: MemoryUpdatesService,
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
 		private readonly db: AchievementsStorageService,
@@ -58,8 +62,7 @@ export class AchievementsMemoryMonitor {
 			forceRetrigger$.next(null);
 		});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
-			const changes = event.data[0] as MemoryUpdate;
+		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.NumberOfAchievementsCompleted) {
 				this.numberOfCompletedAchievements$$.next(changes.NumberOfAchievementsCompleted);
 			}
