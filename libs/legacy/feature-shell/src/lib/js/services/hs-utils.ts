@@ -161,6 +161,8 @@ export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
 	...startOfGameGlobalEffectCards,
 	...deathrattleGlobalEffectCards,
+	CardIds.ApocalypseTavernBrawlToken,
+	CardIds.JourneyToTheEast_UberApocalypseTavernBrawl,
 	CardIds.BestialMadness_YOG_505,
 	CardIds.BlackrockNRoll,
 	CardIds.CelestialAlignment,
