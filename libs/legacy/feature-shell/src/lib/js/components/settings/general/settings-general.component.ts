@@ -16,6 +16,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<settings-general-bug-report *ngSwitchCase="'bugreport'"></settings-general-bug-report>
 				<settings-decktracker-beta *ngSwitchCase="'beta'"></settings-decktracker-beta>
 				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
+				<settings-discord *ngSwitchCase="'discord'"></settings-discord>
 				<settings-general-data *ngSwitchCase="'data'"></settings-general-data>
 				<settings-general-quests *ngSwitchCase="'quests'"></settings-general-quests>
 				<settings-general-mods *ngSwitchCase="'mods'"></settings-general-mods>

@@ -38,6 +38,9 @@ import {
 			<li [ngClass]="{ selected: selectedMenu === 'broadcast' }" (mousedown)="selectMenu('broadcast')">
 				<span [owTranslate]="'settings.general.menu.broadcast'"></span>
 			</li>
+			<li [ngClass]="{ selected: selectedMenu === 'discord' }" (mousedown)="selectMenu('discord')">
+				<span [owTranslate]="'settings.general.menu.discord'"></span>
+			</li>
 			<li class="separator" *ngIf="enableMods"></li>
 			<li *ngIf="enableMods" [ngClass]="{ selected: selectedMenu === 'mods' }" (mousedown)="selectMenu('mods')">
 				<span [owTranslate]="'settings.general.menu.mods'"></span>

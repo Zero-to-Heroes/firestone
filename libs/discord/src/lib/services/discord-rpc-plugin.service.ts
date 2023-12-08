@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { DiscordRPCPlugin, LogLevel } from './discord-rpc-plugin.types';
+import { DiscordRPCPlugin } from './discord-rpc-plugin.types';
 
 declare let OverwolfPlugin: any;
-
-const FIRESTONE_DISCORD_APP_ID = '1181612319495696494';
 
 @Injectable()
 export class DiscordRpcPluginService {
@@ -25,12 +23,9 @@ export class DiscordRpcPluginService {
 			plugin.initialize(async (status: boolean) => {
 				this.plugin = await plugin.get();
 				console.log('[discord] Plugin was loaded!', status, this.plugin, plugin);
-				this.plugin.initialize(FIRESTONE_DISCORD_APP_ID, LogLevel.Trace, (response) => {
-					console.debug('[discord] plugin initialized', response);
-					this.initialized = true;
-					this.initializing = false;
-					resolve();
-				});
+				this.initialized = true;
+				this.initializing = false;
+				resolve();
 			});
 		});
 	}

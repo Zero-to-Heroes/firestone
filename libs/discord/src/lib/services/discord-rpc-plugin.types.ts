@@ -15,8 +15,8 @@ export type DiscordRPCPlugin = {
 		endTime: number,
 		button1Text: string,
 		button1Url: string,
-		button2Text: string,
-		button2Url: string,
+		button2Text: string | null,
+		button2Url: string | null,
 		callback: CallbackResponse,
 	) => void;
 	updatePresenceWithButtonsArray: (

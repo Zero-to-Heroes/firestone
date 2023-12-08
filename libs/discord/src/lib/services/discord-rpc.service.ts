@@ -1,23 +1,53 @@
+/* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
 import { DiscordRpcPluginService } from './discord-rpc-plugin.service';
-import { DiscordRPCPlugin } from './discord-rpc-plugin.types';
+import { DiscordRPCPlugin, LogLevel } from './discord-rpc-plugin.types';
+
+const FIRESTONE_DISCORD_APP_ID = '1181612319495696494';
 
 @Injectable()
 export class DiscordRpcService {
 	private plugin: DiscordRPCPlugin;
 
+	private status: 'offline' | 'initializing' | 'online' = 'offline';
+
 	constructor(private readonly pluginService: DiscordRpcPluginService) {}
 
 	public async init() {
-		this.plugin = await this.pluginService.getPlugin();
+		if (this.status !== 'offline') {
+			return;
+		}
 
-		this.plugin.onClientReady.addListener((info) => console.log('[discord] client ready', info));
-		this.plugin.onPresenceUpdate.addListener((info) => console.log('[discord] presence update', info));
-		this.plugin.onClientError.addListener((info) => console.error('[discord] client error', info));
-		this.plugin.onLogLine.addListener((info) => console.log('[discord] log line', info));
+		return new Promise<void>(async (resolve) => {
+			console.debug('[discord] initializing plugin');
+			this.status = 'initializing';
+			if (!this.plugin) {
+				console.debug('[discord] no plugin, building new one');
+				this.plugin = await this.pluginService.getPlugin();
+				this.plugin.onClientReady.addListener((info) => {
+					console.debug('[discord-presence] client ready', info);
+					this.status = 'online';
+				});
+				this.plugin.onPresenceUpdate.addListener((info) =>
+					console.log('[discord-presence] presence update', info),
+				);
+				this.plugin.onClientError.addListener((info) => console.error('[discord-presence] client error', info));
+				this.plugin.onLogLine.addListener((info) => console.debug('[discord-presence] log line', info.message));
+			}
+
+			console.debug('[discord] calling plugin.initialize()');
+			this.plugin.initialize(FIRESTONE_DISCORD_APP_ID, LogLevel.Trace, (response) => {
+				console.debug('[discord] plugin initialized', response);
+				resolve();
+			});
+		});
 	}
 
 	public async updatePresence(details: string, state: string, smallImageKey: string, smallImageText: string) {
+		if (this.status !== 'online') {
+			await this.init();
+		}
+
 		this.plugin.updatePresence(
 			details,
 			state,
@@ -27,11 +57,24 @@ export class DiscordRpcService {
 			smallImageText,
 			true,
 			0,
-			'Button 1',
-			'https://button1.url',
-			'Button 2',
-			'https://button2.url',
+			'Get the app',
+			'https://www.firestoneapp.com',
+			'',
+			'',
+			// 'Button 2',
+			// 'https://button2.url',
 			console.log,
 		);
+	}
+
+	public clearPresence() {
+		if (this.status !== 'online') {
+			return;
+		}
+
+		this.plugin.dispose((info) => {
+			console.log('[discord] dispose', info);
+			this.status = 'offline';
+		});
 	}
 }
