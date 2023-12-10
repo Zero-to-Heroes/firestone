@@ -44,7 +44,8 @@ const PROCESSORS = [
 		updater: (deck: DeckState): DeckState => deck.update({ treantsSummoned: (deck.treantsSummoned ?? 0) + 1 }),
 	},
 	{
-		cardSelector: (card: ReferenceCard) => card?.races?.includes(Race[Race.DRAGON]),
+		cardSelector: (card: ReferenceCard) =>
+			card?.races?.includes(Race[Race.DRAGON]) || card?.races?.includes(Race[Race.ALL]),
 		updater: (deck: DeckState): DeckState => deck.update({ dragonsSummoned: (deck.dragonsSummoned ?? 0) + 1 }),
 	},
 ];
