@@ -1,11 +1,11 @@
 import { EventEmitter } from '@angular/core';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
+import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { GameState } from '../../../../models/decktracker/game-state';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsInitMmrEvent } from '../events/bgs-init-mmr-event';

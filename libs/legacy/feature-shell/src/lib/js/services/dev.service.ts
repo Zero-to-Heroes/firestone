@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
 import { CardIds, ReferenceCard, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { sortByProperties } from '@services/utils';
 import { Achievement } from '../models/achievement';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
-import { DeckCard } from '../models/decktracker/deck-card';
-import { DeckState } from '../models/decktracker/deck-state';
-import { GameState } from '../models/decktracker/game-state';
 import { AchievementsLiveProgressTrackingService } from './achievement/achievements-live-progress-tracking.service';
 import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';

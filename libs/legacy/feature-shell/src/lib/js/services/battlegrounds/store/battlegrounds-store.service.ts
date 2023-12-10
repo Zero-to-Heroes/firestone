@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -8,7 +9,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
-import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';

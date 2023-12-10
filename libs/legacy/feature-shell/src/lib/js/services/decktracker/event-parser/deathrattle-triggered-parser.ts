@@ -1,9 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import { DeckManipulationHelper } from '@legacy-import/src/lib/js/services/decktracker/event-parser/deck-manipulation-helper';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { deathrattleGlobalEffectCards } from '../../hs-utils';
 import { EventParser } from './event-parser';

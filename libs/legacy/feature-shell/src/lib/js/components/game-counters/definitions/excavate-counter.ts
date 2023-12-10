@@ -5,9 +5,9 @@ import {
 	EXCAVATE_TREASURE_2_IDS,
 	EXCAVATE_TREASURE_3_IDS,
 } from '@firestone-hs/reference-data';
+import { GameState } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 

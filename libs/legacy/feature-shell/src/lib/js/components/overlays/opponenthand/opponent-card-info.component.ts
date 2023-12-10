@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
+import { DeckCard } from '@firestone/game-state';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

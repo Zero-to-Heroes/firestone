@@ -1,4 +1,4 @@
-import { GameState } from '../../../../models/decktracker/game-state';
+import { GameState } from '@firestone/game-state';
 import { GameStateEvent } from '../../../../models/decktracker/game-state-event';
 import { ConstructedChangeTabEvent } from '../../event/constructed-change-tab-event';
 import { EventParser } from '../event-parser';

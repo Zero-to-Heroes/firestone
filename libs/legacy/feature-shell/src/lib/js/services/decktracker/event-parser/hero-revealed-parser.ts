@@ -1,7 +1,6 @@
 import { CardClass } from '@firestone-hs/reference-data';
+import { GameState, HeroCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameState } from '../../../models/decktracker/game-state';
-import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 

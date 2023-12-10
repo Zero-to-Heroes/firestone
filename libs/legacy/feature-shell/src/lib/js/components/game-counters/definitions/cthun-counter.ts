@@ -1,6 +1,6 @@
+import { GameState } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameState } from '../../../models/decktracker/game-state';
 import {
 	DEFAULT_CTHUN_ATK,
 	DEFAULT_CTHUN_HEALTH,

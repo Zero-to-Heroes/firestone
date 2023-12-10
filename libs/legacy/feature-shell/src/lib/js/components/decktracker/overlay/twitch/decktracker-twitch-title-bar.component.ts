@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { DeckState } from '../../../../models/decktracker/deck-state';
+import { DeckState } from '@firestone/game-state';
 
 @Component({
 	selector: 'decktracker-twitch-title-bar',

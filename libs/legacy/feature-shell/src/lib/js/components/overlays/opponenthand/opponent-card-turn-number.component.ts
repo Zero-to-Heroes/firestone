@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
+import { DeckCard } from '@firestone/game-state';
 
 @Component({
 	selector: 'opponent-card-turn-number',

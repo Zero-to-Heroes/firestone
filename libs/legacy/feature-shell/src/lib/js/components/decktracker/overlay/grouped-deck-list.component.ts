@@ -8,13 +8,12 @@ import {
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
+import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';

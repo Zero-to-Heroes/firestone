@@ -1,5 +1,4 @@
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { DeckState, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
@@ -25,7 +24,7 @@ export class MindrenderIlluciaParser implements EventParser {
 			cardsPlayedFromInitialDeck: secondDeck.cardsPlayedFromInitialDeck,
 			deck: secondDeck.deck,
 			deckList: secondDeck.deckList,
-			dynamicZones: secondDeck.dynamicZones,
+			// dynamicZones: secondDeck.dynamicZones,
 			hand: secondDeck.hand,
 			unknownRealCardsInDeck: secondDeck.unknownRealCardsInDeck,
 			deckstring: secondDeck.deckstring,

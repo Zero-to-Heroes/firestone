@@ -1,7 +1,4 @@
-import { BoardSecret } from '../../../models/decktracker/board-secret';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { BoardSecret, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { SecretConfigService } from '../secret-config.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

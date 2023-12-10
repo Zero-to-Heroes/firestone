@@ -7,11 +7,10 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
-import { DeckCard } from '@models/decktracker/deck-card';
-import { GameState } from '@models/decktracker/game-state';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 

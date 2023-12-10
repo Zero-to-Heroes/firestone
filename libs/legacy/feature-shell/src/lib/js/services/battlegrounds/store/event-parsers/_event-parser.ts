@@ -1,5 +1,5 @@
+import { GameState } from '@firestone/game-state';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { GameState } from '../../../../models/decktracker/game-state';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 
 export interface EventParser {

@@ -24,6 +24,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
 import { DuelsDeckSummary } from '@firestone/duels/general';
+import { GameState } from '@firestone/game-state';
 import { AdventuresInfo, Card, CardBack } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
@@ -32,7 +33,6 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
-import { GameState } from '../../models/decktracker/game-state';
 import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';

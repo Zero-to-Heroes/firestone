@@ -8,12 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { BoardSecret, DeckCard, SecretOption } from '@firestone/game-state';
 import { sortByProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { BoardSecret } from '../../models/decktracker/board-secret';
-import { DeckCard } from '../../models/decktracker/deck-card';
-import { SecretOption } from '../../models/decktracker/secret-option';
 import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

@@ -1,9 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState, ShortCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { COUNTERSPELLS } from '@services/hs-utils';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

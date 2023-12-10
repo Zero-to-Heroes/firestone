@@ -12,14 +12,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { DeckState, GameState, StatsRecap } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { Observable, combineLatest, shareReplay } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
-import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';

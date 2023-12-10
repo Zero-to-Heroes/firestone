@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState, HeroCard } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -13,11 +14,7 @@ import { ShuffleDeckParser } from '@services/decktracker/event-parser/shuffle-de
 import { SpecialCardPowerTriggeredParser } from '@services/decktracker/event-parser/special-card-power-triggered-parser';
 import { SphereOfSapienceParser } from '@services/decktracker/event-parser/special-cases/sphere-of-sapience-parser';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
-import { DeckCard } from '../../models/decktracker/deck-card';
-import { DeckState } from '../../models/decktracker/deck-state';
-import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
-import { HeroCard } from '../../models/decktracker/hero-card';
 import { GameEvent, PlayerGameState } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
@@ -185,7 +182,7 @@ export class GameStateService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly attackOnBoardService: AttackOnBoardService,
-		private readonly duelsRunService: DuelsDecksProviderService,
+		private readonly duelsRunService: DuelsDecksProviderService, // private readonly gameStateUpdates: GameStateUpdatesService,
 	) {
 		this.init();
 	}
@@ -466,12 +463,12 @@ export class GameStateService {
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
-		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
-		if (!playerFromTracker) {
-			return playerDeckWithDynamicZones;
-		}
+		// const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
+		// if (!playerFromTracker) {
+		// 	return playerDeckWithDynamicZones;
+		// }
 
-		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
+		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState, playerFromTracker);
 		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
 			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
 			return DeckCard.create({

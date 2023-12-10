@@ -9,12 +9,12 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { GameType } from '@firestone-hs/reference-data';
+import { TurnTiming } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { combineLatest, interval, Observable } from 'rxjs';
+import { Observable, combineLatest, interval } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { TurnTiming } from '../../../models/decktracker/deck-state';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { sumOnArray } from '../../../services/utils';
 

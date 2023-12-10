@@ -1,5 +1,5 @@
 import { CardClass } from '@firestone-hs/reference-data';
-import { NonFunctionProperties } from '../../services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 
 export class HeroCard {
 	readonly name: string;

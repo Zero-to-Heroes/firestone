@@ -8,11 +8,11 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { GameState } from '@firestone/game-state';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 import { TwitchPreferencesService } from './twitch-preferences.service';
 

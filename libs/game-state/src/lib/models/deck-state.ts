@@ -1,13 +1,11 @@
 import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { ShortCard } from '@models/decktracker/game-state';
-import { NonFunctionProperties } from '@services/utils';
-import { ChoosingOptionsGameEvent } from '../mainwindow/game-events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
+import { ShortCard } from './game-state';
 import { HeroCard } from './hero-card';
-import { DynamicZone } from './view/dynamic-zone';
 
 export const POGO_CARD_IDS = [
 	CardIds.PogoHopper_BOT_283,
@@ -99,7 +97,7 @@ export class DeckState {
 	readonly minionsDeadThisMatch: readonly ShortCard[] = [];
 	readonly lastDeathrattleMinionDead: ShortCard;
 	readonly anachronosTurnsPlayed: readonly number[] = [];
-	readonly bonelordFrostwhisperFirstTurnTrigger: number = null;
+	readonly bonelordFrostwhisperFirstTurnTrigger: number | null = null;
 	readonly plaguesShuffledIntoEnemyDeck: number = 0;
 	readonly currentExcavateTier: number = 0;
 	readonly maxExcavateTier: number = 0;
@@ -116,9 +114,9 @@ export class DeckState {
 	readonly board: readonly DeckCard[] = [];
 	readonly otherZone: readonly DeckCard[] = [];
 	readonly globalEffects: readonly DeckCard[] = [];
-	readonly dynamicZones: readonly DynamicZone[] = [];
+	// readonly dynamicZones: readonly DynamicZone[] = [];
 
-	readonly currentOptions?: readonly CardOption[] = [];
+	readonly currentOptions: readonly CardOption[] = [];
 
 	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
@@ -140,13 +138,11 @@ export class DeckState {
 	}
 
 	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService, cardCost: number): DeckState {
-		console.debug('considering', spell, cardCost);
 		if (!spell) {
 			return this;
 		}
 
 		const refCard = allCards.getCard(spell.cardId);
-		console.debug('refCard', refCard, refCard.type?.toUpperCase(), CardType[CardType.SPELL]);
 		if (refCard.type?.toUpperCase() !== CardType[CardType.SPELL]) {
 			return this;
 		}
@@ -159,18 +155,12 @@ export class DeckState {
 					.map((cardId) => allCards.getCard(cardId).spellSchool)
 					.filter((spellSchool) => !!spellSchool),
 			),
-		];
+		] as string[];
 
 		let manaSpentOnSpellsThisMatch = this.manaSpentOnSpellsThisMatch;
 		let manaSpentOnHolySpellsThisMatch = this.manaSpentOnHolySpellsThisMatch;
 		const manaCost = cardCost ?? 0;
 		manaSpentOnSpellsThisMatch += manaCost;
-		console.debug(
-			'is holy',
-			refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]),
-			refCard?.spellSchool,
-			manaCost,
-		);
 		if (refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY])) {
 			manaSpentOnHolySpellsThisMatch += manaCost;
 		}
@@ -182,7 +172,7 @@ export class DeckState {
 		});
 	}
 
-	public findCard(entityId: number): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } {
+	public findCard(entityId: number): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } | null {
 		const zones: { id: 'hand' | 'deck' | 'board' | 'other'; cards: readonly DeckCard[] }[] = [
 			{ id: 'hand', cards: this.hand },
 			{ id: 'deck', cards: this.deck },
@@ -384,7 +374,7 @@ export class DeckState {
 			);
 	}
 
-	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {
+	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard | null {
 		if (!this.cardsPlayedThisTurn?.length) {
 			return null;
 		}
@@ -415,7 +405,9 @@ export interface CardOption {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly source: string;
-	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
+	readonly context: /*ChoosingOptionsGameEvent['additionalData']['context'];*/ {
+		readonly DataNum1: number;
+	};
 	readonly questDifficulty?: number;
 	readonly questReward?: {
 		readonly EntityId: number;

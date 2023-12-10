@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { DeckCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 

@@ -1,9 +1,5 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
-import { BoardSecret } from '../../../models/decktracker/board-secret';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
-import { SecretOption } from '../../../models/decktracker/secret-option';
+import { BoardSecret, DeckCard, DeckState, GameState, SecretOption } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';

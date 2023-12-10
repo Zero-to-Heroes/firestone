@@ -1,7 +1,6 @@
 import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
+import { DeckCard, GameState, ShortCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import {
 	COUNTERSPELLS,

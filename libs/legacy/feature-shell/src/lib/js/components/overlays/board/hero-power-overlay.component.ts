@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { DeckCard } from '@firestone/game-state';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '@models/decktracker/deck-card';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 

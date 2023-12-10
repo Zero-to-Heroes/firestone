@@ -1,4 +1,4 @@
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckHandlerService } from '../deck-handler.service';
 import { DeckParserService } from '../deck-parser.service';

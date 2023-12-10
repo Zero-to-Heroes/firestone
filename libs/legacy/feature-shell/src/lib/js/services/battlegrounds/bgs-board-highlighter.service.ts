@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
+import { DeckCard } from '@firestone/game-state';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
-import { DeckCard } from '../../models/decktracker/deck-card';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { isMinionGolden } from './bgs-utils';

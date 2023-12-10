@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { GameState } from '@firestone/game-state';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { GameState } from '../../models/decktracker/game-state';
 
 @Injectable()
 export class GameStateFacadeService {

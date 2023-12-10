@@ -1,6 +1,6 @@
 import { CardClass } from '@firestone-hs/reference-data';
+import { DeckCard } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { DeckCard } from './deck-card';
 
 export class VisualDeckCard extends DeckCard {
 	readonly highlight: 'dim' | 'normal' | 'in-hand';

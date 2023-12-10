@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

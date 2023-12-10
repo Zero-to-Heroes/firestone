@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
-import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -198,78 +196,76 @@ export class DeckListByZoneComponent implements OnDestroy {
 			),
 		);
 		// If there are no dynamic zones, we use the standard "other" zone
-		if (this._deckState.dynamicZones.length === 0) {
-			const otherZone = [
-				...this._deckState.otherZone
-					// Frizz creates PLAY entities that don't have any information
-					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] CardID=
-					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ZONE value=SETASIDE
-					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=CONTROLLER value=1
-					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ENTITY_ID value=91
-					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] tag=ZONE value=PLAY
-					// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
-					.filter((c) => !!c.cardId?.length)
-					.filter(
-						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',
-					),
-				...this._deckState.board,
-			];
-			zones.push(
-				this.buildZone(
-					otherZone,
-					null,
-					'other',
-					this.i18n.translateString('decktracker.zones.other'),
-					this._sortCardsByManaCostInOtherZone
-						? (a, b) => a.manaCost - b.manaCost
-						: (a, b) => this.sortByIcon(a, b),
-					null,
-					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
-					// not show them in the zones
-					// (a: VisualDeckCard) => a.zone !== 'SETASIDE',
-					// Cards like Tracking put cards from the deck to the SETASIDE zone, so we want to
-					// keep them in fact. We have added a specific flag for cards that are just here
-					// for technical reasons
-					(a: VisualDeckCard) =>
-						// See comment on temporary cards in grouped-deck-list.component.ts
-						(!a.temporaryCard || a.zone !== 'SETASIDE') &&
-						!a.createdByJoust &&
-						!(this._hideGeneratedCardsInOtherZone && a.creatorCardId) &&
-						!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
-				),
-			);
-		}
+		// if (this._deckState.dynamicZones.length === 0) {
+		const otherZone = [
+			...this._deckState.otherZone
+				// Frizz creates PLAY entities that don't have any information
+				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] CardID=
+				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ZONE value=SETASIDE
+				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=CONTROLLER value=1
+				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ENTITY_ID value=91
+				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] tag=ZONE value=PLAY
+				// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
+				.filter((c) => !!c.cardId?.length)
+				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
+			...this._deckState.board,
+		];
+		zones.push(
+			this.buildZone(
+				otherZone,
+				null,
+				'other',
+				this.i18n.translateString('decktracker.zones.other'),
+				this._sortCardsByManaCostInOtherZone
+					? (a, b) => a.manaCost - b.manaCost
+					: (a, b) => this.sortByIcon(a, b),
+				null,
+				// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
+				// not show them in the zones
+				// (a: VisualDeckCard) => a.zone !== 'SETASIDE',
+				// Cards like Tracking put cards from the deck to the SETASIDE zone, so we want to
+				// keep them in fact. We have added a specific flag for cards that are just here
+				// for technical reasons
+				(a: VisualDeckCard) =>
+					// See comment on temporary cards in grouped-deck-list.component.ts
+					(!a.temporaryCard || a.zone !== 'SETASIDE') &&
+					!a.createdByJoust &&
+					!(this._hideGeneratedCardsInOtherZone && a.creatorCardId) &&
+					!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
+			),
+		);
+		// }
 		// Otherwise, we add all the dynamic zones
-		this._deckState.dynamicZones.forEach((zone) => {
-			zones.push(this.buildDynamicZone(zone, null));
-		});
+		// this._deckState.dynamicZones.forEach((zone) => {
+		// 	zones.push(this.buildDynamicZone(zone, null));
+		// });
 		this.zones = zones as readonly DeckZone[];
 	}
 
-	private buildDynamicZone(
-		zone: DynamicZone,
-		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
-	): DeckZone {
-		return {
-			id: zone.id,
-			name: zone.name,
-			sections: [
-				{
-					header: null,
-					cards: zone.cards.map((card) =>
-						VisualDeckCard.create(card).update({
-							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-							lastAffectedByCardIds: (card.lastAffectedByCardId
-								? [card.lastAffectedByCardId]
-								: []) as readonly string[],
-						}),
-					),
-					sortingFunction: sortingFunction,
-				},
-			],
-			numberOfCards: zone.cards.length,
-		} as DeckZone;
-	}
+	// private buildDynamicZone(
+	// 	zone: DynamicZone,
+	// 	sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
+	// ): DeckZone {
+	// 	return {
+	// 		id: zone.id,
+	// 		name: zone.name,
+	// 		sections: [
+	// 			{
+	// 				header: null,
+	// 				cards: zone.cards.map((card) =>
+	// 					VisualDeckCard.create(card).update({
+	// 						creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+	// 						lastAffectedByCardIds: (card.lastAffectedByCardId
+	// 							? [card.lastAffectedByCardId]
+	// 							: []) as readonly string[],
+	// 					}),
+	// 				),
+	// 				sortingFunction: sortingFunction,
+	// 			},
+	// 		],
+	// 		numberOfCards: zone.cards.length,
+	// 	} as DeckZone;
+	// }
 
 	private buildZone(
 		cards: readonly DeckCard[],

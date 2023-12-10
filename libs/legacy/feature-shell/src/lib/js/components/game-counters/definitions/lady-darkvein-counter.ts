@@ -1,7 +1,7 @@
 import { CardIds, SpellSchool } from '@firestone-hs/reference-data';
+import { GameState, ShortCard } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 

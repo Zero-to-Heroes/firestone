@@ -7,9 +7,9 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { DeckState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 

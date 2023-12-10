@@ -1,10 +1,8 @@
 import { sanitizeDeckDefinition } from '@components/decktracker/copy-deckstring.component';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { GameType } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';

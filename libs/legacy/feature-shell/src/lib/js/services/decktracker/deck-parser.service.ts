@@ -11,13 +11,13 @@ import {
 	ScenarioId,
 	SceneMode,
 } from '@firestone-hs/reference-data';
+import { Metadata } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
 import { distinctUntilChanged } from 'rxjs';
-import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { SceneService } from '../game/scene.service';

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardMetaInfo } from '../../models/decktracker/card-meta-info';
-import { DeckCard } from '../../models/decktracker/deck-card';
-import { DeckState } from '../../models/decktracker/deck-state';
+import { CardMetaInfo, DeckCard, DeckState } from '@firestone/game-state';
 
 @Injectable()
 export class GameStateMetaInfoService {

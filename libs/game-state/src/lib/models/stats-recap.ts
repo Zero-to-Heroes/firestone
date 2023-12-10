@@ -7,7 +7,7 @@ export class StatsRecap {
 	readonly totalLosses: number;
 	readonly winratePercent: number;
 
-	public static from(deckStats: readonly GameStat[], opponentClass?: string): StatsRecap {
+	public static from(deckStats: readonly GameStat[], opponentClass?: string): StatsRecap | null {
 		console.debug('building stats recap', deckStats, opponentClass);
 		if (!deckStats || deckStats.length === 0) {
 			return null;

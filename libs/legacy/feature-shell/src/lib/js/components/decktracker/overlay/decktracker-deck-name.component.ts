@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

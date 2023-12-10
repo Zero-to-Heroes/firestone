@@ -1,5 +1,4 @@
-import { CardOption } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { CardOption, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { ChoosingOptionsGameEvent } from '../../../models/mainwindow/game-events/choosing-options-game-event';
 import { EventParser } from './event-parser';

@@ -7,7 +7,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { StatsRecap } from '../../../models/decktracker/stats-recap';
+import { StatsRecap } from '@firestone/game-state';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 

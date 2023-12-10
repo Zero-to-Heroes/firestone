@@ -12,11 +12,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { DeckState, GameState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckState } from '@legacy-import/src/lib/js/models/decktracker/deck-state';
 import { BehaviorSubject, Observable, from } from 'rxjs';
-import { GameState } from '../../../../models/decktracker/game-state';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 

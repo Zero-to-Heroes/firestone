@@ -1,9 +1,8 @@
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardOption, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
-import { CardOption } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 export const buildBasicCardChoiceValue = (

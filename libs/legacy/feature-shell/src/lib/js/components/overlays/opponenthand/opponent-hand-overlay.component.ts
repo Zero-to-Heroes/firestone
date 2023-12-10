@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { DeckCard } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

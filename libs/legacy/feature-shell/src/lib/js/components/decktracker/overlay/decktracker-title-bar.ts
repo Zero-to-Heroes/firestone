@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import { DeckState, StatsRecap } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { DeckState } from '../../../models/decktracker/deck-state';
-import { StatsRecap } from '../../../models/decktracker/stats-recap';
 
 @Component({
 	selector: 'decktracker-title-bar',

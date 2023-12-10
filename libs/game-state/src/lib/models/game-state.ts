@@ -1,8 +1,7 @@
-import { CardIds, GameType, SpellSchool } from '@firestone-hs/reference-data';
+import { CardIds, GameType, SpellSchool, isBattlegrounds } from '@firestone-hs/reference-data';
 import { MatchInfo } from '@firestone/memory';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
-import { NonFunctionProperties } from '../../services/utils';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
 
@@ -57,7 +56,7 @@ export class GameState {
 		);
 	}
 
-	public lastBattlecryPlayedForMacaw(allCards: CardsFacadeService, side: 'player' | 'opponent'): string {
+	public lastBattlecryPlayedForMacaw(allCards: CardsFacadeService, side: 'player' | 'opponent'): string | undefined {
 		return (
 			this.cardsPlayedThisMatch
 				.filter((card) => card.side === side)
@@ -72,7 +71,7 @@ export class GameState {
 		);
 	}
 
-	public lastShadowSpellPlayed(allCards: CardsFacadeService, side: 'player' | 'opponent'): string {
+	public lastShadowSpellPlayed(allCards: CardsFacadeService, side: 'player' | 'opponent'): string | undefined {
 		return this.cardsPlayedThisMatch
 			.filter((card) => card.side === side)
 			.filter((card) => {

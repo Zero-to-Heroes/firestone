@@ -1,12 +1,8 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { DeckCard, DeckSideboard, DeckState, GameState, HeroCard, Metadata } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckSideboard, DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
-import { HeroCard } from '../../../models/decktracker/hero-card';
-import { Metadata } from '../../../models/decktracker/metadata';
 import { GameEvent } from '../../../models/game-event';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { DeckHandlerService } from '../deck-handler.service';

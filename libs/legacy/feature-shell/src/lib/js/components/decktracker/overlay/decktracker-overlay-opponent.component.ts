@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { GameState } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { GameState } from '../../../models/decktracker/game-state';
 
 @Component({
 	selector: 'decktracker-overlay-opponent',

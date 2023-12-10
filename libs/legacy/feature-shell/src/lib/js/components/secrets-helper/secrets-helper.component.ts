@@ -7,9 +7,9 @@ import {
 	OnDestroy,
 	Renderer2,
 } from '@angular/core';
+import { BoardSecret } from '@firestone/game-state';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DebugService } from '../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
