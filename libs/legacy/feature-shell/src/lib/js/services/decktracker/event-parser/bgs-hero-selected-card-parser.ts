@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -26,11 +26,15 @@ export class BgsHeroSelectedCardParser implements EventParser {
 			zone: 'SETASIDE',
 		} as DeckCard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newHero = deck.hero?.update({
+			cardId: cardId,
+		});
+		const newPlayerDeck = deck.update({
 			hand: newHand,
 			otherZone: newOther,
 			deck: newDeck,
-		} as DeckState);
+			hero: newHero,
+		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

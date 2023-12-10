@@ -76,6 +76,7 @@ export class GameModeDataService {
 				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			default:
+				this.triggerRankMatchInfoRetrieve();
 				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 		}
@@ -124,13 +125,14 @@ export class GameModeDataService {
 	}
 
 	private async triggerRankMatchInfoRetrieve() {
+		console.debug('[match-info] triggerRankMatchInfoRetrieve');
 		await runLoop(async () => {
 			const [matchInfo, playerDeck] = await Promise.all([
 				this.memoryService.getMatchInfo(),
 				this.deckParser.getCurrentDeck(10000),
 			]);
+			console.log('[match-info] matchInfo', matchInfo);
 			if (!!matchInfo?.localPlayer && !!matchInfo?.opponent) {
-				console.log('[match-info] matchInfo', matchInfo);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_INFO,

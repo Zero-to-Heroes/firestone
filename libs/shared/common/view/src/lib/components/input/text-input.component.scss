@@ -12,6 +12,8 @@
 		width: 100%;
 		border: 1px solid currentColor;
 		display: flex;
+		padding: 5px;
+		padding-left: 10px;
 
 		&:focus-within,
 		&:hover {
@@ -24,6 +26,7 @@
 		background: transparent;
 		border: none;
 		cursor: text;
+		color: inherit;
 
 		&:focus {
 			outline: none;

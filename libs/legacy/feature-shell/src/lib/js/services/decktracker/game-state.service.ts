@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, HeroCard } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, GameStateUpdatesService, HeroCard } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -182,7 +182,8 @@ export class GameStateService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly attackOnBoardService: AttackOnBoardService,
-		private readonly duelsRunService: DuelsDecksProviderService, // private readonly gameStateUpdates: GameStateUpdatesService,
+		private readonly duelsRunService: DuelsDecksProviderService,
+		private readonly gameStateUpdates: GameStateUpdatesService,
 	) {
 		this.init();
 	}
@@ -195,11 +196,12 @@ export class GameStateService {
 			return;
 		}
 
+		await this.gameStateUpdates.isReady();
+		await this.prefs.isReady();
+
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 		this.buildEventEmitters();
-
-		await this.prefs.isReady();
 		this.prefs.preferences$$
 			.pipe(
 				distinctUntilChanged(
@@ -464,9 +466,9 @@ export class GameStateService {
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
 		// const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
-		// if (!playerFromTracker) {
-		// 	return playerDeckWithDynamicZones;
-		// }
+		if (!playerFromTracker) {
+			return newState;
+		}
 
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState, playerFromTracker);
 		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
@@ -490,7 +492,10 @@ export class GameStateService {
 	}
 
 	private async buildEventEmitters() {
-		const result = [(event) => this.deckEventBus.next(event)];
+		const result = [
+			(event) => this.deckEventBus.next(event),
+			(event) => this.gameStateUpdates.updateGameState(event.state),
+		];
 		const prefs = await this.prefs.getPreferences();
 		console.log('is logged in to Twitch?', !!prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {

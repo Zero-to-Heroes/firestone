@@ -62,6 +62,7 @@ export const toGameTypeEnum = (gameType: StatGameModeType): GameType => {
 	}
 };
 
+/** @deprecated use hs-reference-data\formatGameType instead */
 export const toGameType = (gameType: GameType): StatGameModeType => {
 	switch (gameType) {
 		case GameType.GT_UNKNOWN:

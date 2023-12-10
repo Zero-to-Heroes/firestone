@@ -546,6 +546,7 @@ import { DiscordModule } from '@firestone/discord';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
+import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -883,6 +884,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedCommonModule,
 		DiscordModule,
 		MemoryModule,
+		GameStateModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

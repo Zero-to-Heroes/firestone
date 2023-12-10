@@ -36,7 +36,7 @@ export class DiscordRpcService {
 			}
 
 			console.debug('[discord] calling plugin.initialize()');
-			this.plugin.initialize(FIRESTONE_DISCORD_APP_ID, LogLevel.Trace, (response) => {
+			this.plugin.initialize(FIRESTONE_DISCORD_APP_ID, LogLevel.Warning, (response) => {
 				console.debug('[discord] plugin initialized', response);
 				resolve();
 			});
@@ -58,7 +58,7 @@ export class DiscordRpcService {
 			true,
 			0,
 			'Get the app',
-			'https://www.firestoneapp.com',
+			'https://www.firestoneapp.com?utm_source=discord_rpc',
 			'',
 			'',
 			// 'Button 2',

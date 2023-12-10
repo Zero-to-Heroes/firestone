@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { DiscordPresenceManagerService } from './services/discord-presence-manager.service';
@@ -8,7 +9,7 @@ import { DiscordRpcService } from './services/discord-rpc.service';
 import { PresenceManagerService } from './services/presence-manager.service';
 
 @NgModule({
-	imports: [CommonModule, SharedCommonServiceModule, MemoryModule],
+	imports: [CommonModule, SharedCommonServiceModule, MemoryModule, GameStateModule],
 	providers: [DiscordRpcPluginService, DiscordRpcService, DiscordPresenceManagerService, PresenceManagerService],
 })
 export class DiscordModule {}

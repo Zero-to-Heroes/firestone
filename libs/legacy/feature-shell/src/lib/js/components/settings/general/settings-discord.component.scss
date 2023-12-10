@@ -1,0 +1,58 @@
+.title {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+
+	.premium-lock {
+		display: none;
+		height: 25px;
+		width: 25px;
+		--icon-color: var(--default-title-color);
+		margin-right: 5px;
+	}
+}
+
+.subgroup {
+	.toggle {
+		margin-bottom: 10px;
+	}
+
+	.tokens {
+		list-style: disc;
+		margin-bottom: 10px;
+
+		.token {
+			margin-left: 30px;
+		}
+	}
+
+	.custom-text-config {
+		margin-left: 15px;
+		width: 300px;
+		--text-input-color-active: var(--color-3);
+
+		&.disabled {
+			opacity: 0.4;
+			pointer-events: none;
+		}
+	}
+
+	.custom-text-input {
+		margin-top: 15px;
+	}
+
+	.details-text-2 {
+		margin-bottom: 15px;
+	}
+}
+
+.settings-group.locked {
+	.title .premium-lock {
+		display: flex;
+	}
+
+	.subgroup {
+		opacity: 0.4;
+		pointer-events: none;
+	}
+}
