@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
+import { filter, take } from 'rxjs';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
+import { SceneService } from '../../../game/scene.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
 import { EventParser } from './event-parsers/_event-parser';
 import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';
@@ -50,15 +53,30 @@ export class RealTimeStatsService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
-	) {}
+		private readonly scene: SceneService,
+	) {
+		// Not sure how we can improve this
+		// If I wait until I know we're in a BG game, then I miss the first few events
+		this.initListeners();
+	}
 
 	public addListener(listener: (state: RealTimeStatsState) => void): void {
 		if (!this.listeners.includes(listener)) {
 			this.listeners.push(listener);
 		}
-		if (!this.eventParsers?.length) {
-			this.init();
-		}
+		// if (!this.eventParsers?.length) {
+		// }
+	}
+
+	private async initListeners() {
+		await this.scene.isReady();
+
+		this.scene.currentScene$$
+			.pipe(
+				filter((scene) => scene === SceneMode.BACON),
+				take(1),
+			)
+			.subscribe(() => this.init());
 	}
 
 	private init() {
@@ -86,7 +104,6 @@ export class RealTimeStatsService {
 				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter((event) => event);
-
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				await this.processEvent(eventsToProcess[i]);
 			}
@@ -109,7 +126,7 @@ export class RealTimeStatsService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			console.debug('[real-time-stats] new state', this.state);
+			// console.debug('[real-time-stats] new state', gameEvent.type, this.state);
 			this.listeners.forEach((listener) => listener(this.state));
 		}
 	}
