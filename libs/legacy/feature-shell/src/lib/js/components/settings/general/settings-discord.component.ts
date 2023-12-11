@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable, take, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -17,6 +18,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				field="discordRichPresence"
 				[label]="'settings.general.discord.discord-presence-label' | owTranslate"
 				[tooltip]="'settings.general.discord.discord-presence-tooltip' | owTranslate"
+				[toggleFunction]="afterRichPresenceChanged"
 			></preference-toggle>
 		</div>
 		<!-- Premium config -->
@@ -109,6 +111,7 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
 	}
@@ -154,6 +157,9 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 		};
 		console.debug('updating prefs', newPrefs, value);
 		await this.prefs.savePreferences(newPrefs);
+		this.analytics.trackEvent('discord', {
+			feature: 'change-custom-in-game-text',
+		});
 	}
 
 	async onCustomMatchStringUpdated(value: string) {
@@ -164,5 +170,14 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 		};
 		console.debug('updating prefs', newPrefs, value);
 		await this.prefs.savePreferences(newPrefs);
+		this.analytics.trackEvent('discord', {
+			feature: 'change-custom-in-match-text',
+		});
 	}
+
+	afterRichPresenceChanged = (newValue: boolean) => {
+		this.analytics.trackEvent('discord', {
+			enabled: newValue,
+		});
+	};
 }
