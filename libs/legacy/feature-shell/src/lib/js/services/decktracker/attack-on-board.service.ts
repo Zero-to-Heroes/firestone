@@ -37,12 +37,18 @@ export class AttackOnBoardService {
 		const baseHeroAttack = deck.isActivePlayer
 			? Math.max(playerFromTracker?.Hero?.attack || 0, 0)
 			: Math.max(playerFromTracker?.Weapon?.attack || 0, 0);
+
+		const heroAttacksThisTurn = getTag(playerFromTracker.Hero, GameTag.NUM_ATTACKS_THIS_TURN);
 		const heroAttack =
 			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, deck.isActivePlayer)
-				? Math.min(
-						this.windfuryMultiplier(playerFromTracker.Hero),
-						// We can get attack outside of weapons
-						playerFromTracker?.Weapon?.durability || 1,
+				? Math.max(
+						0,
+						Math.min(
+							this.windfuryMultiplier(playerFromTracker.Hero),
+							// We can get attack outside of weapons
+							getTag(playerFromTracker?.Weapon, GameTag.DURABILITY) -
+								getTag(playerFromTracker?.Weapon, GameTag.DAMAGE) || 1,
+						) - heroAttacksThisTurn,
 				  ) *
 				  (numberOfVoidtouchedAttendants + baseHeroAttack)
 				: 0;
@@ -50,9 +56,10 @@ export class AttackOnBoardService {
 		// 	'heroAttack',
 		// 	heroAttack,
 		// 	baseHeroAttack,
+		// 	playerFromTracker.Hero,
 		// 	this.canAttack(playerFromTracker.Hero, deck.isActivePlayer),
 		// 	this.windfuryMultiplier(playerFromTracker.Hero),
-		// 	playerFromTracker?.Weapon?.durability,
+		// 	playerFromTracker?.Weapon,
 		// );
 		const result = {
 			board: totalAttackOnBoard,
@@ -152,4 +159,8 @@ export const hasTag = (entity, tag: number, value = 1): boolean => {
 	}
 	const matches = entity.tags.some((t) => t.Name === tag && t.Value === value);
 	return matches;
+};
+
+export const getTag = (entity, tag: number): number => {
+	return entity?.tags?.find((t) => t.Name === tag)?.Value ?? 0;
 };
