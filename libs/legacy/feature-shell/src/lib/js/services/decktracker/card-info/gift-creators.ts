@@ -501,6 +501,8 @@ export const giftCreators = [
 	CardIds.PrismaticElemental,
 	CardIds.PsychicConjurerCore,
 	CardIds.PsychicConjurerLegacy,
+	CardIds.Pyros,
+	CardIds.Pyros_PyrosToken_UNG_027t2,
 	CardIds.Pyrotechnician,
 	CardIds.QueenAzshara_TSC_641,
 	CardIds.RaidNegotiator,
