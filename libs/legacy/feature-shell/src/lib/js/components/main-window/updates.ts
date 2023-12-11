@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.0.11',
+		version: '13.1.0',
 		force: false,
 		sections: [
 			// {
@@ -42,25 +42,34 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'arena',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the card winrate bubbles would not disappear after finishing the draft.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `(PREMIUM) You can now set a custom message through your status on Discord! Placeholders now only include the current game mode and hero name, but let met know on Discord if you'd like some more options :) See <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features#general">the wiki</a> for some screenshots.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the Dragons Summoned counter would not include ALL tribes.`,
+							},
+						],
+					},
 					{
 						category: 'battlegrounds',
 						details: [
