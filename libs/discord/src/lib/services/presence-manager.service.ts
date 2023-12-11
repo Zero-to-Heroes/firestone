@@ -6,7 +6,7 @@ import { GameStateUpdatesService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap } from 'rxjs';
 import { IN_GAME_TEXT_PLACEHOLDER } from './discord-presence-manager.service';
 
 @Injectable()
@@ -33,13 +33,13 @@ export class PresenceManagerService {
 			.preferences$((prefs) => prefs.discordRichPresence)
 			.pipe(
 				switchMap(([useRichPresence]) => {
-					console.debug('[presence] new useRichPresence', useRichPresence);
+					// console.debug('[presence] new useRichPresence', useRichPresence);
 					return !useRichPresence ? of({ enabled: false }) : this.buildPresence();
 				}),
-				tap((update) => console.debug('[presence] new update', update)),
+				// tap((update) => console.debug('[presence] new update', update)),
 			)
 			.subscribe(async (newPresence) => {
-				console.debug('[presence] new presence', newPresence);
+				// console.debug('[presence] new presence', newPresence);
 				this.presence$$.next(newPresence);
 			});
 	}
@@ -49,19 +49,19 @@ export class PresenceManagerService {
 		const metaData$ = this.gameStateUpdates.gameState$$.pipe(
 			map((gameState) => gameState?.metadata),
 			distinctUntilChanged(),
-			tap((metadata) => console.debug('[presence] new metadata', metadata)),
+			// tap((metadata) => console.debug('[presence] new metadata', metadata)),
 			shareReplay(1),
 		);
 		const matchInfo$ = this.gameStateUpdates.gameState$$.pipe(
 			map((gameState) => gameState?.matchInfo),
 			distinctUntilChanged(),
-			tap((matchInfo) => console.debug('[presence] new matchInfo', matchInfo)),
+			// tap((matchInfo) => console.debug('[presence] new matchInfo', matchInfo)),
 			shareReplay(1),
 		);
 		const playerHero$ = this.gameStateUpdates.gameState$$.pipe(
 			map((gameState) => gameState?.playerDeck?.hero?.cardId),
 			distinctUntilChanged(),
-			tap((hero) => console.debug('[presence] new hero', hero)),
+			// tap((hero) => console.debug('[presence] new hero', hero)),
 			shareReplay(1),
 		);
 		return combineLatest([
@@ -77,7 +77,7 @@ export class PresenceManagerService {
 			matchInfo$,
 			playerHero$,
 		]).pipe(
-			tap((data) => console.debug('[presence] new data', data)),
+			// tap((data) => console.debug('[presence] new data', data)),
 			map(
 				([
 					inGame,
@@ -114,16 +114,16 @@ export class PresenceManagerService {
 		playerHero: string | undefined,
 		// additionalResult: string | undefined,
 	): string | null | undefined {
-		console.debug(
-			'[presence] building custom text',
-			enableCustomInGameText,
-			enableCustomInMatchText,
-			gameText,
-			matchText,
-			metaData,
-			matchInfo,
-			playerHero,
-		);
+		// console.debug(
+		// 	'[presence] building custom text',
+		// 	enableCustomInGameText,
+		// 	enableCustomInMatchText,
+		// 	gameText,
+		// 	matchText,
+		// 	metaData,
+		// 	matchInfo,
+		// 	playerHero,
+		// );
 		if (!enableCustomInGameText && !enableCustomInMatchText) {
 			return null;
 		}
@@ -139,7 +139,7 @@ export class PresenceManagerService {
 			?.replace('{rank}', rank ?? '')
 			.replace('{mode}', mode)
 			.replace('{hero}', hero);
-		console.debug('[presence] returning result', result, mode, rank, hero);
+		// console.debug('[presence] returning result', result, mode, rank, hero);
 		return result;
 		// .replace('{wins}', wins ?? '')
 		// .replace('{losses}', losses ?? '');

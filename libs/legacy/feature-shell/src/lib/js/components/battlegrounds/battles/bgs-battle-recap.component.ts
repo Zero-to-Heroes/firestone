@@ -81,7 +81,7 @@ export class BgsBattleRecapComponent {
 		if (!value) {
 			return;
 		}
-		console.debug('setting faceOff', value);
+		// console.debug('setting faceOff', value);
 		this.turnNumber = value.turn;
 		this.result = value.result;
 		this.i18nResult = value.result
