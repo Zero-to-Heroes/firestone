@@ -12,13 +12,16 @@
 		width: 100%;
 		border: 1px solid currentColor;
 		display: flex;
-		padding: 5px;
-		padding-left: 10px;
+		height: 30px;
 
 		&:focus-within,
 		&:hover {
 			background: rgba(255, 255, 255, 0.08);
 		}
+	}
+
+	.search-icon {
+		margin-right: -10px;
 	}
 
 	input {
@@ -27,6 +30,7 @@
 		border: none;
 		cursor: text;
 		color: inherit;
+		margin-left: 10px;
 
 		&:focus {
 			outline: none;

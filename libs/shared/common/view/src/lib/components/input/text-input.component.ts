@@ -17,7 +17,7 @@ import { BehaviorSubject, Observable, debounceTime } from 'rxjs';
 	template: `
 		<div class="text-input">
 			<label class="search-label">
-				<i class="i-30" *ngIf="showSearchIcon" inlineSVG="assets/svg/search.svg"> </i>
+				<i class="search-icon i-30" *ngIf="showSearchIcon" inlineSVG="assets/svg/search.svg"> </i>
 				<input
 					[ngModel]="value$ | async"
 					[placeholder]="placeholder"
