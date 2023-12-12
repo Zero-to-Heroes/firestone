@@ -172,7 +172,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 	private async loadNewDecks(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<ExtendedDeckStats> {
 		time = (time as string) === 'all-time' ? 'past-20' : time;
-		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
+		const fileName = `${format}/${rank}/${time}/overview-from-hourly.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load deck stats', url, format, time, rank);
 		const resultStr = await this.api.get(url);
@@ -223,7 +223,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 	private async loadNewArchetypes(format: GameFormat, time: TimePeriod, rank: RankBracket): Promise<ArchetypeStats> {
 		time = (time as string) === 'all-time' ? 'past-20' : time;
-		const fileName = `${format}/${rank}/${time}/overview.gz.json`;
+		const fileName = `${format}/${rank}/${time}/overview-from-hourly.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load archetype stats', url, format, time, rank);
 		const resultStr = await this.api.get(url);

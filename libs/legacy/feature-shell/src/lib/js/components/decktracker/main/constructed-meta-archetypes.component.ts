@@ -4,10 +4,10 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { formatGamesCount } from './constructed-meta-decks.component';
+import { formatGamesCount, getDateAgo } from './constructed-meta-decks.component';
 
 @Component({
 	selector: 'constructed-meta-archetypes',
@@ -19,11 +19,20 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 		<ng-container
 			*ngIf="{
 				archetypes: archetypes$ | async,
-				showStandardDeviation: showStandardDeviation$ | async
+				showStandardDeviation: showStandardDeviation$ | async,
+				lastUpdate: lastUpdate$ | async,
+				totalGames: totalGames$ | async
 			} as value"
 		>
 			<with-loading [isLoading]="!value.archetypes">
 				<div class="constructed-meta-archetypes">
+					<div class="data-info">
+						<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+						<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ value.lastUpdate }}</div>
+						<div class="separator">-</div>
+						<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+						<div class="value">{{ value.totalGames }}</div>
+					</div>
 					<div class="header" *ngIf="sortCriteria$ | async as sort">
 						<sortable-table-label
 							class="cell player-class"
@@ -91,6 +100,9 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComp
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	archetypes$: Observable<EnhancedArchetypeStat[]>;
 	showStandardDeviation$: Observable<boolean>;
+	lastUpdate$: Observable<string>;
+	lastUpdateFull$: Observable<string>;
+	totalGames$: Observable<string>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'games',
@@ -141,6 +153,43 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComp
 					.map((stat) => this.enhanceStat(stat, useConservativeEstimate))
 					.sort((a, b) => this.sortArchetypes(a, b, sortCriteria)),
 			),
+		);
+		this.totalGames$ = this.constructedMetaStats.constructedMetaArchetypes$$.pipe(
+			this.mapData((stats) => stats.dataPoints.toLocaleString(this.i18n.formatCurrentLocale())),
+			takeUntil(this.destroyed$),
+		);
+		this.lastUpdate$ = this.constructedMetaStats.constructedMetaArchetypes$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(stats.lastUpdated);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale());
+			}),
+		);
+		this.lastUpdateFull$ = this.constructedMetaStats.constructedMetaArchetypes$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				const date = new Date(stats.lastUpdated);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
+			}),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -42,6 +42,28 @@ with-loading {
 	}
 }
 
+.data-info {
+	display: flex;
+	margin-bottom: 20px;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 10px;
+
+	.label {
+		color: var(--color-2);
+		margin-right: 5px;
+	}
+
+	.value {
+		color: var(--color-1);
+	}
+
+	.separator {
+		margin: 0 5px;
+		color: var(--color-1);
+	}
+}
+
 .empty-state {
 	@extend %empty-state;
 	flex-grow: 1;

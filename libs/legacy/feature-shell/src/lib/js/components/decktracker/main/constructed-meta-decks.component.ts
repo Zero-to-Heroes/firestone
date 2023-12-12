@@ -5,9 +5,10 @@ import { Card } from '@firestone/memory';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, startWith } from 'rxjs/operators';
+import { debounceTime, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -22,11 +23,20 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			*ngIf="{
 				decks: decks$ | async,
 				showStandardDeviation: showStandardDeviation$ | async,
-				collection: collection$ | async
+				collection: collection$ | async,
+				lastUpdate: lastUpdate$ | async,
+				totalGames: totalGames$ | async
 			} as value"
 		>
 			<with-loading [isLoading]="!value.decks">
 				<div class="constructed-meta-decks">
+					<div class="data-info">
+						<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+						<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ value.lastUpdate }}</div>
+						<div class="separator">-</div>
+						<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+						<div class="value">{{ value.totalGames }}</div>
+					</div>
 					<div class="header" *ngIf="sortCriteria$ | async as sort">
 						<sortable-table-label
 							class="cell player-class"
@@ -103,6 +113,9 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	collection$: Observable<readonly Card[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	showStandardDeviation$: Observable<boolean>;
+	lastUpdate$: Observable<string>;
+	lastUpdateFull$: Observable<string>;
+	totalGames$: Observable<string>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'games',
@@ -114,6 +127,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -187,6 +201,45 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 					return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 				},
 			),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.totalGames$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
+			this.mapData((stats) => stats.dataPoints.toLocaleString(this.i18n.formatCurrentLocale())),
+			takeUntil(this.destroyed$),
+		);
+		this.lastUpdate$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(stats.lastUpdated);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale());
+			}),
+		);
+		this.lastUpdateFull$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				const date = new Date(stats.lastUpdated);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
+			}),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -323,4 +376,27 @@ export const formatGamesCount = (value: number): number => {
 		return 10 * Math.round(value / 10);
 	}
 	return value;
+};
+
+export const getDateAgo = (date: Date, i18n: LocalizationFacadeService): string => {
+	const now = new Date();
+	const diff = now.getTime() - date.getTime();
+	const hours = diff / (1000 * 3600);
+	if (hours < 1) {
+		return i18n.translateString('global.duration.ago.less-than-an-hour-ago');
+	}
+	if (hours < 24) {
+		return i18n.translateString('global.duration.ago.hours-ago', {
+			value: Math.round(hours),
+		});
+	}
+	const days = diff / (1000 * 3600 * 24);
+	if (days < 7) {
+		return i18n.translateString('global.duration.ago.days-ago', {
+			value: Math.round(days),
+		});
+	}
+	return i18n.translateString('global.duration.ago.weeks-ago', {
+		value: Math.round(days / 7),
+	});
 };
