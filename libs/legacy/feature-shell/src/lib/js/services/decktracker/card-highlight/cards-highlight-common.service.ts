@@ -493,7 +493,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.BlindeyeSharpshooter_WW_402:
 				return and(side(inputSide), or(inDeck, inHand), or(naga, spell));
 			case CardIds.BloodCrusader:
-				return and(side(inputSide), or(inDeck, inHand), naga);
+				return and(side(inputSide), or(inDeck, inHand), paladin, minion);
 			case CardIds.BloodOfGhuun:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.BloodreaverGuldan_CORE_ICC_831:
