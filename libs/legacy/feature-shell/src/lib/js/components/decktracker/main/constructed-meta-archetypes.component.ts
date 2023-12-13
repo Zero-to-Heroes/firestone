@@ -3,11 +3,12 @@ import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { formatGamesCount, getDateAgo } from './constructed-meta-decks.component';
+import { formatGamesCount } from './constructed-meta-decks.component';
 
 @Component({
 	selector: 'constructed-meta-archetypes',

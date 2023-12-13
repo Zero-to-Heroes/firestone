@@ -3,7 +3,9 @@ import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { BgsActiveTimeFilterType } from './bgs-active-time-filter.type';
 
-const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/%mmr-folder%/bgs-%timeSuffix%.gz.json';
+// const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/%mmr-folder%/bgs-%timeSuffix%.gz.json';
+const META_HERO_STATS_URL =
+	'https://static.zerotoheroes.com/api/bgs/hero-stats/%mmr-folder%/%timeSuffix%/overview-from-hourly.gz.json';
 
 @Injectable()
 export class BgsMetaHeroStatsAccessService {

@@ -152,6 +152,7 @@ export const buildHeroStats = (
 	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {
+	useAnomalyFilter = false;
 	// mmrPercentile = useMmrFilter ? mmrPercentile : 100;
 	anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
 	// const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];

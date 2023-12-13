@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, filter, takeUntil } from 'rxjs';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
@@ -27,6 +27,13 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 				[attr.aria-label]="'Battlegrounds meta hero stats'"
 				*ngIf="{ tiers: tiers$ | async } as value"
 			>
+				<div class="data-info">
+					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+					<div class="separator">-</div>
+					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+					<div class="value">{{ totalGames$ | async }}</div>
+				</div>
 				<div class="header">
 					<div class="portrait"></div>
 					<div class="hero-details" [fsTranslate]="'app.battlegrounds.tier-list.header-hero-details'"></div>
@@ -71,6 +78,9 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	implements AfterContentInit
 {
 	tiers$: Observable<readonly BgsMetaHeroStatTier[]>;
+	lastUpdate$: Observable<string>;
+	lastUpdateFull$: Observable<string>;
+	totalGames$: Observable<string>;
 
 	@Output() heroStatClick = new EventEmitter<string>();
 
@@ -80,9 +90,17 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	@Input() set heroSort(value: BgsHeroSortFilterType) {
 		this.heroSort$$.next(value);
 	}
+	@Input() set totalGames(value: number) {
+		this.totalGames$$.next(value);
+	}
+	@Input() set lastUpdate(value: Date) {
+		this.lastUpdate$$.next(value);
+	}
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
 	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>(null);
+	private totalGames$$ = new BehaviorSubject<number>(null);
+	private lastUpdate$$ = new BehaviorSubject<Date>(null);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
 		super(cdr);
@@ -116,6 +134,37 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 					default:
 						return buildTiers(stats, this.i18n);
 				}
+			}),
+		);
+
+		this.totalGames$ = this.totalGames$$.pipe(
+			filter((totalGames) => totalGames != null),
+			this.mapData((totalGames) => totalGames.toLocaleString(this.i18n.formatCurrentLocale())),
+			takeUntil(this.destroyed$),
+		);
+		this.lastUpdate$ = this.lastUpdate$$.pipe(
+			filter((date) => !!date),
+			this.mapData((date) => {
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale());
+			}),
+		);
+		this.lastUpdateFull$ = this.lastUpdate$$.pipe(
+			filter((date) => !!date),
+			this.mapData((date) => {
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
 			}),
 		);
 	}

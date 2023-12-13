@@ -3,7 +3,7 @@ import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { Card } from '@firestone/memory';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
@@ -376,27 +376,4 @@ export const formatGamesCount = (value: number): number => {
 		return 10 * Math.round(value / 10);
 	}
 	return value;
-};
-
-export const getDateAgo = (date: Date, i18n: LocalizationFacadeService): string => {
-	const now = new Date();
-	const diff = now.getTime() - date.getTime();
-	const hours = diff / (1000 * 3600);
-	if (hours < 1) {
-		return i18n.translateString('global.duration.ago.less-than-an-hour-ago');
-	}
-	if (hours < 24) {
-		return i18n.translateString('global.duration.ago.hours-ago', {
-			value: Math.round(hours),
-		});
-	}
-	const days = diff / (1000 * 3600 * 24);
-	if (days < 7) {
-		return i18n.translateString('global.duration.ago.days-ago', {
-			value: Math.round(days),
-		});
-	}
-	return i18n.translateString('global.duration.ago.weeks-ago', {
-		value: Math.round(days / 7),
-	});
 };
