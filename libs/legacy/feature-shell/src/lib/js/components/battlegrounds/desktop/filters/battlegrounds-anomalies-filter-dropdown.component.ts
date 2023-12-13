@@ -3,6 +3,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { IOptionWithImage } from '@firestone/shared/common/view';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { BG_USE_ANOMALIES } from '@legacy-import/src/lib/js/services/feature-flags';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -82,6 +83,7 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 				filter(([categoryId, currentView]) => !!categoryId && !!currentView),
 				this.mapData(
 					([categoryId, currentView]) =>
+						BG_USE_ANOMALIES &&
 						!['categories', 'category'].includes(currentView) &&
 						![
 							'bgs-category-personal-stats',

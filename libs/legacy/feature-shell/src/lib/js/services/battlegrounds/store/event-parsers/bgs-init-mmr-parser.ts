@@ -7,6 +7,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameStateService } from '../../../decktracker/game-state.service';
+import { BG_USE_ANOMALIES } from '../../../feature-flags';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsInitMmrEvent } from '../events/bgs-init-mmr-event';
 import { EventParser } from './_event-parser';
@@ -40,7 +41,7 @@ export class BgsInitMmrParser implements EventParser {
 			...prefs,
 			bgsSavedRankFilter: prefs.bgsActiveRankFilter,
 			bgsSavedTribesFilter: prefs.bgsActiveTribesFilter,
-			bgsSavedAnomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+			bgsSavedAnomaliesFilter: [], //prefs.bgsActiveAnomaliesFilter,
 		};
 		await this.prefs.savePreferences(savedPrefs);
 
@@ -59,7 +60,7 @@ export class BgsInitMmrParser implements EventParser {
 		const newPrefs: Preferences = {
 			...savedPrefs,
 			bgsActiveTribesFilter: races,
-			bgsActiveAnomaliesFilter: anomalies.filter((a) => !!a),
+			bgsActiveAnomaliesFilter: BG_USE_ANOMALIES ? anomalies.filter((a) => !!a) : [],
 			bgsActiveRankFilter: percentile?.percentile ?? 100,
 			bgsActiveUseMmrFilterInHeroSelection: savedPrefs.bgsSavedUseMmrFilterInHeroSelection,
 			bgsActiveUseAnomalyFilterInHeroSelection: savedPrefs.bgsSavedUseAnomalyFilterInHeroSelection,

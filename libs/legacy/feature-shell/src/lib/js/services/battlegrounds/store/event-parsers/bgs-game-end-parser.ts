@@ -10,6 +10,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { BG_USE_ANOMALIES } from '../../../feature-flags';
 import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
@@ -44,9 +45,9 @@ export class BgsGameEndParser implements EventParser {
 			...prefs,
 			bgsActiveRankFilter: prefs.bgsSavedRankFilter ?? prefs.bgsActiveRankFilter,
 			bgsActiveTribesFilter: prefs.bgsSavedTribesFilter ?? prefs.bgsActiveTribesFilter,
-			bgsActiveAnomaliesFilter: (prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter).filter(
-				(a) => !!a,
-			),
+			bgsActiveAnomaliesFilter: BG_USE_ANOMALIES
+				? (prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter).filter((a) => !!a)
+				: [],
 			bgsActiveUseAnomalyFilterInHeroSelection: true,
 			bgsActiveUseMmrFilterInHeroSelection: true,
 		};

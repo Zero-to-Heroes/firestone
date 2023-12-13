@@ -12,6 +12,7 @@ import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { BG_USE_ANOMALIES } from '@legacy-import/src/lib/js/services/feature-flags';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
@@ -104,7 +105,7 @@ export class BattlegroundsTierListComponent
 				timeFilter: timeFilter,
 				rankFilter: rankFilter,
 				tribesFilter: tribesFilter,
-				anomaliesFilter: anomaliesFilter,
+				anomaliesFilter: BG_USE_ANOMALIES ? anomaliesFilter : [],
 			})),
 			this.mapData((info) => {
 				const stats = info.stats;

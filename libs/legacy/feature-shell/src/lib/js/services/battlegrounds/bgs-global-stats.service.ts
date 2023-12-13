@@ -3,8 +3,6 @@ import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { ApiRunner } from '@firestone/shared/framework/core';
 
 // The light version doesn't have tribe filtering
-const BGS_STATS_RETRIEVE_URL =
-	'https://static.zerotoheroes.com/api/bgs/heroes/bgs-global-stats-%tribeSuffix%-%timeSuffix%.gz.json';
 
 /** @deprecated */
 @Injectable()

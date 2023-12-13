@@ -11,6 +11,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-perfect-games.service';
+import { BG_USE_ANOMALIES } from '@legacy-import/src/lib/js/services/feature-flags';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -96,7 +97,7 @@ export class BattlegroundsPerfectGamesComponent
 			.filter((replay) => this.rankFilter(replay, rankFilter))
 			.filter((replay) => this.heroFilter(replay, heroFilter))
 			.filter((replay) => this.tribesFilter(replay, tribesFilter))
-			.filter((replay) => this.anomaliesFilter(replay, anomaliesFilter));
+			.filter((replay) => (BG_USE_ANOMALIES ? this.anomaliesFilter(replay, anomaliesFilter) : true));
 	}
 
 	private tribesFilter(stat: GameStat, tribesFilter: readonly Race[]) {

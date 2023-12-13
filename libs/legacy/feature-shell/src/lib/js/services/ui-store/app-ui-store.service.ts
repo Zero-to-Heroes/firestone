@@ -59,6 +59,7 @@ import { DuelsBucketsService } from '../duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
 import { DuelsLeaderboardService } from '../duels/duels-leaderboard.service';
 import { DuelsMetaStatsService } from '../duels/duels-meta-stats.service';
+import { BG_USE_ANOMALIES } from '../feature-flags';
 import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
@@ -699,7 +700,7 @@ export class AppUiStoreService extends Store<Preferences> {
 								bgsActiveAnomaliesFilter,
 								bgsHeroesUseConservativeEstimate,
 								useMmrFilter,
-								useAnomalyFilter,
+								BG_USE_ANOMALIES ? useAnomalyFilter : false,
 								this.allCards,
 						  );
 					return result;
@@ -741,11 +742,12 @@ export class AppUiStoreService extends Store<Preferences> {
 								tribesFilter.length === ALL_BG_RACES.length ||
 								tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
 						)
-						.filter(
-							(g) =>
-								!anomaliesFilter?.length ||
-								!useAnomalyFilter ||
-								anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a)),
+						.filter((g) =>
+							BG_USE_ANOMALIES
+								? !anomaliesFilter?.length ||
+								  !useAnomalyFilter ||
+								  anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a))
+								: true,
 						);
 					const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
 					console.debug(

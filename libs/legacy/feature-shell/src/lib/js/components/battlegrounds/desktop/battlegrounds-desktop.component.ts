@@ -10,6 +10,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { BG_USE_QUESTS } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -109,10 +110,12 @@ export class BattlegroundsDesktopComponent
 				id: 'bgs-category-meta-heroes',
 				name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
 			},
-			{
-				id: 'bgs-category-meta-quests',
-				name: this.i18n.translateString('app.battlegrounds.menu.quests'),
-			},
+			BG_USE_QUESTS
+				? {
+						id: 'bgs-category-meta-quests',
+						name: this.i18n.translateString('app.battlegrounds.menu.quests'),
+				  }
+				: (null as BattlegroundsCategory),
 			{
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),
@@ -129,7 +132,7 @@ export class BattlegroundsDesktopComponent
 				id: 'bgs-category-simulator',
 				name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
 			},
-		];
+		].filter((c) => !!c) as readonly BattlegroundsCategory[];
 
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
