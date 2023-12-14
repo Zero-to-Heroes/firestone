@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.1.0',
+		version: '13.1.1',
 		force: false,
 		sections: [
 			// {
@@ -65,8 +65,20 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `You can now choose whether some widgets (like Spell Schools or Menagerie) display their items all on one line, or each on a separate line. Go to the Settings > Decktracker > Global at the bottom to change this.`,
+							},
+							{
+								type: 'feature',
+								text: `Deck stats should now update more frequently, and display the time at which they were last updated. Beware that the sample size will be a little smaller during the first few days.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where the Dragons Summoned counter would not include ALL tribes.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the attack counter would not take the weapon's durability into account.`,
 							},
 						],
 					},
@@ -78,8 +90,41 @@ export const updates: readonly Update[] = [
 								text: `Add an option to show the spells at the bottom of the minions list.`,
 							},
 							{
+								type: 'feature',
+								text: `Add a new "Tavern Spells" section in the minions list overlay.`,
+							},
+							{
+								type: 'feature',
+								text: `Hero stats should now update more frequently, and display the time at which they were last updated. Beware that the sample size will be a little smaller during the first few days.`,
+							},
+							{
+								type: 'ui',
+								text: `Remove filters linked to Quest and Anomalies.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a sim issue that would occur rarely with Diremuck Forager.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Lighter Fighter.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Live Stats would not refresh properly.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where re-deleting a deck that was deleted once in the past wouldn't work.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the hero power / signature treasure info was sometimes missing when viewing your own runs overview.`,
 							},
 						],
 					},
