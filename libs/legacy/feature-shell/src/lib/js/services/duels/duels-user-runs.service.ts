@@ -73,6 +73,7 @@ export class DuelsUserRunsService {
 				) || [];
 			const rewardsResults: readonly DuelsRewardsInfo[] = results?.rewardsResults || [];
 			console.log('[duels-runs] loaded user runs and rewards', stepResults?.length, rewardsResults?.length);
+			console.debug('[duels-runs] loaded user runs and rewards', results);
 			this.duelsRuns$$.next(stepResults);
 			this.duelsRewards$$.next(rewardsResults);
 		});

@@ -56,7 +56,7 @@ export class DuelsDecksProviderService {
 				this.duelsUserRuns.duelsRewards$$,
 				this.store.gameStats$(),
 			]).pipe(
-				filter(([duelsRunInfos, duelsRewardsInfo, gameStats]) => !!gameStats?.length),
+				filter(([duelsRunInfos, duelsRewardsInfo, gameStats]) => duelsRunInfos != null && !!gameStats?.length),
 				take(1),
 			);
 			const runSourceFilteredValues$ = combineLatest([
@@ -66,7 +66,7 @@ export class DuelsDecksProviderService {
 			]).pipe(
 				filter(
 					([duelsRunInfos, duelsRewardsInfo, gameStats]) =>
-						!!gameStats?.length && isDuels(gameStats[0]?.gameMode),
+						duelsRunInfos != null && !!gameStats?.length && isDuels(gameStats[0]?.gameMode),
 				),
 			);
 			concat(runSourceFirstValue$, runSourceFilteredValues$)
@@ -326,7 +326,7 @@ export class DuelsDecksProviderService {
 				return null;
 			}
 		}
-		return DuelsRun.create({
+		const result = DuelsRun.create({
 			id: runId,
 			type: this.getDuelsType(steps[0]),
 			creationTimestamp: steps[0].creationTimestamp,
@@ -342,6 +342,7 @@ export class DuelsDecksProviderService {
 			steps: steps,
 			rewards: rewardsInfo,
 		} as DuelsRun);
+		return result;
 	}
 
 	private getFirstMatchForRun(sortedMatches: readonly GameStat[]): GameStat {
@@ -397,7 +398,8 @@ export class DuelsDecksProviderService {
 		if (!steps || steps.length === 0) {
 			return null;
 		}
-		return steps.find((step) => step.bundleType === 'hero-power')?.option1;
+		const result = steps.find((step) => step.bundleType === 'hero-power')?.option1;
+		return result;
 	}
 
 	private extractHeroCardId(sortedMatches: readonly GameStat[]): string {
