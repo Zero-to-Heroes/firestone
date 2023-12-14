@@ -447,11 +447,14 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 			heroPortraitTooltip: heroCard.name,
 			placement: buildMatchResultText(info, this.i18n),
 			deltaMmr: parseInt(info.newPlayerRank) - parseInt(info.playerRank),
-			anomalies: [...(info.bgsAnomalies ?? [])].sort().map((anomaly) => ({
-				cardId: anomaly,
-				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
-				tooltip: this.allCards.getCard(anomaly).name,
-			})),
+			anomalies: [...(info.bgsAnomalies ?? [])]
+				.filter((a) => !!a?.length)
+				.sort()
+				.map((anomaly) => ({
+					cardId: anomaly,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
+					tooltip: this.allCards.getCard(anomaly).name,
+				})),
 			availableTribes: [...(info.bgsAvailableTribes ?? [])]
 				.sort((a, b) => a - b)
 				.map((race) => ({

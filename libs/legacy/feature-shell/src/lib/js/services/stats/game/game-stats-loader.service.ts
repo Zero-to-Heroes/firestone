@@ -180,6 +180,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod));
 		await this.saveLocalStats(stats);
 		console.log('[game-stats-loader] Retrieved game stats for user', stats?.length);
+		//console.debug('[game-stats-loader] Retrieved game stats for user', stats);
 		return GameStats.create({
 			stats: stats
 				// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
