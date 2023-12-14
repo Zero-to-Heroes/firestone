@@ -1148,6 +1148,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.OnyxBishop:
 			case CardIds.OnyxBishop_WON_057:
 				return and(side(inputSide), inGraveyard);
+			case CardIds.OnyxianWarder:
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.OopsAllSpellsTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.OpenTheDoorwaysTavernBrawl:
