@@ -11,7 +11,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	template: `
 		<div
 			class="opponent-card-info-id"
-			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess)"
+			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess) || forged"
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
@@ -19,17 +19,24 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[ngClass]="{ buffed: hasBuffs }"
 		>
 			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" (error)="handleMissingImage($event)" />
+			<img
+				*ngIf="forged && !cardUrl"
+				src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/tracker/forged.webp"
+				class="card-image forged"
+			/>
+			<div *ngIf="hasBuffs && !forged && !cardUrl" class="only-buff">
+				<svg>
+					<use xlink:href="assets/svg/sprite.svg#card_only_buff" />
+				</svg>
+			</div>
+
+			<div *ngIf="forged && cardUrl" class="card-image forged icon" inlineSVG="assets/svg/forged.svg"></div>
 			<div *ngIf="drawnBy" class="drawn">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#created_by" />
 				</svg>
 			</div>
 			<div *ngIf="createdBy" class="created-by" inlineSVG="assets/svg/gift_inside_circle.svg"></div>
-			<div *ngIf="!cardUrl" class="only-buff">
-				<svg>
-					<use xlink:href="assets/svg/sprite.svg#card_only_buff" />
-				</svg>
-			</div>
 		</div>
 	`,
 })
@@ -38,6 +45,7 @@ export class OpponentCardInfoIdComponent {
 	cardUrl: string;
 	createdBy: boolean;
 	drawnBy: boolean;
+	forged: boolean;
 	hasBuffs: boolean;
 	_card: DeckCard;
 
@@ -61,6 +69,7 @@ export class OpponentCardInfoIdComponent {
 			!this.createdBy &&
 			publicCardCreators.includes(value.lastAffectedByCardId as CardIds);
 		this.hasBuffs = value.buffCardIds?.length > 0;
+		this.forged = value.forged > 0;
 
 		this.cardId =
 			realCardId || (this.createdBy && value.creatorCardId) || (this.drawnBy && value.lastAffectedByCardId);

@@ -37,9 +37,25 @@
 		color: var(--icon-color);
 		background-color: var(--icon-bg);
 	}
+
+	.forged.icon {
+		position: absolute;
+		width: 17px;
+		top: 14px;
+		left: -7px;
+		--icon-secondary-color: var(--color-7);
+		--icon-color: var(--color-1);
+		transform: scale(15);
+	}
 }
 
 .card-image {
 	width: 260%;
 	clip-path: ellipse(50% 50% at 50% 50%);
+
+	&.forged {
+		width: 185%;
+		position: relative;
+		left: -7%;
+	}
 }

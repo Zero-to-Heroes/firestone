@@ -441,6 +441,9 @@ export class GameEvents {
 					GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps),
 				);
 				break;
+			case 'CARD_FORGED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_FORGED, gameEvent));
+				break;
 			case 'JADE_GOLEM':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.JADE_GOLEM, gameEvent, {
