@@ -21,7 +21,6 @@ export class MulticasterCounterDefinition implements CounterDefinition<GameState
 		private readonly side: 'player' | 'opponent',
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly prefs: PreferencesService,
 	) {}
 
 	public static async create(
@@ -31,7 +30,7 @@ export class MulticasterCounterDefinition implements CounterDefinition<GameState
 		prefs: PreferencesService,
 	): Promise<MulticasterCounterDefinition> {
 		await prefs.isReady();
-		const result = new MulticasterCounterDefinition(side, allCards, i18n, prefs);
+		const result = new MulticasterCounterDefinition(side, allCards, i18n);
 		result.prefValue$ = prefs
 			.preferences$((prefs) => prefs.countersUseExpandedView)
 			.pipe(

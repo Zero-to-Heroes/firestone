@@ -209,7 +209,7 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 			case 'lightray':
 				return LightrayCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'menagerie':
-				return MenagerieCounterDefinition.create(side, this.allCards, this.i18n);
+				return MenagerieCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'corpseSpent':
 				return CorpseSpentCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'overdraft':

@@ -1,11 +1,15 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { GameState, ShortCard } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Observable, distinctUntilChanged, map } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
 export class MenagerieCounterDefinition implements CounterDefinition<GameState, readonly ShortCard[]> {
+	prefValue$?: Observable<boolean> = new Observable<boolean>();
+
 	readonly type = 'menagerie';
 	readonly value: number | string;
 	readonly image: string;
@@ -20,12 +24,21 @@ export class MenagerieCounterDefinition implements CounterDefinition<GameState, 
 		private readonly i18n: LocalizationFacadeService,
 	) {}
 
-	public static create(
+	public static async create(
 		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
-	): MenagerieCounterDefinition {
-		return new MenagerieCounterDefinition(side, allCards, i18n);
+		prefs: PreferencesService,
+	): Promise<MenagerieCounterDefinition> {
+		await prefs.isReady();
+		const result = new MenagerieCounterDefinition(side, allCards, i18n);
+		result.prefValue$ = prefs
+			.preferences$((prefs) => prefs.countersUseExpandedView)
+			.pipe(
+				distinctUntilChanged(),
+				map(([pref]) => pref),
+			);
+		return result;
 	}
 
 	public select(gameState: GameState): readonly ShortCard[] {
@@ -33,15 +46,17 @@ export class MenagerieCounterDefinition implements CounterDefinition<GameState, 
 		return deck.cardsPlayedThisMatch ?? [];
 	}
 
-	public emit(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<MenagerieCounterDefinition> {
+	public emit(
+		cardsPlayedThisMatch: readonly ShortCard[],
+		countersUseExpandedView: boolean,
+	): NonFunctionProperties<MenagerieCounterDefinition> {
 		const allPlayedCards = cardsPlayedThisMatch.map((c) => this.allCards.getCard(c.cardId));
 		console.debug('allPlayedCards', allPlayedCards, cardsPlayedThisMatch);
 
-		const uniqueTribes = extractUniqueTribes(allPlayedCards);
-		const tribeText = uniqueTribes
+		const uniqueTribes = extractUniqueTribes(allPlayedCards)
 			.map((tribe) => this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`))
-			.sort()
-			.join(', ');
+			.sort();
+		const tribeText = countersUseExpandedView ? '<br/>' + uniqueTribes?.join('<br/>') : uniqueTribes.join(', ');
 		const tooltip = this.i18n.translateString(`counters.menagerie.${this.side}`, {
 			value: tribeText,
 		});
