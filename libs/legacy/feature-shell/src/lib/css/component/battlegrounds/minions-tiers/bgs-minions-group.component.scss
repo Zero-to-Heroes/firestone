@@ -123,6 +123,7 @@
 				&.taunt,
 				&.divine-shield,
 				&.end-of-turn,
+				&.bg-spell,
 				&.reborn {
 					display: flex;
 					background: var(--icon-secondary-color);
@@ -169,6 +170,10 @@
 
 				&.reborn {
 					--icon-color: #6aaeb9;
+				}
+
+				&.bg-spell {
+					--icon-color: #a11e1e;
 				}
 			}
 

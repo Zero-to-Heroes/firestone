@@ -175,6 +175,19 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 							>
 								<span class="label">R</span>
 							</div>
+							<div
+								class="highlight-minion-button bg-spell"
+								*ngIf="minion.hasBgSpell && showBattlecryHighlight"
+								[ngClass]="{
+									highlighted: minion.bgSpellHighlight
+								}"
+								(click)="highlightBgSpell()"
+								[helpTooltip]="
+									!minion.bgSpellHighlight ? highlightBgSpellOnTooltip : highlightBgSpellOffTooltip
+								"
+							>
+								<span class="label">S</span>
+							</div>
 						</div>
 						<div
 							class="banned-overlay"
@@ -286,6 +299,7 @@ export class BattlegroundsMinionsGroupComponent
 							const hasDivineShield = card.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 							const hasEndOfTurn = card.mechanics?.includes(GameTag[GameTag.END_OF_TURN]);
 							const hasReborn = card.mechanics?.includes(GameTag[GameTag.REBORN]);
+							const hasBgSpell = card.mechanics?.includes(GameTag[GameTag.BG_SPELL]);
 							const result: Minion = {
 								cardId: minion.id,
 								displayedCardIds: this.buildAllCardIds(minion.id, showGoldenCards),
@@ -302,6 +316,7 @@ export class BattlegroundsMinionsGroupComponent
 								endOfTurnHighlight:
 									hasEndOfTurn && group.highlightedMechanics.includes(GameTag.END_OF_TURN),
 								rebornHighlight: hasReborn && group.highlightedMechanics.includes(GameTag.REBORN),
+								bgSpellHighlight: hasBgSpell && group.highlightedMechanics.includes(GameTag.BG_SPELL),
 								techLevel: card.techLevel,
 								goldCost: isBgsSpell(card) ? card.cost : null,
 								hasBattlecry: hasBattlecry,
@@ -310,6 +325,7 @@ export class BattlegroundsMinionsGroupComponent
 								hasDivineShield: hasDivineShield,
 								hasEndOfTurn: hasEndOfTurn,
 								hasReborn: hasReborn,
+								hasBgSpell: hasBgSpell,
 								banned: minion.banned,
 							};
 							return result;
@@ -404,6 +420,13 @@ export class BattlegroundsMinionsGroupComponent
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.REBORN));
 	}
 
+	highlightBgSpell() {
+		if (!this.showBattlecryHighlight) {
+			return;
+		}
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.BG_SPELL));
+	}
+
 	trackByFn(index: number, minion: Minion) {
 		return minion.cardId;
 	}
@@ -480,6 +503,12 @@ export class BattlegroundsMinionsGroupComponent
 	highlightRebornOffTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
 		value: this.i18n.translateString('global.mechanics.reborn'),
 	});
+	highlightBgSpellOnTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.bg_spell'),
+	});
+	highlightBgSpellOffTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.bg_spell'),
+	});
 }
 
 interface Minion {
@@ -495,12 +524,14 @@ interface Minion {
 	readonly hasEndOfTurn?: boolean;
 	readonly hasBattlecry?: boolean;
 	readonly hasReborn?: boolean;
+	readonly hasBgSpell?: boolean;
 	readonly battlecryHighlight?: boolean;
 	readonly deathrattleHighlight?: boolean;
 	readonly tauntHighlight?: boolean;
 	readonly divineShieldHighlight?: boolean;
 	readonly endOfTurnHighlight?: boolean;
 	readonly rebornHighlight?: boolean;
+	readonly bgSpellHighlight?: boolean;
 	readonly hasDeathrattle?: boolean;
 	readonly hasDivineShield?: boolean;
 }

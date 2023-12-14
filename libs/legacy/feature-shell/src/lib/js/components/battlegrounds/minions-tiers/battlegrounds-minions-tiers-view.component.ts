@@ -330,7 +330,7 @@ export const buildTiers = (
 		},
 		type: 'standard',
 	}));
-	const mechanicsTiers = showMechanicsTiers ? buildMechanicsTiers(filteredCards, buddies, i18n) : [];
+	const mechanicsTiers = showMechanicsTiers ? buildMechanicsTiers(filteredCards, buddies, hasSpells, i18n) : [];
 	const tribeTiers = showTribeTiers
 		? buildTribeTiers(
 				filteredCards,
@@ -389,6 +389,7 @@ const buildTribeTiers = (
 const buildMechanicsTiers = (
 	cardsInGame: readonly ExtendedReferenceCard[],
 	allBuddies: readonly ExtendedReferenceCard[],
+	hasSpells: boolean,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): readonly Tier[] => {
 	const mechanicalTiers: Tier[] = [
@@ -450,6 +451,17 @@ const buildMechanicsTiers = (
 			type: 'mechanics',
 		},
 	];
+	if (hasSpells) {
+		mechanicalTiers.push({
+			tavernTier: 'S',
+			cards: cardsInGame.filter((c) => isInMechanicalTier(c, GameTag.BG_SPELL)),
+			groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+			tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+				value: i18n.translateString(`global.mechanics.${GameTag[GameTag.BG_SPELL].toLowerCase()}`),
+			}),
+			type: 'mechanics',
+		});
+	}
 	if (allBuddies.length) {
 		mechanicalTiers.push({
 			tavernTier: 'Buds',
