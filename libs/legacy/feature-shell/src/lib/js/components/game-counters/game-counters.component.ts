@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameState } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { DebugService } from '../../services/debug.service';
@@ -99,25 +100,30 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
 		if (!this.activeCounter?.includes('bgs')) {
-			const definition = this.buildDefinition(this.activeCounter, this.side);
-			this.definition$ = this.store
-				.listenDeckState$((state) => state)
-				.pipe(
-					filter(([state]) => !!state),
-					map(([state]) => definition.select(state)),
-					filter((info) => info != null),
-					this.mapData(
-						(info) => definition.emit(info),
-						// Because counters often return an object
-						(a, b) => deepEqual(a, b),
-					),
-				);
+			const definition = await this.buildDefinition(this.activeCounter, this.side);
+			this.definition$ = combineLatest([
+				this.store.listenDeckState$((state) => state),
+				definition.prefValue$ ?? of(null),
+			]).pipe(
+				filter(([[state], prefValue]) => !!state),
+				map(([[state], prefValue]) => ({
+					counterInfo: definition.select(state),
+					prefValue: prefValue,
+				})),
+				filter((info) => info?.counterInfo != null),
+				this.mapData(
+					(info) => definition.emit(info.counterInfo, info.prefValue),
+					// Because counters often return an object
+					(a, b) => deepEqual(a, b),
+				),
+			);
 		} else {
 			const definition = this.buildBgsDefinition(this.activeCounter, this.side);
 			// TODO: have each definition define what it listens to, instead of recomputing
@@ -136,12 +142,15 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				),
 			);
 		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	private buildDefinition(
+	private async buildDefinition(
 		activeCounter: CounterType,
 		side: 'player' | 'opponent',
-	): CounterDefinition<GameState, any> {
+	): Promise<CounterDefinition<GameState, any>> {
 		switch (activeCounter) {
 			case 'galakrond':
 				return GalakrondCounterDefinition.create(side, this.allCards, this.i18n);
@@ -228,7 +237,7 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 			case 'greySageParrot':
 				return GreySageParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'multicaster':
-				return MulticasterCounterDefinition.create(side, this.allCards, this.i18n);
+				return MulticasterCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'heroPowerDamage':
 				return HeroPowerDamageCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':

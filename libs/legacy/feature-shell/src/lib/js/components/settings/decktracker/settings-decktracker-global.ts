@@ -111,6 +111,15 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 				</div>
 			</div>
+			<div class="settings-group">
+				<div class="subgroup">
+					<preference-toggle
+						field="countersUseExpandedView"
+						[label]="'settings.decktracker.global.counters-use-expanded-view-label' | owTranslate"
+						[tooltip]="'settings.decktracker.global.counters-use-expanded-view-tooltip' | owTranslate"
+					></preference-toggle>
+				</div>
+			</div>
 			<div class="reset-container">
 				<button
 					(mousedown)="reset()"
