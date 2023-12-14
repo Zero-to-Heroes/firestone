@@ -84,13 +84,13 @@ export const filterDuelsRuns = (
 	return (
 		runs
 			// Keep only runs that have been created after the deck's initial deletion date
-			.filter(
-				(run) =>
-					!duelsDeckDeletes ||
-					!duelsDeckDeletes[run.initialDeckList]?.length ||
-					duelsDeckDeletes[run.initialDeckList][duelsDeckDeletes[run.initialDeckList].length - 1] <
-						run.creationTimestamp,
-			)
+			.filter((run) => {
+				if (!duelsDeckDeletes || !duelsDeckDeletes[run.initialDeckList]?.length) {
+					return true;
+				}
+				const latestDeletion = Math.max(...duelsDeckDeletes[run.initialDeckList]);
+				return latestDeletion < run.creationTimestamp;
+			})
 			.filter((run) => (mmrFilter as any) === 'all' || run.ratingAtStart >= mmrFilter)
 			.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 			.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
