@@ -30,14 +30,14 @@ fs-coliseum ::ng-deep {
 	}
 
 	.player-controls-content {
-		--foreground-secondary: var(--color-3);
-		--foreground-third: var(--color-4);
-		--background-secondary: var(--color-1);
+		--foreground-secondary: var(--color-3, rgb(222, 222, 222));
+		--foreground-third: var(--color-4, rgb(182, 182, 182));
+		--background-secondary: var(--color-1, rgb(79, 79, 79));
 	}
 	.player-seeker-track {
-		--background-third: var(--color-2);
+		--background-third: var(--color-2, rgb(182, 182, 182));
 	}
 	.player-seeker-container {
-		color: var(--default-title-color);
+		color: var(--default-title-color, red);
 	}
 }
