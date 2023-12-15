@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { LocalizationStandaloneService } from '@components/decktracker/overlay/twitch/localization-standalone.service';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { Store } from '@firestone/shared/framework/common';
@@ -8,6 +7,7 @@ import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	ILocalizationService,
+	LocalizationStandaloneService,
 } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
@@ -52,8 +52,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		}),
 	],
 	providers: [
-		CardsFacadeStandaloneService,
-		LocalizationStandaloneService,
 		CardsHighlightStandaloneService,
 		TwitchStoreService,
 		TwitchCardsHighlightFacadeService,

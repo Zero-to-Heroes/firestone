@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
@@ -7,6 +8,7 @@ import { LoadingStateComponent } from './components/loading-state.component';
 import { WithLoadingComponent } from './components/with-loading.component';
 import { FsTranslateDirective } from './localization/fs-translate.directive';
 import { FsTranslatePipe } from './localization/fs-translate.pipe';
+import { LocalizationStandaloneService } from './localization/localization-standalone.service';
 import { AnalyticsService } from './services/analytics/analytics.service';
 import { ApiRunner } from './services/api-runner';
 import { CardsFacadeStandaloneService } from './services/cards-facade-standalone.service';
@@ -19,7 +21,13 @@ import { WindowManagerService } from './services/window-manager.service';
 const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent, LoadingStateComponent];
 
 @NgModule({
-	imports: [CommonModule, BrowserAnimationsModule, InlineSVGModule.forRoot(), SharedFrameworkCommonModule],
+	imports: [
+		CommonModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		InlineSVGModule.forRoot(),
+		SharedFrameworkCommonModule,
+	],
 	providers: [
 		AnalyticsService,
 		ApiRunner,
@@ -29,6 +37,7 @@ const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent,
 		DiskCacheService,
 		LocalStorageService,
 		WindowManagerService,
+		LocalizationStandaloneService,
 	],
 	declarations: components,
 	exports: components,

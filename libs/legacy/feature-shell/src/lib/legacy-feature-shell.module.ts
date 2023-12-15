@@ -457,7 +457,6 @@ import { DeckTrackerOverlayContainerComponent } from '@components/decktracker/ov
 import { DeckTrackerOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { DeckTrackerTwitchTitleBarComponent } from '@components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
 import { EmptyCardComponent } from '@components/decktracker/overlay/twitch/empty-card.component';
-import { LocalizationStandaloneService } from '@components/decktracker/overlay/twitch/localization-standalone.service';
 import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
@@ -1885,8 +1884,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LotteryService,
 		LotteryWidgetControllerService,
 
-		// Twitch
-		LocalizationStandaloneService,
 		TwitchPreferencesService,
 	],
 	entryComponents: [

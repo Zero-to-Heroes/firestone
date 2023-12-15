@@ -2,6 +2,7 @@ export * from './lib/components/loading-state.component';
 export * from './lib/components/with-loading.component';
 export * from './lib/localization/fs-translate.directive';
 export * from './lib/localization/fs-translate.pipe';
+export * from './lib/localization/localization-standalone.service';
 export * from './lib/localization/localization-utils';
 export * from './lib/localization/localization.service';
 export * from './lib/services/abstract-facade-service';

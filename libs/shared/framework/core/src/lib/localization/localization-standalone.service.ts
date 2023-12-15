@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeStandaloneService, ImageLocalizationOptions } from '@firestone/shared/framework/core';
-import { CollectionCardType } from '@legacy-import/src/lib/js/models/collection/collection-card-type.type';
+import { CollectionCardType } from '@firestone-hs/user-packs';
+import { capitalizeEachWord } from '@firestone/shared/framework/common';
+import { CardsFacadeStandaloneService, ImageLocalizationOptions, formatClass } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
-import { formatClass } from '../../../../services/hs-utils';
-import { capitalizeEachWord } from '../../../../services/utils';
 
-// For Twitch
 @Injectable()
 export class LocalizationStandaloneService {
 	private locale = 'enUS';
@@ -23,7 +21,7 @@ export class LocalizationStandaloneService {
 		await this.allCards.setLocale(locale);
 	}
 
-	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null | undefined {
 		if (!cardId) {
 			return null;
 		}
@@ -36,7 +34,7 @@ export class LocalizationStandaloneService {
 		return `${base}/${suffix}`;
 	}
 
-	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null | undefined {
 		if (!cardId) {
 			return null;
 		}
@@ -47,7 +45,7 @@ export class LocalizationStandaloneService {
 	}
 
 	// Because each localization has its own file, we always get the info from the root
-	public getCardName(cardId: string, defaultName: string = null): string {
+	public getCardName(cardId: string, defaultName: string | null = null): string {
 		const card = this.allCards.getCard(cardId);
 		return card?.name ?? defaultName;
 	}
@@ -56,7 +54,7 @@ export class LocalizationStandaloneService {
 		return `Created by ${this.getCardName(creatorCardId) ?? 'unknown'}`;
 	}
 
-	public getUnknownCardName(playerClass: string = null): string {
+	public getUnknownCardName(playerClass: string | null = null): string {
 		return playerClass ? `Unknown ${formatClass(playerClass, this)} card` : 'Unknown Card';
 	}
 
@@ -72,7 +70,7 @@ export class LocalizationStandaloneService {
 		return this.translate.instant(key, params);
 	}
 
-	private buildTypeSuffix(cardType: CollectionCardType): string {
+	private buildTypeSuffix(cardType: CollectionCardType | null | undefined): string {
 		switch (cardType) {
 			case 'NORMAL':
 				return '';
