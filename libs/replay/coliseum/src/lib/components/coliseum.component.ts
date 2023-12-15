@@ -1,6 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { Action, BaconBoardVisualStateAction, Game, GameParserService, Turn } from '@firestone-hs/replay-parser';
+import {
+	Action,
+	BaconBoardVisualStateAction,
+	BattlegroundsSimulationParserService,
+	Game,
+	GameParserService,
+	Turn,
+} from '@firestone-hs/replay-parser';
+import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { Subscription } from 'rxjs';
 import { GameConfService } from '../services/game-conf.service';
 
@@ -63,16 +72,20 @@ import { GameConfService } from '../services/game-conf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColiseumComponent implements OnDestroy {
-	@Input() reviewId: string;
-	@Input() set replayXml(value: string) {
+	@Input() reviewId: string | null;
+	@Input() set replayXml(value: string | null) {
 		if (!value?.length) {
 			return;
 		}
 		this.setReplay(value);
 	}
+	@Input() set bgsSimulation(value: GameSample | null) {
+		if (!value) {
+			return;
+		}
+		this.parseBgsSimulation(value);
+	}
 
-	bgsSimulationString: string;
-	bgsSimulationId: string;
 	status: string | null;
 	currentAction: Action | undefined;
 	text: string | undefined;
@@ -90,9 +103,10 @@ export class ColiseumComponent implements OnDestroy {
 	private gameSub: Subscription;
 
 	constructor(
-		private gameParser: GameParserService,
-		private gameConf: GameConfService,
-		private cdr: ChangeDetectorRef,
+		private readonly gameParser: GameParserService,
+		private readonly gameConf: GameConfService,
+		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
+		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	private async setReplay(replayXml: string) {
@@ -169,13 +183,38 @@ export class ColiseumComponent implements OnDestroy {
 		);
 	}
 
-	public updateStatus(newStatus: string) {
-		// console.debug('updating status', newStatus);
-		this.status = newStatus;
+	private async parseBgsSimulation(bgsSimulation: GameSample) {
+		this.status = 'Parsing bgsSimulationString simulation';
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+		const game = await this.bgsSimulationParser.parse(bgsSimulation);
+		console.log('parsed bgs simulation');
+		const turn = 0;
+		const action = 0;
+		this.game = game;
+		this.currentTurn = turn <= 0 ? 0 : turn >= this.game.turns.size ? this.game.turns.size - 1 : turn;
+		this.currentActionInTurn =
+			action <= 0
+				? 0
+				: action >= this.game.turns.get(this.currentTurn)!.actions.length
+				? this.game.turns.get(this.currentTurn)!.actions.length - 1
+				: action;
+		this.populateInfo(true);
+		this.showPreloader = false;
+		this.status = null;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+
+	// private updateStatus(newStatus: string) {
+	// 	// console.debug('updating status', newStatus);
+	// 	this.status = newStatus;
+	// 	if (!(this.cdr as ViewRef).destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
 	ngOnDestroy() {
 		this.gameSub.unsubscribe();

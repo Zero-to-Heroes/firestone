@@ -300,7 +300,10 @@ export class ControlsComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	@Input() set reviewId(value: string) {
+	@Input() set reviewId(value: string | null) {
+		if (!value?.length) {
+			return;
+		}
 		// reset all the controls
 		this.isPlaying = false;
 		this.currentSpeed = 1;

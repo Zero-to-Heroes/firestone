@@ -1,3 +1,8 @@
 <div class="coliseum-container battlegrounds-theme" *ngIf="ready$ | async">
-	<fs-coliseum class="external-player" [reviewId]="reviewId" [replayXml]="replayXml"></fs-coliseum>
+	<fs-coliseum
+		class="external-player"
+		[reviewId]="reviewId"
+		[replayXml]="replayXml"
+		[bgsSimulation]="bgsSimulation"
+	></fs-coliseum>
 </div>

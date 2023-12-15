@@ -1,12 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
+import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 const REPLAY_API = 'https://xml.firestoneapp.com/';
+const BGS_SAMPLE_API = 'https://h7h6lfnlmd7vstumpqiz74xqoq0vhsnm.lambda-url.us-west-2.on.aws/';
 
 @Component({
 	selector: 'coliseum-app',
@@ -16,8 +18,9 @@ const REPLAY_API = 'https://xml.firestoneapp.com/';
 export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	ready$: Observable<boolean>;
 
-	reviewId: string;
-	replayXml: string;
+	reviewId: string | null;
+	replayXml: string | null;
+	bgsSimulation: GameSample | null;
 
 	private ready$$ = new BehaviorSubject<boolean>(false);
 
@@ -61,6 +64,18 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 			}
 			this.replayXml = replayXml;
 			this.reviewId = reviewId;
+		} else if (bgsSimulationId) {
+			console.log('loading', bgsSimulationId);
+			const gameSample = await this.retrieveEncodedSimulation(bgsSimulationId);
+			console.log('parsed', gameSample);
+			this.bgsSimulation = gameSample;
+		} else if (bgsSimulation) {
+			console.log('decoding', bgsSimulation);
+			const decoded = atob(bgsSimulation);
+			console.log('decoded', decoded);
+			const parsed = JSON.parse(decoded);
+			console.log('parsed', parsed);
+			this.bgsSimulation = parsed;
 		}
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -99,6 +114,24 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 				.toPromise();
 			return replay;
 		}
+	}
+
+	private async retrieveEncodedSimulation(bgsSimulationId: string): Promise<GameSample | null> {
+		try {
+			const sample: GameSample = (await this.http
+				.get(BGS_SAMPLE_API + bgsSimulationId, {
+					headers: new HttpHeaders({
+						'Content-Type': 'application/json',
+					}).set('Accept', 'application/json'),
+					withCredentials: false,
+				})
+				.toPromise()) as GameSample;
+			console.log('retrieved sample', sample);
+			return sample;
+		} catch (e: any) {
+			console.error('issue retrieve bgs sample', bgsSimulationId, e.message, e);
+		}
+		return null;
 	}
 
 	private getSearchParam(name: string): string {
