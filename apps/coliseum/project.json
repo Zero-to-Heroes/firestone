@@ -16,7 +16,11 @@
 				"tsConfig": "apps/coliseum/tsconfig.app.json",
 				"inlineStyleLanguage": "scss",
 				"assets": ["apps/coliseum/src/favicon.ico", "apps/coliseum/src/assets"],
-				"styles": ["apps/coliseum/src/styles.scss"],
+				"styles": [
+					"apps/coliseum/src/styles.scss",
+					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss",
+					"libs/shared/styles/src/lib/styles/decktracker-theme.scss"
+				],
 				"scripts": []
 			},
 			"configurations": {

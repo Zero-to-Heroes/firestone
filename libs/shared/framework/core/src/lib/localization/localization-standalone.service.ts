@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { capitalizeEachWord } from '@firestone/shared/framework/common';
-import { CardsFacadeStandaloneService, ImageLocalizationOptions, formatClass } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CardsFacadeStandaloneService } from '../services/cards-facade-standalone.service';
+import { ImageLocalizationOptions, formatClass } from './localization.service';
 
 @Injectable()
 export class LocalizationStandaloneService {

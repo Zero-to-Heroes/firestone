@@ -1,0 +1,43 @@
+:host {
+	height: 100%;
+	width: 100%;
+	display: block;
+}
+
+.coliseum-container {
+	height: 100%;
+	width: 100%;
+	background: var(--color-7);
+	color: var(--color-1);
+}
+
+.external-player {
+	position: relative;
+	width: 75%;
+	margin: auto;
+	overflow: hidden;
+	padding-right: 5px;
+	display: block;
+}
+
+fs-coliseum ::ng-deep {
+	.manastorm-player-wrapper {
+		background: transparent;
+	}
+	// Hide the "view online" button
+	.player-controls-content.player-controls-content-left {
+		opacity: 0;
+	}
+
+	.player-controls-content {
+		--foreground-secondary: var(--color-3);
+		--foreground-third: var(--color-4);
+		--background-secondary: var(--color-1);
+	}
+	.player-seeker-track {
+		--background-third: var(--color-2);
+	}
+	.player-seeker-container {
+		color: var(--default-title-color);
+	}
+}

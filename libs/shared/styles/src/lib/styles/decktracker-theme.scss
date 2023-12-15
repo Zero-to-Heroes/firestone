@@ -1,0 +1,62 @@
+:host.decktracker-theme,
+.decktracker-theme {
+	--window-background-image-backup: radial-gradient(
+		44.58% 50% at 50% 50%,
+		rgba(48, 35, 128, 1) 0%,
+		rgba(24, 24, 43, 1) 100%
+	);
+	--window-background-image: radial-gradient(
+			44.58% 50% at 50% 50%,
+			rgba(48, 35, 128, 0.7) 0%,
+			rgba(24, 24, 43, 0.7) 100%
+		),
+		url('/Files/assets/images/backgrounds/decktracker_main_window.png');
+	--color-1: #9fb6d7;
+	--color-2: #767faf;
+	--color-3: #5a5f87;
+	--color-4: #303352;
+	--color-5: #1f2142;
+	--color-6: #101530;
+	--color-7: #07081f;
+	--color-9: #12121f; // The color of the edge of the background image
+	--color-common-1: #d9c3ab;
+	--color-common-2: #ffb948;
+	--color-common-2-dark: #882609;
+
+	--ad-link-color: var(--color-3);
+	--on-ad-link-color-hover: var(--color-1);
+
+	--main-menu-background-color: var(--color-7);
+	--window-outline-color: #303352;
+	--default-text-color: #d9c3ab;
+	--default-text-color-bright: #f3dcc3;
+	--default-title-color: #ffb948;
+	--secondary-text-color: #9fb6d7;
+
+	--menu-selection-color: #5a5f87;
+	--on-menu-selection-color: #ffb948;
+	--menu-bar-bottom-border-color: #303352;
+
+	--tooltip-background-color: #9fb6d7;
+	--tooltip-color: #101530;
+
+	--ads-background-color: #07081f;
+	--ads-color: #101530;
+
+	--control-button-color: #9fb6d7;
+	--on-control-button-background-color: #303352;
+	--on-close-button-color: #101530;
+	--on-close-button-background-color: #9fb6d7;
+
+	--fs-scrollbar-thumb-color: #5a5f87;
+	--on-fs-scrollbar-thumb-color: #9fb6d7;
+
+	--toggle-color-border: var(--color-1);
+	--toggle-color-knob: var(--color-1);
+
+	--confirmation-backdrop-color: #07081f;
+
+	--confirmation-text-color: #9fb6d7;
+	--on-confirmation-text-color: #1f2142;
+	--on-confirmation-button-background-color: rgba(255, 255, 255, 0.08);
+}
