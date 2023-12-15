@@ -37,6 +37,7 @@
 							"maximumError": "40kb"
 						}
 					],
+					"sourceMap": false,
 					"outputHashing": "all"
 				},
 				"development": {
