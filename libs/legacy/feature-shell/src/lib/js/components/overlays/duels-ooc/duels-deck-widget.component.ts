@@ -128,14 +128,18 @@ export class DuelsDeckWidgetComponent {
 	) {}
 
 	copyDeckCode() {
-		const deckDefinition = decode(this.initialDeck);
-		const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
-		const normalizedDeckstring = encode(updatedDeckDefinition);
-		this.ow.placeOnClipboard(normalizedDeckstring);
-		this.screenCaptureOn = true;
-		this.copyTooltip = this.i18n.translateString('duels.deck-select.copy-deck-tooltip-confirmation');
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+		try {
+			const deckDefinition = decode(this.initialDeck);
+			const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
+			const normalizedDeckstring = encode(updatedDeckDefinition);
+			this.ow.placeOnClipboard(normalizedDeckstring);
+			this.screenCaptureOn = true;
+			this.copyTooltip = this.i18n.translateString('duels.deck-select.copy-deck-tooltip-confirmation');
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		} catch (e) {
+			console.error('Could not copy deckstring', this.initialDeck, e);
 		}
 
 		setTimeout(() => {
