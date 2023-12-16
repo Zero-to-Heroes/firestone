@@ -1672,6 +1672,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), outcast);
 			case CardIds.XyrellaTheDevout:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
+			case CardIds.YellingYodeler:
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			// case CardIds.YoggSaronUnleashed_YOG_516:
 			// 	return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.YshaarjTheDefiler:
