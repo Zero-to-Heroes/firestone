@@ -37,6 +37,7 @@ export class BgsBestUserStatsService extends AbstractFacadeService<BgsBestUserSt
 		this.bestStats$$.onFirstSubscribe(async () => {
 			const localInfo = this.localStorage.getItem<LocalBgsBestStats>(LocalStorageService.USER_BGS_BEST_STATS);
 			if (localInfo?.stats?.length) {
+				console.debug('[bgs-best-user-stats] using local info', localInfo);
 				this.bestStats$$.next(localInfo.stats);
 			}
 
@@ -50,6 +51,7 @@ export class BgsBestUserStatsService extends AbstractFacadeService<BgsBestUserSt
 				stats: remoteData,
 			};
 			this.localStorage.setItem(LocalStorageService.USER_BGS_BEST_STATS, newInfo);
+			console.debug('[bgs-best-user-stats] using remote info', remoteData);
 			this.bestStats$$.next(remoteData);
 		});
 	}

@@ -48,19 +48,28 @@ export class BgsGame {
 		return this.players.find((player) => player.playerId === playerId);
 	}
 
-	public getMainPlayer(): BgsPlayer {
+	public getMainPlayer(withDebug = false): BgsPlayer {
 		const mainPlayer = this.players.find((player) => player.isMainPlayer);
 		if (!mainPlayer) {
-			// if (this.players.length === 8) {
-			console.warn(
-				'Could not find main player',
-				this.players.map((player) => ({
-					cardId: player.cardId,
-					isMainPlayer: player.isMainPlayer,
-					name: player.name,
-				})),
-			);
-			// }
+			if (this.players.length === 8) {
+				console.error(
+					'Could not find main player',
+					this.players.map((player) => ({
+						cardId: player.cardId,
+						isMainPlayer: player.isMainPlayer,
+						name: player.name,
+					})),
+				);
+			} else if (withDebug) {
+				console.warn(
+					'Could not find main player',
+					this.players.map((player) => ({
+						cardId: player.cardId,
+						isMainPlayer: player.isMainPlayer,
+						name: player.name,
+					})),
+				);
+			}
 		}
 		return mainPlayer;
 	}

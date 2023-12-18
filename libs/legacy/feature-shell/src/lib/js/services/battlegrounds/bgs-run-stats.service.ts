@@ -31,6 +31,13 @@ export class BgsRunStatsService {
 		private readonly userService: UserService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async (event) => {
+			console.debug(
+				'[bgs-run-stats] starting run stats',
+				event.data[0],
+				event.data[1],
+				event.data[2],
+				event.data[3],
+			);
 			this.computeRunStats(event.data[0], event.data[1], event.data[2], event.data[3]);
 		});
 		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async (event) => {
@@ -115,7 +122,7 @@ export class BgsRunStatsService {
 			liveStats,
 			input,
 			bestBgsUserStats || [],
-			currentGame.getMainPlayer()?.playerId,
+			currentGame.getMainPlayer(true)?.playerId,
 		);
 		console.debug('[bgs-run-stats] newBestVaues');
 
@@ -156,7 +163,7 @@ export class BgsRunStatsService {
 				? input.mainPlayer?.boardHistory
 				: [],
 			tripleTimings:
-				input.mainPlayer && realTimeStatsState.triplesPerHero[mainPlayerId]
+				input.mainPlayer && realTimeStatsState?.triplesPerHero[mainPlayerId]
 					? new Array(realTimeStatsState.triplesPerHero[mainPlayerId])
 					: [],
 			playerIdToCardIdMapping: realTimeStatsState.playerIdToCardIdMapping,
