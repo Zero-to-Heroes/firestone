@@ -46,7 +46,6 @@ export class CardNameComponent {
 		const path = this.buildPath(cardType, pathId);
 		const nameRatio = 1800 / name.length;
 		const fontSize = Math.min(100, nameRatio);
-		console.debug('nameRatio', nameRatio, name.length, name, fontSize);
 		return `
             <svg x="0" y ="0" viewBox="0 0 1000 200" id="svg">
                 <defs>${path}</defs>
