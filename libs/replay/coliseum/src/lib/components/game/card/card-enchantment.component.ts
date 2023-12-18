@@ -36,7 +36,23 @@ export class CardEnchantmentComponent {
 			return;
 		}
 		this.name = card.name;
-		this.art = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
+		const cardForArt = this.normalizeEnchantment(cardId);
+		this.art = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardForArt}.jpg`;
 		this.description = card.text;
+	}
+
+	private normalizeEnchantment(cardId: string): string {
+		if (!cardId?.length) {
+			return cardId;
+		}
+
+		// The base case
+		const regex = /(.*)e\d*$/;
+		const match = regex.exec(cardId);
+		if (!!match) {
+			const rootCardId = match[1];
+			return rootCardId;
+		}
+		return cardId;
 	}
 }
