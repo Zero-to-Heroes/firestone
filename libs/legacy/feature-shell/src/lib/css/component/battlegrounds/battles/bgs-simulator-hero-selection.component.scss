@@ -49,6 +49,8 @@
 				outline: 1px solid var(--color-3);
 				display: flex;
 				color: var(--color-3);
+				position: relative;
+				top: 0.5px;
 
 				&:focus-within,
 				&:hover {
