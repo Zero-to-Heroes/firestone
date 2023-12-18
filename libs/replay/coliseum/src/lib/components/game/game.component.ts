@@ -85,7 +85,7 @@ import { GameHelper } from '../../services/game-helper';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameComponent implements AfterViewInit {
-	_currentAction: Action | undefined;
+	_currentAction: Action | undefined | null;
 	_entities: Map<number, Entity>;
 	_playerId: number;
 	_opponentId: number;
@@ -106,7 +106,7 @@ export class GameComponent implements AfterViewInit {
 	isDarkOverlay: boolean;
 	isRecruitPhase: boolean;
 
-	@Input() gameMode: string | undefined;
+	@Input() gameMode: string | undefined | null;
 
 	private activeSpellId: number | undefined;
 	private secretRevealedId: number | null;
@@ -154,7 +154,7 @@ export class GameComponent implements AfterViewInit {
 		this._showHiddenCards = value;
 	}
 
-	@Input() set currentAction(value: Action | undefined) {
+	@Input() set currentAction(value: Action | undefined | null) {
 		// console.debug('[game] setting new action', value);
 		this._currentAction = value;
 		this._entities = value ? value.entities : Map();

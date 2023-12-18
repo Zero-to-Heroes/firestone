@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReplayParserModule } from '@firestone-hs/replay-parser';
-import { Ng2FittextModule } from 'ng2-fittext';
 import { ColiseumComponent } from './components/coliseum.component';
 import { ControlsComponent } from './components/controls.component';
 import { ActiveSpellComponent } from './components/game/active-spell.component';
@@ -82,7 +81,7 @@ import { TransitionGroupItemDirective } from './directives/transition-group-item
 import { Events } from './services/events.service';
 
 @NgModule({
-	imports: [CommonModule, FormsModule, BrowserAnimationsModule, Ng2FittextModule, ReplayParserModule.forRoot()],
+	imports: [CommonModule, FormsModule, BrowserAnimationsModule, ReplayParserModule.forRoot()],
 	declarations: [
 		ColiseumComponent,
 		GameComponent,

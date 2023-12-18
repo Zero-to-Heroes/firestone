@@ -65,7 +65,7 @@ export class OverlaysComponent {
 	@Output() overlayUpdated: EventEmitter<{ isOverlay: boolean; isDarkOverlay: boolean }> = new EventEmitter();
 
 	isOverlay: boolean;
-	action: Action | undefined;
+	action: Action | undefined | null;
 	_entities: Map<number, Entity>;
 	_crossed: readonly number[] | undefined;
 	_playerId: number;
@@ -97,7 +97,7 @@ export class OverlaysComponent {
 		this._showHiddenCards = value;
 	}
 
-	@Input() set currentAction(value: Action | undefined) {
+	@Input() set currentAction(value: Action | undefined | null) {
 		if (value === this.action) {
 			return;
 		}

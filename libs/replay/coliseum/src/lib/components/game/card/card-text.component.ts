@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
@@ -8,15 +8,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 	styleUrls: ['../../../text.scss', './card-text.component.scss'],
 	template: `
 		<div class="card-text {{ _cardType }}" [ngClass]="{ premium: premium }" *ngIf="text">
-			<div
-				class="text"
-				[fittext]="true"
-				[minFontSize]="2"
-				[useMaxFontSize]="true"
-				[activateOnResize]="false"
-				[modelToWatch]="dirtyFlag"
-				[innerHTML]="text"
-			></div>
+			<div class="text" [innerHTML]="text"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,13 +17,16 @@ export class CardTextComponent {
 	_cardType: string | null;
 	premium: boolean;
 	text: SafeHtml | undefined;
-	maxFontSize: number;
-	dirtyFlag = false;
 
 	private _entity: Entity | undefined;
 	private _controller: Entity | undefined;
 
-	constructor(private cards: AllCardsService, private domSanitizer: DomSanitizer, private cdr: ChangeDetectorRef) {
+	constructor(
+		private cards: AllCardsService,
+		private domSanitizer: DomSanitizer,
+		private cdr: ChangeDetectorRef,
+		private el: ElementRef,
+	) {
 		document.addEventListener('card-resize', (event) => this.resizeText(), true);
 	}
 
@@ -111,7 +106,12 @@ export class CardTextComponent {
 	}
 
 	private resizeText() {
-		this.dirtyFlag = !this.dirtyFlag;
+		const textSize = this.text?.toString().length || 0;
+		const textSizeRatio = 13 / textSize;
+		const element = this.el.nativeElement.querySelector('.text');
+		const fontSize = textSizeRatio * element.clientWidth;
+		element.style.fontSize = `${fontSize}px`;
+		console.debug('resizeText', fontSize);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -123,7 +123,6 @@ export class CardTextComponent {
 			if (bonus !== 0 || double !== 0) {
 				value += bonus;
 				value *= Math.pow(2, double);
-				// console.log('updated value', value);
 				return '*' + value + '*';
 			}
 			return '' + value;
