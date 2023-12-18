@@ -115,7 +115,7 @@ export class BgsRunStatsService {
 			liveStats,
 			input,
 			bestBgsUserStats || [],
-			currentGame.getMainPlayer().playerId,
+			currentGame.getMainPlayer()?.playerId,
 		);
 		console.debug('[bgs-run-stats] newBestVaues');
 
