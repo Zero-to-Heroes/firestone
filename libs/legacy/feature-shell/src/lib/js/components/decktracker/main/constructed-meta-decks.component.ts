@@ -205,6 +205,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			takeUntil(this.destroyed$),
 		);
 		this.totalGames$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
+			filter((stats) => !!stats),
 			this.mapData((stats) => stats.dataPoints.toLocaleString(this.i18n.formatCurrentLocale())),
 			takeUntil(this.destroyed$),
 		);

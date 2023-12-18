@@ -156,6 +156,7 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComp
 			),
 		);
 		this.totalGames$ = this.constructedMetaStats.constructedMetaArchetypes$$.pipe(
+			filter((stats) => !!stats),
 			this.mapData((stats) => stats.dataPoints.toLocaleString(this.i18n.formatCurrentLocale())),
 			takeUntil(this.destroyed$),
 		);
