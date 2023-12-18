@@ -118,11 +118,11 @@ export class PlayAreaComponent {
 
 		// In BG, the resources are attached to the PlayerEntity, and not the hero
 		// const humainPlayerEntity = this._entities.find(entity => entity.)
-		this.totalCrystals = this.playerEntity.getTag(GameTag.RESOURCES) || 0;
-		this.availableCrystals = this.totalCrystals - (this.playerEntity.getTag(GameTag.RESOURCES_USED) || 0);
-		this.lockedCrystals = this.playerEntity.getTag(GameTag.OVERLOAD_LOCKED) || 0;
+		this.totalCrystals = this.playerEntity?.getTag(GameTag.RESOURCES) || 0;
+		this.availableCrystals = this.totalCrystals - (this.playerEntity?.getTag(GameTag.RESOURCES_USED) || 0);
+		this.lockedCrystals = this.playerEntity?.getTag(GameTag.OVERLOAD_LOCKED) || 0;
 		this.emptyCrystals = this.totalCrystals - this.availableCrystals - this.lockedCrystals;
-		this.futureLockedCrystals = this.playerEntity.getTag(GameTag.OVERLOAD_OWED) || 0;
+		this.futureLockedCrystals = this.playerEntity?.getTag(GameTag.OVERLOAD_OWED) || 0;
 		// console.debug('[play-area] play-area entities updated', this.hand);
 	}
 
