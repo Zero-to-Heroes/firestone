@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.1',
+		version: '13.2.4',
 		force: false,
 		sections: [
 			// {
@@ -51,7 +51,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `(PREMIUM) You can now set a custom message through your status on Discord! Placeholders now only include the current game mode and hero name, but let met know on Discord if you'd like some more options :) See <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features#general">the wiki</a> for some screenshots.`,
+								text: `You can now update your current Discord status message when playing Hearthstone with Firestone enabled. See <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features#general">the wiki</a> for some screenshots.`,
+							},
+							{
+								type: 'feature',
+								text: `(PREMIUM) Premium users can use placeholders to automatically update their status message with the current game mode and hero name. Let met know on Discord if you'd like some more placeholder options :)`,
 							},
 						],
 					},
