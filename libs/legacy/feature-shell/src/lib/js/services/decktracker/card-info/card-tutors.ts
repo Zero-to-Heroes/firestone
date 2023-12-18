@@ -86,6 +86,7 @@ export const tutors = [
 	CardIds.GhuunTheBloodGod,
 	CardIds.GnomishExperimenter, // the chicken is created, but if the card drawn is not a minion, it should be an eye
 	CardIds.GolgannethTheThunderer_ShargahnsWrathToken,
+	CardIds.GolgannethTheThunderer,
 	CardIds.GorlocRavager,
 	CardIds.GrandEmpressShekzara,
 	CardIds.GuessTheWeight,
