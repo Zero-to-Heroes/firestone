@@ -49,6 +49,8 @@ export class BoardCardFrameComponent {
 		const frame =
 			this._cardType === CardType.LOCATION
 				? 'onboard_location'
+				: this._cardType === CardType.BATTLEGROUND_SPELL
+				? 'onboard_bg_spell'
 				: this._hideStats
 				? 'onboard_minion_hide_stats'
 				: 'onboard_minion_frame';

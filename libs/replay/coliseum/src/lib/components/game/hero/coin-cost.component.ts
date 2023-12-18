@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { sleep } from '@firestone/shared/framework/common';
 
 @Component({
 	selector: 'coin-cost',
@@ -45,7 +46,7 @@ export class CoinCostComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		setTimeout(() => this.resizeText());
+		this.resizeText();
 	}
 
 	private updateCost() {
@@ -70,18 +71,31 @@ export class CoinCostComponent implements AfterViewInit {
 		}
 	}
 
-	private resizeText() {
+	private async resizeText() {
 		try {
-			const el = this.elRef.nativeElement.querySelector('.coin-cost');
-			if (!el) {
-				setTimeout(() => this.resizeText());
-				return;
-			}
-			const fontSize = 0.6 * el.getBoundingClientRect().width;
-			const textEl = this.elRef.nativeElement.querySelector('.cost');
-			textEl.style.fontSize = fontSize + 'px';
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+			let previousWidth = undefined;
+			// eslint-disable-next-line no-constant-condition
+			while (true) {
+				const el = this.elRef.nativeElement.querySelector('.coin-cost');
+				if (!el) {
+					await sleep(10);
+					continue;
+				}
+
+				const newWidth = el.getBoundingClientRect().width;
+				if (newWidth === previousWidth) {
+					break;
+				}
+
+				const fontSize = 0.6 * newWidth;
+				console.debug('[coin-cost] setting font size', fontSize, el.getBoundingClientRect(), el);
+				const textEl = this.elRef.nativeElement.querySelector('.cost');
+				textEl.style.fontSize = fontSize + 'px';
+				previousWidth = newWidth;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+				await sleep(10);
 			}
 		} catch (e) {
 			console.error('[coin-cost] Exception in resizeText', e);

@@ -152,7 +152,8 @@ export class PlayAreaComponent {
 			.filter(
 				(entity) =>
 					entity.getTag(GameTag.CARDTYPE) === CardType.MINION ||
-					entity.getTag(GameTag.CARDTYPE) == CardType.LOCATION,
+					entity.getTag(GameTag.CARDTYPE) == CardType.LOCATION ||
+					entity.getTag(GameTag.CARDTYPE) == CardType.BATTLEGROUND_SPELL,
 			)
 			.sort((a, b) => a.getTag(GameTag.ZONE_POSITION) - b.getTag(GameTag.ZONE_POSITION));
 	}

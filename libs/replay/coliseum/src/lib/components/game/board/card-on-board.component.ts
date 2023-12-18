@@ -8,7 +8,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 	styleUrls: ['./card-on-board.component.scss'],
 	template: `
 		<div
-			class="card-on-board"
+			class="card-on-board {{ cardTypeStr }}"
 			cardTooltip
 			[tooltipEntity]="_entity"
 			[tooltipEnchantments]="_enchantments"
@@ -39,6 +39,11 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 				*ngIf="!isMainPlayer && tavernTier > 0 && isRecruitPhase"
 				[level]="tavernTier"
 			></tavern-level-icon>
+			<coin-cost
+				*ngIf="!isMainPlayer && tavernTier > 0 && isRecruitPhase && cardTypeStr === 'battleground_spell'"
+				[cardId]="cardId"
+			>
+			</coin-cost>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,6 +63,7 @@ export class CardOnBoardComponent {
 
 	cardId: string;
 	cardType: CardType;
+	cardTypeStr: string;
 	cardClass: CardClass;
 	originalCard: ReferenceCard;
 	premium: boolean;
@@ -89,6 +95,7 @@ export class CardOnBoardComponent {
 			this.originalCard && this.originalCard.type
 				? CardType[this.originalCard.type.toUpperCase() as string]
 				: undefined;
+		this.cardTypeStr = this.originalCard.type?.toLowerCase();
 		this.cardClass = this.originalCard?.classes?.length ? CardClass[this.originalCard.classes[0]] : undefined;
 
 		this.premium = entity.getTag(GameTag.PREMIUM) === 1;
