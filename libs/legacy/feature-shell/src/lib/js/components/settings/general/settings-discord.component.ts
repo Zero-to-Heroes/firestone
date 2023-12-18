@@ -21,17 +21,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[toggleFunction]="afterRichPresenceChanged"
 			></preference-toggle>
 		</div>
-		<!-- Premium config -->
-		<div class="settings-group" [ngClass]="{ disabled: discordDisabled$ | async }" premiumSetting>
-			<div class="title">
-				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#lock" />
-					</svg>
-				</div>
-				<span class="title-text" [fsTranslate]="'settings.general.discord.advanced-config-title'"></span>
-			</div>
-
+		<div class="settings-group" [ngClass]="{ disabled: discordDisabled$ | async }">
 			<div class="subgroup">
 				<preference-toggle
 					class="toggle"
@@ -50,6 +40,17 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					>
 					</fs-text-input>
 				</div>
+			</div>
+		</div>
+		<!-- Premium config -->
+		<div class="settings-group" [ngClass]="{ disabled: discordDisabled$ | async }" premiumSetting>
+			<div class="title">
+				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#lock" />
+					</svg>
+				</div>
+				<span class="title-text" [fsTranslate]="'settings.general.discord.advanced-config-title'"></span>
 			</div>
 
 			<div class="subgroup">
