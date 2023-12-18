@@ -105,10 +105,13 @@ export class CardTextComponent {
 		this._cardType = !cardType ? null : CardType[cardType]?.toLowerCase();
 	}
 
-	private resizeText() {
+	private async resizeText() {
+		const element = this.el.nativeElement.querySelector('.text');
+		if (!element) {
+			return;
+		}
 		const textSize = this.text?.toString().length || 0;
 		const textSizeRatio = 13 / textSize;
-		const element = this.el.nativeElement.querySelector('.text');
 		const fontSize = textSizeRatio * element.clientWidth;
 		element.style.fontSize = `${fontSize}px`;
 		if (!(this.cdr as ViewRef).destroyed) {
