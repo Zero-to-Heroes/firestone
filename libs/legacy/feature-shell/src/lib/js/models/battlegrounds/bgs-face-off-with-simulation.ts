@@ -3,6 +3,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
+import { BugReportService } from '../../services/bug/bug-report.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { BattleInfoMessage } from './battle-info-message.type';
 import { BgsGame } from './bgs-game';
@@ -29,15 +30,15 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 		});
 	}
 
-	public checkIntegrity(gameState: BgsGame) {
+	public checkIntegrity(gameState: BgsGame, bugService: BugReportService) {
 		if (this.battleResult?.won === 0 && this.result === 'won') {
-			this.report('victory', gameState);
+			this.report('victory', gameState, bugService);
 		}
 		if (this.battleResult?.lost === 0 && this.result === 'lost') {
-			this.report('loss', gameState);
+			this.report('loss', gameState, bugService);
 		}
 		if (this.battleResult?.tied === 0 && this.result === 'tied') {
-			this.report('tie', gameState);
+			this.report('tie', gameState, bugService);
 		}
 
 		if (this.playerCardId === 'TB_BaconShop_HERO_PH' || this.opponentCardId === 'TB_BaconShop_HERO_PH') {
@@ -50,7 +51,7 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 		return !allEntities?.length ? 1 : Math.max(...allEntities.map((e) => e.entityId)) + 1;
 	}
 
-	private async report(status: string, game: BgsGame) {
+	private async report(status: string, game: BgsGame, bugService: BugReportService) {
 		// const user = await this.ow.getCurrentUser();
 		const isSupported = isSupportedScenario(this.battleInfo).isSupported;
 		if (isSupported) {
@@ -63,6 +64,15 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 				this.battleInfo,
 				this.battleResult,
 			);
+			bugService.submitAutomatedReport({
+				type: 'bg-sim',
+				info: JSON.stringify({
+					message: '[bgs-simulation] Impossible battle ' + status,
+					reviewId: game.reviewId,
+					currentTurn: game.currentTurn,
+					battleInfo: this.battleInfo,
+				}),
+			});
 		}
 	}
 }

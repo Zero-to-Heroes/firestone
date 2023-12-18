@@ -1,6 +1,7 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { BugReportService } from '../../../bug/bug-report.service';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -12,6 +13,7 @@ export class BgsBattleResultParser implements EventParser {
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameEventsService: GameEvents,
+		private readonly bugService: BugReportService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -49,7 +51,7 @@ export class BgsBattleResultParser implements EventParser {
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.update({
 			faceOffs: newFaceOffs,
 		});
-		newFaceOff.checkIntegrity(gameAfterFirstFaceOff);
+		newFaceOff.checkIntegrity(gameAfterFirstFaceOff, this.bugService);
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,
 			lastOpponentPlayerId: event.opponentPlayerId,

@@ -13,6 +13,7 @@ import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { BugReportService } from '../../bug/bug-report.service';
 import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
@@ -144,6 +145,7 @@ export class BattlegroundsStoreService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly bgsUserStatsService: BgsBestUserStatsService,
 		private readonly gameStatus: GameStatusService,
+		private readonly bugService: BugReportService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -622,7 +624,7 @@ export class BattlegroundsStoreService {
 			new BgsTurnStartParser(this.logsUploader, this.i18n),
 			new BgsGameEndParser(this.prefs, this.i18n, () => this.stateUpdater),
 			new BgsStageChangeParser(),
-			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService),
+			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService, this.bugService),
 			new BgsArmorChangedParser(this.allCards),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.allCards),
