@@ -30,4 +30,18 @@
 		left: 0%;
 		top: 5%;
 	}
+
+	&.battleground_spell {
+		::ng-deep coin-cost {
+			.coin-cost {
+				width: 30%;
+				left: 0%;
+				top: 23%;
+			}
+			.cost {
+				top: 4%;
+				left: 39%;
+			}
+		}
+	}
 }

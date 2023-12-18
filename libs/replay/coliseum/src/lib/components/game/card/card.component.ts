@@ -8,7 +8,7 @@ import { GameConfService } from '../../../services/game-conf.service';
 	styleUrls: ['./card.component.scss'],
 	template: `
 		<div
-			class="card"
+			class="card {{ cardTypeStr }}"
 			[ngClass]="{ highlight: _option }"
 			cardResize
 			cardTooltip
@@ -25,6 +25,8 @@ import { GameConfService } from '../../../services/game-conf.service';
 			<card-race *ngIf="race" [race]="race"> </card-race>
 			<card-cost *ngIf="cardId && !tavernTier" [cardType]="cardType" [cardId]="cardId" [cost]="cost"> </card-cost>
 			<tavern-level-icon *ngIf="tavernTier ?? 0 > 0" [level]="tavernTier"></tavern-level-icon>
+			<coin-cost *ngIf="(tavernTier ?? 0) > 0 && cardTypeStr === 'battleground_spell'" [cardId]="cardId">
+			</coin-cost>
 			<card-stats
 				*ngIf="cardId"
 				[cardId]="cardId"
@@ -56,6 +58,7 @@ export class CardComponent {
 
 	cardId: string | undefined;
 	cardType: CardType | undefined;
+	cardTypeStr: string | undefined;
 	cardClass: CardClass | undefined;
 	originalCard: ReferenceCard | undefined;
 	premium: boolean | undefined;
@@ -139,6 +142,7 @@ export class CardComponent {
 			this.originalCard = undefined;
 			this.race = undefined;
 			this.cardType = undefined;
+			this.cardTypeStr = undefined;
 			this.cardClass = undefined;
 			return;
 		}
@@ -157,6 +161,7 @@ export class CardComponent {
 				this.originalCard && this.originalCard.type
 					? CardType[this.originalCard.type.toUpperCase() as string]
 					: undefined;
+			this.cardTypeStr = this.originalCard.type?.toLowerCase();
 			this.cardClass = this.originalCard?.classes?.length ? CardClass[this.originalCard.classes[0]] : undefined;
 			this.tavernTier = this.conf.isBattlegrounds() ? this._entity.getTag(GameTag.TECH_LEVEL) : 0;
 		}
