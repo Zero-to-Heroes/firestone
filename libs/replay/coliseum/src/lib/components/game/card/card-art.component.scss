@@ -22,7 +22,8 @@
 		// top: -19%;
 	}
 
-	&.spell {
+	&.spell,
+	&.battleground_spell {
 		clip-path: inset(31% 4% 30% 0%);
 	}
 

@@ -29,7 +29,7 @@ export class CardNameComponent {
 			cardType === CardType.HERO_POWER || cardType === CardType.LOCATION || !cardType
 				? undefined // Banner already included in frame art
 				: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/card/name-banner-${CardType[
-						cardType
+						cardType === CardType.BATTLEGROUND_SPELL ? CardType.SPELL : cardType
 						// eslint-disable-next-line no-mixed-spaces-and-tabs
 				  ]?.toLowerCase()}.png`;
 		this.textSvg = cardType
@@ -38,12 +38,19 @@ export class CardNameComponent {
 	}
 
 	private buildNameSvg(cardType: CardType, name: string): string {
+		if (!name) {
+			return '';
+		}
+		// cardType = cardType === CardType.BATTLEGROUND_SPELL ? CardType.SPELL : cardType;
 		const pathId = `${CardType[cardType]?.toLowerCase()}Path`;
 		const path = this.buildPath(cardType, pathId);
+		const nameRatio = 1800 / name.length;
+		const fontSize = Math.min(100, nameRatio);
+		console.debug('nameRatio', nameRatio, name.length, name, fontSize);
 		return `
             <svg x="0" y ="0" viewBox="0 0 1000 200" id="svg">
                 <defs>${path}</defs>
-                <text id="svgText" font-size="97">
+                <text id="svgText" font-size="${fontSize}">
                     <textPath startOffset="50%" href="#${pathId}">${name}</textPath>
                 </text>
             </svg>`;
@@ -54,6 +61,7 @@ export class CardNameComponent {
 			case CardType.MINION:
 				return `<path id=${pathId} d="M 0,110 C 30,120 100,120 180,105 M 180,105 C 250,90 750,-35 1000,80" />`;
 			case CardType.SPELL:
+			case CardType.BATTLEGROUND_SPELL:
 				return `<path id=${pathId} d="M 0,120 Q 500,-35 1000,120" />`;
 			case CardType.LOCATION:
 				return `<path id=${pathId} d="M 0,60 Q 500,215 1000,60" />`;

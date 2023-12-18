@@ -111,7 +111,6 @@ export class CardTextComponent {
 		const element = this.el.nativeElement.querySelector('.text');
 		const fontSize = textSizeRatio * element.clientWidth;
 		element.style.fontSize = `${fontSize}px`;
-		console.debug('resizeText', fontSize);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

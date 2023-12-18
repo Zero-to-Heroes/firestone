@@ -169,7 +169,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 					// to restore the navigation to where the user currently is
 					const turn = this.currentTurn ?? 0;
 					const action = this.currentActionInTurn ?? 0;
-					console.debug('initial turn/action', turn, action);
 					this.game = game;
 					this.totalTime = this.buildTotalTime();
 					if (
