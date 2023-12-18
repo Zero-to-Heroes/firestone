@@ -88,7 +88,6 @@ export class CoinCostComponent implements AfterViewInit {
 				}
 
 				const fontSize = 0.6 * newWidth;
-				console.debug('[coin-cost] setting font size', fontSize, el.getBoundingClientRect(), el);
 				const textEl = this.elRef.nativeElement.querySelector('.cost');
 				textEl.style.fontSize = fontSize + 'px';
 				previousWidth = newWidth;
