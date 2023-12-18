@@ -14,7 +14,7 @@ export class TurnNarratorComponent {
 	_text: string;
 	_active = false;
 
-	@Input() set text(text: string | undefined) {
+	@Input() set text(text: string | undefined | null) {
 		if (!text) {
 			return;
 		}

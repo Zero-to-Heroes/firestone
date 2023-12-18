@@ -1,5 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import {
 	Action,
@@ -10,7 +20,7 @@ import {
 	Turn,
 } from '@firestone-hs/replay-parser';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { GameConfService } from '../services/game-conf.service';
 
 @Component({
@@ -24,12 +34,12 @@ import { GameConfService } from '../services/game-conf.service';
 						<div class="aspect-ratio-inner">
 							<game
 								*ngIf="game"
-								[gameMode]="gameMode"
+								[gameMode]="gameMode$ | async"
 								[playerId]="game.players[0].playerId"
 								[opponentId]="game.players[1].playerId"
 								[playerName]="game.players[0].name"
 								[opponentName]="game.players[1].name"
-								[currentAction]="currentAction"
+								[currentAction]="currentAction$ | async"
 								[showHiddenCards]="showHiddenCards"
 							>
 							</game>
@@ -54,7 +64,11 @@ import { GameConfService } from '../services/game-conf.service';
 				(seek)="onSeek($event)"
 			>
 			</seeker>
-			<turn-narrator class="ignored-wrapper" [text]="text" [active]="!!game && !showPreloader"></turn-narrator>
+			<turn-narrator
+				class="ignored-wrapper"
+				[text]="text$ | async"
+				[active]="!!game && !showPreloader"
+			></turn-narrator>
 			<controls
 				class="ignored-wrapper"
 				[reviewId]="reviewId"
@@ -71,7 +85,13 @@ import { GameConfService } from '../services/game-conf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ColiseumComponent implements OnDestroy {
+export class ColiseumComponent implements OnDestroy, AfterContentInit {
+	@Output() replayLocation = new EventEmitter<ReplayLocation>();
+
+	text$: Observable<string | undefined>;
+	gameMode$: Observable<string | undefined>;
+	currentAction$: Observable<Action | undefined>;
+
 	@Input() reviewId: string | null;
 	@Input() set replayXml(value: string | null) {
 		if (!value?.length) {
@@ -85,16 +105,22 @@ export class ColiseumComponent implements OnDestroy {
 		}
 		this.parseBgsSimulation(value);
 	}
+	@Input() set initialLocation(value: ReplayLocation) {
+		if (!value) {
+			return;
+		}
+		this.currentTurn = value.turn;
+		this.currentActionInTurn = value.action;
+		console.debug('set initial location', this.currentTurn, this.currentActionInTurn, value);
+	}
 
 	status: string | null;
-	currentAction: Action | undefined;
-	text: string | undefined;
-	turnString: string | undefined;
+	// text: string | undefined;
+	// turnString: string | undefined;
 	showHiddenCards = true;
 	totalTime: number;
 	currentTime = 0;
 	showPreloader = true;
-	gameMode: string | undefined;
 
 	game: Game;
 
@@ -102,12 +128,22 @@ export class ColiseumComponent implements OnDestroy {
 	private currentTurn = 0;
 	private gameSub: Subscription;
 
+	private text$$ = new BehaviorSubject<string | undefined>(undefined);
+	private gameMode$$ = new BehaviorSubject<string | undefined>(undefined);
+	private currentAction$$ = new BehaviorSubject<Action | undefined>(undefined);
+
 	constructor(
 		private readonly gameParser: GameParserService,
 		private readonly gameConf: GameConfService,
 		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
+
+	ngAfterContentInit() {
+		this.text$ = this.text$$.asObservable();
+		this.gameMode$ = this.gameMode$$.asObservable();
+		this.currentAction$ = this.currentAction$$.asObservable();
+	}
 
 	private async setReplay(replayXml: string) {
 		this.gameParser.cancelProcessing();
@@ -131,18 +167,24 @@ export class ColiseumComponent implements OnDestroy {
 				if (game) {
 					// Since the user can already navigate before the game is fully loaded, we want
 					// to restore the navigation to where the user currently is
-					const turn = 0;
-					const action = 0;
+					const turn = this.currentTurn ?? 0;
+					const action = this.currentActionInTurn ?? 0;
+					console.debug('initial turn/action', turn, action);
 					this.game = game;
 					this.totalTime = this.buildTotalTime();
-					this.currentTurn = turn <= 0 ? 0 : turn >= this.game.turns.size ? this.game.turns.size - 1 : turn;
-					this.currentActionInTurn =
-						action <= 0
-							? 0
-							: action >= (this.game?.turns?.get(this.currentTurn)?.actions?.length ?? 0)
-							? (this.game?.turns?.get(this.currentTurn)?.actions?.length ?? 1) - 1
-							: action;
-					this.populateInfo(complete);
+					if (
+						this.currentTurn < this.game.turns.size &&
+						this.currentActionInTurn < (this.game.turns?.get(this.currentTurn)?.actions?.length ?? 0)
+					) {
+						// this.currentTurn = turn <= 0 ? 0 : turn >= this.game.turns.size ? this.game.turns.size - 1 : turn;
+						// this.currentActionInTurn =
+						// 	action <= 0
+						// 		? 0
+						// 		: action >= (this.game?.turns?.get(this.currentTurn)?.actions?.length ?? 0)
+						// 		? (this.game?.turns?.get(this.currentTurn)?.actions?.length ?? 1) - 1
+						// 		: action;
+						this.populateInfo(complete);
+					}
 					if (!(this.cdr as ViewRef).destroyed) {
 						this.cdr.detectChanges();
 					}
@@ -300,13 +342,14 @@ export class ColiseumComponent implements OnDestroy {
 			return;
 		}
 
-		this.currentAction = this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn];
-		this.text = this.computeText();
-		this.turnString = this.computeTurnString();
-		this.gameMode = this.computeGameMode();
+		this.currentAction$$.next(this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn]);
+		this.text$$.next(this.computeText());
+		// this.turnString = this.computeTurnString();
+		this.gameMode$$.next(this.computeGameMode());
 		// This avoid truncating the query string because we don't have all the info yet
 		if (complete) {
 			this.currentTime = this.computeCurrentTime();
+			this.updateUrlQueryString();
 		}
 	}
 
@@ -358,15 +401,15 @@ export class ColiseumComponent implements OnDestroy {
 		return this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn]?.textRaw;
 	}
 
-	private computeTurnString(): string | undefined {
-		if (!this.game) {
-			console.warn('[app] game not present, not performing operation', 'computeTurnString');
-			return undefined;
-		}
-		return this.game.turns.get(this.currentTurn)?.turn === 'mulligan'
-			? 'Mulligan'
-			: `Turn${this.game.turns.get(this.currentTurn)?.turn}`;
-	}
+	// private computeTurnString(): string | undefined {
+	// 	if (!this.game) {
+	// 		console.warn('[app] game not present, not performing operation', 'computeTurnString');
+	// 		return undefined;
+	// 	}
+	// 	return this.game.turns.get(this.currentTurn)?.turn === 'mulligan'
+	// 		? 'Mulligan'
+	// 		: `Turn${this.game.turns.get(this.currentTurn)?.turn}`;
+	// }
 
 	private moveCursorToNextAction() {
 		if (!this.game || !this.game.turns) {
@@ -440,6 +483,8 @@ export class ColiseumComponent implements OnDestroy {
 	}
 
 	private moveCursorToNextTurn() {
+		const start = Date.now();
+		console.debug('moving cursor', this.currentTurn, this.game.turns.size);
 		if (!this.game || !this.game.turns) {
 			return;
 		}
@@ -449,6 +494,8 @@ export class ColiseumComponent implements OnDestroy {
 		this.currentActionInTurn = 0;
 		this.currentTurn++;
 		this.populateInfo();
+
+		console.debug('moved cursor', Date.now() - start, this.currentTurn, this.game.turns.size);
 		const currentTurn = this.game.turns.get(this.currentTurn);
 		if (!currentTurn) {
 			return;
@@ -461,9 +508,9 @@ export class ColiseumComponent implements OnDestroy {
 			this.moveCursorToNextTurn();
 			return;
 		}
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef).destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private moveCursorToPreviousTurn() {
@@ -492,4 +539,16 @@ export class ColiseumComponent implements OnDestroy {
 			this.cdr.detectChanges();
 		}
 	}
+
+	private updateUrlQueryString() {
+		this.replayLocation.next({
+			turn: this.currentTurn,
+			action: this.currentActionInTurn,
+		});
+	}
+}
+
+export interface ReplayLocation {
+	readonly turn: number;
+	readonly action: number;
 }

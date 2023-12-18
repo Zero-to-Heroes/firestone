@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import { ReplayLocation } from '@firestone/replay/coliseum';
 import { ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -21,8 +22,12 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	reviewId: string | null;
 	replayXml: string | null;
 	bgsSimulation: GameSample | null;
+	initialLocation: ReplayLocation;
 
 	private ready$$ = new BehaviorSubject<boolean>(false);
+
+	private bgsSimulationId: string;
+	private bgsSimulationString: string;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -49,7 +54,20 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		const reviewId = this.getSearchParam('reviewId');
 		const bgsSimulation = this.getSearchParam('bgsSimulation');
 		const bgsSimulationId = this.getSearchParam('bgsSimulationId');
+		const initialTurn = this.getSearchParam('turn');
+		const initialAction = this.getSearchParam('action');
+
 		console.log('params', reviewId, bgsSimulationId, bgsSimulation);
+		this.reviewId = reviewId;
+		this.bgsSimulationId = bgsSimulationId;
+		this.bgsSimulationString = bgsSimulation;
+		if (initialTurn || initialAction) {
+			this.initialLocation = {
+				turn: parseInt(initialTurn),
+				action: parseInt(initialAction),
+			};
+			console.debug('initial location', this.initialLocation);
+		}
 
 		if (!reviewId && !bgsSimulationId && !bgsSimulation) {
 			console.error('[game-replay] no reviewId or bgsSimulationId or bgsSimulation');
@@ -63,7 +81,6 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 				return;
 			}
 			this.replayXml = replayXml;
-			this.reviewId = reviewId;
 		} else if (bgsSimulationId) {
 			console.log('loading', bgsSimulationId);
 			const gameSample = await this.retrieveEncodedSimulation(bgsSimulationId);
@@ -81,6 +98,20 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onReplayLocationUpdated(location: ReplayLocation) {
+		const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+		const reviewQuery = this.reviewId
+			? `reviewId=${this.reviewId}&`
+			: this.bgsSimulationString
+			? `bgsSimulation=${this.bgsSimulationString}&`
+			: this.bgsSimulationId
+			? `bgsSimulationId=${this.bgsSimulationId}&`
+			: '';
+		const queryString = `${reviewQuery}turn=${location.turn}&action=${location.action}`;
+		const newUrl = `${baseUrl}?${queryString}`;
+		window.history.replaceState({ path: newUrl }, '', newUrl);
 	}
 
 	private async getReplayXml(reviewId: string): Promise<string | null> {
