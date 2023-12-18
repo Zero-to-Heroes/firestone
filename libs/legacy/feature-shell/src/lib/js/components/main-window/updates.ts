@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.1.1',
+		version: '13.2.1',
 		force: false,
 		sections: [
 			// {
@@ -134,6 +134,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add a dropdown to filter by opponent class for ranked games.`,
+							},
+							{
+								type: 'misc',
+								text: `Improved the performance while loading replays, especially for BG.`,
 							},
 						],
 					},
