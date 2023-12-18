@@ -17,6 +17,7 @@
 	--icon-color: var(--color-1);
 	overflow: hidden;
 	z-index: 1;
+	position: relative;
 
 	&.buffed {
 		border-color: #ffb948;
@@ -46,6 +47,8 @@
 		--icon-secondary-color: var(--color-7);
 		--icon-color: var(--color-1);
 		transform: scale(15);
+		max-width: 25px;
+		max-height: 25px;
 	}
 }
 
@@ -57,5 +60,7 @@
 		width: 185%;
 		position: relative;
 		left: -7%;
+		max-width: 25px;
+		max-height: 25px;
 	}
 }
