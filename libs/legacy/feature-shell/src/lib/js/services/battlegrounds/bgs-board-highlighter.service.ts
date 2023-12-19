@@ -187,6 +187,8 @@ export class BgsBoardHighlighterService {
 				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
 			case CardIds.DancinDeryl:
 				return [CardIds.FreedealingGambler_BGS_049];
+			case CardIds.EdwinVancleef_TB_BaconShop_HERO_01:
+				return [CardIds.FreedealingGambler_BGS_049];
 			case CardIds.TradePrinceGallywix_TB_BaconShop_HERO_10:
 				return [CardIds.FreedealingGambler_BGS_049];
 			case CardIds.MillhouseManastorm_TB_BaconShop_HERO_49:
