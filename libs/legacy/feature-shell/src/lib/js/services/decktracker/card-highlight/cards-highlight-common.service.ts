@@ -1054,8 +1054,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.LastStand:
 				return and(side(inputSide), inDeck, taunt);
-			// case CardIds.LeadDancer:
-			// 	return and(inDeck, minion, attackLessThan(card. ));
+			case CardIds.LeadDancer:
+				// TODO: implement current attack
+				return and(inDeck, minion, attackLessThan(4));
 			case CardIds.LineHopper:
 				return and(side(inputSide), outcast);
 			case CardIds.LivingSeedRank1:
