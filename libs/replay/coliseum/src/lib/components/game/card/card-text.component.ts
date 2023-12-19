@@ -110,7 +110,7 @@ export class CardTextComponent {
 		if (!element) {
 			return;
 		}
-		const textSize = this.text?.toString().length || 0;
+		const textSize = Math.max(20, this.text?.toString().length || 0);
 		const textSizeRatio = 13 / textSize;
 		const fontSize = textSizeRatio * element.clientWidth;
 		element.style.fontSize = `${fontSize}px`;
