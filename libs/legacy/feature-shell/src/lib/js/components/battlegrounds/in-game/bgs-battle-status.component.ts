@@ -221,16 +221,16 @@ export class BgsBattleStatusComponent {
 			// 		},
 			// 	);
 			// 	break;
-			case 'secret':
-				this._simulationMessage = this.i18n.translateString(
-					'battlegrounds.battle.composition-not-supported.general',
-					{
-						value: this.i18n.translateString(
-							'battlegrounds.battle.composition-not-supported.reason-secret',
-						),
-					},
-				);
-				break;
+			// case 'secret':
+			// 	this._simulationMessage = this.i18n.translateString(
+			// 		'battlegrounds.battle.composition-not-supported.general',
+			// 		{
+			// 			value: this.i18n.translateString(
+			// 				'battlegrounds.battle.composition-not-supported.reason-secret',
+			// 			),
+			// 		},
+			// 	);
+			// 	break;
 			case 'error':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.bug',

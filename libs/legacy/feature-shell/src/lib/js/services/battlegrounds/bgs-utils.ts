@@ -708,17 +708,17 @@ const isSupportedScenarioForPlayer = (
 		// 		reason: 'choral-mrrrglr',
 		// 	};
 		// }
-		else if (boardInfo?.secrets?.length > 0) {
-			return {
-				isSupported: false,
-				reason: 'secret',
-			};
-		} else if (hasStreetMagician(boardInfo)) {
-			return {
-				isSupported: false,
-				reason: 'secret',
-			};
-		}
+		// else if (boardInfo?.secrets?.length > 0) {
+		// 	return {
+		// 		isSupported: false,
+		// 		reason: 'secret',
+		// 	};
+		// } else if (hasStreetMagician(boardInfo)) {
+		// 	return {
+		// 		isSupported: false,
+		// 		reason: 'secret',
+		// 	};
+		// }
 		return {
 			isSupported: true,
 		};

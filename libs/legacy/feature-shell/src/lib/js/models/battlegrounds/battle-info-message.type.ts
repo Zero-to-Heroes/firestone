@@ -4,6 +4,6 @@ export type BattleInfoMessage =
 	// | 'rylak'
 	// | 'choral-mrrrglr'
 	// | 'bassgill'
-	| 'secret'
+	// | 'secret'
 	| 'error'
 	| undefined;
