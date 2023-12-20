@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.4',
+		version: '13.2.6',
 		force: false,
 		sections: [
 			// {
@@ -42,25 +42,21 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now update your current Discord status message when playing Hearthstone with Firestone enabled. See <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features#general">the wiki</a> for some screenshots.`,
-							},
-							{
-								type: 'feature',
-								text: `(PREMIUM) Premium users can use placeholders to automatically update their status message with the current game mode and hero name. Let met know on Discord if you'd like some more placeholder options :)`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'general',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `You can now update your current Discord status message when playing Hearthstone with Firestone enabled. See <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features#general">the wiki</a> for some screenshots.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -69,20 +65,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `You can now choose whether some widgets (like Spell Schools or Menagerie) display their items all on one line, or each on a separate line. Go to the Settings > Decktracker > Global at the bottom to change this.`,
-							},
-							{
-								type: 'feature',
-								text: `Deck stats should now update more frequently, and display the time at which they were last updated. Beware that the sample size will be a little smaller during the first few days.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where the Dragons Summoned counter would not include ALL tribes.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the attack counter would not take the weapon's durability into account.`,
+								text: `Fix an issue where the "Forged" icon in the opponent's hand would sometimes get very big.`,
 							},
 						],
 					},
@@ -90,45 +74,28 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add an option to show the spells at the bottom of the minions list.`,
+								type: 'misc',
+								text: `Update for 29.2.3.`,
 							},
 							{
 								type: 'feature',
-								text: `Add a new "Tavern Spells" section in the minions list overlay.`,
-							},
-							{
-								type: 'feature',
-								text: `Hero stats should now update more frequently, and display the time at which they were last updated. Beware that the sample size will be a little smaller during the first few days.`,
-							},
-							{
-								type: 'ui',
-								text: `Remove filters linked to Quest and Anomalies.`,
+								text: `Add support for secrets in the simulator.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue that would occur rarely with Diremuck Forager.`,
+								text: `Fix a sim issue with the attack order when tokens are summoned.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue with Lighter Fighter.`,
+								text: `Fix a sim issue with Tamsin's Hero Power not properly updating the first attacker.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Live Stats would not refresh properly.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where re-deleting a deck that was deleted once in the past wouldn't work.`,
+								text: `Fix a sim issue with Ozumat's Hero Power not triggering at the right time.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the hero power / signature treasure info was sometimes missing when viewing your own runs overview.`,
+								text: `Fix a sim issue with Mechanized Gift Horse.`,
 							},
 						],
 					},
@@ -136,12 +103,12 @@ export const updates: readonly Update[] = [
 						category: 'replays',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a dropdown to filter by opponent class for ranked games.`,
+								type: 'misc',
+								text: `Drastically improve the performances when browsing replays.`,
 							},
 							{
-								type: 'misc',
-								text: `Improved the performance while loading replays, especially for BG.`,
+								type: 'feature',
+								text: `Add support for Tavern Spells (in play and in hand).`,
 							},
 						],
 					},
