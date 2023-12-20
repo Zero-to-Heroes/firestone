@@ -1230,7 +1230,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
 				return and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp);
 			case CardIds.RaDen:
-				return and(side(inputSide), minionPlayedThisMatch, notInInitialDeck);
+				return and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen)));
 			case CardIds.RaidBossOnyxia_ONY_004:
 				return and(side(inputSide), or(inDeck, inHand), minion, whelp);
 			case CardIds.RaidingParty:
