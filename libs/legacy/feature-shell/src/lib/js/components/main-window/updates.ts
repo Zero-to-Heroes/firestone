@@ -97,6 +97,14 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue with Mechanized Gift Horse.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where auras where not properly reapplied after minion stats were set to a specific value.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where minion deaths were not always properly processed after a Start of Combat hero power.`,
+							},
 						],
 					},
 					{
