@@ -83,6 +83,7 @@ import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 				[standardCounter]="definition.standardCounter"
 				[cardTooltip]=""
 				[cardTooltipRelatedCardIds]="definition.cardTooltips"
+				[side]="side"
 			></generic-counter>
 		</div>
 	`,

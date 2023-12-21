@@ -219,7 +219,7 @@ import { CounterSetting } from './model';
 			<div class="settings-group">
 				<preference-slider
 					class="first-slider"
-					[field]="'countersScale'"
+					[field]="'countersScaleOpponent'"
 					[enabled]="true"
 					[min]="60"
 					[max]="140"

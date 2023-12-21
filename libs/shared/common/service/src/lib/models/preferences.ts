@@ -275,6 +275,8 @@ export class Preferences implements IPreferences {
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly countersScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly countersScaleOpponent: number = 100;
 	readonly countersUseExpandedView: boolean = true;
 
 	readonly playerGalakrondCounter: BooleanWithLimited = true;

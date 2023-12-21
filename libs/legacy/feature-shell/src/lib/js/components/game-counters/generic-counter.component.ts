@@ -6,9 +6,12 @@ import {
 	ElementRef,
 	Input,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
 	selector: 'generic-counter',
@@ -54,21 +57,41 @@ export class GenericCountersComponent extends AbstractSubscriptionStoreComponent
 	@Input() counterClass: string;
 	@Input() standardCounter: boolean;
 
+	@Input() set side(value: 'player' | 'opponent') {
+		this.side$$.next(value);
+	}
+
+	private side$$ = new BehaviorSubject<'player' | 'opponent'>('player');
+
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterViewInit(): void {
-		this.listenForBasicPref$((prefs) => prefs.countersScale).subscribe((scale) => {
+	async ngAfterViewInit() {
+		await this.prefs.isReady();
+
+		combineLatest([
+			this.side$$,
+			this.prefs.preferences$(
+				(prefs) => prefs.countersScale,
+				(prefs) => prefs.countersScaleOpponent,
+			),
+		]).subscribe(([side, [scalePlayer, scaleOpponent]]) => {
+			const scale = side === 'player' ? scalePlayer : scaleOpponent;
 			const element = this.el.nativeElement.querySelector('.scalable');
 			if (element) {
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 			}
 		});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
