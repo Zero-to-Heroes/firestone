@@ -1,5 +1,6 @@
 /* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import { DiscordRpcPluginService } from './discord-rpc-plugin.service';
 import { DiscordRPCPlugin, LogLevel } from './discord-rpc-plugin.types';
 
@@ -47,6 +48,7 @@ export class DiscordRpcService {
 		if (this.status !== 'online') {
 			await this.init();
 		}
+		await this.ready();
 
 		this.plugin.updatePresence(
 			details,
@@ -76,5 +78,12 @@ export class DiscordRpcService {
 			console.log('[discord] dispose', info);
 			this.status = 'offline';
 		});
+	}
+
+	private async ready() {
+		while (!this.plugin) {
+			await sleep(500);
+		}
+		return;
 	}
 }
