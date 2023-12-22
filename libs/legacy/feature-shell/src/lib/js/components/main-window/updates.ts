@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.6',
+		version: '13.2.7',
 		force: false,
 		sections: [
 			// {
@@ -91,7 +91,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue with Ozumat's Hero Power not triggering at the right time.`,
+								text: `Fix a sim issue with start of combat hero powers (like Ozumat's or Teron's) not triggering at the right time.`,
 							},
 							{
 								type: 'bug',
