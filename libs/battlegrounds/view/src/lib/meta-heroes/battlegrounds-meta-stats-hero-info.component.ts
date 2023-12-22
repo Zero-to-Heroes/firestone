@@ -143,6 +143,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			})),
 		};
 		this.placementChartData = [globalPlacementChartData];
+		// console.debug('setting placement chart data', this.placementChartData, value);
 
 		this.netMmr = value.playerNetMmr;
 
