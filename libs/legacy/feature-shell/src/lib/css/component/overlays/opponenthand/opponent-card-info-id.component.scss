@@ -17,7 +17,6 @@
 	--icon-color: var(--color-1);
 	overflow: hidden;
 	z-index: 1;
-	position: relative;
 
 	&.buffed {
 		border-color: #ffb948;
@@ -52,7 +51,7 @@
 }
 
 .card-image {
-	width: 260%;
+	width: 340%;
 	clip-path: ellipse(50% 50% at 50% 50%);
 
 	&.forged {
