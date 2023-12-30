@@ -207,8 +207,8 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	): Promise<DeckStat | null> {
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
-		const fileName = `${format}/${rank}/${time}/${deckId}`;
-		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}/${fileName}`;
+		const fileName = `${format}/${rank}/${time}/deck/${deckId}.gz.json`;
+		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
 		const resultStr = await this.api.get(url);
 		if (!resultStr?.length) {
