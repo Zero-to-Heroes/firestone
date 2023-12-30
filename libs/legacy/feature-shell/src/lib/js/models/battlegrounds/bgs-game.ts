@@ -26,7 +26,7 @@ export class BgsGame {
 
 	readonly lastOpponentCardId: string;
 	readonly lastOpponentPlayerId: number;
-	readonly liveStats: RealTimeStatsState;
+	readonly liveStats: RealTimeStatsState = new RealTimeStatsState();
 	readonly gameEnded: boolean;
 
 	public static create(base: Partial<NonFunctionProperties<BgsGame>>): BgsGame {
