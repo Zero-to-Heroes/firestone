@@ -384,7 +384,7 @@ export class EndGameUploaderService {
 		if (isDuels(game.gameMode)) {
 			game.runId = info.duelsRunId;
 		} else if (game.gameMode === 'arena') {
-			game.runId = info.arenaInfo.runId;
+			game.runId = info.arenaInfo?.runId;
 		}
 
 		game.lotteryPoints = info.lotteryPoints;
