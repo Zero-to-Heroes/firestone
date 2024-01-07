@@ -215,12 +215,13 @@ export const hasSpellSchool = (input: SelectorInput): boolean => {
 export const spellSchoolPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.uniqueSpellSchools?.includes(input.card?.spellSchool);
 
+export const passive = hasMechanic(GameTag.DUNGEON_PASSIVE_BUFF);
 export const cardType =
 	(type: CardType) =>
 	(input: SelectorInput): boolean =>
 		input.card?.type?.toLowerCase() === CardType[type].toLowerCase();
 export const minion = cardType(CardType.MINION);
-export const spell = cardType(CardType.SPELL);
+export const spell = and(cardType(CardType.SPELL), not(passive));
 export const weapon = cardType(CardType.WEAPON);
 
 export const race =

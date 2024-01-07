@@ -1337,6 +1337,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Shadowcasting101TavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion);
+			case CardIds.ShadowEssence_CORE_ICC_235:
+			case CardIds.ShadowEssence_ICC_235:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.ShadowOfDemise:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.ShadowVisions:
