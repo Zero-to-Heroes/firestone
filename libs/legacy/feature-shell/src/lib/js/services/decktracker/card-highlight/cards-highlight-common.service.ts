@@ -376,6 +376,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), beast);
 			case CardIds.AdvancedTargetingMonocle:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.AegwynnTheGuardianCore:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.AlakirTheWindsOfTime_WON_092h:
 				return and(side(inputSide), inDeck, minion, or(charge, divineShield, taunt, windfury));
 			case CardIds.AlarmedSecuritybot_YOG_510:
@@ -1263,6 +1265,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
 			case CardIds.RingmasterWhatley:
 				return and(side(inputSide), inDeck, minion, or(dragon, mech, pirate));
+			case CardIds.RingOfBlackIceTavernBrawl:
+				return and(side(inputSide), or(inDeck, inHand), freeze);
 			case CardIds.RingOfPhaseshiftingTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 			case CardIds.RingOfRefreshmentTavernBrawl:
