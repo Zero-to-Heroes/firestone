@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { ILocalizationService } from '@firestone/shared/framework/core';
@@ -26,6 +27,7 @@ import { ArenaClassInfo } from './model';
 					[data]="placementChartData"
 					[id]="'placementDistribution' + className"
 					[offsetValue]="0"
+					[dataTextFormatter]="dataTextFormatter"
 				></basic-bar-chart-2>
 			</div>
 		</div>
@@ -56,6 +58,8 @@ export class ArenaClassInfoComponent {
 	dataPoints: string | null;
 	winrate: string;
 	placementChartData: SimpleBarChartData[];
+	dataTextFormatter = (value: string) =>
+		this.i18n.translateString('app.arena.class-tier-list.graph-placement-tooltip', { value: value })!;
 
 	constructor(private readonly i18n: ILocalizationService) {}
 }

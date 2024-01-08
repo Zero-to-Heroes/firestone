@@ -38,6 +38,11 @@ export class BasicBarChart2Component {
 		this.udpateStats();
 	}
 
+	@Input() set dataTextFormatter(formatter: (value: string) => string) {
+		this._dataTextFormatter = formatter;
+		this.udpateStats();
+	}
+
 	@Input() set midLineValue(value: number) {
 		this._midLineValue = value;
 		this.udpateStats();
@@ -55,6 +60,7 @@ export class BasicBarChart2Component {
 
 	private chartData: readonly SimpleBarChartData[];
 	private _tooltipTitle;
+	private _dataTextFormatter: (value: string) => string;
 	private _midLineValue: number;
 	private _offsetValue = 0;
 
@@ -108,6 +114,9 @@ export class BasicBarChart2Component {
 							  })
 							: null;
 					const matchesElement = !!matchesLabel ? `<div class="raw-value">${matchesLabel}</div>` : '';
+					const dataText = this._dataTextFormatter
+						? this._dataTextFormatter((+data.value).toFixed(1))
+						: `${(+data.value).toFixed(1)}%`;
 					return {
 						// Ensure a min height to make the graph look better
 						height: Math.max((100 * data.value) / maxValues[i], 2),
@@ -117,7 +126,7 @@ export class BasicBarChart2Component {
 								${tooltipTitle}
 								<div class="label">${placeLabel}</div>
 								${matchesElement}
-								<div class="value">${(+data.value).toFixed(1)}%</div>
+								<div class="value">${dataText}</div>
 							</div>`,
 					};
 				}),
