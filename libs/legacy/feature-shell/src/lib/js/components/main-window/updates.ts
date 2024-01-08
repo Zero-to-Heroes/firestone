@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.10',
+		version: '13.2.11',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,30 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'general',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `You can now update your current Discord status message when playing Hearthstone with Firestone enabled. See <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features#general">the wiki</a> for some screenshots.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Reconnects should be handled more gracefully now. It is still a tricky subject, so let me know if you experience bugs after reconnecting to your game.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Card stats for meta decks should now (finally) be fixed! Sorry again for the inconvenience.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
