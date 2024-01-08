@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.7',
+		version: '13.2.10',
 		force: false,
 		sections: [
 			// {
@@ -62,61 +62,11 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the "Forged" icon in the opponent's hand would sometimes get very big.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'misc',
-								text: `Update for 29.2.3.`,
-							},
-							{
-								type: 'feature',
-								text: `Add support for secrets in the simulator.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix a sim issue with the attack order when tokens are summoned.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Tamsin's Hero Power not properly updating the first attacker.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with start of combat hero powers (like Ozumat's or Teron's) not triggering at the right time.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Mechanized Gift Horse.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where auras where not properly reapplied after minion stats were set to a specific value.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where minion deaths were not always properly processed after a Start of Combat hero power.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'misc',
-								text: `Drastically improve the performances when browsing replays.`,
-							},
-							{
-								type: 'feature',
-								text: `Add support for Tavern Spells (in play and in hand).`,
+								text: `Fix a sim issue where some secrets could trigger infinitely.`,
 							},
 						],
 					},
