@@ -66,6 +66,14 @@ export class LogListenerService {
 				await sleep(100);
 				this.startLogRegister();
 			});
+		this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
+			console.debug('[log-listener] [' + this.logFile + '] Game is running?', inGame);
+			if (inGame) {
+				this.startLogRegister();
+			} else {
+				this.stopLogRegister();
+			}
+		});
 		// this.startLogRegister();
 	}
 
@@ -83,12 +91,14 @@ export class LogListenerService {
 		if (this.ow.gameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
 			this.registerLogMonitor();
+		} else {
+			console.debug('[log-listener] [' + this.logFile + '] Game is not running', gameInfo);
 		}
 	}
 
 	private async stopLogRegister() {
-		this.monitoring = false;
 		this.ow.stopFileListener(this.logFile);
+		this.monitoring = false;
 	}
 
 	registerLogMonitor() {
