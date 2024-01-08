@@ -170,7 +170,7 @@ export class NavigationBackProcessor implements Processor {
 				const selectedSet = setsManager.sets$$
 					.getValue()
 					?.find((set) => set.getCard(navigationState.navigationCollection.selectedCardId) != null);
-				console.log('selected set', selectedSet?.id);
+				// console.log('selected set', selectedSet?.id);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'cards',
