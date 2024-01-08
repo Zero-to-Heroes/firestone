@@ -18,6 +18,7 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 					<span
 						class="main-text"
 						[owTranslate]="'app.decktracker.meta.deck.archetype-core-cards-header'"
+						[helpTooltip]="'app.decktracker.meta.deck.archetype-core-cards-header-tooltip' | fsTranslate"
 					></span>
 					<span class="details">{{ archetypeCoreCardsHeaderDetails }}</span>
 				</div>
@@ -26,7 +27,11 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 			</div>
 			<div class="container removed">
 				<div class="title">
-					<span class="main-text" [owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"></span>
+					<span
+						class="main-text"
+						[owTranslate]="'app.decktracker.meta.deck.removed-cards-header'"
+						[helpTooltip]="'app.decktracker.meta.deck.removed-cards-header-tooltip' | fsTranslate"
+					></span>
 					<span class="details">{{ removedCardsHeaderDetails }}</span>
 				</div>
 				<deck-list-static class="cards" [cards]="removedCards" [collection]="value.collection">
@@ -34,7 +39,11 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 			</div>
 			<div class="container added">
 				<div class="title">
-					<span class="main-text" [owTranslate]="'app.decktracker.meta.deck.added-cards-header'"></span>
+					<span
+						class="main-text"
+						[owTranslate]="'app.decktracker.meta.deck.added-cards-header'"
+						[helpTooltip]="'app.decktracker.meta.deck.added-cards-header-tooltip' | fsTranslate"
+					></span>
 					<span class="details">{{ addedCardsHeaderDetails }}</span>
 				</div>
 				<deck-list-static class="cards" [cards]="addedCards" [collection]="value.collection">
