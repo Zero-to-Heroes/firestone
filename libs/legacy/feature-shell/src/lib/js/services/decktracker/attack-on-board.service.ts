@@ -30,7 +30,7 @@ export class AttackOnBoardService {
 		const totalAttackOnBoard = entitiesOnBoardThatCanAttack
 			.map(
 				(entity) =>
-					this.windfuryMultiplier(entity) *
+					Math.max(0, this.windfuryMultiplier(entity) - getTag(entity, GameTag.NUM_ATTACKS_THIS_TURN)) *
 					this.getEntityAttack(entity, numberOfVoidtouchedAttendants, deck.board, playerFromTracker.Board),
 			)
 			.reduce((a, b) => a + b, 0);
