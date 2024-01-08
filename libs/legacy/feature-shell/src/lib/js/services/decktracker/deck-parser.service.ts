@@ -174,7 +174,7 @@ export class DeckParserService {
 
 		// Templates are negative
 		const deckTemplates = await this.getDeckTemplates();
-		const deck = deckTemplates.find((deck) => deck.DeckId === deckId || deck.Id === -deckId);
+		const deck = deckTemplates.find((deck) => +deck.DeckId === deckId || +deck.Id === -deckId);
 		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
@@ -243,15 +243,24 @@ export class DeckParserService {
 			if (changes.SelectedDeckId) {
 				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
 				this.selectedDeckId = changes.SelectedDeckId;
-				const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2, true);
-				console.log(
-					'[deck-parser] getting active deck from memory after ID selection',
-					this.selectedDeckId,
-					activeDeck,
-				);
-				if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-					console.log('[deck-parser] updating active deck after ID selection', activeDeck, this.currentDeck);
-					this.setCurrentDeck(this.updateDeckFromMemory(activeDeck, null, null));
+				if (this.selectedDeckId < 0) {
+					console.log('[deck-parser] getting template deck after ID selection', this.selectedDeckId);
+					await this.getTemplateDeck(this.selectedDeckId, null, null);
+				} else {
+					const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2, true);
+					console.log(
+						'[deck-parser] getting active deck from memory after ID selection',
+						this.selectedDeckId,
+						activeDeck,
+					);
+					if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+						console.log(
+							'[deck-parser] updating active deck after ID selection',
+							activeDeck,
+							this.currentDeck,
+						);
+						this.setCurrentDeck(this.updateDeckFromMemory(activeDeck, null, null));
+					}
 				}
 			}
 		});
