@@ -250,10 +250,12 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	clearSelection() {
 		this.tempSelected$.next([]);
+		this.currentSearch$$.next(null);
 	}
 
 	resetSelection() {
 		this.tempSelected$.next(this.options$.value);
+		this.currentSearch$$.next(null);
 	}
 
 	buttonTooltip(validSelection: boolean): string {
