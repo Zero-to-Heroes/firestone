@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.11',
+		version: '13.2.12',
 		force: false,
 		sections: [
 			// {
@@ -71,11 +71,33 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where loaner decks would not be detected.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix some issues with the Attack counter (replacing weapons, Charge minions).`,
+							},
+						],
+					},
+					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where some secrets could trigger infinitely.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'misc',
+								text: `Add clarifications on the tooltips as what the Wins Profile bars represent.`,
 							},
 						],
 					},
