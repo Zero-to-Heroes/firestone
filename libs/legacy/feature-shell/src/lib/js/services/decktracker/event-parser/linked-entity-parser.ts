@@ -19,29 +19,29 @@ export class LinkedEntityParser implements EventParser {
 		const linkedEntityControllerId = gameEvent.additionalData.linkedEntityControllerId;
 
 		let isPlayerForFind = controllerId === localPlayer.PlayerId;
-		// console.debug('[linked-entity-parser] isPlayerForFind', isPlayerForFind, gameEvent);
+		console.debug('[linked-entity-parser] isPlayerForFind', cardId, isPlayerForFind, gameEvent);
 		let deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
 
 		let newCard = deckInWhichToFindTheCard.findCard(entityId)?.card;
 		// let revert = false;
-		// console.debug('[linked-entity-parser] newCard', newCard, entityId, isPlayerForFind, deckInWhichToFindTheCard);
+		console.debug('[linked-entity-parser] newCard', newCard, entityId, isPlayerForFind, deckInWhichToFindTheCard);
 		if (!newCard) {
 			// Can happen because of Disarming Elemetal where we dredge in the other player's deck or Spy-O-Matic
 			isPlayerForFind = !isPlayerForFind;
 			deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
 			newCard = deckInWhichToFindTheCard.findCard(entityId)?.card;
-			// console.debug(
-			// 	'[linked-entity-parser] missing newCard, trying to find in other deck',
-			// 	newCard,
-			// 	entityId,
-			// 	isPlayerForFind,
-			// 	deckInWhichToFindTheCard,
-			// );
+			console.debug(
+				'[linked-entity-parser] missing newCard, trying to find in other deck',
+				newCard,
+				entityId,
+				isPlayerForFind,
+				deckInWhichToFindTheCard,
+			);
 			if (newCard && reverseIfNeeded(false, newCard.lastAffectedByCardId)) {
 				// revert = true;
 			} else {
 				// If we still don't find the card, revert to the initial values
-				// console.debug('[linked-entity-parser] missing newCard');
+				console.debug('[linked-entity-parser] missing newCard');
 				isPlayerForFind = !isPlayerForFind;
 				deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
 				newCard = DeckCard.create({
@@ -53,13 +53,13 @@ export class LinkedEntityParser implements EventParser {
 		}
 
 		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId)?.card;
-		// console.debug(
-		// 	'[linked-entity-parser] originalCard',
-		// 	originalCard,
-		// 	newCard,
-		// 	gameEvent.additionalData.linkedEntityId,
-		// 	deckInWhichToFindTheCard,
-		// );
+		console.debug(
+			'[linked-entity-parser] originalCard',
+			originalCard,
+			newCard,
+			gameEvent.additionalData.linkedEntityId,
+			deckInWhichToFindTheCard,
+		);
 		let newPlayerDeck: DeckState;
 
 		const isPlayerForAdd = linkedEntityControllerId === localPlayer.PlayerId;
@@ -74,9 +74,9 @@ export class LinkedEntityParser implements EventParser {
 				// When the card is in the setaside zone, we don't want to override the temporaryCard, because it is very likely a temp card
 				temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
 			} as DeckCard);
-			//console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
+			console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard, isPlayerForAdd, true);
-			// console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
+			console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
 		} else {
 			// Can happen for BG heroes
 			if (gameEvent.additionalData.linkedEntityZone !== Zone.DECK) {
@@ -93,11 +93,11 @@ export class LinkedEntityParser implements EventParser {
 				zone: undefined,
 				temporaryCard: undefined,
 			} as DeckCard);
-			//console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
+			console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToAddTheCard.deck,
 				updatedCard.cardId,
-				updatedCard.entityId,
+				updatedCard.entityId ?? gameEvent.additionalData.linkedEntityId, // To catch the card that has been added before
 				true,
 				true,
 				// For Lady Prestor + Dredge interaction
