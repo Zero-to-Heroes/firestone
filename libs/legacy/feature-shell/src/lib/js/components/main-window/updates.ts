@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.12',
+		version: '13.2.13',
 		force: false,
 		sections: [
 			// {
@@ -61,6 +61,18 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Card stats for meta decks should now (finally) be fixed! Sorry again for the inconvenience.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix the oracle for Fizzle's Snapshot (the cards were not flagged at their correct place in the opponent's hand).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Identity Theft would create two copies of each card in the opponent's deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Loaner Decks were not properly detected.`,
 							},
 						],
 					},
