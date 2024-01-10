@@ -43,7 +43,9 @@ export class WebsiteLocalizationService extends ILocalizationService {
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
 		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this._locale}/${highRes}`;
-		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
+		const suffix = `${cardId}${
+			['GOLDEN', 'DIAMOND', 'SIGNATURE'].includes(options?.cardType ?? '') ? '_golden' : ''
+		}.png`;
 		return `${base}/${suffix}`;
 	}
 
@@ -52,7 +54,9 @@ export class WebsiteLocalizationService extends ILocalizationService {
 			return null;
 		}
 		const base = `https://static.firestoneapp.com/cards`;
-		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
+		const suffix = `${cardId}${
+			['GOLDEN', 'DIAMOND', 'SIGNATURE'].includes(options?.cardType ?? '') ? '_golden' : ''
+		}.png`;
 		return `${base}/${suffix}`;
 	}
 
