@@ -61,31 +61,24 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 					const collection = await this.memoryReadingOperation();
 					if (!this.isMemoryInfoEmpty(collection)) {
 						const updated = this.updateMemoryInfo(collection);
-						console.debug(
+						console.log(
 							`[collection-manager] [${this.type()}] updating collection`,
 							newCount,
 							collection?.length,
 							updated?.length,
+							updated?.length > 0 ? updated[0] : null,
 						);
 						this.collection$$.next(updated);
 					}
 				});
 			this.collection$$.pipe(filter((collection) => !!collection?.length)).subscribe(async (collection) => {
-				console.debug(
-					`[collection-manager] [${this.type()}] updating collection in db`,
-					collection?.length,
-					collection,
-				);
+				console.log(`[collection-manager] [${this.type()}] updating collection in db`, collection?.length);
 				await this.localDbSaveOperation(collection);
 			});
 
 			const collectionFromDb = await this.localDbRetrieveOperation();
 			if (collectionFromDb?.length) {
-				console.debug(
-					`[collection-manager] [${this.type()}] init collection from db`,
-					collectionFromDb.length,
-					collectionFromDb,
-				);
+				console.log(`[collection-manager] [${this.type()}] init collection from db`, collectionFromDb.length);
 				this.collection$$.next(collectionFromDb);
 			}
 			await this.postInit();
