@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.13',
+		version: '13.2.15',
 		force: false,
 		sections: [
 			// {
@@ -62,22 +62,6 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Card stats for meta decks should now (finally) be fixed! Sorry again for the inconvenience.`,
 							},
-							{
-								type: 'bug',
-								text: `Fix the oracle for Fizzle's Snapshot (the cards were not flagged at their correct place in the opponent's hand).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Identity Theft would create two copies of each card in the opponent's deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Loaner Decks were not properly detected.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's Jade Golem counter could not be turned off.`,
-							},
 						],
 					},
 				],
@@ -97,6 +81,22 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix some issues with the Attack counter (replacing weapons, Charge minions).`,
 							},
+							{
+								type: 'bug',
+								text: `Fix the oracle for Fizzle's Snapshot (the cards were not flagged at their correct place in the opponent's hand).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Identity Theft would create two copies of each card in the opponent's deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Loaner Decks were not properly detected.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the opponent's Jade Golem counter could not be turned off.`,
+							},
 						],
 					},
 					{
@@ -105,6 +105,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where some secrets could trigger infinitely.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with minions spawned from hand. I had hoped that I could integrate the in-combat buffs to properly guess the actual stats of the minion in hand, but it turns out that it isn't possible without also requiring a lot of maintenance. So sims where minions are summoned from hand will now be a bit less accurate.`,
 							},
 						],
 					},
