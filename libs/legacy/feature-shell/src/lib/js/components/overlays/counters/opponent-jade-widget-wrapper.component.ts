@@ -33,7 +33,7 @@ export class OpponentJadeWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'jadeGolem';
-		this.prefExtractor = (prefs) => prefs.opponentJadeGolemCounterCounter;
+		this.prefExtractor = (prefs) => prefs.opponentJadeGolemCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck.jadeGolemSize > 0 ||
 			state.opponentDeck?.hasRelevantCard(
