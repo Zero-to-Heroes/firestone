@@ -74,6 +74,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where Loaner Decks were not properly detected.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the opponent's Jade Golem counter could not be turned off.`,
+							},
 						],
 					},
 				],
