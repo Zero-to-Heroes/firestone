@@ -92,6 +92,18 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue where minions from a higher tavern tier could still be summoned during combat.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Lighter Fighter would still do 5 damage.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Black Magic Soulstone.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the first attacker would not be properly recomputed after Tamsin's hero power.`,
+							},
 						],
 					},
 				],
