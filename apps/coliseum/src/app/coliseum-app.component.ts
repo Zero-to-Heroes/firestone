@@ -6,6 +6,7 @@ import { ReplayLocation } from '@firestone/replay/coliseum';
 import { ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { debugBgsSimulation } from './debug-sim';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 const REPLAY_API = 'https://xml.firestoneapp.com/';
@@ -52,8 +53,10 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	async ngAfterViewInit() {
 		console.log('replay loader ngAfterViewInit');
 		const reviewId = this.getSearchParam('reviewId');
-		const bgsSimulation = this.getSearchParam('bgsSimulation');
+		const bgsSimulationInput = this.getSearchParam('bgsSimulation');
 		const bgsSimulationId = this.getSearchParam('bgsSimulationId');
+		const bgsSimulation = bgsSimulationInput === 'debug' ? debugBgsSimulation : bgsSimulationInput;
+		console.debug('bgsSimulation', bgsSimulation);
 		const initialTurn = this.getSearchParam('turn');
 		const initialAction = this.getSearchParam('action');
 
