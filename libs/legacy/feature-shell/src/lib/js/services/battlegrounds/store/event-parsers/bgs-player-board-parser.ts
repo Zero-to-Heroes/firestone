@@ -90,7 +90,11 @@ export class BgsPlayerBoardParser implements EventParser {
 		const battleInfo: BgsBattleInfo = {
 			playerBoard: bgsPlayer,
 			opponentBoard: bgsOpponent,
-			options: null,
+			options: {
+				maxAcceptableDuration: 5000,
+				numberOfSimulations: 5000,
+				skipInfoLogs: false,
+			},
 			gameState: {
 				currentTurn: currentState.currentGame.currentTurn,
 				validTribes: currentState.currentGame.availableRaces,
