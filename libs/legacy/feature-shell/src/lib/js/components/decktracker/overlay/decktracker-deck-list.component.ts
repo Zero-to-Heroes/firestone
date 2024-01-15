@@ -54,6 +54,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[showGlobalEffectsZone]="showGlobalEffectsZone"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone"
+					[showBoardCardsInSeparateZone]="showBoardCardsInSeparateZone"
 					[showStatsChange]="showStatsChange"
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
 					[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
@@ -106,6 +107,7 @@ export class DeckTrackerDeckListComponent
 	@Input() showGlobalEffectsZone: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() showGeneratedCardsInSeparateZone: boolean;
+	@Input() showBoardCardsInSeparateZone: boolean;
 	@Input() showStatsChange: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() cardsGoToBottom: boolean;

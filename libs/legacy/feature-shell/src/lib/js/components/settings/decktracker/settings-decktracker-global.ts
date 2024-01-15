@@ -60,6 +60,11 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.decktracker.global.show-matchup-winrate-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowBoardCardsSeparateZone"
+						[label]="'settings.decktracker.global.show-board-in-separate-zone' | owTranslate"
+						[tooltip]="'settings.decktracker.global.show-board-in-separate-zone-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="overlayShowGiftedCardsInSeparateLine"
 						[label]="'settings.decktracker.global.show-gifts-separately' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-gifts-separately-tooltip' | owTranslate"

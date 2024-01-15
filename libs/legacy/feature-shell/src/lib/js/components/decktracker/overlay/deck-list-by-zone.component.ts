@@ -79,6 +79,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showGeneratedCardsInSeparateZone$$.next(value);
 	}
 
+	@Input() set showBoardCardsInSeparateZone(value: boolean) {
+		this.showBoardCardsInSeparateZone$$.next(value);
+	}
+
 	@Input() set deckState(value: DeckState) {
 		this.deckState$$.next(value);
 	}
@@ -98,6 +102,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showGeneratedCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
+	private showBoardCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
@@ -123,6 +128,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showBottomCardsSeparately$$,
 			this.showTopCardsSeparately$$,
 			this.showGeneratedCardsInSeparateZone$$,
+			this.showBoardCardsInSeparateZone$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
 			debounceTime(200),
@@ -136,6 +142,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					showBottomCardsSeparately,
 					showTopCardsSeparately,
 					showGeneratedCardsInSeparateZone,
+					showBoardCardsInSeparateZone,
 				]) =>
 					this.buildZones(
 						showGlobalEffectsZone,
@@ -144,6 +151,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showBottomCardsSeparately,
 						showTopCardsSeparately,
 						showGeneratedCardsInSeparateZone,
+						showBoardCardsInSeparateZone,
 						deckState,
 					),
 			),
@@ -159,6 +167,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showBottomCardsSeparately: boolean,
 		showTopCardsSeparately: boolean,
 		showGeneratedCardsInSeparateZone: boolean,
+		showBoardCardsInSeparateZone: boolean,
 		deckState: DeckState,
 	): readonly DeckZone[] {
 		if (!deckState) {
@@ -166,6 +175,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		}
 		const zones = [];
 
+		// Global effects
 		if (showGlobalEffectsZone && deckState.globalEffects.length > 0) {
 			zones.push(
 				this.buildZone(
@@ -179,6 +189,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			);
 		}
 
+		// Deck
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
 		if (showTopCardsSeparately && deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
@@ -205,7 +216,6 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			sortingFunction: null,
 			order: 0,
 		});
-
 		zones.push(
 			Object.assign(
 				this.buildZone(
@@ -222,6 +232,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			),
 		);
 
+		// Hand
 		zones.push(
 			this.buildZone(
 				deckState.hand,
@@ -235,8 +246,24 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			),
 		);
 
-		// If there are no dynamic zones, we use the standard "other" zone
-		// if (deckState.dynamicZones.length === 0) {
+		// Board
+		if (showBoardCardsInSeparateZone) {
+			const boardZone = [...deckState.board];
+			zones.push(
+				this.buildZone(
+					boardZone,
+					null,
+					'board',
+					this.i18n.translateString('decktracker.zones.board'),
+					sortCardsByManaCostInOtherZone
+						? (a, b) => a.manaCost - b.manaCost
+						: (a, b) => this.sortByIcon(a, b),
+					null,
+				),
+			);
+		}
+
+		// Other
 		const otherZone = [
 			...deckState.otherZone
 				// Frizz creates PLAY entities that don't have any information
@@ -248,7 +275,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
 				.filter((c) => !!c.cardId?.length)
 				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
-			...deckState.board,
+			...(showBoardCardsInSeparateZone ? [] : deckState.board),
 		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length : true));
 		zones.push(
 			this.buildZone(
@@ -280,7 +307,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					.filter(
 						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',
 					),
-				...deckState.board,
+				...(showBoardCardsInSeparateZone ? [] : deckState.board),
 			].filter((c) => !!c.creatorCardId?.length);
 			zones.push(
 				this.buildZone(
