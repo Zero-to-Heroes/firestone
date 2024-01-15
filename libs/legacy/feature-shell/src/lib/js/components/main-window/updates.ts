@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.17',
+		version: '13.2.20',
 		force: false,
 		sections: [
 			// {
@@ -50,17 +50,12 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Reconnects should be handled more gracefully now. It is still a tricky subject, so let me know if you experience bugs after reconnecting to your game.`,
+								type: 'feature',
+								text: `Add an option to show the generated cards in a separate section (called "Other (gifts)") in the deck tracker.`,
 							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
 							{
-								type: 'bug',
-								text: `Card stats for meta decks should now (finally) be fixed! Sorry again for the inconvenience.`,
+								type: 'feature',
+								text: `Add an option to show the cards on board in a separate section in the tracker.`,
 							},
 						],
 					},
@@ -75,27 +70,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where loaner decks would not be detected.`,
+								text: `Fix an issue where weapons were missing a gift icon.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix some issues with the Attack counter (replacing weapons, Charge minions).`,
+								type: 'content',
+								text: `Mousing over Imp King Rafaam in the tracker now shows the Imps that could be resurrected as related cards.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix the oracle for Fizzle's Snapshot (the cards were not flagged at their correct place in the opponent's hand).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Identity Theft would create two copies of each card in the opponent's deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Loaner Decks were not properly detected.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's Jade Golem counter could not be turned off.`,
+								type: 'ui',
+								text: `Remove the golden border from cards in hand in the tracker.`,
 							},
 						],
 					},
@@ -104,60 +87,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue where some secrets could trigger infinitely.`,
+								text: `Fix a sim issue when multiple secrets could trigger during the same attack.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue with minions spawned from hand. I had hoped that I could integrate the in-combat buffs to properly guess the actual stats of the minion in hand, but it turns out that it isn't possible without also requiring a lot of maintenance. So sims where minions are summoned from hand will now be a bit less accurate.`,
-							},
-							{
-								type: 'feature',
-								text: `Show cards in hand and secrets in BG simulation replays.`,
-							},
-							{
-								type: 'feature',
-								text: `Show minion overlay icons (deathrattle, trigger, poisonous, etc.) on BG simulation replays.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with the location of spawned minions.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with buffing the minions in the opponent's hand.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Reckoning.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Audacious Anchor start of combat behavior.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where minions from a higher tavern tier could still be summoned during combat.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Lighter Fighter would still do 5 damage.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Black Magic Soulstone.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where the first attacker would not be properly recomputed after Tamsin's hero power.`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'misc',
-								text: `Add clarifications on the tooltips as what the Wins Profile bars represent.`,
+								text: `Fix a ew sim issues where tokens would not always spawn at the right place.`,
 							},
 						],
 					},
