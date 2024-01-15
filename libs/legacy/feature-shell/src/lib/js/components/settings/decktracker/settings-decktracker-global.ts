@@ -65,6 +65,11 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.decktracker.global.show-gifts-separately-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowGiftedCardsSeparateZone"
+						[label]="'settings.decktracker.global.show-gifts-in-separate-zone' | owTranslate"
+						[tooltip]="'settings.decktracker.global.show-gifts-in-separate-zone-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="overlayResetDeckPositionAfterTrade"
 						[label]="'settings.decktracker.global.reset-deck-position-after-trade' | owTranslate"
 						[tooltip]="'settings.decktracker.global.reset-deck-position-after-trade-tooltip' | owTranslate"

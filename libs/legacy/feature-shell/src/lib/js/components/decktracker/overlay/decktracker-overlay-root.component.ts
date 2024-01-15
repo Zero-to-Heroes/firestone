@@ -74,6 +74,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								[showUpdatedCost]="showUpdatedCost$ | async"
 								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
+								[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone$ | async"
 								[showStatsChange]="showStatsChange$ | async"
 								[cardsGoToBottom]="cardsGoToBottom$ | async"
 								[darkenUsedCards]="darkenUsedCards$ | async"
@@ -131,6 +132,7 @@ export class DeckTrackerOverlayRootComponent
 	showUnknownCards$: Observable<boolean>;
 	showUpdatedCost$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
+	showGeneratedCardsInSeparateZone$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;
 	showGlobalEffectsZone$: Observable<boolean>;
@@ -308,6 +310,9 @@ export class DeckTrackerOverlayRootComponent
 		this.showUpdatedCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowCostReduction);
 		this.showGiftsSeparately$ = this.listenForBasicPref$(
 			(preferences) => preferences.overlayShowGiftedCardsInSeparateLine,
+		);
+		this.showGeneratedCardsInSeparateZone$ = this.listenForBasicPref$(
+			(preferences) => preferences.overlayShowGiftedCardsSeparateZone,
 		);
 		this.showStatsChange$ = this.listenForBasicPref$((preferences) => preferences.overlayShowStatsChange);
 		this.cardsGoToBottom$ = this.listenForBasicPref$((preferences) => this.cardsGoToBottomExtractor(preferences));

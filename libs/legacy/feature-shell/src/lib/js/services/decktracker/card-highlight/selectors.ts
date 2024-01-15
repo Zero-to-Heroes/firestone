@@ -29,7 +29,7 @@ const inZoneName =
 		input.zone?.toLowerCase() === zone?.toLowerCase();
 export const inDeck = inZoneName('deck');
 export const inHand = inZoneName('hand');
-export const inOther = inZoneName('other');
+export const inOther = inZoneName('other') || inZoneName('other-generated');
 export const inGraveyard = inZoneName('graveyard');
 export const discarded = inZoneName('discard');
 export const inPlay = (input: SelectorInput): boolean =>

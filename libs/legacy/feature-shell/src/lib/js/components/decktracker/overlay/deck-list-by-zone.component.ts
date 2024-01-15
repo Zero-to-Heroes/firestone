@@ -234,6 +234,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				'in-hand',
 			),
 		);
+
 		// If there are no dynamic zones, we use the standard "other" zone
 		// if (deckState.dynamicZones.length === 0) {
 		const otherZone = [
@@ -248,7 +249,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				.filter((c) => !!c.cardId?.length)
 				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
 			...deckState.board,
-		];
+		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length : true));
 		zones.push(
 			this.buildZone(
 				otherZone,
@@ -271,6 +272,31 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					!(hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
 			),
 		);
+
+		if (showGeneratedCardsInSeparateZone) {
+			const otherGeneratedZone = [
+				...deckState.otherZone
+					.filter((c) => !!c.cardId?.length)
+					.filter(
+						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',
+					),
+				...deckState.board,
+			].filter((c) => !!c.creatorCardId?.length);
+			zones.push(
+				this.buildZone(
+					otherGeneratedZone,
+					null,
+					'other-generated',
+					this.i18n.translateString('decktracker.zones.other-generated'),
+					sortCardsByManaCostInOtherZone
+						? (a, b) => a.manaCost - b.manaCost
+						: (a, b) => this.sortByIcon(a, b),
+					null,
+					(a: VisualDeckCard) => (!a.temporaryCard || a.zone !== 'SETASIDE') && !a.createdByJoust,
+				),
+			);
+		}
+
 		// }
 		// Otherwise, we add all the dynamic zones
 		// deckState.dynamicZones.forEach((zone) => {
