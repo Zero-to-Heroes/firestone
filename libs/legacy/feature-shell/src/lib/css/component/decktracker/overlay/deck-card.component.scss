@@ -91,18 +91,18 @@
 		}
 	}
 
-	&.in-hand {
-		.gradiant {
-			border: 3px solid;
-			border-image: linear-gradient(45deg, rgba(159, 182, 215, 0), #ffb948) 1;
-		}
-		.mana-cost.mana-cost {
-			background: #939393;
-			span {
-				color: #101530;
-			}
-		}
-	}
+	// &.in-hand {
+	// 	.gradiant {
+	// 		border: 3px solid;
+	// 		border-image: linear-gradient(45deg, rgba(159, 182, 215, 0), #ffb948) 1;
+	// 	}
+	// 	.mana-cost.mana-cost {
+	// 		background: #939393;
+	// 		span {
+	// 			color: #101530;
+	// 		}
+	// 	}
+	// }
 
 	&.color-class-cards {
 		.gradiant {
@@ -248,8 +248,7 @@
 		z-index: 1;
 	}
 
-	&.color-mana-cost,
-	&.in-hand.color-mana-cost {
+	&.color-mana-cost {
 		.mana-cost {
 			background: #bfc1c4;
 			span {
