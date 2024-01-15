@@ -1,3 +1,4 @@
+import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -20,7 +21,11 @@ export class BgsBattleResultParser implements EventParser {
 		return state && state.currentGame && gameEvent.type === 'BgsBattleResultEvent';
 	}
 
-	public async parse(currentState: BattlegroundsState, event: BgsBattleResultEvent): Promise<BattlegroundsState> {
+	public async parse(
+		currentState: BattlegroundsState,
+		event: BgsBattleResultEvent,
+		gameState: GameState,
+	): Promise<BattlegroundsState> {
 		if (!currentState.currentGame.getMainPlayer()) {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 				console.warn(
@@ -51,7 +56,11 @@ export class BgsBattleResultParser implements EventParser {
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.update({
 			faceOffs: newFaceOffs,
 		});
-		newFaceOff.checkIntegrity(gameAfterFirstFaceOff, this.bugService);
+		newFaceOff.checkIntegrity(
+			gameAfterFirstFaceOff,
+			this.bugService,
+			gameState.reconnectOngoing || gameState.hasReconnected,
+		);
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,
 			lastOpponentPlayerId: event.opponentPlayerId,

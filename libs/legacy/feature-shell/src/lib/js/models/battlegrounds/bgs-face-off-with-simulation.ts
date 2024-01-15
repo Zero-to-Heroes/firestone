@@ -30,15 +30,15 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 		});
 	}
 
-	public checkIntegrity(gameState: BgsGame, bugService: BugReportService) {
+	public checkIntegrity(gameState: BgsGame, bugService: BugReportService, hasReconnected: boolean) {
 		if (this.battleResult?.won === 0 && this.result === 'won') {
-			this.report('victory', gameState, bugService);
+			this.report('victory', gameState, bugService, hasReconnected);
 		}
 		if (this.battleResult?.lost === 0 && this.result === 'lost') {
-			this.report('loss', gameState, bugService);
+			this.report('loss', gameState, bugService, hasReconnected);
 		}
 		if (this.battleResult?.tied === 0 && this.result === 'tied') {
-			this.report('tie', gameState, bugService);
+			this.report('tie', gameState, bugService, hasReconnected);
 		}
 
 		if (this.playerCardId === 'TB_BaconShop_HERO_PH' || this.opponentCardId === 'TB_BaconShop_HERO_PH') {
@@ -51,8 +51,12 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 		return !allEntities?.length ? 1 : Math.max(...allEntities.map((e) => e.entityId)) + 1;
 	}
 
-	private async report(status: string, game: BgsGame, bugService: BugReportService) {
+	private async report(status: string, game: BgsGame, bugService: BugReportService, hasReconnected: boolean) {
 		// const user = await this.ow.getCurrentUser();
+		if (hasReconnected) {
+			console.log('[bgs-simulation] Reconnected, not reporting', status, game.currentTurn);
+			return;
+		}
 		const isSupported = isSupportedScenario(this.battleInfo).isSupported;
 		if (isSupported) {
 			console.warn(
