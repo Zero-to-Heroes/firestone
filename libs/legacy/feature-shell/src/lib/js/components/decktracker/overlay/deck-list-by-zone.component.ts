@@ -248,7 +248,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		// Board
 		if (showBoardCardsInSeparateZone) {
-			const boardZone = [...deckState.board];
+			const boardZone = [...deckState.board, deckState.weapon].filter((c) => !!c);
 			zones.push(
 				this.buildZone(
 					boardZone,
@@ -264,8 +264,16 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		}
 
 		// Other
+		const otherZoneFromDeck = deckState.otherZone ?? [];
+		// We don't want to show the weapons equipped directly by hero powers
+		// Actually we do, as the origin of the weapon doesn't really change how it is interacted with
+		// .filter(
+		// 	(c) =>
+		// 		this.allCards.getCard(c.cardId)?.type?.toUpperCase() !== CardType[CardType.WEAPON] ||
+		// 		this.allCards.getCard(c.creatorCardId)?.type?.toUpperCase() !== CardType[CardType.HERO_POWER],
+		// );
 		const otherZone = [
-			...deckState.otherZone
+			...otherZoneFromDeck
 				// Frizz creates PLAY entities that don't have any information
 				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] CardID=
 				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ZONE value=SETASIDE
@@ -302,7 +310,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		if (showGeneratedCardsInSeparateZone) {
 			const otherGeneratedZone = [
-				...deckState.otherZone
+				...otherZoneFromDeck
 					.filter((c) => !!c.cardId?.length)
 					.filter(
 						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',

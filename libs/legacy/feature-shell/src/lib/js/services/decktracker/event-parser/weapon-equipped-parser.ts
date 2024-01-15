@@ -17,6 +17,7 @@ export class WeaponEquippedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const dbCard = this.cards.getCard(cardId);
+		// const creator = gameEvent.additionalData.creatorId;
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -26,6 +27,7 @@ export class WeaponEquippedParser implements EventParser {
 			zone: 'PLAY',
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
+			creatorCardId: gameEvent.additionalData.creatorCardId,
 		} as DeckCard);
 		const newPlayerDeck = deck.update({
 			weapon: card,
