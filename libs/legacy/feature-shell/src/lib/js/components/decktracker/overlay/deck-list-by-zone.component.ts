@@ -1,7 +1,16 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	OnDestroy,
+} from '@angular/core';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil, tap } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -11,7 +20,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	styleUrls: ['../../../../css/component/decktracker/overlay/deck-list-by-zone.component.scss'],
 	template: `
 		<ul class="deck-list">
-			<li *ngFor="let zone of zones; trackBy: trackZone">
+			<li *ngFor="let zone of zones$ | async; trackBy: trackZone">
 				<deck-zone
 					[zone]="zone"
 					[tooltipPosition]="_tooltipPosition"
@@ -21,9 +30,9 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[showStatsChange]="showStatsChange"
-					[showTopCardsSeparately]="_showTopCardsSeparately"
-					[showBottomCardsSeparately]="_showBottomCardsSeparately"
-					[darkenUsedCards]="_darkenUsedCards"
+					[showTopCardsSeparately]="showTopCardsSeparately$ | async"
+					[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
+					[darkenUsedCards]="darkenUsedCards"
 					[showTotalCardsInZone]="showTotalCardsInZone"
 					[side]="side"
 				></deck-zone>
@@ -32,7 +41,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckListByZoneComponent implements OnDestroy {
+export class DeckListByZoneComponent extends AbstractSubscriptionComponent implements OnDestroy, AfterContentInit {
+	zones$: Observable<readonly DeckZone[]>;
+	showTopCardsSeparately$: Observable<boolean>;
+	showBottomCardsSeparately$: Observable<boolean>;
+
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
 	@Input() showUpdatedCost: boolean;
@@ -43,91 +56,120 @@ export class DeckListByZoneComponent implements OnDestroy {
 	@Input() side: 'player' | 'opponent' | 'duels';
 
 	@Input() set showGlobalEffectsZone(value: boolean) {
-		this._showGlobalEffectsZone = value;
-		this.updateInfo();
+		this.showGlobalEffectsZone$$.next(value);
 	}
 
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
-		if (value === this._hideGeneratedCardsInOtherZone) {
-			return;
-		}
-		this._hideGeneratedCardsInOtherZone = value;
-		this.updateInfo();
+		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
 
 	@Input() set sortCardsByManaCostInOtherZone(value: boolean) {
-		if (value === this._sortCardsByManaCostInOtherZone) {
-			return;
-		}
-		this._sortCardsByManaCostInOtherZone = value;
-		this.updateInfo();
+		this.sortCardsByManaCostInOtherZone$$.next(value);
 	}
 
 	@Input() set showBottomCardsSeparately(value: boolean) {
-		if (value === this._showBottomCardsSeparately) {
-			return;
-		}
-		this._showBottomCardsSeparately = value;
-		this.updateInfo();
+		this.showBottomCardsSeparately$$.next(value);
 	}
 
 	@Input() set showTopCardsSeparately(value: boolean) {
-		if (value === this._showTopCardsSeparately) {
-			return;
-		}
-		this._showTopCardsSeparately = value;
-		this.updateInfo();
+		this.showTopCardsSeparately$$.next(value);
+	}
+
+	@Input() set showGeneratedCardsInSeparateZone(value: boolean) {
+		this.showGeneratedCardsInSeparateZone$$.next(value);
+	}
+
+	@Input() set deckState(value: DeckState) {
+		this.deckState$$.next(value);
 	}
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 	}
 
-	@Input() set deckState(value: DeckState) {
-		if (value === this._deckState) {
-			return;
-		}
-		this._deckState = value;
-		this.updateInfo();
-	}
+	@Input() darkenUsedCards: boolean;
 
-	@Input() set darkenUsedCards(value: boolean) {
-		this._darkenUsedCards = value;
-	}
-
-	zones: readonly DeckZone[];
 	_tooltipPosition: CardTooltipPositionType;
-	_showBottomCardsSeparately = true;
-	_showTopCardsSeparately = true;
 	_darkenUsedCards = true;
 
-	private _showGlobalEffectsZone: boolean;
-	private _hideGeneratedCardsInOtherZone: boolean;
-	private _sortCardsByManaCostInOtherZone: boolean;
-	private _deckState: DeckState;
+	private showGlobalEffectsZone$$ = new BehaviorSubject<boolean>(false);
+	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
+	private sortCardsByManaCostInOtherZone$$ = new BehaviorSubject<boolean>(false);
+	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showGeneratedCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
+	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
-	constructor(private readonly i18n: LocalizationFacadeService, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {
+		super(cdr);
+	}
 
 	trackZone(index, zone: DeckZone) {
 		return zone.id;
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this._deckState = null;
-		this.zones = null;
+	ngAfterContentInit(): void {
+		this.showTopCardsSeparately$ = this.showTopCardsSeparately$$.asObservable();
+		this.showBottomCardsSeparately$ = this.showBottomCardsSeparately$$.asObservable();
+		this.zones$ = combineLatest([
+			this.deckState$$,
+			this.showGlobalEffectsZone$$,
+			this.hideGeneratedCardsInOtherZone$$,
+			this.sortCardsByManaCostInOtherZone$$,
+			this.showBottomCardsSeparately$$,
+			this.showTopCardsSeparately$$,
+			this.showGeneratedCardsInSeparateZone$$,
+		]).pipe(
+			filter(([deckState, _]) => !!deckState),
+			debounceTime(200),
+			startWith([]),
+			this.mapData(
+				([
+					deckState,
+					showGlobalEffectsZone,
+					hideGeneratedCardsInOtherZone,
+					sortCardsByManaCostInOtherZone,
+					showBottomCardsSeparately,
+					showTopCardsSeparately,
+					showGeneratedCardsInSeparateZone,
+				]) =>
+					this.buildZones(
+						showGlobalEffectsZone,
+						hideGeneratedCardsInOtherZone,
+						sortCardsByManaCostInOtherZone,
+						showBottomCardsSeparately,
+						showTopCardsSeparately,
+						showGeneratedCardsInSeparateZone,
+						deckState,
+					),
+			),
+			tap((zones) => console.debug('[deck-list-by-zone] zones', zones)),
+			takeUntil(this.destroyed$),
+		);
 	}
 
-	private updateInfo() {
-		if (!this._deckState) {
+	private buildZones(
+		showGlobalEffectsZone: boolean,
+		hideGeneratedCardsInOtherZone: boolean,
+		sortCardsByManaCostInOtherZone: boolean,
+		showBottomCardsSeparately: boolean,
+		showTopCardsSeparately: boolean,
+		showGeneratedCardsInSeparateZone: boolean,
+		deckState: DeckState,
+	): readonly DeckZone[] {
+		if (!deckState) {
 			return;
 		}
 		const zones = [];
 
-		if (this._showGlobalEffectsZone && this._deckState.globalEffects.length > 0) {
+		if (showGlobalEffectsZone && deckState.globalEffects.length > 0) {
 			zones.push(
 				this.buildZone(
-					this._deckState.globalEffects,
+					deckState.globalEffects,
 					null,
 					'global-effects',
 					this.i18n.translateString('decktracker.zones.global-effects'),
@@ -138,24 +180,21 @@ export class DeckListByZoneComponent implements OnDestroy {
 		}
 
 		const deckSections: InternalDeckZoneSection[] = [];
-		let cardsInDeckZone = this._deckState.deck;
-		if (this._showTopCardsSeparately && this._deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
+		let cardsInDeckZone = deckState.deck;
+		if (showTopCardsSeparately && deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.top-of-deck'),
 				sortingFunction: (a, b) => a.positionFromTop - b.positionFromTop,
-				cards: this._deckState.deck.filter((c) => c.positionFromTop != undefined),
+				cards: deckState.deck.filter((c) => c.positionFromTop != undefined),
 				order: -1,
 			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromTop == undefined);
 		}
-		if (
-			this._showBottomCardsSeparately &&
-			this._deckState.deck.filter((c) => c.positionFromBottom != undefined).length
-		) {
+		if (showBottomCardsSeparately && deckState.deck.filter((c) => c.positionFromBottom != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.bottom-of-deck'),
 				sortingFunction: (a, b) => a.positionFromBottom - b.positionFromBottom,
-				cards: this._deckState.deck.filter((c) => c.positionFromBottom != undefined),
+				cards: deckState.deck.filter((c) => c.positionFromBottom != undefined),
 				order: 1,
 			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
@@ -175,30 +214,30 @@ export class DeckListByZoneComponent implements OnDestroy {
 					'deck',
 					this.i18n.translateString('decktracker.zones.in-deck'),
 					null,
-					this._deckState.cardsLeftInDeck,
+					deckState.cardsLeftInDeck,
 				),
 				{
-					showWarning: this._deckState.showDecklistWarning,
+					showWarning: deckState.showDecklistWarning,
 				} as DeckZone,
 			),
 		);
 
 		zones.push(
 			this.buildZone(
-				this._deckState.hand,
+				deckState.hand,
 				null,
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
 				null,
-				this._deckState.hand.length,
+				deckState.hand.length,
 				null,
 				'in-hand',
 			),
 		);
 		// If there are no dynamic zones, we use the standard "other" zone
-		// if (this._deckState.dynamicZones.length === 0) {
+		// if (deckState.dynamicZones.length === 0) {
 		const otherZone = [
-			...this._deckState.otherZone
+			...deckState.otherZone
 				// Frizz creates PLAY entities that don't have any information
 				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] CardID=
 				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ZONE value=SETASIDE
@@ -208,7 +247,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 				// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
 				.filter((c) => !!c.cardId?.length)
 				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
-			...this._deckState.board,
+			...deckState.board,
 		];
 		zones.push(
 			this.buildZone(
@@ -216,9 +255,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 				null,
 				'other',
 				this.i18n.translateString('decktracker.zones.other'),
-				this._sortCardsByManaCostInOtherZone
-					? (a, b) => a.manaCost - b.manaCost
-					: (a, b) => this.sortByIcon(a, b),
+				sortCardsByManaCostInOtherZone ? (a, b) => a.manaCost - b.manaCost : (a, b) => this.sortByIcon(a, b),
 				null,
 				// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 				// not show them in the zones
@@ -230,16 +267,16 @@ export class DeckListByZoneComponent implements OnDestroy {
 					// See comment on temporary cards in grouped-deck-list.component.ts
 					(!a.temporaryCard || a.zone !== 'SETASIDE') &&
 					!a.createdByJoust &&
-					!(this._hideGeneratedCardsInOtherZone && a.creatorCardId) &&
-					!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
+					!(hideGeneratedCardsInOtherZone && a.creatorCardId) &&
+					!(hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
 			),
 		);
 		// }
 		// Otherwise, we add all the dynamic zones
-		// this._deckState.dynamicZones.forEach((zone) => {
+		// deckState.dynamicZones.forEach((zone) => {
 		// 	zones.push(this.buildDynamicZone(zone, null));
 		// });
-		this.zones = zones as readonly DeckZone[];
+		return zones;
 	}
 
 	// private buildDynamicZone(
