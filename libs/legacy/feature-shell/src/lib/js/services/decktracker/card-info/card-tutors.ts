@@ -184,6 +184,7 @@ export const tutors = [
 	CardIds.SymphonyOfSins_MovementOfPrideToken,
 	CardIds.TaelanFordringCore,
 	CardIds.TakeToTheSkies_WW_816,
+	CardIds.TenGallonHat_WW_811,
 	CardIds.TentacledMenace,
 	CardIds.TheCurator_KAR_061,
 	CardIds.ThePurator,
