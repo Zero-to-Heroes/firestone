@@ -91,7 +91,19 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix a ew sim issues where tokens would not always spawn at the right place.`,
+								text: `Fix a few sim issues where tokens would not always spawn at the right place.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix another sim issue instance where tokens spawned might not attack in the right order.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where cards created by Primalfin Lookout in hand might not be murlocs.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the first minion to attack after Illidan's Hero Power trigger might not attack again, even if still alive.`,
 							},
 						],
 					},
