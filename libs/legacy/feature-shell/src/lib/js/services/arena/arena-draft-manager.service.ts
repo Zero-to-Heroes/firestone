@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DraftPick } from '@firestone-hs/arena-draft-pick';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { IArenaDraftManagerService } from '@firestone/arena/common';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
@@ -6,13 +7,16 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
+	ApiRunner,
 	AppInjector,
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, pairwise, withLatestFrom } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
 import { SceneService } from '../game/scene.service';
+
+const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
 
 @Injectable()
 export class ArenaDraftManagerService
@@ -29,6 +33,7 @@ export class ArenaDraftManagerService
 	private memory: MemoryInspectionService;
 	private prefs: PreferencesService;
 	private allCards: CardsFacadeService;
+	private api: ApiRunner;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
 
@@ -58,6 +63,7 @@ export class ArenaDraftManagerService
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.allCards = AppInjector.get(CardsFacadeService);
+		this.api = AppInjector.get(ApiRunner);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
 		this.currentStep$$.onFirstSubscribe(async () => {
@@ -127,6 +133,64 @@ export class ArenaDraftManagerService
 						}
 					}
 				});
+
+			this.currentDeck$$
+				.pipe(
+					distinctUntilChanged((a, b) => a?.DeckList?.length === b?.DeckList?.length),
+					pairwise(),
+					withLatestFrom(this.cardOptions$$),
+				)
+				.subscribe(([[previousDeck, currentDeck], options]) => {
+					if (previousDeck.Id !== currentDeck.Id) {
+						console.log('[arena-draft-manager] new deck, not sending pick', previousDeck, currentDeck);
+						return;
+					}
+
+					const previousCards: readonly string[] =
+						previousDeck?.DeckList?.map((card) => card as string) ?? [];
+					// For each card in previousCards, remove one copy of it from the currentCards
+					// The remaining cards in currentCards are the ones that were added
+					// Be careful, as there can be multiple copies of cards in currentCards, and nly one
+					// copy in previousCards
+					const addedCards: string[] = currentDeck?.DeckList?.map((card) => card as string) ?? [];
+					for (const card of previousCards) {
+						const index = addedCards.indexOf(card);
+						if (index !== -1) {
+							addedCards.splice(index, 1);
+						}
+					}
+
+					if (addedCards.length !== 1) {
+						console.warn(
+							'[arena-draft-manager] invalid added cards',
+							addedCards,
+							previousDeck,
+							currentDeck,
+							options,
+						);
+						return;
+					}
+
+					const pick: DraftPick = {
+						runId: currentDeck.Id,
+						pickNumber: currentDeck.DeckList.length + 1,
+						options: options,
+						pick: addedCards[0],
+					};
+					console.debug(
+						'[arena-draft-manager] updating card options',
+						pick,
+						previousDeck,
+						currentDeck,
+						options,
+					);
+					this.sendDraftPick(pick);
+				});
 		});
+	}
+
+	private async sendDraftPick(pick: DraftPick) {
+		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
+		console.debug('[arena-draft-manager] uploaded draft pick', result);
 	}
 }
