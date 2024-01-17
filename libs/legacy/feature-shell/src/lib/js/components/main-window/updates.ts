@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.20',
+		version: '13.2.22',
 		force: false,
 		sections: [
 			// {
@@ -47,15 +47,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'replays',
 						details: [
 							{
-								type: 'feature',
-								text: `Add an option to show the generated cards in a separate section (called "Other (gifts)") in the deck tracker.`,
-							},
-							{
-								type: 'feature',
-								text: `Add an option to show the cards on board in a separate section in the tracker.`,
+								type: 'bug',
+								text: `Fix an issue where the cards would not appear properly, especially the ones in the player's hand.`,
 							},
 						],
 					},
@@ -66,33 +62,8 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where weapons were missing a gift icon.`,
-							},
-							{
-								type: 'content',
-								text: `Mousing over Imp King Rafaam in the tracker now shows the Imps that could be resurrected as related cards.`,
-							},
-							{
-								type: 'ui',
-								text: `Remove the golden border from cards in hand in the tracker.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue when multiple secrets could trigger during the same attack.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a few sim issues where tokens would not always spawn at the right place.`,
-							},
 							{
 								type: 'bug',
 								text: `Fix another sim issue instance where tokens spawned might not attack in the right order.`,
