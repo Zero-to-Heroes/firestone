@@ -4,7 +4,7 @@ import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { IArenaDraftManagerService } from '@firestone/arena/common';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -12,7 +12,7 @@ import {
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, map, pairwise, withLatestFrom } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, pairwise } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
 import { SceneService } from '../game/scene.service';
 
@@ -36,6 +36,7 @@ export class ArenaDraftManagerService
 	private api: ApiRunner;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
+	private previousCardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
@@ -49,6 +50,7 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = this.mainInstance.currentStep$$;
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
+		this.previousCardOptions$$ = this.mainInstance.previousCardOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
@@ -57,6 +59,7 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.previousCardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
@@ -98,6 +101,7 @@ export class ArenaDraftManagerService
 					this.heroOptions$$.next(changes.ArenaHeroOptions);
 				}
 				if (!!changes.ArenaCardOptions?.length) {
+					this.previousCardOptions$$.next(this.cardOptions$$.getValue());
 					this.cardOptions$$.next(changes.ArenaCardOptions);
 				}
 
@@ -134,14 +138,32 @@ export class ArenaDraftManagerService
 					}
 				});
 
-			this.currentDeck$$
+			combineLatest([this.currentDeck$$, this.cardOptions$$])
 				.pipe(
-					distinctUntilChanged((a, b) => a?.DeckList?.length === b?.DeckList?.length),
+					distinctUntilChanged(
+						([deckA, optionsA], [deckB, optionsB]) =>
+							deckA?.DeckList?.length === deckB?.DeckList?.length || arraysEqual(optionsA, optionsB),
+					),
 					pairwise(),
-					withLatestFrom(this.cardOptions$$),
 				)
-				.subscribe(([[previousDeck, currentDeck], options]) => {
-					if (previousDeck.Id !== currentDeck.Id) {
+				.subscribe(([[previousDeck, previousOptions], [currentDeck, currentOptions]]) => {
+					console.debug(
+						'[arena-draft-manager] considering new options',
+						previousDeck,
+						previousOptions,
+						currentDeck,
+						currentOptions,
+					);
+
+					if (!currentDeck) {
+						console.log(
+							'[arena-draft-manager] no current deck, not sending pick',
+							previousDeck,
+							currentDeck,
+						);
+						return;
+					}
+					if (previousDeck?.Id !== currentDeck.Id) {
 						console.log('[arena-draft-manager] new deck, not sending pick', previousDeck, currentDeck);
 						return;
 					}
@@ -166,14 +188,17 @@ export class ArenaDraftManagerService
 							addedCards,
 							previousDeck,
 							currentDeck,
-							options,
+							previousOptions,
 						);
 						return;
 					}
 
+					// On the first pick, we don't have previous options
+					const pickNumber = currentDeck.DeckList.length;
+					const options = pickNumber === 1 ? currentOptions : previousOptions;
 					const pick: DraftPick = {
 						runId: currentDeck.Id,
-						pickNumber: currentDeck.DeckList.length + 1,
+						pickNumber: pickNumber,
 						options: options,
 						pick: addedCards[0],
 					};
@@ -182,7 +207,8 @@ export class ArenaDraftManagerService
 						pick,
 						previousDeck,
 						currentDeck,
-						options,
+						previousOptions,
+						currentOptions,
 					);
 					this.sendDraftPick(pick);
 				});
@@ -191,6 +217,6 @@ export class ArenaDraftManagerService
 
 	private async sendDraftPick(pick: DraftPick) {
 		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
-		console.debug('[arena-draft-manager] uploaded draft pick', result);
+		console.debug('[arena-draft-manager] uploaded draft pick');
 	}
 }
