@@ -614,6 +614,19 @@ export class OverwolfService {
 		});
 	}
 
+	public setWindowBehindHearthArena(): void {
+		overwolf.windows.setPosition(
+			{
+				relativeTo: {
+					processName: 'HearthArenaCompanion',
+					windowTitle: 'Overlay', // Doesn't work
+				},
+				insertAbove: false,
+			},
+			(info) => console.log('[arena-integration] set behind HearthArena', info),
+		);
+	}
+
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
 		return new Promise<void>((resolve) => {
 			try {

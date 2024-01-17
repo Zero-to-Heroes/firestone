@@ -9,8 +9,10 @@ import {
 } from '@angular/core';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { AdService } from '../../services/ad.service';
 import { ArenaDraftManagerService } from '../../services/arena/arena-draft-manager.service';
 import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -43,6 +45,7 @@ export class ArenaCardSelectionWidgetWrapperComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly arenaDraftManager: ArenaDraftManagerService,
+		private readonly ads: AdService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
@@ -66,6 +69,16 @@ export class ArenaCardSelectionWidgetWrapperComponent
 			}),
 			this.handleReposition(),
 		);
+
+		// TODO: only do this when user is not premium?
+		combineLatest([this.ads.enablePremiumFeatures$$, this.showWidget$])
+			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
+			.subscribe(([premium, showWidget]) => {
+				// Integration with HearthArena
+				if (showWidget && !premium) {
+					this.ow.setWindowBehindHearthArena();
+				}
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
