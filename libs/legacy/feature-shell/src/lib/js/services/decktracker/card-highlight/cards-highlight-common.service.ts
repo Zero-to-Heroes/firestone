@@ -664,6 +664,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DeepwaterEvoker:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.Demonfuse:
+			case CardIds.Demonfuse_DarkFusionEnchantment:
+				return and(side(inputSide), or(inDeck, inHand), demon);
 			case CardIds.DefenseAttorneyNathanos:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DesertNestmatron_WW_826:
@@ -701,6 +704,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), dragon);
 			case CardIds.DragonAffinityTavernBrawl:
 				return and(side(inputSide), dragon);
+			case CardIds.DragonBreeder:
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.DragonbloodTavernBrawl:
 				return and(side(inputSide), dragon);
 			case CardIds.DragonboneRitualTavernBrawl:
@@ -1144,6 +1149,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.NecriumApothecary:
 				return and(side(inputSide), inDeck, minion, deathrattle);
+			case CardIds.NetherBreath_DRG_205:
+				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.NzothGodOfTheDeep:
 				return and(side(inputSide), inGraveyard, minion, (input: SelectorInput) => !!input.card?.races?.length);
 			case CardIds.NzothTheCorruptor:
