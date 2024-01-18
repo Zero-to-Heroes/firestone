@@ -76,6 +76,26 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue where the first minion to attack after Illidan's Hero Power trigger might not attack again, even if still alive.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the first minion to attack would not be recomputed after Teron's Rapid Reanmation trigger.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Scallywag's Sky Pirate token would not attack right away, but wait for enemy reborn to trigger first.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Emergent Flame would never target enemy minions.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Obsidian Ravager would not deal damage to its main target in its pre-attack phase.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where non-golden Withered Spearhide would give 2 Blood Gems`,
+							},
 						],
 					},
 				],
