@@ -662,12 +662,6 @@ export const isSupportedScenario = (
 		isSupported: playerSupport.isSupported && oppSupport.isSupported,
 		reason: playerSupport.reason ?? oppSupport.reason,
 	};
-	if (
-		battleInfo.playerBoard?.player?.heroPowerId === CardIds.Prestidigitation_TB_BaconShop_HP_020 ||
-		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.Prestidigitation_TB_BaconShop_HP_020
-	) {
-		console.log('[bgs-simulation] is supported?', result);
-	}
 	return result;
 };
 
@@ -689,36 +683,12 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'piloted-whirl-o-tron',
 			};
+		} else if (hasStictchedEntity(boardInfo)) {
+			return {
+				isSupported: false,
+				reason: 'stitched',
+			};
 		}
-		// else if (hasMinions(boardInfo, [CardIds.RylakMetalhead_BG26_801, CardIds.RylakMetalhead_BG26_801_G])) {
-		// 	return {
-		// 		isSupported: false,
-		// 		reason: 'rylak',
-		// 	};
-		// }
-		// else if (!isPlayer && hasMinions(boardInfo, [CardIds.Bassgill, CardIds.BassgillBattlegrounds])) {
-		// 	return {
-		// 		isSupported: false,
-		// 		reason: 'bassgill',
-		// 	};
-		// }
-		// else if (hasMinions(boardInfo, [CardIds.ChoralMrrrglr, CardIds.ChoralMrrrglrBattlegrounds])) {
-		// 	return {
-		// 		isSupported: false,
-		// 		reason: 'choral-mrrrglr',
-		// 	};
-		// }
-		// else if (boardInfo?.secrets?.length > 0) {
-		// 	return {
-		// 		isSupported: false,
-		// 		reason: 'secret',
-		// 	};
-		// } else if (hasStreetMagician(boardInfo)) {
-		// 	return {
-		// 		isSupported: false,
-		// 		reason: 'secret',
-		// 	};
-		// }
 		return {
 			isSupported: true,
 		};
@@ -733,6 +703,12 @@ const isSupportedScenarioForPlayer = (
 
 const hasMinions = (boardInfo: BgsBoardInfo, cardIds: readonly CardIds[]) => {
 	return cardIds.some((cardId) => hasMinionOnBoard(boardInfo, cardId));
+};
+
+const hasStictchedEntity = (boardInfo: BgsBoardInfo) => {
+	return boardInfo.board.some((m) =>
+		m.enchantments.some((e) => e.cardId === CardIds.DeathstalkerRexxar_StitchedEnchantment),
+	);
 };
 
 const hasScallywag = (boardInfo: BgsBoardInfo) => {

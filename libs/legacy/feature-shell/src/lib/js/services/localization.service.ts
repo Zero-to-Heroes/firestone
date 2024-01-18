@@ -120,6 +120,12 @@ export class LocalizationService {
 		});
 	}
 
+	public getUnknownManaMinionName(manaCost: number): string {
+		return this.translateString('decktracker.unknown-mana-minion', {
+			manaCost: manaCost,
+		});
+	}
+
 	public getUnknownRaceName(info: string): string {
 		return this.translateString('decktracker.unknown-info', {
 			info: info,

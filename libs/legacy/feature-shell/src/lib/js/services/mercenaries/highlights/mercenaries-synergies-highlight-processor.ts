@@ -584,7 +584,7 @@ const anySpellPower = or(
 	spellPower,
 );
 
-const bleed = (card: ReferenceCard) => hasMechanic(card, GameTag.BLEED);
+const bleed = (card: ReferenceCard) => hasMechanic(card, GameTag.LETTUCE_BLEED);
 const deathrattle = (card: ReferenceCard) => hasMechanic(card, GameTag.DEATHRATTLE);
 const divineShield = (card: ReferenceCard) => hasMechanic(card, GameTag.DIVINE_SHIELD);
 const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);

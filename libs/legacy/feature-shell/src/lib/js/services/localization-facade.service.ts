@@ -64,6 +64,10 @@ export class LocalizationFacadeService implements ILocalizationService {
 		return this.service.getUnknownManaSpellName(manaCost);
 	}
 
+	public getUnknownManaMinionName(manaCost: number): string {
+		return this.service.getUnknownManaMinionName(manaCost);
+	}
+
 	public getUnknownRaceName(race: string): string {
 		return this.service.getUnknownRaceName(race);
 	}

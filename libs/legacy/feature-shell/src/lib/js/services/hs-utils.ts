@@ -93,6 +93,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.DarkInquisitorXanesh,
 	CardIds.DarkPharaohTekahn,
+	CardIds.DeepminerBrann_DEEP_020,
 	CardIds.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
 	CardIds.DemonslayerKurtrusToken,
 	CardIds.DrBoomMadGenius,
@@ -138,6 +139,8 @@ export const battlecryGlobalEffectCards = [
 	CardIds.AzsharanScavenger_SunkenScavengerToken,
 	CardIds.AzsharanGardens_SunkenGardensToken,
 	CardIds.TopiorTheShrubbagazzor,
+	CardIds.TheAzeriteDragonToken_DEEP_999t4,
+	CardIds.TheAzeriteMurlocToken_DEEP_999t5,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.TheStonewright,
 	CardIds.ValdrisFelgorge,
@@ -146,7 +149,11 @@ export const battlecryGlobalEffectCards = [
 	CardIds.WyrmrestPurifier,
 ];
 
-export const deathrattleGlobalEffectCards = [CardIds.BonelordFrostwhisper, CardIds.UnluckyPowderman_WW_367];
+export const deathrattleGlobalEffectCards = [
+	CardIds.BonelordFrostwhisper,
+	CardIds.UnluckyPowderman_WW_367,
+	CardIds.Therazane_DEEP_036,
+];
 
 export const startOfGameGlobalEffectCards = [
 	CardIds.GennGreymane_GIL_692,

@@ -751,6 +751,7 @@ export const giftCreators = [
 	CardIds.WitchwoodApple,
 	CardIds.WitchwoodAppleCore,
 	CardIds.WorgenRoadie_InstrumentCaseToken,
+	CardIds.WorldPillarFragmentToken_DEEP_999t3,
 	CardIds.WorthyExpedition,
 	CardIds.WretchedExile,
 	CardIds.XarilPoisonedMind,
@@ -765,4 +766,9 @@ export const giftCreators = [
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
 	CardIds.StonehillDefender,
+	CardIds.MismatchedFossils_DEEP_001,
+	CardIds.ShatteredReflections_DEEP_025,
+	CardIds.FoolsGold_DEEP_022,
+	CardIds.FoolsGoldTavernBrawl,
+	CardIds.MaruutStonebinder_DEEP_037,
 ];

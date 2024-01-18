@@ -1,9 +1,1 @@
-export type BattleInfoMessage =
-	| 'scallywag'
-	| 'piloted-whirl-o-tron'
-	// | 'rylak'
-	// | 'choral-mrrrglr'
-	// | 'bassgill'
-	// | 'secret'
-	| 'error'
-	| undefined;
+export type BattleInfoMessage = 'scallywag' | 'piloted-whirl-o-tron' | 'stitched' | 'error' | undefined;

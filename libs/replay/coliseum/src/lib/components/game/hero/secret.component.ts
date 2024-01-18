@@ -28,7 +28,7 @@ export class SecretComponent {
 		if (value) {
 			this.entityId = value.id;
 			const playerClass: number = value.getTag(GameTag.CLASS);
-			const isSidequest = value.getTag(GameTag.SIDEQUEST) > 0;
+			const isSidequest = value.getTag(GameTag.SIDE_QUEST) > 0;
 			if (playerClass) {
 				this.image = this.buildImage(playerClass, isSidequest);
 				this.markImage = this.buildMark(playerClass, isSidequest);

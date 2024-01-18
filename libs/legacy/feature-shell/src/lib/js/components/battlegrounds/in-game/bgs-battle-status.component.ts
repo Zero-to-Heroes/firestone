@@ -189,6 +189,16 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
+			case 'stitched':
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.i18n.translateString(
+							'battlegrounds.battle.composition-not-supported.reason-stitched',
+						),
+					},
+				);
+				break;
 			case 'piloted-whirl-o-tron':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',

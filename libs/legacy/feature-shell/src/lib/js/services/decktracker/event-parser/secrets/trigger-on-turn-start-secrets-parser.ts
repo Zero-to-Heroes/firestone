@@ -10,6 +10,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		CardIds.OpenTheCages,
 		CardIds.Perjury,
 		CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
+		CardIds.SummoningWard_DEEP_000,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -33,13 +34,16 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
 			secretsWeCantRuleOut.push(CardIds.CompetitiveSpirit_AT_073);
+			secretsWeCantRuleOut.push(CardIds.SummoningWard_DEEP_000);
+		}
+
+		const isBoardFull = deckWithSecretToCheck.board.length === 7;
+		if (isBoardFull) {
+			secretsWeCantRuleOut.push(CardIds.SummoningWard_DEEP_000);
 		}
 
 		// Only triggers if board has between 2 and 6 minions
-		if (
-			deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length < 2 ||
-			deckWithSecretToCheck.board.length === 7
-		) {
+		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length < 2 || isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken);
 			secretsWeCantRuleOut.push(CardIds.OpenTheCages);
 		}

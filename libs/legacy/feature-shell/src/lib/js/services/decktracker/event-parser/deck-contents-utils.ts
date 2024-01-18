@@ -1,4 +1,4 @@
-import { CardClass, CardIds, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { hasRace } from '../../hs-utils';
@@ -18,6 +18,8 @@ export const modifyDecksForSpecialCards = (
 			return [handleEmbiggen(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.DeckOfLunacy:
 			return [handleDeckOfLunacy(deckState, allCards, i18n), opponentDeckState];
+		case CardIds.TheAzeriteMurlocToken_DEEP_999t5:
+			return [handleTheAzeriteMurloc(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.FrizzKindleroost:
 			return [handleFrizzKindleroost(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.TheFiresOfZinAzshari:
@@ -283,7 +285,34 @@ const handleDeckOfLunacy = (
 				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Spell',
-				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+				cardMatchCondition: (other: ReferenceCard) =>
+					(!other.type || other.type === 'Spell') && other.cost === card.getEffectiveManaCost() + 3,
+			} as DeckCard),
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleTheAzeriteMurloc = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) =>
+			refCard?.type?.toUpperCase() === CardType[CardType.MINION] ||
+			card?.cardType?.toUpperCase() === CardType[CardType.MINION],
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: i18n.getUnknownManaMinionName(Math.min(10, card.getEffectiveManaCost() + 3)),
+				creatorCardId: CardIds.TheAzeriteMurlocToken_DEEP_999t5,
+				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
+				rarity: 'unknown',
+				cardType: 'Minion',
+				cardMatchCondition: (other: ReferenceCard) =>
+					(!other.type || other.type === 'Minion') && other.cost === card.getEffectiveManaCost() + 3,
 			} as DeckCard),
 		deckState,
 		allCards,
