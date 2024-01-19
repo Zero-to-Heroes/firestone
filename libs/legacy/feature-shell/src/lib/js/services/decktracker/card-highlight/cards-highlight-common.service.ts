@@ -1013,6 +1013,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.Kazakusan_ONY_005:
 				return and(side(inputSide), or(inDeck, cardsPlayedThisMatch), minion, dragon);
+			case CardIds.Khazgoroth_TitanforgeToken:
+				return and(side(inputSide), inDeck, weapon);
 			case CardIds.KhadgarsScryingOrb:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.KeepersStrength_YOG_509:
