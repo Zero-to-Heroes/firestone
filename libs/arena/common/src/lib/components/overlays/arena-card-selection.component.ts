@@ -71,7 +71,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			this.mapData(
 				([options, stats]) =>
 					options?.map((option) => {
-						const stat = stats?.find((s) => s.cardId === option);
+						const stat = stats?.stats?.find((s) => s.cardId === option);
 						const drawnWinrate = !stat?.stats?.drawn ? null : stat.stats.drawnThenWin / stat.stats.drawn;
 						return {
 							cardId: option,

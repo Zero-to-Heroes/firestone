@@ -50,7 +50,7 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 		const tiers$ = this.arenaClassStats.classStats$$.pipe(
 			tap((info) => console.debug('[arena-class-tier-list] received info a', info)),
 			this.mapData((stats) => {
-				return buildArenaClassInfoTiers(stats, null, this.i18n);
+				return buildArenaClassInfoTiers(stats?.stats, null, this.i18n);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),

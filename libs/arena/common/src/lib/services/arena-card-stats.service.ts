@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ArenaCardStat, ArenaCardStats } from '@firestone-hs/arena-stats';
+import { ArenaCardStats } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
@@ -9,7 +9,7 @@ const ARENA_CARD_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotohe
 
 @Injectable()
 export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsService> {
-	public cardStats$$: SubscriberAwareBehaviorSubject<readonly ArenaCardStat[] | null | undefined>;
+	public cardStats$$: SubscriberAwareBehaviorSubject<ArenaCardStats | null | undefined>;
 	public searchString$$: BehaviorSubject<string | undefined>;
 
 	private api: ApiRunner;
@@ -25,7 +25,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	}
 
 	protected async init() {
-		this.cardStats$$ = new SubscriberAwareBehaviorSubject<readonly ArenaCardStat[] | null | undefined>(null);
+		this.cardStats$$ = new SubscriberAwareBehaviorSubject<ArenaCardStats | null | undefined>(null);
 		this.searchString$$ = new BehaviorSubject<string | undefined>(undefined);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
@@ -51,8 +51,9 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 					const context = classFilter === 'all' || classFilter == null ? 'global' : classFilter;
 					const url = ARENA_CARD_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context);
 					const result: ArenaCardStats | null = await this.api.callGetApi(url);
-					console.log('[arena-card-stats] loaded duels config');
-					this.cardStats$$.next(result?.stats);
+					console.log('[arena-card-stats] loaded arena stats');
+					console.debug('[arena-card-stats] loaded arena stats', result);
+					this.cardStats$$.next(result);
 				});
 		});
 	}

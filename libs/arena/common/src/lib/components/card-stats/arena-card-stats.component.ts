@@ -2,9 +2,10 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ArenaCardStat } from '@firestone-hs/arena-stats';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, shareReplay, startWith, tap } from 'rxjs';
+import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
+import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import { ArenaCardStatInfo } from './model';
 
 @Component({
@@ -17,6 +18,13 @@ import { ArenaCardStatInfo } from './model';
 				[attr.aria-label]="'Arena card stats'"
 				*ngIf="{ cards: cards$ | async } as value"
 			>
+				<div class="data-info">
+					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+					<div class="separator">-</div>
+					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+					<div class="value">{{ totalGames$ | async }}</div>
+				</div>
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<sortable-table-label
 						class="cell card-details"
@@ -67,6 +75,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	loading$: Observable<boolean>;
 	cards$: Observable<ArenaCardStatInfo[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
+	lastUpdate$: Observable<string | null>;
+	lastUpdateFull$: Observable<string | null>;
+	totalGames$: Observable<string>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'drawn-winrate',
@@ -76,6 +87,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly arenaCardStats: ArenaCardStatsService,
+		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 	) {
@@ -84,6 +96,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 
 	async ngAfterContentInit() {
 		await this.arenaCardStats.isReady();
+		await this.arenaClassStats.isReady();
 
 		console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
@@ -94,8 +107,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		]).pipe(
 			tap((info) => console.debug('[arena-card-stats] received info', info)),
 			this.mapData(([stats, searchString, sortCriteria]) =>
-				this.buildCardStats(stats, searchString, sortCriteria),
+				this.buildCardStats(stats?.stats, searchString, sortCriteria),
 			),
+			tap((info) => console.debug('[arena-card-stats] built card stats', info)),
 			shareReplay(1),
 			this.mapData((stats) => stats),
 		);
@@ -103,6 +117,50 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			startWith(true),
 			tap((info) => console.debug('[arena-card-stats]] received info 2', info)),
 			this.mapData((tiers) => tiers === null),
+		);
+		this.totalGames$ = this.arenaClassStats.classStats$$.pipe(
+			filter((stats) => !!stats),
+			this.mapData(
+				(stats) =>
+					stats?.stats
+						?.map((s) => s.totalGames)
+						?.reduce((a, b) => a + b, 0)
+						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
+			),
+			takeUntil(this.destroyed$),
+		);
+		this.lastUpdate$ = this.arenaClassStats.classStats$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(stats.lastUpdated);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS');
+			}),
+		);
+		this.lastUpdateFull$ = this.arenaClassStats.classStats$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				const date = new Date(stats.lastUpdated);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
+			}),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -119,7 +177,8 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		searchString: string | undefined,
 		sortCriteria: SortCriteria<ColumnSortType>,
 	): ArenaCardStatInfo[] {
-		return (
+		console.debug('[arena-card-stats] building card stats', stats, searchString, sortCriteria);
+		const result =
 			stats
 				?.filter((stat) => stat.stats?.drawn > 100)
 				.filter(
@@ -128,8 +187,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 						this.allCards.getCard(stat.cardId)?.name?.toLowerCase().includes(searchString.toLowerCase()),
 				)
 				.map((stat) => this.buildCardStat(stat))
-				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? []
-		);
+				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? [];
+		console.debug('[arena-card-stats] built card stats', result);
+		return result;
 		// .sort(sortByProperties((a: ArenaCardStatInfo) => [-(a.drawWinrate ?? 0)])) ?? []
 	}
 

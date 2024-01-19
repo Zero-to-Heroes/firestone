@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ArenaClassStat, ArenaClassStats } from '@firestone-hs/arena-stats';
+import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
@@ -9,7 +9,7 @@ const ARENA_CLASS_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoh
 
 @Injectable()
 export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStatsService> {
-	public classStats$$: SubscriberAwareBehaviorSubject<readonly ArenaClassStat[] | null | undefined>;
+	public classStats$$: SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>;
 
 	private api: ApiRunner;
 	private prefs: PreferencesService;
@@ -23,7 +23,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 	}
 
 	protected async init() {
-		this.classStats$$ = new SubscriberAwareBehaviorSubject<readonly ArenaClassStat[] | null | undefined>(null);
+		this.classStats$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 
@@ -45,7 +45,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 					const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod);
 					const result: ArenaClassStats | null = await this.api.callGetApi(url);
 					console.log('[arena-class-stats] loaded duels config');
-					this.classStats$$.next(result?.stats);
+					this.classStats$$.next(result);
 				});
 		});
 	}

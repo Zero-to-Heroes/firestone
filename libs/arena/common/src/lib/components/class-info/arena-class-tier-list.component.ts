@@ -5,8 +5,8 @@ import {
 	getStandardDeviation,
 	sortByProperties,
 } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
-import { Observable, shareReplay, startWith, tap } from 'rxjs';
+import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
+import { Observable, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import { ArenaClassInfo, ArenaClassTier } from './model';
 
@@ -20,6 +20,13 @@ import { ArenaClassInfo, ArenaClassTier } from './model';
 				[attr.aria-label]="'Arena class tier list'"
 				*ngIf="{ tiers: tiers$ | async } as value"
 			>
+				<div class="data-info">
+					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+					<div class="separator">-</div>
+					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+					<div class="value">{{ totalGames$ | async }}</div>
+				</div>
 				<div class="header">
 					<div class="cell portrait"></div>
 					<div class="cell class-details" [fsTranslate]="'app.arena.class-tier-list.header-hero-name'"></div>
@@ -45,6 +52,9 @@ import { ArenaClassInfo, ArenaClassTier } from './model';
 export class ArenaClassTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	tiers$: Observable<readonly ArenaClassTier[] | null | undefined>;
+	lastUpdate$: Observable<string | null>;
+	lastUpdateFull$: Observable<string | null>;
+	totalGames$: Observable<string>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -59,15 +69,15 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 
 		console.debug('[arena-class-tier-list] after content init');
 		this.tiers$ = this.arenaClassStats.classStats$$.pipe(
-			tap((info) => console.debug('[arena-class-tier-list] received info', info)),
+			filter((stats) => !!stats?.stats),
 			this.mapData((stats) => {
-				const averageWinsDistribution = this.buildAverageWinsDistribution(stats);
+				const averageWinsDistribution = this.buildAverageWinsDistribution(stats?.stats);
 				console.debug(
 					'averageWinsDistribution',
 					averageWinsDistribution,
 					averageWinsDistribution.map((d) => d.total).reduce((a, b) => a + b, 0),
 				);
-				return buildArenaClassInfoTiers(stats, averageWinsDistribution, this.i18n);
+				return buildArenaClassInfoTiers(stats?.stats, averageWinsDistribution, this.i18n);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),
@@ -77,6 +87,50 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 			startWith(true),
 			tap((info) => console.debug('[arena-class-tier-list] received info 2', info)),
 			this.mapData((tiers) => tiers === null),
+		);
+		this.totalGames$ = this.arenaClassStats.classStats$$.pipe(
+			filter((stats) => !!stats),
+			this.mapData(
+				(stats) =>
+					stats?.stats
+						?.map((s) => s.totalGames)
+						?.reduce((a, b) => a + b, 0)
+						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
+			),
+			takeUntil(this.destroyed$),
+		);
+		this.lastUpdate$ = this.arenaClassStats.classStats$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(stats.lastUpdated);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS');
+			}),
+		);
+		this.lastUpdateFull$ = this.arenaClassStats.classStats$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdated) {
+					return null;
+				}
+				const date = new Date(stats.lastUpdated);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
+			}),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -168,13 +222,6 @@ const buildPlacementDistribution = (
 		const delta = distribution ? distribution.total / averageForWins.total : 0;
 		result.push({ wins: i, total: 100 * delta });
 	}
-	console.debug(
-		'placementDistribution',
-		result,
-		winsDistributionInPercents,
-		averageWinsDistribution,
-		winsDistribution,
-	);
 	return result;
 };
 

@@ -14,7 +14,7 @@
 	.header {
 		display: flex;
 		font-size: 14px;
-		margin-bottom: 10px;
+		// margin-bottom: 10px;
 		flex-wrap: wrap;
 		overflow: hidden;
 		height: 35px;
@@ -34,5 +34,28 @@
 				background: rgba(255, 255, 255, 0.08);
 			}
 		}
+	}
+}
+
+.data-info {
+	display: flex;
+	margin-bottom: 20px;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 10px;
+	font-size: 0.8em;
+
+	.label {
+		color: var(--color-2);
+		margin-right: 5px;
+	}
+
+	.value {
+		color: var(--color-1);
+	}
+
+	.separator {
+		margin: 0 5px;
+		color: var(--color-1);
 	}
 }
