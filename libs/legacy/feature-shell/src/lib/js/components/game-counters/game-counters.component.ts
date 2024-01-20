@@ -17,6 +17,7 @@ import { AnachronosCounterDefinition } from './definitions/anachronos-counter';
 import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
 import { AsvedonCounterDefinition } from './definitions/asvedon-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
+import { BgsGoldDeltaCounterDefinition } from './definitions/bgs-delta-gold-counter';
 import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
@@ -126,18 +127,22 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				),
 			);
 		} else {
-			const definition = this.buildBgsDefinition(this.activeCounter, this.side);
+			const definition = await this.buildBgsDefinition(this.activeCounter, this.side);
 			// TODO: have each definition define what it listens to, instead of recomputing
 			// everything each time
 			this.definition$ = combineLatest([
 				this.store.listenBattlegrounds$(([state, prefs]) => state),
 				this.store.listenDeckState$((state) => state),
+				definition.prefValue$ ?? of(null),
 			]).pipe(
-				filter(([[bgState], [deckState]]) => !!bgState && !!deckState),
-				map(([[bgState], [deckState]]) => definition.select({ bgState, deckState })),
-				filter((info) => info != null),
+				filter(([[bgState], [deckState], prefValue]) => !!bgState && !!deckState),
+				map(([[bgState], [deckState], prefValue]) => ({
+					counterInfo: definition.select({ deckState, bgState }),
+					prefValue: prefValue,
+				})),
+				filter((info) => info?.counterInfo != null),
 				this.mapData(
-					(info) => definition.emit(info),
+					(info) => definition.emit(info.counterInfo, info.prefValue),
 					// Because counters often return an object
 					(a, b) => deepEqual(a, b),
 				),
@@ -250,10 +255,10 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 		}
 	}
 
-	private buildBgsDefinition(
+	private async buildBgsDefinition(
 		activeCounter: CounterType,
 		side: 'player' | 'opponent',
-	): CounterDefinition<{ deckState: GameState; bgState: BattlegroundsState }, any> {
+	): Promise<CounterDefinition<{ deckState: GameState; bgState: BattlegroundsState }, any>> {
 		switch (activeCounter) {
 			case 'bgsPogo':
 				return BgsPogoCounterDefinition.create(side, this.allCards, this.i18n);
@@ -263,6 +268,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return BgsMagmalocCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMajordomo':
 				return BgsMajordomoCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'bgsGoldDelta':
+				return BgsGoldDeltaCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 				return null;

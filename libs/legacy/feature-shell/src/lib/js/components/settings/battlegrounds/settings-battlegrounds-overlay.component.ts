@@ -299,6 +299,12 @@ import { Knob } from '../preference-slider.component';
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.counters-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
+					field="playerBgsGoldDeltaCounter"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.overlay.counter-gold-delta-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.counter-gold-delta-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerBgsMajordomoCounter"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.counter-majordomo-label' | owTranslate"

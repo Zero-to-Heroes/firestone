@@ -149,6 +149,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
 			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
+			<player-bgs-gold-delta-widget-wrapper></player-bgs-gold-delta-widget-wrapper>
 
 			<lottery-widget-wrapper></lottery-widget-wrapper>
 		</div>
