@@ -193,7 +193,7 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 							.join(', ')
 					: null;
 				this.faction = card.mercenary
-					? this.i18n.translateString(`app.collection.card-details.factions.${getHeroFaction(card.races[0])}`)
+					? this.i18n.translateString(`app.collection.card-details.factions.${getHeroFaction(card)}`)
 					: null;
 				const flavorSource = card.flavor ?? card.text;
 				this.flavor = flavorSource?.length

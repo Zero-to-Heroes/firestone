@@ -1,4 +1,4 @@
-import { CardIds, GameTag, Race, ReferenceCard, SpellSchool, TagRole } from '@firestone-hs/reference-data';
+import { CardIds, Faction, GameTag, Race, ReferenceCard, SpellSchool, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { normalizeMercenariesCardId } from '../mercenaries-utils';
 import { HighlightSelector } from './mercenaries-synergies-highlight.service';
@@ -551,8 +551,8 @@ const caster = (card: ReferenceCard) => hasRole(card, TagRole.CASTER);
 const fighter = (card: ReferenceCard) => hasRole(card, TagRole.FIGHTER);
 const protector = (card: ReferenceCard) => hasRole(card, TagRole.TANK);
 
-const alliance = or(draenei, dwarf, gnome, highelf, human, nightelf, worgen);
-const horde = or(bloodelf, goblin, halforc, orc, tauren, troll, undead);
+const alliance = (card: ReferenceCard) => card.faction === Faction[Faction.ALLIANCE];
+const horde = (card: ReferenceCard) => card.faction === Faction[Faction.HORDE];
 const explorer = (card: ReferenceCard) => hasTag(card, GameTag.MERCS_EXPLORER);
 
 const spellSchool = (card: ReferenceCard, spellSchool: SpellSchool) =>

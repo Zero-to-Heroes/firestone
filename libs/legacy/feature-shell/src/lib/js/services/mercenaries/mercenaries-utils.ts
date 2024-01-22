@@ -1,4 +1,4 @@
-import { CardIds, GameTag, GameType, Race, TagRole } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, GameType, ReferenceCard, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesReferenceData } from './mercenaries-reference-data.service';
 
@@ -239,27 +239,8 @@ export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'prote
 	}
 };
 
-export const getHeroFaction = (race: string): 'alliance' | 'horde' | 'none' | null => {
-	switch (race.toUpperCase()) {
-		case Race[Race.DRAENEI]:
-		case Race[Race.DWARF]:
-		case Race[Race.GNOME]:
-		case Race[Race.HIGHELF]:
-		case Race[Race.HUMAN]:
-		case Race[Race.NIGHTELF]:
-		case Race[Race.WORGEN]:
-			return 'alliance';
-		case Race[Race.BLOODELF]:
-		case Race[Race.GOBLIN]:
-		case Race[Race.HALFORC]:
-		case Race[Race.ORC]:
-		case Race[Race.TAUREN]:
-		case Race[Race.TROLL]:
-		case Race[Race.UNDEAD]:
-			return 'horde';
-		default:
-			return 'none';
-	}
+export const getHeroFaction = (card: ReferenceCard): string | undefined => {
+	return card.faction?.toLowerCase();
 };
 
 export const isMercenaries = (gameType: GameType | string): boolean => {
