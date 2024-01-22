@@ -1,5 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaCardStat } from '@firestone-hs/arena-stats';
+import { CardClass, CardIds, allDuelsTreasureCardIds } from '@firestone-hs/reference-data';
+import {
+	ArenaCardClassFilterType,
+	ArenaCardTypeFilterType,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
@@ -90,6 +96,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
@@ -97,6 +104,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	async ngAfterContentInit() {
 		await this.arenaCardStats.isReady();
 		await this.arenaClassStats.isReady();
+		await this.prefs.isReady();
 
 		console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
@@ -104,10 +112,14 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			this.arenaCardStats.cardStats$$,
 			this.arenaCardStats.searchString$$,
 			this.sortCriteria$$,
+			this.prefs.preferences$(
+				(prefs) => prefs.arenaActiveCardTypeFilter,
+				(prefs) => prefs.arenaActiveCardClassFilter,
+			),
 		]).pipe(
 			tap((info) => console.debug('[arena-card-stats] received info', info)),
-			this.mapData(([stats, searchString, sortCriteria]) =>
-				this.buildCardStats(stats?.stats, searchString, sortCriteria),
+			this.mapData(([stats, searchString, sortCriteria, [cardType, cardClass]]) =>
+				this.buildCardStats(stats?.stats, cardType, cardClass, searchString, sortCriteria),
 			),
 			tap((info) => console.debug('[arena-card-stats] built card stats', info)),
 			shareReplay(1),
@@ -174,6 +186,8 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 
 	private buildCardStats(
 		stats: readonly ArenaCardStat[] | null | undefined,
+		cardType: ArenaCardTypeFilterType | null | undefined,
+		cardClass: ArenaCardClassFilterType | null | undefined,
 		searchString: string | undefined,
 		sortCriteria: SortCriteria<ColumnSortType>,
 	): ArenaCardStatInfo[] {
@@ -186,11 +200,40 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 						!searchString?.length ||
 						this.allCards.getCard(stat.cardId)?.name?.toLowerCase().includes(searchString.toLowerCase()),
 				)
+				.filter((stat) => this.hasCorrectCardClass(stat.cardId, cardClass))
+				.filter((stat) => this.hasCorrectCardType(stat.cardId, cardType))
 				.map((stat) => this.buildCardStat(stat))
 				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? [];
 		console.debug('[arena-card-stats] built card stats', result);
 		return result;
 		// .sort(sortByProperties((a: ArenaCardStatInfo) => [-(a.drawWinrate ?? 0)])) ?? []
+	}
+
+	private hasCorrectCardClass(cardId: string, cardClass: ArenaCardClassFilterType | null | undefined): boolean {
+		if (!cardClass || cardClass === 'all') {
+			return true;
+		}
+		const refCard = this.allCards.getCard(cardId);
+		if (cardClass === 'no-neutral') {
+			return !!refCard?.classes?.length && !refCard.classes.includes(CardClass[CardClass.NEUTRAL]);
+		}
+		if (cardClass === 'neutral') {
+			return !refCard?.classes?.length || refCard.classes.includes(CardClass[CardClass.NEUTRAL]);
+		}
+		return !!refCard?.classes?.length && refCard.classes.includes(CardClass[cardClass]);
+	}
+
+	private hasCorrectCardType(cardId: string, cardType: ArenaCardTypeFilterType | null | undefined): boolean {
+		if (!cardType || cardType === 'all') {
+			return true;
+		}
+		if (cardType === 'legendary') {
+			return this.allCards.getCard(cardId)?.rarity === 'Legendary';
+		}
+		if (cardType === 'treasure') {
+			return allDuelsTreasureCardIds.includes(cardId as CardIds);
+		}
+		return true;
 	}
 
 	private buildCardStat(stat: ArenaCardStat): ArenaCardStatInfo {

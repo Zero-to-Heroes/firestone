@@ -4,6 +4,8 @@ import { IPreferences } from '@firestone/shared/framework/common';
 import 'reflect-metadata';
 import {
 	AchievementsCompletedFilterType,
+	ArenaCardClassFilterType,
+	ArenaCardTypeFilterType,
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
 	BgsActiveTimeFilterType,
@@ -737,6 +739,8 @@ export class Preferences implements IPreferences {
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
+	readonly arenaActiveCardClassFilter: ArenaCardClassFilterType = 'all';
+	readonly arenaActiveCardTypeFilter: ArenaCardTypeFilterType = 'all';
 	// TODO: add settings
 	readonly arenaShowHeroSelectionOverlay: boolean = true;
 	readonly arenaShowCardSelectionOverlay: boolean = true;

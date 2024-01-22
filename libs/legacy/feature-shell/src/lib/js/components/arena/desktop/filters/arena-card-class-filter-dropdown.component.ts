@@ -1,21 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaCardClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
-import { classes, formatClass } from '../../../../services/hs-utils';
+import { classes } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
-/** This approach seems to be the cleanest way to properly narrow down the values needed from
- * the state. The other approaches are cool and data-driven, but as of now they seem more
- * difficult to implement with a store approach. The other filters might have to be refactored
- * to this approach
- */
 @Component({
-	selector: 'arena-class-filter-dropdown',
+	selector: 'arena-card-class-filter-dropdown',
 	styleUrls: [],
 	template: `
 		<filter-dropdown
@@ -29,7 +23,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ArenaCardClassFilterDropdownComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	constructor(
@@ -47,15 +44,17 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 
 		this.filter$ = combineLatest([
 			this.store.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId),
-			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
+			this.prefs.preferences$((prefs) => prefs.arenaActiveCardClassFilter),
 		]).pipe(
 			filter(([[selectedCategoryId], [filter]]) => !!filter),
 			this.mapData(([[selectedCategoryId], [filter]]) => {
-				const options = ['all', ...(classes as ArenaClassFilterType[])].map(
+				const options = ['all', 'neutral', 'no-neutral'].map(
 					(option) =>
 						({
 							value: option,
-							label: formatClass(option, this.i18n),
+							label: classes.includes(option)
+								? this.i18n.translateString(`global.class.${option?.toLowerCase()}`)
+								: this.i18n.translateString(`app.arena.filters.card-class.${option}`),
 						} as ClassFilterOption),
 				);
 				return {
@@ -63,8 +62,8 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 					options: options,
 					placeholder:
 						options.find((option) => option.value === filter)?.label ??
-						this.i18n.translateString('app.arena.filters.hero-class.all'),
-					visible: ['arena-runs', 'card-stats'].includes(selectedCategoryId),
+						this.i18n.translateString('app.arena.filters.card-class.all'),
+					visible: ['card-stats'].includes(selectedCategoryId),
 				};
 			}),
 		);
@@ -78,12 +77,12 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			arenaActiveClassFilter: option.value as ArenaClassFilterType,
+			arenaActiveCardClassFilter: option.value as ArenaCardClassFilterType,
 		};
 		this.prefs.savePreferences(newPrefs);
 	}
 }
 
 interface ClassFilterOption extends IOption {
-	value: ArenaClassFilterType;
+	value: ArenaCardClassFilterType;
 }
