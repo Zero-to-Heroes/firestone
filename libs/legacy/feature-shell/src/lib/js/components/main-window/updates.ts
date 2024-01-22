@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.22',
+		version: '13.2.24',
 		force: false,
 		sections: [
 			// {
@@ -47,11 +47,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'replays',
+						category: 'arena',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the cards would not appear properly, especially the ones in the player's hand.`,
+								type: 'feature',
+								text: `Card and Class Stats are now updated every hour and tell you when they were last updated.`,
 							},
 						],
 					},
@@ -62,39 +62,67 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a new setting to show the Plagues at the top of the deck to better keep track of them. The setting is ON by default.`,
+							},
+							{
+								type: 'feature',
+								text: `When the opponent plays a card stolen from your deck by Benevolant Banker, it is now removed from your "Deck" section.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an info leak where the card created by Shattered Reflections would be revealed when drawn by the opponent.`,
+							},
+						],
+					},
+					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix another sim issue instance where tokens spawned might not attack in the right order.`,
+								type: 'feature',
+								text: `Add a counter to tell you how much more (or less) gold you will have next turn.`,
+							},
+							{
+								type: 'feature',
+								text: `The list of Buddies will now always show when spells are in the tavern.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where cards created by Primalfin Lookout in hand might not be murlocs.`,
+								text: `Fix an issue with the in-app simulator where the simulation would sometimes never end.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a filter in hte Cards Stats tab to show only Neutral cards, or conversely exclude them and show only class cards.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix a sim issue where the first minion to attack after Illidan's Hero Power trigger might not attack again, even if still alive.`,
+								type: 'feature',
+								text: `Add a filter in hte Cards Stats tab to show only Legendary or Treasure cards.`,
 							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `Passive treasures that grant Spell Damage will now only highlight cards in your deck that deal damage.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue where the first minion to attack would not be recomputed after Teron's Rapid Reanmation trigger.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Scallywag's Sky Pirate token would not attack right away, but wait for enemy reborn to trigger first.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Emergent Flame would never target enemy minions.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Obsidian Ravager would not deal damage to its main target in its pre-attack phase.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where non-golden Withered Spearhide would give 2 Blood Gems`,
+								text: `Fix an issue where some heroes would be put in an incorrect faction, causing some issues with highlights during the treasure selection phase.`,
 							},
 						],
 					},
