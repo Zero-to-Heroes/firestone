@@ -45,7 +45,7 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		let opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(
@@ -54,7 +54,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.debug('[card-played] newHand', newHand, removedCard);
+		console.debug('[card-played] newHand', newHand, removedCard);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -63,16 +63,37 @@ export class CardPlayedFromHandParser implements EventParser {
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
 		if (!removedCard?.cardId && cardId && !gameEvent.additionalData.transientCard) {
-			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
-				newDeck,
-				cardId,
-				entityId,
-				false, // Only remove known cards
-			);
-			// console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
-
-			if (removedCardFromDeck) {
-				newDeck = newDeckAfterReveal;
+			// Technically this should also be done in "card-played-by-effect", but the use case is pretty marginal,
+			// and not worth the added complexity for now
+			if (removedCard.stolenFromOpponent) {
+				const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
+					opponentDeck.deck,
+					cardId,
+					entityId,
+					false, // Only remove known cards
+				);
+				console.debug(
+					'[card-played] newDeckAfterReveal otherDeck',
+					newDeckAfterReveal,
+					newDeck,
+					removedCardFromDeck,
+				);
+				if (removedCardFromDeck) {
+					opponentDeck = opponentDeck.update({
+						deck: newDeckAfterReveal,
+					});
+				}
+			} else {
+				const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
+					newDeck,
+					cardId,
+					entityId,
+					false, // Only remove known cards
+				);
+				console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
+				if (removedCardFromDeck) {
+					newDeck = newDeckAfterReveal;
+				}
 			}
 		}
 
