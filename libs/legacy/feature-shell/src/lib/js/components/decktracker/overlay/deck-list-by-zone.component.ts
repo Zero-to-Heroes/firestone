@@ -6,6 +6,7 @@ import {
 	Input,
 	OnDestroy,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -13,6 +14,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil, tap } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -79,6 +81,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showGeneratedCardsInSeparateZone$$.next(value);
 	}
 
+	@Input() set showPlaguesOnTop(value: boolean) {
+		this.showPlaguesOnTop$$.next(value);
+	}
+
 	@Input() set showBoardCardsInSeparateZone(value: boolean) {
 		this.showBoardCardsInSeparateZone$$.next(value);
 	}
@@ -103,6 +109,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showGeneratedCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
 	private showBoardCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
+	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(true);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
@@ -129,6 +136,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showTopCardsSeparately$$,
 			this.showGeneratedCardsInSeparateZone$$,
 			this.showBoardCardsInSeparateZone$$,
+			this.showPlaguesOnTop$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
 			debounceTime(200),
@@ -143,6 +151,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					showTopCardsSeparately,
 					showGeneratedCardsInSeparateZone,
 					showBoardCardsInSeparateZone,
+					showPlaguesOnTop,
 				]) =>
 					this.buildZones(
 						showGlobalEffectsZone,
@@ -152,6 +161,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showTopCardsSeparately,
 						showGeneratedCardsInSeparateZone,
 						showBoardCardsInSeparateZone,
+						showPlaguesOnTop,
 						deckState,
 					),
 			),
@@ -168,6 +178,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showTopCardsSeparately: boolean,
 		showGeneratedCardsInSeparateZone: boolean,
 		showBoardCardsInSeparateZone: boolean,
+		showPlaguesOnTop: boolean,
 		deckState: DeckState,
 	): readonly DeckZone[] {
 		if (!deckState) {
@@ -213,7 +224,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
 			cards: cardsInDeckZone,
-			sortingFunction: null,
+			sortingFunction: showPlaguesOnTop
+				? (a, b) => (PLAGUES.includes(a.cardId as CardIds) ? -1 : PLAGUES.includes(b.cardId as CardIds) ? 1 : 0)
+				: null,
 			order: 0,
 		});
 		zones.push(
