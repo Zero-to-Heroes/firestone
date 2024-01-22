@@ -8,7 +8,7 @@ import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-const GOLD_DELTA_VALUES = {
+const GOLD_DELTA_VALUES: { [cardId: string]: number } = {
 	[CardIds.Overconfidence_BG28_884]: 3, // Or 1 for ties?
 	[CardIds.SouthseaBusker_BG26_135]: 1,
 	[CardIds.SouthseaBusker_BG26_135_G]: 2,
@@ -23,7 +23,7 @@ export class BgsGoldDeltaCounterDefinition
 	prefValue$?: Observable<boolean> = new Observable<boolean>();
 
 	readonly type = 'bgsGoldDelta';
-	readonly value: number;
+	readonly value: string;
 	readonly image: string;
 	readonly cssClass: string;
 	readonly tooltip: string;
@@ -71,16 +71,27 @@ export class BgsGoldDeltaCounterDefinition
 			return this.i18n.translateString('counters.bgs-gold-delta.card', { cardName, count });
 		});
 		const cardsStr = countersUseExpandedView ? '<br/>' + cardsStrArray.join('<br/>') : cardsStrArray.join(', ');
-		const goldDelta = cardsPlayedThisTurn
+		const goldDelta: number = cardsPlayedThisTurn
 			.map((cardId) => GOLD_DELTA_VALUES[cardId as CardIds])
 			.reduce((a, b) => a + b, 0);
+		const goldDeltaSure: number = cardsPlayedThisTurn
+			.filter((cardId) => cardId !== CardIds.Overconfidence_BG28_884)
+			.map((cardId) => GOLD_DELTA_VALUES[cardId as CardIds])
+			.reduce((a, b) => a + b, 0);
+		const maxValueText =
+			goldDelta === goldDeltaSure
+				? ''
+				: ` ${this.i18n.translateString('counters.bgs-gold-delta.up-to', {
+						maxValue: goldDelta,
+				  })}`;
 		return {
 			type: 'bgsGoldDelta',
-			value: goldDelta,
+			value: `${goldDeltaSure} (${goldDelta})`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.RecklessInvestment_BG28_513}.jpg`,
 			cssClass: 'bgs-gold-delta-counter',
 			tooltip: this.i18n.translateString(`counters.bgs-gold-delta.${this.side}`, {
-				value: goldDelta,
+				value: goldDeltaSure,
+				maxValueText: maxValueText,
 				cards: cardsStr,
 			}),
 			standardCounter: true,
