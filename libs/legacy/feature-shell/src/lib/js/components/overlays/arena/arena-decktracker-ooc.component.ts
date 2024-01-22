@@ -72,7 +72,7 @@ export class ArenaDecktrackerOocComponent
 			tap((deck) => console.debug('[arena-decktracker-ooc] new deck', deck)),
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
-				if (!deck) {
+				if (!deck?.HeroCardId?.length) {
 					return null;
 				}
 
