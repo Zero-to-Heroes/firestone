@@ -260,7 +260,6 @@ export const rarity =
 		input.card?.rarity?.toLowerCase() === rarity?.toLowerCase();
 export const legendary = rarity('Legendary');
 
-// TODO: implement it
 export const damage = (input: SelectorInput): boolean => {
-	return true;
+	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]);
 };
