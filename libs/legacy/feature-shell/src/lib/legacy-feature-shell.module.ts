@@ -830,7 +830,8 @@ import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-ess
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { ModsConfigService } from './libs/mods/services/mods-config.service';
-console.log('environment is ' + process.env['NODE_ENV'], process.env);
+
+console.log('environment is ' + process.env['NODE_ENV']);
 
 try {
 	overwolf?.extensions.current.getManifest((manifestResult) => {
