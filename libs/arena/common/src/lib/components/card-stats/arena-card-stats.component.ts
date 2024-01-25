@@ -228,10 +228,19 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			return true;
 		}
 		if (cardType === 'legendary') {
-			return this.allCards.getCard(cardId)?.rarity === 'Legendary';
+			return (
+				this.allCards.getCard(cardId)?.rarity === 'Legendary' &&
+				!allDuelsTreasureCardIds.includes(cardId as CardIds)
+			);
 		}
 		if (cardType === 'treasure') {
 			return allDuelsTreasureCardIds.includes(cardId as CardIds);
+		}
+		if (cardType === 'other') {
+			return (
+				!allDuelsTreasureCardIds.includes(cardId as CardIds) &&
+				this.allCards.getCard(cardId)?.rarity !== 'Legendary'
+			);
 		}
 		return true;
 	}
