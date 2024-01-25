@@ -43,6 +43,7 @@ import {
 	frenzy,
 	frost,
 	generatesPlague,
+	hasMultipleCopies,
 	hasSpellSchool,
 	healthBiggerThanAttack,
 	healthLessThan,
@@ -1276,6 +1277,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ReliquaryResearcher_WW_432:
 				return and(side(inputSide), or(inDeck, inHand), excavate);
+			case CardIds.RenoLoneRanger_WW_0700:
+				return and(side(inputSide), inDeck, hasMultipleCopies);
 			case CardIds.Resurrect_BRM_017:
 				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.RevivePet:

@@ -56,6 +56,9 @@ export const opposingSide =
 			: input.side === 'duels';
 	};
 
+export const hasMultipleCopies = (input: SelectorInput): boolean =>
+	input.deckState.deck?.filter((c) => c.cardId === input.cardId).length > 1;
+
 export const effectiveCostLess =
 	(cost: number) =>
 	(input: SelectorInput): boolean =>
