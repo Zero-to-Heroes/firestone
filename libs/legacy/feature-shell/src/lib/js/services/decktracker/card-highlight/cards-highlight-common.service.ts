@@ -404,7 +404,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Ancharrr:
 				return and(side(inputSide), inDeck, minion, pirate);
 			case CardIds.AntiqueFlinger_WW_413:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.Anubrekhan_RLK_659:
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.ApexisBlast:
@@ -458,7 +458,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.BabaNaga:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.BadlandsBrawler_WW_349:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.BalindaStonehearth:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.BandOfBeesTavernBrawl:
@@ -517,7 +517,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.BookOfSpecters:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.BountyBoard_WW_003:
-				return and(side(inputSide), or(inDeck, inHand), or(excavate, quickdraw, tradeable, legendary));
+				return and(side(inputSide), or(inDeck, inHand, inOther), or(excavate, quickdraw, tradeable, legendary));
 			case CardIds.BrannBronzebeard_CORE_LOE_077:
 			case CardIds.BrannBronzebeard_LOE_077:
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
@@ -909,7 +909,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.HarnessTheElementsTavernBrawl:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.HarrowingOx_WW_356:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.HealingWave:
 			case CardIds.HealingWave_WON_320:
 				return and(side(inputSide), inDeck, minion);
@@ -1206,7 +1206,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.PetCollector:
 				return and(side(inputSide), inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.PileOfBones_WW_324:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.PileOnHeroic:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.PillageTheFallenTavernBrawl:
@@ -1276,7 +1276,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.RefreshingSpringWater:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ReliquaryResearcher_WW_432:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.DeepminerBrann_DEEP_020:
 			case CardIds.DinotamerBrann_ULD_156:
 			case CardIds.EliseTheEnlightened:
@@ -1420,7 +1420,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.SkulkingGeist_ICC_701:
 				return and(side(inputSide), or(inDeck, inHand), spell, baseCostEqual(1));
 			case CardIds.SlagmawTheSlumbering_WW_375:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.SmallTimeBuccaneer:
 			case CardIds.SmallTimeBuccaneer_WON_351:
 				return and(side(inputSide), or(inHand, inDeck), weapon);
@@ -1619,7 +1619,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.TownCrier_GIL_580:
 				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.TramConductorGerry_WW_437:
-				return and(side(inputSide), or(inDeck, inHand), excavate);
+				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.TramOperator:
 				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.TrenchSurveyor_TSC_642:
