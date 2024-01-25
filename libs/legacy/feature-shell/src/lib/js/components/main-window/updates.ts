@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.24',
+		version: '13.2.25',
 		force: false,
 		sections: [
 			// {
@@ -71,6 +71,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `When the opponent plays a card stolen from your deck by Benevolant Banker, it is now removed from your "Deck" section.`,
+							},
+							{
+								type: 'content',
+								text: `Mousing over highlander cards like Reno, Lone Ranger now highlights all duplicates in your deck.`,
 							},
 							{
 								type: 'bug',
