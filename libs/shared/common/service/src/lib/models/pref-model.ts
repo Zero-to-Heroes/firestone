@@ -149,7 +149,7 @@ export type ArenaClassFilterType =
 	| 'warlock';
 export type ArenaCardClassFilterType = ArenaClassFilterType | 'neutral' | 'no-neutral';
 export type ArenaTimeFilterType = 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
-export type ArenaCardTypeFilterType = 'all' | 'legendary' | 'treasure';
+export type ArenaCardTypeFilterType = 'all' | 'legendary' | 'treasure' | 'other';
 export type StatsXpGraphSeasonFilterType =
 	| 'all-seasons'
 	| 'season-1'

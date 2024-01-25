@@ -48,7 +48,7 @@ export class ArenaCardTypeFilterDropdownComponent
 		]).pipe(
 			filter(([[selectedCategoryId], [filter]]) => !!filter),
 			this.mapData(([[selectedCategoryId], [filter]]) => {
-				const options = ['all', 'legendary', 'treasure'].map(
+				const options = ['all', 'legendary', 'treasure', 'other'].map(
 					(option) =>
 						({
 							value: option,
