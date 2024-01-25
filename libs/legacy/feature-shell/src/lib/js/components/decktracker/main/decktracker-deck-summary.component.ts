@@ -158,6 +158,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	}
 
 	deleteDeck() {
+		console.log('[deck-delete] deleting deck', this._deck?.deckstring);
 		this.stateUpdater.next(new DecktrackerDeleteDeckEvent(this._deck?.deckstring));
 	}
 

@@ -64,6 +64,6 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 			this.decks$$.next(newDecks);
 		}
 
-		const newDecks = existingDecks.filter((deck) => deck.deckstring !== deckstring);
+		// const newDecks = existingDecks.filter((deck) => deck.deckstring !== deckstring);
 	}
 }

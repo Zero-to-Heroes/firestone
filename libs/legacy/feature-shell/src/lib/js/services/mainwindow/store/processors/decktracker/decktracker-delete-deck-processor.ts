@@ -20,11 +20,13 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.log('[deck-delete] will delete deck', event.deckstring);
 		await this.constructedPersonalDecks.deleteDeck(event.deckstring);
 
 		// If no games were played with the deck, no need to change anything
 		const gameStats = await this.gamesLoader.gameStats$$.getValueWithInit();
 		const gamesWithDeck = gameStats?.stats?.filter((s) => s.playerDecklist === event.deckstring);
+		console.log('[deck-delete] gamesWithDeck', gamesWithDeck?.length);
 		if (!gamesWithDeck?.length) {
 			return [
 				null,
