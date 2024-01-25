@@ -1277,7 +1277,16 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ReliquaryResearcher_WW_432:
 				return and(side(inputSide), or(inDeck, inHand), excavate);
+			case CardIds.DeepminerBrann_DEEP_020:
+			case CardIds.DinotamerBrann_ULD_156:
+			case CardIds.EliseTheEnlightened:
+			case CardIds.EliseTheTrailblazer:
+			case CardIds.MurozondThiefOfTime_WON_066:
+			case CardIds.RenoJackson_CORE_LOE_011:
+			case CardIds.RenoJackson_LOE_011:
 			case CardIds.RenoLoneRanger_WW_0700:
+			case CardIds.RenoTheRelicologist:
+			case CardIds.ZephrysTheGreat_ULD_003:
 				return and(side(inputSide), inDeck, hasMultipleCopies);
 			case CardIds.Resurrect_BRM_017:
 				return and(side(inputSide), inGraveyard, minion);
