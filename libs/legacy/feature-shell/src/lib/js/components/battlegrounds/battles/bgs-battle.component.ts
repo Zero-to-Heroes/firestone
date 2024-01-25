@@ -565,7 +565,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		modalRef.instance.currentHero =
 			side === 'player' ? this.player.player.heroPowerId : this.opponent.player.heroPowerId;
 		modalRef.instance.heroPowerData =
-			side === 'player' ? this.player.player.heroPowerInfo : this.opponent.player.heroPowerInfo;
+			side === 'player' ? +this.player.player.heroPowerInfo : +this.opponent.player.heroPowerInfo;
 		modalRef.instance.applyHandler = (newHeroPowerCardId: string, heroPowerInfo: number) => {
 			this.overlayRef.detach();
 			side === 'player'
