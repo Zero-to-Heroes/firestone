@@ -91,7 +91,26 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 			.map((secret) => secret.allPossibleOptions)
 			.reduce((a, b) => a.concat(b), []);
 
-		const optionsGroupedByCard = this.groupBy(allOptionsList, (secret: SecretOption) => secret.cardId);
+		// Some secrets are duplicated between sets. There is a deckDuplicateDbfId field
+		// in the refCard
+		// const result: string[] = [];
+		// const processedDbfIds: number[] = [];
+		// for (const secret of allOptionsList) {
+		// 	const refCard = this.allCards.getCard(secret.cardId);
+		// 	const dbfId = refCard.deckDuplicateDbfId ?? refCard.dbfId;
+		// 	if (processedDbfIds.includes(dbfId)) {
+		// 		continue;
+		// 	}
+		// 	processedDbfIds.push(dbfId);
+		// 	console.debug('adding secret', refCard.name, dbfId, processedDbfIds);
+		// 	result.push(refCard.id);
+		// }
+
+		const optionsGroupedByCard = this.groupBy(
+			allOptionsList,
+			(secret: SecretOption) =>
+				this.allCards.getCard(secret.cardId).deckDuplicateDbfId ?? this.allCards.getCard(secret.cardId).dbfId,
+		);
 
 		const reducedOptions: readonly DeckCard[] = [...optionsGroupedByCard.values()]
 			.filter((options) => options && options.length > 0)
