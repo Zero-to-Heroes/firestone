@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ArenaCardStat } from '@firestone-hs/arena-stats';
 import { CardClass, CardIds, allDuelsTreasureCardIds } from '@firestone-hs/reference-data';
 import {
 	ArenaCardClassFilterType,
@@ -10,7 +10,8 @@ import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
-import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
+import { ArenaCombinedCardStat } from '../../models/arena-combined-card-stat';
+import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD, ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import { ArenaCardStatInfo } from './model';
 
@@ -30,6 +31,9 @@ import { ArenaCardStatInfo } from './model';
 					<div class="separator">-</div>
 					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
 					<div class="value">{{ totalGames$ | async }}</div>
+					<div class="separator">-</div>
+					<div class="label" [fsTranslate]="'app.arena.card-stats.total-cards-drafted'"></div>
+					<div class="value">{{ totalCardsDrafted$ | async }}</div>
 				</div>
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<sortable-table-label
@@ -53,6 +57,48 @@ import { ArenaCardStatInfo } from './model';
 						[name]="'app.arena.card-stats.header-drawn-winrate' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'drawn-winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell pickrate-impact"
+						[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
+						[helpTooltip]="headerPickrateSkillTooltip"
+						[sort]="sort"
+						[criteria]="'pickrate-impact'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell offered-total"
+						[name]="'app.arena.card-stats.header-offered-total' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'offered-total'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell pickrate"
+						[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'pickrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<!-- <sortable-table-label
+						class="cell offered-total-high-wins"
+						[name]="'app.arena.card-stats.header-offered-total-high-wins' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'offered-high-wins'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label> -->
+					<sortable-table-label
+						class="cell pickrate-high-wins"
+						[name]="headerPickrateHighWins"
+						[helpTooltip]="headerPickrateHighWinsTooltip"
+						[sort]="sort"
+						[criteria]="'pickrate-high-wins'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -84,6 +130,21 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	lastUpdate$: Observable<string | null>;
 	lastUpdateFull$: Observable<string | null>;
 	totalGames$: Observable<string>;
+	totalCardsDrafted$: Observable<string>;
+
+	headerPickrateHighWins: string = this.i18n.translateString('app.arena.card-stats.header-pickrate-high-wins', {
+		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
+	})!;
+	headerPickrateHighWinsTooltip: string = this.i18n.translateString(
+		'app.arena.card-stats.header-pickrate-high-wins-tooltip',
+		{ value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD },
+	)!;
+	headerPickrateSkillTooltip: string = this.i18n.translateString(
+		'app.arena.card-stats.header-pickrate-impact-tooltip',
+		{
+			value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
+		},
+	)!;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'drawn-winrate',
@@ -141,6 +202,17 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			),
 			takeUntil(this.destroyed$),
 		);
+		this.totalCardsDrafted$ = this.arenaCardStats.cardStats$$.pipe(
+			filter((stats) => !!stats),
+			this.mapData(
+				(stats) =>
+					stats?.stats
+						?.map((s) => s.draftStats?.totalOffered ?? 0)
+						?.reduce((a, b) => a + b, 0)
+						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
+			),
+			takeUntil(this.destroyed$),
+		);
 		this.lastUpdate$ = this.arenaClassStats.classStats$$.pipe(
 			this.mapData((stats) => {
 				if (!stats?.lastUpdated) {
@@ -185,7 +257,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	}
 
 	private buildCardStats(
-		stats: readonly ArenaCardStat[] | null | undefined,
+		stats: readonly ArenaCombinedCardStat[] | null | undefined,
 		cardType: ArenaCardTypeFilterType | null | undefined,
 		cardClass: ArenaCardClassFilterType | null | undefined,
 		searchString: string | undefined,
@@ -194,7 +266,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		console.debug('[arena-card-stats] building card stats', stats, searchString, sortCriteria);
 		const result =
 			stats
-				?.filter((stat) => stat.stats?.drawn > 100)
+				?.filter((stat) => stat.matchStats?.drawn > 100)
 				.filter(
 					(stat) =>
 						!searchString?.length ||
@@ -245,11 +317,18 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		return true;
 	}
 
-	private buildCardStat(stat: ArenaCardStat): ArenaCardStatInfo {
+	private buildCardStat(stat: ArenaCombinedCardStat): ArenaCardStatInfo {
 		return {
 			cardId: stat.cardId,
-			drawnTotal: stat.stats.drawn,
-			drawWinrate: stat.stats.drawn > 0 ? stat.stats.drawnThenWin / stat.stats.drawn : null,
+			drawnTotal: stat.matchStats.drawn,
+			drawWinrate: stat.matchStats.drawn > 0 ? stat.matchStats.drawnThenWin / stat.matchStats.drawn : null,
+			totalOffered: stat.draftStats?.totalOffered,
+			totalPicked: stat.draftStats?.totalPicked,
+			pickRate: stat.draftStats?.pickRate,
+			totalOfferedHighWins: stat.draftStats?.totalOfferedHighWins,
+			totalPickedHighWins: stat.draftStats?.totalPickedHighWins,
+			pickRateHighWins: stat.draftStats?.pickRateHighWins,
+			pickRateImpact: stat.draftStats?.pickRateImpact,
 		};
 	}
 
@@ -272,9 +351,49 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				return this.sortByDrawnWinrate(a, b, sortCriteria.direction);
 			case 'drawn-total':
 				return this.sortByDrawnTotal(a, b, sortCriteria.direction);
+			case 'offered-total':
+				return this.sortByOfferedTotal(a, b, sortCriteria.direction);
+			case 'pickrate':
+				return this.sortByPickrateTotal(a, b, sortCriteria.direction);
+			case 'offered-total-high-wins':
+				return this.sortByOfferedTotalHighWins(a, b, sortCriteria.direction);
+			case 'pickrate-high-wins':
+				return this.sortByPickrateHighWins(a, b, sortCriteria.direction);
+			case 'pickrate-impact':
+				return this.sortByPickrateImpact(a, b, sortCriteria.direction);
 			default:
 				return 0;
 		}
+	}
+
+	private sortByPickrateImpact(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.pickRateImpact ?? 0;
+		const bData = b.pickRateImpact ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByPickrateHighWins(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.pickRateHighWins ?? 0;
+		const bData = b.pickRateHighWins ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByOfferedTotalHighWins(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.totalOfferedHighWins ?? 0;
+		const bData = b.totalOfferedHighWins ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByPickrateTotal(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.pickRate ?? 0;
+		const bData = b.pickRate ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByOfferedTotal(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.totalOffered ?? 0;
+		const bData = b.totalOffered ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
 	private sortByName(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
@@ -296,4 +415,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	}
 }
 
-type ColumnSortType = 'name' | 'drawn-total' | 'drawn-winrate';
+type ColumnSortType =
+	| 'name'
+	| 'drawn-total'
+	| 'drawn-winrate'
+	| 'pickrate-impact'
+	| 'offered-total'
+	| 'pickrate'
+	| 'pickrate-high-wins'
+	| 'offered-total-high-wins';

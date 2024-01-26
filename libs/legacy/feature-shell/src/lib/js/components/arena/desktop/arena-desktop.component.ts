@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ArenaCategory, ArenaCategoryType } from '@firestone/arena/common';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { ArenaSelectCategoryEvent } from '../../../services/mainwindow/store/processors/arena/arena-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -35,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="!(showAds$ | async)">
+			<section class="secondary" *ngIf="showSecondary$ | async">
 				<arena-classes-recap *ngIf="category.value?.id === 'arena-runs'"></arena-classes-recap>
 			</section>
 		</div>
@@ -48,6 +48,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent im
 	category$: Observable<ArenaCategory>;
 	categories$: Observable<readonly ArenaCategory[]>;
 	showAds$: Observable<boolean>;
+	showSecondary$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -70,6 +71,9 @@ export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent im
 			.listen$(([main, nav]) => main.arena.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showSecondary$ = combineLatest([this.category$, this.showAds$]).pipe(
+			this.mapData(([category, showAds]) => category?.id === 'arena-runs' && !showAds),
+		);
 	}
 
 	selectCategory(categoryId: ArenaCategoryType) {

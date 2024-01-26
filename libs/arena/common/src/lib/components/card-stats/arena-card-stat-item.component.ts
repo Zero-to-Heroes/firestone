@@ -12,6 +12,10 @@ import { ArenaCardStatInfo } from './model';
 			</div>
 			<div class="cell drawn-total">{{ drawTotal }}</div>
 			<div class="cell drawn-winrate">{{ drawnWinrate }}</div>
+			<div class="cell pickrate-impact">{{ pickrateImpact }}</div>
+			<div class="cell offered-total">{{ offeredTotal }}</div>
+			<div class="cell pickrate">{{ pickrateTotal }}</div>
+			<div class="cell pickrate-high-wins">{{ pickrateHighWins }}</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,12 +26,22 @@ export class ArenaCardStatItemComponent {
 		this.drawTotal =
 			value.drawnTotal == null ? '-' : value.drawnTotal.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
 		this.drawnWinrate = value.drawWinrate == null ? '-' : (100 * value.drawWinrate).toFixed(1) + '%';
-		// console.debug('setting stat', value);
+		this.pickrateImpact = value.pickRateImpact == null ? '-' : (100 * value.pickRateImpact).toFixed(1) + '%';
+		this.offeredTotal =
+			value.totalOffered == null
+				? '-'
+				: value.totalOffered.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
+		this.pickrateTotal = value.pickRate == null ? '-' : (100 * value.pickRate).toFixed(1) + '%';
+		this.pickrateHighWins = value.pickRateHighWins == null ? '-' : (100 * value.pickRateHighWins).toFixed(1) + '%';
 	}
 
 	cardId: string;
 	drawTotal: string;
 	drawnWinrate: string;
+	pickrateImpact: string;
+	offeredTotal: string;
+	pickrateTotal: string;
+	pickrateHighWins: string;
 
 	constructor(private readonly i18n: ILocalizationService) {}
 }
