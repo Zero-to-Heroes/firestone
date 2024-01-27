@@ -271,6 +271,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async getExtensionRunningState(extensionId: string): Promise<overwolf.extensions.GetRunningStateResult> {
+		return new Promise<overwolf.extensions.GetRunningStateResult>((resolve) => {
+			overwolf.extensions.getRunningState(extensionId, (result) => {
+				resolve(result);
+			});
+		});
+	}
+
 	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
 		return new Promise<overwolf.profile.GetCurrentUserResult>((resolve) => {
 			overwolf.profile.getCurrentUser((user) => {

@@ -10,6 +10,7 @@
 
 .info-container {
 	display: flex;
+	flex-direction: column;
 	background: var(--color-6);
 	border-radius: 15px;
 	width: fit-content;
@@ -53,7 +54,7 @@
 		}
 	}
 
-	.winrate {
+	.stat {
 		.value {
 			color: var(--default-title-color);
 		}

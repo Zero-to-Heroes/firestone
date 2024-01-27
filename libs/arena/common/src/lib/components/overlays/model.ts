@@ -5,5 +5,8 @@ export interface ArenaHeroOption {
 }
 export interface ArenaCardOption {
 	readonly cardId: string;
-	readonly drawnWinrate: number;
+	readonly drawnWinrate: number | null | undefined;
+	readonly pickRate: number | null | undefined;
+	readonly pickRateDelta: number | null | undefined;
+	readonly pickRateHighWins: number | null | undefined;
 }

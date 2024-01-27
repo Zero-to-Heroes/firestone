@@ -29,7 +29,7 @@ export class ArenaCardStatItemComponent {
 		this.pickrateImpact = value.pickRateImpact == null ? '-' : (100 * value.pickRateImpact).toFixed(1) + '%';
 		this.offeredTotal =
 			value.totalOffered == null
-				? '-'
+				? '0'
 				: value.totalOffered.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
 		this.pickrateTotal = value.pickRate == null ? '-' : (100 * value.pickRate).toFixed(1) + '%';
 		this.pickrateHighWins = value.pickRateHighWins == null ? '-' : (100 * value.pickRateHighWins).toFixed(1) + '%';

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -7,6 +7,7 @@ import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/c
 	template: `
 		<div
 			class="info-premium"
+			[ngClass]="{ extended: extended }"
 			(click)="showPremium()"
 			[helpTooltip]="'app.arena.draft.locked-premium-info-tooltip' | fsTranslate"
 		>
@@ -21,6 +22,8 @@ import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/c
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaOptionInfoPremiumComponent {
+	@Input() extended: boolean;
+
 	constructor(private readonly ow: OverwolfService, private readonly analytics: AnalyticsService) {}
 
 	showPremium() {

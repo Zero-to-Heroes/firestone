@@ -9,10 +9,13 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
+	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
+	IAdsService,
 	ICardsHighlightService,
 	ILocalizationService,
+	OverwolfService,
 } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
@@ -37,11 +40,15 @@ import { ArenaCardOption } from './model';
 			>
 			</arena-card-option>
 		</div>
+		<div class="root-side" *ngIf="showingSideBanner$ | async">
+			<arena-option-info-premium [extended]="true"></arena-option-info-premium>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showing$: Observable<boolean>;
+	showingSideBanner$: Observable<boolean>;
 	pickNumber$: Observable<number>;
 	options$: Observable<readonly ArenaCardOption[]>;
 
@@ -51,6 +58,8 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		// Provided in the app
 		@Inject(ARENA_DRAFT_MANAGER_SERVICE_TOKEN) private readonly draftManager: IArenaDraftManagerService,
 		@Inject(CARDS_HIGHLIGHT_SERVICE_TOKEN) private readonly cardsHighlightService: ICardsHighlightService,
@@ -62,8 +71,15 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		await this.draftManager.isReady();
 		await this.arenaCardStats.isReady();
 		await this.prefs.isReady();
+		await this.ads.isReady();
 		console.debug('[arena-card-selection] ready');
 
+		const isHearthArenaRunning = await this.ow.getExtensionRunningState(`eldaohcjmecjpkpdhhoiolhhaeapcldppbdgbnbc`);
+		console.log('[arena-card-selection] isHearthArenaRunning', isHearthArenaRunning);
+
+		this.showingSideBanner$ = this.ads.hasPremiumSub$$.pipe(
+			this.mapData((hasPremium) => !hasPremium && isHearthArenaRunning?.isRunning),
+		);
 		// TODO: load the context of the current class
 		// So this means storing somewhere the current draft info (including the decklist)
 		// this.updateClassContext();
@@ -75,14 +91,25 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 						const drawnWinrate = !stat?.matchStats?.drawn
 							? null
 							: stat.matchStats.drawnThenWin / stat.matchStats.drawn;
-						return {
+						const pickRate = !stat?.draftStats?.pickRate ? null : stat.draftStats.pickRate;
+						const pickRateDelta = !stat?.draftStats?.pickRateImpact ? null : stat.draftStats.pickRateImpact;
+						const pickRateHighWins = !stat?.draftStats?.pickRateHighWins
+							? null
+							: stat.draftStats.pickRateHighWins;
+						const result: ArenaCardOption = {
 							cardId: option,
 							drawnWinrate: drawnWinrate,
-						} as ArenaCardOption;
+							pickRate: pickRate,
+							pickRateDelta: pickRateDelta,
+							pickRateHighWins: pickRateHighWins,
+						};
+						return result;
 					}) ?? [],
 			),
 		);
-		this.showing$ = this.options$.pipe(this.mapData((options) => options.length > 0));
+		this.showing$ = combineLatest([this.options$, this.showingSideBanner$]).pipe(
+			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
+		);
 		this.pickNumber$ = this.draftManager.currentDeck$$.pipe(
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			this.mapData((deck: any /*DeckInfoFromMemory*/) => deck?.DeckList?.length ?? 0),
