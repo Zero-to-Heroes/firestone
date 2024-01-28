@@ -11,3 +11,15 @@
 .option {
 	background: rgba(255, 255, 255, 0.01);
 }
+
+.root-side {
+	display: flex;
+	position: absolute;
+	top: 22.5vh;
+	left: 91vh;
+	width: 15vh;
+	font-size: 12px;
+
+	arena-option-info-premium {
+	}
+}

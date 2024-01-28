@@ -17,7 +17,7 @@ import {
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
@@ -77,8 +77,17 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		const isHearthArenaRunning = await this.ow.getExtensionRunningState(`eldaohcjmecjpkpdhhoiolhhaeapcldppbdgbnbc`);
 		console.log('[arena-card-selection] isHearthArenaRunning', isHearthArenaRunning);
 
-		this.showingSideBanner$ = this.ads.hasPremiumSub$$.pipe(
-			this.mapData((hasPremium) => !hasPremium && isHearthArenaRunning?.isRunning),
+		this.pickNumber$ = this.draftManager.currentDeck$$.pipe(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			this.mapData((deck: any /*DeckInfoFromMemory*/) => deck?.DeckList?.length ?? 0),
+		);
+		this.showingSideBanner$ = combineLatest([this.ads.hasPremiumSub$$, this.pickNumber$]).pipe(
+			tap((info) =>
+				console.debug('[arena-card-selection] showingSideBanner', info, isHearthArenaRunning.isRunning),
+			),
+			this.mapData(
+				([hasPremium, pickNumber]) => pickNumber >= 1 && !hasPremium && isHearthArenaRunning?.isRunning,
+			),
 		);
 		// TODO: load the context of the current class
 		// So this means storing somewhere the current draft info (including the decklist)
@@ -109,10 +118,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		);
 		this.showing$ = combineLatest([this.options$, this.showingSideBanner$]).pipe(
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
-		);
-		this.pickNumber$ = this.draftManager.currentDeck$$.pipe(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			this.mapData((deck: any /*DeckInfoFromMemory*/) => deck?.DeckList?.length ?? 0),
 		);
 
 		this.cardsHighlightService.initForDuels();

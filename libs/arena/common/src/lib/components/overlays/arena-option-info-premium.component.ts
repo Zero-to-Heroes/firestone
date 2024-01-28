@@ -11,12 +11,18 @@ import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/c
 			(click)="showPremium()"
 			[helpTooltip]="'app.arena.draft.locked-premium-info-tooltip' | fsTranslate"
 		>
-			<div class="premium-lock">
-				<svg>
-					<use xlink:href="assets/svg/sprite.svg#lock" />
-				</svg>
+			<div class="extended-info">
+				<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
+				<div class="title">Firestone</div>
 			</div>
-			<div class="text" [fsTranslate]="'app.arena.draft.locked-premium-info'"></div>
+			<div class="container">
+				<div class="premium-lock">
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#lock" />
+					</svg>
+				</div>
+				<div class="text" [fsTranslate]="'app.arena.draft.locked-premium-info'"></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
