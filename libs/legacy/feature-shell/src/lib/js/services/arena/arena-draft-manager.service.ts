@@ -196,7 +196,8 @@ export class ArenaDraftManagerService
 					// On the first pick, we don't have previous options
 					const pickNumber = currentDeck.DeckList.length;
 					const options = pickNumber === 1 ? currentOptions : previousOptions;
-					const playerClass = this.allCards.getCard(currentDeck?.HeroCardId).classes?.[0];
+					const heroRefCard = this.allCards.getCard(currentDeck?.HeroCardId);
+					const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
 					const pick: DraftPick = {
 						runId: currentDeck.Id,
 						pickNumber: pickNumber,
@@ -205,7 +206,7 @@ export class ArenaDraftManagerService
 						playerClass: playerClass,
 					};
 					console.debug(
-						'[arena-draft-manager] updating card options',
+						'[arena-draft-manager] uploading pick',
 						pick,
 						previousDeck,
 						currentDeck,
