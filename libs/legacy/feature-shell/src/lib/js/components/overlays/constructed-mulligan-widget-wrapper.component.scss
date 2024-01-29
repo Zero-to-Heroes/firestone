@@ -1,0 +1,13 @@
+:host {
+	z-index: -1;
+}
+
+.container {
+	height: 34vh;
+	width: 112vh;
+	top: 30vh;
+	left: 15vh;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}

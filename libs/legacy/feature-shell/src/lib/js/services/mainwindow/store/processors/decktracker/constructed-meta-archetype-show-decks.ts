@@ -1,3 +1,4 @@
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
@@ -25,7 +26,10 @@ export class ConstructedMetaArchetypeShowDecksEvent implements MainWindowStoreEv
 }
 
 export class ConstructedMetaArchetypeShowDecksProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly navigation: ConstructedNavigationService,
+	) {}
 
 	public async process(
 		event: ConstructedMetaArchetypeShowDecksEvent,
@@ -39,12 +43,12 @@ export class ConstructedMetaArchetypeShowDecksProcessor implements Processor {
 			constructedMetaDecksArchetypeFilter: [event.archetypeId],
 		};
 		await this.prefs.savePreferences(newPrefs);
+		this.navigation.selectedConstructedMetaArchetype$$.next(null);
+		this.navigation.selectedConstructedMetaDeck$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				navigationDecktracker: navigationState.navigationDecktracker.update({
-					selectedConstructedMetaDeck: undefined,
-					selectedConstructedMetaArchetype: undefined,
 					currentView: 'constructed-meta-decks',
 				}),
 			}),

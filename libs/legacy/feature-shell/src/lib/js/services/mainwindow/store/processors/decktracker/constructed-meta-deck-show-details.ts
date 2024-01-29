@@ -1,3 +1,4 @@
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
@@ -24,17 +25,20 @@ export class ConstructedMetaDeckDetailsShowEvent implements MainWindowStoreEvent
 }
 
 export class ConstructedMetaDeckDetailsShowProcessor implements Processor {
+	constructor(private readonly navigation: ConstructedNavigationService) {}
+
 	public async process(
 		event: ConstructedMetaDeckDetailsShowEvent,
 		currentState: MainWindowState,
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		this.navigation.selectedConstructedMetaDeck$$.next(event.deckstring);
 		return [
 			null,
 			navigationState.update({
 				navigationDecktracker: navigationState.navigationDecktracker.update({
-					selectedConstructedMetaDeck: event.deckstring,
+					// selectedConstructedMetaDeck: event.deckstring,
 					currentView: 'constructed-meta-deck-details',
 				}),
 			}),

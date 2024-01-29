@@ -194,6 +194,7 @@ export class Preferences implements IPreferences {
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
 	readonly overlayEnableDiscoverHelp: boolean = true;
+	readonly decktrackerMulliganGuideOverlay: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerOpponentHandScale: number = 100;
 

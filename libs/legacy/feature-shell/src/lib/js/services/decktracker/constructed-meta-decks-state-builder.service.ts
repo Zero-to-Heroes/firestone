@@ -8,12 +8,12 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
 const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rdwyw.lambda-url.us-west-2.on.aws';
@@ -32,8 +32,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	private triggerLoadArchetypes$$ = new BehaviorSubject<boolean>(false);
 
 	private api: ApiRunner;
-	private store: AppUiStoreFacadeService;
+	// private store: AppUiStoreFacadeService;
 	private prefs: PreferencesService;
+	private navigation: ConstructedNavigationService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'constructedMetaDecks', () => !!this.constructedMetaDecks$$);
@@ -57,9 +58,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.store = AppInjector.get(AppUiStoreFacadeService);
+		this.navigation = AppInjector.get(ConstructedNavigationService);
 
-		await this.store.initComplete();
+		await this.navigation.isReady();
 		await this.prefs.isReady();
 
 		this.constructedMetaDecks$$.onFirstSubscribe(async () => {
@@ -93,7 +94,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 				this.constructedMetaDecks$$.next(stats);
 			});
 		combineLatest([
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaDeck),
+			this.navigation.selectedConstructedMetaDeck$$,
 			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksRankFilter2,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
@@ -106,7 +107,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 						!!timeFilter && !!formatFilter && !!rankFilter,
 				),
 			)
-			.subscribe(async ([[deckstring], [rankFilter, timeFilter, formatFilter]]) => {
+			.subscribe(async ([deckstring, [rankFilter, timeFilter, formatFilter]]) => {
 				this.currentConstructedMetaDeck$$.next(undefined);
 				if (deckstring?.length) {
 					const deck = await this.loadNewDeckDetails(deckstring, formatFilter, timeFilter, rankFilter);
@@ -134,7 +135,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 				this.constructedMetaArchetypes$$.next(stats);
 			});
 		combineLatest([
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.selectedConstructedMetaArchetype),
+			this.navigation.selectedConstructedMetaArchetype$$,
 			this.prefs.preferences$(
 				(prefs) => prefs.constructedMetaDecksRankFilter2,
 				(prefs) => prefs.constructedMetaDecksTimeFilter,
@@ -147,7 +148,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 						!!timeFilter && !!formatFilter && !!rankFilter,
 				),
 			)
-			.subscribe(async ([[archetypeId], [rankFilter, timeFilter, formatFilter]]) => {
+			.subscribe(async ([archetypeId, [rankFilter, timeFilter, formatFilter]]) => {
 				this.currentConstructedMetaArchetype$$.next(undefined);
 				if (archetypeId > 0) {
 					const deck = await this.loadNewArchetypeDetails(archetypeId, formatFilter, timeFilter, rankFilter);

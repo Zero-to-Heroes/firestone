@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class GameStateFacadeService {
-	public gameState$$: BehaviorSubject<GameState>;
+	public gameState$$: BehaviorSubject<GameState | null>;
 
 	constructor(private readonly ow: OverwolfService) {
 		this.init();
@@ -19,7 +19,11 @@ export class GameStateFacadeService {
 	}
 
 	private async init() {
-		this.gameState$$ = new BehaviorSubject<GameState>(null);
+		while (!this.ow.getMainWindow().deckEventBus) {
+			await sleep(50);
+		}
+
+		this.gameState$$ = new BehaviorSubject<GameState | null>(null);
 		this.ow.getMainWindow().deckEventBus.subscribe(async (event) => {
 			this.gameState$$.next(event.state);
 		});
