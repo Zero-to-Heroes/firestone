@@ -25,7 +25,7 @@ export class GameStateFacadeService {
 
 		this.gameState$$ = new BehaviorSubject<GameState | null>(null);
 		this.ow.getMainWindow().deckEventBus.subscribe(async (event) => {
-			this.gameState$$.next(event.state);
+			this.gameState$$.next(event?.state);
 		});
 	}
 }

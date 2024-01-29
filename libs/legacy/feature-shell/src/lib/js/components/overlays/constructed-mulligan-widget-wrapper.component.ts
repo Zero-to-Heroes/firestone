@@ -16,7 +16,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'constructed-mulligan-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/constructed-board-widget-wrapper.component.scss'],
+	styleUrls: ['./constructed-mulligan-widget-wrapper.component.scss'],
 	template: `
 		<div class="container" *ngIf="showWidget$ | async">
 			<constructed-mulligan> </constructed-mulligan>
@@ -50,9 +50,6 @@ export class ConstructedMulliganWidgetWrapperComponent
 
 	async ngAfterContentInit() {
 		await this.mulliganGuide.isReady();
-
-		await this.scene.isReady();
-		await this.prefs.isReady();
 
 		this.showWidget$ = this.mulliganGuide.mulliganAdvice$$.pipe(
 			this.mapData((advice) => !!advice?.length),

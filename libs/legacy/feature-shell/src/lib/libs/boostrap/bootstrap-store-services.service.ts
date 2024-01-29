@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
-import { ConstructedMetaDecksStateService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
+import {
+	ConstructedMetaDecksStateService,
+	ConstructedMulliganGuideService,
+	ConstructedPersonalDecksService,
+} from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
@@ -72,6 +76,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ArenaDraftManagerService: ArenaDraftManagerService,
 		private readonly init_duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly init_constructedPersonalDeckService: ConstructedPersonalDecksService,
+		private readonly init_ConstructedMulliganGuideService: ConstructedMulliganGuideService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

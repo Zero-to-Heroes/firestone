@@ -245,7 +245,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		return stats;
 	}
 
-	private async loadNewArchetypeDetails(
+	public async loadNewArchetypeDetails(
 		archetypeId: number,
 		format: GameFormat,
 		time: TimePeriod,
