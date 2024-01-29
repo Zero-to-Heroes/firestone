@@ -224,6 +224,9 @@ export class GameStateService {
 			state: this.state,
 		};
 		this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
+		if (this.state) {
+			console.debug('[game-state] emitting non-game event', emittedEvent.event.name, emittedEvent.state);
+		}
 	}
 
 	private async processEvent(gameEvent: GameEvent) {

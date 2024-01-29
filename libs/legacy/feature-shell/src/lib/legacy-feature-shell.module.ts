@@ -739,6 +739,7 @@ import { AiDeckService } from './js/services/decktracker/ai-deck-service.service
 import { AttackOnBoardService } from './js/services/decktracker/attack-on-board.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
+import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { ConstructedMetaDecksStateService } from './js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
@@ -1807,6 +1808,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DecksProviderService,
 		ConstructedMetaDecksStateService,
 		ConstructedConfigService,
+		ConstructedArchetypeServiceOrchestrator,
 
 		EndGameListenerService,
 		EndGameUploaderService,

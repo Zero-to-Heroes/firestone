@@ -7,9 +7,14 @@ import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.serv
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { AiDeckService } from '../ai-deck-service.service';
+import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
 import { DeckHandlerService } from '../deck-handler.service';
 import { DeckParserService } from '../deck-parser.service';
 import { AnomalyRevealedParser } from '../event-parser/anomaly-revealed-parser';
+import {
+	ArchetypeCategorizationEvent,
+	ArchetypeCategorizationParser,
+} from '../event-parser/archetype-categorization-parser';
 import { AssignCardIdParser } from '../event-parser/assign-card-ids-parser';
 import { AttackParser } from '../event-parser/attack-parser';
 import { BgsHeroSelectedCardParser } from '../event-parser/bgs-hero-selected-card-parser';
@@ -126,11 +131,13 @@ export class GameStateParsersService {
 		private readonly deckParser: DeckParserService,
 		private readonly duelsRunService: DuelsDecksProviderService,
 		private readonly secretsConfig: SecretConfigService,
+		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 	) {}
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
 		return {
 			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
+			[ArchetypeCategorizationEvent.EVENT_NAME]: [new ArchetypeCategorizationParser()],
 			[GameEvent.ATTACKING_HERO]: [new AttackParser(this.allCards)],
 			[GameEvent.ATTACKING_MINION]: [new AttackParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_HERO_SELECTED]: [new BgsHeroSelectedCardParser(this.helper)],
@@ -202,7 +209,14 @@ export class GameStateParsersService {
 			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser()],
 			[GameEvent.MATCH_INFO]: [new PlayersInfoParser()],
 			[GameEvent.MATCH_METADATA]: [
-				new MatchMetadataParser(this.deckParser, this.prefs, this.deckHandler, this.allCards, this.memory),
+				new MatchMetadataParser(
+					this.deckParser,
+					this.prefs,
+					this.deckHandler,
+					this.allCards,
+					this.memory,
+					this.constructedArchetypes,
+				),
 			],
 			[GameEvent.MINION_BACK_ON_BOARD]: [new MinionBackOnBoardParser(this.helper)],
 			[GameEvent.MINION_GO_DORMANT]: [new MinionGoDormantParser(this.helper)],

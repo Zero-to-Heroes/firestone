@@ -5,6 +5,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
+import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
 import { DeckHandlerService } from '../deck-handler.service';
 import { DeckInfo, DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
@@ -16,6 +17,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly handler: DeckHandlerService,
 		private readonly allCards: CardsFacadeService,
 		private readonly memory: MemoryInspectionService,
+		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -77,6 +79,8 @@ export class MatchMetadataParser implements EventParser {
 			board,
 		);
 		const hero: HeroCard = this.buildHero(currentDeck);
+
+		this.constructedArchetypes.triggerArchetypeCategorization(currentDeck?.deckstring);
 
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
 		const opponentDeck: readonly DeckCard[] = this.handler.buildEmptyDeckList(deckList.length);
