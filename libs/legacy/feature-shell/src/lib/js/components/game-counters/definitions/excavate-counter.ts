@@ -109,5 +109,9 @@ const getTier4ExcavateTreasure = (playerClass: CardClass): string => {
 			return CardIds.KoboldMiner_TheAzeriteSnakeToken_WW_001t25;
 		case CardClass.WARRIOR:
 			return CardIds.KoboldMiner_TheAzeriteOxToken_WW_001t27;
+		case CardClass.SHAMAN:
+			return CardIds.TheAzeriteMurlocToken_DEEP_999t5;
+		case CardClass.PALADIN:
+			return CardIds.TheAzeriteDragonToken_DEEP_999t4;
 	}
 };
