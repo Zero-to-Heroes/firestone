@@ -191,11 +191,15 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			tap((info) => console.debug('[arena-card-stats]] received info 2', info)),
 			this.mapData((tiers) => tiers === null),
 		);
-		this.totalGames$ = this.arenaClassStats.classStats$$.pipe(
-			filter((stats) => !!stats),
+		this.totalGames$ = combineLatest([
+			this.arenaClassStats.classStats$$,
+			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
+		]).pipe(
+			filter(([stats]) => !!stats),
 			this.mapData(
-				(stats) =>
+				([stats, [playerClass]]) =>
 					stats?.stats
+						?.filter((s) => !playerClass?.length || playerClass === 'all' || s.playerClass === playerClass)
 						?.map((s) => s.totalGames)
 						?.reduce((a, b) => a + b, 0)
 						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
