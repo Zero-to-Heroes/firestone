@@ -9,6 +9,8 @@ import {
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
+const SHOW_ADS_IN_DEV = false;
+
 @Injectable()
 export class AdService extends AbstractFacadeService<AdService> implements IAdsService {
 	public showAds$$: BehaviorSubject<boolean>;
@@ -64,7 +66,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return true;
+			return SHOW_ADS_IN_DEV;
 		}
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
@@ -96,7 +98,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	private async hasPremiumSubInternal(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
 			console.warn('[ads] not display in dev');
-			return false;
+			return !SHOW_ADS_IN_DEV;
 		}
 		const shouldDisplayAds = await this.shouldDisplayAds();
 		return !shouldDisplayAds;
