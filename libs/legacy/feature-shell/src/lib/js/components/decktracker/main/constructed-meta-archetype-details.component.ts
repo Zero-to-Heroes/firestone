@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { Observable, combineLatest } from 'rxjs';
-import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';

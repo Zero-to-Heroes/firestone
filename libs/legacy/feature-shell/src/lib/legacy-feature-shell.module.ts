@@ -518,6 +518,7 @@ import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/a
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
+import { ConstructedMulliganWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
@@ -741,7 +742,6 @@ import { CardsHighlightFacadeService } from './js/services/decktracker/card-high
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
-import { ConstructedMetaDecksStateService } from './js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DeckHandlerService } from './js/services/decktracker/deck-handler.service';
 import { DeckParserService } from './js/services/decktracker/deck-parser.service';
@@ -1523,6 +1523,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaCardSelectionWidgetWrapperComponent,
 		ArenaDecktrackerOocWidgetWrapperComponent,
 		ArenaDecktrackerOocComponent,
+		ConstructedMulliganWidgetWrapperComponent,
 
 		LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,
@@ -1806,7 +1807,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		DecktrackerStateLoaderService,
 		DecksProviderService,
-		ConstructedMetaDecksStateService,
 		ConstructedConfigService,
 		ConstructedArchetypeServiceOrchestrator,
 

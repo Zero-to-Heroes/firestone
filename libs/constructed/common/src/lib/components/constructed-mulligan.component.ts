@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
-import { ConstructedArchetypeService } from '../services/constructed-archetype.service';
+import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 import { GameStateFacadeService } from '../services/game-state-facade.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 		protected override readonly cdr: ChangeDetectorRef,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly gameState: GameStateFacadeService,
-		private readonly archetypes: ConstructedArchetypeService,
+		private readonly archetypes: ConstructedMetaDecksStateService,
 	) {
 		super(cdr);
 	}

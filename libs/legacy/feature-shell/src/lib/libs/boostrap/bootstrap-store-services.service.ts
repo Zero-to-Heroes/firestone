@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
-import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
@@ -9,7 +9,6 @@ import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsQuestsService } from '../../js/services/battlegrounds/bgs-quests.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
-import { ConstructedMetaDecksStateService } from '../../js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';

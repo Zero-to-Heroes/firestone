@@ -1,13 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
-import { ConstructedMetaDecksStateService } from '../../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

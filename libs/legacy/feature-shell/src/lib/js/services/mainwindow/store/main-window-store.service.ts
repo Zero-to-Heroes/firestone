@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
-import { ConstructedPersonalDecksService } from '@firestone/constructed/common';
+import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { DuelsPersonalDecksService } from '@firestone/duels/general';
 import { MemoryInspectionService } from '@firestone/memory';
@@ -399,6 +399,7 @@ export class MainWindowStoreService {
 		private readonly bgsPerfectGames: BgsPerfectGamesService,
 		private readonly duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
+		private readonly constructedNavigation: ConstructedNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -678,11 +679,17 @@ export class MainWindowStoreService {
 			[ConstructedNewDeckVersionEvent.eventName(), new ConstructedNewDeckVersionProcessor(this.prefs)],
 			[ConstructedEjectDeckVersionEvent.eventName(), new ConstructedEjectDeckVersionProcessor(this.prefs)],
 			[ConstructedToggleDeckVersionStatsEvent.eventName(), new ConstructedToggleDeckVersionStatsProcessor()],
-			[ConstructedMetaDeckDetailsShowEvent.eventName(), new ConstructedMetaDeckDetailsShowProcessor()],
-			[ConstructedMetaArchetypeDetailsShowEvent.eventName(), new ConstructedMetaArchetypeDetailsShowProcessor()],
+			[
+				ConstructedMetaDeckDetailsShowEvent.eventName(),
+				new ConstructedMetaDeckDetailsShowProcessor(this.constructedNavigation),
+			],
+			[
+				ConstructedMetaArchetypeDetailsShowEvent.eventName(),
+				new ConstructedMetaArchetypeDetailsShowProcessor(this.constructedNavigation),
+			],
 			[
 				ConstructedMetaArchetypeShowDecksEvent.eventName(),
-				new ConstructedMetaArchetypeShowDecksProcessor(this.prefs),
+				new ConstructedMetaArchetypeShowDecksProcessor(this.prefs, this.constructedNavigation),
 			],
 			// Battlegrounds
 			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],

@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { ConstructedMetaDecksStateService } from '@legacy-import/src/lib/js/services/decktracker/constructed-meta-decks-state-builder.service';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable, tap } from 'rxjs';
 
