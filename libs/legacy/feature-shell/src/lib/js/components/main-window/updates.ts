@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.2.28',
+		version: '13.3.0',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,25 @@ export const updates: readonly Update[] = [
 			// 	text: `If you ever wonder what the total play time for each mode looks like for ALL of Firestone users, I have published an infographics on Twitter: https://x.com/ZerotoHeroes_HS/status/1726691418687832090?s=20
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'arena',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Card and Class Stats are now updated every hour and tell you when they were last updated.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `Card stats now have more info about pick rate, including pick rate for runs that went to 6+ wins. Please be aware that it might take a few days to gather enough data to have reliable stats.`,
+							},
+							{
+								type: 'feature',
+								text: `Premium users can now see the pickrate of each card directly on the overlay.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -83,6 +87,24 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Stormpike Lieutenant would buff the board, instead of the tavern.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the same secret could appear multiple times in the secrets tracker.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `If you run HearthArena at the same time as Firestone and are not a premium user, the "go premium" banner that appears below the draft (if you have the "show draft stat" setting turned on) will now move to the side.`,
 							},
 						],
 					},
