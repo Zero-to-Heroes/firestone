@@ -1,6 +1,5 @@
-import { Card, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
+import { Card, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { Events } from '../../events.service';
-import { SceneService } from '../../game/scene.service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 

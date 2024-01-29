@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryInspectionService, MemoryMercenariesCollectionInfo, MemoryMercenariesInfo } from '@firestone/memory';
+import {
+	MemoryInspectionService,
+	MemoryMercenariesCollectionInfo,
+	MemoryMercenariesInfo,
+	SceneService,
+} from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -11,7 +16,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, debounceTime, filter, take } from 'rxjs';
 import { Events } from '../events.service';
-import { SceneService } from '../game/scene.service';
 import { sleep } from '../utils';
 
 export const MERCENARIES_SCENES = [

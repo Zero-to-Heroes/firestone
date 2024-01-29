@@ -7,7 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryVisitor } from '@firestone/memory';
+import { MemoryVisitor, SceneService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
@@ -17,7 +17,6 @@ import {
 	BattleMercenary,
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
-import { SceneService } from '../../../services/game/scene.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import {

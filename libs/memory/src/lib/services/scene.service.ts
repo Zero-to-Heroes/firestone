@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { MemoryInspectionService } from './memory-inspection.service';
+import { MemoryUpdatesService } from './memory-updates.service';
 
 @Injectable()
 export class SceneService extends AbstractFacadeService<SceneService> {
@@ -12,7 +13,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 	private memory: MemoryInspectionService;
 	private memoryUpdates: MemoryUpdatesService;
 
-	private internalSubscriber$$ = new SubscriberAwareBehaviorSubject<void>(null);
+	private internalSubscriber$$ = new SubscriberAwareBehaviorSubject<void | null>(null);
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'sceneService', () => !!this.currentScene$$ && !!this.lastNonGamePlayScene$$);
@@ -54,7 +55,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		});
 	}
 
-	private updateScene(scene: SceneMode) {
+	private updateScene(scene: SceneMode | null) {
 		if (!scene) {
 			return;
 		}
@@ -63,7 +64,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		if (scene !== SceneMode.GAMEPLAY) {
 			this.lastNonGamePlayScene$$.next(scene);
 		} else if (this.lastNonGamePlayScene$$.value === null) {
-			this.lastNonGamePlayScene$$.next(undefined);
+			this.lastNonGamePlayScene$$.next(null);
 		}
 	}
 }

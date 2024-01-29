@@ -7,9 +7,16 @@ import { MemoryInspectionService } from './services/memory-inspection.service';
 import { MemoryUpdatesService } from './services/memory-updates.service';
 import { MindVisionFacadeService } from './services/mind-vision/mind-vision-facade.service';
 import { MindVisionStateMachineService } from './services/mind-vision/mind-vision-state-machine.service';
+import { SceneService } from './services/scene.service';
 
 @NgModule({
 	imports: [CommonModule, SharedFrameworkCoreModule, SharedFrameworkCommonModule, SharedCommonServiceModule],
-	providers: [MemoryInspectionService, MindVisionStateMachineService, MindVisionFacadeService, MemoryUpdatesService],
+	providers: [
+		MemoryInspectionService,
+		MindVisionStateMachineService,
+		MindVisionFacadeService,
+		MemoryUpdatesService,
+		SceneService,
+	],
 })
 export class MemoryModule {}

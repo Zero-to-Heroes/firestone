@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { ProfileBgHeroStat } from '@firestone-hs/api-user-profile';
 import { SceneMode, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
+import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map, take } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
-import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 

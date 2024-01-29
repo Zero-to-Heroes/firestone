@@ -3,12 +3,11 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 
 import { PackInfo } from '@firestone/collection/view';
-import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
+import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Coin } from '../../models/coin';
 import { Events } from '../events.service';
-import { SceneService } from '../game/scene.service';
 import { CollectionStorageService } from './collection-storage.service';
 import { AllTimeBoostersInternalService } from './details/all-time-boosters';
 import { BgHeroSkinsInternalService } from './details/bg-hero-skins';

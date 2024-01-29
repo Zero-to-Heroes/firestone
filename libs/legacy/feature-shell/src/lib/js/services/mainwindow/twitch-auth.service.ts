@@ -3,7 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
-import { MatchInfo } from '@firestone/memory';
+import { MatchInfo, SceneService } from '@firestone/memory';
 import {
 	GameStatusService,
 	Message,
@@ -26,7 +26,6 @@ import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-sta
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { GameEvent } from '../../models/game-event';
-import { SceneService } from '../game/scene.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 

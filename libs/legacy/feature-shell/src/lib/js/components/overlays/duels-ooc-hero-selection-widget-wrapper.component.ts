@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { DungeonCrawlOptionType, SceneMode } from '@firestone-hs/reference-data';
 import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
+import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 

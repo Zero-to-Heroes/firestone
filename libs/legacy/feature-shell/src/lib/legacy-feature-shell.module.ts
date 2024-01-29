@@ -773,7 +773,6 @@ import { GameEventsEmitterService } from './js/services/game-events-emitter.serv
 import { GameEvents } from './js/services/game-events.service';
 import { GameModeDataService } from './js/services/game-mode-data.service';
 import { GameNativeStateStoreService } from './js/services/game/game-native-state-store.service';
-import { SceneService } from './js/services/game/scene.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
@@ -1714,7 +1713,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
-		SceneService,
 		SetsService,
 		DebugService,
 		Events,

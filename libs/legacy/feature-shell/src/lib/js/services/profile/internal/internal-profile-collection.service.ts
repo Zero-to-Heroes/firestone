@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CardsForSet, ProfilePackStat, ProfileSet } from '@firestone-hs/api-user-profile';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { CollectionCardType } from '../../../models/collection/collection-card-type.type';
 import { Set as CollectionSet } from '../../../models/set';
-import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 

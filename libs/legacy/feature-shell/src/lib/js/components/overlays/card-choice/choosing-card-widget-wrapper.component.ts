@@ -13,13 +13,13 @@ import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { CardOption, DeckCard, GameState } from '@firestone/game-state';
+import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
-import { SceneService } from '../../../services/game/scene.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';

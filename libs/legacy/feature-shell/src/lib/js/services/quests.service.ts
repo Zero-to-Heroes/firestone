@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
-import { MemoryInspectionService } from '@firestone/memory';
+import { MemoryInspectionService, SceneService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { Events } from './events.service';
-import { SceneService } from './game/scene.service';
 import { ActiveQuestsUpdatedEvent } from './mainwindow/store/events/quests/active-quests-updated-event';
 import { ReferenceQuestsLoadedEvent } from './mainwindow/store/events/quests/reference-quests-loaded-event';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';

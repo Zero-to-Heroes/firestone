@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
+import { MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
 import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';

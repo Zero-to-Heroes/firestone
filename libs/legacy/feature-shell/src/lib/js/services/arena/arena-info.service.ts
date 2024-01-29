@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { ArenaInfo, MemoryInspectionService } from '@firestone/memory';
+import { ArenaInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { BehaviorSubject, filter } from 'rxjs';
 import { runLoop } from '../game-mode-data.service';
-import { SceneService } from '../game/scene.service';
 
 @Injectable()
 export class ArenaInfoService {

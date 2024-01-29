@@ -7,11 +7,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { ConstructedMulliganGuideService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
-import { SceneService } from '../../services/game/scene.service';
+import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -44,38 +43,19 @@ export class ConstructedMulliganWidgetWrapperComponent
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly scene: SceneService,
+		private readonly mulliganGuide: ConstructedMulliganGuideService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	async ngAfterContentInit() {
+		await this.mulliganGuide.isReady();
+
 		await this.scene.isReady();
 		await this.prefs.isReady();
 
-		this.showWidget$ = combineLatest([
-			this.scene.currentScene$$,
-			this.prefs.preferences$((prefs) => prefs.decktrackerMulliganGuideOverlay),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
-			),
-		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
-				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
-					return false;
-				}
-
-				// We explicitely don't check for null, so that if the memory updates are broken
-				// we still somehow show the info
-				if (currentScene !== SceneMode.GAMEPLAY) {
-					return false;
-				}
-
-				return !gameEnded;
-			}),
+		this.showWidget$ = this.mulliganGuide.mulliganAdvice$$.pipe(
+			this.mapData((advice) => !!advice?.length),
 			this.handleReposition(),
 		);
 

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
 import { filter, take } from 'rxjs';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
-import { SceneService } from '../../../game/scene.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
 import { EventParser } from './event-parsers/_event-parser';
 import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';

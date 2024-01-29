@@ -1,9 +1,8 @@
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
+import { MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { debounceTime, distinctUntilChanged, filter, map, merge, tap, throttleTime } from 'rxjs';
 import { Events } from '../../events.service';
-import { SceneService } from '../../game/scene.service';
 
 export abstract class AbstractCollectionInternalService<T, U = T> {
 	public collection$$ = new SubscriberAwareBehaviorSubject<readonly T[]>(null);

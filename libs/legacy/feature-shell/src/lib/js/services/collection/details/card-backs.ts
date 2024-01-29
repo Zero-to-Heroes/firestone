@@ -1,7 +1,6 @@
-import { CardBack, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
+import { CardBack, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { Events } from '../../events.service';
-import { SceneService } from '../../game/scene.service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 

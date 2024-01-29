@@ -13,12 +13,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { Observable, combineLatest } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
-import { SceneService } from '../../services/game/scene.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

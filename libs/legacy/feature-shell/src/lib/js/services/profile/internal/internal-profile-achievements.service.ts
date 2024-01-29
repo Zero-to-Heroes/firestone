@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ProfileAchievementCategory } from '@firestone-hs/api-user-profile';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
-import { SceneService } from '../../game/scene.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 

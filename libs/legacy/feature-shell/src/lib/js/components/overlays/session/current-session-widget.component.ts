@@ -17,6 +17,7 @@ import {
 } from '@components/replays/replay-info/replay-info-battlegrounds.component';
 import { GameType, getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { SceneService } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -26,7 +27,6 @@ import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
 import { Observable, combineLatest, from } from 'rxjs';
-import { SceneService } from '../../../services/game/scene.service';
 
 @Component({
 	selector: 'current-session-widget',

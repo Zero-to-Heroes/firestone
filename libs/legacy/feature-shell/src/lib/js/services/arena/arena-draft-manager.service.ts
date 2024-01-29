@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DraftPick } from '@firestone-hs/arena-draft-pick';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { IArenaDraftManagerService } from '@firestone/arena/common';
-import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
+import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import {
@@ -14,7 +14,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, map, pairwise } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
-import { SceneService } from '../game/scene.service';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
 
