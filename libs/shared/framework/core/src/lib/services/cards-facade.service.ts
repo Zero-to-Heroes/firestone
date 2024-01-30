@@ -67,6 +67,10 @@ export class CardsFacadeService {
 		return this.service.getCards();
 	}
 
+	public getRootCardId(cardId: string): string {
+		return this.service.getRootCardId(cardId);
+	}
+
 	public getAnomalies(): readonly ReferenceCard[] {
 		if (this.allAnomalies?.length) {
 			return this.allAnomalies;

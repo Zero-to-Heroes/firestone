@@ -1,0 +1,33 @@
+.mulligan-guide {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	align-items: center;
+	justify-content: center;
+	font-size: 13px;
+
+	&.wide {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+.mulligan-info {
+	display: flex;
+	flex-direction: column;
+	background: var(--color-6);
+	border-radius: 15px;
+	width: fit-content;
+	color: var(--color-1);
+	padding: 10px;
+	margin: auto;
+
+	.label {
+		margin-right: 5px;
+		opacity: 0.8;
+	}
+
+	.stat {
+		.value {
+			color: var(--default-title-color);
+		}
+	}
+}

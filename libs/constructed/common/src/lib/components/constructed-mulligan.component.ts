@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -8,8 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
-import { MulliganAdvice } from '../models/mulligan-advice';
+import { Observable, filter } from 'rxjs';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { GameStateFacadeService } from '../services/game-state-facade.service';
 
@@ -18,15 +18,28 @@ import { GameStateFacadeService } from '../services/game-state-facade.service';
 	styleUrls: ['./constructed-mulligan.component.scss'],
 	template: `
 		<div class="root">
-			<ul class="mulligan-guide" *ngIf="mulliganGuide$ | async as mulliganGuide">
-				<div class="mulligan-info" *ngFor="let info of mulliganGuide">{{ info.cardId }} - {{ info.score }}</div>
+			<ul
+				class="mulligan-guide"
+				*ngIf="mulliganGuide$ | async as mulliganGuide"
+				[ngClass]="{ wide: mulliganGuide.length === 4 }"
+			>
+				<div class="mulligan-info" *ngFor="let info of mulliganGuide">
+					<div class="stat mulligan-winrate">
+						<span
+							class="label"
+							[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
+							[helpTooltip]="'decktracker.overlay.mulligan.mulligan-impact-tooltip' | fsTranslate"
+						></span>
+						<span class="value">{{ info.impact }}</span>
+					</div>
+				</div>
 			</ul>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedMulliganComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	mulliganGuide$: Observable<readonly MulliganAdvice[] | null>;
+	mulliganGuide$: Observable<readonly InternalMulliganAdvice[] | null>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -41,10 +54,21 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 		await this.gameState.isReady();
 		await this.ads.isReady();
 
-		this.mulliganGuide$ = this.mulligan.mulliganAdvice$$;
+		this.mulliganGuide$ = this.mulligan.mulliganAdvice$$.pipe(
+			filter((advice) => !!advice),
+			this.mapData((advice) =>
+				advice!.map((advice) => ({
+					impact: advice.score == null ? '-' : advice.score.toFixed(2),
+				})),
+			),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+}
+
+interface InternalMulliganAdvice {
+	impact: string;
 }
