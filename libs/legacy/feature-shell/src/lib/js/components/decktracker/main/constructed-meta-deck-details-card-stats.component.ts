@@ -37,24 +37,6 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				>
 				</sortable-table-label>
 				<sortable-table-label
-					class="cell data copy-1"
-					[name]="'app.decktracker.meta.details.cards.copy-1-header' | owTranslate"
-					[helpTooltip]="'app.decktracker.meta.details.cards.copy-1-header-tooltip' | owTranslate"
-					[sort]="sort"
-					[criteria]="'copy-1'"
-					(sortClick)="onSortClick($event)"
-				>
-				</sortable-table-label>
-				<sortable-table-label
-					class="cell data copy-2"
-					[name]="'app.decktracker.meta.details.cards.copy-2-header' | owTranslate"
-					[helpTooltip]="'app.decktracker.meta.details.cards.copy-2-header-tooltip' | owTranslate"
-					[sort]="sort"
-					[criteria]="'copy-2'"
-					(sortClick)="onSortClick($event)"
-				>
-				</sortable-table-label>
-				<sortable-table-label
 					class="cell data winrate"
 					[name]="'app.decktracker.meta.details.cards.mulligan-winrate-header' | owTranslate"
 					[helpTooltip]="'app.decktracker.meta.details.cards.mulligan-winrate-header-tooltip' | owTranslate"
@@ -63,6 +45,24 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					(sortClick)="onSortClick($event)"
 				>
 				</sortable-table-label>
+				<sortable-table-label
+					class="cell data copy-1"
+					[name]="'app.decktracker.meta.details.cards.copy-1-header' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.copy-1-header-tooltip' | owTranslate"
+					[sort]="sort"
+					[criteria]="'copy-1'"
+					(sortClick)="onSortClick($event)"
+				>
+				</sortable-table-label>
+				<!-- <sortable-table-label
+					class="cell data copy-2"
+					[name]="'app.decktracker.meta.details.cards.copy-2-header' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.details.cards.copy-2-header-tooltip' | owTranslate"
+					[sort]="sort"
+					[criteria]="'copy-2'"
+					(sortClick)="onSortClick($event)"
+				>
+				</sortable-table-label> -->
 				<sortable-table-label
 					class="cell data kept"
 					[name]="'app.decktracker.meta.details.cards.mulligan-kept-header' | owTranslate"
@@ -95,9 +95,9 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 							[side]="'player'"
 						></deck-card>
 					</div>
-					<div class="cell data copy-1">{{ card.copy1Str }}</div>
-					<div class="cell data copy-2">{{ card.copy2Str }}</div>
 					<div class="cell data winrate {{ card.mulliganWinrateCss }}">{{ card.mulliganWinrateStr }}</div>
+					<div class="cell data copy-1">{{ card.copy1Str }}</div>
+					<!-- <div class="cell data copy-2">{{ card.copy2Str }}</div> -->
 					<div class="cell data kept ">{{ card.keptInMulliganStr }}</div>
 					<div class="cell data drawn {{ card.drawnWinrateCss }}">{{ card.drawnWinrateStr }}</div>
 				</li>
@@ -191,6 +191,14 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 
 						const copy1 = firstCopyData.inStartingDeck / totalGames;
 						const copy1Str = buildPercents(copy1);
+						console.debug(
+							'copy1',
+							copy1,
+							copy1Str,
+							firstCopyData.inStartingDeck,
+							totalGames,
+							firstCopyData,
+						);
 						const secondCopyData = data[1];
 						const copy2 = (secondCopyData?.inStartingDeck ?? 0) / totalGames;
 						const copy2Str = copy2 > 0 ? buildPercents(copy2) : '-';
