@@ -8,7 +8,7 @@ import { MemoryUpdatesService } from './memory-updates.service';
 @Injectable()
 export class SceneService extends AbstractFacadeService<SceneService> {
 	public currentScene$$: SubscriberAwareBehaviorSubject<SceneMode | null>;
-	public lastNonGamePlayScene$$: SubscriberAwareBehaviorSubject<SceneMode | null>;
+	public lastNonGamePlayScene$$: SubscriberAwareBehaviorSubject<SceneMode | null | undefined>;
 
 	private memory: MemoryInspectionService;
 	private memoryUpdates: MemoryUpdatesService;
@@ -26,7 +26,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 
 	protected async init() {
 		this.currentScene$$ = new SubscriberAwareBehaviorSubject<SceneMode | null>(null);
-		this.lastNonGamePlayScene$$ = new SubscriberAwareBehaviorSubject<SceneMode | null>(null);
+		this.lastNonGamePlayScene$$ = new SubscriberAwareBehaviorSubject<SceneMode | null | undefined>(null);
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 
@@ -63,8 +63,9 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		this.currentScene$$.next(scene);
 		if (scene !== SceneMode.GAMEPLAY) {
 			this.lastNonGamePlayScene$$.next(scene);
-		} else if (this.lastNonGamePlayScene$$.value === null) {
-			this.lastNonGamePlayScene$$.next(null);
+		}
+		if (this.lastNonGamePlayScene$$.value === null) {
+			this.lastNonGamePlayScene$$.next(undefined);
 		}
 	}
 }
