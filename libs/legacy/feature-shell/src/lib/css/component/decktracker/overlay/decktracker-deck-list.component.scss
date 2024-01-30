@@ -11,6 +11,7 @@
 	left: -10px;
 	position: relative;
 	max-height: calc(var(--decktracker-max-height) / var(--decktracker-scale) - 30px); // Take into account the top menu
+	padding-bottom: calc(10px * var(--decktracker-scale));
 
 	.select-container {
 		width: 100%;
