@@ -138,6 +138,8 @@ export class OpponentCardInfoIdComponent {
 				return CardIds.RunicHelmTavernBrawl;
 			case CardIds.RingOfPhaseshifting_PhaseshiftedTavernBrawlEnchantment:
 				return CardIds.RingOfPhaseshiftingTavernBrawl;
+			case CardIds.AnomalyLootFilled_LootFilledDummy:
+				return CardIds.AnomalyLootFilled;
 		}
 
 		// The base case
