@@ -6,6 +6,7 @@ import {
 	Component,
 	ElementRef,
 	Input,
+	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -302,7 +303,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChoosingCardOptionComponent {
+export class ChoosingCardOptionComponent implements OnDestroy {
 	@Input() set option(value: CardChoiceOption) {
 		this._option = value;
 		this._referenceCard = this.allCards.getCard(value?.cardId);
@@ -365,6 +366,11 @@ export class ChoosingCardOptionComponent {
 			return;
 		}
 		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
+	}
+
+	ngOnDestroy() {
+		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
+		this.cardsHighlightService.unregister(this._uniqueId, this.side);
 	}
 }
 
