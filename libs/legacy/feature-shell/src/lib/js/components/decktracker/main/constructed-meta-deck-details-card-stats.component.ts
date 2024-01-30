@@ -10,6 +10,7 @@ import {
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'constructed-meta-deck-details-card-stats',
@@ -18,7 +19,10 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 		`../../../../css/component/decktracker/main/constructed-meta-deck-details-card-stats.component.scss`,
 	],
 	template: `
-		<div class="constructed-meta-deck-details-card-stats" [ngClass]="{ deck: isDeck, archetype: !isDeck }">
+		<div
+			class="constructed-meta-deck-details-card-stats"
+			[ngClass]="{ deck: isDeck$ | async, archetype: !(isDeck$ | async) }"
+		>
 			<div class="controls">
 				<preference-toggle
 					class="show-relative-info-button"
@@ -47,8 +51,8 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				</sortable-table-label>
 				<sortable-table-label
 					class="cell data copy-1"
-					[name]="'app.decktracker.meta.details.cards.copy-1-header' | owTranslate"
-					[helpTooltip]="'app.decktracker.meta.details.cards.copy-1-header-tooltip' | owTranslate"
+					[name]="popularityLabel$ | async"
+					[helpTooltip]="popularityLabelTooltip$ | async"
 					[sort]="sort"
 					[criteria]="'copy-1'"
 					(sortClick)="onSortClick($event)"
@@ -112,6 +116,9 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 {
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	cardData$: Observable<readonly InternalCardData[]>;
+	isDeck$: Observable<boolean>;
+	popularityLabel$: Observable<string>;
+	popularityLabelTooltip$: Observable<string>;
 
 	@Input() set cards(value: readonly ConstructedCardData[]) {
 		this.cardData$$.next(value);
@@ -125,19 +132,26 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	@Input() set totalGames(value: number) {
 		this.totalGames$$.next(value);
 	}
-	@Input() isDeck: boolean;
+	@Input() set isDeck(value: boolean) {
+		this.isDeck$$.next(value);
+	}
 
 	private cardData$$ = new BehaviorSubject<readonly ConstructedCardData[]>([]);
 	private showRelativeInfo$$ = new BehaviorSubject<boolean>(false);
 	private deckWinrate$$ = new BehaviorSubject<number>(null);
 	private totalGames$$ = new BehaviorSubject<number>(null);
+	private isDeck$$ = new BehaviorSubject<boolean>(false);
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'mulligan-winrate',
 		direction: 'desc',
 	});
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(cdr);
 	}
 
@@ -145,15 +159,30 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	// which cards do well or not
 	ngAfterContentInit(): void {
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
+		this.isDeck$ = this.isDeck$$.asObservable();
+		this.popularityLabel$ = this.isDeck$.pipe(
+			this.mapData((isDeck) =>
+				isDeck
+					? this.i18n.translateString('app.decktracker.meta.details.cards.copy-1-header')
+					: this.i18n.translateString('app.decktracker.meta.details.cards.copy-per-deck-header'),
+			),
+		);
+		this.popularityLabelTooltip$ = this.isDeck$.pipe(
+			this.mapData((isDeck) =>
+				isDeck
+					? this.i18n.translateString('app.decktracker.meta.details.cards.copy-1-header-tooltip')
+					: this.i18n.translateString('app.decktracker.meta.details.cards.copy-per-deck-header-tooltip'),
+			),
+		);
 		this.cardData$ = combineLatest([
 			this.cardData$$,
 			this.sortCriteria$$,
 			this.showRelativeInfo$$,
 			this.deckWinrate$$,
 			this.totalGames$$,
+			this.isDeck$$,
 		]).pipe(
-			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate, totalGames]) => {
-				console.debug('cardsData', cardData);
+			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate, totalGames, isDeck]) => {
 				const groupedByCardId = groupByFunction((data: ConstructedCardData) => data.cardId)(cardData);
 				const result = Object.keys(groupedByCardId)
 					.map((cardId) => {
@@ -190,15 +219,13 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const drawnWinrateCss = buildCss(relativeDrawnWinrate);
 
 						const copy1 = firstCopyData.inStartingDeck / totalGames;
-						const copy1Str = buildPercents(copy1);
-						console.debug(
-							'copy1',
-							copy1,
-							copy1Str,
-							firstCopyData.inStartingDeck,
-							totalGames,
-							firstCopyData,
-						);
+						const copy1Str = isDeck
+							? buildPercents(copy1)
+							: copy1.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+									minimumIntegerDigits: 1,
+									minimumFractionDigits: 0,
+									maximumFractionDigits: 2,
+							  });
 						const secondCopyData = data[1];
 						const copy2 = (secondCopyData?.inStartingDeck ?? 0) / totalGames;
 						const copy2Str = copy2 > 0 ? buildPercents(copy2) : '-';
