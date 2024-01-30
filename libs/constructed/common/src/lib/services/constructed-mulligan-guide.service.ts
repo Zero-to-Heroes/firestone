@@ -59,6 +59,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 		await Promise.all([this.scene.isReady(), this.prefs.isReady(), this.ads.isReady(), this.archetypes.isReady()]);
 
+		return;
+
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$((prefs) => prefs.decktrackerMulliganGuideOverlay),
