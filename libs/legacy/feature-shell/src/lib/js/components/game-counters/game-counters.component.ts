@@ -17,6 +17,7 @@ import { AnachronosCounterDefinition } from './definitions/anachronos-counter';
 import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
 import { AsvedonCounterDefinition } from './definitions/asvedon-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
+import { BgsBloodGemCounterDefinition } from './definitions/bgs-blood-gem-counter';
 import { BgsGoldDeltaCounterDefinition } from './definitions/bgs-delta-gold-counter';
 import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-counter';
@@ -266,6 +267,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return BgsSouthseaStrongarmCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMagmaloc':
 				return BgsMagmalocCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'bgsBloodGem':
+				return BgsBloodGemCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMajordomo':
 				return BgsMajordomoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsGoldDelta':

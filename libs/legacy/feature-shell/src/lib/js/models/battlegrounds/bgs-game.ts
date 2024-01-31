@@ -15,6 +15,8 @@ export class BgsGame {
 	// readonly replayXml: string;
 	readonly mmrAtStart: number;
 	readonly pogoHoppersCount: number;
+	readonly bloodGemAttackBuff: number;
+	readonly bloodGemHealthBuff: number;
 	readonly availableRaces: readonly Race[];
 	readonly bannedRaces: readonly Race[];
 

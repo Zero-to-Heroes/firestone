@@ -68,5 +68,6 @@ export type CounterType =
 	| 'bgsPogo'
 	| 'bgsSouthsea'
 	| 'bgsMagmaloc'
+	| 'bgsBloodGem'
 	| 'bgsGoldDelta'
 	| 'bgsMajordomo';

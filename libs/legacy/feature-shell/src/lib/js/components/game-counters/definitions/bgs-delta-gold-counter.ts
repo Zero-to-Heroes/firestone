@@ -78,15 +78,17 @@ export class BgsGoldDeltaCounterDefinition
 			.filter((cardId) => cardId !== CardIds.Overconfidence_BG28_884)
 			.map((cardId) => GOLD_DELTA_VALUES[cardId as CardIds])
 			.reduce((a, b) => a + b, 0);
+		const goldDeltaStr = goldDelta === goldDeltaSure ? '' : ` (${goldDelta})`;
 		const maxValueText =
 			goldDelta === goldDeltaSure
 				? ''
-				: ` ${this.i18n.translateString('counters.bgs-gold-delta.up-to', {
+				: ` (${this.i18n.translateString('counters.bgs-gold-delta.up-to', {
 						maxValue: goldDelta,
-				  })}`;
+				  })})`;
+		console.debug('gold delta', goldDelta, goldDeltaSure, goldDelta === goldDeltaSure, maxValueText);
 		return {
 			type: 'bgsGoldDelta',
-			value: `${goldDeltaSure} (${goldDelta})`,
+			value: `${goldDeltaSure}${goldDeltaStr}`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.RecklessInvestment_BG28_513}.jpg`,
 			cssClass: 'bgs-gold-delta-counter',
 			tooltip: this.i18n.translateString(`counters.bgs-gold-delta.${this.side}`, {

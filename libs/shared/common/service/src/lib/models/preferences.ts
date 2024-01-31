@@ -546,6 +546,9 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsGoldDeltaCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerBgsBloodGemCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBgsBloodGemCounterWidgetPosition: { left: number; top: number };
 	readonly playerBgsSouthseaCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsSouthseaCounterWidgetPosition: { left: number; top: number };

@@ -35,6 +35,7 @@ import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser'
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsBattleSimulationResetParser } from './event-parsers/bgs-battle-simulation-reset-parser';
 import { BgsBattleSimulationUpdateParser } from './event-parsers/bgs-battle-simulation-update-parser';
+import { BgsBloodGemBuffChangedEvent, BgsBloodGemBuffChangedParser } from './event-parsers/bgs-blood-gem-buff-changed';
 import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
@@ -372,6 +373,15 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.totalArmor,
 					),
 				);
+			} else if (gameEvent.type === GameEvent.BLOOD_GEM_BUFF_CHANGED) {
+				if (gameEvent.entityId === gameEvent.localPlayer.Id) {
+					this.battlegroundsUpdater.next(
+						new BgsBloodGemBuffChangedEvent(
+							gameEvent.additionalData.attack,
+							gameEvent.additionalData.health,
+						),
+					);
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(
 					new BgsPlayerBoardEvent(
@@ -558,13 +568,13 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			// console.debug(
-			// 	'[bgs-store] new state',
-			// 	gameEvent.type,
-			// 	gameEvent,
-			// 	this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
-			// 	this.state,
-			// );
+			console.debug(
+				'[bgs-store] new state',
+				gameEvent.type,
+				gameEvent,
+				this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
+				this.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay();
 		}
@@ -626,6 +636,7 @@ export class BattlegroundsStoreService {
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService, this.bugService),
 			new BgsArmorChangedParser(this.allCards),
+			new BgsBloodGemBuffChangedParser(),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.allCards),
 			new BgsPostMatchStatsFilterChangeParser(this.prefs),

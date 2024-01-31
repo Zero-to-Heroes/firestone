@@ -810,6 +810,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'BLOOD_GEM_BUFF_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BLOOD_GEM_BUFF_CHANGED, gameEvent, {
+						attack: gameEvent.Value.AdditionalProps.Attack,
+						health: gameEvent.Value.AdditionalProps.Health,
+					}),
+				);
+				break;
 			case 'EXCAVATE_TIER_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.EXCAVATE_TIER_CHANGED, gameEvent, {
