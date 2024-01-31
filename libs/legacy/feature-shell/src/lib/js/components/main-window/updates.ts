@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.3.2',
+		version: '13.3.3',
 		force: false,
 		sections: [
 			// {
@@ -69,6 +69,10 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add a Blood Gem counter (even though you can see the current Blood Gem buff while mousing over a minion with the Blood Gem keyword, it's often not practical).`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a sim issue where Venomstrike Trap and Snake Trap could trigger on a full board.`,
 							},
@@ -96,6 +100,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where the same secret could appear multiple times in the secrets tracker.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where card highlights in the tracker would persist after picking a Discover option that would highlight cards.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the tracker would not appear when starting the app while already in a match.`,
 							},
 						],
 					},
