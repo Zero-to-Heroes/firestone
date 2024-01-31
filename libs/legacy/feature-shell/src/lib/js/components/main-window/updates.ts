@@ -92,6 +92,22 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue where Stormpike Lieutenant would buff the board, instead of the tavern.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Faceless Disciple was not implemented (my bad).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where King Bargurgle would still grant stats on Deathrattle.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the player attack order could be off after Illidan's hero power triggered.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where a magnetized golden Replicating Menace would not spawn any minion.`,
+							},
 						],
 					},
 					{
