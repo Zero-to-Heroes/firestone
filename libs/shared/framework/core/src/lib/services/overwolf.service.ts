@@ -113,18 +113,6 @@ export class OverwolfService {
 		overwolf.games.onGameInfoUpdated.removeListener(listener);
 	}
 
-	public addGameEventsErrorListener(callback) {
-		overwolf.games.events.onError.addListener(callback);
-	}
-
-	public addGameEventInfoUpdates2Listener(callback) {
-		overwolf.games.events.onInfoUpdates2.addListener(callback);
-	}
-
-	public addGameEventsListener(callback) {
-		overwolf.games.events.onNewEvents.addListener(callback);
-	}
-
 	/** @deprecated Use event bus communication instead */
 	public addMessageReceivedListener(callback: (message: any) => void): (message: any) => void {
 		overwolf.windows.onMessageReceived.addListener(callback);
@@ -476,25 +464,9 @@ export class OverwolfService {
 		});
 	}
 
-	public async getGameEventsInfo() {
-		return new Promise<any>((resolve) => {
-			overwolf.games.events.getInfo((info: any) => {
-				resolve(info);
-			});
-		});
-	}
-
 	public async getGameDbInfo() {
 		return new Promise<overwolf.games.GetGameDBInfoResult>((resolve) => {
 			overwolf.games.getGameDBInfo(HEARTHSTONE_GAME_ID, (info: overwolf.games.GetGameDBInfoResult) => {
-				resolve(info);
-			});
-		});
-	}
-
-	public async setGameEventsRequiredFeatures(features) {
-		return new Promise<any>((resolve) => {
-			overwolf.games.events.setRequiredFeatures(features, (info) => {
 				resolve(info);
 			});
 		});
