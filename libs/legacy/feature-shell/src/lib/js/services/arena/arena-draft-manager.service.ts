@@ -35,7 +35,7 @@ export class ArenaDraftManagerService
 	private api: ApiRunner;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
-	private previousCardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	// private previousCardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
@@ -49,7 +49,7 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = this.mainInstance.currentStep$$;
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
-		this.previousCardOptions$$ = this.mainInstance.previousCardOptions$$;
+		// this.previousCardOptions$$ = this.mainInstance.previousCardOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
@@ -58,7 +58,7 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
-		this.previousCardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		// this.previousCardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
@@ -97,11 +97,31 @@ export class ArenaDraftManagerService
 					}
 				}
 				if (!!changes.ArenaHeroOptions?.length) {
+					console.debug(
+						'[arena-draft-manager] received hero options',
+						changes.ArenaHeroOptions,
+						this.heroOptions$$.getValue(),
+						this.cardOptions$$.getValue(),
+					);
+					this.cardOptions$$.next(null);
 					this.heroOptions$$.next(changes.ArenaHeroOptions);
 				}
 				if (!!changes.ArenaCardOptions?.length) {
-					this.previousCardOptions$$.next(this.cardOptions$$.getValue());
-					this.cardOptions$$.next(changes.ArenaCardOptions);
+					if (changes.ArenaCardOptions.every((c) => this.allCards.getCard(c).type === 'Hero')) {
+						console.debug(
+							'[arena-draft-manager] received hero options as cards, ignoring',
+							changes.ArenaCardOptions,
+						);
+					} else {
+						console.debug(
+							'[arena-draft-manager] received card options',
+							changes.ArenaCardOptions,
+							this.heroOptions$$.getValue(),
+							this.cardOptions$$.getValue(),
+						);
+						this.heroOptions$$.next(null);
+						this.cardOptions$$.next(changes.ArenaCardOptions);
+					}
 				}
 
 				const scene = changes.CurrentScene || (await this.scene.currentScene$$.getValueWithInit());
@@ -140,8 +160,9 @@ export class ArenaDraftManagerService
 			combineLatest([this.currentDeck$$, this.cardOptions$$])
 				.pipe(
 					distinctUntilChanged(
-						([deckA, optionsA], [deckB, optionsB]) =>
-							deckA?.DeckList?.length === deckB?.DeckList?.length || arraysEqual(optionsA, optionsB),
+						([previousDeck, previousOptions], [currentDeck, currentOptions]) =>
+							this.deckLength(previousDeck) === this.deckLength(currentDeck) ||
+							arraysEqual(previousOptions, currentOptions),
 					),
 					pairwise(),
 				)
@@ -162,7 +183,7 @@ export class ArenaDraftManagerService
 						);
 						return;
 					}
-					if (previousDeck?.Id !== currentDeck.Id) {
+					if (previousDeck?.Id !== currentDeck.Id || currentDeck.DeckList.length === 0) {
 						console.log('[arena-draft-manager] new deck, not sending pick', previousDeck, currentDeck);
 						return;
 					}
@@ -192,9 +213,12 @@ export class ArenaDraftManagerService
 						return;
 					}
 
+					// The "distinctUntilChanged" waits until BOTH the deck and the options have changed
+					// This means that the options related to the pick will always be the "previousOptions",
+					// unless this is the first pick registered by the app (eg we left then came back)
 					// On the first pick, we don't have previous options
 					const pickNumber = currentDeck.DeckList.length;
-					const options = pickNumber === 1 ? currentOptions : previousOptions;
+					const options = previousOptions ?? currentOptions;
 					const heroRefCard = this.allCards.getCard(currentDeck?.HeroCardId);
 					const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
 					const pick: DraftPick = {
@@ -212,6 +236,9 @@ export class ArenaDraftManagerService
 						previousOptions,
 						currentOptions,
 					);
+					if (!pick.options?.includes(pick.pick)) {
+						console.error('[arena-draft-manager] invalid pick', pick, previousDeck, currentDeck);
+					}
 					this.sendDraftPick(pick);
 				});
 		});
@@ -220,5 +247,11 @@ export class ArenaDraftManagerService
 	private async sendDraftPick(pick: DraftPick) {
 		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
 		console.debug('[arena-draft-manager] uploaded draft pick');
+	}
+
+	private deckLength(deck: DeckInfoFromMemory): number {
+		const heroSize = !!deck?.HeroCardId?.length ? 1 : 0;
+		const deckSize = deck?.DeckList?.length ?? 0;
+		return heroSize + deckSize;
 	}
 }

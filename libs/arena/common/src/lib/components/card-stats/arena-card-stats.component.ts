@@ -267,7 +267,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		searchString: string | undefined,
 		sortCriteria: SortCriteria<ColumnSortType>,
 	): ArenaCardStatInfo[] {
-		console.debug('[arena-card-stats] building card stats', stats, searchString, sortCriteria);
+		console.debug(
+			'[arena-card-stats] building card stats',
+			stats?.filter((s) => s.cardId === 'WW_406'),
+			searchString,
+			sortCriteria,
+		);
 		const result =
 			stats
 				?.filter((stat) => stat.matchStats?.drawn > 100)
@@ -280,7 +285,10 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				.filter((stat) => this.hasCorrectCardType(stat.cardId, cardType))
 				.map((stat) => this.buildCardStat(stat))
 				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? [];
-		console.debug('[arena-card-stats] built card stats', result);
+		console.debug(
+			'[arena-card-stats] built card stats',
+			result?.filter((s) => s.cardId === 'WW_406'),
+		);
 		return result;
 		// .sort(sortByProperties((a: ArenaCardStatInfo) => [-(a.drawWinrate ?? 0)])) ?? []
 	}
