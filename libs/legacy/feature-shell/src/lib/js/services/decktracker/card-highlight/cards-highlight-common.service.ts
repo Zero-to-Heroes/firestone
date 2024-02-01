@@ -1073,6 +1073,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(inDeck, minion, attackLessThan(4));
 			case CardIds.LineHopper:
 				return and(side(inputSide), outcast);
+			case CardIds.LivingPrairie_WW_024:
+				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.LivingSeedRank1:
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
