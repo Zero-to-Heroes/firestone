@@ -175,8 +175,14 @@ const buildAdditionalCards = (
 };
 
 const buildEnchantments = (
-	enchantments: readonly { EntityId: number; CardId: string }[],
-): { cardId: string; originEntityId: number; timing: number }[] => {
+	enchantments: readonly { EntityId: number; CardId: string; TagScriptDataNum1: number; TagScriptDataNum2: number }[],
+): {
+	cardId: string;
+	originEntityId: number;
+	tagScriptDataNum1: number;
+	tagScriptDataNum2: number;
+	timing: number;
+}[] => {
 	if (!enchantments?.length) {
 		return [];
 	}
@@ -184,6 +190,8 @@ const buildEnchantments = (
 	return enchantments.map((enchant) => ({
 		originEntityId: enchant.EntityId,
 		cardId: enchant.CardId,
+		tagScriptDataNum1: enchant.TagScriptDataNum1 ?? 0,
+		tagScriptDataNum2: enchant.TagScriptDataNum2 ?? 0,
 		timing: 0,
 	}));
 };

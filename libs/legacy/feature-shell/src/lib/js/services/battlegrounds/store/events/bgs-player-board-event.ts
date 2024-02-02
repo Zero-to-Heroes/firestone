@@ -33,5 +33,10 @@ export interface PlayerBoardEntity {
 	readonly Entity: number;
 	readonly Id: number;
 	readonly Tags: readonly { Name: number; Value: number }[];
-	readonly Enchantments: readonly { EntityId: number; CardId: string }[];
+	readonly Enchantments: readonly {
+		EntityId: number;
+		CardId: string;
+		TagScriptDataNum1: number;
+		TagScriptDataNum2: number;
+	}[];
 }
