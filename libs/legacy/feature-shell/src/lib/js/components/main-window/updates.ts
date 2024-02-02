@@ -88,6 +88,14 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue where Sr. Tomb Diver could gild dead minions.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where avenge minions summoned by deathrattles would get the avenge value already incremented.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with the timing of Avenge effects with regards to Reborn.`,
+							},
 						],
 					},
 					{
