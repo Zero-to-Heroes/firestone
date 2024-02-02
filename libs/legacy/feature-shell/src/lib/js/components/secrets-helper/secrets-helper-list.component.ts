@@ -133,7 +133,9 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 					internalEntityIds: [uuidShort()],
 				});
 			})
-			.sort(sortByProperties((option) => [option.highlight === 'dim' ? 1 : 0, option.cardName]));
+			.sort(
+				sortByProperties((option) => [option.highlight === 'dim' ? 1 : 0, option.classes[0], option.cardName]),
+			);
 
 		return reducedOptions.map((c) => VisualDeckCard.create(c));
 	}
