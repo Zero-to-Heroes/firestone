@@ -224,7 +224,7 @@ export class Preferences implements IPreferences {
 	readonly overlayShowGiftedCardsSeparateZone: boolean = false;
 	readonly overlayShowPlaguesOnTop: boolean = true;
 	readonly overlayShowBoardCardsSeparateZone: boolean = false;
-	readonly overlayResetDeckPositionAfterTrade: boolean = true;
+	readonly overlayResetDeckPositionAfterTrade: boolean = false;
 	readonly overlayShowStatsChange: boolean = true;
 	readonly overlayShowDeckWinrate: boolean = true;
 	readonly overlayShowMatchupWinrate: boolean = true;
