@@ -65,7 +65,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		if (!removedCard?.cardId && cardId && !gameEvent.additionalData.transientCard) {
 			// Technically this should also be done in "card-played-by-effect", but the use case is pretty marginal,
 			// and not worth the added complexity for now
-			if (removedCard.stolenFromOpponent) {
+			if (removedCard?.stolenFromOpponent) {
 				const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
 					opponentDeck.deck,
 					cardId,
