@@ -1,8 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { sanitizeDeckDefinition } from '@components/decktracker/copy-deckstring.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
 import { decode, encode } from '@firestone-hs/deckstrings';
+import { sanitizeDeckDefinition } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { SetCard } from '@models/set';
 import { LocalizationFacadeService } from '@services/localization-facade.service';

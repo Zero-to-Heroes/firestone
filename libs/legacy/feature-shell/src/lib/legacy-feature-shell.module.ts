@@ -638,7 +638,6 @@ import { ControlMaximizeComponent } from './js/components/controls/control-maxim
 import { ControlMinimizeComponent } from './js/components/controls/control-minimize.component';
 import { ControlSettingsComponent } from './js/components/controls/control-settings.component';
 import { ControlShareComponent } from './js/components/controls/control-share.component';
-import { CopyDesckstringComponent } from './js/components/decktracker/copy-deckstring.component';
 import { ImportDeckstringComponent } from './js/components/decktracker/import-deckstring.component';
 import { ConstructedDustFilterDropdownComponent } from './js/components/decktracker/main/filters/constructed-dust-filter-dropdown.component';
 import { DeckCardComponent } from './js/components/decktracker/overlay/deck-card.component';
@@ -972,7 +971,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckListByZoneComponent,
 		GroupedDeckListComponent,
 		DeckZoneComponent,
-		CopyDesckstringComponent,
 		DeckListComponent,
 		DeckListStaticComponent,
 		DkRunesComponent,
@@ -1084,7 +1082,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckListByZoneComponent,
 		GroupedDeckListComponent,
 		DeckZoneComponent,
-		CopyDesckstringComponent,
 		DeckListStaticComponent,
 
 		BgsOpponentOverviewBigComponent,

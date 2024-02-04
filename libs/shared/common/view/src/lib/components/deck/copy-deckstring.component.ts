@@ -1,13 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
-import { CardClass, CardIds, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
-import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { normalizeDeckHeroDbfId } from '@services/hs-utils';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { CardClass, CardIds, allDuelsSignatureTreasures, normalizeDeckHeroDbfId } from '@firestone-hs/reference-data';
+import {
+	AnalyticsService,
+	CardsFacadeService,
+	ILocalizationService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'copy-deckstring',
-	styleUrls: ['../../../css/component/decktracker/copy-deckstring.component.scss'],
+	styleUrls: ['./copy-deckstring.component.scss'],
 	template: `
 		<div
 			class="copy-deckstring"
@@ -50,7 +53,7 @@ export class CopyDesckstringComponent {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		@Optional() private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly analytics: AnalyticsService,
 	) {}
@@ -114,7 +117,7 @@ export const sanitizeDeckDefinition = (
 		.filter((c: CardClass) => c !== CardClass.NEUTRAL)[0];
 	deckDefinition.heroes = deckDefinition.heroes.map((hero) => {
 		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
-		const result = normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass) ?? 7;
+		const result = normalizeDeckHeroDbfId(hero, allCards.getService(), duelsClass, deckClass) ?? 7;
 		return result;
 	});
 	deckDefinition.cards = newCards;

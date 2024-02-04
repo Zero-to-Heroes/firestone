@@ -14,13 +14,13 @@ import {
 	SignatureTreasureDuelsDeckStatInfo,
 	TreasureDuelsDeckStatInfo,
 } from '@firestone/duels/general';
+import { sanitizeDeckDefinition, sanitizeDeckstring } from '@firestone/shared/common/view';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { combineLatest, concat } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
-import { sanitizeDeckDefinition, sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

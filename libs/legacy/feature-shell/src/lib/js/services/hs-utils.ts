@@ -523,6 +523,7 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 	}
 };
 
+/** @deprecated */
 export const normalizeDeckHeroDbfId = (
 	heroDbfId: number,
 	cards: CardsFacadeService,
