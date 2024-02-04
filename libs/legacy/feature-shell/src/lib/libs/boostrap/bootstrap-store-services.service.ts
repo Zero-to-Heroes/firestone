@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
+import { ArenaCardStatsService, ArenaClassStatsService, ArenaNavigationService } from '@firestone/arena/common';
 import {
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideService,
@@ -79,6 +79,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ConstructedMulliganGuideService: ConstructedMulliganGuideService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
+		private readonly init_ArenaNavigationService: ArenaNavigationService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

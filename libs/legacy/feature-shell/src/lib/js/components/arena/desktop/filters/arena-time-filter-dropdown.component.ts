@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { IOption } from 'ng-select';
@@ -34,6 +35,7 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreC
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: ArenaNavigationService,
 	) {
 		super(store, cdr);
 	}
@@ -42,14 +44,15 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreC
 		await this.patchesConfig.isReady();
 		await this.prefs.isReady();
 		await this.store.initComplete();
+		await this.nav.isReady();
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentArenaMetaPatch$$,
 			this.prefs.preferences$((prefs) => prefs.arenaActiveTimeFilter),
-			this.store.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId),
+			this.nav.selectedCategoryId$$,
 		]).pipe(
-			filter(([patch, [filter], [selectedCategoryId]]) => !!filter && !!patch),
-			this.mapData(([patch, [filter], [selectedCategoryId]]) => {
+			filter(([patch, [filter], selectedCategoryId]) => !!filter && !!patch),
+			this.mapData(([patch, [filter], selectedCategoryId]) => {
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',

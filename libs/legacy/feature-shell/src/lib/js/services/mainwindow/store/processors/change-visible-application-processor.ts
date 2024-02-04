@@ -69,7 +69,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		const arena =
 			event.module === 'arena'
 				? navigationState.navigationArena.update({
-						selectedCategoryId: 'arena-runs',
 						menuDisplayType: 'menu',
 						expandedRunIds: [] as readonly string[],
 				  } as NavigationArena)

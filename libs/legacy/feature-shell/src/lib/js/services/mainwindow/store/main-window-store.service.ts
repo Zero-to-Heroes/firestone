@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { DuelsPersonalDecksService } from '@firestone/duels/general';
@@ -400,6 +401,7 @@ export class MainWindowStoreService {
 		private readonly duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly constructedNavigation: ConstructedNavigationService,
+		private readonly arenaNavigation: ArenaNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -870,7 +872,7 @@ export class MainWindowStoreService {
 			],
 			[DuelsDeckbuilderImportDeckEvent.eventName(), new DuelsDeckbuilderImportDeckProcessor(this.cards)],
 			// Arena
-			[ArenaSelectCategoryEvent.eventName(), new ArenaSelectCategoryProcessor()],
+			[ArenaSelectCategoryEvent.eventName(), new ArenaSelectCategoryProcessor(this.arenaNavigation)],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],

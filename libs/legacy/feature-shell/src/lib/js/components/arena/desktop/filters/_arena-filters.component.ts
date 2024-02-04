@@ -1,4 +1,5 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -27,16 +28,26 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 	showRegionFilter$: Observable<boolean>;
 	showArenaCardSearch$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: ArenaNavigationService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showRegionFilter$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId)
-			.pipe(this.mapData(([currentView]) => ['arena-runs'].includes(currentView)));
-		this.showArenaCardSearch$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId)
-			.pipe(this.mapData(([currentView]) => ['card-stats'].includes(currentView)));
+	async ngAfterContentInit() {
+		await this.nav.isReady();
+
+		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((currentView) => ['arena-runs'].includes(currentView)),
+		);
+		this.showArenaCardSearch$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((currentView) => ['card-stats'].includes(currentView)),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

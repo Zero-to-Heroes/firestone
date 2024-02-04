@@ -1,3 +1,8 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
 .arena-run {
 	background: rgba(255, 255, 255, 0.08);
 	display: flex;
@@ -8,6 +13,7 @@
 	font-style: normal;
 	font-weight: normal;
 	color: var(--default-text-color);
+	width: 100%;
 
 	&.expanded {
 		margin-bottom: 10px;

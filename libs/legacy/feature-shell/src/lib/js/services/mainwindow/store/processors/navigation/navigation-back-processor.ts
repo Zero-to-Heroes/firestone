@@ -116,10 +116,10 @@ export class NavigationBackProcessor implements Processor {
 			return null;
 		}
 		// console.log('building parent arena state', navigationState.navigationArena.selectedCategoryId);
-		switch (navigationState.navigationArena.selectedCategoryId) {
-			default:
-				return null;
-		}
+		// switch (navigationState.navigationArena.selectedCategoryId) {
+		// 	default:
+		// 		return null;
+		// }
 	}
 
 	private static buildParentBattlegroundsState(

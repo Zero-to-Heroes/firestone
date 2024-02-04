@@ -15,8 +15,10 @@ import { ArenaCardSelectionComponent } from './components/overlays/arena-card-se
 import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
 import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
+import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
+import { ArenaNavigationService } from './services/arena-navigation.service';
 
 const components = [
 	ArenaClassTierListComponent,
@@ -30,6 +32,7 @@ const components = [
 	ArenaCardSelectionComponent,
 	ArenaCardOptionComponent,
 	ArenaOptionInfoPremiumComponent,
+	ArenaDeckDetailsComponent,
 ];
 @NgModule({
 	imports: [
@@ -41,7 +44,7 @@ const components = [
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,
 	],
-	providers: [ArenaClassStatsService, ArenaCardStatsService],
+	providers: [ArenaClassStatsService, ArenaCardStatsService, ArenaNavigationService],
 	declarations: components,
 	exports: components,
 })

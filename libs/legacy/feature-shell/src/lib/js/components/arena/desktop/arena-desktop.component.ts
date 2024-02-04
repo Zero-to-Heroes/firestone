@@ -1,6 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ArenaCategory, ArenaCategoryType } from '@firestone/arena/common';
-import { Observable, combineLatest } from 'rxjs';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ArenaCategory, ArenaCategoryType, ArenaNavigationService } from '@firestone/arena/common';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { ArenaSelectCategoryEvent } from '../../../services/mainwindow/store/processors/arena/arena-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -13,7 +13,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		`../../../../css/component/arena/desktop/arena-desktop.component.scss`,
 	],
 	template: `
-		<div class="app-section arena" *ngIf="{ value: category$ | async } as category">
+		<div class="app-section arena" *ngIf="category$ | async as category">
 			<section class="main divider">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
@@ -21,22 +21,22 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
 								*ngFor="let cat of categories$ | async; trackBy: trackByFn"
-								[ngClass]="{ selected: cat.id === category.value?.id }"
+								[ngClass]="{ selected: cat.id === category }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								<span>{{ cat.name }} </span>
 							</li>
 						</ul>
-						<arena-filters> </arena-filters>
-						<arena-runs-list *ngIf="category.value?.id === 'arena-runs'"> </arena-runs-list>
-						<arena-class-tier-list *ngIf="category.value?.id === 'class-tier-list'">
-						</arena-class-tier-list>
-						<arena-card-stats *ngIf="category.value?.id === 'card-stats'"> </arena-card-stats>
+						<arena-filters *ngIf="category !== 'arena-deck-details'"> </arena-filters>
+						<arena-runs-list *ngIf="category === 'arena-runs'"> </arena-runs-list>
+						<arena-class-tier-list *ngIf="category === 'class-tier-list'"> </arena-class-tier-list>
+						<arena-card-stats *ngIf="category === 'card-stats'"> </arena-card-stats>
+						<arena-deck-details *ngIf="category === 'arena-deck-details'"> </arena-deck-details>
 					</div>
 				</with-loading>
 			</section>
 			<section class="secondary" *ngIf="showSecondary$ | async">
-				<arena-classes-recap *ngIf="category.value?.id === 'arena-runs'"></arena-classes-recap>
+				<arena-classes-recap *ngIf="category === 'arena-runs'"></arena-classes-recap>
 			</section>
 		</div>
 	`,
@@ -45,35 +45,43 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
-	category$: Observable<ArenaCategory>;
+	category$: Observable<ArenaCategoryType>;
 	categories$: Observable<readonly ArenaCategory[]>;
 	showAds$: Observable<boolean>;
 	showSecondary$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: ArenaNavigationService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.nav.isReady();
+
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.arena.loading)
 			.pipe(this.mapData(([loading]) => loading));
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationArena.menuDisplayType)
 			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.category$ = this.store
-			.listen$(
-				([main, nav]) => main.arena,
-				([main, nav]) => nav.navigationArena.selectedCategoryId,
-			)
-			.pipe(this.mapData(([arena, selectedCategoryId]) => arena.findCategory(selectedCategoryId)));
+		this.category$ = this.nav.selectedCategoryId$$.pipe(
+			tap((selectedCategoryId) => console.debug('selectedCategoryId', selectedCategoryId)),
+			this.mapData((selectedCategoryId) => selectedCategoryId),
+		);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.arena.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 		this.showSecondary$ = combineLatest([this.category$, this.showAds$]).pipe(
-			this.mapData(([category, showAds]) => category?.id === 'arena-runs' && !showAds),
+			this.mapData(([category, showAds]) => category === 'arena-runs' && !showAds),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectCategory(categoryId: ArenaCategoryType) {

@@ -1,0 +1,30 @@
+:host {
+	position: relative;
+	left: 10px;
+	display: flex;
+	min-height: 1px;
+}
+
+.deck-list {
+	list-style: none;
+	overflow: hidden;
+	max-height: 100%;
+	width: calc(100% + 20px);
+	min-width: calc(100% + 20px);
+	position: relative;
+	left: -10px;
+}
+
+.card {
+	margin-bottom: 1px;
+	display: flex;
+
+	::ng-deep .deck-card {
+		width: 100%;
+	}
+}
+
+.sideboard {
+	list-style: none;
+	padding-left: 15px;
+}

@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { ArenaCardClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
@@ -34,6 +35,7 @@ export class ArenaCardClassFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: ArenaNavigationService,
 	) {
 		super(store, cdr);
 	}
@@ -41,13 +43,14 @@ export class ArenaCardClassFilterDropdownComponent
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
 		await this.store.initComplete();
+		await this.nav.isReady();
 
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId),
+			this.nav.selectedCategoryId$$,
 			this.prefs.preferences$((prefs) => prefs.arenaActiveCardClassFilter),
 		]).pipe(
-			filter(([[selectedCategoryId], [filter]]) => !!filter),
-			this.mapData(([[selectedCategoryId], [filter]]) => {
+			filter(([selectedCategoryId, [filter]]) => !!filter),
+			this.mapData(([selectedCategoryId, [filter]]) => {
 				const options = ['all', 'neutral', 'no-neutral'].map(
 					(option) =>
 						({

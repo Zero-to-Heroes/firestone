@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { CardsFacadeService, formatClass } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ArenaRun } from '../../../models/arena/arena-run';
@@ -38,6 +39,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 			</div>
 			<div class="right-info">
+				<div class="group view-deck" (click)="showDeck()" *ngIf="deckstring">
+					<div class="text" [owTranslate]="'app.duels.run.view-deck-button'"></div>
+					<div class="icon" inlineSVG="assets/svg/view_deck.svg"></div>
+				</div>
 				<div class="group show-more" [ngClass]="{ expanded: _isExpanded }" (click)="toggleShowMore()">
 					<div class="text" *ngIf="_isExpanded" [owTranslate]="'app.arena.runs.minimize-run-button'"></div>
 					<div class="text" *ngIf="!_isExpanded" [owTranslate]="'app.arena.runs.view-run-button'"></div>
@@ -83,6 +88,7 @@ export class ArenaRunComponent {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly nav: ArenaNavigationService,
 	) {}
 
 	toggleShowMore() {
@@ -99,6 +105,13 @@ export class ArenaRunComponent {
 
 	trackByStepFn(index: number, item: GameStat) {
 		return item.reviewId;
+	}
+
+	async showDeck() {
+		await this.nav.isReady();
+
+		this.nav.selectedCategoryId$$.next('arena-deck-details');
+		this.nav.selectedPersonalDeckstring$$.next(this.deckstring);
 	}
 
 	private updateValues() {

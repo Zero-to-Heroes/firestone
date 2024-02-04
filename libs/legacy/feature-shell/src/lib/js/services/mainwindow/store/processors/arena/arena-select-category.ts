@@ -1,4 +1,4 @@
-import { ArenaCategoryType } from '@firestone/arena/common';
+import { ArenaCategoryType, ArenaNavigationService } from '@firestone/arena/common';
 import { MainWindowState } from '@legacy-import/src/lib/js/models/mainwindow/main-window-state';
 import { NavigationState } from '@legacy-import/src/lib/js/models/mainwindow/navigation/navigation-state';
 import { MainWindowStoreEvent } from '../../events/main-window-store-event';
@@ -25,19 +25,16 @@ export class ArenaSelectCategoryEvent implements MainWindowStoreEvent {
 }
 
 export class ArenaSelectCategoryProcessor implements Processor {
+	constructor(private readonly nav: ArenaNavigationService) {}
+
 	public async process(
 		event: ArenaSelectCategoryEvent,
 		currentState: MainWindowState,
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		return [
-			null,
-			navigationState.update({
-				navigationArena: navigationState.navigationArena.update({
-					selectedCategoryId: event.value,
-				}),
-			}),
-		];
+		// Main issue is that using this breaks the back/next buttons
+		this.nav.selectedCategoryId$$.next(event.value);
+		return [null, null];
 	}
 }
