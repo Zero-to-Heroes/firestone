@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
+import { decode } from '@firestone-hs/deckstrings';
 import { COIN_IDS, CardIds, SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -25,13 +26,13 @@ import {
 	switchMap,
 	tap,
 } from 'rxjs';
-import { MulliganAdvice } from '../models/mulligan-advice';
+import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { GameStateFacadeService } from './game-state-facade.service';
 
 @Injectable()
 export class ConstructedMulliganGuideService extends AbstractFacadeService<ConstructedMulliganGuideService> {
-	public mulliganAdvice$$: BehaviorSubject<readonly MulliganAdvice[] | null>;
+	public mulliganAdvice$$: BehaviorSubject<MulliganGuide | null>;
 
 	private scene: SceneService;
 	private prefs: PreferencesService;
@@ -49,7 +50,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 	}
 
 	protected async init() {
-		this.mulliganAdvice$$ = new BehaviorSubject<readonly MulliganAdvice[] | null>(null);
+		this.mulliganAdvice$$ = new BehaviorSubject<MulliganGuide | null>(null);
 		this.scene = AppInjector.get(SceneService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
@@ -105,31 +106,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			}
 		});
 
-		const cardsInHand$ = showWidget$.pipe(
-			filter((showWidget) => showWidget),
-			debounceTime(200),
-			switchMap(() => this.gameState.gameState$$),
-			map((gameState) => {
-				// There should never be a "basic" coin in the mulligan AFAIK
-				const cardsInHand =
-					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !COIN_IDS.includes(c as CardIds)) ??
-					[];
-				return cardsInHand.length > 0 ? cardsInHand : null;
-			}),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
-			tap((cardsInHand) => console.log('[mulligan-guide] cardsInHand', cardsInHand)),
-		);
-
-		// const playerRank$ = showWidget$.pipe(
-		// 	filter((showWidget) => showWidget),
-		// 	switchMap(() => this.gameState.gameState$$),
-		// 	map((gameState) => {
-		//         gameState?.playerDeck?.
-		// 	}),
-		// );
-
-		// TODO: get the correct rank
 		const archetype$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
 			debounceTime(200),
@@ -151,6 +127,54 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			shareReplay(1),
 			tap((archetype) => console.log('[mulligan-guide] archetype', archetype)),
 		);
+
+		// TODO: get the correct rank
+		// const playerRank$ = showWidget$.pipe(
+		// 	filter((showWidget) => showWidget),
+		// 	switchMap(() => this.gameState.gameState$$),
+		// 	map((gameState) => {
+		//         gameState?.playerDeck?.
+		// 	}),
+		// );
+
+		const cardsInHand$ = showWidget$.pipe(
+			filter((showWidget) => showWidget),
+			debounceTime(200),
+			switchMap(() => this.gameState.gameState$$),
+			map((gameState) => {
+				// There should never be a "basic" coin in the mulligan AFAIK
+				const cardsInHand =
+					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !COIN_IDS.includes(c as CardIds)) ??
+					[];
+				return cardsInHand.length > 0 ? cardsInHand : null;
+			}),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
+			tap((cardsInHand) => console.log('[mulligan-guide] cardsInHand', cardsInHand)),
+		);
+		const deckCards$ = showWidget$.pipe(
+			filter((showWidget) => showWidget),
+			debounceTime(200),
+			switchMap(() => this.gameState.gameState$$),
+			map((gameState) => {
+				const deckstring = gameState?.playerDeck?.deckstring;
+				if (!deckstring?.length) {
+					return null;
+				}
+
+				const deckDefinition = decode(deckstring);
+				const cards = deckDefinition?.cards
+					?.map((card) => card[0])
+					.map((dbfId) => this.allCards.getCard(dbfId));
+				return cards;
+			}),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
+			tap((cardsInHand) => console.log('[mulligan-guide] deckCards', cardsInHand)),
+		);
+
+		// const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]);
+
 		const mulliganAdvice$ = cardsInHand$.pipe(
 			filter((cardsInHand) => !!cardsInHand),
 			debounceTime(200),
@@ -200,7 +224,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 								: rawImpact > 0
 								? rawImpact * positiveScale
 								: rawImpact * negativeScale;
-						const mulliganAdvice: MulliganAdvice = {
+						const mulliganAdvice: MulliganCardAdvice = {
 							cardId: cardId,
 							score: normalizedImpact,
 						};
@@ -220,6 +244,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			shareReplay(1),
 			tap((mulliganAdvice) => console.log('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
 		);
-		mulliganAdvice$.subscribe((value) => this.mulliganAdvice$$.next(value));
+		mulliganAdvice$.subscribe((value) => this.mulliganAdvice$$.next(null));
 	}
 }

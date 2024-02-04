@@ -57,7 +57,7 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 		this.mulliganGuide$ = this.mulligan.mulliganAdvice$$.pipe(
 			filter((advice) => !!advice),
 			this.mapData((advice) =>
-				advice!.map((advice) => ({
+				advice!.allDeckCards.map((advice) => ({
 					impact: advice.score == null ? '-' : advice.score.toFixed(2),
 				})),
 			),

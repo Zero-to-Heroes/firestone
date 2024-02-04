@@ -17,28 +17,17 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 				</copy-deckstring>
 				<deck-list-basic class="deck-list" [deckstring]="decklist"></deck-list-basic>
 			</div>
-			<!-- <div class="stats" scrollable *ngIf="deck.personal">
-				<div
-					class="header"
-					[owTranslate]="'app.duels.deck-stat.all-runs-with-deck'"
-					[translateParams]="{ deckName: deck.deck.deckName }"
-				></div>
-				<duels-runs-list
-					[deckstring]="deck.deck.initialDeckList"
-					[displayLoot]="true"
-					[displayShortLoot]="false"
-				></duels-runs-list>
+			<div class="picks">
+				<div class="header" [fsTranslate]="'app.arena.deck-details.picks-header'"></div>
+				<div class="picks-list" *ngIf="picks$ | async as picks"></div>
 			</div>
-			<div class="stats" *ngIf="!deck.personal" scrollable>
-				<div class="header" [owTranslate]="'app.duels.deck-stat.run-details'"></div>
-				<duels-run [run]="deck.run" [displayLoot]="true" [isExpanded]="true"></duels-run>
-			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decklist$: Observable<string | null>;
+	picks$: Observable<readonly Pick[]>;
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly nav: ArenaNavigationService) {
 		super(cdr);

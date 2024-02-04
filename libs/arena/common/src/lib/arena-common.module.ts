@@ -18,6 +18,7 @@ import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-opt
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
+import { ArenDeckDetailsService } from './services/arena-deck-details.service';
 import { ArenaNavigationService } from './services/arena-navigation.service';
 
 const components = [
@@ -44,7 +45,7 @@ const components = [
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,
 	],
-	providers: [ArenaClassStatsService, ArenaCardStatsService, ArenaNavigationService],
+	providers: [ArenaClassStatsService, ArenaCardStatsService, ArenaNavigationService, ArenDeckDetailsService],
 	declarations: components,
 	exports: components,
 })

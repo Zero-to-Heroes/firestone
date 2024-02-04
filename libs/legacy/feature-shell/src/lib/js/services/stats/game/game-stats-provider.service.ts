@@ -7,7 +7,7 @@ import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.serv
 import { GameStatsLoaderService } from './game-stats-loader.service';
 
 @Injectable()
-export class GameStatsProviderService {
+export class GameStatsProviderService extends IGameStatsProviderInterface {
 	public gameStats$ = new SubscriberAwareBehaviorSubject<readonly GameStat[]>(null);
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly gameStats: GameStatsLoaderService) {

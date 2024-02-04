@@ -52,7 +52,7 @@ export class ConstructedMulliganWidgetWrapperComponent
 		await this.mulliganGuide.isReady();
 
 		this.showWidget$ = this.mulliganGuide.mulliganAdvice$$.pipe(
-			this.mapData((advice) => !!advice?.length),
+			this.mapData((advice) => !!advice),
 			this.handleReposition(),
 		);
 
