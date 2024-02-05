@@ -300,6 +300,7 @@ export class EndGameListenerService {
 			bgBattleOdds: battleOdds,
 			// Here we purposefully don't want to init the lottery if it hasn't been initialized yet
 			lotteryPoints: this.lottery.lottery$$.getValue()?.currentPoints(),
+			bgGame: this.bgStore.state.currentGame,
 		};
 		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 		await this.endGameUploader.upload2(augmentedInfo);

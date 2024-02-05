@@ -1,4 +1,4 @@
-import { GameForUpload } from './game-for-upload';
+import { GameForUpload } from '@firestone/stats/common';
 
 export interface ManastormInfo {
 	readonly type: 'new-review' | 'new-empty-review';

@@ -12,7 +12,9 @@ import {
 } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameForUpload, XpForGameInfo } from '@firestone/stats/common';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
+import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
@@ -33,9 +35,7 @@ import {
 	isMercenariesPvP,
 	normalizeMercenariesCardId,
 } from '../mercenaries/mercenaries-utils';
-import { XpForGameInfo } from '../rewards/rewards-monitor';
 import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
-import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
 import { ManastormInfo } from './manastorm-info';
 import { ReplayUploadService } from './replay-upload.service';
@@ -169,6 +169,7 @@ export class EndGameUploaderService {
 			game.hasBgsSpells = info.gameSettings?.battlegroundsSpells;
 			game.bgsAnomalies = info.gameSettings?.battlegroundsAnomalies;
 			game.bgBattleOdds = info.bgBattleOdds;
+			game.bgGame = info.bgGame;
 		} else if (isMercenaries(game.gameMode)) {
 			// Looks like we can assume the mapId is unique for a given player
 			game.runId = isMercenariesPvE(game.gameMode)
@@ -388,6 +389,7 @@ export class EndGameUploaderService {
 		}
 
 		game.lotteryPoints = info.lotteryPoints;
+		game.replay = replay;
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
 		return game;
@@ -494,5 +496,6 @@ export interface UploadInfo {
 	xpForGame?: XpForGameInfo;
 	bgNewRating: number;
 	bgBattleOdds?: readonly { turn: number; wonPercent: number }[];
+	bgGame?: BgsGame;
 	lotteryPoints?: number;
 }

@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
+import { GameForUpload } from '@firestone/stats/common';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
@@ -9,7 +10,6 @@ import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwin
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
-import { GameForUpload } from '../manastorm-bridge/game-for-upload';
 import { UserService } from '../user.service';
 import { sleep } from '../utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -87,20 +87,19 @@ export class BgsRunStatsService {
 		return results;
 	}
 
-	private async computeRunStats(
+	public buildInput(
 		reviewId: string,
-		currentGame: BgsGame,
-		bestBgsUserStats: readonly BgsBestStat[],
 		game: GameForUpload,
-	) {
+		currentGame: BgsGame,
+		userId: string,
+		userName: string,
+	): BgsComputeRunStatsInput {
 		const newMmr = parseInt(game.newPlayerRank);
-		const liveStats = currentGame.liveStats;
-		const user = await this.userService.getCurrentUser();
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
 			heroCardId: currentGame.getMainPlayer()?.cardId,
-			userId: user.userId,
-			userName: user.username,
+			userId: userId,
+			userName: userName,
 			battleResultHistory: currentGame.buildBattleResultHistory().map((history) => ({
 				...history,
 				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
@@ -117,6 +116,18 @@ export class BgsRunStatsService {
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
+		return input;
+	}
+
+	private async computeRunStats(
+		reviewId: string,
+		currentGame: BgsGame,
+		bestBgsUserStats: readonly BgsBestStat[],
+		game: GameForUpload,
+	) {
+		const liveStats = currentGame.liveStats;
+		const user = await this.userService.getCurrentUser();
+		const input = this.buildInput(reviewId, game, currentGame, user.userId, user.username);
 
 		const [postMatchStats, newBestValues] = this.populateObject(
 			liveStats,
@@ -128,7 +139,7 @@ export class BgsRunStatsService {
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
-		this.buildStatsRemotely(input);
+		// this.buildStatsRemotely(input);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		// Wait a bit, to be sure that the stats have been created
 		await sleep(1000);

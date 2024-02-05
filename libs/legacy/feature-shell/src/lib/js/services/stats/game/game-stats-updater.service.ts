@@ -9,6 +9,7 @@ import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameForUpload } from '@firestone/stats/common';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -17,7 +18,6 @@ import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
-import { GameForUpload } from '../../manastorm-bridge/game-for-upload';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import {
 	MercenariesReferenceData,

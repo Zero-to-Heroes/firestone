@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
 import { MemoryInspectionService, MemoryUpdatesService, RewardsTrackInfo } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
+import { XpForGameInfo } from '@firestone/stats/common';
 import { filter, take } from 'rxjs';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { Season } from '../stats/xp/xp-tables/_season';
@@ -160,16 +161,4 @@ export class RewardMonitorService {
 		}
 		return totalMissingXp;
 	}
-}
-
-export interface XpForGameInfo {
-	readonly previousXp: number;
-	readonly previousLevel: number;
-	readonly currentXp: number;
-	readonly currentLevel: number;
-	readonly xpGainedWithoutBonus: number;
-	readonly realXpGained: number;
-	readonly levelsGained: number;
-	readonly bonusXp: number;
-	readonly xpNeeded: number;
 }

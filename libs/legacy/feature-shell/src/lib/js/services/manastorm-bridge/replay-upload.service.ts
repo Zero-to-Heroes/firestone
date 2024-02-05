@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { ReplayMetadataBuilderService } from '@firestone/stats/common';
+import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/common';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';
-import { uuid } from '../utils';
-import { GameForUpload } from './game-for-upload';
+import { BgsRunStatsService } from '../battlegrounds/bgs-run-stats.service';
 
 const BUCKET = 'com.zerotoheroes.batch';
 
@@ -16,6 +15,7 @@ export class ReplayUploadService {
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
+		private readonly bgsRunStatsService: BgsRunStatsService,
 	) {}
 
 	public async uploadGame(game: GameForUpload) {
@@ -32,10 +32,24 @@ export class ReplayUploadService {
 	}
 
 	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload) {
+		const prefs = await this.prefs.getPreferences();
+		const start = Date.now();
+		const bgsRunStats =
+			game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly'
+				? this.bgsRunStatsService.buildInput(reviewId, game, game.bgGame, userId, userName)
+				: null;
+		const fullMetaData = await this.metadataBuilder.buildMetadata(
+			game,
+			bgsRunStats,
+			userId,
+			userName,
+			prefs.allowGamesShare,
+		);
+		console.debug('[manastorm-bridge] built metadata after', Date.now() - start, 'ms', fullMetaData);
+		const fileToUpload = JSON.stringify(fullMetaData) + '\n' + game.uncompressedXmlReplay;
+		// const fileToUpload = game.uncompressedXmlReplay;
+
 		const jszip = new JSZip();
-		const fullMetaData = this.metadataBuilder.buildMetadata(game);
-		// const fileToUpload = fullMetaData + '\n' + game.uncompressedXmlReplay;
-		const fileToUpload = game.uncompressedXmlReplay;
 		jszip.file('power.log', fileToUpload);
 		const blob: Blob = await jszip.generateAsync({
 			type: 'blob',
@@ -51,11 +65,7 @@ export class ReplayUploadService {
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-		const today = new Date();
-		const replayKey = `hearthstone/replay/${today.getFullYear()}/${
-			today.getMonth() + 1
-		}/${today.getDate()}/${uuid()}.xml.zip`;
-		const prefs = await this.prefs.getPreferences();
+		const replayKey = fullMetaData.game.replayKey;
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		const metadata = {
 			'review-id': reviewId,

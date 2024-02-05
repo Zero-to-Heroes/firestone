@@ -3,8 +3,8 @@ import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsInfo } from '@firestone/memory';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameForUpload } from '@firestone/stats/common';
 import { Events } from '@legacy-import/src/lib/js/services/events.service';
-import { GameForUpload } from '@legacy-import/src/lib/js/services/manastorm-bridge/game-for-upload';
 import { distinctUntilChanged, filter, map, tap, withLatestFrom } from 'rxjs/operators';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
