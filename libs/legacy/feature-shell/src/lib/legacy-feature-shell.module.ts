@@ -357,7 +357,6 @@ import { ReplaysPlayerClassFilterDropdownComponent } from './js/components/repla
 import { GameReplayComponent } from './js/components/replays/game-replay.component';
 import { GroupedReplaysComponent } from './js/components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from './js/components/replays/match-details.component';
-import { RankImageComponent } from './js/components/replays/rank-image.component';
 import { ReplayInfoComponent } from './js/components/replays/replay-info/_replay-info.component';
 import { ReplayInfoBattlegroundsComponent } from './js/components/replays/replay-info/replay-info-battlegrounds.component';
 import { ReplayInfoDuelsComponent } from './js/components/replays/replay-info/replay-info-duels.component';
@@ -1327,7 +1326,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReplayInfoGenericComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,
-		RankImageComponent,
 		ReplayIconToggleComponent,
 		ReplayMercDetailsToggleComponent,
 		ReplaysGameModeFilterDropdownComponent,

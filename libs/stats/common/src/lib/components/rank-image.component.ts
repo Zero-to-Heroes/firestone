@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { buildRankText, GameStat } from '@firestone/stats/data-access';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import { GameStat, buildRankText } from '@firestone/stats/data-access';
 
 @Component({
 	selector: 'rank-image',
-	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/rank-image.component.scss`],
+	styleUrls: [`./rank-image.component.scss`],
 	template: `
 		<div
 			class="rank-image {{ gameMode }}"
@@ -67,15 +67,15 @@ export class RankImageComponent {
 	@Input() gameMode: string;
 	@Input() rankTooltip: string;
 
-	playerRank: string;
-	playerRankImage: string;
-	playerRankArt: string;
-	playerRankDecoration: string;
-	playerRankImageTooltip: string;
-	isLegend: boolean;
-	rankText: string;
-	rankIssue: boolean;
+	playerRank: string | undefined;
+	playerRankImage: string | undefined;
+	playerRankArt: string | undefined;
+	playerRankDecoration: string | undefined;
+	playerRankImageTooltip: string | undefined;
+	isLegend: boolean | undefined;
+	rankText: string | undefined;
+	rankIssue: boolean | undefined;
 	rankIssueTooltip = this.i18n.translateString('app.replays.replay-info.rank-issue-tooltip');
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }

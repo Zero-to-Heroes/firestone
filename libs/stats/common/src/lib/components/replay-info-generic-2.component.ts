@@ -1,33 +1,16 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	Input,
-	OnDestroy,
-} from '@angular/core';
+/* eslint-disable no-mixed-spaces-and-tabs */
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent, capitalizeEachWord } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
-import { Subscription } from 'rxjs';
-import { RunStep } from '../../../models/duels/run-step';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
-	selector: 'replay-info-ranked',
-	styleUrls: [
-		`../../../../css/global/menu.scss`,
-		`../../../../css/component/replays/replay-info/replay-info.component.scss`,
-		`../../../../css/component/replays/replay-info/replay-info-ranked.component.scss`,
-	],
+	selector: 'replay-info-generic-2',
+	styleUrls: [`./replay-info.component.scss`],
 	template: `
-		<div class="replay-info ranked {{ visualResult }}">
+		<div class="replay-info {{ gameMode }} {{ visualResult }}">
 			<div class="result-color-code {{ visualResult }}"></div>
 
 			<div class="left-info">
@@ -37,11 +20,12 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 
 				<div class="group player-images">
 					<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
-					<div class="vs" [owTranslate]="'app.replays.replay-info.versus'"></div>
+					<div class="vs" *ngIf="opponentClassImage" [fsTranslate]="'app.replays.replay-info.versus'"></div>
 					<img
 						class="player-class opponent"
 						[src]="opponentClassImage"
 						[helpTooltip]="opponentClassTooltip"
+						*ngIf="opponentClassImage"
 					/>
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
@@ -59,7 +43,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</div>
 			</div>
 
-			<div class="right-info">
+			<!-- <div class="right-info">
 				<div class="replay" *ngIf="reviewId" (click)="showReplay()">
 					<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
 					<div
@@ -75,74 +59,49 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						</svg>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoRankedComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class ReplayInfoGeneric2Component extends AbstractSubscriptionComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
 	@Input() displayTime = true;
 
-	@Input() set replay(value: GameStat | RunStep) {
+	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}
 
-	replayInfo: GameStat;
-	replaysShowClassIcon: boolean;
-
-	visualResult: string;
 	gameMode: StatGameModeType;
+
+	replayInfo: GameStat;
+	visualResult: string;
+
+	replaysShowClassIcon: boolean;
 	playerClassImage: string;
 	playerClassTooltip: string;
 	opponentClassImage: string;
 	opponentClassTooltip: string;
-
 	opponentName: string;
-	playCoinIconSvg: SafeHtml;
-	playCoinTooltip: SafeHtml;
-	gameTime: string;
-	reviewId: string;
 
-	private bgsPerfectGame: boolean;
-	private sub$$: Subscription;
+	playCoinIconSvg: SafeHtml;
+	playCoinTooltip: SafeHtml | null;
+	reviewId: string;
+	gameTime: string | null;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe(
-			(replaysShowClassIcon) => {
-				this.replaysShowClassIcon = replaysShowClassIcon;
-				this.updateInfo();
-			},
-		);
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
-		this.sub$$.unsubscribe();
-	}
-
-	showReplay() {
-		this.store.send(new ShowReplayEvent(this.reviewId));
-	}
-
-	capitalize(input: string): string {
+	capitalize(input: string): string | null {
 		return capitalizeEachWord(input);
 	}
 
@@ -177,8 +136,8 @@ export class ReplayInfoRankedComponent
 			? this.allCards.getCard(info.playerCardId)
 			: this.allCards.getCard(info.opponentCardId);
 		const name = heroCard.name;
-		const encodedDeckName = info.playerDeckName;
-		let decodedTeamName: string = null;
+		const encodedDeckName = info.playerDeckName ?? '';
+		let decodedTeamName: string | null = null;
 		try {
 			decodedTeamName = decodeURIComponent(encodedDeckName);
 		} catch (e) {
@@ -199,7 +158,7 @@ export class ReplayInfoRankedComponent
 		}
 	}
 
-	private buildPlayCoinIconSvg(info: GameStat): [SafeHtml, string] {
+	private buildPlayCoinIconSvg(info: GameStat): [SafeHtml, string | null] {
 		const iconName = info.coinPlay === 'coin' ? 'match_coin' : 'match_play';
 		const tooltip =
 			info.coinPlay === 'coin'
@@ -223,7 +182,6 @@ export class ReplayInfoRankedComponent
 	}
 }
 
-/** @deprecated */
 export const extractTime = (durationInSeconds: number): { min: string; sec: string } => {
 	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
 	const minutes = `${Math.floor((durationInSeconds - (durationInSeconds % 60)) / 60)}`;

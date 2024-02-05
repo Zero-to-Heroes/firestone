@@ -83,6 +83,7 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 				? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${run.heroCardId}.jpg`
 				: null,
 			rewards: run.rewards,
+			steps: run.steps,
 		};
 		return result;
 	}

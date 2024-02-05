@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { StatsCommonModule } from '@firestone/stats/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { ArenaCardSearchComponent } from './components/card-stats/arena-card-search.component';
@@ -46,6 +47,7 @@ const components = [
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,
 		DuelsGeneralModule,
+		StatsCommonModule,
 	],
 	providers: [ArenaClassStatsService, ArenaCardStatsService, ArenaNavigationService, ArenDeckDetailsService],
 	declarations: components,

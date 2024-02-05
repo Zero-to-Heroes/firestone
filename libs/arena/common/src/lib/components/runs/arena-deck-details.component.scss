@@ -37,6 +37,22 @@
 		}
 	}
 
+	.left-info,
+	.right-info {
+		display: flex;
+		align-items: center;
+		height: 100%;
+
+		& > div:last-child {
+			border-right: none;
+			margin-right: 0;
+		}
+	}
+
+	.right-info {
+		margin-left: auto;
+	}
+
 	.details {
 		display: flex;
 		flex-direction: column;
@@ -50,6 +66,9 @@
 	.overview {
 		display: flex;
 		align-items: center;
+		background: rgba(255, 255, 255, 0.08);
+		padding: 5px;
+		padding-left: 15px;
 
 		.group {
 			border-right: 1px solid var(--default-text-color);
@@ -159,6 +178,50 @@
 						}
 					}
 				}
+			}
+		}
+	}
+}
+
+.show-more {
+	font-size: 14px;
+
+	.icon {
+		margin-left: 8px;
+		transition: transform 0.4s ease-in-out;
+	}
+
+	&:hover {
+		color: var(--default-title-color);
+		--icon-color: var(--default-title-color);
+	}
+}
+
+.show-more .icon {
+	width: 13px;
+	height: 7px;
+}
+
+.show-more.expanded {
+	.icon {
+		transform: scaleY(-1);
+	}
+}
+
+.run-details {
+	margin-bottom: 5px;
+
+	.details {
+		padding-left: 10px;
+		list-style: none;
+
+		li {
+			// margin-top: 5px;
+		}
+
+		::ng-deep replay-info {
+			.player-name.opponent {
+				display: none;
 			}
 		}
 	}

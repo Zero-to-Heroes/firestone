@@ -213,7 +213,7 @@ export class GameStat {
 	}
 }
 
-export const buildRankText = (playerRank: string, gameMode: string, additionalResult: string): string => {
+export const buildRankText = (playerRank: string | undefined, gameMode: string, additionalResult: string): string => {
 	if (gameMode === 'duels' || gameMode === 'paid-duels') {
 		if (additionalResult && additionalResult.indexOf('-') !== -1) {
 			const [wins, losses] = additionalResult.split('-');

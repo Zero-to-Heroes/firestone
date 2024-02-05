@@ -21,27 +21,60 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 				<deck-list-basic class="deck-list" [deckstring]="decklist"></deck-list-basic>
 			</div>
 			<div class="details">
-				<div class="deck-summary">
+				<div class="deck-summary" *ngIf="overview$ | async as overview">
 					<div class="header" [fsTranslate]="'app.arena.deck-details.deck-summary-header'"></div>
-					<div class="overview" *ngIf="overview$ | async as overview">
-						<div class="group result">
-							<div class="wins">{{ overview.wins }}</div>
-							<div class="separator">-</div>
-							<div class="losses">{{ overview.losses }}</div>
+					<div class="overview">
+						<div class="left-info">
+							<div class="group result">
+								<div class="wins">{{ overview.wins }}</div>
+								<div class="separator">-</div>
+								<div class="losses">{{ overview.losses }}</div>
+							</div>
+
+							<div class="group player-images">
+								<img
+									class="player-class"
+									[src]="overview.playerClassImage"
+									[cardTooltip]="overview.playerCardId"
+									*ngIf="overview.playerClassImage"
+								/>
+							</div>
+
+							<div class="group rewards" *ngIf="overview.rewards?.length">
+								<duels-reward *ngFor="let reward of overview.rewards" [reward]="reward"></duels-reward>
+							</div>
 						</div>
 
-						<div class="group player-images">
-							<img
-								class="player-class"
-								[src]="overview.playerClassImage"
-								[cardTooltip]="overview.playerCardId"
-								*ngIf="overview.playerClassImage"
-							/>
+						<div class="right-info">
+							<div
+								class="group show-more"
+								[ngClass]="{ expanded: isExpanded }"
+								(click)="toggleShowMore()"
+							>
+								<div
+									class="text"
+									*ngIf="isExpanded"
+									[fsTranslate]="'app.arena.runs.minimize-run-button'"
+								></div>
+								<div
+									class="text"
+									*ngIf="!isExpanded"
+									[fsTranslate]="'app.arena.runs.view-run-button'"
+								></div>
+								<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+							</div>
 						</div>
-
-						<div class="group rewards" *ngIf="overview.rewards?.length">
-							<duels-reward *ngFor="let reward of overview.rewards" [reward]="reward"></duels-reward>
-						</div>
+					</div>
+					<div class="run-details" *ngIf="isExpanded">
+						<ul class="details">
+							<li *ngFor="let step of overview.steps">
+								<replay-info-generic-2
+									[replay]="step"
+									[displayCoin]="false"
+									[displayTime]="false"
+								></replay-info-generic-2>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<div class="picks">
@@ -76,6 +109,8 @@ export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent imp
 	picks$: Observable<readonly Pick[] | undefined | null>;
 	overview$: Observable<ArenaDeckOverview | null>;
 
+	isExpanded: boolean;
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly nav: ArenaNavigationService,
@@ -98,6 +133,13 @@ export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent imp
 			this.mapData((deckDetails) => deckDetails?.overview ?? null),
 		);
 
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	toggleShowMore() {
+		this.isExpanded = !this.isExpanded;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -1,5 +1,6 @@
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Pick } from '@firestone-hs/arena-draft-pick';
+import { GameStat } from '@firestone/stats/data-access';
 
 export interface ArenaDeckDetails {
 	readonly deckstring: string;
@@ -12,5 +13,6 @@ export interface ArenaDeckOverview {
 	readonly losses: number;
 	readonly playerCardId: string;
 	readonly playerClassImage: string | null;
+	readonly steps: readonly GameStat[];
 	readonly rewards: readonly ArenaRewardInfo[];
 }
