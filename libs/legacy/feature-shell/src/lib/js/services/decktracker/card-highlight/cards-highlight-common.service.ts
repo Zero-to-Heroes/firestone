@@ -1283,11 +1283,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.DinotamerBrann_ULD_156:
 			case CardIds.EliseTheEnlightened:
 			case CardIds.EliseTheTrailblazer:
+			case CardIds.Kazakus_CFM_621:
 			case CardIds.MurozondThiefOfTime_WON_066:
 			case CardIds.RenoJackson_CORE_LOE_011:
 			case CardIds.RenoJackson_LOE_011:
 			case CardIds.RenoLoneRanger_WW_0700:
 			case CardIds.RenoTheRelicologist:
+			case CardIds.SpiritOfTheBadlands_WW_337:
+			case CardIds.TheldurinTheLost_WW_815:
 			case CardIds.ZephrysTheGreat_ULD_003:
 				return and(side(inputSide), inDeck, hasMultipleCopies);
 			case CardIds.Resurrect_BRM_017:
