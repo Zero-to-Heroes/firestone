@@ -1,3 +1,4 @@
+export * from './lib/component/duels-reward.component';
 export * from './lib/duels-general.module';
 export * from './lib/models/duels-config';
 export * from './lib/models/duels-personal-deck';

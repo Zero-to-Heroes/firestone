@@ -14,6 +14,7 @@ export * from './lib/components/runs/arena-deck-details.component';
 export * from './lib/models/arena-category';
 export * from './lib/models/arena-combined-card-stat';
 export * from './lib/models/arena-deck-details';
+export * from './lib/models/arena-run';
 export * from './lib/services/arena-card-stats.service';
 export * from './lib/services/arena-class-stats.service';
 export * from './lib/services/arena-deck-details.service';

@@ -4,7 +4,8 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { distinctUntilChanged, filter, withLatestFrom } from 'rxjs';
-import { ArenaDeckDetails } from '../models/arena-deck-details';
+import { ArenaDeckDetails, ArenaDeckOverview } from '../models/arena-deck-details';
+import { ArenaRun } from '../models/arena-run';
 import { ArenaNavigationService } from './arena-navigation.service';
 
 const ARENA_DECK_DETAILS_URL = `https://znumiwhsu7lx2chawhhgzhjol40ygaro.lambda-url.us-west-2.on.aws/%runId%`;
@@ -33,29 +34,28 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 		this.gameStats = AppInjector.get(GAME_STATS_PROVIDER_SERVICE_TOKEN);
 
 		this.deckDetails$$.onFirstSubscribe(() => {
-			this.nav.selectedPersonalDeckstring$$
+			this.nav.selectedPersonalRun$$
 				.pipe(
-					filter((deckstring) => !!deckstring),
+					filter((run) => !!run),
 					distinctUntilChanged(),
 					withLatestFrom(this.gameStats.gameStats$),
 				)
-				.subscribe(async ([deckstring, gameStats]) => {
-					console.debug('[arena-deck-details] received deckstring', deckstring);
-					this.deckDetails$$.next(undefined);
-					if (!deckstring) {
+				.subscribe(async ([run, gameStats]) => {
+					console.debug('[arena-deck-details] received run', run);
+					if (!run) {
 						this.deckDetails$$.next(null);
-						console.warn('[arena-deck-details] received empty deckstring');
+						console.warn('[arena-deck-details] received empty run');
 						return;
 					}
-					const runId = gameStats?.find(
-						(s) => s.gameMode === 'arena' && s.playerDecklist === deckstring,
-					)?.runId;
-					if (!runId) {
-						this.deckDetails$$.next(null);
-						console.warn('[arena-deck-details] could not find runId for deckstring', deckstring);
-						return;
-					}
-					const picks = await this.api.callGetApi<Picks>(ARENA_DECK_DETAILS_URL.replace('%runId%', runId));
+
+					const overview = this.buildOverview(run);
+					this.deckDetails$$.next({
+						deckstring: run.initialDeckList,
+						runId: run.id,
+						overview: overview,
+					} as ArenaDeckDetails);
+
+					const picks = await this.api.callGetApi<Picks>(ARENA_DECK_DETAILS_URL.replace('%runId%', run.id));
 					const pickInfo = picks?.picks;
 					if (!pickInfo) {
 						this.deckDetails$$.next(null);
@@ -64,12 +64,26 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 					}
 					console.debug('[arena-deck-details] received picks', picks);
 					const deckDetails: ArenaDeckDetails = {
-						deckstring: deckstring,
-						runId: runId,
+						deckstring: run.initialDeckList,
+						runId: run.id,
 						picks: picks.picks,
+						overview: overview,
 					};
 					this.deckDetails$$.next(deckDetails);
 				});
 		});
+	}
+
+	private buildOverview(run: ArenaRun): ArenaDeckOverview {
+		const result: ArenaDeckOverview = {
+			wins: run.wins,
+			losses: run.losses,
+			playerCardId: run.heroCardId,
+			playerClassImage: run.heroCardId
+				? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${run.heroCardId}.jpg`
+				: null,
+			rewards: run.rewards,
+		};
+		return result;
 	}
 }

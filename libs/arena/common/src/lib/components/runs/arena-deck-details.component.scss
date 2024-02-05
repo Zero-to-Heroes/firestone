@@ -37,19 +37,80 @@
 		}
 	}
 
+	.details {
+		display: flex;
+		flex-direction: column;
+		margin-left: 50px;
+	}
+
+	.deck-summary {
+		margin-bottom: 30px;
+	}
+
+	.overview {
+		display: flex;
+		align-items: center;
+
+		.group {
+			border-right: 1px solid var(--default-text-color);
+			display: flex;
+			height: 100%;
+			padding-right: 10px;
+			margin-right: 10px;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			position: relative;
+
+			&.player-images {
+				padding-left: 0px;
+				padding-right: 10px;
+			}
+		}
+
+		.separator {
+			margin-left: 3px;
+			margin-right: 3px;
+		}
+
+		.player-images {
+			img {
+				width: 30px;
+				height: 30px;
+				clip-path: circle(10px at 50% 50%);
+				transform: scale(1.5);
+				margin-right: 5px;
+			}
+		}
+
+		.result {
+			font-size: 13px;
+			line-height: 18px;
+			width: 45px;
+			justify-content: center;
+
+			.wins {
+				color: #61ff47;
+			}
+
+			.losses {
+				color: #ff4747;
+			}
+		}
+	}
+
+	.header {
+		color: var(--default-title-color);
+		font-size: 16px;
+		margin-bottom: 20px;
+	}
+
 	.picks {
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
 		font-size: 13px;
 		color: var(--color-1);
-		margin-left: 50px;
-
-		.header {
-			color: var(--default-title-color);
-			font-size: 16px;
-			margin-bottom: 20px;
-		}
 
 		.picks-list {
 			display: flex;

@@ -173,7 +173,6 @@ import { DuelsLeaderboardComponent } from './js/components/duels/desktop/duels-l
 import { DuelsPersonalDeckDetailsComponent } from './js/components/duels/desktop/duels-personal-deck-details.component';
 import { DuelsPersonalDecksVignetteComponent } from './js/components/duels/desktop/duels-personal-deck-vignette.component';
 import { DuelsPersonalDecksComponent } from './js/components/duels/desktop/duels-personal-decks.component';
-import { DuelsRewardComponent } from './js/components/duels/desktop/duels-reward.component';
 import { DuelsRunComponent } from './js/components/duels/desktop/duels-run.component';
 import { DuelsRunsListComponent } from './js/components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from './js/components/duels/desktop/duels-top-decks.component';
@@ -1392,7 +1391,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsPersonalDeckDetailsComponent,
 		DuelsClassesRecapComponent,
 		DuelsStatCellComponent,
-		DuelsRewardComponent,
 		DuelsReplaysRecapComponent,
 		DuelsReplaysRecapForRunComponent,
 		DuelsDeckStatsComponent,

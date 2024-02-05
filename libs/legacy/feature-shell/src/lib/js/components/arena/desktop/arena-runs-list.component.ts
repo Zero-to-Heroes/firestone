@@ -8,12 +8,12 @@ import {
 } from '@angular/core';
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { ArenaRun } from '@firestone/arena/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
-import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { PatchInfo } from '../../../models/patches';
 import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';

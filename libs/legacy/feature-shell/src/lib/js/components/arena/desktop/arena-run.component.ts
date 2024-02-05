@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { ArenaNavigationService } from '@firestone/arena/common';
+import { ArenaNavigationService, ArenaRun } from '@firestone/arena/common';
 import { CardsFacadeService, formatClass } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { ArenaRun } from '../../../models/arena/arena-run';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -111,7 +110,7 @@ export class ArenaRunComponent {
 		await this.nav.isReady();
 
 		this.nav.selectedCategoryId$$.next('arena-deck-details');
-		this.nav.selectedPersonalDeckstring$$.next(this.deckstring);
+		this.nav.selectedPersonalRun$$.next(this._run);
 	}
 
 	private updateValues() {

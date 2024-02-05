@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { DuelsGeneralModule } from '@firestone/duels/general';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -44,6 +45,7 @@ const components = [
 
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,
+		DuelsGeneralModule,
 	],
 	providers: [ArenaClassStatsService, ArenaCardStatsService, ArenaNavigationService, ArenDeckDetailsService],
 	declarations: components,

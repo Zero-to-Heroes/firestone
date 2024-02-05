@@ -2,14 +2,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { RewardType } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'duels-reward',
-	styleUrls: [
-		`../../../../css/global/menu.scss`,
-		`../../../../css/component/duels/desktop/duels-reward.component.scss`,
-	],
+	styleUrls: [`./duels-reward.component.scss`],
 	template: `
 		<div class="duels-reward" [helpTooltip]="tooltip">
 			<div class="image" [inlineSVG]="svg" *ngIf="svg"></div>
@@ -30,13 +27,13 @@ export class DuelsRewardComponent {
 		}
 	}
 
-	svg: string;
+	svg: string | null;
 	amount: number;
-	tooltip: string;
+	tooltip: string | null;
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 
-	private buildSvg(reward: DuelsRewardsInfo | ArenaRewardInfo): string {
+	private buildSvg(reward: DuelsRewardsInfo | ArenaRewardInfo): string | null {
 		const rewardType = reward.rewardType;
 		switch (rewardType) {
 			case RewardType.ARCANE_DUST:
@@ -52,7 +49,7 @@ export class DuelsRewardComponent {
 		}
 	}
 
-	private buildName(rewardType: RewardType): string {
+	private buildName(rewardType: RewardType): string | null {
 		switch (rewardType) {
 			case RewardType.ARCANE_DUST:
 				return this.i18n.translateString('app.global.reward.dust');

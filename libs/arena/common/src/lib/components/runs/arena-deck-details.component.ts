@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Pick } from '@firestone-hs/arena-draft-pick';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
+import { ArenaDeckOverview } from '../../models/arena-deck-details';
 import { ArenDeckDetailsService } from '../../services/arena-deck-details.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
@@ -19,27 +20,52 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 				</copy-deckstring>
 				<deck-list-basic class="deck-list" [deckstring]="decklist"></deck-list-basic>
 			</div>
-			<div class="picks">
-				<div class="header" [fsTranslate]="'app.arena.deck-details.picks-header'"></div>
-				<ng-container *ngIf="{ picks: picks$ | async } as value">
-					<with-loading [isLoading]="value.picks === undefined">
-						<div class="picks-list" *ngIf="value.picks as picks" scrollable>
-							<div class="pick" *ngFor="let pick of picks">
-								<div class="pick-number">{{ pick.pickNumber }}</div>
-								<div class="options">
-									<div
-										class="option"
-										*ngFor="let option of pick.options"
-										[ngClass]="{ selected: option === pick.pick }"
-									>
-										<card-tile class="option-card" [cardId]="option"></card-tile>
+			<div class="details">
+				<div class="deck-summary">
+					<div class="header" [fsTranslate]="'app.arena.deck-details.deck-summary-header'"></div>
+					<div class="overview" *ngIf="overview$ | async as overview">
+						<div class="group result">
+							<div class="wins">{{ overview.wins }}</div>
+							<div class="separator">-</div>
+							<div class="losses">{{ overview.losses }}</div>
+						</div>
+
+						<div class="group player-images">
+							<img
+								class="player-class"
+								[src]="overview.playerClassImage"
+								[cardTooltip]="overview.playerCardId"
+								*ngIf="overview.playerClassImage"
+							/>
+						</div>
+
+						<div class="group rewards" *ngIf="overview.rewards?.length">
+							<duels-reward *ngFor="let reward of overview.rewards" [reward]="reward"></duels-reward>
+						</div>
+					</div>
+				</div>
+				<div class="picks">
+					<div class="header" [fsTranslate]="'app.arena.deck-details.picks-header'"></div>
+					<ng-container *ngIf="{ picks: picks$ | async } as value">
+						<with-loading [isLoading]="value.picks === undefined">
+							<div class="picks-list" *ngIf="value.picks as picks" scrollable>
+								<div class="pick" *ngFor="let pick of picks">
+									<div class="pick-number">{{ pick.pickNumber }}</div>
+									<div class="options">
+										<div
+											class="option"
+											*ngFor="let option of pick.options"
+											[ngClass]="{ selected: option === pick.pick }"
+										>
+											<card-tile class="option-card" [cardId]="option"></card-tile>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="error" *ngIf="value.picks === null">Error</div>
-					</with-loading>
-				</ng-container>
+							<div class="error" *ngIf="value.picks === null">Error</div>
+						</with-loading>
+					</ng-container>
+				</div>
 			</div>
 		</div>
 	`,
@@ -48,6 +74,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decklist$: Observable<string | null>;
 	picks$: Observable<readonly Pick[] | undefined | null>;
+	overview$: Observable<ArenaDeckOverview | null>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -61,11 +88,14 @@ export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent imp
 		await this.nav.isReady();
 		await this.deckDetailsService.isReady();
 
-		this.decklist$ = this.nav.selectedPersonalDeckstring$$.pipe(
-			this.mapData((selectedPersonalDeckstring) => selectedPersonalDeckstring),
+		this.decklist$ = this.deckDetailsService.deckDetails$$.pipe(
+			this.mapData((deckDetails) => deckDetails?.deckstring ?? null),
 		);
 		this.picks$ = this.deckDetailsService.deckDetails$$.pipe(
-			this.mapData((deckDetails) => (deckDetails === undefined ? undefined : deckDetails?.picks ?? null)),
+			this.mapData((deckDetails) => (deckDetails?.picks === undefined ? undefined : deckDetails.picks)),
+		);
+		this.overview$ = this.deckDetailsService.deckDetails$$.pipe(
+			this.mapData((deckDetails) => deckDetails?.overview ?? null),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

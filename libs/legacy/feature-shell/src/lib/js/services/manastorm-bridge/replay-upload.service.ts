@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { ReplayMetadataBuilderService } from '@firestone/stats/common';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';
-import { Events } from '../events.service';
 import { uuid } from '../utils';
 import { GameForUpload } from './game-for-upload';
 
@@ -15,7 +15,7 @@ export class ReplayUploadService {
 	constructor(
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
-		private readonly events: Events,
+		private readonly metadataBuilder: ReplayMetadataBuilderService,
 	) {}
 
 	public async uploadGame(game: GameForUpload) {
@@ -33,7 +33,10 @@ export class ReplayUploadService {
 
 	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload) {
 		const jszip = new JSZip();
-		jszip.file('power.log', game.uncompressedXmlReplay);
+		const fullMetaData = this.metadataBuilder.buildMetadata(game);
+		// const fileToUpload = fullMetaData + '\n' + game.uncompressedXmlReplay;
+		const fileToUpload = game.uncompressedXmlReplay;
+		jszip.file('power.log', fileToUpload);
 		const blob: Blob = await jszip.generateAsync({
 			type: 'blob',
 			compression: 'DEFLATE',
