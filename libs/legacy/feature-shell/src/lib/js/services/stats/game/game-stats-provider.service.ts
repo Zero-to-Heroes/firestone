@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -7,8 +8,8 @@ import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.serv
 import { GameStatsLoaderService } from './game-stats-loader.service';
 
 @Injectable()
-export class GameStatsProviderService extends IGameStatsProviderInterface {
-	public gameStats$ = new SubscriberAwareBehaviorSubject<readonly GameStat[]>(null);
+export class GameStatsProviderService implements IGameStatsProviderService {
+	public gameStats$ = new SubscriberAwareBehaviorSubject<readonly GameStat[] | null>(null);
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly gameStats: GameStatsLoaderService) {
 		window['gameStatsProvider'] = this;

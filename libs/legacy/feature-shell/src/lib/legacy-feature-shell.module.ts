@@ -564,6 +564,7 @@ import {
 	SharedFrameworkCoreModule,
 	setAppInjector,
 } from '@firestone/shared/framework/core';
+import { GAME_STATS_PROVIDER_SERVICE_TOKEN, StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
@@ -889,6 +890,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DiscordModule,
 		MemoryModule,
 		GameStateModule,
+		StatsCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -1710,6 +1712,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useExisting: CardsHighlightFacadeService },
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
+		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SetsService,

@@ -1,6 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Pick } from '@firestone-hs/arena-draft-pick';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
+import { ArenDeckDetailsService } from '../../services/arena-deck-details.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
 @Component({
@@ -19,7 +21,25 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 			</div>
 			<div class="picks">
 				<div class="header" [fsTranslate]="'app.arena.deck-details.picks-header'"></div>
-				<div class="picks-list" *ngIf="picks$ | async as picks"></div>
+				<ng-container *ngIf="{ picks: picks$ | async } as value">
+					<with-loading [isLoading]="value.picks === undefined">
+						<div class="picks-list" *ngIf="value.picks as picks" scrollable>
+							<div class="pick" *ngFor="let pick of picks">
+								<div class="pick-number">{{ pick.pickNumber }}</div>
+								<div class="options">
+									<div
+										class="option"
+										*ngFor="let option of pick.options"
+										[ngClass]="{ selected: option === pick.pick }"
+									>
+										<card-tile class="option-card" [cardId]="option"></card-tile>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="error" *ngIf="value.picks === null">Error</div>
+					</with-loading>
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -27,17 +47,25 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 })
 export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decklist$: Observable<string | null>;
-	picks$: Observable<readonly Pick[]>;
+	picks$: Observable<readonly Pick[] | undefined | null>;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly nav: ArenaNavigationService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly nav: ArenaNavigationService,
+		private readonly deckDetailsService: ArenDeckDetailsService,
+	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.nav.isReady();
+		await this.deckDetailsService.isReady();
 
 		this.decklist$ = this.nav.selectedPersonalDeckstring$$.pipe(
 			this.mapData((selectedPersonalDeckstring) => selectedPersonalDeckstring),
+		);
+		this.picks$ = this.deckDetailsService.deckDetails$$.pipe(
+			this.mapData((deckDetails) => (deckDetails === undefined ? undefined : deckDetails?.picks ?? null)),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

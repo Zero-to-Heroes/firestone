@@ -19,65 +19,6 @@
 		min-height: 1px;
 		flex-shrink: 0;
 
-		.deck-selection {
-			display: flex;
-			align-items: center;
-			width: calc(100% + 20px);
-			margin-bottom: 10px;
-
-			label {
-				color: var(--color-3);
-				font-family: Open Sans;
-				font-style: normal;
-				font-weight: normal;
-				font-size: 14px;
-				display: flex;
-				align-items: center;
-
-				&.final {
-					margin-left: auto;
-
-					&.disabled {
-						opacity: 0.5;
-
-						&:hover {
-							color: var(--color-3);
-						}
-					}
-				}
-
-				.icon {
-					width: 14px;
-					height: 14px;
-					margin-right: 8px;
-
-					&.checked {
-						display: none;
-					}
-				}
-
-				&:hover {
-					color: var(--default-title-color);
-				}
-			}
-
-			input[type='radio'] {
-				display: none;
-
-				&:checked + label {
-					color: var(--default-title-color);
-
-					.icon.checked {
-						display: block;
-					}
-
-					.icon.unchecked {
-						display: none;
-					}
-				}
-			}
-		}
-
 		.copy-deckcode {
 			width: 100%;
 			margin-bottom: 10px;
@@ -96,42 +37,66 @@
 		}
 	}
 
-	.stats {
-		margin-left: 15px;
+	.picks {
+		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
-		flex-grow: 1;
-		min-height: 0;
-		overflow: auto;
+		font-size: 13px;
+		color: var(--color-1);
+		margin-left: 50px;
 
 		.header {
-			font-size: 14px;
-			margin-bottom: 10px;
+			color: var(--default-title-color);
+			font-size: 16px;
+			margin-bottom: 20px;
 		}
 
-		::ng-deep duels-runs-list,
-		::ng-deep duels-run {
-			.rewards,
-			.view-deck {
-				display: none;
-			}
-		}
-	}
+		.picks-list {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+			min-height: 0;
+			overflow: scroll;
 
-	&.top-deck {
-		.stats {
-			::ng-deep duels-runs-list,
-			::ng-deep duels-run {
-				.rewards,
-				.view-deck {
-					display: none;
+			.pick {
+				display: flex;
+				align-items: center;
+				height: 30px;
+				position: relative;
+
+				.pick-number {
+					width: 25px;
 				}
-			}
 
-			::ng-deep duels-run {
-				.replay,
-				.show-more {
-					display: none;
+				.options {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					height: 100%;
+					width: 100%;
+					max-width: 800px;
+					gap: 10px;
+
+					.option {
+						opacity: 0.2;
+						height: 100%;
+						min-height: 0;
+
+						&.selected {
+							opacity: 1;
+						}
+					}
+
+					.option-card {
+						height: 100%;
+						display: flex;
+						padding: 0;
+						margin: 0;
+
+						::ng-deep .deck-card {
+							width: 100%;
+							height: 100%;
+						}
+					}
 				}
 			}
 		}
