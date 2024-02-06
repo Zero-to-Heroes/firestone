@@ -75,6 +75,11 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.decktracker.global.show-gifts-in-separate-zone-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayGroupSameCardsTogether"
+						[label]="'settings.decktracker.global.group-same-cards' | owTranslate"
+						[tooltip]="'settings.decktracker.global.group-same-cards-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="overlayShowPlaguesOnTop"
 						[label]="'settings.decktracker.global.show-plagues-on-top' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-plagues-on-top-tooltip' | owTranslate"

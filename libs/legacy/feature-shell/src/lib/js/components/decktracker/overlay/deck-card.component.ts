@@ -172,6 +172,11 @@ export class DeckCardComponent implements OnDestroy {
 		this.updateInfos();
 	}
 
+	@Input() set groupSameCardsTogether(value: boolean) {
+		this._groupSameCardsTogether = value;
+		this.updateInfos();
+	}
+
 	@Input() set colorManaCost(value: boolean) {
 		this._colorManaCost = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -246,6 +251,7 @@ export class DeckCardComponent implements OnDestroy {
 	mouseOverRight = 0;
 	_showUnknownCards = true;
 	isUnknownCard: boolean;
+	_groupSameCardsTogether: boolean;
 
 	private _showUpdatedCost: boolean;
 	private _showStatsChange: boolean;
@@ -365,10 +371,10 @@ export class DeckCardComponent implements OnDestroy {
 		this.isDredged = this._card.dredged && !this._card.zone;
 		this.relatedCardIds = this._card.relatedCardIds;
 
-		this.isBurned = this._card.zone === 'BURNED' || this._card.milled;
-		this.isDiscarded = this._card.zone === 'DISCARD';
-		this.isCountered = this._card.countered;
-		this.isGraveyard = this._card.zone === 'GRAVEYARD';
+		this.isBurned = !this._groupSameCardsTogether && (this._card.zone === 'BURNED' || this._card.milled);
+		this.isDiscarded = !this._groupSameCardsTogether && this._card.zone === 'DISCARD';
+		this.isCountered = !this._groupSameCardsTogether && this._card.countered;
+		this.isGraveyard = !this._groupSameCardsTogether && this._card.zone === 'GRAVEYARD';
 		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
 		this._isMissing = this._card.isMissing;
 

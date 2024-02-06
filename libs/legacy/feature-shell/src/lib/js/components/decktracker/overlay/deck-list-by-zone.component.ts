@@ -31,6 +31,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showStatsChange]="showStatsChange"
 					[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 					[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
@@ -53,6 +54,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	@Input() showUpdatedCost: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showGiftsSeparately: boolean;
+	@Input() groupSameCardsTogether: boolean;
 	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';

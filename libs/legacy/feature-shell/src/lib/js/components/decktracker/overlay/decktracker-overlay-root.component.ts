@@ -74,6 +74,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								[showUpdatedCost]="showUpdatedCost$ | async"
 								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
+								[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 								[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone$ | async"
 								[showPlaguesOnTop]="showPlaguesOnTop$ | async"
 								[showBoardCardsInSeparateZone]="showBoardCardsInSeparateZone$ | async"
@@ -134,6 +135,7 @@ export class DeckTrackerOverlayRootComponent
 	showUnknownCards$: Observable<boolean>;
 	showUpdatedCost$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
+	groupSameCardsTogether$: Observable<boolean>;
 	showGeneratedCardsInSeparateZone$: Observable<boolean>;
 	showBoardCardsInSeparateZone$: Observable<boolean>;
 	showPlaguesOnTop$: Observable<boolean>;
@@ -314,6 +316,9 @@ export class DeckTrackerOverlayRootComponent
 		this.showUpdatedCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowCostReduction);
 		this.showGiftsSeparately$ = this.listenForBasicPref$(
 			(preferences) => preferences.overlayShowGiftedCardsInSeparateLine,
+		);
+		this.groupSameCardsTogether$ = this.listenForBasicPref$(
+			(preferences) => preferences.overlayGroupSameCardsTogether,
 		);
 		this.showGeneratedCardsInSeparateZone$ = this.listenForBasicPref$(
 			(preferences) => preferences.overlayShowGiftedCardsSeparateZone,

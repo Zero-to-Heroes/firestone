@@ -57,6 +57,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[showUnknownCards]="showUnknownCards && (showTotalCardsInZone$ | async)"
 							[showUpdatedCost]="showUpdatedCost$ | async"
 							[showStatsChange]="showStatsChange$ | async"
+							[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 							[zone]="zone$ | async"
 							[side]="side$ | async"
 							(cardClicked)="onCardClicked($event)"
@@ -78,6 +79,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 	showUpdatedCost$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
+	groupSameCardsTogether$: Observable<boolean>;
 	className$: Observable<string>;
 	zoneName$: Observable<string>;
 	showWarning$: Observable<boolean>;
@@ -104,6 +106,9 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 	@Input() set showGiftsSeparately(value: boolean) {
 		this.showGiftsSeparately$$.next(value);
 	}
+	@Input() set groupSameCardsTogether(value: boolean) {
+		this.groupSameCardsTogether$$.next(value);
+	}
 	@Input() set showStatsChange(value: boolean) {
 		this.showStatsChange$$.next(value);
 	}
@@ -123,6 +128,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 	private open$$ = new BehaviorSubject<boolean>(true);
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(true);
 	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(true);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
@@ -144,6 +150,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		this.showUpdatedCost$ = this.showUpdatedCost$$.asObservable().pipe(this.mapData((info) => info));
 		this.showStatsChange$ = this.showStatsChange$$.asObservable().pipe(this.mapData((info) => info));
 		this.showTotalCardsInZone$ = this.showTotalCardsInZone$$.asObservable().pipe(this.mapData((info) => info));
+		this.groupSameCardsTogether$ = this.groupSameCardsTogether$$.asObservable().pipe(this.mapData((info) => info));
 		this.className$ = this.zone$.pipe(this.mapData((zone) => zone?.id));
 		this.zoneName$ = this.zone$.pipe(this.mapData((zone) => zone?.name));
 		this.showWarning$ = this.zone$.pipe(this.mapData((zone) => zone?.showWarning));
@@ -157,6 +164,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			this.showUpdatedCost$,
 			this.showStatsChange$,
 			this.showGiftsSeparately$$.asObservable(),
+			this.groupSameCardsTogether$$.asObservable(),
 			this.showBottomCardsSeparately$$.asObservable(),
 			this.showTopCardsSeparately$$.asObservable(),
 		).pipe(
@@ -167,6 +175,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 					showUpdatedCost,
 					showStatsChange,
 					showGiftsSeparately,
+					groupSameCardsTogether,
 					showBottomCardsSeparately,
 					showTopCardsSeparately,
 				]) =>
@@ -176,6 +185,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 						showUpdatedCost,
 						showStatsChange,
 						showGiftsSeparately,
+						groupSameCardsTogether,
 						showBottomCardsSeparately,
 						showTopCardsSeparately,
 					),
@@ -215,6 +225,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		showUpdatedCost: boolean,
 		showStatsChange: boolean,
 		showGiftsSeparately: boolean,
+		groupSameCardsTogether: boolean,
 		showBottomCardsSeparately: boolean,
 		showTopCardsSeparately: boolean,
 	): readonly DeckZoneSection[] {
@@ -230,6 +241,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 					quantitiesLeftForCard,
 					showStatsChange,
 					showGiftsSeparately,
+					groupSameCardsTogether,
 					showBottomCardsSeparately,
 					showTopCardsSeparately,
 					collection,
@@ -286,11 +298,15 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		quantitiesLeftForCard: { [cardId: string]: number },
 		showStatsChange: boolean,
 		showGiftsSeparately: boolean,
+		groupSameCardsTogether: boolean,
 		showBottomCardsSeparately: boolean,
 		showTopCardsSeparately: boolean,
 		collection: readonly SetCard[],
 	): string {
-		const keyWithBonus = showStatsChange ? card.cardId + '_' + (card.mainAttributeChange || 0) : card.cardId;
+		const keyWithBonus =
+			!groupSameCardsTogether && showStatsChange
+				? card.cardId + '_' + (card.mainAttributeChange || 0)
+				: card.cardId;
 		// We never want cards that are played to be grouped with cards that are not played
 		const keyWithHighlights = keyWithBonus + '-' + card.highlight;
 		const creatorsKeySuffix = !card.creatorCardIds?.length
@@ -298,18 +314,21 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			: !!card.cardId
 			? 'creators'
 			: 'creators-' + (card.creatorCardIds || []).join('-');
-		const keyWithGift = showGiftsSeparately ? keyWithHighlights + creatorsKeySuffix : keyWithHighlights;
+		const keyWithGift =
+			!groupSameCardsTogether && showGiftsSeparately ? keyWithHighlights + creatorsKeySuffix : keyWithHighlights;
 		const keyWithBottom = showBottomCardsSeparately
 			? keyWithGift + 'bottom-' + (card.positionFromBottom ?? '')
 			: keyWithGift;
 		const keyWithTop = showTopCardsSeparately
 			? keyWithBottom + 'top-' + (card.positionFromTop ?? '')
 			: keyWithBottom;
-		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
-		const keyWithDiscard = card.zone === 'DISCARD' ? keyWithGraveyard + '-discard' : keyWithGraveyard;
-		const keyWithCost = keyWithDiscard + '-' + card.getEffectiveManaCost();
+		const keyWithGraveyard =
+			!groupSameCardsTogether && card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
+		const keyWithDiscard =
+			!groupSameCardsTogether && card.zone === 'DISCARD' ? keyWithGraveyard + '-discard' : keyWithGraveyard;
+		const keyWithCost = keyWithDiscard + (!groupSameCardsTogether ? '-' + card.getEffectiveManaCost() : '');
 		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
-		const keyWithRelatedCards = keyWithCost + '-' + relatedCardIds;
+		const keyWithRelatedCards = keyWithCost + (!groupSameCardsTogether ? '-' + relatedCardIds : '');
 		if (!collection?.length) {
 			return keyWithRelatedCards;
 		}

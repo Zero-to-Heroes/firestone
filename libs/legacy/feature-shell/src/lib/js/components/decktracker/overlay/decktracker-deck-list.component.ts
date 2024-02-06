@@ -53,6 +53,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[showUpdatedCost]="showUpdatedCost"
 					[showGlobalEffectsZone]="showGlobalEffectsZone"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone"
 					[showPlaguesOnTop]="showPlaguesOnTop"
 					[showBoardCardsInSeparateZone]="showBoardCardsInSeparateZone"
@@ -75,6 +76,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showStatsChange]="showStatsChange"
 					[cardsGoToBottom]="cardsGoToBottom"
 					[tooltipPosition]="_tooltipPosition"
@@ -107,6 +109,7 @@ export class DeckTrackerDeckListComponent
 	@Input() showUpdatedCost: boolean;
 	@Input() showGlobalEffectsZone: boolean;
 	@Input() showGiftsSeparately: boolean;
+	@Input() groupSameCardsTogether: boolean;
 	@Input() showGeneratedCardsInSeparateZone: boolean;
 	@Input() showPlaguesOnTop: boolean;
 	@Input() showBoardCardsInSeparateZone: boolean;

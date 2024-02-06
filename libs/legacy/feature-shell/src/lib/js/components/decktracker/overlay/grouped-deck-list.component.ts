@@ -34,6 +34,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[showUnknownCards]="showUnknownCards"
 				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately$ | async"
+				[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 				[showStatsChange]="showStatsChange"
 				[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 				[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
@@ -53,6 +54,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 	showTopCardsSeparately$: Observable<boolean>;
 	showBottomCardsSeparately$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
+	groupSameCardsTogether$: Observable<boolean>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
@@ -88,6 +90,10 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		this.showGiftsSeparately$$.next(value);
 	}
 
+	@Input() set groupSameCardsTogether(value: boolean) {
+		this.groupSameCardsTogether$$.next(value);
+	}
+
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
 		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
@@ -100,6 +106,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
@@ -117,6 +124,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 			.asObservable()
 			.pipe(this.mapData((info) => info));
 		this.showGiftsSeparately$ = this.showGiftsSeparately$$.asObservable().pipe(this.mapData((info) => info));
+		this.groupSameCardsTogether$ = this.groupSameCardsTogether$$.asObservable().pipe(this.mapData((info) => info));
 		this.zone$ = combineLatest([
 			this.deckState$$.asObservable(),
 			this.showWarning$$.asObservable(),
@@ -125,6 +133,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 			this.showTopCardsSeparately$,
 			this.showBottomCardsSeparately$,
 			this.showGiftsSeparately$,
+			this.groupSameCardsTogether$,
 		]).pipe(
 			this.mapData(
 				([
@@ -135,6 +144,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 					showTopCardsSeparately,
 					showBottomCardsSeparately,
 					showGiftsSeparately,
+					groupSameCardsTogether,
 				]) =>
 					this.buildGroupedList(
 						deckState,
@@ -144,6 +154,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						showTopCardsSeparately,
 						showBottomCardsSeparately,
 						showGiftsSeparately,
+						groupSameCardsTogether,
 					),
 			),
 		);
@@ -161,6 +172,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		showTopCardsSeparately: boolean,
 		showBottomCardsSeparately: boolean,
 		showGiftsSeparately: boolean,
+		groupSameCardsTogether: boolean,
 	) {
 		// console.debug('building zone', deckState);
 		if (!deckState) {
