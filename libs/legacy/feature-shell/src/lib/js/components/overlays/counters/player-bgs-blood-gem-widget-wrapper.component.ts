@@ -38,7 +38,7 @@ export class PlayerBgsBloodGemWidgetWrapperComponent
 		this.onBgs = true;
 		this.prefExtractor = (prefs) => prefs.playerBgsBloodGemCounter;
 		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
-			return bgState.currentGame.bloodGemAttackBuff > 0 || bgState.currentGame.bloodGemHealthBuff > 0;
+			return bgState.currentGame?.bloodGemAttackBuff > 0 || bgState.currentGame?.bloodGemHealthBuff > 0;
 		};
 	}
 }
