@@ -105,8 +105,8 @@ export class EndGameUploaderService {
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it
 		// being removed from memory by the player clicking away
-		let playerRank;
-		let newPlayerRank;
+		let playerRank: string | number;
+		let newPlayerRank: string | number;
 
 		const playerInfo = info.matchInfo?.localPlayer;
 		const opponentInfo = info.matchInfo?.opponent;
@@ -212,7 +212,7 @@ export class EndGameUploaderService {
 				game.gameMode === 'mercenaries-pvp'
 					? info.mercsInfo?.PvpRating
 					: game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
-					? this.getMercenariesBountyDifficulty(game.mercsBountyId)
+					? await this.getMercenariesBountyDifficulty(game.mercsBountyId)
 					: null;
 			game.forceOpponentName =
 				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
@@ -338,8 +338,8 @@ export class EndGameUploaderService {
 			}
 		}
 		game.opponentRank = opponentRank;
-		game.playerRank = playerRank;
-		game.newPlayerRank = newPlayerRank;
+		game.playerRank = '' + playerRank;
+		game.newPlayerRank = '' + newPlayerRank;
 		console.log(
 			'[manastorm-bridge]',
 			currentReviewId,
