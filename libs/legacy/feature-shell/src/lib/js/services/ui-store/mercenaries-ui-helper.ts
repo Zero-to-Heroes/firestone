@@ -111,6 +111,9 @@ export const isValidMercSearchItem = (card: ReferenceCard, searchString: string)
 	) {
 		return true;
 	}
+	if (card.faction?.toLowerCase().includes(lowSearchString)) {
+		return true;
+	}
 
 	return false;
 };
