@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -100,6 +100,7 @@ export class BattlegroundsDesktopComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
@@ -157,6 +158,7 @@ export class BattlegroundsDesktopComponent
 	}
 
 	selectCategory(categoryId: string) {
+		this.analytics.trackEvent('bgs-navigation', { section: categoryId });
 		this.stateUpdater.next(new SelectBattlegroundsCategoryEvent(categoryId));
 	}
 
