@@ -7,7 +7,8 @@ import * as AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';
 import { BgsRunStatsService } from '../battlegrounds/bgs-run-stats.service';
 
-const BUCKET = 'com.zerotoheroes.batch';
+const BUCKET_METADATA = 'com.zerotoheroes.batch';
+const BUCKET_REPLAY = 'xml.firestoneapp.com';
 
 @Injectable()
 export class ReplayUploadService {
@@ -46,12 +47,31 @@ export class ReplayUploadService {
 			prefs.allowGamesShare,
 		);
 		console.debug('[manastorm-bridge] built metadata after', Date.now() - start, 'ms', fullMetaData);
-		const fileToUpload = JSON.stringify(fullMetaData) + '\n' + game.uncompressedXmlReplay;
+
+		// Configure The S3 Object
+		AWS.config.region = 'us-west-2';
+		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+
+		// First upload the replay file, then the metadata
+		const replayFileZip = new JSZip();
+		replayFileZip.file('replay.xml', game.uncompressedXmlReplay);
+		const fileReplayBlob: Blob = await replayFileZip.generateAsync({
+			type: 'blob',
+			compression: 'DEFLATE',
+			compressionOptions: {
+				level: 9,
+			},
+		});
+		const replayKey = fullMetaData.game.replayKey;
+		console.log('[manastorm-bridge] uploading replay', replayKey);
+		await this.uploadReplay(replayKey, fileReplayBlob);
+
+		// const fileToUpload = JSON.stringify(fullMetaData) + '\n' + game.uncompressedXmlReplay;
 		// const fileToUpload = game.uncompressedXmlReplay;
 
-		const jszip = new JSZip();
-		jszip.file('power.log', fileToUpload);
-		const blob: Blob = await jszip.generateAsync({
+		const metaDataZipFile = new JSZip();
+		metaDataZipFile.file('power.log', JSON.stringify(fullMetaData));
+		const metaDataBlob: Blob = await metaDataZipFile.generateAsync({
 			type: 'blob',
 			compression: 'DEFLATE',
 			compressionOptions: {
@@ -59,76 +79,48 @@ export class ReplayUploadService {
 			},
 		});
 		const fileKey = Date.now() + '_' + reviewId + '.hszip';
-		console.log('[manastorm-bridge] built file key', fileKey);
-
-		// Configure The S3 Object
-		AWS.config.region = 'us-west-2';
-		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
-
-		const replayKey = fullMetaData.game.replayKey;
-		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
-		const metadata = {
-			'review-id': reviewId,
-			'replay-key': replayKey,
-			'application-key': `firestone-${version}`,
-			'user-key': userId,
-			username: userName,
-			'file-type': 'hszip',
-			'player-rank': game.playerRank != null ? '' + game.playerRank : '',
-			'new-player-rank': game.newPlayerRank != null ? '' + game.newPlayerRank : '',
-			'opponent-rank': game.opponentRank != null ? '' + game.opponentRank : '',
-			'game-mode': game.gameMode,
-			'game-format': game.gameFormat,
-			'build-number': game.buildNumber ? '' + game.buildNumber : '',
-			deckstring: game.deckstring,
-			'deck-name': game.deckName ? encodeURIComponent(game.deckName) : null,
-			'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
-			'should-zip': 'true',
-			'app-version': '' + process.env.APP_VERSION,
-			'app-channel': '' + process.env.APP_CHANNEL,
-			'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
-			'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
-			'bgs-has-prizes': JSON.stringify(!!game.hasBgsPrizes),
-			'bgs-has-spells': JSON.stringify(!!game.hasBgsSpells),
-			'duels-run-id': encodeURIComponent(game.runId),
-			'run-id': encodeURIComponent(game.runId),
-			'additional-result': game.additionalResult,
-			'normalized-xp-gained': '' + game.xpForGame?.xpGainedWithoutBonus,
-			'real-xp-gamed': '' + game.xpForGame?.realXpGained,
-			'level-after-match': game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
-			'mercs-bounty-id': '' + game.mercsBountyId,
-			// Because for mercs the player name from the replay isn't super interesting (Innkeeper), we build a
-			// better name ourselves
-			'force-opponent-name': encodeURIComponent(game.forceOpponentName),
-			'allow-game-share': '' + prefs.allowGamesShare,
-			'bg-battle-odds': !!game.bgBattleOdds?.length ? JSON.stringify(game.bgBattleOdds) : '',
-		};
-		const params = {
-			Bucket: BUCKET,
-			Key: fileKey,
-			ACL: 'public-read-write',
-			Body: blob,
-			Metadata: metadata,
-		};
-		console.log('no-format', '[manastorm-bridge] uploading with params', JSON.stringify(metadata));
-		this.performReplayUpload(game, reviewId, params);
+		console.log('[manastorm-bridge] built file key for meta data', fileKey);
+		await this.uploadMetaData(fileKey, metaDataBlob);
+		console.log('[manastorm-bridge] uploaded metadata');
 	}
 
-	private performReplayUpload(game: GameForUpload, reviewId: string, params, retriesLeft = 5) {
-		if (retriesLeft <= 0) {
-			console.error('[manastorm-bridge] Could not upload replay', { ...game, uncompressedXmlReplay: '...' });
-			return;
-		}
-		const s3 = new S3();
-		s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
-			// There Was An Error With Your S3 Config
-			if (err) {
-				console.warn('[manastorm-bridge] An error during upload', err);
-				if (err.retryable) {
-					this.performReplayUpload(game, reviewId, params, retriesLeft - 1);
-					return;
+	private async uploadReplay(replayKey: string, fileReplayBlob: Blob) {
+		return new Promise<void>((resolve, reject) => {
+			const s3 = new S3();
+			const params = {
+				Bucket: BUCKET_REPLAY,
+				Key: replayKey,
+				ACL: 'public-read',
+				Body: fileReplayBlob,
+				ContentType: 'application/zip',
+			};
+			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
+				if (err) {
+					console.error('[manastorm-bridge] An error during replay upload', err);
+					reject();
 				}
-			}
+				resolve();
+			});
+		});
+	}
+
+	private async uploadMetaData(fileKey: string, metaDataBlob: Blob) {
+		return new Promise<void>((resolve, reject) => {
+			const s3 = new S3();
+			const params = {
+				Bucket: BUCKET_METADATA,
+				Key: fileKey,
+				ACL: 'public-read-write',
+				Body: metaDataBlob,
+				ContentType: 'application/zip',
+			};
+			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
+				if (err) {
+					console.error('[manastorm-bridge] An error during metadata upload', err);
+					reject();
+				}
+				resolve();
+			});
 		});
 	}
 }
