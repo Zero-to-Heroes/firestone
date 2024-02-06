@@ -3,10 +3,13 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	Inject,
 	Input,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, tap } from 'rxjs';
@@ -17,7 +20,7 @@ import { ArenaCardOption } from './model';
 	selector: 'arena-card-option',
 	styleUrls: ['./arena-card-option.component.scss'],
 	template: `
-		<div class="option" *ngIf="{ showWidget: showWidget$ | async } as value">
+		<div class="option scalable" *ngIf="{ showWidget: showWidget$ | async } as value">
 			<div class="info-container" *ngIf="value.showWidget">
 				<div class="stat winrate">
 					<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-winrate'"></span>
@@ -68,6 +71,9 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
@@ -79,6 +85,15 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			tap((info) => console.debug('[arena-card-option] showWidget', info)),
 			this.mapData(([pickNumber, hasPremium]) => pickNumber === 0 || hasPremium),
 		);
+		this.prefs
+			.preferences$((prefs) => prefs.arenaDraftOverlayScale)
+			.pipe(this.mapData(([value]) => value))
+			.subscribe((value) => {
+				const newScale = value / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

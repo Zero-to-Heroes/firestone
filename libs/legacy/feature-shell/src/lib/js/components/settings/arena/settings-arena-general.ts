@@ -9,6 +9,7 @@ import { Knob } from '../preference-slider.component';
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
 		`../../../../css/component/settings/collection/settings-collection-notification.component.scss`,
+		`./settings-arena-general.component.scss`,
 	],
 	template: `
 		<div class="collection-notification">
@@ -32,11 +33,22 @@ import { Knob } from '../preference-slider.component';
 			<section class="settings-group">
 				<div class="subtitle" [owTranslate]="'settings.arena.general.tracker-size'"></div>
 				<preference-slider
-					class="first-slider"
+					class="slider first-slider"
 					[field]="'arenaOocTrackerScale'"
 					[enabled]="true"
 					[min]="50"
 					[max]="150"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+				<div class="subtitle" [owTranslate]="'settings.arena.general.draft-overlay-size'"></div>
+				<preference-slider
+					class="first-slider"
+					[field]="'arenaDraftOverlayScale'"
+					[enabled]="true"
+					[min]="50"
+					[max]="175"
 					[snapSensitivity]="5"
 					[knobs]="sizeKnobs"
 				>
