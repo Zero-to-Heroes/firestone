@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { GameFormat } from '@firestone-hs/constructed-deck-stats';
+import { GameFormat, RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
-import { COIN_IDS, CardIds, SceneMode } from '@firestone-hs/reference-data';
+import {
+	COIN_IDS,
+	CardIds,
+	GameFormat as GameFormatEnum,
+	GameFormatString,
+	SceneMode,
+} from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
@@ -21,6 +27,7 @@ import {
 	debounceTime,
 	distinctUntilChanged,
 	filter,
+	from,
 	map,
 	shareReplay,
 	switchMap,
@@ -29,6 +36,8 @@ import {
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { GameStateFacadeService } from './game-state-facade.service';
+
+export const CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD = 20;
 
 @Injectable()
 export class ConstructedMulliganGuideService extends AbstractFacadeService<ConstructedMulliganGuideService> {
@@ -59,8 +68,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		this.allCards = AppInjector.get(CardsFacadeService);
 
 		await Promise.all([this.scene.isReady(), this.prefs.isReady(), this.ads.isReady(), this.archetypes.isReady()]);
-
-		return;
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -100,42 +107,42 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			shareReplay(1),
 			tap((showWidget) => console.log('[mulligan-guide] showWidget', showWidget)),
 		);
-		showWidget$.subscribe((value) => {
-			if (!value) {
-				this.mulliganAdvice$$.next(null);
-			}
-		});
+
+		const format$ = showWidget$.pipe(
+			filter((showWidget) => showWidget),
+			switchMap(() => this.gameState.gameState$$),
+			map(
+				(gameState) =>
+					toFormatType(gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD) as GameFormatString,
+			),
+		);
+		const playerRank$ = from(['legend-diamond'] as RankBracket[]);
+		const opponentClass$ = from(['all'] as ('all' | string)[]);
 
 		const archetype$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
+			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
-			switchMap(() => this.gameState.gameState$$),
-			map((gameState) => ({
+			switchMap(() => combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$])),
+			map(([gameState, playerRank, opponentClass]) => ({
 				archetypeId: gameState?.playerDeck?.archetypeId,
 				format: gameState?.metadata?.formatType,
+				playerRank: playerRank,
+				opponentClass: opponentClass,
 			})),
 			filter((info) => !!info.archetypeId && !!info.format),
 			distinctUntilChanged((a, b) => a.archetypeId === b.archetypeId && a.format === b.format),
-			switchMap(({ archetypeId, format }) =>
+			switchMap(({ archetypeId, format, playerRank, opponentClass }) =>
 				this.archetypes.loadNewArchetypeDetails(
 					archetypeId as number,
 					toFormatType(format as any) as GameFormat,
 					'last-patch',
-					'legend-diamond',
+					playerRank,
 				),
 			),
 			shareReplay(1),
 			tap((archetype) => console.log('[mulligan-guide] archetype', archetype)),
 		);
-
-		// TODO: get the correct rank
-		// const playerRank$ = showWidget$.pipe(
-		// 	filter((showWidget) => showWidget),
-		// 	switchMap(() => this.gameState.gameState$$),
-		// 	map((gameState) => {
-		//         gameState?.playerDeck?.
-		// 	}),
-		// );
 
 		const cardsInHand$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
@@ -173,77 +180,79 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			tap((cardsInHand) => console.log('[mulligan-guide] deckCards', cardsInHand)),
 		);
 
-		// const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]);
-
-		const mulliganAdvice$ = cardsInHand$.pipe(
-			filter((cardsInHand) => !!cardsInHand),
+		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]).pipe(
+			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
 			debounceTime(200),
-			switchMap((cardsInHand) =>
-				archetype$.pipe(
-					map((archetype) => ({
+			switchMap(([cardsInHand, deckCards]) =>
+				combineLatest([archetype$, format$, playerRank$, opponentClass$]).pipe(
+					map(([archetype, format, playerRank, opponentClass]) => ({
 						cardsInHand: cardsInHand,
+						deckCards: deckCards,
 						archetype: archetype,
+						format: format,
+						playerRank: playerRank,
+						opponentClass: opponentClass,
 					})),
 				),
 			),
-			filter(({ cardsInHand, archetype }) => !!archetype),
-			map(({ cardsInHand, archetype }) => {
-				console.debug('[mulligan-guide] building advice', cardsInHand, archetype);
+			filter(({ cardsInHand, deckCards, archetype }) => !!archetype),
+			map(({ cardsInHand, deckCards, archetype, format, playerRank, opponentClass }) => {
+				// console.debug('[mulligan-guide] building advice', cardsInHand, archetype);
 				const archetypeWinrate = archetype!.winrate;
-				const mulliganWinrates = archetype!.cardsData
-					.filter((card) => card.inHandAfterMulligan > 20)
-					.map((card) => card.inHandAfterMulliganThenWin / card.inHandAfterMulligan - archetypeWinrate);
-				const highestMulliganWinrate = mulliganWinrates.reduce((a, b) => Math.max(a, b), 0);
-				const lowestMulliganWinrate = mulliganWinrates.reduce((a, b) => Math.min(a, b), 0);
-				const positiveScale = 10 / highestMulliganWinrate;
-				const negativeScale = 10 / -lowestMulliganWinrate;
-				console.debug(
-					'[mulligan-guide] scales',
-					positiveScale,
-					negativeScale,
-					archetypeWinrate,
-					highestMulliganWinrate,
-					lowestMulliganWinrate,
-					mulliganWinrates,
-				);
+				// const mulliganImpacts = archetype!.cardsData
+				// 	.filter((card) => card.inHandAfterMulligan > CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD)
+				// 	.map((card) => card.inHandAfterMulliganThenWin / card.inHandAfterMulligan - archetypeWinrate);
+				// const highestMulliganWinrate = mulliganImpacts.reduce((a, b) => Math.max(a, b), 0);
+				// const lowestMulliganWinrate = mulliganImpacts.reduce((a, b) => Math.min(a, b), 0);
+				// console.debug(
+				// 	'[mulligan-guide] mulliganImpacts',
+				// 	archetypeWinrate,
+				// 	highestMulliganWinrate,
+				// 	lowestMulliganWinrate,
+				// 	mulliganImpacts,
+				// );
 
-				return (
-					cardsInHand?.map((cardId) => {
+				const allDeckCards: readonly MulliganCardAdvice[] =
+					deckCards?.map((refCard) => {
 						const cardData =
-							archetype!.cardsData?.find((card) => card.cardId === cardId) ??
+							archetype!.cardsData?.find((card) => card.cardId === refCard.id) ??
 							archetype!.cardsData?.find(
 								(card) =>
-									this.allCards.getRootCardId(card.cardId) === this.allCards.getRootCardId(cardId),
+									this.allCards.getRootCardId(card.cardId) ===
+									this.allCards.getRootCardId(refCard.id),
 							);
 						const rawImpact = !!cardData?.inHandAfterMulligan
 							? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate
 							: null;
-						const normalizedImpact =
-							rawImpact == null
-								? null
-								: rawImpact > 0
-								? rawImpact * positiveScale
-								: rawImpact * negativeScale;
 						const mulliganAdvice: MulliganCardAdvice = {
-							cardId: cardId,
-							score: normalizedImpact,
+							cardId: refCard.id,
+							score: rawImpact == null ? null : 100 * rawImpact,
 						};
-						console.debug(
-							'[mulligan-guide] mulliganAdvice',
-							cardId,
-							cardData,
-							archetypeWinrate,
-							rawImpact,
-							normalizedImpact,
-						);
-						// TODO: take the archetype winrate into account, and normalize the winrate
+						// console.debug(
+						// 	'[mulligan-guide] mulliganAdvice',
+						// 	refCard.id,
+						// 	cardData,
+						// 	archetypeWinrate,
+						// 	rawImpact,
+						// );
 						return mulliganAdvice;
-					}) ?? null
-				);
+					}) ?? [];
+
+				const result: MulliganGuide = {
+					cardsInHand: cardsInHand!,
+					allDeckCards: allDeckCards,
+					sampleSize: archetype!.totalGames,
+					rankBracket: playerRank,
+					opponentClass: opponentClass,
+					format: format,
+				};
+				return result;
 			}),
 			shareReplay(1),
 			tap((mulliganAdvice) => console.log('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
 		);
-		mulliganAdvice$.subscribe((value) => this.mulliganAdvice$$.next(null));
+		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) =>
+			this.mulliganAdvice$$.next(showWidget ? advice : null),
+		);
 	}
 }

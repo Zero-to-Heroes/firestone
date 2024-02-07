@@ -31,6 +31,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		const deckWithSecretToCheck = isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
 		const secretsWeCantRuleOut = [];
 
+		// TODO: handle UNTOUCHABLE, DORMANT
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
 			secretsWeCantRuleOut.push(CardIds.CompetitiveSpirit_AT_073);

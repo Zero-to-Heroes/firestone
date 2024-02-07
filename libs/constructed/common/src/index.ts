@@ -1,4 +1,5 @@
 export * from './lib/components/constructed-mulligan.component';
+export * from './lib/components/mulligan-detailed-info.component';
 export * from './lib/constructed-common.module';
 export * from './lib/models/deck-summary';
 export * from './lib/services/constructed-archetype.service';

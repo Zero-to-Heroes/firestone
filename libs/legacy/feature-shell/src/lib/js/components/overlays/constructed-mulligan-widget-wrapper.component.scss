@@ -3,11 +3,15 @@
 }
 
 .container {
-	height: 3vh;
+	height: 47vh;
 	width: 92vh;
-	top: 64vh;
+	top: 26vh;
 	left: 24vh;
 	position: relative;
 	display: flex;
 	flex-direction: column;
+}
+
+constructed-mulligan {
+	height: 100%;
 }
