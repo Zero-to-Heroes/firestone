@@ -19,7 +19,7 @@ import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils'
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
-import { share, startWith } from 'rxjs/operators';
+import { filter, share, startWith } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -207,6 +207,10 @@ export class ConstructedDeckbuilderCardsComponent
 			),
 			from([this.allCards.getCards()]),
 		]).pipe(
+			filter(
+				([config, [currentFormat, currentClass], cards]) =>
+					!!config && !!currentFormat && !!currentClass && !!cards,
+			),
 			this.mapData(([config, [currentFormat, currentClass], cards]) => {
 				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
 				const validSets =
