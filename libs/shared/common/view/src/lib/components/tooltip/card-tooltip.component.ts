@@ -22,7 +22,7 @@ import {
 	groupByFunction,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -167,6 +167,7 @@ export class CardTooltipComponent
 	private resizeObserver: ResizeObserver;
 
 	private timeout;
+	private lifecycleHookDone: boolean;
 
 	constructor(
 		// FIXME: how to handle the various types of preferences?
@@ -182,8 +183,9 @@ export class CardTooltipComponent
 		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
-		// FIXME: For some reason, lifecycle methods are not called systematically
-		// setTimeout(() => this.ngAfterContentInit(), 50);
+		// FIXME: For some reason, lifecycle methods are not called systematically. I've noticed this
+		// in the _clickthrough overlay
+		this.forceLifecycleHooks();
 	}
 
 	@HostListener('document:keydown', ['$event'])
@@ -225,6 +227,7 @@ export class CardTooltipComponent
 	}
 
 	ngAfterContentInit(): void {
+		this.lifecycleHookDone = true;
 		// setTimeout(() => this.ngAfterViewInit(), 10);
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
@@ -393,6 +396,16 @@ export class CardTooltipComponent
 	}
 
 	private getRect = () => this.el.nativeElement.querySelector('.container')?.getBoundingClientRect();
+
+	private forceLifecycleHooks() {
+		setTimeout(() => {
+			if (this.lifecycleHookDone) {
+				return;
+			}
+			this.ngAfterContentInit();
+			setTimeout(() => this.ngAfterViewInit(), 50);
+		}, 50);
+	}
 }
 
 interface InternalCard {
