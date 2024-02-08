@@ -62,7 +62,7 @@ export class MulliganDetailedInfoComponent extends AbstractSubscriptionComponent
 			this.mapData((data) => {
 				return data
 					? this.i18n.translateString('decktracker.overlay.mulligan.deck-mulligan-overview-footer', {
-							sampleSize: data.sampleSize,
+							sampleSize: data.sampleSize.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
 							rankBracket: this.i18n.translateString(
 								`app.decktracker.filters.rank-bracket.${data.rankBracket}`,
 							),
