@@ -31,6 +31,7 @@ export class LocalStorageService {
 	public static LOTTERY_STATE = 'lottery-state';
 	public static DUELS_PERSONAL_DECKS = 'duels-personal-decks';
 	public static CONSTRUCTED_PERSONAL_DECKS = 'constructed-personal-decks';
+	public static LOCAL_STORAGE_MULLIGAN_ADVICE_SEEN = 'LOCAL_STORAGE_MULLIGAN_ADVICE_SEEN';
 
 	private cache = {};
 

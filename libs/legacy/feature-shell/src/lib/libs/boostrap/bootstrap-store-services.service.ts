@@ -7,6 +7,7 @@ import {
 } from '@firestone/arena/common';
 import {
 	ConstructedMetaDecksStateService,
+	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
@@ -84,6 +85,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ConstructedMulliganGuideService: ConstructedMulliganGuideService,
 		private readonly init_ArenaNavigationService: ArenaNavigationService,
 		private readonly init_ArenDeckDetailsService: ArenDeckDetailsService,
+		private readonly init_ConstructedMulliganGuideGuardianService: ConstructedMulliganGuideGuardianService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

@@ -14,6 +14,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ selected: selectedMenu === 'opponent-deck' }" (mousedown)="selectMenu('opponent-deck')">
 				<span [owTranslate]="'settings.decktracker.menu.opponent-deck'"></span>
 			</li>
+			<li [ngClass]="{ selected: selectedMenu === 'mulligan' }" (mousedown)="selectMenu('mulligan')">
+				<span [owTranslate]="'settings.decktracker.menu.mulligan'"></span>
+			</li>
 			<li [ngClass]="{ selected: selectedMenu === 'turn-timer' }" (mousedown)="selectMenu('turn-timer')">
 				<span [owTranslate]="'settings.decktracker.menu.turn-timer'"></span>
 			</li>

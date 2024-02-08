@@ -13,6 +13,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 					*ngSwitchCase="'opponent-deck'"
 				></settings-decktracker-opponent-deck>
 				<settings-decktracker-global *ngSwitchCase="'global'"></settings-decktracker-global>
+				<settings-decktracker-mulligan *ngSwitchCase="'mulligan'"></settings-decktracker-mulligan>
 				<settings-decktracker-turn-timer *ngSwitchCase="'turn-timer'"></settings-decktracker-turn-timer>
 				<settings-decktracker-launch *ngSwitchCase="'launch'"></settings-decktracker-launch>
 				<settings-decktracker-duels *ngSwitchCase="'duels'"></settings-decktracker-duels>

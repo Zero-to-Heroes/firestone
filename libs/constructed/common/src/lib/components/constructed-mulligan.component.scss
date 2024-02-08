@@ -14,6 +14,17 @@
 	&.wide {
 		grid-template-columns: repeat(4, 1fr);
 	}
+
+	.premium-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		mulligan-info-premium {
+			height: 3vh;
+			width: fit-content;
+		}
+	}
 }
 
 .mulligan-info {

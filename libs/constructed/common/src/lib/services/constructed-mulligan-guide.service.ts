@@ -35,6 +35,7 @@ import {
 } from 'rxjs';
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
+import { IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
 import { GameStateFacadeService } from './game-state-facade.service';
 
 export const CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD = 20;
@@ -71,12 +72,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.prefs.preferences$((prefs) => prefs.decktrackerMulliganGuideOverlay),
+			this.prefs.preferences$(
+				(prefs) =>
+					IS_ENABLED &&
+					(prefs.decktrackerShowMulliganDeckOverview || prefs.decktrackerShowMulliganCardImpact),
+			),
 			this.gameState.gameState$$,
-			this.ads.hasPremiumSub$$,
+			// canShowWidget$,
 		]).pipe(
 			debounceTime(200),
-			map(([currentScene, [displayFromPrefs], gameState, hasPremiumSub]) => {
+			map(([currentScene, [displayFromPrefs], gameState]) => {
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
@@ -97,12 +102,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					return false;
 				}
 
-				if (!hasPremiumSub) {
-					return false;
-				}
-
 				return true;
 			}),
+
 			distinctUntilChanged(),
 			shareReplay(1),
 			tap((showWidget) => console.log('[mulligan-guide] showWidget', showWidget)),
