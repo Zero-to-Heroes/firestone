@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.4.2',
+		version: '13.4.3',
 		force: false,
 		sections: [
 			// {
@@ -46,6 +46,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now view mulligan data for your deck directly in the overlay! Free users will be able to use this feature 3 times per day, while premium users will have unlimited access to it. Let me know if you have any feedback on this! (note: it will probably be deactivated when the app goes live, as I want to keep it a bit longer in beta for testing)`,
+							},
+						],
+					},
 					{
 						category: 'arena',
 						details: [
