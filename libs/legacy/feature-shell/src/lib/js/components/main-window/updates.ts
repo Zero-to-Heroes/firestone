@@ -75,21 +75,29 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Secrets are now grouped by class once more in the Secrets Helper.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'content',
+								text: `Piloted Whirl-o-Tron is now supported in the simulator.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where battlecries that had no effects on the combat (tavern-only battlecries) would not trigger Kalecgos when triggered in combat (e.g. by Rylak).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Fish of N'Zoth would sometimes spawn traitor minions that would attack their own warband.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',

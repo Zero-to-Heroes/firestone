@@ -678,11 +678,6 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'scallywag',
 			};
-		} else if (hasPilotedWhirlOTron(boardInfo)) {
-			return {
-				isSupported: false,
-				reason: 'piloted-whirl-o-tron',
-			};
 		} else if (hasStictchedEntity(boardInfo)) {
 			return {
 				isSupported: false,
@@ -718,12 +713,12 @@ const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	);
 };
 
-const hasPilotedWhirlOTron = (boardInfo: BgsBoardInfo) => {
-	return (
-		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy) ||
-		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy_G)
-	);
-};
+// const hasPilotedWhirlOTron = (boardInfo: BgsBoardInfo) => {
+// 	return (
+// 		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy) ||
+// 		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy_G)
+// 	);
+// };
 
 // const hasRylak = (boardInfo: BgsBoardInfo) => {
 // 	return (
