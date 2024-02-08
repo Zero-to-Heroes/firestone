@@ -8,7 +8,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const IS_ENABLED = false;
+export const IS_ENABLED = true;
 export const DAILY_FREE_USES = 3;
 
 @Injectable()
@@ -34,8 +34,10 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 		);
 		const today = new Date().toISOString().substring(0, 10);
 		const todaysCount = freeUseCount?.day === today ? freeUseCount.count : 0;
-		console.log('[mulligan-guide-guardian] free use count in init', todaysCount);
+		console.log('[mulligan-guide-guardian] use count in init', today, todaysCount);
 		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES - todaysCount));
+
+		this.addDevMode();
 	}
 
 	public acknowledgeMulliganAdviceSeen() {
@@ -52,8 +54,19 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 			day: today,
 			count: newCount,
 		});
-		console.log('[mulligan-guide-guardian] new free use count', newCount);
+		console.log('[mulligan-guide-guardian] new use count', today, newCount);
 		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES - newCount));
+	}
+
+	private addDevMode() {
+		if (process.env['NODE_ENV'] === 'production') {
+			return;
+		}
+
+		window['resetDailyUses'] = () => {
+			this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_MULLIGAN_ADVICE_SEEN, null);
+			this.freeUsesLeft$$.next(DAILY_FREE_USES);
+		};
 	}
 }
 

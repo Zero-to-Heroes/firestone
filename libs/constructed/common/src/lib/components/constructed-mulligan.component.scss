@@ -47,6 +47,10 @@
 			color: var(--default-title-color);
 		}
 	}
+
+	.no-data .label {
+		margin-right: 0;
+	}
 }
 
 .mulligan-overview {

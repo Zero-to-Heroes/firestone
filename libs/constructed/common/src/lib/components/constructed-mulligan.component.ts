@@ -20,6 +20,7 @@ import {
 	distinctUntilChanged,
 	filter,
 	shareReplay,
+	takeUntil,
 } from 'rxjs';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
@@ -39,13 +40,22 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 				>
 					<ng-container *ngIf="(showPremiumBanner$ | async) === false">
 						<div class="mulligan-info" *ngFor="let info of cardsInHandInfo">
-							<div class="stat mulligan-winrate">
+							<div class="stat mulligan-winrate" *ngIf="info.impact !== null">
 								<span
 									class="label"
 									[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
 									[helpTooltip]="helpTooltip$ | async"
 								></span>
 								<span class="value">{{ info.impact }}</span>
+							</div>
+							<div class="stat mulligan-winrate no-data" *ngIf="info.impact === null">
+								<span
+									class="label"
+									[fsTranslate]="'decktracker.overlay.mulligan.no-mulligan-data'"
+									[helpTooltip]="
+										'decktracker.overlay.mulligan.no-mulligan-data-tooltip' | fsTranslate
+									"
+								></span>
 							</div>
 						</div>
 					</ng-container>
@@ -72,6 +82,7 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 	helpTooltip$: Observable<string | null>;
 
 	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
+	private noData$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -91,10 +102,20 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 		await this.guardian.isReady();
 		await this.prefs.isReady();
 
-		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$])
+		this.mulligan.mulliganAdvice$$
+			.pipe(
+				filter((advice) => !!advice),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((advice) => {
+				console.debug('[mulligan] noData?', advice?.noData, advice);
+				this.noData$$.next(advice?.noData ?? false);
+			});
+
+		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$, this.noData$$])
 			.pipe(
 				debounceTime(200),
-				this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
+				this.mapData(([hasPremiumSub, freeUsesLeft, noData]) => noData || hasPremiumSub || freeUsesLeft > 0),
 				distinctUntilChanged(),
 			)
 			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
@@ -104,9 +125,13 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 			.pipe(this.mapData(([showMulliganCardImpact]) => showMulliganCardImpact));
 		this.showMulliganOverview$ = combineLatest([
 			this.showPremiumBanner$$,
+			this.noData$$,
 			this.prefs.preferences$((prefs) => prefs.decktrackerShowMulliganDeckOverview),
 		]).pipe(
-			this.mapData(([showPremiumBanner, [showMulliganOverview]]) => !showPremiumBanner && showMulliganOverview),
+			this.mapData(
+				([showPremiumBanner, noData, [showMulliganOverview]]) =>
+					!noData && !showPremiumBanner && showMulliganOverview,
+			),
 		);
 		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -121,13 +146,13 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
-		this.cardsInHandInfo$ = this.mulligan.mulliganAdvice$$.pipe(
-			filter((guide) => !!guide),
-			this.mapData((guide) => {
+		this.cardsInHandInfo$ = combineLatest([this.noData$$, this.mulligan.mulliganAdvice$$]).pipe(
+			filter(([noData, guide]) => !!guide),
+			this.mapData(([noData, guide]) => {
 				return guide!.cardsInHand
 					.map((cardId) => guide?.allDeckCards.find((advice) => advice.cardId === cardId))
 					.map((advice) => ({
-						impact: advice?.score == null ? '-' : advice.score.toFixed(2),
+						impact: noData ? null : advice?.score == null ? '-' : advice.score.toFixed(2),
 					}));
 			}),
 		);
@@ -157,12 +182,12 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 	}
 
 	override ngOnDestroy(): void {
-		if (!this.showPremiumBanner$$.value) {
+		if (!this.showPremiumBanner$$.value && !this.noData$$.value) {
 			this.guardian.acknowledgeMulliganAdviceSeen();
 		}
 	}
 }
 
 interface InternalMulliganAdvice {
-	impact: string;
+	impact: string | null;
 }

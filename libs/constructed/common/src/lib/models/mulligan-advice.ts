@@ -8,6 +8,7 @@ export interface MulliganGuide {
 	readonly format: GameFormatString;
 	readonly rankBracket: RankBracket;
 	readonly opponentClass: 'all' | string;
+	readonly noData?: boolean;
 }
 
 export interface MulliganCardAdvice {

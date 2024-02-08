@@ -251,6 +251,10 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<ArchetypeStat | null> {
+		if (!archetypeId) {
+			return null;
+		}
+
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const fileName = `${format}/${rank}/${time}/archetype/${archetypeId}.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;

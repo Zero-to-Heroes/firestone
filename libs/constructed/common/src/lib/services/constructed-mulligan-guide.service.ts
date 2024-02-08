@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { GameFormat, RankBracket } from '@firestone-hs/constructed-deck-stats';
+import { ArchetypeStat, GameFormat, RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import {
 	COIN_IDS,
@@ -11,7 +11,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual } from '@firestone/shared/framework/common';
+import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AbstractFacadeService,
@@ -23,6 +23,7 @@ import {
 import { toFormatType } from '@firestone/stats/data-access';
 import {
 	BehaviorSubject,
+	Observable,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -81,6 +82,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			// canShowWidget$,
 		]).pipe(
 			debounceTime(200),
+			// tap((info) => console.log('[mulligan-guide] will show widget?', info)),
 			map(([currentScene, [displayFromPrefs], gameState]) => {
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
@@ -104,10 +106,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 				return true;
 			}),
-
 			distinctUntilChanged(),
-			shareReplay(1),
 			tap((showWidget) => console.log('[mulligan-guide] showWidget', showWidget)),
+			shareReplay(1),
 		);
 
 		const format$ = showWidget$.pipe(
@@ -121,7 +122,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const playerRank$ = from(['legend-diamond'] as RankBracket[]);
 		const opponentClass$ = from(['all'] as ('all' | string)[]);
 
-		const archetype$ = showWidget$.pipe(
+		const archetype$: Observable<ArchetypeStat | null> = showWidget$.pipe(
 			filter((showWidget) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
@@ -132,18 +133,28 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				playerRank: playerRank,
 				opponentClass: opponentClass,
 			})),
-			filter((info) => !!info.archetypeId && !!info.format),
-			distinctUntilChanged((a, b) => a.archetypeId === b.archetypeId && a.format === b.format),
-			switchMap(({ archetypeId, format, playerRank, opponentClass }) =>
-				this.archetypes.loadNewArchetypeDetails(
+			filter((info) => !!info.format),
+			distinctUntilChanged(
+				(a, b) =>
+					a.archetypeId === b.archetypeId &&
+					a.format === b.format &&
+					a.playerRank === b.playerRank &&
+					a.opponentClass === b.opponentClass,
+			),
+			switchMap(({ archetypeId, format, playerRank, opponentClass }) => {
+				const result = this.archetypes.loadNewArchetypeDetails(
 					archetypeId as number,
 					toFormatType(format as any) as GameFormat,
 					'last-patch',
 					playerRank,
-				),
-			),
-			shareReplay(1),
+				);
+				// console.debug('[mulligan-guide] archetype result', result);
+				return result;
+			}),
+			// filter((archetype) => !!archetype),
+			// map(archetype => archetype as ArchetypeStat),
 			tap((archetype) => console.log('[mulligan-guide] archetype', archetype)),
+			// shareReplay(1),
 		);
 
 		const cardsInHand$ = showWidget$.pipe(
@@ -158,8 +169,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				return cardsInHand.length > 0 ? cardsInHand : null;
 			}),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
 			tap((cardsInHand) => console.log('[mulligan-guide] cardsInHand', cardsInHand)),
+			shareReplay(1),
 		);
 		const deckCards$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
@@ -178,8 +189,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				return cards;
 			}),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
 			tap((cardsInHand) => console.log('[mulligan-guide] deckCards', cardsInHand)),
+			shareReplay(1),
 		);
 
 		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]).pipe(
@@ -197,28 +208,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					})),
 				),
 			),
-			filter(({ cardsInHand, deckCards, archetype }) => !!archetype),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			map(({ cardsInHand, deckCards, archetype, format, playerRank, opponentClass }) => {
-				// console.debug('[mulligan-guide] building advice', cardsInHand, archetype);
-				const archetypeWinrate = archetype!.winrate;
-				// const mulliganImpacts = archetype!.cardsData
-				// 	.filter((card) => card.inHandAfterMulligan > CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD)
-				// 	.map((card) => card.inHandAfterMulliganThenWin / card.inHandAfterMulligan - archetypeWinrate);
-				// const highestMulliganWinrate = mulliganImpacts.reduce((a, b) => Math.max(a, b), 0);
-				// const lowestMulliganWinrate = mulliganImpacts.reduce((a, b) => Math.min(a, b), 0);
-				// console.debug(
-				// 	'[mulligan-guide] mulliganImpacts',
-				// 	archetypeWinrate,
-				// 	highestMulliganWinrate,
-				// 	lowestMulliganWinrate,
-				// 	mulliganImpacts,
-				// );
-
+				const archetypeWinrate = archetype?.winrate ?? 0;
 				const allDeckCards: readonly MulliganCardAdvice[] =
 					deckCards?.map((refCard) => {
 						const cardData =
-							archetype!.cardsData?.find((card) => card.cardId === refCard.id) ??
-							archetype!.cardsData?.find(
+							archetype?.cardsData?.find((card) => card.cardId === refCard.id) ??
+							archetype?.cardsData?.find(
 								(card) =>
 									this.allCards.getRootCardId(card.cardId) ===
 									this.allCards.getRootCardId(refCard.id),
@@ -230,28 +227,22 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 							cardId: refCard.id,
 							score: rawImpact == null ? null : 100 * rawImpact,
 						};
-						// console.debug(
-						// 	'[mulligan-guide] mulliganAdvice',
-						// 	refCard.id,
-						// 	cardData,
-						// 	archetypeWinrate,
-						// 	rawImpact,
-						// );
 						return mulliganAdvice;
 					}) ?? [];
 
 				const result: MulliganGuide = {
+					noData: !archetype,
 					cardsInHand: cardsInHand!,
 					allDeckCards: allDeckCards,
-					sampleSize: archetype!.totalGames,
+					sampleSize: archetype?.totalGames ?? 0,
 					rankBracket: playerRank,
 					opponentClass: opponentClass,
 					format: format,
 				};
 				return result;
 			}),
-			shareReplay(1),
 			tap((mulliganAdvice) => console.log('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
+			shareReplay(1),
 		);
 		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) =>
 			this.mulliganAdvice$$.next(showWidget ? advice : null),
