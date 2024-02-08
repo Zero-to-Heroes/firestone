@@ -22,7 +22,7 @@ import {
 	groupByFunction,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -206,13 +206,14 @@ export class CardTooltipComponent
 	}
 
 	ngAfterViewInit(): void {
-		let i = 0;
-		this.resizeObserver =
-			this.resizeObserver ??
-			new ResizeObserver((entries) => {
-				this.keepInBound$$.next(++i);
-			});
+		if (this.resizeObserver) {
+			return;
+		}
 
+		let i = 0;
+		this.resizeObserver = new ResizeObserver((entries) => {
+			this.keepInBound$$.next(++i);
+		});
 		this.resizeObserver.observe(this.el.nativeElement);
 	}
 
@@ -227,8 +228,12 @@ export class CardTooltipComponent
 	}
 
 	ngAfterContentInit(): void {
+		if (this.lifecycleHookDone) {
+			return;
+		}
 		this.lifecycleHookDone = true;
-		// setTimeout(() => this.ngAfterViewInit(), 10);
+		console.debug('ngAfterContentInit');
+
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
 		this.opacity$ = this.opacity$$;
@@ -399,6 +404,7 @@ export class CardTooltipComponent
 
 	private forceLifecycleHooks() {
 		setTimeout(() => {
+			console.debug('testing lifecycle hooks', this.lifecycleHookDone);
 			if (this.lifecycleHookDone) {
 				return;
 			}
