@@ -1,3 +1,4 @@
+import { MatchAnalysis } from '@firestone-hs/assign-constructed-archetype';
 import { BgsBoard, BgsHeroQuest, BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser';
 import { BnetRegion, Race } from '@firestone-hs/reference-data';
 import { StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
@@ -11,6 +12,7 @@ export interface ReplayUploadMetadata {
 		readonly reviewId: string;
 		readonly replayKey: string;
 		readonly deckstring: string;
+		readonly normalizedDeckstring: string | null;
 		readonly deckName: string;
 		readonly scenarioId: number;
 		readonly buildNumber: number;
@@ -69,6 +71,9 @@ export interface ReplayUploadMetadata {
 		readonly heroSkillsUsed: {
 			[abilityCardId: string]: number;
 		};
+	};
+	readonly stats: {
+		readonly matchAnalysis: MatchAnalysis | null;
 	};
 	readonly meta: {
 		readonly application: string;

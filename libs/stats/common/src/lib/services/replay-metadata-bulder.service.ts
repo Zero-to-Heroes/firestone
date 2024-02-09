@@ -6,15 +6,20 @@ import {
 	extractTotalTurns,
 	parseBattlegroundsGame,
 } from '@firestone-hs/hs-replay-xml-parser';
+import { normalizeDeckList } from '@firestone-hs/reference-data';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
-import { uuid } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { ReplayUploadMetadata } from '../model/replay-upload-metadata';
+import { MatchAnalysisService } from './match-analysis.service';
 
 @Injectable()
 export class ReplayMetadataBuilderService {
-	constructor(private readonly allCards: CardsFacadeService, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
+		private readonly matchAnalysisService: MatchAnalysisService,
+	) {}
 
 	public async buildMetadata(
 		game: GameForUpload,
@@ -46,10 +51,13 @@ export class ReplayMetadataBuilderService {
 			},
 			game: {
 				reviewId: game.reviewId,
-				replayKey: `hearthstone/replay/${today.getFullYear()}/${
-					today.getMonth() + 1
-				}/${today.getDate()}/${uuid()}.xml.zip`,
+				replayKey: `hearthstone/replay/${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}/${
+					game.reviewId
+				}.xml.zip`,
 				deckstring: game.deckstring,
+				normalizedDeckstring: !game.deckstring?.length
+					? null
+					: normalizeDeckList(game.deckstring, this.allCards.getService()),
 				deckName: game.deckName,
 				scenarioId: game.scenarioId,
 				buildNumber: game.buildNumber,
@@ -75,6 +83,9 @@ export class ReplayMetadataBuilderService {
 				totalDurationTurns: totalDurationTurns,
 			},
 			bgs: bgs as ReplayUploadMetadata['bgs'],
+			stats: {
+				matchAnalysis: this.matchAnalysisService.buildMatchStats(game),
+			},
 		};
 		return metadata;
 	}
