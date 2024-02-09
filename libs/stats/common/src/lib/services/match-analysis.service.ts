@@ -8,6 +8,7 @@ import { StatGameModeType } from '@firestone/stats/data-access';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { cardDrawn } from './match-analysis/parsers/cards-draw-parser';
 import { cardsInHand } from './match-analysis/parsers/cards-in-hand-parser';
+import { extractPlayedCards } from './match-analysis/played-card-extractor';
 import { ReplayParser } from './match-analysis/replay-parser';
 
 const GAME_MODES_WITH_ANALYSIS: readonly StatGameModeType[] = [
@@ -38,6 +39,7 @@ export class MatchAnalysisService {
 		const parser = new ReplayParser(replay, [cardsInHand, cardDrawn]);
 		let cardsAfterMulligan: { cardId: string; kept: boolean }[] = [];
 		let cardsBeforeMulligan: string[] = [];
+		let cardsDrawn: { cardId: string; cardDbfId: number; turn: number }[] = [];
 		parser.on('cards-in-hand', (event) => {
 			if (cardsBeforeMulligan?.length === 0) {
 				cardsBeforeMulligan = event.cardsInHand.map((cardId) => getBaseCardId(cardId));
@@ -51,12 +53,18 @@ export class MatchAnalysisService {
 				});
 			}
 		});
-		let cardsDrawn: { cardId: string; turn: number }[] = [];
 		parser.on('card-draw', (event) => {
+			const baseCardId = getBaseCardId(event.cardId);
 			// console.debug('card drawn', event.cardId);
-			cardsDrawn = [...cardsDrawn, { cardId: getBaseCardId(event.cardId), turn: event.turn }];
+			cardsDrawn = [
+				...cardsDrawn,
+				{ cardId: baseCardId, cardDbfId: this.allCards.getCard(baseCardId).dbfId, turn: event.turn },
+			];
 		});
 		parser.parse();
+
+		const finalCardsAfterMulligan = [...cardsAfterMulligan];
+		const finalCardsDrawn = [...cardsDrawn];
 
 		const deckDefinition = decode(game.deckstring);
 		// List of cards, ordered by id, including duplicates
@@ -90,7 +98,13 @@ export class MatchAnalysisService {
 
 		const result: MatchAnalysis = {
 			cardsAnalysis: cardsAnalysis,
+			cardsAfterMulligan: finalCardsAfterMulligan,
+			cardsDrawn: finalCardsDrawn,
 		};
 		return result;
+	}
+
+	public buildCardsPlayed(playerId: number, replay: Replay): readonly string[] {
+		return extractPlayedCards(replay, playerId);
 	}
 }

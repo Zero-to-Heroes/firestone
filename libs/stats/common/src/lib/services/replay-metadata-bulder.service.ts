@@ -7,10 +7,10 @@ import {
 	parseBattlegroundsGame,
 } from '@firestone-hs/hs-replay-xml-parser';
 import { normalizeDeckList } from '@firestone-hs/reference-data';
+import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
-import { ReplayUploadMetadata } from '../model/replay-upload-metadata';
 import { MatchAnalysisService } from './match-analysis.service';
 
 @Injectable()
@@ -74,9 +74,11 @@ export class ReplayMetadataBuilderService {
 
 				mainPlayerName: replay.mainPlayerName,
 				mainPlayerCardId: replay.mainPlayerCardId,
+				mainPlayerId: game.replay.mainPlayerId,
 				opponentPlayerName: replay.opponentPlayerName,
 				forceOpponentName: game.forceOpponentName,
 				opponentPlayerCardId: replay.opponentPlayerCardId,
+				opponentPlayerId: game.replay.opponentPlayerId,
 				result: replay.result,
 				playCoin: replay.playCoin,
 				totalDurationSeconds: totalDurationSeconds,
@@ -85,6 +87,11 @@ export class ReplayMetadataBuilderService {
 			bgs: bgs as ReplayUploadMetadata['bgs'],
 			stats: {
 				matchAnalysis: this.matchAnalysisService.buildMatchStats(game),
+				playerPlayedCards: this.matchAnalysisService.buildCardsPlayed(game.replay.mainPlayerId, game.replay),
+				opponentPlayedCards: this.matchAnalysisService.buildCardsPlayed(
+					game.replay.opponentPlayerId,
+					game.replay,
+				),
 			},
 		};
 		return metadata;
