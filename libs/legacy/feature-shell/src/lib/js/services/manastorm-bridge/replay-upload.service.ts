@@ -78,7 +78,7 @@ export class ReplayUploadService {
 				level: 9,
 			},
 		});
-		const fileKey = Date.now() + '_' + reviewId + '.hszip';
+		const fileKey = fullMetaData.game.reviewId + '_' + fullMetaData.user.userId + '.hszip';
 		console.log('[manastorm-bridge] built file key for meta data', fileKey);
 		await this.uploadMetaData(fileKey, metaDataBlob);
 		console.log('[manastorm-bridge] uploaded metadata');
