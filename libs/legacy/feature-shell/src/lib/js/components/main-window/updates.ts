@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.4.3',
+		version: '13.4.4',
 		force: false,
 		sections: [
 			// {
@@ -93,6 +93,41 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Fish of N'Zoth would sometimes spawn traitor minions that would attack their own warband.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a setting to ignore the discard / burned / dead / etc. status when grouping cards with the same card ID.`,
+							},
+							{
+								type: 'feature',
+								text: `Don't show destroyed Locations as being in the Graveyard.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Fracking wouldn't draw from the bottom of the deck.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a setting to change the size of the overlay while drafting.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Text search now also searches in the merc's faction.`,
 							},
 						],
 					},
