@@ -50,7 +50,9 @@ export class CardDrawParser implements EventParser {
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
-		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide].includes(gameEvent.additionalData.drawnByCardId);
+		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(
+			gameEvent.additionalData.drawnByCardId,
+		);
 		const useBottomOfDeckToIdentifyCard =
 			!isPlayer &&
 			deck.deck.some(
