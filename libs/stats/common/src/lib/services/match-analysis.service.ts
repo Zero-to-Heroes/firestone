@@ -28,6 +28,7 @@ export class MatchAnalysisService {
 
 	public buildMatchStats(game: GameForUpload): MatchAnalysis | null {
 		if (!GAME_MODES_WITH_ANALYSIS.includes(game.gameMode)) {
+			console.debug('[match-analysis] not analyzing game mode', game.gameMode);
 			return null;
 		}
 		if (!game.deckstring?.length == null) {
