@@ -85,7 +85,7 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.decktracker.global.show-plagues-on-top-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
-						field="overlayResetDeckPositionAfterTrade"
+						field="overlayResetDeckPositionAfterTrade2"
 						[label]="'settings.decktracker.global.reset-deck-position-after-trade' | owTranslate"
 						[tooltip]="'settings.decktracker.global.reset-deck-position-after-trade-tooltip' | owTranslate"
 					></preference-toggle>

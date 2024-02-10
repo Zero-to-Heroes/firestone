@@ -51,7 +51,7 @@ export class CardTradedParser implements EventParser {
 
 		const prefs = await this.prefs.getPreferences();
 		// Because we don't know where the card is inserted, we reset the positions
-		const deckWithResetPositions: readonly DeckCard[] = prefs.overlayResetDeckPositionAfterTrade
+		const deckWithResetPositions: readonly DeckCard[] = prefs.overlayResetDeckPositionAfterTrade2
 			? newDeck.map((card) =>
 					card.update({
 						...card,
