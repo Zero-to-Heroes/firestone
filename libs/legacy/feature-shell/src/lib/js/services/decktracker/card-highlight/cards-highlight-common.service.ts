@@ -1344,7 +1344,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.RushTheStage:
 				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.SalhetsPride:
-				return and(side(inputSide), inDeck, minion, effectiveCostLess(2));
+				return and(side(inputSide), inDeck, minion, healthLessThan(2));
 			case CardIds.SaroniteShambler_YOG_521:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.ScavengersIngenuity:
