@@ -690,6 +690,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, demon, minion);
 			case CardIds.DiscipleOfEonar:
 				return and(side(inputSide), or(inDeck, inHand), chooseOne);
+			case CardIds.DiscipleOfGolganneth:
+				return and(side(inputSide), or(inDeck, inHand), overload);
 			case CardIds.DiscoMaul:
 				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.DisksOfLegendTavernBrawl:
@@ -772,6 +774,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 			case CardIds.FiremancerFlurgl:
 				return and(side(inputSide), race(Race.MURLOC), or(inDeck, inHand));
+			case CardIds.FlameRevenant:
+				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.FlamesOfTheKirinTorTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fire);
 			case CardIds.FlameWavesTavernBrawl:
