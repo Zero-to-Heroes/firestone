@@ -151,6 +151,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-bgs-blood-gem-widget-wrapper></player-bgs-blood-gem-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 			<player-bgs-gold-delta-widget-wrapper></player-bgs-gold-delta-widget-wrapper>
+			<player-bgs-lord-of-gains-widget-wrapper></player-bgs-lord-of-gains-widget-wrapper>
 
 			<lottery-widget-wrapper></lottery-widget-wrapper>
 		</div>

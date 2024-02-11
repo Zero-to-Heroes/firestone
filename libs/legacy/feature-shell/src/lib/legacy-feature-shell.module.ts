@@ -522,6 +522,7 @@ import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/cou
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsGoldDeltaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-gold-delta-widget-wrapper.component';
+import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
@@ -1595,6 +1596,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBgsMajordomoWidgetWrapperComponent,
 		PlayerBgsGoldDeltaWidgetWrapperComponent,
 		PlayerBgsBloodGemWidgetWrapperComponent,
+		PlayerBgsLordOfGainsWidgetWrapperComponent,
 
 		OpponentCounterWidgetWrapperComponent,
 		OpponentWatchpostCounterWidgetWrapperComponent,

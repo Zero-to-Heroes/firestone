@@ -19,6 +19,7 @@ import { AsvedonCounterDefinition } from './definitions/asvedon-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsBloodGemCounterDefinition } from './definitions/bgs-blood-gem-counter';
 import { BgsGoldDeltaCounterDefinition } from './definitions/bgs-delta-gold-counter';
+import { BgsLordOfGainsCounterDefinition } from './definitions/bgs-lord-of-gains-counter';
 import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
@@ -273,6 +274,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return BgsMajordomoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsGoldDelta':
 				return BgsGoldDeltaCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
+			case 'bgsLordOfGains':
+				return BgsLordOfGainsCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 				return null;

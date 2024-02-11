@@ -311,6 +311,12 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.overlay.counter-gold-delta-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerBgsLordOfGainsCounter"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.overlay.counter-lord-of-gains-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.counter-lord-of-gains-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerBgsMajordomoCounter"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.counter-majordomo-label' | owTranslate"
