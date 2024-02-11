@@ -7,6 +7,7 @@ import {
 	CardIds,
 	GameFormat as GameFormatEnum,
 	GameFormatString,
+	GameType,
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
@@ -87,10 +88,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
-				const isBgs = gameState?.isBattlegrounds();
-				const isMercs = gameState?.isMercenaries();
 
-				if (!gameStarted || mulliganOver || isBgs || isMercs || !displayFromPrefs) {
+				if (!gameStarted || mulliganOver || !displayFromPrefs) {
+					return false;
+				}
+
+				if (
+					![GameType.GT_RANKED, GameType.GT_CASUAL, GameType.GT_VS_FRIEND].includes(
+						gameState.metadata.gameType,
+					)
+				) {
 					return false;
 				}
 
