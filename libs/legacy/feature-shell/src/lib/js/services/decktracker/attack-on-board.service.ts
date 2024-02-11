@@ -38,7 +38,9 @@ export class AttackOnBoardService {
 			? Math.max(playerFromTracker?.Hero?.attack || 0, 0)
 			: Math.max(playerFromTracker?.Weapon?.attack || 0, 0);
 
-		const heroAttacksThisTurn = getTag(playerFromTracker.Hero, GameTag.NUM_ATTACKS_THIS_TURN);
+		const heroAttacksThisTurn = deck.isActivePlayer
+			? getTag(playerFromTracker.Hero, GameTag.NUM_ATTACKS_THIS_TURN)
+			: 0;
 		const heroAttack =
 			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, deck.isActivePlayer)
 				? Math.max(
@@ -56,7 +58,7 @@ export class AttackOnBoardService {
 		// 	'heroAttack',
 		// 	heroAttack,
 		// 	baseHeroAttack,
-		// 	playerFromTracker.Hero,
+		// 	playerFromTracker?.Hero,
 		// 	this.canAttack(playerFromTracker.Hero, deck.isActivePlayer),
 		// 	this.windfuryMultiplier(playerFromTracker.Hero),
 		// 	playerFromTracker?.Weapon,
