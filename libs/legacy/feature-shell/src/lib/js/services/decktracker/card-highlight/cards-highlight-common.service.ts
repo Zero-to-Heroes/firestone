@@ -1356,7 +1356,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ScepterOfSummoning:
 				return and(side(inputSide), or(inDeck, inHand), minion, effectiveCostMore(5));
 			case CardIds.ScourgeIllusionist:
-				return and(side(inputSide), inDeck, minion, deathrattle);
+				return and(side(inputSide), inDeck, minion, deathrattle, not(cardIs(CardIds.ScourgeIllusionist)));
 			case CardIds.ScrapShot:
 				return and(side(inputSide), inDeck, beast);
 			case CardIds.ScrollSavvy:
