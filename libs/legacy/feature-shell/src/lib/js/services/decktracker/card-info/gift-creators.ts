@@ -660,6 +660,7 @@ export const giftCreators = [
 	CardIds.TanglefurMystic,
 	CardIds.TasteOfChaos,
 	CardIds.TearReality,
+	CardIds.TenGallonHat_WW_811,
 	CardIds.TentacleGrip_YOG_526,
 	CardIds.TentacleTender_YOG_517,
 	CardIds.TheBadlandsBandits_WW_345,
