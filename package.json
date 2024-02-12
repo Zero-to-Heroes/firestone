@@ -46,7 +46,7 @@
 		"@firestone-hs/duels-leaderboard": "^1.0.5",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.128",
 		"@firestone-hs/mailbox": "^1.0.29",
-		"@firestone-hs/reference-data": "^1.0.142",
+		"@firestone-hs/reference-data": "^1.0.144",
 		"@firestone-hs/replay-metadata": "^0.0.60",
 		"@firestone-hs/replay-parser": "^1.2.21",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
@@ -151,7 +151,7 @@
 		"typescript": "^4.8.2"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^1.0.142",
+		"@firestone-hs/reference-data": "^1.0.144",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.128",
 		"@angular/common": "^15.0.0",
 		"@angular/core": "^15.0.0",
