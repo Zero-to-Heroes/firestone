@@ -48,7 +48,7 @@ export class ConstructedMetaDeckDetailsComponent
 
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
 		this.showRelativeInfo$ = this.prefs
-			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo)
+			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo2)
 			.pipe(this.mapData(([showRelativeInfo]) => showRelativeInfo));
 		this.collection$ = this.store.collection$().pipe(
 			filter((collection) => !!collection),

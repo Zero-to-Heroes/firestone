@@ -171,7 +171,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksDustFilter: ConstructedMetaDecksDustFilterType = 'all';
 	readonly constructedMetaArchetypesSampleSizeFilter: number = 2000;
 	readonly constructedMetaDecksUseConservativeWinrate: boolean = false;
-	readonly constructedMetaDecksShowRelativeInfo: boolean = false;
+	readonly constructedMetaDecksShowRelativeInfo2: boolean = true;
 	readonly constructedMetaDecksPlayerClassFilter: readonly string[] = [];
 	readonly constructedMetaDecksArchetypeFilter: readonly number[] = [];
 

@@ -44,7 +44,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
 		this.showRelativeInfo$ = this.prefs
-			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo)
+			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo2)
 			.pipe(this.mapData(([showRelativeInfo]) => showRelativeInfo));
 		this.deckDetails$ = combineLatest([
 			this.constructedMetaStats.currentConstructedMetaArchetype$$,

@@ -1,5 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import {
 	AbstractSubscriptionComponent,
@@ -26,7 +27,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div class="controls">
 				<preference-toggle
 					class="show-relative-info-button"
-					field="constructedMetaDecksShowRelativeInfo"
+					field="constructedMetaDecksShowRelativeInfo2"
 					[label]="'app.decktracker.meta.details.cards.show-relative-info-button' | owTranslate"
 					[helpTooltip]="'app.decktracker.meta.details.cards.show-relative-info-button-tooltip' | owTranslate"
 				></preference-toggle>
@@ -42,8 +43,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</sortable-table-label>
 				<sortable-table-label
 					class="cell data winrate"
-					[name]="'app.decktracker.meta.details.cards.mulligan-winrate-header' | owTranslate"
-					[helpTooltip]="'app.decktracker.meta.details.cards.mulligan-winrate-header-tooltip' | owTranslate"
+					[name]="mulliganWinrateHeader$ | async"
+					[helpTooltip]="mulliganWinrateHeaderTooltip$ | async"
 					[sort]="sort"
 					[criteria]="'mulligan-winrate'"
 					(sortClick)="onSortClick($event)"
@@ -78,10 +79,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</sortable-table-label>
 				<sortable-table-label
 					class="cell data drawn"
-					[name]="'app.decktracker.meta.details.cards.mulligan-drawn-winrate-header' | owTranslate"
-					[helpTooltip]="
-						'app.decktracker.meta.details.cards.mulligan-drawn-winrate-header-tooltip' | owTranslate
-					"
+					[name]="drawnWinrateHeader$ | async"
+					[helpTooltip]="drawnWinrateHeaderTooltip$ | async"
 					[sort]="sort"
 					[criteria]="'drawn-winrate'"
 					(sortClick)="onSortClick($event)"
@@ -117,6 +116,11 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	cardData$: Observable<readonly InternalCardData[]>;
 	isDeck$: Observable<boolean>;
+
+	mulliganWinrateHeader$: Observable<string>;
+	mulliganWinrateHeaderTooltip$: Observable<string>;
+	drawnWinrateHeader$: Observable<string>;
+	drawnWinrateHeaderTooltip$: Observable<string>;
 	popularityLabel$: Observable<string>;
 	popularityLabelTooltip$: Observable<string>;
 
@@ -142,6 +146,8 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	private totalGames$$ = new BehaviorSubject<number>(null);
 	private isDeck$$ = new BehaviorSubject<boolean>(false);
 
+	private showImpact$: Observable<boolean>;
+
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'mulligan-winrate',
 		direction: 'desc',
@@ -151,15 +157,53 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	// TODO: show the info related to the global deck winrate, to make it easier to see
 	// which cards do well or not
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		this.isDeck$ = this.isDeck$$.asObservable();
+		this.showImpact$ = this.prefs
+			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo2)
+			.pipe(this.mapData(([showImpact]) => showImpact));
+		this.mulliganWinrateHeader$ = this.showImpact$.pipe(
+			this.mapData((showImpact) =>
+				showImpact
+					? this.i18n.translateString('app.decktracker.meta.details.cards.mulligan-winrate-impact-header')
+					: this.i18n.translateString('app.decktracker.meta.details.cards.mulligan-winrate-header'),
+			),
+		);
+		this.mulliganWinrateHeaderTooltip$ = this.showImpact$.pipe(
+			this.mapData((showImpact) =>
+				showImpact
+					? this.i18n.translateString(
+							'app.decktracker.meta.details.cards.mulligan-winrate-impact-header-tooltip',
+					  )
+					: this.i18n.translateString('app.decktracker.meta.details.cards.mulligan-winrate-header-tooltip'),
+			),
+		);
+		this.drawnWinrateHeader$ = this.showImpact$.pipe(
+			this.mapData((showImpact) =>
+				showImpact
+					? this.i18n.translateString('app.decktracker.meta.details.cards.drawn-winrate-impact-header')
+					: this.i18n.translateString('app.decktracker.meta.details.cards.drawn-winrate-header'),
+			),
+		);
+		this.drawnWinrateHeaderTooltip$ = this.showImpact$.pipe(
+			this.mapData((showImpact) =>
+				showImpact
+					? this.i18n.translateString(
+							'app.decktracker.meta.details.cards.drawn-winrate-impact-header-tooltip',
+					  )
+					: this.i18n.translateString('app.decktracker.meta.details.cards.drawn-winrate-header-tooltip'),
+			),
+		);
 		this.popularityLabel$ = this.isDeck$.pipe(
 			this.mapData((isDeck) =>
 				isDeck
@@ -263,6 +307,10 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 				return result;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onSortClick(rawCriteria: string) {
