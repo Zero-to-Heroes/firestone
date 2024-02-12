@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.4.4',
+		version: '13.4.9',
 		force: false,
 		sections: [
 			// {
@@ -46,15 +46,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now view mulligan data for your deck directly in the overlay! Free users will be able to use this feature 3 times per day, while premium users will have unlimited access to it. Let me know if you have any feedback on this! (note: it will probably be deactivated when the app goes live, as I want to keep it a bit longer in beta for testing)`,
-							},
-						],
-					},
+					// {
+					// 	category: 'decktracker',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `You can now view mulligan data for your deck directly in the overlay! Free users will be able to use this feature 3 times per day, while premium users will have unlimited access to it. Let me know if you have any feedback on this! (note: it will probably be deactivated when the app goes live, as I want to keep it a bit longer in beta for testing)`,
+					// 		},
+					// 	],
+					// },
 					{
 						category: 'arena',
 						details: [
@@ -83,6 +83,10 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add a counter to tell you how many different spells you've played, and which ones.`,
+							},
+							{
 								type: 'content',
 								text: `Piloted Whirl-o-Tron is now supported in the simulator.`,
 							},
@@ -110,6 +114,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where Fracking wouldn't draw from the bottom of the deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix san issue where the attack counter could not properly take the hero attack into account during the other player's turn.`,
 							},
 						],
 					},
