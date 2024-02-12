@@ -37,7 +37,7 @@ import {
 } from 'rxjs';
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
-import { IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
+import { MULLIGAN_GUIDE_IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
 import { GameStateFacadeService } from './game-state-facade.service';
 
 export const CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD = 20;
@@ -76,7 +76,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			this.scene.currentScene$$,
 			this.prefs.preferences$(
 				(prefs) =>
-					IS_ENABLED &&
+					MULLIGAN_GUIDE_IS_ENABLED &&
 					(prefs.decktrackerShowMulliganDeckOverview || prefs.decktrackerShowMulliganCardImpact),
 			),
 			this.gameState.gameState$$,
