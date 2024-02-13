@@ -8,6 +8,7 @@ import { EventParser } from '../event-parser';
 export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
 		CardIds.RatTrap,
+		// CardIds.RatTrapCore,
 		CardIds.HiddenWisdom,
 		CardIds.GallopingSavior,
 		CardIds.MotionDenied,
@@ -28,6 +29,7 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		const toExclude = [];
 		if (gameEvent.additionalData.cardsPlayed < 3) {
 			toExclude.push(CardIds.RatTrap);
+			// toExclude.push(CardIds.RatTrapCore);
 			toExclude.push(CardIds.HiddenWisdom);
 			toExclude.push(CardIds.GallopingSavior);
 			toExclude.push(CardIds.MotionDenied);
@@ -35,6 +37,7 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		}
 		if (deckWithSecretToCheck.board.length === 7) {
 			toExclude.push(CardIds.RatTrap);
+			// toExclude.push(CardIds.RatTrapCore);
 			toExclude.push(CardIds.GallopingSavior);
 		}
 		if (deckWithSecretToCheck.hand.length === 10) {

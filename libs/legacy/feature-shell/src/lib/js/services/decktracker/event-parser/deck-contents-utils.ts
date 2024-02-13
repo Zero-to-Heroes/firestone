@@ -46,6 +46,7 @@ export const modifyDecksForSpecialCards = (
 			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.LadyPrestor_SW_078:
 			return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
+		// case CardIds.ArchVillainRafaam_CORE_DAL_422:
 		case CardIds.ArchVillainRafaam_DAL_422:
 		case CardIds.UnearthedRaptor_GoldenMonkeyToken:
 			return [handleArchVillainRafaam(deckState, allCards, i18n), opponentDeckState];

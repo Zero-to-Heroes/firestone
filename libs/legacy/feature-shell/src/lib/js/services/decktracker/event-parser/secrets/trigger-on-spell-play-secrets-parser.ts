@@ -11,6 +11,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.CatTrickCore,
 		CardIds.CatTrick,
 		CardIds.IceTrap,
+		// CardIds.IceTrapCore,
 		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 		CardIds.PressurePlate,
 		CardIds.CounterspellLegacy,

@@ -16,6 +16,7 @@ export const tutors = [
 	CardIds.BalindaStonehearth,
 	CardIds.Banjosaur,
 	CardIds.BarakKodobane_BAR_551,
+	// CardIds.BarakKodobane_CORE_BAR_551,
 	CardIds.BartendOBot_WW_408,
 	CardIds.BlindeyeSharpshooter_WW_402,
 	CardIds.Bogshaper,
@@ -113,6 +114,7 @@ export const tutors = [
 	CardIds.MagathaBaneOfMusic,
 	CardIds.MarkOfScorn,
 	CardIds.MastersCall,
+	// CardIds.MastersCall_CORE,
 	CardIds.MesaduneTheFractured_WW_429,
 	CardIds.MessengerBuzzard_WW_807,
 	CardIds.MoonlitGuidance_DED_002, // falls in both cases
@@ -134,6 +136,7 @@ export const tutors = [
 	CardIds.RadarDetector_Story_11_RadarDetector,
 	CardIds.RadarDetector_TSC_079,
 	CardIds.RaidingParty,
+	// CardIds.RaidingPartyCore,
 	CardIds.RaidTheDocks,
 	CardIds.RedscaleDragontamer,
 	CardIds.RelicOfDimensions,

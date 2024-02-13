@@ -88,6 +88,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.ArchbishopBenedictus_CORE_ICC_215,
 	CardIds.ArchbishopBenedictus_ICC_215,
 	CardIds.ArchVillainRafaam_DAL_422,
+	// CardIds.ArchVillainRafaam_CORE_DAL_422,
 	CardIds.AudioAmplifier,
 	CardIds.BladeOfTheBurningSun,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
@@ -322,6 +323,7 @@ export const hideInfoWhenPlayerPlaysIt = [
 	CardIds.IncriminatingPsychic,
 	CardIds.KoboldIllusionist,
 	CardIds.MadameLazul,
+	// CardIds.MadameLazulCore,
 	CardIds.MindVisionLegacy,
 	CardIds.MindVisionVanilla,
 	CardIds.PsychicConjurerCore,
@@ -358,6 +360,7 @@ export const publicTutors = [
 	CardIds.ConquerorsBanner,
 	CardIds.FelLordBetrug_DAL_607, // don't know if you're talking about the card in hand or the minion summoned
 	CardIds.IceTrap,
+	// CardIds.IceTrapCore,
 	CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 	CardIds.KingsElekk,
 	CardIds.KronxDragonhoof,
@@ -379,6 +382,7 @@ export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 	CardIds.AmuletOfUndying,
 	CardIds.BlacksmithingHammer,
 	CardIds.WickedShipment,
+	// CardIds.WindUpMusician,
 ];
 
 export const supportedAdditionalData = [
@@ -487,6 +491,7 @@ export const COUNTERSPELLS = [
 	CardIds.CounterspellVanilla,
 	CardIds.OhMyYogg,
 	CardIds.IceTrap,
+	// CardIds.IceTrapCore,
 	CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 	// Even though it's a specific enchantment that counters the spell, the trigger entity is the minion itself
 	CardIds.BlademasterOkani,

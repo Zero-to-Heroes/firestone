@@ -62,8 +62,17 @@ export const getAllCardsInGame = (
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
-		.filter((card) => hasSpells || card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_SPELL])
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
+		.filter((card) => {
+			if (card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_SPELL]) {
+				return true;
+			}
+			// Filter spells based on tribes
+			if (!hasSpells) {
+				return false;
+			}
+			return isValidBgSpellForTribes(card.id, availableTribes);
+		})
 		.filter((card) => {
 			if (!availableTribes?.length) {
 				return true;
@@ -87,6 +96,36 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 		validTribes.length === 0 ||
 		validTribes.includes(raceEnum)
 	);
+};
+
+const isValidBgSpellForTribes = (cardId: string, availableTribes: readonly Race[]): boolean => {
+	if (!availableTribes?.length) {
+		return true;
+	}
+
+	switch (cardId) {
+		case CardIds.ScavengeForParts_BG28_600:
+			return availableTribes.includes(Race.MECH);
+		case CardIds.CloningConch_BG28_601:
+			return availableTribes.includes(Race.MURLOC);
+		case CardIds.GuzzleTheGoop_BG28_602:
+			return availableTribes.includes(Race.DRAGON);
+		case CardIds.BoonOfBeetles_BG28_603:
+			return availableTribes.includes(Race.BEAST);
+		case CardIds.Butchering_BG28_604:
+			return availableTribes.includes(Race.UNDEAD);
+		case CardIds.SuspiciousStimulant_BG28_605:
+			return availableTribes.includes(Race.ELEMENTAL);
+		case CardIds.SpitescaleSpecial_BG28_606:
+			return availableTribes.includes(Race.NAGA);
+		case CardIds.CorruptedCupcakes_BG28_607:
+			return availableTribes.includes(Race.DEMON);
+		case CardIds.PlunderSeeker_BG28_609:
+			return availableTribes.includes(Race.PIRATE);
+		case CardIds.GemConfiscation_BG28_698:
+			return availableTribes.includes(Race.QUILBOAR);
+	}
+	return true;
 };
 
 export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: boolean): readonly Race[] => {

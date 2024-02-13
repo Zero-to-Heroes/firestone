@@ -18,6 +18,12 @@ export interface PlayerBoard {
 	readonly heroPowerInfo: number;
 	readonly heroPowerInfo2: number;
 	readonly questRewards: readonly string[];
+	readonly questRewardEntities: readonly {
+		cardId: string;
+		avengeDefault?: number;
+		avengeCurrent?: number;
+		scriptDataNum1: number;
+	}[];
 	readonly globalInfo: any; // BgsPlayerGlobalInfo;
 }
 
