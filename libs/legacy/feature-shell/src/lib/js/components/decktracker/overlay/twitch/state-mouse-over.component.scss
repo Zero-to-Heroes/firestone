@@ -138,6 +138,10 @@ empty-card {
 		left: 47%;
 		bottom: 14%;
 		top: auto;
+
+		empty-card {
+			width: 100%;
+		}
 	}
 
 	.secrets {
@@ -197,6 +201,10 @@ empty-card {
 		left: 36.5%;
 		bottom: 16%;
 		top: auto;
+	}
+
+	.hero {
+		bottom: 30%;
 	}
 }
 

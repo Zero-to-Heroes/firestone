@@ -18,7 +18,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'state-mouse-over',
-	styleUrls: ['../../../../../css/component/decktracker/overlay/twitch/state-mouse-over.component.scss'],
+	styleUrls: ['./state-mouse-over.component.scss'],
 	template: `
 		<div class="state-mouse-over" [style.left.%]="horizontalOffset">
 			<ul
@@ -78,6 +78,9 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 						[topOffset]="topSecretPositionTop(i)"
 					></empty-card>
 				</div>
+				<div class="hero">
+					<empty-card [cardId]="topHeroCard" [cardTooltipPosition]="'right'"></empty-card>
+				</div>
 				<div class="hero-power">
 					<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
 				</div>
@@ -114,6 +117,9 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 						[leftOffset]="bottomSecretPositionLeft(i)"
 						[topOffset]="bottomSecretPositionTop(i)"
 					></empty-card>
+				</div>
+				<div class="hero">
+					<empty-card [cardId]="bottomHeroCard" [cardTooltipPosition]="'right'"></empty-card>
 				</div>
 				<div class="hero-power">
 					<empty-card
@@ -177,6 +183,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 		this.topSecretCards = this._gameState.opponentDeck?.otherZone
 			.filter((card) => card.zone === 'SECRET')
 			.map((card) => card.cardId);
+		this.topHeroCard = this._gameState.opponentDeck?.hero?.cardId;
 		this.bottomBoardCards = this._gameState.playerDeck?.board.map((card) => card.cardId);
 		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower?.cardId;
 		this.bottomWeaponCard = this._gameState.playerDeck?.weapon?.cardId;
@@ -184,6 +191,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 			.filter((card) => card.zone === 'SECRET')
 			.map((card) => card.cardId);
 		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
+		this.bottomHeroCard = this._gameState.playerDeck?.hero?.cardId;
 		this.constructedAnomaly = this._gameState.matchInfo?.anomalies?.[0];
 		this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
 			cardsInDeck: this._gameState.playerDeck?.deck?.length ?? 0,
@@ -212,11 +220,13 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	topWeaponCard: string;
 	topBoardCards: readonly string[];
 	topSecretCards: readonly string[];
+	topHeroCard: string;
 	bottomBoardCards: readonly string[];
 	bottomHeroPowerCard: string;
 	bottomWeaponCard: string;
 	bottomSecretCards: readonly string[];
 	bottomHandCards: readonly string[];
+	bottomHeroCard: string;
 	bgsPlayers: readonly TwitchBgsPlayer[];
 	bgsAnomaly: string;
 	constructedAnomaly: string;
