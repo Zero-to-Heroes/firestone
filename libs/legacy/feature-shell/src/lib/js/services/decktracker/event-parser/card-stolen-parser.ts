@@ -84,6 +84,8 @@ export class CardStolenParser implements EventParser {
 							cardId: cardInHand.cardId || cardId,
 							cardName: this.i18n.getCardName(cardInHand.cardId) ?? this.i18n.getCardName(cardId),
 							stolenFromOpponent: !cardInHand.stolenFromOpponent,
+							positionFromBottom: undefined,
+							positionFromTop: undefined,
 						} as DeckCard),
 				  )
 				: stealingToDeck.hand;
@@ -96,6 +98,8 @@ export class CardStolenParser implements EventParser {
 							cardId: cardInBoard.cardId || cardId,
 							cardName: this.i18n.getCardName(cardInBoard.cardId) ?? this.i18n.getCardName(cardId),
 							stolenFromOpponent: !cardInBoard.stolenFromOpponent,
+							positionFromBottom: undefined,
+							positionFromTop: undefined,
 						} as DeckCard),
 				  )
 				: stealingToDeck.board;
@@ -107,6 +111,8 @@ export class CardStolenParser implements EventParser {
 							cardId: cardInDeck.cardId || cardId,
 							cardName: this.i18n.getCardName(cardInDeck.cardId) ?? this.i18n.getCardName(cardId),
 							stolenFromOpponent: !cardInDeck.stolenFromOpponent,
+							positionFromBottom: undefined,
+							positionFromTop: undefined,
 						} as DeckCard),
 				  )
 				: stealingToDeck.deck;
