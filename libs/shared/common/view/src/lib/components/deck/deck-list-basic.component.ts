@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import {
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -68,18 +68,22 @@ export class DeckListBasicComponent extends AbstractSubscriptionComponent implem
 		}
 
 		const decklist = decode(deckstring);
-		return decklist.cards.map((pair) => {
-			const cardDbfId = pair[0];
-			const quantity = pair[1];
-			const card = this.allCards.getCard(cardDbfId);
-			const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
-			const sideboard = this.buildMinimalSideboard(sideboardFromList);
-			return {
-				cardId: card.id,
-				quantity: quantity,
-				sideboard: sideboard,
-			};
-		});
+		return decklist.cards
+			.map((pair) => {
+				const cardDbfId = pair[0];
+				const quantity = pair[1];
+				const card = this.allCards.getCard(cardDbfId);
+				const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
+				const sideboard = this.buildMinimalSideboard(sideboardFromList);
+				return {
+					cardId: card.id,
+					name: card.name,
+					cost: card.cost,
+					quantity: quantity,
+					sideboard: sideboard,
+				};
+			})
+			.sort(sortByProperties((c) => [c.cost, c.name]));
 	}
 
 	private buildMinimalSideboard(sideboardFromList: Sideboard): readonly MinimalCard[] {
