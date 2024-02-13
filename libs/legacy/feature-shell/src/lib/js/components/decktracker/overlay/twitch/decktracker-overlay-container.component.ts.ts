@@ -140,7 +140,7 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	async ngAfterViewInit() {
-		console.debug('after view init in container');
+		// console.debug('after view init in container');
 		super.listenForResize();
 		if (!(window as any).Twitch) {
 			console.debug('wait for Twitch script');

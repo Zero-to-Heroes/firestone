@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DeckCard } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import {
 	Handler,
 	SelectorOptions,

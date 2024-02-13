@@ -195,12 +195,12 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		combineLatest(this.side$, this.zoneName$)
 			.pipe(this.mapData((info) => info))
 			.subscribe(async ([side, zoneName]) => {
-				const newOpen = !(await this.prefs?.getZoneToggleDefaultClose(zoneName, side));
+				const newOpen = !(await this.prefs?.getZoneToggleDefaultClose?.(zoneName, side));
 				this.open$$.next(newOpen);
 			});
 		combineLatest(this.side$, this.zoneName$, this.open$)
 			.pipe(this.mapData((info) => info))
-			.subscribe(([side, zoneName, open]) => this.prefs?.setZoneToggleDefaultClose(zoneName, side, !open));
+			.subscribe(([side, zoneName, open]) => this.prefs?.setZoneToggleDefaultClose?.(zoneName, side, !open));
 	}
 
 	toggleZone() {

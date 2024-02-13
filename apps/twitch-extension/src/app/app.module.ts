@@ -17,6 +17,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { CardsHighlightStandaloneService } from '@components/decktracker/overlay/twitch/cards-highlight-standalone.service';
 import { TwitchCardsHighlightFacadeService } from '@components/decktracker/overlay/twitch/twitch-cards-highlight-facade.service';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
@@ -63,6 +65,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		// { provide: Store, useFactory: () => null },
 		{ provide: Store, useExisting: TwitchStoreService },
 		{ provide: CardsHighlightFacadeService, useExisting: TwitchCardsHighlightFacadeService },
+		{ provide: PreferencesService, useExisting: TwitchPreferencesService },
 		// For coliseum-components
 		{ provide: AllCardsService, useExisting: CardsFacadeStandaloneService },
 	],

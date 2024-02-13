@@ -451,6 +451,9 @@ export class OverwolfService {
 	}
 
 	public async getRunningGameInfo() {
+		if (!this.isOwEnabled()) {
+			return null;
+		}
 		return new Promise<overwolf.games.GetRunningGameInfoResult>((resolve) => {
 			try {
 				overwolf.games.getRunningGameInfo((res: overwolf.games.GetRunningGameInfoResult) => {

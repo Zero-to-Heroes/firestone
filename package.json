@@ -16,7 +16,7 @@
 		"upload-coliseum": "npx ts-node ./build-tools/upload-coliseum.ts",
 		"build-web": "rm -rf node_modules/.cache/nx && nx build website --configuration=production && npm run upload-web",
 		"build-coliseum": "rm -rf node_modules/.cache/nx && rm -rf dist/apps/coliseum && nx build coliseum --configuration=production && npm run upload-coliseum",
-		"dev-twitch": "set IS_TWITCH=true&& nx build twitch-extension --configuration=development --watch",
+		"dev-twitch": "set IS_TWITCH=true && nx build twitch-extension --configuration=development --watch",
 		"build-twitch-watch": "nx build twitch-extension --configuration=production --watch",
 		"build-twitch": "rm -rf node_modules/.cache/nx && nx build twitch-extension --configuration=production"
 	},

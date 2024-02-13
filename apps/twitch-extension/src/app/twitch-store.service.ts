@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, PrefsSelector, Store } from '@firestone/shared/framework/common';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable } from 'rxjs';
+import { PrefsSelector, Store, arraysEqual } from '@firestone/shared/framework/common';
+import { BehaviorSubject, Observable, distinctUntilChanged, filter, map } from 'rxjs';
 
 @Injectable()
 export class TwitchStoreService extends Store<Preferences> {

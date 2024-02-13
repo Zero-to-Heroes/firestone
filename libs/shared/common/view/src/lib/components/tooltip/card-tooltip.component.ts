@@ -360,7 +360,7 @@ export class CardTooltipComponent
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
 		// console.debug('keeping in bounds', top, left, height, width);
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.ow?.getRunningGameInfo();
 		if (!gameInfo) {
 			this.opacity$$.next(1);
 			return;
