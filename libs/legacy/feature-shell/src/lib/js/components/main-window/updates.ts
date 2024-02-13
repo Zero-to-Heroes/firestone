@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.4.9',
+		version: '13.4.11',
 		force: false,
 		sections: [
 			// {
@@ -54,22 +54,13 @@ export const updates: readonly Update[] = [
 					// 			text: `You can now view mulligan data for your deck directly in the overlay! Free users will be able to use this feature 3 times per day, while premium users will have unlimited access to it. Let me know if you have any feedback on this! (note: it will probably be deactivated when the app goes live, as I want to keep it a bit longer in beta for testing)`,
 					// 		},
 					// 	],
-					// },
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now see an overview of your Arena runs, including the decklist used and the picks made during the draft. Let me know if there are more things you'd like to see there!`,
-							},
-						],
-					},
+					// }
 					{
 						category: 'general',
 						details: [
 							{
-								type: 'misc',
-								text: `I did some major rework of how games are uploaded. It should be transparent to you, but if you notice anything weird (replay not found, stats missing, etc.), please let me know!`,
+								type: 'feature',
+								text: `App has been update for 28.6. Expect some more updates throughout the week :)`,
 							},
 						],
 					},
@@ -84,19 +75,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a counter to tell you how many different spells you've played, and which ones.`,
-							},
-							{
-								type: 'content',
-								text: `Piloted Whirl-o-Tron is now supported in the simulator.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where battlecries that had no effects on the combat (tavern-only battlecries) would not trigger Kalecgos when triggered in combat (e.g. by Rylak).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Fish of N'Zoth would sometimes spawn traitor minions that would attack their own warband.`,
+								text: `Add a "spells" group next to the minion tribes in the BG minions list.`,
 							},
 						],
 					},
@@ -104,20 +83,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a setting to ignore the discard / burned / dead / etc. status when grouping cards with the same card ID.`,
-							},
-							{
-								type: 'feature',
-								text: `Don't show destroyed Locations as being in the Graveyard.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where Fracking wouldn't draw from the bottom of the deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix san issue where the attack counter could not properly take the hero attack into account during the other player's turn.`,
+								text: `Fix an issue where the "bottom" position in the deck was not reset when a card is being stolen.`,
 							},
 						],
 					},
@@ -125,17 +92,8 @@ export const updates: readonly Update[] = [
 						category: 'arena',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a setting to change the size of the overlay while drafting.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Text search now also searches in the merc's faction.`,
+								type: 'bug',
+								text: `Fix an issue where the decklist would not be ordered by mana cost.`,
 							},
 						],
 					},
