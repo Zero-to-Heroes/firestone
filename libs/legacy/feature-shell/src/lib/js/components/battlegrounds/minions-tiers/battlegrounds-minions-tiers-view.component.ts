@@ -9,6 +9,7 @@ import {
 import {
 	BUDDIES_TRIBE_REQUIREMENTS,
 	CardIds,
+	CardType,
 	GameTag,
 	NON_DISCOVERABLE_BUDDIES,
 	Race,
@@ -338,6 +339,7 @@ export const buildTiers = (
 				playerCardId,
 				availableTribes,
 				buddies,
+				hasSpells,
 				groupMinionsIntoTheirTribeGroup,
 				i18n,
 				allCards,
@@ -351,6 +353,7 @@ const buildTribeTiers = (
 	playerCardId: string,
 	availableTribes: readonly Race[],
 	allBuddies: readonly ExtendedReferenceCard[],
+	hasSpells: boolean,
 	groupMinionsIntoTheirTribeGroup: boolean,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
@@ -367,7 +370,7 @@ const buildTribeTiers = (
 		),
 	].map((t) => Race[t]);
 	console.log('[tribe-tiers] all tribes', allTribes, availableTribes);
-	return allTribes
+	const tribesResult = allTribes
 		.map((tribe: Race) => {
 			const cardsForTribe = cardsInGame.filter((c) =>
 				getEffectiveTribes(c, groupMinionsIntoTheirTribeGroup)?.includes(Race[tribe]),
@@ -385,6 +388,17 @@ const buildTribeTiers = (
 		.sort((a, b) => {
 			return compareTribes(a.tavernTier as Race, b.tavernTier as Race, i18n);
 		});
+	const spellsTier: Tier = !hasSpells
+		? null
+		: {
+				tavernTier: 'spell',
+				tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.CarefulInvestment_BG28_800}.jpg`,
+				tooltip: 'Spells',
+				cards: cardsInGame.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL]),
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+				type: 'tribe',
+		  };
+	return [...tribesResult, spellsTier].filter((tier) => tier);
 };
 
 const buildMechanicsTiers = (
