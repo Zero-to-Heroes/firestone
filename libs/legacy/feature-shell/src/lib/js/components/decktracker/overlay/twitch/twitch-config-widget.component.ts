@@ -12,7 +12,7 @@ import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/lo
 import { Observable, from } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DropdownOption } from '../../../settings/dropdown.component';
-import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
+import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twitch.component';
 
 @Component({
 	selector: 'twitch-config-widget',
@@ -193,10 +193,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitchConfigWidgetComponent
-	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterContentInit
-{
+export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchComponent implements AfterContentInit {
 	prefs$: Observable<TwitchPreferences>;
 
 	autoTrueFalseOptions: DropdownOption[] = [
@@ -286,12 +283,12 @@ export class TwitchConfigWidgetComponent
 		protected readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		super(cdr, prefs, el, renderer);
-		super.minScale = 0.7;
+		super(cdr);
+		// super.minScale = 0.7;
 	}
 
 	ngAfterContentInit(): void {
-		super.listenForResize();
+		// super.listenForResize();
 		this.prefs$ = from(this.prefs.prefs.asObservable()).pipe(debounceTime(200), distinctUntilChanged());
 	}
 
