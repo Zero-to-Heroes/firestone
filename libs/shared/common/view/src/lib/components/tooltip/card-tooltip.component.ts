@@ -232,7 +232,7 @@ export class CardTooltipComponent
 			return;
 		}
 		this.lifecycleHookDone = true;
-		console.debug('ngAfterContentInit');
+		// console.debug('ngAfterContentInit');
 
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
@@ -404,7 +404,7 @@ export class CardTooltipComponent
 
 	private forceLifecycleHooks() {
 		setTimeout(() => {
-			console.debug('testing lifecycle hooks', this.lifecycleHookDone);
+			// console.debug('testing lifecycle hooks', this.lifecycleHookDone);
 			if (this.lifecycleHookDone) {
 				return;
 			}
