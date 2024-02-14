@@ -145,7 +145,13 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithKnownInfo.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
 				: cardWithKnownInfo;
-		const cardWithAdditionalAttributes = addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent, this.allCards);
+		const cardWithGuessedInfo = addGuessedInfo(otherCardWithBuffs, gameEvent);
+		const cardWithAdditionalAttributes = addAdditionalAttribues(
+			cardWithGuessedInfo,
+			deck,
+			gameEvent,
+			this.allCards,
+		);
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithAdditionalAttributes',
 		// 	cardWithAdditionalAttributes,
@@ -264,6 +270,17 @@ export const addAdditionalAttribues = (
 		case CardIds.EliteTaurenChampion_MoltenPickOfRockToken:
 			return card.update({
 				mainAttributeChange: gameEvent.additionalData.dataNum1 - 8,
+			});
+	}
+	return card;
+};
+
+const addGuessedInfo = (card: DeckCard, gameEvent: GameEvent): DeckCard => {
+	switch (gameEvent.additionalData.creatorCardId) {
+		case CardIds.HarthStonebrew_CORE_GIFT_01:
+		case CardIds.HarthStonebrew_GIFT_01:
+			return card.update({
+				creatorAdditionalInfo: gameEvent.additionalData.position,
 			});
 	}
 	return card;

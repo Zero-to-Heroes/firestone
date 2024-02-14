@@ -14,6 +14,7 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { updateHandWithStonebrewInfo } from './special-cases/stonebrew/stonebrew';
 
 export class CardPlayedFromHandParser implements EventParser {
 	constructor(
@@ -187,11 +188,13 @@ export class CardPlayedFromHandParser implements EventParser {
 			? handAfterCardsRemembered
 			: processCardLinks(cardToAdd, handAfterCardsRemembered, this.helper, this.allCards);
 
+		const hardAfterGuessedInfo = addGuessedInfo(cardWithZone, handAfterCardsLinks, this.allCards);
+
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
 		const newPlayerDeck = deck
 			.update({
-				hand: handAfterCardsLinks,
+				hand: hardAfterGuessedInfo,
 				board: newBoard,
 				deck: newDeck,
 				otherZone: newOtherZone,
@@ -306,4 +309,17 @@ export const processCardLinks = (
 		updatedLinkedCardInHand,
 		false,
 	);
+};
+
+const addGuessedInfo = (
+	playedCard: DeckCard,
+	hand: readonly DeckCard[],
+	allCards: CardsFacadeService,
+): readonly DeckCard[] => {
+	switch (playedCard.creatorCardId) {
+		case CardIds.HarthStonebrew_CORE_GIFT_01:
+		case CardIds.HarthStonebrew_GIFT_01:
+			return updateHandWithStonebrewInfo(playedCard, hand, allCards);
+	}
+	return hand;
 };
