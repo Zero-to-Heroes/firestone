@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.4.11',
+		version: '13.4.12',
 		force: false,
 		sections: [
 			// {
@@ -82,6 +82,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
+							{
+								type: 'feature',
+								text: `Add oracles for Harth Stonebrew. After your opponent plays one of the cards received from him, the app will automatically tag all the others.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the "bottom" position in the deck was not reset when a card is being stolen.`,
