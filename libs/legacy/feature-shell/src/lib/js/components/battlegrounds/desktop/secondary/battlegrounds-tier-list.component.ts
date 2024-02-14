@@ -7,9 +7,9 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
-import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BG_USE_ANOMALIES } from '@legacy-import/src/lib/js/services/feature-flags';

@@ -8,7 +8,6 @@ import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
-import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
@@ -248,10 +247,6 @@ export class AppUiStoreFacadeService {
 
 	public achievementsHistory$(): Observable<readonly AchievementHistory[]> {
 		return this.store.achievementsHistory$();
-	}
-
-	public bgsQuests$(): BehaviorSubject<BgsQuestStats> {
-		return this.store.bgsQuests$();
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {

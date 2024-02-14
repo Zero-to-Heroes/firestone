@@ -1,20 +1,19 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { BgsGlobalRewardStat, MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
+import { BgsGlobalRewardStat, WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsMetaQuestRewardStatTier, BgsMetaQuestRewardStatTierItem, BgsQuestTier } from './meta-quests.model';
 
-const QUEST_REWARDS_MINIMUM_DATA_POINTS = 1000;
+const QUEST_REWARDS_MINIMUM_DATA_POINTS = 60;
 
 export const buildQuestRewardStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalRewardStat>[],
-	mmrFilter: MmrPercentile['percentile'],
 	allCards: CardsFacadeService,
 ): readonly BgsMetaQuestRewardStatTierItem[] => {
+	console.debug('building reward stats', stats);
 	const mainStats: readonly BgsMetaQuestRewardStatTierItem[] = stats
-		.filter((s) => s.mmrPercentile === mmrFilter)
 		.filter((s) => s.dataPoints > QUEST_REWARDS_MINIMUM_DATA_POINTS)
+		.filter((s) => !!s.rewardCardId?.length)
 		.map((s) => ({
 			cardId: s.rewardCardId,
 			name: allCards.getCard(s.rewardCardId).name,
@@ -30,13 +29,11 @@ export const buildQuestRewardTiers = (
 	i18n: ILocalizationService,
 	localize = true,
 ): readonly BgsMetaQuestRewardStatTier[] => {
-	console.debug('buildTiers', stats);
 	if (!stats?.length) {
 		return [];
 	}
 
 	const questStats = [...stats].sort(sortByProperties((s) => [s.averagePosition]));
-	console.debug('questStats', questStats);
 	const { mean, standardDeviation } = getStandardDeviation(questStats.map((stat) => stat.averagePosition));
 
 	// TODO: How to include the difficulty?

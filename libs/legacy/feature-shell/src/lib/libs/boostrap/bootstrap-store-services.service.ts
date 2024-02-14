@@ -5,6 +5,7 @@ import {
 	ArenaClassStatsService,
 	ArenaNavigationService,
 } from '@firestone/arena/common';
+import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import {
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
@@ -17,7 +18,6 @@ import { AchievementsLiveProgressTrackingService } from '../../js/services/achie
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { BattlegroundsQuestsService } from '../../js/services/battlegrounds/bgs-quests.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';

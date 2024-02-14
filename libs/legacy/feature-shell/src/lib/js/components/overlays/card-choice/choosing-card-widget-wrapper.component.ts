@@ -10,7 +10,6 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { CardOption, DeckCard, GameState } from '@firestone/game-state';
@@ -114,32 +113,32 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 		const bgsQuests$$ = new BehaviorSubject<BgsQuestStats>(null);
 
-		let subscribedToQuests = false;
+		// let subscribedToQuests = false;
 		const bgsState$$ = new BehaviorSubject<BattlegroundsState>(null);
-		this.store
-			.listenBattlegrounds$(([state]) => state)
-			.pipe(this.mapData(([state]) => state))
-			.subscribe((state) => {
-				if (!subscribedToQuests) {
-					const hasQuests =
-						state?.currentGame?.hasQuests ||
-						normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards) ===
-							CardIds.SireDenathrius_BG24_HERO_100;
-					// console.debug(
-					// 	'[choosing-card] hasQuests',
-					// 	hasQuests,
-					// 	state?.currentGame?.getMainPlayer()?.cardId,
-					// 	normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards),
-					// 	state?.currentGame?.hasQuests,
-					// );
-					if (hasQuests) {
-						// Only subscribe to the quests if quests are active, so that we don't get data uselessly
-						this.store.bgsQuests$().subscribe((quests) => bgsQuests$$.next(quests));
-						subscribedToQuests = true;
-					}
-				}
-				bgsState$$.next(state);
-			});
+		// this.store
+		// 	.listenBattlegrounds$(([state]) => state)
+		// 	.pipe(this.mapData(([state]) => state))
+		// 	.subscribe((state) => {
+		// 		if (!subscribedToQuests) {
+		// 			const hasQuests =
+		// 				state?.currentGame?.hasQuests ||
+		// 				normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards) ===
+		// 					CardIds.SireDenathrius_BG24_HERO_100;
+		// 			// console.debug(
+		// 			// 	'[choosing-card] hasQuests',
+		// 			// 	hasQuests,
+		// 			// 	state?.currentGame?.getMainPlayer()?.cardId,
+		// 			// 	normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards),
+		// 			// 	state?.currentGame?.hasQuests,
+		// 			// );
+		// 			if (hasQuests) {
+		// 				// Only subscribe to the quests if quests are active, so that we don't get data uselessly
+		// 				this.store.bgsQuests$().subscribe((quests) => bgsQuests$$.next(quests));
+		// 				subscribedToQuests = true;
+		// 			}
+		// 		}
+		// 		bgsState$$.next(state);
+		// 	});
 
 		this.options$ = combineLatest([
 			this.store.listenDeckState$((state) => state),

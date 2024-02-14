@@ -57,6 +57,7 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 					([currentView]) =>
 						currentView !== 'bgs-category-personal-stats' &&
 						currentView !== 'bgs-category-perfect-games' &&
+						currentView !== 'bgs-category-meta-quests' &&
 						currentView !== 'bgs-category-simulator',
 				),
 			);

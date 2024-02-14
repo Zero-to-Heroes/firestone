@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsHeroTier } from '@firestone-hs/bgs-global-stats';
-import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
 @Component({

@@ -18,13 +18,11 @@ export const buildTiers = (
 	i18n: ILocalizationService,
 	localize = true,
 ): readonly DuelsMetaStatsTier[] => {
-	console.debug('buildTiers', stats);
 	if (!stats?.length) {
 		return [];
 	}
 
 	const sortedStats = [...stats].sort(sortByProperties((s) => [-s.globalWinrate]));
-	console.debug('sortedStats', sortedStats);
 	const { mean, standardDeviation } = getStandardDeviation(sortedStats.map((stat) => stat.globalWinrate));
 
 	return [

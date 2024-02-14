@@ -229,7 +229,6 @@ const buildTiers = (
 	stats: readonly ArenaClassInfo[] | null | undefined,
 	i18n: ILocalizationService,
 ): readonly ArenaClassTier[] | null | undefined => {
-	console.debug('buildTiers', stats);
 	if (stats == null) {
 		return stats === null ? null : undefined;
 	}

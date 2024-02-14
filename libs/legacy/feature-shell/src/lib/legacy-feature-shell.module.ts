@@ -542,6 +542,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
+import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
@@ -724,7 +725,6 @@ import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-st
 import { BgsMetaHeroStatsService } from './js/services/battlegrounds/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
-import { BattlegroundsQuestsService } from './js/services/battlegrounds/bgs-quests.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
@@ -878,6 +878,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReplayColiseumModule,
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
+		BattlegroundsCommonModule,
 		StatsDataAccessModule,
 		DuelsViewModule,
 		DuelsDataAccessModule,
@@ -1824,7 +1825,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsMetaHeroStatsService,
 		BgsMetaHeroStrategiesService,
 		BgsGlobalStatsService,
-		BattlegroundsQuestsService,
 		BgsBattleSimulationService,
 		BgsBattlePositioningService,
 		BgsRunStatsService,

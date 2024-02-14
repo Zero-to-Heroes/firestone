@@ -1,12 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { BgsHeroTier } from '@firestone-hs/bgs-global-stats';
-import { WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats/dist/quests-v2/charged-stat';
-import { BgsGlobalHeroStat, BgsHeroAnomalyStat } from '@firestone-hs/bgs-global-stats/dist/stats-v2/bgs-hero-stat';
+import { BgsGlobalHeroStat, BgsHeroAnomalyStat, WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { getStandardDeviation, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from './meta-heroes.model';
+import { BgsHeroTier, BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from './meta-heroes.model';
 
 // Remove data that looks corrupted - there is another check elsewhere that flags heroes with not
 // enough data points to be reliable
@@ -93,13 +91,11 @@ export const buildTiers = (
 	i18n: ILocalizationService,
 	localize = true,
 ): readonly BgsMetaHeroStatTier[] => {
-	console.debug('buildTiers', stats);
 	if (!stats?.length) {
 		return [];
 	}
 
 	const heroStats = [...stats].sort(sortByProperties((s) => [s.averagePosition]));
-	console.debug('heroStats', heroStats);
 	const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.averagePosition));
 
 	return [

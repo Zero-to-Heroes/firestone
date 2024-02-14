@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem, buildQuestTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 
 @Component({
@@ -28,6 +28,14 @@ import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 				showCollapseButton: showCollapseButton$ | async
 			} as value"
 		>
+			<div class="data-info">
+				<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+				<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+				<div class="separator">-</div>
+				<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+				<div class="value">{{ totalGames$ | async }}</div>
+			</div>
+
 			<div class="header">
 				<div class="image"></div>
 				<div class="quest-details" [fsTranslate]="'app.battlegrounds.tier-list.header-quest-details'"></div>
@@ -120,20 +128,25 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	tiers$: Observable<readonly BgsMetaQuestStatTier[]>;
 	collapsedQuests$: Observable<readonly string[]>;
 	showCollapseButton$: Observable<boolean>;
+	lastUpdate$: Observable<string | null>;
+	lastUpdateFull$: Observable<string | null>;
+	totalGames$: Observable<string>;
 
 	@Input() set stats(value: readonly BgsMetaQuestStatTierItem[]) {
 		this.stats$$.next(value);
 	}
-
+	@Input() set lastUpdate(value: string) {
+		this.lastUpdate$$.next(value);
+	}
 	@Input() set collapsedQuests(value: readonly string[]) {
 		this.collapsedQuests$$.next(value);
 	}
-
 	@Input() groupedByDifficulty: boolean;
 	@Input() searchString: string;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestStatTierItem[]>(null);
 	private collapsedQuests$$ = new BehaviorSubject<readonly string[]>([]);
+	private lastUpdate$$ = new BehaviorSubject<string | null>(null);
 	private searchString$$ = new BehaviorSubject<string>(null);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
@@ -149,7 +162,6 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 			filter(([stats, searchString]) => !!stats),
 			this.mapData(([stats, searchString]) => {
 				const result = buildQuestTiers(stats, searchString, this.i18n);
-				console.debug('built tiers', result);
 				return result;
 			}),
 		);
@@ -159,8 +171,47 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 		);
 		this.showCollapseButton$ = combineLatest([this.collapsedQuests$$, numberOfQuests$]).pipe(
 			this.mapData(([collapsedQuests, numberOfQuests]) => {
-				console.debug('show collapse button', collapsedQuests, numberOfQuests);
 				return collapsedQuests.length < numberOfQuests;
+			}),
+		);
+		this.totalGames$ = this.tiers$.pipe(
+			filter((stats) => !!stats),
+			this.mapData(
+				(stats) =>
+					stats
+						?.flatMap((s) => s.items)
+						?.map((i) => i.dataPoints)
+						?.reduce((a, b) => a + b, 0)
+						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
+			),
+		);
+		this.lastUpdate$ = this.lastUpdate$$.pipe(
+			filter((date) => !!date),
+			this.mapData((dateStr) => {
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(dateStr);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS');
+			}),
+		);
+		this.lastUpdateFull$ = this.lastUpdate$$.pipe(
+			filter((date) => !!date),
+			this.mapData((dateStr) => {
+				const date = new Date(dateStr);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
 			}),
 		);
 	}

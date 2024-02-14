@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { ApiRunner } from '@firestone/shared/framework/core';
 
 // The light version doesn't have tribe filtering
@@ -32,13 +31,3 @@ export class BgsGlobalStatsService {
 	// 	return globalStats;
 	// }
 }
-
-export const fixInvalidTimeSuffix = (timeSuffix: string): BgsActiveTimeFilterType => {
-	switch (timeSuffix) {
-		case 'past-7':
-			return 'past-seven';
-		case 'past-3':
-			return 'past-three';
-	}
-	return timeSuffix as BgsActiveTimeFilterType;
-};

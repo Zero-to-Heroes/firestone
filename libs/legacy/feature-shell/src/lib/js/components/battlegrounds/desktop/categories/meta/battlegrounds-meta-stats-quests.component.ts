@@ -1,4 +1,5 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import {
 	BgsMetaQuestRewardStatTierItem,
 	BgsMetaQuestStatTierItem,
@@ -20,9 +21,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	template: `
 		<ng-container [ngSwitch]="questsTab$ | async">
 			<ng-container *ngSwitchCase="'quests'">
-				<ng-container *ngIf="{ questStats: questStats$ | async } as value">
+				<ng-container *ngIf="{ questStats: questStats$ | async, lastUpdate: lastUpdate$ | async } as value">
 					<battlegrounds-meta-stats-quests-view
 						[stats]="value.questStats"
+						[lastUpdate]="value.lastUpdate"
 						[collapsedQuests]="collapsedQuests$ | async"
 						[groupedByDifficulty]="groupedByDifficulty$ | async"
 						(statClick)="onStatClicked($event)"
@@ -34,9 +36,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 				</ng-container>
 			</ng-container>
 			<ng-container *ngSwitchCase="'rewards'">
-				<ng-container *ngIf="{ rewardStats: rewardStats$ | async } as value">
+				<ng-container *ngIf="{ rewardStats: rewardStats$ | async, lastUpdate: lastUpdate$ | async } as value">
 					<battlegrounds-meta-stats-quest-rewards-view
 						[stats]="value.rewardStats"
+						[lastUpdate]="value.lastUpdate"
 					></battlegrounds-meta-stats-quest-rewards-view>
 				</ng-container>
 			</ng-container>
@@ -53,6 +56,7 @@ export class BattlegroundsMetaStatsQuestsComponent
 	questStats$: Observable<readonly BgsMetaQuestStatTierItem[]>;
 	collapsedQuests$: Observable<readonly string[]>;
 	groupedByDifficulty$: Observable<boolean>;
+	lastUpdate$: Observable<string>;
 
 	rewardStats$: Observable<readonly BgsMetaQuestRewardStatTierItem[]>;
 
@@ -61,33 +65,40 @@ export class BattlegroundsMetaStatsQuestsComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly quests: BattlegroundsQuestsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.questsTab$ = this.listenForBasicPref$((prefs) => prefs.bgsQuestsActiveTab);
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+		await this.quests.isReady();
 
-		this.groupedByDifficulty$ = this.listenForBasicPref$((prefs) => prefs.bgsGroupQuestsByDifficulty);
-		this.questStats$ = combineLatest([
-			this.store.bgsQuests$(),
-			this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter),
-			this.groupedByDifficulty$,
-		]).pipe(
-			this.mapData(([stats, mmrFilter, bgsGroupQuestsByDifficulty]) =>
-				buildQuestStats(stats?.questStats ?? [], mmrFilter, bgsGroupQuestsByDifficulty, this.allCards),
+		this.questsTab$ = this.prefs
+			.preferences$((prefs) => prefs.bgsQuestsActiveTab)
+			.pipe(this.mapData(([pref]) => pref));
+		this.groupedByDifficulty$ = this.prefs
+			.preferences$((prefs) => prefs.bgsGroupQuestsByDifficulty)
+			.pipe(this.mapData(([pref]) => pref));
+
+		this.questStats$ = combineLatest([this.quests.questStats$$, this.groupedByDifficulty$]).pipe(
+			this.mapData(([stats, bgsGroupQuestsByDifficulty]) =>
+				buildQuestStats(stats?.questStats ?? [], bgsGroupQuestsByDifficulty, this.allCards),
 			),
 		);
-		this.collapsedQuests$ = this.listenForBasicPref$((prefs) => prefs.bgsQuestsCollapsed);
-
-		this.rewardStats$ = combineLatest([
-			this.store.bgsQuests$(),
-			this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter),
-		]).pipe(
-			this.mapData(([stats, mmrFilter]) =>
-				buildQuestRewardStats(stats?.rewardStats ?? [], mmrFilter, this.allCards),
-			),
+		this.collapsedQuests$ = this.prefs
+			.preferences$((prefs) => prefs.bgsQuestsCollapsed)
+			.pipe(this.mapData(([pref]) => pref ?? []));
+		this.rewardStats$ = combineLatest([this.quests.questStats$$]).pipe(
+			this.mapData(([stats]) => buildQuestRewardStats(stats?.rewardStats ?? [], this.allCards)),
 		);
+		this.lastUpdate$ = this.quests.questStats$$.pipe(
+			this.mapData((stats) => (stats ? '' + stats.lastUpdateDate : null)),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onStatClicked(stat: BgsMetaQuestStatTierItem) {
