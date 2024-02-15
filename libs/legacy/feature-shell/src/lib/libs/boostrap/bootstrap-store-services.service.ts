@@ -7,6 +7,7 @@ import {
 } from '@firestone/arena/common';
 import {
 	BattlegroundsQuestsService,
+	BgsGameStateFacadeService,
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
 } from '@firestone/battlegrounds/common';
@@ -18,7 +19,6 @@ import {
 } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { BgsGameStateFacadeService } from 'libs/battlegrounds/common/src/lib/services/bgs-game-state-facade.service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
