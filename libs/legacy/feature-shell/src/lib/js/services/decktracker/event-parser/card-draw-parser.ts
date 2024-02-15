@@ -55,11 +55,11 @@ export class CardDrawParser implements EventParser {
 		);
 		const useBottomOfDeckToIdentifyCard =
 			!isPlayer &&
+			cardDrawnFromBottom &&
 			deck.deck.some(
 				(c) =>
 					c.positionFromBottom != null && c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId,
-			) &&
-			cardDrawnFromBottom;
+			);
 		// console.debug(
 		// 	'useTopOfDeckToIdentifyCard',
 		// 	useTopOfDeckToIdentifyCard,
@@ -68,6 +68,11 @@ export class CardDrawParser implements EventParser {
 		// 	deck.deck.filter((c) => c.positionFromTop != null),
 		// 	deck,
 		// );
+		// When drawing "normally", we first try to avoid picking cards that are from the bottom of the deck,
+		// if any
+		const deckToDrawnFromTop = deck.deck.some((c) => c.positionFromBottom == null)
+			? deck.deck.filter((c) => c.positionFromBottom == null)
+			: deck.deck;
 		const card = useTopOfDeckToIdentifyCard
 			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: useBottomOfDeckToIdentifyCard
@@ -76,7 +81,16 @@ export class CardDrawParser implements EventParser {
 					// Because Finley puts the cards at the bottom before drawing
 					.filter((c) => c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId)
 					.sort((c) => c.positionFromBottom)[0]
-			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
+			: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
+		// console.debug(
+		// 	'[card-draw] found card in zone',
+		// 	card,
+		// 	deck,
+		// 	cardId,
+		// 	entityId,
+		// 	useTopOfDeckToIdentifyCard,
+		// 	useBottomOfDeckToIdentifyCard,
+		// );
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 
 		// console.debug(
