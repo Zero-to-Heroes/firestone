@@ -122,6 +122,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-chained-guardian-widget-wrapper></player-chained-guardian-widget-wrapper>
 			<player-treant-widget-wrapper></player-treant-widget-wrapper>
 			<player-dragons-summoned-widget-wrapper></player-dragons-summoned-widget-wrapper>
+			<player-earthen-golem-widget-wrapper></player-earthen-golem-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
@@ -144,6 +145,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-spell-widget-wrapper></opponent-spell-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
+			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
