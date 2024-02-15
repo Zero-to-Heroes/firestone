@@ -156,25 +156,6 @@ export class ChoosingBgsQuestWidgetWrapperComponent extends AbstractWidgetWrappe
 	}
 }
 
-export interface BgsQuestCardChoiceOption {
-	readonly cardId: string;
-	readonly quest: {
-		readonly dataPoints: number;
-		readonly heroDataPoints: number;
-		readonly difficultyDataPoints: number;
-		readonly averageTurnsToComplete: number;
-		readonly averageTurnsToCompleteForHero: number;
-		readonly averageTurnsToCompleteForDifficulty: number;
-	};
-	readonly reward: {
-		// readonly tier: string;
-		readonly dataPoints: number;
-		readonly averagePosition: number;
-		readonly heroDataPoints: number;
-		readonly averagePositionForHero: number;
-	};
-}
-
 const isBgQuestDiscover = (source: string): boolean => {
 	return source === CardIds.DiscoverQuestRewardDntToken;
 };

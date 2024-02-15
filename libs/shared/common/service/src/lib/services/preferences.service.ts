@@ -72,6 +72,17 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
 	}
 
+	public preferencesSingle$<S extends PrefsSelector<Preferences, any>>(
+		selector: S,
+	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
+		return this.preferences$$.pipe(
+			filter((prefs) => !!prefs),
+			map((prefs) => selector(prefs)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			shareReplay(1),
+		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
+	}
+
 	public async getPreferences(): Promise<Preferences> {
 		await this.isReady();
 		return this.preferences$$.getValue();
