@@ -5,13 +5,27 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	Inject,
+	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsInGameQuestsService, BgsQuestCardChoiceOption } from '@firestone/battlegrounds/common';
+import {
+	BgsInGameQuestsGuardianService,
+	BgsInGameQuestsService,
+	BgsQuestCardChoiceOption,
+} from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	pairwise,
+	takeUntil,
+} from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
@@ -24,18 +38,28 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
 			>
-				<!-- TODO: premium stuff -->
-				<choosing-card-bgs-quest-option
-					class="option-container"
-					*ngFor="let option of value.options"
-					[option]="option"
-				></choosing-card-bgs-quest-option>
+				<ng-container *ngIf="(showPremiumBanner$ | async) === false">
+					<choosing-card-bgs-quest-option
+						class="option-container"
+						*ngFor="let option of value.options"
+						[option]="option"
+						[freeUsesLeft]="freeUsesLeft$ | async"
+					></choosing-card-bgs-quest-option>
+				</ng-container>
+				<ng-container *ngIf="showPremiumBanner$ | async">
+					<div class="premium-container" *ngFor="let option of value.options">
+						<bgs-quest-stats-info-premium></bgs-quest-stats-info-premium>
+					</div>
+				</ng-container>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChoosingBgsQuestWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
+export class ChoosingBgsQuestWidgetWrapperComponent
+	extends AbstractWidgetWrapperComponent
+	implements AfterContentInit, OnDestroy
+{
 	protected defaultPositionLeftProvider = null;
 	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;
@@ -44,9 +68,13 @@ export class ChoosingBgsQuestWidgetWrapperComponent extends AbstractWidgetWrappe
 
 	showWidget$: Observable<boolean>;
 	options$: Observable<readonly BgsQuestCardChoiceOption[]>;
+	showPremiumBanner$: Observable<boolean>;
+	freeUsesLeft$: Observable<number>;
 
 	windowWidth: number;
 	windowHeight: number;
+
+	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -56,12 +84,16 @@ export class ChoosingBgsQuestWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly quests: BgsInGameQuestsService,
+		private readonly guardian: BgsInGameQuestsGuardianService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.quests.isReady();
+		await this.ads.isReady();
+		await this.guardian.isReady();
 
 		this.showWidget$ = this.quests.showWidget$$.pipe(
 			this.mapData((showWidget) => showWidget),
@@ -69,8 +101,36 @@ export class ChoosingBgsQuestWidgetWrapperComponent extends AbstractWidgetWrappe
 		);
 		this.options$ = this.quests.questStats$$.pipe(this.mapData((options) => options));
 
+		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$])
+			.pipe(
+				debounceTime(200),
+				this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
+			)
+			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
+		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
+		this.freeUsesLeft$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
+			debounceTime(200),
+			this.mapData(([hasPremiumSub, freeUsesLeft]) => (hasPremiumSub ? 0 : freeUsesLeft)),
+		);
+
+		const displayInfo$ = combineLatest([this.showWidget$, this.options$]).pipe(
+			this.mapData(([showWidget, options]) => showWidget && !!options?.length),
+		);
+		displayInfo$
+			.pipe(distinctUntilChanged(), pairwise(), takeUntil(this.destroyed$))
+			.subscribe(([wasDisplayed, isDisplayed]) => {
+				console.debug('[bgs-quest] widget visibility changed', wasDisplayed, isDisplayed);
+				if (wasDisplayed && !isDisplayed) {
+					if (!this.showPremiumBanner$$.value) {
+						this.guardian.acknowledgeStatsSeen();
+					}
+				}
+			});
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+
+	override ngOnDestroy(): void {}
 }

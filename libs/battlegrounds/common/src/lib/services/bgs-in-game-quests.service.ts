@@ -5,7 +5,7 @@ import { GameStateFacadeService } from '@firestone/constructed/common';
 import { CardOption } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
+import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -21,6 +21,7 @@ import {
 	map,
 	shareReplay,
 	switchMap,
+	tap,
 } from 'rxjs';
 import { BgsQuestCardChoiceOption } from '../model/quests-in-game';
 import { BgsGameStateFacadeService } from './bgs-game-state-facade.service';
@@ -73,6 +74,8 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
 			this.gameState.gameState$$.pipe(map((state) => state?.metadata?.gameType)),
 		]).pipe(
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			tap((data) => console.debug('[bgs-quest] will show?', data)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
 				if (!displayFromPrefs || !BG_USE_QUESTS) {
 					return false;
@@ -90,7 +93,9 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 				}
 				return true;
 			}),
+			distinctUntilChanged(),
 			shareReplay(1),
+			tap((show) => console.debug('[bgs-quest] showWidget', show)),
 		);
 		showWidget$.subscribe((show) => {
 			this.showWidget$$.next(show);
@@ -141,6 +146,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 					) ?? []
 				);
 			}),
+			shareReplay(1),
 		);
 		options$.subscribe((options) => {
 			this.questStats$$.next(options as any);

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsQuestCardChoiceOption, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsQuestCardChoiceOption, DAILY_FREE_USES, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -20,6 +20,9 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 						<div class="text" [fsTranslate]="'battlegrounds.in-game.quests.sample-size'"></div>
 						<div class="value">{{ rewardDataPoints }}</div>
 					</div>
+				</div>
+				<div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
+					{{ freeUsesText }}
 				</div>
 				<div class="values">
 					<div
@@ -160,6 +163,21 @@ export class ChoosingCardBgsQuestOptionComponent {
 		});
 	}
 
+	@Input() set freeUsesLeft(value: number) {
+		this._freeUsesLeft = value;
+		this.freeUsesText = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-text', {
+			value: value,
+		});
+		this.freeUsesTooltip = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-tooltip', {
+			max: DAILY_FREE_USES,
+			left: value,
+		});
+		console.debug('set free users left', this._freeUsesLeft);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	rewardAveragePositionGlobal: string;
 	rewardAveragePositionForHero: string;
 	questTurnsToCompleteForDifficulty: string;
@@ -174,5 +192,13 @@ export class ChoosingCardBgsQuestOptionComponent {
 	questDifficultyTooltip: string;
 	questHeroTooltip: string;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	_freeUsesLeft: number;
+	freeUsesTooltip: string;
+	freeUsesText: string;
+
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 }

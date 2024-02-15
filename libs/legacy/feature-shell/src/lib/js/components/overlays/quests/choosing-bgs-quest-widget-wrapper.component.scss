@@ -15,4 +15,15 @@
 
 	.option-container {
 	}
+
+	.premium-container {
+		display: flex;
+		justify-content: center;
+
+		bgs-quest-stats-info-premium {
+			height: 2vh;
+			font-size: 13px;
+			width: fit-content;
+		}
+	}
 }
