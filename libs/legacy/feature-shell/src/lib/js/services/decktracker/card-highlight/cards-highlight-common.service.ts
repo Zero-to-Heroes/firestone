@@ -1156,6 +1156,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.MeekMasteryTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion, neutral);
+			case CardIds.MeltedMaker:
+				return and(side(inputSide), or(inDeck, inHand), forge);
 			case CardIds.MenagerieWarden_CORE_KAR_065:
 			case CardIds.MenagerieWarden_KAR_065:
 			case CardIds.MenagerieWarden_WON_305:
@@ -1246,6 +1248,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.PillageTheFallenTavernBrawl:
 				return and(side(inputSide), weapon);
+			case CardIds.PipThePotent_WW_394:
+				return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(1));
 			case CardIds.PitCommander:
 				return and(side(inputSide), inDeck, minion, demon);
 			case CardIds.PitStop:
