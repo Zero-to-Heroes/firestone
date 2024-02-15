@@ -570,13 +570,13 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			console.debug(
-				'[bgs-store] new state',
-				gameEvent.type,
-				gameEvent,
-				this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
-				this.state,
-			);
+			// console.debug(
+			// 	'[bgs-store] emitting new state',
+			// 	gameEvent.type,
+			// 	gameEvent,
+			// 	this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
+			// 	this.state,
+			// );
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay();
 		}

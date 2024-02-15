@@ -225,7 +225,7 @@ export class GameStateService {
 		};
 		this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		if (this.state) {
-			console.debug('[game-state] emitting non-game event', emittedEvent.event.name, emittedEvent.state);
+			// console.debug('[game-state] emitting non-game event', emittedEvent.event.name, emittedEvent.state);
 		}
 	}
 
@@ -312,14 +312,14 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug(
-				'[game-state] emitting event',
-				emittedEvent.event.name,
-				gameEvent.entityId,
-				gameEvent.cardId,
-				gameEvent,
-				emittedEvent.state,
-			);
+			// console.debug(
+			// 	'[game-state] emitting event',
+			// 	emittedEvent.event.name,
+			// 	gameEvent.entityId,
+			// 	gameEvent.cardId,
+			// 	gameEvent,
+			// 	emittedEvent.state,
+			// );
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
