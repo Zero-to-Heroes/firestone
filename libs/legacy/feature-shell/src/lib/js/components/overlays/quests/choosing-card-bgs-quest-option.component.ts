@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { BgsQuestCardChoiceOption, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsQuestCardChoiceOption } from './choosing-bgs-quest-widget-wrapper.component';
 
 @Component({
 	selector: 'choosing-card-bgs-quest-option',

@@ -1,4 +1,4 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 
 export interface BattlegroundsOverlay {

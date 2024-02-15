@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { BgsHeroSelectionOverviewPanel } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, tap } from 'rxjs';
-import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';

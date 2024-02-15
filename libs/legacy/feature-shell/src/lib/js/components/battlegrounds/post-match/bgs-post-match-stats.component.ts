@@ -10,14 +10,16 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { Entity } from '@firestone-hs/replay-parser';
+import {
+	BgsFaceOffWithSimulation,
+	BgsGame,
+	BgsPostMatchStatsPanel,
+	BgsStatsFilterId,
+	MinionStat,
+	QuestReward,
+} from '@firestone/battlegrounds/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsGame } from '../../../models/battlegrounds/bgs-game';
-import { QuestReward } from '../../../models/battlegrounds/bgs-player';
-import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { FeatureFlags } from '../../../services/feature-flags';

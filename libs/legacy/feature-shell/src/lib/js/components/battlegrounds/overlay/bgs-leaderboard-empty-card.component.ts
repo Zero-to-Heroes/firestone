@@ -9,9 +9,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
+import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';

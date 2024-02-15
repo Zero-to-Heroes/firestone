@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
+import { BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/battlegrounds/common';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

@@ -1,11 +1,9 @@
 import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { BgsBoard, BgsPlayer, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
-import { BgsPlayer } from '../../../../../models/battlegrounds/bgs-player';
-import { BgsBoard } from '../../../../../models/battlegrounds/in-game/bgs-board';
-import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';

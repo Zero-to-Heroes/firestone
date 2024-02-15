@@ -1,15 +1,17 @@
 import { EventEmitter } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
+import {
+	BattlegroundsState,
+	BgsBattlesPanel,
+	BgsGame,
+	BgsPanel,
+	BgsPlayer,
+	BgsPostMatchStats,
+	BgsPostMatchStatsPanel,
+} from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
-import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
-import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BG_USE_ANOMALIES } from '../../../feature-flags';
 import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

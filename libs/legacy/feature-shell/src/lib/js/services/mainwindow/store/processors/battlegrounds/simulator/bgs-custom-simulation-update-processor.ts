@@ -1,5 +1,5 @@
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import * as deepmerge from 'deepmerge';
-import { BgsFaceOffWithSimulation } from '../../../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BattlegroundsAppState } from '../../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BgsCustomSimulationState } from '../../../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
 import { MainWindowState } from '../../../../../../models/mainwindow/main-window-state';

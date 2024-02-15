@@ -7,10 +7,10 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
+import { BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';

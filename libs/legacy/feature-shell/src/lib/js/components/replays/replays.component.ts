@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
 import { Observable } from 'rxjs';
-import { BgsPostMatchStatsPanel } from '../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';

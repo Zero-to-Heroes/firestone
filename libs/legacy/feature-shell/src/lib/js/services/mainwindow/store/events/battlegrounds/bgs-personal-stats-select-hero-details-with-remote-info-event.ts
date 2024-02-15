@@ -1,4 +1,4 @@
-import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
+import { BgsPostMatchStatsForReview } from '@firestone/battlegrounds/common';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent implements MainWindowStoreEvent {

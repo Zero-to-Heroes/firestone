@@ -1,11 +1,13 @@
+import {
+	BattlegroundsState,
+	BgsBattlesPanel,
+	BgsFaceOffWithSimulation,
+	BgsPanel,
+} from '@firestone/battlegrounds/common';
 import * as deepmerge from 'deepmerge';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { replaceInArray } from '../../../utils';
-import { BgsBattleSimulationUpdateEvent } from '../events/bgs-battle-simulation-update-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsBattleSimulationUpdateEvent } from '../events/bgs-battle-simulation-update-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBattleSimulationUpdateParser implements EventParser {

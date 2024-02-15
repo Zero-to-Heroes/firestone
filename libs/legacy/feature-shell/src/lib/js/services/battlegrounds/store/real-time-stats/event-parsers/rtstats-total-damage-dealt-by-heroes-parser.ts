@@ -1,10 +1,10 @@
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import { CardIds } from '@firestone-hs/reference-data';
+import { RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../models/game-event';
 import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
-import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
 export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {

@@ -3,10 +3,10 @@ import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsCustomSimulationResetEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
 import { BgsCustomSimulationUpdateEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

@@ -1,8 +1,7 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { NumericTurnInfo, RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { NumericTurnInfo } from '@models/battlegrounds/post-match/numeric-turn-info';
 import { GameEvent } from '../../../../../../models/game-event';
-import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatsBgsOpponentRevealedParser implements EventParser {

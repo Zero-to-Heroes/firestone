@@ -1,12 +1,14 @@
 import { CardIds, defaultStartingHp, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import {
+	BattlegroundsState,
+	BgsGame,
+	BgsHeroSelectionOverviewPanel,
+	BgsPanel,
+	BgsPlayer,
+	BgsTavernUpgrade,
+} from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsHeroSelectedEvent } from '../events/bgs-hero-selected-event';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';

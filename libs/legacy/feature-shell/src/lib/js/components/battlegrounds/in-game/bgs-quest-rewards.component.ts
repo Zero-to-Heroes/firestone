@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { QuestReward } from '../../../models/battlegrounds/bgs-player';
+import { QuestReward } from '@firestone/battlegrounds/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

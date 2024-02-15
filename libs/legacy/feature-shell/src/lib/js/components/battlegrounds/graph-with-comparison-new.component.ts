@@ -8,10 +8,10 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { NumericTurnInfo } from '@firestone/battlegrounds/common';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
-import { BehaviorSubject, combineLatest, filter, Observable, share, takeUntil } from 'rxjs';
-import { NumericTurnInfo } from '../../models/battlegrounds/post-match/numeric-turn-info';
+import { BehaviorSubject, Observable, combineLatest, filter, share, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'graph-with-comparison-new',

@@ -1,5 +1,5 @@
+import { RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { GameEvent } from '../../../../../models/game-event';
-import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
 export class RTStatsMetadataParser implements EventParser {

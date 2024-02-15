@@ -5,18 +5,15 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
+import { BattlegroundsState, BgsBoard, BgsGame, BgsPlayer, PlayerBoard } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { GameEvents } from '../../../game-events.service';
 import { LogsUploaderService } from '../../../logs-uploader.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
-import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
+import { BgsPlayerBoardEvent } from '../events/bgs-player-board-event';
 import { EventParser } from './_event-parser';
 
 export class BgsPlayerBoardParser implements EventParser {

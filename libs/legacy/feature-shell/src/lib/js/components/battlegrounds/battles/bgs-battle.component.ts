@@ -19,11 +19,11 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { removeFromReadonlyArray } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import {
 	PermutationResult,
 	ProcessingStatus,

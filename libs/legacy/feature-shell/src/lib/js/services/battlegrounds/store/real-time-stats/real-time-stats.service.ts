@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
@@ -35,7 +36,6 @@ import { RTStatsTotalDamageDealtByMinionsParser } from './event-parsers/rtstats-
 import { RTStatsTotalDamageTakenByHeroesParser } from './event-parsers/rtstats-total-damage-taken-by-heroes-parser';
 import { RTStatsTotalDamageTakenByMinionsParser } from './event-parsers/rtstats-total-damage-taken-by-minions-parser';
 import { RTStatTurnStartParser } from './event-parsers/rtstats-turn-start-parser';
-import { RealTimeStatsState } from './real-time-stats';
 
 // TODO: move this into a mode-independant package, as it could be used for non-bg stuff
 @Injectable()

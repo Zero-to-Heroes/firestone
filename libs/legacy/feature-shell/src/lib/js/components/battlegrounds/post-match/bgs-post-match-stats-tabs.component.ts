@@ -8,13 +8,11 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { isSupportedScenario } from '../../../services/battlegrounds/bgs-utils';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';

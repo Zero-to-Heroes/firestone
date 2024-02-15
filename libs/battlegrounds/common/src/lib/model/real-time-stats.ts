@@ -9,9 +9,9 @@ import {
 	ValueHeroInfo,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
-import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
-import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
+import { BgsBoard } from './in-game/bgs-board';
+import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
+import { BgsTriple } from './in-game/bgs-triple';
 
 export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly reconnectOngoing: boolean;

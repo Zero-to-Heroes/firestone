@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
+import { BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getBuddy } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, from } from 'rxjs';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({

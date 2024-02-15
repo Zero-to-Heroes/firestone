@@ -1,6 +1,6 @@
+import { RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { GameEvent } from '../../../../../models/game-event';
 import { MinionsDiedEvent } from '../../../../../models/mainwindow/game-events/minions-died-event';
-import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
 export class RTStatsMinionsKilledParser implements EventParser {

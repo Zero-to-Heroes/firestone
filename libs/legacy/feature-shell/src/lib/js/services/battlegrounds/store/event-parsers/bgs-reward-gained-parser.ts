@@ -1,6 +1,5 @@
+import { BattlegroundsState, QuestReward } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { QuestReward } from '../../../../models/battlegrounds/bgs-player';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsRewardGainedEvent } from '../events/bgs-reward-gained-event';
 import { EventParser } from './_event-parser';

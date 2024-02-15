@@ -1,8 +1,8 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { DeckCard, GameState } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 

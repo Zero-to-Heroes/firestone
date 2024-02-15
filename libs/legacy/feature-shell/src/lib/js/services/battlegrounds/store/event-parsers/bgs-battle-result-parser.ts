@@ -1,7 +1,7 @@
+import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { checkIntegrity } from '@legacy-import/src/lib/js/models/battlegrounds/face-off-check';
 import { BugReportService } from '../../../bug/bug-report.service';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
@@ -56,7 +56,8 @@ export class BgsBattleResultParser implements EventParser {
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.update({
 			faceOffs: newFaceOffs,
 		});
-		newFaceOff.checkIntegrity(
+		checkIntegrity(
+			newFaceOff,
 			gameAfterFirstFaceOff,
 			this.bugService,
 			gameState.reconnectOngoing || gameState.hasReconnected,

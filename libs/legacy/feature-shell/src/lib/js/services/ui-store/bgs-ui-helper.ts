@@ -1,8 +1,8 @@
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { BgsQuestStat } from '@firestone/battlegrounds/common';
 import { BgsActiveTimeFilterType, BgsHeroTier } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { GameStat } from '@firestone/stats/data-access';
-import { BgsQuestStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { PatchInfo } from '../../models/patches';
 import { groupByFunction } from '../utils';

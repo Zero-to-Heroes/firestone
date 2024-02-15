@@ -7,11 +7,11 @@ import {
 	Input,
 } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
-import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

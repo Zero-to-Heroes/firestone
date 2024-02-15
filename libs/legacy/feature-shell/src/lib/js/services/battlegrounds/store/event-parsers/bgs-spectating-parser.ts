@@ -1,6 +1,6 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsSpectatingEvent } from '../events/bgs-spectating-event';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsSpectatingEvent } from '../events/bgs-spectating-event';
 import { EventParser } from './_event-parser';
 
 export class BgsSpectatingParser implements EventParser {

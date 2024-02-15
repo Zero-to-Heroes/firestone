@@ -1,7 +1,5 @@
+import { BattlegroundsState, BgsPlayer, BgsTriple } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsTripleCreatedEvent } from '../events/bgs-triple-created-event';

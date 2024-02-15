@@ -10,10 +10,10 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
+import { NumericTurnInfo } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
-import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

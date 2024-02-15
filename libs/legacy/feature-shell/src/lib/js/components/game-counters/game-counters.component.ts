@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

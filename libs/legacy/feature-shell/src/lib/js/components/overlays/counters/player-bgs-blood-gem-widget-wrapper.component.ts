@@ -6,10 +6,10 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 

@@ -13,9 +13,9 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { BattleInfoMessage } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
-import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
 import { VisualAchievement } from '../../models/visual-achievement';
 
 /** @deprecated */

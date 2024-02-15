@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { StatName } from '@firestone-hs/user-bgs-post-match-stats';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
 
 @Component({
 	selector: 'bgs-post-match-stats-recap',

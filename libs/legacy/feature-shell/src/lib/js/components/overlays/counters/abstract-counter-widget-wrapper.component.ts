@@ -8,11 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { CounterType } from '../../game-counters/definitions/_counter-definition';

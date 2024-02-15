@@ -1,10 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { BgsFaceOffWithSimulation, BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

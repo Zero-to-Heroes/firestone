@@ -1,4 +1,4 @@
-import { BgsFaceOffWithSimulation } from '../../../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BattlegroundsMainWindowSelectBattleEvent implements MainWindowStoreEvent {

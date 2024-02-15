@@ -5,7 +5,11 @@ import {
 	ArenaClassStatsService,
 	ArenaNavigationService,
 } from '@firestone/arena/common';
-import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
+import {
+	BattlegroundsQuestsService,
+	BgsInGameQuestsGuardianService,
+	BgsInGameQuestsService,
+} from '@firestone/battlegrounds/common';
 import {
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
@@ -14,6 +18,7 @@ import {
 } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { BgsGameStateFacadeService } from 'libs/battlegrounds/common/src/lib/services/bgs-game-state-facade.service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
@@ -76,6 +81,9 @@ export class BootstrapStoreServicesService {
 		private readonly init_DuelsMetaStatsService: DuelsMetaStatsService,
 		private readonly init_DuelsConfigService: DuelsConfigService,
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
+		private readonly init_BgsInGameQuestsService: BgsInGameQuestsService,
+		private readonly init_BgsInGameQuestsGuardianService: BgsInGameQuestsGuardianService,
+		private readonly init_BgsGameStateFacadeService: BgsGameStateFacadeService,
 		private readonly init_BgsPerfectGamesService: BgsPerfectGamesService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
 		private readonly init_ArenaCardStatsService: ArenaCardStatsService,

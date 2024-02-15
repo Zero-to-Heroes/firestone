@@ -1,9 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { BattlegroundsState, BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
-import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 import { GameEvents } from '../../../game-events.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

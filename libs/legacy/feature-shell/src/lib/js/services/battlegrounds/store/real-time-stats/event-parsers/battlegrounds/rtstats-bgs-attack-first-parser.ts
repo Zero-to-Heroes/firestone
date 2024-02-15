@@ -1,8 +1,8 @@
 import { BooleanTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/boolean-turn-info';
+import { RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds } from '../../../../bgs-utils';
-import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsAttackFirstParser implements EventParser {

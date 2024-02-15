@@ -1,6 +1,6 @@
+import { NumericTurnInfoWithCardIds, RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds } from '../../../../bgs-utils';
-import { NumericTurnInfoWithCardIds, RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsMinionsBoughtParser implements EventParser {

@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BattlegroundsState, RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
@@ -8,7 +9,6 @@ import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-bu
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -99,7 +99,6 @@ import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
 import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
-import { RealTimeStatsState } from './real-time-stats/real-time-stats';
 import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
 
 @Injectable()

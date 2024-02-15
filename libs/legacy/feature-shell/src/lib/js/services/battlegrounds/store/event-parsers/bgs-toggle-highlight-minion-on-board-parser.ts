@@ -1,4 +1,4 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsToggleHighlightMinionOnBoardEvent } from '../events/bgs-toggle-highlight-minion-on-board-event';
 import { EventParser } from './_event-parser';

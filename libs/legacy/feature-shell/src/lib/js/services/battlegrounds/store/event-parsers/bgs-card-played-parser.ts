@@ -1,6 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { GameEvent } from '../../../../models/game-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsCardPlayedEvent } from '../events/bgs-card-played-event';

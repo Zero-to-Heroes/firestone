@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { NumericTurnInfo } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { deepEqual } from '../../../services/utils';
 
 @Component({

@@ -2,9 +2,8 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { getTribeIcon } from '@firestone-hs/reference-data';
+import { BgsBoard, BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
 import { fromJS } from 'immutable';
-import { BgsPlayer, QuestReward } from '../../../../models/battlegrounds/bgs-player';
-import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { TwitchBgsHeroOverviewComponent } from './twitch-bgs-hero-overview.component';
 import { TwitchBgsBoard, TwitchBgsPlayer, TwitchBgsStateConfig } from './twitch-bgs-state';
 

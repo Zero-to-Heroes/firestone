@@ -1,5 +1,5 @@
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 
 export interface EventParser {

@@ -11,9 +11,9 @@ import {
 import { Entity, BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
 import { Entity as ParserEntity } from '@firestone-hs/replay-parser';
+import { BgsBoard } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Color, ScaleType } from '@sebastientromp/ngx-charts';
-import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

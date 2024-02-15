@@ -1,13 +1,15 @@
 import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { defaultStartingHp, GameType, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import {
+	BattlegroundsState,
+	BgsBattlesPanel,
+	BgsFaceOffWithSimulation,
+	BgsNextOpponentOverviewPanel,
+	BgsOpponentOverview,
+	BgsPanel,
+} from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
-import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { BgsOpponentOverview } from '../../../../models/battlegrounds/in-game/bgs-opponent-overview';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { EventParser } from './_event-parser';

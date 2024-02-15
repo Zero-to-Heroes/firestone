@@ -1,13 +1,15 @@
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
+import {
+	BattlegroundsState,
+	BgsBattleHistory,
+	BgsComposition,
+	BgsGame,
+	BgsPanel,
+	BgsPlayer,
+	BgsPostMatchStatsPanel,
+} from '@firestone/battlegrounds/common';
 import { MemoryBgGame, MemoryBgPlayer } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsBattleHistory } from '../../../../models/battlegrounds/in-game/bgs-battle-history';
-import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
-import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';

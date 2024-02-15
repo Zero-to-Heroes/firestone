@@ -1,10 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
+import {
+	BgsGame,
+	BgsPostMatchStats,
+	BgsPostMatchStatsForReview,
+	RealTimeStatsState,
+} from '@firestone/battlegrounds/common';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
-import { BgsGame } from '../../models/battlegrounds/bgs-game';
-import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
-import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
@@ -14,7 +17,6 @@ import { UserService } from '../user.service';
 import { sleep } from '../utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
-import { RealTimeStatsState } from './store/real-time-stats/real-time-stats';
 
 const POST_MATCH_STATS_UPDATE_URL = 'https://bvs52e46c6yaqlt4o257eagbpu0iqfog.lambda-url.us-west-2.on.aws/';
 const POST_MATCH_STATS_RETRIEVE_URL = 'https://4nsgpj3i3anf6qc3c7zugsdjvm0sadln.lambda-url.us-west-2.on.aws/';

@@ -1,5 +1,5 @@
+import { BgsStatsFilterId } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { BgsStatsFilterId } from '../../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';

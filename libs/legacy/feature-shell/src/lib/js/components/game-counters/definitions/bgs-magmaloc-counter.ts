@@ -1,9 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { BattlegroundsState, NumericTurnInfo } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
-import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 

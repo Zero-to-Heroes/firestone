@@ -1,9 +1,8 @@
+import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { normalizeHeroCardId } from '../../bgs-utils';
-import { BattlegroundsBattleSimulationEvent } from '../events/battlegrounds-battle-simulation-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BattlegroundsBattleSimulationEvent } from '../events/battlegrounds-battle-simulation-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBattleSimulationParser implements EventParser {

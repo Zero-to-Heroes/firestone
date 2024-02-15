@@ -1,7 +1,6 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsCombatStartEvent } from '../events/bgs-combat-start-event';
+import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsCombatStartEvent } from '../events/bgs-combat-start-event';
 import { EventParser } from './_event-parser';
 
 export class BgsCombatStartParser implements EventParser {

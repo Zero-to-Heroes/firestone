@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
-import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
-import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
+import {
+	BgsFaceOffWithSimulation,
+	BgsPlayer,
+	BgsTavernUpgrade,
+	BgsTriple,
+	QuestReward,
+} from '@firestone/battlegrounds/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

@@ -1,7 +1,6 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { BgsStartComputingPostMatchStatsEvent } from '../events/bgs-start-computing-post-match-stats-event';
+import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsStartComputingPostMatchStatsEvent } from '../events/bgs-start-computing-post-match-stats-event';
 import { EventParser } from './_event-parser';
 
 export class BgsStartComputingPostMatchStatsParser implements EventParser {

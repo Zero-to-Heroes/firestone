@@ -1,8 +1,6 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
-import { BgsSelectBattleEvent } from '../events/bgs-select-battle-event';
+import { BattlegroundsState, BgsBattlesPanel, BgsPanel } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsSelectBattleEvent } from '../events/bgs-select-battle-event';
 import { EventParser } from './_event-parser';
 
 export class BgsSelectBattleParser implements EventParser {

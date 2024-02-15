@@ -1,10 +1,10 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { NonFunctionProperties, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, distinctUntilChanged, map } from 'rxjs';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 

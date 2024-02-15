@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
+import { BattlegroundsState, BgsBoard, BgsPlayer } from '@firestone/battlegrounds/common';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
@@ -22,9 +23,6 @@ import {
 	TwitchBgsPlayer,
 	TwitchBgsState,
 } from '../../components/decktracker/overlay/twitch/twitch-bgs-state';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
-import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
-import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { GameEvent } from '../../models/game-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';

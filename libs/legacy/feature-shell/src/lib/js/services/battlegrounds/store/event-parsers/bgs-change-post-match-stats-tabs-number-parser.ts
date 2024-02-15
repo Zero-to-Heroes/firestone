@@ -1,7 +1,5 @@
+import { BattlegroundsState, BgsPanel, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { BgsPostMatchStatsPanel } from '@legacy-import/src/lib/js/models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../events/bgs-change-post-match-stats-tabs-number-event';
 import { EventParser } from './_event-parser';

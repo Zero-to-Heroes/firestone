@@ -9,7 +9,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { BgsPlayer } from '@firestone/battlegrounds/common';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

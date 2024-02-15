@@ -20,6 +20,7 @@ import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } fro
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
 import { DuelsDeckSummary } from '@firestone/duels/general';
@@ -29,7 +30,6 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { DuelsBucketsData } from '../../models/duels/duels-state';

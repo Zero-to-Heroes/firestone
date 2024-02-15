@@ -1,6 +1,6 @@
+import { HpTurnInfo, RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
-import { HpTurnInfo, RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsTurnStartParser implements EventParser {

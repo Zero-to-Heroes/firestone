@@ -1,12 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { BgsPostMatchStatsForReview, MinionStat } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Map } from 'immutable';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
-import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';

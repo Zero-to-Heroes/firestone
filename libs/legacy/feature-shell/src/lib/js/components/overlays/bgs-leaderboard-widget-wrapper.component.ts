@@ -8,12 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
+import { BgsPlayer } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 

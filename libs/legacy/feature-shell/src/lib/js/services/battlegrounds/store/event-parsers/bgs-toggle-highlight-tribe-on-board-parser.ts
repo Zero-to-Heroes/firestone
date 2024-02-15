@@ -1,7 +1,7 @@
 import { Race } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsToggleHighlightTribeOnBoardEvent } from '../events/bgs-toggle-highlight-tribe-on-board-event';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsToggleHighlightTribeOnBoardEvent } from '../events/bgs-toggle-highlight-tribe-on-board-event';
 import { EventParser } from './_event-parser';
 
 export class BgsToggleHighlightTribeOnBoardParser implements EventParser {

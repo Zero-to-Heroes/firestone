@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { BG_USE_QUESTS } from '@firestone/battlegrounds/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BG_USE_QUESTS } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BgsQuestStat } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
 @Component({
 	selector: 'bgs-hero-tier',

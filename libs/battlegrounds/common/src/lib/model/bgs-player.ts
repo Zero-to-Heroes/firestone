@@ -2,9 +2,8 @@ import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-par
 import { GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { PlayerBoardEntity } from '@legacy-import/src/lib/js/services/battlegrounds/store/events/bgs-player-board-event';
-import { NonFunctionProperties } from '@services/utils';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
 import { BgsBoard } from './in-game/bgs-board';
 import { BgsComposition } from './in-game/bgs-composition';
@@ -12,6 +11,7 @@ import { BgsDamage } from './in-game/bgs-damage';
 import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
 import { BgsTribe } from './in-game/bgs-tribe';
 import { BgsTriple } from './in-game/bgs-triple';
+import { PlayerBoardEntity } from './player-board';
 
 export class BgsPlayer implements IBgsPlayer {
 	readonly playerId: number;
@@ -68,15 +68,15 @@ export class BgsPlayer implements IBgsPlayer {
 		return result;
 	}
 
-	public getLastKnownBattleHistory(): BgsBattleHistory {
+	public getLastKnownBattleHistory(): BgsBattleHistory | null {
 		return !this.battleHistory?.length ? null : this.battleHistory[this.battleHistory.length - 1];
 	}
 
-	public getLastKnownComposition(): BgsComposition {
+	public getLastKnownComposition(): BgsComposition | null {
 		return !this.compositionHistory?.length ? null : this.compositionHistory[this.compositionHistory.length - 1];
 	}
 
-	public getLastKnownBoardState(): readonly Entity[] {
+	public getLastKnownBoardState(): readonly Entity[] | null {
 		return !this.boardHistory
 			? null
 			: this.boardHistory.length === 0
@@ -84,7 +84,7 @@ export class BgsPlayer implements IBgsPlayer {
 			: this.boardHistory[this.boardHistory.length - 1].board;
 	}
 
-	public getLastKnownBoardStateAsReplayEntities(): readonly ReplayEntity[] {
+	public getLastKnownBoardStateAsReplayEntities(): readonly ReplayEntity[] | null {
 		const boardState = this.getLastKnownBoardState();
 		if (boardState == null) {
 			return null;
@@ -102,11 +102,14 @@ export class BgsPlayer implements IBgsPlayer {
 		);
 	}
 
-	public getLastBoardStateTurn(): number {
+	public getLastBoardStateTurn(): number | undefined {
 		return !this.boardHistory?.length ? undefined : this.boardHistory[this.boardHistory.length - 1].turn;
 	}
 
-	public buildBgsEntities(logEntities: readonly PlayerBoardEntity[], allCards: CardsFacadeService): BoardEntity[] {
+	public buildBgsEntities(
+		logEntities: readonly PlayerBoardEntity[],
+		allCards: CardsFacadeService,
+	): (BoardEntity | null)[] {
 		if (!logEntities?.length) {
 			return [];
 		}
@@ -122,7 +125,7 @@ export interface QuestReward {
 	readonly isHeroPower: boolean;
 }
 
-export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity => {
+export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity | null => {
 	if (!logEntity) {
 		return null;
 	}
@@ -160,7 +163,7 @@ const buildAdditionalCards = (
 	cardId: string,
 	Tags: readonly { Name: number; Value: number }[],
 	allCards: CardsFacadeService,
-): readonly string[] => {
+): readonly string[] | null => {
 	const modularTags = Tags?.filter(
 		(t) => t.Name === GameTag.MODULAR_ENTITY_PART_1 || t.Name === GameTag.MODULAR_ENTITY_PART_2,
 	);

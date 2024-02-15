@@ -1,6 +1,6 @@
+import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
-import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';

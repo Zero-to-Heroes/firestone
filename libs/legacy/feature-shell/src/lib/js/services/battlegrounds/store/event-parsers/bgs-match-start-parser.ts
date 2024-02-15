@@ -1,15 +1,17 @@
 import { BgsPlayer } from '@firestone-hs/hs-replay-xml-parser';
 import { GameTag, Race } from '@firestone-hs/reference-data';
+import {
+	BattlegroundsState,
+	BgsBattlesPanel,
+	BgsFaceOffWithSimulation,
+	BgsGame,
+	BgsHeroSelectionOverviewPanel,
+	BgsNextOpponentOverviewPanel,
+	BgsPanel,
+	BgsPostMatchStatsPanel,
+} from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { BgsFaceOffWithSimulation } from '@legacy-import/src/lib/js/models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPanel } from '@legacy-import/src/lib/js/models/battlegrounds/bgs-panel';
-import { BgsHeroSelectionOverviewPanel } from '@legacy-import/src/lib/js/models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsBattlesPanel } from '@legacy-import/src/lib/js/models/battlegrounds/in-game/bgs-battles-panel';
-import { BgsNextOpponentOverviewPanel } from '@legacy-import/src/lib/js/models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { BgsPostMatchStatsPanel } from '@legacy-import/src/lib/js/models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsMatchStartEvent } from '../events/bgs-match-start-event';

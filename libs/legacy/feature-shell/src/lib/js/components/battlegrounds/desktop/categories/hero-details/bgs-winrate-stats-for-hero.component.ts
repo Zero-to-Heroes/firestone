@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
-import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';

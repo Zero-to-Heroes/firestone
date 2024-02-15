@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { BgsPanelId } from '@firestone/battlegrounds/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { BgsPanelId } from '../../models/battlegrounds/bgs-panel-id.type';
-import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

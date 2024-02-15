@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
-import { BgsTavernUpgrade } from '../../models/battlegrounds/in-game/bgs-tavern-upgrade';
-import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
 
 @Component({
 	selector: 'bgs-player-capsule',

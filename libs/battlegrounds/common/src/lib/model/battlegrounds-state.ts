@@ -37,7 +37,7 @@ export class BattlegroundsState {
 		} as BattlegroundsState);
 	}
 
-	public getPanel(panelId: BgsPanelId): BgsPanel {
+	public getPanel(panelId: BgsPanelId): BgsPanel | undefined {
 		return this.panels.find((panel) => panel.id === panelId);
 	}
 }

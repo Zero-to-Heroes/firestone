@@ -1,9 +1,9 @@
-import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
-import { NonFunctionProperties } from '@legacy-import/src/lib/js/services/utils';
-import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BgsFaceOffWithSimulation } from './bgs-face-off-with-simulation';
 import { BgsPlayer } from './bgs-player';
+import { RealTimeStatsState } from './real-time-stats';
 
 export class BgsGame {
 	readonly reviewId: string;
@@ -46,11 +46,11 @@ export class BgsGame {
 		return this.update({ players: newPlayers } as BgsGame);
 	}
 
-	public findPlayer(playerId: number): BgsPlayer {
+	public findPlayer(playerId: number): BgsPlayer | undefined {
 		return this.players.find((player) => player.playerId === playerId);
 	}
 
-	public getMainPlayer(withDebug = false): BgsPlayer {
+	public getMainPlayer(withDebug = false): BgsPlayer | undefined {
 		const mainPlayer = this.players.find((player) => player.isMainPlayer);
 		if (!mainPlayer) {
 			if (this.players.length === 8) {
@@ -205,7 +205,7 @@ export class BgsGame {
 		return this.faceOffs.map((faceOff) => ({
 			turn: faceOff.turn,
 			actualResult: faceOff.result,
-			simulationResult: faceOff.battleResult,
+			simulationResult: faceOff.battleResult as BgsBattleSimulationResult,
 			battleInfo: faceOff.battleInfo,
 		}));
 	}
@@ -213,7 +213,7 @@ export class BgsGame {
 	public getRelevantFaceOff(
 		bgsShowSimResultsOnlyOnRecruit: boolean,
 		bgsHideSimResultsOnRecruit: boolean,
-	): BgsFaceOffWithSimulation {
+	): BgsFaceOffWithSimulation | null | undefined {
 		if (this.phase === 'combat') {
 			// When the game has ended, we return immediately
 			if (bgsShowSimResultsOnlyOnRecruit && !this.gameEnded) {
@@ -230,14 +230,14 @@ export class BgsGame {
 	}
 
 	// Used for next opponent panel
-	public lastFaceOff(): BgsFaceOffWithSimulation {
+	public lastFaceOff(): BgsFaceOffWithSimulation | null {
 		if (!this.faceOffs?.length) {
 			return null;
 		}
 		return this.faceOffs[this.faceOffs.length - 1];
 	}
 
-	public lastNonEmptyFaceOff(): BgsFaceOffWithSimulation {
+	public lastNonEmptyFaceOff(): BgsFaceOffWithSimulation | null | undefined {
 		if (!this.faceOffs?.length) {
 			return null;
 		}

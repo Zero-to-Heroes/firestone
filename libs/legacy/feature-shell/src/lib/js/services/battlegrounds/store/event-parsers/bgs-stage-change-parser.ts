@@ -1,6 +1,6 @@
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsStageChangeEvent } from '../events/bgs-stage-change-event';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsStageChangeEvent } from '../events/bgs-stage-change-event';
 import { EventParser } from './_event-parser';
 
 export class BgsStageChangeParser implements EventParser {

@@ -1,7 +1,7 @@
 import { GameTag, Race } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsResetHighlightsEvent } from '../events/bgs-reset-highlights-event';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsResetHighlightsEvent } from '../events/bgs-reset-highlights-event';
 import { EventParser } from './_event-parser';
 
 export class BgsResetHighlightsParser implements EventParser {

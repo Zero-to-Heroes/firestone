@@ -1,7 +1,7 @@
 import { CardIds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { GameEvents } from '../../../game-events.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';

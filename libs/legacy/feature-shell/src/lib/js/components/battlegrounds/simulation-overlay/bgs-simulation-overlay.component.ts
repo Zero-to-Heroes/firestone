@@ -6,9 +6,9 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
