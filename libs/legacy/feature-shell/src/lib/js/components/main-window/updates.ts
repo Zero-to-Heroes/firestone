@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.4.12',
+		version: '13.5.0',
 		force: false,
 		sections: [
 			// {
@@ -46,21 +46,16 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
-					// {
-					// 	category: 'decktracker',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `You can now view mulligan data for your deck directly in the overlay! Free users will be able to use this feature 3 times per day, while premium users will have unlimited access to it. Let me know if you have any feedback on this! (note: it will probably be deactivated when the app goes live, as I want to keep it a bit longer in beta for testing)`,
-					// 		},
-					// 	],
-					// }
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `App has been update for 28.6. Expect some more updates throughout the week :)`,
+								text: `You can now browse the stats for the Quests and Rewards in the app.`,
+							},
+							{
+								type: 'feature',
+								text: `View the Quest/Reward stats directly in the overlay! This shows the reward's average placement and the quest's average turns to complete. This is a premium feature, but free users can still use it a couple of times a day (the exact quantity can still change in the future)`,
 							},
 						],
 					},
@@ -71,33 +66,24 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a "spells" group next to the minion tribes in the BG minions list.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Add oracles for Harth Stonebrew. After your opponent plays one of the cards received from him, the app will automatically tag all the others.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where the "bottom" position in the deck was not reset when a card is being stolen.`,
+								text: `Fix an issue where the Earthen Golem counter wouldn't appear anymore.`,
 							},
 						],
 					},
 					{
-						category: 'arena',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the decklist would not be ordered by mana cost.`,
+								text: `Fix a sim issue where the Stable Amalgamation reward would be treated as Avenge (1).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the effects that summons a minion "when there space" for them would not work as intended.`,
 							},
 						],
 					},
