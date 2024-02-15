@@ -39,6 +39,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
 			<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
 			<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
+			<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
 
 			<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
 			<constructed-mulligan-widget-wrapper></constructed-mulligan-widget-wrapper>

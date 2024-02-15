@@ -10,20 +10,19 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
+import { CardIds, GameType, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
+import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { Observable, combineLatest } from 'rxjs';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
-import { buildBasicCardChoiceValue, buildBgsQuestCardChoiceValue } from './card-choice-values';
+import { buildBasicCardChoiceValue } from './card-choice-values';
 
 @Component({
 	selector: 'choosing-card-widget-wrapper',
@@ -34,22 +33,11 @@ import { buildBasicCardChoiceValue, buildBgsQuestCardChoiceValue } from './card-
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
 			>
-				<ng-container [ngSwitch]="widgetType$ | async">
-					<ng-container *ngSwitchCase="'normal'">
-						<choosing-card-option
-							class="option-container"
-							*ngFor="let option of value.options"
-							[option]="option"
-						></choosing-card-option>
-					</ng-container>
-					<ng-container *ngSwitchCase="'bgsQuest'">
-						<choosing-card-bgs-quest-option
-							class="option-container"
-							*ngFor="let option of value.options"
-							[option]="option"
-						></choosing-card-bgs-quest-option>
-					</ng-container>
-				</ng-container>
+				<choosing-card-option
+					class="option-container"
+					*ngFor="let option of value.options"
+					[option]="option"
+				></choosing-card-option>
 			</div>
 		</div>
 	`,
@@ -64,7 +52,6 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 	showWidget$: Observable<boolean>;
 	options$: Observable<readonly CardChoiceOption[]>;
-	widgetType$: Observable<'normal' | 'bgsQuest'>;
 
 	windowWidth: number;
 	windowHeight: number;
@@ -79,19 +66,24 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly scene: SceneService,
+		private readonly quests: BattlegroundsQuestsService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.scene.isReady();
+		await this.quests.isReady();
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.store.listen$(([main, nav, prefs]) => prefs.overlayEnableDiscoverHelp),
-			this.store.listenDeckState$((deckState) => deckState?.playerDeck?.currentOptions),
+			this.store.listenDeckState$(
+				(deckState) => deckState?.playerDeck?.currentOptions,
+				(deckState) => deckState?.metadata?.gameType,
+			),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [currentOptions]]) => {
+			this.mapData(([currentScene, [displayFromPrefs], [currentOptions, gameType]]) => {
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -106,126 +98,39 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 					return false;
 				}
 
+				if (
+					![
+						GameType.GT_CASUAL,
+						GameType.GT_PVPDR,
+						GameType.GT_PVPDR_PAID,
+						GameType.GT_RANKED,
+						GameType.GT_ARENA,
+						GameType.GT_VS_AI,
+						GameType.GT_VS_FRIEND,
+					].includes(gameType)
+				) {
+					return false;
+				}
+
 				return true;
 			}),
 			this.handleReposition(),
 		);
 
-		const bgsQuests$$ = new BehaviorSubject<BgsQuestStats>(null);
-
-		// let subscribedToQuests = false;
-		const bgsState$$ = new BehaviorSubject<BattlegroundsState>(null);
-		// this.store
-		// 	.listenBattlegrounds$(([state]) => state)
-		// 	.pipe(this.mapData(([state]) => state))
-		// 	.subscribe((state) => {
-		// 		if (!subscribedToQuests) {
-		// 			const hasQuests =
-		// 				state?.currentGame?.hasQuests ||
-		// 				normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards) ===
-		// 					CardIds.SireDenathrius_BG24_HERO_100;
-		// 			// console.debug(
-		// 			// 	'[choosing-card] hasQuests',
-		// 			// 	hasQuests,
-		// 			// 	state?.currentGame?.getMainPlayer()?.cardId,
-		// 			// 	normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards),
-		// 			// 	state?.currentGame?.hasQuests,
-		// 			// );
-		// 			if (hasQuests) {
-		// 				// Only subscribe to the quests if quests are active, so that we don't get data uselessly
-		// 				this.store.bgsQuests$().subscribe((quests) => bgsQuests$$.next(quests));
-		// 				subscribedToQuests = true;
-		// 			}
-		// 		}
-		// 		bgsState$$.next(state);
-		// 	});
-
-		this.options$ = combineLatest([
-			this.store.listenDeckState$((state) => state),
-			this.store.enablePremiumFeatures$(),
-			this.listenForBasicPref$((prefs) => prefs.bgsShowQuestStatsOverlay),
-		]).pipe(
-			this.mapData(([[state], premium, bgsShowQuestStatsOverlay]) => {
+		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
+			this.mapData(([[state]]) => {
 				const options = state.playerDeck?.currentOptions;
-				// const options = JSON.parse(
-				// 	'[{"entityId":1130,"cardId":"BG24_Quest_151","source":"BG24_QuestsPlayerEnch_t","context":{"DataNum1":-1},"questDifficulty":6,"questReward":{"EntityId":1131,"CardId":"BG24_Reward_363"}},{"entityId":1132,"cardId":"BG24_Quest_352","source":"BG24_QuestsPlayerEnch_t","context":{"DataNum1":-1},"questDifficulty":15,"questReward":{"EntityId":1133,"CardId":"BG24_Reward_309"}},{"entityId":1134,"cardId":"BG24_Quest_311","source":"BG24_QuestsPlayerEnch_t","context":{"DataNum1":-1},"questDifficulty":10,"questReward":{"EntityId":1135,"CardId":"BG24_Reward_350"}}]',
-				// );
-				// console.debug(
-				// 	'[choosing-card] options',
-				// 	options,
-				// 	state,
-				// 	premium,
-				// 	bgsShowQuestStatsOverlay,
-				// 	bgsQuests$$.getValue(),
-				// );
-				return (
-					options
-						?.map((o) => {
-							const isBaseDiscover = !isBgQuestDiscover(o.source);
-							if (isBaseDiscover) {
-								const result: CardChoiceOption = {
-									cardId: o.cardId,
-									entityId: o.entityId,
-									flag: this.buildFlag(o, state),
-									value: buildBasicCardChoiceValue(o, state, this.allCards, this.i18n),
-								};
-								return result;
-							}
-
-							if (!premium || !bgsShowQuestStatsOverlay) {
-								return null;
-							}
-
-							const optionInfo = buildBgsQuestCardChoiceValue(
-								o,
-								bgsState$$.getValue(),
-								bgsQuests$$.getValue(),
-								this.allCards,
-							);
-							console.debug(
-								'[choosing-card] optionInfo',
-								optionInfo,
-								o,
-								bgsState$$.getValue(),
-								bgsQuests$$.getValue(),
-							);
-							if (!optionInfo) {
-								console.warn('[choosing-card] could not find option info', o);
-								return null;
-							}
-
-							const result: BgsQuestCardChoiceOption = {
-								cardId: o.cardId,
-								entityId: o.entityId,
-								flag: this.buildFlag(o, state),
-								questCompletionTurns: optionInfo.questCompletionTurns?.toFixed(1),
-								rewardAveragePosition: optionInfo.rewardAveragePosition?.toFixed(2),
-								rewardTier: optionInfo.rewardTier,
-								questTooltip: this.i18n.translateString(
-									'battlegrounds.in-game.quests.turn-to-complete-tooltip',
-									{
-										averageTurnsToComplete: optionInfo.averageTurnsToComplete?.toFixed(1),
-										turnsToCompleteForHero: optionInfo.turnsToCompleteForHero?.toFixed(1),
-										turnsToCompleteImpact: optionInfo.turnsToCompleteImpact?.toFixed(1),
-									},
-								),
-								rewardTooltip: this.i18n.translateString(
-									'battlegrounds.in-game.quests.reward-position-tooltip',
-								),
-							};
-							return result;
-						})
-						.filter((o) => !!o) ?? []
-				);
+				return options?.map((o) => {
+					const result: CardChoiceOption = {
+						cardId: o.cardId,
+						entityId: o.entityId,
+						flag: this.buildFlag(o, state),
+						value: buildBasicCardChoiceValue(o, state, this.allCards, this.i18n),
+					};
+					return result;
+				});
 			}),
 		);
-		this.widgetType$ = this.store
-			.listenDeckState$((state) => state.playerDeck?.currentOptions)
-			.pipe(
-				this.mapData(([options]) =>
-					options?.some((o) => isBgQuestDiscover(o.source)) ? 'bgsQuest' : 'normal',
-				),
-			);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -373,49 +278,6 @@ export class ChoosingCardOptionComponent implements OnDestroy {
 	}
 }
 
-@Component({
-	selector: 'choosing-card-bgs-quest-option',
-	styleUrls: ['../../../../css/component/overlays/card-choice/choosing-card-widget-wrapper.component.scss'],
-	template: `
-		<div class="option tall-option">
-			<div class="flag-container value-container reward-tier" [helpTooltip]="rewardTooltip">
-				<!-- <div class="tier">
-					{{ rewardTier }}
-				</div> -->
-				<div class="average-position value">
-					{{ rewardAveragePosition }}
-				</div>
-			</div>
-			<div class="flag-container value-container quest-completion" [helpTooltip]="questTooltip">
-				<div class="value">
-					{{ questCompletionTurns }}
-				</div>
-			</div>
-		</div>
-	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ChoosingCardBgsQuestOptionComponent {
-	@Input() set option(value: CardChoiceOption) {
-		const castValue: BgsQuestCardChoiceOption = value as BgsQuestCardChoiceOption;
-		this._option = castValue;
-		this.questCompletionTurns = castValue.questCompletionTurns;
-		this.rewardTier = castValue.rewardTier;
-		this.rewardAveragePosition = castValue.rewardAveragePosition;
-		this.questTooltip = castValue.questTooltip;
-		this.rewardTooltip = castValue.rewardTooltip;
-	}
-
-	_option: BgsQuestCardChoiceOption;
-	questCompletionTurns: string;
-	rewardAveragePosition: string;
-	rewardTier: string;
-	questTooltip: string;
-	rewardTooltip: string;
-
-	constructor(private readonly allCards: CardsFacadeService) {}
-}
-
 // For discovers for which knowing the effect on your deck isn't relevant
 const NO_HIGHLIGHT_CARD_IDS = [CardIds.MurlocHolmes_REV_022, CardIds.MurlocHolmes_REV_770];
 
@@ -426,16 +288,4 @@ export interface CardChoiceOption {
 	readonly value?: string;
 }
 
-export interface BgsQuestCardChoiceOption extends CardChoiceOption {
-	readonly questCompletionTurns: string;
-	readonly rewardTier: string;
-	readonly rewardAveragePosition: string;
-	readonly questTooltip?: string;
-	readonly rewardTooltip?: string;
-}
-
 export type CardOptionFlag = 'flag' | 'value' | null;
-
-const isBgQuestDiscover = (source: string): boolean => {
-	return source === CardIds.DiscoverQuestRewardDntToken;
-};

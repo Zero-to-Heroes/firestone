@@ -256,7 +256,6 @@ import { BgsWindowButtonWidgetWrapperComponent } from './js/components/overlays/
 import { HeroPowerOverlayComponent } from './js/components/overlays/board/hero-power-overlay.component';
 import { MinionOnBoardOverlayComponent } from './js/components/overlays/board/minion-on-board-overlay.component';
 import {
-	ChoosingCardBgsQuestOptionComponent,
 	ChoosingCardOptionComponent,
 	ChoosingCardWidgetWrapperComponent,
 } from './js/components/overlays/card-choice/choosing-card-widget-wrapper.component';
@@ -529,6 +528,8 @@ import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/count
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
+import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
+import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
 import { SettingsArenaGeneralComponent } from '@components/settings/arena/settings-arena-general';
 import { SettingsArenaMenuComponent } from '@components/settings/arena/settings-arena-menu.component';
 import { SettingsArenaComponent } from '@components/settings/arena/settings-arena.component';
@@ -1502,6 +1503,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MercsQuestsWidgetWrapperComponent,
 		ChoosingCardWidgetWrapperComponent,
 		ChoosingCardOptionComponent,
+		ChoosingBgsQuestWidgetWrapperComponent,
 		ChoosingCardBgsQuestOptionComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,

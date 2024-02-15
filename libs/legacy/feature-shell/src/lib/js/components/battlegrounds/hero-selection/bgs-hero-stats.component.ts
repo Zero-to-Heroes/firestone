@@ -130,7 +130,6 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 					tribeModifiers: value.averagePositionDetails.tribesModifiers,
 					anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
 			  };
-		console.debug('tooltip input', this.averagePositionTooltipInput);
 	}
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

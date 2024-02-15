@@ -38,13 +38,20 @@ export class BattlegroundsQuestsService extends AbstractFacadeService<Battlegrou
 					(prefs) => prefs.bgsActiveRankFilter,
 				)
 				.subscribe(async ([timeFilter, rankFilter]) => {
-					const quests = await this.loadQuests(timeFilter, rankFilter);
+					const quests = await this.loadQuestsInternal(timeFilter, rankFilter);
 					this.questStats$$.next(quests);
 				});
 		});
 	}
 
-	private async loadQuests(
+	public async loadQuests(
+		timeFilter: BgsActiveTimeFilterType,
+		rankFilter: BgsRankFilterType,
+	): Promise<BgsQuestStats | null> {
+		return this.mainInstance.loadQuestsInternal(timeFilter, rankFilter);
+	}
+
+	private async loadQuestsInternal(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,
 	): Promise<BgsQuestStats | null> {

@@ -1,8 +1,6 @@
-import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { CardIds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardOption, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 export const buildBasicCardChoiceValue = (
@@ -15,65 +13,6 @@ export const buildBasicCardChoiceValue = (
 		case CardIds.GuessTheWeight:
 			return guessTheWeight(option, state, allCards, i18n);
 	}
-};
-
-export const buildBgsQuestCardChoiceValue = (
-	option: CardOption,
-	bgsState: BattlegroundsState,
-	bgsQuests: BgsQuestStats,
-	allCards: CardsFacadeService,
-): {
-	questCompletionTurns: number;
-	rewardAveragePosition: number;
-	rewardTier: string;
-	averageTurnsToComplete: number;
-	turnsToCompleteForHero: number;
-	turnsToCompleteImpact: number;
-} => {
-	const bgQuestCardId = option.cardId;
-	const mainPlayerCardId = bgsState?.currentGame?.getMainPlayer()?.cardId;
-
-	// TODO: handle difficulty, MMR, etc.
-	const questStat = bgsQuests?.questStats.find((s) => s.questCardId === bgQuestCardId);
-	console.debug('questStat', questStat, bgsState?.currentGame?.getMainPlayer());
-	if (!questStat) {
-		return null;
-	}
-
-	const questStatForHero = questStat?.heroStats.find(
-		(s) => s.heroCardId === normalizeHeroCardId(mainPlayerCardId, allCards),
-	);
-	console.debug('statForHero', questStatForHero, mainPlayerCardId, questStat.heroStats);
-	const statForDifficulty = questStat?.difficultyStats?.find((s) => s.difficulty === option.questDifficulty);
-	const turnsToCompleteImpact = statForDifficulty?.impactTurnToComplete ?? 0;
-	console.debug('turnsToCompleteImpact', turnsToCompleteImpact, statForDifficulty);
-	const turnsToComplete =
-		(questStatForHero == null ? questStat.averageTurnToComplete : questStatForHero.averageTurnToComplete) +
-		turnsToCompleteImpact;
-	// Because what we count as "turn to complete" is the NUM_TURNS_IN_PLAY, which incremenets at every
-	// phase (recruit and combat), we have to devide by 2
-	// And since the we play the quest on turn 0, and we want "1 turn" to mean "complete the turn you get it", we
-	// add 1
-	const turnsLeftToComplete = turnsToComplete == null ? null : turnsToComplete / 2 + 1;
-	console.debug('turnsLeftToComplete', turnsLeftToComplete, turnsToComplete);
-
-	const rewardStat = bgsQuests.rewardStats.find((r) => r.rewardCardId === option.questReward?.CardId);
-	console.debug('rewardStat', rewardStat);
-	const rewardStatForHero = rewardStat?.heroStats.find(
-		(s) => s.heroCardId === normalizeHeroCardId(mainPlayerCardId, allCards),
-	);
-	console.debug('rewardStatForHero', rewardStatForHero);
-
-	return turnsLeftToComplete == null
-		? null
-		: {
-				questCompletionTurns: turnsLeftToComplete,
-				rewardAveragePosition: rewardStatForHero?.averagePlacement,
-				rewardTier: '',
-				averageTurnsToComplete: questStat.averageTurnToComplete,
-				turnsToCompleteForHero: questStatForHero?.averageTurnToComplete,
-				turnsToCompleteImpact: turnsToCompleteImpact,
-		  };
 };
 
 const guessTheWeight = (
