@@ -38,8 +38,44 @@ export class EntityChosenParser implements EventParser {
 		} else if (originCreatorCardId === CardIds.NellieTheGreatThresher) {
 			// console.debug('handling nellie pirate crew');
 			return this.handleNelliePirateCrew(currentState, gameEvent);
+		} else if (
+			originCreatorCardId === CardIds.SphereOfSapience &&
+			gameEvent.cardId === CardIds.SphereOfSapience_ANewFateToken
+		) {
+			// console.debug('handling nellie pirate crew');
+			return this.handleSphereOfSapience(currentState, gameEvent);
 		}
 		return currentState;
+	}
+
+	private handleSphereOfSapience(currentState: GameState, gameEvent: GameEvent): GameState {
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		// console.debug('drawing from deck', cardId, gameEvent);
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		if (!isPlayer) {
+			return currentState;
+		}
+
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const otherOption = deck.currentOptions.find((o) => o.cardId !== CardIds.SphereOfSapience_ANewFateToken);
+		const candidateCards = deck.deck.filter((c) => c.cardId === otherOption.cardId);
+		console.debug('[sphere-of-sapience] candidateCards', candidateCards);
+		const card = candidateCards.find((c) => c.positionFromTop != null) || candidateCards[0];
+		console.debug('[sphere-of-sapience] card', card);
+		const newDeck = deck.deck.filter((c) => c !== card);
+		console.debug('[sphere-of-sapience] newDeck', newDeck);
+		const newCard = card.update({
+			positionFromTop: undefined,
+			positionFromBottom: DeckCard.deckIndexFromBottom++,
+		});
+		console.debug('[sphere-of-sapience] newCard', newCard);
+		const finalDeck = this.helper.addSingleCardToZone(newDeck, newCard);
+		console.debug('[sphere-of-sapience] finalDeck', finalDeck);
+		return currentState.update({
+			playerDeck: deck.update({
+				deck: finalDeck,
+			}),
+		});
 	}
 
 	private handleNelliePirateCrew(currentState: GameState, gameEvent: GameEvent): GameState {
