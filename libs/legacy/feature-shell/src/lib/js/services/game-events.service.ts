@@ -1154,6 +1154,7 @@ export class GameEvents {
 								heroPowerInfo2: gameEvent.Value.PlayerBoard.HeroPowerInfo2,
 								questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
 								questRewardEntities: gameEvent.Value.PlayerBoard.QuestRewardEntities,
+								questEntities: gameEvent.Value.PlayerBoard.QuestEntities,
 								globalInfo: gameEvent.Value.PlayerBoard.GlobalInfo,
 							},
 							opponentBoard: {
@@ -1169,6 +1170,7 @@ export class GameEvents {
 								heroPowerInfo2: gameEvent.Value.OpponentBoard.HeroPowerInfo2,
 								questRewards: gameEvent.Value.OpponentBoard.QuestRewards,
 								questRewardEntities: gameEvent.Value.OpponentBoard.QuestRewardEntities,
+								questEntities: gameEvent.Value.OpponentBoard.QuestEntities,
 								globalInfo: gameEvent.Value.OpponentBoard.GlobalInfo,
 							},
 						},

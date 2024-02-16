@@ -9,6 +9,12 @@ export interface PlayerBoard {
 	readonly heroPowerUsed: boolean;
 	readonly heroPowerInfo: number;
 	readonly heroPowerInfo2: number;
+	readonly questEntities: readonly {
+		CardId: string;
+		RewardDbfId: number;
+		ProgressCurrent: number;
+		ProgressTotal: number;
+	}[];
 	readonly questRewards: readonly string[];
 	readonly questRewardEntities: readonly {
 		cardId: string;

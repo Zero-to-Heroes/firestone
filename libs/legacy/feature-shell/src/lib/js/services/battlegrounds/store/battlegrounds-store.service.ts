@@ -397,6 +397,7 @@ export class BattlegroundsStoreService {
 							heroPowerInfo2: gameEvent.additionalData.playerBoard.heroPowerInfo2,
 							questRewards: gameEvent.additionalData.playerBoard.questRewards,
 							questRewardEntities: gameEvent.additionalData.playerBoard.questRewardEntities,
+							questEntities: gameEvent.additionalData.playerBoard.questEntities,
 							globalInfo: gameEvent.additionalData.playerBoard.globalInfo,
 						},
 						{
@@ -412,6 +413,7 @@ export class BattlegroundsStoreService {
 							heroPowerInfo2: gameEvent.additionalData.opponentBoard.heroPowerInfo2,
 							questRewards: gameEvent.additionalData.opponentBoard.questRewards,
 							questRewardEntities: gameEvent.additionalData.opponentBoard.questRewardEntities,
+							questEntities: gameEvent.additionalData.opponentBoard.questEntities,
 							globalInfo: gameEvent.additionalData.opponentBoard.globalInfo,
 						},
 					),

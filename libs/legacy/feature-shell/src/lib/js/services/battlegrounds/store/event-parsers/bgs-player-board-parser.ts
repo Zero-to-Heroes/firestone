@@ -178,6 +178,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerInfo2: playerBoard.heroPowerInfo2,
 				questRewards: playerBoard.questRewards,
 				questRewardEntities: playerBoard.questRewardEntities,
+				questEntities: playerBoard.questEntities,
 				hand: hand,
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
