@@ -405,10 +405,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.AmuletOfUndying:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
-			case CardIds.AnimateDead:
-				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
 			case CardIds.Ancharrr:
 				return and(side(inputSide), inDeck, minion, pirate);
+			case CardIds.AncientMysteries:
+				return and(side(inputSide), inDeck, secret);
+			case CardIds.AnimateDead:
+				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
 			case CardIds.AntiqueFlinger_WW_413:
 				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.Anubrekhan_RLK_659:
@@ -1690,6 +1692,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.TwistedTether:
 				return and(side(inputSide), inHand, undead);
+			case CardIds.UnchainedGladiator:
+				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.UndyingAllies:
 				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.UnendingSwarm:
