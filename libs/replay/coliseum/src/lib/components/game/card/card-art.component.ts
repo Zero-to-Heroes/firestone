@@ -20,6 +20,10 @@ export class CardArtComponent {
 
 	@Input() set cardType(cardType: CardType | undefined) {
 		// console.debug('[card-art] setting cardType', cardType);
+		cardType =
+			cardType === CardType.BATTLEGROUND_QUEST_REWARD || cardType === CardType.BATTLEGROUND_SPELL
+				? CardType.SPELL
+				: cardType;
 		this._cardType = cardType ? CardType[cardType]?.toLowerCase() : 'unknown';
 	}
 }

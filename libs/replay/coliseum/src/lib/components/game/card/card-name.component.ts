@@ -23,13 +23,17 @@ export class CardNameComponent {
 	@Input() set cardId(cardId: string) {
 		// console.debug('[card-name] setting cardId', cardId);
 		const originalCard = this.cards.getCard(cardId);
-		const cardType: CardType =
+		let cardType: CardType =
 			originalCard && originalCard.type ? CardType[originalCard.type.toUpperCase() as string] : undefined;
+		cardType =
+			cardType === CardType.BATTLEGROUND_QUEST_REWARD || cardType === CardType.BATTLEGROUND_SPELL
+				? CardType.SPELL
+				: cardType;
 		this.banner =
 			cardType === CardType.HERO_POWER || cardType === CardType.LOCATION || !cardType
 				? undefined // Banner already included in frame art
 				: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/card/name-banner-${CardType[
-						cardType === CardType.BATTLEGROUND_SPELL ? CardType.SPELL : cardType
+						cardType
 						// eslint-disable-next-line no-mixed-spaces-and-tabs
 				  ]?.toLowerCase()}.png`;
 		this.textSvg = cardType

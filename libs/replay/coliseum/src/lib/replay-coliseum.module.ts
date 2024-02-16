@@ -32,6 +32,9 @@ import { TavernLevelIconComponent } from './components/game/card/tavern-level-ic
 import { DeckComponent } from './components/game/deck/deck.component';
 import { GameComponent } from './components/game/game.component';
 import { HandComponent } from './components/game/hand.component';
+import { BgsQuestRewardArtComponent } from './components/game/hero/bgs-quest-reward-art.component';
+import { BgsQuestRewardFrameComponent } from './components/game/hero/bgs-quest-reward-frame.component';
+import { BgsQuestRewardComponent } from './components/game/hero/bgs-quest-reward.component';
 import { CoinCostComponent } from './components/game/hero/coin-cost.component';
 import { HeroArtComponent } from './components/game/hero/hero-art.component';
 import { HeroCardComponent } from './components/game/hero/hero-card.component';
@@ -116,6 +119,9 @@ import { Events } from './services/events.service';
 		HeroPowerArtComponent,
 		HeroPowerCostComponent,
 		HeroPowerFrameComponent,
+		BgsQuestRewardComponent,
+		BgsQuestRewardArtComponent,
+		BgsQuestRewardFrameComponent,
 
 		WeaponComponent,
 		WeaponArtComponent,
