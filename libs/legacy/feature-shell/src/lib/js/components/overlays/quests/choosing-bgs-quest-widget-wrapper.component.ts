@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import {
+	BG_USE_QUESTS,
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
 	BgsQuestCardChoiceOption,
@@ -91,6 +92,10 @@ export class ChoosingBgsQuestWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
+		if (!BG_USE_QUESTS) {
+			return;
+		}
+
 		await this.quests.isReady();
 		await this.ads.isReady();
 		await this.guardian.isReady();

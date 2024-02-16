@@ -78,6 +78,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
 			this.gameState.gameState$$.pipe(map((state) => state?.metadata?.gameType)),
 		]).pipe(
+			// debounceTime(500),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			tap((data) => console.debug('[bgs-quest] will show?', data)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
