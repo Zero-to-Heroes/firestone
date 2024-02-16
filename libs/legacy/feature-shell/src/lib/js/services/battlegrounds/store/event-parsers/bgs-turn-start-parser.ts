@@ -29,7 +29,6 @@ export class BgsTurnStartParser implements EventParser {
 		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
-		// console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
 		if (
 			currentState.currentGame.players.length !== 8 &&
 			isBattlegrounds(gameState?.metadata?.gameType) &&

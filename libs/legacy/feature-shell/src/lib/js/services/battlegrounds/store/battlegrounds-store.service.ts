@@ -240,7 +240,6 @@ export class BattlegroundsStoreService {
 	}
 
 	private async handleHotkeyPressed(force = false) {
-		// console.log('[bgs-store] pressed hotkey', force);
 		if (this.overlayHandlers) {
 			await Promise.all(this.overlayHandlers.map((handler) => handler.handleHotkeyPressed(this.state, force)));
 		}
@@ -586,7 +585,6 @@ export class BattlegroundsStoreService {
 	private async buildEventEmitters() {
 		const result = [(state) => this.battlegroundsStoreEventBus.next(state)];
 		const prefs = await this.prefs.getPreferences();
-		// console.log('[bgs-store] is logged in to Twitch?', !!prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {

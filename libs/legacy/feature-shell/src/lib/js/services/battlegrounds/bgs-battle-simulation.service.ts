@@ -140,7 +140,7 @@ export class BgsBattleSimulationService {
 				},
 				body: JSON.stringify(sample),
 			});
-			// console.log('[bgs-simulation] id for simulation sample', response);
+			// console.debug('[bgs-simulation] id for simulation sample', response);
 			return response.text();
 		} catch (e) {
 			console.error('[bgs-simulation] could not get if from sample', e.message, sample, e);
