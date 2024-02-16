@@ -368,7 +368,7 @@ const buildTribeTiers = (
 				.filter((t) => t !== Race[Race.ALL] && availableTribes.includes(Race[t])),
 		),
 	].map((t) => Race[t]);
-	console.log('[tribe-tiers] all tribes', allTribes, availableTribes);
+	console.debug('[tribe-tiers] all tribes', allTribes, availableTribes);
 	const tribesResult = allTribes
 		.map((tribe: Race) => {
 			const cardsForTribe = cardsInGame.filter((c) =>

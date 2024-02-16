@@ -8,7 +8,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const BG_USE_QUESTS = true;
+export const BG_USE_QUESTS = false;
 export const DAILY_FREE_USES = 2;
 
 @Injectable()
@@ -34,7 +34,7 @@ export class BgsInGameQuestsGuardianService extends AbstractFacadeService<BgsInG
 		);
 		const today = new Date().toISOString().substring(0, 10);
 		const todaysCount = freeUseCount?.day === today ? freeUseCount.count : 0;
-		console.log('[bgs-quests-guardian] use count in init', today, todaysCount, freeUseCount);
+		console.log('[bgs-quests-guardian] use count in init', today, todaysCount);
 		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES - todaysCount));
 
 		this.addDevMode();
@@ -54,7 +54,7 @@ export class BgsInGameQuestsGuardianService extends AbstractFacadeService<BgsInG
 			day: today,
 			count: newCount,
 		});
-		console.log('[bgs-quests-guardian] new use count', today, newCount, freeUseCount);
+		console.log('[bgs-quests-guardian] new use count', today, newCount);
 		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES - newCount));
 	}
 

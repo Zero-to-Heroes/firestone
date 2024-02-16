@@ -22,7 +22,7 @@ export class DiscordRpcPluginService {
 
 			plugin.initialize(async (status: boolean) => {
 				this.plugin = await plugin.get();
-				console.log('[discord] Plugin was loaded!', status, this.plugin, plugin);
+				console.log('[discord] Plugin was loaded!', status);
 				this.initialized = true;
 				this.initializing = false;
 				resolve();

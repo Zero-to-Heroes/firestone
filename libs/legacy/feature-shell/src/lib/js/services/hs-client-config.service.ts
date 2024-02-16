@@ -34,7 +34,7 @@ export class HsClientConfigService {
 		const content = `[Log]\nFileSizeLimit.Int=-1`;
 		try {
 			const existingConfig = await this.ow.readTextFile(targetPath);
-			console.log('[hs-client-config] existing config?', existingConfig?.trim(), existingConfig);
+			console.log('[hs-client-config] existing config?', existingConfig?.trim());
 
 			if (strip(content) === strip(existingConfig)) {
 				return;

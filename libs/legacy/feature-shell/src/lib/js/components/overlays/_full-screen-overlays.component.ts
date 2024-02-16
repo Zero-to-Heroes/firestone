@@ -246,7 +246,7 @@ export class FullScreenOverlaysComponent
 		const gameHeight = gameInfo.height;
 		const height = gameHeight;
 		const width = gameWidth;
-		console.log('full screen change window size', width, height, gameWidth, gameHeight, gameInfo);
+		console.log('full screen change window size', width, height, gameWidth, gameHeight);
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		console.log('full screen change window position');
 		await this.ow.changeWindowPosition(this.windowId, 0, 0);

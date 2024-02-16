@@ -51,7 +51,6 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	}
 
 	async ngAfterViewInit() {
-		console.log('replay loader ngAfterViewInit');
 		const reviewId = this.getSearchParam('reviewId');
 		const bgsSimulationInput = this.getSearchParam('bgsSimulation');
 		const bgsSimulationId = this.getSearchParam('bgsSimulationId');
@@ -60,7 +59,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		const initialTurn = this.getSearchParam('turn');
 		const initialAction = this.getSearchParam('action');
 
-		console.log('params', reviewId, bgsSimulationId, bgsSimulation);
+		console.debug('params', reviewId, bgsSimulationId, bgsSimulation);
 		this.reviewId = reviewId;
 		this.bgsSimulationId = bgsSimulationId;
 		this.bgsSimulationString = bgsSimulation;
@@ -87,14 +86,14 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		} else if (bgsSimulationId) {
 			console.log('loading', bgsSimulationId);
 			const gameSample = await this.retrieveEncodedSimulation(bgsSimulationId);
-			console.log('parsed', gameSample);
+			console.debug('parsed', gameSample);
 			this.bgsSimulation = gameSample;
 		} else if (bgsSimulation) {
 			// console.log('decoding', bgsSimulation);
 			const decoded = atob(bgsSimulation);
 			// console.log('decoded', decoded);
 			const parsed = JSON.parse(decoded);
-			console.log('parsed', parsed);
+			console.debug('parsed', parsed);
 			this.bgsSimulation = parsed;
 		}
 
@@ -160,7 +159,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 					withCredentials: false,
 				})
 				.toPromise()) as GameSample;
-			console.log('retrieved sample', sample);
+			console.debug('retrieved sample', sample);
 			return sample;
 		} catch (e: any) {
 			console.error('issue retrieve bgs sample', bgsSimulationId, e.message, e);

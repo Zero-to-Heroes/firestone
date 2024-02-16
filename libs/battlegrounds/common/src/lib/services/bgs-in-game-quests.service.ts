@@ -68,6 +68,10 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			this.bgsGameState.isReady(),
 		]);
 
+		if (!BG_USE_QUESTS) {
+			return;
+		}
+
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferencesSingle$((prefs) => prefs.overlayEnableDiscoverHelp),

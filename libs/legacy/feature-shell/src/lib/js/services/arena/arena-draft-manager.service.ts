@@ -176,15 +176,11 @@ export class ArenaDraftManagerService
 					);
 
 					if (!currentDeck) {
-						console.log(
-							'[arena-draft-manager] no current deck, not sending pick',
-							previousDeck,
-							currentDeck,
-						);
+						console.log('[arena-draft-manager] no current deck, not sending pick');
 						return;
 					}
 					if (previousDeck?.Id !== currentDeck.Id || currentDeck.DeckList.length === 0) {
-						console.log('[arena-draft-manager] new deck, not sending pick', previousDeck, currentDeck);
+						console.log('[arena-draft-manager] new deck, not sending pick');
 						return;
 					}
 

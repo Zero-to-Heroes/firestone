@@ -83,7 +83,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			// canShowWidget$,
 		]).pipe(
 			debounceTime(200),
-			// tap((info) => console.log('[mulligan-guide] will show widget?', info)),
 			map(([currentScene, [displayFromPrefs], gameState]) => {
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;

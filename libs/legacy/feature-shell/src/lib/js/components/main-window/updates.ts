@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.0',
+		version: '13.5.1',
 		force: false,
 		sections: [
 			// {
@@ -56,6 +56,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `View the Quest/Reward stats directly in the overlay! This shows the reward's average placement and the quest's average turns to complete. This is a premium feature, but free users can still use it a couple of times a day (the exact quantity can still change in the future)`,
+							},
+							{
+								type: 'bug',
+								text: `I forgot to add the setting to disable the quest overlay in 13.5.0, it should now be available under Settings > Battlegrounds > Overlay. Sorry about that!`,
 							},
 						],
 					},

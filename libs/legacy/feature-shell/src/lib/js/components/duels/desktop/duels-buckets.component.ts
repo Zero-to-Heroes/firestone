@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { CardClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { startWith, tap } from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -100,7 +100,7 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 			};
 		});
 		const allBuckets$ = this.store.duelsBuckets$().pipe(
-			tap((data) => console.log('[duels-buckets] received buckets', data)),
+			// tap((data) => console.debug('[duels-buckets] received buckets', data)),
 			this.mapData((buckets) => {
 				return buckets.map((bucket) => {
 					const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
@@ -129,7 +129,6 @@ export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent im
 					return bucketData;
 				});
 			}),
-			tap((data) => console.log('[duels-buckets] built buckets', data)),
 		);
 		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),

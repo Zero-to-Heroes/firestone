@@ -71,7 +71,7 @@ export class GameEvents {
 				// 	);
 				// });
 				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
-					console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
+					// console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.GLOBAL_STATS_UPDATED,
@@ -271,7 +271,7 @@ export class GameEvents {
 				);
 				break;
 			case 'RUMBLE_RUN_STEP':
-				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
+				// console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.RUMBLE_RUN_STEP,
@@ -282,7 +282,7 @@ export class GameEvents {
 				);
 				break;
 			case 'DUNGEON_RUN_STEP':
-				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
@@ -293,7 +293,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MONSTER_HUNT_STEP':
-				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
@@ -760,7 +760,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
@@ -1215,7 +1215,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_REWARD_REVEALED':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_REVEALED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
@@ -1225,7 +1225,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_REWARD_GAINED':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_GAINED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
@@ -1235,7 +1235,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_QUEST_REWARD_EQUIPPED':
-				// console.log(gameEvent.Type + ' event', gameEvent);
+				// console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
@@ -1244,7 +1244,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_QUEST_REWARD_DESTROYED':
-				// console.log(gameEvent.Type + ' event', gameEvent);
+				// console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,

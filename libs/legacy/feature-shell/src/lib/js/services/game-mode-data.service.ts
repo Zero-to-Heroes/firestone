@@ -158,7 +158,7 @@ export class GameModeDataService {
 		await runLoop(async () => {
 			const playerDeck = await this.deckParser.getCurrentDeck(10000);
 			if (!!playerDeck?.deckstring) {
-				console.log('[match-info] playerDeckInfo', playerDeck);
+				console.debug('[match-info] playerDeckInfo', playerDeck);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.PLAYER_DECK_INFO,

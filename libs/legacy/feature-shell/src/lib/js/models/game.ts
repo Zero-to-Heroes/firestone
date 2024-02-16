@@ -4,7 +4,7 @@ export class Game {
 	readonly gameMode: any;
 
 	public findPlayerFromName(name: string) {
-		console.log('finding player from name', this.matchInfo, name);
+		console.debug('finding player from name', this.matchInfo, name);
 		if (!this.matchInfo || !this.matchInfo.LocalPlayer || !this.matchInfo.OpposingPlayer) {
 			return null;
 		}

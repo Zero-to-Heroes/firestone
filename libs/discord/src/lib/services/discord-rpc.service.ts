@@ -30,7 +30,7 @@ export class DiscordRpcService {
 					this.status = 'online';
 				});
 				this.plugin.onPresenceUpdate.addListener((info) =>
-					console.log('[discord-presence] presence update', info),
+					console.debug('[discord-presence] presence update', info),
 				);
 				this.plugin.onClientError.addListener((info) => console.error('[discord-presence] client error', info));
 				this.plugin.onLogLine.addListener((info) => console.debug('[discord-presence] log line', info.message));
@@ -65,7 +65,7 @@ export class DiscordRpcService {
 			'',
 			// 'Button 2',
 			// 'https://button2.url',
-			console.log,
+			console.debug,
 		);
 	}
 
@@ -75,7 +75,7 @@ export class DiscordRpcService {
 		}
 
 		this.plugin.dispose((info) => {
-			console.log('[discord] dispose', info);
+			console.log('[discord] dispose');
 			this.status = 'offline';
 		});
 	}

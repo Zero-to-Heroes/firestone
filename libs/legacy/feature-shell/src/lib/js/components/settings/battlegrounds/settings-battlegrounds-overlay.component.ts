@@ -65,7 +65,6 @@ import { Knob } from '../preference-slider.component';
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.general.show-quest-stats-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.general.show-quest-stats-tooltip' | owTranslate"
-					premiumSetting
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableMinionAutoHighlight"
