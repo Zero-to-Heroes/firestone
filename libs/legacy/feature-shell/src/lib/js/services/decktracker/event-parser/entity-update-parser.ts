@@ -32,8 +32,16 @@ export class EntityUpdateParser implements EventParser {
 		// Some cards discovered by the opponent from their deck leak info in the logs
 		// This will probably cause some existing info to disappear, and will have to be removed once the logs are fixed
 		const obfsucatedCardId =
-			!isPlayer && cardInOther && !cardInOther.cardId && !gameEvent.additionalData?.revealed ? null : cardId;
-		// console.debug('[entity-update] cardInOther', cardInOther);
+			!isPlayer &&
+			cardInOther &&
+			!cardInOther.cardId &&
+			// Added for Benevolent Banker, but I'm pretty sure it will bring back other info leaks
+			// Add some comments here with the card in question
+			!cardId &&
+			!gameEvent.additionalData?.revealed
+				? null
+				: cardId;
+		console.debug('[entity-update] cardInOther', cardInOther, obfsucatedCardId);
 
 		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
@@ -72,13 +80,21 @@ export class EntityUpdateParser implements EventParser {
 						cardName: this.i18n.getCardName(obfsucatedCardId),
 				  } as DeckCard)
 				: null;
+		console.debug(
+			'[entity-update] newCardInOther',
+			newCardInOther,
+			cardInOther,
+			obfsucatedCardId,
+			cardId,
+			gameEvent.additionalData?.revealed,
+		);
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
-
 		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
 		const newOther = newCardInOther
 			? this.helper.replaceCardInZone(deck.otherZone, newCardInOther)
 			: deck.otherZone;
+		console.debug('[entity-update] newOther', newOther, deck.otherZone, newCardInOther);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,

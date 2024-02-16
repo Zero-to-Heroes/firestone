@@ -28,8 +28,31 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const copiedDeck = isCopiedPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const newCopy: DeckCard = deck.findCard(entityId)?.card;
-		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
-		// console.debug('copiedCard', isPlayer, copiedCard, newCopy, copiedDeck, copiedCardEntityId, gameEvent, deck);
+		// The issue when using only the entityId is that we can't find the card in deck, as
+		// the entityId is not stored there
+		let copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
+		console.debug(
+			'[copied-from-entity] copiedCard',
+			isPlayer,
+			copiedCard,
+			newCopy,
+			copiedDeck,
+			copiedCardEntityId,
+			gameEvent,
+			deck,
+		);
+
+		// Typically happens when the opponent copies a card in our deck. Their copy is known (we know entityId + cardId)
+		// but it references an entityId on our side that we don't know of (if it's in the deck)
+		if (!copiedCard && copiedCardZone === Zone.DECK && !!newCopy?.cardId) {
+			const copyCardId = newCopy.cardId;
+			copiedCard =
+				copiedDeck.deck.find(
+					(card) =>
+						card.cardId === copyCardId && card.positionFromBottom == null && card.positionFromTop == null,
+				) ?? copiedDeck.deck.find((card) => card.cardId === copyCardId);
+			console.debug('[copied-from-entity] copiedCard not found', copiedCard, copyCardId, copiedDeck.deck);
+		}
 
 		// Cards like Masked Reveler summon a copy of a card from the deck. Because we don't store the entityId of
 		// unknown cards in deck (to avoid info leaks), we can't find the right card from the event info, and so
