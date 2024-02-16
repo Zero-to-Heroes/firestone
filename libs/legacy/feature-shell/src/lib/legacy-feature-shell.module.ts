@@ -517,6 +517,7 @@ import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/a
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { ConstructedMulliganWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
+import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
@@ -1623,6 +1624,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentChaoticTendrilWidgetWrapperComponent,
 		OpponentSpellWidgetWrapperComponent,
 		OpponentExcavateWidgetWrapperComponent,
+		OpponentCorpseSpentWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

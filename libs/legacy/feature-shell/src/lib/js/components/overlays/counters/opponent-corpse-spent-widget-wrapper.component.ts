@@ -35,13 +35,18 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
 		this.activeCounter = 'corpseSpent';
-		this.prefExtractor = (prefs) => prefs.playerCorpseSpentCounter;
+		this.prefExtractor = (prefs) => prefs.opponentCorpseSpentCounter;
 		this.deckStateExtractor = (state) => {
-			if (state.opponentDeck.hero?.classes?.includes(CardClass.DEATHKNIGHT)) {
+			console.debug('[opponent-corpse-spent] getting deck state', state.opponentDeck.hero);
+			if (!state.opponentDeck.hero?.classes?.includes(CardClass.DEATHKNIGHT)) {
 				return false;
 			}
 
-			const costs = state.opponentDeck.cardsPlayedFromInitialDeck
+			const entityIdsPlayed = state.opponentDeck.cardsPlayedThisMatch.map((c) => c.entityId);
+			const cardsPlayedThisMatch = state.opponentDeck
+				.getAllCardsInDeck()
+				.filter((c) => entityIdsPlayed.includes(c.entityId));
+			const costs = cardsPlayedThisMatch
 				.filter((c) => !!c.cardId)
 				.map((c) => this.allCards.getCard(c.cardId))
 				.filter((c) => !!c.additionalCosts)
@@ -54,6 +59,14 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 				})),
 			);
 			const groupedByRune = groupByFunction((rune: any) => rune.rune)(allRuneEntries);
+			console.debug(
+				'[opponent-corpse-spent] grouped by runes',
+				groupedByRune,
+				costs,
+				state.opponentDeck.cardsPlayedFromInitialDeck,
+				entityIdsPlayed,
+				cardsPlayedThisMatch,
+			);
 			return Object.keys(groupedByRune).length === 3;
 		};
 	}

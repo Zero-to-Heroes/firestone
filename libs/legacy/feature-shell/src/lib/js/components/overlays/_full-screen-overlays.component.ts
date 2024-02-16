@@ -146,6 +146,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-spell-widget-wrapper></opponent-spell-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
+			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
