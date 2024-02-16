@@ -56,7 +56,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		const bgsSimulationInput = this.getSearchParam('bgsSimulation');
 		const bgsSimulationId = this.getSearchParam('bgsSimulationId');
 		const bgsSimulation = bgsSimulationInput === 'debug' ? debugBgsSimulation : bgsSimulationInput;
-		console.debug('bgsSimulation', bgsSimulation);
+		// console.debug('bgsSimulation', bgsSimulation);
 		const initialTurn = this.getSearchParam('turn');
 		const initialAction = this.getSearchParam('action');
 
@@ -90,9 +90,9 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 			console.log('parsed', gameSample);
 			this.bgsSimulation = gameSample;
 		} else if (bgsSimulation) {
-			console.log('decoding', bgsSimulation);
+			// console.log('decoding', bgsSimulation);
 			const decoded = atob(bgsSimulation);
-			console.log('decoded', decoded);
+			// console.log('decoded', decoded);
 			const parsed = JSON.parse(decoded);
 			console.log('parsed', parsed);
 			this.bgsSimulation = parsed;

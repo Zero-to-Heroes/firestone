@@ -25,5 +25,6 @@ export class BgsQuestRewardComponent {
 		this._reward = value;
 		this.entityId = value.id;
 		this.cardId = value.cardID;
+		console.debug('set reward', value.cardID, value.tags.toJS());
 	}
 }
