@@ -16,6 +16,7 @@ import {
 	BehaviorSubject,
 	Observable,
 	combineLatest,
+	debounceTime,
 	distinctUntilChanged,
 	filter,
 	map,
@@ -78,7 +79,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
 			this.gameState.gameState$$.pipe(map((state) => state?.metadata?.gameType)),
 		]).pipe(
-			// debounceTime(500),
+			debounceTime(500),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			tap((data) => console.debug('[bgs-quest] will show?', data)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
@@ -120,6 +121,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 					})),
 				),
 			),
+			debounceTime(500),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			switchMap(({ playerRank, availableRaces }) => {
 				return this.quests.loadQuests('last-patch', IN_GAME_RANK_FILTER);
@@ -136,6 +138,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			quests$,
 			this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.getMainPlayer()?.cardId)),
 		]).pipe(
+			debounceTime(500),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			filter(([options, bgsShowQuestStatsOverlay, quests, mainPlayerCardId]) => {
 				return options?.every((o) => isBgQuestDiscover(o.source)) ?? false;
