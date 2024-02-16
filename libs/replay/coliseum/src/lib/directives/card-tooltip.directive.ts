@@ -22,7 +22,6 @@ export class CardTooltipDirective {
 		let elementTop = 0;
 		let element = this.el.nativeElement;
 		while (element && !element.classList.contains('external-player') && !element.classList.contains('coliseum')) {
-			// console.log('adding top offset', elementTop, element, element.offsetTop);
 			elementLeft += element.offsetLeft;
 			elementTop += element.offsetTop;
 			element = element.offsetParent;

@@ -77,7 +77,7 @@ export class HeroPowerComponent {
 		// console.debug('[hero-power] setting new heroPower', heroPower, heroPower && heroPower.tags.toJS());
 		this.entity = heroPower;
 		if (!heroPower) {
-			// console.log('no hero power, returning');
+			// console.debug('no hero power, returning');
 			return;
 		}
 		this.entityId = heroPower.id;

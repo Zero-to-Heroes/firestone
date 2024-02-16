@@ -53,7 +53,6 @@ export class TavernButtonComponent {
 
 	@Input() set option(value: boolean) {
 		this._option = value;
-		// console.log('setting option', this._entity && this._entity.id, value);
 	}
 
 	private updateAnimations() {

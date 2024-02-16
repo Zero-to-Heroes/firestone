@@ -116,7 +116,7 @@ export class CardOnBoardComponent {
 			entity.getTag(GameTag.JUST_PLAYED) === 1 &&
 			entity.getTag(GameTag.CHARGE) !== 1;
 		this.tavernTier = entity.getTag(GameTag.TECH_LEVEL);
-		// console.log('tavern tier', entity.id, this.tavernTier, entity.tags.toJS());
+		// console.debug('tavern tier', entity.id, this.tavernTier, entity.tags.toJS());
 	}
 
 	@Input() set option(value: boolean) {

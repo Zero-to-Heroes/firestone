@@ -71,7 +71,7 @@ export class RewardMonitorService {
 						resolve(this.xpForGameInfo);
 						return;
 					} else {
-						console.log('[rewards-monitor] got rewardsTrackInfo', rewardTrackInfo);
+						console.debug('[rewards-monitor] got rewardsTrackInfo', rewardTrackInfo);
 						const partialInfo: XpForGameInfo = rewardTrackInfo
 							? ({
 									currentXp: rewardTrackInfo.Xp,
@@ -136,7 +136,7 @@ export class RewardMonitorService {
 							bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
 							xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel + 1),
 						};
-						console.log('[rewards-monitor] built xp for game', levelsGained, xpGained, this.xpForGameInfo);
+						console.log('[rewards-monitor] built xp for game', levelsGained, xpGained);
 						// }
 					}
 				});
@@ -144,7 +144,7 @@ export class RewardMonitorService {
 				const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
 					(track) => track.TrackType === RewardTrackType.GLOBAL,
 				);
-				console.log('[rewards-monitor] initialize values from rewardsTrackInfo', rewardTrackInfo);
+				console.debug('[rewards-monitor] initialize values from rewardsTrackInfo', rewardTrackInfo);
 				this.lastRewardTrackInfo = rewardTrackInfo;
 			});
 	}

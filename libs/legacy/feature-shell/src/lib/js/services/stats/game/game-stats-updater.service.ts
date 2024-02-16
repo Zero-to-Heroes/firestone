@@ -50,7 +50,7 @@ export class GameStatsUpdaterService {
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
 			const info: ManastormInfo = data.data[0];
 			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game);
-			console.log('built new game stat', newGameStat);
+			console.log('built new game stat', newGameStat.reviewId);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
@@ -152,7 +152,7 @@ export const extractHeroTimings = (
 	const mercStats = extractStats(game as ReviewMessage, replay, null, referenceData as any, allCards);
 
 	if (!mercStats?.filter((stat) => stat.statName === 'mercs-hero-timing').length) {
-		console.log('no hero timings, returning', mercStats);
+		console.debug('no hero timings, returning', mercStats);
 		return {} as any;
 	}
 

@@ -158,7 +158,7 @@ export class PackMonitor {
 			this.totalDuplicateCards = 0;
 		}
 		this.unrevealedCards = [];
-		// console.log('[pack-monitor] reset done');
+		// console.debug('[pack-monitor] reset done');
 	}
 }
 

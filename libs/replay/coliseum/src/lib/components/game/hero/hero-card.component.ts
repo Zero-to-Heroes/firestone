@@ -42,7 +42,7 @@ export class HeroCardComponent {
 	_secrets: readonly Entity[] | undefined;
 
 	@Input() set hero(hero: Entity | undefined) {
-		// console.log('[hero-card] setting hero', hero, hero && hero.tags.toJS());
+		// console.debug('[hero-card] setting hero', hero, hero && hero.tags.toJS());
 		this._entity = hero;
 		this.updateInfo();
 	}
@@ -71,7 +71,7 @@ export class HeroCardComponent {
 	}
 
 	@Input() set secrets(value: readonly Entity[]) {
-		// console.log('[hero-card] setting secrets', value);
+		// console.debug('[hero-card] setting secrets', value);
 		this._secrets = value;
 	}
 }

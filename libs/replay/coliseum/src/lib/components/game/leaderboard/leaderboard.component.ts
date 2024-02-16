@@ -42,7 +42,6 @@ export class LeaderboardComponent {
 
 	isMainPlayer(entity: Entity): boolean {
 		const result = this.playerEntity && entity.getTag(GameTag.CONTROLLER) === this.playerEntity.playerId;
-		// console.log('is main player', this.playerEntity.tags.toJS());
 		return result;
 	}
 
@@ -72,7 +71,7 @@ export class LeaderboardComponent {
 					![Zone.SETASIDE, Zone.GRAVEYARD].includes(entity.getTag(GameTag.ZONE)),
 			)
 			.sort((a, b) => a.getTag(GameTag.PLAYER_LEADERBOARD_PLACE) - b.getTag(GameTag.PLAYER_LEADERBOARD_PLACE));
-		// console.log(
+		// console.debug(
 		// 	'leaderboard',
 		// 	this._playerId,
 		// 	this.leaderboard.map(entity => ({

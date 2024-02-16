@@ -13,7 +13,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('[duels-loot] handling loot', event.dungeonLootInfo);
+		console.debug('[duels-loot] handling loot', event.dungeonLootInfo);
 		const dungeonLootInfo = event.dungeonLootInfo;
 		this.duelsUserRuns.newLoot(dungeonLootInfo);
 		return [null, null];

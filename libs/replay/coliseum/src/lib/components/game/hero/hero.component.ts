@@ -63,13 +63,11 @@ export class HeroComponent {
 	constructor(private conf: GameConfService) {}
 
 	@Input() set entities(entities: Map<number, Entity>) {
-		// console.log('[hero] setting new entities', entities && entities.toJS());
 		this._entities = entities;
 		this.updateEntityGroups();
 	}
 
 	@Input() set playerId(playerId: number) {
-		// console.log('[hero] setting playerId', playerId);
 		this._playerId = playerId;
 		this.updateEntityGroups();
 	}
@@ -92,7 +90,7 @@ export class HeroComponent {
 
 	isOption(entity: Entity | undefined): boolean {
 		const result = !!this.heroOptions && entity && this.heroOptions.indexOf(entity.id) !== -1;
-		// console.log('is option', entity && entity.id, result, this.heroOptions, entity);
+		// console.debug('is option', entity && entity.id, result, this.heroOptions, entity);
 		return result ?? false;
 	}
 
@@ -132,7 +130,7 @@ export class HeroComponent {
 		this.tavernUpgradeEntity = GameHelper.getTavernButton(this._entities, this._opponentId, 3);
 		this.tavernRerollEntity = GameHelper.getTavernButton(this._entities, this._opponentId, 2);
 		this.tavernFreezeEntity = GameHelper.getTavernButton(this._entities, this._opponentId, 1);
-		// console.log('freeze id', this.tavernFreezeEntity && this.tavernFreezeEntity.id, this.tavernFreezeEntity);
+		// console.debug('freeze id', this.tavernFreezeEntity && this.tavernFreezeEntity.id, this.tavernFreezeEntity);
 
 		this.heroOptions = GameHelper.getOptions(
 			[
@@ -145,11 +143,11 @@ export class HeroComponent {
 			],
 			this._options,
 		);
-		// console.log('hero options', this.heroOptions);
+		// console.debug('hero options', this.heroOptions);
 	}
 
 	private getHeroEntity(entities: Map<number, Entity>, playerEntity: Entity | undefined): Entity | undefined {
-		// console.log('getting hero from playerentity', playerEntity, playerEntity?.tags?.toJS());
+		// console.debug('getting hero from playerentity', playerEntity, playerEntity?.tags?.toJS());
 		if (!entities || !playerEntity) {
 			return undefined;
 		}

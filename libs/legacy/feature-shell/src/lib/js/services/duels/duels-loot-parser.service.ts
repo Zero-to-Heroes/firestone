@@ -121,7 +121,6 @@ export class DuelsLootParserService {
 	}
 
 	private async sendLootInfo(duelsInfo: DuelsInfo, reviewId: string, duelsRunId: string) {
-		// console.log('[duels-loot] sending loot info?', duelsInfo);
 		const lootBundles = duelsInfo.LootOptionBundles.filter((bundle) => bundle).map((bundle) => ({
 			bundleId: this.allCards.getCardFromDbfId(+bundle.BundleId)?.id || '' + bundle.BundleId,
 			elements: bundle.Elements.map((dbfId) => this.allCards.getCardFromDbfId(+dbfId)?.id || '' + dbfId),
@@ -142,7 +141,6 @@ export class DuelsLootParserService {
 	}
 
 	private async sendTreasureInfo(duelsInfo: DuelsInfo, reviewId: string, duelsRunId: string) {
-		// console.log('[duels-loot] sending treasure info?', duelsInfo);
 		const treasures: readonly string[] = duelsInfo.TreasureOption.map(
 			(option) => this.allCards.getCard(+option)?.id || '' + option,
 		);

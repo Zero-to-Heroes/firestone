@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { Race, TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
+import { TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
 import { BgsGame } from '@firestone/battlegrounds/common';
 import {
 	ArenaInfo,
@@ -149,18 +149,7 @@ export class EndGameUploaderService {
 					? info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces
 					: this.bgsStore?.state?.currentGame?.availableRaces;
 			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(racesFromGame);
-			console.log(
-				'[manastorm-bridge]',
-				currentReviewId,
-				'available races',
-				availableRaces,
-				racesFromGame,
-				info.bgInfo?.Game?.AvailableRaces,
-				info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces,
-				this.bgsStore?.state?.currentGame?.availableRaces,
-				availableRaces?.map((r) => Race[r] ?? r),
-				this.bgsStore?.state?.currentGame?.availableRaces?.map((r) => Race[r] ?? r),
-			);
+			console.log('[manastorm-bridge]', currentReviewId, 'available races', availableRaces);
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;
@@ -220,7 +209,7 @@ export class EndGameUploaderService {
 					: null;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
-			console.log('[manastorm-bridge]', currentReviewId, 'got duels info', info.duelsInfo);
+			console.log('[manastorm-bridge]', currentReviewId, 'got duels info');
 			playerRank = game.gameMode === 'duels' ? info.duelsInfo?.Rating : info.duelsInfo?.PaidRating;
 			const wins = info.duelsInfo?.Wins;
 			const losses = info.duelsInfo?.Losses;

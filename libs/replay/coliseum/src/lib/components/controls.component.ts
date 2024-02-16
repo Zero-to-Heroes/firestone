@@ -309,7 +309,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
 		this.currentSpeed = 1;
 		this.showingHiddenCards = true;
 		this._reviewId = value;
-		// console.log('set review id', this._reviewId);
+		// console.debug('set review id', this._reviewId);
 	}
 
 	@Input() set active(value: boolean) {

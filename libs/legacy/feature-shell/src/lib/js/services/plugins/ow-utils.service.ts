@@ -165,7 +165,7 @@ class OwUtilsServiceInternal {
 
 	public async downloadAndUnzipFile(fileUrl: string, path: string): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
-			console.log('[ow-utils] downloadAndUnzipFile-ing', fileUrl, path, this);
+			console.log('[ow-utils] downloadAndUnzipFile-ing', fileUrl, path);
 			const plugin = await this.get();
 			try {
 				plugin.downloadAndUnzipFile(fileUrl, path, (status, message) => {
@@ -212,7 +212,7 @@ class OwUtilsServiceInternal {
 	public initialize() {
 		this.initialized = false;
 		try {
-			console.log('[ow-utils] plugin init starting', this.plugin);
+			console.log('[ow-utils] plugin init starting');
 			this.plugin = new OverwolfPlugin('ow-utils', true);
 			this.plugin.initialize(async (status: boolean) => {
 				if (status === false) {

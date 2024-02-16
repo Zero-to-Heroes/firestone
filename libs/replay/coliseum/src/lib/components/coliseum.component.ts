@@ -418,7 +418,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.currentActionInTurn >= (this.game.turns.get(this.currentTurn)?.actions?.length ?? 1) - 1 &&
 			this.currentTurn >= this.game.turns.size - 1
 		) {
-			// console.log(
+			// console.debug(
 			// 	'cannot go further',
 			// 	this.currentActionInTurn,
 			// 	this.currentTurn,
@@ -431,7 +431,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		if (this.currentActionInTurn >= (this.game.turns.get(this.currentTurn)?.actions?.length ?? 0)) {
 			this.currentActionInTurn = 0;
 			this.currentTurn++;
-			// console.log('went further', this.currentTurn, this.currentActionInTurn);
+			// console.debug('went further', this.currentTurn, this.currentActionInTurn);
 		}
 		const currentTurn = this.game.turns.get(this.currentTurn);
 		if (!currentTurn) {

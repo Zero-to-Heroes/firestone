@@ -145,7 +145,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		// const input = {
 		// 	userId: 'zerg',
 		// };
-		console.log('[game-stats-loader] retrieving stats from API', user);
+		console.log('[game-stats-loader] retrieving stats from API', input);
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];

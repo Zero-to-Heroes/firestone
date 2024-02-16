@@ -85,7 +85,6 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		// console.log('building parent duels state', navigationState.navigationDuels.selectedCategoryId);
 		switch (navigationState.navigationDuels.selectedCategoryId) {
 			default:
 				return null;
@@ -100,7 +99,6 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		// console.log('building parent mercenaries state', navigationState.navigationMercenaries.selectedCategoryId);
 		switch (navigationState.navigationMercenaries.selectedCategoryId) {
 			default:
 				return null;
@@ -115,7 +113,6 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		// console.log('building parent arena state', navigationState.navigationArena.selectedCategoryId);
 		// switch (navigationState.navigationArena.selectedCategoryId) {
 		// 	default:
 		// 		return null;
@@ -130,7 +127,6 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		// console.log('building parent battelgrounds state', navigationState.navigationBattlegrounds.currentView);
 		switch (navigationState.navigationBattlegrounds.currentView) {
 			case 'categories':
 				return null;
@@ -170,7 +166,6 @@ export class NavigationBackProcessor implements Processor {
 				const selectedSet = setsManager.sets$$
 					.getValue()
 					?.find((set) => set.getCard(navigationState.navigationCollection.selectedCardId) != null);
-				// console.log('selected set', selectedSet?.id);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'cards',

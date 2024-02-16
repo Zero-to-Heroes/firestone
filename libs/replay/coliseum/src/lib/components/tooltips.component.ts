@@ -213,7 +213,7 @@ export class TooltipsComponent implements AfterViewInit {
 					resolve();
 				} else {
 					this.cacheTooltipSize(true);
-					// console.log('[tooltips] waiting for init');
+					// console.debug('[tooltips] waiting for init');
 					setTimeout(() => dbWait(), 100);
 				}
 			};

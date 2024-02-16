@@ -35,7 +35,7 @@ export class CardElementResizeDirective implements AfterViewInit {
 			const textEls = this.elRef.nativeElement.querySelectorAll('[resizeTarget]');
 			for (const textEl of textEls) {
 				textEl.style.fontSize = fontSize + 'px';
-				// console.log('resized element', textEl, textEls);
+				// ('resized element', textEl, textEls);
 				if (!this.keepOpacity) {
 					this.elRef.nativeElement.style.opacity = 1;
 				} else {

@@ -162,10 +162,10 @@ export class GameComponent implements AfterViewInit {
 		this.activeSpellId = value ? value.activeSpell : undefined;
 		this.secretRevealedId = value instanceof SecretRevealedAction ? value.entityId : null;
 		this.questCompletedId = value instanceof QuestCompletedAction ? value.originId : null;
-		// console.log('setting current action', value, value?.targets);
+		// console.debug('setting current action', value, value?.targets);
 		this._targets = value ? value.targets : [];
 		this._options = value ? value.options : [];
-		// console.log('set options', this._options);
+		// console.debug('set options', this._options);
 
 		const gameEntity = GameHelper.getGameEntity(this._entities);
 		this.isRecruitPhase = !!gameEntity && gameEntity.getTag(GameTag.BOARD_VISUAL_STATE) === 1;
@@ -177,7 +177,7 @@ export class GameComponent implements AfterViewInit {
 	}
 
 	onOverlayUpdated(event: { isOverlay: boolean; isDarkOverlay: boolean }) {
-		// console.log('overlay updated', event);
+		// console.debug('overlay updated', event);
 		this.isOverlay = event.isOverlay;
 		this.isDarkOverlay = event.isDarkOverlay;
 		if (!(this.cdr as ViewRef).destroyed) {

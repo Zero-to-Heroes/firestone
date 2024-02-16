@@ -36,7 +36,7 @@ export class TargetZoneComponent implements AfterViewInit {
 	}
 
 	@Input() set targets(value: readonly [number, number][]) {
-		// console.log('[target-zone] setting targets', value);
+		// console.debug('[target-zone] setting targets', value);
 		this._targets = value || [];
 		this.svg = undefined;
 
@@ -57,7 +57,7 @@ export class TargetZoneComponent implements AfterViewInit {
 	}
 
 	@Input() set active(value: boolean) {
-		// console.log('[target-zone] setting active', value);
+		// console.debug('[target-zone] setting active', value);
 		this._active = value;
 	}
 
@@ -74,11 +74,11 @@ export class TargetZoneComponent implements AfterViewInit {
 		const allTargetIds: number[] = this._targets
 			.reduce((a: number[], b: number[]) => a.concat(b), [])
 			.filter((v, i, a) => a.indexOf(v) === i); // Keep unique values
-		// console.log('all targets', allTargetIds);
+		// console.debug('all targets', allTargetIds);
 		const anyMissingTargetElement = allTargetIds.some(
 			(targetId) => !this.el.nativeElement.parentNode.querySelector(`[data-entity-id="${targetId}"]`),
 		);
-		// console.log('any missing?', anyMissingTargetElement);
+		// console.debug('any missing?', anyMissingTargetElement);
 		return anyMissingTargetElement;
 	}
 
@@ -110,7 +110,7 @@ export class TargetZoneComponent implements AfterViewInit {
 					${paths}
 				</svg>
 			`);
-			// console.log('built svg', this.svg);
+			// console.debug('built svg', this.svg);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -127,7 +127,7 @@ export class TargetZoneComponent implements AfterViewInit {
 			this.gameEl.querySelector(`[data-entity-id="${targetId}"]`) ||
 			this.gameEl.querySelector(`[data-player-entity-id="${targetId}"]`);
 		if (!originElement || !targetElement) {
-			// console.log('[targets] missing some elements', originElement, originId, targetElement, targetId);
+			// console.debug('[targets] missing some elements', originElement, originId, targetElement, targetId);
 			return null;
 		}
 		const orX =
@@ -149,7 +149,7 @@ export class TargetZoneComponent implements AfterViewInit {
 		const svgPath = `
             <line x1="${orX}" y1="${orY}" x2="${tarX}" y2="${tarY}" class="arrow" marker-end="url(#arrow)"/>
         `;
-		// console.log('build svgPath', svgPath);
+		// console.debug('build svgPath', svgPath);
 		return svgPath;
 	}
 }

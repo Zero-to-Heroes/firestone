@@ -36,7 +36,7 @@ export class GameRunningParser implements EventParser {
 			return state;
 		}
 		if (state.deck && state.deck.some((card) => card.entityId > 0 || card.cardId)) {
-			console.log('[game-running] deck in state, returning', state.deck);
+			console.log('[game-running] deck in state, returning');
 			return state;
 		}
 		const newDeck = this.handler.buildEmptyDeckList(deckCount);
