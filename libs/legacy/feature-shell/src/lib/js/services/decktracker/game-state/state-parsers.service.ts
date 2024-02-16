@@ -41,6 +41,7 @@ import { CardRevealedParser } from '../event-parser/card-revealed-parser';
 import { CardStolenParser } from '../event-parser/card-stolen-parser';
 import { CardTradedParser } from '../event-parser/card-traded-parser';
 import { ChoosingOptionsParser } from '../event-parser/choosing-options-parser';
+import { ListCardsPlayedFromInitialDeckParser } from '../event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CopiedFromEntityIdParser } from '../event-parser/copied-from-entity-id-parser';
 import { CorpsesSpentThisGameParser } from '../event-parser/corpses-spent-this-game-parser';
 import { CostChangedParser } from '../event-parser/cost-changed-parser';
@@ -161,6 +162,7 @@ export class GameStateParsersService {
 				new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
 				new PogoPlayedParser(),
 				new SpecificSummonsParser(this.allCards),
+				new ListCardsPlayedFromInitialDeckParser(this.helper),
 			],
 			[GameEvent.CARD_REMOVED_FROM_BOARD]: [new CardRemovedFromBoardParser(this.helper)],
 			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
@@ -247,8 +249,14 @@ export class GameStateParsersService {
 			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper)],
 			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.QUEST_DESTROYED]: [new QuestDestroyedParser(this.helper)],
-			[GameEvent.QUEST_PLAYED_FROM_DECK]: [new QuestPlayedFromDeckParser(this.helper)],
-			[GameEvent.QUEST_PLAYED]: [new QuestPlayedFromHandParser(this.helper, this.allCards)],
+			[GameEvent.QUEST_PLAYED_FROM_DECK]: [
+				new QuestPlayedFromDeckParser(this.helper),
+				new ListCardsPlayedFromInitialDeckParser(this.helper),
+			],
+			[GameEvent.QUEST_PLAYED]: [
+				new QuestPlayedFromHandParser(this.helper, this.allCards),
+				new ListCardsPlayedFromInitialDeckParser(this.helper),
+			],
 			[GameEvent.RECEIVE_CARD_IN_HAND]: [new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.RECONNECT_OVER]: [new ReconnectOverParser(this.deckHandler)],
 			[GameEvent.RECONNECT_START]: [new ReconnectStartParser()],
@@ -258,10 +266,17 @@ export class GameStateParsersService {
 				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 			],
 			[GameEvent.SECRET_DESTROYED]: [new SecretDestroyedParser(this.helper)],
-			[GameEvent.SECRET_PLAYED_FROM_DECK]: [new SecretPlayedFromDeckParser(this.helper, this.secretsConfig)],
-			[GameEvent.SECRET_PLAYED]: [new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards)],
+			[GameEvent.SECRET_PLAYED_FROM_DECK]: [
+				new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
+				new ListCardsPlayedFromInitialDeckParser(this.helper),
+			],
+			[GameEvent.SECRET_PLAYED]: [
+				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
+				new ListCardsPlayedFromInitialDeckParser(this.helper),
+			],
 			[GameEvent.SECRET_PUT_IN_PLAY]: [
 				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
+				new ListCardsPlayedFromInitialDeckParser(this.helper),
 			],
 			[GameEvent.SECRET_TRIGGERED]: [new SecretTriggeredParser(this.helper)],
 			[GameEvent.SECRET_WILL_TRIGGER]: [new SecretWillTriggerParser(this.helper)],

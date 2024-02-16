@@ -8,10 +8,7 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return (
-			state &&
-			[GameEvent.CARD_PLAYED, GameEvent.QUEST_PLAYED, GameEvent.QUEST_PLAYED_FROM_DECK].includes(gameEvent.type)
-		);
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
