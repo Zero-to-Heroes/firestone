@@ -9,6 +9,8 @@ import {
 import { BehaviorSubject } from 'rxjs';
 
 export const BG_USE_QUESTS = false;
+// Temp flag to enable the feature in the desktop app while the overlay is causing issues
+export const BG_USE_QUESTS_IN_DESKTOP = true;
 export const DAILY_FREE_USES = 2;
 
 @Injectable()

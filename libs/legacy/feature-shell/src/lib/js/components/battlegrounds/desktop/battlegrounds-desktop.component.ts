@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { BG_USE_QUESTS } from '@firestone/battlegrounds/common';
+import { BG_USE_QUESTS, BG_USE_QUESTS_IN_DESKTOP } from '@firestone/battlegrounds/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter, takeUntil, tap } from 'rxjs/operators';
@@ -111,7 +111,7 @@ export class BattlegroundsDesktopComponent
 				id: 'bgs-category-meta-heroes',
 				name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
 			},
-			BG_USE_QUESTS
+			BG_USE_QUESTS || BG_USE_QUESTS_IN_DESKTOP
 				? {
 						id: 'bgs-category-meta-quests',
 						name: this.i18n.translateString('app.battlegrounds.menu.quests'),
