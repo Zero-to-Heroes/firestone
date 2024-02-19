@@ -41,7 +41,6 @@ const DK_UNHOLY_HAND = [
 	CardIds.Blightfang,
 	CardIds.PlagueStrike_RLK_018,
 	CardIds.BattlefieldNecromancerCore_RLK_061,
-	CardIds.TwinSlice_BT_175,
 ];
 const DEMONHUNTER_HAND = [
 	CardIds.TwinSlice_BT_175,
