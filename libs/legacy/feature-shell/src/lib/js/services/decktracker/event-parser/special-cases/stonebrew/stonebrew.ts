@@ -15,13 +15,23 @@ const DK_BLOOD_HAND = [
 const DK_FROST_HAND = [
 	CardIds.GlacialAdvance_RLK_512,
 	CardIds.LadyDeathwhisper_RLK_713,
-	CardIds.SchoolTeacher,
 	CardIds.FrostwyrmsFury_RLK_063,
-	CardIds.HowlingBlast_RLK_015,
 	CardIds.FrostStrike,
+	CardIds.SchoolTeacher,
 	CardIds.ThassarianCore_RLK_223,
 	CardIds.HornOfWinter_RLK_042,
+	CardIds.HowlingBlast_RLK_015,
 ];
+// const DK_FROST_HAND = [
+// 	CardIds.GlacialAdvance_RLK_512,
+// 	CardIds.LadyDeathwhisper_RLK_713,
+// 	CardIds.FrostwyrmsFury_RLK_063,
+// 	CardIds.FrostStrike,
+// 	CardIds.SchoolTeacher,
+// 	CardIds.ThassarianCore_RLK_223,
+// 	CardIds.HornOfWinter_RLK_042,
+// 	CardIds.HowlingBlast_RLK_015,
+// ];
 const DK_UNHOLY_HAND = [
 	CardIds.AmalgamOfTheDeep,
 	CardIds.GraveStrengthCore_RLK_707,
@@ -34,36 +44,75 @@ const DK_UNHOLY_HAND = [
 	CardIds.TwinSlice_BT_175,
 ];
 const DEMONHUNTER_HAND = [
+	CardIds.TwinSlice_BT_175,
 	CardIds.AltruisTheOutcast,
 	CardIds.ImprisonedAntaen,
-	CardIds.EyeBeam,
-	CardIds.EyeBeam,
-	CardIds.SkullOfGuldan_BT_601,
-	CardIds.PriestessOfFury,
 	CardIds.Metamorphosis_BT_429,
+	CardIds.PriestessOfFury,
+	CardIds.SkullOfGuldan_BT_601,
+	CardIds.EyeBeam,
 	CardIds.WarglaivesOfAzzinoth_BT_430,
 ];
+// const DEMONHUNTER_HAND = [
+// 	CardIds.AltruisTheOutcast,
+// 	CardIds.ImprisonedAntaen,
+// 	CardIds.EyeBeam,
+// 	CardIds.EyeBeam,
+// 	CardIds.SkullOfGuldan_BT_601,
+// 	CardIds.PriestessOfFury,
+// 	CardIds.Metamorphosis_BT_429,
+// 	CardIds.WarglaivesOfAzzinoth_BT_430,
+// ];
 const DRUID_HAND = [
 	CardIds.TwigOfTheWorldTree,
-	CardIds.NaturalizeLegacy,
+	CardIds.BranchingPaths,
 	CardIds.KingTogwaggle,
 	CardIds.MalfurionThePestilent_ICC_832,
-	CardIds.SpreadingPlague_ICC_054,
+	CardIds.NaturalizeLegacy,
 	CardIds.AzalinaSoulthief,
 	CardIds.LesserJasperSpellstone,
-	CardIds.BranchingPaths,
+	CardIds.SpreadingPlague_ICC_054,
 ];
-const MAGE_HAND = [];
+// const DRUID_HAND = [
+// 	CardIds.TwigOfTheWorldTree,
+// 	CardIds.NaturalizeLegacy,
+// 	CardIds.KingTogwaggle,
+// 	CardIds.MalfurionThePestilent_ICC_832,
+// 	CardIds.SpreadingPlague_ICC_054,
+// 	CardIds.AzalinaSoulthief,
+// 	CardIds.LesserJasperSpellstone,
+// 	CardIds.BranchingPaths,
+// ];
+const MAGE_HAND = [
+	CardIds.IceBlockLegacy,
+	CardIds.FrostNovaLegacy,
+	CardIds.IceLanceLegacy,
+	CardIds.FireballLegacy,
+	CardIds.FrostboltLegacy,
+	CardIds.ArchmageAntonidasLegacy,
+	CardIds.AlexstraszaLegacy,
+	CardIds.SorcerersApprenticeLegacy,
+];
 const HUNTER_HAND = [
+	CardIds.CloakedHuntress_KAR_006,
+	CardIds.DeathstalkerRexxar_ICC_828,
 	CardIds.LesserEmeraldSpellstone,
 	CardIds.WanderingMonster,
-	CardIds.MisdirectionLegacy,
-	CardIds.ExplosiveTrapLegacy_EX1_610,
 	CardIds.CatTrick,
-	CardIds.DeathstalkerRexxar_ICC_828,
-	CardIds.CloakedHuntress_KAR_006,
 	CardIds.FreezingTrapLegacy,
+	CardIds.ExplosiveTrapLegacy_EX1_610,
+	CardIds.MisdirectionLegacy,
 ];
+// const HUNTER_HAND = [
+// 	CardIds.LesserEmeraldSpellstone,
+// 	CardIds.WanderingMonster,
+// 	CardIds.MisdirectionLegacy,
+// 	CardIds.ExplosiveTrapLegacy_EX1_610,
+// 	CardIds.CatTrick,
+// 	CardIds.DeathstalkerRexxar_ICC_828,
+// 	CardIds.CloakedHuntress_KAR_006,
+// 	CardIds.FreezingTrapLegacy,
+// ];
 const PALADIN_HAND = [
 	CardIds.LadyLiadrin,
 	CardIds.AldorTruthseeker,
@@ -84,36 +133,76 @@ const PRIEST_HAND = [
 	CardIds.ShieldOfGalakrond,
 	CardIds.DevotedManiac,
 ];
+// const PRIEST_HAND = [
+// 	CardIds.GalakrondTheUnspeakable,
+// 	CardIds.SoulMirror,
+// 	CardIds.KronxDragonhoof,
+// 	CardIds.TimeRip,
+// 	CardIds.FateWeaver,
+// 	CardIds.DiscipleOfGalakrond,
+// 	CardIds.ShieldOfGalakrond,
+// 	CardIds.DevotedManiac,
+// ];
 const SHAMAN_HAND = [
-	CardIds.HealingRain,
-	CardIds.SaroniteChainGang_ICC_466,
-	CardIds.ZolaTheGorgon,
 	CardIds.Lifedrinker,
-	CardIds.GrumbleWorldshaker,
-	CardIds.GlacialShard,
+	CardIds.ZolaTheGorgon,
+	CardIds.HealingRain,
 	CardIds.Shudderwock_GIL_820,
 	CardIds.Volcano,
+	CardIds.SaroniteChainGang_ICC_466,
+	CardIds.GlacialShard,
+	CardIds.GrumbleWorldshaker,
 ];
+// const SHAMAN_HAND = [
+// 	CardIds.HealingRain,
+// 	CardIds.SaroniteChainGang_ICC_466,
+// 	CardIds.ZolaTheGorgon,
+// 	CardIds.Lifedrinker,
+// 	CardIds.GrumbleWorldshaker,
+// 	CardIds.GlacialShard,
+// 	CardIds.Shudderwock_GIL_820,
+// 	CardIds.Volcano,
+// ];
 const ROGUE_HAND = [
+	CardIds.YouthfulBrewmasterLegacy,
 	CardIds.GangUp,
 	CardIds.PreparationLegacy,
-	CardIds.YouthfulBrewmasterLegacy,
-	CardIds.BrannBronzebeard_LOE_077,
 	CardIds.ColdlightOracleLegacy,
+	CardIds.BrannBronzebeard_LOE_077,
 	CardIds.AntiqueHealbot,
 	CardIds.ShadowstepLegacy,
 	CardIds.VanishLegacy,
 ];
+// const ROGUE_HAND = [
+// 	CardIds.GangUp,
+// 	CardIds.PreparationLegacy,
+// 	CardIds.YouthfulBrewmasterLegacy,
+// 	CardIds.BrannBronzebeard_LOE_077,
+// 	CardIds.ColdlightOracleLegacy,
+// 	CardIds.AntiqueHealbot,
+// 	CardIds.ShadowstepLegacy,
+// 	CardIds.VanishLegacy,
+// ];
 const WARRIOR_HAND = [
 	CardIds.WhirlwindLegacy,
-	CardIds.DeathsBite,
-	CardIds.InnerRageLegacy,
-	CardIds.WarsongCommanderLegacy,
-	CardIds.EmperorThaurissan_BRM_028,
 	CardIds.GrimPatron,
-	CardIds.FrothingBerserkerLegacy,
+	CardIds.InnerRageLegacy,
 	CardIds.ExecuteLegacy,
+	CardIds.FrothingBerserkerCore,
+	CardIds.DeathsBite,
+	CardIds.EmperorThaurissan_BRM_028,
+	CardIds.WarsongCommanderLegacy,
 ];
+// const WARRIOR_HAND = [
+// 	CardIds.WhirlwindLegacy,
+// 	CardIds.DeathsBite,
+// 	CardIds.InnerRageLegacy,
+// 	CardIds.WarsongCommanderLegacy,
+// 	CardIds.EmperorThaurissan_BRM_028,
+// 	CardIds.GrimPatron,
+// 	CardIds.FrothingBerserkerLegacy,
+// 	CardIds.ExecuteLegacy,
+// ];
 const WARLOCK_HAND = [
 	CardIds.SkullOfTheManari,
 	CardIds.CarnivorousCube,
@@ -124,6 +213,16 @@ const WARLOCK_HAND = [
 	CardIds.Defile_ICC_041,
 	CardIds.DarkPact_LOOT_017,
 ];
+// const WARLOCK_HAND = [
+// 	CardIds.SkullOfTheManari,
+// 	CardIds.CarnivorousCube,
+// 	CardIds.BloodreaverGuldan_ICC_831,
+// 	CardIds.FacelessManipulatorLegacy,
+// 	CardIds.DoomguardLegacy,
+// 	CardIds.Voidlord_LOOT_368,
+// 	CardIds.Defile_ICC_041,
+// 	CardIds.DarkPact_LOOT_017,
+// ];
 const ALL_HANDS = [
 	DK_BLOOD_HAND,
 	DK_FROST_HAND,
@@ -146,12 +245,21 @@ export const updateHandWithStonebrewInfo = (
 	hand: readonly DeckCard[],
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
+	console.debug('[stonebrew] updating hand with stonebrew info', playedCard, hand);
 	const playedCardBaseId = getBaseCardId(playedCard.cardId);
 	for (const iconicHand of ALL_HANDS) {
-		if (iconicHand.includes(playedCardBaseId)) {
+		if (iconicHand.includes(playedCardBaseId as CardIds)) {
+			console.debug(
+				'[stonebrew] found iconic hand',
+				iconicHand,
+				playedCardBaseId,
+				playedCard.cardId,
+				playedCardBaseId,
+			);
 			return newHand(hand, iconicHand, allCards);
 		}
 	}
+
 	// if I missed the correct ID, use the "base id" to still get something
 	ALL_HANDS_DBFIDs =
 		ALL_HANDS_DBFIDs ??
@@ -162,6 +270,14 @@ export const updateHandWithStonebrewInfo = (
 		allCards.getCard(playedCardBaseId).deckDuplicateDbfId ?? allCards.getCard(playedCardBaseId).dbfId;
 	for (const iconicHand of ALL_HANDS_DBFIDs) {
 		if (iconicHand.includes(playedCardBaseDbfId)) {
+			console.debug(
+				'[stonebrew] found iconic hand with dbfid',
+				iconicHand,
+				playedCardBaseId,
+				playedCardBaseDbfId,
+				playedCard.cardId,
+				playedCardBaseId,
+			);
 			return newHand(hand, iconicHand, allCards);
 		}
 	}
@@ -185,8 +301,9 @@ const newHand = (
 		const positionInIconicHand: number = card.creatorAdditionalInfo;
 		const guessedCardId = iconicHand[positionInIconicHand];
 		const refCard = allCards.getCard(guessedCardId);
+		console.debug('[stonebrew] updating card', card, refCard, positionInIconicHand, iconicHand);
 		return card.update({
-			cardId: guessedCardId,
+			cardId: refCard.id,
 			cardName: refCard.name,
 			manaCost: refCard.cost,
 			rarity: refCard.rarity,
