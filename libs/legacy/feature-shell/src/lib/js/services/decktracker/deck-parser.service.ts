@@ -388,6 +388,15 @@ export class DeckParserService {
 	): Promise<DeckInfo> {
 		const lines: readonly string[] = await this.readAllLogLines();
 
+		// const debugDeckstring = 'AAEBAf0EBMABvqQDiKgDx7IEDfcN67oCh70Cj9MC9KsDkeED558ExqAEo+QE/uwEvO0E/5IF4MMFAAA=';
+		// return {
+		// 	deckstring: debugDeckstring,
+		// 	name: 'hop',
+		// 	scenarioId: scenarioId,
+		// 	gameType: gameType,
+		// 	deck: !!debugDeckstring ? decode(debugDeckstring) : undefined,
+		// } as DeckInfo;
+
 		// ignore everythine if the lines don't contain any "finding game with deck"
 		// this means that we're reconnecting and that have just received the full list of decks
 		// TODO: test other languages
