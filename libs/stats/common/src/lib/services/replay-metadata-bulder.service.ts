@@ -6,7 +6,6 @@ import {
 	extractTotalTurns,
 	parseBattlegroundsGame,
 } from '@firestone-hs/hs-replay-xml-parser';
-import { normalizeDeckList } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -57,7 +56,7 @@ export class ReplayMetadataBuilderService {
 				deckstring: game.deckstring,
 				normalizedDeckstring: !game.deckstring?.length
 					? null
-					: normalizeDeckList(game.deckstring, this.allCards.getService()),
+					: this.allCards.getService().normalizeDeckList(game.deckstring),
 				deckName: game.deckName,
 				scenarioId: game.scenarioId,
 				buildNumber: game.buildNumber,
