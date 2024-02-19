@@ -136,7 +136,7 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
 		enchantments: buildEnchantments(logEntity.Enchantments),
 		entityId: logEntity.Entity,
-		health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
+		health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value ?? 0,
 		maxHealth: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
 		poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
 		venomous: logEntity.Tags.find((tag) => tag.Name === GameTag.VENOMOUS)?.Value === 1,
