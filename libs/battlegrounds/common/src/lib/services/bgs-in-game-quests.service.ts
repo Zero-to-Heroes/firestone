@@ -75,7 +75,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.prefs.preferencesSingle$((prefs) => prefs.overlayEnableDiscoverHelp),
+			this.prefs.preferencesSingle$((prefs) => prefs.bgsShowQuestStatsOverlay),
 			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
 			this.gameState.gameState$$.pipe(map((state) => state?.metadata?.gameType)),
 		]).pipe(
