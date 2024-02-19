@@ -1,13 +1,25 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { BgsQuestCardChoiceOption, DAILY_FREE_USES, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'choosing-card-bgs-quest-option',
 	styleUrls: ['./choosing-card-bgs-quest-option.component.scss'],
 	template: `
 		<div class="option">
-			<div class="reward">
+			<div class="reward scalable">
 				<div class="header" [helpTooltip]="rewardGlobalTooltip">
 					<!-- <div class="tier">
                         {{ rewardTier }}
@@ -50,7 +62,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 					</div>
 				</div>
 			</div>
-			<div class="quest">
+			<div class="quest scalable">
 				<div class="header" [helpTooltip]="questHeaderTooltip">
 					<div
 						class="text"
@@ -98,7 +110,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChoosingCardBgsQuestOptionComponent {
+export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set option(value: BgsQuestCardChoiceOption) {
 		const loc = this.i18n.formatCurrentLocale();
 		this.rewardAveragePositionGlobal = value.reward.averagePosition
@@ -173,6 +185,7 @@ export class ChoosingCardBgsQuestOptionComponent {
 			left: value,
 		});
 		console.debug('set free users left', this._freeUsesLeft);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -197,8 +210,35 @@ export class ChoosingCardBgsQuestOptionComponent {
 	freeUsesText: string;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+		private readonly prefs: PreferencesService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
+		this.prefs
+			.preferences$((prefs) => prefs.bgsQuestsOverlayScale)
+			.pipe(
+				this.mapData(([pref]) => pref),
+				filter((pref) => !!pref),
+				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				const newScale = scale / 100;
+				const elements = this.el.nativeElement.querySelectorAll('.scalable');
+				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 }

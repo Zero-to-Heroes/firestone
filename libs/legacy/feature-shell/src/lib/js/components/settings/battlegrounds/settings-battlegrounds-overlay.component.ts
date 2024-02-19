@@ -26,6 +26,7 @@ import { Knob } from '../preference-slider.component';
 				bgsEnableApp: bgsEnableApp$ | async,
 				bgsUseOverlay: bgsUseOverlay$ | async,
 				showBannedTribes: showBannedTribes$ | async,
+				bgsEnableQuestsOverlay: bgsEnableQuestsOverlay$ | async,
 				bgsEnableMinionListOverlay: bgsEnableMinionListOverlay$ | async
 			} as value"
 			scrollable
@@ -334,6 +335,23 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.overlay.counter-soutshsea-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
+
+			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.quest-stats-title'"></div>
+			<div class="settings-group">
+				<div class="slider-label" [owTranslate]="'settings.global.widget-size-label'"></div>
+				<preference-slider
+					class="simulator-size-slider"
+					field="bgsQuestsOverlayScale"
+					[enabled]="value.bgsFullToggle && value.bgsEnableApp && value.bgsEnableQuestsOverlay"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="50"
+					[max]="150"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs2"
+				>
+				</preference-slider>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -352,6 +370,7 @@ export class SettingsBattlegroundsOverlayComponent
 	bgsUseOverlay$: Observable<boolean>;
 	showBannedTribes$: Observable<boolean>;
 	bgsEnableMinionListOverlay$: Observable<boolean>;
+	bgsEnableQuestsOverlay$: Observable<boolean>;
 
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
@@ -365,6 +384,20 @@ export class SettingsBattlegroundsOverlayComponent
 		},
 		{
 			percentageValue: 18,
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
+		},
+		{
+			percentageValue: 100,
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
+		},
+	];
+	sizeKnobs2: readonly Knob[] = [
+		{
+			percentageValue: 0,
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
+		},
+		{
+			percentageValue: 50,
 			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
@@ -398,5 +431,6 @@ export class SettingsBattlegroundsOverlayComponent
 		this.bgsFullToggle$ = this.listenForBasicPref$((prefs) => prefs.bgsFullToggle);
 		this.showBannedTribes$ = this.listenForBasicPref$((prefs) => prefs.bgsShowBannedTribesOverlay);
 		this.bgsEnableMinionListOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
+		this.bgsEnableQuestsOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsShowQuestStatsOverlay);
 	}
 }

@@ -8,6 +8,15 @@
 	height: 100%;
 }
 
+.scalable {
+	transform: scale(1);
+	position: relative;
+	opacity: 1;
+	transition-property: transform, opacity;
+	transition-duration: 0.3s;
+	transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+}
+
 .reward,
 .quest {
 	display: flex;

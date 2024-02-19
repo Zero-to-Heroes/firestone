@@ -208,6 +208,7 @@ export class Preferences implements IPreferences {
 	readonly bgsShowQuestsWidget: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsQuestsWidgetPosition: { left: number; top: number };
+	readonly bgsQuestsOverlayScale: number = 100;
 
 	readonly mercsShowQuestsWidget: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
