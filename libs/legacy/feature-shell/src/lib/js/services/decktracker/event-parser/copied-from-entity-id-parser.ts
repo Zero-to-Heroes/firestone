@@ -61,20 +61,10 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// the card might be inside their deck (though we don't want to store the entityId, because that would leak to
 		// info leaks)
 
-		// if (!copiedCard) {
-		// 	return currentState;
-		// }
-
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
-		// const effectiveCreatorCardId =
-		// 	(newCopy?.lastAffectedByCardId as CardIds) || (newCopy?.creatorCardId as CardIds);
-		// See receive-card-in-hand-parser
-		// const isSpecialCasePublic =
-		// 	(!isCopiedPlayer &&
-		// 		!forcedHiddenCardCreators.includes(effectiveCreatorCardId as CardIds) &&
-		// 		copiedCardZone !== Zone.HAND) ||
-		// 	(isCopiedPlayer && !hideInfoWhenPlayerPlaysIt.includes(effectiveCreatorCardId as CardIds));
-		const shouldObfuscate = !isCopiedPlayer && copiedCardZone === Zone.HAND;
+		// There seems to be info leaks in the logs when the opponent discovers a card in their deck
+		// e.g. when they play Fracking or From the Depths
+		const shouldObfuscate = !isCopiedPlayer && (copiedCardZone === Zone.HAND || copiedCardZone === Zone.DECK);
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
 		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
