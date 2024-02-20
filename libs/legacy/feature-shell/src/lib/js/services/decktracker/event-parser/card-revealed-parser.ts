@@ -30,6 +30,15 @@ export class CardRevealedParser implements EventParser {
 		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const dbCard = this.cards.getCard(cardId, false) ?? ({} as ReferenceCard);
+		let positionFromBottom = DeckCard.deckIndexFromBottom;
+		if (gameEvent.additionalData.revealedFromBlock === 'DREDGE') {
+			// Make sure there is no overlap with existing cards
+			// When we dredge we are at the very bottom, so we can increase the current index by any big number
+			DeckCard.deckIndexFromBottom += 4;
+			positionFromBottom = DeckCard.deckIndexFromBottom + 3 - gameEvent.additionalData.indexInBlock;
+		} else {
+			positionFromBottom = DeckCard.deckIndexFromBottom++;
+		}
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -39,12 +48,7 @@ export class CardRevealedParser implements EventParser {
 			zone: 'SETASIDE',
 			temporaryCard: true,
 			lastAffectedByCardId: gameEvent.additionalData.creatorCardId || gameEvent.additionalData.originEntityCardId,
-			positionFromBottom:
-				gameEvent.additionalData.revealedFromBlock === 'DREDGE'
-					? // Make sure there is no overlap with existing cards
-					  // When we dredge we are at the very bottom, so we can increase the current index by any big number
-					  DeckCard.deckIndexFromBottom + 4 + 3 - gameEvent.additionalData.indexInBlock
-					: undefined,
+			positionFromBottom: positionFromBottom,
 		} as DeckCard);
 		// console.debug('[debug]', 'card revealed', card, DeckCard.deckIndexFromBottom, gameEvent);
 
