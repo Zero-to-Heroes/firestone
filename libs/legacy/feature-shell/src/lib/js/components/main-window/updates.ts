@@ -114,6 +114,14 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a sim issue where Golden Mad Matador would only trigger once.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Goldrinn + Titus.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Yrel's power could not prevent minions from dying.`,
+							},
 						],
 					},
 				],
