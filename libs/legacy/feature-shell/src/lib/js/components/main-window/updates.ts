@@ -85,6 +85,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the opponent's corpse counter would not appear.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the position from the bottom after dredging would sometimes be incorrect.`,
+							},
 						],
 					},
 					{
