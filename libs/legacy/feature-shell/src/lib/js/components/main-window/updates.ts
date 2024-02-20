@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.4',
+		version: '13.5.5',
 		force: false,
 		sections: [
 			// {
@@ -52,6 +52,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now browse the stats for the Quests and Rewards in the app (it's back on again!).`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Constructed meta stats (decks and archetypes) should be working once again.`,
 							},
 						],
 					},
