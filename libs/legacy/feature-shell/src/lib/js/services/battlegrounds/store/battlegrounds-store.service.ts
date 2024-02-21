@@ -338,18 +338,18 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(
 					new BgsRewardRevealedEvent(
 						gameEvent.cardId,
+						gameEvent.additionalData.playerId,
 						gameEvent.additionalData.questRewardDbfId,
 						gameEvent.additionalData.isHeroPowerReward,
-						gameEvent.additionalData.playerId,
 					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_GAINED) {
 				this.battlegroundsUpdater.next(
 					new BgsRewardGainedEvent(
 						gameEvent.cardId,
+						gameEvent.additionalData.playerId,
 						gameEvent.additionalData.questRewardDbfId,
 						gameEvent.additionalData.isHeroPowerReward,
-						gameEvent.additionalData.playerId,
 					),
 				);
 			} else if (
@@ -570,13 +570,13 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			// console.debug(
-			// 	'[bgs-store] emitting new state',
-			// 	gameEvent.type,
-			// 	gameEvent,
-			// 	this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
-			// 	this.state,
-			// );
+			console.debug(
+				'[bgs-store] emitting new state',
+				gameEvent.type,
+				gameEvent,
+				this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
+				this.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay();
 		}

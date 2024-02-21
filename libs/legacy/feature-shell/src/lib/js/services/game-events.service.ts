@@ -652,6 +652,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
 				break;
 			case 'QUEST_COMPLETED':
+			case 'BATTLEGROUNDS_QUEST_COMPLETED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.QUEST_COMPLETED, gameEvent));
 				break;
 			case 'WEAPON_DESTROYED':
