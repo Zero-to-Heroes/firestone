@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckState } from '@firestone/game-state';
+import { TwitchPreferences } from './twitch-preferences';
+import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'decktracker-twitch-title-bar',
 	styleUrls: [
 		'../../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/decktracker-twitch-title-bar.component.scss',
+		'./decktracker-twitch-title-bar.component.scss',
 	],
 	template: `
 		<div class="control-bar">
@@ -23,7 +25,7 @@ import { DeckState } from '@firestone/game-state';
 			<button
 				class="i-30 close-button"
 				(mousedown)="closeWindow()"
-				helpTooltip="Minimize the tracker. You can reactivate it with the Extension Settings button at the bottom"
+				helpTooltip="Minimize the tracker. You can reactivate it from the settings panel at the left of the stream"
 				inlineSVG="assets/svg/control_minimize.svg"
 			></button>
 		</div>
@@ -49,7 +51,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 	shouldShowDeckstring = false;
 	copied = false;
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, protected readonly prefs: TwitchPreferencesService) {}
 
 	async copyDeckstring() {
 		if (this.shouldShowDeckstring) {
@@ -135,8 +137,11 @@ export class DeckTrackerTwitchTitleBarComponent {
 		}
 	}
 
-	closeWindow() {
-		(window as any).Twitch.ext.actions.minimize();
+	async closeWindow() {
+		const prefs = this.prefs.preferences$$.getValue();
+		const newPrefs: TwitchPreferences = { ...prefs, decktrackerOpen: false };
+		console.log('changing decktrackerOpen pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
 	}
 
 	private copyDone() {

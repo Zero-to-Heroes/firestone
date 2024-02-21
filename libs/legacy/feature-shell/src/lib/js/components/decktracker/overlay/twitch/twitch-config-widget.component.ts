@@ -19,7 +19,7 @@ import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twi
 	styleUrls: [
 		`../../../../../css/themes/battlegrounds-theme.scss`,
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
-		'../../../../../css/component/decktracker/overlay/twitch/twitch-config-widget.component.scss',
+		'./twitch-config-widget.component.scss',
 	],
 	template: `
 		<!-- Don't add scalable class so that the root element itself is scaled -->
@@ -53,6 +53,12 @@ import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twi
 				<section class="constructed">
 					<div class="section-title" [owTranslate]="'twitch.constructed-section-title'"></div>
 					<div class="group">
+						<checkbox
+							class="item"
+							[label]="'twitch.show-tracker' | owTranslate"
+							[value]="prefs.decktrackerOpen"
+							(valueChanged)="onShowDecktrackerChanged(prefs, $event)"
+						></checkbox>
 						<checkbox
 							class="item"
 							[label]="'settings.decktracker.opponent-deck.group-cards-by-zone-label' | owTranslate"
@@ -323,6 +329,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onShowHeroCardsChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showHeroCards: value };
 		console.log('changing showHeroCards pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowDecktrackerChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, decktrackerOpen: value };
+		console.log('changing decktrackerOpen pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

@@ -10,6 +10,7 @@ export class TwitchPreferences {
 	readonly showRelatedCards: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
 
+	readonly decktrackerOpen: boolean = true;
 	readonly magnifierIconOnTop: boolean = false;
 	readonly hideBattleOddsInCombat: 'auto' | 'true' | 'false' = 'auto';
 	readonly hideBattleOddsInTavern: 'auto' | 'true' | 'false' = 'auto';

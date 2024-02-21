@@ -15,7 +15,7 @@ import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch
 import { DeckState, GameState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
@@ -29,7 +29,7 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 	],
 	template: `
 		<div
-			*ngIf="playerDeck"
+			*ngIf="playerDeck && showTracker$ | async"
 			class="root active decktracker-theme"
 			[ngClass]="{ dragging: dragging }"
 			[activeTheme]="'decktracker'"
@@ -65,6 +65,10 @@ export class DeckTrackerOverlayStandaloneComponent
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 
+	displayMode$: Observable<'DISPLAY_MODE_ZONE' | 'DISPLAY_MODE_GROUPED'>;
+	showRelatedCards$ = new Observable<boolean>();
+	showTracker$: Observable<boolean>;
+
 	@Input() set gameState(value: GameState) {
 		this.playerDeck = value?.playerDeck;
 		this.gameState$$.next(
@@ -74,9 +78,6 @@ export class DeckTrackerOverlayStandaloneComponent
 			}),
 		);
 	}
-
-	displayMode$: Observable<'DISPLAY_MODE_ZONE' | 'DISPLAY_MODE_GROUPED'>;
-	showRelatedCards$ = new Observable<boolean>();
 
 	playerDeck: DeckState;
 	dragging: boolean;
@@ -96,12 +97,11 @@ export class DeckTrackerOverlayStandaloneComponent
 	}
 
 	ngAfterContentInit() {
-		this.displayMode$ = from(this.prefs.prefs.asObservable()).pipe(
-			this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')),
-		);
-		this.showRelatedCards$ = from(this.prefs.prefs.asObservable()).pipe(
-			this.mapData((prefs) => prefs?.showRelatedCards),
-		);
+		this.displayMode$ = this.prefs.prefs
+			.asObservable()
+			.pipe(this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')));
+		this.showRelatedCards$ = this.prefs.prefs.asObservable().pipe(this.mapData((prefs) => prefs?.showRelatedCards));
+		this.showTracker$ = this.prefs.prefs.asObservable().pipe(this.mapData((prefs) => prefs?.decktrackerOpen));
 		this.highlightService.setup(this.gameState$$);
 	}
 
