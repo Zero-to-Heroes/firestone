@@ -252,7 +252,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 				this.topHeroCard = this._gameState?.opponentDeck?.hero?.cardId;
 				this.bottomBoardCards = this._gameState?.playerDeck?.board.map((card) => card.cardId);
 				this.bottomHeroPowerCard = this._gameState?.playerDeck?.heroPower?.cardId;
-				this.bottomWeaponCard = this._gameState?.playerDeck?.weapon?.cardId;
+				this.bottomWeaponCard = this.buildBottomWeaponCards(this._gameState, this._bgsState);
 				this.bottomSecretCards = this.buildBottomSecretCards(this._gameState, this._bgsState);
 				this.bottomHandCards = this._gameState?.playerDeck?.hand.map((card) => card.cardId);
 				this.bottomHeroCard = this._gameState?.playerDeck?.hero?.cardId;
@@ -539,6 +539,19 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 					return `${[cardId, ...rewards].join(',')}`;
 				})
 		);
+	}
+
+	private buildBottomWeaponCards(gameState: GameState, bgsState: TwitchBgsState): string {
+		if (!!gameState?.playerDeck?.weapon?.cardId?.length) {
+			return gameState?.playerDeck?.weapon?.cardId;
+		}
+
+		const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
+		if (!bgsMainPlayer?.questRewards?.some((r) => r.completed)) {
+			return null;
+		}
+		const completedRewards = bgsMainPlayer.questRewards.filter((r) => r.completed).map((r) => r.cardId) ?? [];
+		return `${completedRewards.join(',')}`;
 	}
 }
 

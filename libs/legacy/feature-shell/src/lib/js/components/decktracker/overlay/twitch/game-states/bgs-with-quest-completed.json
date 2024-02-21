@@ -1,0 +1,386 @@
+{
+	"scene": 4,
+	"deck": {
+		"playerDeck": {
+			"hand": [],
+			"board": [
+				{ "cardId": "BG26_529", "entityId": 1151, "zone": "PLAY" },
+				{ "cardId": "BG28_593", "entityId": 1125, "zone": "PLAY" },
+				{ "cardId": "BG26_135", "entityId": 1155, "zone": "PLAY" },
+				{ "cardId": "BGS_115t", "entityId": 1156, "zone": "PLAY" },
+				{ "cardId": "BG28_590", "entityId": 1311, "zone": "PLAY" },
+				{ "cardId": "BG26_529", "entityId": 1309, "zone": "PLAY" }
+			],
+			"otherZone": [],
+			"heroPower": { "cardId": "TB_BaconShop_HP_035", "entityId": 181, "zone": "PLAY" },
+			"weapon": null
+		},
+		"opponentDeck": {
+			"hand": [{ "entityId": 720 }, { "entityId": 721 }],
+			"board": [
+				{ "cardId": "BG23_350", "entityId": 1305, "zone": "PLAY" },
+				{ "cardId": "BG28_805", "entityId": 1314, "zone": "PLAY" }
+			],
+			"otherZone": [],
+			"heroPower": { "cardId": "TB_BaconShop_HP_038", "entityId": 1149, "zone": "PLAY" },
+			"weapon": null
+		},
+		"mulliganOver": true,
+		"metadata": { "gameType": 23, "formatType": 1, "scenarioId": 3459 },
+		"currentTurn": 4,
+		"gameTagTurnNumber": 0,
+		"gameStarted": true,
+		"matchInfo": {}
+	},
+	"bgs": {
+		"leaderboard": [
+			{
+				"cardId": "TB_BaconShop_HERO_34_SKIN_A",
+				"heroPowerCardId": "TB_BaconShop_HP_035",
+				"name": "Necrolord Patchwerk",
+				"isMainPlayer": true,
+				"initialHealth": 60,
+				"damageTaken": 8,
+				"leaderboardPlace": 1,
+				"lastBoard": {
+					"turn": 3,
+					"board": [
+						{
+							"id": 722,
+							"cardID": "BG26_529",
+							"tags": {
+								"CARDRACE": 24,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"TAG_SCRIPT_DATA_NUM_1": 3,
+								"ENTITY_ID": 722,
+								"ATK": 5,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"HEALTH": 5,
+								"CONTROLLER": 3
+							}
+						},
+						{
+							"id": 842,
+							"cardID": "BG26_135",
+							"tags": {
+								"CARDRACE": 23,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 842,
+								"ATK": 3,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 2,
+								"HEALTH": 1,
+								"CONTROLLER": 3
+							}
+						},
+						{
+							"id": 1054,
+							"cardID": "BGS_115t",
+							"tags": {
+								"CARDRACE": 18,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"ENTITY_ID": 1054,
+								"ATK": 2,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 3,
+								"HEALTH": 2,
+								"CONTROLLER": 3
+							}
+						}
+					]
+				},
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 2 }],
+				"currentWinStreak": 0,
+				"lastKnownComposition": { "turn": 4, "tribe": "mixed", "count": 1 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "TB_BaconShop_HERO_38",
+					"damage": 3,
+					"isDefeated": false
+				},
+				"questRewards": [
+					{ "cardId": "BG24_Reward_125", "isHeroPower": false, "completed": true, "completedTurn": 4 }
+				],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "BG20_HERO_242",
+				"heroPowerCardId": "BG20_HERO_242p",
+				"name": "Guff Runetotem",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 2,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 2 }],
+				"currentWinStreak": 0,
+				"lastKnownComposition": { "turn": 4, "tribe": "ELEMENTAL", "count": 2 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "TB_BaconShop_HERO_15",
+					"damage": 3,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_15",
+				"heroPowerCardId": "TB_BaconShop_HP_010",
+				"name": "George the Fallen",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 3,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [
+					{ "tavernTier": 2, "turn": 2 },
+					{ "tavernTier": 3, "turn": 4 }
+				],
+				"currentWinStreak": 1,
+				"lastKnownComposition": { "turn": 4, "tribe": "mixed", "count": 1 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "BG20_HERO_242",
+					"damage": 3,
+					"isDefeated": false
+				},
+				"questRewards": [
+					{ "cardId": "BG28_Reward_518", "isHeroPower": false, "completed": false, "completedTurn": null }
+				],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_38",
+				"heroPowerCardId": "TB_BaconShop_HP_038",
+				"name": "King Mukla",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 4,
+				"lastBoard": {
+					"turn": 3,
+					"board": [
+						{
+							"id": 1141,
+							"cardID": "BGS_061",
+							"tags": {
+								"CARDRACE": 23,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 1141,
+								"ATK": 9,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"DEATHRATTLE": 1,
+								"HEALTH": 6,
+								"CONTROLLER": 11
+							}
+						},
+						{
+							"id": 1147,
+							"cardID": "BGS_061",
+							"tags": {
+								"CARDRACE": 23,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 1147,
+								"ATK": 3,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 2,
+								"DEATHRATTLE": 1,
+								"HEALTH": 1,
+								"CONTROLLER": 11
+							}
+						}
+					]
+				},
+				"tripleHistory": [{ "tierOfTripledMinion": 2, "turn": 4 }],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 3 }],
+				"currentWinStreak": 3,
+				"lastKnownComposition": { "turn": 4, "tribe": "PIRATE", "count": 2 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "TB_BaconShop_HERO_34_SKIN_A",
+					"damage": 3,
+					"isDefeated": false
+				},
+				"questRewards": [
+					{ "cardId": "BG28_Reward_504", "isHeroPower": false, "completed": false, "completedTurn": null }
+				],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_40",
+				"heroPowerCardId": "TB_BaconShop_HP_057",
+				"name": "Sir Finley Mrrgglton",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 5,
+				"lastBoard": {
+					"turn": 2,
+					"board": [
+						{
+							"id": 715,
+							"cardID": "BG28_590",
+							"tags": {
+								"CARDRACE": 24,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 715,
+								"ATK": 2,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"HEALTH": 4,
+								"CONTROLLER": 11
+							}
+						}
+					]
+				},
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 2 }],
+				"currentWinStreak": 2,
+				"lastKnownComposition": { "turn": 4, "tribe": "DRAGON", "count": 3 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "TB_BaconShop_HERO_18",
+					"damage": 7,
+					"isDefeated": false
+				},
+				"questRewards": [
+					{ "cardId": "BG28_Reward_508", "isHeroPower": false, "completed": false, "completedTurn": null }
+				],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "BG22_HERO_305",
+				"heroPowerCardId": "BG22_HERO_305p",
+				"name": "Onyxia",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 6,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 2 }],
+				"currentWinStreak": 1,
+				"lastKnownComposition": { "turn": 4, "tribe": "DEMON", "count": 2 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "TB_BaconShop_HERO_25_SKIN_D",
+					"damage": 4,
+					"isDefeated": true
+				},
+				"questRewards": [
+					{ "cardId": "BG28_Reward_515", "isHeroPower": false, "completed": false, "completedTurn": null }
+				],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_18",
+				"heroPowerCardId": "TB_BaconShop_HP_072",
+				"name": "Patches the Pirate",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 7,
+				"leaderboardPlace": 7,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 2 }],
+				"currentWinStreak": 0,
+				"lastKnownComposition": { "turn": 4, "tribe": "mixed", "count": 1 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "TB_BaconShop_HERO_40",
+					"damage": 7,
+					"isDefeated": false
+				},
+				"questRewards": [
+					{ "cardId": "BG27_Reward_804", "isHeroPower": false, "completed": false, "completedTurn": null }
+				],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_25_SKIN_D",
+				"heroPowerCardId": "TB_BaconShop_HP_049",
+				"name": "Icebinder Baz'hial",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 30,
+				"leaderboardPlace": 8,
+				"lastBoard": {
+					"turn": 1,
+					"board": [
+						{
+							"id": 460,
+							"cardID": "BGS_004",
+							"tags": {
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 460,
+								"ATK": 2,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"HEALTH": 5,
+								"CONTROLLER": 11
+							}
+						}
+					]
+				},
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [{ "tavernTier": 2, "turn": 2 }],
+				"currentWinStreak": 0,
+				"lastKnownComposition": { "turn": 4, "tribe": "mixed", "count": 0 },
+				"lastKnownBattleHistory": {
+					"turn": 4,
+					"opponentCardId": "BG22_HERO_305",
+					"damage": 4,
+					"isDefeated": true
+				},
+				"questRewards": [],
+				"buddyTurns": []
+			}
+		],
+		"currentBattle": {
+			"battleInfo": {
+				"wonLethal": 0,
+				"won": 286,
+				"tied": 282,
+				"lost": 4432,
+				"lostLethal": 0,
+				"damageWon": 858,
+				"damageLost": 13296,
+				"averageDamageWon": 3,
+				"averageDamageLost": 3,
+				"wonLethalPercent": 0,
+				"wonPercent": 5.72,
+				"tiedPercent": 5.64,
+				"lostPercent": 88.64,
+				"lostLethalPercent": 0,
+				"outcomeSamples": null
+			},
+			"status": "done"
+		},
+		"currentTurn": 4,
+		"inGame": true,
+		"availableRaces": [15, 24, 17, 23, 18],
+		"phase": "recruit",
+		"config": { "hasBuddies": false, "hasPrizes": false, "hasQuests": true, "hasSpells": true, "anomalies": [null] }
+	},
+	"streamerPrefs": { "bgsHideSimResultsOnRecruit": true, "bgsShowSimResultsOnlyOnRecruit": false }
+}
