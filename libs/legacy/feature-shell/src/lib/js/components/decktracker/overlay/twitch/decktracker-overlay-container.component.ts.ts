@@ -62,6 +62,7 @@ import { mapTwitchLanguageToHsLocale } from './twitch-config-widget.component';
 					[availableRaces]="bgsState.availableRaces"
 					[currentTurn]="bgsState.currentTurn"
 					[hasBuddies]="bgsState.config?.hasBuddies"
+					[hasSpells]="bgsState.config?.hasSpells"
 					[anomalies]="bgsState.config?.anomalies"
 					[playerCardId]="getMainPlayerCardId(bgsState)"
 					[showMechanicsTiers]="showMechanicsTiers$ | async"

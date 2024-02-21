@@ -25,7 +25,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 		`../../../../../css/global/cdk-overlay.scss`,
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'../../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component.scss',
+		'./battlegrounds-minions-tiers-twitch.component.scss',
 	],
 	template: `
 		<div class="root" cdkDrag (cdkDragStarted)="startDragging()" (cdkDragReleased)="stopDragging()">
