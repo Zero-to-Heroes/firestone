@@ -251,7 +251,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 					.map((card) => card.cardId);
 				this.topHeroCard = this._gameState?.opponentDeck?.hero?.cardId;
 				this.bottomBoardCards = this._gameState?.playerDeck?.board.map((card) => card.cardId);
-				this.bottomHeroPowerCard = this._gameState?.playerDeck?.heroPower?.cardId;
+				this.bottomHeroPowerCard = this.buildBottomHeroPowerCards(this._gameState, this._bgsState);
 				this.bottomWeaponCard = this.buildBottomWeaponCards(this._gameState, this._bgsState);
 				this.bottomSecretCards = this.buildBottomSecretCards(this._gameState, this._bgsState);
 				this.bottomHandCards = this._gameState?.playerDeck?.hand.map((card) => card.cardId);
@@ -541,16 +541,23 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		);
 	}
 
+	private buildBottomHeroPowerCards(gameState: GameState, bgsState: TwitchBgsState): string {
+		const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
+		const completedRewards =
+			bgsMainPlayer?.questRewards?.filter((r) => r.completed && r.isHeroPower).map((r) => r.cardId) ?? [];
+		if (!completedRewards.length) {
+			return gameState?.playerDeck?.heroPower?.cardId;
+		}
+		return `${completedRewards.join(',')}`;
+	}
+
 	private buildBottomWeaponCards(gameState: GameState, bgsState: TwitchBgsState): string {
-		if (!!gameState?.playerDeck?.weapon?.cardId?.length) {
+		const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
+		const completedRewards =
+			bgsMainPlayer?.questRewards?.filter((r) => r.completed && !r.isHeroPower).map((r) => r.cardId) ?? [];
+		if (!completedRewards.length) {
 			return gameState?.playerDeck?.weapon?.cardId;
 		}
-
-		const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
-		if (!bgsMainPlayer?.questRewards?.some((r) => r.completed)) {
-			return null;
-		}
-		const completedRewards = bgsMainPlayer.questRewards.filter((r) => r.completed).map((r) => r.cardId) ?? [];
 		return `${completedRewards.join(',')}`;
 	}
 }
