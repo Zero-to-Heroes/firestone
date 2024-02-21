@@ -19,7 +19,7 @@ import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
-import fakeState from './gameState.json';
+import fullState from './game-states/bgs-with-quest-pending.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 import { mapTwitchLanguageToHsLocale } from './twitch-config-widget.component';
 
@@ -304,8 +304,8 @@ export class DeckTrackerOverlayContainerComponent
 		console.log('finished setting up locale', 'enUS', this.i18n);
 		// TODO: use prefs
 		await this.translate.use('enUS').toPromise();
-		this.gameState = fakeState as any;
-		// this.bgsState = fakeBgsState as any;
+		this.gameState = (fullState as any).deck;
+		this.bgsState = (fullState as any).bgs;
 		this.showDecktracker =
 			!!this.gameState &&
 			!this.bgsState?.inGame &&

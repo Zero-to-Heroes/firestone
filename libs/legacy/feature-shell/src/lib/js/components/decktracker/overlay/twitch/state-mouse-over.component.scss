@@ -151,6 +151,7 @@ empty-card {
 		left: 45.5%;
 		bottom: 5%;
 		top: auto;
+		z-index: 1;
 
 		::ng-deep .secret {
 			.card {

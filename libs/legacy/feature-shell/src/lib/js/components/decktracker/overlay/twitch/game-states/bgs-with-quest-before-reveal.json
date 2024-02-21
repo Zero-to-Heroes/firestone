@@ -1,0 +1,250 @@
+{
+	"scene": 4,
+	"deck": {
+		"playerDeck": {
+			"hand": [],
+			"board": [],
+			"otherZone": [
+				{
+					"cardId": "BG24_Quest_Bob",
+					"entityId": 392,
+					"zone": "SECRET"
+				}
+			],
+			"heroPower": {
+				"cardId": "TB_BaconShop_HP_001",
+				"entityId": 167,
+				"zone": "PLAY"
+			},
+			"weapon": null
+		},
+		"opponentDeck": {
+			"hand": [],
+			"board": [
+				{
+					"cardId": "BG_GVG_085",
+					"entityId": 397,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG28_300",
+					"entityId": 399,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG26_529",
+					"entityId": 401,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG28_504",
+					"entityId": 403,
+					"zone": "PLAY"
+				}
+			],
+			"otherZone": [],
+			"heroPower": null,
+			"weapon": null
+		},
+		"mulliganOver": true,
+		"metadata": {
+			"gameType": 23,
+			"formatType": 1,
+			"scenarioId": 3459
+		},
+		"currentTurn": 1,
+		"gameTagTurnNumber": 0,
+		"gameStarted": true,
+		"matchInfo": {}
+	},
+	"bgs": {
+		"leaderboard": [
+			{
+				"cardId": "TB_BaconShop_HERO_702",
+				"heroPowerCardId": "TB_BaconShop_HP_702",
+				"name": "The Jailer",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 1,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_27",
+				"heroPowerCardId": "TB_BaconShop_HP_014",
+				"name": "Sindragosa",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 2,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_01_SKIN_D",
+				"heroPowerCardId": "TB_BaconShop_HP_001",
+				"name": "Enchanting Edwin",
+				"isMainPlayer": true,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 3,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "BG20_HERO_102",
+				"heroPowerCardId": "BG20_HERO_102p",
+				"name": "Overlord Saurfang",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 4,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_41",
+				"heroPowerCardId": "TB_BaconShop_HP_046",
+				"name": "Reno Jackson",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 5,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "BG22_HERO_201",
+				"heroPowerCardId": "BG22_HERO_201p",
+				"name": "Ambassador Faelin",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 6,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "BG20_HERO_100",
+				"heroPowerCardId": "BG20_HERO_100p",
+				"name": "Rokara",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 7,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			},
+			{
+				"cardId": "BG20_HERO_202",
+				"heroPowerCardId": "BG20_HERO_202p",
+				"name": "Master Nguyen",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 8,
+				"lastBoard": null,
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 1,
+					"tribe": "mixed",
+					"count": 0
+				},
+				"lastKnownBattleHistory": null,
+				"questRewards": [],
+				"buddyTurns": []
+			}
+		],
+		"currentBattle": {
+			"battleInfo": null
+		},
+		"currentTurn": 1,
+		"inGame": true,
+		"availableRaces": [24, 17, 14, 43, 11],
+		"phase": "recruit",
+		"config": {
+			"hasBuddies": false,
+			"hasPrizes": false,
+			"hasQuests": true,
+			"hasSpells": true,
+			"anomalies": [null]
+		}
+	},
+	"streamerPrefs": {
+		"bgsHideSimResultsOnRecruit": true,
+		"bgsShowSimResultsOnlyOnRecruit": false
+	}
+}

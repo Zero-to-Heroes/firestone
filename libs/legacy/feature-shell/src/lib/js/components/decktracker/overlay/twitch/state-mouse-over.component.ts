@@ -9,10 +9,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameState } from '@firestone/game-state';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Map } from 'immutable';
-import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 import { TwitchPreferencesService } from './twitch-preferences.service';
 
@@ -145,7 +146,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
+export class StateMouseOverComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	showLiveInfo$: Observable<boolean>;
 	magnifierIconOnTop$: Observable<boolean>;
 
@@ -157,53 +158,11 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	}
 
 	@Input() set bgsState(value: TwitchBgsState) {
-		if (value === this._bgsState) {
-			return;
-		}
-		this._bgsState = value;
-		this.bgsPlayers = this._bgsState?.leaderboard;
-		this.currentTurn = this._bgsState?.currentTurn;
-		this.bgsAnomaly = this._bgsState?.config?.anomalies?.[0];
-		this.isBgs =
-			!!this._bgsState && !!this.bgsPlayers?.length && this._bgsState?.inGame && !this._bgsState?.gameEnded;
-		// console.log('isBgs', this.isBgs, this._bgsState, this.bgsPlayers);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.bgsState$$.next(value);
 	}
 
 	@Input() set gameState(value: GameState) {
-		if (value === this._gameState) {
-			return;
-		}
-		this._gameState = value;
-		this.topHeroPowerCard = this._gameState.opponentDeck?.heroPower?.cardId;
-		this.topWeaponCard = this._gameState.opponentDeck?.weapon?.cardId;
-		this.topBoardCards = this._gameState.opponentDeck?.board.map((card) => card.cardId);
-		this.topSecretCards = this._gameState.opponentDeck?.otherZone
-			.filter((card) => card.zone === 'SECRET')
-			.map((card) => card.cardId);
-		this.topHeroCard = this._gameState.opponentDeck?.hero?.cardId;
-		this.bottomBoardCards = this._gameState.playerDeck?.board.map((card) => card.cardId);
-		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower?.cardId;
-		this.bottomWeaponCard = this._gameState.playerDeck?.weapon?.cardId;
-		this.bottomSecretCards = this._gameState.playerDeck?.otherZone
-			.filter((card) => card.zone === 'SECRET')
-			.map((card) => card.cardId);
-		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
-		this.bottomHeroCard = this._gameState.playerDeck?.hero?.cardId;
-		this.constructedAnomaly = this._gameState.matchInfo?.anomalies?.[0];
-		this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
-			cardsInDeck: this._gameState.playerDeck?.deck?.length ?? 0,
-			cardsInHand: this._gameState.playerDeck?.hand?.length ?? 0,
-		});
-		this.opponentCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-opponent-tooltip', {
-			cardsInDeck: this._gameState.opponentDeck?.deck?.length ?? 0,
-			cardsInHand: this._gameState.opponentDeck?.hand?.length ?? 0,
-		});
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.gameState$$.next(value);
 	}
 
 	@Input() set magnifierIconOnTop(value: null | '' | 'top' | 'bottom') {
@@ -238,13 +197,16 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	private showLiveInfo = new BehaviorSubject<boolean>(false);
 	private magnifierIconOnTopFromStreamer = new BehaviorSubject<null | '' | 'top' | 'bottom'>(null);
 
-	private destroyed$ = new Subject<void>();
+	private gameState$$ = new BehaviorSubject<GameState>(null);
+	private bgsState$$ = new BehaviorSubject<TwitchBgsState>(null);
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: TwitchPreferencesService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) {
+		super(cdr);
+	}
 
 	ngAfterContentInit(): void {
 		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(takeUntil(this.destroyed$));
@@ -260,6 +222,58 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 			}),
 			takeUntil(this.destroyed$),
 		);
+		const gameState$ = this.gameState$$
+			.asObservable()
+			.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroyed$));
+		const bgsState$ = this.bgsState$$
+			.asObservable()
+			.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroyed$));
+		combineLatest([gameState$, bgsState$])
+			.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroyed$))
+			.subscribe(([gameState, bgsState]) => {
+				this._gameState = gameState;
+				this._bgsState = bgsState;
+
+				this.bgsPlayers = this._bgsState?.leaderboard;
+				this.currentTurn = this._bgsState?.currentTurn;
+				this.bgsAnomaly = this._bgsState?.config?.anomalies?.[0];
+				this.isBgs =
+					!!this._bgsState &&
+					!!this.bgsPlayers?.length &&
+					this._bgsState?.inGame &&
+					!this._bgsState?.gameEnded;
+
+				this.topHeroPowerCard = this._gameState?.opponentDeck?.heroPower?.cardId;
+				this.topWeaponCard = this._gameState?.opponentDeck?.weapon?.cardId;
+				this.topBoardCards = this._gameState?.opponentDeck?.board.map((card) => card.cardId);
+				this.topSecretCards = this._gameState?.opponentDeck?.otherZone
+					.filter((card) => card.zone === 'SECRET')
+					.map((card) => card.cardId);
+				this.topHeroCard = this._gameState?.opponentDeck?.hero?.cardId;
+				this.bottomBoardCards = this._gameState?.playerDeck?.board.map((card) => card.cardId);
+				this.bottomHeroPowerCard = this._gameState?.playerDeck?.heroPower?.cardId;
+				this.bottomWeaponCard = this._gameState?.playerDeck?.weapon?.cardId;
+				this.bottomSecretCards = this.buildBottomSecretCards(this._gameState, this._bgsState);
+				this.bottomHandCards = this._gameState?.playerDeck?.hand.map((card) => card.cardId);
+				this.bottomHeroCard = this._gameState?.playerDeck?.hero?.cardId;
+				this.constructedAnomaly = this._gameState?.matchInfo?.anomalies?.[0];
+				this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
+					cardsInDeck: this._gameState?.playerDeck?.deck?.length ?? 0,
+					cardsInHand: this._gameState?.playerDeck?.hand?.length ?? 0,
+				});
+				this.opponentCardsLeftInDeckTooltip = this.i18n.translateString(
+					'twitch.cards-in-deck-opponent-tooltip',
+					{
+						cardsInDeck: this._gameState?.opponentDeck?.deck?.length ?? 0,
+						cardsInHand: this._gameState?.opponentDeck?.hand?.length ?? 0,
+					},
+				);
+
+				// console.log('isBgs', this.isBgs, this._bgsState, this.bgsPlayers);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	@HostListener('window:beforeunload')
@@ -508,6 +522,23 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 				positionTop: Map.of(0, 22, 1, 16, 2, 10, 3, 10, 4, 9, 5, 9, 6, 10, 7, 15, 8, 19, 9, 28, 10, 38, 11, 41),
 			} as Adjustment,
 		) as Map<number, Adjustment>;
+	}
+
+	private buildBottomSecretCards(gameState: GameState, bgsState: TwitchBgsState): readonly string[] {
+		const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
+		return (
+			gameState?.playerDeck?.otherZone
+				.filter((card) => card.zone === 'SECRET')
+				.map((card) => card.cardId)
+				// Add support for BG quests
+				.map((cardId) => {
+					if (!bgsMainPlayer) {
+						return cardId;
+					}
+					const rewards = bgsMainPlayer?.questRewards?.filter((r) => !r.completed).map((r) => r.cardId) ?? [];
+					return `${[cardId, ...rewards].join(',')}`;
+				})
+		);
 	}
 }
 
