@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.5',
+		version: '13.5.12',
 		force: false,
 		sections: [
 			// {
@@ -104,6 +104,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix a sim issue where Titus would apply its effect to entities that died at the same time as it.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix a sim issue where hero powers with Avenge effects would sometimes not trigger.`,
 							},
 							{
@@ -121,6 +125,26 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Yrel's power could not prevent minions from dying.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Boon of Beetles' enchantment could be applied twice.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the timing for Assemble the Lineup was incorrect, causing issues with Scallywag's Sky Pirate token.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where auras would not be applied properly to the minion summoned by Rapid Reanimation.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where deathrattles would not progress their related quests.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Mystic Sporebat was considered Avenge instead of Deathrattle.`,
 							},
 						],
 					},
