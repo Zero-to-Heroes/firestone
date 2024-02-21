@@ -25,7 +25,7 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 		`../../../../../css/themes/decktracker-theme.scss`,
 		`../../../../../css/global/cdk-overlay.scss`,
 		'../../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
+		'./decktracker-overlay-standalone.component.scss',
 	],
 	template: `
 		<div
@@ -47,6 +47,7 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 							[displayMode]="displayMode$ | async"
 							[tooltipPosition]="tooltipPosition"
 							[showRelatedCards]="showRelatedCards$ | async"
+							[colorManaCost]="colorManaCost$ | async"
 							[darkenUsedCards]="true"
 							[side]="'player'"
 						>
@@ -68,6 +69,7 @@ export class DeckTrackerOverlayStandaloneComponent
 	displayMode$: Observable<'DISPLAY_MODE_ZONE' | 'DISPLAY_MODE_GROUPED'>;
 	showRelatedCards$ = new Observable<boolean>();
 	showTracker$: Observable<boolean>;
+	colorManaCost$: Observable<boolean>;
 
 	@Input() set gameState(value: GameState) {
 		this.playerDeck = value?.playerDeck;
@@ -102,6 +104,9 @@ export class DeckTrackerOverlayStandaloneComponent
 			.pipe(this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')));
 		this.showRelatedCards$ = this.prefs.prefs.asObservable().pipe(this.mapData((prefs) => prefs?.showRelatedCards));
 		this.showTracker$ = this.prefs.prefs.asObservable().pipe(this.mapData((prefs) => prefs?.decktrackerOpen));
+		this.colorManaCost$ = this.prefs.prefs
+			.asObservable()
+			.pipe(this.mapData((prefs) => prefs?.decktrackerColorManaCost));
 		this.highlightService.setup(this.gameState$$);
 	}
 

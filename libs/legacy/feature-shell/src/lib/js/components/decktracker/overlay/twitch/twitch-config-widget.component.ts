@@ -82,6 +82,13 @@ import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twi
 							[value]="prefs.overlayHighlightRelatedCards"
 							(valueChanged)="onHighlightRelatedCardsChanged(prefs, $event)"
 						></checkbox>
+						<checkbox
+							class="item"
+							[label]="'settings.decktracker.global.show-rarity-color' | owTranslate"
+							[labelTooltip]="'settings.decktracker.global.show-rarity-color-tooltip' | owTranslate"
+							[value]="prefs.decktrackerColorManaCost"
+							(valueChanged)="onDecktrackerColorManaCostChanged(prefs, $event)"
+						></checkbox>
 					</div>
 				</section>
 				<section class="battlegrounds">
@@ -353,6 +360,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onHighlightRelatedCardsChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, overlayHighlightRelatedCards: value };
 		console.log('changing overlayHighlightRelatedCards pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onDecktrackerColorManaCostChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, decktrackerColorManaCost: value };
+		console.log('changing decktrackerColorManaCost pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

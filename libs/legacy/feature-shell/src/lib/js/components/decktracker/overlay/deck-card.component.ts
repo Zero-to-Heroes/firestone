@@ -363,7 +363,7 @@ export class DeckCardComponent implements OnDestroy {
 
 		this.numberOfCopies = this._card.totalQuantity;
 		this.positionFromTop = this._card.positionFromTop;
-		this.rarity = this._card.rarity?.toLowerCase();
+		this.rarity = this._card.rarity?.toLowerCase() ?? this.cards.getCard(this.cardId)?.rarity?.toLowerCase();
 		this.creatorCardIds = this._card.creatorCardIds;
 		this.giftTooltip = null;
 		this.updateGiftTooltip();

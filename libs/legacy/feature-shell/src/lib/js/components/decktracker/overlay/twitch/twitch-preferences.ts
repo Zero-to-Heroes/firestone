@@ -9,6 +9,7 @@ export class TwitchPreferences {
 	readonly showBattleSimulator: boolean = true;
 	readonly showRelatedCards: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
+	readonly decktrackerColorManaCost: boolean = true;
 
 	readonly decktrackerOpen: boolean = true;
 	readonly magnifierIconOnTop: boolean = false;

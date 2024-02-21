@@ -19,7 +19,7 @@ import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
-import fullState from './game-states/bgs-with-quest-completed.json';
+import fullState from './game-states/constructed.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 import { mapTwitchLanguageToHsLocale } from './twitch-config-widget.component';
 
