@@ -126,6 +126,9 @@ export class ReceiveCardInHandParser implements EventParser {
 						manaCost: this.allCards.getCard(newCardId).cost,
 						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
 				  });
+		const cardWithZone = cardWithKnownInfo.update({
+			zone: 'HAND',
+		});
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithDefault',
 		// 	cardWithKnownInfo,
@@ -137,14 +140,14 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
-				? cardWithKnownInfo.update({
+				? cardWithZone.update({
 						buffingEntityCardIds: [
 							...(cardWithDefault.buffingEntityCardIds || []),
 							buffingEntityCardId,
 						] as readonly string[],
-						buffCardIds: [...(cardWithKnownInfo.buffCardIds || []), buffCardId] as readonly string[],
+						buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
-				: cardWithKnownInfo;
+				: cardWithZone;
 		const cardWithGuessedInfo = addGuessedInfo(otherCardWithBuffs, gameEvent);
 		const cardWithAdditionalAttributes = addAdditionalAttribues(
 			cardWithGuessedInfo,

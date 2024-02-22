@@ -157,6 +157,7 @@ export class CardDrawParser implements EventParser {
 				: undefined,
 			manaCost: isCardInfoPublic ? card.manaCost ?? card.manaCost : null,
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
+			zone: 'HAND',
 		} as DeckCard);
 		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, lastInfluencedByCardId);
 		const previousDeck = deck.deck;

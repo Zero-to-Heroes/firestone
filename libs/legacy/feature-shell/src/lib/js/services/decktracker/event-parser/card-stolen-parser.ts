@@ -86,6 +86,7 @@ export class CardStolenParser implements EventParser {
 							stolenFromOpponent: !cardInHand.stolenFromOpponent,
 							positionFromBottom: undefined,
 							positionFromTop: undefined,
+							zone: 'HAND',
 						} as DeckCard),
 				  )
 				: stealingToDeck.hand;

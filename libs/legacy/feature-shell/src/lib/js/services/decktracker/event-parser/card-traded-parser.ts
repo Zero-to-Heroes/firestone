@@ -42,6 +42,7 @@ export class CardTradedParser implements EventParser {
 					positionFromTop: undefined,
 					positionFromBottom: undefined,
 					dredged: undefined,
+					zone: undefined,
 			  } as DeckCard)
 			: card;
 
