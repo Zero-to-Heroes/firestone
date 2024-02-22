@@ -18,7 +18,7 @@ export class TwitchCardsHighlightFacadeService {
 	public async initForDuels() {
 		this.service.init({
 			skipGameState: true,
-			skipPrefs: true,
+			skipPrefs: false,
 			uniqueZone: true,
 		});
 	}

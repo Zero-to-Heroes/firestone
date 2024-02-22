@@ -10,12 +10,12 @@ import {
 } from '@angular/core';
 import { GameState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsHighlightFacadeService } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
+import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-facade.service';
 import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
@@ -211,7 +211,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: TwitchPreferencesService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly highlight: CardsHighlightFacadeService,
+		private readonly highlight: TwitchCardsHighlightFacadeService,
 	) {
 		super(cdr);
 	}
@@ -280,7 +280,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 				if (!this.isBgs) {
 					this.highlight.init({
 						skipGameState: true,
-						skipPrefs: true,
+						skipPrefs: false,
 						uniqueZone: true,
 					});
 				}
