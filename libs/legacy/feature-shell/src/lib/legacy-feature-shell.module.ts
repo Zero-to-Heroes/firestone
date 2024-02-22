@@ -511,6 +511,8 @@ import { ConstructedMetaDeckCardSearchComponent } from '@components/decktracker/
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { TwitchCardsFacadeManagerService } from '@components/decktracker/overlay/twitch/twitch-cards-facade-manager.service';
+import { TwitchLocalizationManagerService } from '@components/decktracker/overlay/twitch/twitch-localization-manager.service';
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
@@ -1794,10 +1796,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LogRegisterService,
 		HsClientConfigService,
 		SettingsCommunicationService,
-		TwitchAuthService,
-		TwitchPresenceService,
 		OutOfCardsService,
 		GameNativeStateStoreService,
+		TwitchAuthService,
+		TwitchPresenceService,
+		TwitchCardsFacadeManagerService,
+		TwitchLocalizationManagerService,
 
 		CollectionBootstrapService,
 		PackMonitor,

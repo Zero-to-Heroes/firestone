@@ -29,7 +29,7 @@ export class CardsFacadeStandaloneService {
 	}
 
 	public async setLocale(locale: string) {
-		console.log('setting locale', locale);
+		console.log('setting locale for cards', locale);
 		const fileName = this.getFileName(locale);
 		console.log('initializing cards db with', fileName);
 		await this.service.initializeCardsDb(undefined, fileName);

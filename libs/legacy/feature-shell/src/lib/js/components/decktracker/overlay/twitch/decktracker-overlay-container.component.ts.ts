@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
@@ -21,7 +21,8 @@ import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import fullState from './game-states/constructed.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
-import { mapTwitchLanguageToHsLocale } from './twitch-config-widget.component';
+import { TwitchCardsFacadeManagerService } from './twitch-cards-facade-manager.service';
+import { TwitchLocalizationManagerService } from './twitch-localization-manager.service';
 
 @Component({
 	selector: 'decktracker-overlay-container',
@@ -102,7 +103,7 @@ export class DeckTrackerOverlayContainerComponent
 
 	private twitch;
 	private token: string;
-	private localeInit: boolean;
+	// private localeInit: boolean;
 
 	private baseInitDone$$ = new BehaviorSubject<boolean>(false);
 
@@ -114,6 +115,8 @@ export class DeckTrackerOverlayContainerComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly translate: TranslateService,
 		private readonly allCards: CardsFacadeStandaloneService,
+		private readonly allCardsManager: TwitchCardsFacadeManagerService,
+		private readonly localizationManager: TwitchLocalizationManagerService,
 	) {
 		super(cdr, prefs, el, renderer);
 	}
@@ -149,24 +152,8 @@ export class DeckTrackerOverlayContainerComponent
 			return;
 		}
 
-		this.localeInit = false;
-		this.translate.setDefaultLang('enUS');
-		const prefs = this.prefs.prefs.getValue();
-		const localeFromPrefs = prefs.locale ?? 'auto';
-		console.log('search params', window.location.search);
-		const queryLanguage =
-			localeFromPrefs === 'auto' ? new URLSearchParams(window.location.search).get('language') : localeFromPrefs;
-		const locale = mapTwitchLanguageToHsLocale(queryLanguage);
-		console.log('mapped to HS locale', locale);
-
-		console.debug('waiting for cards to init');
-		await this.allCards.init(new AllCardsService(), locale);
-		console.debug('cards init done');
-
-		await this.i18n.setLocale(locale);
-		await this.translate.use(locale).toPromise();
-		this.localeInit = true;
-		console.log('finished setting up locale', locale, this.i18n);
+		await this.localizationManager.init();
+		await this.allCardsManager.isReady();
 		this.baseInitDone$$.next(true);
 
 		this.twitch = (window as any).Twitch.ext;
@@ -175,7 +162,6 @@ export class DeckTrackerOverlayContainerComponent
 			this.token = auth.token;
 			console.log('set token', this.token);
 			this.twitch.listen('broadcast', async (target, contentType, event) => {
-				await this.waitForLocaleInit();
 				const deckEvent: TwitchEvent = JSON.parse(inflate(event, { to: 'string' }));
 				this.processEvent(deckEvent);
 			});
@@ -301,10 +287,6 @@ export class DeckTrackerOverlayContainerComponent
 			return;
 		}
 
-		await this.i18n.setLocale('enUS');
-		console.log('finished setting up locale', 'enUS', this.i18n);
-		// TODO: use prefs
-		await this.translate.use('enUS').toPromise();
 		this.gameState = (fullState as any).deck;
 		this.bgsState = (fullState as any).bgs;
 		this.showDecktracker =
@@ -318,18 +300,5 @@ export class DeckTrackerOverlayContainerComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private waitForLocaleInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
-			const dbWait = () => {
-				if (this.localeInit) {
-					resolve();
-				} else {
-					setTimeout(() => dbWait(), 50);
-				}
-			};
-			dbWait();
-		});
 	}
 }
