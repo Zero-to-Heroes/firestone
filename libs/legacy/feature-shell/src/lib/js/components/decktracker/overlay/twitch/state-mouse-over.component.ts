@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { GameState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsHighlightFacadeService } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -98,6 +99,8 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					*ngFor="let cardId of bottomBoardCards"
 					[cardId]="cardId"
 					[cardTooltipBgs]="isBgs"
+					(mouseenter)="onBottomCardMouseEnter(cardId)"
+					(mouseleave)="onBottomCardMouseLeave(cardId)"
 				></empty-card>
 			</ul>
 			<ul class="hero bottom-hero">
@@ -127,6 +130,8 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 						[cardId]="bottomHeroPowerCard"
 						[cardTooltipPosition]="'right'"
 						[cardTooltipBgs]="isBgs"
+						(mouseenter)="onBottomCardMouseEnter(bottomHeroPowerCard)"
+						(mouseleave)="onBottomCardMouseLeave(bottomHeroPowerCard)"
 					></empty-card>
 				</div>
 			</ul>
@@ -139,6 +144,8 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					[cardId]="cardId"
 					[cardTooltipBgs]="isBgs"
 					[cardTooltipPosition]="'top'"
+					(mouseenter)="onBottomCardMouseEnter(cardId)"
+					(mouseleave)="onBottomCardMouseLeave(cardId)"
 				>
 				</empty-card>
 			</ul>
@@ -204,6 +211,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: TwitchPreferencesService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly highlight: CardsHighlightFacadeService,
 	) {
 		super(cdr);
 	}
@@ -269,6 +277,14 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 					},
 				);
 
+				if (!this.isBgs) {
+					this.highlight.init({
+						skipGameState: true,
+						skipPrefs: true,
+						uniqueZone: true,
+					});
+				}
+
 				// console.log('isBgs', this.isBgs, this._bgsState, this.bgsPlayers);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
@@ -287,6 +303,14 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onBottomCardMouseEnter(cardId: string) {
+		this.highlight?.onMouseEnter(cardId, 'player');
+	}
+
+	onBottomCardMouseLeave(cardId: string) {
+		this.highlight?.onMouseLeave(cardId);
 	}
 
 	trackByLeaderboard(index: number, player: TwitchBgsPlayer) {
