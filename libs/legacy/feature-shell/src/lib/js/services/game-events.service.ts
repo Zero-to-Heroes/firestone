@@ -1510,6 +1510,7 @@ export class GameEvents {
 
 	private existingLogLines: string[] = [];
 	private catchingUp: boolean;
+	private pluginBeingInitialized: boolean;
 
 	public isCatchingUpLogLines(): boolean {
 		return this.catchingUp;
@@ -1626,10 +1627,11 @@ export class GameEvents {
 	}
 
 	private async initPlugin() {
-		if (this.plugin) {
+		if (this.plugin || this.pluginBeingInitialized) {
 			return;
 		}
 
+		this.pluginBeingInitialized = true;
 		console.log('[game-events] init log listener plugin');
 		this.plugin = await this.gameEventsPlugin.get();
 		if (this.plugin) {
@@ -1654,5 +1656,6 @@ export class GameEvents {
 				console.log('[game-events] real-time log processing ready to go');
 			});
 		}
+		this.pluginBeingInitialized = false;
 	}
 }
