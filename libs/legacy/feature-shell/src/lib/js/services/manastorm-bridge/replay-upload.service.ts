@@ -46,7 +46,8 @@ export class ReplayUploadService {
 			userName,
 			prefs.allowGamesShare,
 		);
-		console.log('[manastorm-bridge] built metadata after', Date.now() - start, 'ms', fullMetaData);
+		console.log('[manastorm-bridge] built metadata after', Date.now() - start, 'ms');
+		console.debug('[manastorm-bridge] built metadata after', Date.now() - start, 'ms', fullMetaData);
 
 		// Configure The S3 Object
 		AWS.config.region = 'us-west-2';
