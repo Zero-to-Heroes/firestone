@@ -26,6 +26,11 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 			<div class="card-name">
 				<span>{{ cardName }}</span>
 			</div>
+			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
+				<div class="inner-border">
+					<span>{{ numberOfCopies }}</span>
+				</div>
+			</div>
 			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
 				<div class="inner-border">
 					<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
@@ -48,6 +53,7 @@ export class CardTileComponent {
 		this.manaCostStr = refCard.hideStats ? '' : refCard.cost?.toString() ?? '?';
 		this.cardName = refCard.name;
 	}
+	@Input() numberOfCopies: number;
 
 	_cardId: string;
 	cardImage: string;

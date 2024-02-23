@@ -14,7 +14,7 @@ import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
 	template: `
 		<ng-scrollbar class="deck-list" [autoHeightDisabled]="false" [sensorDisabled]="false" scrollable>
 			<li class="card-container" *ngFor="let card of cards$ | async">
-				<card-tile class="card" [cardId]="card.cardId"></card-tile>
+				<card-tile class="card" [cardId]="card.cardId" [numberOfCopies]="card.quantity"></card-tile>
 				<div class="sideboard" *ngIf="card.sideboard">
 					<card-tile
 						*ngFor="let sideboard of card.sideboard"
