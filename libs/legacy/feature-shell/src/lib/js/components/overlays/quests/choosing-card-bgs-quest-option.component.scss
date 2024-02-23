@@ -31,6 +31,10 @@
 		border-bottom: 1px solid var(--color-3);
 		position: relative;
 
+		& > .text {
+			// color: var(--color-1);
+		}
+
 		.sample-size {
 			display: flex;
 			font-size: 10px;
@@ -38,6 +42,7 @@
 			align-items: center;
 			justify-content: center;
 			margin-top: 3px;
+			opacity: 0.6;
 
 			.value {
 				margin-left: 5px;
@@ -80,11 +85,23 @@
 	flex-basis: 100%;
 	padding: 5px;
 
+	.value {
+		// color: var(--color-1);
+		color: var(--default-title-color);
+	}
+
+	&.better {
+		.value {
+			color: #61ff47;
+		}
+	}
+	&.worse {
+		.value {
+			color: #ff4747;
+		}
+	}
+
 	&:not(:last-child) {
 		border-right: 1px solid var(--color-3);
 	}
-}
-
-.value {
-	color: var(--color-1);
 }

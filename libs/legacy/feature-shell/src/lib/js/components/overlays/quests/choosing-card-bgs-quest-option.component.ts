@@ -51,7 +51,7 @@ import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
 							{{ rewardAveragePositionGlobal }}
 						</div>
 					</div>
-					<div class="item" [helpTooltip]="rewardAveragePlacementHeroTooltip">
+					<div class="item {{ rewardHeroCss }}" [helpTooltip]="rewardAveragePlacementHeroTooltip">
 						<div
 							class="text"
 							[fsTranslate]="'battlegrounds.in-game.quests.reward.average-placement-hero'"
@@ -74,15 +74,6 @@ import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
 					</div>
 				</div>
 				<div class="values">
-					<div class="item" [helpTooltip]="questDifficultyTooltip">
-						<div
-							class="text"
-							[fsTranslate]="'battlegrounds.in-game.quests.quest.average-difficulty-header'"
-						></div>
-						<div class="value">
-							{{ questTurnsToCompleteForDifficulty }}
-						</div>
-					</div>
 					<div
 						class="item"
 						[helpTooltip]="'battlegrounds.in-game.quests.quest.average-global-tooltip' | fsTranslate"
@@ -95,7 +86,16 @@ import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
 							{{ questTurnsToCompleteGlobal }}
 						</div>
 					</div>
-					<div class="item" [helpTooltip]="questHeroTooltip">
+					<div class="item {{ questDifficultyCss }}" [helpTooltip]="questDifficultyTooltip">
+						<div
+							class="text"
+							[fsTranslate]="'battlegrounds.in-game.quests.quest.average-difficulty-header'"
+						></div>
+						<div class="value">
+							{{ questTurnsToCompleteForDifficulty }}
+						</div>
+					</div>
+					<div class="item {{ questHeroCss }}" [helpTooltip]="questHeroTooltip">
 						<div
 							class="text"
 							[fsTranslate]="'battlegrounds.in-game.quests.quest.average-hero-header'"
@@ -125,24 +125,45 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 					maximumFractionDigits: 2,
 			  })
 			: '-';
-		this.questTurnsToCompleteForDifficulty = value.quest.averageTurnsToCompleteForDifficulty
-			? value.quest.averageTurnsToCompleteForDifficulty.toLocaleString(loc, {
-					minimumFractionDigits: 1,
-					maximumFractionDigits: 1,
-			  })
-			: '-';
+		this.rewardHeroCss =
+			!value.reward.averagePositionForHero || value.reward.averagePositionForHero === value.reward.averagePosition
+				? ''
+				: value.reward.averagePositionForHero < value.reward.averagePosition
+				? 'better'
+				: 'worse';
+
 		this.questTurnsToCompleteGlobal = value.quest.averageTurnsToComplete
 			? value.quest.averageTurnsToComplete.toLocaleString(loc, {
 					minimumFractionDigits: 1,
 					maximumFractionDigits: 1,
 			  })
 			: '-';
+		this.questTurnsToCompleteForDifficulty = value.quest.averageTurnsToCompleteForDifficulty
+			? value.quest.averageTurnsToCompleteForDifficulty.toLocaleString(loc, {
+					minimumFractionDigits: 1,
+					maximumFractionDigits: 1,
+			  })
+			: '-';
+		this.questDifficultyCss =
+			!value.quest.averageTurnsToCompleteForDifficulty ||
+			value.quest.averageTurnsToCompleteForDifficulty === value.quest.averageTurnsToComplete
+				? ''
+				: value.quest.averageTurnsToCompleteForDifficulty < value.quest.averageTurnsToComplete
+				? 'better'
+				: 'worse';
 		this.questTurnsToCompleteForHero = value.quest.averageTurnsToCompleteForHero
 			? value.quest.averageTurnsToCompleteForHero.toLocaleString(loc, {
 					minimumFractionDigits: 1,
 					maximumFractionDigits: 1,
 			  })
 			: '-';
+		this.questHeroCss =
+			!value.quest.averageTurnsToCompleteForHero ||
+			value.quest.averageTurnsToCompleteForHero === value.quest.averageTurnsToComplete
+				? ''
+				: value.quest.averageTurnsToCompleteForHero < value.quest.averageTurnsToComplete
+				? 'better'
+				: 'worse';
 		this.rewardDataPoints = value.reward.dataPoints.toLocaleString(loc);
 		this.questDataPoints = value.quest.dataPoints.toLocaleString(loc);
 
@@ -201,9 +222,12 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 
 	rewardGlobalTooltip: string;
 	rewardAveragePlacementHeroTooltip: string;
+	rewardHeroCss: string;
 	questHeaderTooltip: string;
 	questDifficultyTooltip: string;
+	questDifficultyCss: string;
 	questHeroTooltip: string;
+	questHeroCss: string;
 
 	_freeUsesLeft: number;
 	freeUsesTooltip: string;
