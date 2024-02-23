@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.15',
+		version: '13.5.18',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,25 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `You can now browse the stats for the Quests and Rewards in the app (it's back on again!).`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Quest stats overlay is back! While it's a premium feature, free users can use it for two games every day (this might change in the future).`,
+							},
+							{
+								type: 'bug',
+								text: `There was an issue in how Quest data was collected for specific difficulties. As such, the "difficulty" data will be incorrect for a few days, and should be back to normal soon.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -64,6 +68,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `The "extra gold next turn" counter should now properly take into account cards that duplicate effects, like Brann or Brann's Blessings.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix a sim issue where a Venomous minion being deflected by Mad Matador would lose its Venomous charge.`,
