@@ -6,8 +6,6 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { CARD_IDS_FOR_GOLD_DELTA } from '@components/game-counters/definitions/bgs-delta-gold-counter';
-import { CardIds } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -45,9 +43,7 @@ export class PlayerBgsGoldDeltaWidgetWrapperComponent
 				return false;
 			}
 
-			return state.playerDeck.cardsPlayedThisTurn.some((card) =>
-				CARD_IDS_FOR_GOLD_DELTA.includes(card.cardId as CardIds),
-			);
+			return bgState.currentGame?.extraGoldNextTurn > 0 || bgState.currentGame?.overconfidences > 0;
 		};
 	}
 }

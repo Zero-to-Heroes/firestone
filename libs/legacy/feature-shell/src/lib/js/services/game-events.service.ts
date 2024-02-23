@@ -1132,6 +1132,15 @@ export class GameEvents {
 			case 'BATTLEGROUNDS_MINION_SOLD':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_SOLD, gameEvent));
 				break;
+			case 'BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN':
+				console.debug('[game-events] emitting BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN, gameEvent, {
+						extraGold: gameEvent.Value.AdditionalProps.ExtraGoldNextTurn,
+						overconfidences: gameEvent.Value.AdditionalProps.Overconfidences,
+					}),
+				);
+				break;
 			case 'BATTLEGROUNDS_ENEMY_HERO_KILLED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent),

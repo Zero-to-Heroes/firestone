@@ -30,6 +30,8 @@ export class BgsGame {
 	readonly lastOpponentPlayerId: number;
 	readonly liveStats: RealTimeStatsState = new RealTimeStatsState();
 	readonly gameEnded: boolean;
+	readonly extraGoldNextTurn: number = 0;
+	readonly overconfidences: number = 0;
 
 	public static create(base: Partial<NonFunctionProperties<BgsGame>>): BgsGame {
 		return Object.assign(new BgsGame(), base);

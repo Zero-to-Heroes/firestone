@@ -68,6 +68,7 @@ import { BgsToggleHighlightMinionOnBoardParser } from './event-parsers/bgs-toggl
 import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle-highlight-tribe-on-board-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
+import { BgsExtraGoldNextTurnEvent, BgsExtraGoldNextTurnParser } from './event-parsers/extra-gold-next-turn';
 import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BgsArmorChangedEvent } from './events/bgs-armor-changed-event';
@@ -352,6 +353,13 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.isHeroPowerReward,
 					),
 				);
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN) {
+				this.battlegroundsUpdater.next(
+					new BgsExtraGoldNextTurnEvent(
+						gameEvent.additionalData.extraGold,
+						gameEvent.additionalData.overconfidences,
+					),
+				);
 			} else if (
 				gameEvent.type === GameEvent.DAMAGE &&
 				gameEvent.additionalData.targets &&
@@ -629,6 +637,7 @@ export class BattlegroundsStoreService {
 			new BgsBuddyGainedParser(this.gameEventsService, this.allCards),
 			new BgsRewardRevealedParser(this.allCards),
 			new BgsRewardGainedParser(this.allCards),
+			new BgsExtraGoldNextTurnParser(),
 			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService, this.allCards),
 			new BgsTripleCreatedParser(this.allCards),
 			new BgsOpponentRevealedParser(this.allCards),

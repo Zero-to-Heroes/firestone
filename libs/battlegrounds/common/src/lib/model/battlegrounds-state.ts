@@ -1,4 +1,5 @@
 import { GameTag, Race } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BgsGame } from './bgs-game';
 import { BgsPanel } from './bgs-panel';
 import { BgsPanelId } from './bgs-panel-id.type';
@@ -22,11 +23,11 @@ export class BattlegroundsState {
 	readonly highlightedMechanics: readonly GameTag[] = [];
 	readonly highlightedMinions: readonly string[] = [];
 
-	public static create(base: BattlegroundsState): BattlegroundsState {
+	public static create(base: Partial<NonFunctionProperties<BattlegroundsState>>): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), base);
 	}
 
-	public update(base: BattlegroundsState): BattlegroundsState {
+	public update(base: Partial<NonFunctionProperties<BattlegroundsState>>): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), this, base);
 	}
 
