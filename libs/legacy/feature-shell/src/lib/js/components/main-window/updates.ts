@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.12',
+		version: '13.5.15',
 		force: false,
 		sections: [
 			// {
@@ -42,109 +42,55 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now browse the stats for the Quests and Rewards in the app (it's back on again!).`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Constructed meta stats (decks and archetypes) should be working once again.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'battlegrounds',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `You can now browse the stats for the Quests and Rewards in the app (it's back on again!).`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Update the contents of Harth Stonebrew's hands following the 28.6.1 server-side hotfix. I'm still missing an updated version for Blood DK, Unholy DK and Paladin, so please send a screenshot my way if you have one :)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's hand markers would display incorrect information after playing some of the cards created by Harth Stonebrew.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's corpse counter would not appear.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the position from the bottom after dredging would sometimes be incorrect.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a slider to resize the Quests Overlay (under Settings > Battlegrounds > Overlay, at the bottom).`,
+								type: 'bug',
+								text: `Fix a sim issue where a Venomous minion being deflected by Mad Matador would lose its Venomous charge.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the toggle for the Quests Overlay would not work properly.`,
+								text: `Fix a sim issue where Golden Deadstomper and Golden Zliza would give an incorrect buff.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Titus would apply its effect to entities that died at the same time as it.`,
+								text: `Fix a sim issue where Redemtpion would not handle auras from minions very well.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where hero powers with Avenge effects would sometimes not trigger.`,
+								text: `Fix a sim issue where Emergent Flame's buff (triggered by Rylak) would not take into account the previous turn's refreshes.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where quests could get completed during a battle.`,
+								text: `Fix a sim issue where Smoking Gun's buff would not be applied properly when received during the battle.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Golden Mad Matador would only trigger once.`,
+								text: `Fix a sim issue where Sr Tomb Diver would always try to find a non-golden minion to target, instead of picking the rightmost one.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue with Goldrinn + Titus.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Yrel's power could not prevent minions from dying.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Boon of Beetles' enchantment could be applied twice.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where the timing for Assemble the Lineup was incorrect, causing issues with Scallywag's Sky Pirate token.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where auras would not be applied properly to the minion summoned by Rapid Reanimation.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where deathrattles would not progress their related quests.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Mystic Sporebat was considered Avenge instead of Deathrattle.`,
+								text: `Fix a sim issue where Beatboxer's enchantments would not be properly assigned.`,
 							},
 						],
 					},
