@@ -10,6 +10,7 @@ import { BgsQuestStatsInfoPremiumComponent } from './components/bgs-quest-stats-
 import { BgsGameStateFacadeService } from './services/bgs-game-state-facade.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
+import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
 import { BattlegroundsQuestsService } from './services/bgs-quests.service';
 
 const components = [BgsQuestStatsInfoPremiumComponent];
@@ -30,6 +31,7 @@ const components = [BgsQuestStatsInfoPremiumComponent];
 		BgsInGameQuestsService,
 		BgsInGameQuestsGuardianService,
 		BgsGameStateFacadeService,
+		BgsMatchMemoryInfoService,
 	],
 	declarations: components,
 	exports: components,

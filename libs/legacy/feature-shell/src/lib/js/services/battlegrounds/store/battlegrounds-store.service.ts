@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BattlegroundsState, RealTimeStatsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsMatchMemoryInfoService, RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
@@ -8,7 +8,7 @@ import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parser
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -123,7 +123,7 @@ export class BattlegroundsStoreService {
 	private queuedEvents: { event: BattlegroundsStoreEvent; trigger: string }[] = [];
 	private overlayHandlers: BattlegroundsOverlay[];
 	private eventEmitters = [];
-	private memoryInterval;
+	// private memoryInterval;
 	private battlegroundsHotkeyListener;
 	private realTimeStatsListener: (state: RealTimeStatsState) => void;
 
@@ -147,6 +147,7 @@ export class BattlegroundsStoreService {
 		private readonly bgsUserStatsService: BgsBestUserStatsService,
 		private readonly gameStatus: GameStatusService,
 		private readonly bugService: BugReportService,
+		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -201,12 +202,12 @@ export class BattlegroundsStoreService {
 			this.handleHotkeyPressed();
 		});
 		// this.handleDisplayPreferences();
-		this.gameStatus.onGameExit(() => {
-			if (this.memoryInterval) {
-				clearInterval(this.memoryInterval);
-				this.memoryInterval = null;
-			}
-		});
+		// this.gameStatus.onGameExit(() => {
+		// 	if (this.memoryInterval) {
+		// 		clearInterval(this.memoryInterval);
+		// 		this.memoryInterval = null;
+		// 	}
+		// });
 
 		await sleep(1);
 		const mainWindowStoreEmitter: BehaviorSubject<[MainWindowState, NavigationState]> =
@@ -238,6 +239,9 @@ export class BattlegroundsStoreService {
 			console.debug('[bgs-store] prefs updated', prefs);
 			this.updateOverlay();
 		});
+		this.matchMemoryInfo.battlegroundsMemoryInfo$$
+			.pipe(filter((info) => !!info))
+			.subscribe((info) => this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info)));
 	}
 
 	private async handleHotkeyPressed(force = false) {
@@ -313,7 +317,6 @@ export class BattlegroundsStoreService {
 					const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
 					// We already only send the event at the beginning of the turn
 					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-					// this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
@@ -456,10 +459,11 @@ export class BattlegroundsStoreService {
 				gameEvent.type === GameEvent.GAME_END ||
 				(gameEvent.type === GameEvent.SPECTATING && !gameEvent.additionalData.spectating)
 			) {
-				if (this.memoryInterval) {
-					clearInterval(this.memoryInterval);
-					this.memoryInterval = null;
-				}
+				this.matchMemoryInfo.stopMemoryReading();
+				// if (this.memoryInterval) {
+				// 	clearInterval(this.memoryInterval);
+				// 	this.memoryInterval = null;
+				// }
 				this.battlegroundsUpdater.next(new BgsStartComputingPostMatchStatsEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
@@ -474,40 +478,8 @@ export class BattlegroundsStoreService {
 		});
 	}
 
-	private async startMemoryReading(forceReset = false) {
-		if (this.memoryInterval) {
-			clearInterval(this.memoryInterval);
-			this.memoryInterval = null;
-		}
-		const firstInfo = await this.memory.getBattlegroundsMatchWithPlayers(1, forceReset);
-		if (!firstInfo?.Game?.Players?.length) {
-			console.log('[bgs-init] No players returned, will call with reset');
-			await sleep(3000);
-			this.startMemoryReading(true);
-			return;
-		}
-		this.memoryInterval = setInterval(async () => {
-			if (this.state?.currentGame?.players?.length < 8) {
-				return;
-			}
-			// Here we want to get the players info, mostly
-			let info = await this.memory.getBattlegroundsMatchWithPlayers(1);
-			if (!!info?.Game?.Players?.length) {
-				info = {
-					...info,
-					Game: {
-						...info.Game,
-						Players: info.Game.Players.map((player) => ({
-							...player,
-							// We set the damage to null because? Most likely this is to avoid info
-							// leaks
-							Damage: this.state?.currentGame?.phase === 'recruit' ? player.Damage : null,
-						})),
-					},
-				};
-			}
-			this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-		}, 3000);
+	private async startMemoryReading() {
+		this.matchMemoryInfo.startMemoryReading();
 	}
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
