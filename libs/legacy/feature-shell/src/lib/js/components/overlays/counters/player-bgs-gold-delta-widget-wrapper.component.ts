@@ -38,11 +38,10 @@ export class PlayerBgsGoldDeltaWidgetWrapperComponent
 		this.onBgs = true;
 		this.prefExtractor = (prefs) => prefs.playerBgsGoldDeltaCounter;
 		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
-			const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
-			if (!isRecruitPhase) {
-				return false;
-			}
-
+			// const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
+			// if (!isRecruitPhase) {
+			// 	return false;
+			// }
 			return bgState.currentGame?.extraGoldNextTurn > 0 || bgState.currentGame?.overconfidences > 0;
 		};
 	}
