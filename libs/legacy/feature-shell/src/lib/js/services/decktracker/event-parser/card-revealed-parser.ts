@@ -34,8 +34,17 @@ export class CardRevealedParser implements EventParser {
 		if (gameEvent.additionalData.revealedFromBlock === 'DREDGE') {
 			// Make sure there is no overlap with existing cards
 			// When we dredge we are at the very bottom, so we can increase the current index by any big number
-			DeckCard.deckIndexFromBottom += 4;
+			// Only increase it at the first time of the dredge block
+			if (gameEvent.additionalData.indexInBlock === 0) {
+				DeckCard.deckIndexFromBottom += 4;
+			}
 			positionFromBottom = DeckCard.deckIndexFromBottom + 3 - gameEvent.additionalData.indexInBlock;
+			console.debug(
+				'[card-revealed] dredge',
+				positionFromBottom,
+				DeckCard.deckIndexFromBottom,
+				gameEvent.additionalData.indexInBlock,
+			);
 		}
 		// else {
 		// 	positionFromBottom = DeckCard.deckIndexFromBottom++;
