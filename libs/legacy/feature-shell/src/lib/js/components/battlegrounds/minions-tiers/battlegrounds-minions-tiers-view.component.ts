@@ -266,7 +266,7 @@ export const buildTiers = (
 	if (anomalies.includes(CardIds.ValuationInflation_BG27_Anomaly_556)) {
 		tiersToInclude = tiersToInclude.filter((tier) => tier !== 1);
 	}
-	console.debug('tiersToInclude', tiersToInclude, anomalies, playerCardId);
+	// console.debug('tiersToInclude', tiersToInclude, anomalies, playerCardId);
 
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 		.filter((card) => tiersToInclude.includes(card.techLevel))
@@ -360,7 +360,7 @@ const buildTribeTiers = (
 	if (!availableTribes?.length) {
 		return [];
 	}
-	console.debug('building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
+	// console.debug('building tribe tiers', cardsInGame, playerCardId, availableTribes, allBuddies);
 	const allTribes: Race[] = [
 		...new Set(
 			cardsInGame
@@ -368,7 +368,7 @@ const buildTribeTiers = (
 				.filter((t) => t !== Race[Race.ALL] && availableTribes.includes(Race[t])),
 		),
 	].map((t) => Race[t]);
-	console.debug('[tribe-tiers] all tribes', allTribes, availableTribes);
+	// console.debug('[tribe-tiers] all tribes', allTribes, availableTribes);
 	const tribesResult = allTribes
 		.map((tribe: Race) => {
 			const cardsForTribe = cardsInGame.filter((c) =>

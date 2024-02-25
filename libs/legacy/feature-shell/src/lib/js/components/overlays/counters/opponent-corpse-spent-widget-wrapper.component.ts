@@ -37,7 +37,6 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 		this.activeCounter = 'corpseSpent';
 		this.prefExtractor = (prefs) => prefs.opponentCorpseSpentCounter;
 		this.deckStateExtractor = (state) => {
-			console.debug('[opponent-corpse-spent] getting deck state', state.opponentDeck.hero);
 			if (!state.opponentDeck.hero?.classes?.includes(CardClass.DEATHKNIGHT)) {
 				return false;
 			}
