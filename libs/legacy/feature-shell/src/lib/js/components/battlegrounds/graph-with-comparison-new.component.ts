@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { NumericTurnInfo } from '@firestone/battlegrounds/common';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { BehaviorSubject, Observable, combineLatest, filter, share, takeUntil } from 'rxjs';
@@ -103,6 +104,7 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionStoreCo
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(store, cdr);
 	}
@@ -435,13 +437,18 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionStoreCo
 		delta: number,
 		datapoint: TooltipItem<'line'>,
 	): string {
+		console.debug('building section', datapoint, datapoint.formattedValue);
 		return `
 			<div class="section ${theClass}">
 				<div class="subtitle">${label}</div>
 				<div class="value">${turnLabel} ${datapoint?.label}</div>
 				<div class="value">${
 					datapoint?.formattedValue
-						? statLabel + ' ' + parseInt(datapoint.formattedValue).toFixed(0)
+						? statLabel +
+						  ' ' +
+						  parseInt('' + datapoint.raw).toLocaleString(this.i18n.formatCurrentLocale(), {
+								maximumFractionDigits: 0,
+						  })
 						: 'No data'
 				}</div>
 				<div class="delta">${
