@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -12,12 +13,15 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardMousedOverService, Side } from '@firestone/memory';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
+import { combineLatest, distinctUntilChanged, filter, map, pairwise, takeUntil } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { AdService } from '../../../services/ad.service';
 import { Handler } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
 import {
 	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS,
@@ -148,7 +152,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckCardComponent implements OnDestroy {
+export class DeckCardComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	/** @deprecated */
@@ -262,12 +266,53 @@ export class DeckCardComponent implements OnDestroy {
 	private _side: 'player' | 'opponent' | 'duels';
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
 		private readonly el: ElementRef,
+		private readonly cardMouseOverService: CardMousedOverService,
+		private readonly ads: AdService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
-	) {}
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await this.cardMouseOverService.isReady();
+		await this.ads.isReady();
+
+		combineLatest([this.ads.enablePremiumFeatures$$, this.cardMouseOverService.mousedOverCard$$])
+			.pipe(
+				filter(([enablePremiumFeatures]) => enablePremiumFeatures),
+				map(([enablePremiumFeatures, mousedOverCard]) => mousedOverCard),
+				distinctUntilChanged((a, b) => a?.CardId === b?.CardId && a?.Zone === b?.Zone && a?.Side === b?.Side),
+				pairwise(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([previousMouseOverCard, mousedOverCard]) => {
+				if (!this.cardId) {
+					return;
+				}
+				if (mousedOverCard?.Side === Side.OPPOSING && this._side === 'player') {
+					return;
+				}
+				if (mousedOverCard?.Side === Side.FRIENDLY && this._side === 'opponent') {
+					return;
+				}
+
+				if (mousedOverCard?.CardId === this.cardId) {
+					console.debug('considering mouse over', previousMouseOverCard, mousedOverCard, this.cardId);
+					this.onMouseEnter(null);
+				} else if (previousMouseOverCard?.CardId === this.cardId) {
+					console.debug('considering mouse leave', previousMouseOverCard, mousedOverCard, this.cardId);
+					this.onMouseLeave(null);
+				}
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	registerHighlight() {
 		if (!this._side) {

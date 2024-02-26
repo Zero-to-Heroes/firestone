@@ -1,4 +1,4 @@
-import { DraftSlotType, DungeonCrawlOptionType, SceneMode } from '@firestone-hs/reference-data';
+import { DraftSlotType, DungeonCrawlOptionType, SceneMode, Zone } from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
@@ -40,6 +40,8 @@ export interface MemoryUpdate {
 	readonly DuelsCurrentCardsInDeck: number;
 	readonly IsDuelsRewardsPending: boolean;
 
+	readonly MousedOverCard: MousedOverCard;
+
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPacks: readonly PackInfo[];
 	readonly MassOpenedPacks: readonly PackInfo[];
@@ -68,4 +70,16 @@ export interface MercenaryTreasureSelection {
 
 export interface DuelsTreasureSelection {
 	readonly Options: readonly number[];
+}
+
+export interface MousedOverCard {
+	readonly CardId: string;
+	readonly Zone: Zone;
+	readonly Side: Side;
+}
+
+export enum Side {
+	NEUTRAL = 0,
+	FRIENDLY = 1,
+	OPPOSING = 2,
 }

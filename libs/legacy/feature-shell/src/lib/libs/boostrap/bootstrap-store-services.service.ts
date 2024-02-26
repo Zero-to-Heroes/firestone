@@ -18,6 +18,7 @@ import {
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
+import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
@@ -94,6 +95,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ArenaNavigationService: ArenaNavigationService,
 		private readonly init_ArenDeckDetailsService: ArenDeckDetailsService,
 		private readonly init_ConstructedMulliganGuideGuardianService: ConstructedMulliganGuideGuardianService,
+		private readonly init_CardMousedOverService: CardMousedOverService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}
