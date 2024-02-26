@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.18',
+		version: '13.5.19',
 		force: false,
 		sections: [
 			// {
@@ -52,10 +52,6 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Quest stats overlay is back! While it's a premium feature, free users can use it for two games every day (this might change in the future).`,
-							},
-							{
-								type: 'bug',
-								text: `There was an issue in how Quest data was collected for specific difficulties. As such, the "difficulty" data will be incorrect for a few days, and should be back to normal soon.`,
 							},
 						],
 					},
@@ -99,6 +95,32 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Beatboxer's enchantments would not be properly assigned.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an "elemental streak" counter to keep track of how many turns in a row you played elementals.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the order of cards in the "Bottom of deck" section would be reversed after a Dredge.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards discovered from your own deck would be treated as a Dredge effect.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the app's main window would pop up when starting the game.`,
 							},
 						],
 					},
