@@ -286,7 +286,7 @@ export class AppStartupService {
 		const prefs = (await this.prefs.getPreferences()) ?? new Preferences();
 		this.prefs.updateRemotePreferences();
 		if (prefs.showSessionRecapOnExit && this.stateUpdater) {
-			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
+			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays', true));
 		} else {
 			// Don't close Firestone when leaving HS
 			// this.ow.closeWindow(OverwolfService.MAIN_WINDOW);

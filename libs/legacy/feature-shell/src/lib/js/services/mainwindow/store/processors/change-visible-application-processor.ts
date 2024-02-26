@@ -86,7 +86,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
+				isVisible: event.forceApplicationVisible || navigationState.isVisible,
 				currentApp: event.module,
 				navigationCollection: binder,
 				navigationAchievements: achievements,
