@@ -4,6 +4,17 @@
 
 .label {
 	width: 300px;
+	display: flex;
+	align-items: center;
+
+	.info {
+		margin-left: 5px;
+		margin-top: 2px;
+		width: 15px;
+		height: 15px;
+		--icon-color: #a89782;
+		--icon-color-secondary: #ffb948;
+	}
 }
 
 filter-dropdown {

@@ -87,3 +87,6 @@ export interface ShortCard {
 	readonly cardId: string;
 	readonly side?: 'player' | 'opponent';
 }
+export interface ShortCardWithTurn extends ShortCard {
+	readonly turn: number;
+}

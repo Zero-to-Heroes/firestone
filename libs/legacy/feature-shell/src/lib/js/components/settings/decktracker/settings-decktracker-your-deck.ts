@@ -338,6 +338,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'elementalStreak',
+			field: 'playerElementalStreakCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'tramHeist',
 			field: 'playerTramHeistCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-label'),

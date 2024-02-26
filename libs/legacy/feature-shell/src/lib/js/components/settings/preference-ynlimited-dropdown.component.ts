@@ -22,7 +22,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	template: `
 		<label class="label">
 			{{ label }}
-			<div class="info" *ngIf="tooltip" [helpTooltip]="tooltip"></div>
+			<div class="info" *ngIf="tooltip" [helpTooltip]="tooltip" inlineSVG="assets/svg/info.svg"></div>
 		</label>
 		<filter-dropdown
 			*ngIf="filter$ | async as value"

@@ -4,7 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
-import { ShortCard } from './game-state';
+import { ShortCard, ShortCardWithTurn } from './game-state';
 import { HeroCard } from './hero-card';
 
 export const POGO_CARD_IDS = [
@@ -80,7 +80,7 @@ export class DeckState {
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly uniqueSpellSchools: readonly string[] = [];
-	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
+	readonly cardsPlayedThisMatch: readonly ShortCardWithTurn[] = [];
 	readonly manaSpentOnSpellsThisMatch: number = 0;
 	readonly manaSpentOnHolySpellsThisMatch: number = 0;
 	readonly watchpostsPlayedThisMatch: number = 0;

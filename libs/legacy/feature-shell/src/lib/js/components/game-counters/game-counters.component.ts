@@ -34,6 +34,7 @@ import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { EarthenGolemCounterDefinition } from './definitions/earthen-golem-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
+import { ElementalStreakCounterDefinition } from './definitions/elemental-streak-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { ExcavateCounterDefinition } from './definitions/excavate-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
@@ -206,6 +207,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'elementalStreak':
+				return ElementalStreakCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'tramHeist':
 				return TramHeistCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'excavate':

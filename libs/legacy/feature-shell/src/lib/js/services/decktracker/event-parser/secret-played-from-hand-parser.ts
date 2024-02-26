@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckCard, DeckState, GameState, ShortCard } from '@firestone/game-state';
+import { BoardSecret, DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { COUNTERSPELLS } from '../../hs-utils';
@@ -96,10 +96,11 @@ export class SecretPlayedFromHandParser implements EventParser {
 				gameEvent.additionalData.cost,
 			);
 
-		const newCardPlayedThisMatch: ShortCard = {
+		const newCardPlayedThisMatch: ShortCardWithTurn = {
 			entityId: cardWithZone.entityId,
 			cardId: cardWithZone.cardId,
 			side: isPlayer ? 'player' : 'opponent',
+			turn: +currentState.currentTurn,
 		};
 
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
@@ -108,7 +109,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 					cardsPlayedThisMatch: [
 						...newPlayerDeck.cardsPlayedThisMatch,
 						newCardPlayedThisMatch,
-					] as readonly ShortCard[],
+					] as readonly ShortCardWithTurn[],
 			  });
 
 		return currentState.update({

@@ -1,5 +1,5 @@
 import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, ShortCard } from '@firestone/game-state';
+import { DeckCard, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -220,10 +220,11 @@ export class CardPlayedFromHandParser implements EventParser {
 			);
 		// console.debug('newPlayerDeck', newPlayerDeck);
 
-		const newCardPlayedThisMatch: ShortCard = {
+		const newCardPlayedThisMatch: ShortCardWithTurn = {
 			entityId: cardToAdd.entityId,
 			cardId: cardToAdd.cardId,
 			side: isPlayer ? 'player' : 'opponent',
+			turn: +currentState.currentTurn,
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
 			? [newPlayerDeck, opponentDeck]
@@ -232,7 +233,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			cardsPlayedThisMatch: [
 				...newPlayerDeck.cardsPlayedThisMatch,
 				newCardPlayedThisMatch,
-			] as readonly ShortCard[],
+			] as readonly ShortCardWithTurn[],
 			anachronosTurnsPlayed:
 				cardId === CardIds.Anachronos
 					? [...playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed, currentState.gameTagTurnNumber]
