@@ -308,6 +308,7 @@ export const forcedHiddenCardCreators = [
 	// CardIds.PsychicConjurerCore,
 	// CardIds.PsychicConjurerLegacy,
 	CardIds.SpymastersGambitTavernBrawlToken,
+	CardIds.EnergyShaper,
 	// CardIds.TheotarTheMadDuke,
 ];
 

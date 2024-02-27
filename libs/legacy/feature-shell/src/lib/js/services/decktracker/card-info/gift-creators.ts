@@ -212,7 +212,7 @@ export const giftCreators = [
 	CardIds.EmbraceOfNature,
 	CardIds.EmeraldExplorer_DRG_313,
 	CardIds.EncumberedPackMule,
-	CardIds.EnergyShaper,
+	// CardIds.EnergyShaper,
 	CardIds.ErodedSediment_WW_428,
 	CardIds.ETCBandManager_ETC_080,
 	CardIds.ETCBandManager_SignANewArtist,
