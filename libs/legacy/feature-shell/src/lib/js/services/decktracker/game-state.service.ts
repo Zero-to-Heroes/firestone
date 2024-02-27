@@ -312,14 +312,14 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug(
-			// 	'[game-state] emitting event',
-			// 	emittedEvent.event.name,
-			// 	gameEvent.entityId,
-			// 	gameEvent.cardId,
-			// 	gameEvent,
-			// 	emittedEvent.state,
-			// );
+			console.debug(
+				'[game-state] emitting event',
+				emittedEvent.event.name,
+				gameEvent.entityId,
+				gameEvent.cardId,
+				gameEvent,
+				emittedEvent.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -329,6 +329,7 @@ export class GameStateService {
 			gameEvent.type !== GameEvent.COUNTER_WILL_TRIGGER &&
 			// Sometimes these events are sent even if the cost doesn't actually change
 			gameEvent.type !== GameEvent.COST_CHANGED &&
+			gameEvent.type !== GameEvent.ZONE_POSITION_CHANGED &&
 			((this.secretWillTrigger?.reactingToCardId &&
 				this.secretWillTrigger.reactingToCardId === gameEvent.cardId) ||
 				(this.secretWillTrigger?.reactingToEntityId &&
