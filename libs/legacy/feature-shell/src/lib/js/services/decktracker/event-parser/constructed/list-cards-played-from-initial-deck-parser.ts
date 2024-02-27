@@ -22,7 +22,12 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const baseCardId = getBaseCardId(cardId);
 		const card = this.helper.findCardInZone(deck.hand, baseCardId, entityId);
-		if (card.creatorCardId || gameEvent.additionalData.creatorCardId || COIN_IDS.includes(baseCardId as CardIds)) {
+		if (
+			!card ||
+			card.creatorCardId ||
+			gameEvent.additionalData.creatorCardId ||
+			COIN_IDS.includes(baseCardId as CardIds)
+		) {
 			return currentState;
 		}
 
