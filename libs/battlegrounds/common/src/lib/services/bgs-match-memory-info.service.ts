@@ -92,6 +92,6 @@ export class BgsMatchMemoryInfoService {
 
 	public stopMemoryReading() {
 		console.debug('[bgs-match-memory-info] stopping memory reading');
-		this.sub.unsubscribe();
+		this.sub?.unsubscribe();
 	}
 }
