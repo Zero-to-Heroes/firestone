@@ -114,6 +114,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.Inzah,
 	CardIds.IronweaveBloodletterTavernBrawl,
 	CardIds.JotunTheEternal,
+	CardIds.JungleGiants_BarnabusTheStomperToken,
 	CardIds.LadyInWhite,
 	CardIds.LadyPrestor_SW_078,
 	CardIds.LordaeronAttendantToken,
