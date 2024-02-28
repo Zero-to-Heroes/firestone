@@ -787,7 +787,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			options: {
 				...this._faceOff.battleInfo.options,
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
-				maxAcceptableDuration: 6000,
+				maxAcceptableDuration: 8000,
 			},
 			gameState: {
 				...this._faceOff.battleInfo.gameState,

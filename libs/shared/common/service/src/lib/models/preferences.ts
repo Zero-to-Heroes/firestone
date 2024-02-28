@@ -604,7 +604,7 @@ export class Preferences implements IPreferences {
 	readonly bgsHideSimResultsOnRecruit: boolean = true;
 	readonly bgsShowSimResultsOnlyOnRecruit: boolean = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;
-	readonly bgsSimulatorNumberOfSims = 5000;
+	readonly bgsSimulatorNumberOfSims = 8000;
 	readonly bgsShowEndGameNotif: boolean = true;
 	readonly bgsEnableMinionAutoHighlight: boolean = true;
 	readonly bgsEnableTribeAutoHighlight: boolean = true;
