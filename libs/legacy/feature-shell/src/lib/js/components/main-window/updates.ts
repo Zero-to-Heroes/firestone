@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.5.19',
+		version: '13.6.0',
 		force: false,
 		sections: [
 			// {
@@ -42,85 +42,60 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Quest stats overlay is back! While it's a premium feature, free users can use it for two games every day (this might change in the future).`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'battlegrounds',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `Quest stats overlay is back! While it's a premium feature, free users can use it for two games every day (this might change in the future).`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `The "extra gold next turn" counter should now properly take into account cards that duplicate effects, like Brann or Brann's Blessings.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where a Venomous minion being deflected by Mad Matador would lose its Venomous charge.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Golden Deadstomper and Golden Zliza would give an incorrect buff.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Redemtpion would not handle auras from minions very well.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Emergent Flame's buff (triggered by Rylak) would not take into account the previous turn's refreshes.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Smoking Gun's buff would not be applied properly when received during the battle.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Sr Tomb Diver would always try to find a non-golden minion to target, instead of picking the rightmost one.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Beatboxer's enchantments would not be properly assigned.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an "elemental streak" counter to keep track of how many turns in a row you played elementals.`,
+								text: `Premium users can now move directly over cards in their hand to highlight related cards in the deck tracker (non-premium users can still do this by mousing over the cards in hand in the tracker itself).`,
+							},
+							{
+								type: 'feature',
+								text: `Unknown Mixed Concoctions in the opponent's hand are now flagged! As this card is a custom card (thanks Matt!), it is not localized and will always be in English for now.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the order of cards in the "Bottom of deck" section would be reversed after a Dredge.`,
+								text: `Fix an issue where Energy Shaper would leak some information about what card in the opponent's hand were spells.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where cards discovered from your own deck would be treated as a Dredge effect.`,
+								text: `Fix an issue where Counterspell cards' effect would not be properly accounted for when graying out some secrets in the secrets helper.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the app's main window would pop up when starting the game.`,
+								text: `Fix a sim issue where Rapid Reanimation's target would not always be correct.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Weebomination's battlecry was not implemented.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Warband Stats chart would not properly display numbers greater than 1000.`,
 							},
 						],
 					},
