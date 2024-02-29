@@ -123,7 +123,7 @@ export class AttackOnBoardService {
 	}
 
 	// On the opponent's turn, we show the total attack, except for dormant minions
-	private canAttack(entity, isActivePlayer: boolean): boolean {
+	private canAttack(entity: EntityGameState, isActivePlayer: boolean): boolean {
 		const isDormant = hasTag(entity, GameTag.DORMANT);
 		const cantAttack = hasTag(entity, GameTag.CANT_ATTACK);
 		// Here technically it's not totally correct, as you'd have to know if the

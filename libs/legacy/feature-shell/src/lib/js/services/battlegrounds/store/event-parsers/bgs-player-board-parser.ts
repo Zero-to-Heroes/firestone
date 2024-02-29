@@ -88,8 +88,8 @@ export class BgsPlayerBoardParser implements EventParser {
 			playerBoard: bgsPlayer,
 			opponentBoard: bgsOpponent,
 			options: {
-				maxAcceptableDuration: 5000,
-				numberOfSimulations: 5000,
+				maxAcceptableDuration: 8000,
+				numberOfSimulations: 8000,
 				skipInfoLogs: false,
 			},
 			gameState: {

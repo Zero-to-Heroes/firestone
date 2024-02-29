@@ -102,7 +102,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			return null;
 		}
 
-		const enchantments = [...(boardEntity.enchantments ?? []), ...(playerEntity?.enchantments ?? [])];
+		const enchantments = []; // [...(boardEntity.enchantments ?? []), ...(playerEntity?.enchantments ?? [])];
 		const debuffs = enchantments
 			.filter((e) => DEBUFF_SPEED_MODIFIER_ENCHANTMENTS.includes(e.cardId as CardIds))
 			.filter((e) => !!e.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value);

@@ -242,7 +242,8 @@ export interface EntityGameState {
 	readonly health: number;
 	readonly durability: number;
 	readonly tags: readonly { Name: number; Value: number }[];
-	readonly enchantments: readonly EnchantmentGameState[];
+	// Used only for mercs, removing for now to improve perfs
+	// readonly enchantments: readonly EnchantmentGameState[];
 }
 
 export interface EnchantmentGameState {

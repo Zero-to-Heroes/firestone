@@ -3,7 +3,7 @@ import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesSer
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, merge } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
@@ -104,7 +104,14 @@ export class EndGameListenerService {
 				);
 				const reviewId$ = this.reviewIdService.reviewId$;
 				// Doesn't work, reviewId arrives earlier
-				const gameEnded$ = merge(
+				const gameEnded$: Observable<{
+					ended: boolean;
+					spectating: boolean;
+					replayXml: string;
+					GameType: number | null;
+					FormatType: number | null;
+					ScenarioID: number | null;
+				}> = merge(
 					this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_END)),
 					this.gameEvents.allEvents
 						.asObservable()
@@ -119,7 +126,9 @@ export class EndGameListenerService {
 							return {
 								ended: false,
 								spectating: false,
-								game: null,
+								FormatType: null,
+								GameType: null,
+								ScenarioID: null,
 								replayXml: null,
 							};
 						}
@@ -128,7 +137,9 @@ export class EndGameListenerService {
 							return {
 								ended: true,
 								spectating: endEvent.additionalData.spectating,
-								game: endEvent.additionalData.game,
+								FormatType: endEvent.additionalData.FormatType,
+								GameType: endEvent.additionalData.GameType,
+								ScenarioID: endEvent.additionalData.ScenarioID,
 								replayXml: endEvent.additionalData.replayXml,
 							};
 						}
@@ -137,12 +148,21 @@ export class EndGameListenerService {
 							return {
 								ended: false,
 								spectating: startEvent.additionalData.spectating,
-								game: null,
+								FormatType: null,
+								GameType: null,
+								ScenarioID: null,
 								replayXml: null,
 							};
 						}
 					}),
-					startWith({ ended: false, spectating: false, game: null, replayXml: null }),
+					startWith({
+						ended: false,
+						spectating: false,
+						FormatType: null,
+						GameType: null,
+						ScenarioID: null,
+						replayXml: null,
+					}),
 				);
 
 				// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible

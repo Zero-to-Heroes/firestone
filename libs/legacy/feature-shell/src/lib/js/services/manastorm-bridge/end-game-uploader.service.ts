@@ -89,7 +89,7 @@ export class EndGameUploaderService {
 
 	private async initializeGame(info: UploadInfo): Promise<GameForUpload> {
 		const currentReviewId = info.reviewId;
-		const gameResult = info.gameEnded.game;
+		// const gameResult = info.gameEnded.game;
 		const replayXml = info.gameEnded.replayXml;
 
 		if (!replayXml) {
@@ -98,10 +98,10 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'Creating new game', 'with replay length', replayXml.length);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentReviewId);
 		console.log('[manastorm-bridge]', currentReviewId, 'Created new game');
-		game.gameFormat = toFormatType(gameResult.FormatType);
-		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', gameResult.FormatType, game.gameFormat);
-		game.gameMode = toGameType(gameResult.GameType);
-		console.log('[manastorm-bridge]', currentReviewId, 'parsed type', gameResult.GameType, game.gameMode);
+		game.gameFormat = toFormatType(info.gameEnded.FormatType);
+		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', info.gameEnded.FormatType, game.gameFormat);
+		game.gameMode = toGameType(info.gameEnded.GameType);
+		console.log('[manastorm-bridge]', currentReviewId, 'parsed type', info.gameEnded.GameType, game.gameMode);
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it
 		// being removed from memory by the player clicking away
@@ -341,7 +341,7 @@ export class EndGameUploaderService {
 		game.reviewId = currentReviewId;
 		game.buildNumber = info.metadata.BuildNumber;
 		// So that we can have overwrites, eg for LETTUCE_PVP_VS_AI
-		game.scenarioId = gameResult.ScenarioID; // scenarioId;
+		game.scenarioId = info.gameEnded.ScenarioID; // scenarioId;
 		game.xpForGame = info.xpForGame;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			console.log(
@@ -463,8 +463,11 @@ export interface UploadInfo {
 	gameEnded: {
 		ended: boolean;
 		spectating: boolean;
-		game: any;
+		// game: any;
 		replayXml: string;
+		FormatType: number;
+		GameType: number;
+		ScenarioID: number;
 	};
 	matchInfo: MatchInfo;
 	playerDeck: DeckInfo;

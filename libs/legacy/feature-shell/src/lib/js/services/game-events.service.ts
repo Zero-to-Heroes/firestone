@@ -1291,10 +1291,13 @@ export class GameEvents {
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
-							game: gameEvent.Value.Game,
+							// game: gameEvent.Value.Game,
 							report: gameEvent.Value.GameStateReport,
 							replayXml: gameEvent.Value.ReplayXml,
 							spectating: gameEvent.Value.Spectating,
+							GameType: gameEvent.Value.GameType,
+							FormatType: gameEvent.Value.FormatType,
+							ScenarioID: gameEvent.Value.ScenarioID,
 						},
 					} as GameEvent),
 				);
