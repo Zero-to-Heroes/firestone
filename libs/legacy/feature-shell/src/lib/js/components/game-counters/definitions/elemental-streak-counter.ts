@@ -44,8 +44,10 @@ export class ElementalStreakCounterDefinition
 		const lastTurn = input.currentTurn;
 		let elementalStreak = 0;
 		for (let i = lastTurn; i > 0; i--) {
-			const elementals = groupedByTurn[i]?.filter((card) =>
-				this.allCards.getCard(card.cardId).races?.includes(Race[Race.ELEMENTAL]),
+			const elementals = groupedByTurn[i]?.filter(
+				(card) =>
+					this.allCards.getCard(card.cardId).races?.includes(Race[Race.ELEMENTAL]) ||
+					this.allCards.getCard(card.cardId).races?.includes(Race[Race.ALL]),
 			);
 			if (!elementals?.length && i !== lastTurn) {
 				break;
