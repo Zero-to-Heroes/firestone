@@ -1599,6 +1599,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, pirate);
 			case CardIds.SwordOfTheFallen:
 				return and(side(inputSide), inDeck, spell, secret);
+			case CardIds.SymphonyOfSins_MovementOfPrideToken:
+				return and(side(inputSide), or(inDeck, inHand), minion);
 			case CardIds.TaelanFordringCore:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.TaethelanBloodwatcher_WW_430:
