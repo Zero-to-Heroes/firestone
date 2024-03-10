@@ -45,6 +45,7 @@ export class PlayerMulticasterWidgetWrapperComponent
 					CardIds.InquisitiveCreation,
 					CardIds.DiscoveryOfMagic,
 					CardIds.ElementalInspiration,
+					CardIds.MagisterDawngrasp_AV_200,
 				],
 				{ onlyLimited: prefValue === 'limited' },
 			);
