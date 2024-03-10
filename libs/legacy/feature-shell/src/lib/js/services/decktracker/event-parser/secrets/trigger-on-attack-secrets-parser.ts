@@ -207,7 +207,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		// 	gameEvent.gameState.Opponent.Hero,
 		// 	...gameEvent.gameState.Opponent.Board,
 		// ];
-		const otherTargets = allEntities.filter((entity) => [attackerId, defenderId].indexOf(entity) === -1);
+		const otherTargets = allEntities.filter((entity) => ![attackerId, defenderId].includes(entity));
 
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
