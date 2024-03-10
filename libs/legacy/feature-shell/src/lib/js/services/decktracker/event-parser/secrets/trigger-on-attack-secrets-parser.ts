@@ -53,7 +53,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
-			gameEvent.gameState &&
+			// gameEvent.gameState &&
 			(gameEvent.type === GameEvent.ATTACKING_HERO ||
 				gameEvent.type === GameEvent.ATTACKING_MINION ||
 				gameEvent.type === GameEvent.SECRET_TRIGGERED)
@@ -90,12 +90,13 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		}
 
 		const isPlayerTheAttackedParty = defenderControllerId === gameEvent.localPlayer.PlayerId;
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
+
+		// const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
-		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {
+		if (isPlayerTheAttackedParty && currentState.playerDeck.isActivePlayer) {
 			return currentState;
 		}
-		if (!isPlayerTheAttackedParty && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
+		if (!isPlayerTheAttackedParty && currentState.opponentDeck.isActivePlayer) {
 			return currentState;
 		}
 
@@ -194,12 +195,19 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		}
 
 		const allEntities = [
-			gameEvent.gameState.Player.Hero,
-			...gameEvent.gameState.Player.Board,
-			gameEvent.gameState.Opponent.Hero,
-			...gameEvent.gameState.Opponent.Board,
+			currentState.playerDeck.hero?.entityId,
+			...currentState.playerDeck.board.map((entity) => entity.entityId),
+			currentState.opponentDeck.hero?.entityId,
+			...currentState.opponentDeck.board.map((entity) => entity.entityId),
 		];
-		const otherTargets = allEntities.filter((entity) => [attackerId, defenderId].indexOf(entity.entityId) === -1);
+
+		// const allEntities = [
+		// 	gameEvent.gameState.Player.Hero,
+		// 	...gameEvent.gameState.Player.Board,
+		// 	gameEvent.gameState.Opponent.Hero,
+		// 	...gameEvent.gameState.Opponent.Board,
+		// ];
+		const otherTargets = allEntities.filter((entity) => [attackerId, defenderId].indexOf(entity) === -1);
 
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
