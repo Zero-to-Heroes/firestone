@@ -73,7 +73,7 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 			.pipe(this.mapData(([pref]) => pref));
 		this.allSets$ = this.store.sets$().pipe(
 			debounceTime(1000),
-			this.mapData((sets) => sets),
+			this.mapData((sets) => sets.filter((s) => s.id?.toLowerCase() !== 'gift')),
 		);
 		this.sets$ = combineLatest([this.activeFilter$, this.allSets$]).pipe(
 			this.mapData(([activeFilter, allSets]) => {
