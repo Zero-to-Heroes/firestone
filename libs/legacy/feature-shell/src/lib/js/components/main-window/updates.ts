@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.6.5',
+		version: '13.6.6',
 		force: false,
 		sections: [
 			// {
@@ -46,6 +46,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `The app has been updated for 29.0. As usual, expect a few more updates during the week to implement what's missing.`,
+							},
+						],
+					},
 					{
 						category: 'decktracker',
 						details: [
