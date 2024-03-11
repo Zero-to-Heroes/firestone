@@ -189,6 +189,9 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	if (isCorrectCardId(creatorCard, newCardId, CardIds.Ignite)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.FloppyHydra_TOY_897)) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
+	}
 	if (
 		isCorrectCardId(creatorCard, newCardId, CardIds.RenosMagicalTorch) ||
 		isCorrectCardId(creatorCard, newCardId, CardIds.RenosMagicalTorchTavernBrawl)

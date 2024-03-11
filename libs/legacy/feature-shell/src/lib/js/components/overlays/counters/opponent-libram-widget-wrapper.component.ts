@@ -37,12 +37,8 @@ export class OpponentLibramWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentLibramCounter;
 		this.deckStateExtractor = (state) =>
 			state.opponentDeck?.libramsPlayedThisMatch > 0 ||
-			state.opponentDeck?.hasRelevantCard(
-				[
-					CardIds.LadyLiadrin,
-					// , CardIds.LadyLiadrin_CORE
-				],
-				{ onlyLimited: true },
-			);
+			state.opponentDeck?.hasRelevantCard([CardIds.LadyLiadrin, CardIds.LadyLiadrin_CORE_BT_334], {
+				onlyLimited: true,
+			});
 	}
 }

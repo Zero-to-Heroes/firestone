@@ -72,7 +72,7 @@ export class CardTextComponent {
 		// console.debug('building text for', description);
 		if (this._controller) {
 			if (this._entity.getCardType() === CardType.SPELL) {
-				damageBonus = this._controller.getTag(GameTag.CURRENT_SPELLPOWER) || 0;
+				damageBonus = this._controller.getTag(GameTag.CURRENT_SPELLPOWER_BASE) || 0;
 				// console.debug('damage bonus', damageBonus);
 				if (this._entity.getTag(GameTag.RECEIVES_DOUBLE_SPELLDAMAGE_BONUS) === 1) {
 					damageBonus *= 2;

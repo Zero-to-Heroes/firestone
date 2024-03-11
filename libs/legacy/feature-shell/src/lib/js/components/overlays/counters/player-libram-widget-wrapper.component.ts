@@ -36,14 +36,8 @@ export class PlayerLibramWidgetWrapperComponent
 		this.activeCounter = 'libram';
 		this.prefExtractor = (prefs) => prefs.playerLibramCounter;
 		this.deckStateExtractor = (state, prefValue) =>
-			state.playerDeck?.hasRelevantCard(
-				[
-					CardIds.LadyLiadrin,
-					// , CardIds.LadyLiadrin_CORE
-				],
-				{
-					onlyLimited: prefValue === 'limited',
-				},
-			);
+			state.playerDeck?.hasRelevantCard([CardIds.LadyLiadrin, CardIds.LadyLiadrin_CORE_BT_334], {
+				onlyLimited: prefValue === 'limited',
+			});
 	}
 }

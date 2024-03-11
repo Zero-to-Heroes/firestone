@@ -8,7 +8,7 @@ import { EventParser } from '../event-parser';
 export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
 		CardIds.RatTrap,
-		// CardIds.RatTrapCore,
+		CardIds.RatTrap_CORE_GIL_577,
 		CardIds.HiddenWisdom,
 		CardIds.GallopingSavior,
 		CardIds.MotionDenied,

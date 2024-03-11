@@ -33,14 +33,14 @@ const DK_UNHOLY_HAND = [
 	CardIds.BattlefieldNecromancerCore_RLK_061,
 ];
 const DEMONHUNTER_HAND = [
-	CardIds.TwinSlice_BT_175,
-	CardIds.AltruisTheOutcast,
-	CardIds.ImprisonedAntaen,
-	CardIds.EyeBeam,
-	CardIds.SkullOfGuldan_BT_601,
-	CardIds.PriestessOfFury,
-	CardIds.Metamorphosis_BT_429,
-	CardIds.WarglaivesOfAzzinoth_BT_430,
+	CardIds.TwinSliceToken_TOY_400t3,
+	CardIds.SkullOfGuldanToken_TOY_401t,
+	CardIds.AltruisTheOutcastToken_TOY_401t2,
+	CardIds.ImprisonedAntaenToken_TOY_400t4,
+	CardIds.PriestessOfFuryToken_TOY_400t5,
+	CardIds.MetamorphosisToken_TOY_400t6,
+	CardIds.WarglaivesOfAzzinothToken_TOY_400t7,
+	CardIds.EyeBeamToken_TOY_400t8,
 ];
 const DRUID_HAND = [
 	CardIds.KingTogwaggle,

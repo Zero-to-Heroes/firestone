@@ -13,6 +13,7 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.ImpKingRafaam_REV_789,
 	CardIds.ImpKingRafaam_REV_835,
 	CardIds.ImpKingRafaam_ImpKingRafaamToken,
+	CardIds.JoymancerJepetto_TOY_960,
 	CardIds.MassResurrection_DAL_724,
 	CardIds.OnyxBishop,
 	CardIds.OnyxBishop_WON_057,

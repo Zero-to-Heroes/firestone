@@ -72,6 +72,11 @@ export const effectiveCostMore =
 	(input: SelectorInput): boolean =>
 		input.deckCard?.getEffectiveManaCost() > cost;
 
+export const costMore =
+	(cost: number) =>
+	(input: SelectorInput): boolean =>
+		input.deckCard?.manaCost > cost;
+
 export const effectiveCostEqual =
 	(cost: number) =>
 	(input: SelectorInput): boolean =>
@@ -114,6 +119,10 @@ export const attackLessThan =
 	(attack: number) =>
 	(input: SelectorInput): boolean =>
 		input.card.attack != null && input.card.attack < attack;
+export const attackIs =
+	(attack: number) =>
+	(input: SelectorInput): boolean =>
+		input.card.attack === attack;
 
 export const healthGreaterThan =
 	(health: number) =>
@@ -123,6 +132,10 @@ export const healthLessThan =
 	(health: number) =>
 	(input: SelectorInput): boolean =>
 		input.card.health != null && input.card.health < health;
+export const healthIs =
+	(health: number) =>
+	(input: SelectorInput): boolean =>
+		input.card.health === health;
 
 export const cardIs =
 	(...cardIds: readonly CardIds[]) =>
@@ -263,6 +276,9 @@ export const rarity =
 		input.card?.rarity?.toLowerCase() === rarity?.toLowerCase();
 export const legendary = rarity('Legendary');
 
+export const spellDamage = (input: SelectorInput): boolean => {
+	return input.card?.mechanics?.includes(GameTag[GameTag.SPELLPOWER]);
+};
 export const damage = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]);
 };

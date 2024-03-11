@@ -88,9 +88,10 @@ export const battlecryGlobalEffectCards = [
 	CardIds.ArchbishopBenedictus_CORE_ICC_215,
 	CardIds.ArchbishopBenedictus_ICC_215,
 	CardIds.ArchVillainRafaam_DAL_422,
-	// CardIds.ArchVillainRafaam_CORE_DAL_422,
+	CardIds.ArchVillainRafaam_CORE_DAL_422,
 	CardIds.AudioAmplifier,
 	CardIds.BladeOfTheBurningSun,
+	CardIds.CardboardGolem_TOY_809,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.DarkInquisitorXanesh,
 	CardIds.DarkPharaohTekahn,
@@ -146,13 +147,14 @@ export const battlecryGlobalEffectCards = [
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.TheStonewright,
 	CardIds.ValdrisFelgorge,
-	// CardIds.VampiricBlood_RLK_051,
+	CardIds.VampiricBlood_RLK_051,
 	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
 ];
 
 export const deathrattleGlobalEffectCards = [
 	CardIds.BonelordFrostwhisper,
+	CardIds.JadeDisplay_TOY_803,
 	CardIds.UnluckyPowderman_WW_367,
 	CardIds.Therazane_DEEP_036,
 ];
@@ -180,6 +182,7 @@ export const globalEffectCards = [
 	CardIds.DraconicMunitionTavernBrawl,
 	CardIds.TheFiresOfZinAzshari,
 	CardIds.Embiggen,
+	CardIds.Ensmallen_TOY_805,
 	// CardIds.GrandTotemEysor, // We handle the effects triggered instead of the card played
 	CardIds.HornsOfFlameTavernBrawlToken,
 	CardIds.HumbleBlessingsTavernBrawl,
@@ -362,7 +365,7 @@ export const publicTutors = [
 	CardIds.ConquerorsBanner,
 	CardIds.FelLordBetrug_DAL_607, // don't know if you're talking about the card in hand or the minion summoned
 	CardIds.IceTrap,
-	// CardIds.IceTrapCore,
+	CardIds.IceTrap_CORE_AV_226,
 	CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 	CardIds.KingsElekk,
 	CardIds.KronxDragonhoof,
@@ -388,11 +391,12 @@ export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 	CardIds.AmuletOfUndying,
 	CardIds.BlacksmithingHammer,
 	CardIds.WickedShipment,
-	// CardIds.WindUpMusician,
+	CardIds.WindUpMusician_TOY_509,
 ];
 
 export const supportedAdditionalData = [
 	CardIds.Ignite,
+	CardIds.FloppyHydra_TOY_897,
 	CardIds.RenosMagicalTorchTavernBrawl,
 	CardIds.Bottomfeeder,
 	CardIds.SirakessCultist_AbyssalCurseToken,
@@ -497,7 +501,7 @@ export const COUNTERSPELLS = [
 	CardIds.CounterspellVanilla,
 	CardIds.OhMyYogg,
 	CardIds.IceTrap,
-	// CardIds.IceTrapCore,
+	CardIds.IceTrap_CORE_AV_226,
 	CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 	// Even though it's a specific enchantment that counters the spell, the trigger entity is the minion itself
 	CardIds.BlademasterOkani,
