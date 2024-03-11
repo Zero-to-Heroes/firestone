@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.6.0',
+		version: '13.6.5',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,21 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Quest stats overlay is back! While it's a premium feature, free users can use it for two games every day (this might change in the future).`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where some secrets would not be grayed out properly when attacking the enemy hero.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -65,20 +65,12 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Premium users can now move directly over cards in their hand to highlight related cards in the deck tracker (non-premium users can still do this by mousing over the cards in hand in the tracker itself).`,
-							},
-							{
-								type: 'feature',
-								text: `Unknown Mixed Concoctions in the opponent's hand are now flagged! As this card is a custom card (thanks Matt!), it is not localized and will always be in English for now.`,
+								type: 'content',
+								text: `Show the Spell Schools widget where Magister Dawngrasp is in the deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Energy Shaper would leak some information about what card in the opponent's hand were spells.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Counterspell cards' effect would not be properly accounted for when graying out some secrets in the secrets helper.`,
+								text: `Add the missing Gift set (with Harth Stonebrew) to the constructed deck builder.`,
 							},
 						],
 					},
@@ -87,15 +79,27 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Rapid Reanimation's target would not always be correct.`,
+								text: `Fix a sim issue where Matador's effect would not work properly with divine shield.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Weebomination's battlecry was not implemented.`,
+								text: `Fix a sim issue where Embrace Your Rage and Diremuck Forager would not interact properly.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Warband Stats chart would not properly display numbers greater than 1000.`,
+								text: `Fix a sim issue where Polarizing Beatboxer would sometimes miss a few enchantments when on the opponent's board.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Felfin Navigator wouldn't do anything when triggered by Rylak.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Monstrous Macaw would not trigger the Boon of Beetles enchantment.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Fish of N'Zoth with Reborn could inherit its own deathrattle.`,
 							},
 						],
 					},
