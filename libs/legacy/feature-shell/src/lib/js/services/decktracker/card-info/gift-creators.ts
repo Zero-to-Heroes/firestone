@@ -835,4 +835,8 @@ export const giftCreators = [
 	CardIds.TigressPlushy_TigressPlushyToken_TOY_811t,
 	CardIds.ToyCaptainTarim_TOY_813,
 	CardIds.ToyCaptainTarim_ToyCaptainTarimToken_TOY_813t,
+	CardIds.TabletopRoleplayer_TOY_915,
+	CardIds.ThistleTeaSet_TOY_514,
+	CardIds.WindowShopper_TOY_652,
+	CardIds.WindowShopper_WindowShopperToken_TOY_652t,
 ];

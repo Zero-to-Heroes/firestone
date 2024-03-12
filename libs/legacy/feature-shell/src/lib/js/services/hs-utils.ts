@@ -204,6 +204,7 @@ export const globalEffectCards = [
 	CardIds.TheDemonSeed_CompleteTheRitualToken, // BLightborn Tamsin
 	CardIds.UpgradedPackMule,
 	CardIds.Wildfire,
+	CardIds.WishUponAStar_TOY_877,
 ];
 
 // Also whitelist in the parser
@@ -391,7 +392,9 @@ export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 	CardIds.AmuletOfUndying,
 	CardIds.BlacksmithingHammer,
 	CardIds.WickedShipment,
+	CardIds.WindUpEnforcer_TOY_880,
 	CardIds.WindUpMusician_TOY_509,
+	CardIds.WindUpSapling_TOY_802,
 ];
 
 export const supportedAdditionalData = [
