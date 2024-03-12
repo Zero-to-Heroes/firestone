@@ -7,7 +7,9 @@
 .search-autocomplete {
 	height: 30px;
 	padding-left: 12px;
+	padding-right: 10px;
 	display: flex;
+	// display: block;
 	align-items: center;
 
 	&:hover {

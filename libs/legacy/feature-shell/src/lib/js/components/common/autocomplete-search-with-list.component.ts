@@ -132,12 +132,12 @@ export class AutocompleteSearchWithListComponent<T>
 	}
 
 	onFocusLost() {
-		setTimeout(() => {
-			this.showSearchResults = false;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}, 500);
+		// setTimeout(() => {
+		// 	this.showSearchResults = false;
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// }, 500);
 	}
 
 	onMouseDown(event: Event) {
