@@ -11,6 +11,7 @@ import {
 	attackGreaterThan,
 	attackIs,
 	attackLessThan,
+	aura,
 	baseCostEqual,
 	battlecry,
 	beast,
@@ -61,6 +62,7 @@ import {
 	lastAffectedByCardId,
 	legendary,
 	lifesteal,
+	location,
 	magnetic,
 	mech,
 	minion,
@@ -818,6 +820,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.GaiaTheTechtonic_TSC_029:
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
+			case CardIds.TheGalacticProjectionOrb_TOY_378:
+				return and(side(inputSide), spellPlayedThisMatch);
 			case CardIds.GameMasterNemsy_TOY_524:
 				return and(side(inputSide), inDeck, demon);
 			case CardIds.GatherYourParty:
@@ -1706,10 +1710,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.TramOperator:
 				return and(side(inputSide), inDeck, minion, mech);
+			case CardIds.TreasureDistributor_TOY_518:
+				return and(side(inputSide), or(inHand, inDeck), pirate);
 			case CardIds.TrenchSurveyor_TSC_642:
 				return and(side(inputSide), inDeck, minion, mech);
 			case CardIds.TrialOfTheJormungars_WON_028:
 				return and(side(inputSide), inDeck, beast, effectiveCostLess(4));
+			case CardIds.TrinketArtist_TOY_882:
+				return and(side(inputSide), inDeck, or(and(minion, divineShield), aura));
 			case CardIds.TrinketTracker:
 				return and(side(inputSide), inDeck, spell, effectiveCostEqual(1));
 			case CardIds.Tyr:
@@ -1725,6 +1733,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.TwistedTether:
 				return and(side(inputSide), inHand, undead);
+			case CardIds.UmpiresGrasp_TOY_641:
+				return and(side(inputSide), inDeck, demon);
 			case CardIds.UnchainedGladiator:
 				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.UndyingAllies:
@@ -1771,6 +1781,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, beast);
 			case CardIds.WarsongWrangler:
 				return and(side(inputSide), inDeck, beast);
+			case CardIds.WatercolorArtist_TOY_376:
+				return and(side(inputSide), inDeck, spell, frost);
 			case CardIds.WeaponsExpert:
 				return and(side(inputSide), inDeck, weapon);
 			case CardIds.WickedWitchdoctor:
@@ -1799,6 +1811,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inGraveyard, minion, beast);
 			case CardIds.WitherTheWeakTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, fel);
+			case CardIds.WoodlandWonders_TOY_804:
+				return and(side(inputSide), or(inDeck, inHand), spellDamage);
+			case CardIds.WorkshopJanitor_TOY_891:
+				return and(side(inputSide), or(inDeck, inHand), location);
 			case CardIds.WretchedExile:
 				return and(side(inputSide), or(inDeck, inHand), outcast);
 			case CardIds.XyrellaTheDevout:
@@ -1807,6 +1823,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			// case CardIds.YoggSaronUnleashed_YOG_516:
 			// 	return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.YoggInTheBox_TOY_372:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.YshaarjTheDefiler:
 				return and(side(inputSide), cardsPlayedThisMatch, corrupted);
 		}

@@ -171,6 +171,7 @@ const hasMechanic =
 	(mechanic: GameTag) =>
 	(input: SelectorInput): boolean =>
 		(input.card?.mechanics ?? []).includes(GameTag[mechanic]);
+export const aura = hasMechanic(GameTag.PALADIN_AURA);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const charge = hasMechanic(GameTag.CHARGE);
 export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
@@ -236,6 +237,7 @@ export const cardType =
 	(type: CardType) =>
 	(input: SelectorInput): boolean =>
 		input.card?.type?.toLowerCase() === CardType[type].toLowerCase();
+export const location = cardType(CardType.LOCATION);
 export const minion = cardType(CardType.MINION);
 export const spell = and(cardType(CardType.SPELL), not(passive));
 export const weapon = cardType(CardType.WEAPON);
