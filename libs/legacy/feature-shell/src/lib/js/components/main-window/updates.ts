@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.6.6',
+		version: '13.7.0',
 		force: false,
 		sections: [
 			// {
@@ -47,73 +47,39 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `The app has been updated for 29.0. As usual, expect a few more updates during the week to implement what's missing.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where some secrets would not be grayed out properly when attacking the enemy hero.`,
+								type: 'feature',
+								text: `(PREMIUM) Add a mulligan guide for constructed. It gives you the impact of keeping each card during the mulligan, as well as the percentage of players who keep each card.`,
+							},
+							{
+								type: 'feature',
+								text: `Non-premium users can use the mulligan guide for free 3 times a day.`,
 							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'content',
-								text: `Show the Spell Schools widget where Magister Dawngrasp is in the deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Add the missing Gift set (with Harth Stonebrew) to the constructed deck builder.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Matador's effect would not work properly with divine shield.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Embrace Your Rage and Diremuck Forager would not interact properly.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Polarizing Beatboxer would sometimes miss a few enchantments when on the opponent's board.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Felfin Navigator wouldn't do anything when triggered by Rylak.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Monstrous Macaw would not trigger the Boon of Beetles enchantment.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Fish of N'Zoth with Reborn could inherit its own deathrattle.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				{
+			// 					type: 'content',
+			// 					text: `Show the Spell Schools widget where Magister Dawngrasp is in the deck.`,
+			// 				},
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Add the missing Gift set (with Harth Stonebrew) to the constructed deck builder.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
