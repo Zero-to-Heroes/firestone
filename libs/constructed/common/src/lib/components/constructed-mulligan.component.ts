@@ -40,13 +40,25 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 				>
 					<ng-container *ngIf="(showPremiumBanner$ | async) === false">
 						<div class="mulligan-info" *ngFor="let info of cardsInHandInfo">
-							<div class="stat mulligan-winrate" *ngIf="info.impact !== null">
-								<span
-									class="label"
-									[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
-									[helpTooltip]="helpTooltip$ | async"
-								></span>
-								<span class="value">{{ info.impact }}</span>
+							<div class="stat-container" *ngIf="info.impact !== null">
+								<div class="stat mulligan-winrate">
+									<span
+										class="label"
+										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
+										[helpTooltip]="helpTooltip$ | async"
+									></span>
+									<span class="value">{{ info.impact }}</span>
+								</div>
+								<div class="stat mulligan-keep-rate">
+									<span
+										class="label"
+										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-keep-rate'"
+										[helpTooltip]="
+											'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate
+										"
+									></span>
+									<span class="value">{{ info.keepRate }}</span>
+								</div>
 							</div>
 							<div class="stat mulligan-winrate no-data" *ngIf="info.impact === null">
 								<span
@@ -153,6 +165,11 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 					.map((cardId) => guide?.allDeckCards.find((advice) => advice.cardId === cardId))
 					.map((advice) => ({
 						impact: noData ? null : advice?.score == null ? '-' : advice.score.toFixed(2),
+						keepRate: noData
+							? null
+							: advice?.keepRate == null
+							? '-'
+							: `${(100 * advice.keepRate).toFixed(1)}%`,
 					}));
 			}),
 		);
@@ -190,4 +207,5 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 
 interface InternalMulliganAdvice {
 	impact: string | null;
+	keepRate: string | null;
 }

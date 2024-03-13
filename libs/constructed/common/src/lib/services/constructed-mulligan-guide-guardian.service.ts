@@ -8,8 +8,8 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const MULLIGAN_GUIDE_IS_ENABLED = false;
-export const DAILY_FREE_USES = 300;
+export const MULLIGAN_GUIDE_IS_ENABLED = true;
+export const DAILY_FREE_USES = 3;
 
 @Injectable()
 export class ConstructedMulliganGuideGuardianService extends AbstractFacadeService<ConstructedMulliganGuideGuardianService> {

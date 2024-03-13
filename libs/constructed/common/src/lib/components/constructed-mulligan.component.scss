@@ -9,7 +9,7 @@
 	grid-template-columns: repeat(3, 1fr);
 	align-items: center;
 	justify-content: center;
-	font-size: 13px;
+	font-size: 18px;
 
 	&.wide {
 		grid-template-columns: repeat(4, 1fr);
@@ -19,6 +19,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		font-size: 14px;
 
 		mulligan-info-premium {
 			height: 3vh;
@@ -36,6 +37,23 @@
 	color: var(--color-1);
 	padding: 10px;
 	margin: auto;
+
+	.stat-container {
+		display: flex;
+
+		.stat {
+			display: flex;
+			flex-direction: column;
+			padding-right: 20px;
+			padding-left: 20px;
+			align-items: center;
+			justify-content: center;
+
+			&:not(:last-child) {
+				border-right: 1px solid var(--color-1);
+			}
+		}
+	}
 
 	.label {
 		margin-right: 5px;

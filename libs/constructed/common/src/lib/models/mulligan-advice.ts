@@ -14,4 +14,5 @@ export interface MulliganGuide {
 export interface MulliganCardAdvice {
 	readonly cardId: string;
 	readonly score: number | null;
+	readonly keepRate: number | null;
 }
