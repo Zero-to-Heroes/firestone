@@ -5,8 +5,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	Inject,
 	OnDestroy,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -39,7 +41,7 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 					[ngClass]="{ wide: cardsInHandInfo.length === 4 }"
 				>
 					<ng-container *ngIf="(showPremiumBanner$ | async) === false">
-						<div class="mulligan-info" *ngFor="let info of cardsInHandInfo">
+						<div class="mulligan-info scalable" *ngFor="let info of cardsInHandInfo">
 							<div class="stat-container" *ngIf="info.impact !== null">
 								<div class="stat mulligan-winrate">
 									<span
@@ -60,7 +62,7 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 									<span class="value">{{ info.keepRate }}</span>
 								</div>
 							</div>
-							<div class="stat mulligan-winrate no-data" *ngIf="info.impact === null">
+							<div class="stat mulligan-winrate no-data scalable" *ngIf="info.impact === null">
 								<span
 									class="label"
 									[fsTranslate]="'decktracker.overlay.mulligan.no-mulligan-data'"
@@ -104,6 +106,8 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 		private readonly guardian: ConstructedMulliganGuideGuardianService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
 	}
@@ -192,6 +196,20 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 				};
 			}),
 		);
+
+		this.prefs
+			.preferences$((prefs) => prefs.decktrackerMulliganScale)
+			.pipe(
+				this.mapData(([pref]) => pref),
+				filter((pref) => !!pref),
+				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				const newScale = scale / 100;
+				const elements = this.el.nativeElement.querySelectorAll('.scalable');
+				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

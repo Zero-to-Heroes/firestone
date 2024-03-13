@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-decktracker-mulligan',
@@ -22,8 +24,39 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					[tooltip]="'settings.decktracker.mulligan.show-mulligan-deck-overview-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
+
+			<div class="title" [owTranslate]="'settings.decktracker.mulligan.size'"></div>
+			<div class="settings-group">
+				<preference-slider
+					class="first-slider"
+					[field]="'decktrackerMulliganScale'"
+					[enabled]="true"
+					[min]="25"
+					[max]="175"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerMulliganComponent {}
+export class SettingsDecktrackerMulliganComponent {
+	sizeKnobs: readonly Knob[] = [
+		{
+			percentageValue: 0,
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
+		},
+		{
+			percentageValue: 50,
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
+		},
+		{
+			percentageValue: 100,
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
+		},
+	];
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
+}
