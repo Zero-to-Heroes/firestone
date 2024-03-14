@@ -775,7 +775,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.Felgorger_SW_043:
 				return and(side(inputSide), inDeck, spell, fel);
-			case CardIds.Fetch1Lettuce:
+			case CardIds.Fetch_TOY_352:
 				return and(side(inputSide), inDeck, or(beast, spell));
 			case CardIds.FirekeepersIdolTavernBrawl:
 				return and(side(inputSide), spell, fire);
