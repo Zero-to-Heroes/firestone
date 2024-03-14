@@ -1,4 +1,5 @@
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { GameStat } from '@firestone/stats/data-access';
 
 export class ArenaRun {
@@ -6,6 +7,7 @@ export class ArenaRun {
 	readonly initialDeckList: string;
 	readonly steps: readonly GameStat[];
 	readonly rewards: readonly ArenaRewardInfo[];
+	readonly draftStat: DraftDeckStats;
 	readonly creationTimestamp: number;
 	readonly heroCardId: string;
 	// TODO: add support for hero power for dual arena

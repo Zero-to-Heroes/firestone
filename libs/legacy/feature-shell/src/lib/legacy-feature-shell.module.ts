@@ -713,6 +713,7 @@ import { RawAchievementsLoaderService } from './js/services/achievement/data/raw
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
+import { ArenaDeckStatsService } from './js/services/arena/arena-deck-stats.service';
 import { ArenaDraftManagerService } from './js/services/arena/arena-draft-manager.service';
 import { ArenaInfoService } from './js/services/arena/arena-info.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
@@ -1884,6 +1885,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaInfoService,
 		ArenaLastMatchService,
 		ArenaDraftManagerService,
+		ArenaDeckStatsService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

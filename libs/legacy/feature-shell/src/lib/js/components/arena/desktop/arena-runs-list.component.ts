@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { ArenaRun } from '@firestone/arena/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
@@ -16,6 +17,7 @@ import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { PatchInfo } from '../../../models/patches';
+import { ArenaDeckStatsService } from '../../../services/arena/arena-deck-stats.service';
 import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
@@ -59,6 +61,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly arenaRewards: ArenaRewardsService,
+		private readonly arenaDeckStats: ArenaDeckStatsService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
@@ -67,6 +70,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 	async ngAfterContentInit() {
 		await this.patchesConfig.isReady();
 		await this.arenaRewards.isReady();
+		await this.arenaDeckStats.isReady();
 		await this.prefs.isReady();
 
 		// TODO perf: split this into two observables, so that we don't reocmpute the
@@ -74,16 +78,17 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 		this.runs$ = combineLatest([
 			this.store.gameStats$(),
 			this.arenaRewards.arenaRewards$$,
+			this.arenaDeckStats.deckStats$$,
 			this.prefs.preferences$(
 				(prefs) => prefs.arenaActiveTimeFilter,
 				(prefs) => prefs.arenaActiveClassFilter,
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
 		]).pipe(
-			filter(([stats, rewards, [timeFilter, heroFilter]]) => !!stats?.length),
-			this.mapData(([stats, rewards, [timeFilter, heroFilter], patch]) => {
+			filter(([stats, rewards, deckStats, [timeFilter, heroFilter]]) => !!stats?.length),
+			this.mapData(([stats, rewards, deckStats, [timeFilter, heroFilter], patch]) => {
 				const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena').filter((stat) => !!stat.runId);
-				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards);
+				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
 				const filteredRuns = arenaRuns
 					.filter((match) => this.isCorrectHero(match, heroFilter))
 					.filter((match) => this.isCorrectTime(match, timeFilter, patch));
@@ -145,6 +150,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 	private buildArenaRuns(
 		arenaMatches: readonly GameStat[],
 		rewards: readonly ArenaRewardInfo[],
+		deckStats: readonly DraftDeckStats[],
 	): readonly ArenaRun[] {
 		const matchesGroupedByRun = !!arenaMatches?.length
 			? groupByFunction((match: GameStat) => match.runId)(arenaMatches)
@@ -155,6 +161,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 		return Object.keys(matchesGroupedByRun).map((runId: string) => {
 			const matches: readonly GameStat[] = matchesGroupedByRun[runId];
 			const rewards = rewardsGroupedByRun[runId];
+			const draftStat = deckStats?.find((stat) => stat.runId === runId);
 			const firstMatch = matches[0];
 			const sortedMatches = [...matches].sort((a, b) => a.creationTimestamp - b.creationTimestamp);
 			const [wins, losses] = this.extractWins(sortedMatches);
@@ -168,6 +175,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 				losses: losses,
 				steps: matches,
 				rewards: rewards,
+				draftStat: draftStat,
 			} as ArenaRun);
 		});
 	}

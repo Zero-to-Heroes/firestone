@@ -30,6 +30,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					/>
 				</div>
 
+				<!-- <div class="group stat" *ngIf="!!deckImpact">
+					{{ deckImpact }}
+				</div> -->
+
 				<div class="group rewards" *ngIf="rewards?.length">
 					<duels-reward
 						*ngFor="let reward of rewards; trackBy: trackByRewardFn"
@@ -77,6 +81,8 @@ export class ArenaRunComponent {
 	playerClassTooltip: string;
 	wins: number;
 	losses: number;
+	deckImpact: string;
+	deckScore: string;
 	steps: readonly GameStat[];
 	rewards: readonly ArenaRewardInfo[];
 	_isExpanded: boolean;
@@ -136,6 +142,8 @@ export class ArenaRunComponent {
 			heroCard && !!heroCard?.classes?.length
 				? `${heroCard.name} (${formatClass(heroCard.classes[0], this.i18n)})`
 				: null;
+		this.deckScore = this._run.draftStat?.deckScore != null ? this._run.draftStat.deckScore.toFixed(2) : null;
+		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
