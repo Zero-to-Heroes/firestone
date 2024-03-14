@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { DraftPick } from '@firestone-hs/arena-draft-pick';
+import { DraftDeckStats, DraftPick } from '@firestone-hs/arena-draft-pick';
+import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
-import { IArenaDraftManagerService } from '@firestone/arena/common';
+import {
+	ArenaCardStatsService,
+	ArenaClassStatsService,
+	ArenaCombinedCardStats,
+	IArenaDraftManagerService,
+} from '@firestone/arena/common';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
@@ -12,10 +18,13 @@ import {
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, map, pairwise } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, tap, withLatestFrom } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
+const SAVE_DRAFT_STATS_URL = `https://kfudiyqjqqra5cvjbt543ippfe0xzbjv.lambda-url.us-west-2.on.aws/`;
+
+const TOTAL_CARDS_IN_AN_ARENA_DECK = 30;
 
 @Injectable()
 export class ArenaDraftManagerService
@@ -33,6 +42,8 @@ export class ArenaDraftManagerService
 	private prefs: PreferencesService;
 	private allCards: CardsFacadeService;
 	private api: ApiRunner;
+	private arenaCardStats: ArenaCardStatsService;
+	private arenaClassStats: ArenaClassStatsService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
 	// private previousCardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
@@ -66,6 +77,8 @@ export class ArenaDraftManagerService
 		this.prefs = AppInjector.get(PreferencesService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.api = AppInjector.get(ApiRunner);
+		this.arenaCardStats = AppInjector.get(ArenaCardStatsService);
+		this.arenaClassStats = AppInjector.get(ArenaClassStatsService);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
 		this.currentStep$$.onFirstSubscribe(async () => {
@@ -237,7 +250,78 @@ export class ArenaDraftManagerService
 					}
 					this.sendDraftPick(pick);
 				});
+			this.currentDeck$$
+				.pipe(
+					debounceTime(500),
+					distinctUntilChanged(
+						(previousDeck, currentDeck) => this.deckLength(previousDeck) === this.deckLength(currentDeck),
+					),
+					tap((deck) => console.debug('[arena-draft-manager] [stat] current deck', deck)),
+					pairwise(),
+					tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck', info)),
+					// So that we only do it once, when we finish the draft
+					filter(
+						([previousDeck, currentDeck]) =>
+							currentDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK &&
+							previousDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK - 1,
+					),
+					tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck 2', info)),
+					map(([previousDeck, currentDeck]) => currentDeck),
+					withLatestFrom(this.arenaCardStats.cardStats$$, this.arenaClassStats.classStats$$),
+					map(([currentDeck, cardStats, classStats]) => ({ currentDeck, cardStats, classStats })),
+				)
+				.subscribe(
+					({
+						currentDeck,
+						cardStats,
+						classStats,
+					}: {
+						currentDeck: DeckInfoFromMemory;
+						cardStats: ArenaCombinedCardStats;
+						classStats: ArenaClassStats;
+					}) => {
+						console.debug(
+							'[arena-draft-manager] [stat] computing stats for deck',
+							currentDeck,
+							cardStats,
+							classStats,
+						);
+						const deckClass = this.allCards.getCard(currentDeck.HeroCardId)?.playerClass?.toUpperCase();
+						const classStat = classStats.stats.find((s) => s.playerClass?.toUpperCase() === deckClass);
+						const classWinrate = classStat?.totalGames ? classStat.totalsWins / classStat.totalGames : null;
+						const cardImpacts = currentDeck.DeckList.map((card) => {
+							const cardStat = cardStats.stats.find((s) => s.cardId === card);
+							const drawnWinrate = cardStat?.matchStats?.drawnThenWin / cardStat?.matchStats?.drawn;
+							const drawnImpact =
+								classWinrate == null || drawnWinrate == null ? null : drawnWinrate - classWinrate;
+							return drawnImpact;
+						});
+						const averageCardImpact = cardImpacts.reduce((a, b) => a + b, 0) / cardImpacts.length;
+						const deckImpact = 100 * averageCardImpact;
+						const deckScore = 100 * (classWinrate + averageCardImpact);
+						const deckDraftStats: DraftDeckStats = {
+							runId: currentDeck.Id,
+							playerClass: deckClass,
+							deckImpact: deckImpact,
+							deckScore: deckScore,
+						};
+						console.debug(
+							'[arena-draft-manager] deck stats',
+							deckDraftStats,
+							deckImpact,
+							deckScore,
+							classWinrate,
+							averageCardImpact,
+						);
+						this.sendDeckStats(deckDraftStats);
+					},
+				);
 		});
+	}
+
+	private async sendDeckStats(stats: DraftDeckStats) {
+		const result = await this.api.callPostApi(SAVE_DRAFT_STATS_URL, stats);
+		console.debug('[arena-draft-manager] uploaded deck stats');
 	}
 
 	private async sendDraftPick(pick: DraftPick) {
