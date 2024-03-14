@@ -1358,12 +1358,9 @@ export class GameEvents {
 				break;
 			case 'WHIZBANG_DECK_ID':
 				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.WHIZBANG_DECK_ID,
-						additionalData: {
-							deckId: gameEvent.Value.DeckId,
-						},
-					} as GameEvent),
+					GameEvent.build(GameEvent.WHIZBANG_DECK_ID, gameEvent, {
+						deckId: gameEvent.Value.AdditionalProps.DeckId,
+					}),
 				);
 				break;
 			case 'RECONNECT_START':

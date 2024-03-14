@@ -24,7 +24,7 @@ import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils
 import { getLogsDir } from '../log-utils.service';
 import { DeckHandlerService } from './deck-handler.service';
 
-const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json`;
+const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.gz.json`;
 
 @Injectable()
 export class DeckParserService {
@@ -179,6 +179,7 @@ export class DeckParserService {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
 			this.setCurrentDeck(this.updateDeckFromMemory(deck, scenarioId, gameType));
 		} else {
+			await this.memory.getWhizbangDeck(deckId);
 			this.setCurrentDeck(null);
 		}
 		return this.currentDeck;

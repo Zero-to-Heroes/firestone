@@ -14,22 +14,26 @@ export class WhizbangDeckParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		const [, controllerId, localPlayer] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
 		const deckId = gameEvent.additionalData.deckId;
 		console.log('parsing whizbang deck', deckId);
 
-		const deck = await this.deckParser.getTemplateDeck(
+		const templateDeck = await this.deckParser.getTemplateDeck(
 			deckId,
 			currentState.metadata?.scenarioId,
 			currentState.metadata?.gameType,
 		);
-		console.log('got whizbang deck', deck);
-		if (!deck) {
+		console.log('got whizbang deck', templateDeck?.name, 'isPlayer', isPlayer);
+		if (!templateDeck) {
 			return currentState;
 		}
 
 		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			currentState,
-			new DeckstringOverrideEvent(deck.name, deck.deckstring, 'player'),
+			new DeckstringOverrideEvent(templateDeck.name, templateDeck.deckstring, isPlayer ? 'player' : 'opponent'),
 		);
 		return stateAfterPlayerDeckUpdate;
 	}
