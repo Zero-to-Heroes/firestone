@@ -6,7 +6,7 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
 const SHOW_ADS_IN_DEV = false;
@@ -58,6 +58,12 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 				this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
 			},
 		);
+		this.showAds$$.pipe(distinctUntilChanged()).subscribe((showAds) => {
+			console.debug('[ads] show ads?', showAds);
+		});
+		this.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremiumSub) => {
+			console.debug('[ads] hasPremiumSub?', hasPremiumSub);
+		});
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
