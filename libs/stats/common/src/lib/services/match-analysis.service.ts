@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { CardAnalysis, MatchAnalysis } from '@firestone-hs/assign-constructed-archetype';
 import { decode } from '@firestone-hs/deckstrings';
 import { Replay } from '@firestone-hs/hs-replay-xml-parser';
 import { getBaseCardId } from '@firestone-hs/reference-data';
+import { CardAnalysis, MatchAnalysis } from '@firestone-hs/replay-metadata';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { cardDrawn } from './match-analysis/parsers/cards-draw-parser';
 import { cardsInHand } from './match-analysis/parsers/cards-in-hand-parser';
+import { cardPlayed } from './match-analysis/parsers/cards-play-parser';
 import { extractPlayedCards } from './match-analysis/played-card-extractor';
 import { ReplayParser } from './match-analysis/replay-parser';
 
@@ -37,10 +38,11 @@ export class MatchAnalysisService {
 
 		const replay: Replay = game.replay;
 
-		const parser = new ReplayParser(replay, [cardsInHand, cardDrawn]);
+		const parser = new ReplayParser(replay, [cardsInHand, cardDrawn, cardPlayed]);
 		let cardsAfterMulligan: { cardId: string; kept: boolean }[] = [];
 		let cardsBeforeMulligan: string[] = [];
 		let cardsDrawn: { cardId: string; cardDbfId: number; turn: number }[] = [];
+		let cardsPlayed: { cardId: string; cardDbfId: number; turn: number }[] = [];
 		parser.on('cards-in-hand', (event) => {
 			if (cardsBeforeMulligan?.length === 0) {
 				cardsBeforeMulligan = event.cardsInHand.map((cardId) => getBaseCardId(cardId));
@@ -62,10 +64,19 @@ export class MatchAnalysisService {
 				{ cardId: baseCardId, cardDbfId: this.allCards.getCard(baseCardId).dbfId, turn: event.turn },
 			];
 		});
+		parser.on('card-play', (event) => {
+			const baseCardId = getBaseCardId(event.cardId);
+			// console.debug('card played', event.cardId);
+			cardsPlayed = [
+				...cardsPlayed,
+				{ cardId: baseCardId, cardDbfId: this.allCards.getCard(baseCardId).dbfId, turn: event.turn },
+			];
+		});
 		parser.parse();
 
 		const finalCardsAfterMulligan = [...cardsAfterMulligan];
 		const finalCardsDrawn = [...cardsDrawn];
+		const finalCardsPlayed = [...cardsPlayed];
 
 		const deckDefinition = decode(game.deckstring);
 		// List of cards, ordered by id, including duplicates
@@ -73,6 +84,7 @@ export class MatchAnalysisService {
 			.flatMap((pair) => new Array(pair[1]).fill(this.allCards.getCard(pair[0]).id))
 			.sort();
 		const cardsAnalysis: readonly CardAnalysis[] = deckCards.map((cardId) => {
+			const refCard = this.allCards.getCard(cardId);
 			// Remove the info from cards after mulligan
 			const cardAfterMulligan = cardsAfterMulligan.find((c) => c.cardId === cardId);
 			if (cardAfterMulligan) {
@@ -87,16 +99,27 @@ export class MatchAnalysisService {
 			if (cardDrawn) {
 				cardsDrawn = cardsDrawn.filter((c) => c !== cardDrawn);
 			}
+			const cardPlayed = cardsPlayed.find((c) => c.cardId === cardId);
+			if (cardPlayed) {
+				cardsPlayed = cardsPlayed.filter((c) => c !== cardPlayed);
+			}
 
+			const playedTurn = cardPlayed?.turn == null ? null : Math.ceil(cardPlayed.turn / 2);
 			return {
 				cardId: cardId,
 				drawnBeforeMulligan: cardBeforeMulliganIdx !== -1,
 				mulligan: !!cardAfterMulligan,
 				kept: cardAfterMulligan?.kept ?? false,
 				drawnTurn: cardDrawn?.turn,
+				playedTurn: playedTurn,
+				playedOnCurve: playedTurn == null || refCard.cost == null ? false : playedTurn <= refCard.cost,
 			};
 		});
 
+		console.debug(
+			'cards played',
+			cardsAnalysis.filter((c) => c.playedTurn),
+		);
 		const result: MatchAnalysis = {
 			cardsAnalysis: cardsAnalysis,
 			cardsAfterMulligan: finalCardsAfterMulligan,
