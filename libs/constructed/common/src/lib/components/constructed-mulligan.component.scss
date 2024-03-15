@@ -10,18 +10,19 @@
 	opacity: 1;
 	transition-property: transform, opacity;
 	transition-duration: 0.3s;
+	transform-origin: bottom center;
 	transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
 }
 
 .mulligan-guide {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	align-items: center;
 	justify-content: center;
 	font-size: 18px;
 
 	&.wide {
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 
 	.premium-container {
