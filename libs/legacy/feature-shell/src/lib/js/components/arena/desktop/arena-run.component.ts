@@ -30,9 +30,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					/>
 				</div>
 
-				<!-- <div class="group stat" *ngIf="!!deckImpact">
-					{{ deckImpact }}
-				</div> -->
+				<div class="group score" *ngIf="!!deckScore" [helpTooltip]="deckScoreTooltip">
+					<div class="image" [inlineSVG]="'assets/svg/star.svg'"></div>
+					<div class="value">{{ deckScore }}</div>
+				</div>
 
 				<div class="group rewards" *ngIf="rewards?.length">
 					<duels-reward
@@ -83,6 +84,7 @@ export class ArenaRunComponent {
 	losses: number;
 	deckImpact: string;
 	deckScore: string;
+	deckScoreTooltip: string;
 	steps: readonly GameStat[];
 	rewards: readonly ArenaRewardInfo[];
 	_isExpanded: boolean;
@@ -142,8 +144,9 @@ export class ArenaRunComponent {
 			heroCard && !!heroCard?.classes?.length
 				? `${heroCard.name} (${formatClass(heroCard.classes[0], this.i18n)})`
 				: null;
-		this.deckScore = this._run.draftStat?.deckScore != null ? this._run.draftStat.deckScore.toFixed(2) : null;
+		this.deckScore = this._run.draftStat?.deckScore != null ? this._run.draftStat.deckScore.toFixed(1) : null;
 		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
+		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
