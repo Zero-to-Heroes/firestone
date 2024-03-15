@@ -45,6 +45,42 @@ import { ArenaCardStatInfo } from './model';
 					>
 					</sortable-table-label>
 					<sortable-table-label
+						class="cell drawn-winrate"
+						[name]="'app.arena.card-stats.header-drawn-winrate' | fsTranslate"
+						[helpTooltip]="'app.arena.card-stats.header-drawn-winrate-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'drawn-winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell deck-winrate"
+						[name]="'app.arena.card-stats.header-deck-winrate' | fsTranslate"
+						[helpTooltip]="'app.arena.card-stats.header-deck-winrate-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'deck-winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell pickrate"
+						[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
+						[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'pickrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell pickrate-high-wins"
+						[name]="headerPickrateHighWins"
+						[helpTooltip]="headerPickrateHighWinsTooltip"
+						[sort]="sort"
+						[criteria]="'pickrate-high-wins'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell drawn-total"
 						[name]="'app.arena.card-stats.header-drawn-total' | fsTranslate"
 						[sort]="sort"
@@ -53,19 +89,10 @@ import { ArenaCardStatInfo } from './model';
 					>
 					</sortable-table-label>
 					<sortable-table-label
-						class="cell drawn-winrate"
-						[name]="'app.arena.card-stats.header-drawn-winrate' | fsTranslate"
+						class="cell deck-total"
+						[name]="'app.arena.card-stats.header-deck-total' | fsTranslate"
 						[sort]="sort"
-						[criteria]="'drawn-winrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell pickrate-impact"
-						[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
-						[helpTooltip]="headerPickrateSkillTooltip"
-						[sort]="sort"
-						[criteria]="'pickrate-impact'"
+						[criteria]="'deck-total'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -78,10 +105,11 @@ import { ArenaCardStatInfo } from './model';
 					>
 					</sortable-table-label>
 					<sortable-table-label
-						class="cell pickrate"
-						[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
+						class="cell pickrate-impact"
+						[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
+						[helpTooltip]="headerPickrateSkillTooltip"
 						[sort]="sort"
-						[criteria]="'pickrate'"
+						[criteria]="'pickrate-impact'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -93,15 +121,6 @@ import { ArenaCardStatInfo } from './model';
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label> -->
-					<sortable-table-label
-						class="cell pickrate-high-wins"
-						[name]="headerPickrateHighWins"
-						[helpTooltip]="headerPickrateHighWinsTooltip"
-						[sort]="sort"
-						[criteria]="'pickrate-high-wins'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
 				</div>
 				<virtual-scroller
 					#scroll
@@ -334,6 +353,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			cardId: stat.cardId,
 			drawnTotal: stat.matchStats.drawn,
 			drawWinrate: stat.matchStats.drawn > 0 ? stat.matchStats.drawnThenWin / stat.matchStats.drawn : null,
+			deckTotal: stat.matchStats.inStartingDeck,
+			deckWinrate:
+				stat.matchStats.inStartingDeck > 0 ? stat.matchStats.wins / stat.matchStats.inStartingDeck : null,
 			totalOffered: stat.draftStats?.totalOffered,
 			totalPicked: stat.draftStats?.totalPicked,
 			pickRate: stat.draftStats?.pickRate,
@@ -361,8 +383,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				return this.sortByName(a, b, sortCriteria.direction);
 			case 'drawn-winrate':
 				return this.sortByDrawnWinrate(a, b, sortCriteria.direction);
+			case 'deck-winrate':
+				return this.sortByDeckWinrate(a, b, sortCriteria.direction);
 			case 'drawn-total':
 				return this.sortByDrawnTotal(a, b, sortCriteria.direction);
+			case 'deck-total':
+				return this.sortByDeckTotal(a, b, sortCriteria.direction);
 			case 'offered-total':
 				return this.sortByOfferedTotal(a, b, sortCriteria.direction);
 			case 'pickrate':
@@ -420,9 +446,21 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
+	private sortByDeckTotal(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.deckTotal ?? 0;
+		const bData = b.deckTotal ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
 	private sortByDrawnWinrate(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
 		const aData = a.drawWinrate ?? 0;
 		const bData = b.drawWinrate ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByDeckWinrate(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.deckWinrate ?? 0;
+		const bData = b.deckWinrate ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 }
@@ -431,6 +469,8 @@ type ColumnSortType =
 	| 'name'
 	| 'drawn-total'
 	| 'drawn-winrate'
+	| 'deck-total'
+	| 'deck-winrate'
 	| 'pickrate-impact'
 	| 'offered-total'
 	| 'pickrate'

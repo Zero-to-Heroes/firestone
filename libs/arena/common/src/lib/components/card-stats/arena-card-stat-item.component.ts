@@ -10,12 +10,14 @@ import { ArenaCardStatInfo } from './model';
 			<div class="cell card-details">
 				<card-tile [cardId]="cardId"></card-tile>
 			</div>
-			<div class="cell drawn-total">{{ drawTotal }}</div>
 			<div class="cell drawn-winrate">{{ drawnWinrate }}</div>
-			<div class="cell pickrate-impact">{{ pickrateImpact }}</div>
-			<div class="cell offered-total">{{ offeredTotal }}</div>
+			<div class="cell deck-winrate">{{ deckWinrate }}</div>
 			<div class="cell pickrate">{{ pickrateTotal }}</div>
 			<div class="cell pickrate-high-wins">{{ pickrateHighWins }}</div>
+			<div class="cell drawn-total">{{ drawTotal }}</div>
+			<div class="cell deck-total">{{ deckTotal }}</div>
+			<div class="cell offered-total">{{ offeredTotal }}</div>
+			<div class="cell pickrate-impact">{{ pickrateImpact }}</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,7 +27,10 @@ export class ArenaCardStatItemComponent {
 		this.cardId = value.cardId;
 		this.drawTotal =
 			value.drawnTotal == null ? '-' : value.drawnTotal.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
+		this.deckTotal =
+			value.deckTotal == null ? '-' : value.deckTotal.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
 		this.drawnWinrate = value.drawWinrate == null ? '-' : (100 * value.drawWinrate).toFixed(1) + '%';
+		this.deckWinrate = value.deckWinrate == null ? '-' : (100 * value.deckWinrate).toFixed(1) + '%';
 		this.pickrateImpact = value.pickRateImpact == null ? '-' : (100 * value.pickRateImpact).toFixed(1) + '%';
 		this.offeredTotal =
 			value.totalOffered == null
@@ -37,7 +42,9 @@ export class ArenaCardStatItemComponent {
 
 	cardId: string;
 	drawTotal: string;
+	deckTotal: string;
 	drawnWinrate: string;
+	deckWinrate: string;
 	pickrateImpact: string;
 	offeredTotal: string;
 	pickrateTotal: string;

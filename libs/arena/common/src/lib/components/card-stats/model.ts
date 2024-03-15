@@ -1,5 +1,7 @@
 export interface ArenaCardStatInfo {
 	readonly cardId: string;
+	readonly deckTotal: number;
+	readonly deckWinrate: number | null | undefined;
 	readonly drawnTotal: number;
 	readonly drawWinrate: number | null | undefined;
 	readonly pickRateImpact: number | null | undefined;
