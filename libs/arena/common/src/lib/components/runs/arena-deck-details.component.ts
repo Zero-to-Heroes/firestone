@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Pick } from '@firestone-hs/arena-draft-pick';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { ArenaDeckOverview } from '../../models/arena-deck-details';
 import { ArenDeckDetailsService } from '../../services/arena-deck-details.service';
@@ -38,6 +39,15 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 									[cardTooltip]="overview.playerCardId"
 									*ngIf="overview.playerClassImage"
 								/>
+							</div>
+
+							<div
+								class="group score"
+								*ngIf="!!overview.draftStat?.deckScore"
+								[helpTooltip]="deckScoreTooltip"
+							>
+								<div class="image" [inlineSVG]="'assets/svg/star.svg'"></div>
+								<div class="value">{{ overview.draftStat.deckScore.toFixed(1) }}</div>
 							</div>
 
 							<div class="group rewards" *ngIf="overview.rewards?.length">
@@ -110,11 +120,13 @@ export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent imp
 	overview$: Observable<ArenaDeckOverview | null>;
 
 	isExpanded: boolean;
+	deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly nav: ArenaNavigationService,
 		private readonly deckDetailsService: ArenDeckDetailsService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}

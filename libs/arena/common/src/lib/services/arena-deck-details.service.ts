@@ -84,6 +84,7 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 				: null,
 			rewards: run.rewards,
 			steps: run.steps,
+			draftStat: run.draftStat,
 		};
 		return result;
 	}
