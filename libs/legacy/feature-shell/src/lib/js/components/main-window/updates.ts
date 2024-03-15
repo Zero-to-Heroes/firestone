@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.7.0',
+		version: '13.7.3',
 		force: false,
 		sections: [
 			// {
@@ -59,27 +59,32 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now see your deck scores in the My Runs list. This is not retroactive, and will only be available for drafts started after this update.`,
+							},
+						],
+					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'content',
-			// 					text: `Show the Spell Schools widget where Magister Dawngrasp is in the deck.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Add the missing Gift set (with Harth Stonebrew) to the constructed deck builder.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'ui',
+								text: `Update how stats are displayed for the Arena draft stats overlay.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
