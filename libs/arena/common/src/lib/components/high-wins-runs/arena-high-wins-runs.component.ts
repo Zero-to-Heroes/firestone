@@ -65,8 +65,11 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 
 		this.runGroups$ = combineLatest([
 			this.runsService.runs$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
-		]).pipe(this.mapData(([runs, [playerClass]]) => this.buildGroups(runs, playerClass)));
+			this.prefs.preferences$(
+				(prefs) => prefs.arenaActiveClassFilter,
+				(prefs) => prefs.arenaActiveWinsFilter,
+			),
+		]).pipe(this.mapData(([runs, [playerClass, wins]]) => this.buildGroups(runs, playerClass, wins)));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -76,15 +79,16 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 	private buildGroups(
 		runs: HighWinRunsInfo | null | undefined,
 		playerClass: ArenaClassFilterType | null,
+		wins: number | null,
 	): (ArenaRunInfo | string)[] | null {
 		console.debug('[arena-high-wins-runs] building groups', runs, playerClass);
 		if (runs?.runs == null) {
 			return null;
 		}
 
-		const filteredRuns = runs.runs.filter(
-			(run) => !playerClass || playerClass === 'all' || run.playerClass === playerClass,
-		);
+		const filteredRuns = runs.runs
+			.filter((run) => !wins || run.wins >= wins)
+			.filter((run) => !playerClass || playerClass === 'all' || run.playerClass === playerClass);
 		const groupingFunction = (deck: ArenaRunInfo) => {
 			const date = new Date(deck.creationDate);
 			return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {

@@ -760,6 +760,7 @@ export class Preferences implements IPreferences {
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
 	readonly arenaActiveCardClassFilter: ArenaCardClassFilterType = 'all';
 	readonly arenaActiveCardTypeFilter: ArenaCardTypeFilterType = 'all';
+	readonly arenaActiveWinsFilter: number = 10;
 	// TODO: add settings
 	readonly arenaShowHeroSelectionOverlay: boolean = true;
 	readonly arenaShowCardSelectionOverlay: boolean = true;

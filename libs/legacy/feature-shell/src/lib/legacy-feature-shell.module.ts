@@ -496,6 +496,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 import { ArenaRunComponent } from '@components/arena/desktop/arena-run.component';
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
+import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
 import { ConstructedMetaArchetypeDetailsComponent } from '@components/decktracker/main/constructed-meta-archetype-details.component';
@@ -1440,6 +1441,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaFiltersComponent,
 		ArenaTimeFilterDropdownComponent,
 		ArenaClassFilterDropdownComponent,
+		ArenaHighWinRunsWinsFilterDropdownComponent,
 		ArenaCardClassFilterDropdownComponent,
 		ArenaCardTypeFilterDropdownComponent,
 		ArenaRunComponent,

@@ -18,6 +18,9 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<arena-class-filter-dropdown class="filter class-filter"></arena-class-filter-dropdown>
 			<arena-card-class-filter-dropdown class="filter card-class-filter"></arena-card-class-filter-dropdown>
 			<arena-card-type-filter-dropdown class="filter card-type-filter"></arena-card-type-filter-dropdown>
+			<arena-high-win-runs-wins-filter-dropdown
+				class="filter card-type-filter"
+			></arena-high-win-runs-wins-filter-dropdown>
 			<!-- Do it here because for now the current view is in the store -->
 			<arena-card-search class="filter card-search" *ngIf="showArenaCardSearch$ | async"></arena-card-search>
 		</div>
