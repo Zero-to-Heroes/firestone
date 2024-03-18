@@ -32,7 +32,7 @@ export class MatchAnalysisService {
 			console.debug('[match-analysis] not analyzing game mode', game.gameMode);
 			return null;
 		}
-		if (!game.deckstring?.length == null) {
+		if (!game.deckstring?.length) {
 			return null;
 		}
 
