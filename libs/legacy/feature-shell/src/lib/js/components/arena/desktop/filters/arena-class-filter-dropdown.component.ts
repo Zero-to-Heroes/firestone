@@ -67,7 +67,7 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 					placeholder:
 						options.find((option) => option.value === filter)?.label ??
 						this.i18n.translateString('app.arena.filters.hero-class.all'),
-					visible: ['arena-runs', 'card-stats'].includes(selectedCategoryId),
+					visible: ['arena-runs', 'card-stats', 'arena-high-wins-runs'].includes(selectedCategoryId),
 				};
 			}),
 		);

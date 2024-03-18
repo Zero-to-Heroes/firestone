@@ -48,7 +48,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 })
 export class ArenaRunVignetteComponent {
 	@Input() set stat(value: ArenaRunInfo) {
-		console.debug('setting stat', value);
+		// console.debug('setting stat', value);
 		this.setStat(value);
 	}
 

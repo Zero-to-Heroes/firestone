@@ -7,9 +7,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ArenaRunInfo, HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
+import { ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { ArenaGroupedRuns } from '../../models/arena-high-wins-runs';
 import { ArenaHighWinsRunsService } from '../../services/arena-high-wins-runs.service';
 
@@ -53,26 +54,37 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly runsService: ArenaHighWinsRunsService,
 		private readonly i18n: ILocalizationService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.runsService.isReady();
+		await this.prefs.isReady();
 
-		this.runGroups$ = this.runsService.runs$$.pipe(this.mapData((runs) => this.buildGroups(runs)));
+		this.runGroups$ = combineLatest([
+			this.runsService.runs$$,
+			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
+		]).pipe(this.mapData(([runs, [playerClass]]) => this.buildGroups(runs, playerClass)));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	private buildGroups(runs: HighWinRunsInfo | null | undefined): (ArenaRunInfo | string)[] | null {
-		console.debug('[arena-high-wins-runs] building groups', runs);
+	private buildGroups(
+		runs: HighWinRunsInfo | null | undefined,
+		playerClass: ArenaClassFilterType | null,
+	): (ArenaRunInfo | string)[] | null {
+		console.debug('[arena-high-wins-runs] building groups', runs, playerClass);
 		if (runs?.runs == null) {
 			return null;
 		}
 
+		const filteredRuns = runs.runs.filter(
+			(run) => !playerClass || playerClass === 'all' || run.playerClass === playerClass,
+		);
 		const groupingFunction = (deck: ArenaRunInfo) => {
 			const date = new Date(deck.creationDate);
 			return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
@@ -82,7 +94,7 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 			});
 		};
 		const groupByDate = groupByFunction(groupingFunction);
-		const runsByDate = groupByDate(runs.runs);
+		const runsByDate = groupByDate(filteredRuns);
 		const result = Object.keys(runsByDate).map((date) => this.buildGroupedRuns(date, runsByDate[date]));
 		console.debug('[arena-high-wins-runs] built groups', result);
 		return result.map((r) => [r.header, ...r.runs]).flat();
