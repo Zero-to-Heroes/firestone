@@ -63,6 +63,15 @@ import { ArenaCardStatInfo } from './model';
 					>
 					</sortable-table-label>
 					<sortable-table-label
+						class="cell mulligan-winrate"
+						[name]="'app.arena.card-stats.header-mulligan-winrate' | fsTranslate"
+						[helpTooltip]="'app.arena.card-stats.header-mulligan-winrate-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'mulligan-winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell pickrate"
 						[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
 						[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
@@ -353,6 +362,10 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			cardId: stat.cardId,
 			drawnTotal: stat.matchStats.drawn,
 			drawWinrate: stat.matchStats.drawn > 0 ? stat.matchStats.drawnThenWin / stat.matchStats.drawn : null,
+			mulliganWinrate:
+				stat.matchStats.inHandAfterMulligan > 0
+					? stat.matchStats.inHandAfterMulliganThenWin / stat.matchStats.inHandAfterMulligan
+					: null,
 			deckTotal: stat.matchStats.inStartingDeck,
 			deckWinrate:
 				stat.matchStats.inStartingDeck > 0 ? stat.matchStats.wins / stat.matchStats.inStartingDeck : null,
@@ -385,6 +398,8 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				return this.sortByDrawnWinrate(a, b, sortCriteria.direction);
 			case 'deck-winrate':
 				return this.sortByDeckWinrate(a, b, sortCriteria.direction);
+			case 'mulligan-winrate':
+				return this.sortByMulliganWinrate(a, b, sortCriteria.direction);
 			case 'drawn-total':
 				return this.sortByDrawnTotal(a, b, sortCriteria.direction);
 			case 'deck-total':
@@ -463,6 +478,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		const bData = b.deckWinrate ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
+
+	private sortByMulliganWinrate(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.mulliganWinrate ?? 0;
+		const bData = b.mulliganWinrate ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
 }
 
 type ColumnSortType =
@@ -471,6 +492,7 @@ type ColumnSortType =
 	| 'drawn-winrate'
 	| 'deck-total'
 	| 'deck-winrate'
+	| 'mulligan-winrate'
 	| 'pickrate-impact'
 	| 'offered-total'
 	| 'pickrate'
