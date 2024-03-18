@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.7.3',
+		version: '13.7.5',
 		force: false,
 		sections: [
 			// {
@@ -65,6 +65,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now see your deck scores in the My Runs list. This is not retroactive, and will only be available for drafts started after this update.`,
+							},
+							{
+								type: 'feature',
+								text: `You can now see a list of recent decks that went to 10+ wins, as well as the choices they made during the draft.`,
+							},
+							{
+								type: 'feature',
+								text: `Add the "Deck Winrate" stat in the Card Stats tab.`,
 							},
 						],
 					},
