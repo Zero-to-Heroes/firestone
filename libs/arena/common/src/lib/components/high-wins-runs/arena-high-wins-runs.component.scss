@@ -1,0 +1,63 @@
+:host {
+	flex-grow: 1;
+	display: flex;
+	min-height: 0;
+}
+
+.runs-container {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+with-loading {
+	display: flex;
+}
+
+.runs-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-transition: all 2s;
+	transition: all 2s;
+	flex-grow: 1;
+	padding-right: 10px;
+	min-height: 0;
+
+	.header {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 19px;
+		color: var(--default-title-color);
+		margin-bottom: 5px;
+	}
+
+	arena-run-vignette {
+		width: 100%;
+		margin-bottom: 5px;
+		width: 100%;
+	}
+
+	// arena-grouped-high-wins-runs {
+	// 	margin-bottom: 5px;
+	// }
+}
+
+.loading {
+	height: 25px;
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	justify-items: center;
+	align-items: center;
+	color: var(--color-1);
+}

@@ -12,15 +12,18 @@ import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stat
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
 import { ArenaClassTierListTierComponent } from './components/class-info/arena-class-tier-list-tier.component';
 import { ArenaClassTierListComponent } from './components/class-info/arena-class-tier-list.component';
+import { ArenaHighWinsRunsComponent } from './components/high-wins-runs/arena-high-wins-runs.component';
 import { ArenaCardOptionComponent } from './components/overlays/arena-card-option.component';
 import { ArenaCardSelectionComponent } from './components/overlays/arena-card-selection.component';
 import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
 import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
+import { ArenaRunVignetteComponent } from './components/runs/arena-run-vignette.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 import { ArenDeckDetailsService } from './services/arena-deck-details.service';
+import { ArenaHighWinsRunsService } from './services/arena-high-wins-runs.service';
 import { ArenaNavigationService } from './services/arena-navigation.service';
 
 const components = [
@@ -36,6 +39,8 @@ const components = [
 	ArenaCardOptionComponent,
 	ArenaOptionInfoPremiumComponent,
 	ArenaDeckDetailsComponent,
+	ArenaHighWinsRunsComponent,
+	ArenaRunVignetteComponent,
 ];
 @NgModule({
 	imports: [
@@ -49,7 +54,13 @@ const components = [
 		DuelsGeneralModule,
 		StatsCommonModule,
 	],
-	providers: [ArenaClassStatsService, ArenaCardStatsService, ArenaNavigationService, ArenDeckDetailsService],
+	providers: [
+		ArenaClassStatsService,
+		ArenaCardStatsService,
+		ArenaNavigationService,
+		ArenDeckDetailsService,
+		ArenaHighWinsRunsService,
+	],
 	declarations: components,
 	exports: components,
 })

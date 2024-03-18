@@ -1,5 +1,6 @@
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { GameStat } from '@firestone/stats/data-access';
 
 export class ArenaRun {
@@ -15,7 +16,7 @@ export class ArenaRun {
 	readonly wins: number;
 	readonly losses: number;
 
-	public static create(base: ArenaRun): ArenaRun {
+	public static create(base: Partial<NonFunctionProperties<ArenaRun>>): ArenaRun {
 		return Object.assign(new ArenaRun(), base);
 	}
 

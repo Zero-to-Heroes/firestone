@@ -3,7 +3,7 @@ import { Picks } from '@firestone-hs/arena-draft-pick';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
-import { distinctUntilChanged, filter, withLatestFrom } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs';
 import { ArenaDeckDetails, ArenaDeckOverview } from '../models/arena-deck-details';
 import { ArenaRun } from '../models/arena-run';
 import { ArenaNavigationService } from './arena-navigation.service';
@@ -38,9 +38,8 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 				.pipe(
 					filter((run) => !!run),
 					distinctUntilChanged(),
-					withLatestFrom(this.gameStats.gameStats$),
 				)
-				.subscribe(async ([run, gameStats]) => {
+				.subscribe(async (run) => {
 					console.debug('[arena-deck-details] received run', run);
 					if (!run) {
 						this.deckDetails$$.next(null);

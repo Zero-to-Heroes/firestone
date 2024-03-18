@@ -30,7 +30,6 @@ import { AchievementsCompletedFilterDropdownComponent } from './js/components/ac
 import { ArenaClassesRecapComponent } from './js/components/arena/desktop/arena-classes-recap.component';
 import { ArenaDesktopComponent } from './js/components/arena/desktop/arena-desktop.component';
 import { ArenaEmptyStateComponent } from './js/components/arena/desktop/arena-empty-state.component';
-import { ArenaRunComponent } from './js/components/arena/desktop/arena-run.component';
 import { ArenaRunsListComponent } from './js/components/arena/desktop/arena-runs-list.component';
 import { ArenaFiltersComponent } from './js/components/arena/desktop/filters/_arena-filters.component';
 import { ArenaClassFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-class-filter-dropdown.component';
@@ -494,6 +493,7 @@ import { PremiumSettingDirective } from '@components/settings/premium-setting.di
 // import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 // import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
+import { ArenaRunComponent } from '@components/arena/desktop/arena-run.component';
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
@@ -1436,13 +1436,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaDesktopComponent,
 		ArenaEmptyStateComponent,
 		ArenaRunsListComponent,
-		ArenaRunComponent,
 		ArenaClassesRecapComponent,
 		ArenaFiltersComponent,
 		ArenaTimeFilterDropdownComponent,
 		ArenaClassFilterDropdownComponent,
 		ArenaCardClassFilterDropdownComponent,
 		ArenaCardTypeFilterDropdownComponent,
+		ArenaRunComponent,
 
 		MercenariesOpponentTeamComponent,
 		MercenariesTeamRootComponent,

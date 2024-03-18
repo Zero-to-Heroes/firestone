@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { ArenaNavigationService, ArenaRun } from '@firestone/arena/common';
-import { CardsFacadeService, formatClass } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'arena-run',
-	styleUrls: [`../../../../css/global/menu.scss`, `../../../../css/component/arena/desktop/arena-run.component.scss`],
+	styleUrls: [`./arena-run.component.scss`],
 	template: `
 		<div class="arena-run">
 			<div class="left-info">
@@ -15,7 +14,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<img class="game-mode" [src]="gameModeImage" [helpTooltip]="gameModeTooltip" />
 				</div>
 
-				<div class="group result" *ngIf="wins != null">
+				<div class="group result" *ngIf="wins !== null">
 					<div class="wins">{{ wins }}</div>
 					<div class="separator">-</div>
 					<div class="losses">{{ losses }}</div>
@@ -76,15 +75,15 @@ export class ArenaRunComponent {
 
 	deckstring: string;
 	gameModeImage: string;
-	gameModeTooltip: string;
+	gameModeTooltip: string | null;
 	playerCardId: string;
-	playerClassImage: string;
-	playerClassTooltip: string;
+	playerClassImage: string | null;
+	playerClassTooltip: string | null;
 	wins: number;
 	losses: number;
-	deckImpact: string;
-	deckScore: string;
-	deckScoreTooltip: string;
+	deckImpact: string | null;
+	deckScore: string | null;
+	deckScoreTooltip: string | null;
 	steps: readonly GameStat[];
 	rewards: readonly ArenaRewardInfo[];
 	_isExpanded: boolean;
@@ -92,7 +91,7 @@ export class ArenaRunComponent {
 	private _run: ArenaRun;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly nav: ArenaNavigationService,
