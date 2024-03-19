@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LotteryConfigResourceStatType, LotteryState } from '../../services/lottery/lottery.model';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { UserService } from '../../services/user.service';
 
 @Component({
 	selector: 'lottery-lottery',

@@ -9,14 +9,13 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { UserService } from '../services/user.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({

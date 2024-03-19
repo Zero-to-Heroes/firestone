@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService, UserService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../../models/achievement';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameStateService } from '../../decktracker/game-state.service';
-import { UserService } from '../../user.service';
 
 const ACHIEVEMENTS_UPDATE_URL = 'https://yl2slri7psjvyzqscikel2cfgi0hlesx.lambda-url.us-west-2.on.aws/';
 const ACHIEVEMENTS_RETRIEVE_URL = 'https://v4sa2mtlxy5y5suuwwmj6p2i6e0epbqt.lambda-url.us-west-2.on.aws/';

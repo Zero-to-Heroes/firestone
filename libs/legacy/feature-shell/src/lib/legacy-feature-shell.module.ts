@@ -834,7 +834,6 @@ import { SystemTrayService } from './js/services/system-tray.service';
 import { TipService } from './js/services/tip.service';
 import { AppUiStoreFacadeService } from './js/services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from './js/services/ui-store/app-ui-store.service';
-import { UserService } from './js/services/user.service';
 import { AppBootstrapService } from './libs/boostrap/app-bootstrap.service';
 import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
@@ -1770,7 +1769,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		TipService,
 		MainWindowStoreService,
 		StoreBootstrapService,
-		UserService,
 		LazyDataInitService,
 		QuestsService,
 		LiveStreamsService,

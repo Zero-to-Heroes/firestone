@@ -6,14 +6,13 @@ import {
 	BgsPostMatchStatsForReview,
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/common';
-import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
-import { UserService } from '../user.service';
 import { sleep } from '../utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';

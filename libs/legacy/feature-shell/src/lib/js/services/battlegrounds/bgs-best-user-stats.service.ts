@@ -6,9 +6,9 @@ import {
 	ApiRunner,
 	AppInjector,
 	LocalStorageService,
+	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { UserService } from '../user.service';
 
 const BGS_BEST_USER_STATS_ENDPOINT = 'https://ituxwmzobarpdbza5ayj2emdgq0nyhzp.lambda-url.us-west-2.on.aws';
 

@@ -8,11 +8,11 @@ import {
 	ApiRunner,
 	AppInjector,
 	OverwolfService,
+	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, filter, withLatestFrom } from 'rxjs';
 import { ReviewIdService } from '../review-id.service';
-import { UserService } from '../user.service';
 import { ArenaInfoService } from './arena-info.service';
 
 const REWARDS_RETRIEVE_URL = 'https://b763ob2h6h3ewimg7ztsl72p240qvfyr.lambda-url.us-west-2.on.aws/';

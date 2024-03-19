@@ -1,29 +1,26 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject, deepEqual, sleep } from '@firestone/shared/framework/common';
-import {
-	ADS_SERVICE_TOKEN,
-	AbstractFacadeService,
-	ApiRunner,
-	AppInjector,
-	IAdsService,
-	OverwolfService,
-	WindowManagerService,
-} from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { AbstractFacadeService } from './abstract-facade-service';
+import { ADS_SERVICE_TOKEN, IAdsService } from './ads-service.interface';
+import { ApiRunner } from './api-runner';
+import { AppInjector } from './app-injector';
+import { OverwolfService } from './overwolf.service';
+import { WindowManagerService } from './window-manager.service';
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
 // TODO: use Hearthstone user id
 @Injectable()
 export class UserService extends AbstractFacadeService<UserService> {
-	public user$$: SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult>;
+	public user$$: SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult | null>;
 
 	private ow: OverwolfService;
 	private api: ApiRunner;
 	private ads: IAdsService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'userService', () => !!this.user$$);
+		super(windowManager, 'UserService', () => !!this.user$$);
 	}
 
 	protected override assignSubjects() {
@@ -56,7 +53,7 @@ export class UserService extends AbstractFacadeService<UserService> {
 		});
 	}
 
-	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
+	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult | null> {
 		return await this.user$$.getValueWithInit();
 	}
 
@@ -71,15 +68,15 @@ export class UserService extends AbstractFacadeService<UserService> {
 		return user;
 	}
 
-	private async sendCurrentUser(user: overwolf.profile.GetCurrentUserResult, isPremium: boolean) {
+	private async sendCurrentUser(user: overwolf.profile.GetCurrentUserResult | null, isPremium: boolean) {
 		// Don't send anything in dev to allow for impersonation
-		if (process.env.NODE_ENV !== 'production') {
+		if (process.env['NODE_ENV'] !== 'production') {
 			console.warn('[user-service] not sending user mapping in dev');
 			return;
 		}
 
 		// console.log('[user-service] sending current user', user, isPremium);
-		if (!!user.username) {
+		if (!!user?.username) {
 			await this.api.callPostApi(USER_MAPPING_UPDATE_URL, {
 				userId: user.userId,
 				userName: user.username,

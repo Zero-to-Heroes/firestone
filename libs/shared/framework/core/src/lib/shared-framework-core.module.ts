@@ -16,6 +16,7 @@ import { CardsFacadeService } from './services/cards-facade.service';
 import { DiskCacheService } from './services/disk-cache.service';
 import { LocalStorageService } from './services/local-storage';
 import { OverwolfService } from './services/overwolf.service';
+import { UserService } from './services/user.service';
 import { WindowManagerService } from './services/window-manager.service';
 
 const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent, LoadingStateComponent];
@@ -38,6 +39,7 @@ const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent,
 		LocalStorageService,
 		WindowManagerService,
 		LocalizationStandaloneService,
+		UserService,
 	],
 	declarations: components,
 	exports: components,

@@ -7,8 +7,7 @@ import {
 	Input as LootInput,
 } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
-import { UserService } from '../user.service';
+import { ApiRunner, UserService } from '@firestone/shared/framework/core';
 
 const DUELS_RUN_INFO_URL = 'https://cc3tc224po5orwembimzyaxqhy0khyij.lambda-url.us-west-2.on.aws/';
 

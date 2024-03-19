@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { UserService } from '../user.service';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	UserService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 
 const SAVE_URL = `https://kfudiyqjqqra5cvjbt543ippfe0xzbjv.lambda-url.us-west-2.on.aws/`;
 const RETRIEVE_URL = 'https://oqskvzs6pjzhrcsg54z7tvnxoe0fmuyw.lambda-url.us-west-2.on.aws/';

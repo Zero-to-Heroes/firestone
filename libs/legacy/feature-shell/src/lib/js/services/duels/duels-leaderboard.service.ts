@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
-import { UserService } from '../user.service';
+import { ApiRunner, UserService } from '@firestone/shared/framework/core';
 
 const DUELS_LEADERBOARD_URL = 'https://hj7zgbe3esjkltgsbu3pznjq4q0edrhn.lambda-url.us-west-2.on.aws/';
 
