@@ -1,3 +1,4 @@
+/** @deprecated */
 export type CurrentAppType =
 	| 'collection'
 	| 'achievements'
@@ -12,4 +13,5 @@ export type CurrentAppType =
 	| 'profile'
 	| 'streams'
 	| 'mailbox'
+	| 'communities'
 	| 'live';

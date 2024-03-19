@@ -74,6 +74,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `Add the "Deck Winrate" stat in the Card Stats tab.`,
 							},
+							{
+								type: 'feature',
+								text: `Add the "Mulligan Winrate" stat in the Card Stats tab.`,
+							},
 						],
 					},
 				],
@@ -82,6 +86,15 @@ export const updates: readonly Update[] = [
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a simulation issue when Matador doesn't have any valid target left.`,
+							},
+						],
+					},
 					{
 						category: 'arena',
 						details: [

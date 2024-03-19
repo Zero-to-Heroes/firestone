@@ -12,6 +12,7 @@
 		align-items: center;
 		justify-content: center;
 		position: relative;
+		color: var(--default-title-color);
 
 		&.selected {
 			border: none;

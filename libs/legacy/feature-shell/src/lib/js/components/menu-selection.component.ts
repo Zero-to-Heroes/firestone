@@ -154,6 +154,8 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 				</div>
 			</button>
 
+			<li class="main-menu-separator"></li>
+
 			<button
 				tabindex="-1"
 				type="button"
@@ -166,6 +168,20 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.profile-header'"></div>
+				</div>
+			</button>
+			<button
+				tabindex="-1"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.communities-header' | owTranslate"
+				[ngClass]="{ selected: selectedModule === 'communities' }"
+				(click)="selectModule('communities')"
+			>
+				<div class="icon" inlineSVG="assets/svg/community.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.communities-header'"></div>
 				</div>
 			</button>
 

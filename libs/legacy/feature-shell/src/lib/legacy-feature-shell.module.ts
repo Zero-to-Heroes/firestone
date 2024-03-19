@@ -552,6 +552,7 @@ import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { CollectionViewModule } from '@firestone/collection/view';
+import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DiscordModule } from '@firestone/discord';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
@@ -899,6 +900,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MemoryModule,
 		GameStateModule,
 		StatsCommonModule,
+		CommunitiesCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

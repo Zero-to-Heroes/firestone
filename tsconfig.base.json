@@ -25,6 +25,7 @@
 			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
 			"@firestone/collection/view": ["libs/collection/view/src/index.ts"],
+			"@firestone/communities/common": ["libs/communities/common/src/index.ts"],
 			"@firestone/constructed/common": ["libs/constructed/common/src/index.ts"],
 			"@firestone/discord": ["libs/discord/src/index.ts"],
 			"@firestone/duels/data-access": ["libs/duels/data-access/src/index.ts"],

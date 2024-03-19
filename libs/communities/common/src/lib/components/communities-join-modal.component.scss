@@ -1,0 +1,30 @@
+.modal {
+	width: 520px;
+	display: flex;
+	flex-direction: column;
+	padding: 30px;
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	outline: 1px solid var(--window-outline-color);
+	border: 1px solid #472406;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	pointer-events: all;
+}
+
+.title {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	padding: 0 10px;
+	color: var(--default-title-color);
+	font-size: 18px;
+}
+
+.text {
+	color: var(--default-text-color);
+	font-size: 18px;
+}

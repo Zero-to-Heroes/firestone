@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, deepEqual, sleep } from '@firestone/shared/framework/common';
 import {
+	ADS_SERVICE_TOKEN,
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	IAdsService,
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { AdService } from './ad.service';
-import { deepEqual } from './utils';
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
@@ -20,7 +20,7 @@ export class UserService extends AbstractFacadeService<UserService> {
 
 	private ow: OverwolfService;
 	private api: ApiRunner;
-	private ads: AdService;
+	private ads: IAdsService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'userService', () => !!this.user$$);
@@ -34,7 +34,7 @@ export class UserService extends AbstractFacadeService<UserService> {
 		this.user$$ = new SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
-		this.ads = AppInjector.get(AdService);
+		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
 
 		combineLatest([this.ads.enablePremiumFeatures$$, this.user$$])
 			.pipe(
