@@ -43,7 +43,7 @@ export class DeckTrackerOverlayOpponentComponent {
 	showBottomCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowBottomCardsSeparately;
 	showTopCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowTopCardsSeparately;
 	showDkRunesExtractor = (prefs: Preferences) => prefs.opponentOverlayShowDkRunes;
-	deckExtractor = (state: GameState) => state.opponentDeck;
+	deckExtractor = (state: GameState, inMulligan: boolean) => (inMulligan ? null : state.opponentDeck);
 	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
 	// trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => false;
