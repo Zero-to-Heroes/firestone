@@ -12,6 +12,7 @@ import {
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
 } from '@firestone/battlegrounds/common';
+import { CommunityJoinService } from '@firestone/communities/common';
 import {
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
@@ -98,6 +99,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ArenDeckDetailsService: ArenDeckDetailsService,
 		private readonly init_ConstructedMulliganGuideGuardianService: ConstructedMulliganGuideGuardianService,
 		private readonly init_CardMousedOverService: CardMousedOverService,
+		private readonly init_CommunityJoinService: CommunityJoinService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

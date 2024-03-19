@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	UserService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 
-const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
+const JOIN_COMMUNITY_URL = 'https://t2cgqsjooshgnnjqspi44vokqa0ywqmw.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class CommunityJoinService extends AbstractFacadeService<CommunityJoinService> {
@@ -21,6 +27,7 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 	protected async init() {
 		// this.duelsConfig$$ = new SubscriberAwareBehaviorSubject<DuelsConfig | null>(null);
 		this.api = AppInjector.get(ApiRunner);
+		this.user = AppInjector.get(UserService);
 	}
 
 	public async joinCommunity(code: string) {
@@ -29,7 +36,12 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 
 	private async joinCommunityInternal(code: string) {
 		console.debug('joining community', code);
-		const result = await this.api.callPostApi(JOIN_COMMUNITY_URL, { code: code });
+		const user = await this.user.getCurrentUser();
+		const result = await this.api.callPostApi(JOIN_COMMUNITY_URL, {
+			code: code,
+			userId: user?.userId,
+			userName: user?.username,
+		});
 		console.debug('result', result);
 	}
 }

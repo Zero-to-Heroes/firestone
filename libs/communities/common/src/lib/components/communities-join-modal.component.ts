@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { CommunityJoinService } from '../services/community-join.service';
 
 @Component({
 	selector: 'communities-join-modal',
@@ -28,8 +29,12 @@ export class CommunitiesJoinModalComponent {
 
 	@Input() closeHandler: () => void;
 
-	joinCommunity() {
+	constructor(private readonly communityJoinService: CommunityJoinService) {}
+
+	async joinCommunity() {
 		console.debug('joining community', this.code);
+		await this.communityJoinService.isReady();
+		await this.communityJoinService.joinCommunity(this.code);
 	}
 
 	onMouseDown(event: Event) {
