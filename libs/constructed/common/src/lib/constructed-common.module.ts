@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { GameStateModule } from '@firestone/game-state';
+import { MemoryModule } from '@firestone/memory';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
+import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ConstructedMulliganComponent } from './components/constructed-mulligan.component';
@@ -17,7 +21,16 @@ import { GameStateFacadeService } from './services/game-state-facade.service';
 const components = [ConstructedMulliganComponent, MulliganDetailedInfoComponent, MulliganInfoPremiumComponent];
 
 @NgModule({
-	imports: [CommonModule, StatsDataAccessModule, SharedFrameworkCoreModule, SharedCommonViewModule],
+	imports: [
+		CommonModule,
+		StatsDataAccessModule,
+		SharedFrameworkCoreModule,
+		SharedFrameworkCommonModule,
+		SharedCommonViewModule,
+		SharedCommonServiceModule,
+		MemoryModule,
+		GameStateModule,
+	],
 	declarations: components,
 	exports: components,
 	providers: [
