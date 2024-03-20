@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameStateFacadeService } from '@firestone/constructed/common';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
@@ -16,7 +17,6 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { GameStateFacadeService } from '../../../../../../../constructed/common/src';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { ArenaInfoService } from '../arena/arena-info.service';

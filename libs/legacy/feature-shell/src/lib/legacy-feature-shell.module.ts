@@ -894,11 +894,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementsDataAccessModule,
 		DuelsGeneralModule,
 		ArenaCommonModule,
-		ConstructedCommonModule,
 		DiscordModule,
 		MemoryModule,
 		GameStateModule,
 		StatsCommonModule,
+		ConstructedCommonModule,
 		CommunitiesCommonModule,
 
 		ColiseumComponentsModule,
