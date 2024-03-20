@@ -76,7 +76,9 @@ export class DecktrackerTimeFilterDropdownComponent
 					} as TimeFilterOption,
 					{
 						value: 'last-patch',
-						label: this.i18n.translateString('app.decktracker.filters.time-filter.last-patch'),
+						label: this.i18n.translateString('app.global.filters.time-patch', {
+							value: patch.version,
+						}),
 						tooltip: formatPatch(patch, this.i18n),
 					} as TimeFilterOption,
 					{
