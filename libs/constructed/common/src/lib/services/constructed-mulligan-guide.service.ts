@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { ArchetypeStat, GameFormat, RankBracket } from '@firestone-hs/constructed-deck-stats';
+import { ArchetypeStat, DeckStat, GameFormat, RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import {
 	COIN_IDS,
@@ -160,6 +160,40 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
 			// shareReplay(1),
 		);
+		const deckDetails$: Observable<DeckStat | null> = showWidget$.pipe(
+			filter((showWidget) => showWidget),
+			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
+			debounceTime(200),
+			switchMap(() => combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$])),
+			map(([gameState, playerRank, opponentClass]) => ({
+				deckString: gameState?.playerDeck?.deckstring,
+				format: gameState?.metadata?.formatType,
+				playerRank: playerRank,
+				opponentClass: opponentClass,
+			})),
+			filter((info) => !!info.format),
+			distinctUntilChanged(
+				(a, b) =>
+					a.deckString === b.deckString &&
+					a.format === b.format &&
+					a.playerRank === b.playerRank &&
+					a.opponentClass === b.opponentClass,
+			),
+			switchMap(({ deckString, format, playerRank, opponentClass }) => {
+				const result = this.archetypes.loadNewDeckDetails(
+					deckString,
+					toFormatType(format as any) as GameFormat,
+					'last-patch',
+					playerRank,
+				);
+				// console.debug('[mulligan-guide] archetype result', result);
+				return result;
+			}),
+			// filter((archetype) => !!archetype),
+			// map(archetype => archetype as ArchetypeStat),
+			tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
+			// shareReplay(1),
+		);
 
 		const cardsInHand$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
@@ -201,11 +235,12 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
 			debounceTime(200),
 			switchMap(([cardsInHand, deckCards]) =>
-				combineLatest([archetype$, format$, playerRank$, opponentClass$]).pipe(
-					map(([archetype, format, playerRank, opponentClass]) => ({
+				combineLatest([archetype$, deckDetails$, format$, playerRank$, opponentClass$]).pipe(
+					map(([archetype, deckDetails, format, playerRank, opponentClass]) => ({
 						cardsInHand: cardsInHand,
 						deckCards: deckCards,
 						archetype: archetype,
+						deckDetails: deckDetails,
 						format: format,
 						playerRank: playerRank,
 						opponentClass: opponentClass,
@@ -213,13 +248,15 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				),
 			),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			map(({ cardsInHand, deckCards, archetype, format, playerRank, opponentClass }) => {
-				const archetypeWinrate = archetype?.winrate ?? 0;
+			map(({ cardsInHand, deckCards, archetype, deckDetails, format, playerRank, opponentClass }) => {
+				const archetypeWinrate = archetype?.winrate ?? deckDetails?.winrate ?? 0;
+				const cardsData = archetype?.cardsData ?? deckDetails?.cardsData ?? [];
+				const sampleSize = archetype?.totalGames ?? deckDetails?.totalGames ?? 0;
 				const allDeckCards: readonly MulliganCardAdvice[] =
 					deckCards?.map((refCard) => {
 						const cardData =
-							archetype?.cardsData?.find((card) => card.cardId === refCard.id) ??
-							archetype?.cardsData?.find(
+							cardsData.find((card) => card.cardId === refCard.id) ??
+							cardsData.find(
 								(card) =>
 									this.allCards.getRootCardId(card.cardId) ===
 									this.allCards.getRootCardId(refCard.id),
@@ -239,10 +276,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					}) ?? [];
 
 				const result: MulliganGuide = {
-					noData: !archetype,
+					noData: !cardsData.length,
 					cardsInHand: cardsInHand!,
 					allDeckCards: allDeckCards,
-					sampleSize: archetype?.totalGames ?? 0,
+					sampleSize: sampleSize,
 					rankBracket: playerRank,
 					opponentClass: opponentClass,
 					format: format,

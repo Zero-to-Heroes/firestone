@@ -203,12 +203,16 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		return result;
 	}
 
-	private async loadNewDeckDetails(
-		deckstring: string,
+	public async loadNewDeckDetails(
+		deckstring: string | undefined,
 		format: GameFormat,
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat | null> {
+		if (!deckstring) {
+			return null;
+		}
+
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const fileName = `${format}/${rank}/${time}/${deckId}`;
