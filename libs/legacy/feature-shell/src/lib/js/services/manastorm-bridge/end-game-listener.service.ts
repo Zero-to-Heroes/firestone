@@ -2,9 +2,20 @@ import { Injectable } from '@angular/core';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
+import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, merge } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
+import {
+	concatMap,
+	distinctUntilChanged,
+	filter,
+	map,
+	shareReplay,
+	startWith,
+	take,
+	tap,
+	withLatestFrom,
+} from 'rxjs/operators';
 import { GameStateFacadeService } from '../../../../../../../constructed/common/src';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
@@ -63,25 +74,21 @@ export class EndGameListenerService {
 				);
 				// Why use this instead of the deckstring from the game state?
 				// How to make sure the "new" version doesn't override the old one once the game is over?
-				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameEvents.allEvents
+				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.fullGameState$$
 					.asObservable()
 					.pipe(
-						filter((event) => event.type === GameEvent.GAME_END),
-						withLatestFrom(this.gameState.gameState$$.asObservable()),
-						filter(([_, state]) => !!state?.playerDeck?.deckstring),
-						map(
-							([_, state]) => ({
-								name: state.playerDeck.name,
-								deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
-							}),
-							// Remove signature treasures from the decklists
-							// isDuels(state?.metadata?.gameType)
-							// 	? {
-							// 			name: state.playerDeck.name,
-							// 			deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
-							// 	  }
-							// 	: deck,
+						// Using GAME_END here means there is a race, and can cause the deck to not be properly assigned
+						filter(
+							(info) =>
+								info?.event?.name === GameEvent.GAME_SETTINGS ||
+								info?.event?.name === GameEvent.WHIZBANG_DECK_ID,
 						),
+						tap((info) => console.debug('[manastorm-bridge] playerDeck debug', info.event.name, info)),
+						filter((info) => !!info.state?.playerDeck?.deckstring),
+						map(({ state }) => ({
+							name: state.playerDeck.name,
+							deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
+						})),
 						startWith(null),
 						distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
 						tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
@@ -146,6 +153,8 @@ export class EndGameListenerService {
 					filter((changes) => !!changes.BattlegroundsNewRating),
 					map((changes) => changes.BattlegroundsNewRating),
 					startWith(null),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					shareReplay(1),
 					tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
 				);
 				const reviewId$ = this.reviewIdService.reviewId$;
@@ -209,6 +218,8 @@ export class EndGameListenerService {
 						ScenarioID: null,
 						replayXml: null,
 					}),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					tap((info) => console.debug('[manastorm-bridge] gameEnded', info)),
 				);
 
 				// Ideally we should retrieve this after the bgNewRating$ emits. However, since it's possible
@@ -219,6 +230,7 @@ export class EndGameListenerService {
 						return await this.getBattlegroundsEndGame();
 					}),
 					startWith(null),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
 				);
 
@@ -289,6 +301,7 @@ export class EndGameListenerService {
 						// 	),
 						// ),
 						filter((info) => !info.gameEnded.spectating),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
 						tap((info) =>
 							console.debug(
 								'[manastorm-bridge] not a spectate game, continuing',

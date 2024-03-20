@@ -104,7 +104,12 @@ export class DeckParserService {
 				metadata.scenarioId,
 				metadata.gameType,
 			);
-			return this.getTemplateDeck(this.selectedDeckId, metadata.scenarioId, metadata.gameType);
+			return this.getTemplateDeck(
+				this.selectedDeckId,
+				metadata.scenarioId,
+				metadata.gameType,
+				metadata.formatType,
+			);
 		}
 
 		// This doesn't work for Duels for instance - we keep the same sceanrio ID, but
@@ -165,7 +170,12 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	public async getTemplateDeck(deckId: number, scenarioId: number, gameType: GameType): Promise<DeckInfo> {
+	public async getTemplateDeck(
+		deckId: number,
+		scenarioId: number,
+		gameType: GameType,
+		gameFormat: GameFormat,
+	): Promise<DeckInfo> {
 		if (this.spectating) {
 			console.log('[deck-parser] spectating, not returning Whizbang deck');
 			return;
@@ -177,7 +187,7 @@ export class DeckParserService {
 		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
-			this.setCurrentDeck(this.updateDeckFromMemory(deck, scenarioId, gameType));
+			this.setCurrentDeck(this.updateDeckFromMemory(deck, scenarioId, gameType, gameFormat));
 		} else {
 			await this.memory.getWhizbangDeck(deckId);
 			this.setCurrentDeck(null);
@@ -245,7 +255,7 @@ export class DeckParserService {
 				this.selectedDeckId = changes.SelectedDeckId;
 				if (this.selectedDeckId < 0) {
 					console.log('[deck-parser] getting template deck after ID selection', this.selectedDeckId);
-					await this.getTemplateDeck(this.selectedDeckId, null, null);
+					await this.getTemplateDeck(this.selectedDeckId, null, null, null);
 				} else {
 					const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2, true);
 					console.log(
@@ -305,7 +315,12 @@ export class DeckParserService {
 		}
 	}
 
-	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number, gameType: GameType) {
+	private updateDeckFromMemory(
+		deckFromMemory: DeckInfoFromMemory,
+		scenarioId: number,
+		gameType: GameType,
+		gameFormat?: GameFormat,
+	) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
 		if (!deckFromMemory) {
 			console.error('[deck-parser] no deck to update');
@@ -315,7 +330,7 @@ export class DeckParserService {
 		const decklist: readonly number[] = normalizeWithDbfIds(deckFromMemory.DeckList, this.allCards);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		const deckDefinition: DeckDefinition = {
-			format: deckFromMemory.FormatType || GameFormat.FT_WILD,
+			format: deckFromMemory.FormatType || gameFormat || GameFormat.FT_WILD,
 			cards: explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
@@ -336,6 +351,7 @@ export class DeckParserService {
 			'[deck-parser] built deck definition',
 			deckFromMemory.HeroCardId,
 			deckFromMemory.HeroClass,
+			gameFormat,
 			deckDefinition,
 			JSON.stringify(deckDefinition),
 			deckDefinition.cards.map((pair) => pair[0]),

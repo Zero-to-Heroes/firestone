@@ -50,7 +50,8 @@ export class GameStatsUpdaterService {
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
 			const info: ManastormInfo = data.data[0];
 			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game);
-			console.log('built new game stat', newGameStat.reviewId);
+			console.log('​[manastorm-bridge] built new game stat', newGameStat.reviewId);
+			console.debug('​[manastorm-bridge] built new game stat', newGameStat);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}

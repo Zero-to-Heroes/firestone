@@ -19,14 +19,16 @@ export class WhizbangDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const deckId = gameEvent.additionalData.deckId;
-		console.log('parsing whizbang deck', deckId);
+		console.log('parsing whizbang deck', deckId, currentState.metadata?.formatType);
 
 		const templateDeck = await this.deckParser.getTemplateDeck(
 			deckId,
 			currentState.metadata?.scenarioId,
 			currentState.metadata?.gameType,
+			currentState.metadata?.formatType,
 		);
 		console.log('got whizbang deck', templateDeck?.name, 'isPlayer', isPlayer);
+		console.debug('got whizbang deck', templateDeck);
 		if (!templateDeck) {
 			return currentState;
 		}
