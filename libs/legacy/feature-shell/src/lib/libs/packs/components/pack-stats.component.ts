@@ -219,7 +219,17 @@ export const LEGENDARY_PITY_TIMER = 40;
 const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 	BoosterType.YEAR_OF_DRAGON,
 	BoosterType.YEAR_OF_PHOENIX,
-	// BoosterType.
+	BoosterType.STANDARD_DEMONHUNTER,
+	BoosterType.STANDARD_DEATHKNIGHT,
+	BoosterType.STANDARD_DRUID,
+	BoosterType.STANDARD_HUNTER,
+	BoosterType.STANDARD_MAGE,
+	BoosterType.STANDARD_PALADIN,
+	BoosterType.STANDARD_PRIEST,
+	BoosterType.STANDARD_ROGUE,
+	BoosterType.STANDARD_SHAMAN,
+	BoosterType.STANDARD_WARLOCK,
+	BoosterType.STANDARD_WARRIOR,
 ];
 
 const buildPityTimer = (
