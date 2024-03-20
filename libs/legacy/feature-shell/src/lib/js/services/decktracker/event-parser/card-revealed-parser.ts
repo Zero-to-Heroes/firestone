@@ -1,4 +1,4 @@
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -6,6 +6,20 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+
+const WHIZBANG_DECK_CARD_IDS = [
+	CardIds.SplendiferousWhizbang_SeptupletDeckToken_TOY_700t1,
+	CardIds.SplendiferousWhizbang_RainbowDeckToken_TOY_700t2,
+	CardIds.SplendiferousWhizbang_DeckOfTreasuresToken_TOY_700t3,
+	CardIds.SplendiferousWhizbang_ShrunkenDeckToken_TOY_700t4,
+	CardIds.SplendiferousWhizbang_WonderfulDeckToken_TOY_700t6,
+	CardIds.SplendiferousWhizbang_DeckOfDiscoveryToken_TOY_700t7,
+	CardIds.SplendiferousWhizbang_QuestingDeckToken_TOY_700t8,
+	CardIds.SplendiferousWhizbang_DeckOfWishesToken_TOY_700t9,
+	CardIds.SplendiferousWhizbang_DeckOfHeroesToken_TOY_700t10,
+	CardIds.SplendiferousWhizbang_DeckOfLegendsToken_TOY_700t11,
+	CardIds.SplendiferousWhizbang_DeckOfVillainsToken_TOY_700t12,
+];
 
 export class CardRevealedParser implements EventParser {
 	constructor(
@@ -74,9 +88,22 @@ export class CardRevealedParser implements EventParser {
 			gameEvent.additionalData.revealedFromBlock === 'DREDGE'
 				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false)
 				: this.helper.addSingleCardToZone(deck.otherZone, card);
+		let globalEffects = deck.globalEffects;
+		if (WHIZBANG_DECK_CARD_IDS.includes(card.cardId as CardIds)) {
+			const globalEffectCard = DeckCard.create({
+				entityId: null,
+				cardId: card.cardId,
+				cardName: this.i18n.getCardName(card.cardId),
+				manaCost: dbCard?.cost,
+				rarity: dbCard?.rarity?.toLowerCase(),
+				zone: null,
+			} as DeckCard);
+			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
+		}
 		// console.debug('[debug]', 'newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOther,
+			globalEffects: globalEffects,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
