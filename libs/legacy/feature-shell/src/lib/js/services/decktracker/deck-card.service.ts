@@ -43,6 +43,7 @@ export class DeckCardService {
 	private buildContextRelatedCardIds(card: DeckCard, deckState: DeckState): readonly string[] {
 		switch (card.cardId) {
 			case CardIds.ETCBandManager_ETC_080:
+			case CardIds.ZilliaxDeluxe3000_TOY_330:
 				return deckState.sideboards?.find((s) => s.keyCardId === card.cardId)?.cards ?? [];
 			case CardIds.StarlightWhelp:
 			case CardIds.HexLordMalacrass:

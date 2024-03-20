@@ -37,7 +37,10 @@ export class DeckstringOverrideParser implements EventParser {
 			.filter((card) => !card.creatorCardId);
 
 		const sideboards: readonly DeckSideboard[] = this.deckHandler.buildSideboards(deckstring);
-		const cardsFromDeckstring = this.deckHandler.buildDeckList(deckstring);
+		const cardsFromDeckstring = await this.deckHandler.postProcessDeck(
+			this.deckHandler.buildDeckList(deckstring),
+			null,
+		);
 
 		// Now remove the from this list the cards that were moved out of the initial deck
 		const newDeckContents = [...cardsFromDeckstring];

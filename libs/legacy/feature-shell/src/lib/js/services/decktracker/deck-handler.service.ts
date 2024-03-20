@@ -89,13 +89,19 @@ export class DeckHandlerService {
 
 	private postProcessDeckCard(deckCard: DeckCard, boardId: Board): DeckCard {
 		const newCardId = this.updateCardId(deckCard.cardId, boardId);
-		if (newCardId === deckCard.cardId) {
-			return deckCard;
-		}
+		// if (newCardId === deckCard.cardId) {
+		// 	return deckCard;
+		// }
 		const newCard = this.allCards.getCard(newCardId);
+		let newCost = deckCard.manaCost;
+		if (newCard.id === CardIds.ZilliaxDeluxe3000_TOY_330) {
+			const modules = deckCard.relatedCardIds?.map((c) => this.allCards.getCard(c)) ?? [];
+			newCost = modules.map((c) => c.cost).reduce((a, b) => a + b, 0);
+		}
 		return deckCard.update({
 			cardId: newCard.id,
 			cardName: this.i18n.getCardName(newCard.id),
+			manaCost: newCost,
 		} as DeckCard);
 	}
 
