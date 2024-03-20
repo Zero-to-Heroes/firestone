@@ -7,7 +7,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -53,7 +53,8 @@ export class DecksProviderService {
 				),
 			])
 				.pipe(
-					filter(([stats, [filters], patch]) => !!stats?.length && !!patch),
+					tap((event) => console.debug('[decks-provider] received event', event)),
+					filter(([stats, [filters], patch]) => !!stats?.length),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(
 						([
@@ -298,8 +299,9 @@ export class DecksProviderService {
 			case 'last-patch':
 				// See bgs-ui-helper
 				return (
-					stat.buildNumber >= lastPatch.number ||
-					stat.creationTimestamp > new Date(lastPatch.date).getTime() + 24 * 60 * 60 * 1000
+					!!lastPatch &&
+					(stat.buildNumber >= lastPatch.number ||
+						stat.creationTimestamp > new Date(lastPatch.date).getTime() + 24 * 60 * 60 * 1000)
 				);
 			case 'past-30':
 				const past30Date = new Date(now - 30 * 24 * 60 * 60 * 1000);
