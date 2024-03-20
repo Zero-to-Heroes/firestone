@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -12,7 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -23,6 +24,7 @@ import {
 	filter,
 	shareReplay,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
@@ -80,14 +82,17 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 					</ng-container>
 				</ul>
 			</ng-container>
-			<div class="mulligan-overview" *ngIf="showMulliganOverview$ | async">
+			<div class="mulligan-overview scalable" *ngIf="showMulliganOverview$ | async">
 				<mulligan-detailed-info [data]="allDeckMulliganInfo$ | async"></mulligan-detailed-info>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMulliganComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class ConstructedMulliganComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
 	allDeckMulliganInfo$: Observable<MulliganChartData | null>;
 	showHandInfo$: Observable<boolean | null>;
@@ -197,17 +202,27 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 			}),
 		);
 
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	async ngAfterViewInit() {
+		await this.prefs.isReady();
+
 		this.prefs
 			.preferences$((prefs) => prefs.decktrackerMulliganScale)
 			.pipe(
+				tap((scale) => console.debug('[mulligan] setting scale', scale)),
 				this.mapData(([pref]) => pref),
 				filter((pref) => !!pref),
 				distinctUntilChanged(),
 				takeUntil(this.destroyed$),
 			)
-			.subscribe((scale) => {
+			.subscribe(async (scale) => {
 				const newScale = scale / 100;
-				const elements = this.el.nativeElement.querySelectorAll('.scalable');
+				const elements = await this.getScalableElements();
+				console.debug('[mulligan] setting scale 2', newScale, elements);
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});
 
@@ -220,6 +235,17 @@ export class ConstructedMulliganComponent extends AbstractSubscriptionComponent 
 		if (!this.showPremiumBanner$$.value && !this.noData$$.value) {
 			this.guardian.acknowledgeMulliganAdviceSeen();
 		}
+	}
+
+	private async getScalableElements(): Promise<HTMLElement[]> {
+		let elements = this.el.nativeElement.querySelectorAll('.scalable');
+		let retriesLeft = 10;
+		while (retriesLeft >= 0 && elements?.length < 3) {
+			await sleep(100);
+			elements = this.el.nativeElement.querySelectorAll('.scalable');
+			retriesLeft--;
+		}
+		return elements;
 	}
 }
 
