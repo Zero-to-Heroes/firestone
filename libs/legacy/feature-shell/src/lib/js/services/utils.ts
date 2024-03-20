@@ -156,7 +156,7 @@ export const formatPatch = (input: PatchInfo, i18n: LocalizationFacadeService): 
 	return i18n.translateString('global.patch', {
 		version: input.version,
 		number: input.number,
-		date: input.date.split('-').reverse().join('-'),
+		date: new Date(input.date).toLocaleDateString(i18n.formatCurrentLocale()),
 	});
 };
 
