@@ -5,14 +5,13 @@ import { sanitizeDeckstring } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, merge } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map, startWith, take, tap, withLatestFrom } from 'rxjs/operators';
+import { GameStateFacadeService } from '../../../../../../../constructed/common/src';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
-import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
-import { isDuels } from '../duels/duels-utils';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
@@ -39,6 +38,7 @@ export class EndGameListenerService {
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
 		private readonly arenaInfo: ArenaInfoService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		this.init();
 	}
@@ -61,21 +61,67 @@ export class EndGameListenerService {
 					map((event) => event.additionalData.matchInfo as MatchInfo),
 					startWith(null),
 				);
-				const playerDeck$ = this.gameEvents.allEvents.asObservable().pipe(
-					filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
-					map((event) => event.additionalData.playerDeck as DeckInfo),
-					startWith(null),
-					map((deck) =>
-						// Remove signature treasures from the decklists
-						isDuels(deck?.gameType)
-							? {
-									...deck,
-									deckstring: sanitizeDeckstring(deck.deckstring, this.allCards),
-							  }
-							: deck,
-					),
-					tap((info) => console.log('[manastorm-bridge] playerDeck', info)),
-				);
+				// Why use this instead of the deckstring from the game state?
+				// How to make sure the "new" version doesn't override the old one once the game is over?
+				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameEvents.allEvents
+					.asObservable()
+					.pipe(
+						filter((event) => event.type === GameEvent.GAME_END),
+						withLatestFrom(this.gameState.gameState$$.asObservable()),
+						filter(([_, state]) => !!state?.playerDeck?.deckstring),
+						map(
+							([_, state]) => ({
+								name: state.playerDeck.name,
+								deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
+							}),
+							// Remove signature treasures from the decklists
+							// isDuels(state?.metadata?.gameType)
+							// 	? {
+							// 			name: state.playerDeck.name,
+							// 			deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
+							// 	  }
+							// 	: deck,
+						),
+						startWith(null),
+						distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
+						tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
+					);
+				// const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.gameState$$
+				// .asObservable()
+				// .pipe(
+				// 	filter((state) => !!state?.playerDeck?.deckstring),
+				// 	map(
+				// 		(state) => ({
+				// 			name: state.playerDeck.name,
+				// 			deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
+				// 		}),
+				// 		// Remove signature treasures from the decklists
+				// 		// isDuels(state?.metadata?.gameType)
+				// 		// 	? {
+				// 		// 			name: state.playerDeck.name,
+				// 		// 			deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
+				// 		// 	  }
+				// 		// 	: deck,
+				// 	),
+				// 	startWith(null),
+				// 	distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
+				// 	tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
+				// );
+				// const playerDeck$ = this.gameEvents.allEvents.asObservable().pipe(
+				// 	filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
+				// 	map((event) => event.additionalData.playerDeck as DeckInfo),
+				// 	startWith(null),
+				// 	map((deck) =>
+				// 		// Remove signature treasures from the decklists
+				// 		isDuels(deck?.gameType)
+				// 			? {
+				// 					...deck,
+				// 					deckstring: sanitizeDeckstring(deck.deckstring, this.allCards),
+				// 			  }
+				// 			: deck,
+				// 	),
+				// 	tap((info) => console.log('[manastorm-bridge] playerDeck', info)),
+				// );
 				const duelsInfo$ = this.duelsState.duelsInfo$$;
 				const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
 				const arenaInfo$ = this.arenaInfo.arenaInfo$$;

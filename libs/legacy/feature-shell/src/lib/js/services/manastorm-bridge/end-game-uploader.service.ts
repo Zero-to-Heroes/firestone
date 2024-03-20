@@ -18,7 +18,6 @@ import { toFormatType, toGameType } from '@firestone/stats/data-access';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
-import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsLootParserService } from '../duels/duels-loot-parser.service';
 import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
@@ -470,7 +469,7 @@ export interface UploadInfo {
 		ScenarioID: number;
 	};
 	matchInfo: MatchInfo;
-	playerDeck: DeckInfo;
+	playerDeck: { deckstring: string; name: string };
 	duelsInfo: DuelsInfo;
 	arenaInfo: ArenaInfo;
 	mercsInfo: MemoryMercenariesInfo;
