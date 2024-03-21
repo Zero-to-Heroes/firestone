@@ -6,7 +6,7 @@
 
 .duels-deckbuilder-signature-treasure {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	min-height: 0;
 	flex-grow: 1;
 	overflow: auto;

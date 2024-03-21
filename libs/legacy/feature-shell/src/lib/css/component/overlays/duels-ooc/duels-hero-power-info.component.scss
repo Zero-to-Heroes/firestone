@@ -132,7 +132,7 @@
 
 	.top-decks {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		column-gap: 0;
 		row-gap: 3vh;
 		margin-top: 2vh;

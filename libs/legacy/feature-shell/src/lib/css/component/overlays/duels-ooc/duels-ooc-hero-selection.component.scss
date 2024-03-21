@@ -28,7 +28,7 @@
 
 	&.hero .container {
 		grid-template-rows: repeat(2, 1fr);
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 4vh;
 		width: 65vh;
 		height: 49vh;
@@ -37,7 +37,7 @@
 	}
 
 	&.hero-power .container {
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 5vh;
 		width: 80vh;
 		height: 35vh;
@@ -46,8 +46,8 @@
 	}
 
 	&.signature-treasure .container {
-		grid-template-rows: repeat(2, 1fr);
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 4vh;
 		width: 59vh;
 		height: 39vh;

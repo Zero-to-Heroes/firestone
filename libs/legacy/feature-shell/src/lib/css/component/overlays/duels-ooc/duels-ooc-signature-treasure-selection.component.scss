@@ -9,7 +9,7 @@
 	padding-left: 16vh;
 	padding-right: 15vh;
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	column-gap: 3vh;
 	row-gap: 0;
 	flex-shrink: 0;
