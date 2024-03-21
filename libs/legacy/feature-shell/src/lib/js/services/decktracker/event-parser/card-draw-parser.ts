@@ -27,7 +27,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('drawing from deck', cardId, gameEvent);
+		console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -45,7 +45,7 @@ export class CardDrawParser implements EventParser {
 		// the bottom of the deck
 		// If no cardId is provided, we use the entityId
 		const shouldUseEntityId =
-			!isPlayer &&
+			isPlayer && // Initially, it was !isPlayer, but I don't understand why. If it's the opponent, we don't want to use the entityId
 			(!cardId ||
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
@@ -60,14 +60,14 @@ export class CardDrawParser implements EventParser {
 				(c) =>
 					c.positionFromBottom != null && c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId,
 			);
-		// console.debug(
-		// 	'useTopOfDeckToIdentifyCard',
-		// 	useTopOfDeckToIdentifyCard,
-		// 	useBottomOfDeckToIdentifyCard,
-		// 	isPlayer,
-		// 	deck.deck.filter((c) => c.positionFromTop != null),
-		// 	deck,
-		// );
+		console.debug(
+			'useTopOfDeckToIdentifyCard',
+			useTopOfDeckToIdentifyCard,
+			useBottomOfDeckToIdentifyCard,
+			isPlayer,
+			deck.deck.filter((c) => c.positionFromTop != null),
+			deck,
+		);
 		// When drawing "normally", we first try to avoid picking cards that are from the bottom of the deck,
 		// if any
 		const deckToDrawnFromTop = deck.deck.some((c) => c.positionFromBottom == null)
@@ -82,25 +82,25 @@ export class CardDrawParser implements EventParser {
 					.filter((c) => c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId)
 					.sort((c) => c.positionFromBottom)[0]
 			: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
-		// console.debug(
-		// 	'[card-draw] found card in zone',
-		// 	card,
-		// 	deck,
-		// 	cardId,
-		// 	entityId,
-		// 	useTopOfDeckToIdentifyCard,
-		// 	useBottomOfDeckToIdentifyCard,
-		// );
+		console.debug(
+			'[card-draw] found card in zone',
+			card,
+			deck,
+			cardId,
+			entityId,
+			useTopOfDeckToIdentifyCard,
+			useBottomOfDeckToIdentifyCard,
+		);
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 
-		// console.debug(
-		// 	'drawing card',
-		// 	card,
-		// 	isPlayer,
-		// 	deck,
-		// 	deck.deck.some((c) => c.positionFromTop),
-		// 	[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
-		// );
+		console.debug(
+			'drawing card',
+			card,
+			isPlayer,
+			deck,
+			deck.deck.some((c) => c.positionFromTop),
+			[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
+		);
 
 		// This is more and more spaghetti. TODO: clean this up, my future self!
 		// This has been introduced because some cards leak info in the logs (tradeable cards traded back to deck)
@@ -159,7 +159,7 @@ export class CardDrawParser implements EventParser {
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 			zone: 'HAND',
 		} as DeckCard);
-		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, lastInfluencedByCardId);
+		console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
 
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
@@ -177,7 +177,7 @@ export class CardDrawParser implements EventParser {
 					},
 			  )[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
-		// console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck);
+		console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck);
 
 		if (drawFromTop) {
 			const topCard = newDeck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0];
@@ -188,10 +188,10 @@ export class CardDrawParser implements EventParser {
 				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
 			}
 		}
-		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
-		// console.debug('added card to hand', newHand);
+		console.debug('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,
