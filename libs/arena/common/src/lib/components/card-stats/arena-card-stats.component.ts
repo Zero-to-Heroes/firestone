@@ -37,19 +37,19 @@ import { ArenaCardStatInfo } from './model';
 				</div>
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<sortable-table-label
-						class="cell card-details"
-						[name]="'app.arena.card-stats.header-card-name' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'name'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
 						class="cell drawn-winrate"
 						[name]="'app.arena.card-stats.header-drawn-winrate' | fsTranslate"
 						[helpTooltip]="'app.arena.card-stats.header-drawn-winrate-tooltip' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'drawn-winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell card-details"
+						[name]="'app.arena.card-stats.header-card-name' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'name'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>

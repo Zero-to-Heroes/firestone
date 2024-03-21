@@ -10,8 +10,8 @@ import { ArenaCardStatInfo } from './model';
 			<div class="cell card-details">
 				<card-tile [cardId]="cardId"></card-tile>
 			</div>
-			<div class="cell drawn-winrate">{{ drawnWinrate }}</div>
 			<div class="cell deck-winrate">{{ deckWinrate }}</div>
+			<div class="cell drawn-winrate">{{ drawnWinrate }}</div>
 			<div class="cell mulligan-winrate">{{ mulliganWinrate }}</div>
 			<div class="cell pickrate">{{ pickrateTotal }}</div>
 			<div class="cell pickrate-high-wins">{{ pickrateHighWins }}</div>
