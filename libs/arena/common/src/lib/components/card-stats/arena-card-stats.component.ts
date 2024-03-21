@@ -366,9 +366,11 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				stat.matchStats.inHandAfterMulligan > 0
 					? stat.matchStats.inHandAfterMulliganThenWin / stat.matchStats.inHandAfterMulligan
 					: null,
-			deckTotal: stat.matchStats.inStartingDeck,
+			deckTotal: stat.matchStats.decksWithCard,
 			deckWinrate:
-				stat.matchStats.inStartingDeck > 0 ? stat.matchStats.wins / stat.matchStats.inStartingDeck : null,
+				stat.matchStats.decksWithCard > 0
+					? stat.matchStats.decksWithCardThenWin / stat.matchStats.decksWithCard
+					: null,
 			totalOffered: stat.draftStats?.totalOffered,
 			totalPicked: stat.draftStats?.totalPicked,
 			pickRate: stat.draftStats?.pickRate,

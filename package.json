@@ -36,7 +36,7 @@
 		"@firestone-hs/api-user-profile": "^0.0.7",
 		"@firestone-hs/arena-draft-pick": "^1.0.7",
 		"@firestone-hs/arena-high-win-runs": "^0.0.1",
-		"@firestone-hs/arena-stats": "^0.0.3",
+		"@firestone-hs/arena-stats": "^0.0.4",
 		"@firestone-hs/assign-constructed-archetype": "^0.0.3",
 		"@firestone-hs/bgs-global-stats": "^1.0.41",
 		"@firestone-hs/build-global-stats": "^1.0.8",
