@@ -133,11 +133,18 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 							currentHeroWinrate == null || drawnWinrate == null
 								? null
 								: drawnWinrate - currentHeroWinrate;
+						const deckWinrate = !stat?.matchStats?.decksWithCard
+							? null
+							: stat.matchStats.decksWithCardThenWin / stat.matchStats.decksWithCard;
+						const deckImpact =
+							currentHeroWinrate == null || deckWinrate == null ? null : deckWinrate - currentHeroWinrate;
 						console.debug('drawnImpact', drawnImpact, currentHeroWinrate, drawnWinrate);
 						const result: ArenaCardOption = {
 							cardId: option,
 							drawnWinrate: drawnWinrate,
 							drawnImpact: drawnImpact,
+							deckWinrate: deckWinrate,
+							deckImpact: deckImpact,
 							pickRate: pickRate,
 							pickRateDelta: pickRateDelta,
 							pickRateHighWins: pickRateHighWins,

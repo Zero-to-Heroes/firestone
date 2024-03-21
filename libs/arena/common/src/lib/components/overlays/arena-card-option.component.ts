@@ -22,17 +22,29 @@ import { ArenaCardOption } from './model';
 	template: `
 		<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
 			<div class="info-container scalable" *ngIf="value.showWidget">
-				<div class="stat winrate ">
-					<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-impact'"></span>
-					<span class="value {{ winrateClass }}" [helpTooltip]="drawnImpactTooltip">{{ drawImpact }}</span>
+				<div class="stats impact">
+					<div class="stat winrate draw">
+						<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-impact'"></span>
+						<span class="value {{ drawWinrateClass }}" [helpTooltip]="drawnImpactTooltip">{{
+							drawImpact
+						}}</span>
+					</div>
+					<div class="stat winrate ">
+						<span class="label" [fsTranslate]="'app.arena.draft.card-deck-impact'"></span>
+						<span class="value {{ deckWinrateClass }}" [helpTooltip]="deckImpactTooltip">{{
+							deckImpact
+						}}</span>
+					</div>
 				</div>
-				<div class="stat pickrate">
-					<span class="label" [fsTranslate]="'app.arena.card-stats.header-pickrate'"></span>
-					<span class="value">{{ pickrate }}</span>
-				</div>
-				<div class="stat pickrate-delta">
-					<span class="label" [helpTooltip]="pickRateImpactTooltip">{{ pickRateHighWinsLabel }}</span>
-					<span class="value">{{ pickRateHighWins }}</span>
+				<div class="stats pick">
+					<div class="stat pickrate">
+						<span class="label" [fsTranslate]="'app.arena.card-stats.header-pickrate'"></span>
+						<span class="value">{{ pickrate }}</span>
+					</div>
+					<div class="stat pickrate-delta">
+						<span class="label" [helpTooltip]="pickRateImpactTooltip">{{ pickRateHighWinsLabel }}</span>
+						<span class="value">{{ pickRateHighWins }}</span>
+					</div>
 				</div>
 			</div>
 			<arena-option-info-premium *ngIf="!value.showWidget"></arena-option-info-premium>
@@ -46,12 +58,18 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 	@Input() set card(value: ArenaCardOption) {
 		console.debug('[arena-card-option] setting card', value);
 		this.drawnWinrate = value.drawnWinrate == null ? '-' : (100 * value.drawnWinrate).toFixed(1) + '%';
+		this.deckWinrate = value.deckWinrate == null ? '-' : (100 * value.deckWinrate).toFixed(1) + '%';
 		this.drawImpact = value.drawnImpact == null ? '-' : (100 * value.drawnImpact).toFixed(2);
-		this.winrateClass = value.drawnImpact == null ? '' : value.drawnImpact > 0 ? 'positive' : 'negative';
+		this.deckImpact = value.deckImpact == null ? '-' : (100 * value.deckImpact).toFixed(2);
+		this.drawWinrateClass = value.drawnImpact == null ? '' : value.drawnImpact > 0 ? 'positive' : 'negative';
+		this.deckWinrateClass = value.deckImpact == null ? '' : value.deckImpact > 0 ? 'positive' : 'negative';
 		this.pickrate = value.pickRate == null ? '-' : (100 * value.pickRate).toFixed(1) + '%';
 		this.pickRateHighWins = value.pickRateHighWins == null ? '-' : (100 * value.pickRateHighWins).toFixed(1) + '%';
 		this.drawnImpactTooltip = this.i18n.translateString(`app.arena.draft.card-drawn-impact-tooltip`, {
 			drawWinrate: this.drawnWinrate,
+		});
+		this.deckImpactTooltip = this.i18n.translateString(`app.arena.draft.card-deck-impact-tooltip`, {
+			deckWinrate: this.deckWinrate,
 		});
 	}
 
@@ -60,11 +78,15 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 	}
 
 	drawnWinrate: string;
+	deckWinrate: string;
 	drawImpact: string;
-	winrateClass: string;
+	deckImpact: string;
+	drawWinrateClass: string;
+	deckWinrateClass: string;
 	pickrate: string;
 	pickRateHighWins: string;
 	drawnImpactTooltip: string | null;
+	deckImpactTooltip: string | null;
 
 	pickRateHighWinsLabel = this.i18n.translateString(`app.arena.card-stats.header-pickrate-high-wins-short`, {
 		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
@@ -99,7 +121,9 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			.subscribe(async (value) => {
 				const newScale = value / 100;
 				const element = await this.getScalable();
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				if (!!element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				}
 				// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
 			});
 

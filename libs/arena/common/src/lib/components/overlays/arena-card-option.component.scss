@@ -17,12 +17,13 @@
 
 .info-container {
 	display: flex;
-	// flex-direction: column;
+	flex-direction: column;
 	background: var(--color-6);
 	border-radius: 15px;
 	width: fit-content;
 	color: var(--color-1);
 	padding: 10px 0;
+	position: relative;
 	top: 86%; // Show at the bottom of the card
 
 	.label {
@@ -62,6 +63,19 @@
 		}
 	}
 
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--color-1);
+			padding-bottom: 10px;
+		}
+		&:last-child {
+			padding-top: 10px;
+		}
+	}
+
 	.stat {
 		display: flex;
 		flex-direction: column;
@@ -70,6 +84,10 @@
 		padding-left: 15px;
 		padding-right: 15px;
 		font-size: 16px;
+
+		.label {
+			white-space: nowrap;
+		}
 
 		.value {
 			color: var(--default-title-color);
@@ -87,4 +105,10 @@
 			border-right: 1px solid var(--color-1);
 		}
 	}
+}
+
+arena-option-info-premium {
+	display: flex;
+	position: relative;
+	top: 86%; // Show at the bottom of the card
 }
