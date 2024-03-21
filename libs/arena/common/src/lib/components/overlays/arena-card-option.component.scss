@@ -4,7 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: flex-start;
 	font-size: 13px;
 }
 
@@ -23,6 +23,7 @@
 	width: fit-content;
 	color: var(--color-1);
 	padding: 10px 0;
+	top: 86%; // Show at the bottom of the card
 
 	.label {
 		margin-right: 5px;

@@ -770,7 +770,7 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly arenaOocTrackerPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly arenaDraftOverlayScale: number = 100;
+	readonly arenaDraftOverlayScale: number = 80;
 
 	readonly statsXpGraphSeasonFilter: StatsXpGraphSeasonFilterType = 'all-seasons';
 

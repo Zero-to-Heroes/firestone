@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, tap } from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
@@ -20,8 +20,8 @@ import { ArenaCardOption } from './model';
 	selector: 'arena-card-option',
 	styleUrls: ['./arena-card-option.component.scss'],
 	template: `
-		<div class="option scalable" *ngIf="{ showWidget: showWidget$ | async } as value">
-			<div class="info-container" *ngIf="value.showWidget">
+		<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
+			<div class="info-container scalable" *ngIf="value.showWidget">
 				<div class="stat winrate ">
 					<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-impact'"></span>
 					<span class="value {{ winrateClass }}" [helpTooltip]="drawnImpactTooltip">{{ drawImpact }}</span>
@@ -96,9 +96,9 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 		this.prefs
 			.preferences$((prefs) => prefs.arenaDraftOverlayScale)
 			.pipe(this.mapData(([value]) => value))
-			.subscribe((value) => {
+			.subscribe(async (value) => {
 				const newScale = value / 100;
-				const element = this.el.nativeElement.querySelector('.scalable');
+				const element = await this.getScalable();
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
 			});
@@ -106,5 +106,16 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private async getScalable(): Promise<ElementRef<HTMLElement>> {
+		let element = this.el.nativeElement.querySelector('.scalable');
+		let retriesLeft = 10;
+		while (!element && retriesLeft > 0) {
+			await sleep(200);
+			element = this.el.nativeElement.querySelector('.scalable');
+			retriesLeft--;
+		}
+		return element;
 	}
 }
