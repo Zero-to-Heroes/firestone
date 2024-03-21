@@ -24,6 +24,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
 			[showTotalCardsInZoneExtractor]="showTotalCardsInZoneExtractor"
+			[showDecklistExtractor]="showDecklistExtractor"
 			closeEvent="CLOSE_TRACKER"
 			player="player"
 		>
@@ -50,6 +51,7 @@ export class DeckTrackerOverlayPlayerComponent {
 	showMatchupWinrateExtractor = (prefs: Preferences) => prefs.overlayShowMatchupWinrate;
 	// We know our deck, so don't hide the info
 	showTotalCardsInZoneExtractor = (computedValue) => true;
+	showDecklistExtractor = (inMulligan) => true;
 
 	constructor(private prefs: PreferencesService) {}
 }

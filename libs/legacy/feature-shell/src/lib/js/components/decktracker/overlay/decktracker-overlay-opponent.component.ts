@@ -22,6 +22,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 			[deckExtractor]="deckExtractor"
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
+			[showDecklistExtractor]="showDecklistExtractor"
 			closeEvent="CLOSE_OPPONENT_TRACKER"
 			player="opponent"
 		>
@@ -43,11 +44,12 @@ export class DeckTrackerOverlayOpponentComponent {
 	showBottomCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowBottomCardsSeparately;
 	showTopCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowTopCardsSeparately;
 	showDkRunesExtractor = (prefs: Preferences) => prefs.opponentOverlayShowDkRunes;
-	deckExtractor = (state: GameState, inMulligan: boolean) => (inMulligan ? null : state.opponentDeck);
+	deckExtractor = (state: GameState) => state.opponentDeck;
 	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
 	// trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => false;
 	showMatchupWinrateExtractor = (prefs: Preferences) => false;
+	showDecklistExtractor = (inMulligan) => !inMulligan;
 	// Because whitespace for the tooltips
 	// defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
 	// defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;

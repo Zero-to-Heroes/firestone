@@ -88,6 +88,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								[showTotalCardsInZone]="showTotalCardsInZone$ | async"
 								[showDkRunes]="showDkRunes$ | async"
 								[side]="player"
+								*ngIf="showDecklist$ | async"
 							>
 							</decktracker-deck-list>
 							<div class="backdrop" *ngIf="showBackdrop"></div>
@@ -114,7 +115,8 @@ export class DeckTrackerOverlayRootComponent
 	@Input() showBottomCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
 	@Input() showTopCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
-	@Input() deckExtractor: (state: GameState, inMulligan: boolean) => DeckState;
+	@Input() deckExtractor: (state: GameState) => DeckState;
+	@Input() showDecklistExtractor: (inMulligan: boolean) => boolean;
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showDkRunesExtractor: (prefs: Preferences) => boolean;
@@ -151,6 +153,7 @@ export class DeckTrackerOverlayRootComponent
 	showTopCardsSeparately$: Observable<boolean>;
 	showDkRunes$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
+	showDecklist$: Observable<boolean>;
 
 	active = true;
 	windowId: string;
@@ -199,13 +202,20 @@ export class DeckTrackerOverlayRootComponent
 			this.showMatchupWinrateExtractor(preferences),
 		);
 
+		this.showDecklist$ = this.store
+			.listenDeckState$((gameState) => gameState)
+			.pipe(
+				this.mapData(
+					([gameState]) => !!gameState && this.showDecklistExtractor(gameState.currentTurn === 'mulligan'),
+				),
+				shareReplay(1),
+				takeUntil(this.destroyed$),
+			);
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(
 				this.mapData(([gameState]) => {
-					const deck = !gameState
-						? null
-						: this.deckExtractor(gameState, gameState.currentTurn === 'mulligan');
+					const deck = !gameState ? null : this.deckExtractor(gameState);
 					return deck;
 				}),
 				shareReplay(1),
