@@ -156,10 +156,10 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 					.filter((pack) => NON_BUYABLE_BOOSTER_IDS.includes(pack.packType))
 					.sort(
 						sortByProperties((pack) => [
+							-pack.set?.launchDate?.getTime() ?? 0,
 							!CLASS_PACKS.includes(pack.packType),
 							!YEAR_PACKS.includes(pack.packType),
 							!pack.set,
-							-pack.set?.launchDate?.getTime() ?? 0,
 							pack.name,
 						]),
 					);

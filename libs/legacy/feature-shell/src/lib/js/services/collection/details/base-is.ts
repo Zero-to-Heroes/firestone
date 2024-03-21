@@ -4,6 +4,8 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { debounceTime, distinctUntilChanged, filter, map, merge, tap, throttleTime } from 'rxjs';
 import { Events } from '../../events.service';
 
+const THROTTLE_TIME = 30_000;
+
 export abstract class AbstractCollectionInternalService<T, U = T> {
 	public collection$$ = new SubscriberAwareBehaviorSubject<readonly T[]>(null);
 
@@ -51,7 +53,7 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 			);
 			const goToCollectionScene$ = this.scene.currentScene$$.pipe(
 				filter((scene) => scene === SceneMode.COLLECTIONMANAGER),
-				throttleTime(120_000),
+				throttleTime(THROTTLE_TIME),
 				tap(() => console.log('[collection-manager] going to collection scene', this.type())),
 			);
 			merge(collectionUpdate$, goToCollectionScene$)
