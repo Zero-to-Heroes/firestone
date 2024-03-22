@@ -40,7 +40,7 @@ export class DeckParserService {
 	// private currentScene: SceneMode;
 	private currentDeck: DeckInfo;
 
-	private deckTemplates: readonly DeckInfoFromMemory[];
+	private deckTemplates: readonly DeckTemplate[];
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
@@ -183,7 +183,7 @@ export class DeckParserService {
 
 		// Templates are negative
 		const deckTemplates = await this.getDeckTemplates();
-		const deck = deckTemplates.find((deck) => +deck.DeckId === deckId || +deck.Id === -deckId);
+		const deck = deckTemplates.find((deck) => +deck.DeckId === deckId || +deck.TemplateId === -deckId);
 		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
@@ -195,9 +195,9 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	private async getDeckTemplates(): Promise<readonly DeckInfoFromMemory[]> {
+	private async getDeckTemplates(): Promise<readonly DeckTemplate[]> {
 		if (!this.deckTemplates?.length) {
-			const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
+			const templatesFromRemote: readonly DeckTemplate[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
 			this.deckTemplates = (templatesFromRemote ?? [])
 				.filter((template) => template.DeckList?.length)
 				.map(
@@ -205,7 +205,7 @@ export class DeckParserService {
 						({
 							...template,
 							DeckList: template.DeckList.map((dbfId) => +dbfId),
-						} as DeckInfoFromMemory),
+						} as DeckTemplate),
 				);
 		}
 		return this.deckTemplates ?? [];
@@ -520,4 +520,8 @@ export interface DeckInfo {
 	deckstring: string;
 	deck: DeckDefinition;
 	gameType: GameType;
+}
+
+export interface DeckTemplate extends DeckInfoFromMemory {
+	TemplateId: number;
 }
