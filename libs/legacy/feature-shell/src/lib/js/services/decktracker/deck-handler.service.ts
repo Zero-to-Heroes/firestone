@@ -84,23 +84,29 @@ export class DeckHandlerService {
 			return deck;
 		}
 
-		return deck.map((decKCard) => this.postProcessDeckCard(decKCard, boardId));
+		const result = deck.map((decKCard) => this.postProcessDeckCard(decKCard, boardId));
+		// console.debug('[debug] post-processed deck', result);
+		return result;
 	}
 
 	private postProcessDeckCard(deckCard: DeckCard, boardId: Board): DeckCard {
-		const newCardId = this.updateCardId(deckCard.cardId, boardId);
+		let newCardId = this.updateCardIdForTransferStudent(deckCard.cardId, boardId);
 		// if (newCardId === deckCard.cardId) {
 		// 	return deckCard;
 		// }
 		const newCard = this.allCards.getCard(newCardId);
 		let newCost = deckCard.manaCost;
+		// console.debug('[debug] newCardId', newCardId, deckCard.cardId);
 		if (newCard.id === CardIds.ZilliaxDeluxe3000_TOY_330) {
 			const modules = deckCard.relatedCardIds?.map((c) => this.allCards.getCard(c)) ?? [];
 			newCost = modules.map((c) => c.cost).reduce((a, b) => a + b, 0);
+			// The card ID only changes based on the skin
+			newCardId = modules[2]?.id ?? newCardId;
+			// console.debug('[debug] modules', newCardId, modules, modules[2]?.id);
 		}
 		return deckCard.update({
-			cardId: newCard.id,
-			cardName: this.i18n.getCardName(newCard.id),
+			cardId: newCardId,
+			cardName: this.i18n.getCardName(newCardId),
 			manaCost: newCost,
 		} as DeckCard);
 	}
@@ -119,7 +125,7 @@ export class DeckHandlerService {
 		}
 	}
 
-	private updateCardId(cardId: string, boardId: Board): string {
+	private updateCardIdForTransferStudent(cardId: string, boardId: Board): string {
 		if (cardId !== CardIds.TransferStudent || !boardId) {
 			return cardId;
 		}
