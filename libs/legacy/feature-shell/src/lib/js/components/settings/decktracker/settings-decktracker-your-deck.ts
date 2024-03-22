@@ -340,6 +340,15 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'cardsDrawn',
+			field: 'playerCardsDrawnCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-tooltip', {
+				cardName: this.allCards.getCard(CardIds.PlayhouseGiant_TOY_530)?.name,
+			}),
+			showLimitedOption: true,
+		},
+		{
 			id: 'elementalStreak',
 			field: 'playerElementalStreakCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),

@@ -443,6 +443,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerCardsDrawnCounter: BooleanWithLimited = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerCardsDrawnCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerElementalStreakCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalStreakCounterWidgetPosition: { left: number; top: number };

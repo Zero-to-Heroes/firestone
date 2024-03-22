@@ -315,9 +315,9 @@ export class GameStateService {
 			console.debug(
 				'[game-state] emitting event',
 				emittedEvent.event.name,
-				this.state.opponentDeck?.board?.length,
 				gameEvent.entityId,
 				gameEvent.cardId,
+				this.state.currentTurn,
 				gameEvent,
 				emittedEvent.state,
 			);

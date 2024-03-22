@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -95,8 +95,8 @@ export class CardDrawParser implements EventParser {
 
 		console.debug(
 			'drawing card',
-			card,
 			isPlayer,
+			card,
 			deck,
 			deck.deck.some((c) => c.positionFromTop),
 			[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
@@ -192,9 +192,13 @@ export class CardDrawParser implements EventParser {
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
 		console.debug('added card to hand', newHand);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			hand: newHand,
+			cardDrawnThisGame:
+				currentState.currentTurn === 'mulligan' || currentState.currentTurn === 0
+					? 0
+					: deck.cardDrawnThisGame + 1,
 		});
 		// console.debug('new player deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {

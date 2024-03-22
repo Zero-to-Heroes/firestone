@@ -27,6 +27,7 @@ import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southse
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
+import { CardsDrawnCounterDefinition } from './definitions/cards-drawn-counter';
 import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian-counter';
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
@@ -207,6 +208,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'cardsDrawn':
+				return CardsDrawnCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elementalStreak':
 				return ElementalStreakCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'tramHeist':

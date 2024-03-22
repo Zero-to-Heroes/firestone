@@ -526,6 +526,7 @@ import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counte
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsGoldDeltaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-gold-delta-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
+import { PlayerCardsDrawnWidgetWrapperComponent } from '@components/overlays/counters/player-cards-drawn-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
@@ -1603,6 +1604,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
+		PlayerCardsDrawnWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
