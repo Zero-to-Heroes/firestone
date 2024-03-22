@@ -1142,6 +1142,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.LockAndLoad_CORE_AT_061:
 			case CardIds.LockAndLoad_WON_023:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.LokenJailerOfYoggSaron:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.LorthemarTheron_RLK_593:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.LoveEverlasting:
