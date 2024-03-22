@@ -1,4 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -348,7 +350,9 @@ export class SettingsDecktrackerYourDeckComponent
 			id: 'tramHeist',
 			field: 'playerTramHeistCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-label'),
-			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-tooltip'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-tooltip', {
+				cardName: this.allCards.getCard(CardIds.TramHeist_WW_053)?.name,
+			}),
 			showLimitedOption: true,
 		},
 		{
@@ -497,6 +501,7 @@ export class SettingsDecktrackerYourDeckComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
