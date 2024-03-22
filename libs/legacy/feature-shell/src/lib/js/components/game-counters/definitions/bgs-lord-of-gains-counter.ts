@@ -57,7 +57,10 @@ export class BgsLordOfGainsCounterDefinition
 		spellsPlayedThisTurn: readonly string[],
 		countersUseExpandedView: boolean,
 	): NonFunctionProperties<BgsLordOfGainsCounterDefinition> {
-		const groupedByCard = groupByFunction((cardId: string) => cardId)(spellsPlayedThisTurn);
+		const groupedByCard = groupByFunction(
+			(cardId: string) =>
+				this.allCards.getCard(cardId).battlegroundsNormalDbfId ?? this.allCards.getCard(cardId).dbfId,
+		)(spellsPlayedThisTurn);
 		const cardsStrArray = Object.keys(groupedByCard)
 			.filter((cardId) => ![].includes(cardId))
 			.map((cardId) => {
