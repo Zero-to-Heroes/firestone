@@ -36,7 +36,7 @@ export class DragonsSummonedCounterDefinition implements CounterDefinition<GameS
 		return {
 			type: 'dragonsSummoned',
 			value: dragonsSummoned,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.FyeTheSettingSun_WW_825}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.TimewinderZarimi_TOY_385}.jpg`,
 			cssClass: 'dragons-summoned-counter',
 			tooltip: this.i18n.translateString(`counters.specific-summons.${this.side}`, {
 				value: dragonsSummoned,
