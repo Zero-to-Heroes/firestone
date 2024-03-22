@@ -133,12 +133,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard) {
 		// Happens when using the deck-list component outside of a game
+		// console.debug('[cards-highlight] mouse enter', cardId, side, card, this.options);
 		if (!this.options?.skipGameState && !this.gameState) {
 			console.debug('no game state, skipping highlight');
 			return;
 		}
 
 		const shouldHighlight = await this.shouldHighlightProvider();
+		// console.debug('[cards-highlight] should highlight', shouldHighlight, this.options);
 		if (!this.options?.skipPrefs && !shouldHighlight) {
 			console.debug('highlighting disabled in prefs, skipping highlight', shouldHighlight, this.options);
 			return;
@@ -155,11 +157,26 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			playerDeckProvider,
 			opponentDeckProvider,
 		);
+		// console.debug('[cards-highlight] cards to highlight', cardsToHighlight);
 		for (const card of cardsToHighlight) {
 			const handler = Object.values(this.handlers).find((h) =>
 				// Discovers don't have deck card providers
 				h.deckCardProvider()?.internalEntityIds?.includes(card.internalEntityId),
 			);
+			// console.debug(
+			// 	'[cards-highlight] handler',
+			// 	handler,
+			// 	card.internalEntityId,
+			// 	card.cardId,
+			// 	card.card?.name,
+			// 	this.handlers,
+			// 	Object.values(this.handlers)[0]?.deckCardProvider(),
+			// 	Object.values(this.handlers).map(
+			// 		(h) =>
+			// 			// Discovers don't have deck card providers
+			// 			h.deckCardProvider()?.internalEntityIds,
+			// 	),
+			// );
 			if (!!handler) {
 				handler.highlightCallback();
 			}
@@ -194,7 +211,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	}
 
 	private buildFakeDeckStateFromRegisteredHandlers(): DeckState {
-		return DeckState.create({
+		const result = DeckState.create({
 			deck: Object.values(this.handlers).map((h) => {
 				return !!h.deckCardProvider()
 					? h.deckCardProvider()
@@ -203,6 +220,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					  });
 			}),
 		});
+		// console.debug('built fake deck state', result, this.handlers);
+		return result;
 	}
 
 	private buildCardsToHighlight(
@@ -219,9 +238,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			!!playerDeckProvider ? playerDeckProvider() : null,
 			side === 'duels' ? side : 'player',
 		);
-		for (const card of allPlayerCards) {
-			if (selector(card)) {
-				result.push(card);
+		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
+		for (const playerCard of allPlayerCards) {
+			// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card);
+			if (selector(playerCard)) {
+				// console.debug('\t', 'highlighting', playerCard.card?.name, playerCard, card);
+				result.push(playerCard);
 			}
 		}
 
@@ -229,9 +251,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
 			side === 'duels' ? side : 'opponent',
 		);
-		for (const card of allOpponentCards) {
-			if (selector(card)) {
-				result.push(card);
+		for (const oppCard of allOpponentCards) {
+			if (selector(oppCard)) {
+				result.push(oppCard);
 			}
 		}
 		return result;
@@ -1246,6 +1268,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.Owlonius_TOY_807:
 				return and(side(inputSide), or(inHand, inDeck), or(and(spell, dealsDamage), spellDamage));
+			case CardIds.PaintedCanvasaur_TOY_350:
+				return and(side(inputSide), or(inHand, inDeck), beast);
 			case CardIds.ParachuteBrigand:
 			case CardIds.PatchesThePirate_CFM_637:
 				return and(side(inputSide), or(inDeck, inHand), minion, pirate);

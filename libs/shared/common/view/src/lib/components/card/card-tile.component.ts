@@ -1,21 +1,38 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Inject,
+	Input,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { uuidShort } from '@firestone/shared/framework/common';
+import {
+	CARDS_HIGHLIGHT_SERVICE_TOKEN,
+	CardsFacadeService,
+	ICardsHighlightService,
+} from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'card-tile',
 	styleUrls: ['./card-tile.component.scss'],
 	template: `
 		<div
-			class="deck-card {{ rarity }} {{ cardClass }}"
+			class="deck-card {{ rarity }} {{ cardClass }} "
 			[ngClass]="{
 				'color-mana-cost': true,
-				'color-class-cards': false
+				'color-class-cards': false,
+				'linked-card': isLinkedCardHighlight
 			}"
 			[cardTooltip]="_cardId"
 			[cardTooltipPosition]="'auto'"
 			[cardTooltipShowRelatedCards]="true"
 			[cardTooltipRelatedCardIds]="relatedCardIds"
+			(mouseenter)="onMouseEnter()"
+			(mouseleave)="onMouseLeave()"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="mana-cost">
@@ -52,6 +69,8 @@ export class CardTileComponent {
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value}.jpg)`;
 		this.manaCostStr = refCard.hideStats ? '' : refCard.cost?.toString() ?? '?';
 		this.cardName = refCard.name;
+
+		this.registerHighlight();
 	}
 	@Input() numberOfCopies: number;
 
@@ -62,6 +81,69 @@ export class CardTileComponent {
 	rarity: string;
 	cardClass: string;
 	relatedCardIds: readonly string[];
+	isLinkedCardHighlight: boolean;
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	private _uniqueId: string;
+	private _referenceCard: ReferenceCard;
+
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		@Inject(CARDS_HIGHLIGHT_SERVICE_TOKEN)
+		@Optional()
+		private readonly cardsHighlightService: ICardsHighlightService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		this.cardsHighlightService?.onMouseLeave(this._cardId);
+		this.cardsHighlightService?.unregister(this._uniqueId, 'duels');
+	}
+
+	onMouseEnter() {
+		// console.debug('mouse enter', this._cardId, this.cardsHighlightService);
+		this.cardsHighlightService?.onMouseEnter(this._cardId, 'duels');
+	}
+
+	onMouseLeave() {
+		this.cardsHighlightService?.onMouseLeave(this._cardId);
+	}
+
+	doHighlight() {
+		this.isLinkedCardHighlight = true;
+		// console.debug('highlighting', this._cardId);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	doUnhighlight() {
+		this.isLinkedCardHighlight = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private registerHighlight() {
+		this._uniqueId = uuidShort();
+		this._referenceCard = this.allCards.getCard(this._cardId);
+		this.cardsHighlightService?.register(
+			this._uniqueId,
+			{
+				referenceCardProvider: () => this._referenceCard,
+				deckCardProvider: () => ({
+					cardId: this._cardId,
+					internalEntityId: this._uniqueId,
+					internalEntityIds: [this._uniqueId],
+				}),
+				zoneProvider: () => null,
+				side: () => 'duels',
+				highlightCallback: () => this.doHighlight(),
+				unhighlightCallback: () => this.doUnhighlight(),
+				debug: this,
+			} /*as Handler*/,
+			'duels',
+		);
+		// console.debug('registering highlight', this._card?.cardId, this.el.nativeElement);
+	}
 }
