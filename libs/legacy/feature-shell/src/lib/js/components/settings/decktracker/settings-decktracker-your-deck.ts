@@ -340,6 +340,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'thirstyDrifter',
+			field: 'playerThirstyDrifterCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.thirsty-drifter-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.thirsty-drifter-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'cardsDrawn',
 			field: 'playerCardsDrawnCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-label'),

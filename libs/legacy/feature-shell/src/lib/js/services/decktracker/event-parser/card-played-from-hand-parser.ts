@@ -225,6 +225,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			cardId: cardToAdd.cardId,
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
+			effectiveCost: gameEvent.additionalData.cost,
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
 			? [newPlayerDeck, opponentDeck]

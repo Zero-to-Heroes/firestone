@@ -35,6 +35,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		},
 	): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const effectiveCost = gameEvent.additionalData.cost;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -101,6 +102,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			cardId: cardWithZone.cardId,
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
+			effectiveCost: effectiveCost,
 		};
 
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
