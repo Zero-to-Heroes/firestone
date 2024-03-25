@@ -340,6 +340,15 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'wheelOfDeath',
+			field: 'playerWheelOfDeathCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-label', {
+				cardName: this.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
+			}),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'thirstyDrifter',
 			field: 'playerThirstyDrifterCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.thirsty-drifter-label'),

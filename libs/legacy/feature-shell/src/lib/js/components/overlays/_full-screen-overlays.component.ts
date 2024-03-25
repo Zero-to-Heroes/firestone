@@ -95,6 +95,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
 			<player-thirsty-drifter-widget-wrapper></player-thirsty-drifter-widget-wrapper>
 			<player-cards-drawn-widget-wrapper></player-cards-drawn-widget-wrapper>
 			<player-elemental-streak-widget-wrapper></player-elemental-streak-widget-wrapper>
@@ -150,6 +151,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
+			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>

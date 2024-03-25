@@ -103,6 +103,7 @@ export class DeckState {
 	readonly currentExcavateTier: number = 0;
 	readonly maxExcavateTier: number = 0;
 	readonly totalExcavates: number = 0;
+	readonly wheelOfDeathCounter: number | undefined = undefined;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

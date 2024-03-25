@@ -1474,6 +1474,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'WHEEL_OF_DEATH_COUNTER_UPDATED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED, gameEvent, {
+						turnsBeforeControllerDies: gameEvent.Value.AdditionalProps.TurnsBeforeControllerDies,
+					}),
+				);
+				break;
 			case 'MERCENARIES_SELECTED_TARGET':
 			case 'MERCENARIES_UNSELECTED_TARGET':
 				break;

@@ -68,6 +68,7 @@ import { TreantCounterDefinition } from './definitions/treant-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
+import { WheelOfDeathCounterDefinition } from './definitions/wheel-of-death-counter';
 
 @Component({
 	selector: 'game-counters',
@@ -209,6 +210,8 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'wheelOfDeath':
+				return WheelOfDeathCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'thirstyDrifter':
 				return ThirstyDrifterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'cardsDrawn':

@@ -111,6 +111,7 @@ import { PlaguesParser } from '../event-parser/special-cases/plagues-parser';
 import { PogoPlayedParser } from '../event-parser/special-cases/pogo-played-parser';
 import { SpecificSummonsParser } from '../event-parser/special-cases/specific-summons-parser';
 import { SphereOfSapienceParser } from '../event-parser/special-cases/sphere-of-sapience-parser';
+import { WheelOfDeathCounterUpdatedParser } from '../event-parser/special-cases/wheel-of-death-counter-updated-parser';
 import { StartOfGameEffectParser } from '../event-parser/start-of-game-effect-parser';
 import { TurnDurationUpdatedParser } from '../event-parser/turn-duration-updated-parser';
 import { WeaponDestroyedParser } from '../event-parser/weapon-destroyed-parser';
@@ -298,6 +299,7 @@ export class GameStateParsersService {
 			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs)],
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
 			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],
 			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
 			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],
 			// [GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],

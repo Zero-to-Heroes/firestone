@@ -523,6 +523,7 @@ import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overla
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
+import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsGoldDeltaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-gold-delta-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
@@ -535,6 +536,7 @@ import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/c
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
+import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
 import { SettingsArenaGeneralComponent } from '@components/settings/arena/settings-arena-general';
@@ -1583,6 +1585,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerWheelOfDeathWidgetWrapperComponent,
 		PlayerThirstyDrifterWidgetWrapperComponent,
 		PlayerElementalStreakWidgetWrapperComponent,
 		PlayerTramHeistWidgetWrapperComponent,
@@ -1637,6 +1640,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentSpellWidgetWrapperComponent,
 		OpponentExcavateWidgetWrapperComponent,
 		OpponentCorpseSpentWidgetWrapperComponent,
+		OpponentWheelOfDeathWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

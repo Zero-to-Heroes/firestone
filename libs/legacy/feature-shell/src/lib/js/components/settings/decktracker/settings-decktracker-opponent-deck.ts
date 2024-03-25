@@ -1,4 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -406,12 +408,22 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.excavate-tooltip'),
 			showLimitedOption: true,
 		},
+		{
+			id: 'wheelOfDeath',
+			field: 'opponentWheelOfDeathCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-label', {
+				cardName: this.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
+			}),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.wheel-of-death-tooltip'),
+			showLimitedOption: true,
+		},
 	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
