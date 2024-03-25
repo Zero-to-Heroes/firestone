@@ -229,4 +229,5 @@ export const tutors = [
 	CardIds.QualityAssurance_TOY_605,
 	CardIds.SketchArtist_TOY_916,
 	CardIds.TrinketArtist_TOY_882,
+	CardIds.PluckyPaintfin_TOY_517,
 ];
