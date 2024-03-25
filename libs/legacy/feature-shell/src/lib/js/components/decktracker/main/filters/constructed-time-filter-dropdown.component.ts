@@ -70,8 +70,15 @@ export class ConstructedTimeFilterDropdownComponent
 					(option) =>
 						({
 							value: option,
-							label: this.i18n.translateString(`app.decktracker.filters.time-filter.${option}`),
+							label:
+								option === 'last-patch'
+									? this.i18n.translateString('app.global.filters.time-patch', {
+											value: patch.version,
+									  })
+									: this.i18n.translateString(`app.decktracker.filters.time-filter.${option}`),
 							tooltip: option === 'last-patch' ? formatPatch(patch, this.i18n) : undefined,
+							// label: this.i18n.translateString(`app.decktracker.filters.time-filter.${option}`),
+							// tooltip: option === 'last-patch' ? formatPatch(patch, this.i18n) : undefined,
 						} as FilterOption),
 				);
 				return {
