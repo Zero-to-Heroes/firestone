@@ -130,6 +130,10 @@ export class BattlegroundsDesktopComponent
 				name: this.i18n.translateString('app.battlegrounds.menu.perfect-games'),
 			},
 			{
+				id: 'bgs-category-leaderboard',
+				name: this.i18n.translateString('app.battlegrounds.menu.leaderboard'),
+			},
+			{
 				id: 'bgs-category-simulator',
 				name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
 			},
@@ -163,6 +167,6 @@ export class BattlegroundsDesktopComponent
 	}
 
 	showSidebar(categoryId: string): boolean {
-		return categoryId !== 'bgs-category-simulator';
+		return categoryId !== 'bgs-category-simulator' && categoryId !== 'bgs-category-leaderboard';
 	}
 }

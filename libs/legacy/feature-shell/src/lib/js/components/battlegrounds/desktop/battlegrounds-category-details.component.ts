@@ -38,6 +38,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			</battlegrounds-personal-stats-stats>
 			<battlegrounds-perfect-games *ngIf="selectedCategoryId === 'bgs-category-perfect-games'">
 			</battlegrounds-perfect-games>
+			<battlegrounds-leaderboards *ngIf="selectedCategoryId === 'bgs-category-leaderboard'">
+			</battlegrounds-leaderboards>
 			<battlegrounds-personal-stats-hero-details
 				*ngIf="selectedCategoryId && selectedCategoryId.indexOf('bgs-category-personal-hero-details') !== -1"
 			>

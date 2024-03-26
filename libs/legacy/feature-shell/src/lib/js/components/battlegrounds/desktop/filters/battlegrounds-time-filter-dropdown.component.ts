@@ -60,6 +60,7 @@ export class BattlegroundsTimeFilterDropdownComponent
 							'bgs-category-personal-stats',
 							'bgs-category-perfect-games',
 							'bgs-category-simulator',
+							'bgs-category-leaderboard',
 						].includes(categoryId),
 				),
 			);

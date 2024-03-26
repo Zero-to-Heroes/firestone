@@ -62,6 +62,7 @@ export class BattlegroundsRankFilterDropdownComponent
 							'bgs-category-personal-stats',
 							'bgs-category-simulator',
 							'bgs-category-personal-rating',
+							'bgs-category-leaderboard',
 						].includes(categoryId),
 				),
 			);

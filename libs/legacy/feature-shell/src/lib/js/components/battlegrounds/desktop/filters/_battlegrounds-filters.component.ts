@@ -23,6 +23,9 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-rank-group-dropdown class="rank-group"></battlegrounds-rank-group-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
+			<battlegrounds-leaderboard-region-filter-dropdown
+				class="leaderboard-region-filter"
+			></battlegrounds-leaderboard-region-filter-dropdown>
 
 			<preference-toggle
 				class="use-conservative-estimate-link"
@@ -58,6 +61,7 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 						currentView !== 'bgs-category-personal-stats' &&
 						currentView !== 'bgs-category-perfect-games' &&
 						currentView !== 'bgs-category-meta-quests' &&
+						currentView !== 'bgs-category-leaderboard' &&
 						currentView !== 'bgs-category-simulator',
 				),
 			);

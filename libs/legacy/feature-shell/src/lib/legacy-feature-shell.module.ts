@@ -498,6 +498,7 @@ import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
+import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
 import { ConstructedMetaArchetypeDetailsComponent } from '@components/decktracker/main/constructed-meta-archetype-details.component';
 import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
@@ -1384,6 +1385,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsRankGroupDropdownComponent,
 		BattlegroundsTimeFilterDropdownComponent,
 		BattlegroundsQuestTypeFilterDropdownComponent,
+		BattlegroundsLeaderboardRegionFilterDropdownComponent,
 
 		DuelsDesktopComponent,
 		DuelsEmptyStateComponent,

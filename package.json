@@ -47,6 +47,7 @@
 		"@firestone-hs/duels-leaderboard": "^1.0.5",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.133",
 		"@firestone-hs/mailbox": "^1.0.29",
+		"@firestone-hs/official-leaderboards": "^0.0.1",
 		"@firestone-hs/reference-data": "^2.0.14",
 		"@firestone-hs/replay-metadata": "^0.0.61",
 		"@firestone-hs/replay-parser": "1.2.28",

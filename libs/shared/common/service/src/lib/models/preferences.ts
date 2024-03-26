@@ -692,6 +692,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveUseAnomalyFilterInHeroSelection: boolean = true;
 	readonly bgsSavedUseMmrFilterInHeroSelection: boolean = false;
 	readonly bgsSavedUseAnomalyFilterInHeroSelection: boolean = false;
+	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' = 'EU';
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

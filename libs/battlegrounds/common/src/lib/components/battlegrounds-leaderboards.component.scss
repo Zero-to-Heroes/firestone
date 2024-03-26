@@ -1,0 +1,59 @@
+:host {
+	display: flex;
+	min-height: 0;
+}
+
+.leaderboards {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+	flex-direction: column;
+	color: var(--color-1);
+
+	.leaderboard-header {
+		display: flex;
+		flex-shrink: 0;
+		height: 50px;
+		color: var(--default-text-color);
+	}
+
+	.leaderboard-entries {
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		overflow-y: scroll;
+		flex-grow: 1;
+		margin-bottom: 20px;
+	}
+
+	.leaderboard-entry {
+		display: flex;
+		height: 40px;
+		min-height: 40px;
+		border-bottom: 1px solid var(--color-3);
+		align-items: center;
+
+		&:nth-child(odd) {
+			background-color: rgba(255, 255, 255, 0.08);
+		}
+	}
+}
+
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.rank {
+	width: 100px;
+}
+
+.rating {
+	width: 150px;
+}
+
+.name {
+	padding-left: 50px;
+	flex-grow: 1;
+}
