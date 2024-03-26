@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.8.0',
+		version: '13.8.1',
 		force: false,
 		sections: [
 			// {
@@ -98,6 +98,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix an issue where decks containing both Zilliax and ETC would not show the sideboards properly.`,
+							},
+							{
+								type: 'bug',
 								text: `The tracker should now show the correct cost for Zilliax.`,
 							},
 							{
@@ -121,6 +125,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `You can now browse the official leaderboards directly in the app, and search for any player by name. Keep in mind that only players with at least 8,000 MMM are in the official leaderboards.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the Lord of Gains counter would count normal and golden versions of Spellcrafts as two different spells.`,
