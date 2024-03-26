@@ -288,6 +288,9 @@ export class DeckManipulationHelper {
 		entityId: number,
 		normalizeUpgradedCards = true,
 	): DeckCard {
+		if (!cardId?.length && !entityId) {
+			return DeckCard.create();
+		}
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 		// Explicit search by entity id
 		if (entityId) {
