@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
@@ -23,9 +22,17 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-rank-group-dropdown class="rank-group"></battlegrounds-rank-group-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
+
 			<battlegrounds-leaderboard-region-filter-dropdown
 				class="leaderboard-region-filter"
 			></battlegrounds-leaderboard-region-filter-dropdown>
+			<fs-text-input
+				class="leaderboard-player-search"
+				*ngIf="showLeaderboardPlayerSearch$ | async"
+				(fsModelUpdate)="onLeaderboardPlayerNameChanged($event)"
+				[placeholder]="'app.battlegrounds.filters.leaderboard.search-placeholder' | fsTranslate"
+			>
+			</fs-text-input>
 
 			<preference-toggle
 				class="use-conservative-estimate-link"
@@ -41,12 +48,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
 	showConservativeEstimateLink$: Observable<boolean>;
+	showLeaderboardPlayerSearch$: Observable<boolean>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
@@ -71,5 +78,20 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 				filter(([currentView]) => !!currentView),
 				this.mapData(([currentView]) => currentView === 'bgs-category-meta-heroes'),
 			);
+		this.showLeaderboardPlayerSearch$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationBattlegrounds.selectedCategoryId)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(([currentView]) => currentView === 'bgs-category-leaderboard'),
+			);
+	}
+
+	async onLeaderboardPlayerNameChanged(value: string) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			bgsLeaderboardPlayerSearch: value,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 }

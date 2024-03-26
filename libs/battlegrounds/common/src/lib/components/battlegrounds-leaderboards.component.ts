@@ -53,14 +53,24 @@ export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent impl
 
 		this.leaderboard$ = combineLatest([
 			this.leaderboardsService.leaderboards$$,
-			this.prefs.preferences$((prefs) => prefs.bgsLeaderboardRegionFilter),
+			this.prefs.preferences$(
+				(prefs) => prefs.bgsLeaderboardRegionFilter,
+				(prefs) => prefs.bgsLeaderboardPlayerSearch,
+			),
 		]).pipe(
 			tap((data) => console.debug('[bgs-leaderboards] received data', data)),
-			filter(([leaderboards, [region]]) => !!leaderboards?.leaderboards?.length && !!region),
-			this.mapData(
-				([leaderboards, [region]]) =>
-					leaderboards!.leaderboards!.find((leaderboard) => leaderboard.region === region)!.entries,
+			filter(
+				([leaderboards, [region, bgsLeaderboardPlayerSearch]]) =>
+					!!leaderboards?.leaderboards?.length && !!region,
 			),
+			this.mapData(([leaderboards, [region, bgsLeaderboardPlayerSearch]]) => {
+				const entries = leaderboards!.leaderboards!.find(
+					(leaderboard) => leaderboard.region === region,
+				)!.entries;
+				return !bgsLeaderboardPlayerSearch?.length
+					? entries
+					: entries.filter((entry) => entry.accountId.includes(bgsLeaderboardPlayerSearch));
+			}),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
