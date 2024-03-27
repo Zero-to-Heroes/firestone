@@ -34,6 +34,30 @@
 	.aspect-ratio {
 		padding-bottom: 115%;
 	}
+
+	.name {
+		position: absolute;
+		color: white;
+		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+		bottom: 3%;
+		left: 9%;
+		width: 70%;
+		font-size: 0.6em;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+}
+
+.mmr {
+	position: absolute;
+	color: white;
+	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	bottom: -21%;
+	left: 9%;
+	width: 90%;
+	font-size: 0.8em;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .rating {

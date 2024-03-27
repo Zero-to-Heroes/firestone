@@ -1,10 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BgsFaceOffWithSimulation, BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/battlegrounds/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	BgsFaceOffWithSimulation,
+	BgsNextOpponentOverviewPanel,
+	BgsPlayer,
+	BgsStateFacadeService,
+} from '@firestone/battlegrounds/common';
+import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -87,17 +92,20 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 
 	buddiesEnabled$: Observable<boolean>;
 
-	opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
+	// opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly state: BgsStateFacadeService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await this.state.isReady();
+
 		this.enableSimulation$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
 			.pipe(this.mapData(([pref]) => pref));
@@ -134,41 +142,45 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 				filter(([game]) => !!game),
 				this.mapData(([game]) => game.lastFaceOff()),
 			);
-		this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.players)
-			.pipe(
-				debounceTime(1000),
-				filter(([players]) => !!players?.length),
-				this.mapData(
-					([players]) =>
-						[...players].sort((a, b) => {
-							if (a.leaderboardPlace < b.leaderboardPlace) {
-								return -1;
-							}
-							if (b.leaderboardPlace < a.leaderboardPlace) {
-								return 1;
-							}
-							if (a.damageTaken < b.damageTaken) {
-								return -1;
-							}
-							if (b.damageTaken < a.damageTaken) {
-								return 1;
-							}
-							return 0;
-						}),
-					deepEqual,
-				),
-			)
-			.subscribe((opponents) => this.opponentsSubject$$.next(opponents));
-		this.opponents$ = this.opponentsSubject$$.asObservable().pipe(
-			filter((opponents) => opponents?.length >= 8),
+		const opponents$ = this.state.gameState$$.pipe(
+			debounceTime(1000),
+			map((state) => state.currentGame?.players),
+			filter((players) => !!players?.length),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			this.mapData((players) =>
+				[...players].sort((a, b) => {
+					if (a.leaderboardPlace < b.leaderboardPlace) {
+						return -1;
+					}
+					if (b.leaderboardPlace < a.leaderboardPlace) {
+						return 1;
+					}
+					if (a.damageTaken < b.damageTaken) {
+						return -1;
+					}
+					if (b.damageTaken < a.damageTaken) {
+						return 1;
+					}
+					return 0;
+				}),
+			),
+			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		this.nextOpponent$ = combineLatest(this.nextOpponentCardId$, this.opponentsSubject$$.asObservable()).pipe(
+		this.opponents$ = opponents$.pipe(
+			filter((opponents) => opponents?.length >= 8),
+			tap((info) => console.log('opponents', info)),
+			takeUntil(this.destroyed$),
+		);
+		this.nextOpponent$ = combineLatest([this.nextOpponentCardId$, opponents$]).pipe(
 			this.mapData(([nextOpponentCardId, opponents]) =>
 				opponents.find((opp) => opp.cardId === nextOpponentCardId),
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByOpponentInfoFn(index, item: BgsPlayer) {

@@ -101,6 +101,7 @@ export class AppUiStoreFacadeService {
 		return this.store.listenNativeGameState$(...selectors);
 	}
 
+	/** @deprecated */
 	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {

@@ -16,8 +16,9 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[maxHealth]="maxHealth"
 					[cardTooltip]="heroPowerCardId"
 					[cardTooltipClass]="'bgs-hero-power'"
+					[name]="name"
+					[mmr]="mmr"
 				></bgs-hero-portrait>
-				<!-- <div class="name">{{ name }}</div> -->
 				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="main-info">
@@ -69,6 +70,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	maxHealth: number;
 	heroPowerCardId: string;
 	name: string;
+	mmr: number | null;
 	tavernTier: number;
 	boardMinions: readonly Entity[];
 	boardTurn: number;
@@ -100,6 +102,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.name;
+		this.mmr = value.mmr;
 		this.tavernTier = value.getCurrentTavernTier();
 		this.boardMinions = value.getLastKnownBoardStateAsReplayEntities();
 		this.boardTurn = value.getLastBoardStateTurn();

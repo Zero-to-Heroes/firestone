@@ -9,6 +9,8 @@ import { PlayerMatchMmr } from '../model/in-game/bgs-player-match-mmr';
 import { BgsMatchMemoryInfoService } from './bgs-match-memory-info.service';
 import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderboards.service';
 
+const MIN_RATING = 0; // 6000
+
 @Injectable()
 export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPlayersMmrService> {
 	public playersMatchMmr$$ = new SubscriberAwareBehaviorSubject<readonly PlayerMatchMmr[] | null>(null);
@@ -40,11 +42,12 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 				this.gameState.gameState$$,
 			]).pipe(
 				debounceTime(2000),
+				tap((info) => console.debug('[bgs-match-players-mmr] before game info', info)),
 				map(([memoryInfo, gameState]) => {
 					if (!memoryInfo?.Game?.Players?.length || !gameState?.region) {
 						return null;
 					}
-					if (!memoryInfo.Rating || memoryInfo.Rating < 6000) {
+					if (!memoryInfo.Rating || memoryInfo.Rating < MIN_RATING) {
 						return null;
 					}
 
@@ -75,6 +78,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 								const leaderboardPlayer = leaderboard?.entries.find(
 									(leaderboardPlayer) => leaderboardPlayer.accountId === player.name,
 								);
+								console.debug('[bgs-match-players-mmr] player', player, leaderboardPlayer);
 								return {
 									playerId: player.id,
 									playerName: player.name,

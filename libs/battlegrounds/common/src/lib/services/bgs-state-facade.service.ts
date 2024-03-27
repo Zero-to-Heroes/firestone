@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
 import {
@@ -6,7 +7,7 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, tap } from 'rxjs';
 import { BattlegroundsState } from '../model/battlegrounds-state';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
@@ -37,7 +38,10 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 		this.gameState$$.onFirstSubscribe(() => {
 			const bgState: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 			combineLatest([bgState, this.matchPlayers.playersMatchMmr$$])
-				.pipe(debounceTime(200))
+				.pipe(
+					debounceTime(200),
+					tap((value) => console.log('[bgs-state-facade] info', value)),
+				)
 				.subscribe(([state, playersMmr]) => {
 					if (!state) {
 						return;
@@ -51,10 +55,16 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 						currentGame: state.currentGame.update({
 							players: state.currentGame.players.map((player) => {
 								const playerMmr = playersMmr?.find((mmr) => mmr.playerId === player.playerId);
-								return playerMmr ? player.update({ mmr: playerMmr.mmr }) : player;
+								return playerMmr
+									? player.update({
+											mmr: playerMmr.mmr,
+											name: playerMmr.playerName ?? player.name,
+									  })
+									: player;
 							}),
 						}),
 					});
+					console.debug('[bgs-state-facade] updating state', mergedState);
 					this.gameState$$.next(mergedState);
 				});
 		});

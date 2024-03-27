@@ -1,4 +1,6 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-hero-portrait',
@@ -11,6 +13,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 					class="frame"
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png"
 				/>
+				<div class="name" *ngIf="name">{{ name }}</div>
 				<div class="aspect-ratio"></div>
 			</div>
 			<div class="quest-reward" *ngIf="_questRewardCardId" [cardTooltip]="_questRewardCardId">
@@ -27,6 +30,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 			<div class="rating" *ngIf="rating !== null && rating !== undefined">
 				<div class="value">{{ rating?.toLocaleString('en-US') }}</div>
 			</div>
+			<div
+				class="mmr"
+				*ngIf="_mmr !== null && _mmr !== undefined"
+				[helpTooltip]="'battlegrounds.in-game.opponents.mmr-tooltip' | fsTranslate"
+			>
+				<div class="value">{{ _mmr }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,8 +47,19 @@ export class BgsHeroPortraitComponent {
 	heroIcon: string;
 	_questRewardCardId: string;
 	questRewardIcon: string;
+	_mmr: string;
 
 	@Input() rating: number;
+	@Input() name: string;
+
+	@Input() set mmr(value: number) {
+		this._mmr =
+			value == null
+				? null
+				: this.i18n.translateString('battlegrounds.in-game.opponents.mmr', {
+						value: value.toLocaleString('en-US'),
+				  });
+	}
 
 	@Input() set heroCardId(value: string) {
 		this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
@@ -88,7 +109,7 @@ export class BgsHeroPortraitComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
 		// cdr.detach();
 	}
 }
