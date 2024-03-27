@@ -61,7 +61,7 @@ import { Knob } from '../preference-slider.component';
 					"
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
-				<preference-toggle
+				<!-- <preference-toggle
 					field="enableMailbox"
 					[label]="'settings.general.launch.enable-mailbox-label' | owTranslate"
 					[tooltip]="'settings.general.launch.enable-mailbox-tooltip' | owTranslate"
@@ -71,7 +71,7 @@ import { Knob } from '../preference-slider.component';
 					field="enableMailboxUnread"
 					[label]="'settings.general.launch.enable-mailbox-unread-label' | owTranslate"
 					[tooltip]="'settings.general.launch.enable-mailbox-unread-tooltip' | owTranslate"
-				></preference-toggle>
+				></preference-toggle> -->
 			</section>
 		</div>
 
