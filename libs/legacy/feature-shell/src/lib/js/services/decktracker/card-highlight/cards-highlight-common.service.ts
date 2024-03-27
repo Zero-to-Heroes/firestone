@@ -394,6 +394,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, secret);
 			case CardIds.AnimateDead:
 				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
+			case CardIds.AnimatedAvalanche:
+				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.AntiqueFlinger_WW_413:
 				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.Anubrekhan_RLK_659:
@@ -683,6 +685,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion, deathrattle);
 			case CardIds.DeathlyDeathTavernBrawl:
 				return and(side(inputSide), minion, deathrattle);
+			case CardIds.DeathSpeakerBlackthorn_BAR_329:
+				return and(side(inputSide), inDeck, minion, deathrattle, effectiveCostLess(6));
 			case CardIds.DeathstriderTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DeepwaterEvoker:
