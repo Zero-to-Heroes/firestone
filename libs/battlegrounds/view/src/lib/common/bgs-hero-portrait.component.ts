@@ -1,6 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'bgs-hero-portrait',
@@ -32,7 +35,12 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 			</div>
 			<div
 				class="mmr"
-				*ngIf="_mmr !== null && _mmr !== undefined && (rating === null || rating === undefined)"
+				*ngIf="
+					(showMmr$ | async) &&
+					_mmr !== null &&
+					_mmr !== undefined &&
+					(rating === null || rating === undefined)
+				"
 				[helpTooltip]="'battlegrounds.in-game.opponents.mmr-tooltip' | fsTranslate"
 			>
 				<div class="value">{{ _mmr }}</div>
@@ -41,7 +49,9 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroPortraitComponent {
+export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	showMmr$: Observable<boolean>;
+
 	_health: number;
 	_maxHealth: number;
 	heroIcon: string;
@@ -109,7 +119,20 @@ export class BgsHeroPortraitComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
-		// cdr.detach();
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+		private readonly prefs: PreferencesService,
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		this.showMmr$ = this.prefs
+			.preferences$(
+				(prefs) => prefs.bgsUseLeaderboardDataInOverlay,
+				(prefs) => prefs.bgsShowMmrInOpponentRecap,
+			)
+			.pipe(this.mapData(([useLeaderboardData, showMmr]) => useLeaderboardData && showMmr));
 	}
 }

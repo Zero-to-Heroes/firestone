@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-battlegrounds-general *ngSwitchCase="'general'"></settings-battlegrounds-general>
 				<settings-battlegrounds-overlay *ngSwitchCase="'overlay'"></settings-battlegrounds-overlay>
+				<settings-battlegrounds-leaderboard *ngSwitchCase="'leaderboard'"></settings-battlegrounds-leaderboard>
 				<settings-battlegrounds-session *ngSwitchCase="'session'"></settings-battlegrounds-session>
 			</ng-container>
 		</div>

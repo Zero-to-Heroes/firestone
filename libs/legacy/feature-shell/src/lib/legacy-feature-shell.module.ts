@@ -543,6 +543,7 @@ import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests
 import { SettingsArenaGeneralComponent } from '@components/settings/arena/settings-arena-general';
 import { SettingsArenaMenuComponent } from '@components/settings/arena/settings-arena-menu.component';
 import { SettingsArenaComponent } from '@components/settings/arena/settings-arena.component';
+import { SettingsBattlegroundsLeaderboardComponent } from '@components/settings/battlegrounds/settings-battlegrounds-leaderboard.component';
 import { SettingsDecktrackerMulliganComponent } from '@components/settings/decktracker/settings-decktracker-mulligan.componen';
 import { SettingsDiscordComponent } from '@components/settings/general/settings-discord.component';
 import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
@@ -1698,6 +1699,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsBattlegroundsGeneralComponent,
 		SettingsBattlegroundsOverlayComponent,
 		SettingsBattlegroundsSessionComponent,
+		SettingsBattlegroundsLeaderboardComponent,
 		SettingsBattlegroundsMenuComponent,
 
 		SettingsMercenariesComponent,

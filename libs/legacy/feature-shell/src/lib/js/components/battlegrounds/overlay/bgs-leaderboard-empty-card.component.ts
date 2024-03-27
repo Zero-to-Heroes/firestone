@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -36,7 +37,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
-				<div class="name-container">
+				<div class="name-container" *ngIf="showMmr$ | async">
 					<div class="name">{{ _bgsPlayer?.player?.name }}</div>
 					<div class="mmr" *ngIf="mmr">{{ mmr }}</div>
 				</div>
@@ -66,6 +67,8 @@ export class BgsLeaderboardEmptyCardComponent
 {
 	componentType: ComponentType<BgsOverlayHeroOverviewComponent> = BgsOverlayHeroOverviewComponent;
 	showLiveInfo$: Observable<boolean>;
+	showMmr$: Observable<boolean>;
+
 	showLiveInfo = new BehaviorSubject<boolean>(false);
 
 	@Input() set currentTurn(value: number) {
@@ -140,11 +143,14 @@ export class BgsLeaderboardEmptyCardComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly i18n: ILocalizationService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
 		this.listenForBasicPref$((prefs) => prefs.bgsOpponentOverlayAtTop).subscribe((value) => {
 			this.position = value ? 'global-top-left' : 'global-bottom-left';
 			this.componentClass = value ? null : 'bottom';
@@ -161,6 +167,16 @@ export class BgsLeaderboardEmptyCardComponent
 			() => this.onTabDown(),
 			() => this.onTabUp(),
 		);
+		this.showMmr$ = this.prefs
+			.preferences$(
+				(prefs) => prefs.bgsUseLeaderboardDataInOverlay,
+				(prefs) => prefs.bgsShowMmrInLeaderboardOverlay,
+			)
+			.pipe(this.mapData(([useLeaderboardData, showMmr]) => useLeaderboardData && showMmr));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngOnDestroy(): void {

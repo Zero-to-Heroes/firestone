@@ -14,6 +14,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ selected: selectedMenu === 'session' }" (mousedown)="selectMenu('session')">
 				<span [owTranslate]="'settings.battlegrounds.menu.session'"></span>
 			</li>
+			<li [ngClass]="{ selected: selectedMenu === 'leaderboard' }" (mousedown)="selectMenu('leaderboard')">
+				<span [owTranslate]="'settings.battlegrounds.menu.leaderboard'"></span>
+			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

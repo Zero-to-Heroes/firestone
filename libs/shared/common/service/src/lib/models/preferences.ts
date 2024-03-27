@@ -663,6 +663,9 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsOverlayButtonPosition: { left: number; top: number };
 	readonly bgsQuestsCollapsed: readonly string[] = [];
+	readonly bgsUseLeaderboardDataInOverlay: boolean = false;
+	readonly bgsShowMmrInLeaderboardOverlay: boolean = false;
+	readonly bgsShowMmrInOpponentRecap: boolean = true;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 100;

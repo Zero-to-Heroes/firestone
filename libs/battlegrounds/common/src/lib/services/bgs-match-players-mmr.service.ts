@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs';
@@ -18,6 +19,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 	private memoryInfo: BgsMatchMemoryInfoService;
 	private leaderboards: BattlegroundsOfficialLeaderboardService;
 	private gameState: GameStateFacadeService;
+	private prefs: PreferencesService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsMatchPlayersMmrService', () => !!this.playersMatchMmr$$);
@@ -32,6 +34,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 		this.memoryInfo = AppInjector.get(BgsMatchMemoryInfoService);
 		this.leaderboards = AppInjector.get(BattlegroundsOfficialLeaderboardService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
+		this.prefs = AppInjector.get(PreferencesService);
 
 		await this.leaderboards.isReady();
 		await this.gameState.isReady();
@@ -40,8 +43,10 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 			const gameInfo$ = combineLatest([
 				this.memoryInfo.battlegroundsMemoryInfo$$,
 				this.gameState.gameState$$,
+				this.prefs.preferences$((prefs) => prefs.bgsUseLeaderboardDataInOverlay),
 			]).pipe(
 				debounceTime(500),
+				filter(([memoryInfo, gameState, [useLeaderboardData]]) => useLeaderboardData),
 				tap((info) => console.debug('[bgs-match-players-mmr] before game info', info)),
 				map(([memoryInfo, gameState]) => {
 					if (!memoryInfo?.Game?.Players?.length || !gameState?.region) {
