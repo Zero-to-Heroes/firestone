@@ -41,7 +41,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 				this.memoryInfo.battlegroundsMemoryInfo$$,
 				this.gameState.gameState$$,
 			]).pipe(
-				debounceTime(2000),
+				debounceTime(500),
 				tap((info) => console.debug('[bgs-match-players-mmr] before game info', info)),
 				map(([memoryInfo, gameState]) => {
 					if (!memoryInfo?.Game?.Players?.length || !gameState?.region) {

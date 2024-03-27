@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -36,6 +36,10 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
+				<div class="name-container">
+					<div class="name">{{ _bgsPlayer?.player?.name }}</div>
+					<div class="mmr" *ngIf="mmr">{{ mmr }}</div>
+				</div>
 
 				<bgs-hero-short-recap
 					class="short-recap"
@@ -120,6 +124,8 @@ export class BgsLeaderboardEmptyCardComponent
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
 	damage: number;
 
+	mmr: string;
+
 	questRewards: readonly QuestReward[];
 
 	buddyImage: string;
@@ -129,10 +135,11 @@ export class BgsLeaderboardEmptyCardComponent
 	private isPremiumUser: boolean;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(store, cdr);
 	}
@@ -187,6 +194,7 @@ export class BgsLeaderboardEmptyCardComponent
 				damageTaken: this._previousPlayer.damageTaken,
 				isMainPlayer: this._previousPlayer.isMainPlayer,
 				name: this._previousPlayer.name,
+				mmr: this._previousPlayer.mmr,
 				leaderboardPlace: this._previousPlayer.leaderboardPlace,
 				tavernUpgradeHistory: this._previousPlayer.tavernUpgradeHistory,
 				tripleHistory: this._previousPlayer.tripleHistory,
@@ -216,6 +224,12 @@ export class BgsLeaderboardEmptyCardComponent
 				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
 				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
 		this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
+		this.mmr =
+			this._bgsPlayer?.player?.mmr != null
+				? this.i18n.translateString('battlegrounds.in-game.opponents.mmr', {
+						value: this._bgsPlayer.player.mmr.toLocaleString(this.i18n.formatCurrentLocale()),
+				  })
+				: null;
 
 		if (this.winStreak === 0 && this.damage > 0) {
 			this.damage = -this.damage;

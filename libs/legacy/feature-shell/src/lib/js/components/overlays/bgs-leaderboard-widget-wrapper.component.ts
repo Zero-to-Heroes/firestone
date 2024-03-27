@@ -8,12 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
-import { BgsPlayer } from '@firestone/battlegrounds/common';
+import { BgsPlayer, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, map } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -42,6 +42,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 					[showLastOpponentIcon]="value.showLastOpponentIcon"
 					[opponentBoardMouseOver]="value.opponentBoardMouseOver"
 					[buddiesEnabled]="value.buddiesEnabled"
+					[style.left.%]="getLeftOffset(i)"
 				>
 				</bgs-leaderboard-empty-card>
 				<div class="mouse-leave-fix top"></div>
@@ -76,12 +77,14 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly state: BgsStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.scene.isReady();
+		await this.state.isReady();
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -104,15 +107,14 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		this.buddiesEnabled$ = this.store
 			.listenBattlegrounds$(([state]) => state?.currentGame?.hasBuddies)
 			.pipe(this.mapData(([hasBuddies]) => hasBuddies));
-		this.bgsPlayers$ = this.store
-			.listenBattlegrounds$(([state]) => state?.currentGame?.players)
-			.pipe(
-				debounceTime(1000),
-				filter(([players]) => !!players?.length),
-				this.mapData(([players]) =>
-					[...players].sort((a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace),
-				),
-			);
+		this.bgsPlayers$ = this.state.gameState$$.pipe(
+			debounceTime(1000),
+			map((state) => state?.currentGame?.players),
+			filter((players) => !!players?.length),
+			this.mapData((players) =>
+				[...players].sort((a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace),
+			),
+		);
 		this.lastOpponentPlayerId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentPlayerId)
 			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));
@@ -125,6 +127,10 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	getLeftOffset(index: number): number {
+		return -index;
 	}
 
 	trackByFunction(index: number, player: BgsPlayer) {

@@ -32,7 +32,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 			</div>
 			<div
 				class="mmr"
-				*ngIf="_mmr !== null && _mmr !== undefined"
+				*ngIf="_mmr !== null && _mmr !== undefined && (rating === null || rating === undefined)"
 				[helpTooltip]="'battlegrounds.in-game.opponents.mmr-tooltip' | fsTranslate"
 			>
 				<div class="value">{{ _mmr }}</div>
@@ -57,7 +57,7 @@ export class BgsHeroPortraitComponent {
 			value == null
 				? null
 				: this.i18n.translateString('battlegrounds.in-game.opponents.mmr', {
-						value: value.toLocaleString('en-US'),
+						value: value.toLocaleString(this.i18n.formatCurrentLocale()),
 				  });
 	}
 

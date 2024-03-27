@@ -50,3 +50,17 @@
 	top: 30px;
 	left: -20px;
 }
+
+.name-container {
+	display: flex;
+	flex-direction: column;
+	color: white;
+	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	top: 1vh;
+	left: 4vh;
+	width: 70%;
+	font-size: 0.8vh;
+	white-space: nowrap;
+	overflow: hidden;
+	position: absolute;
+}

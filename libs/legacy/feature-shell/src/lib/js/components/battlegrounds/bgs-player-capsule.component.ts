@@ -22,6 +22,8 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[cardTooltipClass]="'bgs-hero-power'"
 					[rating]="rating"
 					[questRewardCardId]="questRewardCardId"
+					[name]="name"
+					[mmr]="mmr"
 				></bgs-hero-portrait>
 				<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
 				<div
@@ -46,6 +48,7 @@ export class BgsPlayerCapsuleComponent {
 	heroPowerCardId: string;
 	questRewardCardId: string;
 	name: string;
+	mmr: number;
 	tavernTier: number;
 	boardMinions: readonly Entity[];
 	boardTurn: number;
@@ -77,6 +80,7 @@ export class BgsPlayerCapsuleComponent {
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
+		this.mmr = value.mmr;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
