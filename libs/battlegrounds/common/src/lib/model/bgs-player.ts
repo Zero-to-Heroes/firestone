@@ -21,6 +21,7 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly heroPowerCardId: string;
 	readonly questRewards: readonly QuestReward[] = [];
 	readonly name: string;
+	readonly mmr: number | null;
 	readonly isMainPlayer: boolean = false;
 	readonly tavernUpgradeHistory: readonly BgsTavernUpgrade[] = [];
 	readonly tripleHistory: readonly BgsTriple[] = [];

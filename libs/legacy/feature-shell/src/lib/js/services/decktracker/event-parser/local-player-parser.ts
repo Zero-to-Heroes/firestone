@@ -1,3 +1,4 @@
+import { buildRegion } from '@firestone-hs/hs-replay-xml-parser';
 import { CardClass } from '@firestone-hs/reference-data';
 import { DeckState, GameState, HeroCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -13,6 +14,7 @@ export class LocalPlayerParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const battleTag = gameEvent.localPlayer && gameEvent.localPlayer.Name;
+		const region = buildRegion(gameEvent.localPlayer.AccountHi);
 		const playerName = battleTag && battleTag.indexOf('#') !== -1 ? battleTag.split('#')[0] : battleTag;
 		const classes = this.allCards.getCard(gameEvent.localPlayer.CardID).classes;
 		const newHero = Object.assign(new HeroCard(), currentState.playerDeck.hero, {
@@ -22,8 +24,9 @@ export class LocalPlayerParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
 			hero: newHero,
 		} as DeckState);
-		return Object.assign(new GameState(), currentState, {
+		return currentState.update({
 			playerDeck: newPlayerDeck,
+			region: region,
 		});
 	}
 

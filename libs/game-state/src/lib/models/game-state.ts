@@ -1,4 +1,4 @@
-import { CardIds, GameType, SpellSchool, isBattlegrounds } from '@firestone-hs/reference-data';
+import { BnetRegion, CardIds, GameType, SpellSchool, isBattlegrounds } from '@firestone-hs/reference-data';
 import { MatchInfo } from '@firestone/memory';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -15,6 +15,7 @@ export class GameState {
 	public static playTiming = 0;
 
 	readonly matchInfo: MatchInfo;
+	readonly region: BnetRegion;
 	readonly playerDeck: DeckState = new DeckState();
 	readonly opponentDeck: DeckState = new DeckState();
 	readonly mulliganOver: boolean = false;

@@ -13,8 +13,10 @@ import { BgsGameStateFacadeService } from './services/bgs-game-state-facade.serv
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
 import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
+import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
 import { BattlegroundsOfficialLeaderboardService } from './services/bgs-official-leaderboards.service';
 import { BattlegroundsQuestsService } from './services/bgs-quests.service';
+import { BgsStateFacadeService } from './services/bgs-state-facade.service';
 
 const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent];
 
@@ -38,6 +40,8 @@ const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent]
 		BgsGameStateFacadeService,
 		BgsMatchMemoryInfoService,
 		BattlegroundsOfficialLeaderboardService,
+		BgsMatchPlayersMmrService,
+		BgsStateFacadeService,
 	],
 	declarations: components,
 	exports: components,
