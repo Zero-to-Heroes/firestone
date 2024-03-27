@@ -1,9 +1,10 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { LeaderboardEntry } from '@firestone-hs/official-leaderboards';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, tap } from 'rxjs';
 import { BattlegroundsOfficialLeaderboardService } from '../services/bgs-official-leaderboards.service';
 
@@ -12,6 +13,11 @@ import { BattlegroundsOfficialLeaderboardService } from '../services/bgs-officia
 	styleUrls: ['./battlegrounds-leaderboards.component.scss'],
 	template: `
 		<div class="leaderboards" *ngIf="{ leaderboard: leaderboard$ | async } as value">
+			<div class="data-info">
+				<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+				<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+			</div>
+
 			<li class="leaderboard-header">
 				<div class="cell rank" [fsTranslate]="'app.duels.leaderboard.rank'"></div>
 				<div class="cell rating" [fsTranslate]="'app.duels.leaderboard.rating'"></div>
@@ -37,6 +43,8 @@ import { BattlegroundsOfficialLeaderboardService } from '../services/bgs-officia
 })
 export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	leaderboard$: Observable<LeaderboardEntry[]>;
+	lastUpdate$: Observable<string | null>;
+	lastUpdateFull$: Observable<string | null>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -69,7 +77,42 @@ export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent impl
 				)!.entries;
 				return !bgsLeaderboardPlayerSearch?.length
 					? entries
-					: entries.filter((entry) => entry.accountId.includes(bgsLeaderboardPlayerSearch));
+					: entries.filter((entry) =>
+							entry.accountId.toLocaleLowerCase().includes(bgsLeaderboardPlayerSearch.toLowerCase()),
+					  );
+			}),
+		);
+		this.lastUpdate$ = this.leaderboardsService.leaderboards$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdate) {
+					return null;
+				}
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(stats.lastUpdate);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS');
+			}),
+		);
+		this.lastUpdateFull$ = this.leaderboardsService.leaderboards$$.pipe(
+			this.mapData((stats) => {
+				if (!stats?.lastUpdate) {
+					return null;
+				}
+				const date = new Date(stats.lastUpdate);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
 			}),
 		);
 

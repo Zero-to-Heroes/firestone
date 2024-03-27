@@ -57,3 +57,21 @@
 	padding-left: 50px;
 	flex-grow: 1;
 }
+
+.data-info {
+	display: flex;
+	margin-bottom: 20px;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 10px;
+	font-size: 0.8em;
+
+	.label {
+		color: var(--color-2);
+		margin-right: 5px;
+	}
+
+	.value {
+		color: var(--color-1);
+	}
+}
