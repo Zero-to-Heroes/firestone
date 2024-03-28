@@ -338,6 +338,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		// console.debug('unregistering highlight', this._card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);

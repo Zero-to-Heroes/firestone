@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -123,11 +122,6 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
 	}
 
 	trackByGroup(index, item: DuelsGroupedDecks) {

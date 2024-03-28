@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -112,6 +113,7 @@ export class MercenariesTeamListComponent
 		this.refreshScroll();
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.scaleSub.unsubscribe();

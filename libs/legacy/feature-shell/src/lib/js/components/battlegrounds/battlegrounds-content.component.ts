@@ -4,7 +4,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener,
 	OnDestroy,
 } from '@angular/core';
 import { BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/common';
@@ -133,10 +132,5 @@ export class BattlegroundsContentComponent
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
 	}
 }

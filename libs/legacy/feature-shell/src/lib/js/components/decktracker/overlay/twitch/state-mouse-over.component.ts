@@ -294,6 +294,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.destroyed$.next();
 		this.destroyed$.complete();
 	}

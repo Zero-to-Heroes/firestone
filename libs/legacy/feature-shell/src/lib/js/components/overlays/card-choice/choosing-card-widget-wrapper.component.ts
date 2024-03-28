@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	Input,
 	OnDestroy,
 	Renderer2,
@@ -272,6 +273,7 @@ export class ChoosingCardOptionComponent implements OnDestroy {
 		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
 		this.cardsHighlightService.unregister(this._uniqueId, this.side);
