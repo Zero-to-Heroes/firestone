@@ -26,6 +26,7 @@
 	align-items: center;
 	justify-content: flex-end;
 	overflow: hidden;
+	flex-shrink: 0;
 
 	.background-main-part,
 	.background-second-part {

@@ -36,7 +36,11 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				[showGoldenCards]="showGoldenCards"
 			></bgs-minions-group>
 
-			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight">
+			<div
+				class="reset-all-button"
+				(click)="resetHighlights()"
+				*ngIf="showTribesHighlight || showBattlecryHighlight"
+			>
 				<div class="background-second-part"></div>
 				<div class="background-main-part"></div>
 				<div class="content">
