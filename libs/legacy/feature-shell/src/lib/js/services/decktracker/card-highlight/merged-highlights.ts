@@ -8,6 +8,7 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	// This is not computed by highlights, but directly as related cards
 	// CardIds.CommanderSivara_TSC_087,
 	CardIds.ContrabandStash,
+	CardIds.DefenseAttorneyNathanos,
 	CardIds.TheGalacticProjectionOrb_TOY_378,
 	CardIds.GrandMagisterRommath,
 	CardIds.HighCultistBasaleph,
@@ -16,6 +17,7 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.ImpKingRafaam_ImpKingRafaamToken,
 	CardIds.JoymancerJepetto_TOY_960,
 	CardIds.MassResurrection_DAL_724,
+	CardIds.NineLives,
 	CardIds.OnyxBishop,
 	CardIds.OnyxBishop_WON_057,
 	CardIds.RaDen,

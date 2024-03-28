@@ -1238,6 +1238,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.NetherBreath_DRG_205:
 				return and(side(inputSide), or(inDeck, inHand), dragon);
+			case CardIds.NineLives:
+				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.NostalgicInitiate_TOY_340:
 			case CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1:
 				return and(side(inputSide), or(inDeck, inHand), spell);
