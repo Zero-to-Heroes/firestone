@@ -194,10 +194,20 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		console.debug('[constructed-meta-decks] will load all cards in decks');
 		const result: ExtendedDeckStats = {
 			...stats,
-			deckStats: stats.deckStats.map((deck) => ({
-				...deck,
-				allCardsInDeck: [...(deck.cardVariations?.added ?? []), ...(deck.archetypeCoreCards ?? [])],
-			})),
+			deckStats: stats.deckStats.map((deck) => {
+				const allCardsInDeck = [...(deck.cardVariations?.added ?? []), ...(deck.archetypeCoreCards ?? [])];
+				for (const removed of deck.cardVariations?.removed ?? []) {
+					// Remove the first instance of the cards from allCardsInDeck
+					const index = allCardsInDeck.indexOf(removed);
+					if (index !== -1) {
+						allCardsInDeck.splice(index, 1);
+					}
+				}
+				return {
+					...deck,
+					allCardsInDeck: allCardsInDeck,
+				};
+			}),
 		};
 		console.debug('[constructed-meta-decks] done loading all cards in decks');
 		return result;
