@@ -8,6 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { CardIds } from '@firestone-hs/reference-data';
 import { Card } from '@firestone/memory';
 import {
 	AbstractSubscriptionStoreComponent,
@@ -175,10 +176,14 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 					collection == null
 						? true
 						: getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
+				const cardCost =
+					card.id === CardIds.ZilliaxDeluxe3000_TOY_330
+						? sideboard.map((c) => c.manaCost).reduce((a, b) => a + b, 0)
+						: card.cost;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
-					manaCost: card.hideStats ? null : card.cost,
+					manaCost: card.hideStats ? null : cardCost,
 					rarity: card.rarity,
 					totalQuantity: miniCard.quantity,
 					sideboard: sideboard,
