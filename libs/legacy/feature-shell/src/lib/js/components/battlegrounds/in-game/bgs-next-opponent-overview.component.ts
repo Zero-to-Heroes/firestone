@@ -8,7 +8,7 @@ import {
 import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -169,7 +169,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 		);
 		this.opponents$ = opponents$.pipe(
 			filter((opponents) => opponents?.length >= 8),
-			tap((info) => console.log('opponents', info)),
 			takeUntil(this.destroyed$),
 		);
 		this.nextOpponent$ = combineLatest([this.nextOpponentCardId$, opponents$]).pipe(
