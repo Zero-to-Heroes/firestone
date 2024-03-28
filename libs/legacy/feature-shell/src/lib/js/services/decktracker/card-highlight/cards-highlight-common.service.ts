@@ -1724,6 +1724,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, mech);
 			case CardIds.Timewarden:
 				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
+			case CardIds.TimewinderZarimi_TOY_385:
+				return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 			case CardIds.TinyWorldbreaker_YOG_527:
 				return and(side(inputSide), or(inDeck, inHand), mech);
 			case CardIds.TogwagglesScheme:
