@@ -5,4 +5,5 @@ export interface ManastormInfo {
 	readonly reviewId: string;
 	readonly replayUrl: string;
 	readonly game: GameForUpload;
+	readonly xml: string;
 }

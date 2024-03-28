@@ -31,12 +31,12 @@ export class GlobalStatsNotifierService {
 			console.debug('[global-stats] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review') {
-				this.updateGlobalStats(info.reviewId, info.game);
+				this.updateGlobalStats(info.reviewId, info.game, info.xml);
 			}
 		});
 	}
 
-	private async updateGlobalStats(reviewId: string, game: GameForUpload) {
+	private async updateGlobalStats(reviewId: string, game: GameForUpload, xml: string) {
 		const currentGlobalStats = this.store.state.globalStats;
 		if (game.gameMode?.startsWith('mercenaries')) {
 			return currentGlobalStats;
@@ -48,11 +48,7 @@ export class GlobalStatsNotifierService {
 			playerRank: game.playerRank,
 			uploaderToken: undefined,
 		};
-		const statsFromGame = await extractStatsForGame(
-			message,
-			game.uncompressedXmlReplay,
-			this.allCards.getService(),
-		);
+		const statsFromGame = await extractStatsForGame(message, xml, this.allCards.getService());
 		if (!statsFromGame?.stats) {
 			return currentGlobalStats;
 		}

@@ -79,21 +79,21 @@ export class DuelsLootParserService {
 		this.events
 			.on(Events.REVIEW_FINALIZED)
 			.pipe(
-				map((event) => event.data[0].game as GameForUpload),
-				filter((game) => isDuels(game.gameMode)),
+				map((event) => ({ game: event.data[0].game as GameForUpload, xml: event.data[0].xml })),
+				filter((info) => isDuels(info.game.gameMode)),
 				withLatestFrom(this.duelsState.duelsInfo$$),
 			)
-			.subscribe(([game, duelsInfo]) => this.sendBasicLootInfo(game, duelsInfo));
+			.subscribe(([info, duelsInfo]) => this.sendBasicLootInfo(info.game, info.xml, duelsInfo));
 	}
 
-	private async sendBasicLootInfo(game: GameForUpload, duelsInfo: DuelsInfo) {
+	private async sendBasicLootInfo(game: GameForUpload, xml: string, duelsInfo: DuelsInfo) {
 		if (!duelsInfo) {
 			console.warn('[duels-loot] no duels info, not sending basic loot info', game, duelsInfo);
 			return;
 		}
 
 		const user = await this.ow.getCurrentUser();
-		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
+		const replay = parseHsReplayString(xml, this.allCards.getService());
 		console.debug('[duels-loot] replay', replay.mainPlayerHeroPowerCardId, replay.opponentPlayerHeroPowerCardId);
 		console.debug('[duels-loot] will decode deck', game.deckstring);
 		const signatureTreasure: string = this.allCards.getCard(duelsInfo.SignatureTreasureCardDbfId).id;

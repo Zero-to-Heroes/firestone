@@ -60,7 +60,7 @@ export class GameForUpload {
 
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
-	uncompressedXmlReplay: string;
+	// uncompressedXmlReplay: string;
 
 	// TODO: we can probably remove that ID, it was used by Manastorm but doesn't make
 	// sense for Firestone anymore

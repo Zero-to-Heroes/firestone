@@ -22,6 +22,7 @@ export class ReplayMetadataBuilderService {
 
 	public async buildMetadata(
 		game: GameForUpload,
+		xml: string,
 		bgsRunStats: BgsComputeRunStatsInput | null,
 		userId: string,
 		userName: string,
@@ -31,7 +32,7 @@ export class ReplayMetadataBuilderService {
 		const replay = game.replay;
 		const totalDurationTurns = extractTotalTurns(replay);
 		const totalDurationSeconds = extractTotalDuration(replay);
-		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(game, bgsRunStats);
+		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(game, xml, bgsRunStats);
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		const metadata: ReplayUploadMetadata = {
 			user: {
@@ -98,6 +99,7 @@ export class ReplayMetadataBuilderService {
 
 	private buildBgsMetadata(
 		game: GameForUpload,
+		xml: string,
 		bgsRunStats: BgsComputeRunStatsInput | null,
 	): ReplayUploadMetadata['bgs'] | undefined {
 		if (!bgsRunStats || (game.gameMode !== 'battlegrounds' && game.gameMode !== 'battlegrounds-friendly')) {
@@ -105,7 +107,7 @@ export class ReplayMetadataBuilderService {
 		}
 
 		const postMatchStats = parseBattlegroundsGame(
-			game.uncompressedXmlReplay,
+			xml,
 			bgsRunStats.mainPlayer,
 			bgsRunStats.battleResultHistory,
 			bgsRunStats.faceOffs,

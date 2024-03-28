@@ -19,7 +19,7 @@ export class ReplayUploadService {
 		private readonly bgsRunStatsService: BgsRunStatsService,
 	) {}
 
-	public async uploadGame(game: GameForUpload) {
+	public async uploadGame(game: GameForUpload, xml: string) {
 		if (!game.reviewId) {
 			console.error('[manastorm-bridge] Could not upload game, no review id is associated to it');
 			return;
@@ -29,10 +29,10 @@ export class ReplayUploadService {
 		// console.debug('[manastorm-bridge] uploading game', game);
 		const user = await this.ow.getCurrentUser();
 		console.log('[manastorm-bridge] retrieved current user');
-		this.postFullReview(game.reviewId, user.userId, user.username, game);
+		this.postFullReview(game.reviewId, user.userId, user.username, game, xml);
 	}
 
-	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload) {
+	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload, xml: string) {
 		const prefs = await this.prefs.getPreferences();
 		const start = Date.now();
 		const bgsRunStats =
@@ -41,6 +41,7 @@ export class ReplayUploadService {
 				: null;
 		const fullMetaData = await this.metadataBuilder.buildMetadata(
 			game,
+			xml,
 			bgsRunStats,
 			userId,
 			userName,
@@ -55,7 +56,7 @@ export class ReplayUploadService {
 
 		// First upload the replay file, then the metadata
 		const replayFileZip = new JSZip();
-		replayFileZip.file('replay.xml', game.uncompressedXmlReplay);
+		replayFileZip.file('replay.xml', xml);
 		const fileReplayBlob: Blob = await replayFileZip.generateAsync({
 			type: 'blob',
 			compression: 'DEFLATE',

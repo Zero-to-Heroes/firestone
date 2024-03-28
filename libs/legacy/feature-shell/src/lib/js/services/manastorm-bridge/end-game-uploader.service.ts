@@ -67,14 +67,14 @@ export class EndGameUploaderService {
 
 	public async upload2(info: UploadInfo): Promise<void> {
 		console.log('[manastorm-bridge]', info.reviewId, 'Uploading game info');
-		const game: GameForUpload = await this.initializeGame(info);
+		const { game, xml } = await this.initializeGame(info);
 		if (!!game) {
-			this.emitNewGameEvent(game);
-			await this.replayUploadService.uploadGame(game);
+			this.emitNewGameEvent(game, xml);
+			await this.replayUploadService.uploadGame(game, xml);
 		}
 	}
 
-	private emitNewGameEvent(game: GameForUpload) {
+	private emitNewGameEvent(game: GameForUpload, xml: string) {
 		const reviewId = game.reviewId;
 		console.log('[manastorm-bridge] Uploaded game', reviewId);
 		const info: ManastormInfo = {
@@ -82,11 +82,12 @@ export class EndGameUploaderService {
 			reviewId: reviewId,
 			replayUrl: `https://replays.firestoneapp.com/?reviewId=${reviewId}`,
 			game: game,
+			xml: xml,
 		};
 		this.events.broadcast(Events.REVIEW_FINALIZED, info);
 	}
 
-	private async initializeGame(info: UploadInfo): Promise<GameForUpload> {
+	private async initializeGame(info: UploadInfo): Promise<{ game: GameForUpload; xml: string }> {
 		const currentReviewId = info.reviewId;
 		// const gameResult = info.gameEnded.game;
 		const replayXml = info.gameEnded.replayXml;
@@ -363,7 +364,8 @@ export class EndGameUploaderService {
 			);
 		}
 		console.log('[manastorm-bridge]', currentReviewId, 'added meta data');
-		game.uncompressedXmlReplay = replayXml;
+		// We don't want to store this, as it will drastically increase the memory footprint over time
+		// game.uncompressedXmlReplay = replayXml;
 		console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
 		this.gameParserService.extractMatchup(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
@@ -380,7 +382,7 @@ export class EndGameUploaderService {
 		game.replay = replay;
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
-		return game;
+		return { game, xml: replayXml };
 	}
 
 	private findMercTeam(

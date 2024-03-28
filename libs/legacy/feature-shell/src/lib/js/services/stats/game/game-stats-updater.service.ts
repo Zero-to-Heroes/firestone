@@ -49,15 +49,15 @@ export class GameStatsUpdaterService {
 		// For now we keep the main store as the source of truth, but maybe this should be moved away at some point?
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
 			const info: ManastormInfo = data.data[0];
-			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game);
+			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game, info.xml);
 			console.log('​[manastorm-bridge] built new game stat', newGameStat.reviewId);
 			console.debug('​[manastorm-bridge] built new game stat', newGameStat);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
 
-	private async buildGameStat(reviewId: string, game: GameForUpload): Promise<GameStat> {
-		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
+	private async buildGameStat(reviewId: string, game: GameForUpload, xml: string): Promise<GameStat> {
+		const replay = parseHsReplayString(xml, this.allCards.getService());
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
 
