@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
+import { CardIds } from '@firestone-hs/reference-data';
 import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -156,7 +157,11 @@ export class DuelsTopDeckService extends AbstractFacadeService<DuelsTopDeckServi
 	}
 
 	private buildDustCost(deck: DeckDefinition, sets: readonly Set[]): number {
-		const allPairCardInDeck = [...(deck.cards ?? []), ...(deck.sideboards?.flatMap((s) => s.cards) ?? [])];
+		const sideboardCards =
+			deck.sideboards?.flatMap((s) =>
+				this.allCards.getCard(s.keyCardDbfId).id.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330) ? [] : s.cards,
+			) ?? [];
+		const allPairCardInDeck = [...(deck.cards ?? []), ...sideboardCards];
 		const allCardsInDeck = allPairCardInDeck.map((cards) => cards[0]) ?? [];
 		const result = allCardsInDeck
 			.map((cardDbfId) => this.allCards.getCard(cardDbfId))

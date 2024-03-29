@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { CardIds } from '@firestone-hs/reference-data';
 import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
@@ -270,12 +271,14 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 		conservativeEstimate: boolean,
 	): EnhancedDeckStat {
 		const deckDefinition = decode(stat.decklist);
-		const deckCards = [...deckDefinition.cards, ...(deckDefinition.sideboards ?? []).flatMap((s) => s.cards)].map(
-			(pair) => ({
-				quantity: pair[1],
-				card: this.allCards.getCardFromDbfId(pair[0]),
-			}),
-		);
+		const sideboardCards =
+			deckDefinition.sideboards?.flatMap((s) =>
+				this.allCards.getCard(s.keyCardDbfId).id.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330) ? [] : s.cards,
+			) ?? [];
+		const deckCards = [...deckDefinition.cards, ...sideboardCards].map((pair) => ({
+			quantity: pair[1],
+			card: this.allCards.getCardFromDbfId(pair[0]),
+		}));
 		const dustCost = deckCards
 			.map((c) => ({ quantity: c.quantity, cardId: c.card.id }))
 			.map((card) => {
