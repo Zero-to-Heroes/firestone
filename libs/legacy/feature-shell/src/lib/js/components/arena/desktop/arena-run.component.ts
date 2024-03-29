@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { ArenaNavigationService, ArenaRun } from '@firestone/arena/common';
+import { ArenaNavigationService, ArenaRun, InternalNotableCard, buildNotableCards } from '@firestone/arena/common';
 import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 
@@ -26,6 +26,15 @@ import { GameStat } from '@firestone/stats/data-access';
 						[src]="playerClassImage"
 						[cardTooltip]="playerCardId"
 						*ngIf="playerClassImage"
+					/>
+				</div>
+
+				<div class="group notable-cards" *ngIf="notableCards?.length">
+					<img
+						*ngFor="let card of notableCards"
+						class="notable-card"
+						[src]="card.image"
+						[cardTooltip]="card.cardId"
 					/>
 				</div>
 
@@ -87,6 +96,7 @@ export class ArenaRunComponent {
 	steps: readonly GameStat[];
 	rewards: readonly ArenaRewardInfo[];
 	_isExpanded: boolean;
+	notableCards: readonly InternalNotableCard[];
 
 	private _run: ArenaRun;
 
@@ -146,6 +156,7 @@ export class ArenaRunComponent {
 		this.deckScore = this._run.draftStat?.deckScore != null ? this._run.draftStat.deckScore.toFixed(1) : null;
 		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
+		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -32,7 +32,8 @@
 	position: relative;
 	font-size: 14px;
 
-	&.player-images {
+	&.player-images,
+	&.notable-cards {
 		padding-left: 0px;
 		padding-right: 10px;
 	}
@@ -73,7 +74,8 @@
 	margin-right: 3px;
 }
 
-.player-images {
+.player-images,
+.notable-cards {
 	img {
 		width: 30px;
 		height: 30px;
