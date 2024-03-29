@@ -59,6 +59,7 @@ export class LiveStreamInfoComponent {
 		this.streamLanguage = !!value.language?.length ? mapTwitchLanguageToIsoCode(value.language) : null;
 		this.streamTitle = value.title;
 		this.currentViewers = value.viewer_count;
+		this.twitchUrl = `https://www.twitch.tv/${value.twitchUserName}?utm_source=firestone`;
 	}
 
 	_stream: PresenceInfo;
@@ -69,12 +70,13 @@ export class LiveStreamInfoComponent {
 	streamLanguage: string;
 	streamTitle: string;
 	currentViewers: number;
+	twitchUrl: string;
 	watchTooltip = this.i18n.translateString('app.streams.watch-on-twitch-button');
 
 	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
 
 	watchOnTwitch() {
-		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}?utm_source=firestone`);
+		this.ow.openUrlInDefaultBrowser(this.twitchUrl);
 	}
 }
 
