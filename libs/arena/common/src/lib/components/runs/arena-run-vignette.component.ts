@@ -1,6 +1,8 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { ArenaRunInfo } from '@firestone-hs/arena-high-win-runs';
+import { decode } from '@firestone-hs/deckstrings';
 import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
 import { ArenaRun } from '../../models/arena-run';
@@ -28,6 +30,15 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 						[src]="playerClassImage"
 						[cardTooltip]="playerCardId"
 						*ngIf="playerClassImage"
+					/>
+				</div>
+
+				<div class="group notable-cards">
+					<img
+						*ngFor="let card of notableCards"
+						class="notable-card"
+						[src]="card.image"
+						[cardTooltip]="card.cardId"
 					/>
 				</div>
 
@@ -63,6 +74,7 @@ export class ArenaRunVignetteComponent {
 	deckImpact: string | null;
 	deckScore: string | null;
 	deckScoreTooltip: string | null;
+	notableCards: readonly InternalNotableCard[];
 
 	private _run: ArenaRun;
 
@@ -95,6 +107,7 @@ export class ArenaRunVignetteComponent {
 		this.deckScore = value.deckScore != null ? value.deckScore.toFixed(1) : null;
 		// this.deckImpact = value.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
+		this.notableCards = this.buildNotableCards(value);
 
 		this._run = ArenaRun.create({
 			id: '' + value.id,
@@ -110,4 +123,23 @@ export class ArenaRunVignetteComponent {
 			losses: value.losses,
 		});
 	}
+
+	private buildNotableCards(deck: ArenaRunInfo): readonly InternalNotableCard[] {
+		const deckDefinition = decode(deck.decklist);
+		const allDbfIds = deckDefinition.cards.flatMap((c) => c[0]);
+		const legendaries = allDbfIds
+			.map((cardId) => this.allCards.getCard(cardId))
+			.filter((c) => c?.rarity === 'Legendary');
+		return legendaries.length === 1
+			? legendaries.map((c) => ({
+					image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c.id}.jpg`,
+					cardId: c.id,
+			  }))
+			: [];
+	}
+}
+
+interface InternalNotableCard {
+	image: string;
+	cardId: string;
 }
