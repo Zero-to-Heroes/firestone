@@ -748,6 +748,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inHand, inDeck), dragon);
 			case CardIds.DragonGolem_WW_822:
 				return and(side(inputSide), or(inHand, inDeck), dragon);
+			case CardIds.DrakonidOperative:
+			case CardIds.DrakonidOperativeCore:
+				return and(side(inputSide), or(inHand, inDeck), dragon);
 			case CardIds.Drekthar_AV_100:
 				return !card
 					? null
@@ -801,6 +804,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.Felgorger_SW_043:
 				return and(side(inputSide), inDeck, spell, fel);
+			case CardIds.FelscaleEvoker:
+				return and(side(inputSide), inDeck, demon, not(cardIs(CardIds.FelscaleEvoker)));
 			case CardIds.Fetch_TOY_352:
 				return and(side(inputSide), inDeck, or(beast, spell));
 			case CardIds.FirekeepersIdolTavernBrawl:
@@ -1366,6 +1371,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.RambunctiousStuffy_TOY_821:
 				return and(side(inputSide), or(inDeck, inHand), spell, frost);
+			case CardIds.Razorboar:
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle, effectiveCostLess(4));
 			case CardIds.RazormaneBattleguard:
 				return and(side(inputSide), minion, taunt);
 			case CardIds.RecordScratcher:
