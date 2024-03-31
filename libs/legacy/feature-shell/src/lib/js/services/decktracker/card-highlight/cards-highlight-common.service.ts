@@ -683,6 +683,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.DeathBlossomWhomper:
 				return and(side(inputSide), inDeck, minion, deathrattle);
+			case CardIds.DeathGrowl:
+				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DeathlyDeathTavernBrawl:
 				return and(side(inputSide), minion, deathrattle);
 			case CardIds.DeathSpeakerBlackthorn_BAR_329:
@@ -942,6 +944,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					);
 				};
 			case CardIds.GuffRunetotem_BAR_720:
+				return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
+			case CardIds.Gyreworm:
 				return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.HabeasCorpses:
 				return and(side(inputSide), inGraveyard, minion);
@@ -1245,6 +1249,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.NineLives:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
+			case CardIds.NorthernNavigation:
+				return and(side(inputSide), or(inHand, inDeck), spell, frost);
 			case CardIds.NostalgicInitiate_TOY_340:
 			case CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1:
 				return and(side(inputSide), or(inDeck, inHand), spell);
@@ -1481,6 +1487,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, beast);
 			case CardIds.ServiceBell:
 				return and(side(inputSide), inDeck, not(neutral));
+			case CardIds.Shadehound:
+				return and(side(inputSide), or(inDeck, inHand), beast);
 			case CardIds.Shadowborn:
 				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Shadowcasting101TavernBrawl:
@@ -1518,6 +1526,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), pirate);
 			case CardIds.ShroudOfConcealment:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.Shudderblock_TOY_501:
+				return and(side(inputSide), or(inHand, inDeck), battlecry);
 			case CardIds.Shudderwock_GIL_820:
 				return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry);
 			case CardIds.SicklyGrimewalker_YOG_512:
