@@ -127,7 +127,7 @@ export class EndGameUploaderService {
 				);
 				if (!durationInTurns) {
 					console.debug('[manastorm-bridge] ignoring game ended before hero selection', durationInTurns);
-					return null;
+					return { game: null, xml: null };
 				}
 			}
 			console.log(
