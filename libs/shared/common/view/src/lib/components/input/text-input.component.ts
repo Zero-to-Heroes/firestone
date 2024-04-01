@@ -17,7 +17,13 @@ import { BehaviorSubject, Observable, debounceTime } from 'rxjs';
 	template: `
 		<div class="text-input">
 			<label class="search-label">
-				<i class="search-icon i-30" *ngIf="showSearchIcon" inlineSVG="assets/svg/search.svg"> </i>
+				<i
+					class="search-icon i-30"
+					*ngIf="showSearchIcon"
+					inlineSVG="assets/svg/search.svg"
+					[helpTooltip]="tooltip"
+				>
+				</i>
 				<input
 					[ngModel]="value$ | async"
 					[placeholder]="placeholder"
@@ -38,6 +44,7 @@ export class TextInputComponent extends AbstractSubscriptionComponent implements
 		this.value$$.next(value);
 	}
 	@Input() placeholder: string;
+	@Input() tooltip: string;
 	@Input() debounceTime = 200;
 	@Input() showSearchIcon = true;
 

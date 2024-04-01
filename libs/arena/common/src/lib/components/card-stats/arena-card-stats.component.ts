@@ -301,16 +301,24 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			searchString,
 			sortCriteria,
 		);
+		const searchTokens = !searchString?.length
+			? []
+			: searchString
+					.toLowerCase()
+					.split(',')
+					.map((token) => token.trim());
 		const result =
 			stats
 				?.filter((stat) => stat.matchStats?.drawn > 100)
-				.filter(
-					(stat) =>
-						!searchString?.length ||
-						this.allCards.getCard(stat.cardId)?.name?.toLowerCase().includes(searchString.toLowerCase()),
-				)
 				.filter((stat) => this.hasCorrectCardClass(stat.cardId, cardClass))
 				.filter((stat) => this.hasCorrectCardType(stat.cardId, cardType))
+				.filter(
+					(stat) =>
+						!searchTokens.length ||
+						searchTokens.some((token) =>
+							this.allCards.getCard(stat.cardId)?.name?.toLowerCase().replace(',', '').includes(token),
+						),
+				)
 				.map((stat) => this.buildCardStat(stat))
 				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? [];
 		console.debug(

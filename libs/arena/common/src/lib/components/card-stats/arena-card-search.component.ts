@@ -8,6 +8,7 @@ import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 		<fs-text-input
 			(fsModelUpdate)="onTextChanged($event)"
 			[placeholder]="'app.collection.card-search.search-box-placeholder' | fsTranslate"
+			[tooltip]="'app.arena.card-search-tooltip' | fsTranslate"
 		>
 		</fs-text-input>
 	`,
