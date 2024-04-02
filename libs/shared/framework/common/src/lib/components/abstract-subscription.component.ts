@@ -11,8 +11,10 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		console.debug('destroying abstract component', this.constructor.name);
 		this.destroyed$.next();
 		this.destroyed$.complete();
+		console.debug('destroyed abstract component', this.constructor.name);
 	}
 
 	protected mapData<T, R>(
@@ -24,7 +26,6 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 			debounceTime(debounceTimeMs),
 			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			map(extractor),
-			// distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			tap((filter) =>
 				setTimeout(() => {
 					if (!(this.cdr as ViewRef)?.destroyed) {
@@ -32,7 +33,6 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 					}
 				}, 0),
 			),
-			// share(), // TODO: test this when I have time to do it properly
 			takeUntil(this.destroyed$),
 		);
 	}

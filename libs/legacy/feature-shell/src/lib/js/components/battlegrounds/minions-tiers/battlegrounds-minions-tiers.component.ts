@@ -7,16 +7,17 @@ import {
 	OnDestroy,
 	Renderer2,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { arraysEqual } from '@firestone/shared/framework/common';
+import { BgsGameStateFacadeService } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { getAllCardsInGame, getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Tier, buildTiers } from './battlegrounds-minions-tiers-view.component';
 
 @Component({
@@ -49,11 +50,9 @@ import { Tier, buildTiers } from './battlegrounds-minions-tiers-view.component';
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersOverlayComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
-	private static readonly WINDOW_WIDTH = 1300;
-
 	tiers$: Observable<readonly Tier[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
@@ -69,39 +68,47 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showSpellsAtBottom$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly gameState: BgsGameStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.tiers$ = combineLatest([
-			this.store.listenPrefs$(
-				(prefs) => prefs.bgsShowMechanicsTiers,
-				(prefs) => prefs.bgsShowTribeTiers,
-				(prefs) => prefs.bgsGroupMinionsIntoTheirTribeGroup,
-			),
-			this.store.listenBattlegrounds$(
-				([main, prefs]) => main?.currentGame?.availableRaces,
-				([main, prefs]) => main?.currentGame?.hasBuddies,
-				([main, prefs]) => main?.currentGame?.hasSpells,
-				([main, prefs]) => main?.currentGame?.anomalies,
-				([main, prefs]) => main?.currentGame?.getMainPlayer()?.cardId,
-				([main, prefs]) => main?.currentGame?.players?.map((p) => p.cardId),
-			),
-		]).pipe(
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+		await this.gameState.isReady();
+
+		this.tiers$ = combineLatest([this.prefs.preferences$$, this.gameState.gameState$$]).pipe(
+			map(([prefs, gameState]) => ({
+				showMechanicsTiers: prefs.bgsShowMechanicsTiers,
+				showTribeTiers: prefs.bgsShowTribeTiers,
+				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
+				races: gameState?.currentGame?.availableRaces,
+				hasBuddies: gameState?.currentGame?.hasBuddies,
+				hasSpells: gameState?.currentGame?.hasSpells,
+				anomalies: gameState?.currentGame?.anomalies,
+				playerCardId: gameState?.currentGame?.getMainPlayer()?.cardId,
+				allPlayersCardIds: gameState?.currentGame?.players?.map((p) => p.cardId),
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
-				([
-					[showMechanicsTiers, showTribeTiers, bgsGroupMinionsIntoTheirTribeGroup],
-					[races, hasBuddies, hasSpells, anomalies, playerCardId, allPlayersCardIds],
-				]) => {
+				({
+					showMechanicsTiers,
+					showTribeTiers,
+					bgsGroupMinionsIntoTheirTribeGroup,
+					races,
+					hasBuddies,
+					hasSpells,
+					anomalies,
+					playerCardId,
+					allPlayersCardIds,
+				}) => {
 					// hasSpells = true;
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
@@ -127,32 +134,42 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				},
 			),
 		);
-		this.highlightedTribes$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
-			.pipe(this.mapData(([tribes]) => tribes));
-		this.highlightedMechanics$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main.highlightedMechanics)
-			.pipe(this.mapData(([highlightedMechanics]) => highlightedMechanics));
-		this.highlightedMinions$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
-			.pipe(this.mapData(([tribes]) => tribes));
-		this.currentTurn$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
-			.pipe(this.mapData(([currentTurn]) => currentTurn));
-		this.tavernTier$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.getMainPlayer()?.getCurrentTavernTier())
-			.pipe(this.mapData(([tavernTier]) => tavernTier));
-		this.showTribesHighlight$ = this.listenForBasicPref$((prefs) => prefs.bgsShowTribesHighlight);
-		this.showBattlecryHighlight$ = this.listenForBasicPref$((prefs) => prefs.bgsShowMechanicsHighlight);
-		this.showMinionsList$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
-		this.showTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableTurnNumbertOverlay);
-		this.enableMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListMouseOver);
-		this.showGoldenCards$ = this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowGoldenCard);
-		this.showSpellsAtBottom$ = this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowSpellsAtBottom);
-		this.listenForBasicPref$((prefs) => prefs.bgsMinionsListScale).subscribe((scale) => {
-			// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
-			const element = this.el.nativeElement.querySelector('.scalable');
+		this.highlightedTribes$ = this.gameState.gameState$$.pipe(this.mapData((main) => main.highlightedTribes));
+		this.highlightedMechanics$ = this.gameState.gameState$$.pipe(this.mapData((main) => main.highlightedMechanics));
+		this.highlightedMinions$ = this.gameState.gameState$$.pipe(this.mapData((main) => main.highlightedMinions));
+		this.currentTurn$ = this.gameState.gameState$$.pipe(this.mapData((main) => main.currentGame?.currentTurn));
+		this.tavernTier$ = this.gameState.gameState$$.pipe(
+			this.mapData((main) => main.currentGame?.getMainPlayer()?.getCurrentTavernTier()),
+		);
+		this.showTribesHighlight$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowTribesHighlight),
+		);
+		this.showBattlecryHighlight$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowMechanicsHighlight),
+		);
+		this.showMinionsList$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableMinionListOverlay),
+		);
+		this.showTurnNumber$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableTurnNumbertOverlay),
+		);
+		this.enableMouseOver$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableMinionListMouseOver),
+		);
+		this.showGoldenCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsMinionListShowGoldenCard),
+		);
+		this.showSpellsAtBottom$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsMinionListShowSpellsAtBottom),
+		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListScale)).subscribe((scale) => {
+			let element = this.el.nativeElement.querySelector('.scalable');
 			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			element = null;
 		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

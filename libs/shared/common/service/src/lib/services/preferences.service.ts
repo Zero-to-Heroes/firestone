@@ -59,6 +59,9 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		this.preferences$$ = new BehaviorSubject<Preferences>(this.storage.getUserPreferences());
 
 		this.preferences$$.pipe(sampleTime(1500)).subscribe((prefs) => this.storage.saveUserPreferences(prefs));
+		window['prefsObservers'] = () => {
+			console.log(this.preferences$$.observers);
+		};
 	}
 
 	public preferences$<S extends PrefsSelector<Preferences, any>[]>(

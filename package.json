@@ -6,6 +6,7 @@
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
 		"clear-cache": "rm -rf node_modules/.cache/nx",
 		"dev": "nx build --source-map=true --watch",
+		"dev-prod": "nx build --source-map=true --configuration=production --watch",
 		"dev-web": "nx build website --source-map=true --watch",
 		"dev-coliseum": "nx build coliseum --source-map=true --watch",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",

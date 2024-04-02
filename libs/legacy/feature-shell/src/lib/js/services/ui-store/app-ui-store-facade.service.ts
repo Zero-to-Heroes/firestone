@@ -77,6 +77,7 @@ export class AppUiStoreFacadeService {
 		return this.store.listen$(...selectors);
 	}
 
+	/** @deprecated */
 	public listenPrefs$<S extends PrefsSelector<Preferences, any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {

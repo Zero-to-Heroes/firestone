@@ -1,6 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsHeroSelectionOverviewPanel } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -47,15 +48,17 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.heroTooltipActive$ = combineLatest([
-			this.store.enablePremiumFeatures$(),
-			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTooltip),
-		]).pipe(this.mapData(([premium, [bgsShowHeroSelectionTooltip]]) => premium && bgsShowHeroSelectionTooltip));
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
+		this.heroTooltipActive$ = combineLatest([this.store.enablePremiumFeatures$(), this.prefs.preferences$$]).pipe(
+			this.mapData(([premium, prefs]) => premium && prefs.bgsShowHeroSelectionTooltip),
+		);
 		this.showTierOverlay$ = combineLatest([
 			this.store.enablePremiumFeatures$(),
 			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTiers),
@@ -123,6 +126,10 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 				}
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByHeroFn(index, item: BgsMetaHeroStatTierItem) {
