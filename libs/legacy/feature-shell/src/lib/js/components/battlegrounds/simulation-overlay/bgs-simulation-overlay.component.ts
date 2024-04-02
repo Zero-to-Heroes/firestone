@@ -5,12 +5,13 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation, BgsGameStateFacadeService } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-simulation-overlay',
@@ -25,29 +26,34 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulationOverlayComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	showSimulationSample$: Observable<boolean>;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly gameState: BgsGameStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.nextBattle$ = combineLatest(
-			this.store.listenBattlegrounds$(([state]) => state?.currentGame),
-			this.store.listen$(
-				([state, nav, prefs]) => prefs?.bgsShowSimResultsOnlyOnRecruit,
-				([state, nav, prefs]) => prefs?.bgsHideSimResultsOnRecruit,
+		await Promise.all([this.prefs.isReady, this.gameState.isReady()]);
+
+		this.nextBattle$ = combineLatest([
+			this.gameState.gameState$$.pipe(this.mapData((state) => state?.currentGame)),
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					bgsShowSimResultsOnlyOnRecruit: prefs?.bgsShowSimResultsOnlyOnRecruit,
+					bgsHideSimResultsOnRecruit: prefs?.bgsHideSimResultsOnRecruit,
+				})),
 			),
-		).pipe(
-			filter(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) => !!currentGame),
-			this.mapData(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) => {
+		]).pipe(
+			filter(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }]) => !!currentGame),
+			this.mapData(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }]) => {
 				const result = currentGame.getRelevantFaceOff(
 					bgsShowSimResultsOnlyOnRecruit,
 					bgsHideSimResultsOnRecruit,
@@ -55,14 +61,17 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionStoreComp
 				return result;
 			}),
 		);
-		this.showSimulationSample$ = this.listenForBasicPref$((prefs) => prefs?.bgsEnableSimulationSampleInOverlay);
-		this.store
-			.listen$(([main, nav, prefs]) => prefs.bgsSimulatorScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((scale) => {
-				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			});
+		this.showSimulationSample$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs?.bgsEnableSimulationSampleInOverlay),
+		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs?.bgsSimulatorScale)).subscribe((scale) => {
+			// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+		});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
