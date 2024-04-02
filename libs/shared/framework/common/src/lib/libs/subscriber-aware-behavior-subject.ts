@@ -16,13 +16,15 @@ export class SubscriberAwareBehaviorSubject<T> extends BehaviorSubject<T> {
 	public async getValueWithInit(
 		uninitializedValue: T | null | undefined = null,
 		timeToWaitBetweenChecksInMs = 200,
+		retries = 40,
 	): Promise<T> {
 		// console.debug('getting value', new Error().stack);
 		this.triggerListeners();
 		let value = super.getValue();
-		while (value === uninitializedValue) {
+		while (value === uninitializedValue && retries > 0) {
 			await sleep(timeToWaitBetweenChecksInMs);
 			value = super.getValue();
+			retries--;
 		}
 		return value;
 	}
