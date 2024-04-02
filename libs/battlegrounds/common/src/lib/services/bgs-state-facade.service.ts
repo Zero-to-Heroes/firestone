@@ -40,7 +40,7 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 			combineLatest([bgState, this.matchPlayers.playersMatchMmr$$])
 				.pipe(debounceTime(200))
 				.subscribe(([state, playersMmr]) => {
-					if (!state) {
+					if (!state?.currentGame) {
 						return;
 					}
 					if (!playersMmr?.length) {
