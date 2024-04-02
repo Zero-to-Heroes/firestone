@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsHeroSelectionOverviewPanel } from '@firestone/battlegrounds/common';
+import { BgsGameStateFacadeService, BgsHeroSelectionOverviewPanel } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
@@ -7,6 +7,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
+import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -44,40 +45,46 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 	showTierOverlay$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly gameState: BgsGameStateFacadeService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
+		await this.gameState.isReady();
+		await this.ads.isReady();
 
-		this.heroTooltipActive$ = combineLatest([this.store.enablePremiumFeatures$(), this.prefs.preferences$$]).pipe(
+		this.heroTooltipActive$ = combineLatest([this.ads.enablePremiumFeatures$$, this.prefs.preferences$$]).pipe(
 			this.mapData(([premium, prefs]) => premium && prefs.bgsShowHeroSelectionTooltip),
 		);
 		this.showTierOverlay$ = combineLatest([
-			this.store.enablePremiumFeatures$(),
-			this.store.listenPrefs$((prefs) => prefs.bgsShowHeroSelectionTiers),
-		]).pipe(this.mapData(([premium, [bgsShowHeroSelectionTiers]]) => premium && bgsShowHeroSelectionTiers));
+			this.ads.enablePremiumFeatures$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionTiers)),
+		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => premium && bgsShowHeroSelectionTiers));
 
 		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
 			this.store.achievementCategories$(),
-			this.store.listenBattlegrounds$(
-				([main, prefs]) =>
-					main.panels?.find(
-						(panel) => panel.id === 'bgs-hero-selection-overview',
-					) as BgsHeroSelectionOverviewPanel,
-				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
+			this.gameState.gameState$$.pipe(
+				this.mapData(
+					(main) =>
+						main.panels?.find(
+							(panel) => panel.id === 'bgs-hero-selection-overview',
+						) as BgsHeroSelectionOverviewPanel,
+				),
 			),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
-			this.mapData(([tiers, achievements, [panel, showAchievements]]) => {
+			this.mapData(([tiers, achievements, panel, showAchievements]) => {
 				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
 				if (!panel || !heroesAchievementCategory) {
 					console.log('no panel or no category', !panel, !heroesAchievementCategory);
