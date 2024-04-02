@@ -11,10 +11,10 @@ import {
 import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { AdService } from '../../../services/ad.service';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
 @Component({
@@ -62,7 +62,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLeaderboardEmptyCardComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	componentType: ComponentType<BgsOverlayHeroOverviewComponent> = BgsOverlayHeroOverviewComponent;
@@ -138,26 +138,27 @@ export class BgsLeaderboardEmptyCardComponent
 	private isPremiumUser: boolean;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
+		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
+		await this.ads.isReady();
 
-		this.listenForBasicPref$((prefs) => prefs.bgsOpponentOverlayAtTop).subscribe((value) => {
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((value) => {
 			this.position = value ? 'global-top-left' : 'global-bottom-left';
 			this.componentClass = value ? null : 'bottom';
 			this.updateInfo();
 		});
 
-		this.store.enablePremiumFeatures$().subscribe((premium) => {
+		this.ads.enablePremiumFeatures$$.subscribe((premium) => {
 			// console.debug('isPremiumUser', premium);
 			this.isPremiumUser = premium;
 		});
@@ -167,12 +168,9 @@ export class BgsLeaderboardEmptyCardComponent
 			() => this.onTabDown(),
 			() => this.onTabUp(),
 		);
-		this.showMmr$ = this.prefs
-			.preferences$(
-				(prefs) => prefs.bgsUseLeaderboardDataInOverlay,
-				(prefs) => prefs.bgsShowMmrInLeaderboardOverlay,
-			)
-			.pipe(this.mapData(([useLeaderboardData, showMmr]) => useLeaderboardData && showMmr));
+		this.showMmr$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsUseLeaderboardDataInOverlay && prefs.bgsShowMmrInLeaderboardOverlay),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

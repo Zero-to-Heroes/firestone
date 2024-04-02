@@ -10,6 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsPlayer } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -69,15 +70,21 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 	buddiesEnabled: boolean;
 
 	constructor(
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
-		this.store
-			.listenPrefs$((prefs) => prefs.bgsOpponentBoardScale)
-			.pipe(this.mapData(([pref]) => pref, null, 0))
+		this.init();
+	}
+
+	private async init() {
+		await this.prefs.isReady();
+
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.bgsOpponentBoardScale, null, 0))
 			.subscribe((scale) => {
 				try {
 					// Use this trick to avoid having the component flicker when appearing
@@ -88,21 +95,22 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 					// Do nothing
 				}
 			});
-		this.store
-			.listenPrefs$((prefs) => prefs.bgsOpponentOverlayAtTop)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((pref) => {
-				try {
-					const element = this.el.nativeElement.querySelector('.scalable');
-					this.renderer.setStyle(element, 'transform-origin', pref ? 'top left' : 'bottom left');
-					this.renderer.removeClass(element, 'bottom');
-					if (!pref) {
-						this.renderer.addClass(element, 'bottom');
-					}
-				} catch (e) {
-					// Do nothing
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((pref) => {
+			try {
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform-origin', pref ? 'top left' : 'bottom left');
+				this.renderer.removeClass(element, 'bottom');
+				if (!pref) {
+					this.renderer.addClass(element, 'bottom');
 				}
-			});
+			} catch (e) {
+				// Do nothing
+			}
+		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterContentInit() {

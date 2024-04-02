@@ -128,11 +128,8 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 	}
 
 	async ngAfterContentInit() {
-		this.showMmr$ = this.prefs
-			.preferences$(
-				(prefs) => prefs.bgsUseLeaderboardDataInOverlay,
-				(prefs) => prefs.bgsShowMmrInOpponentRecap,
-			)
-			.pipe(this.mapData(([useLeaderboardData, showMmr]) => useLeaderboardData && showMmr));
+		this.showMmr$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsUseLeaderboardDataInOverlay && prefs.bgsShowMmrInOpponentRecap),
+		);
 	}
 }

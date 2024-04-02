@@ -64,6 +64,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		};
 	}
 
+	/** @deprecated Looks like it causes memory leaks */
 	public preferences$<S extends PrefsSelector<Preferences, any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
