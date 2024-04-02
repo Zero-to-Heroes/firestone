@@ -59,22 +59,32 @@
 	font-size: 10px;
 }
 
-.reward .header {
-	padding-right: 40px;
-	padding-left: 40px;
+.reward {
+	transform-origin: bottom center;
 
-	.free-uses-left {
-		right: 40px;
+	.header {
+		padding-right: 40px;
+		padding-left: 40px;
+
+		.free-uses-left {
+			right: 40px;
+		}
 	}
 }
 
 .quest {
 	margin-top: auto;
+	transform-origin: top center;
 }
 
 .values {
 	display: flex;
 	width: 100%;
+}
+
+.text {
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .item {
