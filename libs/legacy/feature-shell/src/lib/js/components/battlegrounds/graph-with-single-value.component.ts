@@ -11,10 +11,9 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
-import { fromEvent, Subscription } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { Subscription, fromEvent } from 'rxjs';
 
 @Component({
 	selector: 'graph-with-single-value',
@@ -43,7 +42,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GraphWithSingleValueComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterViewInit, AfterContentInit, OnDestroy
 {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
@@ -77,12 +76,8 @@ export class GraphWithSingleValueComponent
 	private _reverse = true;
 	private _beginAtZero = true;
 
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly el: ElementRef,
-	) {
-		super(store, cdr);
+	constructor(protected readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
+		super(cdr);
 	}
 
 	ngAfterContentInit(): void {

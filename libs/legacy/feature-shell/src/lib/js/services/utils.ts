@@ -190,16 +190,6 @@ export const updateFirstElementWithoutProp = <T>(
 	return replaceInArray(array, indexWithoutProperty, base as T);
 };
 
-// For ng2-charts
-/* eslint-disable @typescript-eslint/ban-types */
-export const thisAsThat = (callBack: Function) => {
-	// eslint-disable-next-line @typescript-eslint/no-this-alias
-	const self = this;
-	return function () {
-		return callBack.apply(self, [this].concat(Array.prototype.slice.call(arguments)));
-	};
-};
-
 export const decode = (input: string): string => {
 	const fromBase64 = Buffer.from(input, 'base64').toString();
 	const inflated = inflate(fromBase64, { to: 'string' });

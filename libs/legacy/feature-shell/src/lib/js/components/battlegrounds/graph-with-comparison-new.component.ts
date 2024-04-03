@@ -7,10 +7,9 @@ import {
 	Input,
 	ViewChild,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { NumericTurnInfo } from '@firestone/battlegrounds/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { BehaviorSubject, Observable, combineLatest, filter, share, takeUntil } from 'rxjs';
 
@@ -52,7 +51,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, share, takeUntil } 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GraphWithComparisonNewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class GraphWithComparisonNewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
 	lineChartData$: Observable<ChartData<'line'>>;
@@ -101,12 +100,11 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionStoreCo
 	private yourValues$$ = new BehaviorSubject<readonly NumericTurnInfo[]>(null);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly i18n: ILocalizationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
