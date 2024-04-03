@@ -12,8 +12,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/constructed/common';
 import { DeckState, GameState, StatsRecap } from '@firestone/game-state';
-import { Preferences } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { Observable, combineLatest, shareReplay } from 'rxjs';
@@ -174,6 +175,8 @@ export class DeckTrackerOverlayRootComponent
 		private events: Events,
 		private readonly cardsHighlight: CardsHighlightFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 		this.cardsHighlight.init();
@@ -195,32 +198,30 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await Promise.all([this.patchesConfig.isReady(), this.gameState.isReady(), this.prefs.isReady()]);
 
-		this.showDeckWinrate$ = this.listenForBasicPref$((preferences) => this.showDeckWinrateExtractor(preferences));
-		this.showMatchupWinrate$ = this.listenForBasicPref$((preferences) =>
-			this.showMatchupWinrateExtractor(preferences),
+		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showDeckWinrateExtractor(preferences)),
+		);
+		this.showMatchupWinrate$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showMatchupWinrateExtractor(preferences)),
 		);
 
-		this.showDecklist$ = this.store
-			.listenDeckState$((gameState) => gameState)
-			.pipe(
-				this.mapData(
-					([gameState]) => !!gameState && this.showDecklistExtractor(gameState.currentTurn === 'mulligan'),
-				),
-				shareReplay(1),
-				takeUntil(this.destroyed$),
-			);
-		this.deck$ = this.store
-			.listenDeckState$((gameState) => gameState)
-			.pipe(
-				this.mapData(([gameState]) => {
-					const deck = !gameState ? null : this.deckExtractor(gameState);
-					return deck;
-				}),
-				shareReplay(1),
-				takeUntil(this.destroyed$),
-			);
+		this.showDecklist$ = this.gameState.gameState$$.pipe(
+			this.mapData(
+				(gameState) => !!gameState && this.showDecklistExtractor(gameState.currentTurn === 'mulligan'),
+			),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.deck$ = this.gameState.gameState$$.pipe(
+			this.mapData((gameState) => {
+				const deck = !gameState ? null : this.deckExtractor(gameState);
+				return deck;
+			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		// For debug only
 		this.deck$
 			.pipe(
@@ -231,15 +232,17 @@ export class DeckTrackerOverlayRootComponent
 			.subscribe((deckstring) => {
 				console.log('[deck-tracker] using deck', deckstring, 'for player', this.player);
 			});
-		this.showTotalCardsInZone$ = this.store
-			.listenDeckState$((gameState) => gameState.currentTurn)
-			.pipe(this.mapData(([currentTurn]) => this.showTotalCardsInZoneExtractor(currentTurn !== 'mulligan')));
+		this.showTotalCardsInZone$ = this.gameState.gameState$$.pipe(
+			this.mapData((gameState) => this.showTotalCardsInZoneExtractor(gameState.currentTurn !== 'mulligan')),
+		);
 		const gamesForDeck$ = combineLatest([
 			this.showDeckWinrate$,
 			this.showMatchupWinrate$,
-			this.store.listenDeckState$(
-				(gameState) => gameState?.playerDeck?.deckstring,
-				(gameState) => gameState?.metadata?.formatType,
+			this.gameState.gameState$$.pipe(
+				this.mapData((gameState) => ({
+					deckstring: gameState?.playerDeck?.deckstring,
+					formatType: gameState?.metadata?.formatType,
+				})),
 			),
 			this.store.listen$(
 				([main, nav, prefs]) => main.decktracker.filters.time,
@@ -248,11 +251,13 @@ export class DeckTrackerOverlayRootComponent
 			this.patchesConfig.currentConstructedMetaPatch$$,
 			this.store.gameStats$(),
 			this.store.decks$(),
-			this.store.listenPrefs$(
-				(prefs) => prefs.desktopDeckDeletes,
-				(prefs) => prefs.desktopDeckStatsReset,
-				(prefs) => prefs.desktopDeckHiddenDeckCodes,
-				(prefs) => prefs.desktopDeckShowHiddenDecks,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					desktopDeckDeletes: prefs.desktopDeckDeletes,
+					desktopDeckStatsReset: prefs.desktopDeckStatsReset,
+					desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
+					desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
+				})),
 			),
 		]).pipe(
 			debounceTime(1000),
@@ -260,24 +265,34 @@ export class DeckTrackerOverlayRootComponent
 				([
 					showDeckWinrate,
 					showMatchupWinrate,
-					[deckstring, formatType],
+					{ deckstring, formatType },
 					[timeFilter, rankFilter],
 					patch,
 					gameStats,
 					decks,
-					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
+					{
+						desktopDeckDeletes,
+						desktopDeckStatsReset,
+						desktopDeckHiddenDeckCodes,
+						desktopDeckShowHiddenDecks,
+					},
 				]) => (showDeckWinrate || showDeckWinrate) && !!gameStats?.length && !!decks?.length,
 			),
 			this.mapData(
 				([
 					showDeckWinrate,
 					showMatchupWinrate,
-					[deckstring, formatType],
+					{ deckstring, formatType },
 					[timeFilter, rankFilter],
 					patch,
 					gameStats,
 					decks,
-					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
+					{
+						desktopDeckDeletes,
+						desktopDeckStatsReset,
+						desktopDeckHiddenDeckCodes,
+						desktopDeckShowHiddenDecks,
+					},
 				]) => {
 					const result = DecksProviderService.buildValidReplays(
 						deckstring,
@@ -301,10 +316,10 @@ export class DeckTrackerOverlayRootComponent
 		);
 
 		this.matchupStatsRecap$ = combineLatest([
-			this.store.listenDeckState$((gameState) => gameState.opponentDeck?.hero?.classes),
+			this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState?.opponentDeck?.hero?.classes)),
 			gamesForDeck$,
 		]).pipe(
-			this.mapData(([[opponentClasses], gamesForDeck]) => {
+			this.mapData(([opponentClasses, gamesForDeck]) => {
 				const gamesForOpponent = gamesForDeck.filter((stat) =>
 					!stat.opponentClass
 						? false
@@ -318,57 +333,79 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.deckStatsRecap$ = gamesForDeck$.pipe(this.mapData((gameStats) => StatsRecap.from(gameStats)));
 
-		this.displayMode$ = this.listenForBasicPref$((preferences) => this.overlayDisplayModeExtractor(preferences));
-		this.showTitleBar$ = this.listenForBasicPref$((preferences) => preferences.overlayShowTitleBar);
-		this.showControlBar$ = this.listenForBasicPref$((preferences) => preferences.overlayShowControlBar);
-		this.opacity$ = this.listenForBasicPref$((preferences) => this.opacityExtractor(preferences) / 100);
-		this.colorManaCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowRarityColors);
-		this.showRelatedCards$ = this.listenForBasicPref$((preferences) => preferences.overlayShowRelatedCards);
-		this.showUnknownCards$ = this.listenForBasicPref$((preferences) => preferences.overlayShowUnknownCards);
-		this.showUpdatedCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowCostReduction);
-		this.showGiftsSeparately$ = this.listenForBasicPref$(
-			(preferences) => preferences.overlayShowGiftedCardsInSeparateLine,
+		this.displayMode$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.overlayDisplayModeExtractor(preferences)),
 		);
-		this.groupSameCardsTogether$ = this.listenForBasicPref$(
-			(preferences) => preferences.overlayGroupSameCardsTogether,
+		this.showTitleBar$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowTitleBar),
 		);
-		this.showGeneratedCardsInSeparateZone$ = this.listenForBasicPref$(
-			(preferences) => preferences.overlayShowGiftedCardsSeparateZone,
+		this.showControlBar$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowControlBar),
 		);
-		this.showPlaguesOnTop$ = this.listenForBasicPref$((preferences) => preferences.overlayShowPlaguesOnTop);
-		this.showBoardCardsInSeparateZone$ = this.listenForBasicPref$(
-			(preferences) => preferences.overlayShowBoardCardsSeparateZone,
+		this.opacity$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.opacityExtractor(preferences) / 100),
 		);
-		this.showStatsChange$ = this.listenForBasicPref$((preferences) => preferences.overlayShowStatsChange);
-		this.cardsGoToBottom$ = this.listenForBasicPref$((preferences) => this.cardsGoToBottomExtractor(preferences));
-		this.showGlobalEffectsZone$ = this.listenForBasicPref$((preferences) =>
-			this.showGlobalEffectsExtractor(preferences),
+		this.colorManaCost$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowRarityColors),
 		);
-		this.darkenUsedCards$ = this.listenForBasicPref$((preferences) => this.darkenUsedCardsExtractor(preferences));
-		this.hideGeneratedCardsInOtherZone$ = this.listenForBasicPref$((preferences) =>
-			this.hideGeneratedCardsInOtherZoneExtractor(preferences),
+		this.showRelatedCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowRelatedCards),
 		);
-		this.sortCardsByManaCostInOtherZone$ = this.listenForBasicPref$((preferences) =>
-			this.sortCardsByManaCostInOtherZoneExtractor(preferences),
+		this.showUnknownCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowUnknownCards),
 		);
-		this.showBottomCardsSeparately$ = this.listenForBasicPref$((preferences) =>
-			this.showBottomCardsSeparatelyExtractor(preferences),
+		this.showUpdatedCost$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowCostReduction),
 		);
-		this.showTopCardsSeparately$ = this.listenForBasicPref$((preferences) =>
-			this.showTopCardsSeparatelyExtractor(preferences),
+		this.showGiftsSeparately$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowGiftedCardsInSeparateLine),
 		);
-		this.showDkRunes$ = this.listenForBasicPref$((preferences) => this.showDkRunesExtractor(preferences));
-		this.store
-			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				this.showTooltipsFromPrefs = value;
-				this.cdr?.detectChanges();
-			});
-		this.store
-			.listenPrefs$((prefs) => this.scaleExtractor(prefs))
+		this.groupSameCardsTogether$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayGroupSameCardsTogether),
+		);
+		this.showGeneratedCardsInSeparateZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowGiftedCardsSeparateZone),
+		);
+		this.showPlaguesOnTop$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowPlaguesOnTop),
+		);
+		this.showBoardCardsInSeparateZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowBoardCardsSeparateZone),
+		);
+		this.showStatsChange$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowStatsChange),
+		);
+		this.cardsGoToBottom$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.cardsGoToBottomExtractor(preferences)),
+		);
+		this.showGlobalEffectsZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showGlobalEffectsExtractor(preferences)),
+		);
+		this.darkenUsedCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.darkenUsedCardsExtractor(preferences)),
+		);
+		this.hideGeneratedCardsInOtherZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.hideGeneratedCardsInOtherZoneExtractor(preferences)),
+		);
+		this.sortCardsByManaCostInOtherZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.sortCardsByManaCostInOtherZoneExtractor(preferences)),
+		);
+		this.showBottomCardsSeparately$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showBottomCardsSeparatelyExtractor(preferences)),
+		);
+		this.showTopCardsSeparately$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showTopCardsSeparatelyExtractor(preferences)),
+		);
+		this.showDkRunes$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showDkRunesExtractor(preferences)),
+		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowTooltipsOnHover)).subscribe((value) => {
+			this.showTooltipsFromPrefs = value;
+			this.cdr?.detectChanges();
+		});
+		this.prefs.preferences$$
 			.pipe(
-				this.mapData(([pref]) => pref),
+				this.mapData((prefs) => this.scaleExtractor(prefs)),
 				filter((pref) => !!pref),
 				distinctUntilChanged(),
 				takeUntil(this.destroyed$),
