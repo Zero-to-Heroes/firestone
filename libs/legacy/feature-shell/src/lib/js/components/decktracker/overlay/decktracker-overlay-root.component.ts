@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -102,7 +101,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 })
 export class DeckTrackerOverlayRootComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
+	implements AfterContentInit, OnDestroy
 {
 	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
 	@Input() overlayDisplayModeExtractor: (prefs: Preferences) => string;
@@ -181,21 +180,6 @@ export class DeckTrackerOverlayRootComponent
 	) {
 		super(cdr);
 		this.cardsHighlight.init();
-	}
-
-	async ngAfterViewInit() {
-		// this.events.on(Events.SHOW_MODAL).subscribe(() => {
-		// 	this.showBackdrop = true;
-		// 	if (!(this.cdr as ViewRef)?.destroyed) {
-		// 		this.cdr.detectChanges();
-		// 	}
-		// });
-		// this.events.on(Events.HIDE_MODAL).subscribe(() => {
-		// 	this.showBackdrop = false;
-		// 	if (!(this.cdr as ViewRef)?.destroyed) {
-		// 		this.cdr.detectChanges();
-		// 	}
-		// });
 	}
 
 	async ngAfterContentInit() {
