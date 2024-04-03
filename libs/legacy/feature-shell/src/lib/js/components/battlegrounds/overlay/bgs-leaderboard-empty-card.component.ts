@@ -13,7 +13,7 @@ import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
@@ -29,7 +29,6 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 				[componentInput]="opponentBoardMouseOver ? _bgsPlayer : null"
 				[componentTooltipPosition]="position"
 			>
-				<!-- transparent image with 1:1 intrinsic aspect ratio -->
 				<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
 				<div
 					class="last-opponent-icon"
@@ -158,11 +157,11 @@ export class BgsLeaderboardEmptyCardComponent
 			this.updateInfo();
 		});
 
-		this.ads.enablePremiumFeatures$$.subscribe((premium) => {
+		this.ads.enablePremiumFeatures$$.pipe(takeUntil(this.destroyed$)).subscribe((premium) => {
 			// console.debug('isPremiumUser', premium);
 			this.isPremiumUser = premium;
 		});
-		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(this.mapData((info) => info));
+		this.showLiveInfo$ = this.showLiveInfo.pipe(this.mapData((info) => info));
 		this.callbackHandle = this.ow.addHotKeyHoldListener(
 			'live-info',
 			() => this.onTabDown(),

@@ -9,10 +9,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { Subscription } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 // TODO: refactor this to extend from toggle-view
 @Component({
@@ -58,10 +56,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceToggleComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
@@ -80,24 +75,25 @@ export class PreferenceToggleComponent
 
 	private sub$$: Subscription;
 
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private prefs: PreferencesService,
-	) {
-		super(store, cdr);
+	constructor(protected readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+		super(cdr);
 		this.loadDefaultValues();
 		this.uniqueId = uuidShort();
 	}
 
-	ngAfterContentInit() {
-		this.sub$$ = this.store
-			.listenPrefs$((prefs) => prefs[this.field])
-			.pipe(this.mapData(([pref]) => pref))
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
+		this.sub$$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs[this.field]))
 			.subscribe(async (value) => {
 				this.value = await this.valueExtractor(value);
 				this.cdr?.detectChanges();
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')

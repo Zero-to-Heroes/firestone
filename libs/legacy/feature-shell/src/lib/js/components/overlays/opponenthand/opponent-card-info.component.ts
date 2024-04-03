@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
 import { DeckCard } from '@firestone/game-state';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { DebugService } from '../../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -41,17 +42,18 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponen
 		private readonly init_DebugService: DebugService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.store
-			.listenPrefs$((prefs) => prefs.decktrackerOpponentHandScale)
+		await this.prefs.isReady();
+
+		this.prefs.preferences$$
 			.pipe(
 				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
+				this.mapData((prefs) => prefs.decktrackerOpponentHandScale),
 				filter((scale) => !!scale),
 				takeUntil(this.destroyed$),
 			)
@@ -63,5 +65,9 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponen
 					this.cdr.detectChanges();
 				}
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

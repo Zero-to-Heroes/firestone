@@ -14,13 +14,8 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import {
-	AbstractSubscriptionStoreComponent,
-	IPreferences,
-	Store,
-	deepEqual,
-	groupByFunction,
-} from '@firestone/shared/framework/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 
@@ -87,7 +82,7 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTooltipComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterViewInit, OnDestroy, AfterContentInit
 {
 	public viewRef: ComponentRef<CardTooltipComponent>;
@@ -170,19 +165,15 @@ export class CardTooltipComponent
 	private lifecycleHookDone: boolean;
 
 	constructor(
-		// FIXME: how to handle the various types of preferences?
-		// More generally, how to handle the store? Should I use the same model everywhere, and simply
-		// change how the model is emitted?
-		// Maybe I can little by little extract all the data to interfaces as I need them
-		protected override readonly store: Store<IPreferences>,
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		// FIXME: For some reason, lifecycle methods are not called systematically. I've noticed this
 		// in the _clickthrough overlay
 		this.forceLifecycleHooks();
@@ -227,11 +218,12 @@ export class CardTooltipComponent
 		}
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
 		if (this.lifecycleHookDone) {
 			return;
 		}
 		this.lifecycleHookDone = true;
+		await this.prefs.isReady();
 		// console.debug('ngAfterContentInit');
 
 		this.relativePosition$ = this.relativePosition$$.asObservable();
@@ -265,14 +257,19 @@ export class CardTooltipComponent
 			this.relatedCardIds$$.asObservable(),
 			this.localized$$.asObservable(),
 			this.isBgs$$.asObservable(),
-			this.store.listenPrefs$(
-				(prefs) => prefs.locale, // We don't use it, but we want to rebuild images when it changes
-				(prefs) => prefs.collectionUseHighResImages,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
+						highRes: prefs.collectionUseHighResImages,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
-				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
+				([relatedCardIds, localized, isBgs, { locale, highRes }]) => {
 					return relatedCardIds.map((cardId) => {
 						const image = !!cardId
 							? localized
@@ -301,14 +298,19 @@ export class CardTooltipComponent
 			this.additionalClass$$.asObservable(),
 			this.buffs$$.asObservable(),
 			this.createdBy$$.asObservable(),
-			this.store.listenPrefs$(
-				(prefs) => prefs.locale,
-				(prefs) => prefs.collectionUseHighResImages,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
+						highRes: prefs.collectionUseHighResImages,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
-				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, [locale, highRes]]) => {
+				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, { locale, highRes }]) => {
 					return (
 						([...cardIds] ?? [])
 							// Empty card IDs are necessary when showing buff only
@@ -348,6 +350,7 @@ export class CardTooltipComponent
 				0,
 			),
 		);
+
 		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
