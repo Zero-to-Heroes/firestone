@@ -6,16 +6,16 @@ import {
 	ElementRef,
 	Input,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { GameType } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/constructed/common';
 import { TurnTiming } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable, combineLatest, interval } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { sumOnArray } from '../../../services/utils';
 
 @Component({
@@ -46,7 +46,7 @@ import { sumOnArray } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TurnTimerWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showTurnTimerMatchLength$: Observable<boolean>;
 	currentTurn$: Observable<string>;
 	totalMatchLength$: Observable<Date>;
@@ -58,48 +58,53 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionStoreComponent
 	width$: Observable<number>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
+		private readonly gameState: GameStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showFuse$ = this.store
-			.listenDeckState$((state) => state?.metadata?.gameType)
-			.pipe(this.mapData(([gameType]) => ![GameType.GT_VS_AI].includes(gameType)));
-		this.currentTurn$ = this.store
-			.listenDeckState$((state) => state?.currentTurn)
-			.pipe(
-				this.mapData(([currentTurn]) =>
-					isNaN(+currentTurn)
-						? this.i18n.translateString('turn-timer.mulligan')
-						: this.i18n.translateString('turn-timer.current-turn', {
-								value: currentTurn,
-						  }),
-				),
-			);
-		this.totalMatchLength$ = combineLatest(
-			interval(1000),
-			this.store.listenDeckState$((state) => state?.matchStartTimestamp),
-		).pipe(
-			filter(([interval, [matchStartTimestamp]]) => !!matchStartTimestamp),
-			this.mapData(([interval, [matchStartTimestamp]]) => formatDuration(Date.now() - matchStartTimestamp)),
+	async ngAfterContentInit() {
+		await Promise.all([this.gameState.isReady(), this.prefs.isReady()]);
+
+		this.showFuse$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => ![GameType.GT_VS_AI].includes(state?.metadata?.gameType)),
 		);
-		this.player$ = combineLatest(
-			interval(1000),
-			this.store.listenDeckState$(
-				(state) => state?.playerDeck?.hero?.playerName,
-				(state) => state?.playerDeck?.turnDuration,
-				(state) => state?.playerDeck?.turnTimings,
+		this.currentTurn$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) =>
+				isNaN(+state?.currentTurn)
+					? this.i18n.translateString('turn-timer.mulligan')
+					: this.i18n.translateString('turn-timer.current-turn', {
+							value: state?.currentTurn,
+					  }),
 			),
-			this.listenForBasicPref$((prefs) => prefs.useStreamerMode),
-		).pipe(
-			this.mapData(([interval, [playerName, turnDuration, turnTimings], useStreamerMode]) =>
+		);
+		this.totalMatchLength$ = combineLatest([
+			interval(1000),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state?.matchStartTimestamp)),
+		]).pipe(
+			filter(([interval, matchStartTimestamp]) => !!matchStartTimestamp),
+			this.mapData(([interval, matchStartTimestamp]) => formatDuration(Date.now() - matchStartTimestamp)),
+		);
+		this.player$ = combineLatest([
+			interval(1000),
+			this.gameState.gameState$$.pipe(
+				this.mapData(
+					(state) => ({
+						playerName: state?.playerDeck?.hero?.playerName,
+						turnDuration: state?.playerDeck?.turnDuration,
+						turnTimings: state?.playerDeck?.turnTimings,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
+			),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useStreamerMode)),
+		]).pipe(
+			this.mapData(([interval, { playerName, turnDuration, turnTimings }, useStreamerMode]) =>
 				this.buildPlayer(
 					useStreamerMode ? this.i18n.translateString('decktracker.streamer-mode.you') : playerName,
 					turnDuration,
@@ -107,16 +112,21 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionStoreComponent
 				),
 			),
 		);
-		this.opponent$ = combineLatest(
+		this.opponent$ = combineLatest([
 			interval(1000),
-			this.store.listenDeckState$(
-				(state) => state?.opponentDeck?.hero?.playerName,
-				(state) => state?.opponentDeck?.turnDuration,
-				(state) => state?.opponentDeck?.turnTimings,
+			this.gameState.gameState$$.pipe(
+				this.mapData(
+					(state) => ({
+						playerName: state?.playerDeck?.hero?.playerName,
+						turnDuration: state?.playerDeck?.turnDuration,
+						turnTimings: state?.playerDeck?.turnTimings,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
-			this.listenForBasicPref$((prefs) => prefs.useStreamerMode),
-		).pipe(
-			this.mapData(([interval, [playerName, turnDuration, turnTimings], useStreamerMode]) =>
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useStreamerMode)),
+		]).pipe(
+			this.mapData(([interval, { playerName, turnDuration, turnTimings }, useStreamerMode]) =>
 				this.buildPlayer(
 					useStreamerMode ? this.i18n.translateString('decktracker.streamer-mode.opponent') : playerName,
 					turnDuration,
@@ -125,27 +135,38 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionStoreComponent
 			),
 		);
 
-		this.opacity$ = this.listenForBasicPref$((prefs) => prefs.turnTimerWidgetOpacity).pipe(
-			this.mapData((opacity) => Math.max(0.01, opacity / 100)),
+		this.opacity$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => Math.max(0.01, prefs.turnTimerWidgetOpacity / 100)),
 		);
-		this.width$ = this.listenForBasicPref$((prefs) => prefs.turnTimerWidgetWidth);
-		this.showTurnTimerMatchLength$ = this.listenForBasicPref$((prefs) => prefs.showTurnTimerMatchLength);
+		this.width$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.turnTimerWidgetWidth));
+		this.showTurnTimerMatchLength$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.showTurnTimerMatchLength),
+		);
 
-		this.store
-			.listenPrefs$((prefs) => prefs.turnTimerWidgetScale)
+		this.prefs.preferences$$
 			.pipe(
-				filter(([pref]) => !!pref),
-				this.mapData(([pref]) => pref),
+				this.mapData((prefs) => prefs.turnTimerWidgetScale),
+				filter((pref) => !!pref),
+				this.mapData((pref) => pref),
 			)
 			.subscribe((scale) => {
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	closeHandler = () => {
-		this.store?.send(new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, showTurnTimer: false })));
+	closeHandler = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			showTurnTimer: false,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	};
 
 	private buildPlayer(playerName: string, turnDuration: number, turnTimings: readonly TurnTiming[]): TurnTimerPlayer {
