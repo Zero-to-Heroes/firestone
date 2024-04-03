@@ -1,16 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { GameStateFacadeService } from '@firestone/constructed/common';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 import { AbyssalCurseCounterDefinition } from './definitions/abyssal-curse-counter';
 import { AnachronosCounterDefinition } from './definitions/anachronos-counter';
@@ -96,32 +94,31 @@ import { WheelOfDeathCounterDefinition } from './definitions/wheel-of-death-coun
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameCountersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() activeCounter: CounterType;
 	@Input() side: 'player' | 'opponent';
 
 	definition$: Observable<NonFunctionProperties<CounterDefinition<any, any>>>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly bgsState: BgsStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
+		await Promise.all([this.prefs.isReady(), this.gameState.isReady(), this.bgsState.isReady()]);
+
 		if (!this.activeCounter?.includes('bgs')) {
 			const definition = await this.buildDefinition(this.activeCounter, this.side);
-			this.definition$ = combineLatest([
-				this.store.listenDeckState$((state) => state),
-				definition.prefValue$ ?? of(null),
-			]).pipe(
-				filter(([[state], prefValue]) => !!state),
-				map(([[state], prefValue]) => ({
+			this.definition$ = combineLatest([this.gameState.gameState$$, definition.prefValue$ ?? of(null)]).pipe(
+				filter(([state, prefValue]) => !!state),
+				map(([state, prefValue]) => ({
 					counterInfo: definition.select(state),
 					prefValue: prefValue,
 				})),
@@ -137,12 +134,12 @@ export class GameCountersComponent extends AbstractSubscriptionStoreComponent im
 			// TODO: have each definition define what it listens to, instead of recomputing
 			// everything each time
 			this.definition$ = combineLatest([
-				this.store.listenBattlegrounds$(([state, prefs]) => state),
-				this.store.listenDeckState$((state) => state),
+				this.bgsState.gameState$$,
+				this.gameState.gameState$$,
 				definition.prefValue$ ?? of(null),
 			]).pipe(
-				filter(([[bgState], [deckState], prefValue]) => !!bgState && !!deckState),
-				map(([[bgState], [deckState], prefValue]) => ({
+				filter(([bgState, deckState, prefValue]) => !!bgState && !!deckState),
+				map(([bgState, deckState, prefValue]) => ({
 					counterInfo: definition.select({ deckState, bgState }),
 					prefValue: prefValue,
 				})),

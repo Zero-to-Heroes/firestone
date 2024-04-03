@@ -11,7 +11,7 @@ import {
 import { BgsQuestCardChoiceOption, DAILY_FREE_USES, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 @Component({
@@ -235,7 +235,6 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly el: ElementRef,
@@ -247,10 +246,9 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
 
-		this.prefs
-			.preferences$((prefs) => prefs.bgsQuestsOverlayScale)
+		this.prefs.preferences$$
 			.pipe(
-				this.mapData(([pref]) => pref),
+				this.mapData((prefs) => prefs.bgsQuestsOverlayScale),
 				filter((pref) => !!pref),
 				distinctUntilChanged(),
 				takeUntil(this.destroyed$),

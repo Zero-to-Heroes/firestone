@@ -6,9 +6,11 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
@@ -115,22 +117,29 @@ export class ReplayInfoGenericComponent
 	private sub$$: Subscription;
 
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe(
-			(replaysShowClassIcon) => {
+	async ngAfterContentInit() {
+		await this.prefs.isReady();
+
+		this.sub$$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon))
+			.subscribe((replaysShowClassIcon) => {
 				this.replaysShowClassIcon = replaysShowClassIcon;
 				this.updateInfo();
-			},
-		);
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')

@@ -5,10 +5,11 @@ import {
 	BgsPlayer,
 	BgsStateFacadeService,
 } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
+import { AdService } from '../../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
@@ -92,56 +93,38 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 
 	buddiesEnabled$: Observable<boolean>;
 
-	// opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
-
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
 		private readonly state: BgsStateFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.state.isReady();
+		await Promise.all([this.state.isReady(), this.prefs.isReady(), this.ads.isReady()]);
 
-		this.enableSimulation$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
-			.pipe(this.mapData(([pref]) => pref));
+		this.enableSimulation$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableSimulation));
 		this.showNextOpponentRecapSeparately$ = this.listenForBasicPref$(
 			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
 		);
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((showAds) => showAds));
-		this.buddiesEnabled$ = this.store
-			.listenBattlegrounds$(([state]) => state?.currentGame?.hasBuddies)
-			.pipe(this.mapData(([hasBuddies]) => hasBuddies));
-		this.currentTurn$ = this.store
-			.listenBattlegrounds$(([state, prefs]) => state?.currentGame?.currentTurn)
-			.pipe(this.mapData(([turn]) => turn));
-		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
-			.listenBattlegrounds$(
-				([state]) => state.panels,
-				([state]) => state.currentPanelId,
-			)
-			.pipe(
-				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
-				this.mapData(
-					([panels, currentPanelId]) =>
-						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
-					(a, b) => deepEqual(a, b),
-				),
-			);
+		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
+		this.buddiesEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasBuddies));
+		this.currentTurn$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.currentTurn));
+		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.state.gameState$$.pipe(
+			this.mapData(
+				(state) =>
+					state.panels?.find((panel) => panel.id === state.currentPanelId) as BgsNextOpponentOverviewPanel,
+				(a, b) => deepEqual(a, b),
+			),
+		);
 		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
-		this.lastOpponentPlayerId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentPlayerId)
-			.pipe(this.mapData(([lastOpponentPlayerId]) => lastOpponentPlayerId));
-		this.nextBattle$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				filter(([game]) => !!game),
-				this.mapData(([game]) => game.lastFaceOff()),
-			);
+		this.lastOpponentPlayerId$ = this.state.gameState$$.pipe(
+			this.mapData((state) => state.currentGame?.lastOpponentPlayerId),
+		);
+		this.nextBattle$ = this.state.gameState$$.pipe(this.mapData((state) => state.currentGame?.lastFaceOff()));
 		const opponents$ = this.state.gameState$$.pipe(
 			debounceTime(1000),
 			map((state) => state.currentGame?.players),
