@@ -137,6 +137,8 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly ads: AdService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefsService: PreferencesService,
+		private readonly decksProvider: DecksProviderService,
+		private readonly gameStatsProvider: GameStatsProviderService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -146,6 +148,8 @@ export class AppUiStoreService extends Store<Preferences> {
 	// This is called after all constructors have been called, so everything should be filled
 	public async start() {
 		await this.prefsService.isReady();
+		await this.decksProvider.isReady();
+		await this.gameStatsProvider.isReady();
 
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
@@ -558,11 +562,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initDecks() {
-		this.decks = (this.ow.getMainWindow().decksProvider as DecksProviderService).decks$;
+		this.decks = this.decksProvider.decks$$;
 	}
 
 	private initGameStats() {
-		this.gameStats = (this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService).gameStats$;
+		this.gameStats = this.gameStatsProvider.gameStats$$;
 	}
 
 	private initHighlightedBgsMinions() {

@@ -13,7 +13,7 @@ export class ArenaLastMatchService {
 	}
 
 	private async listForLastArenaMatch() {
-		this.gameStats.gameStats$
+		this.gameStats.gameStats$$
 			.pipe(
 				filter((stats) => !!stats?.length),
 				map((stats) => stats?.filter((s) => s.gameMode === 'arena')),

@@ -3,8 +3,14 @@ import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
@@ -15,60 +21,78 @@ import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { PatchInfo } from '../../../models/patches';
 import { classes } from '../../hs-utils';
+import { MainWindowStateFacadeService } from '../../mainwindow/store/main-window-state-facade.service';
 import { PatchesConfigService } from '../../patches-config.service';
-import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
+import { GameStatsProviderService } from '../../stats/game/game-stats-provider.service';
 import { deepEqual, groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
 @Injectable()
-export class DecksProviderService {
-	public decks$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[]>(null);
+export class DecksProviderService extends AbstractFacadeService<DecksProviderService> {
+	public decks$$: SubscriberAwareBehaviorSubject<readonly DeckSummary[]>;
 
-	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly patchesConfig: PatchesConfigService,
-		private readonly constructedPersonalDecks: ConstructedPersonalDecksService,
-	) {
-		window['decksProvider'] = this;
-		this.init();
+	private allCards: CardsFacadeService;
+	private patchesConfig: PatchesConfigService;
+	private constructedPersonalDecks: ConstructedPersonalDecksService;
+	private mainWindowState: MainWindowStateFacadeService;
+	private prefs: PreferencesService;
+	private gameStats: GameStatsProviderService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'DecksProviderService', () => !!this.decks$$);
 	}
 
-	private async init() {
-		await this.store.initComplete();
+	protected override assignSubjects() {
+		this.decks$$ = this.mainInstance.decks$$;
+	}
+
+	protected async init() {
+		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.patchesConfig = AppInjector.get(PatchesConfigService);
+		this.constructedPersonalDecks = AppInjector.get(ConstructedPersonalDecksService);
+		this.mainWindowState = AppInjector.get(MainWindowStateFacadeService);
+		this.prefs = AppInjector.get(PreferencesService);
+		this.gameStats = AppInjector.get(GameStatsProviderService);
+
 		await this.patchesConfig.isReady();
 		await this.constructedPersonalDecks.isReady();
+		await this.mainWindowState.isReady();
+		await this.prefs.isReady();
+		await this.gameStats.isReady();
 
-		this.decks$.onFirstSubscribe(() => {
+		this.decks$$.onFirstSubscribe(() => {
 			combineLatest([
-				this.store.gameStats$(),
-				this.store.listen$(([main, nav]) => main.decktracker.filters),
+				this.gameStats.gameStats$$,
+				this.mainWindowState.mainWindowState$$.pipe(map((state) => state.decktracker.filters)),
 				this.patchesConfig.currentConstructedMetaPatch$$,
 				this.constructedPersonalDecks.decks$$,
-				this.store.listenPrefs$(
-					(prefs) => prefs.desktopDeckDeletes,
-					(prefs) => prefs.desktopDeckHiddenDeckCodes,
-					(prefs) => prefs.constructedDeckVersions,
-					(prefs) => prefs.desktopDeckStatsReset,
-					(prefs) => prefs.desktopDeckShowHiddenDecks,
+				this.prefs.preferences$$.pipe(
+					map((prefs) => ({
+						desktopDeckDeletes: prefs.desktopDeckDeletes,
+						desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
+						constructedDeckVersions: prefs.constructedDeckVersions,
+						desktopDeckStatsReset: prefs.desktopDeckStatsReset,
+						desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
+					})),
 				),
 			])
 				.pipe(
 					tap((event) => console.debug('[decks-provider] received event', event)),
-					filter(([stats, [filters], patch]) => !!stats?.length),
+					filter(([stats, filters, patch]) => !!stats?.length),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(
 						([
 							stats,
-							[filters],
+							filters,
 							patch,
 							constructedPersonalAdditionalDecks,
-							[
+							{
 								desktopDeckDeletes,
 								desktopDeckHiddenDeckCodes,
 								constructedDeckVersions,
 								desktopDeckStatsReset,
 								desktopDeckShowHiddenDecks,
-							],
+							},
 						]) => {
 							return this.buildState(
 								stats,
@@ -84,7 +108,7 @@ export class DecksProviderService {
 						},
 					),
 				)
-				.subscribe(this.decks$);
+				.subscribe(this.decks$$);
 		});
 	}
 

@@ -15,15 +15,15 @@ import { CardClass } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/constructed/common';
 import { DeckState, GameState, StatsRecap } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { Observable, combineLatest, shareReplay } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
+import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
 	selector: 'decktracker-overlay-root',
@@ -51,7 +51,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[style.width.px]="overlayWidthInPx"
 							[ngClass]="{ 'hide-control-bar': !(showControlBar$ | async) }"
 						>
-							<!-- <div class="background"></div> -->
 							<decktracker-control-bar
 								[settingsCategory]="player"
 								[closeEvent]="closeEvent"
@@ -102,7 +101,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayRootComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
@@ -168,7 +167,6 @@ export class DeckTrackerOverlayRootComponent
 	private showTooltips = true;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private el: ElementRef,
 		private renderer: Renderer2,
@@ -177,28 +175,38 @@ export class DeckTrackerOverlayRootComponent
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly decksProvider: DecksProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.cardsHighlight.init();
 	}
 
 	async ngAfterViewInit() {
-		this.events.on(Events.SHOW_MODAL).subscribe(() => {
-			this.showBackdrop = true;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		this.events.on(Events.HIDE_MODAL).subscribe(() => {
-			this.showBackdrop = false;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// this.events.on(Events.SHOW_MODAL).subscribe(() => {
+		// 	this.showBackdrop = true;
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// });
+		// this.events.on(Events.HIDE_MODAL).subscribe(() => {
+		// 	this.showBackdrop = false;
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// });
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.patchesConfig.isReady(), this.gameState.isReady(), this.prefs.isReady()]);
+		await Promise.all([
+			this.patchesConfig.isReady(),
+			this.gameState.isReady(),
+			this.prefs.isReady(),
+			this.gameStats.isReady(),
+			this.mainWindowState.isReady(),
+			this.decksProvider.isReady(),
+		]);
 
 		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showDeckWinrateExtractor(preferences)),
@@ -244,20 +252,25 @@ export class DeckTrackerOverlayRootComponent
 					formatType: gameState?.metadata?.formatType,
 				})),
 			),
-			this.store.listen$(
-				([main, nav, prefs]) => main.decktracker.filters.time,
-				([main, nav, prefs]) => main.decktracker.filters.rank,
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData((main) => ({
+					timeFilter: main.decktracker.filters.time,
+					rankFilter: main.decktracker.filters.rank,
+				})),
 			),
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.store.gameStats$(),
-			this.store.decks$(),
+			this.gameStats.gameStats$$,
+			this.decksProvider.decks$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					desktopDeckDeletes: prefs.desktopDeckDeletes,
-					desktopDeckStatsReset: prefs.desktopDeckStatsReset,
-					desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
-					desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
-				})),
+				this.mapData(
+					(prefs) => ({
+						desktopDeckDeletes: prefs.desktopDeckDeletes,
+						desktopDeckStatsReset: prefs.desktopDeckStatsReset,
+						desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
+						desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
 			debounceTime(1000),
@@ -266,7 +279,7 @@ export class DeckTrackerOverlayRootComponent
 					showDeckWinrate,
 					showMatchupWinrate,
 					{ deckstring, formatType },
-					[timeFilter, rankFilter],
+					{ timeFilter, rankFilter },
 					patch,
 					gameStats,
 					decks,
@@ -283,7 +296,7 @@ export class DeckTrackerOverlayRootComponent
 					showDeckWinrate,
 					showMatchupWinrate,
 					{ deckstring, formatType },
-					[timeFilter, rankFilter],
+					{ timeFilter, rankFilter },
 					patch,
 					gameStats,
 					decks,
@@ -429,7 +442,6 @@ export class DeckTrackerOverlayRootComponent
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
-		// this.cardsHighlight.shutDown();
 	}
 
 	onMinimize() {

@@ -42,6 +42,7 @@ import { GameNativeStateStoreService } from '../../js/services/game/game-native-
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
 import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
+import { MainWindowStateFacadeService } from '../../js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
@@ -61,6 +62,7 @@ export class BootstrapStoreServicesService {
 		// TODO: this has a lot of dependencies, it should be refactored to limit the impact
 		// and let the store be started up as soon as possible
 		private readonly mainWindowStore: MainWindowStoreService,
+		private readonly init_MainWindowStateFacadeService: MainWindowStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateService,
 		private readonly gameNativeState: GameNativeStateStoreService,

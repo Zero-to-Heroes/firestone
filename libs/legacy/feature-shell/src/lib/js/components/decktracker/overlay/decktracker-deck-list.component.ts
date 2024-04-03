@@ -8,22 +8,20 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	Optional,
 	Output,
 	ViewRef,
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, GameFormat } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SetCard } from '../../../models/set';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-deck-list',
@@ -94,10 +92,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerDeckListComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	deckstring$: Observable<string>;
 	deckState$: Observable<DeckState>;
 
@@ -143,18 +138,20 @@ export class DeckTrackerDeckListComponent
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
-		@Optional() protected readonly store: AppUiStoreFacadeService,
+		// @Optional() protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private el: ElementRef,
+		private readonly el: ElementRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.sub$$ = this.store
-			?.listenPrefs$((prefs) => prefs.decktrackerScale)
-			.pipe(this.mapData(([pref]) => pref))
+	async ngAfterContentInit() {
+		await Promise.all([this.prefs.isReady()]);
+
+		this.sub$$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.decktrackerScale))
 			.subscribe((scale) => this.refreshScroll());
 		this.deckState$ = this.deckState$$.asObservable();
 		this.deckstring$ = this.deckState$$.asObservable().pipe(
@@ -208,6 +205,10 @@ export class DeckTrackerDeckListComponent
 				return encode(deckDefinition);
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')

@@ -804,6 +804,7 @@ import { LotteryService } from './js/services/lottery/lottery.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { CollectionBootstrapService } from './js/services/mainwindow/store/collection-bootstrap.service';
+import { MainWindowStateFacadeService } from './js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from './js/services/mainwindow/store/store-bootstrap.service';
 import { TwitchAuthService } from './js/services/mainwindow/twitch-auth.service';
@@ -1780,6 +1781,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AdService,
 		TipService,
 		MainWindowStoreService,
+		MainWindowStateFacadeService,
 		StoreBootstrapService,
 		LazyDataInitService,
 		QuestsService,

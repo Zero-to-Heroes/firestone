@@ -71,6 +71,7 @@ export class AppUiStoreFacadeService {
 		return this.store.initComplete();
 	}
 
+	/** @deprecated */
 	public listen$<S extends Selector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
@@ -135,6 +136,7 @@ export class AppUiStoreFacadeService {
 		return this.store.duelsHeroStats$();
 	}
 
+	/** @deprecated */
 	public gameStats$(): Observable<readonly GameStat[]> {
 		return this.store.gameStats$();
 	}
@@ -167,6 +169,7 @@ export class AppUiStoreFacadeService {
 		return this.store.duelsLeaderboard$();
 	}
 
+	/** @deprecated */
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.store.decks$();
 	}
