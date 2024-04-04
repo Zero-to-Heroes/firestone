@@ -1,10 +1,20 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	ViewRef,
+} from '@angular/core';
 import { CardBack } from '@firestone/memory';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -41,7 +51,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBacksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class CardBacksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 139;
 
 	animated$: Observable<boolean>;
@@ -53,28 +63,36 @@ export class CardBacksComponent extends AbstractSubscriptionStoreComponent imple
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly collectionManager: CollectionManager,
+		private readonly ow: OverwolfService,
+	) {
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
-		this.store
-			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				const cardScale = value / 100;
-				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
-		const cardBacks$ = this.store.cardBacks$().pipe(this.mapData((cardBacks) => cardBacks));
+		await Promise.all([this.prefs.isReady(), this.collectionManager.isReady()]);
+
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+
+		this.animated$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionUseAnimatedCardBacks));
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
+			const cardScale = value / 100;
+			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+		const cardBacks$ = this.collectionManager.cardBacks$$.pipe(this.mapData((cardBacks) => cardBacks));
 		this.total$ = cardBacks$.pipe(this.mapData((cardBacks) => cardBacks?.length ?? 0));
 		this.unlocked$ = cardBacks$.pipe(
 			this.mapData((cardBacks) => cardBacks?.filter((item) => item.owned).length ?? 0),
 		);
-		this.shownCardBacks$ = combineLatest(this.cardsOwnedActiveFilter$$.asObservable(), cardBacks$).pipe(
+		this.shownCardBacks$ = combineLatest([this.cardsOwnedActiveFilter$$.asObservable(), cardBacks$]).pipe(
 			this.mapData(([filter, cardBacks]) =>
 				cardBacks?.filter(this.filterCardsOwned(filter)).map((cardBack) => ({
 					...cardBack,
@@ -84,6 +102,10 @@ export class CardBacksComponent extends AbstractSubscriptionStoreComponent imple
 				})),
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
@@ -91,7 +113,7 @@ export class CardBacksComponent extends AbstractSubscriptionStoreComponent imple
 	}
 
 	showFullCardBack(cardBack: CardBack) {
-		this.store.send(new ShowCardBackDetailsEvent(cardBack.id));
+		this.stateUpdater.next(new ShowCardBackDetailsEvent(cardBack.id));
 	}
 
 	trackByCardId(index: number, card: CardBack) {
