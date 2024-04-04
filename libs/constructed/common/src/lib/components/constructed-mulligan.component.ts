@@ -24,7 +24,6 @@ import {
 	filter,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
@@ -141,16 +140,16 @@ export class ConstructedMulliganComponent
 			)
 			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
-		this.showHandInfo$ = this.prefs
-			.preferences$((prefs) => prefs.decktrackerShowMulliganCardImpact)
-			.pipe(this.mapData(([showMulliganCardImpact]) => showMulliganCardImpact));
+		this.showHandInfo$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.decktrackerShowMulliganCardImpact),
+		);
 		this.showMulliganOverview$ = combineLatest([
 			this.showPremiumBanner$$,
 			this.noData$$,
-			this.prefs.preferences$((prefs) => prefs.decktrackerShowMulliganDeckOverview),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
 		]).pipe(
 			this.mapData(
-				([showPremiumBanner, noData, [showMulliganOverview]]) =>
+				([showPremiumBanner, noData, showMulliganOverview]) =>
 					!noData && !showPremiumBanner && showMulliganOverview,
 			),
 		);
@@ -210,11 +209,9 @@ export class ConstructedMulliganComponent
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		this.prefs
-			.preferences$((prefs) => prefs.decktrackerMulliganScale)
+		this.prefs.preferences$$
 			.pipe(
-				tap((scale) => console.debug('[mulligan] setting scale', scale)),
-				this.mapData(([pref]) => pref),
+				this.mapData((prefs) => prefs.decktrackerMulliganScale),
 				filter((pref) => !!pref),
 				distinctUntilChanged(),
 				takeUntil(this.destroyed$),

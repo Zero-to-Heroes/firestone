@@ -5,6 +5,7 @@ import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { map } from 'rxjs';
 
 const BGS_QUESTS_URL =
 	'https://static.zerotoheroes.com/api/bgs/quest-stats/mmr-%percentile%/%timePeriod%/overview-from-hourly.gz.json';
@@ -32,12 +33,14 @@ export class BattlegroundsQuestsService extends AbstractFacadeService<Battlegrou
 		await this.prefs.isReady();
 
 		this.questStats$$.onFirstSubscribe(async () => {
-			this.prefs
-				.preferences$(
-					(prefs) => prefs.bgsActiveTimeFilter,
-					(prefs) => prefs.bgsActiveRankFilter,
+			this.prefs.preferences$$
+				.pipe(
+					map((prefs) => ({
+						timeFilter: prefs.bgsActiveTimeFilter,
+						rankFilter: prefs.bgsActiveRankFilter,
+					})),
 				)
-				.subscribe(async ([timeFilter, rankFilter]) => {
+				.subscribe(async ({ timeFilter, rankFilter }) => {
 					const quests = await this.loadQuestsInternal(timeFilter, rankFilter);
 					this.questStats$$.next(quests);
 				});

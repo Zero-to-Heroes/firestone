@@ -47,10 +47,10 @@ export class ArenaCardClassFilterDropdownComponent
 
 		this.filter$ = combineLatest([
 			this.nav.selectedCategoryId$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveCardClassFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveCardClassFilter)),
 		]).pipe(
-			filter(([selectedCategoryId, [filter]]) => !!filter),
-			this.mapData(([selectedCategoryId, [filter]]) => {
+			filter(([selectedCategoryId, filter]) => !!filter),
+			this.mapData(([selectedCategoryId, filter]) => {
 				const options = ['all', 'neutral', 'no-neutral'].map(
 					(option) =>
 						({

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ArenaRunInfo, HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
 import { ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { ArenaGroupedRuns } from '../../models/arena-high-wins-runs';
@@ -65,11 +65,16 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 
 		this.runGroups$ = combineLatest([
 			this.runsService.runs$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.arenaActiveClassFilter,
-				(prefs) => prefs.arenaActiveWinsFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						playerClass: prefs.arenaActiveClassFilter,
+						wins: prefs.arenaActiveWinsFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
-		]).pipe(this.mapData(([runs, [playerClass, wins]]) => this.buildGroups(runs, playerClass, wins)));
+		]).pipe(this.mapData(([runs, { playerClass, wins }]) => this.buildGroups(runs, playerClass, wins)));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

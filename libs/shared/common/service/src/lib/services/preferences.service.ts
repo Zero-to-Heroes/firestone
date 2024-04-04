@@ -64,18 +64,6 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		};
 	}
 
-	/** @deprecated Looks like it causes memory leaks */
-	public preferences$<S extends PrefsSelector<Preferences, any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
-		return this.preferences$$.pipe(
-			filter((prefs) => !!prefs),
-			map((prefs) => selectors.map((selector) => selector(prefs))),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
-		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
-	}
-
 	public preferencesSingle$<S extends PrefsSelector<Preferences, any>>(
 		selector: S,
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {

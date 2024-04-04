@@ -5,7 +5,7 @@ import { ArenaCardStat, ArenaCardStats } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
 
 const ARENA_CARD_MATCH_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/cards/%timePeriod%/%context%.gz.json`;
@@ -40,12 +40,14 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			console.debug('[arena-card-stats] init');
 			await this.prefs.isReady();
 
-			this.prefs
-				.preferences$(
-					(prefs) => prefs.arenaActiveTimeFilter,
-					(prefs) => prefs.arenaActiveClassFilter,
+			this.prefs.preferences$$
+				.pipe(
+					map((prefs) => ({
+						timeFilter: prefs.arenaActiveTimeFilter,
+						classFilter: prefs.arenaActiveClassFilter,
+					})),
 				)
-				.subscribe(async ([timeFilter, classFilter]) => {
+				.subscribe(async ({ timeFilter, classFilter }) => {
 					const timePeriod =
 						timeFilter === 'all-time'
 							? 'past-20'

@@ -79,14 +79,19 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 			this.store.gameStats$(),
 			this.arenaRewards.arenaRewards$$,
 			this.arenaDeckStats.deckStats$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.arenaActiveTimeFilter,
-				(prefs) => prefs.arenaActiveClassFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						timeFilter: prefs.arenaActiveTimeFilter,
+						heroFilter: prefs.arenaActiveClassFilter,
+					}),
+					(a, b) => a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter,
+				),
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
 		]).pipe(
-			filter(([stats, rewards, deckStats, [timeFilter, heroFilter]]) => !!stats?.length),
-			this.mapData(([stats, rewards, deckStats, [timeFilter, heroFilter], patch]) => {
+			filter(([stats, rewards, deckStats, { timeFilter, heroFilter }]) => !!stats?.length),
+			this.mapData(([stats, rewards, deckStats, { timeFilter, heroFilter }, patch]) => {
 				const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena').filter((stat) => !!stat.runId);
 				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
 				const filteredRuns = arenaRuns

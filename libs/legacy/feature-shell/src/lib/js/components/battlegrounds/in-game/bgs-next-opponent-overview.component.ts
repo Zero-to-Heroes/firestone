@@ -6,12 +6,10 @@ import {
 	BgsStateFacadeService,
 } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-next-opponent-overview',
@@ -80,7 +78,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableSimulation$: Observable<boolean>;
 	showNextOpponentRecapSeparately$: Observable<boolean>;
 	showAds$: Observable<boolean>;
@@ -94,21 +92,20 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreC
 	buddiesEnabled$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly state: BgsStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await Promise.all([this.state.isReady(), this.prefs.isReady(), this.ads.isReady()]);
 
 		this.enableSimulation$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableSimulation));
-		this.showNextOpponentRecapSeparately$ = this.listenForBasicPref$(
-			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
+		this.showNextOpponentRecapSeparately$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowNextOpponentRecapSeparately),
 		);
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
 		this.buddiesEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasBuddies));

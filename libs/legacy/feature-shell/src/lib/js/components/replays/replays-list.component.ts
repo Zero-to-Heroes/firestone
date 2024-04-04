@@ -1,12 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
+import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -64,12 +66,13 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.prefs.isReady();
+		await Promise.all([this.prefs.isReady(), this.gameStats.isReady()]);
 
 		this.showUseClassIconsToggle$ = this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter).pipe(
 			this.mapData(
@@ -97,21 +100,26 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 			),
 		);
 		this.replays$ = combineLatest([
-			this.store.gameStats$(),
-			this.prefs.preferences$(
-				(prefs) => prefs.replaysActiveGameModeFilter,
-				(prefs) => prefs.replaysActiveBgHeroFilter,
-				(prefs) => prefs.replaysActiveDeckstringsFilter,
-				(prefs) => prefs.replaysActivePlayerClassFilter,
-				(prefs) => prefs.replaysActiveOpponentClassFilter,
+			this.gameStats.gameStats$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						gameModeFilter: prefs.replaysActiveGameModeFilter,
+						bgHeroFilter: prefs.replaysActiveBgHeroFilter,
+						deckstringsFilter: prefs.replaysActiveDeckstringsFilter,
+						playerClassFilter: prefs.replaysActivePlayerClassFilter,
+						opponentClassFilter: prefs.replaysActiveOpponentClassFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.opponentSearchString$$,
 		]).pipe(
-			filter(([gameStats, [other]]) => !!gameStats?.length),
+			filter(([gameStats]) => !!gameStats?.length),
 			this.mapData(
 				([
 					gameStats,
-					[gameModeFilter, bgHeroFilter, deckstringsFilter, playerClassFilter, opponentClassFilter],
+					{ gameModeFilter, bgHeroFilter, deckstringsFilter, playerClassFilter, opponentClassFilter },
 					opponentSearchString,
 				]) => {
 					return this.applyFilters(

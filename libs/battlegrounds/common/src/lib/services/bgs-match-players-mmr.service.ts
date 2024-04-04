@@ -43,10 +43,10 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 			const gameInfo$ = combineLatest([
 				this.memoryInfo.battlegroundsMemoryInfo$$,
 				this.gameState.gameState$$,
-				this.prefs.preferences$((prefs) => prefs.bgsUseLeaderboardDataInOverlay),
+				this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsUseLeaderboardDataInOverlay)),
 			]).pipe(
 				debounceTime(500),
-				filter(([memoryInfo, gameState, [useLeaderboardData]]) => useLeaderboardData),
+				filter(([memoryInfo, gameState, useLeaderboardData]) => useLeaderboardData),
 				tap((info) => console.debug('[bgs-match-players-mmr] before game info', info)),
 				map(([memoryInfo, gameState]) => {
 					if (!memoryInfo?.Game?.Players?.length || !gameState?.region) {

@@ -118,29 +118,23 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 	}
 
 	ngAfterContentInit() {
-		this.discordDisabled$ = this.prefs
-			.preferences$((prefs) => prefs.discordRichPresence)
-			.pipe(this.mapData(([value]) => !value));
-		this.discordRpcDisableCustomInGameText$ = this.prefs
-			.preferences$((prefs) => prefs.discordRpcEnableCustomInGameText)
-			.pipe(this.mapData(([value]) => !value));
-		this.discordRpcDisableCustomInMatchText$ = this.prefs
-			.preferences$((prefs) => prefs.discordRpcEnableCustomInMatchText)
-			.pipe(this.mapData(([value]) => !value));
-		this.customInput$ = this.prefs
-			.preferences$((prefs) => prefs.discordRpcCustomInGameText)
-			.pipe(
-				this.mapData(([value]) => value),
-				take(1),
-				takeUntil(this.destroyed$),
-			);
-		this.customMatchInput$ = this.prefs
-			.preferences$((prefs) => prefs.discordRpcCustomInMatchText)
-			.pipe(
-				this.mapData(([value]) => value),
-				take(1),
-				takeUntil(this.destroyed$),
-			);
+		this.discordDisabled$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.discordRichPresence));
+		this.discordRpcDisableCustomInGameText$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.discordRpcEnableCustomInGameText),
+		);
+		this.discordRpcDisableCustomInMatchText$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.discordRpcEnableCustomInMatchText),
+		);
+		this.customInput$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.discordRpcCustomInGameText),
+			take(1),
+			takeUntil(this.destroyed$),
+		);
+		this.customMatchInput$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.discordRpcCustomInMatchText),
+			take(1),
+			takeUntil(this.destroyed$),
+		);
 
 		this.customInGameTextPlaceholder = this.i18n.translateString(
 			'settings.general.discord.in-game-text-default-value',

@@ -134,7 +134,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 
 		const options$ = combineLatest([
 			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
-			this.prefs.preferences$((prefs) => prefs.bgsShowQuestStatsOverlay),
+			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowQuestStatsOverlay)),
 			quests$,
 			this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.getMainPlayer()?.cardId)),
 		]).pipe(

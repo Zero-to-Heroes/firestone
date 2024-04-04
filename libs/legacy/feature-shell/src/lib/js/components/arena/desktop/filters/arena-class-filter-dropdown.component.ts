@@ -50,10 +50,10 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 
 		this.filter$ = combineLatest([
 			this.nav.selectedCategoryId$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveClassFilter)),
 		]).pipe(
-			filter(([selectedCategoryId, [filter]]) => !!filter),
-			this.mapData(([selectedCategoryId, [filter]]) => {
+			filter(([selectedCategoryId, filter]) => !!filter),
+			this.mapData(([selectedCategoryId, filter]) => {
 				const options = ['all', ...(classes as ArenaClassFilterType[])].map(
 					(option) =>
 						({

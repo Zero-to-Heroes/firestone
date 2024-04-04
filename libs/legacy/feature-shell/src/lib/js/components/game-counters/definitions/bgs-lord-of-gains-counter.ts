@@ -34,12 +34,10 @@ export class BgsLordOfGainsCounterDefinition
 	): Promise<BgsLordOfGainsCounterDefinition> {
 		await prefs.isReady();
 		const result = new BgsLordOfGainsCounterDefinition(side, allCards, i18n);
-		result.prefValue$ = prefs
-			.preferences$((prefs) => prefs.countersUseExpandedView)
-			.pipe(
-				distinctUntilChanged(),
-				map(([pref]) => pref),
-			);
+		result.prefValue$ = prefs.preferences$$.pipe(
+			map((prefs) => prefs.countersUseExpandedView),
+			distinctUntilChanged(),
+		);
 		return result;
 	}
 

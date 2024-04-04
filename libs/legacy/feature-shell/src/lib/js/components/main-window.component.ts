@@ -163,7 +163,7 @@ export class MainWindowComponent
 			),
 		);
 		this.showAds$ = combineLatest([
-			this.store.showAds$(),
+			this.store.showAds$().pipe(this.mapData((showAds) => showAds)),
 			this.store.listen$(([main, nav, prefs]) => main.showFtue),
 		]).pipe(
 			this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),

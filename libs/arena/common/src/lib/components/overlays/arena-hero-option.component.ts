@@ -66,15 +66,12 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 			this.mapData((info) => info),
 			tap((info) => console.debug('[arena-hero-option] showWidget', info)),
 		);
-		this.prefs
-			.preferences$((prefs) => prefs.arenaDraftOverlayScale)
-			.pipe(this.mapData(([value]) => value))
-			.subscribe((value) => {
-				const newScale = value / 100;
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
-			});
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale)).subscribe((value) => {
+			const newScale = value / 100;
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

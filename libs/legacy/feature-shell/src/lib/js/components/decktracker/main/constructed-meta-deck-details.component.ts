@@ -47,9 +47,9 @@ export class ConstructedMetaDeckDetailsComponent
 		await this.prefs.isReady();
 
 		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
-		this.showRelativeInfo$ = this.prefs
-			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo2)
-			.pipe(this.mapData(([showRelativeInfo]) => showRelativeInfo));
+		this.showRelativeInfo$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.constructedMetaDecksShowRelativeInfo2),
+		);
 		this.collection$ = this.store.collection$().pipe(
 			filter((collection) => !!collection),
 			debounceTime(500),
@@ -57,9 +57,9 @@ export class ConstructedMetaDeckDetailsComponent
 		);
 		this.deckDetails$ = combineLatest([
 			this.constructedMetaStats.currentConstructedMetaDeck$$,
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksUseConservativeWinrate),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksUseConservativeWinrate)),
 		]).pipe(
-			this.mapData(([stat, [conservativeEstimate]]) => {
+			this.mapData(([stat, conservativeEstimate]) => {
 				console.debug('deckStat', stat);
 				if (!stat) {
 					// Keep the null / undefined

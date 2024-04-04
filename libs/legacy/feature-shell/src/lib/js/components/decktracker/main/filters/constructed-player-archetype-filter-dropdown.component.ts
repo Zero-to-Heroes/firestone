@@ -90,11 +90,11 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 			}),
 		);
 		this.filter$ = combineLatest([
-			this.prefs.preferences$((prefs) => prefs.constructedMetaDecksArchetypeFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksArchetypeFilter)),
 			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 		]).pipe(
 			tap((filter) => console.debug('[archetype-filter] filter', filter)),
-			this.mapData(([[filter], [currentView]]) => ({
+			this.mapData(([filter, [currentView]]) => ({
 				selected: filter.map((a) => '' + a),
 				placeholder: this.i18n.translateString(`app.decktracker.filters.archetype-filter.all`),
 			})),

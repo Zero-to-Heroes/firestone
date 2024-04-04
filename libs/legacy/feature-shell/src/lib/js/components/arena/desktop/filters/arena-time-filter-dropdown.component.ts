@@ -48,11 +48,11 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreC
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentArenaMetaPatch$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveTimeFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveTimeFilter)),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
-			filter(([patch, [filter], selectedCategoryId]) => !!filter && !!patch),
-			this.mapData(([patch, [filter], selectedCategoryId]) => {
+			filter(([patch, filter, selectedCategoryId]) => !!filter && !!patch),
+			this.mapData(([patch, filter, selectedCategoryId]) => {
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',

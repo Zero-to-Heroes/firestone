@@ -169,9 +169,9 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		this.isDeck$ = this.isDeck$$.asObservable();
-		this.showImpact$ = this.prefs
-			.preferences$((prefs) => prefs.constructedMetaDecksShowRelativeInfo2)
-			.pipe(this.mapData(([showImpact]) => showImpact));
+		this.showImpact$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.constructedMetaDecksShowRelativeInfo2),
+		);
 		this.mulliganWinrateHeader$ = this.showImpact$.pipe(
 			this.mapData((showImpact) =>
 				showImpact

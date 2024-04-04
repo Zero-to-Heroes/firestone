@@ -7,7 +7,7 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaCombinedCardStat } from '../../models/arena-combined-card-stat';
@@ -201,13 +201,18 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			this.arenaCardStats.cardStats$$,
 			this.arenaCardStats.searchString$$,
 			this.sortCriteria$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.arenaActiveCardTypeFilter,
-				(prefs) => prefs.arenaActiveCardClassFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						cardType: prefs.arenaActiveCardTypeFilter,
+						cardClass: prefs.arenaActiveCardClassFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
 			tap((info) => console.debug('[arena-card-stats] received info', info)),
-			this.mapData(([stats, searchString, sortCriteria, [cardType, cardClass]]) =>
+			this.mapData(([stats, searchString, sortCriteria, { cardType, cardClass }]) =>
 				this.buildCardStats(stats?.stats, cardType, cardClass, searchString, sortCriteria),
 			),
 			tap((info) => console.debug('[arena-card-stats] built card stats', info)),
@@ -221,7 +226,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		);
 		this.totalGames$ = combineLatest([
 			this.arenaClassStats.classStats$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveClassFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveClassFilter)),
 		]).pipe(
 			filter(([stats]) => !!stats),
 			this.mapData(

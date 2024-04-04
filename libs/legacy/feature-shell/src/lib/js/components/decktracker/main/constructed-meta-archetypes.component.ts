@@ -3,7 +3,7 @@ import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -124,21 +124,26 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComp
 		await this.prefs.isReady();
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
-		this.showStandardDeviation$ = this.prefs
-			.preferences$((prefs) => !prefs.constructedMetaDecksUseConservativeWinrate)
-			.pipe(this.mapData(([pref]) => pref));
+		this.showStandardDeviation$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => !prefs.constructedMetaDecksUseConservativeWinrate),
+		);
 		this.archetypes$ = combineLatest([
 			this.sortCriteria$$,
 			this.constructedMetaStats.constructedMetaArchetypes$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
-				(prefs) => prefs.constructedMetaArchetypesSampleSizeFilter,
-				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
-				(prefs) => prefs.constructedMetaDecksArchetypeFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						useConservativeEstimate: prefs.constructedMetaDecksUseConservativeWinrate,
+						sampleSize: prefs.constructedMetaArchetypesSampleSizeFilter,
+						playerClasses: prefs.constructedMetaDecksPlayerClassFilter,
+						archetypes: prefs.constructedMetaDecksArchetypeFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
-			filter(([sortCriteria, stats, [useConservativeEstimate, sampleSize]]) => !!stats?.dataPoints),
-			this.mapData(([sortCriteria, stats, [useConservativeEstimate, sampleSize, playerClasses, archetypes]]) =>
+			filter(([sortCriteria, stats, { useConservativeEstimate, sampleSize }]) => !!stats?.dataPoints),
+			this.mapData(([sortCriteria, stats, { useConservativeEstimate, sampleSize, playerClasses, archetypes }]) =>
 				stats.archetypeStats
 					.filter((a) => a.totalGames >= sampleSize)
 					.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.heroCardClass))

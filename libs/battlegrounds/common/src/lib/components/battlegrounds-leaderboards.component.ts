@@ -3,7 +3,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { LeaderboardEntry } from '@firestone-hs/official-leaderboards';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, tap } from 'rxjs';
 import { BattlegroundsOfficialLeaderboardService } from '../services/bgs-official-leaderboards.service';
@@ -61,17 +61,22 @@ export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent impl
 
 		this.leaderboard$ = combineLatest([
 			this.leaderboardsService.leaderboards$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.bgsLeaderboardRegionFilter,
-				(prefs) => prefs.bgsLeaderboardPlayerSearch,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						region: prefs.bgsLeaderboardRegionFilter,
+						bgsLeaderboardPlayerSearch: prefs.bgsLeaderboardPlayerSearch,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
 			tap((data) => console.debug('[bgs-leaderboards] received data', data)),
 			filter(
-				([leaderboards, [region, bgsLeaderboardPlayerSearch]]) =>
+				([leaderboards, { region, bgsLeaderboardPlayerSearch }]) =>
 					!!leaderboards?.leaderboards?.length && !!region,
 			),
-			this.mapData(([leaderboards, [region, bgsLeaderboardPlayerSearch]]) => {
+			this.mapData(([leaderboards, { region, bgsLeaderboardPlayerSearch }]) => {
 				const entries = leaderboards!.leaderboards!.find(
 					(leaderboard) => leaderboard.region === region,
 				)!.entries;

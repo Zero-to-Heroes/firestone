@@ -11,6 +11,7 @@ import { PatchInfo } from '../../../models/patches';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
+import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -117,23 +118,28 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
-		await this.prefs.isReady();
+		await Promise.all([this.patchesConfig.isReady(), this.prefs.isReady(), this.gameStats.isReady()]);
 
 		this.stats$ = combineLatest([
-			this.store.gameStats$(),
-			this.prefs.preferences$(
-				(prefs) => prefs.arenaActiveTimeFilter,
-				(prefs) => prefs.arenaActiveClassFilter,
+			this.gameStats.gameStats$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						timeFilter: prefs.arenaActiveTimeFilter,
+						heroFilter: prefs.arenaActiveClassFilter,
+					}),
+					(a, b) => a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter,
+				),
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
 		]).pipe(
-			this.mapData(([stats, [timeFilter, heroFilter], patch]) => {
+			this.mapData(([stats, { timeFilter, heroFilter }, patch]) => {
 				const arenaMatches = stats?.filter((stat) => stat.gameMode === 'arena');
 				if (!arenaMatches.length) {
 					return null;

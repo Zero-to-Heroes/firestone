@@ -8,9 +8,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
@@ -49,7 +48,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GenericCountersComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
+export class GenericCountersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() value: number | string;
 	@Input() valueImg: string;
 	@Input() image: string;
@@ -64,13 +63,12 @@ export class GenericCountersComponent extends AbstractSubscriptionStoreComponent
 	private side$$ = new BehaviorSubject<'player' | 'opponent'>('player');
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterViewInit() {
@@ -78,11 +76,13 @@ export class GenericCountersComponent extends AbstractSubscriptionStoreComponent
 
 		combineLatest([
 			this.side$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.countersScale,
-				(prefs) => prefs.countersScaleOpponent,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					scalePlayer: prefs.countersScale,
+					scaleOpponent: prefs.countersScaleOpponent,
+				})),
 			),
-		]).subscribe(([side, [scalePlayer, scaleOpponent]]) => {
+		]).subscribe(([side, { scalePlayer, scaleOpponent }]) => {
 			const scale = side === 'player' ? scalePlayer : scaleOpponent;
 			const element = this.el.nativeElement.querySelector('.scalable');
 			if (element) {

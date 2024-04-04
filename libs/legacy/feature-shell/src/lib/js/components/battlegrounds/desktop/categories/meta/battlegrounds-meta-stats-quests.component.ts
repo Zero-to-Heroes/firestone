@@ -74,21 +74,17 @@ export class BattlegroundsMetaStatsQuestsComponent
 		await this.prefs.isReady();
 		await this.quests.isReady();
 
-		this.questsTab$ = this.prefs
-			.preferences$((prefs) => prefs.bgsQuestsActiveTab)
-			.pipe(this.mapData(([pref]) => pref));
-		this.groupedByDifficulty$ = this.prefs
-			.preferences$((prefs) => prefs.bgsGroupQuestsByDifficulty)
-			.pipe(this.mapData(([pref]) => pref));
+		this.questsTab$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsQuestsActiveTab));
+		this.groupedByDifficulty$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsGroupQuestsByDifficulty),
+		);
 
 		this.questStats$ = combineLatest([this.quests.questStats$$, this.groupedByDifficulty$]).pipe(
 			this.mapData(([stats, bgsGroupQuestsByDifficulty]) =>
 				buildQuestStats(stats?.questStats ?? [], bgsGroupQuestsByDifficulty, this.allCards),
 			),
 		);
-		this.collapsedQuests$ = this.prefs
-			.preferences$((prefs) => prefs.bgsQuestsCollapsed)
-			.pipe(this.mapData(([pref]) => pref ?? []));
+		this.collapsedQuests$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsQuestsCollapsed ?? []));
 		this.rewardStats$ = combineLatest([this.quests.questStats$$]).pipe(
 			this.mapData(([stats]) => buildQuestRewardStats(stats?.rewardStats ?? [], this.allCards)),
 		);

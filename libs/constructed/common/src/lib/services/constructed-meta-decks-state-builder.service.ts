@@ -9,10 +9,10 @@ import {
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
@@ -75,38 +75,44 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		combineLatest([
 			this.triggerLoadDecks$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.constructedMetaDecksRankFilter2,
-				(prefs) => prefs.constructedMetaDecksTimeFilter,
-				(prefs) => prefs.constructedMetaDecksFormatFilter,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => ({
+					rankFilter: prefs.constructedMetaDecksRankFilter2,
+					timeFilter: prefs.constructedMetaDecksTimeFilter,
+					formatFilter: prefs.constructedMetaDecksFormatFilter,
+				})),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
 		])
 			.pipe(
 				filter(
-					([triggerLoad, [rankFilter, timeFilter, formatFilter]]) =>
+					([triggerLoad, { rankFilter, timeFilter, formatFilter }]) =>
 						triggerLoad && !!timeFilter && !!formatFilter && !!rankFilter,
 				),
 			)
-			.subscribe(async ([_, [rankFilter, timeFilter, formatFilter]]) => {
+			.subscribe(async ([_, { rankFilter, timeFilter, formatFilter }]) => {
 				this.constructedMetaDecks$$.next(null);
 				const stats = await this.loadNewDecks(formatFilter, timeFilter, rankFilter);
 				this.constructedMetaDecks$$.next(stats);
 			});
 		combineLatest([
 			this.navigation.selectedConstructedMetaDeck$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.constructedMetaDecksRankFilter2,
-				(prefs) => prefs.constructedMetaDecksTimeFilter,
-				(prefs) => prefs.constructedMetaDecksFormatFilter,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => ({
+					rankFilter: prefs.constructedMetaDecksRankFilter2,
+					timeFilter: prefs.constructedMetaDecksTimeFilter,
+					formatFilter: prefs.constructedMetaDecksFormatFilter,
+				})),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
 		])
 			.pipe(
 				filter(
-					([deckstring, [rankFilter, timeFilter, formatFilter]]) =>
+					([deckstring, { rankFilter, timeFilter, formatFilter }]) =>
 						!!timeFilter && !!formatFilter && !!rankFilter,
 				),
 			)
-			.subscribe(async ([deckstring, [rankFilter, timeFilter, formatFilter]]) => {
+			.subscribe(async ([deckstring, { rankFilter, timeFilter, formatFilter }]) => {
 				this.currentConstructedMetaDeck$$.next(null);
 				if (deckstring?.length) {
 					const deck = await this.loadNewDeckDetails(deckstring, formatFilter, timeFilter, rankFilter);
@@ -116,38 +122,44 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		combineLatest([
 			this.triggerLoadArchetypes$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.constructedMetaDecksRankFilter2,
-				(prefs) => prefs.constructedMetaDecksTimeFilter,
-				(prefs) => prefs.constructedMetaDecksFormatFilter,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => ({
+					rankFilter: prefs.constructedMetaDecksRankFilter2,
+					timeFilter: prefs.constructedMetaDecksTimeFilter,
+					formatFilter: prefs.constructedMetaDecksFormatFilter,
+				})),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
 		])
 			.pipe(
 				filter(
-					([triggerLoad, [rankFilter, timeFilter, formatFilter]]) =>
+					([triggerLoad, { rankFilter, timeFilter, formatFilter }]) =>
 						triggerLoad && !!timeFilter && !!formatFilter && !!rankFilter,
 				),
 			)
-			.subscribe(async ([_, [rankFilter, timeFilter, formatFilter]]) => {
+			.subscribe(async ([_, { rankFilter, timeFilter, formatFilter }]) => {
 				this.constructedMetaArchetypes$$.next(null);
 				const stats = await this.loadNewArchetypes(formatFilter, timeFilter, rankFilter);
 				this.constructedMetaArchetypes$$.next(stats);
 			});
 		combineLatest([
 			this.navigation.selectedConstructedMetaArchetype$$,
-			this.prefs.preferences$(
-				(prefs) => prefs.constructedMetaDecksRankFilter2,
-				(prefs) => prefs.constructedMetaDecksTimeFilter,
-				(prefs) => prefs.constructedMetaDecksFormatFilter,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => ({
+					rankFilter: prefs.constructedMetaDecksRankFilter2,
+					timeFilter: prefs.constructedMetaDecksTimeFilter,
+					formatFilter: prefs.constructedMetaDecksFormatFilter,
+				})),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
 		])
 			.pipe(
 				filter(
-					([archetypeId, [rankFilter, timeFilter, formatFilter]]) =>
+					([archetypeId, { rankFilter, timeFilter, formatFilter }]) =>
 						!!timeFilter && !!formatFilter && !!rankFilter,
 				),
 			)
-			.subscribe(async ([archetypeId, [rankFilter, timeFilter, formatFilter]]) => {
+			.subscribe(async ([archetypeId, { rankFilter, timeFilter, formatFilter }]) => {
 				this.currentConstructedMetaArchetype$$.next(null);
 				if (archetypeId != null && archetypeId > 0) {
 					const deck = await this.loadNewArchetypeDetails(archetypeId, formatFilter, timeFilter, rankFilter);

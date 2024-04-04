@@ -47,10 +47,10 @@ export class BattlegroundsLeaderboardRegionFilterDropdownComponent
 
 		this.filter$ = combineLatest([
 			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId),
-			this.prefs.preferences$((prefs) => prefs.bgsLeaderboardRegionFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsLeaderboardRegionFilter)),
 		]).pipe(
-			filter(([[selectedCategoryId], [filter]]) => !!selectedCategoryId),
-			this.mapData(([[selectedCategoryId], [filter]]) => {
+			filter(([[selectedCategoryId], filter]) => !!selectedCategoryId),
+			this.mapData(([[selectedCategoryId], filter]) => {
 				const allRegions = ['EU', 'US', 'AP'];
 				const options: FilterOption[] = allRegions.map(
 					(option) =>

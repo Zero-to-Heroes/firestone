@@ -46,10 +46,10 @@ export class ArenaHighWinRunsWinsFilterDropdownComponent
 
 		this.filter$ = combineLatest([
 			this.nav.selectedCategoryId$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveWinsFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveWinsFilter)),
 		]).pipe(
-			filter(([selectedCategoryId, [filter]]) => !!filter),
-			this.mapData(([selectedCategoryId, [filter]]) => {
+			filter(([selectedCategoryId, filter]) => !!filter),
+			this.mapData(([selectedCategoryId, filter]) => {
 				const options = [10, 11, 12].map((option) => ({
 					value: '' + option,
 					label: this.i18n.translateString('app.arena.filters.high-win-runs.wins', { value: option }),

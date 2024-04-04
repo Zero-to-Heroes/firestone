@@ -64,9 +64,9 @@ export class SettingsBattlegroundsLeaderboardComponent
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
 
-		this.bgsUseLeaderboardDataInOverlay$ = this.prefs
-			.preferences$((prefs) => prefs.bgsUseLeaderboardDataInOverlay)
-			.pipe(this.mapData(([pref]) => pref));
+		this.bgsUseLeaderboardDataInOverlay$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsUseLeaderboardDataInOverlay),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

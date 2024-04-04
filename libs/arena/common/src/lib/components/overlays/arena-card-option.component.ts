@@ -115,9 +115,8 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			tap((info) => console.debug('[arena-card-option] showWidget', info)),
 			this.mapData(([pickNumber, hasPremium]) => pickNumber === 0 || hasPremium),
 		);
-		this.prefs
-			.preferences$((prefs) => prefs.arenaDraftOverlayScale)
-			.pipe(this.mapData(([value]) => value))
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale))
 			.subscribe(async (value) => {
 				const newScale = value / 100;
 				const element = await this.getScalable();

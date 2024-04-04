@@ -5,6 +5,7 @@ import { GameFormat, GameType, formatGameType } from '@firestone-hs/reference-da
 import { GameStateUpdatesService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap } from 'rxjs';
 import { IN_GAME_TEXT_PLACEHOLDER } from './discord-presence-manager.service';
@@ -29,10 +30,11 @@ export class PresenceManagerService {
 		await this.gameStateUpdates.isReady();
 		await this.allCards.waitForReady();
 
-		this.prefs
-			.preferences$((prefs) => prefs.discordRichPresence)
+		this.prefs.preferences$$
 			.pipe(
-				switchMap(([useRichPresence]) => {
+				map((prefs) => prefs.discordRichPresence),
+				distinctUntilChanged(),
+				switchMap((useRichPresence) => {
 					// console.debug('[presence] new useRichPresence', useRichPresence);
 					return !useRichPresence ? of({ enabled: false }) : this.buildPresence();
 				}),
@@ -67,11 +69,14 @@ export class PresenceManagerService {
 		return combineLatest([
 			this.gameStatus.inGame$$,
 			//TODO: premium status. Wait until we migrate to tebex, so that we can use the refactored services?
-			this.prefs.preferences$(
-				(prefs) => prefs.discordRpcEnableCustomInGameText,
-				(prefs) => prefs.discordRpcEnableCustomInMatchText,
-				(prefs) => prefs.discordRpcCustomInGameText,
-				(prefs) => prefs.discordRpcCustomInMatchText,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => ({
+					enableCustomInGameText: prefs.discordRpcEnableCustomInGameText,
+					enableCustomInMatchText: prefs.discordRpcEnableCustomInMatchText,
+					gameText: prefs.discordRpcCustomInGameText,
+					matchText: prefs.discordRpcCustomInMatchText,
+				})),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
 			metaData$,
 			matchInfo$,
@@ -81,7 +86,7 @@ export class PresenceManagerService {
 			map(
 				([
 					inGame,
-					[enableCustomInGameText, enableCustomInMatchText, gameText, matchText],
+					{ enableCustomInGameText, enableCustomInMatchText, gameText, matchText },
 					metaData,
 					matchInfo,
 					playerHero,

@@ -47,10 +47,10 @@ export class ArenaCardTypeFilterDropdownComponent
 
 		this.filter$ = combineLatest([
 			this.nav.selectedCategoryId$$,
-			this.prefs.preferences$((prefs) => prefs.arenaActiveCardTypeFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveCardTypeFilter)),
 		]).pipe(
-			filter(([selectedCategoryId, [filter]]) => !!filter),
-			this.mapData(([selectedCategoryId, [filter]]) => {
+			filter(([selectedCategoryId, filter]) => !!filter),
+			this.mapData(([selectedCategoryId, filter]) => {
 				const options = ['all', 'legendary', 'treasure', 'other'].map(
 					(option) =>
 						({
