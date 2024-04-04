@@ -14,38 +14,57 @@ import {
 	SignatureTreasureDuelsDeckStatInfo,
 	TreasureDuelsDeckStatInfo,
 } from '@firestone/duels/general';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { sanitizeDeckDefinition, sanitizeDeckstring } from '@firestone/shared/common/view';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { combineLatest, concat } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual, deepEqual, groupByFunction } from '../utils';
 import { DuelsUserRunsService } from './duels-user-runs.service';
 
 @Injectable()
-export class DuelsDecksProviderService {
-	public duelsRuns$$ = new SubscriberAwareBehaviorSubject<readonly DuelsRun[]>(null);
-	public duelsDecks$$ = new SubscriberAwareBehaviorSubject<readonly DuelsDeckSummary[]>(null);
+export class DuelsDecksProviderService extends AbstractFacadeService<DuelsDecksProviderService> {
+	public duelsRuns$$: SubscriberAwareBehaviorSubject<readonly DuelsRun[]>;
+	public duelsDecks$$: SubscriberAwareBehaviorSubject<readonly DuelsDeckSummary[]>;
 
-	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly duelsUserRuns: DuelsUserRunsService,
-		private readonly duelsPersonalDecks: DuelsPersonalDecksService,
-	) {
-		window['duelsDecksProvider'] = this;
-		this.init();
+	private allCards: CardsFacadeService;
+	private i18n: LocalizationFacadeService;
+	private duelsUserRuns: DuelsUserRunsService;
+	private duelsPersonalDecks: DuelsPersonalDecksService;
+	private gameStats: GameStatsProviderService;
+	private prefs: PreferencesService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'DuelsDecksProviderService', () => !!this.duelsRuns$$);
 	}
 
-	private async init() {
-		await this.store.initComplete();
-		await this.duelsPersonalDecks.isReady();
+	protected override assignSubjects() {
+		this.duelsRuns$$ = this.mainInstance.duelsRuns$$;
+		this.duelsDecks$$ = this.mainInstance.duelsDecks$$;
+	}
+
+	protected async init() {
+		this.duelsRuns$$ = new SubscriberAwareBehaviorSubject<readonly DuelsRun[] | null>(null);
+		this.duelsDecks$$ = new SubscriberAwareBehaviorSubject<readonly DuelsDeckSummary[] | null>(null);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.i18n = AppInjector.get(LocalizationFacadeService);
+		this.duelsUserRuns = AppInjector.get(DuelsUserRunsService);
+		this.duelsPersonalDecks = AppInjector.get(DuelsPersonalDecksService);
+		this.gameStats = AppInjector.get(GameStatsProviderService);
+		this.prefs = AppInjector.get(PreferencesService);
+
+		await Promise.all([this.duelsPersonalDecks.isReady(), this.gameStats.isReady(), this.prefs.isReady()]);
 
 		this.duelsRuns$$.onFirstSubscribe(() => {
 			console.log('[duels-runs] init duels runs');
@@ -54,7 +73,7 @@ export class DuelsDecksProviderService {
 			const runSourceFirstValue$ = combineLatest([
 				this.duelsUserRuns.duelsRuns$$,
 				this.duelsUserRuns.duelsRewards$$,
-				this.store.gameStats$(),
+				this.gameStats.gameStats$$,
 			]).pipe(
 				filter(([duelsRunInfos, duelsRewardsInfo, gameStats]) => duelsRunInfos != null && !!gameStats?.length),
 				take(1),
@@ -62,7 +81,7 @@ export class DuelsDecksProviderService {
 			const runSourceFilteredValues$ = combineLatest([
 				this.duelsUserRuns.duelsRuns$$,
 				this.duelsUserRuns.duelsRewards$$,
-				this.store.gameStats$(),
+				this.gameStats.gameStats$$,
 			]).pipe(
 				filter(
 					([duelsRunInfos, duelsRewardsInfo, gameStats]) =>
@@ -105,12 +124,12 @@ export class DuelsDecksProviderService {
 			combineLatest([
 				this.duelsRuns$$.asObservable(),
 				this.duelsPersonalDecks.decks$$,
-				this.store.listenPrefs$((prefs) => prefs.duelsPersonalDeckNames),
+				this.prefs.preferences$$.pipe(map((prefs) => prefs.duelsPersonalDeckNames)),
 			])
 				.pipe(
 					distinctUntilChanged((a, b) => arraysEqual(a, b)),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
-					map(([runs, duelsPersonalAdditionalDecks, [duelsPersonalDeckNames]]) =>
+					map(([runs, duelsPersonalAdditionalDecks, duelsPersonalDeckNames]) =>
 						this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks ?? [], duelsPersonalDeckNames),
 					),
 				)

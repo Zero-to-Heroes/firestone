@@ -1,14 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { filterDuelsTreasureStats } from '@firestone/duels/data-access';
-import { DuelsRun } from '@firestone/duels/general';
+import { DuelsNavigationService, DuelsRun } from '@firestone/duels/general';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
+import { DuelsDecksProviderService } from '../../../services/duels/duels-decks-provider.service';
+import { DuelsMetaStatsService } from '../../../services/duels/duels-meta-stats.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildDuelsHeroTreasurePlayerStats, filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-treasure-stats',
@@ -27,37 +29,49 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly DuelsMetaStats[]>;
 	sort$: Observable<DuelsHeroSortFilterType>;
 	hideLowData$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly duelsDecks: DuelsDecksProviderService,
+		private readonly duelsMetaStats: DuelsMetaStatsService,
+		private readonly nav: DuelsNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await Promise.all([
+			this.patchesConfig.isReady(),
+			this.duelsDecks.isReady(),
+			this.duelsMetaStats.isReady(),
+			this.nav.isReady(),
+			this.prefs.isReady(),
+		]);
 
 		const rawStats$ = combineLatest([
-			this.store.duelsRuns$(),
-			this.store.duelsMetaStats$(),
-			this.store.listen$(
-				// ([main, nav]) => main.duels?.globalStats?.treasures,
-				// ([main, nav]) => main.duels?.globalStats?.mmrPercentiles,
-				([main, nav]) => nav.navigationDuels.treasureSearchString,
-				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+			this.duelsDecks.duelsRuns$$,
+			this.duelsMetaStats.duelsMetaStats$$,
+			this.nav.heroSearchString$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						statType: prefs.duelsActiveTreasureStatTypeFilter,
+						gameMode: prefs.duelsActiveGameModeFilter,
+						timeFilter: prefs.duelsActiveTimeFilter,
+						classFilter: prefs.duelsActiveHeroesFilter2,
+						heroPowerFilter: prefs.duelsActiveHeroPowerFilter2,
+						sigTreasureFilter: prefs.duelsActiveSignatureTreasureFilter2,
+						mmrFilter: prefs.duelsActiveMmrFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
@@ -65,9 +79,9 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 				([
 					runs,
 					duelMetaStats,
-					[
+					treasureSearchString,
+					{
 						// mmrPercentiles,
-						treasureSearchString,
 						statType,
 						gameMode,
 						timeFilter,
@@ -75,7 +89,7 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 						heroPowerFilter,
 						sigTreasureFilter,
 						mmrFilter,
-					],
+					},
 					patch,
 				]) =>
 					[
@@ -128,8 +142,8 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreCompon
 				return tieredStats;
 			}),
 		);
-		this.sort$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroSortFilter);
-		this.hideLowData$ = this.listenForBasicPref$((prefs) => prefs.duelsHideStatsBelowThreshold);
+		this.sort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsActiveHeroSortFilter));
+		this.hideLowData$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsHideStatsBelowThreshold));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -135,6 +135,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly prefsService: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly gameStatsProvider: GameStatsProviderService,
+		private readonly duelsDecksProviderService: DuelsDecksProviderService,
 		private readonly duelsHeroStatsService: DuelsHeroStatsService,
 		private readonly duelsMetaStatsService: DuelsMetaStatsService,
 	) {
@@ -421,6 +422,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		await this.patchesConfig.isReady();
 		await this.duelsMetaStatsService.isReady();
 		await this.duelsHeroStatsService.isReady();
+		await this.duelsDecksProviderService.isReady();
 
 		// Has to be first, since other observables depend on it
 		this.initGameStats();
@@ -549,11 +551,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initDuelsDecks() {
-		this.duelsDecks = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsDecks$$;
+		this.duelsDecks = this.duelsDecksProviderService.duelsDecks$$;
 	}
 
 	private initDuelsRuns() {
-		this.duelsRuns = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService).duelsRuns$$;
+		this.duelsRuns = this.duelsDecksProviderService.duelsRuns$$;
 	}
 
 	private initDecks() {

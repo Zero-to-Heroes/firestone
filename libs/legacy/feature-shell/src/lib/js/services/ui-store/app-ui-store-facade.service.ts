@@ -150,6 +150,7 @@ export class AppUiStoreFacadeService {
 	// 	return this.store.duelsTopDecks$();
 	// }
 
+	/** @deprecated */
 	public duelsRuns$(): Observable<readonly DuelsRun[]> {
 		return this.store.duelsRuns$();
 	}
