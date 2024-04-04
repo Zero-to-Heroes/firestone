@@ -128,7 +128,6 @@ import { DuelsDeckbuilderImportDeckEvent } from './events/duels/duels-deckbuilde
 import { DuelsDecksSearchEvent } from './events/duels/duels-decks-search-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
 import { DuelsHeroPowerFilterSelectedEvent } from './events/duels/duels-hero-power-filter-selected-event';
-import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
 import { DuelsLeaderboardGameModeFilterSelectedEvent } from './events/duels/duels-leaderboard-game-mode-filter-selected-event';
@@ -274,7 +273,6 @@ import { DuelsDeckbuilderImportDeckProcessor } from './processors/duels/duels-de
 import { DuelsDecksSearchProcessor } from './processors/duels/duels-decks-search-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
 import { DuelsHeroPowerFilterSelectedProcessor } from './processors/duels/duels-hero-power-filter-selected-processor';
-import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
 import { DuelsLeaderboardGameModeFilterSelectedProcessor } from './processors/duels/duels-leaderboard-game-mode-filter-selected-processor';
@@ -844,7 +842,6 @@ export class MainWindowStoreService {
 			],
 			[DuelsToggleExpandedRunEvent.eventName(), new DuelsToggleExpandedRunProcessor()],
 			[DuelsTreasureSearchEvent.eventName(), new DuelsTreasureSearchProcessor()],
-			[DuelsHeroSearchEvent.eventName(), new DuelsHeroSearchProcessor()],
 			[DuelsDecksSearchEvent.eventName(), new DuelsDecksSearchProcessor()],
 			[DuelsCurrentDeckEvent.eventName(), new DuelsCurrentDeckProcessor()],
 			[DuelsIsOnMainScreenEvent.eventName(), new DuelsIsOnMainScreenProcessor()],

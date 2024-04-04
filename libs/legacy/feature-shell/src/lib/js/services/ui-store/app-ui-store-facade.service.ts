@@ -132,6 +132,7 @@ export class AppUiStoreFacadeService {
 		return this.store.bgsMetaStatsHero$();
 	}
 
+	/** @deprecated */
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
 		return this.store.duelsHeroStats$();
 	}

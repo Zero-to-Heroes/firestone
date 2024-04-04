@@ -1,19 +1,16 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { DuelsHeroStat, DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, buildHeroStats, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
-import { filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { DuelsRun } from '@firestone/duels/general';
-import { PrefsSelector, Store, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ModsConfig } from '@legacy-import/src/lib/libs/mods/model/mods-config';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
-import { buildDuelsHeroPlayerStats, filterDuelsRuns } from '@services/ui-store/duels-ui-helper';
 
-import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 
@@ -55,6 +52,7 @@ import { DecksProviderService } from '../decktracker/main/decks-provider.service
 import { DuelsAdventureInfoService } from '../duels/duels-adventure-info.service';
 import { DuelsBucketsService } from '../duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
+import { DuelsHeroStatsService } from '../duels/duels-hero-stats.service';
 import { DuelsLeaderboardService } from '../duels/duels-leaderboard.service';
 import { DuelsMetaStatsService } from '../duels/duels-meta-stats.service';
 import { BG_USE_ANOMALIES } from '../feature-flags';
@@ -98,13 +96,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	private bgsMetaStatsHero: Observable<readonly BgsMetaHeroStatTierItem[]>;
 	private gameStats: Observable<readonly GameStat[]>;
 	private decks: Observable<readonly DeckSummary[]>;
-	private duelsHeroStats = new SubscriberAwareBehaviorSubject<readonly DuelsHeroPlayerStat[]>([]);
 	private duelsRuns: Observable<readonly DuelsRun[]>;
 	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
 	// private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
 	private duelsAdventureInfo: Observable<AdventuresInfo>;
 	private duelsBuckets: Observable<readonly DuelsBucketsData[]>;
-	private duelsMetaStats: Observable<DuelsStat>;
 	private duelsLeaderboard: Observable<DuelsLeaderboard>;
 	private mails: Observable<MailState>;
 	private tavernBrawl: Observable<TavernBrawlState>;
@@ -139,6 +135,8 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly prefsService: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly gameStatsProvider: GameStatsProviderService,
+		private readonly duelsHeroStatsService: DuelsHeroStatsService,
+		private readonly duelsMetaStatsService: DuelsMetaStatsService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -286,7 +284,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		return this.duelsHeroStats;
+		return this.duelsHeroStatsService.duelsHeroStats$$.asObservable();
 	}
 
 	public gameStats$(): Observable<readonly GameStat[]> {
@@ -314,7 +312,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	public duelsMetaStats$(): Observable<DuelsStat> {
-		return this.duelsMetaStats;
+		return this.duelsMetaStatsService.duelsMetaStats$$.asObservable();
 	}
 
 	public duelsLeaderboard$(): Observable<DuelsLeaderboard> {
@@ -421,20 +419,21 @@ export class AppUiStoreService extends Store<Preferences> {
 	// start appearing
 	private async init() {
 		await this.patchesConfig.isReady();
+		await this.duelsMetaStatsService.isReady();
+		await this.duelsHeroStatsService.isReady();
+
 		// Has to be first, since other observables depend on it
 		this.initGameStats();
 		// Needs to be before duels stuff
 		this.initDuelsRuns();
 		// The rest
 		this.initBgsMetaStatsHero();
-		this.initDuelsHeroStats();
 		this.initDecks();
 		this.initDuelsDecks();
 		this.duelsAdventureInfo = (
 			this.ow.getMainWindow().duelsAdventureInfo as DuelsAdventureInfoService
 		).duelsAdventureInfo$$;
 		this.duelsBuckets = (this.ow.getMainWindow().duelsBuckets as DuelsBucketsService).duelsBuckets$$;
-		this.duelsMetaStats = (this.ow.getMainWindow().duelsMetaStats as DuelsMetaStatsService).duelsMetaStats$$;
 		this.duelsLeaderboard = (
 			this.ow.getMainWindow().duelsLeaderboard as DuelsLeaderboardService
 		).duelsLeaderboard$$;
@@ -569,72 +568,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.highlightedBgsMinions = (
 			this.ow.getMainWindow().bgsBoardHighlighter as BgsBoardHighlighterService
 		).shopMinions$$;
-	}
-
-	private initDuelsHeroStats() {
-		this.duelsHeroStats.onFirstSubscribe(() => {
-			combineLatest([
-				this.duelsRuns$(),
-				this.duelsMetaStats$(),
-				this.listen$(
-					([main, nav]) => nav.navigationDuels.heroSearchString,
-					([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
-					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-					([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-					([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
-					([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
-				),
-				this.patchesConfig.currentDuelsMetaPatch$$,
-			])
-				.pipe(
-					map(
-						([
-							runs,
-							duelStats,
-							[
-								heroSearchString,
-								statType,
-								gameMode,
-								timeFilter,
-								heroFilter,
-								heroPowerFilter,
-								sigTreasureFilter,
-							],
-							patch,
-						]) =>
-							[
-								filterDuelsHeroStats(
-									duelStats?.heroes,
-									heroFilter,
-									heroPowerFilter,
-									sigTreasureFilter,
-									statType,
-									this.allCards,
-									heroSearchString,
-								),
-								filterDuelsRuns(
-									runs,
-									timeFilter,
-									heroFilter,
-									gameMode,
-									null,
-									patch,
-									0,
-									heroPowerFilter,
-									sigTreasureFilter,
-									statType,
-								),
-								statType,
-							] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
-					),
-					distinctUntilChanged((a, b) => arraysEqual(a, b)),
-					map(([duelStats, duelsRuns, statType]) =>
-						buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns),
-					),
-				)
-				.subscribe(this.duelsHeroStats);
-		});
 	}
 
 	private initBgsMetaStatsHero() {

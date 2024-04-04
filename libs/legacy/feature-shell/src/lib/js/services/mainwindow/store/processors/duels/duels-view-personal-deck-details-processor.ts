@@ -39,7 +39,6 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					menuDisplayType: 'breadcrumbs',
 					expandedRunIds: expandedRunIds,
 					treasureSearchString: null,
-					heroSearchString: null,
 				} as NavigationDuels),
 				text: deckName,
 			} as NavigationState),

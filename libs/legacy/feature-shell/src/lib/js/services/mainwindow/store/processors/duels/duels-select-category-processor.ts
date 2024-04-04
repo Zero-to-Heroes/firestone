@@ -18,7 +18,6 @@ export class DuelsSelectCategoryProcessor implements Processor {
 					selectedCategoryId: event.categoryId,
 					expandedRunIds: [] as readonly string[],
 					treasureSearchString: null,
-					heroSearchString: null,
 				} as NavigationDuels),
 			} as NavigationState),
 		];

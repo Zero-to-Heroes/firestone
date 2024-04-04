@@ -7,15 +7,15 @@ import {
 	EventEmitter,
 	HostListener,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DuelsNavigationService } from '@firestone/duels/general';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { DuelsHeroSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-hero-search',
@@ -36,7 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsHeroSearchComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	searchString: string;
@@ -47,20 +47,24 @@ export class DuelsHeroSearchComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly nav: DuelsNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.searchStringSub$$ = this.store
-			.listen$(([main, nav]) => nav.navigationDuels.heroSearchString)
+	async ngAfterContentInit() {
+		await this.nav.isReady();
+		this.searchStringSub$$ = this.nav.heroSearchString$$
 			.pipe(takeUntil(this.destroyed$))
-			.subscribe(([heroSearchString]) => {
+			.subscribe((heroSearchString) => {
 				this.searchString = heroSearchString;
 			});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {
@@ -81,7 +85,7 @@ export class DuelsHeroSearchComponent
 	}
 
 	onSearchStringChange() {
-		this.stateUpdater.next(new DuelsHeroSearchEvent(this.searchString));
+		this.nav.heroSearchString$$.next(this.searchString);
 	}
 
 	onMouseDown(event: Event) {

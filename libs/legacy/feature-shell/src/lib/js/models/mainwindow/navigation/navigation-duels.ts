@@ -9,7 +9,7 @@ export class NavigationDuels {
 	// Used when navigating to the deck details
 	readonly expandedRunIds: readonly string[];
 	readonly treasureSearchString: string;
-	readonly heroSearchString: string;
+	// readonly heroSearchString: string;
 
 	public update(base: Partial<NonFunctionProperties<NavigationDuels>>): NavigationDuels {
 		return Object.assign(new NavigationDuels(), this, base);

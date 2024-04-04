@@ -36,6 +36,7 @@ import { OverlayDisplayService } from '../../js/services/decktracker/overlay-dis
 import { DuelsAdventureInfoService } from '../../js/services/duels/duels-adventure-info.service';
 import { DuelsBucketsService } from '../../js/services/duels/duels-buckets.service';
 import { DuelsDecksProviderService } from '../../js/services/duels/duels-decks-provider.service';
+import { DuelsHeroStatsService } from '../../js/services/duels/duels-hero-stats.service';
 import { DuelsLeaderboardService } from '../../js/services/duels/duels-leaderboard.service';
 import { DuelsMetaStatsService } from '../../js/services/duels/duels-meta-stats.service';
 import { GameNativeStateStoreService } from '../../js/services/game/game-native-state-store.service';
@@ -87,6 +88,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_DuelsBucketsService: DuelsBucketsService,
 		private readonly init_DuelsLeaderboardService: DuelsLeaderboardService,
 		private readonly init_DuelsMetaStatsService: DuelsMetaStatsService,
+		private readonly init_DuelsHeroStatsService: DuelsHeroStatsService,
 		private readonly init_DuelsConfigService: DuelsConfigService,
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		private readonly init_BgsInGameQuestsService: BgsInGameQuestsService,

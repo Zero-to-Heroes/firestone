@@ -1,11 +1,20 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	ViewRef,
+} from '@angular/core';
 import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
+import { DuelsHeroStatsService } from '../../../services/duels/duels-hero-stats.service';
 import { DuelsExploreDecksEvent } from '../../../services/mainwindow/store/events/duels/duels-explore-decks-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	selector: 'duels-hero-stats',
@@ -26,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly DuelsMetaStats[]>;
 	sort$: Observable<DuelsHeroSortFilterType>;
 	hideLowData$: Observable<boolean>;
@@ -34,18 +43,22 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 	private currentType: DuelsStatTypeFilterType;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly heroStats: DuelsHeroStatsService,
+		private readonly ow: OverwolfService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.listenForBasicPref$((prefs) => prefs.duelsActiveStatTypeFilter).subscribe((type) => {
+	async ngAfterContentInit() {
+		await Promise.all([this.prefs.isReady(), this.heroStats.isReady()]);
+
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsActiveStatTypeFilter)).subscribe((type) => {
 			this.currentType = type;
 		});
-		this.stats$ = this.store.duelsHeroStats$().pipe(
+		this.stats$ = this.heroStats.duelsHeroStats$$.pipe(
 			this.mapData((stats) => {
 				console.debug('[duels-hero-stats] received stats', stats);
 				const tieredStats = stats?.map((stat) => {
@@ -70,8 +83,12 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 				return tieredStats?.length > 0 ? tieredStats : null;
 			}),
 		);
-		this.sort$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroSortFilter);
-		this.hideLowData$ = this.listenForBasicPref$((prefs) => prefs.duelsHideStatsBelowThreshold);
+		this.sort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsActiveHeroSortFilter));
+		this.hideLowData$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsHideStatsBelowThreshold));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onStatsClicked(stat: DuelsMetaStats) {
@@ -79,6 +96,7 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent 
 		const heroCardId = this.currentType === 'hero' ? stat.cardId : null;
 		const heroPowerCardId = this.currentType === 'hero-power' ? stat.cardId : null;
 		const signatureTreasureCardId = this.currentType === 'signature-treasure' ? stat.cardId : null;
-		this.store.send(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
+		const stateUpdater: EventEmitter<MainWindowStoreEvent> = this.ow.getMainWindow().mainWindowStoreUpdater;
+		stateUpdater.next(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 }
