@@ -12,7 +12,7 @@ import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, takeUntil } from 'rxjs';
 import { AdService } from '../../services/ad.service';
 import { ArenaDraftManagerService } from '../../services/arena/arena-draft-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -72,7 +72,10 @@ export class ArenaCardSelectionWidgetWrapperComponent
 
 		// TODO: only do this when user is not premium?
 		combineLatest([this.ads.enablePremiumFeatures$$, this.showWidget$])
-			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
+			.pipe(
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				takeUntil(this.destroyed$),
+			)
 			.subscribe(([premium, showWidget]) => {
 				// Integration with HearthArena
 				if (showWidget && !premium) {

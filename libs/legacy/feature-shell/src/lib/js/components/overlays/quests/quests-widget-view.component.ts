@@ -6,12 +6,12 @@ import {
 	ElementRef,
 	Input,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
-import { Preferences } from '@firestone/shared/common/service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
 	selector: 'quests-widget-view',
@@ -48,7 +48,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestsWidgetViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() theme: string;
 	@Input() widgetIcon: string;
 	@Input() xpIcon: string;
@@ -69,22 +69,21 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionStoreComponen
 	private showBottom$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
+		private readonly prefs: PreferencesService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.quests$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.quests.getReferenceQuests(),
-				([main, nav]) => main.quests.activeQuests,
-				([main, nav]) => main,
-			),
-		).pipe(
-			this.mapData(([[referenceQuests, activeQuests, state]]) => {
+	async ngAfterContentInit() {
+		await Promise.all([this.prefs.isReady(), this.mainWindowState.isReady()]);
+
+		this.quests$ = this.mainWindowState.mainWindowState$$.pipe(
+			this.mapData((state) => {
+				const referenceQuests = state.quests.getReferenceQuests();
+				const activeQuests = state.quests.activeQuests;
 				return activeQuests?.Quests?.filter((q) => [QuestStatus.NEW, QuestStatus.ACTIVE].includes(q.Status))
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
@@ -115,14 +114,9 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionStoreComponen
 					.filter((q) => !!q);
 			}),
 		);
-		this.showQuests$ = combineLatest(
-			this.store.listenPrefs$(
-				(prefs) => prefs,
-				(prefs) => prefs.showQuestsWidgetWhenEmpty,
-			),
-			this.quests$,
-		).pipe(
-			this.mapData(([[prefs, showWhenEmpty], quests]) => {
+		this.showQuests$ = combineLatest(this.prefs.preferences$$, this.quests$).pipe(
+			this.mapData(([prefs, quests]) => {
+				const showWhenEmpty = prefs.showQuestsWidgetWhenEmpty;
 				const showQuests = this.showPrefsExtractor && this.showPrefsExtractor(prefs);
 				return showQuests && (!!quests?.length || showWhenEmpty);
 			}),

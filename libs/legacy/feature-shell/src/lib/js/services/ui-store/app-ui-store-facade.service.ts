@@ -218,10 +218,6 @@ export class AppUiStoreFacadeService {
 		return this.store.showAds$();
 	}
 
-	public enablePremiumFeatures$(): Observable<boolean> {
-		return this.store.enablePremiumFeatures$();
-	}
-
 	public hasPremiumSub$(): Observable<boolean> {
 		return this.store.hasPremiumSub$();
 	}

@@ -4,6 +4,7 @@ import { DeckCard } from '@firestone/game-state';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { AdService } from '../ad.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { isMinionGolden } from './bgs-utils';
@@ -19,6 +20,7 @@ export class BgsBoardHighlighterService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
+		private readonly ads: AdService,
 	) {
 		window['bgsBoardHighlighter'] = this;
 		this.init();
@@ -26,6 +28,8 @@ export class BgsBoardHighlighterService {
 
 	private async init() {
 		await this.store.initComplete();
+		await this.ads.isReady();
+
 		this.shopMinions$$.onFirstSubscribe(() => {
 			this.initPremiumHighlights();
 			this.initHighlights();
@@ -35,7 +39,7 @@ export class BgsBoardHighlighterService {
 	private initHighlights() {
 		console.debug('[bgs-board-highlighter] init highlights');
 		const enableAutoHighlight$ = combineLatest([
-			this.store.enablePremiumFeatures$(),
+			this.ads.enablePremiumFeatures$$,
 			this.store.listenPrefs$((prefs) => prefs.bgsEnableMinionAutoHighlight),
 		]).pipe(map(([premium, [autoHighlight]]) => premium && autoHighlight));
 
@@ -141,7 +145,7 @@ export class BgsBoardHighlighterService {
 	private initPremiumHighlights() {
 		console.debug('[bgs-board-highlighter] init premium highlights');
 		combineLatest([
-			this.store.enablePremiumFeatures$(),
+			this.ads.enablePremiumFeatures$$,
 			this.store.listenPrefs$(
 				(prefs) => prefs.bgsEnableMinionAutoHighlight,
 				(prefs) => prefs.bgsEnableTribeAutoHighlight,

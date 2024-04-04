@@ -1,7 +1,15 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ViewRef,
+} from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
+import { AdService } from '../../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
@@ -177,12 +185,15 @@ export class SettingsBattlegroundsGeneralComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		const premium$ = this.store.enablePremiumFeatures$().pipe(this.mapData((premium) => premium));
+	async ngAfterContentInit() {
+		await this.ads.isReady();
+
+		const premium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
 		this.useLocalSimulator$ = combineLatest([
 			premium$,
 			this.store.listenPrefs$((prefs) => !prefs.bgsUseRemoteSimulator),
@@ -198,6 +209,10 @@ export class SettingsBattlegroundsGeneralComponent
 		this.bgsEnableApp$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableApp);
 		this.bgsUseOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsUseOverlay);
 		this.bgsFullToggle$ = this.listenForBasicPref$((prefs) => prefs.bgsFullToggle);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

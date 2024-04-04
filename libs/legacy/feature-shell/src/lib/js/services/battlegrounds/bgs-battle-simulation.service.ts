@@ -7,7 +7,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { AdService } from '../ad.service';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 import { normalizeHeroCardId } from './bgs-utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -25,7 +25,7 @@ export class BgsBattleSimulationService {
 		private readonly api: ApiRunner,
 		private readonly cards: CardsFacadeService,
 		private readonly executor: BgsBattleSimulationExecutorService,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly ads: AdService,
 		@Optional() private readonly ow: OverwolfService,
 		@Optional() private readonly prefs: PreferencesService,
 	) {
@@ -38,8 +38,9 @@ export class BgsBattleSimulationService {
 	}
 
 	private async init() {
-		await this.store.initComplete();
-		this.store.enablePremiumFeatures$().subscribe((premium) => {
+		await this.ads.isReady();
+
+		this.ads.enablePremiumFeatures$$.subscribe((premium) => {
 			this.isPremium = premium;
 		});
 	}

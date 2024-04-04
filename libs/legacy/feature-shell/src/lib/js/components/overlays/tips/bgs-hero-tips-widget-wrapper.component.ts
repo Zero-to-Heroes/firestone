@@ -12,6 +12,7 @@ import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
+import { AdService } from '../../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
@@ -47,15 +48,16 @@ export class BgsHeroTipsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly ads: AdService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await Promise.all([this.scene.isReady(), this.ads.isReady()]);
 
 		this.showWidget$ = combineLatest([
-			this.store.enablePremiumFeatures$(),
+			this.ads.enablePremiumFeatures$$,
 			this.scene.currentScene$$,
 			this.store.listen$(([main, nav, prefs]) => prefs.bgsShowHeroTipsOverlay && prefs.bgsFullToggle),
 			this.store.listenBattlegrounds$(

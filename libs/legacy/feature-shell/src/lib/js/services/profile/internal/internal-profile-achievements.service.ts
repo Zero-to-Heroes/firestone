@@ -5,6 +5,7 @@ import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
+import { AdService } from '../../ad.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 
@@ -16,16 +17,16 @@ export class InternalProfileAchievementsService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly sceneService: SceneService,
+		private readonly ads: AdService,
 	) {
 		this.init();
 	}
 
 	private async init() {
-		await this.store.initComplete();
-		await this.sceneService.isReady();
+		await Promise.all([this.store.initComplete(), this.sceneService.isReady(), this.ads.isReady()]);
 
 		this.achievementCategories$$.onFirstSubscribe(() => {
-			combineLatest([this.sceneService.currentScene$$, this.store.enablePremiumFeatures$()])
+			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
 				.pipe(
 					// I don't have a good way to detect when the Journal is being opened
 					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene)),

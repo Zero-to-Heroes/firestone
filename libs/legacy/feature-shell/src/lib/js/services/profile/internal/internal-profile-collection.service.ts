@@ -6,6 +6,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { CollectionCardType } from '../../../models/collection/collection-card-type.type';
 import { Set as CollectionSet } from '../../../models/set';
+import { AdService } from '../../ad.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../utils';
 
@@ -14,16 +15,19 @@ export class InternalProfileCollectionService {
 	public sets$$ = new SubscriberAwareBehaviorSubject<readonly ProfileSet[]>([]);
 	public packsAllTime$$ = new SubscriberAwareBehaviorSubject<readonly ProfilePackStat[]>([]);
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly sceneService: SceneService) {
+	constructor(
+		private readonly store: AppUiStoreFacadeService,
+		private readonly sceneService: SceneService,
+		private readonly ads: AdService,
+	) {
 		this.init();
 	}
 
 	private async init() {
-		await this.store.initComplete();
-		await this.sceneService.isReady();
+		await Promise.all([this.store.initComplete(), this.sceneService.isReady(), this.ads.isReady()]);
 
 		this.sets$$.onFirstSubscribe(() => {
-			combineLatest([this.sceneService.currentScene$$, this.store.enablePremiumFeatures$()])
+			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
 				.pipe(
 					// I don't have a good way to detect when the Journal is being opened
 					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene)),
@@ -34,7 +38,7 @@ export class InternalProfileCollectionService {
 				});
 		});
 		this.packsAllTime$$.onFirstSubscribe(() => {
-			combineLatest([this.sceneService.currentScene$$, this.store.enablePremiumFeatures$()])
+			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
 				.pipe(
 					// I don't have a good way to detect when the Journal is being opened
 					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene)),
@@ -49,7 +53,7 @@ export class InternalProfileCollectionService {
 	private initSets() {
 		// TODO: don't upload if the collection didn't change since last upload
 
-		const setsToUpload$ = combineLatest([this.store.enablePremiumFeatures$(), this.store.sets$()]).pipe(
+		const setsToUpload$ = combineLatest([this.ads.enablePremiumFeatures$$, this.store.sets$()]).pipe(
 			filter(([premium, sets]) => premium),
 			// So that we don't spam the server when the user is opening packs
 			debounceTime(10000),
@@ -87,10 +91,7 @@ export class InternalProfileCollectionService {
 	}
 
 	private initBoosters() {
-		const boostersToUpload$ = combineLatest([
-			this.store.enablePremiumFeatures$(),
-			this.store.allTimeBoosters$(),
-		]).pipe(
+		const boostersToUpload$ = combineLatest([this.ads.enablePremiumFeatures$$, this.store.allTimeBoosters$()]).pipe(
 			filter(([premium, sets]) => premium),
 			debounceTime(2000),
 			map(([premium, boosters]) => {

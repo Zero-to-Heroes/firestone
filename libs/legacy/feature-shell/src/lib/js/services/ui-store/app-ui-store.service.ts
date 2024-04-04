@@ -369,10 +369,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.ads.showAds$$;
 	}
 
-	public enablePremiumFeatures$(): Observable<boolean> {
-		return this.ads.enablePremiumFeatures$$;
-	}
-
 	public hasPremiumSub$(): Observable<boolean> {
 		return this.ads.hasPremiumSub$$;
 	}
