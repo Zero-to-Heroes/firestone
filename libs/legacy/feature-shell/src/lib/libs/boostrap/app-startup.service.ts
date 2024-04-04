@@ -135,26 +135,33 @@ export class AppStartupService {
 		});
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const settingsWindow = await this.ow.getSettingsWindow(prefs);
-		await this.ow.hideWindow(settingsWindow.id);
+		// const settingsWindow = await this.ow.getSettingsWindow(prefs);
+		// await this.ow.hideWindow(settingsWindow.id);
 		setTimeout(() => this.addAnalytics());
 	}
 
 	private async reloadWindows() {
 		console.log('reloading windows in app bootstrap');
 		const prefs: Preferences = await this.prefs.getPreferences();
-		this.ow.closeWindow(OverwolfService.COLLECTION_WINDOW);
-		this.ow.closeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
-		this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
-		this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY);
 		const [mainWindow, settingsWindow] = await Promise.all([
 			this.ow.getCollectionWindow(prefs),
 			this.ow.getSettingsWindow(prefs),
 		]);
+		const isSettingsWindowOpen = settingsWindow.isVisible;
+		const isMainWindowOpen = mainWindow.isVisible;
+		this.ow.closeWindow(settingsWindow.id);
+		this.ow.closeWindow(mainWindow.id);
 		await this.ow.restoreWindow(mainWindow.id);
-		// this.ow.bringToFront(mainWindow.id);
 		await this.ow.restoreWindow(settingsWindow.id);
 		this.ow.bringToFront(settingsWindow.id);
+		this.ow.bringToFront(mainWindow.id);
+
+		if (!isSettingsWindowOpen) {
+			this.ow.closeWindow(settingsWindow.id);
+		}
+		if (!isMainWindowOpen) {
+			this.ow.closeWindow(mainWindow.id);
+		}
 	}
 
 	private async reloadBgWindows() {

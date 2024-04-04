@@ -22,7 +22,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 				<section class="title-bar">
 					<div class="title" [owTranslate]="'settings.title'"></div>
 					<div class="controls">
-						<control-close [windowId]="thisWindowId" [shouldHide]="true"></control-close>
+						<control-close [windowId]="thisWindowId" [shouldHide]="false"></control-close>
 					</div>
 				</section>
 				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">

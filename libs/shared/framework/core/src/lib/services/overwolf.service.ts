@@ -131,17 +131,7 @@ export class OverwolfService {
 		});
 	}
 
-	public addVideoCaptureSettingsChangedListener(callback: (message: any) => void): (message: any) => void {
-		overwolf.settings.OnVideoCaptureSettingsChanged.addListener(callback);
-		return callback;
-	}
-
-	public removeVideoCaptureSettingsChangedListener(listener: (message: any) => void): void {
-		overwolf.settings.OnVideoCaptureSettingsChanged.removeListener(listener);
-	}
-
 	public addHotKeyPressedListener(hotkey: string, callback): any {
-		// overwolf.settings.registerHotKey(hotkey, callback);
 		overwolf.settings.hotkeys.onPressed.addListener((hotkeyPressed) => {
 			if (hotkeyPressed?.name === hotkey) {
 				callback();
@@ -150,7 +140,6 @@ export class OverwolfService {
 	}
 
 	public addHotKeyHoldListener(hotkey: string, onDown, onUp): (message: any) => void {
-		// overwolf.settings.registerHotKey(hotkey, callback);
 		const callback = (hotkeyHold) => {
 			if (hotkeyHold?.name === hotkey) {
 				if (hotkeyHold.state === 'down') {
@@ -381,10 +370,9 @@ export class OverwolfService {
 
 	public async hideCollectionWindow(prefs: Preferences): Promise<void> {
 		const collectionWindow = await this.getCollectionWindow(prefs);
-		const settingsWindow = await this.getSettingsWindow(prefs);
 		// eslint-disable-next-line no-async-promise-executor
 		return new Promise<void>(async (resolve) => {
-			await Promise.all([this.hideWindow(collectionWindow.id), this.hideWindow(settingsWindow.id)]);
+			await Promise.all([this.hideWindow(collectionWindow.id)]);
 			resolve();
 		});
 	}
@@ -485,41 +473,6 @@ export class OverwolfService {
 		});
 	}
 
-	public async setVideoCaptureSettings(
-		resolution: overwolf.settings.enums.ResolutionSettings,
-		fps: number,
-	): Promise<any> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.settings.setVideoCaptureSettings(resolution, fps, (res: any) => {
-				resolve(res);
-			});
-		});
-	}
-
-	public async getVideoCaptureSettings(): Promise<any> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.settings.getVideoCaptureSettings((res: any) => {
-				resolve(res);
-			});
-		});
-	}
-
-	public async setAudioCaptureSettings(captureSystemSound: boolean, captureMicrophoneSound: boolean): Promise<any> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.settings.setAudioCaptureSettings(captureSystemSound, captureMicrophoneSound, (res: any) => {
-				resolve(res);
-			});
-		});
-	}
-
-	public async getAudioCaptureSettings(): Promise<any> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.settings.getAudioCaptureSettings((res: any) => {
-				resolve(res);
-			});
-		});
-	}
-
 	public async sendMessageWithName(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<void>((resolve) => {
@@ -563,14 +516,6 @@ export class OverwolfService {
 	public async getAppVideoCaptureFolderSize(): Promise<any> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.media.getAppVideoCaptureFolderSize((res: any) => {
-				resolve(res);
-			});
-		});
-	}
-
-	public async getOverwolfVideosFolder(): Promise<any> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.settings.getOverwolfVideosFolder((res: any) => {
 				resolve(res);
 			});
 		});
