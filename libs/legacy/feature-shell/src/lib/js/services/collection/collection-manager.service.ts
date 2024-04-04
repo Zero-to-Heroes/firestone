@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
-import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 
 import { PackInfo } from '@firestone/collection/view';
 import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
@@ -16,7 +22,7 @@ import { CardsInternalService } from './details/cards';
 import { CoinsInternalService } from './details/coins';
 
 @Injectable()
-export class CollectionManager {
+export class CollectionManager extends AbstractFacadeService<CollectionManager> {
 	public static EPIC_PITY_TIMER = 10;
 	public static LEGENDARY_PITY_TIMER = 40;
 
@@ -32,29 +38,80 @@ export class CollectionManager {
 	private allTimeBoostersIS: AllTimeBoostersInternalService;
 	private coinsIS: CoinsInternalService;
 
-	constructor(
-		readonly events: Events,
-		readonly api: ApiRunner,
-		readonly allCards: CardsFacadeService,
-		readonly memoryReading: MemoryInspectionService,
-		readonly db: CollectionStorageService,
-		readonly scene: SceneService,
-		readonly memoryUpdates: MemoryUpdatesService,
-		// private readonly setsService: SetsService,
-		private readonly packStatsService: PackStatsService,
-	) {
-		this.cardsIS = new CardsInternalService(events, scene, memoryUpdates, memoryReading, db);
-		this.cardBacksIS = new CardBacksInternalService(events, scene, memoryUpdates, memoryReading, db, api);
-		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(events, scene, memoryUpdates, memoryReading, db);
-		this.allTimeBoostersIS = new AllTimeBoostersInternalService(events, scene, memoryUpdates, memoryReading, db);
-		this.coinsIS = new CoinsInternalService(events, scene, memoryUpdates, memoryReading, db, this.allCards);
+	private events: Events;
+	private api: ApiRunner;
+	private allCards: CardsFacadeService;
+	private memoryReading: MemoryInspectionService;
+	private db: CollectionStorageService;
+	private scene: SceneService;
+	private memoryUpdates: MemoryUpdatesService;
+	private packStatsService: PackStatsService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'CollectionManager', () => !!this.collection$$);
+	}
+
+	protected override assignSubjects() {
+		this.collection$$ = this.mainInstance.collection$$;
+		this.cardBacks$$ = this.mainInstance.cardBacks$$;
+		this.bgHeroSkins$$ = this.mainInstance.bgHeroSkins$$;
+		this.allTimeBoosters$$ = this.mainInstance.allTimeBoosters$$;
+		this.coins$$ = this.mainInstance.coins$$;
+	}
+
+	protected async init() {
+		this.events = AppInjector.get(Events);
+		this.api = AppInjector.get(ApiRunner);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.memoryReading = AppInjector.get(MemoryInspectionService);
+		this.db = AppInjector.get(CollectionStorageService);
+		this.scene = AppInjector.get(SceneService);
+		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
+		this.packStatsService = AppInjector.get(PackStatsService);
+
+		this.cardsIS = new CardsInternalService(
+			this.events,
+			this.scene,
+			this.memoryUpdates,
+			this.memoryReading,
+			this.db,
+		);
+		this.cardBacksIS = new CardBacksInternalService(
+			this.events,
+			this.scene,
+			this.memoryUpdates,
+			this.memoryReading,
+			this.db,
+			this.api,
+		);
+		this.bgHeroSkinsIS = new BgHeroSkinsInternalService(
+			this.events,
+			this.scene,
+			this.memoryUpdates,
+			this.memoryReading,
+			this.db,
+		);
+		this.allTimeBoostersIS = new AllTimeBoostersInternalService(
+			this.events,
+			this.scene,
+			this.memoryUpdates,
+			this.memoryReading,
+			this.db,
+		);
+		this.coinsIS = new CoinsInternalService(
+			this.events,
+			this.scene,
+			this.memoryUpdates,
+			this.memoryReading,
+			this.db,
+			this.allCards,
+		);
 
 		this.collection$$ = this.cardsIS.collection$$;
 		this.cardBacks$$ = this.cardBacksIS.collection$$;
 		this.bgHeroSkins$$ = this.bgHeroSkinsIS.collection$$;
 		this.allTimeBoosters$$ = this.allTimeBoostersIS.collection$$;
 		this.coins$$ = this.coinsIS.collection$$;
-		window['collectionManager'] = this;
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {

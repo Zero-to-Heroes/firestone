@@ -4,14 +4,15 @@ import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds } from '@firestone-hs/reference-data';
 import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
+import { CollectionManager } from '../../../services/collection/collection-manager.service';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-meta-decks',
@@ -109,7 +110,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decks$: Observable<DeckStat[]>;
 	collection$: Observable<readonly Card[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
@@ -124,23 +125,28 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 	});
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly collectionManager: CollectionManager,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.constructedMetaStats.isReady();
+		await Promise.all([
+			this.constructedMetaStats.isReady(),
+			this.collectionManager.isReady(),
+			this.prefs.isReady(),
+		]);
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
-		this.showStandardDeviation$ = this.listenForBasicPref$(
-			(prefs) => !prefs.constructedMetaDecksUseConservativeWinrate,
+		this.showStandardDeviation$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => !prefs.constructedMetaDecksUseConservativeWinrate),
 		);
-		this.collection$ = this.store.collection$().pipe(
+		this.collection$ = this.collectionManager.collection$$.pipe(
 			filter((collection) => !!collection),
 			startWith([]),
 			debounceTime(500),
@@ -165,12 +171,17 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 			this.constructedMetaStats.cardSearch$$,
 			this.sortCriteria$$,
 			collectionCache$,
-			this.store.listenPrefs$(
-				(prefs) => prefs.constructedMetaDecksUseConservativeWinrate,
-				(prefs) => prefs.constructedMetaDecksSampleSizeFilter,
-				(prefs) => prefs.constructedMetaDecksDustFilter,
-				(prefs) => prefs.constructedMetaDecksPlayerClassFilter,
-				(prefs) => prefs.constructedMetaDecksArchetypeFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						conservativeEstimate: prefs.constructedMetaDecksUseConservativeWinrate,
+						sampleSize: prefs.constructedMetaDecksSampleSizeFilter,
+						dust: prefs.constructedMetaDecksDustFilter,
+						playerClasses: prefs.constructedMetaDecksPlayerClassFilter,
+						archetypes: prefs.constructedMetaDecksArchetypeFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		]).pipe(
 			debounceTime(300),
@@ -180,7 +191,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionStoreComp
 					cardSearch,
 					sortCriteria,
 					collection,
-					[conservativeEstimate, sampleSize, dust, playerClasses, archetypes],
+					{ conservativeEstimate, sampleSize, dust, playerClasses, archetypes },
 				]) => {
 					// let enhancedCounter = 0;
 					console.debug('filtering decks', dust);

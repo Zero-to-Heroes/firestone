@@ -138,6 +138,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly duelsDecksProviderService: DuelsDecksProviderService,
 		private readonly duelsHeroStatsService: DuelsHeroStatsService,
 		private readonly duelsMetaStatsService: DuelsMetaStatsService,
+		private readonly collectionManager: CollectionManager,
 	) {
 		super();
 		window['appStore'] = this;
@@ -149,6 +150,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		await this.prefsService.isReady();
 		await this.decksProvider.isReady();
 		await this.gameStatsProvider.isReady();
+		await this.collectionManager.isReady();
 
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
@@ -469,7 +471,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initAllTimeBoosters() {
-		this.allTimeBoosters = (this.ow.getMainWindow().collectionManager as CollectionManager).allTimeBoosters$$;
+		this.allTimeBoosters = this.collectionManager.allTimeBoosters$$.asObservable();
 	}
 
 	private initSets() {
@@ -477,19 +479,19 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initBgHeroSkins() {
-		this.bgHeroSkins = (this.ow.getMainWindow().collectionManager as CollectionManager).bgHeroSkins$$;
+		this.bgHeroSkins = this.collectionManager.bgHeroSkins$$.asObservable();
 	}
 
 	private initCollection() {
-		this.collection = (this.ow.getMainWindow().collectionManager as CollectionManager).collection$$;
+		this.collection = this.collectionManager.collection$$.asObservable();
 	}
 
 	private initCoins() {
-		this.coins = (this.ow.getMainWindow().collectionManager as CollectionManager).coins$$;
+		this.coins = this.collectionManager.coins$$.asObservable();
 	}
 
 	private initCardBacks() {
-		this.cardBacks = (this.ow.getMainWindow().collectionManager as CollectionManager).cardBacks$$;
+		this.cardBacks = this.collectionManager.cardBacks$$.asObservable();
 	}
 
 	private initMails() {
