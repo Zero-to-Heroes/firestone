@@ -85,8 +85,8 @@ export class AppStartupService {
 			// This can happen when we're in another game, so we exit the app for good
 
 			if (this.ow.inAnotherGame(res)) {
-				this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
-				this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
+				this.ow.closeWindow(OverwolfService.COLLECTION_WINDOW);
+				this.ow.closeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
 				this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
 				this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY);
 			} else if (res.runningChanged) {
@@ -96,8 +96,8 @@ export class AppStartupService {
 			}
 		});
 
-		const prefs = await this.prefs.getPreferences();
-		await this.ow.hideCollectionWindow(prefs);
+		// const prefs = await this.prefs.getPreferences();
+		// await this.ow.hideCollectionWindow(prefs);
 
 		// this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
@@ -176,13 +176,11 @@ export class AppStartupService {
 
 	private async onHotkeyPress() {
 		const prefs = await this.prefs.getPreferences();
-
 		const window = await this.ow.getCollectionWindow(prefs);
-
 		if (window.isVisible) {
 			console.log('[startup] closing main window');
 			this.store.stateUpdater.next(new CloseMainWindowEvent());
-			await this.ow.hideCollectionWindow(prefs);
+			await this.ow.hideWindow(window.id);
 			// await this.ow.closeWindow(window.id);
 		} else {
 			this.showCollectionWindow();
@@ -201,6 +199,10 @@ export class AppStartupService {
 		const collectionWindow = await this.ow.getCollectionWindow(prefs);
 		const shouldShowAds = await this.ads.shouldDisplayAds();
 		const isDev = !!process.env.NODE_ENV && process.env.NODE_ENV !== 'production';
+		if (!collectionWindow.isVisible) {
+			this.ow.closeWindow(collectionWindow.id);
+		}
+
 		if (shouldShowAds && !collectionWindow.isVisible) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
 			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
@@ -269,7 +271,7 @@ export class AppStartupService {
 	// }
 
 	private async showCollectionWindow() {
-		// console.log('showing collection window');
+		// console.log('showing collection window', new Error().stack);
 		// We do both store and direct restore to keep things snappier
 		const prefs = await this.prefs.getPreferences();
 		const window = await this.ow.getCollectionWindow(prefs);

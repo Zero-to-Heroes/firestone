@@ -81,9 +81,9 @@ export class ControlCloseComponent implements AfterViewInit {
 			console.log('[control-close] requested window close', this.windowId);
 			if (this.shouldHide) {
 				this.ow.hideWindow(this.windowId);
-			} else if (this.isMainWindow) {
-				const prefs = await this.prefs.getPreferences();
-				this.ow.hideCollectionWindow(prefs);
+				// } else if (this.isMainWindow) {
+				// 	const prefs = await this.prefs.getPreferences();
+				// 	this.ow.hideCollectionWindow(prefs);
 			} else {
 				this.ow.closeWindow(this.windowId);
 			}
