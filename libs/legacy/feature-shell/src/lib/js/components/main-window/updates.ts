@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.9.0',
+		version: '13.10.0',
 		force: false,
 		sections: [
 			// {
@@ -51,7 +51,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'misc',
-								text: `I have identified a few memory leaks in the app. I have started fixing the biggest ones, but it's a work in progress. This should help with the app's performance over time.`,
+								text: `The app's Main and Settings windows now fully close when you click on the "close" button. <br/> I have slightly changed how the Settings window and the app's Main window are loaded. Previously, when you closed one of these, it would simply get hidden, in order to bring it up faster the next time you asked for it. However, this led to some memory being used without any good reason, and so I've changed how they behave. Note that closing the app's main window with the Alt + C shortcut still simply hides it. Let me know what you think!`,
 							},
 						],
 					},
@@ -62,46 +62,11 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'content',
-								text: `Update the hands given by Harth Stonebrew.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the dust cost of decks would be incorrect with Ziliax.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `There is now a setting you can turn on to retrieve your opponents MMR from the official leaderboard. WARNING: this is a name-only lookup, so it's possible that the displayed MMR won't be accurate. It also only includes players with an MMR > 8000, since this is what the leaderboards track.`,
-							},
-							{
-								type: 'ui',
-								text: `Slightly tweak the positioning of the quest stats widgets to avoid hiding the quest text.`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'feature',
-								text: `Run overviews now also showcase the legendaries directly in the summary.`,
-							},
-						],
-					},
-					{
 						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the link to Twitch streams would sometimes point to a missing page.`,
+								type: 'misc',
+								text: `I'm still fixing the memory leaks of the app. It might take a week or so to address all the biggest ones, so please be patient with me :)`,
 							},
 						],
 					},
