@@ -1,31 +1,45 @@
 import { Injectable } from '@angular/core';
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { distinctUntilChanged } from 'rxjs';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { distinctUntilChanged, map } from 'rxjs';
 
 @Injectable()
-export class DuelsMetaStatsService {
-	public duelsMetaStats$$ = new SubscriberAwareBehaviorSubject<DuelsStat>(null);
+export class DuelsMetaStatsService extends AbstractFacadeService<DuelsMetaStatsService> {
+	public duelsMetaStats$$: SubscriberAwareBehaviorSubject<DuelsStat>;
 
-	constructor(
-		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
-		private readonly store: AppUiStoreFacadeService,
-	) {
-		window['duelsMetaStats'] = this;
-		this.init();
+	private duelsAccess: DuelsMetaHeroStatsAccessService;
+	private prefs: PreferencesService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'DuelsMetaStatsService', () => !!this.duelsMetaStats$$);
 	}
 
-	private async init(): Promise<void> {
+	protected override assignSubjects() {
+		this.duelsMetaStats$$ = this.mainInstance.duelsMetaStats$$;
+	}
+
+	protected async init() {
+		this.duelsMetaStats$$ = new SubscriberAwareBehaviorSubject<DuelsStat | null>(null);
+		this.duelsAccess = AppInjector.get(DuelsMetaHeroStatsAccessService);
+		this.prefs = AppInjector.get(PreferencesService);
+
+		await this.prefs.isReady();
+
 		this.duelsMetaStats$$.onFirstSubscribe(async () => {
-			this.store
-				.listenPrefs$(
-					(prefs) => prefs.duelsActiveMmrFilter,
-					(prefs) => prefs.duelsActiveTimeFilter,
+			this.prefs.preferences$$
+				.pipe(
+					map((prefs) => ({
+						mmr: prefs.duelsActiveMmrFilter,
+						time: prefs.duelsActiveTimeFilter,
+					})),
+					distinctUntilChanged(
+						({ mmr: aMmr, time: aTime }, { mmr: bMmr, time: bTime }) => aMmr === bMmr && aTime === bTime,
+					),
 				)
-				.pipe(distinctUntilChanged(([aMmr, aTime], [bMmr, bTime]) => aMmr === bMmr && aTime === bTime))
-				.subscribe(async ([mmr, time]) => {
+				.subscribe(async ({ mmr, time }) => {
 					const metaStats = await this.duelsAccess.loadMetaHeroes(mmr, time);
 					console.log('[duels-meta-stats] loaded meta stats', mmr, time, metaStats?.heroes?.length);
 					this.duelsMetaStats$$.next(metaStats);

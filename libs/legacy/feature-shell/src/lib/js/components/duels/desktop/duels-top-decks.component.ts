@@ -6,14 +6,16 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
+import { DuelsMetaStatsService } from '../../../services/duels/duels-meta-stats.service';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
+import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { PatchesConfigService } from '../../../services/patches-config.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { getDuelsMmrFilterNumber, topDeckGroupApplyFilters } from '../../../services/ui-store/duels-ui-helper';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-top-decks',
@@ -48,45 +50,57 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	deckGroups$: Observable<DuelsGroupedDecks[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly duelsTopDecks: DuelsTopDeckService,
+		private readonly prefs: PreferencesService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly duelsMetaStats: DuelsMetaStatsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
-		await this.duelsTopDecks.isReady();
+		await Promise.all([
+			this.patchesConfig.isReady(),
+			this.duelsTopDecks.isReady(),
+			this.prefs.isReady(),
+			this.mainWindowState.isReady(),
+			this.duelsMetaStats.isReady(),
+		]);
 
 		this.deckGroups$ = combineLatest([
 			this.duelsTopDecks.topDeck$$,
-			this.store.duelsMetaStats$(),
-			this.store.listen$(
-				([main, nav]) => main.duels.decksSearchString,
-				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter2,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-				([main, nav, prefs]) => prefs.duelsActivePassiveTreasuresFilter,
+			this.duelsMetaStats.duelsMetaStats$$,
+			this.mainWindowState.mainWindowState$$.pipe(this.mapData((state) => state.duels.decksSearchString)),
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						mmrFilter: prefs.duelsActiveMmrFilter,
+						classFilter: prefs.duelsActiveHeroesFilter2,
+						heroPowerFilter: prefs.duelsActiveHeroPowerFilter2,
+						sigTreasureFilter: prefs.duelsActiveSignatureTreasureFilter2,
+						timeFilter: prefs.duelsActiveTimeFilter,
+						dustFilter: prefs.duelsActiveTopDecksDustFilter,
+						passivesFilter: prefs.duelsActivePassiveTreasuresFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.patchesConfig.currentDuelsMetaPatch$$,
 		]).pipe(
 			tap((info) => console.debug('[duels-top-deck] info', info)),
-			filter(([topDecks, duelsMetaStats, [_]]) => !!topDecks?.length && !!duelsMetaStats?.mmrPercentiles?.length),
+			filter(([topDecks, duelsMetaStats]) => !!topDecks?.length && !!duelsMetaStats?.mmrPercentiles?.length),
 			this.mapData(
 				([
 					topDecks,
 					duelsMetaStats,
-					[
-						searchString,
+					searchString,
+					{
 						mmrFilter,
 						classFilter,
 						heroPowerFilter,
@@ -94,7 +108,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent i
 						timeFilter,
 						dustFilter,
 						passivesFilter,
-					],
+					},
 					patch,
 				]) => {
 					const trueMmrFilter = getDuelsMmrFilterNumber(duelsMetaStats.mmrPercentiles, mmrFilter);

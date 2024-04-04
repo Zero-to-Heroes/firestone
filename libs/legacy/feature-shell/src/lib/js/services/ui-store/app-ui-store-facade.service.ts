@@ -161,6 +161,7 @@ export class AppUiStoreFacadeService {
 		return this.store.duelsBuckets$();
 	}
 
+	/** @deprecated */
 	public duelsMetaStats$(): Observable<DuelsStat> {
 		return this.store.duelsMetaStats$();
 	}

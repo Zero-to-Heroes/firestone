@@ -187,6 +187,7 @@ export class AppStartupService {
 		}
 	}
 
+	// To Oled: the code where things happen
 	private async showLoadingScreen() {
 		if (this.loadingWindowShown) {
 			return;
@@ -196,9 +197,13 @@ export class AppStartupService {
 
 		// Don't open the loading window if the main window is open
 		const prefs = await this.prefs.getPreferences();
+		// To Oled: commenting out the following line will make the Main Window not open
 		const collectionWindow = await this.ow.getCollectionWindow(prefs);
+		// To Oled: you can uncomment the following line, and the Main Window will still be loaded
+		// return;
 		const shouldShowAds = await this.ads.shouldDisplayAds();
 		const isDev = !!process.env.NODE_ENV && process.env.NODE_ENV !== 'production';
+		// To Oled: I added the following the force-close the window, but I'd like to not have to do it
 		if (!collectionWindow.isVisible) {
 			this.ow.closeWindow(collectionWindow.id);
 		}
