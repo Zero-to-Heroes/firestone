@@ -1,21 +1,13 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
-import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
+import { BG_USE_ANOMALIES, BgsMetaHeroStatsService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BG_USE_ANOMALIES } from '@legacy-import/src/lib/js/services/feature-flags';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
@@ -47,16 +39,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTierListComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterViewInit, AfterContentInit
-{
+export class BattlegroundsTierListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() showFilters: boolean;
 
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
-
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-	private percentiles: readonly MmrPercentile[] = [];
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -64,29 +50,28 @@ export class BattlegroundsTierListComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly playerHeroStats: BgsPlayerHeroStatsService,
+		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-	}
+	async ngAfterContentInit() {
+		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.mainWindowState);
 
-	ngAfterContentInit() {
-		this.store
-			.listen$(([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles)
-			.pipe(
-				filter(([percentiles]) => !!percentiles?.length),
-				this.mapData(([percentiles]) => percentiles),
-			)
-			.subscribe((percentiles) => {
-				this.percentiles = percentiles;
-			});
 		this.stats$ = combineLatest([
-			this.store.bgsMetaStatsHero$(),
+			this.playerHeroStats.tiersWithPlayerData$$,
+			this.metaHeroStats.metaHeroStats$$.pipe(
+				this.mapData(
+					(stats) => ({
+						mmrPercentiles: stats?.mmrPercentiles,
+						lastUpdateDate: stats?.lastUpdateDate,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
+			),
 			this.store.listen$(
-				([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles,
-				([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats()?.lastUpdateDate,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
@@ -94,19 +79,25 @@ export class BattlegroundsTierListComponent
 			),
 		]).pipe(
 			filter(
-				([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) =>
+				([stats, { mmrPercentiles, lastUpdateDate }, [timeFilter, rankFilter, tribesFilter]]) =>
 					!!stats?.length && !!mmrPercentiles?.length && !!lastUpdateDate,
 			),
-			map(([stats, [mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, tribesFilter, anomaliesFilter]]) => ({
-				stats: stats,
-				mmrPercentiles: mmrPercentiles,
-				allTribes: ALL_BG_RACES,
-				lastUpdateDate: lastUpdateDate,
-				timeFilter: timeFilter,
-				rankFilter: rankFilter,
-				tribesFilter: tribesFilter,
-				anomaliesFilter: BG_USE_ANOMALIES ? anomaliesFilter : [],
-			})),
+			map(
+				([
+					stats,
+					{ mmrPercentiles, lastUpdateDate },
+					[timeFilter, rankFilter, tribesFilter, anomaliesFilter],
+				]) => ({
+					stats: stats,
+					mmrPercentiles: mmrPercentiles,
+					allTribes: ALL_BG_RACES,
+					lastUpdateDate: lastUpdateDate,
+					timeFilter: timeFilter,
+					rankFilter: rankFilter,
+					tribesFilter: tribesFilter,
+					anomaliesFilter: BG_USE_ANOMALIES ? anomaliesFilter : [],
+				}),
+			),
 			this.mapData((info) => {
 				const stats = info.stats;
 				const totalMatches = sumOnArray(stats, (stat) => stat.dataPoints);
@@ -156,6 +147,10 @@ export class BattlegroundsTierListComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByTierFn(index, item: HeroTier) {

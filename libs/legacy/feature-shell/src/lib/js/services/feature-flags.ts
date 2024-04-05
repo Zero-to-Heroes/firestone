@@ -17,4 +17,3 @@ export class FeatureFlags {
 }
 
 // To change when features are put back again
-export const BG_USE_ANOMALIES = false;

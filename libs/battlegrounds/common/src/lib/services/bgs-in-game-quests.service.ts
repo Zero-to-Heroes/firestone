@@ -25,9 +25,9 @@ import {
 	tap,
 } from 'rxjs';
 import { BgsQuestCardChoiceOption } from '../model/quests-in-game';
-import { BgsGameStateFacadeService } from './bgs-game-state-facade.service';
 import { BG_USE_QUESTS } from './bgs-in-game-quests-guardian.service';
 import { BattlegroundsQuestsService } from './bgs-quests.service';
+import { BgsStateFacadeService } from './bgs-state-facade.service';
 
 export const IN_GAME_RANK_FILTER = 50;
 
@@ -39,7 +39,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 	private scene: SceneService;
 	private prefs: PreferencesService;
 	private gameState: GameStateFacadeService;
-	private bgsGameState: BgsGameStateFacadeService;
+	private bgsGameState: BgsStateFacadeService;
 	private quests: BattlegroundsQuestsService;
 	private allCards: CardsFacadeService;
 
@@ -58,7 +58,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 		this.scene = AppInjector.get(SceneService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
-		this.bgsGameState = AppInjector.get(BgsGameStateFacadeService);
+		this.bgsGameState = AppInjector.get(BgsStateFacadeService);
 		this.quests = AppInjector.get(BattlegroundsQuestsService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 

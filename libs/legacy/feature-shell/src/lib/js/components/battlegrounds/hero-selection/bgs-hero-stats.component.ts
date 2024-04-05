@@ -1,12 +1,13 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { BgsQuestStat } from '@firestone/battlegrounds/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsPlayerHeroStatsService, BgsQuestStat } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
 	BgsHeroAveragePositionDetails,
 } from '@firestone/battlegrounds/view';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
@@ -132,15 +133,21 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 			  };
 	}
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly playerHeroStats: BgsPlayerHeroStatsService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.playerHeroStats);
+
 		this.placementChartData$ = combineLatest([
 			this.placementDistribution$.asObservable(),
 			this.playerPlacementDistribution$.asObservable(),
-			this.store.bgsMetaStatsHero$(),
+			this.playerHeroStats.tiersWithPlayerData$$,
 		]).pipe(
 			filter(([global, player, globalStats]) => !!global && !!player && !!globalStats),
 			map(([global, player, globalStats]) => ({
@@ -168,6 +175,10 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 				return [globalChartData, playerChartData];
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	buildPercents(value: number): string {

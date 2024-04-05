@@ -1,12 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
+import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
-import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
-import { PatchInfo } from '../../../../models/patches';
 import { isBattlegrounds } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

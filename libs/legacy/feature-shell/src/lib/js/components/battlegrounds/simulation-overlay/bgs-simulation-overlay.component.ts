@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation, BgsGameStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
@@ -35,7 +35,7 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
-		private readonly gameState: BgsGameStateFacadeService,
+		private readonly gameState: BgsStateFacadeService,
 	) {
 		super(cdr);
 	}

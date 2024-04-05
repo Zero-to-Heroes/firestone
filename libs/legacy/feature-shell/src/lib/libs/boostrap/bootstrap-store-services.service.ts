@@ -9,10 +9,11 @@ import {
 import {
 	BattlegroundsOfficialLeaderboardService,
 	BattlegroundsQuestsService,
-	BgsGameStateFacadeService,
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
 	BgsMatchPlayersMmrService,
+	BgsMetaHeroStatsService,
+	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
 } from '@firestone/battlegrounds/common';
 import { CommunityJoinService } from '@firestone/communities/common';
@@ -93,10 +94,11 @@ export class BootstrapStoreServicesService {
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		private readonly init_BgsInGameQuestsService: BgsInGameQuestsService,
 		private readonly init_BgsInGameQuestsGuardianService: BgsInGameQuestsGuardianService,
-		private readonly init_BgsGameStateFacadeService: BgsGameStateFacadeService,
+		private readonly init_BgsStateFacadeService: BgsStateFacadeService,
 		private readonly init_BgsPerfectGamesService: BgsPerfectGamesService,
 		private readonly init_BgsMatchPlayersMmrService: BgsMatchPlayersMmrService,
-		private readonly init_BgsStateFacadeService: BgsStateFacadeService,
+		private readonly init_BgsPlayerHeroStatsService: BgsPlayerHeroStatsService,
+		private readonly init_BgsMetaHeroStatsService: BgsMetaHeroStatsService,
 		private readonly init_BattlegroundsOfficialLeaderboardService: BattlegroundsOfficialLeaderboardService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
 		private readonly init_ArenaCardStatsService: ArenaCardStatsService,

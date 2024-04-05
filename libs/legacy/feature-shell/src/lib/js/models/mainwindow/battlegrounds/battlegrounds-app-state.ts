@@ -1,4 +1,3 @@
-import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsPostMatchStatsForReview } from '@firestone/battlegrounds/common';
 import { AppInjector } from '@firestone/shared/framework/core';
 import { BgsHeroStrategies } from '../../../services/battlegrounds/bgs-meta-hero-strategies.service';
@@ -18,7 +17,6 @@ export class BattlegroundsAppState {
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
 	readonly lastHeroPostMatchStatsHeroId: string;
 
-	readonly metaHeroStats: BgsHeroStatsV2 = undefined;
 	readonly metaHeroStrategies: BgsHeroStrategies = undefined;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
@@ -27,21 +25,6 @@ export class BattlegroundsAppState {
 
 	public update(base: Partial<NonFunctionProperties<BattlegroundsAppState>>): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), this, base);
-	}
-
-	public getMetaHeroStats(): BgsHeroStatsV2 {
-		// Hack, see store-bootstrap.service.ts
-		// if (!this.initComplete) {
-		// 	return this.metaHeroStats;
-		// }
-		if (this.metaHeroStats === undefined) {
-			const service = AppInjector.get<LazyDataInitService>(LazyDataInitService);
-			if (service) {
-				(this.metaHeroStats as BgsHeroStatsV2) = null;
-				service.requestLoad('bgs-meta-hero-stats');
-			}
-		}
-		return this.metaHeroStats;
 	}
 
 	public getMetaHeroStrategies(): BgsHeroStrategies {

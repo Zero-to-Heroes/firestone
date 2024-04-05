@@ -11,11 +11,11 @@ import {
 	getGroupingKeyForHeroStat as groupingKey,
 } from '@firestone/duels/data-access';
 import { DuelsDeckSummary, DuelsRun } from '@firestone/duels/general';
+import { PatchInfo } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsTopDecksDustFilterType } from '@models/duels/duels-types';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsDeckStat, DuelsHeroPlayerStat } from '../../models/duels/duels-player-stats';
-import { PatchInfo } from '../../models/patches';
 import { sumOnArray } from '../utils';
 
 export const buildDuelsHeroPlayerStats = (

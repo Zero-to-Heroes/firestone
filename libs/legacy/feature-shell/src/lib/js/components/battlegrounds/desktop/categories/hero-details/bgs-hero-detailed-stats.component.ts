@@ -1,5 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
@@ -124,13 +126,19 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	bgHeroStats$: Observable<BgsMetaHeroStatTierItem>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly heroStats: BgsPlayerHeroStatsService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.heroStats);
+
 		this.bgHeroStats$ = combineLatest([
-			this.store.bgsMetaStatsHero$(),
+			this.heroStats.tiersWithPlayerData$$,
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
@@ -143,6 +151,10 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComp
 			filter((info) => !!info.heroId),
 			this.mapData((info) => info.heroStats?.find((stat) => stat.id === info.heroId)),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	buildValue(value: number, decimals = 2): string {

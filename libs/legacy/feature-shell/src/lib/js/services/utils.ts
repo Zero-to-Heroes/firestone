@@ -1,7 +1,7 @@
 // import equal from 'fast-deep-equal/es6';
+import { PatchInfo } from '@firestone/shared/common/service';
 import equal from 'deep-equal';
 import { inflate } from 'pako';
-import { PatchInfo } from '../models/patches';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 /**@deprecated */

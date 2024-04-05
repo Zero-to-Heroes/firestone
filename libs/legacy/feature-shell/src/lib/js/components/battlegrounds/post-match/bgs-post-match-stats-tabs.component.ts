@@ -8,9 +8,14 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/battlegrounds/common';
+import {
+	BgsFaceOffWithSimulation,
+	BgsPlayerHeroStatsService,
+	BgsPostMatchStatsPanel,
+	BgsStatsFilterId,
+} from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isSupportedScenario } from '../../../services/battlegrounds/bgs-utils';
@@ -135,15 +140,25 @@ export class BgsPostMatchStatsTabsComponent
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.heroStat$ = combineLatest([this.store.bgsMetaStatsHero$(), this.currentHeroId$$.asObservable()]).pipe(
+	async ngAfterContentInit() {
+		await waitForReady(this.playerHeroStats);
+
+		this.heroStat$ = combineLatest([
+			this.playerHeroStats.tiersWithPlayerData$$,
+			this.currentHeroId$$.asObservable(),
+		]).pipe(
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
 			this.mapData(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

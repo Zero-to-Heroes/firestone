@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DuelsRun } from '@firestone/duels/general';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { formatClass } from '../../../../services/hs-utils';

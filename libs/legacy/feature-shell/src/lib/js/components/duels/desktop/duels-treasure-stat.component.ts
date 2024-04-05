@@ -3,13 +3,12 @@ import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { filterDuelsTreasureStats } from '@firestone/duels/data-access';
 import { DuelsNavigationService, DuelsRun } from '@firestone/duels/general';
 import { DuelsHeroSortFilterType, DuelsMetaStats } from '@firestone/duels/view';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { DuelsDecksProviderService } from '../../../services/duels/duels-decks-provider.service';
 import { DuelsMetaStatsService } from '../../../services/duels/duels-meta-stats.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { buildDuelsHeroTreasurePlayerStats, filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 
 @Component({

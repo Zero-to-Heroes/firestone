@@ -3,9 +3,9 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
 import { CardIds, ReferenceCard, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsStatTypeFilterType, DuelsTimeFilterType, filterDuelsHeroStats } from '@firestone/duels/data-access';
+import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
 import { arraysEqual, groupByFunction, sortByProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import { DuelsDeckStat, DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import {
@@ -19,7 +19,6 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, shareReplay } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
 	selector: 'duels-ooc-hero-selection',

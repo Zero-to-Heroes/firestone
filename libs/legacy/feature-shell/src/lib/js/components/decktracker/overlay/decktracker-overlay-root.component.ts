@@ -13,7 +13,7 @@ import {
 import { CardClass } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/constructed/common';
 import { DeckState, GameState, StatsRecap } from '@firestone/game-state';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -21,7 +21,6 @@ import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, 
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({

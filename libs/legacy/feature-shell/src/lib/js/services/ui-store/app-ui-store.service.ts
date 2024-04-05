@@ -1,7 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { ALL_BG_RACES } from '@firestone-hs/reference-data';
-import { BgsMetaHeroStatTierItem, buildHeroStats, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { DuelsRun } from '@firestone/duels/general';
 import { PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -12,7 +10,7 @@ import { MailsService } from '@mails/services/mails.service';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
@@ -23,7 +21,7 @@ import { DeckSummary } from '@firestone/constructed/common';
 import { DuelsDeckSummary } from '@firestone/duels/general';
 import { GameState } from '@firestone/game-state';
 import { AdventuresInfo, Card, CardBack } from '@firestone/memory';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
@@ -45,7 +43,6 @@ import {
 import { AchievementsStateManagerService } from '../achievement/achievements-state-manager.service';
 import { AdService } from '../ad.service';
 import { BgsBoardHighlighterService, ShopMinion } from '../battlegrounds/bgs-board-highlighter.service';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
@@ -55,7 +52,6 @@ import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service
 import { DuelsHeroStatsService } from '../duels/duels-hero-stats.service';
 import { DuelsLeaderboardService } from '../duels/duels-leaderboard.service';
 import { DuelsMetaStatsService } from '../duels/duels-meta-stats.service';
-import { BG_USE_ANOMALIES } from '../feature-flags';
 import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
@@ -63,11 +59,9 @@ import { LotteryService } from '../lottery/lottery.service';
 import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
-import { PatchesConfigService } from '../patches-config.service';
 import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual } from '../utils';
-import { filterBgsMatchStats } from './bgs-ui-helper';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
@@ -93,7 +87,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 	private modsConfig: BehaviorSubject<ModsConfig>;
 
-	private bgsMetaStatsHero: Observable<readonly BgsMetaHeroStatTierItem[]>;
 	private gameStats: Observable<readonly GameStat[]>;
 	private decks: Observable<readonly DeckSummary[]>;
 	private duelsRuns: Observable<readonly DuelsRun[]>;
@@ -286,10 +279,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }>;
 	}
 
-	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
-		return this.bgsMetaStatsHero;
-	}
-
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
 		return this.duelsHeroStatsService.duelsHeroStats$$.asObservable();
 	}
@@ -435,7 +424,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		// Needs to be before duels stuff
 		this.initDuelsRuns();
 		// The rest
-		this.initBgsMetaStatsHero();
 		this.initDecks();
 		this.initDuelsDecks();
 		this.duelsAdventureInfo = (
@@ -576,128 +564,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.highlightedBgsMinions = (
 			this.ow.getMainWindow().bgsBoardHighlighter as BgsBoardHighlighterService
 		).shopMinions$$;
-	}
-
-	private initBgsMetaStatsHero() {
-		const statsWithOnlyGlobalData$ = combineLatest([
-			this.listen$(([main]) => main.battlegrounds.getMetaHeroStats() ?? null),
-			this.listenPrefs$(
-				(prefs) => prefs.bgsActiveRankFilter,
-				(prefs) => prefs.bgsActiveTribesFilter,
-				(prefs) => prefs.bgsActiveAnomaliesFilter,
-				(prefs) => prefs.bgsHeroesUseConservativeEstimate,
-				(prefs) => prefs.bgsActiveUseMmrFilterInHeroSelection,
-				(prefs) => prefs.bgsActiveUseAnomalyFilterInHeroSelection,
-			),
-		]).pipe(
-			debounceTime(200),
-			distinctUntilChanged(),
-			map(
-				([
-					[stats],
-					[
-						bgsActiveRankFilter,
-						bgsActiveTribesFilter,
-						bgsActiveAnomaliesFilter,
-						bgsHeroesUseConservativeEstimate,
-						useMmrFilter,
-						useAnomalyFilter,
-					],
-				]) => {
-					console.debug(
-						'[bgs-1] rebuilding meta hero stats 1',
-						stats,
-						'rankFilter',
-						bgsActiveRankFilter,
-						'tribesFilter',
-						bgsActiveTribesFilter,
-						'anomaliesFilter',
-						bgsActiveAnomaliesFilter,
-						'bgsHeroesUseConservativeEstimate',
-						bgsHeroesUseConservativeEstimate,
-						'useMmrFilter',
-						useMmrFilter,
-						'useAnomalyFilter',
-						useAnomalyFilter,
-					);
-					const result: readonly BgsMetaHeroStatTierItem[] = !stats?.heroStats
-						? null
-						: buildHeroStats(
-								stats?.heroStats,
-								// bgsActiveRankFilter,
-								bgsActiveTribesFilter,
-								bgsActiveAnomaliesFilter,
-								bgsHeroesUseConservativeEstimate,
-								useMmrFilter,
-								BG_USE_ANOMALIES ? useAnomalyFilter : false,
-								this.allCards,
-						  );
-					return result;
-				},
-			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-		);
-
-		const playerBgGames$ = combineLatest([
-			this.gameStats,
-			this.listen$(([main]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles ?? []),
-			this.patchesConfig.currentBattlegroundsMetaPatch$$,
-			this.listenPrefs$(
-				(prefs) => prefs.bgsActiveRankFilter,
-				(prefs) => prefs.bgsActiveTribesFilter,
-				(prefs) => prefs.bgsActiveAnomaliesFilter,
-				(prefs) => prefs.bgsActiveTimeFilter,
-				(prefs) => prefs.bgsActiveUseMmrFilterInHeroSelection,
-				(prefs) => prefs.bgsActiveUseAnomalyFilterInHeroSelection,
-			),
-		]).pipe(
-			// distinctUntilChanged(),
-			map(
-				([
-					games,
-					[mmrPercentiles],
-					patchInfo,
-					[rankFilter, tribesFilter, anomaliesFilter, timeFilter, useMmrFilter, useAnomalyFilter],
-				]) => {
-					const targetRank: number =
-						!mmrPercentiles?.length || !rankFilter || !useMmrFilter
-							? 0
-							: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
-					const bgGames = (games ?? [])
-						.filter((g) => isBattlegrounds(g.gameMode))
-						.filter(
-							(g) =>
-								!tribesFilter?.length ||
-								tribesFilter.length === ALL_BG_RACES.length ||
-								tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
-						)
-						.filter((g) =>
-							BG_USE_ANOMALIES
-								? !anomaliesFilter?.length ||
-								  !useAnomalyFilter ||
-								  anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a))
-								: true,
-						);
-					const afterFilter = filterBgsMatchStats(bgGames, timeFilter, targetRank, patchInfo);
-					console.debug(
-						'[bgs-2] rebuilding meta hero stats 2',
-						bgGames,
-						afterFilter,
-						anomaliesFilter,
-						useAnomalyFilter,
-					);
-					return afterFilter;
-				},
-			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-		);
-
-		this.bgsMetaStatsHero = combineLatest([statsWithOnlyGlobalData$, playerBgGames$]).pipe(
-			tap((info) => console.debug('[bgs-3] rebuilding meta hero stats 3', info)),
-			map(([stats, playerBgGames]) => stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards))),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
-		);
 	}
 }
 

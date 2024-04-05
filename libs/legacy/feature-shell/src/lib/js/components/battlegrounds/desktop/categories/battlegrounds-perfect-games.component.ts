@@ -7,11 +7,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
+import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-perfect-games.service';
-import { BG_USE_ANOMALIES } from '@legacy-import/src/lib/js/services/feature-flags';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -43,13 +44,13 @@ export class BattlegroundsPerfectGamesComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly perfectGames: BgsPerfectGamesService,
 		private readonly prefs: PreferencesService,
+		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.perfectGames.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.perfectGames, this.prefs, this.metaHeroStats);
 
 		const filters$ = this.prefs.preferences$$.pipe(
 			this.mapData(
@@ -64,11 +65,11 @@ export class BattlegroundsPerfectGamesComponent
 		);
 		this.replays$ = combineLatest([
 			this.perfectGames.perfectGames$$,
-			this.store.listen$(([main, nav]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles),
+			this.metaHeroStats.metaHeroStats$$.pipe(this.mapData((stats) => stats?.mmrPercentiles)),
 			filters$,
 		]).pipe(
-			filter(([perfectGames, [mmrPercentiles]]) => !!perfectGames?.length && !!mmrPercentiles?.length),
-			this.mapData(([perfectGames, [mmrPercentiles], filters]) => {
+			filter(([perfectGames, mmrPercentiles]) => !!perfectGames?.length && !!mmrPercentiles?.length),
+			this.mapData(([perfectGames, mmrPercentiles, filters]) => {
 				const mmrThreshold = getMmrThreshold(filters.rankFilter, mmrPercentiles);
 				return this.applyFilters(
 					perfectGames ?? [],

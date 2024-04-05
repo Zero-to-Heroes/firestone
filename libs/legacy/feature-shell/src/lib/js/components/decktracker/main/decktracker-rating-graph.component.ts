@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
@@ -7,11 +8,9 @@ import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
-import { PatchInfo } from '../../../models/patches';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 

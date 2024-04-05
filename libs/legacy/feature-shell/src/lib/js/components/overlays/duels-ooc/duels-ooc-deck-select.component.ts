@@ -5,6 +5,7 @@ import { CardIds, isPassive } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { DuelsRun } from '@firestone/duels/general';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { DuelsDeckStat } from '@models/duels/duels-player-stats';
@@ -17,7 +18,6 @@ import { deepEqual, groupByFunction, sortByProperties } from '@services/utils';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, shareReplay, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 
 @Component({
 	selector: 'duels-ooc-deck-select',

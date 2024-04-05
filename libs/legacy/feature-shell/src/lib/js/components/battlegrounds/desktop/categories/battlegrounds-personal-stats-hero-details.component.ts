@@ -5,9 +5,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
-import { BgsPlayer } from '@firestone/battlegrounds/common';
+import { BgsPlayer, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -78,11 +79,14 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly heroStats: BgsPlayerHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await Promise.all([this.heroStats.isReady()]);
+
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
 			.pipe(
@@ -90,7 +94,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				this.mapData(([tab]) => tab),
 			);
 		this.player$ = combineLatest([
-			this.store.bgsMetaStatsHero$(),
+			this.heroStats.tiersWithPlayerData$$,
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
@@ -114,6 +118,10 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 					  } as BgsPlayer),
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

@@ -1,8 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BgsHeroSelectionOverviewPanel } from '@firestone/battlegrounds/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BgsHeroSelectionOverviewPanel, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, tap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -62,12 +62,15 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		const tiers$ = this.store.bgsMetaStatsHero$().pipe(
+	async ngAfterContentInit() {
+		await waitForReady(this.playerHeroStats);
+
+		const tiers$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
 			tap((stats) => console.debug('[bgs-hero-selection-overview] received stats', stats)),
 			this.mapData((stats) => buildTiers(stats, this.i18n)),
 		);
@@ -130,6 +133,10 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStore
 				}
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	getOverviewWidth(): number {

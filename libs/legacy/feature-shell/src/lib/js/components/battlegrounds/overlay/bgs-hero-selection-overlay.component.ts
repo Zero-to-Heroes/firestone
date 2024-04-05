@@ -1,9 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsGameStateFacadeService, BgsHeroSelectionOverviewPanel } from '@firestone/battlegrounds/common';
+import {
+	BgsHeroSelectionOverviewPanel,
+	BgsPlayerHeroStatsService,
+	BgsStateFacadeService,
+} from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -50,16 +54,15 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly gameState: BgsGameStateFacadeService,
+		private readonly gameState: BgsStateFacadeService,
 		private readonly ads: AdService,
+		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.prefs.isReady();
-		await this.gameState.isReady();
-		await this.ads.isReady();
+		await waitForReady(this.prefs, this.gameState, this.ads, this.playerHeroStats);
 
 		this.heroTooltipActive$ = combineLatest([this.ads.enablePremiumFeatures$$, this.prefs.preferences$$]).pipe(
 			this.mapData(([premium, prefs]) => premium && prefs.bgsShowHeroSelectionTooltip),
@@ -69,7 +72,9 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionTiers)),
 		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => premium && bgsShowHeroSelectionTiers));
 
-		const tiers$ = this.store.bgsMetaStatsHero$().pipe(this.mapData((stats) => buildTiers(stats, this.i18n)));
+		const tiers$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
+			this.mapData((stats) => buildTiers(stats, this.i18n)),
+		);
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,

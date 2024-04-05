@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsStatTypeFilterType, filterDuelsHeroStats } from '@firestone/duels/data-access';
 import { DuelsNavigationService, DuelsRun } from '@firestone/duels/general';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -12,7 +12,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { DuelsHeroPlayerStat } from '../../models/duels/duels-player-stats';
-import { PatchesConfigService } from '../patches-config.service';
 import { buildDuelsHeroPlayerStats, filterDuelsRuns } from '../ui-store/duels-ui-helper';
 import { DuelsDecksProviderService } from './duels-decks-provider.service';
 import { DuelsMetaStatsService } from './duels-meta-stats.service';

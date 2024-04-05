@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -126,10 +125,6 @@ export class AppUiStoreFacadeService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
 		return this.store.listenMercenariesHighlights$(...selectors);
-	}
-
-	public bgsMetaStatsHero$(): Observable<readonly BgsMetaHeroStatTierItem[]> {
-		return this.store.bgsMetaStatsHero$();
 	}
 
 	/** @deprecated */

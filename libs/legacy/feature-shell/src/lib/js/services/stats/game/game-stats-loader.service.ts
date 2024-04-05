@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -15,11 +15,9 @@ import {
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { filter } from 'rxjs';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
-import { PatchInfo } from '../../../models/patches';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
 import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { PatchesConfigService } from '../../patches-config.service';
 import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
 import { decode } from '../../utils';
 

@@ -1,9 +1,9 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import {
 	BgsHeroCurve,
 	BgsHeroCurveActionExtended,
@@ -11,7 +11,6 @@ import {
 	BgsHeroStratAuthor,
 	BgsHeroStratTip,
 } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-strategies.service';
-import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';

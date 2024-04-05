@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsGameStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -75,7 +75,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		private readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly gameState: BgsGameStateFacadeService,
+		private readonly gameState: BgsStateFacadeService,
 	) {
 		super(cdr);
 	}

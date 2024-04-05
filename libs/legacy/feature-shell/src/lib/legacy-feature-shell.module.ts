@@ -738,7 +738,6 @@ import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-us
 import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
-import { BgsMetaHeroStatsService } from './js/services/battlegrounds/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
@@ -821,7 +820,6 @@ import { MercenariesMemoryCacheService } from './js/services/mercenaries/mercena
 import { MercenariesReferenceDataService } from './js/services/mercenaries/mercenaries-reference-data.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { PatchesConfigService } from './js/services/patches-config.service';
 import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
 import { OwUtilsService } from './js/services/plugins/ow-utils.service';
 import { SimpleIOService } from './js/services/plugins/simple-io.service';
@@ -1854,7 +1852,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		BattlegroundsStoreService,
 		BgsPerfectGamesService,
-		BgsMetaHeroStatsService,
 		BgsMetaHeroStrategiesService,
 		BgsGlobalStatsService,
 		BgsBattleSimulationService,
@@ -1874,7 +1871,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		AiDeckService,
 		SecretConfigService,
-		PatchesConfigService,
 
 		GameStatsLoaderService,
 		GameStatsUpdaterService,

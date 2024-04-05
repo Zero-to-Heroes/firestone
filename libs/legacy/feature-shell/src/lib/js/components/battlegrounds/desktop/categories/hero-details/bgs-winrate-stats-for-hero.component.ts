@@ -1,7 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/battlegrounds/common';
+import {
+	BgsPlayerHeroStatsService,
+	BgsPostMatchStatsForReview,
+	NumericTurnInfo,
+} from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
@@ -37,13 +42,19 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	values$: Observable<Value>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly heroStats: BgsPlayerHeroStatsService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.heroStats);
+
 		this.values$ = combineLatest([
-			this.store.bgsMetaStatsHero$(),
+			this.heroStats.tiersWithPlayerData$$,
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
 				([main, nav]) => main.battlegrounds,
@@ -59,6 +70,10 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreCo
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData((info) => this.buildValue(info.heroStats, info.postMatch, info.heroId)),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildValue(

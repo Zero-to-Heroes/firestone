@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { DuelsTimeFilterType } from '@firestone/duels/data-access';
 import { TimePeriod } from '@firestone/duels/view';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';

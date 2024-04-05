@@ -2,6 +2,7 @@ import { EventEmitter } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import {
+	BG_USE_ANOMALIES,
 	BattlegroundsState,
 	BgsBattlesPanel,
 	BgsGame,
@@ -12,7 +13,6 @@ import {
 } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BG_USE_ANOMALIES } from '../../../feature-flags';
 import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';

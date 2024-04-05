@@ -15,7 +15,7 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs';
-import { BgsGameStateFacadeService } from './bgs-game-state-facade.service';
+import { BgsStateFacadeService } from './bgs-state-facade.service';
 
 const INTERVAL = 3000;
 
@@ -27,7 +27,7 @@ export class BgsMatchMemoryInfoService {
 
 	constructor(
 		private readonly memory: MemoryInspectionService,
-		private readonly gameState: BgsGameStateFacadeService,
+		private readonly gameState: BgsStateFacadeService,
 		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();

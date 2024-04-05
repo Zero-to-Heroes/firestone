@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { DuelsTopDeckService } from '@legacy-import/src/lib/js/services/duels/duels-top-decks.service';
-import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

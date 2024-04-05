@@ -79,7 +79,6 @@ import { ShowAchievementDetailsEvent } from './events/achievements/show-achievem
 import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
-import { BattlegroundsMetaHeroStatsLoadedEvent } from './events/battlegrounds/bgs-meta-hero-stats-loaded-event';
 import { BattlegroundsMetaHeroStrategiesLoadedEvent } from './events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
@@ -211,7 +210,6 @@ import { ArenaSelectCategoryEvent, ArenaSelectCategoryProcessor } from './proces
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
-import { BattlegroundsMetaHeroStatsLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-stats-loaded-processor';
 import { BattlegroundsMetaHeroStrategiesLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-strategies-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
@@ -750,7 +748,6 @@ export class MainWindowStoreService {
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),
 				new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
 			],
-			[BattlegroundsMetaHeroStatsLoadedEvent.eventName(), new BattlegroundsMetaHeroStatsLoadedProcessor()],
 			[
 				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),
 				new BattlegroundsMetaHeroStrategiesLoadedProcessor(),

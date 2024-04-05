@@ -2,9 +2,9 @@ import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { BgsQuestStat } from '@firestone/battlegrounds/common';
 import { BgsActiveTimeFilterType, BgsHeroTier } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
+import { PatchInfo } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { PatchInfo } from '../../models/patches';
 import { groupByFunction } from '../utils';
 
 // export const buildQuestStats = (
@@ -44,17 +44,6 @@ import { groupByFunction } from '../utils';
 // 	const result = [...finalStats].sort(buildSortingFunction(heroSortFilter));
 // 	return result;
 // };
-
-export const filterBgsMatchStats = (
-	bgsMatchStats: readonly GameStat[],
-	timeFilter: BgsActiveTimeFilterType,
-	mmrThreshold: number,
-	currentBattlegroundsMetaPatch: PatchInfo,
-): readonly GameStat[] => {
-	return bgsMatchStats
-		.filter((stat) => filterTime(stat, timeFilter, currentBattlegroundsMetaPatch))
-		.filter((stat) => filterRank(stat, mmrThreshold));
-};
 
 // const buildQuestStat = (
 // 	heroCardId: string,

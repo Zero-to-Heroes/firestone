@@ -6,7 +6,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
@@ -14,7 +14,6 @@ import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsMetaStatsService } from '../../../services/duels/duels-meta-stats.service';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { getDuelsMmrFilterNumber, topDeckGroupApplyFilters } from '../../../services/ui-store/duels-ui-helper';
 
 @Component({

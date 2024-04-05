@@ -9,11 +9,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DuelsRun } from '@firestone/duels/general';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';

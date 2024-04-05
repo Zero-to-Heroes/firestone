@@ -2,10 +2,10 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '@firestone/duels/general';
 import { DuelsDeckSortFilterType } from '@firestone/duels/view';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

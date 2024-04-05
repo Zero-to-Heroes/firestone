@@ -9,6 +9,7 @@ import {
 	GameFormatString,
 	GameType,
 	SceneMode,
+	getBaseCardId,
 } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -74,16 +75,18 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.prefs.preferences$(
-				(prefs) =>
-					MULLIGAN_GUIDE_IS_ENABLED &&
-					(prefs.decktrackerShowMulliganDeckOverview || prefs.decktrackerShowMulliganCardImpact),
+			this.prefs.preferences$$.pipe(
+				map(
+					(prefs) =>
+						MULLIGAN_GUIDE_IS_ENABLED &&
+						(prefs.decktrackerShowMulliganDeckOverview || prefs.decktrackerShowMulliganCardImpact),
+				),
 			),
 			this.gameState.gameState$$,
 			// canShowWidget$,
 		]).pipe(
 			debounceTime(200),
-			map(([currentScene, [displayFromPrefs], gameState]) => {
+			map(([currentScene, displayFromPrefs, gameState]) => {
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
@@ -255,11 +258,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				const allDeckCards: readonly MulliganCardAdvice[] =
 					deckCards?.map((refCard) => {
 						const cardData =
-							cardsData.find((card) => card.cardId === refCard.id) ??
+							cardsData.find((card) => getBaseCardId(card.cardId) === getBaseCardId(refCard.id)) ??
 							cardsData.find(
 								(card) =>
-									this.allCards.getRootCardId(card.cardId) ===
-									this.allCards.getRootCardId(refCard.id),
+									this.allCards.getRootCardId(getBaseCardId(card.cardId)) ===
+									this.allCards.getRootCardId(getBaseCardId(refCard.id)),
 							);
 						const rawImpact = !!cardData?.inHandAfterMulligan
 							? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate

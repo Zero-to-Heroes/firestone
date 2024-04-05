@@ -7,8 +7,8 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { PatchesConfigService } from '@legacy-import/src/lib/js/services/patches-config.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';

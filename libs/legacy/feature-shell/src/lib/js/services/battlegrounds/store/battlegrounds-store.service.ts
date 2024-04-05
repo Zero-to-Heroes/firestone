@@ -1,9 +1,14 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BattlegroundsState, BgsMatchMemoryInfoService, RealTimeStatsState } from '@firestone/battlegrounds/common';
+import {
+	BattlegroundsState,
+	BgsMatchMemoryInfoService,
+	BgsMetaHeroStatsService,
+	RealTimeStatsState,
+} from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -21,7 +26,6 @@ import { GameEvents } from '../../game-events.service';
 import { LogsUploaderService } from '../../logs-uploader.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
-import { PatchesConfigService } from '../../patches-config.service';
 import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';
@@ -148,6 +152,7 @@ export class BattlegroundsStoreService {
 		private readonly gameStatus: GameStatusService,
 		private readonly bugService: BugReportService,
 		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
+		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -161,6 +166,8 @@ export class BattlegroundsStoreService {
 	// initialized, and replay them. Doable, but cumbersome, and will probably lead to bugs
 
 	private async init() {
+		await waitForReady(this.metaHeroStats);
+
 		this.eventParsers = this.buildEventParsers();
 		this.realTimeStatsListener = (state: RealTimeStatsState) => {
 			this.battlegroundsUpdater.next(new BgsRealTimeStatsUpdatedEvent(state));
@@ -261,11 +268,10 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.RECONNECT_OVER) {
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(false));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
+				const heroStats = await this.metaHeroStats.metaHeroStats$$.getValueWithInit();
 				// Order is important here, so that when the MMR is set the races are already populated
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
-				this.battlegroundsUpdater.next(
-					new BgsInitMmrEvent(this.mainWindowState.battlegrounds?.getMetaHeroStats()?.mmrPercentiles),
-				);
+				this.battlegroundsUpdater.next(new BgsInitMmrEvent(heroStats?.mmrPercentiles));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(
 					new BgsHeroSelectedEvent(

@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { SetCard } from '../../../models/set';
 import { DuelsTopDeckService } from '../../../services/duels/duels-top-decks.service';
-import { PatchesConfigService } from '../../../services/patches-config.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { DeckInfo, getCurrentDeck } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

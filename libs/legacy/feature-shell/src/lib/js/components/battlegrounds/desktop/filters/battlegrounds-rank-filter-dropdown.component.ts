@@ -1,7 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { RankFilterOption } from '@firestone/battlegrounds/view';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
@@ -35,17 +37,19 @@ export class BattlegroundsRankFilterDropdownComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.mmrPercentiles$ = this.store
-			.listen$(([main, nav, prefs]) => main.battlegrounds.getMetaHeroStats()?.mmrPercentiles)
-			.pipe(
-				filter(([percentiles]) => !!percentiles?.length),
-				this.mapData(([percentiles]) => percentiles),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.metaHeroStats, this.prefs);
+
+		this.mmrPercentiles$ = this.metaHeroStats.metaHeroStats$$.pipe(
+			this.mapData((stats) => stats?.mmrPercentiles),
+			filter((percentiles) => !!percentiles?.length),
+			this.mapData((percentiles) => percentiles),
+		);
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter);
 		this.visible$ = this.store
 			.listen$(
@@ -66,6 +70,10 @@ export class BattlegroundsRankFilterDropdownComponent
 						].includes(categoryId),
 				),
 			);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: RankFilterOption) {
