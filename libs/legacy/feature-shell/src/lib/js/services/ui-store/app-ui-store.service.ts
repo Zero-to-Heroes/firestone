@@ -139,6 +139,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly duelsHeroStatsService: DuelsHeroStatsService,
 		private readonly duelsMetaStatsService: DuelsMetaStatsService,
 		private readonly collectionManager: CollectionManager,
+		private readonly collectionBootstrapService: CollectionBootstrapService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -151,6 +152,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		await this.decksProvider.isReady();
 		await this.gameStatsProvider.isReady();
 		await this.collectionManager.isReady();
+		await this.collectionBootstrapService.isReady();
 
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
@@ -545,11 +547,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initPackStats() {
-		this.packStats = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).packStats$$;
+		this.packStats = this.collectionBootstrapService.packStats$$;
 	}
 
 	private initCardsHistory() {
-		this.cardHistory = (this.ow.getMainWindow().collectionBootstrap as CollectionBootstrapService).cardHistory$$;
+		this.cardHistory = this.collectionBootstrapService.cardHistory$$;
 	}
 
 	private initDuelsDecks() {

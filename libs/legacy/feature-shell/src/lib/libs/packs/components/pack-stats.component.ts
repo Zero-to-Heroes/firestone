@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BoosterType, boosterIdToBoosterName, boosterIdToSetId, sets } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import {
@@ -9,11 +9,13 @@ import {
 	NON_BUYABLE_BOOSTER_IDS,
 	YEAR_PACKS,
 } from '@firestone/collection/view';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CollectionManager } from '@legacy-import/src/lib/js/services/collection/collection-manager.service';
+import { CollectionBootstrapService } from '@legacy-import/src/lib/js/services/mainwindow/store/collection-bootstrap.service';
 import { Observable, combineLatest } from 'rxjs';
-import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
 import { getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 
 @Component({
@@ -65,7 +67,7 @@ import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionPackStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class CollectionPackStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 115;
 	readonly DEFAULT_CARD_HEIGHT = 155;
 
@@ -78,21 +80,31 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 	cardHeight = this.DEFAULT_CARD_HEIGHT;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly collectionManager: CollectionManager,
+		private readonly collectionBootstrapService: CollectionBootstrapService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
+		await Promise.all([
+			this.prefs.isReady(),
+			this.collectionManager.isReady(),
+			this.collectionBootstrapService.isReady(),
+		]);
+
+		this.showOnlyBuyablePacks$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.collectionShowOnlyBuyablePacks),
+		);
 		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest([
-			this.store.allTimeBoosters$(),
-			this.store.packStats$(),
-			this.store.listenPrefs$((prefs) => prefs.collectionPityTimerResets),
+			this.collectionManager.allTimeBoosters$$,
+			this.collectionBootstrapService.packStats$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionPityTimerResets)),
 		]).pipe(
-			this.mapData(([packsFromMemory, packStats, [collectionPityTimerResets]]) =>
+			this.mapData(([packsFromMemory, packStats, collectionPityTimerResets]) =>
 				Object.values(BoosterType)
 					.filter((boosterId: BoosterType) => !isNaN(boosterId))
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
@@ -195,13 +207,15 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionStoreCompo
 				),
 			),
 		);
-		this.bestPacks$ = this.store
-			.packStats$()
-			.pipe(
-				this.mapData((packStats) =>
-					[...packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a)).slice(0, 5),
-				),
-			);
+		this.bestPacks$ = this.collectionBootstrapService.packStats$$.pipe(
+			this.mapData((packStats) =>
+				[...packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a)).slice(0, 5),
+			),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByPackFn(index: number, item: InternalPackInfo) {

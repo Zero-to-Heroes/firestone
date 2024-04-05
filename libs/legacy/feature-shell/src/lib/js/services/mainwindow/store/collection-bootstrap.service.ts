@@ -2,30 +2,35 @@ import { Injectable } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, filter } from 'rxjs';
 import { CardHistory } from '../../../models/card-history';
 import { cardTypeToPremium } from '../../collection/cards-monitor.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 
 @Injectable()
-export class CollectionBootstrapService {
-	public packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[]>([]);
-	public cardHistory$$ = new BehaviorSubject<readonly CardHistory[]>([]);
+export class CollectionBootstrapService extends AbstractFacadeService<CollectionBootstrapService> {
+	public packStats$$: SubscriberAwareBehaviorSubject<readonly PackResult[]>;
+	public cardHistory$$: BehaviorSubject<readonly CardHistory[]>;
 
-	constructor(
-		private readonly memoryUpdates: MemoryUpdatesService,
-		private readonly collectionManager: CollectionManager,
-	) {
-		window['collectionBootstrap'] = this;
-		this.init();
+	private memoryUpdates: MemoryUpdatesService;
+	private collectionManager: CollectionManager;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'CollectionBootstrapService', () => !!this.packStats$$);
 	}
 
-	public async newPack(pack: PackResult) {
-		const currentStats = await this.packStats$$.getValueWithInit();
-		this.packStats$$.next([pack, ...currentStats]);
+	protected override assignSubjects() {
+		this.packStats$$ = this.mainInstance.packStats$$;
+		this.cardHistory$$ = this.mainInstance.cardHistory$$;
 	}
 
-	private async init() {
+	protected async init() {
+		this.packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[] | null>([]);
+		this.cardHistory$$ = new SubscriberAwareBehaviorSubject<readonly CardHistory[] | null>([]);
+		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
+		this.collectionManager = AppInjector.get(CollectionManager);
+
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.CollectionInit) {
 				console.debug('[collection-bootstrap] collection init detected in memory updates');
@@ -43,6 +48,11 @@ export class CollectionBootstrapService {
 				this.cardHistory$$.next(history);
 			});
 		});
+	}
+
+	public async newPack(pack: PackResult) {
+		const currentStats = await this.packStats$$.getValueWithInit();
+		this.packStats$$.next([pack, ...currentStats]);
 	}
 
 	private async initCollectionState(): Promise<void> {
