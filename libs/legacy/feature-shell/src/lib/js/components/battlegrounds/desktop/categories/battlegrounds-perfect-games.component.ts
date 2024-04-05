@@ -9,15 +9,13 @@ import {
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-perfect-games.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-perfect-games',
@@ -34,19 +32,18 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPerfectGamesComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly perfectGames: BgsPerfectGamesService,
 		private readonly prefs: PreferencesService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
