@@ -140,6 +140,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly duelsMetaStatsService: DuelsMetaStatsService,
 		private readonly collectionManager: CollectionManager,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
+		private readonly setsManager: SetsManagerService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -153,6 +154,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		await this.gameStatsProvider.isReady();
 		await this.collectionManager.isReady();
 		await this.collectionBootstrapService.isReady();
+		await this.setsManager.isReady();
 
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
@@ -477,7 +479,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 
 	private initSets() {
-		this.sets = (this.ow.getMainWindow().setsManager as SetsManagerService).sets$$;
+		this.sets = this.setsManager.sets$$;
 	}
 
 	private initBgHeroSkins() {

@@ -1,15 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Preferences } from '@firestone/shared/common/service';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Set } from '../../models/set';
+import { SetsManagerService } from '../../services/collection/sets-manager.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'sets',
@@ -29,7 +29,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SetsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	activeFilter$: Observable<string>;
 	sets$: Observable<readonly Set[]>;
 
@@ -60,18 +60,19 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 	private allSets$: Observable<readonly Set[]>;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly setsManager: SetsManagerService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.activeFilter$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
-			.pipe(this.mapData(([pref]) => pref));
-		this.allSets$ = this.store.sets$().pipe(
+	async ngAfterContentInit() {
+		await Promise.all([this.setsManager.isReady(), this.prefs.isReady()]);
+
+		this.activeFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionSelectedFormat));
+		this.allSets$ = this.setsManager.sets$$.pipe(
 			debounceTime(1000),
 			this.mapData((sets) => sets.filter((s) => s.id?.toLowerCase() !== 'gift')),
 		);
@@ -88,6 +89,10 @@ export class SetsComponent extends AbstractSubscriptionStoreComponent implements
 				return [...sets].sort(this.sortSets());
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private sortSets(): (a: Set, b: Set) => number {
