@@ -567,6 +567,7 @@ import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
+import { MercenariesCommonModule } from '@firestone/mercenaries/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
@@ -910,6 +911,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedCommonModule,
 		CommunitiesCommonModule,
 		CollectionCommonModule,
+		MercenariesCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

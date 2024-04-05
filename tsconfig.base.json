@@ -35,6 +35,7 @@
 			"@firestone/game-state": ["libs/game-state/src/index.ts"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/memory": ["libs/memory/src/index.ts"],
+			"@firestone/mercenaries/common": ["libs/mercenaries/common/src/index.ts"],
 			"@firestone/profile/data-access": ["libs/profile/data-access/src/index.ts"],
 			"@firestone/replay/coliseum": ["libs/replay/coliseum/src/index.ts"],
 			"@firestone/shared/assets": ["libs/shared/assets/src/index.ts"],

@@ -6,6 +6,7 @@ import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { DuelsPersonalDecksService } from '@firestone/duels/general';
 import { MemoryInspectionService } from '@firestone/memory';
+import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
@@ -159,7 +160,6 @@ import { LocalizationUpdateEvent } from './events/localization-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesAddMercToBackupTeamEvent } from './events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
-import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
 import { MercenariesHideTeamSummaryEvent } from './events/mercenaries/mercenaries-hide-team-summary-event';
 import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
@@ -303,7 +303,6 @@ import { GenericPreferencesUpdateProcessor } from './processors/generic-preferen
 import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
 import { MercenariesAddMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
-import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
 import { MercenariesHideTeamSummaryProcessor } from './processors/mercenaries/mercenaries-hide-team-summary-processor';
 import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
@@ -401,6 +400,7 @@ export class MainWindowStoreService {
 		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly constructedNavigation: ConstructedNavigationService,
 		private readonly collectionNavigation: CollectionNavigationService,
+		private readonly mercenariesNavigation: MercenariesNavigationService,
 		private readonly arenaNavigation: ArenaNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -773,7 +773,6 @@ export class MainWindowStoreService {
 				new MercenariesHeroLevelFilterSelectedProcessor(this.prefs),
 			],
 			[MercenariesHeroSelectedEvent.eventName(), new MercenariesHeroSelectedProcessor(this.cards)],
-			[MercenariesHeroSearchEvent.eventName(), new MercenariesHeroSearchProcessor()],
 			[MercenariesSelectCategoryEvent.eventName(), new MercenariesSelectCategoryProcessor()],
 			[MercenariesPersonalHeroesSortEvent.eventName(), new MercenariesPersonalHeroesSortProcessor(this.prefs)],
 			[MercenariesHideTeamSummaryEvent.eventName(), new MercenariesHideTeamSummaryProcessor(this.prefs)],

@@ -7,7 +7,6 @@ export class NavigationMercenaries {
 	readonly selectedHeroId: string;
 	readonly selectedDetailsMercId: number;
 	readonly selectedCompositionId: string;
-	readonly heroSearchString: string;
 
 	public update(base: Partial<NonFunctionProperties<NavigationMercenaries>>): NavigationMercenaries {
 		return Object.assign(new NavigationMercenaries(), this, base);

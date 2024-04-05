@@ -1,6 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
 import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
+import { MercenariesNavigationService } from '@firestone/mercenaries/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
@@ -145,17 +147,23 @@ export class MercenariesPersonalHeroStatsComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly prefs: PreferencesService,
+		private readonly nav: MercenariesNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.mercenariesCollection.isReady();
-		await this.mercenariesReferenceData.isReady();
+		await Promise.all([
+			this.mercenariesCollection.isReady(),
+			this.mercenariesReferenceData.isReady(),
+			this.prefs.isReady(),
+			this.nav.isReady(),
+		]);
 
-		this.sortCriteria$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion)
-			.pipe(this.mapData(([sortCriteria]) => sortCriteria));
+		this.sortCriteria$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.mercenariesPersonalHeroesSortCriterion),
+		);
 		this.unsortedStats$ = combineLatest([
 			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesCollection.memoryCollectionInfo$$,
@@ -170,20 +178,22 @@ export class MercenariesPersonalHeroStatsComponent
 		this.stats$ = combineLatest([
 			this.unsortedStats$,
 			this.mercenariesReferenceData.referenceData$$,
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion,
-				([main, nav, prefs]) => prefs.mercenariesActiveFullyUpgradedFilter,
-				([main, nav, prefs]) => prefs.mercenariesActiveOwnedFilter,
-				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					sortCriteria: prefs.mercenariesPersonalHeroesSortCriterion,
+					fullyUpgraded: prefs.mercenariesActiveFullyUpgradedFilter,
+					owned: prefs.mercenariesActiveOwnedFilter,
+				})),
 			),
+			this.nav.heroSearchString$$,
 		]).pipe(
 			filter(
-				([stats, referenceData, [sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
+				([stats, referenceData, { sortCriteria, fullyUpgraded, owned }, heroSearchString]) =>
 					!!stats?.length && !!referenceData,
 			),
 			// distinctUntilChanged((a, b) => deepEqual(a, b)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([stats, referenceData, [sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
+			this.mapData(([stats, referenceData, { sortCriteria, fullyUpgraded, owned }, heroSearchString]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, owned, sortCriteria, referenceData),
 			),
 			// tap((info) => {

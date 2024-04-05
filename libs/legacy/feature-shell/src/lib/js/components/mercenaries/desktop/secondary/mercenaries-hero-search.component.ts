@@ -5,13 +5,13 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MercenariesNavigationService } from '@firestone/mercenaries/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { MercenariesHeroSearchEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-search-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-hero-search',
@@ -32,7 +32,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesHeroSearchComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	searchString: string;
@@ -41,13 +41,14 @@ export class MercenariesHeroSearchComponent
 	private searchFormSub$$: Subscription;
 	private searchStringSub$$: Subscription;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(protected readonly cdr: ChangeDetectorRef, private readonly nav: MercenariesNavigationService) {
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.searchStringSub$$ = this.store
-			.listen$(([main, nav]) => nav.navigationMercenaries.heroSearchString)
+	async ngAfterContentInit() {
+		await this.nav.isReady();
+
+		this.searchStringSub$$ = this.nav.heroSearchString$$
 			.pipe(this.mapData((info) => info))
 			.subscribe(([heroSearchString]) => {
 				this.searchString = heroSearchString;
@@ -58,6 +59,10 @@ export class MercenariesHeroSearchComponent
 			.subscribe((data) => {
 				this.onSearchStringChange();
 			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')
@@ -68,7 +73,7 @@ export class MercenariesHeroSearchComponent
 	}
 
 	onSearchStringChange() {
-		this.store.send(new MercenariesHeroSearchEvent(this.searchString));
+		this.nav.heroSearchString$$.next(this.searchString);
 	}
 
 	onMouseDown(event: Event) {
