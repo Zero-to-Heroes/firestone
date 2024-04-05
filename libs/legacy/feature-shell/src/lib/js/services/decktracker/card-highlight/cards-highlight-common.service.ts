@@ -1224,6 +1224,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), mech);
 			case CardIds.Mixtape:
 				return and(opposingSide(inputSide), cardsPlayedThisMatch);
+			case CardIds.Muckmorpher:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.MulchMadnessTavernBrawl:
 				return and(side(inputSide), minion, neutral);
 			case CardIds.MummyMagic:
@@ -1436,6 +1438,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 						CardIds.RivendareWarrider_ZeliekConquestriderToken,
 					),
 				);
+			case CardIds.RoaringApplause:
+				return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 			case CardIds.RobeOfTheApprenticeTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 			case CardIds.RobeOfTheMagi:
