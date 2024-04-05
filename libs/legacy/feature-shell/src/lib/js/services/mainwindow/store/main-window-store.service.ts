@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { DuelsPersonalDecksService } from '@firestone/duels/general';
@@ -399,6 +400,7 @@ export class MainWindowStoreService {
 		private readonly duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly constructedNavigation: ConstructedNavigationService,
+		private readonly collectionNavigation: CollectionNavigationService,
 		private readonly arenaNavigation: ArenaNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -502,7 +504,12 @@ export class MainWindowStoreService {
 				this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1].state
 					.currentApp === navigationState.currentApp) ||
 			// We allow a "back" to the parent in case there is no back history
-			NavigationBackProcessor.buildParentState(navigationState, dataState, this.setsManager) != null;
+			NavigationBackProcessor.buildParentState(
+				navigationState,
+				dataState,
+				this.setsManager,
+				this.collectionNavigation,
+			) != null;
 
 		// 	'isBackArrowEnabled?',
 		// 	backArrowEnabled,
@@ -524,11 +531,17 @@ export class MainWindowStoreService {
 
 	private buildProcessors(): Map<string, Processor> {
 		const processors: readonly [string, Processor][] = [
-			[StoreInitEvent.eventName(), new StoreInitProcessor(this.events, this.prefs, this.i18n)],
+			[
+				StoreInitEvent.eventName(),
+				new StoreInitProcessor(this.events, this.prefs, this.i18n, this.collectionNavigation),
+			],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
-			[NavigationBackEvent.eventName(), new NavigationBackProcessor(this.setsManager)],
+			[NavigationBackEvent.eventName(), new NavigationBackProcessor(this.setsManager, this.collectionNavigation)],
 			[NavigationNextEvent.eventName(), new NavigationNextProcessor()],
-			[ChangeVisibleApplicationEvent.eventName(), new ChangeVisibleApplicationProcessor(this.prefs, this.i18n)],
+			[
+				ChangeVisibleApplicationEvent.eventName(),
+				new ChangeVisibleApplicationProcessor(this.prefs, this.i18n, this.collectionNavigation),
+			],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor()],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
@@ -542,11 +555,26 @@ export class MainWindowStoreService {
 			// Collection
 			[CollectionRefreshPacksEvent.eventName(), new CollectionRefreshPacksProcessor(this.packsService)],
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
-			[CollectionSelectCurrentTabEvent.eventName(), new CollectionSelectCurrentTabProcessor()],
-			[SearchCardsEvent.eventName(), new SearchCardProcessor(this.collectionManager, this.sets, this.i18n)],
-			[SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor(this.setsManager)],
-			[ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards, this.setsManager)],
-			[ShowCardBackDetailsEvent.eventName(), new ShowCardBackDetailsProcessor(this.collectionManager)],
+			[
+				CollectionSelectCurrentTabEvent.eventName(),
+				new CollectionSelectCurrentTabProcessor(this.collectionNavigation),
+			],
+			[
+				SearchCardsEvent.eventName(),
+				new SearchCardProcessor(this.collectionManager, this.sets, this.i18n, this.collectionNavigation),
+			],
+			[
+				SelectCollectionSetEvent.eventName(),
+				new SelectCollectionSetProcessor(this.setsManager, this.collectionNavigation),
+			],
+			[
+				ShowCardDetailsEvent.eventName(),
+				new ShowCardDetailsProcessor(this.cards, this.setsManager, this.collectionNavigation),
+			],
+			[
+				ShowCardBackDetailsEvent.eventName(),
+				new ShowCardBackDetailsProcessor(this.collectionManager, this.collectionNavigation),
+			],
 			[
 				UpdateCardSearchResultsEvent.eventName(),
 				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
@@ -599,24 +627,18 @@ export class MainWindowStoreService {
 			[StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor()],
 			[ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
 			[CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor()],
-			[
-				// Ftue
-				NextFtueEvent.eventName(),
-				new NextFtueProcessor(this.prefs),
-			],
+			// Ftue
+			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs)],
 			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor()],
 			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs)],
 			// Stats
 			[RecomputeGameStatsEvent.eventName(), new RecomputeGameStatsProcessor(this.gameStats)],
 			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
 			[GamesFullClearEvent.eventName(), new GameStatsFullClearProcessor(this.gameStatsLoader)],
+			// Mailbox
+			[MailboxMarkMessageReadEvent.eventName(), new MailboxMarkMessageReadProcessor(this.prefs)],
+			// Replays
 			[
-				// Mailbox
-				MailboxMarkMessageReadEvent.eventName(),
-				new MailboxMarkMessageReadProcessor(this.prefs),
-			],
-			[
-				// Replays
 				ShowReplayEvent.eventName(),
 				new ShowReplayProcessor(this.bgsRunStatsService, this.i18n, this.gameStats, this.bgsPerfectGames),
 			],
@@ -637,11 +659,8 @@ export class MainWindowStoreService {
 			],
 			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
 			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
-			[
-				// Decktracker
-				SelectDecksViewEvent.eventName(),
-				new SelectDeckViewProcessor(),
-			],
+			// Decktracker
+			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor()],
 			[SelectDeckDetailsEvent.eventName(), new SelectDeckDetailsProcessor(this.decksProvider)],
 			[ChangeDeckFormatFilterEvent.eventName(), new ChangeDeckFormatFilterProcessor(this.prefs)],
 			[ChangeDeckRankFilterEvent.eventName(), new ChangeDeckRankFilterProcessor(this.prefs)],

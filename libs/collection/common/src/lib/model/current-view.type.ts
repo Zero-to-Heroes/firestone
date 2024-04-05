@@ -1,4 +1,3 @@
-/** @deprecated */
 export type CurrentView =
 	| 'sets'
 	| 'cards'

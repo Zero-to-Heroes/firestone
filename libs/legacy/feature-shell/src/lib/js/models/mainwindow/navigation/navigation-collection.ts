@@ -1,8 +1,6 @@
 import { SetCard } from '../../set';
-import { CurrentView } from '../collection/current-view.type';
 
 export class NavigationCollection {
-	readonly currentView: CurrentView = 'sets';
 	readonly menuDisplayType: string = 'menu';
 	readonly selectedSetId: string;
 	readonly selectedCardId: string;
@@ -13,9 +11,5 @@ export class NavigationCollection {
 
 	public update(base: NavigationCollection): NavigationCollection {
 		return Object.assign(new NavigationCollection(), this, base);
-	}
-
-	public getPageName(): string {
-		return this.currentView;
 	}
 }

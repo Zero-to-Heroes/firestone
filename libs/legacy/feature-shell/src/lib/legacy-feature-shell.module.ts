@@ -557,6 +557,7 @@ import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
+import { CollectionCommonModule } from '@firestone/collection/common';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -908,6 +909,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		StatsCommonModule,
 		ConstructedCommonModule,
 		CommunitiesCommonModule,
+		CollectionCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

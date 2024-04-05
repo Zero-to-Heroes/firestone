@@ -1,11 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { CollectionNavigationService } from '@firestone/collection/common';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'collection-hero-portrait-owned-filter',
@@ -23,7 +23,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionHeroPortraitOwnedFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	options: IOption[];
@@ -31,11 +31,12 @@ export class CollectionHeroPortraitOwnedFilterDropdownComponent
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: CollectionNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.options = [
 			{
 				value: 'all',
@@ -52,28 +53,32 @@ export class CollectionHeroPortraitOwnedFilterDropdownComponent
 		];
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.collectionActivePortraitOwnedFilter,
-				([main, nav]) => nav.navigationCollection.currentView,
-			)
-			.pipe(
-				filter(([filter, currentView]) => !!filter && !!currentView),
-				this.mapData(([filter, currentView]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: currentView === 'hero-portraits',
-				})),
-			);
-	}
+	async ngAfterContentInit() {
+		await Promise.all([this.nav.isReady(), this.prefs.isReady()]);
 
-	onSelected(option: IOption) {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				collectionActivePortraitOwnedFilter: option.value as any,
+		this.filter$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionActivePortraitOwnedFilter)),
+			this.nav.currentView$$.pipe(this.mapData((currentView) => currentView)),
+		]).pipe(
+			filter(([filter, currentView]) => !!filter && !!currentView),
+			this.mapData(([filter, currentView]) => ({
+				filter: filter,
+				placeholder: this.options.find((option) => option.value === filter)?.label,
+				visible: currentView === 'hero-portraits',
 			})),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	async onSelected(option: IOption) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			collectionActivePortraitOwnedFilter: option.value as any,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 }

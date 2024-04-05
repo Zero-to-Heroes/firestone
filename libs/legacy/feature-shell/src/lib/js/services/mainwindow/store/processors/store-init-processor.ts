@@ -1,3 +1,4 @@
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
@@ -13,6 +14,7 @@ export class StoreInitProcessor implements Processor {
 		private readonly events: Events,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
+		private readonly collectionNav: CollectionNavigationService,
 	) {}
 
 	public async process(
@@ -41,12 +43,11 @@ export class StoreInitProcessor implements Processor {
 
 		const currentAppFromPrefs = prefs.currentMainVisibleSection;
 		if (currentAppFromPrefs) {
-			const [, navState] = await new ChangeVisibleApplicationProcessor(this.prefs, this.i18n).process(
-				new ChangeVisibleApplicationEvent(currentAppFromPrefs),
-				currentState,
-				null,
-				navigationState,
-			);
+			const [, navState] = await new ChangeVisibleApplicationProcessor(
+				this.prefs,
+				this.i18n,
+				this.collectionNav,
+			).process(new ChangeVisibleApplicationEvent(currentAppFromPrefs), currentState, null, navigationState);
 			return navState;
 		}
 

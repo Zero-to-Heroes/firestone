@@ -1,5 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { CardBack } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -101,20 +102,21 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 	}
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly nav: CollectionNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await this.nav.isReady();
+
 		this.loading$ = this.store
 			.listen$(([main, nav, prefs]) => main.binder.isLoading)
 			.pipe(this.mapData(([loading]) => loading));
-		this.currentView$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationCollection.currentView)
-			.pipe(this.mapData(([currentView]) => currentView));
+		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationCollection.menuDisplayType)
 			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
@@ -147,26 +149,8 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 		);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 
-		// const activeFilter$ = this.store
-		// 	.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
-		// 	.pipe(this.mapData(([pref]) => pref));
-		// const allSets$ = this.store.sets$().pipe(
-		// 	debounceTime(1000),
-		// 	this.mapData((sets) => sets),
-		// );
-		// this.displayedSets$ = combineLatest([activeFilter$, allSets$]).pipe(
-		// 	this.mapData(([activeFilter, allSets]) => {
-		// 		const sets =
-		// 			activeFilter === 'all'
-		// 				? allSets
-		// 				: activeFilter === 'standard'
-		// 				? allSets.filter((set) => set.standard)
-		// 				: activeFilter === 'twist'
-		// 				? allSets.filter((set) => set.twist)
-		// 				: allSets.filter((set) => !set.standard);
-		// 		console.debug('visible sets', sets);
-		// 		return sets;
-		// 	}),
-		// );
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

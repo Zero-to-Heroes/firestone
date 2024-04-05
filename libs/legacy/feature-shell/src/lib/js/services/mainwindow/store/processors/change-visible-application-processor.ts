@@ -1,3 +1,4 @@
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
@@ -13,7 +14,11 @@ import { ChangeVisibleApplicationEvent } from '../events/change-visible-applicat
 import { Processor } from './processor';
 
 export class ChangeVisibleApplicationProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService, private readonly i18n: LocalizationService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationService,
+		private readonly collectionNav: CollectionNavigationService,
+	) {}
 
 	public async process(
 		event: ChangeVisibleApplicationEvent,
@@ -24,11 +29,13 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		// if (event.module === navigationState.currentApp) {
 		// 	return [null, null];
 		// }
+		if (event.module === 'collection') {
+			this.collectionNav.currentView$$.next('sets');
+		}
 
 		const binder =
 			event.module === 'collection'
 				? navigationState.navigationCollection.update({
-						currentView: 'sets',
 						menuDisplayType: 'menu',
 				  } as NavigationCollection)
 				: navigationState.navigationCollection;

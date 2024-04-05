@@ -1,3 +1,4 @@
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { Card } from '@firestone/memory';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -11,9 +12,10 @@ import { Processor } from '../processor';
 
 export class SearchCardProcessor implements Processor {
 	constructor(
-		private collectionManager: CollectionManager,
-		private cards: SetsService,
+		private readonly collectionManager: CollectionManager,
+		private readonly cards: SetsService,
 		private readonly i18n: LocalizationService,
+		private readonly collectionNav: CollectionNavigationService,
 	) {}
 
 	public async process(
@@ -36,8 +38,9 @@ export class SearchCardProcessor implements Processor {
 			);
 		});
 
+		this.collectionNav.currentView$$.next('cards');
+
 		const newCollection = navigationState.navigationCollection.update({
-			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',
 			cardList: searchResults,
 			searchString: event.searchString,

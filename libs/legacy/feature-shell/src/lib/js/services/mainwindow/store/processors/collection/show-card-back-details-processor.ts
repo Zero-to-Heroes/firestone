@@ -1,3 +1,4 @@
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { CardBack } from '@firestone/memory';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
@@ -7,7 +8,11 @@ import { ShowCardBackDetailsEvent } from '../../events/collection/show-card-back
 import { Processor } from '../processor';
 
 export class ShowCardBackDetailsProcessor implements Processor {
-	constructor(private readonly collectionManager: CollectionManager) {}
+	constructor(
+		private readonly collectionManager: CollectionManager,
+		private readonly collectionNav: CollectionNavigationService,
+	) {}
+
 	public async process(
 		event: ShowCardBackDetailsEvent,
 		currentState: MainWindowState,
@@ -16,8 +21,10 @@ export class ShowCardBackDetailsProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const cardBacks = await this.collectionManager.cardBacks$$.getValueWithInit();
 		const selectedCardBack: CardBack = cardBacks.find((cardBack) => cardBack.id === event.cardBackId);
+
+		this.collectionNav.currentView$$.next('card-back-details');
+
 		const newCollection = navigationState.navigationCollection.update({
-			currentView: 'card-back-details',
 			menuDisplayType: 'breadcrumbs',
 			selectedCardId: undefined,
 			selectedCardBackId: event.cardBackId,

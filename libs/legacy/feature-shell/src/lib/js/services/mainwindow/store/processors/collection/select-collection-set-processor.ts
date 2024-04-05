@@ -1,3 +1,4 @@
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -7,7 +8,10 @@ import { SelectCollectionSetEvent } from '../../events/collection/select-collect
 import { Processor } from '../processor';
 
 export class SelectCollectionSetProcessor implements Processor {
-	constructor(private readonly setsManager: SetsManagerService) {}
+	constructor(
+		private readonly setsManager: SetsManagerService,
+		private readonly collectionNav: CollectionNavigationService,
+	) {}
 
 	public async process(
 		event: SelectCollectionSetEvent,
@@ -17,8 +21,10 @@ export class SelectCollectionSetProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const allSets = await this.setsManager.sets$$.getValueWithInit();
 		const selectedSet: Set = allSets.find((set) => set.id === event.setId);
+
+		this.collectionNav.currentView$$.next('cards');
+
 		const newCollection = navigationState.navigationCollection.update({
-			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',
 			selectedSetId: event.setId,
 			cardList: selectedSet.allCards,
