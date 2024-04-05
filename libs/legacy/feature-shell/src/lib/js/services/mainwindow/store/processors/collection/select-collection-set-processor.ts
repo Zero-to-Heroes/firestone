@@ -23,13 +23,13 @@ export class SelectCollectionSetProcessor implements Processor {
 		const selectedSet: Set = allSets.find((set) => set.id === event.setId);
 
 		this.collectionNav.currentView$$.next('cards');
+		this.collectionNav.menuDisplayType$$.next('breadcrumbs');
+		this.collectionNav.searchString$$.next(null);
+		this.collectionNav.selectedSetId$$.next(event.setId);
+		this.collectionNav.selectedCardId$$.next(null);
 
 		const newCollection = navigationState.navigationCollection.update({
-			menuDisplayType: 'breadcrumbs',
-			selectedSetId: event.setId,
 			cardList: selectedSet.allCards,
-			searchString: undefined,
-			selectedCardId: undefined,
 			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [

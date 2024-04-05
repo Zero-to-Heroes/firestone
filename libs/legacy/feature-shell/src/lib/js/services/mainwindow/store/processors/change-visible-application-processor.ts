@@ -5,7 +5,6 @@ import { MainWindowState } from '../../../../models/mainwindow/main-window-state
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationArena } from '../../../../models/mainwindow/navigation/navigation-arena';
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
-import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
@@ -31,14 +30,9 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		// }
 		if (event.module === 'collection') {
 			this.collectionNav.currentView$$.next('sets');
+			this.collectionNav.menuDisplayType$$.next('menu');
 		}
 
-		const binder =
-			event.module === 'collection'
-				? navigationState.navigationCollection.update({
-						menuDisplayType: 'menu',
-				  } as NavigationCollection)
-				: navigationState.navigationCollection;
 		const achievements =
 			event.module === 'achievements'
 				? navigationState.navigationAchievements.update({
@@ -94,7 +88,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			navigationState.update({
 				isVisible: event.forceApplicationVisible || navigationState.isVisible,
 				currentApp: event.module,
-				navigationCollection: binder,
 				navigationAchievements: achievements,
 				navigationReplays: replays,
 				navigationBattlegrounds: battlegrounds,

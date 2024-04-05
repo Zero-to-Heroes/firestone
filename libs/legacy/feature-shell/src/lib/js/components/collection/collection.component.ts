@@ -1,13 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CollectionNavigationService } from '@firestone/collection/common';
+import { CollectionNavigationService, CurrentView } from '@firestone/collection/common';
 import { CardBack } from '@firestone/memory';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { Set, SetCard } from '../../models/set';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { AdService } from '../../services/ad.service';
+import { CollectionManager } from '../../services/collection/collection-manager.service';
+import { SetsManagerService } from '../../services/collection/sets-manager.service';
+import { MainWindowStateFacadeService } from '../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
 	selector: 'collection',
@@ -86,7 +88,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class CollectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	currentView$: Observable<CurrentView>;
 	menuDisplayType$: Observable<string>;
@@ -102,36 +104,29 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 	}
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly nav: CollectionNavigationService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly setsManager: SetsManagerService,
+		private readonly collectionManager: CollectionManager,
+		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.nav.isReady();
+		await waitForReady(this.nav, this.mainWindowState, this.setsManager, this.collectionManager, this.ads);
 
-		this.loading$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.isLoading)
-			.pipe(this.mapData(([loading]) => loading));
+		this.loading$ = this.mainWindowState.mainWindowState$$.pipe(this.mapData((state) => state?.binder?.isLoading));
 		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
-		this.menuDisplayType$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationCollection.menuDisplayType)
-			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.searchString$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationCollection.searchString)
-			.pipe(this.mapData(([searchString]) => searchString));
-		this.selectedSet$ = combineLatest([
-			this.store.sets$(),
-			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedSetId),
-		]).pipe(this.mapData(([allSets, [selectedSetId]]) => allSets.find((set) => set.id === selectedSetId)));
-		this.selectedCard$ = combineLatest([
-			this.store.sets$(),
-			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedCardId),
-		]).pipe(
-			this.mapData(([allSets, [selectedCardId]]) =>
+		this.menuDisplayType$ = this.nav.menuDisplayType$$.pipe(this.mapData((menuDisplayType) => menuDisplayType));
+		this.searchString$ = this.nav.searchString$$.pipe(this.mapData((searchString) => searchString));
+		this.selectedSet$ = combineLatest([this.setsManager.sets$$, this.nav.selectedSetId$$]).pipe(
+			this.mapData(([allSets, selectedSetId]) => allSets.find((set) => set.id === selectedSetId)),
+		);
+		this.selectedCard$ = combineLatest([this.setsManager.sets$$, this.nav.selectedCardId$$]).pipe(
+			this.mapData(([allSets, selectedCardId]) =>
 				selectedCardId
 					? allSets.map((set) => set.getCard(selectedCardId)).find((card) => !!card) ??
 					  // This is the case when it's not a collectible card for instance
@@ -140,14 +135,14 @@ export class CollectionComponent extends AbstractSubscriptionStoreComponent impl
 			),
 		);
 		this.selectedCardBack$ = combineLatest([
-			this.store.cardBacks$(),
-			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedCardBackId),
+			this.collectionManager.cardBacks$$,
+			this.nav.selectedCardBackId$$,
 		]).pipe(
-			this.mapData(([cardBacks, [selectedCardBackId]]) =>
+			this.mapData(([cardBacks, selectedCardBackId]) =>
 				cardBacks?.find((cardBack) => cardBack.id === selectedCardBackId),
 			),
 		);
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

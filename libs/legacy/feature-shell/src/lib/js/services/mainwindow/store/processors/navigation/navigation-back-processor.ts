@@ -173,11 +173,11 @@ export class NavigationBackProcessor implements Processor {
 				// We should already have initialized the sets by then
 				const selectedSet = setsManager.sets$$
 					.getValue()
-					?.find((set) => set.getCard(navigationState.navigationCollection.selectedCardId) != null);
+					?.find((set) => set.getCard(nav.selectedCardId$$.getValue()) != null);
 				nav.currentView$$.next('cards');
+				nav.selectedSetId$$.next(selectedSet?.id);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
-						selectedSetId: selectedSet?.id,
 						cardList: selectedSet?.allCards,
 					} as NavigationCollection),
 					// This is starting to be weird. It would probably be best to have an FSM,

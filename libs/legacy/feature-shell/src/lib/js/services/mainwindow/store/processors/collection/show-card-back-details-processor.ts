@@ -23,12 +23,12 @@ export class ShowCardBackDetailsProcessor implements Processor {
 		const selectedCardBack: CardBack = cardBacks.find((cardBack) => cardBack.id === event.cardBackId);
 
 		this.collectionNav.currentView$$.next('card-back-details');
+		this.collectionNav.menuDisplayType$$.next('breadcrumbs');
+		this.collectionNav.searchString$$.next(null);
+		this.collectionNav.selectedCardId$$.next(null);
+		this.collectionNav.selectedCardBackId$$.next(event.cardBackId);
 
 		const newCollection = navigationState.navigationCollection.update({
-			menuDisplayType: 'breadcrumbs',
-			selectedCardId: undefined,
-			selectedCardBackId: event.cardBackId,
-			searchString: undefined,
 			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [

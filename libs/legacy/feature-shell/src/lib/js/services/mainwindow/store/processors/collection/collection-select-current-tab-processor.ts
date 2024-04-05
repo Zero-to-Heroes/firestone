@@ -15,11 +15,11 @@ export class CollectionSelectCurrentTabProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.collectionNav.currentView$$.next(event.tab);
+		this.collectionNav.menuDisplayType$$.next('menu');
+		this.collectionNav.searchString$$.next(null);
+		this.collectionNav.selectedSetId$$.next(null);
+		this.collectionNav.selectedCardId$$.next(null);
 		const newCollection = navigationState.navigationCollection.update({
-			menuDisplayType: 'menu',
-			selectedSetId: undefined,
-			searchString: undefined,
-			selectedCardId: undefined,
 			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [

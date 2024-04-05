@@ -25,12 +25,12 @@ export class ShowCardDetailsProcessor implements Processor {
 		const selectedSet: Set = this.pickSet(allSets, event.cardId);
 		const referenceCard = this.cards.getCard(event.cardId);
 		this.collectionNav.currentView$$.next('card-details');
+		this.collectionNav.menuDisplayType$$.next('breadcrumbs');
+		this.collectionNav.searchString$$.next(null);
+		this.collectionNav.selectedSetId$$.next(selectedSet?.id);
+		this.collectionNav.selectedSetId$$.next(event.cardId);
+		this.collectionNav.selectedCardBackId$$.next(null);
 		const newCollection = navigationState.navigationCollection.update({
-			menuDisplayType: 'breadcrumbs',
-			selectedSetId: selectedSet?.id,
-			selectedCardId: event.cardId,
-			selectedCardBackId: undefined,
-			searchString: undefined,
 			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [

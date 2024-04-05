@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { CollectionNavigationService } from '@firestone/collection/common';
 import { CollectionSetStatsTypeFilterType } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime } from 'rxjs';
 import { Set } from '../../models/set';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -28,12 +29,14 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionStoreComponen
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: CollectionNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.setStatsType$ = this.store
 			.listenPrefs$((prefs) => prefs.collectionSetStatsTypeFilter)
 			.pipe(this.mapData(([pref]) => pref));
@@ -45,11 +48,7 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionStoreComponen
 			debounceTime(1000),
 			this.mapData((sets) => sets),
 		);
-		this.currentSets$ = combineLatest([
-			activeFilter$,
-			allSets$,
-			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.selectedSetId),
-		]).pipe(
+		this.currentSets$ = combineLatest([activeFilter$, allSets$, this.nav.selectedSetId$$]).pipe(
 			this.mapData(([activeFilter, allSets, [selectedSetId]]) => {
 				if (selectedSetId) {
 					return allSets.filter((set) => set.id === selectedSetId);
@@ -67,5 +66,9 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionStoreComponen
 				return sets;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

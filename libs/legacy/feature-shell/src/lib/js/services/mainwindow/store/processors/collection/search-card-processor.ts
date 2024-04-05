@@ -39,11 +39,11 @@ export class SearchCardProcessor implements Processor {
 		});
 
 		this.collectionNav.currentView$$.next('cards');
+		this.collectionNav.menuDisplayType$$.next('breadcrumbs');
+		this.collectionNav.searchString$$.next(event.searchString);
 
 		const newCollection = navigationState.navigationCollection.update({
-			menuDisplayType: 'breadcrumbs',
 			cardList: searchResults,
-			searchString: event.searchString,
 			searchResults: undefined,
 		} as NavigationCollection);
 		return [
