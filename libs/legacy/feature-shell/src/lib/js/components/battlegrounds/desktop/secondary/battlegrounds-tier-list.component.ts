@@ -3,15 +3,14 @@ import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
 import { BG_USE_ANOMALIES, BgsMetaHeroStatsService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
-import { deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-tier-list',
@@ -39,26 +38,25 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTierListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() showFilters: boolean;
 
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly mainWindowState: MainWindowStateFacadeService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.mainWindowState);
+		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.mainWindowState, this.prefs);
 
 		this.stats$ = combineLatest([
 			this.playerHeroStats.tiersWithPlayerData$$,
@@ -71,22 +69,24 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionStoreCom
 					(a, b) => deepEqual(a, b),
 				),
 			),
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
-				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
-				([main, nav, prefs]) => prefs.bgsActiveAnomaliesFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					timeFilter: prefs.bgsActiveTimeFilter,
+					rankFilter: prefs.bgsActiveRankFilter,
+					tribesFilter: prefs.bgsActiveTribesFilter,
+					anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+				})),
 			),
 		]).pipe(
 			filter(
-				([stats, { mmrPercentiles, lastUpdateDate }, [timeFilter, rankFilter, tribesFilter]]) =>
+				([stats, { mmrPercentiles, lastUpdateDate }, { timeFilter, rankFilter, tribesFilter }]) =>
 					!!stats?.length && !!mmrPercentiles?.length && !!lastUpdateDate,
 			),
 			map(
 				([
 					stats,
 					{ mmrPercentiles, lastUpdateDate },
-					[timeFilter, rankFilter, tribesFilter, anomaliesFilter],
+					{ timeFilter, rankFilter, tribesFilter, anomaliesFilter },
 				]) => ({
 					stats: stats,
 					mmrPercentiles: mmrPercentiles,
