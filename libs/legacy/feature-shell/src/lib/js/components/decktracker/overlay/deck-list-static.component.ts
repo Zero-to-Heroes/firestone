@@ -6,19 +6,19 @@ import {
 	EventEmitter,
 	Input,
 	Output,
+	ViewRef,
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds } from '@firestone-hs/reference-data';
 import { Card } from '@firestone/memory';
+import { PreferencesService } from '@firestone/shared/common/service';
 import {
-	AbstractSubscriptionStoreComponent,
-	IPreferences,
+	AbstractSubscriptionComponent,
 	NonFunctionProperties,
-	Store,
 	sortByProperties,
 	uuidShort,
 } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { SetCard } from '../../../models/set';
@@ -66,7 +66,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DeckListStaticComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	cards$: Observable<readonly CardWithSideboard[]>;
 	colorManaCost$: Observable<boolean>;
 
@@ -113,11 +113,11 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		protected override readonly store: Store<IPreferences>,
 		private readonly allCards: CardsFacadeService,
 		private readonly highglight: CardsHighlightFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.highglight.init({
 			skipGameState: true,
 			skipPrefs: true,
@@ -125,8 +125,10 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 		});
 	}
 
-	ngAfterContentInit(): void {
-		this.colorManaCost$ = this.listenForBasicPref$((prefs) => prefs.overlayShowRarityColors);
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
 		this.deckstring$$
 			.pipe(
 				filter((deckstring) => !!deckstring?.length),
@@ -137,6 +139,10 @@ export class DeckListStaticComponent extends AbstractSubscriptionStoreComponent 
 			filter(([deckCards, collection]) => !!deckCards?.length),
 			this.mapData(([deckCards, collection]) => this.buildCards(deckCards, collection)),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onCardClicked(card: VisualDeckCard) {
