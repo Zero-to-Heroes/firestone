@@ -1,13 +1,24 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-new-deck-version-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	selector: 'decktracker-decks',
@@ -16,7 +27,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		`../../../../css/component/decktracker/main/decktracker-decks.component.scss`,
 	],
 	template: `
-		<!-- <deck-drag-template class="drag-template" [deckName]="'Fake deck'"></deck-drag-template> -->
 		<div class="decktracker-decks" *ngIf="decks$ | async as decks">
 			<ul class="deck-list" scrollable [attr.aria-label]="'Constructed deck stats'" role="list">
 				<li
@@ -70,7 +80,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DecktrackerDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableVersioning = FeatureFlags.ENABLE_DECK_VERSIONS;
 
 	decks$: Observable<readonly InternalDeckSummary[]>;
@@ -79,23 +89,36 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionStoreComponen
 	private currentlyDraggedDeck = new BehaviorSubject<string>(null);
 	private currentlyMousedOverDeck = new BehaviorSubject<string>(null);
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly deckService: DecksProviderService,
+		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		const deckSource$: Observable<readonly DeckSummary[]> = combineLatest(
-			this.store.decks$(),
-			this.store.listenPrefs$(
-				(prefs) => prefs.desktopDeckFilters?.sort,
-				(prefs) => prefs.constructedDecksSearchString,
+	async ngAfterContentInit() {
+		await Promise.all([this.deckService.isReady(), this.prefs.isReady()]);
+
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+
+		const deckSource$: Observable<readonly DeckSummary[]> = combineLatest([
+			this.deckService.decks$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						sort: prefs.desktopDeckFilters?.sort,
+						search: prefs.constructedDecksSearchString,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
-		).pipe(
-			this.mapData(([decks, [sort, search]]) => {
+		]).pipe(
+			this.mapData(([decks, { sort, search }]) => {
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter(
 						(deck) =>
@@ -121,11 +144,11 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionStoreComponen
 				0,
 			),
 		);
-		this.decks$ = combineLatest(
+		this.decks$ = combineLatest([
 			deckSource$,
 			currentMergeSourceDeck$,
 			this.currentlyMousedOverDeck.asObservable(),
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([decks, currentMergeSourceDeck, currentlyMousedOverDeck]) => {
 					return decks.map(
@@ -181,6 +204,10 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionStoreComponen
 				0,
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByDeckId(index: number, item: DeckSummary) {
@@ -201,7 +228,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionStoreComponen
 		);
 		const dragged: DeckSummary = event.item.data;
 		if (dragged.deckstring !== droppedOn.deckstring) {
-			this.store.send(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
+			this.stateUpdater.next(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
 		}
 	}
 
