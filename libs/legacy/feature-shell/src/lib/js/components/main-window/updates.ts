@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.10.0',
+		version: '13.10.2',
 		force: false,
 		sections: [
 			// {
@@ -67,6 +67,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'misc',
 								text: `I'm still fixing the memory leaks of the app. It might take a week or so to address all the biggest ones, so please be patient with me :)`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a Dragons Summoned counter for the opponent. It only appears when the opponent is playing Priest and has summoned at least one dragon.`,
 							},
 						],
 					},

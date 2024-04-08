@@ -422,7 +422,7 @@ export class SettingsDecktrackerOpponentDeckComponent
 			field: 'opponentDragonsSummonedCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
-			showLimitedOption: true,
+			showLimitedOption: false,
 		},
 	].sort(sortByProperties((t) => [t.label]));
 
