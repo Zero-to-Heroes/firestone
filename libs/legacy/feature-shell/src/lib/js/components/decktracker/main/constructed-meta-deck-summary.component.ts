@@ -1,11 +1,18 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+} from '@angular/core';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { EnhancedDeckStat } from './constructed-meta-decks.component';
 
@@ -92,18 +99,20 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
-		private readonly store: AppUiStoreFacadeService,
 	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.deck$$
 			.pipe(
 				filter((deck) => !!deck?.decklist?.length),
@@ -145,7 +154,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 
 	viewDetails() {
 		this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
-		this.store.send(new ConstructedMetaDeckDetailsShowEvent(this.deckstring));
+		this.stateUpdater.next(new ConstructedMetaDeckDetailsShowEvent(this.deckstring));
 	}
 }
 

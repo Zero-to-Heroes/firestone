@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
 import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
@@ -89,7 +90,9 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		this.achievement$ = this.achievement$$.asObservable();
 		this.achievementStatus$ = this.achievement$.pipe(
 			this.mapData((achievement) => achievement.achievementStatus()),
@@ -110,9 +113,11 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 				pinnedAchievements.includes(achievement.hsAchievementId),
 			),
 		);
-		this.liveTrackingDisabled$ = this.store
-			.listenPrefs$((prefs) => prefs.showLottery)
-			.pipe(this.mapData(([showLottery]) => !showLottery));
+		this.liveTrackingDisabled$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => !prefs.showLottery));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async togglePin(achievementId: number) {

@@ -8,6 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -72,12 +73,13 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 		private readonly el: ElementRef,
 		private readonly domSanitizer: DomSanitizer,
 		private readonly achievements: AchievementsStateManagerService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.achievements);
+		await waitForReady(this.achievements, this.prefs);
 
 		const achievements$ = combineLatest([
 			this.achievements.groupedAchievements$$,
@@ -96,10 +98,10 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 		this.achieved$ = flatCompletions$.pipe(
 			this.mapData((completions) => completions?.filter((a) => a.numberOfCompletions > 0).length ?? 0),
 		);
-		const filterOption$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.achievementsCompletedActiveFilter),
+		const filterOption$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.achievementsCompletedActiveFilter)),
 			this.store.listen$(([main, nav]) => main.achievements.filters),
-		).pipe(this.mapData(([[pref], [filters]]) => filters.find((option) => option.value === pref)));
+		]).pipe(this.mapData(([pref, [filters]]) => filters.find((option) => option.value === pref)));
 		this.emptyStateTitle$ = filterOption$.pipe(this.mapData((option) => option.emptyStateTitle));
 		this.emptyStateText$ = filterOption$.pipe(this.mapData((option) => option.emptyStateText));
 		this.emptyStateSvgTemplate$ = filterOption$.pipe(

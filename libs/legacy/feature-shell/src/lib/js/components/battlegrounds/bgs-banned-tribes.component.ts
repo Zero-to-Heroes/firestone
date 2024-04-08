@@ -5,14 +5,17 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { Race, getTribeName } from '@firestone-hs/reference-data';
+import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { compareTribes } from '../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-banned-tribes',
@@ -41,7 +44,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tribes$: Observable<readonly Race[]>;
 	tooltip$: Observable<string>;
 	orientation$: Observable<'row' | 'column'>;
@@ -49,23 +52,26 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent
 	singleRow$: Observable<boolean>;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly bgsState: BgsStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.bgsState);
+
 		this.showAvailable$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.bgsShowAvailableTribesOverlay),
-			this.store.listenBattlegrounds$(([state]) => state),
-		]).pipe(this.mapData(([[pref], [state]]) => pref || state?.currentGame?.availableRaces?.length == 1));
-		this.singleRow$ = this.listenForBasicPref$((prefs) => prefs.bgsTribesOverlaySingleRow);
-		this.tribes$ = combineLatest([this.store.listenBattlegrounds$(([state]) => state), this.showAvailable$]).pipe(
-			this.mapData(([[state], showAvailable]) => {
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowAvailableTribesOverlay)),
+			this.bgsState.gameState$$,
+		]).pipe(this.mapData(([pref, state]) => pref || state?.currentGame?.availableRaces?.length == 1));
+		this.singleRow$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsTribesOverlaySingleRow));
+		this.tribes$ = combineLatest([this.bgsState.gameState$$, this.showAvailable$]).pipe(
+			this.mapData(([state, showAvailable]) => {
 				const tribes = showAvailable ? state?.currentGame?.availableRaces : state?.currentGame?.bannedRaces;
 				return [...(tribes ?? [])].sort((a, b) => compareTribes(a, b, this.i18n));
 			}),
@@ -96,17 +102,17 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent
 				return tooltip;
 			}),
 		);
-		this.orientation$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.bgsBannedTribesShowVertically)
-			.pipe(this.mapData(([pref]) => (pref ? 'column' : 'row') as 'row' | 'column'));
-		this.store
-			.listen$(([main, nav, prefs]) => prefs.bgsBannedTribeScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((scale) => {
-				// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			});
+		this.orientation$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => (prefs.bgsBannedTribesShowVertically ? 'column' : 'row') as 'row' | 'column'),
+		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsBannedTribeScale)).subscribe((scale) => {
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByFn(index: number, item: Race) {

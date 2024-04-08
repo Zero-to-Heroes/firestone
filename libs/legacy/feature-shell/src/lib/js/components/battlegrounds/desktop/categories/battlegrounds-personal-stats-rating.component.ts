@@ -1,16 +1,17 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
-import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
+import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@legacy-import/src/lib/js/services/stats/game/game-stats-provider.service';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { isBattlegrounds } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-rating',
@@ -40,50 +41,56 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPersonalStatsRatingComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	value$: Observable<ChartData<'line'>>;
 	regionSelected$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly prefs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.prefs, this.gameStats);
 
 		// Force a region select only if multiple regions are available in the stats
-		this.regionSelected$ = combineLatest(
-			this.store.gameStats$(),
-			this.store.listenPrefs$((prefs) => prefs.regionFilter),
-		).pipe(
+		this.regionSelected$ = combineLatest([
+			this.gameStats.gameStats$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.regionFilter)),
+		]).pipe(
 			this.mapData(
-				([gameStats, [region]]) =>
+				([gameStats, region]) =>
 					// Don't filter for only ranked games, so that the user can clearly understand what they are seeing
 					[...new Set(gameStats.filter((s) => !!s.region).map((s) => s.region))].length === 1 ||
 					(!!region && region !== 'all'),
 			),
 		);
 		this.value$ = combineLatest([
-			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
-				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
+			this.gameStats.gameStats$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						timeFilter: prefs.bgsActiveTimeFilter,
+						mmrFilter: prefs.bgsActiveRankFilter,
+						mmrGroupFilter: prefs.bgsActiveMmrGroupFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.patchesConfig.currentBattlegroundsMetaPatch$$,
 		]).pipe(
 			filter(
-				([stats, [timeFilter, mmrFilter, mmrGroupFilter], currentBattlegroundsMetaPatch]) =>
+				([stats, { timeFilter, mmrFilter, mmrGroupFilter }, currentBattlegroundsMetaPatch]) =>
 					!!stats && !!currentBattlegroundsMetaPatch,
 			),
-			this.mapData(([stats, [timeFilter, mmrFilter, mmrGroupFilter], currentBattlegroundsMetaPatch]) => {
+			this.mapData(([stats, { timeFilter, mmrFilter, mmrGroupFilter }, currentBattlegroundsMetaPatch]) => {
 				const relevantGames = stats
 					.filter((stat) => isBattlegrounds(stat.gameMode))
 					.filter((stat) => stat.playerRank);

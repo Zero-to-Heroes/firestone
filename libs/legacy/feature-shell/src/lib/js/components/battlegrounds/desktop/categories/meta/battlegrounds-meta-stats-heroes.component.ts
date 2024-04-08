@@ -1,12 +1,20 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	ViewRef,
+} from '@angular/core';
 import { BgsMetaHeroStatsService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
+import { MainWindowStoreEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/main-window-store-event';
 import { Observable, shareReplay, takeUntil } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-heroes',
@@ -24,31 +32,30 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMetaStatsHeroesComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly BgsMetaHeroStatTierItem[]>;
 	heroSort$: Observable<BgsHeroSortFilterType>;
 	totalGames$: Observable<number>;
 	lastUpdate$: Observable<Date>;
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
+		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.metaHeroStats, this.playerHeroStats);
+		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.prefs);
 
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(this.mapData((stats) => stats));
-		this.heroSort$ = this.store
-			.listenPrefs$((prefs) => prefs.bgsActiveHeroSortFilter)
-			.pipe(this.mapData(([pref]) => pref));
+		this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));
 		const metaData$ = this.metaHeroStats.metaHeroStats$$.pipe(
 			this.mapData((stats) => ({
 				totalGames: stats?.dataPoints,
@@ -68,6 +75,6 @@ export class BattlegroundsMetaStatsHeroesComponent
 	}
 
 	onHeroStatsClick(heroCardId: string) {
-		this.store.send(new BgsPersonalStatsSelectHeroDetailsEvent(heroCardId));
+		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsEvent(heroCardId));
 	}
 }

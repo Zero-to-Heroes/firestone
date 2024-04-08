@@ -142,7 +142,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 			this.prefs.isReady(),
 		]);
 
-		this.sortCriteria$ = this.sortCriteria$$.asObservable();
+		this.sortCriteria$ = this.sortCriteria$$;
 		this.showStandardDeviation$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => !prefs.constructedMetaDecksUseConservativeWinrate),
 		);
@@ -219,7 +219,6 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 		this.totalGames$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
 			filter((stats) => !!stats),
 			this.mapData((stats) => stats.dataPoints.toLocaleString(this.i18n.formatCurrentLocale())),
-			takeUntil(this.destroyed$),
 		);
 		this.lastUpdate$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(
 			this.mapData((stats) => {
