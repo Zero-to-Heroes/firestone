@@ -1,6 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { Card } from '@firestone/memory';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import {
 	CollectionCardClassFilterType,
 	CollectionCardOwnedFilterType,
@@ -65,33 +68,41 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 	cardWidth = DEFAULT_CARD_WIDTH;
 	cardHeight = DEFAULT_CARD_HEIGHT;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
-		this.store
-			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				const cardScale = value / 100;
-				this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
-				this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
+		await waitForReady(this.prefs);
+
+		this.highRes$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionUseHighResImages));
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
+			const cardScale = value / 100;
+			this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
+			this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 
 		this.cards$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.cardList),
-			this.store.listenPrefs$(
-				(prefs) => prefs.collectionCardClassFilter,
-				(prefs) => prefs.collectionCardRarityFilter,
-				(prefs) => prefs.collectionCardOwnedFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						classFilter: prefs.collectionCardClassFilter,
+						rarityFilter: prefs.collectionCardRarityFilter,
+						ownedFilter: prefs.collectionCardOwnedFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 		).pipe(
-			this.mapData(([[cardList], [classFilter, rarityFilter, ownedFilter]]) =>
+			this.mapData(([[cardList], { classFilter, rarityFilter, ownedFilter }]) =>
 				cardList
 					.filter((card) => this.filterRarity(card, rarityFilter))
 					.filter((card) => this.filterClass(card, classFilter))
@@ -99,6 +110,10 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 					.sort(sortByProperties((card) => [card.cost, card.name])),
 			),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@Input('set') set cardSet(set: Set) {

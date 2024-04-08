@@ -1,6 +1,16 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ViewRef,
+} from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -49,18 +59,22 @@ export class DecktrackerLadderStatsOverviewComponent
 	pieChartOptions: InputPieChartOptions;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly decks: DecksProviderService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.replays$ = combineLatest(
-			this.store.decks$(),
-			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
-		).pipe(
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.decks);
+
+		this.replays$ = combineLatest([
+			this.decks.decks$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveDeckstringsFilter)),
+		]).pipe(
 			this.mapData(([decks, [deckstringsFilter]]) =>
 				(decks ?? [])
 					.filter(
@@ -79,6 +93,10 @@ export class DecktrackerLadderStatsOverviewComponent
 		this.opponentPieChartData$ = this.replays$.pipe(
 			this.mapData((replays) => this.buildOpponentPieChartData(replays)),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

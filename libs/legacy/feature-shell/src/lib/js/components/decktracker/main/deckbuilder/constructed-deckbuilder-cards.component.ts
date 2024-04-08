@@ -12,7 +12,8 @@ import {
 	ReferenceCard,
 	bannedTwistCards,
 } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { ConstructedConfigService } from '@legacy-import/src/lib/js/services/decktracker/constructed-config.service';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
@@ -178,26 +179,26 @@ export class ConstructedDeckbuilderCardsComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly constructedConfig: ConstructedConfigService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.constructedConfig.isReady();
+		await waitForReady(this.constructedConfig, this.prefs);
 
 		// this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
-		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
-		this.store
-			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				const cardScale = value / 100;
-				this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
-				this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
+		this.showRelatedCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.collectionShowRelatedCards),
+		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
+			const cardScale = value / 100;
+			this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
+			this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 
 		this.allowedCards$ = combineLatest([
 			this.constructedConfig.config$$,
@@ -411,6 +412,10 @@ export class ConstructedDeckbuilderCardsComponent
 				</ul>
 			</div>
 		`;
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onDkRunesChanged(runes: readonly DkRune[]) {

@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
 import { Card, CardBack, MemoryMercenary } from '@firestone/memory';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
@@ -97,13 +99,13 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.mercenariesCollection.isReady();
-		await this.mercenariesReferenceData.isReady();
+		await waitForReady(this.mercenariesCollection, this.mercenariesReferenceData, this.prefs);
 
 		const mercenariesReferenceData$ = this.mercenariesReferenceData.referenceData$$.pipe(
 			this.mapData((mercs) => mercs?.mercenaries),
@@ -112,9 +114,8 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 			this.store.bgHeroSkins$(),
 			this.store.collection$(),
 			this.mercenariesCollection.memoryCollectionInfo$$,
-			// this.store.listen$(([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries),
 			mercenariesReferenceData$,
-			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionActivePortraitCategoryFilter)),
 		]).pipe(
 			this.mapData(
 				([ownedBgsHeroSkins, collection, mercenariesCollection, mercenariesReferenceData, category]) => {
@@ -142,30 +143,37 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		this.unlocked$ = relevantHeroes$.pipe(
 			this.mapData((heroes) => heroes.filter((item) => item.numberOwned > 0).length),
 		);
-		const filteredHeroPortraits$ = combineLatest(
+		const filteredHeroPortraits$ = combineLatest([
 			relevantHeroes$,
-			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
-			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitOwnedFilter),
-		).pipe(this.mapData(([heroes, category, owned]) => heroes.filter(this.filterCardsOwned(owned))));
-		this.shownHeroPortraits$ = combineLatest(
-			filteredHeroPortraits$,
-			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
-			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitOwnedFilter),
-		).pipe(
-			this.mapData(([portraitCards, category, cardsOwnedActiveFilter]) =>
-				this.groupPortraits(portraitCards, category),
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						category: prefs.collectionActivePortraitCategoryFilter,
+						owned: prefs.collectionActivePortraitOwnedFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
-		);
-		this.store
-			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				const cardScale = value / 100;
-				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
+		]).pipe(this.mapData(([heroes, { category, owned }]) => heroes.filter(this.filterCardsOwned(owned))));
+		this.shownHeroPortraits$ = combineLatest([
+			filteredHeroPortraits$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						category: prefs.collectionActivePortraitCategoryFilter,
+						owned: prefs.collectionActivePortraitOwnedFilter,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
+			),
+		]).pipe(this.mapData(([portraitCards, { category, owned }]) => this.groupPortraits(portraitCards, category)));
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
+			const cardScale = value / 100;
+			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {

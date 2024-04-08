@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CollectionNavigationService } from '@firestone/collection/common';
-import { CollectionSetStatsTypeFilterType } from '@firestone/shared/common/service';
+import { CollectionSetStatsTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime } from 'rxjs';
 import { Set } from '../../models/set';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { SetsManagerService } from '../../services/collection/sets-manager.service';
 
 @Component({
 	selector: 'set-stats-switcher',
@@ -22,29 +22,27 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetStatsSwitcherComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SetStatsSwitcherComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	setStatsType$: Observable<CollectionSetStatsTypeFilterType>;
 	currentSets$: Observable<readonly Set[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: CollectionNavigationService,
+		private readonly prefs: PreferencesService,
+		private readonly setsManager: SetsManagerService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs, this.setsManager);
 
-		this.setStatsType$ = this.store
-			.listenPrefs$((prefs) => prefs.collectionSetStatsTypeFilter)
+		this.setStatsType$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionSetStatsTypeFilter));
+		const activeFilter$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.collectionSelectedFormat))
 			.pipe(this.mapData(([pref]) => pref));
-
-		const activeFilter$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
-			.pipe(this.mapData(([pref]) => pref));
-		const allSets$ = this.store.sets$().pipe(
+		const allSets$ = this.setsManager.sets$$.pipe(
 			debounceTime(1000),
 			this.mapData((sets) => sets),
 		);

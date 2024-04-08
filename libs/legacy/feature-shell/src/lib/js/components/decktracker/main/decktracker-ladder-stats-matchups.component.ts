@@ -1,12 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { classes, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-ladder-stats-matchups',
@@ -78,10 +79,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerLadderStatsMatchupsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 	rows$: Observable<readonly MatchupRow[]>;
 	showPercentages$: Observable<boolean>;
@@ -91,14 +89,17 @@ export class DecktrackerLadderStatsMatchupsComponent
 	allClasses: readonly { tooltip: string; icon: string }[];
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly decks: DecksProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.decks);
+
 		this.allClasses = classes.map((oppClass) => ({
 			tooltip: this.i18n.translateString('app.decktracker.ladder-stats.opponent-class-tooltip', {
 				className: formatClass(oppClass, this.i18n),
@@ -106,15 +107,21 @@ export class DecktrackerLadderStatsMatchupsComponent
 			icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${oppClass}.png`,
 		}));
 
-		this.showPercentages$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages);
-		this.showFirstOnly$ = this.listenForBasicPref$((prefs) => prefs.desktopStatsShowGoingFirstOnly);
-		this.showSecondOnly$ = this.listenForBasicPref$((prefs) => prefs.desktopStatsShowGoingSecondOnly);
+		this.showPercentages$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.desktopDeckShowMatchupAsPercentages),
+		);
+		this.showFirstOnly$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.desktopStatsShowGoingFirstOnly),
+		);
+		this.showSecondOnly$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.desktopStatsShowGoingSecondOnly),
+		);
 
 		// TODO: the standard/wild filter doesn't work, as it gives more result in Standard than in All...
-		this.replays$ = combineLatest(
-			this.store.decks$(),
-			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
-		).pipe(
+		this.replays$ = combineLatest([
+			this.decks.decks$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveDeckstringsFilter)),
+		]).pipe(
 			this.mapData(([decks, [deckstringsFilter]]) => {
 				const result = (decks ?? [])
 					.filter(
@@ -130,7 +137,7 @@ export class DecktrackerLadderStatsMatchupsComponent
 				return result;
 			}),
 		);
-		this.rows$ = combineLatest(this.replays$, this.showFirstOnly$, this.showSecondOnly$).pipe(
+		this.rows$ = combineLatest([this.replays$, this.showFirstOnly$, this.showSecondOnly$]).pipe(
 			this.mapData(([replays, showFirst, showSecond]) => {
 				const groupedByPlayerClass = groupByFunction((replay: GameStat) => replay.playerClass)(replays);
 				return [...classes, 'total'].map((playerClass) => {
@@ -145,26 +152,30 @@ export class DecktrackerLadderStatsMatchupsComponent
 				});
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	toggleShowFirst = (newValue: boolean) => {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				desktopStatsShowGoingFirstOnly: newValue,
-				desktopStatsShowGoingSecondOnly: newValue ? undefined : prefs.desktopStatsShowGoingSecondOnly,
-			})),
-		);
+	toggleShowFirst = async (newValue: boolean) => {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			desktopStatsShowGoingFirstOnly: newValue,
+			desktopStatsShowGoingSecondOnly: newValue ? undefined : prefs.desktopStatsShowGoingSecondOnly,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	};
 
-	toggleShowSecond = (newValue: boolean) => {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				desktopStatsShowGoingFirstOnly: newValue ? undefined : prefs.desktopStatsShowGoingFirstOnly,
-				desktopStatsShowGoingSecondOnly: newValue,
-			})),
-		);
+	toggleShowSecond = async (newValue: boolean) => {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			desktopStatsShowGoingFirstOnly: newValue ? undefined : prefs.desktopStatsShowGoingFirstOnly,
+			desktopStatsShowGoingSecondOnly: newValue,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	};
 
 	buildValue(value: number): string {

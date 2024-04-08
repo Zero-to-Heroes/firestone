@@ -1,10 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Coin } from '../../models/coin';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -41,7 +42,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TheCoinsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class TheCoinsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 185;
 	readonly DEFAULT_CARD_HEIGHT = 240;
 
@@ -55,31 +56,35 @@ export class TheCoinsComponent extends AbstractSubscriptionStoreComponent implem
 	cardsOwnedActiveFilter$$ = new BehaviorSubject<'own' | 'dontown' | 'all'>('all');
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly collectionManager: CollectionManager,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.store
-			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				const cardScale = value / 100;
-				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-				this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
-		const coins$ = this.store.coins$().pipe(this.mapData((coins) => this.buildCoins(coins ?? [])));
+		await waitForReady(this.prefs, this.collectionManager);
+
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
+			const cardScale = value / 100;
+			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+			this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+		const coins$ = this.collectionManager.coins$$.pipe(this.mapData((coins) => this.buildCoins(coins ?? [])));
 		this.total$ = coins$.pipe(this.mapData((coins) => coins.length));
 		this.unlocked$ = coins$.pipe(this.mapData((coins) => coins.filter((item) => item.numberOwned > 0).length));
-		this.shownCards$ = combineLatest(this.cardsOwnedActiveFilter$$.asObservable(), coins$).pipe(
+		this.shownCards$ = combineLatest([this.cardsOwnedActiveFilter$$.asObservable(), coins$]).pipe(
 			this.mapData(([filter, coins]) => coins.filter(this.filterCardsOwned(filter))),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildCoins(coins: readonly Coin[]): readonly CollectionReferenceCard[] {

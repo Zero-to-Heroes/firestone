@@ -1,5 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
+import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
@@ -11,8 +13,8 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
+import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
 	selector: 'decktracker-rating-graph',
@@ -40,29 +42,31 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerRatingGraphComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DecktrackerRatingGraphComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<Value>;
 	regionSelected$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly prefs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.prefs, this.gameStats, this.mainWindowState);
 
 		// Force a region select only if multiple regions are available in the stats
 		this.regionSelected$ = combineLatest([
-			this.store.gameStats$(),
-			this.store.listenPrefs$((prefs) => prefs.regionFilter),
+			this.gameStats.gameStats$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.regionFilter)),
 		]).pipe(
 			this.mapData(
-				([gameStats, [region]]) =>
+				([gameStats, region]) =>
 					// Don't filter for only ranked games, so that the user can clearly understand what they are seeing
 
 					[...new Set(gameStats.filter((s) => !!s.region).map((s) => s.region))].length === 1 ||
@@ -70,17 +74,22 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionStoreCo
 			),
 		);
 		this.value$ = combineLatest([
-			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav]) => main.decktracker.filters.gameFormat,
-				([main, nav]) => main.decktracker.filters.time,
-				([main, nav]) => main.decktracker.filters.rankingGroup,
-				([main, nav]) => main.decktracker.filters.rankingCategory,
+			this.gameStats.gameStats$$,
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData(
+					(state) => ({
+						gameFormat: state.decktracker.filters.gameFormat,
+						time: state.decktracker.filters.time,
+						rankingGroup: state.decktracker.filters.rankingGroup,
+						rankingCategory: state.decktracker.filters.rankingCategory,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.patchesConfig.currentConstructedMetaPatch$$,
 		]).pipe(
 			map(
-				([stats, [gameFormat, time, rankingGroup, rankingCategory], patch]) =>
+				([stats, { gameFormat, time, rankingGroup, rankingCategory }, patch]) =>
 					[
 						stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => stat.playerRank),
 						gameFormat,
