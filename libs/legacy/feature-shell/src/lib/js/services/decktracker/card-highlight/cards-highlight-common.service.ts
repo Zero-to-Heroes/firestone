@@ -9,6 +9,7 @@ import {
 	and,
 	arcane,
 	attackGreaterThan,
+	attackIs,
 	attackLessThan,
 	aura,
 	baseCostEqual,
@@ -48,6 +49,7 @@ import {
 	hasMultipleCopies,
 	hasSpellSchool,
 	healthBiggerThanAttack,
+	healthIs,
 	healthLessThan,
 	holy,
 	imp,
@@ -1057,11 +1059,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.JewelOfNzoth:
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.JoymancerJepetto_TOY_960:
-				return and(
-					side(inputSide),
-					or(minionPlayedThisMatch, or(inDeck, inHand)),
-					// or(attackIs(1), healthIs(1)),
-				);
+				return and(side(inputSide), minionPlayedThisMatch, or(attackIs(1), healthIs(1)));
 			case CardIds.JuicyPsychmelon:
 				return and(
 					side(inputSide),
