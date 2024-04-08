@@ -11,10 +11,8 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		console.debug('destroying abstract component', this.constructor.name);
 		this.destroyed$.next();
 		this.destroyed$.complete();
-		console.debug('destroyed abstract component', this.constructor.name);
 	}
 
 	protected mapData<T, R>(

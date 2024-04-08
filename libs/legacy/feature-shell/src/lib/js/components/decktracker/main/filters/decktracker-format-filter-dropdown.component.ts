@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
@@ -53,6 +53,8 @@ export class DecktrackerFormatFilterDropdownComponent
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.filter$ = combineLatest([
 			this.store.listen$(([main, nav]) => main.decktracker.filters?.gameFormat),
 			this.nav.currentView$$,

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, filter } from 'rxjs';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -95,13 +95,13 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionStoreComp
 	}
 
 	ngAfterContentInit() {
-		this.deck$ = combineLatest(
+		this.deck$ = combineLatest([
 			this.store.decks$(),
 			this.store.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedVersionDeckstring,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(([decks, [selectedDeckstring, selectedVersionDeckstring]]) => {
 				const deck: DeckSummary = (decks ?? []).find(
 					(deck) =>
@@ -115,6 +115,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionStoreComp
 		);
 		this.deck$.subscribe((deck) => (this.deckstring = deck?.deckstring));
 		this.info$ = this.deck$.pipe(
+			filter((deck) => !!deck),
 			this.mapData((deck) => {
 				return {
 					skin: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${deck.skin}.jpg`,
