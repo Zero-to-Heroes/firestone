@@ -229,6 +229,7 @@ export class ConstructedMulliganComponent
 	}
 
 	override ngOnDestroy(): void {
+		super.ngOnDestroy();
 		if (!this.showPremiumBanner$$.value && !this.noData$$.value) {
 			this.guardian.acknowledgeMulliganAdviceSeen();
 		}

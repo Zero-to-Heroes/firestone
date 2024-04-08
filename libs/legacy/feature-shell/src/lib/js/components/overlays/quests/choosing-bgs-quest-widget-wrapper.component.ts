@@ -136,6 +136,4 @@ export class ChoosingBgsQuestWidgetWrapperComponent
 			this.cdr.detectChanges();
 		}
 	}
-
-	override ngOnDestroy(): void {}
 }
