@@ -48,7 +48,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					<control-maximize [windowId]="windowId"></control-maximize>
 					<control-close
 						[windowId]="windowId"
-						[helpTooltip]="hotkeyText"
+						[helpTooltip]="'app.global.controls.close-button-tooltip' | fsTranslate"
 						helpTooltipPosition="bottom-left"
 						[isMainWindow]="true"
 						[closeAll]="true"
