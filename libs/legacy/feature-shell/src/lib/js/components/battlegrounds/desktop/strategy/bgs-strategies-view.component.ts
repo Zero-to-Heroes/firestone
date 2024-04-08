@@ -2,20 +2,19 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
-import { sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BgsHeroCurve,
 	BgsHeroCurveActionExtended,
 	BgsHeroCurveStep,
 	BgsHeroStratAuthor,
 	BgsHeroStratTip,
+	BgsMetaHeroStrategiesService,
 } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { BgsStrategyCurveComponent } from './bgs-strategy-curve.component';
 
 @Component({
@@ -59,7 +58,7 @@ import { BgsStrategyCurveComponent } from './bgs-strategy-curve.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsStrategiesViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	componentType: ComponentType<BgsStrategyCurveComponent> = BgsStrategyCurveComponent;
 
 	@Input() set heroId(value: string) {
@@ -74,25 +73,25 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionStoreCompone
 	private heroId$$ = new BehaviorSubject<string>(null);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly strategies: BgsMetaHeroStrategiesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.strategies);
 
 		this.strategies$ = combineLatest([
 			this.heroId$$.asObservable(),
-			this.store.listen$(([main]) => main.battlegrounds.getMetaHeroStrategies()),
+			this.strategies.strategies$$,
 			this.patchesConfig.config$$,
 		]).pipe(
-			filter(([heroId, [strats], patchConfig]) => !!strats?.heroes?.length),
-			this.mapData(([heroId, [strats], patchConfig]) => {
+			filter(([heroId, strats, patchConfig]) => !!strats?.heroes?.length),
+			this.mapData(([heroId, strats, patchConfig]) => {
 				console.debug('strats', strats);
 				const stratsForHero: readonly BgsHeroStratTip[] =
 					strats.heroes.find((h) => h.id === normalizeHeroCardId(heroId, this.allCards))?.tips ?? [];

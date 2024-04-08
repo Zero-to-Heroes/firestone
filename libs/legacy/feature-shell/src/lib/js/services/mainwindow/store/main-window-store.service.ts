@@ -81,7 +81,6 @@ import { ShowAchievementDetailsEvent } from './events/achievements/show-achievem
 import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
-import { BattlegroundsMetaHeroStrategiesLoadedEvent } from './events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
@@ -212,7 +211,6 @@ import { ArenaSelectCategoryEvent, ArenaSelectCategoryProcessor } from './proces
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
-import { BattlegroundsMetaHeroStrategiesLoadedProcessor } from './processors/battlegrounds/bgs-meta-hero-strategies-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
@@ -819,10 +817,6 @@ export class MainWindowStoreService {
 					this.battlegroundsNavigation,
 					this.mainNavigation,
 				),
-			],
-			[
-				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),
-				new BattlegroundsMetaHeroStrategiesLoadedProcessor(),
 			],
 			[
 				BgsShowStrategiesEvent.eventName(),

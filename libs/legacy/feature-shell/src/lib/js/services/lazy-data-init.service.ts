@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { TavernBrawlService } from '../../libs/tavern-brawl/services/tavern-brawl.service';
-import { BgsMetaHeroStrategiesService } from './battlegrounds/bgs-meta-hero-strategies.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { QuestsService } from './quests.service';
 
@@ -10,15 +9,12 @@ import { QuestsService } from './quests.service';
 export class LazyDataInitService {
 	constructor(
 		private readonly globalStatsService: GlobalStatsService,
-		private readonly bgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
 		private readonly questsService: QuestsService,
 		private readonly tavernBrawlService: TavernBrawlService,
 	) {}
 
 	public async requestLoad(dataType: StateDataType) {
 		switch (dataType) {
-			case 'bgs-meta-hero-strategies':
-				return this.bgsMetaHeroStrategiesService.loadMetaHeroStrategies();
 			case 'user-global-stats':
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'reference-quests':
@@ -36,6 +32,5 @@ export type StateDataType =
 	| 'reference-quests'
 	| 'duels-top-decks'
 	| 'bgs-meta-hero-stats'
-	| 'bgs-meta-hero-strategies'
 	| 'tavern-brawl-stats';
 // | 'battlegrounds-perfect-games';

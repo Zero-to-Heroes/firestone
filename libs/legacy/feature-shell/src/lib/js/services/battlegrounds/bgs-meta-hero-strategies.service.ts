@@ -1,30 +1,48 @@
 import { Injectable } from '@angular/core';
-import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
-import { BattlegroundsMetaHeroStrategiesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-meta-hero-strategies-loaded-event';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	LocalStorageService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 
 const META_HERO_STRATEGIES_URL =
 	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/battlegrounds-strategies.json';
 
 @Injectable()
-export class BgsMetaHeroStrategiesService {
-	constructor(
-		private readonly localStorage: LocalStorageService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly api: ApiRunner,
-	) {}
+export class BgsMetaHeroStrategiesService extends AbstractFacadeService<BgsMetaHeroStrategiesService> {
+	public strategies$$: SubscriberAwareBehaviorSubject<BgsHeroStrategies | null>;
 
-	public async loadMetaHeroStrategies() {
-		const localStats = this.localStorage.getItem<BgsHeroStrategies>(LocalStorageService.BGS_META_HERO_STRATEGIES);
-		console.debug('[bgs-meta-strat] localStats', localStats);
-		if (!!localStats?.heroes?.length) {
-			this.store.send(new BattlegroundsMetaHeroStrategiesLoadedEvent(localStats));
-		}
+	private localStorage: LocalStorageService;
+	private api: ApiRunner;
 
-		const result = await this.api.callGetApi<BgsHeroStrategies>(META_HERO_STRATEGIES_URL);
-		console.debug('[bgs-meta-strat] result', result);
-		this.localStorage.setItem(LocalStorageService.BGS_META_HERO_STRATEGIES, result);
-		this.store.send(new BattlegroundsMetaHeroStrategiesLoadedEvent(result));
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'BgsMetaHeroStrategiesService', () => !!this.strategies$$);
+	}
+
+	protected override assignSubjects() {
+		this.strategies$$ = this.mainInstance.strategies$$;
+	}
+
+	protected async init() {
+		this.strategies$$ = new SubscriberAwareBehaviorSubject<BgsHeroStrategies | null>(null);
+		this.localStorage = AppInjector.get(LocalStorageService);
+		this.api = AppInjector.get(ApiRunner);
+
+		this.strategies$$.onFirstSubscribe(async () => {
+			const localStats = this.localStorage.getItem<BgsHeroStrategies>(
+				LocalStorageService.BGS_META_HERO_STRATEGIES,
+			);
+			console.debug('[bgs-meta-strat] localStats', localStats);
+			this.strategies$$.next(localStats);
+
+			const result = await this.api.callGetApi<BgsHeroStrategies>(META_HERO_STRATEGIES_URL);
+			console.debug('[bgs-meta-strat] result', result);
+			this.localStorage.setItem(LocalStorageService.BGS_META_HERO_STRATEGIES, result);
+			this.strategies$$.next(result);
+		});
 	}
 }
 

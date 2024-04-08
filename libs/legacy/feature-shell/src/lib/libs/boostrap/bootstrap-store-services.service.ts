@@ -31,6 +31,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
+import { BgsMetaHeroStrategiesService } from '../../js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
@@ -104,6 +105,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BgsMetaHeroStatsService: BgsMetaHeroStatsService,
 		private readonly init_BattlegroundsOfficialLeaderboardService: BattlegroundsOfficialLeaderboardService,
 		private readonly init_BattlegroundsNavigationService: BattlegroundsNavigationService,
+		private readonly init_BgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
 		private readonly init_ArenaCardStatsService: ArenaCardStatsService,
 		private readonly init_ArenaDraftManagerService: ArenaDraftManagerService,
