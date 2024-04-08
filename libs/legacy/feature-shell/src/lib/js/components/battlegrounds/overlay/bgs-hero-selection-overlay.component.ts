@@ -7,15 +7,15 @@ import {
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
+import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-hero-selection-overlay',
@@ -43,26 +43,26 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
 	heroTooltipActive$: Observable<boolean>;
 	showTierOverlay$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		protected readonly store: AppUiStoreFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: BgsStateFacadeService,
 		private readonly ads: AdService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
+		private readonly achievements: AchievementsStateManagerService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.gameState, this.ads, this.playerHeroStats);
+		await waitForReady(this.prefs, this.gameState, this.ads, this.playerHeroStats, this.achievements);
 
 		this.heroTooltipActive$ = combineLatest([this.ads.enablePremiumFeatures$$, this.prefs.preferences$$]).pipe(
 			this.mapData(([premium, prefs]) => premium && prefs.bgsShowHeroSelectionTooltip),
@@ -78,7 +78,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionStoreC
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
-			this.store.achievementCategories$(),
+			this.achievements.groupedAchievements$$,
 			this.gameState.gameState$$.pipe(
 				this.mapData(
 					(main) =>

@@ -1,6 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { AchievementsStateManagerService } from '../../services/achievement/achievements-state-manager.service';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -29,13 +31,19 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 export class AchievementsCategoriesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	categories$: Observable<readonly VisualAchievementCategory[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly achievements: AchievementsStateManagerService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.achievements);
+
 		this.categories$ = combineLatest([
-			this.store.achievementCategories$(),
+			this.achievements.groupedAchievements$$,
 			this.store.listen$(([main, nav, prefs]) => nav.navigationAchievements.selectedCategoryId),
 		]).pipe(
 			this.mapData(
@@ -44,6 +52,10 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionStoreCo
 					categories,
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectCategory(category: VisualAchievementCategory) {

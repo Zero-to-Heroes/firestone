@@ -5,12 +5,15 @@ import {
 	Component,
 	ElementRef,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { sortByProperties } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { findAchievements } from '../../models/mainwindow/achievements-state';
 import { VisualAchievement } from '../../models/visual-achievement';
+import { AchievementsStateManagerService } from '../../services/achievement/achievements-state-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -64,17 +67,20 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 	pinnedAchievements$: Observable<readonly number[]>;
 
 	constructor(
-		private readonly el: ElementRef,
-		private readonly domSanitizer: DomSanitizer,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly domSanitizer: DomSanitizer,
+		private readonly achievements: AchievementsStateManagerService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.achievements);
+
 		const achievements$ = combineLatest([
-			this.store.achievementCategories$(),
+			this.achievements.groupedAchievements$$,
 			this.store.listen$(([main, nav, prefs]) => nav.navigationAchievements.displayedAchievementsList),
 		]).pipe(
 			this.mapData(([categories, [displayedAchievementsList]]) =>
@@ -129,6 +135,10 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 		this.pinnedAchievements$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.pinnedAchievementIds)
 			.pipe(this.mapData(([pinnedAchievementIds]) => pinnedAchievementIds));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByAchievementId(index: number, achievement: VisualAchievement) {

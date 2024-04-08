@@ -34,7 +34,6 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Set } from '../../models/set';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { AchievementHistoryService } from '../achievement/achievements-history.service';
 import {
 	AchievementsLiveProgressTrackingService,
@@ -107,7 +106,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private shouldShowLotteryOverlay: Observable<boolean>;
 	private lottery: Observable<LotteryState>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
-	private achievementCategories: Observable<readonly VisualAchievementCategory[]>;
 	private achievementsHistory: BehaviorSubject<readonly AchievementHistory[]>;
 	private packStats: Observable<readonly PackResult[]>;
 	private cardHistory: Observable<readonly CardHistory[]>;
@@ -134,6 +132,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly collectionManager: CollectionManager,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly setsManager: SetsManagerService,
+		private readonly achievementsStateManagerService: AchievementsStateManagerService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -391,10 +390,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.achievementsHistory;
 	}
 
-	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
-		return this.achievementCategories;
-	}
-
 	public packStats$(): Observable<readonly PackResult[]> {
 		return this.packStats;
 	}
@@ -448,7 +443,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initProfileClassProgress();
 		this.initProfileDuelsHeroStat();
 		this.initProfileBgHeroStat();
-		this.initAchievementCategories();
 		this.achievementsHistory = (
 			this.ow.getMainWindow().achievementsHistory as AchievementHistoryService
 		).achievementsHistory$$;
@@ -528,12 +522,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.profileBgHeroStat = this.ow.getMainWindow().profileBgHeroStat as BehaviorSubject<
 			readonly ProfileBgHeroStat[]
 		>;
-	}
-
-	private initAchievementCategories() {
-		this.achievementCategories = (
-			this.ow.getMainWindow().achievementsStateManager as AchievementsStateManagerService
-		).groupedAchievements$$;
 	}
 
 	private initPackStats() {

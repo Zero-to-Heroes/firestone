@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HsAchievementInfo } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
+import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
@@ -17,29 +17,43 @@ import { RawAchievementsLoaderService } from './data/raw-achievements-loader.ser
 const CATEGORIES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/achievements/configuration';
 
 @Injectable()
-export class AchievementsStateManagerService {
+export class AchievementsStateManagerService extends AbstractFacadeService<AchievementsStateManagerService> {
 	// The achievements grouped by categories
-	public groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[]>([]);
+	public groupedAchievements$$: SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[]>;
 	// The achievement definitions loaded from the config and reference files
-	public rawAchievements$$ = new SubscriberAwareBehaviorSubject<readonly Achievement[]>([]);
+	public rawAchievements$$: SubscriberAwareBehaviorSubject<readonly Achievement[]>;
 
 	// The current in-game progress for each achievement
 	private achievementsInGameProgress$$ = new BehaviorSubject<readonly HsAchievementInfo[]>([]);
 	// The Firestone achievements that have been completed
 	private completedAchievements$$ = new BehaviorSubject<readonly CompletedAchievement[]>([]);
 
-	constructor(
-		private readonly rawAchievementsLoader: RawAchievementsLoaderService,
-		private readonly remoteAchievementsLoader: FirestoneRemoteAchievementsLoaderService,
-		private readonly memoryMonitor: AchievementsMemoryMonitor,
-		private readonly api: ApiRunner,
-		private readonly prefs: PreferencesService,
-	) {
-		this.init();
-		window['achievementsStateManager'] = this;
+	private rawAchievementsLoader: RawAchievementsLoaderService;
+	private remoteAchievementsLoader: FirestoneRemoteAchievementsLoaderService;
+	private memoryMonitor: AchievementsMemoryMonitor;
+	private api: ApiRunner;
+	private prefs: PreferencesService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'AchievementsStateManagerService', () => !!this.groupedAchievements$$);
 	}
 
-	private async init() {
+	protected override assignSubjects() {
+		this.groupedAchievements$$ = this.mainInstance.groupedAchievements$$;
+		this.rawAchievements$$ = this.mainInstance.rawAchievements$$;
+	}
+
+	protected async init() {
+		this.groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[] | null>(
+			null,
+		);
+		this.rawAchievements$$ = new SubscriberAwareBehaviorSubject<readonly Achievement[] | null>(null);
+		this.rawAchievementsLoader = AppInjector.get(RawAchievementsLoaderService);
+		this.remoteAchievementsLoader = AppInjector.get(FirestoneRemoteAchievementsLoaderService);
+		this.memoryMonitor = AppInjector.get(AchievementsMemoryMonitor);
+		this.api = AppInjector.get(ApiRunner);
+		this.prefs = AppInjector.get(PreferencesService);
+
 		this.groupedAchievements$$.onFirstSubscribe(async () => {
 			console.debug('[achievements-state] subscriber to groupedAchievements$$');
 			const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();

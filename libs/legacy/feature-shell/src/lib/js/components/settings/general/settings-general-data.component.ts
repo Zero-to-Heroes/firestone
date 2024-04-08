@@ -1,8 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { DiskCacheService } from '@firestone/shared/framework/core';
+import { DiskCacheService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
+import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { AchievementsFullRefreshEvent } from '../../../services/mainwindow/store/events/achievements/achievements-full-refresh-event';
 import { CollectionRefreshPacksEvent } from '../../../services/mainwindow/store/events/collection/colection-refresh-packs-event';
 import { GamesFullClearEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-clear-event';
@@ -114,12 +115,13 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 		private readonly i18n: LocalizationFacadeService,
 		private readonly diskCache: DiskCacheService,
 		private readonly gamesLoader: GameStatsLoaderService,
+		private readonly achievements: AchievementsStateManagerService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.gamesLoader.isReady();
+		await waitForReady(this.gamesLoader, this.achievements);
 
 		this.disableLocalCache$ = this.listenForBasicPref$((prefs) => prefs.disableLocalCache);
 		this.isRefreshingGames$ = this.isRefreshingGames.asObservable();
@@ -166,8 +168,7 @@ export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreCompo
 			.subscribe((packs) => {
 				this.isRefreshingPacks.next(false);
 			});
-		this.store
-			.achievementCategories$()
+		this.achievements.groupedAchievements$$
 			.pipe(this.mapData((categories) => categories))
 			.subscribe((categories) => {
 				this.isRefreshingAchievements.next(false);

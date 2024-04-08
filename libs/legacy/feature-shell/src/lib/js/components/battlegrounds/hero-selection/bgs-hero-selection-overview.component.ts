@@ -1,15 +1,20 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsHeroSelectionOverviewPanel, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import {
+	BgsHeroSelectionOverviewPanel,
+	BgsPlayerHeroStatsService,
+	BgsStateFacadeService,
+} from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, tap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
+import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
+import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-hero-selection-overview',
@@ -51,45 +56,48 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	// tiers$: Observable<readonly BgsMetaHeroStatTier[]>;
+export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
 	showAds$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
+		private readonly ads: AdService,
+		private readonly bgsState: BgsStateFacadeService,
+		private readonly achievements: AchievementsStateManagerService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.playerHeroStats);
+		await waitForReady(this.playerHeroStats, this.ads, this.bgsState, this.prefs, this.achievements);
 
 		const tiers$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
 			tap((stats) => console.debug('[bgs-hero-selection-overview] received stats', stats)),
 			this.mapData((stats) => buildTiers(stats, this.i18n)),
 		);
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((showAds) => showAds));
+		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
-			this.store.achievementCategories$(),
-			this.store.listenBattlegrounds$(
-				([main, prefs]) =>
-					// Filter here to avoid recomputing achievements info every time something changes in
-					// another panel (finding the right panel is inexpensive)
-					main.panels?.find(
-						(panel) => panel.id === 'bgs-hero-selection-overview',
-					) as BgsHeroSelectionOverviewPanel,
-				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
+			this.achievements.groupedAchievements$$,
+			this.bgsState.gameState$$.pipe(
+				this.mapData(
+					(state) =>
+						// Filter here to avoid recomputing achievements info every time something changes in
+						// another panel (finding the right panel is inexpensive)
+						state.panels?.find(
+							(panel) => panel.id === 'bgs-hero-selection-overview',
+						) as BgsHeroSelectionOverviewPanel,
+				),
 			),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
-			this.mapData(([tiers, achievements, [panel, showAchievements]]) => {
+			this.mapData(([tiers, achievements, panel, showAchievements]) => {
 				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
 				if (!panel || !heroesAchievementCategory) {
 					return [];

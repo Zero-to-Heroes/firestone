@@ -21,7 +21,6 @@ import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { Set } from '../../models/set';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { ShopMinion } from '../battlegrounds/bgs-board-highlighter.service';
 import { LotteryState } from '../lottery/lottery.model';
@@ -238,10 +237,6 @@ export class AppUiStoreFacadeService {
 
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
 		return this.store.profileBgHeroStat$();
-	}
-
-	public achievementCategories$(): Observable<readonly VisualAchievementCategory[]> {
-		return this.store.achievementCategories$();
 	}
 
 	public achievementsHistory$(): Observable<readonly AchievementHistory[]> {
