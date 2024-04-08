@@ -1,4 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -76,14 +78,18 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 
 	@Input() showAds: boolean;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: ConstructedNavigationService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.currentView$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
-			.pipe(this.mapData(([currentView]) => currentView));
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.menuDisplayType)
 			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
@@ -91,6 +97,10 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 			.listen$(([main, nav, prefs]) => main.decktracker.isLoading)
 			.pipe(this.mapData(([isLoading]) => isLoading));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	showSidebar(currentView: DecktrackerViewType): boolean {

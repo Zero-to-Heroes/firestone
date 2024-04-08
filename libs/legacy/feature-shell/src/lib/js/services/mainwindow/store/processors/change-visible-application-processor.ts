@@ -1,5 +1,6 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
@@ -20,7 +21,8 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		private readonly i18n: LocalizationService,
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
-		private readonly nav: BattlegroundsNavigationService,
+		private readonly bgNav: BattlegroundsNavigationService,
+		private readonly constructedNav: ConstructedNavigationService,
 	) {}
 
 	public async process(
@@ -37,7 +39,10 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			this.collectionNav.menuDisplayType$$.next('menu');
 		}
 		if (event.module === 'battlegrounds') {
-			this.nav.selectedCategoryId$$.next('bgs-category-meta-heroes');
+			this.bgNav.selectedCategoryId$$.next('bgs-category-meta-heroes');
+		}
+		if (event.module === 'decktracker') {
+			this.constructedNav.currentView$$.next('decks');
 		}
 
 		const achievements =
@@ -82,7 +87,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		const decktracker =
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
-						currentView: 'decks',
 						menuDisplayType: 'menu',
 						selectedDeckstring: null,
 				  } as NavigationDecktracker)

@@ -8,16 +8,16 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { GameStatsLoaderService } from '../../../services/stats/game/game-stats-loader.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'region-filter-dropdown',
@@ -36,7 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegionFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	filter$: Observable<{
@@ -49,25 +49,24 @@ export class RegionFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly gamesLoader: GameStatsLoaderService,
+		private readonly nav: ConstructedNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.gamesLoader.isReady();
+		await waitForReady(this.nav, this.gamesLoader, this.prefs);
 
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
 			this.gamesLoader.gameStats$$,
-			this.store.listenPrefs$((prefs) => prefs.regionFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.regionFilter)),
 		]).pipe(
-			filter(([[currentView], stats, [filter]]) => !!currentView),
-			this.mapData(([[currentView], stats, [filter]]) => {
+			this.mapData(([stats, filter]) => {
 				const allOptions = ['all'];
 				const allRegions = new Set(stats?.stats?.map((stat) => stat.region).filter((region) => !!region));
 				// Don't show the filter when only one region

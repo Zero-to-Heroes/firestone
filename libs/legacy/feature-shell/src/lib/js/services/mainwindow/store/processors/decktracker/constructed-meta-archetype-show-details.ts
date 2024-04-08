@@ -34,14 +34,7 @@ export class ConstructedMetaArchetypeDetailsShowProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.navigation.selectedConstructedMetaArchetype$$.next(event.id);
-		return [
-			null,
-			navigationState.update({
-				navigationDecktracker: navigationState.navigationDecktracker.update({
-					// selectedConstructedMetaArchetype: event.id,
-					currentView: 'constructed-meta-archetype-details',
-				}),
-			}),
-		];
+		this.navigation.currentView$$.next('constructed-meta-archetype-details');
+		return [null, null];
 	}
 }

@@ -34,14 +34,7 @@ export class ConstructedMetaDeckDetailsShowProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.navigation.selectedConstructedMetaDeck$$.next(event.deckstring);
-		return [
-			null,
-			navigationState.update({
-				navigationDecktracker: navigationState.navigationDecktracker.update({
-					// selectedConstructedMetaDeck: event.deckstring,
-					currentView: 'constructed-meta-deck-details',
-				}),
-			}),
-		];
+		this.navigation.currentView$$.next('constructed-meta-deck-details');
+		return [null, null];
 	}
 }

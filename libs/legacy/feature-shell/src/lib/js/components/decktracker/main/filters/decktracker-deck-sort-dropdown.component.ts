@@ -7,8 +7,9 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PatchesConfigService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
@@ -48,22 +49,21 @@ export class DecktrackerDeckSortDropdownComponent
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.nav);
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
-				([main, nav]) => nav.navigationDecktracker.currentView,
-			),
+			this.store.listen$(([main, nav, prefs]) => prefs.desktopDeckFilters?.sort),
+			this.nav.currentView$$,
 		]).pipe(
-			filter(([patch, [filter, currentView]]) => !!filter && !!patch && !!currentView),
-			this.mapData(([patch, [filter, currentView]]) => {
+			filter(([patch, [filter], currentView]) => !!filter && !!patch && !!currentView),
+			this.mapData(([patch, [filter], currentView]) => {
 				const options = [
 					{
 						value: 'last-played',

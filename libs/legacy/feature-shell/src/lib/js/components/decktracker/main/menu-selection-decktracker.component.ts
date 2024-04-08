@@ -5,14 +5,15 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { ConstructedNavigationService, DecktrackerViewType } from '@firestone/constructed/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
+import { AdService } from '../../../services/ad.service';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'menu-selection-decktracker',
@@ -50,7 +51,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionDecktrackerComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	selectedTab$: Observable<DecktrackerViewType>;
@@ -91,24 +92,26 @@ export class MenuSelectionDecktrackerComponent
 	private premium$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
+		private readonly nav: ConstructedNavigationService,
+		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.selectedTab$ = this.store
-			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
-			.pipe(this.mapData(([tab]) => tab));
-		this.store
-			.hasPremiumSub$()
-			.pipe(this.mapData((hasPremium) => hasPremium))
-			.subscribe((hasPremium) => {
-				this.premium$$.next(hasPremium);
-			});
+	async ngAfterContentInit() {
+		await waitForReady(this.nav, this.ads);
+
+		this.selectedTab$ = this.nav.currentView$$.pipe(this.mapData((tab) => tab));
+		this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => hasPremium)).subscribe((hasPremium) => {
+			this.premium$$.next(hasPremium);
+		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

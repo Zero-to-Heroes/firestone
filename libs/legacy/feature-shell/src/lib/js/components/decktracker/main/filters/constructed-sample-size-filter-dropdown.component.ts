@@ -1,11 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-sample-size-filter-dropdown',
@@ -23,7 +24,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedSampleSizeFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -33,21 +34,23 @@ export class ConstructedSampleSizeFilterDropdownComponent
 	}));
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: ConstructedNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav, this.prefs);
+
 		this.filter$ = combineLatest([
-			this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksSampleSizeFilter),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksSampleSizeFilter)),
+			this.nav.currentView$$,
 		]).pipe(
-			filter(([filter, [currentView]]) => !!filter && !!currentView),
-			this.mapData(([filter, [currentView]]) => {
+			filter(([filter, currentView]) => !!filter && !!currentView),
+			this.mapData(([filter, currentView]) => {
 				return {
 					filter: '' + filter,
 					options: this.options,
@@ -56,6 +59,10 @@ export class ConstructedSampleSizeFilterDropdownComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: IOption) {

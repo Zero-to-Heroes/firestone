@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DeckRankFilterType } from '../../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -44,68 +46,73 @@ export class DecktrackerRankFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav]) => main.decktracker.filters?.rank,
-				([main, nav]) => nav.navigationDecktracker.currentView,
-			)
-			.pipe(
-				filter(([filter, currentView]) => !!filter && !!currentView),
-				this.mapData(([filter, currentView]) => {
-					const options = [
-						{
-							value: 'all',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.all'),
-						} as DeckRankOption,
-						{
-							value: 'silver',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.silver'),
-						} as DeckRankOption,
-						{
-							value: 'gold',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.gold'),
-						} as DeckRankOption,
-						{
-							value: 'platinum',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.platinum'),
-						} as DeckRankOption,
-						{
-							value: 'diamond',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.diamond'),
-						} as DeckRankOption,
-						{
-							value: 'legend',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.legend'),
-						} as DeckRankOption,
-						{
-							value: 'legend-500',
-							label: this.i18n.translateString('app.decktracker.filters.rank-filter.legend-500'),
-						} as DeckRankOption,
-					];
-					return {
-						filter: filter,
-						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: ![
-							'ladder-ranking',
-							'constructed-deckbuilder',
-							'constructed-meta-decks',
-							'constructed-meta-deck-details',
-							'constructed-meta-archetypes',
-							'constructed-meta-archetype-details',
-						].includes(currentView),
-					};
-				}),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.filters?.rank),
+			this.nav.currentView$$,
+		]).pipe(
+			filter(([[filter], currentView]) => !!filter && !!currentView),
+			this.mapData(([[filter], currentView]) => {
+				const options = [
+					{
+						value: 'all',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.all'),
+					} as DeckRankOption,
+					{
+						value: 'silver',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.silver'),
+					} as DeckRankOption,
+					{
+						value: 'gold',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.gold'),
+					} as DeckRankOption,
+					{
+						value: 'platinum',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.platinum'),
+					} as DeckRankOption,
+					{
+						value: 'diamond',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.diamond'),
+					} as DeckRankOption,
+					{
+						value: 'legend',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.legend'),
+					} as DeckRankOption,
+					{
+						value: 'legend-500',
+						label: this.i18n.translateString('app.decktracker.filters.rank-filter.legend-500'),
+					} as DeckRankOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder: options.find((option) => option.value === filter)?.label,
+					visible: ![
+						'ladder-ranking',
+						'constructed-deckbuilder',
+						'constructed-meta-decks',
+						'constructed-meta-deck-details',
+						'constructed-meta-archetypes',
+						'constructed-meta-archetype-details',
+					].includes(currentView),
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

@@ -1,5 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -37,17 +39,20 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.filter$ = combineLatest([
 			this.listenForBasicPref$((prefs) => prefs.constructedMetaArchetypesSampleSizeFilter),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.nav.currentView$$,
 		]).pipe(
-			filter(([filter, [currentView]]) => !!filter && !!currentView),
-			this.mapData(([filter, [currentView]]) => {
+			filter(([filter, currentView]) => !!filter && !!currentView),
+			this.mapData(([filter, currentView]) => {
 				return {
 					filter: '' + filter,
 					options: this.options,
@@ -56,6 +61,10 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: IOption) {

@@ -1,6 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { classes } from '@legacy-import/src/lib/js/services/hs-utils';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -37,11 +39,14 @@ export class ConstructedPlayerClassFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.options = classes
 			.map((playerClass) => {
 				return {
@@ -53,14 +58,18 @@ export class ConstructedPlayerClassFilterDropdownComponent
 			.sort((a, b) => (a.label < b.label ? -1 : 1));
 		this.filter$ = combineLatest([
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksPlayerClassFilter),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.nav.currentView$$,
 		]).pipe(
-			this.mapData(([[filter], [currentView]]) => ({
+			this.mapData(([[filter], currentView]) => ({
 				selected: filter ?? classes,
 				placeholder: this.i18n.translateString(`global.class.all`),
 				visible: ['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
 			})),
 		) as any;
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: readonly string[]) {

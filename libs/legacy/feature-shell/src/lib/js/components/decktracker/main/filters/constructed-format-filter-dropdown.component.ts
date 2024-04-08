@@ -5,9 +5,11 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
@@ -48,17 +50,20 @@ export class ConstructedFormatFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.nav.currentView$$,
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksFormatFilter),
 		]).pipe(
-			filter(([[currentView], [filter]]) => !!currentView),
-			this.mapData(([[currentView], [filter]]) => {
+			filter(([currentView, [filter]]) => !!currentView),
+			this.mapData(([currentView, [filter]]) => {
 				const options: FilterOption[] = ['standard', 'wild', 'twist'].map(
 					(option) =>
 						({
@@ -74,6 +79,10 @@ export class ConstructedFormatFilterDropdownComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

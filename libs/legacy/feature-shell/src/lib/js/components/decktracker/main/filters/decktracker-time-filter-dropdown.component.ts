@@ -7,8 +7,9 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PatchesConfigService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { DeckTimeFilterType } from '@models/mainwindow/decktracker/deck-time-filter.type';
 import { ChangeDeckTimeFilterEvent } from '@services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
@@ -49,22 +50,21 @@ export class DecktrackerTimeFilterDropdownComponent
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.nav);
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.store.listen$(
-				([main, nav]) => main.decktracker.filters?.time,
-				([main, nav]) => nav.navigationDecktracker.currentView,
-			),
+			this.store.listen$(([main, nav]) => main.decktracker.filters?.time),
+			this.nav.currentView$$,
 		]).pipe(
-			filter(([patch, [filter, currentView]]) => !!filter && !!patch && !!currentView),
-			this.mapData(([patch, [filter, currentView]]) => {
+			filter(([patch, [filter], currentView]) => !!filter && !!patch && !!currentView),
+			this.mapData(([patch, [filter], currentView]) => {
 				const options = [
 					{
 						value: 'all-time',

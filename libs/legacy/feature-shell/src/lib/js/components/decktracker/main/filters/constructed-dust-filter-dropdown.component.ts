@@ -1,5 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -34,11 +36,14 @@ export class ConstructedDustFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.options = [
 			{
 				value: 'all',
@@ -63,9 +68,9 @@ export class ConstructedDustFilterDropdownComponent
 		];
 		this.filter$ = combineLatest([
 			this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksDustFilter ?? 'all'),
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.nav.currentView$$,
 		]).pipe(
-			this.mapData(([filter, [currentView]]) => {
+			this.mapData(([filter, currentView]) => {
 				console.debug('dust filter', filter, this.options);
 				return {
 					filter: '' + filter,
@@ -74,6 +79,10 @@ export class ConstructedDustFilterDropdownComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: IOption) {

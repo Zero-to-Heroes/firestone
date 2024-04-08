@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { ToggleShowHiddenDecksEvent } from '@services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -91,61 +93,59 @@ export class DecktrackerFiltersComponent
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.helpTooltip = this.i18n.translateString('app.decktracker.filters.filter-info-tooltip');
-		this.showRegionFilter$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) =>
-					['decks', 'ladder-stats', 'ladder-ranking', 'replays', 'deck-details'].includes(currentView),
-				),
-			);
-		this.showMetaDeckCardSearch$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => ['constructed-meta-decks'].includes(currentView)),
-			);
-		this.showHiddenDecksLink$ = this.store
-			.listen$(
-				([main, nav, prefs]) => nav.navigationDecktracker.currentView,
-				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
-			)
-			.pipe(
-				filter(([currentView, hiddenDeckCodes]) => !!currentView && !!hiddenDeckCodes),
-				this.mapData(
-					([currentView, hiddenDeckCodes]) =>
-						currentView !== 'deck-details' &&
-						currentView !== 'constructed-deckbuilder' &&
-						hiddenDeckCodes.length > 0,
-				),
-			);
-		this.showUseConservativeWinrateLink$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) =>
-					['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
-				),
-			);
-		this.showInfo$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
-			.pipe(
-				this.mapData(
-					([currentView]) =>
-						![
-							'constructed-meta-decks',
-							'constructed-meta-deck-details',
-							'constructed-meta-archetypes',
-							'constructed-meta-archetype-details',
-						].includes(currentView),
-				),
-			);
+		this.showRegionFilter$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) =>
+				['decks', 'ladder-stats', 'ladder-ranking', 'replays', 'deck-details'].includes(currentView),
+			),
+		);
+		this.showMetaDeckCardSearch$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => ['constructed-meta-decks'].includes(currentView)),
+		);
+		this.showHiddenDecksLink$ = combineLatest([
+			this.nav.currentView$$,
+			this.store.listen$(([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes),
+		]).pipe(
+			filter(([currentView, [hiddenDeckCodes]]) => !!currentView && !!hiddenDeckCodes),
+			this.mapData(
+				([currentView, [hiddenDeckCodes]]) =>
+					currentView !== 'deck-details' &&
+					currentView !== 'constructed-deckbuilder' &&
+					hiddenDeckCodes.length > 0,
+			),
+		);
+		this.showUseConservativeWinrateLink$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) =>
+				['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+			),
+		);
+		this.showInfo$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData(
+				(currentView) =>
+					![
+						'constructed-meta-decks',
+						'constructed-meta-deck-details',
+						'constructed-meta-archetypes',
+						'constructed-meta-archetype-details',
+					].includes(currentView),
+			),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

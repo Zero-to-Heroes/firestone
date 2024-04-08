@@ -8,8 +8,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TimePeriod } from '@firestone-hs/constructed-deck-stats';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PatchesConfigService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { formatPatch } from '@legacy-import/src/lib/js/services/utils';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
@@ -52,20 +53,21 @@ export class ConstructedTimeFilterDropdownComponent
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.nav);
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.store.listen$(([main, nav]) => nav.navigationDecktracker.currentView),
+			this.nav.currentView$$,
 			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksTimeFilter),
 		]).pipe(
-			filter(([patch, [currentView], [filter]]) => !!currentView),
-			this.mapData(([patch, [currentView], [filter]]) => {
+			filter(([patch, currentView, [filter]]) => !!currentView),
+			this.mapData(([patch, currentView, [filter]]) => {
 				const options: FilterOption[] = ['current-season', 'past-20', 'past-7', 'past-3', 'last-patch'].map(
 					(option) =>
 						({

@@ -45,13 +45,7 @@ export class ConstructedMetaArchetypeShowDecksProcessor implements Processor {
 		await this.prefs.savePreferences(newPrefs);
 		this.navigation.selectedConstructedMetaArchetype$$.next(null);
 		this.navigation.selectedConstructedMetaDeck$$.next(null);
-		return [
-			null,
-			navigationState.update({
-				navigationDecktracker: navigationState.navigationDecktracker.update({
-					currentView: 'constructed-meta-decks',
-				}),
-			}),
-		];
+		this.navigation.currentView$$.next('constructed-meta-decks');
+		return [null, null];
 	}
 }

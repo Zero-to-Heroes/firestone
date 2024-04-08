@@ -1,6 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { DeckSummary } from '@firestone/constructed/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
 import { MultiselectOption } from '@firestone/shared/common/view';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { formatClass } from '../../../services/hs-utils';
@@ -39,22 +40,25 @@ export class ReplaysDeckstringFilterDropdownComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.filter$ = combineLatest(
 			this.store.decks$(),
+			this.nav.currentView$$,
 			this.store.listen$(
 				([main, nav]) => nav.currentApp,
-				([main, nav]) => nav.navigationDecktracker.currentView,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
 				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
 			),
 		).pipe(
-			this.mapData(([decks, [currentApp, currentView, gameModeFilter, deckstringFilter, archivedDecks]]) => {
+			this.mapData(([decks, currentView, [currentApp, gameModeFilter, deckstringFilter, archivedDecks]]) => {
 				const options: readonly MultiselectOption[] = (
 					decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []
 				)
@@ -93,6 +97,10 @@ export class ReplaysDeckstringFilterDropdownComponent
 				};
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onSelected(selectedDeckstrings: readonly string[]) {

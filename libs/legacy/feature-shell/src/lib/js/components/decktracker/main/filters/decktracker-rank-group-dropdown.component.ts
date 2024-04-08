@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -41,42 +43,47 @@ export class DecktrackerRankGroupDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav]) => main.decktracker.filters?.rankingGroup,
-				([main, nav]) => nav.navigationDecktracker.currentView,
-			)
-			.pipe(
-				filter(([filter, currentView]) => !!filter && !!currentView),
-				this.mapData(([filter, currentView]) => {
-					const options = [
-						{
-							value: 'per-match',
-							label: this.i18n.translateString('app.decktracker.filters.rank-group.per-match'),
-						} as RankingGroupOption,
-						{
-							value: 'per-day',
-							label: this.i18n.translateString('app.decktracker.filters.rank-group.per-day'),
-							tooltip: this.i18n.translateString('app.decktracker.filters.rank-group.per-day-tooltip'),
-						} as RankingGroupOption,
-					];
-					return {
-						filter: filter,
-						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: currentView === 'ladder-ranking',
-					};
-				}),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.filters?.rankingGroup),
+			this.nav.currentView$$,
+		]).pipe(
+			filter(([[filter], currentView]) => !!filter && !!currentView),
+			this.mapData(([[filter], currentView]) => {
+				const options = [
+					{
+						value: 'per-match',
+						label: this.i18n.translateString('app.decktracker.filters.rank-group.per-match'),
+					} as RankingGroupOption,
+					{
+						value: 'per-day',
+						label: this.i18n.translateString('app.decktracker.filters.rank-group.per-day'),
+						tooltip: this.i18n.translateString('app.decktracker.filters.rank-group.per-day-tooltip'),
+					} as RankingGroupOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder: options.find((option) => option.value === filter)?.label,
+					visible: currentView === 'ladder-ranking',
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
@@ -41,60 +43,63 @@ export class DecktrackerFormatFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav]) => main.decktracker.filters?.gameFormat,
-				([main, nav]) => nav.navigationDecktracker.currentView,
-			)
-			.pipe(
-				filter(([filter, currentView]) => !!filter && !!currentView),
-				this.mapData(([filter, currentView]) => {
-					const options = [
-						{
-							value: 'all',
-							label: this.i18n.translateString('app.decktracker.filters.format-filter.all-formats'),
-						} as FormatFilterOption,
-						{
-							value: 'standard',
-							label: this.i18n.translateString('app.decktracker.filters.format-filter.standard'),
-						} as FormatFilterOption,
-						{
-							value: 'wild',
-							label: this.i18n.translateString('app.decktracker.filters.format-filter.wild'),
-						} as FormatFilterOption,
-						{
-							value: 'classic',
-							label: this.i18n.translateString('app.decktracker.filters.format-filter.classic'),
-						} as FormatFilterOption,
-						{
-							value: 'twist',
-							label: this.i18n.translateString('app.decktracker.filters.format-filter.twist'),
-						} as FormatFilterOption,
-					];
-					return {
-						filter: filter,
-						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: ![
-							'deck-details',
-							'constructed-deckbuilder',
-							'constructed-meta-decks',
-							'constructed-meta-deck-details',
-							'constructed-meta-archetypes',
-							'constructed-meta-archetype-details',
-						].includes(currentView),
-					};
-				}),
-			);
+	async ngAfterContentInit() {
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.filters?.gameFormat),
+			this.nav.currentView$$,
+		]).pipe(
+			filter(([[filter], currentView]) => !!filter && !!currentView),
+			this.mapData(([[filter], currentView]) => {
+				const options = [
+					{
+						value: 'all',
+						label: this.i18n.translateString('app.decktracker.filters.format-filter.all-formats'),
+					} as FormatFilterOption,
+					{
+						value: 'standard',
+						label: this.i18n.translateString('app.decktracker.filters.format-filter.standard'),
+					} as FormatFilterOption,
+					{
+						value: 'wild',
+						label: this.i18n.translateString('app.decktracker.filters.format-filter.wild'),
+					} as FormatFilterOption,
+					{
+						value: 'classic',
+						label: this.i18n.translateString('app.decktracker.filters.format-filter.classic'),
+					} as FormatFilterOption,
+					{
+						value: 'twist',
+						label: this.i18n.translateString('app.decktracker.filters.format-filter.twist'),
+					} as FormatFilterOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder: options.find((option) => option.value === filter)?.label,
+					visible: ![
+						'deck-details',
+						'constructed-deckbuilder',
+						'constructed-meta-decks',
+						'constructed-meta-deck-details',
+						'constructed-meta-archetypes',
+						'constructed-meta-archetype-details',
+					].includes(currentView),
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

@@ -1,3 +1,4 @@
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDecktracker } from '../../../../../models/mainwindow/navigation/navigation-decktracker';
@@ -10,6 +11,7 @@ export class SelectDeckDetailsProcessor implements Processor {
 	constructor(
 		private readonly decksProviderService: DecksProviderService,
 		private readonly mainNav: MainWindowNavigationService,
+		private readonly nav: ConstructedNavigationService,
 	) {}
 
 	public async process(
@@ -26,11 +28,11 @@ export class SelectDeckDetailsProcessor implements Processor {
 					(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(event.deckstring),
 			)?.deckName,
 		);
+		this.nav.currentView$$.next('deck-details');
 		return [
 			null,
 			navigationState.update({
 				navigationDecktracker: navigationState.navigationDecktracker.update({
-					currentView: 'deck-details',
 					menuDisplayType: 'breadcrumbs',
 					selectedDeckstring: event.deckstring,
 				} as NavigationDecktracker),

@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DeckRankingCategoryType } from '../../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -41,41 +43,44 @@ export class DecktrackerRankCategoryDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav]) => main.decktracker.filters?.rankingCategory,
-				([main, nav]) => nav.navigationDecktracker.currentView,
-			)
-			.pipe(
-				filter(([filter, currentView]) => !!filter && !!currentView),
-				this.mapData(([filter, currentView]) => {
-					const options = [
-						{
-							value: 'leagues',
-							label: this.i18n.translateString('app.decktracker.filters.rank-category.leagues'),
-						} as RankingCategoryOption,
-						{
-							value: 'legend',
-							label: this.i18n.translateString('app.decktracker.filters.rank-category.legend'),
-						} as RankingCategoryOption,
-					];
-					return {
-						filter: filter,
-						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: currentView === 'ladder-ranking',
-					};
-				}),
-			);
+	async ngAfterContentInit() {
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav]) => main.decktracker.filters?.rankingCategory),
+			this.nav.currentView$$,
+		]).pipe(
+			filter(([[filter], currentView]) => !!filter && !!currentView),
+			this.mapData(([[filter], currentView]) => {
+				const options = [
+					{
+						value: 'leagues',
+						label: this.i18n.translateString('app.decktracker.filters.rank-category.leagues'),
+					} as RankingCategoryOption,
+					{
+						value: 'legend',
+						label: this.i18n.translateString('app.decktracker.filters.rank-category.legend'),
+					} as RankingCategoryOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder: options.find((option) => option.value === filter)?.label,
+					visible: currentView === 'ladder-ranking',
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

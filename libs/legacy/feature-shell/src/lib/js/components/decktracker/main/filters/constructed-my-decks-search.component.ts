@@ -1,10 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -36,18 +36,17 @@ export class ConstructedMyDecksSearchComponent extends AbstractSubscriptionStore
 	searchForm = new FormControl();
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showWidget$ = this.store
-			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
-			.pipe(this.mapData(([currentView]) => currentView === 'decks'));
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.showWidget$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView === 'decks'));
 
 		this.searchForm.valueChanges
 			.pipe(
@@ -62,6 +61,10 @@ export class ConstructedMyDecksSearchComponent extends AbstractSubscriptionStore
 					})),
 				),
 			);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onMouseDown(event: Event) {

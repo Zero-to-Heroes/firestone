@@ -1,3 +1,4 @@
+/** @deprecated */
 export type DecktrackerViewType =
 	| 'decks'
 	| 'ladder-stats'
