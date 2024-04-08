@@ -9,7 +9,6 @@ import {
 	and,
 	arcane,
 	attackGreaterThan,
-	attackIs,
 	attackLessThan,
 	aura,
 	baseCostEqual,
@@ -49,7 +48,6 @@ import {
 	hasMultipleCopies,
 	hasSpellSchool,
 	healthBiggerThanAttack,
-	healthIs,
 	healthLessThan,
 	holy,
 	imp,
@@ -1060,7 +1058,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(
 					side(inputSide),
 					or(minionPlayedThisMatch, or(inDeck, inHand)),
-					or(attackIs(1), healthIs(1)),
+					// or(attackIs(1), healthIs(1)),
 				);
 			case CardIds.JuicyPsychmelon:
 				return and(
