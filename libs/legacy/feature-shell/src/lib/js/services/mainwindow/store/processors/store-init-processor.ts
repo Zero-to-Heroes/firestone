@@ -1,5 +1,6 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
@@ -19,6 +20,7 @@ export class StoreInitProcessor implements Processor {
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly battlegroundsNav: BattlegroundsNavigationService,
+		private readonly constructedNav: ConstructedNavigationService,
 	) {}
 
 	public async process(
@@ -53,6 +55,7 @@ export class StoreInitProcessor implements Processor {
 				this.mainNav,
 				this.collectionNav,
 				this.battlegroundsNav,
+				this.constructedNav,
 			).process(new ChangeVisibleApplicationEvent(currentAppFromPrefs), currentState, null, navigationState);
 			return navState;
 		}

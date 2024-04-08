@@ -542,6 +542,7 @@ export class MainWindowStoreService {
 					this.mainNavigation,
 					this.collectionNavigation,
 					this.battlegroundsNavigation,
+					this.constructedNavigation,
 				),
 			],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
@@ -558,6 +559,7 @@ export class MainWindowStoreService {
 					this.mainNavigation,
 					this.collectionNavigation,
 					this.battlegroundsNavigation,
+					this.constructedNavigation,
 				),
 			],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
@@ -707,10 +709,10 @@ export class MainWindowStoreService {
 			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
 			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
 			// Decktracker
-			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor()],
+			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor(this.constructedNavigation)],
 			[
 				SelectDeckDetailsEvent.eventName(),
-				new SelectDeckDetailsProcessor(this.decksProvider, this.mainNavigation),
+				new SelectDeckDetailsProcessor(this.decksProvider, this.mainNavigation, this.constructedNavigation),
 			],
 			[ChangeDeckFormatFilterEvent.eventName(), new ChangeDeckFormatFilterProcessor(this.prefs)],
 			[ChangeDeckRankFilterEvent.eventName(), new ChangeDeckRankFilterProcessor(this.prefs)],
@@ -727,7 +729,12 @@ export class MainWindowStoreService {
 			[DecktrackerResetDeckStatsEvent.eventName(), new DecktrackerResetDeckStatsProcessor(this.prefs)],
 			[
 				DecktrackerDeleteDeckEvent.eventName(),
-				new DecktrackerDeleteDeckProcessor(this.prefs, this.gameStats, this.constructedPersonalDeckService),
+				new DecktrackerDeleteDeckProcessor(
+					this.prefs,
+					this.gameStats,
+					this.constructedPersonalDeckService,
+					this.constructedNavigation,
+				),
 			],
 			[RestoreDeckSummaryEvent.eventName(), new RestoreDeckSummaryProcessor(this.prefs)],
 			[ToggleShowHiddenDecksEvent.eventName(), new ToggleShowHiddenDecksProcessor(this.prefs)],
