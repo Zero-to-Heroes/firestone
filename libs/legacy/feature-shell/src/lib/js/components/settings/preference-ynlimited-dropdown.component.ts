@@ -5,13 +5,14 @@ import {
 	Component,
 	Input,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'preference-ynlimited',
@@ -35,10 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceYNLimitedComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class PreferenceYNLimitedComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	@Input() field: string;
@@ -64,24 +62,31 @@ export class PreferenceYNLimitedComponent
 	];
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(([main, nav, prefs]) => prefs[this.field])
-			.pipe(
-				this.mapData(([pref]) => ({
-					filter: '' + pref,
-					placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label,
-					visible: true,
-				})),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.filter$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) => prefs[this.field],
+				(a, b) => deepEqual(a, b),
+			),
+			this.mapData(([pref]) => ({
+				filter: '' + pref,
+				placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label,
+				visible: true,
+			})),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onSelected(option: /*BooleanOption*/ IOption) {
