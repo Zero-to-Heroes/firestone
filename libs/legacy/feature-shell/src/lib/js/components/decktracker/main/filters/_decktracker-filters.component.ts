@@ -8,14 +8,14 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { ToggleShowHiddenDecksEvent } from '@services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-filters',
@@ -76,7 +76,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerFiltersComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	showRegionFilter$: Observable<boolean>;
@@ -89,17 +89,17 @@ export class DecktrackerFiltersComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.helpTooltip = this.i18n.translateString('app.decktracker.filters.filter-info-tooltip');
 		this.showRegionFilter$ = this.nav.currentView$$.pipe(
@@ -114,11 +114,11 @@ export class DecktrackerFiltersComponent
 		);
 		this.showHiddenDecksLink$ = combineLatest([
 			this.nav.currentView$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.desktopDeckHiddenDeckCodes)),
 		]).pipe(
-			filter(([currentView, [hiddenDeckCodes]]) => !!currentView && !!hiddenDeckCodes),
+			filter(([currentView, hiddenDeckCodes]) => !!currentView && !!hiddenDeckCodes),
 			this.mapData(
-				([currentView, [hiddenDeckCodes]]) =>
+				([currentView, hiddenDeckCodes]) =>
 					currentView !== 'deck-details' &&
 					currentView !== 'constructed-deckbuilder' &&
 					hiddenDeckCodes.length > 0,

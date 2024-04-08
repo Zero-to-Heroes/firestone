@@ -3,21 +3,24 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 import { RunStep } from '../../../models/duels/run-step';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replay-info-ranked',
@@ -80,10 +83,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoRankedComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
@@ -112,24 +112,33 @@ export class ReplayInfoRankedComponent
 
 	private bgsPerfectGame: boolean;
 	private sub$$: Subscription;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe(
-			(replaysShowClassIcon) => {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.sub$$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon))
+			.subscribe((replaysShowClassIcon) => {
 				this.replaysShowClassIcon = replaysShowClassIcon;
 				this.updateInfo();
-			},
-		);
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')
@@ -139,7 +148,7 @@ export class ReplayInfoRankedComponent
 	}
 
 	showReplay() {
-		this.store.send(new ShowReplayEvent(this.reviewId));
+		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 
 	capitalize(input: string): string {
