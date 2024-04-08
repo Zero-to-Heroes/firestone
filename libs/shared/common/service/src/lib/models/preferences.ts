@@ -341,6 +341,9 @@ export class Preferences implements IPreferences {
 	readonly playerDragonsSummonedCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerDragonsSummonedCounterWidgetPosition: { left: number; top: number };
+	readonly opponentDragonsSummonedCounter: BooleanWithLimited = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentDragonsSummonedCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerChainedGuardianCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

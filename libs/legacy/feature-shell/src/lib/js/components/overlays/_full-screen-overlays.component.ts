@@ -152,6 +152,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
+			<opponent-dragons-summoned-widget-wrapper></opponent-dragons-summoned-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>

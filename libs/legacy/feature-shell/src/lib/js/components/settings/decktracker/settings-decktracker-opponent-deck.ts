@@ -417,6 +417,13 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.wheel-of-death-tooltip'),
 			showLimitedOption: true,
 		},
+		{
+			id: 'dragonsSummoned',
+			field: 'opponentDragonsSummonedCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
+			showLimitedOption: true,
+		},
 	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(
