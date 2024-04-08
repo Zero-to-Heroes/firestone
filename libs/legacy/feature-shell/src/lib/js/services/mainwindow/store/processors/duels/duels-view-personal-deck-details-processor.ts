@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
@@ -12,6 +13,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
 		private readonly duelsDecksProvider: DuelsDecksProviderService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -29,6 +31,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 			prefs.duelsPersonalDeckNames[deck.initialDeckList] ??
 			deck.deckName ??
 			this.i18n.translateString('decktracker.deck-name.unnamed-deck');
+		this.mainNav.text$$.next(deckName);
 		return [
 			null,
 			navigationState.update({
@@ -40,7 +43,6 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					expandedRunIds: expandedRunIds,
 					treasureSearchString: null,
 				} as NavigationDuels),
-				text: deckName,
 			} as NavigationState),
 		];
 	}

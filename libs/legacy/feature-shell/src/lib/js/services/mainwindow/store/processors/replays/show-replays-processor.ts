@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -5,7 +6,7 @@ import { ShowReplaysEvent } from '../../events/replays/show-replays-event';
 import { Processor } from '../processor';
 
 export class ShowReplaysProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
 
 	public async process(
 		event: ShowReplaysEvent,
@@ -19,13 +20,13 @@ export class ShowReplaysProcessor implements Processor {
 			replaysActiveDeckstringsFilter: [event.deckstring],
 			replaysActiveGameModeFilter: event.gameMode,
 		});
+		this.mainNav.text$$.next(null);
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'replays',
-				text: null,
-				image: null,
 			} as NavigationState),
 		];
 	}

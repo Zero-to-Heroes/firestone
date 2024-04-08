@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -8,7 +9,10 @@ import { FilterShownAchievementsEvent } from '../../events/achievements/filter-s
 import { Processor } from '../processor';
 
 export class FilterShownAchievementsProcessor implements Processor {
-	constructor(private readonly stateManager: AchievementsStateManagerService) {}
+	constructor(
+		private readonly stateManager: AchievementsStateManagerService,
+		private readonly nav: MainWindowNavigationService,
+	) {}
 
 	public async process(
 		event: FilterShownAchievementsEvent,
@@ -51,7 +55,7 @@ export class FilterShownAchievementsProcessor implements Processor {
 								: navigationState.navigationAchievements.viewBeforeSearch ??
 								  navigationState.navigationAchievements.currentView,
 						textBeforeSearch:
-							navigationState.navigationAchievements.textBeforeSearch ?? navigationState.text,
+							navigationState.navigationAchievements.textBeforeSearch ?? this.nav.text$$.getValue(),
 						displayedAchievementsList: displayedAchievementsList,
 				  } as NavigationAchievements)
 				: navigationState.navigationAchievements.update({
@@ -63,11 +67,11 @@ export class FilterShownAchievementsProcessor implements Processor {
 			searchString?.length && searchString.length > 2
 				? `Searching for "${searchString}" in ${categoryName}`
 				: navigationState.navigationAchievements.textBeforeSearch;
+		this.nav.text$$.next(text);
 		return [
 			null,
 			navigationState.update({
 				navigationAchievements: newState,
-				text: text,
 			} as NavigationState),
 		];
 	}

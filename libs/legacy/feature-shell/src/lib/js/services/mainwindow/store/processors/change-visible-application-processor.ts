@@ -1,5 +1,6 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
@@ -17,6 +18,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 	constructor(
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
+		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly nav: BattlegroundsNavigationService,
 	) {}
@@ -87,6 +89,8 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				: navigationState.navigationBattlegrounds;
 		// TODO: if this is the live tab, default to the decktracker
 		await this.prefs.setMainVisibleSection(event.module === 'live' ? 'decktracker' : event.module);
+		this.mainNav.text$$.next(this.getInitialText(event.module));
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
@@ -98,8 +102,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationDuels: duels,
 				navigationDecktracker: decktracker,
 				navigationArena: arena,
-				text: this.getInitialText(event.module),
-				image: null,
 			} as NavigationState),
 		];
 	}

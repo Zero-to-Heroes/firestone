@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -61,8 +62,10 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
-			filter(([currentView]) => !!currentView),
+			filter((currentView) => !!currentView),
 			this.mapData(
 				([currentView]) =>
 					currentView !== 'bgs-category-personal-stats' &&
@@ -73,12 +76,12 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 			),
 		);
 		this.showConservativeEstimateLink$ = this.nav.selectedCategoryId$$.pipe(
-			filter(([currentView]) => !!currentView),
-			this.mapData(([currentView]) => currentView === 'bgs-category-meta-heroes'),
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => currentView === 'bgs-category-meta-heroes'),
 		);
 		this.showLeaderboardPlayerSearch$ = this.nav.selectedCategoryId$$.pipe(
-			filter(([currentView]) => !!currentView),
-			this.mapData(([currentView]) => currentView === 'bgs-category-leaderboard'),
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => currentView === 'bgs-category-leaderboard'),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

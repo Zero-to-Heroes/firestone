@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { DuelsDeckStat } from '@legacy-import/src/lib/js/models/duels/duels-player-stats';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -14,6 +15,7 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		private readonly events: Events,
 		private readonly i18n: LocalizationService,
 		private readonly topDecks: DuelsTopDeckService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -30,6 +32,7 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		if (!currentState.duels.additionalDeckDetails.map((stat) => stat.runId).includes(deck?.runId)) {
 			this.events.broadcast(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS, deck?.runId, event.deckId);
 		}
+		this.mainNav.text$$.next(this.getDeckName(deck));
 		return [
 			null,
 			navigationState.update({
@@ -41,7 +44,6 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 					expandedRunIds: [deck?.runId] as readonly string[],
 					treasureSearchString: null,
 				} as NavigationDuels),
-				text: this.getDeckName(deck),
 			} as NavigationState),
 		];
 	}

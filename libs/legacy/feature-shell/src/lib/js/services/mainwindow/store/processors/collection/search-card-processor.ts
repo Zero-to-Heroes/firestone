@@ -1,4 +1,5 @@
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -16,6 +17,7 @@ export class SearchCardProcessor implements Processor {
 		private readonly cards: SetsService,
 		private readonly i18n: LocalizationService,
 		private readonly collectionNav: CollectionNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -46,15 +48,17 @@ export class SearchCardProcessor implements Processor {
 			cardList: searchResults,
 			searchResults: undefined,
 		} as NavigationCollection);
+		this.mainNav.text$$.next(
+			this.i18n.translateString('app.collection.card-search.results-title', {
+				value: event.searchString,
+			}),
+		);
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				navigationCollection: newCollection,
-				text: this.i18n.translateString('app.collection.card-search.results-title', {
-					value: event.searchString,
-				}),
-				image: null,
 			} as NavigationState),
 		];
 	}

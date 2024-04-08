@@ -1,6 +1,7 @@
 import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoard, BgsPlayer, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
@@ -20,6 +21,7 @@ export class ShowMatchStatsProcessor implements Processor {
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -85,18 +87,20 @@ export class ShowMatchStatsProcessor implements Processor {
 		const newReplays = navigationState.navigationReplays.update({
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
+		this.mainNav.text$$.next(
+			new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
+				month: 'short',
+				day: '2-digit',
+				year: 'numeric',
+			}),
+		);
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
-				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
-					month: 'short',
-					day: '2-digit',
-					year: 'numeric',
-				}),
-				image: null,
 			} as NavigationState),
 		];
 	}

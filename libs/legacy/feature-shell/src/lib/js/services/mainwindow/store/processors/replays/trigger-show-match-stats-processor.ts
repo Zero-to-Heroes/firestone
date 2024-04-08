@@ -1,4 +1,5 @@
 import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -18,6 +19,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		private readonly i18n: LocalizationService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -79,18 +81,20 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 			selectedStatsTabs: prefs.bgsSelectedTabs2,
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
+		this.mainNav.text$$.next(
+			new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
+				month: 'short',
+				day: '2-digit',
+				year: 'numeric',
+			}),
+		);
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
-				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
-					month: 'short',
-					day: '2-digit',
-					year: 'numeric',
-				}),
-				image: null,
 			} as NavigationState),
 		];
 	}

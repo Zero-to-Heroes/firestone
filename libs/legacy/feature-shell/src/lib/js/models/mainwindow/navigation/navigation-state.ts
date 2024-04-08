@@ -25,11 +25,7 @@ export class NavigationState {
 	readonly navigationStats: NavigationStats = new NavigationStats();
 	readonly navigationStreams: NavigationStreams = new NavigationStreams();
 
-	readonly backArrowEnabled = false;
-	readonly nextArrowEnabled = false;
 	readonly isNavigationState = false;
-	readonly text: string = 'Categories'; // Init for Achievements, which is the default
-	readonly image: string;
 
 	public update(base: Partial<NonFunctionProperties<NavigationState>>): NavigationState {
 		return Object.assign(new NavigationState(), this, base);

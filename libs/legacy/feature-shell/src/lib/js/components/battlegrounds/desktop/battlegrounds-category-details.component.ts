@@ -69,8 +69,8 @@ export class BattlegroundsCategoryDetailsComponent
 		await waitForReady(this.nav);
 
 		this.selectedCategoryId$ = this.nav.selectedCategoryId$$.pipe(
-			filter(([selectedCategoryId]) => !!selectedCategoryId),
-			this.mapData(([selectedCategoryId]) => selectedCategoryId),
+			filter((selectedCategoryId) => !!selectedCategoryId),
+			this.mapData((selectedCategoryId) => selectedCategoryId),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

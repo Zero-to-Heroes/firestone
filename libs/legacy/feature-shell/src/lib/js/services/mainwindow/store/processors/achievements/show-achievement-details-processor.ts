@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -7,7 +8,10 @@ import { ShowAchievementDetailsEvent } from '../../events/achievements/show-achi
 import { Processor } from '../processor';
 
 export class ShowAchievementDetailsProcessor implements Processor {
-	constructor(private readonly stateManager: AchievementsStateManagerService) {}
+	constructor(
+		private readonly stateManager: AchievementsStateManagerService,
+		private readonly nav: MainWindowNavigationService,
+	) {}
 
 	public async process(
 		event: ShowAchievementDetailsEvent,
@@ -36,14 +40,14 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			selectedAchievementId: achievement,
 		} as NavigationAchievements);
 		const text = hierarchy.categories.map((cat) => cat.name).join(' ');
+		this.nav.text$$.next(text);
+		this.nav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'achievements',
 				navigationAchievements: newAchievements,
-				text: text,
-				image: null,
 			} as NavigationState),
 		];
 	}

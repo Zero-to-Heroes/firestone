@@ -1,4 +1,5 @@
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
@@ -11,6 +12,7 @@ export class ShowCardBackDetailsProcessor implements Processor {
 	constructor(
 		private readonly collectionManager: CollectionManager,
 		private readonly collectionNav: CollectionNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -31,14 +33,14 @@ export class ShowCardBackDetailsProcessor implements Processor {
 		const newCollection = navigationState.navigationCollection.update({
 			searchResults: [] as readonly string[],
 		} as NavigationCollection);
+		this.mainNav.text$$.next(selectedCardBack.name);
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
-				text: selectedCardBack.name,
-				image: null,
 			} as NavigationState),
 		];
 	}

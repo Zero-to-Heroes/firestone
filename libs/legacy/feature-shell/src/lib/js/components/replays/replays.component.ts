@@ -1,5 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -57,14 +59,18 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 	isShowingDuels$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: MainWindowNavigationService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showGlobalHeader$ = this.store
-			.listen$(([main, nav, prefs]) => nav.text)
-			.pipe(this.mapData(([text]) => !!text));
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.showGlobalHeader$ = this.nav.text$$.pipe(this.mapData((text) => !!text));
 		this.currentView$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));
@@ -75,6 +81,10 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.replayInfo)
 			.pipe(this.mapData(([replayInfo]) => replayInfo?.isDuels()));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	showSidebar(currentView: CurrentViewType, isShowingDuels: boolean, bgsPlayerCardId: string): boolean {

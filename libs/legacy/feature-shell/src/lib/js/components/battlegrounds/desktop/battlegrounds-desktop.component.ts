@@ -14,7 +14,6 @@ import {
 } from '@firestone/battlegrounds/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
@@ -150,11 +149,7 @@ export class BattlegroundsDesktopComponent
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
 			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.categoryId$ = this.nav.selectedCategoryId$$.pipe(
-			this.mapData(([selectedCategoryId]) => selectedCategoryId),
-			filter((category) => !!category),
-			takeUntil(this.destroyed$),
-		);
+		this.categoryId$ = this.nav.selectedCategoryId$$.pipe(this.mapData((selectedCategoryId) => selectedCategoryId));
 		this.currentView$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));

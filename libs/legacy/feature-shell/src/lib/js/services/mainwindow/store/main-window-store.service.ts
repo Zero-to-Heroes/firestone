@@ -6,6 +6,7 @@ import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
 import { DuelsPersonalDecksService } from '@firestone/duels/general';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
@@ -402,6 +403,7 @@ export class MainWindowStoreService {
 		private readonly mercenariesNavigation: MercenariesNavigationService,
 		private readonly arenaNavigation: ArenaNavigationService,
 		private readonly battlegroundsNavigation: BattlegroundsNavigationService,
+		private readonly mainNavigation: MainWindowNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -508,6 +510,7 @@ export class MainWindowStoreService {
 				navigationState,
 				dataState,
 				this.setsManager,
+				this.mainNavigation,
 				this.collectionNavigation,
 			) != null;
 
@@ -523,10 +526,9 @@ export class MainWindowStoreService {
 		// );
 		const nextArrowEnabled =
 			this.navigationHistory.currentIndexInHistory < this.navigationHistory.stateHistory.length - 1;
-		return navigationState.update({
-			backArrowEnabled: backArrowEnabled,
-			nextArrowEnabled: nextArrowEnabled,
-		} as NavigationState);
+		this.mainNavigation.backArrowEnabled$$.next(backArrowEnabled);
+		this.mainNavigation.nextArrowEnabled$$.next(nextArrowEnabled);
+		return navigationState;
 	}
 
 	private buildProcessors(): Map<string, Processor> {
@@ -537,18 +539,23 @@ export class MainWindowStoreService {
 					this.events,
 					this.prefs,
 					this.i18n,
+					this.mainNavigation,
 					this.collectionNavigation,
 					this.battlegroundsNavigation,
 				),
 			],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
-			[NavigationBackEvent.eventName(), new NavigationBackProcessor(this.setsManager, this.collectionNavigation)],
+			[
+				NavigationBackEvent.eventName(),
+				new NavigationBackProcessor(this.setsManager, this.mainNavigation, this.collectionNavigation),
+			],
 			[NavigationNextEvent.eventName(), new NavigationNextProcessor()],
 			[
 				ChangeVisibleApplicationEvent.eventName(),
 				new ChangeVisibleApplicationProcessor(
 					this.prefs,
 					this.i18n,
+					this.mainNavigation,
 					this.collectionNavigation,
 					this.battlegroundsNavigation,
 				),
@@ -572,19 +579,34 @@ export class MainWindowStoreService {
 			],
 			[
 				SearchCardsEvent.eventName(),
-				new SearchCardProcessor(this.collectionManager, this.sets, this.i18n, this.collectionNavigation),
+				new SearchCardProcessor(
+					this.collectionManager,
+					this.sets,
+					this.i18n,
+					this.collectionNavigation,
+					this.mainNavigation,
+				),
 			],
 			[
 				SelectCollectionSetEvent.eventName(),
-				new SelectCollectionSetProcessor(this.setsManager, this.collectionNavigation),
+				new SelectCollectionSetProcessor(this.setsManager, this.collectionNavigation, this.mainNavigation),
 			],
 			[
 				ShowCardDetailsEvent.eventName(),
-				new ShowCardDetailsProcessor(this.cards, this.setsManager, this.collectionNavigation),
+				new ShowCardDetailsProcessor(
+					this.cards,
+					this.setsManager,
+					this.collectionNavigation,
+					this.mainNavigation,
+				),
 			],
 			[
 				ShowCardBackDetailsEvent.eventName(),
-				new ShowCardBackDetailsProcessor(this.collectionManager, this.collectionNavigation),
+				new ShowCardBackDetailsProcessor(
+					this.collectionManager,
+					this.collectionNavigation,
+					this.mainNavigation,
+				),
 			],
 			[
 				UpdateCardSearchResultsEvent.eventName(),
@@ -603,20 +625,20 @@ export class MainWindowStoreService {
 			],
 			[
 				SelectAchievementCategoryEvent.eventName(),
-				new SelectAchievementCategoryProcessor(this.achievementsStateManager),
+				new SelectAchievementCategoryProcessor(this.achievementsStateManager, this.mainNavigation),
 			],
 			[
 				SelectAchievementCategoryEvent.eventName(),
-				new SelectAchievementCategoryProcessor(this.achievementsStateManager),
+				new SelectAchievementCategoryProcessor(this.achievementsStateManager, this.mainNavigation),
 			],
 			[
 				ShowAchievementDetailsEvent.eventName(),
-				new ShowAchievementDetailsProcessor(this.achievementsStateManager),
+				new ShowAchievementDetailsProcessor(this.achievementsStateManager, this.mainNavigation),
 			],
 			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistory)],
 			[
 				FilterShownAchievementsEvent.eventName(),
-				new FilterShownAchievementsProcessor(this.achievementsStateManager),
+				new FilterShownAchievementsProcessor(this.achievementsStateManager, this.mainNavigation),
 			],
 			[
 				AchievementsRemovePinnedAchievementsEvent.eventName(),
@@ -651,9 +673,15 @@ export class MainWindowStoreService {
 			// Replays
 			[
 				ShowReplayEvent.eventName(),
-				new ShowReplayProcessor(this.bgsRunStatsService, this.i18n, this.gameStats, this.bgsPerfectGames),
+				new ShowReplayProcessor(
+					this.bgsRunStatsService,
+					this.i18n,
+					this.gameStats,
+					this.bgsPerfectGames,
+					this.mainNavigation,
+				),
 			],
-			[ShowReplaysEvent.eventName(), new ShowReplaysProcessor(this.prefs)],
+			[ShowReplaysEvent.eventName(), new ShowReplaysProcessor(this.prefs, this.mainNavigation)],
 			[
 				TriggerShowMatchStatsEvent.eventName(),
 				new TriggerShowMatchStatsProcessor(
@@ -662,17 +690,28 @@ export class MainWindowStoreService {
 					this.i18n,
 					this.gameStats,
 					this.bgsPerfectGames,
+					this.mainNavigation,
 				),
 			],
 			[
 				ShowMatchStatsEvent.eventName(),
-				new ShowMatchStatsProcessor(this.prefs, this.i18n, this.cards, this.gameStats, this.bgsPerfectGames),
+				new ShowMatchStatsProcessor(
+					this.prefs,
+					this.i18n,
+					this.cards,
+					this.gameStats,
+					this.bgsPerfectGames,
+					this.mainNavigation,
+				),
 			],
 			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
 			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
 			// Decktracker
 			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor()],
-			[SelectDeckDetailsEvent.eventName(), new SelectDeckDetailsProcessor(this.decksProvider)],
+			[
+				SelectDeckDetailsEvent.eventName(),
+				new SelectDeckDetailsProcessor(this.decksProvider, this.mainNavigation),
+			],
 			[ChangeDeckFormatFilterEvent.eventName(), new ChangeDeckFormatFilterProcessor(this.prefs)],
 			[ChangeDeckRankFilterEvent.eventName(), new ChangeDeckRankFilterProcessor(this.prefs)],
 			[ChangeDeckRankGroupEvent.eventName(), new ChangeDeckRankGroupProcessor(this.prefs)],
@@ -724,7 +763,7 @@ export class MainWindowStoreService {
 			// Battlegrounds
 			[
 				SelectBattlegroundsCategoryEvent.eventName(),
-				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation),
+				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation, this.mainNavigation),
 			],
 			[BgsTimeFilterSelectedEvent.eventName(), new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater)],
 			[
@@ -745,6 +784,7 @@ export class MainWindowStoreService {
 					this.cards,
 					this.i18n,
 					this.battlegroundsNavigation,
+					this.mainNavigation,
 				),
 			],
 			[
@@ -767,7 +807,11 @@ export class MainWindowStoreService {
 			],
 			[
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),
-				new BattlegroundsMainWindowSelectBattleProcessor(this.i18n, this.battlegroundsNavigation),
+				new BattlegroundsMainWindowSelectBattleProcessor(
+					this.i18n,
+					this.battlegroundsNavigation,
+					this.mainNavigation,
+				),
 			],
 			[
 				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),
@@ -775,7 +819,13 @@ export class MainWindowStoreService {
 			],
 			[
 				BgsShowStrategiesEvent.eventName(),
-				new BgsShowStrategiesProcessor(this.events, this.cards, this.i18n, this.battlegroundsNavigation),
+				new BgsShowStrategiesProcessor(
+					this.events,
+					this.cards,
+					this.i18n,
+					this.battlegroundsNavigation,
+					this.mainNavigation,
+				),
 			],
 
 			// Mercenaries
@@ -856,11 +906,16 @@ export class MainWindowStoreService {
 			],
 			[
 				DuelsViewDeckDetailsEvent.eventName(),
-				new DuelsViewDeckDetailsProcessor(this.events, this.i18n, this.duelsTopDecks),
+				new DuelsViewDeckDetailsProcessor(this.events, this.i18n, this.duelsTopDecks, this.mainNavigation),
 			],
 			[
 				DuelsViewPersonalDeckDetailsEvent.eventName(),
-				new DuelsViewPersonalDeckDetailsProcessor(this.prefs, this.i18n, this.duelsDeckProvider),
+				new DuelsViewPersonalDeckDetailsProcessor(
+					this.prefs,
+					this.i18n,
+					this.duelsDeckProvider,
+					this.mainNavigation,
+				),
 			],
 			[DuelsTopDeckRunDetailsLoadedEvent.eventName(), new DuelsTopDeckRunDetailsLoadedProcessor()],
 			[

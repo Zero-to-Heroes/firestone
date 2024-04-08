@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
@@ -15,6 +16,7 @@ export class ShowReplayProcessor implements Processor {
 		private readonly i18n: LocalizationService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {}
 
 	public async process(
@@ -36,6 +38,13 @@ export class ShowReplayProcessor implements Processor {
 
 		// Figure out if we have already loaded the stats, or if we need a refresh
 		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {
+			this.mainNav.text$$.next(
+				new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
+					month: 'short',
+					day: '2-digit',
+					year: 'numeric',
+				}),
+			);
 			return [
 				null,
 				navigationState.update({
@@ -43,11 +52,6 @@ export class ShowReplayProcessor implements Processor {
 						currentView: 'match-details',
 						selectedTab: 'replay',
 					} as NavigationReplays),
-					text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
-						month: 'short',
-						day: '2-digit',
-						year: 'numeric',
-					}),
 				} as NavigationState),
 			];
 		}
@@ -65,18 +69,20 @@ export class ShowReplayProcessor implements Processor {
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
 
+		this.mainNav.text$$.next(
+			new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
+				month: 'short',
+				day: '2-digit',
+				year: 'numeric',
+			}),
+		);
+		this.mainNav.image$$.next(null);
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
-				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
-					month: 'short',
-					day: '2-digit',
-					year: 'numeric',
-				}),
-				image: null,
 			} as NavigationState),
 		];
 	}

@@ -1,4 +1,5 @@
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
@@ -12,6 +13,7 @@ import { Processor } from '../processor';
 export class NavigationBackProcessor implements Processor {
 	constructor(
 		private readonly setsManager: SetsManagerService,
+		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
 	) {}
 
@@ -28,6 +30,7 @@ export class NavigationBackProcessor implements Processor {
 						navigationState,
 						currentState,
 						this.setsManager,
+						this.mainNav,
 						this.collectionNav,
 				  )) ?? navigationState;
 		if (!newState?.isVisible) {
@@ -44,19 +47,25 @@ export class NavigationBackProcessor implements Processor {
 		navigationState: NavigationState,
 		dataState: MainWindowState,
 		setsManager: SetsManagerService,
+		mainNav: MainWindowNavigationService,
 		collectionNav: CollectionNavigationService,
 	): NavigationState {
 		switch (navigationState.currentApp) {
 			case 'achievements':
 				return NavigationBackProcessor.buildParentAchievementsState(navigationState, dataState);
 			case 'collection':
-				return NavigationBackProcessor.buildParentCollectionState(navigationState, setsManager, collectionNav);
+				return NavigationBackProcessor.buildParentCollectionState(
+					navigationState,
+					setsManager,
+					mainNav,
+					collectionNav,
+				);
 			case 'decktracker':
 				return NavigationBackProcessor.buildParentDecktrackerState(navigationState, dataState);
 			case 'replays':
-				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState);
+				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState, mainNav);
 			case 'battlegrounds':
-				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState);
+				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState, mainNav);
 			case 'duels':
 				return NavigationBackProcessor.buildParentDuelsState(navigationState, dataState);
 			case 'mercenaries':
@@ -131,6 +140,7 @@ export class NavigationBackProcessor implements Processor {
 	private static buildParentBattlegroundsState(
 		navigationState: NavigationState,
 		dataState: MainWindowState,
+		mainNav: MainWindowNavigationService,
 	): NavigationState {
 		if (!navigationState || !dataState) {
 			// console.warn('Missing state for processing back navigation');
@@ -142,14 +152,14 @@ export class NavigationBackProcessor implements Processor {
 			case 'category':
 				return null;
 			case 'list':
+				// This is starting to be weird. It would probably be best to have an FSM,
+				// and derive the name of the current navigation from the state we are in
+				mainNav.text$$.next(null);
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 						menuDisplayType: 'menu',
 						currentView: 'list',
 					} as NavigationBattlegrounds),
-					// This is starting to be weird. It would probably be best to have an FSM,
-					// and derive the name of the current navigation from the state we are in
-					text: null,
 				} as NavigationState);
 			default:
 				return null;
@@ -159,6 +169,7 @@ export class NavigationBackProcessor implements Processor {
 	private static buildParentCollectionState(
 		navigationState: NavigationState,
 		setsManager: SetsManagerService,
+		mainNav: MainWindowNavigationService,
 		nav: CollectionNavigationService,
 	): NavigationState {
 		switch (nav.currentView$$.getValue()) {
@@ -166,9 +177,8 @@ export class NavigationBackProcessor implements Processor {
 				return null;
 			case 'cards':
 				nav.currentView$$.next('sets');
-				return navigationState.update({
-					text: null,
-				} as NavigationState);
+				mainNav.text$$.next(null);
+				return navigationState;
 			case 'card-details':
 				// We should already have initialized the sets by then
 				const selectedSet = setsManager.sets$$
@@ -176,13 +186,11 @@ export class NavigationBackProcessor implements Processor {
 					?.find((set) => set.getCard(nav.selectedCardId$$.getValue()) != null);
 				nav.currentView$$.next('cards');
 				nav.selectedSetId$$.next(selectedSet?.id);
+				mainNav.text$$.next(selectedSet?.name);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
 						cardList: selectedSet?.allCards,
 					} as NavigationCollection),
-					// This is starting to be weird. It would probably be best to have an FSM,
-					// and derive the name of the current navigation from the state we are in
-					text: selectedSet?.name,
 				} as NavigationState);
 			default:
 				return null;
@@ -199,16 +207,17 @@ export class NavigationBackProcessor implements Processor {
 	private static buildParentReplaysState(
 		navigationState: NavigationState,
 		dataState: MainWindowState,
+		mainNav: MainWindowNavigationService,
 	): NavigationState {
 		switch (navigationState.navigationReplays?.currentView) {
 			case 'list':
 				return null;
 			case 'match-details':
+				mainNav.text$$.next(null);
 				return navigationState.update({
 					navigationReplays: navigationState.navigationReplays.update({
 						currentView: 'list',
 					} as NavigationReplays),
-					text: null,
 				} as NavigationState);
 			default:
 				return null;

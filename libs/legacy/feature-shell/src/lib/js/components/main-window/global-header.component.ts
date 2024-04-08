@@ -5,8 +5,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -58,29 +60,28 @@ export class GlobalHeaderComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly nav: MainWindowNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.text$ = this.store
-			.listen$(([main, nav]) => nav.text)
-			.pipe(
-				filter(([text]) => !!text),
-				this.mapData(([text]) => this.i18n.translateString(text)),
-			);
-		this.image$ = this.store
-			.listen$(([main, nav]) => nav.image)
-			.pipe(
-				filter(([image]) => !!image),
-				this.mapData(([image]) => image),
-			);
-		this.backArrow$ = this.store
-			.listen$(([main, nav]) => nav.backArrowEnabled)
-			.pipe(this.mapData(([backArrowEnabled]) => backArrowEnabled));
-		this.nextArrow$ = this.store
-			.listen$(([main, nav]) => nav.nextArrowEnabled)
-			.pipe(this.mapData(([nextArrowEnabled]) => nextArrowEnabled));
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.text$ = this.nav.text$$.pipe(
+			filter((text) => !!text),
+			this.mapData((text) => this.i18n.translateString(text)),
+		);
+		this.image$ = this.nav.image$$.pipe(
+			filter((image) => !!image),
+			this.mapData((image) => image),
+		);
+		this.backArrow$ = this.nav.backArrowEnabled$$.pipe(this.mapData((backArrowEnabled) => backArrowEnabled));
+		this.nextArrow$ = this.nav.nextArrowEnabled$$.pipe(this.mapData((nextArrowEnabled) => nextArrowEnabled));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {
