@@ -899,6 +899,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.GorlocRavager:
 				return and(side(inputSide), inDeck, murloc);
+			case CardIds.GraniteForgeborn:
+				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.GrandMagisterRommath:
 				return and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck);
 			case CardIds.GraveDefiler:
@@ -1783,7 +1785,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.TyrsTears_TyrsTearsToken:
 				return and(side(inputSide), or(inDeck, inHand, inGraveyard), currentClass, minion);
 			case CardIds.Tuskpiercer:
-				return and(side(inputSide), inDeck, deathrattle);
+				return and(side(inputSide), inDeck, deathrattle, minion);
 			case CardIds.TwilightDeceptor:
 				return and(side(inputSide), inDeck, spell, shadow);
 			case CardIds.TwilightsCall:
