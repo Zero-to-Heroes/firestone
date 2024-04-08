@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { DraftCardCombinedStat, DraftStatsByContext } from '@firestone-hs/arena-draft-pick';
 import { ArenaCardStat, ArenaCardStats } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
 
 const ARENA_CARD_MATCH_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/cards/%timePeriod%/%context%.gz.json`;
@@ -46,6 +46,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 						timeFilter: prefs.arenaActiveTimeFilter,
 						classFilter: prefs.arenaActiveClassFilter,
 					})),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe(async ({ timeFilter, classFilter }) => {
 					const timePeriod =
