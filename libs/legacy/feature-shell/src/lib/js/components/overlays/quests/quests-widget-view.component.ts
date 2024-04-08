@@ -5,6 +5,7 @@ import {
 	Component,
 	ElementRef,
 	Input,
+	ViewRef,
 } from '@angular/core';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -114,7 +115,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 					.filter((q) => !!q);
 			}),
 		);
-		this.showQuests$ = combineLatest(this.prefs.preferences$$, this.quests$).pipe(
+		this.showQuests$ = combineLatest([this.prefs.preferences$$, this.quests$]).pipe(
 			this.mapData(([prefs, quests]) => {
 				const showWhenEmpty = prefs.showQuestsWidgetWhenEmpty;
 				const showQuests = this.showPrefsExtractor && this.showPrefsExtractor(prefs);
@@ -124,6 +125,10 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 		this.showQuestsDetails$ = this.showWidget$$.asObservable().pipe(this.mapData((info) => info));
 		this.showRight$ = this.showRight$$.asObservable().pipe(this.mapData((info) => info));
 		this.showBottom$ = this.showBottom$$.asObservable().pipe(this.mapData((info) => info));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onMouseEnter() {
