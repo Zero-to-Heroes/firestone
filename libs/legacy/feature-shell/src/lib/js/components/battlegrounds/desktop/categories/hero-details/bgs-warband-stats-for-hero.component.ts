@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import {
+	BattlegroundsNavigationService,
 	BgsPlayerHeroStatsService,
 	BgsPostMatchStatsForReview,
 	NumericTurnInfo,
@@ -45,22 +46,23 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly heroStats: BgsPlayerHeroStatsService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.heroStats);
+		await waitForReady(this.heroStats, this.nav);
 
 		this.values$ = combineLatest([
 			this.heroStats.tiersWithPlayerData$$,
 			this.store.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
 				([main, nav]) => main.battlegrounds,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
+			this.nav.selectedCategoryId$$,
 		]).pipe(
-			map(([heroStats, [postMatch, battlegrounds, selectedCategoryId]]) => ({
+			map(([heroStats, [postMatch, battlegrounds], selectedCategoryId]) => ({
 				heroStats: heroStats,
 				postMatch: postMatch,
 				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),

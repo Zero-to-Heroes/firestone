@@ -5,18 +5,6 @@ import { BgsHeroStatsFilterId } from '../battlegrounds/categories/bgs-hero-stats
 export class NavigationBattlegrounds {
 	readonly currentView: CurrentView = 'category';
 	readonly menuDisplayType: string = 'menu';
-	readonly selectedCategoryId:
-		| 'bgs-category-personal-heroes'
-		| 'bgs-category-meta-heroes'
-		| 'bgs-category-meta-quests'
-		| 'bgs-category-personal-quests'
-		| 'bgs-category-personal-hero-details'
-		| 'bgs-category-personal-rating'
-		| 'bgs-category-personal-stats'
-		| 'bgs-category-perfect-games'
-		| 'bgs-category-leaderboard'
-		| 'bgs-category-simulator';
-	// | 'bgs-category-personal-ai';
 	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'winrate-stats';
 
 	public update(base: Partial<NonFunctionProperties<NavigationBattlegrounds>>): NavigationBattlegrounds {

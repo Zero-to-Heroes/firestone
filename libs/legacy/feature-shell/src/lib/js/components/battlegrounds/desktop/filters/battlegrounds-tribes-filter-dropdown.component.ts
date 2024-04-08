@@ -5,10 +5,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
@@ -48,32 +50,37 @@ export class BattlegroundsTribesFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveTribesFilter);
-		this.visible$ = this.store
-			.listen$(
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-				([main, nav]) => nav.navigationBattlegrounds.currentView,
-			)
-			.pipe(
-				filter(([categoryId, currentView]) => !!categoryId && !!currentView),
-				this.mapData(
-					([categoryId, currentView]) =>
-						!['categories', 'category'].includes(currentView) &&
-						![
-							'bgs-category-personal-stats',
-							'bgs-category-simulator',
-							'bgs-category-personal-rating',
-							'bgs-category-meta-quests',
-							'bgs-category-leaderboard',
-							// 'bgs-category-perfect-games',
-						].includes(categoryId),
-				),
-			);
+		this.visible$ = combineLatest([
+			this.nav.selectedCategoryId$$,
+			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
+		]).pipe(
+			filter(([categoryId, [currentView]]) => !!categoryId && !!currentView),
+			this.mapData(
+				([categoryId, [currentView]]) =>
+					!['categories', 'category'].includes(currentView) &&
+					![
+						'bgs-category-personal-stats',
+						'bgs-category-simulator',
+						'bgs-category-personal-rating',
+						'bgs-category-meta-quests',
+						'bgs-category-leaderboard',
+						// 'bgs-category-perfect-games',
+					].includes(categoryId),
+			),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

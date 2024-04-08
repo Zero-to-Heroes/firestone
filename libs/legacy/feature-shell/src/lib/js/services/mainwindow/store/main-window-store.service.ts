@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
@@ -400,6 +401,7 @@ export class MainWindowStoreService {
 		private readonly collectionNavigation: CollectionNavigationService,
 		private readonly mercenariesNavigation: MercenariesNavigationService,
 		private readonly arenaNavigation: ArenaNavigationService,
+		private readonly battlegroundsNavigation: BattlegroundsNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -531,14 +533,25 @@ export class MainWindowStoreService {
 		const processors: readonly [string, Processor][] = [
 			[
 				StoreInitEvent.eventName(),
-				new StoreInitProcessor(this.events, this.prefs, this.i18n, this.collectionNavigation),
+				new StoreInitProcessor(
+					this.events,
+					this.prefs,
+					this.i18n,
+					this.collectionNavigation,
+					this.battlegroundsNavigation,
+				),
 			],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
 			[NavigationBackEvent.eventName(), new NavigationBackProcessor(this.setsManager, this.collectionNavigation)],
 			[NavigationNextEvent.eventName(), new NavigationNextProcessor()],
 			[
 				ChangeVisibleApplicationEvent.eventName(),
-				new ChangeVisibleApplicationProcessor(this.prefs, this.i18n, this.collectionNavigation),
+				new ChangeVisibleApplicationProcessor(
+					this.prefs,
+					this.i18n,
+					this.collectionNavigation,
+					this.battlegroundsNavigation,
+				),
 			],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor()],
@@ -709,7 +722,10 @@ export class MainWindowStoreService {
 				new ConstructedMetaArchetypeShowDecksProcessor(this.prefs, this.constructedNavigation),
 			],
 			// Battlegrounds
-			[SelectBattlegroundsCategoryEvent.eventName(), new SelectBattlegroundsCategoryProcessor()],
+			[
+				SelectBattlegroundsCategoryEvent.eventName(),
+				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation),
+			],
 			[BgsTimeFilterSelectedEvent.eventName(), new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater)],
 			[
 				BgsTribesFilterSelectedEvent.eventName(),
@@ -724,7 +740,12 @@ export class MainWindowStoreService {
 			[BgsPostMatchStatsComputedEvent.eventName(), new BgsPostMatchStatsComputedProcessor(this.gameStats)],
 			[
 				BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
-				new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.cards, this.i18n),
+				new BgsPersonalStatsSelectHeroDetailsProcessor(
+					this.events,
+					this.cards,
+					this.i18n,
+					this.battlegroundsNavigation,
+				),
 			],
 			[
 				BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
@@ -746,13 +767,16 @@ export class MainWindowStoreService {
 			],
 			[
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),
-				new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
+				new BattlegroundsMainWindowSelectBattleProcessor(this.i18n, this.battlegroundsNavigation),
 			],
 			[
 				BattlegroundsMetaHeroStrategiesLoadedEvent.eventName(),
 				new BattlegroundsMetaHeroStrategiesLoadedProcessor(),
 			],
-			[BgsShowStrategiesEvent.eventName(), new BgsShowStrategiesProcessor(this.events, this.cards, this.i18n)],
+			[
+				BgsShowStrategiesEvent.eventName(),
+				new BgsShowStrategiesProcessor(this.events, this.cards, this.i18n, this.battlegroundsNavigation),
+			],
 
 			// Mercenaries
 			[MercenariesModeFilterSelectedEvent.eventName(), new MercenariesModeFilterSelectedProcessor(this.prefs)],

@@ -1,3 +1,4 @@
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -5,7 +6,7 @@ import { BattlegroundsMainWindowSelectBattleEvent } from '../../events/battlegro
 import { Processor } from '../processor';
 
 export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
-	constructor(private readonly i18n: LocalizationService) {}
+	constructor(private readonly i18n: LocalizationService, private readonly nav: BattlegroundsNavigationService) {}
 
 	public async process(
 		event: BattlegroundsMainWindowSelectBattleEvent,
@@ -17,6 +18,7 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 			faceOff: event.faceOff,
 		});
 
+		this.nav.selectedCategoryId$$.next('bgs-category-simulator');
 		return [
 			currentState.update({
 				battlegrounds: currentState.battlegrounds.update({
@@ -29,7 +31,6 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 				navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 					currentView: 'list',
 					menuDisplayType: 'breadcrumbs',
-					selectedCategoryId: 'bgs-category-simulator',
 				}),
 			}),
 		];

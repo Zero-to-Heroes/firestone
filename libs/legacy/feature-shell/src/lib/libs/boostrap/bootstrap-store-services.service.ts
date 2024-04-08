@@ -7,6 +7,7 @@ import {
 	ArenaNavigationService,
 } from '@firestone/arena/common';
 import {
+	BattlegroundsNavigationService,
 	BattlegroundsOfficialLeaderboardService,
 	BattlegroundsQuestsService,
 	BgsInGameQuestsGuardianService,
@@ -100,6 +101,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BgsPlayerHeroStatsService: BgsPlayerHeroStatsService,
 		private readonly init_BgsMetaHeroStatsService: BgsMetaHeroStatsService,
 		private readonly init_BattlegroundsOfficialLeaderboardService: BattlegroundsOfficialLeaderboardService,
+		private readonly init_BattlegroundsNavigationService: BattlegroundsNavigationService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
 		private readonly init_ArenaCardStatsService: ArenaCardStatsService,
 		private readonly init_ArenaDraftManagerService: ArenaDraftManagerService,

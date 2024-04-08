@@ -1,10 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@legacy-import/src/lib/js/services/stats/game/game-stats-provider.service';
 import { Observable, combineLatest } from 'rxjs';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-replays-recap',
@@ -32,23 +33,23 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly gameStats: GameStatsProviderService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.replays$ = combineLatest([
-			this.store.gameStats$(),
-			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId),
-		]).pipe(
-			this.mapData(([replays, [selectedCategoryId]]) => {
+	async ngAfterContentInit() {
+		await waitForReady(this.gameStats, this.nav);
+
+		this.replays$ = combineLatest([this.gameStats.gameStats$$, this.nav.selectedCategoryId$$]).pipe(
+			this.mapData(([replays, selectedCategoryId]) => {
 				const heroId = selectedCategoryId?.split('bgs-category-personal-hero-details-')?.[1];
 				return replays
 					.filter((replay) => isBattlegrounds(replay.gameMode))
@@ -62,6 +63,10 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionStor
 					.slice(0, 10);
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByFn(index, item: GameStat) {

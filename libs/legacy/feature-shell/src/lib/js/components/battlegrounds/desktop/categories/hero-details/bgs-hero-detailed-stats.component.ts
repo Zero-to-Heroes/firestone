@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -130,21 +130,20 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly heroStats: BgsPlayerHeroStatsService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.heroStats);
+		await waitForReady(this.heroStats, this.nav);
 
 		this.bgHeroStats$ = combineLatest([
 			this.heroStats.tiersWithPlayerData$$,
-			this.store.listen$(
-				([main, nav]) => main.battlegrounds,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			),
+			this.store.listen$(([main, nav]) => main.battlegrounds),
+			this.nav.selectedCategoryId$$,
 		]).pipe(
-			map(([heroStats, [battlegrounds, selectedCategoryId]]) => ({
+			map(([heroStats, [battlegrounds], selectedCategoryId]) => ({
 				heroStats: heroStats,
 				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
 			})),

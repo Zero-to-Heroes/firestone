@@ -1,11 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BG_USE_ANOMALIES } from '@firestone/battlegrounds/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BG_USE_ANOMALIES, BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOptionWithImage } from '@firestone/shared/common/view';
 import { sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -53,11 +53,14 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.options = [
 			{
 				value: null,
@@ -74,26 +77,28 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 				.sort(sortByProperties((o) => [o.label])),
 		];
 		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveAnomaliesFilter[0]);
-		this.visible$ = this.store
-			.listen$(
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-				([main, nav]) => nav.navigationBattlegrounds.currentView,
-			)
-			.pipe(
-				filter(([categoryId, currentView]) => !!categoryId && !!currentView),
-				this.mapData(
-					([categoryId, currentView]) =>
-						BG_USE_ANOMALIES &&
-						!['categories', 'category'].includes(currentView) &&
-						![
-							'bgs-category-personal-stats',
-							'bgs-category-simulator',
-							'bgs-category-personal-rating',
-							'bgs-category-meta-quests',
-							// 'bgs-category-perfect-games',
-						].includes(categoryId),
-				),
-			);
+		this.visible$ = combineLatest([
+			this.nav.selectedCategoryId$$,
+			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
+		]).pipe(
+			filter(([categoryId, [currentView]]) => !!categoryId && !!currentView),
+			this.mapData(
+				([categoryId, [currentView]]) =>
+					BG_USE_ANOMALIES &&
+					!['categories', 'category'].includes(currentView) &&
+					![
+						'bgs-category-personal-stats',
+						'bgs-category-simulator',
+						'bgs-category-personal-rating',
+						'bgs-category-meta-quests',
+						// 'bgs-category-perfect-games',
+					].includes(categoryId),
+			),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(value: IOption) {

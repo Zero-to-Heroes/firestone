@@ -1,4 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -55,16 +57,24 @@ export class BattlegroundsCategoryDetailsComponent
 {
 	selectedCategoryId$: Observable<string>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BattlegroundsNavigationService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.selectedCategoryId$ = this.store
-			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
-			.pipe(
-				filter(([selectedCategoryId]) => !!selectedCategoryId),
-				this.mapData(([selectedCategoryId]) => selectedCategoryId),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.selectedCategoryId$ = this.nav.selectedCategoryId$$.pipe(
+			filter(([selectedCategoryId]) => !!selectedCategoryId),
+			this.mapData(([selectedCategoryId]) => selectedCategoryId),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

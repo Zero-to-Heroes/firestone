@@ -5,10 +5,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
@@ -49,6 +51,7 @@ export class BattlegroundsHeroFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 		this.options = [
@@ -70,20 +73,24 @@ export class BattlegroundsHeroFilterDropdownComponent
 		];
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				this.mapData(([filter, selectedCategoryId]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: selectedCategoryId === 'bgs-category-perfect-games',
-				})),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav, prefs]) => prefs.bgsActiveHeroFilter),
+			this.nav.selectedCategoryId$$,
+		]).pipe(
+			filter(([[filter], selectedCategoryId]) => !!filter && !!selectedCategoryId),
+			this.mapData(([[filter], selectedCategoryId]) => ({
+				filter: filter,
+				placeholder: this.options.find((option) => option.value === filter)?.label,
+				visible: selectedCategoryId === 'bgs-category-perfect-games',
+			})),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

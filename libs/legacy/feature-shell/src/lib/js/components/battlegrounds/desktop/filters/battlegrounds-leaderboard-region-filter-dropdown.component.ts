@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -36,21 +36,21 @@ export class BattlegroundsLeaderboardRegionFilterDropdownComponent
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.prefs.isReady();
+		await waitForReady(this.prefs, this.nav);
 
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId),
+			this.nav.selectedCategoryId$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsLeaderboardRegionFilter)),
 		]).pipe(
-			filter(([[selectedCategoryId], filter]) => !!selectedCategoryId),
-			this.mapData(([[selectedCategoryId], filter]) => {
+			filter(([selectedCategoryId, filter]) => !!selectedCategoryId),
+			this.mapData(([selectedCategoryId, filter]) => {
 				const allRegions = ['EU', 'US', 'AP'];
 				const options: FilterOption[] = allRegions.map(
 					(option) =>

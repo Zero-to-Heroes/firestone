@@ -1,3 +1,4 @@
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -12,6 +13,7 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {}
 
 	public async process(
@@ -31,10 +33,10 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 			});
 		}
 
+		this.nav.selectedCategoryId$$.next('bgs-category-personal-hero-details-' + event.heroCardId);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedCategoryId: 'bgs-category-personal-hero-details-' + event.heroCardId,
 		} as NavigationBattlegrounds);
 		return [
 			newState,

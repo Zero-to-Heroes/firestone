@@ -1,4 +1,5 @@
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@legacy-import/src/lib/js/models/mainwindow/main-window-state';
 import { NavigationState } from '@legacy-import/src/lib/js/models/mainwindow/navigation/navigation-state';
@@ -14,6 +15,7 @@ export class BgsShowStrategiesProcessor implements Processor {
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {}
 
 	public async process(
@@ -29,7 +31,7 @@ export class BgsShowStrategiesProcessor implements Processor {
 				selectedPersonalHeroStatsTab: 'strategies',
 			}),
 		} as NavigationState);
-		return new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.allCards, this.i18n).process(
+		return new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.allCards, this.i18n, this.nav).process(
 			new BgsPersonalStatsSelectHeroDetailsEvent(normalizeHeroCardId(event.heroId, this.allCards)),
 			currentState,
 			stateHistory,

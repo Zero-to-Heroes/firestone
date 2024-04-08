@@ -1,4 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ChartData } from 'chart.js';
 import { combineLatest } from 'rxjs';
@@ -33,25 +35,30 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionStoreCo
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.value$ = combineLatest(
 			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav]) => main.battlegrounds,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			),
+			this.store.listen$(([main, nav]) => main.battlegrounds),
+			this.nav.selectedCategoryId$$,
 		).pipe(
-			this.mapData(([gameStats, [battlegrounds, selectedCategoryId]]) =>
+			this.mapData(([gameStats, [battlegrounds], selectedCategoryId]) =>
 				this.buildValue(
 					gameStats.filter((stat) => isBattlegrounds(stat.gameMode)),
 					currentBgHeroId(battlegrounds, selectedCategoryId),
 				),
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildValue(matchStats: readonly GameStat[], heroId: string) {

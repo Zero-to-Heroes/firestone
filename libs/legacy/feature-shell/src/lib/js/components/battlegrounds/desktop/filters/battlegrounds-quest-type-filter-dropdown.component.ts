@@ -1,9 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsQuestActiveTabType } from '@legacy-import/src/lib/js/models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -40,11 +41,14 @@ export class BattlegroundsQuestTypeFilterDropdownComponent
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.options = [
 			{
 				value: 'quests',
@@ -55,20 +59,22 @@ export class BattlegroundsQuestTypeFilterDropdownComponent
 				label: this.i18n.translateString('app.battlegrounds.filters.quest-type.rewards'),
 			} as QuestTypeFilterOption,
 		];
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.bgsQuestsActiveTab,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				this.mapData(([filter, selectedCategoryId]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: selectedCategoryId === 'bgs-category-meta-quests',
-				})),
-			);
+		this.filter$ = combineLatest([
+			this.store.listen$(([main, nav, prefs]) => prefs.bgsQuestsActiveTab),
+			this.nav.selectedCategoryId$$,
+		]).pipe(
+			filter(([[filter], selectedCategoryId]) => !!filter && !!selectedCategoryId),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			this.mapData(([[filter], selectedCategoryId]) => ({
+				filter: filter,
+				placeholder: this.options.find((option) => option.value === filter)?.label,
+				visible: selectedCategoryId === 'bgs-category-meta-quests',
+			})),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onSelected(option: /* QuestTypeFilterOption*/ IOption) {

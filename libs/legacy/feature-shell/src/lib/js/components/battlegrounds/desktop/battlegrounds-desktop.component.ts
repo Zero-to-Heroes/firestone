@@ -5,11 +5,16 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { BG_USE_QUESTS, BG_USE_QUESTS_IN_DESKTOP } from '@firestone/battlegrounds/common';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	BG_USE_QUESTS,
+	BG_USE_QUESTS_IN_DESKTOP,
+	BattlegroundsNavigationService,
+} from '@firestone/battlegrounds/common';
+import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
@@ -101,11 +106,14 @@ export class BattlegroundsDesktopComponent
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.categories = [
 			{
 				id: 'bgs-category-meta-heroes',
@@ -142,19 +150,19 @@ export class BattlegroundsDesktopComponent
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
 			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.categoryId$ = this.store
-			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
-			.pipe(
-				tap((info) => console.debug('[bgs-desktop] computing category', info)),
-				this.mapData(([selectedCategoryId]) => selectedCategoryId),
-				tap((info) => console.debug('[bgs-desktop] computed category', info)),
-				filter((category) => !!category),
-				takeUntil(this.destroyed$),
-			);
+		this.categoryId$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData(([selectedCategoryId]) => selectedCategoryId),
+			filter((category) => !!category),
+			takeUntil(this.destroyed$),
+		);
 		this.currentView$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

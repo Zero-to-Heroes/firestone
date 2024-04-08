@@ -1,4 +1,5 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -54,36 +55,35 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showRegionFilter$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationBattlegrounds.selectedCategoryId)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(
-					([currentView]) =>
-						currentView !== 'bgs-category-personal-stats' &&
-						currentView !== 'bgs-category-perfect-games' &&
-						currentView !== 'bgs-category-meta-quests' &&
-						currentView !== 'bgs-category-leaderboard' &&
-						currentView !== 'bgs-category-simulator',
-				),
-			);
-		this.showConservativeEstimateLink$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationBattlegrounds.selectedCategoryId)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView === 'bgs-category-meta-heroes'),
-			);
-		this.showLeaderboardPlayerSearch$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationBattlegrounds.selectedCategoryId)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView === 'bgs-category-leaderboard'),
-			);
+	async ngAfterContentInit() {
+		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
+			filter(([currentView]) => !!currentView),
+			this.mapData(
+				([currentView]) =>
+					currentView !== 'bgs-category-personal-stats' &&
+					currentView !== 'bgs-category-perfect-games' &&
+					currentView !== 'bgs-category-meta-quests' &&
+					currentView !== 'bgs-category-leaderboard' &&
+					currentView !== 'bgs-category-simulator',
+			),
+		);
+		this.showConservativeEstimateLink$ = this.nav.selectedCategoryId$$.pipe(
+			filter(([currentView]) => !!currentView),
+			this.mapData(([currentView]) => currentView === 'bgs-category-meta-heroes'),
+		);
+		this.showLeaderboardPlayerSearch$ = this.nav.selectedCategoryId$$.pipe(
+			filter(([currentView]) => !!currentView),
+			this.mapData(([currentView]) => currentView === 'bgs-category-leaderboard'),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async onLeaderboardPlayerNameChanged(value: string) {

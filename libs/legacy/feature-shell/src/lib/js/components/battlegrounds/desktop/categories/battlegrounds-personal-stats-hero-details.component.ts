@@ -8,8 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
-import { BgsPlayer, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { BattlegroundsNavigationService, BgsPlayer, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
@@ -80,12 +80,13 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly heroStats: BgsPlayerHeroStatsService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.heroStats.isReady()]);
+		await waitForReady(this.heroStats, this.nav);
 
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
@@ -95,12 +96,10 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 			);
 		this.player$ = combineLatest([
 			this.heroStats.tiersWithPlayerData$$,
-			this.store.listen$(
-				([main, nav]) => main.battlegrounds,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			),
+			this.store.listen$(([main, nav]) => main.battlegrounds),
+			this.nav.selectedCategoryId$$,
 		]).pipe(
-			map(([heroStats, [battlegrounds, selectedCategoryId]]) => ({
+			map(([heroStats, [battlegrounds], selectedCategoryId]) => ({
 				heroStats: heroStats,
 				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
 			})),

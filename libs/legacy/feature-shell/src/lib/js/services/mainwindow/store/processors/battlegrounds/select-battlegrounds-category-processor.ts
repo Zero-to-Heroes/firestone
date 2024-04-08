@@ -1,3 +1,4 @@
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -5,16 +6,18 @@ import { SelectBattlegroundsCategoryEvent } from '../../events/battlegrounds/sel
 import { Processor } from '../processor';
 
 export class SelectBattlegroundsCategoryProcessor implements Processor {
+	constructor(private readonly nav: BattlegroundsNavigationService) {}
+
 	public async process(
 		event: SelectBattlegroundsCategoryEvent,
 		currentState: MainWindowState,
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		this.nav.selectedCategoryId$$.next(event.categoryId);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
 			menuDisplayType: 'menu',
-			selectedCategoryId: event.categoryId,
 		} as NavigationBattlegrounds);
 		return [
 			null,

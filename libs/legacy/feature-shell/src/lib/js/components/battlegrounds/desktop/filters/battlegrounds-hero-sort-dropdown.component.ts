@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
@@ -49,11 +51,14 @@ export class BattlegroundsHeroSortDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.options = [
 			{
 				value: 'tier',
@@ -76,24 +81,28 @@ export class BattlegroundsHeroSortDropdownComponent
 				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.last-played'),
 			} as HeroSortFilterOption,
 		];
-		this.filter$ = this.store
-			.listen$(
+		this.filter$ = combineLatest([
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
-				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
-			)
-			.pipe(
-				filter(([filter, categoryId, currentView]) => !!filter && !!categoryId && !!currentView),
-				this.mapData(([filter, categoryId, currentView]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible:
-						(categoryId === 'bgs-category-personal-heroes' ||
-							categoryId === 'bgs-category-meta-heroes' ||
-							categoryId === 'bgs-category-personal-quests') &&
-						!['categories', 'category'].includes(currentView),
-				})),
-			);
+			),
+			this.nav.selectedCategoryId$$,
+		]).pipe(
+			filter(([[filter, currentView], categoryId]) => !!filter && !!categoryId && !!currentView),
+			this.mapData(([[filter, currentView], categoryId]) => ({
+				filter: filter,
+				placeholder: this.options.find((option) => option.value === filter)?.label,
+				visible:
+					(categoryId === 'bgs-category-personal-heroes' ||
+						categoryId === 'bgs-category-meta-heroes' ||
+						categoryId === 'bgs-category-personal-quests') &&
+					!['categories', 'category'].includes(currentView),
+			})),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

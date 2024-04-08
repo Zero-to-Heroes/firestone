@@ -1,3 +1,4 @@
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
@@ -17,6 +18,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
 		private readonly collectionNav: CollectionNavigationService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {}
 
 	public async process(
@@ -31,6 +33,9 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		if (event.module === 'collection') {
 			this.collectionNav.currentView$$.next('sets');
 			this.collectionNav.menuDisplayType$$.next('menu');
+		}
+		if (event.module === 'battlegrounds') {
+			this.nav.selectedCategoryId$$.next('bgs-category-meta-heroes');
 		}
 
 		const achievements =
@@ -53,7 +58,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'battlegrounds'
 				? navigationState.navigationBattlegrounds.update({
 						currentView: 'list',
-						selectedCategoryId: 'bgs-category-meta-heroes',
 						menuDisplayType: 'menu',
 				  } as NavigationBattlegrounds)
 				: navigationState.navigationBattlegrounds;
