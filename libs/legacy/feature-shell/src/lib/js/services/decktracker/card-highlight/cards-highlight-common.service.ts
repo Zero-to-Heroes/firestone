@@ -1762,6 +1762,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.TotemOfTheDead_LOOTA_845:
 				return and(side(inputSide), deathrattle);
 			case CardIds.TownCrier_GIL_580:
+			case CardIds.TownCrier_CORE_GIL_580:
 				return and(side(inputSide), inDeck, minion, rush);
 			case CardIds.TramConductorGerry_WW_437:
 				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
