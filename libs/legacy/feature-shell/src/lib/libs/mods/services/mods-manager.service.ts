@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { GameStatusService } from '@firestone/shared/common/service';
-import { ApiRunner } from '@firestone/shared/framework/core';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, take, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
 import { toModVersion, toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
 import { ModsUtilsService } from './mods-utils.service';
@@ -24,30 +24,38 @@ export class ModsManagerService {
 		private readonly modsConfigService: ModsConfigService,
 		private readonly modsUtils: ModsUtilsService,
 		private readonly api: ApiRunner,
+		private readonly prefs: PreferencesService,
 	) {
 		window['modsManager'] = this;
 	}
 
 	public async init() {
 		await this.store.initComplete();
-		this.store
-			.listenPrefs$((prefs) => prefs.modsEnabled)
+		await waitForReady(this.prefs);
+
+		this.prefs.preferences$$
 			.pipe(
-				filter(([enabled]) => enabled),
+				map((prefs) => prefs.modsEnabled),
+				distinctUntilChanged(),
+				filter((enabled) => enabled),
 				take(1),
 			)
 			.subscribe(async () => {
 				console.log('[mods-manager] Initializing mods services');
-				await this.store.initComplete();
-
 				this.gameStatus.onGameExit(() => this.inGame$$.next(false));
 				this.gameStatus.onGameStart(() => this.inGame$$.next(true));
-				combineLatest([this.store.listenPrefs$((prefs) => prefs.modsEnabled), this.inGame$$])
+				combineLatest([
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.modsEnabled),
+						distinctUntilChanged(),
+					),
+					this.inGame$$,
+				])
 					.pipe(
-						filter(([[enabled], inGame]) => enabled),
+						filter(([enabled, inGame]) => enabled),
 						distinctUntilChanged(),
 					)
-					.subscribe(([[enabled], inGame]) => {
+					.subscribe(([enabled, inGame]) => {
 						if (inGame) {
 							this.connectWebSocket();
 						} else {

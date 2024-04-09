@@ -1,10 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-general-third-party',
@@ -102,7 +108,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsGeneralThirdPartyComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	oocLoggedIn$: Observable<boolean>;
@@ -158,19 +164,25 @@ export class SettingsGeneralThirdPartyComponent
 	};
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.oocLoggedIn$ = this.store
-			.listenPrefs$((prefs) => prefs.outOfCardsToken)
-			.pipe(this.mapData(([token]) => token?.access_token && token?.expires_timestamp > Date.now()));
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.oocLoggedIn$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.outOfCardsToken),
+			this.mapData((token) => token?.access_token && token?.expires_timestamp > Date.now()),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async oocConnect() {

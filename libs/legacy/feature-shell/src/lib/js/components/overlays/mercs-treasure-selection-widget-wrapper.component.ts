@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -51,18 +51,24 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.mercenariesHighlightSynergies),
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.showWidget$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesHighlightSynergies)),
 			this.store.listenMercenariesOutOfCombat$(
 				([state, prefs]) => !!state?.treasureSelection?.treasureIds?.length,
 			),
-		).pipe(
-			this.mapData(([[displayFromPrefs], [hasTreasures]]) => {
+		]).pipe(
+			this.mapData(([displayFromPrefs, [hasTreasures]]) => {
 				return displayFromPrefs && hasTreasures;
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	protected async doResize(): Promise<void> {

@@ -6,13 +6,14 @@ import {
 	ElementRef,
 	OnDestroy,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
+import { GameStateFacadeService } from '@firestone/constructed/common';
 import { BoardSecret } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DebugService } from '../../services/debug.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'secrets-helper',
@@ -47,7 +48,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class SecretsHelperComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	opacity$: Observable<number>;
 	colorManaCost$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;
@@ -58,41 +59,38 @@ export class SecretsHelperComponent extends AbstractSubscriptionStoreComponent i
 	widthInPx = 227;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-		private readonly init_DebugService: DebugService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.active$ = this.store
-			.listenDeckState$((state) => state?.opponentDeck?.secretHelperActive)
-			.pipe(this.mapData(([pref]) => pref));
-		this.secrets$ = this.store
-			.listenDeckState$((state) => state?.opponentDeck?.secrets)
-			.pipe(this.mapData(([secrets]) => secrets));
-		this.opacity$ = this.store
-			.listenPrefs$((prefs) => prefs.secretsHelperOpacity)
-			.pipe(map(([opacity]) => opacity / 100));
-		this.colorManaCost$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.overlayShowRarityColors)
-			.pipe(this.mapData(([pref]) => pref));
-		this.cardsGoToBottom$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.secretsHelperCardsGoToBottom)
-			.pipe(this.mapData(([pref]) => pref));
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.gameState);
 
-		this.store
-			.listenPrefs$((prefs) => prefs.secretsHelperScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((scale) => {
-				this.el.nativeElement.style.setProperty('--secrets-helper-scale', scale / 100);
-				this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
-				const newScale = scale / 100;
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			});
+		this.active$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => state?.opponentDeck?.secretHelperActive),
+		);
+		this.secrets$ = this.gameState.gameState$$.pipe(this.mapData((state) => state?.opponentDeck?.secrets));
+		this.opacity$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.secretsHelperOpacity / 100));
+		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
+		this.cardsGoToBottom$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.secretsHelperCardsGoToBottom),
+		);
+
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.secretsHelperScale)).subscribe((scale) => {
+			this.el.nativeElement.style.setProperty('--secrets-helper-scale', scale / 100);
+			this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
+			const newScale = scale / 100;
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

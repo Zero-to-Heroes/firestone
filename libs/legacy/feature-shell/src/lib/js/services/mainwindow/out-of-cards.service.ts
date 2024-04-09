@@ -1,9 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Card } from '@firestone/memory';
 import { GameStatusService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, filter, take } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
@@ -28,10 +28,18 @@ export class OutOfCardsService {
 		this.init();
 	}
 
-	private init() {
-		combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.outOfCardsToken)])
+	private async init() {
+		await waitForReady(this.prefs);
+
+		combineLatest([
+			this.gameStatus.inGame$$,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.outOfCardsToken),
+				distinctUntilChanged(),
+			),
+		])
 			.pipe(
-				filter(([inGame, [token]]) => inGame && !!token?.access_token?.length),
+				filter(([inGame, token]) => inGame && !!token?.access_token?.length),
 				take(1),
 			)
 			.subscribe(() => {

@@ -11,7 +11,8 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -66,17 +67,22 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listenPrefs$(
-				(prefs) => prefs.mercenariesEnableOutOfCombatPlayerTeamWidget,
-				(prefs) => prefs.mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						displayFromPrefs: prefs.mercenariesEnableOutOfCombatPlayerTeamWidget,
+						displayFromPrefsVillage: prefs.mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => !!state),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs, displayFromPrefsVillage], [hasState]]) => {
+			this.mapData(([currentScene, { displayFromPrefs, displayFromPrefsVillage }, [hasState]]) => {
 				const scenes = [];
 				if (displayFromPrefs) {
 					scenes.push(SceneMode.LETTUCE_MAP);

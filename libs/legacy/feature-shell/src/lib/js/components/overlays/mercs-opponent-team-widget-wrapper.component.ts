@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -65,19 +65,25 @@ export class MercsOpponentTeamWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.mercenariesEnableOpponentTeamWidget),
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.showWidget$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesEnableOpponentTeamWidget)),
 			this.store.listenMercenaries$(
 				([state, prefs]) => state?.opponentClosedManually,
 				([state, prefs]) => !!state?.opponentTeam?.mercenaries?.length,
 			),
-		).pipe(
-			this.mapData(([[displayFromPrefs], [playerClosedManually, hasTeamMercs]]) => {
+		]).pipe(
+			this.mapData(([displayFromPrefs, [playerClosedManually, hasTeamMercs]]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	// TODO: there might be a more elegant solution that doesn't require to override reposition

@@ -10,7 +10,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -65,14 +65,14 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.duelsShowOocTracker),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsShowOocTracker)),
 			this.scene.currentScene$$,
 			this.store.listen$(([main, nav]) => main.duels.isOnDuelsMainScreen),
 		]).pipe(
-			this.mapData(([[displayFromPrefs], currentScene, [isOnMainScreen]]) => {
+			this.mapData(([displayFromPrefs, currentScene, [isOnMainScreen]]) => {
 				const result =
 					// !isOnInitialTreasureSelectScreen &&
 					displayFromPrefs && isOnMainScreen && currentScene === SceneMode.PVP_DUNGEON_RUN;

@@ -10,7 +10,7 @@ import {
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -58,7 +58,7 @@ export class TurnTimerWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
 			this.store.listenDeckState$(
@@ -67,10 +67,10 @@ export class TurnTimerWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 				(state) => state?.gameEnded,
 			),
 			this.scene.currentScene$$,
-			this.store.listenPrefs$((prefs) => prefs.showTurnTimer),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.showTurnTimer)),
 		]).pipe(
 			this.mapData(
-				([[gameType, gameStarted, gameEnded], currentScene, [pref]]) =>
+				([[gameType, gameStarted, gameEnded], currentScene, pref]) =>
 					pref &&
 					gameStarted &&
 					!gameEnded &&

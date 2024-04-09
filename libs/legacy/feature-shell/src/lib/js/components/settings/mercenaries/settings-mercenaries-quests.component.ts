@@ -1,14 +1,22 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	ViewRef,
+} from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesAddMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesRemoveMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
 import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceDataService } from '../../../services/mercenaries/mercenaries-reference-data.service';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { buildHeroFrame } from '../../mercenaries/desktop/mercenaries-personal-hero-stat.component';
 
 @Component({
@@ -51,36 +59,39 @@ import { buildHeroFrame } from '../../mercenaries/desktop/mercenaries-personal-h
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	mercs$: Observable<readonly Merc[]>;
 	backupTeam$: Observable<readonly BackupTeamMerc[]>;
 
 	valueMatcher: (item: Merc) => string = (merc) => merc.name;
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.mercenariesCollection.isReady();
-		await this.mercenariesReferenceData.isReady();
+		await waitForReady(this.mercenariesCollection, this.mercenariesReferenceData, this.prefs);
 
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.backupTeam$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesBackupTeam)),
 			this.mercenariesCollection.memoryCollectionInfo$$,
 			this.mercenariesReferenceData.referenceData$$,
 		]).pipe(
 			filter(
-				([[backupTeam], collection, refData]) =>
+				([backupTeam, collection, refData]) =>
 					!!refData?.mercenaries?.length && !!collection?.Mercenaries?.length,
 			),
-			this.mapData(([[backupTeam], collection, refData]) => {
+			this.mapData(([backupTeam, collection, refData]) => {
 				const refBackup = backupTeam.map((mercId) => refData.mercenaries.find((m) => m.id === mercId));
 				const result = refBackup
 					.map((refMerc) => {
@@ -135,11 +146,11 @@ export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionStor
 	}
 
 	addMerc(merc: Merc) {
-		this.store.send(new MercenariesAddMercToBackupTeamEvent(merc.id));
+		this.stateUpdater.next(new MercenariesAddMercToBackupTeamEvent(merc.id));
 	}
 
 	removeMerc(merc: BackupTeamMerc) {
-		this.store.send(new MercenariesRemoveMercToBackupTeamEvent(merc.id));
+		this.stateUpdater.next(new MercenariesRemoveMercToBackupTeamEvent(merc.id));
 	}
 }
 

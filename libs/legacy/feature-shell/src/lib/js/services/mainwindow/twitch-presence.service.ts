@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { Metadata } from '@firestone/game-state';
 import { ArenaInfo, DuelsInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
-import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { ApiRunner, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
@@ -30,12 +31,14 @@ export class TwitchPresenceService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly duelsState: DuelsStateBuilderService,
 		private readonly arenaInfo: ArenaInfoService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
+		await waitForReady(this.prefs);
 
 		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_INFO),
@@ -60,13 +63,16 @@ export class TwitchPresenceService {
 				(state) => state?.metadata,
 				(state) => state?.gameStarted,
 			),
-			this.store.listenPrefs$((prefs) => prefs.appearOnLiveStreams),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.appearOnLiveStreams),
+				distinctUntilChanged(),
+			),
 		]).pipe(
 			debounceTime(1000),
 			filter(
 				([
 					[playerCardId, playerClasses, opponentCardId, opponentClasses, metadata, gameStarted],
-					[appearOnLiveStreams],
+					appearOnLiveStreams,
 				]) =>
 					gameStarted &&
 					appearOnLiveStreams &&
@@ -81,7 +87,7 @@ export class TwitchPresenceService {
 			map(
 				([
 					[playerCardId, playerClasses, opponentCardId, opponentClasses, metadata, gameStarted],
-					[appearOnLiveStreams],
+					appearOnLiveStreams,
 				]) => ({
 					playerCardId: playerCardId,
 					playerClass: playerClasses?.[0] ? CardClass[playerClasses[0]] : null,
@@ -214,10 +220,18 @@ export class TwitchPresenceService {
 				}
 			});
 
-		this.store
-			.listenPrefs$((prefs) => prefs.twitchAccessToken)
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs.twitchAccessToken),
+				distinctUntilChanged(),
+			)
 			.subscribe(([token]) => (this.twitchAccessToken = token));
-		this.store.listenPrefs$((prefs) => prefs.twitchLoginName).subscribe(([info]) => (this.twitchLoginName = info));
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs.twitchLoginName),
+				distinctUntilChanged(),
+			)
+			.subscribe((info) => (this.twitchLoginName = info));
 	}
 
 	private async sendNewGameEvent(

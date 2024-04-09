@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { combineLatest, filter, take } from 'rxjs';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
@@ -8,7 +9,6 @@ import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { ProcessingQueue } from '../processing-queue.service';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { AchievementsStateManagerService } from './achievements-state-manager.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
@@ -33,25 +33,30 @@ export class FirestoneAchievementsChallengeService {
 		private readonly achievementsStorage: AchievementsStorageService,
 		private readonly remoteAchievements: FirestoneRemoteAchievementsLoaderService,
 		private readonly events: Events,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly challengeBuilder: ChallengeBuilderService,
 		private readonly gameStatus: GameStatusService,
+		private readonly ow: OverwolfService,
 	) {
 		this.init();
 	}
 
 	private async init() {
-		await this.store.initComplete();
+		await waitForReady(this.prefs);
+
 		combineLatest([
 			this.gameStatus.inGame$$,
-			this.store.listenPrefs$(
-				(prefs) => prefs.achievementsFullEnabled,
-				(prefs) => prefs.achievementsEnabled2,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.achievementsFullEnabled),
+				distinctUntilChanged(),
+			),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.achievementsEnabled2),
+				distinctUntilChanged(),
 			),
 		])
 			.pipe(
-				filter(([inGame, [full, firestoneAchievements]]) => inGame && full && firestoneAchievements),
+				filter(([inGame, full, firestoneAchievements]) => inGame && full && firestoneAchievements),
 				take(1),
 			)
 			.subscribe(async () => {
@@ -185,7 +190,7 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async prepareAchievementCompletedEvent(achievement: Achievement) {
-		this.store.send(new AchievementCompletedEvent(achievement));
+		this.ow.getMainWindow().mainWindowStoreUpdater.next(new AchievementCompletedEvent(achievement));
 	}
 }
 

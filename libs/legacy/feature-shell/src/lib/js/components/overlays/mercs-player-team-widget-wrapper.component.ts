@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -59,19 +59,25 @@ export class MercsPlayerTeamWidgetWrapperComponent extends AbstractWidgetWrapper
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		this.showWidget$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.mercenariesEnablePlayerTeamWidget),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesEnablePlayerTeamWidget)),
 			this.store.listenMercenaries$(
 				([state, prefs]) => state?.playerClosedManually,
 				([state, prefs]) => !!state?.playerTeam?.mercenaries?.length,
 			),
 		]).pipe(
-			this.mapData(([[displayFromPrefs], [playerClosedManually, hasTeamMercs]]) => {
+			this.mapData(([displayFromPrefs, [playerClosedManually, hasTeamMercs]]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	protected async reposition(cleanup?: () => void): Promise<{ left: number; top: number }> {

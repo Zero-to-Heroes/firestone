@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { GameStatusService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { sleep } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
@@ -11,26 +12,41 @@ export class ModsBootstrapService {
 
 	private ws: WebSocket;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly gameStatus: GameStatusService) {}
+	constructor(
+		private readonly store: AppUiStoreFacadeService,
+		private readonly gameStatus: GameStatusService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	public async init() {
 		await this.store.initComplete();
-		this.store
-			.listenPrefs$((prefs) => prefs.modsEnabled)
+		await waitForReady(this.prefs);
+
+		this.prefs.preferences$$
 			.pipe(
-				filter(([enabled]) => enabled),
+				map((prefs) => prefs.modsEnabled),
+				distinctUntilChanged(),
+			)
+			.pipe(
+				filter((enabled) => enabled),
 				take(1),
 			)
 			.subscribe(() => {
 				console.log('[mods-boostrap] Initializing mods services');
 				this.gameStatus.onGameExit(() => this.inGame$$.next(false));
 				this.gameStatus.onGameStart(() => this.inGame$$.next(true));
-				combineLatest([this.store.listenPrefs$((prefs) => prefs.modsEnabled), this.inGame$$])
+				combineLatest([
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.modsEnabled),
+						distinctUntilChanged(),
+					),
+					this.inGame$$,
+				])
 					.pipe(
-						filter(([[enabled], inGame]) => enabled),
+						filter(([enabled, inGame]) => enabled),
 						distinctUntilChanged(),
 					)
-					.subscribe(([[enabled], inGame]) => {
+					.subscribe(([enabled, inGame]) => {
 						if (inGame) {
 							this.connectWebSocket();
 						} else {

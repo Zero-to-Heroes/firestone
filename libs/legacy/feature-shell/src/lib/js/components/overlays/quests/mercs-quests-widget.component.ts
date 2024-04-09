@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { MemoryVisitor, SceneService } from '@firestone/memory';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
 import {
@@ -83,14 +85,13 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly scene: SceneService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.mercenariesCollection.isReady();
-		await this.mercenariesReferenceData.isReady();
-		await this.scene.isReady();
+		await waitForReady(this.mercenariesCollection, this.mercenariesReferenceData, this.scene, this.prefs);
 
 		const team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
@@ -195,13 +196,18 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 			),
 		);
 		this.showQuests$ = combineLatest([
-			this.store.listenPrefs$(
-				(prefs) => prefs.mercsShowQuestsWidget,
-				(prefs) => prefs.showQuestsWidgetWhenEmpty,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						showQuests: prefs.mercsShowQuestsWidget,
+						showWhenEmpty: prefs.showQuestsWidgetWhenEmpty,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.tasks$,
 		]).pipe(
-			this.mapData(([[showQuests, showWhenEmpty], quests]) => {
+			this.mapData(([{ showQuests, showWhenEmpty }, quests]) => {
 				return showQuests && (!!quests?.length || showWhenEmpty);
 			}),
 		);

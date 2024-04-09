@@ -6,12 +6,12 @@ import {
 	Component,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -144,7 +144,7 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsBattlegroundsGeneralComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	useLocalSimulator$: Observable<boolean>;
@@ -176,39 +176,39 @@ export class SettingsBattlegroundsGeneralComponent
 		},
 	];
 
-	// private preferencesSubscription: Subscription;
-
 	private reloadBgWindows;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ads: AdService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.ads.isReady();
+		await waitForReady(this.ads, this.prefs);
 
 		const premium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
 		this.useLocalSimulator$ = combineLatest([
 			premium$,
-			this.store.listenPrefs$((prefs) => !prefs.bgsUseRemoteSimulator),
-		]).pipe(this.mapData(([premium, [useLocalSimulator]]) => !premium || useLocalSimulator));
-		this.enableSimulation$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableSimulation);
-		this.bgsHideSimResultsOnRecruit$ = this.listenForBasicPref$((prefs) => prefs.bgsHideSimResultsOnRecruit);
-		this.bgsShowSimResultsOnlyOnRecruit$ = this.listenForBasicPref$(
-			(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => !prefs.bgsUseRemoteSimulator)),
+		]).pipe(this.mapData(([premium, useLocalSimulator]) => !premium || useLocalSimulator));
+		this.enableSimulation$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableSimulation));
+		this.bgsHideSimResultsOnRecruit$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsHideSimResultsOnRecruit),
 		);
-		this.bgsEnableOpponentBoardMouseOver$ = this.listenForBasicPref$(
-			(prefs) => prefs.bgsEnableOpponentBoardMouseOver,
+		this.bgsShowSimResultsOnlyOnRecruit$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowSimResultsOnlyOnRecruit),
 		);
-		this.bgsEnableApp$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableApp);
-		this.bgsUseOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsUseOverlay);
-		this.bgsFullToggle$ = this.listenForBasicPref$((prefs) => prefs.bgsFullToggle);
+		this.bgsEnableOpponentBoardMouseOver$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
+		);
+		this.bgsEnableApp$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableApp));
+		this.bgsUseOverlay$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsUseOverlay));
+		this.bgsFullToggle$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsFullToggle));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

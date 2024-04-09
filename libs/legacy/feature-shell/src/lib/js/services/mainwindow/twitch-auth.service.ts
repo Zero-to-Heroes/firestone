@@ -12,7 +12,8 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -24,8 +25,6 @@ import {
 	TwitchBgsState,
 } from '../../components/decktracker/overlay/twitch/twitch-bgs-state';
 import { GameEvent } from '../../models/game-event';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../utils';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
 const REDIRECT_URI = 'https://www.firestoneapp.com/twitch-login.html';
@@ -54,7 +53,6 @@ export class TwitchAuthService {
 		private readonly prefs: PreferencesService,
 		private readonly http: HttpClient,
 		private readonly notificationService: OwNotificationsService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
@@ -70,32 +68,30 @@ export class TwitchAuthService {
 	}
 
 	private async init() {
-		await this.store.initComplete();
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.stateUpdater.subscribe((twitchInfo: any) => {
 			console.log('[twitch-auth] received access token', !!twitchInfo);
 			this.saveAccessToken(twitchInfo.access_token);
 		});
-		this.store.listenPrefs$((prefs) => prefs.twitchDelay).subscribe(([delay]) => (this.twitchDelay = delay));
-		this.twitchAccessToken$ = this.store
-			.listenPrefs$((prefs) => prefs.twitchAccessToken)
+
+		this.prefs.preferences$$
 			.pipe(
-				map(([pref]) => pref),
+				map((prefs) => prefs.twitchDelay),
 				distinctUntilChanged(),
-			);
-		this.streamerPrefs$ = this.store
-			.listenPrefs$(
-				(prefs) => prefs.bgsHideSimResultsOnRecruit,
-				(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
 			)
-			.pipe(
-				distinctUntilChanged(),
-				map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
-					bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
-					bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
-				})),
-			);
+			.subscribe((delay) => (this.twitchDelay = delay));
+		this.twitchAccessToken$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.twitchAccessToken),
+			distinctUntilChanged(),
+		);
+		this.streamerPrefs$ = this.prefs.preferences$$.pipe(
+			map((prefs) => ({
+				bgsHideSimResultsOnRecruit: prefs.bgsHideSimResultsOnRecruit,
+				bgsShowSimResultsOnlyOnRecruit: prefs.bgsShowSimResultsOnlyOnRecruit,
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		);
 
 		this.gameStatus.inGame$$
 			.pipe(

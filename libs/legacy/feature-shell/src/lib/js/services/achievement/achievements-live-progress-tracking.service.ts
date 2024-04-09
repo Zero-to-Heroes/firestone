@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { HsAchievementInfo, HsAchievementsInfo, MemoryInspectionService } from '@firestone/memory';
-import { GameStatusService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, skipWhile, take, tap } from 'rxjs';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
 import { buildAchievementHierarchy } from './achievement-utils';
 import { AchievementsStateManagerService } from './achievements-state-manager.service';
@@ -29,13 +28,13 @@ export class AchievementsLiveProgressTrackingService {
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly refLoaderService: AchievementsRefLoaderService,
 		private readonly achievementsMemoryMonitor: AchievementsMemoryMonitor,
 		private readonly stateManager: AchievementsStateManagerService,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
+		private readonly prefs: PreferencesService,
 	) {
 		window['achievementsMonitor'] = this;
 		this.init();
@@ -44,12 +43,18 @@ export class AchievementsLiveProgressTrackingService {
 	private init() {
 		this.achievementsProgressTracking$$.onFirstSubscribe(async () => {
 			console.debug('[achievements-live-progress-tracking] init');
-			await this.store.initComplete();
+			await waitForReady(this.prefs);
 
-			combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.showLottery)])
+			combineLatest([
+				this.gameStatus.inGame$$,
+				this.prefs.preferences$$.pipe(
+					map((prefs) => prefs.showLottery),
+					distinctUntilChanged(),
+				),
+			])
 				.pipe(
 					tap((info) => console.debug('[achievements-live-progress-tracking] will track?', info)),
-					filter(([inGame, [showLottery]]) => inGame && showLottery),
+					filter(([inGame, showLottery]) => inGame && showLottery),
 					tap((info) => console.debug('[achievements-live-progress-tracking] will track 2', info)),
 					take(1),
 				)
@@ -65,11 +70,14 @@ export class AchievementsLiveProgressTrackingService {
 					);
 					// TODO: refresh this when an achievement gets completed
 					combineLatest([
-						this.store.listenPrefs$((prefs) => prefs.pinnedAchievementIds),
+						this.prefs.preferences$$.pipe(
+							map((prefs) => prefs.pinnedAchievementIds),
+							distinctUntilChanged(),
+						),
 						achievementsOnGameStart$,
 					])
 						.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
-						.subscribe(async ([[pinnedAchievementIds], achievementsOnGameStart]) => {
+						.subscribe(async ([pinnedAchievementIds, achievementsOnGameStart]) => {
 							// console.debug(
 							// 	'[achievements-live-progress-tracking] pinnedAchievementIds',
 							// 	pinnedAchievementIds,
@@ -95,9 +103,13 @@ export class AchievementsLiveProgressTrackingService {
 							// 	pinnedAchievementIds,
 							// 	achievementsOnGameStart,
 							// );
-							this.store.send(
-								new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)),
-							);
+							this.ow
+								.getMainWindow()
+								.mainWindowStoreUpdater.next(
+									new AchievementsRemovePinnedAchievementsEvent(
+										completedAchievements.map((a) => a.id),
+									),
+								);
 
 							// When pinning an achievement, we get the first step of the achievements chain
 							// We actually want to pin the most recent uncompleted step

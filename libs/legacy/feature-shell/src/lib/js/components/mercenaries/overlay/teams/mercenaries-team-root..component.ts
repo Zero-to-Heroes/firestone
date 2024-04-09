@@ -256,24 +256,24 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.mercenariesCollection.isReady();
-		await this.mercenariesReferenceData.isReady();
+		await waitForReady(this.mercenariesCollection, this.mercenariesReferenceData, this.prefs);
 
 		this.tasks$ = this.tasks$$.asObservable().pipe(this.mapData((info) => info));
 		this.tasks$.pipe(this.mapData((info) => info)).subscribe((info) => this.tasksListUpdated.next());
 		combineLatest([
 			this.mercenariesReferenceData.referenceData$$,
 			this.mercenariesCollection.memoryCollectionInfo$$,
-			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesBackupTeam)),
 			this.tasks$,
 		])
 			.pipe(
-				this.mapData(([refData, collectionInfo, [mercBackupIds], tasks]) =>
+				this.mapData(([refData, collectionInfo, mercBackupIds, tasks]) =>
 					buildTeamsForTasks(tasks, refData as any, collectionInfo, mercBackupIds, this.allCards, this.i18n),
 				),
 			)

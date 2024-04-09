@@ -1,10 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-broadcast',
@@ -111,34 +110,35 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBroadcastComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SettingsBroadcastComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	twitchUserName$: Observable<string>;
 
 	twitchedLoggedIn: boolean;
 	twitchLoginUrl: string = TWITCH_LOGIN_URL;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly twitch: TwitchAuthService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.twitchUserName$ = this.listenForBasicPref$((prefs) => prefs.twitchUserName);
-		this.store
-			.listenPrefs$(
-				(prefs) => prefs.twitchAccessToken,
-				(prefs) => prefs.twitchLoginName,
-			)
-			.pipe(this.mapData(([twitchAccessToken, twitchLoginName]) => (!twitchLoginName ? null : twitchAccessToken)))
+		await waitForReady(this.prefs);
+
+		this.twitchUserName$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.twitchUserName));
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => (!prefs.twitchLoginName ? null : prefs.twitchAccessToken)))
 			.subscribe(async (token) => {
 				this.twitchedLoggedIn = !!token ? await this.twitch.isLoggedIn() : null;
 				this.cdr?.detectChanges();
 			});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	connect() {

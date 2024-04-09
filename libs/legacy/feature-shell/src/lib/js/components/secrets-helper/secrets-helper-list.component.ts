@@ -9,13 +9,12 @@ import {
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckCard, SecretOption } from '@firestone/game-state';
-import { sortByProperties, uuidShort } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, sortByProperties, uuidShort } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'secrets-helper-list',
@@ -36,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SecretsHelperListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() colorManaCost: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() set secrets(value: readonly BoardSecret[]) {
@@ -49,21 +48,22 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 	isScroll: boolean;
 
 	constructor(
-		private el: ElementRef,
-		private allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.store
-			.listenPrefs$((prefs) => prefs.secretsHelperScale)
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.prefs.preferences$$
 			.pipe(
+				this.mapData((prefs) => prefs.secretsHelperScale),
 				debounceTime(100),
-				map(([pref]) => pref),
 				distinctUntilChanged(),
 				filter((scale) => !!scale),
 				takeUntil(this.destroyed$),
@@ -71,6 +71,10 @@ export class SecretsHelperListComponent extends AbstractSubscriptionStoreCompone
 			.subscribe((scale) => {
 				this.refreshScroll();
 			});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackCard(index, card: VisualDeckCard) {

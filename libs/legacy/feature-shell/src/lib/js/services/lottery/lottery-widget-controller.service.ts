@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OwNotificationsService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
@@ -24,14 +24,19 @@ export class LotteryWidgetControllerService {
 
 	private async init() {
 		await this.store.initComplete();
+		await waitForReady(this.prefs);
+
 		const displayWidgetFromData$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.showLottery),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.showLottery),
+				distinctUntilChanged(),
+			),
 			this.store.hasPremiumSub$(),
 			this.closedByUser$$,
 		]).pipe(
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			// tap((info) => console.debug('[lottery-widget] should track 0?', info)),
-			map(([[showLottery], isPremium, closedByUser]) => {
+			map(([showLottery, isPremium, closedByUser]) => {
 				return (
 					!closedByUser &&
 					// Check for null so that by default it doesn't show up for premium users
@@ -40,15 +45,27 @@ export class LotteryWidgetControllerService {
 			}),
 		);
 		await this.setInitialOverlayValue();
-		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
+		combineLatest([
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.lotteryOverlay),
+				distinctUntilChanged(),
+			),
+			displayWidgetFromData$,
+		])
 			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
-			.subscribe(async ([[lotteryOverlay], visible]) => {
+			.subscribe(async ([lotteryOverlay, visible]) => {
 				this.shouldShowOverlay$$.next(visible && lotteryOverlay);
 			});
 
-		combineLatest([this.store.listenPrefs$((prefs) => prefs.lotteryOverlay), displayWidgetFromData$])
+		combineLatest([
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.lotteryOverlay),
+				distinctUntilChanged(),
+			),
+			displayWidgetFromData$,
+		])
 			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
-			.subscribe(async ([[lotteryOverlay], visible]) => {
+			.subscribe(async ([lotteryOverlay, visible]) => {
 				// console.debug('[lottery-widget] setting visibility', visible);
 				const lotteryWindow = await this.ow.obtainDeclaredWindow(OverwolfService.LOTTERY_WINDOW);
 				if (lotteryOverlay) {
@@ -85,16 +102,20 @@ export class LotteryWidgetControllerService {
 
 		combineLatest([
 			adVisible$,
-			this.store.listenPrefs$(
-				(prefs) => prefs.lotteryShowHiddenWindowNotification,
-				(prefs) => prefs.lotteryOverlay,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.lotteryShowHiddenWindowNotification),
+				distinctUntilChanged(),
+			),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.lotteryOverlay),
+				distinctUntilChanged(),
 			),
 		])
 			.pipe(
 				distinctUntilChanged(),
 				debounceTime(2000),
 				filter(
-					([adVisible, [showNotification, lotteryOverlay]]) =>
+					([adVisible, showNotification, lotteryOverlay]) =>
 						!adVisible && showNotification && !lotteryOverlay,
 				),
 			)

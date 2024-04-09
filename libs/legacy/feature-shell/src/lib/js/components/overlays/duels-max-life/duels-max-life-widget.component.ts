@@ -1,7 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { GameStateFacadeService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 
 @Component({
 	selector: 'duels-max-life-widget',
@@ -18,7 +20,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsMaxLifeWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DuelsMaxLifeWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	maxHealth$: Observable<number>;
 	cssClass$: Observable<string>;
 
@@ -28,22 +30,29 @@ export class DuelsMaxLifeWidgetComponent extends AbstractSubscriptionStoreCompon
 
 	private _side = new BehaviorSubject<'player' | 'opponent'>(null);
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateFacadeService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.maxHealth$ = combineLatest(
-			this._side.asObservable(),
-			this.store.listenDeckState$((gameState) => gameState),
-		).pipe(
-			this.mapData(([side, [gameState]]) => {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.gameState);
+
+		this.maxHealth$ = combineLatest([this._side.asObservable(), this.gameState.gameState$$]).pipe(
+			this.mapData(([side, gameState]) => {
 				const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 				return deckState.hero?.maxHealth;
 			}),
 		);
-		this.cssClass$ = this.store
-			.listenPrefs$((prefs) => prefs.duelsShowMaxLifeWidget2)
-			.pipe(this.mapData(([show]) => (show === 'blink' ? 'blinker' : '')));
+		this.cssClass$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => (prefs.duelsShowMaxLifeWidget2 === 'blink' ? 'blinker' : '')),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

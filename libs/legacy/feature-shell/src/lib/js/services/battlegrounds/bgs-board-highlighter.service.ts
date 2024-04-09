@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { AdService } from '../ad.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -21,6 +22,7 @@ export class BgsBoardHighlighterService {
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ads: AdService,
+		private readonly prefs: PreferencesService,
 	) {
 		window['bgsBoardHighlighter'] = this;
 		this.init();
@@ -28,7 +30,7 @@ export class BgsBoardHighlighterService {
 
 	private async init() {
 		await this.store.initComplete();
-		await this.ads.isReady();
+		await waitForReady(this.ads, this.prefs);
 
 		this.shopMinions$$.onFirstSubscribe(() => {
 			this.initPremiumHighlights();
@@ -40,14 +42,15 @@ export class BgsBoardHighlighterService {
 		console.debug('[bgs-board-highlighter] init highlights');
 		const enableAutoHighlight$ = combineLatest([
 			this.ads.enablePremiumFeatures$$,
-			this.store.listenPrefs$((prefs) => prefs.bgsEnableMinionAutoHighlight),
-		]).pipe(map(([premium, [autoHighlight]]) => premium && autoHighlight));
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsEnableMinionAutoHighlight),
+				distinctUntilChanged(),
+			),
+		]).pipe(map(([premium, autoHighlight]) => premium && autoHighlight));
 
 		const minionsToHighlight$ = combineLatest([
-			this.store.listenPrefs$(
-				(prefs) => prefs.bgsShowTribesHighlight,
-				(prefs) => prefs.bgsShowMechanicsHighlight,
-			),
+			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTribesHighlight, distinctUntilChanged())),
+			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowMechanicsHighlight, distinctUntilChanged())),
 			this.store.listenBattlegrounds$(
 				([state]) => state.currentGame?.phase,
 				([state]) => state.highlightedTribes,
@@ -60,13 +63,14 @@ export class BgsBoardHighlighterService {
 		]).pipe(
 			debounceTime(50),
 			filter(
-				([[showTribesHighlight, showMechanicsHighlights], [phase], [opponentBoard], enableAutoHighlight]) =>
+				([showTribesHighlight, showMechanicsHighlights, [phase], [opponentBoard], enableAutoHighlight]) =>
 					!!phase && !!opponentBoard,
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
-					[showTribesHighlight, showMechanicsHighlights],
+					showTribesHighlight,
+					showMechanicsHighlights,
 					[phase, highlightedTribes, highlightedMinions, highlightedMechanics, anomalies],
 					[opponentBoard],
 					enableAutoHighlight,
@@ -146,9 +150,13 @@ export class BgsBoardHighlighterService {
 		console.debug('[bgs-board-highlighter] init premium highlights');
 		combineLatest([
 			this.ads.enablePremiumFeatures$$,
-			this.store.listenPrefs$(
-				(prefs) => prefs.bgsEnableMinionAutoHighlight,
-				(prefs) => prefs.bgsEnableTribeAutoHighlight,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsEnableMinionAutoHighlight),
+				distinctUntilChanged(),
+			),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsEnableTribeAutoHighlight),
+				distinctUntilChanged(),
 			),
 			this.store.listenBattlegrounds$(
 				([state]) => !!state.currentGame,
@@ -159,11 +167,11 @@ export class BgsBoardHighlighterService {
 			.pipe(
 				debounceTime(1000),
 				filter(
-					([premium, [minionAuto, tribeAuto], [hasCurrentGame, gameEnded, cardId]]) =>
+					([premium, minionAuto, tribeAuto, [hasCurrentGame, gameEnded, cardId]]) =>
 						hasCurrentGame && premium,
 				),
 			)
-			.subscribe(([premium, [minionAuto, tribeAuto], [hasCurrentGame, gameEnded, heroCardId]]) => {
+			.subscribe(([premium, minionAuto, tribeAuto, [hasCurrentGame, gameEnded, heroCardId]]) => {
 				if (gameEnded) {
 					return [];
 				}

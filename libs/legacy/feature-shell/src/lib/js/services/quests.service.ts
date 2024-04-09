@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
 import { MemoryInspectionService, SceneService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
+import { ApiRunner, LocalStorageService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
-import { Events } from './events.service';
+import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { ActiveQuestsUpdatedEvent } from './mainwindow/store/events/quests/active-quests-updated-event';
 import { ReferenceQuestsLoadedEvent } from './mainwindow/store/events/quests/reference-quests-loaded-event';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
@@ -24,7 +23,6 @@ export class QuestsService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly localStorage: LocalStorageService,
 		private readonly prefs: PreferencesService,
-		private readonly events: Events,
 		private readonly memory: MemoryInspectionService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
@@ -34,22 +32,31 @@ export class QuestsService {
 
 	private async init() {
 		await this.store.initComplete();
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		// TODO: expose subject via the store, instead of using the common global state
-		combineLatest([this.gameStatus.inGame$$, this.store.listenPrefs$((prefs) => prefs.enableQuestsWidget)])
+		combineLatest([
+			this.gameStatus.inGame$$,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.enableQuestsWidget),
+				distinctUntilChanged(),
+			),
+		])
 			.pipe(
-				filter(([inGame, [enableQuestsWidget]]) => inGame && enableQuestsWidget),
+				filter(([inGame, enableQuestsWidget]) => inGame && enableQuestsWidget),
 				take(1),
 			)
 			.subscribe(() => {
 				combineLatest([
-					this.store.listenPrefs$((prefs) => prefs.locale),
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.locale),
+						distinctUntilChanged(),
+					),
 					this.requestedInitialReferenceQuestsLoad.asObservable(),
 				])
 					.pipe(
-						filter(([[locale], load]) => load),
-						map(([[locale], load]) => ({ locale })),
+						filter(([locale, load]) => load),
+						map(([locale, load]) => ({ locale })),
 					)
 					.subscribe(({ locale }) => this.loadReferenceQuests(locale));
 				this.scene.currentScene$$.subscribe(async (scene) => {

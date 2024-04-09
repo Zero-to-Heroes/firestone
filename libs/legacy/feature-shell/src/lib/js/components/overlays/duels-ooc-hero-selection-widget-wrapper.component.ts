@@ -12,7 +12,7 @@ import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -60,16 +60,16 @@ export class DuelsOutOfCombatHeroSelectionWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.duelsShowInfoOnHeroSelection),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsShowInfoOnHeroSelection)),
 			this.store.listen$(([main, prefs]) => main?.duels),
 			this.store.listenNativeGameState$((state) => state.isDuelsChoosingHero),
 			this.scene.currentScene$$,
 		]).pipe(
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([[displayFromPrefs], [duels], [isDuelsChoosingHero], currentScene]) => {
+			this.mapData(([displayFromPrefs, [duels], [isDuelsChoosingHero], currentScene]) => {
 				return (
 					displayFromPrefs &&
 					currentScene === SceneMode.PVP_DUNGEON_RUN &&

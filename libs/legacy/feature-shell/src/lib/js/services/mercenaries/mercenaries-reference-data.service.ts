@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -7,9 +8,9 @@ import {
 	AppInjector,
 	DiskCacheService,
 	WindowManagerService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map } from 'rxjs';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
 
@@ -18,8 +19,8 @@ export class MercenariesReferenceDataService extends AbstractFacadeService<Merce
 	public referenceData$$: SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>;
 
 	private api: ApiRunner;
-	private store: AppUiStoreFacadeService;
 	private diskCache: DiskCacheService;
+	private prefs: PreferencesService;
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		super(windowManager, 'mercenariesReferenceData', () => !!this.referenceData$$);
@@ -32,19 +33,18 @@ export class MercenariesReferenceDataService extends AbstractFacadeService<Merce
 	protected async init() {
 		this.referenceData$$ = new SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>(null);
 		this.api = AppInjector.get(ApiRunner);
-		this.store = AppInjector.get(AppUiStoreFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
+		this.prefs = AppInjector.get(PreferencesService);
 
-		await this.store.initComplete();
+		await waitForReady(this.prefs);
 
 		this.referenceData$$.onFirstSubscribe(async () => {
-			this.store
-				.listenPrefs$((prefs) => prefs.locale)
+			this.prefs.preferences$$
 				.pipe(
-					map(([locale]) => [locale]),
+					map((prefs) => prefs.locale),
 					distinctUntilChanged(),
 				)
-				.subscribe(async ([locale]) => {
+				.subscribe(async (locale) => {
 					this.loadReferenceData(locale);
 				});
 		});

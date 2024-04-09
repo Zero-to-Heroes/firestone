@@ -5,9 +5,11 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -55,15 +57,22 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listenPrefs$(
-				(prefs) => prefs.mercenariesEnableActionsQueueWidgetPvE,
-				(prefs) => prefs.mercenariesEnableActionsQueueWidgetPvP,
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.showWidget$ = combineLatest([
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						displayFromPrefsPvE: prefs.mercenariesEnableActionsQueueWidgetPvE,
+						displayFromPrefsPvP: prefs.mercenariesEnableActionsQueueWidgetPvP,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.store.listenMercenaries$(([state, prefs]) => state?.gameMode),
-		).pipe(
-			this.mapData(([[displayFromPrefsPvE, displayFromPrefsPvP], [gameMode]]) => {
+		]).pipe(
+			this.mapData(([{ displayFromPrefsPvE, displayFromPrefsPvP }, [gameMode]]) => {
 				return (
 					(displayFromPrefsPvE && isMercenariesPvE(gameMode)) ||
 					(displayFromPrefsPvP && isMercenariesPvP(gameMode))
@@ -71,5 +80,9 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 			}),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

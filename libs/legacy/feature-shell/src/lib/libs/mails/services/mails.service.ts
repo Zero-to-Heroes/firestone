@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { MailboxMessagesInfo } from '@firestone-hs/mailbox';
-import { ApiRunner } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '@services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
@@ -16,7 +17,11 @@ export class MailsService {
 
 	private mailsInfo$$ = new BehaviorSubject<MailboxMessagesInfo>(null);
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly api: ApiRunner) {
+	constructor(
+		private readonly store: AppUiStoreFacadeService,
+		private readonly api: ApiRunner,
+		private readonly prefs: PreferencesService,
+	) {
 		window['mailsProvider'] = this;
 		// Disabled until further notice
 		// this.init();
@@ -24,17 +29,21 @@ export class MailsService {
 
 	private async init() {
 		await this.store.initComplete();
+		await waitForReady(this.prefs);
 
 		setInterval(() => this.checkMails(), 10 * 60 * 1000);
 		this.checkMails();
 
-		combineLatest(
+		combineLatest([
 			this.mailsInfo$$.asObservable(),
-			this.store.listenPrefs$((prefs) => prefs.mailboxLastVisitDate),
-		)
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.mailboxLastVisitDate),
+				distinctUntilChanged(),
+			),
+		])
 			.pipe(
 				distinctUntilChanged(),
-				map(([mailsInfo, [mailboxLastVisitDate]]) => {
+				map(([mailsInfo, mailboxLastVisitDate]) => {
 					const currentState = this.mails$.value ?? MailState.create({});
 					const updatedMails = this.buildMails(
 						mailsInfo,

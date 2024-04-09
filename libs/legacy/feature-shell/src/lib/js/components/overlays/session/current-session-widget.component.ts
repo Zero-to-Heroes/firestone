@@ -18,8 +18,8 @@ import {
 import { GameType, getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { SceneService } from '@firestone/memory';
-import { Preferences } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { isBattlegrounds, isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -205,12 +205,13 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly scene: SceneService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		const currentGameType$ = this.store
 			.listenDeckState$((state) => state?.metadata?.gameType)
@@ -224,38 +225,34 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComp
 			),
 		);
 		this.currentDisplayedMode$ = from(this.getDisplayModeKey(this.currentMode));
-		this.showGroups$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowGroup);
-		this.showMatches$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowMatches);
-		this.opacity$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetOpacity).pipe(
-			this.mapData((opacity) => Math.max(0.01, opacity / 100)),
+		this.showGroups$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetShowGroup));
+		this.showMatches$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetShowMatches));
+		this.opacity$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => Math.max(0.01, prefs.sessionWidgetOpacity / 100)),
 		);
-		// this.currentGroupingLabel$ = this.currentGrouping$.pipe(
-		// 	this.mapData((grouping) => this.getGroupingKey(grouping)),
-		// );
-		this.gamesTooltip$ = this.store
-			.listenPrefs$((prefs) => prefs.currentSessionStartDate)
-			.pipe(
-				this.mapData(([currentSessionStartDate]) =>
-					currentSessionStartDate
-						? this.i18n.translateString('session.summary.total-games-tooltip', {
-								value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-									month: 'short',
-									day: '2-digit',
-									year: 'numeric',
-								}),
-						  })
-						: this.i18n.translateString('session.summary.total-games-tooltip-all-time'),
-				),
-			);
+		this.gamesTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.currentSessionStartDate),
+			this.mapData((currentSessionStartDate) =>
+				currentSessionStartDate
+					? this.i18n.translateString('session.summary.total-games-tooltip', {
+							value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+								month: 'short',
+								day: '2-digit',
+								year: 'numeric',
+							}),
+					  })
+					: this.i18n.translateString('session.summary.total-games-tooltip-all-time'),
+			),
+		);
 
 		const lastModeGames$ = this.store
 			.gameStats$()
 			.pipe(this.mapData((stats) => stats?.filter((stat) => this.gameModeFilter(stat, this.currentMode))));
-		const lastGames$: Observable<readonly GameStat[]> = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.currentSessionStartDate),
+		const lastGames$: Observable<readonly GameStat[]> = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.currentSessionStartDate)),
 			lastModeGames$,
-		).pipe(
-			this.mapData(([[sessionStartDate], stats]) => {
+		]).pipe(
+			this.mapData(([sessionStartDate, stats]) => {
 				// Newest game first
 				return (
 					stats?.filter(

@@ -5,9 +5,10 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { isDuels } from '../../services/duels/duels-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -42,13 +43,19 @@ export class DuelsMaxLifeOpponentWidgetWrapperComponent
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.duelsShowMaxLifeWidget2),
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.showWidget$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsShowMaxLifeWidget2)),
 			this.store.listenDeckState$((state) => state?.metadata?.gameType),
-		).pipe(
-			this.mapData(([[show], [gameType]]) => isDuels(gameType) && ['mouseover', 'blink'].includes(show)),
+		]).pipe(
+			this.mapData(([show, [gameType]]) => isDuels(gameType) && ['mouseover', 'blink'].includes(show)),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

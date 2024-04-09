@@ -10,7 +10,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -55,14 +55,14 @@ export class DuelsOutOfCombatTreasureSelectionWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.duelsHighlightTreasureSynergies),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsHighlightTreasureSynergies)),
 			this.store.listen$(([main, prefs]) => main?.duels),
 			this.scene.currentScene$$,
 		]).pipe(
-			this.mapData(([[displayFromPrefs], [duels], currentScene]) => {
+			this.mapData(([displayFromPrefs, [duels], currentScene]) => {
 				return (
 					displayFromPrefs &&
 					currentScene === SceneMode.PVP_DUNGEON_RUN &&
