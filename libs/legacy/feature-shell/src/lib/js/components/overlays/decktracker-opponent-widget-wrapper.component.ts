@@ -10,7 +10,8 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -66,15 +67,20 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(
-				([main, nav, pref]) => pref.opponentTracker,
-				([main, nav, pref]) => pref.decktrackerCloseOnGameEnd,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						displayFromPrefs: prefs.opponentTracker,
+						decktrackerCloseOnGameEnd: prefs.decktrackerCloseOnGameEnd,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
 			this.store.listenDeckState$(
 				(deckState) => deckState?.opponentTrackerClosedByUser,
@@ -89,7 +95,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 			this.mapData(
 				([
 					currentScene,
-					[displayFromPrefs, decktrackerCloseOnGameEnd],
+					{ displayFromPrefs, decktrackerCloseOnGameEnd },
 					[closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones],
 					displayFromGameMode,
 				]) => {
@@ -112,12 +118,12 @@ export class DecktrackerOpponentWidgetWrapperComponent
 			),
 			this.handleReposition(),
 		);
-		this.hidden$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.hideOpponentDecktrackerWhenFriendsListIsOpen),
+		this.hidden$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideOpponentDecktrackerWhenFriendsListIsOpen)),
 			this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[hideOpponentDecktrackerWhenFriendsListIsOpen], [isFriendsListOpen]]) =>
+				([hideOpponentDecktrackerWhenFriendsListIsOpen, [isFriendsListOpen]]) =>
 					hideOpponentDecktrackerWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);

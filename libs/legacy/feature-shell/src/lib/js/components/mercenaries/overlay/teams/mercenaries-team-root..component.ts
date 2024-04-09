@@ -16,13 +16,13 @@ import { MercenariesTeamDefinition, MercenaryDefinition, encodeMercs } from '@fi
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { MemoryMercenariesCollectionInfo } from '@firestone/memory';
-import { Preferences } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
-import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { getShortMercHeroName, isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
@@ -122,18 +122,18 @@ export class MercenariesTeamRootComponent
 		private readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.mercenariesMemoryCache.isReady();
+		await waitForReady(this.mercenariesMemoryCache, this.prefs);
 
-		this.scale = this.store
-			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))
+		this.scale = this.prefs.preferences$$
 			.pipe(
+				this.mapData((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null)),
 				debounceTime(100),
-				map(([pref]) => pref),
 				filter((scale) => !!scale),
 				takeUntil(this.destroyed$),
 			)

@@ -4,8 +4,10 @@ import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-c
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsConfigService } from '@firestone/duels/general';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction, sortByProperties, sumOnArray } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { FeatureFlags } from '@services/feature-flags';
 import { dustToCraftFor, normalizeDeckHeroDbfId } from '@services/hs-utils';
@@ -207,31 +209,34 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly duelsConfig: DuelsConfigService,
+		private readonly prefs: PreferencesService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.duelsConfig.isReady();
+		await waitForReady(this.duelsConfig, this.prefs, this.mainWindowState);
 
-		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
-		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
-		this.store
-			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((value) => {
-				const cardScale = value / 100;
-				this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
-				this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
+		this.highRes$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionUseHighResImages));
+		this.showRelatedCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.collectionShowRelatedCards),
+		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
+			const cardScale = value / 100;
+			this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
+			this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 		const allBuckets$ = combineLatest([
 			this.store.duelsBuckets$(),
-			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentClasses),
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData((state) => state.duels?.deckbuilder?.currentClasses),
+			),
 		]).pipe(
-			this.mapData(([buckets, [currentClasses]]) => {
+			this.mapData(([buckets, currentClasses]) => {
 				return buckets?.map((bucket) => {
 					const cardsForClass = bucket.cards.filter((card) => {
 						const refCard = this.allCards.getCard(card.cardId);
@@ -272,12 +277,14 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 		);
 		this.allowedCards$ = combineLatest([
 			this.duelsConfig.duelsConfig$$,
-			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentClasses),
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData((state) => state.duels?.deckbuilder?.currentClasses),
+			),
 			allBuckets$,
 			from([this.allCards.getCards()]),
 		]).pipe(
-			filter(([config, [currentClasses]]) => !!config),
-			this.mapData(([config, [currentClasses], allBuckets, cards]) => {
+			filter(([config, currentClasses]) => !!config),
+			this.mapData(([config, currentClasses, allBuckets, cards]) => {
 				console.debug('computing allowed cards', config, currentClasses, allBuckets, cards);
 				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
@@ -337,13 +344,13 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
-		this.showBuckets$ = this.listenForBasicPref$((prefs) => prefs.duelsDeckbuilderShowBuckets);
+		this.showBuckets$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsDeckbuilderShowBuckets));
 		this.currentDeckCards$ = this.currentDeckCards.asObservable();
 		this.toggledBucketFilters$ = this.toggledBucketFilters.asObservable();
-		const cardIdsForMatchingBucketToggles$: Observable<readonly string[]> = combineLatest(
+		const cardIdsForMatchingBucketToggles$: Observable<readonly string[]> = combineLatest([
 			this.toggledBucketFilters$,
 			allBuckets$,
-		).pipe(
+		]).pipe(
 			this.mapData(([toggledBucketFilters, allBuckets]) => {
 				if (!toggledBucketFilters?.length) {
 					return [];
@@ -378,10 +385,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 					.filter((cardId) => !!cardId),
 			),
 		);
-		this.activeCards$ = combineLatest(
-			combineLatest(this.allowedCards$, this.collection$, this.searchString$, this.currentDeckCards$),
-			combineLatest(cardIdsForMatchingBucketToggles$, allCardIdsInBucketsWithDuplicates$, allBuckets$),
-		).pipe(
+		this.activeCards$ = combineLatest([
+			combineLatest([this.allowedCards$, this.collection$, this.searchString$, this.currentDeckCards$]),
+			combineLatest([cardIdsForMatchingBucketToggles$, allCardIdsInBucketsWithDuplicates$, allBuckets$]),
+		]).pipe(
 			this.mapData(
 				([
 					[allCards, collection, searchString, deckCards],
@@ -469,17 +476,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 			}),
 		);
 		// Init cards if they already exist in the store (because of a deck import for instance)
-		this.store
-			.listen$(([main, nav]) => main.duels.deckbuilder.currentCards)
-			.pipe(this.mapData(([cards]) => cards))
+		this.mainWindowState.mainWindowState$$
+			.pipe(this.mapData((state) => state.duels?.deckbuilder?.currentCards))
 			.subscribe((cards) => this.currentDeckCards.next(cards));
-		this.deckstring$ = combineLatest(
+		this.deckstring$ = combineLatest([
 			this.currentDeckCards$,
 			this.store.listen$(
 				([main, nav]) => main.duels.deckbuilder.currentHeroCardId,
 				([main, nav]) => main.duels.deckbuilder.currentSignatureTreasureCardId,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(([cards, [hero, currentSignatureTreasureCardId]]) => {
 				const cardDbfIds =
 					cards
@@ -510,7 +516,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 				}),
 			),
 		);
-		this.missingDust$ = combineLatest(this.currentDeckCards$, this.collection$).pipe(
+		this.missingDust$ = combineLatest([this.currentDeckCards$, this.collection$]).pipe(
 			this.mapData(([cards, collection]) => {
 				const groupedByCardId = groupByFunction((cardId: string) => cardId)(cards ?? []);
 				return Object.keys(groupedByCardId)

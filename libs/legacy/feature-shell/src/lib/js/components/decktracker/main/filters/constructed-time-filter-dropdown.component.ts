@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { TimePeriod } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { PatchesConfigService } from '@firestone/shared/common/service';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { formatPatch } from '@legacy-import/src/lib/js/services/utils';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
@@ -18,8 +19,6 @@ import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-time-filter-dropdown',
@@ -40,7 +39,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedTimeFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
@@ -48,26 +47,26 @@ export class ConstructedTimeFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly nav: ConstructedNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig, this.nav);
+		await waitForReady(this.patchesConfig, this.nav, this.prefs);
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
 			this.nav.currentView$$,
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksTimeFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksTimeFilter)),
 		]).pipe(
-			filter(([patch, currentView, [filter]]) => !!currentView),
-			this.mapData(([patch, currentView, [filter]]) => {
+			filter(([patch, currentView, filter]) => !!currentView),
+			this.mapData(([patch, currentView, filter]) => {
 				const options: FilterOption[] = ['current-season', 'past-20', 'past-7', 'past-3', 'last-patch'].map(
 					(option) =>
 						({

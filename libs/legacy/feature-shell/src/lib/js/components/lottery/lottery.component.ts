@@ -6,11 +6,13 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AnalyticsService } from '@firestone/shared/framework/core';
+import { AnalyticsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, interval, tap } from 'rxjs';
+import { AdService } from '../../services/ad.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { LotteryTabType } from './lottery-navigation.component';
@@ -127,25 +129,28 @@ export class LotteryWidgetComponent
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,
+		private readonly prefs: PreferencesService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.displayAd$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => !hasPremium));
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.ads);
+
+		this.displayAd$ = this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => !hasPremium));
 		this.closeConfirmationText = `
 			<div style="font-weight: bold">${this.i18n.translateString('app.lottery.close-confirmation-text-2')}</div>
 		`;
 		this.closeConfirmationCancelText = this.i18n.translateString('app.lottery.close-confirmation-button-cancel');
 		this.closeConfirmationOkText = this.i18n.translateString('app.lottery.close-confirmation-button-ok');
-		this.selectedModule$ = this.store
-			.listenPrefs$((prefs) => prefs.lotteryCurrentModule)
-			.pipe(this.mapData(([module]) => module || 'lottery'));
+		this.selectedModule$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.lotteryCurrentModule || 'lottery'),
+		);
 
 		this.currentModuleName$ = this.selectedModule$.pipe(
 			this.mapData((module) => this.i18n.translateString(`app.lottery.navigation.${module}`)),
@@ -154,9 +159,7 @@ export class LotteryWidgetComponent
 			tap((info) => console.debug('should track lottery', info)),
 			this.mapData((shouldTrack) => shouldTrack),
 		);
-		this.opacity$ = this.store
-			.listenPrefs$((prefs) => prefs.lotteryOpacity)
-			.pipe(this.mapData(([opacity]) => opacity / 100));
+		this.opacity$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.lotteryOpacity / 100));
 		this.trackingTooltip$ = this.trackingOngoing$.pipe(
 			this.mapData((trackingOngoing) =>
 				trackingOngoing
@@ -194,19 +197,15 @@ export class LotteryWidgetComponent
 			}),
 		);
 
-		this.store
-			.listenPrefs$((prefs) => prefs.lotteryScale)
-			.pipe(this.mapData(([pref]) => pref))
-			.subscribe((scale) => {
-				// this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
-				// this.el.nativeElement.style.setProperty(
-				// 	'--decktracker-max-height',
-				// 	this.player === 'player' ? '90vh' : '70vh',
-				// );
-				const newScale = scale / 100;
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			});
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.lotteryScale)).subscribe((scale) => {
+			const newScale = scale / 100;
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

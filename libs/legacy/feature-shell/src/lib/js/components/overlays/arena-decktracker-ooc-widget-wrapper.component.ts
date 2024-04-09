@@ -10,8 +10,8 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, tap } from 'rxjs';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest } from 'rxjs';
 import { ArenaDraftManagerService } from '../../services/arena/arena-draft-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -67,16 +67,14 @@ export class ArenaDecktrackerOocWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
-		await this.draftManager.isReady();
+		await waitForReady(this.scene, this.prefs, this.draftManager);
 
 		this.showWidget$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.arenaShowOocTracker),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowOocTracker)),
 			this.scene.currentScene$$,
 			this.draftManager.currentDeck$$,
 		]).pipe(
-			tap((data) => console.debug('[arena-decktracker-ooc-wrapper] data', data)),
-			this.mapData(([[displayFromPrefs], currentScene, deck]) => {
+			this.mapData(([displayFromPrefs, currentScene, deck]) => {
 				const result = displayFromPrefs && currentScene === SceneMode.DRAFT && deck?.DeckList?.length > 0;
 				return result;
 			}),

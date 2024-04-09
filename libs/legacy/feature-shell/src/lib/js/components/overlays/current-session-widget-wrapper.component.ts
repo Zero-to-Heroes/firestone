@@ -10,7 +10,7 @@ import {
 import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -61,8 +61,7 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		const currentGameType$ = this.store
 			.listenDeckState$((state) => state?.metadata?.gameType)
@@ -75,12 +74,12 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 			this.handleReposition(),
 		);
-		this.hidden$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.hideCurrentSessionWidgetWhenFriendsListIsOpen),
+		this.hidden$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideCurrentSessionWidgetWhenFriendsListIsOpen)),
 			this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[hideCurrentSessionWidgetWhenFriendsListIsOpen], [isFriendsListOpen]]) =>
+				([hideCurrentSessionWidgetWhenFriendsListIsOpen, [isFriendsListOpen]]) =>
 					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);

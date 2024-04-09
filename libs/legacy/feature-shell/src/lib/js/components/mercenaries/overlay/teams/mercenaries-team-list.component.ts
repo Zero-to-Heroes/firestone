@@ -11,12 +11,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Zone } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { BattleMercenary, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-team-list',
@@ -45,7 +46,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamListComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@Input() tooltipPosition: CardTooltipPositionType;
@@ -91,22 +92,31 @@ export class MercenariesTeamListComponent
 	private scaleSub: Subscription;
 
 	constructor(
-		private readonly el: ElementRef,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.scaleSub = this.store
-			.listenPrefs$(
-				// So that we don't pass scale extractors around, and the overhead of doing the refresh multiple
-				// time is low
-				(prefs) => prefs.mercenariesPlayerTeamOverlayScale + prefs.mercenariesOpponentTeamOverlayScale,
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.scaleSub = this.prefs.preferences$$
+			.pipe(
+				this.mapData(
+					// So that we don't pass scale extractors around, and the overhead of doing the refresh multiple
+					// time is low
+					(prefs) => prefs.mercenariesPlayerTeamOverlayScale + prefs.mercenariesOpponentTeamOverlayScale,
+				),
+				debounceTime(100),
+				takeUntil(this.destroyed$),
 			)
-			.pipe(debounceTime(100), takeUntil(this.destroyed$))
 			.subscribe((scale) => this.refreshScroll());
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

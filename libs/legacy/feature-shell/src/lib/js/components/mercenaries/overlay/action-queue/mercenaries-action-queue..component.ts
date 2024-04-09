@@ -9,7 +9,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { Preferences } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -54,15 +55,18 @@ export class MercenariesActionsQueueComponent
 	private scale: Subscription;
 
 	constructor(
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		this.actions$ = this.store
 			.listenMercenaries$(([state]) => state?.actionQueue)
 			.pipe(
@@ -77,11 +81,10 @@ export class MercenariesActionsQueueComponent
 					}));
 				}),
 			);
-		this.scale = this.store
-			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))
+		this.scale = this.prefs.preferences$$
 			.pipe(
+				this.mapData((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null)),
 				debounceTime(100),
-				map(([pref]) => pref),
 				distinctUntilChanged(),
 				filter((scale) => !!scale),
 				takeUntil(this.destroyed$),
@@ -96,6 +99,10 @@ export class MercenariesActionsQueueComponent
 					this.cdr.detectChanges();
 				}
 			});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')

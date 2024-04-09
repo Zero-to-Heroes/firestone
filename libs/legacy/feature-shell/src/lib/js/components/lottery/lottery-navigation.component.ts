@@ -1,10 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AnalyticsService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'lottery-navigation',
@@ -26,21 +25,21 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LotteryNavigationComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class LotteryNavigationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	selectedModule$: Observable<string>;
 	tabs: LotteryTab[];
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly analytics: AnalyticsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		this.tabs = [
 			{
 				id: 'lottery',
@@ -53,9 +52,13 @@ export class LotteryNavigationComponent extends AbstractSubscriptionStoreCompone
 				tooltip: this.i18n.translateString('app.lottery.navigation.achievements'),
 			},
 		];
-		this.selectedModule$ = this.store
-			.listenPrefs$((prefs) => prefs.lotteryCurrentModule)
-			.pipe(this.mapData(([module]) => module || 'lottery'));
+		this.selectedModule$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.lotteryCurrentModule || 'lottery'),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async selectModule(module: LotteryTabType) {

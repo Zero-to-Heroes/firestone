@@ -5,10 +5,11 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { AbstractWidgetWrapperComponent } from '@components/overlays/_widget-wrapper.component';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
@@ -54,13 +55,19 @@ export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponen
 		this.forceKeepInBounds = true;
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		this.showWidget$ = combineLatest([
 			this.store.shouldShowLotteryOverlay$(),
-			this.store.listenPrefs$((prefs) => prefs.lotteryOverlay),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.lotteryOverlay)),
 		]).pipe(
-			this.mapData(([shouldShowLotteryOverlay, [overlay]]) => shouldShowLotteryOverlay && overlay),
+			this.mapData(([shouldShowLotteryOverlay, overlay]) => shouldShowLotteryOverlay && overlay),
 			this.handleReposition(),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

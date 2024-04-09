@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { DuelsStatTypeFilterType } from '@firestone/duels/data-access';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsHeroPowerFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-power-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -38,26 +39,31 @@ export class DuelsHeroPowerFilterDropdownComponent
 	extractor: (conf: typeof duelsHeroConfigs[0]) => readonly CardIds[] = (conf) => conf.heroPowers;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroPowerFilter2);
-		this.selectedHeroes$ = this.listenForBasicPref$((prefs) => prefs.duelsActiveHeroesFilter2);
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsActiveHeroPowerFilter2));
+		this.selectedHeroes$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsActiveHeroesFilter2));
 		this.visible$ = combineLatest([
 			this.store.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId),
-			this.store.listenPrefs$((prefs) => prefs.duelsActiveStatTypeFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.duelsActiveStatTypeFilter)),
 		]).pipe(
-			this.mapData(([[selectedCategoryId], [statTypeFilter]]) =>
+			this.mapData(([[selectedCategoryId], statTypeFilter]) =>
 				isHeroPowerVisible(selectedCategoryId, statTypeFilter),
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onSelected(option: readonly string[]) {
