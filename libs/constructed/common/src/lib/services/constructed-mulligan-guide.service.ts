@@ -21,6 +21,7 @@ import {
 	CardsFacadeService,
 	IAdsService,
 	WindowManagerService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import { toFormatType } from '@firestone/stats/data-access';
 import {
@@ -71,7 +72,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		this.archetypes = AppInjector.get(ConstructedMetaDecksStateService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 
-		await Promise.all([this.scene.isReady(), this.prefs.isReady(), this.ads.isReady(), this.archetypes.isReady()]);
+		await waitForReady(this.scene, this.prefs, this.archetypes, this.gameState);
+		await this.ads.isReady();
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,

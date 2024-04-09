@@ -4,7 +4,7 @@ import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesSer
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
 import { deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, merge } from 'rxjs';
 import {
 	concatMap,
@@ -54,7 +54,9 @@ export class EndGameListenerService {
 		this.init();
 	}
 
-	private init(): void {
+	private async init() {
+		await waitForReady(this.gameState);
+
 		this.gameStatus.inGame$$
 			.pipe(
 				filter((inGame) => inGame),
