@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class ConstructedNavigationService extends AbstractFacadeService<ConstructedNavigationService> {
 	public currentView$$: BehaviorSubject<DecktrackerViewType | null>;
+	public selectedDeckstring$$: BehaviorSubject<string | null>;
 	public selectedConstructedMetaDeck$$: BehaviorSubject<string | null>;
 	public selectedConstructedMetaArchetype$$: BehaviorSubject<number | null>;
 
@@ -16,10 +17,12 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 		this.currentView$$ = this.mainInstance.currentView$$;
 		this.selectedConstructedMetaDeck$$ = this.mainInstance.selectedConstructedMetaDeck$$;
 		this.selectedConstructedMetaArchetype$$ = this.mainInstance.selectedConstructedMetaArchetype$$;
+		this.selectedDeckstring$$ = this.mainInstance.selectedDeckstring$$;
 	}
 
 	protected async init() {
 		this.currentView$$ = new BehaviorSubject<DecktrackerViewType | null>(null);
+		this.selectedDeckstring$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaDeck$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaArchetype$$ = new BehaviorSubject<number | null>(null);
 	}

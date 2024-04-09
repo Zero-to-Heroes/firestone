@@ -2,12 +2,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { classes } from '@legacy-import/src/lib/js/services/hs-utils';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-player-class-filter-dropdown',
@@ -28,24 +27,23 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedPlayerClassFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	options: MultiselectOption[];
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: ConstructedNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.options = classes
 			.map((playerClass) => {
@@ -57,10 +55,10 @@ export class ConstructedPlayerClassFilterDropdownComponent
 			})
 			.sort((a, b) => (a.label < b.label ? -1 : 1));
 		this.filter$ = combineLatest([
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksPlayerClassFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksPlayerClassFilter)),
 			this.nav.currentView$$,
 		]).pipe(
-			this.mapData(([[filter], currentView]) => ({
+			this.mapData(([filter, currentView]) => ({
 				selected: filter ?? classes,
 				placeholder: this.i18n.translateString(`global.class.all`),
 				visible: ['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),

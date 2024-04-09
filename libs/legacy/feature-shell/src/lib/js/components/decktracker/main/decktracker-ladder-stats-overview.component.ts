@@ -7,14 +7,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
@@ -49,7 +48,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerLadderStatsOverviewComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	replays$: Observable<readonly GameStat[]>;
@@ -59,13 +58,12 @@ export class DecktrackerLadderStatsOverviewComponent
 	pieChartOptions: InputPieChartOptions;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly decks: DecksProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

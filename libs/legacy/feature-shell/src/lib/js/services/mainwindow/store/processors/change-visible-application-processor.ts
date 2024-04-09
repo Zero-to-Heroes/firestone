@@ -43,6 +43,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		}
 		if (event.module === 'decktracker') {
 			this.constructedNav.currentView$$.next('decks');
+			this.constructedNav.selectedDeckstring$$.next(null);
 		}
 
 		const achievements =
@@ -88,7 +89,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
 						menuDisplayType: 'menu',
-						selectedDeckstring: null,
 				  } as NavigationDecktracker)
 				: navigationState.navigationBattlegrounds;
 		// TODO: if this is the live tab, default to the decktracker

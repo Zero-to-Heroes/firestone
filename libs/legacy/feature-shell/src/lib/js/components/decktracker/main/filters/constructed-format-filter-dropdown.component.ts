@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
@@ -16,8 +18,6 @@ import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-format-filter-dropdown',
@@ -38,7 +38,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedFormatFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
@@ -48,22 +48,22 @@ export class ConstructedFormatFilterDropdownComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.filter$ = combineLatest([
 			this.nav.currentView$$,
-			this.store.listenPrefs$((prefs) => prefs.constructedMetaDecksFormatFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksFormatFilter)),
 		]).pipe(
-			filter(([currentView, [filter]]) => !!currentView),
-			this.mapData(([currentView, [filter]]) => {
+			filter(([currentView, filter]) => !!currentView),
+			this.mapData(([currentView, filter]) => {
 				const options: FilterOption[] = ['standard', 'wild', 'twist'].map(
 					(option) =>
 						({

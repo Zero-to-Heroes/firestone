@@ -1,8 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { Observable, combineLatest } from 'rxjs';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 
 @Component({
 	selector: 'decktracker-replays-recap',
@@ -32,20 +35,27 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly decks: DecksProviderService,
+		private readonly nav: ConstructedNavigationService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.replays$ = combineLatest(
-			this.store.decks$(),
-			this.store.listen$(([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring),
-			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
-		).pipe(
-			this.mapData(([decks, [selectedDeckstring], [deckstringsFilter]]) =>
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.decks);
+
+		this.replays$ = combineLatest([
+			this.decks.decks$$,
+			this.nav.selectedDeckstring$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveDeckstringsFilter)),
+		]).pipe(
+			this.mapData(([decks, selectedDeckstring, deckstringsFilter]) =>
 				(decks ?? [])
 					.filter((deck) =>
 						selectedDeckstring
@@ -66,5 +76,9 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionStoreC
 					.slice(0, 20),
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

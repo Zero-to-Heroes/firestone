@@ -29,12 +29,12 @@ export class SelectDeckDetailsProcessor implements Processor {
 			)?.deckName,
 		);
 		this.nav.currentView$$.next('deck-details');
+		this.nav.selectedDeckstring$$.next(event.deckstring);
 		return [
 			null,
 			navigationState.update({
 				navigationDecktracker: navigationState.navigationDecktracker.update({
 					menuDisplayType: 'breadcrumbs',
-					selectedDeckstring: event.deckstring,
 				} as NavigationDecktracker),
 			} as NavigationState),
 		];

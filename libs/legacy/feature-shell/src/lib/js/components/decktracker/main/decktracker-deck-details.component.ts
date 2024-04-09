@@ -1,7 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { DeckSummary } from '@firestone/constructed/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedEjectDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-eject-deck-version-event';
 import { ConstructedToggleDeckVersionStatsEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-toggle-deck-version-stats-event';
@@ -103,16 +106,18 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreCo
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly decks: DecksProviderService,
+		private readonly nav: ConstructedNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.deck$ = combineLatest(
-			this.store.decks$(),
-			this.store.listen$(([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring),
-		).pipe(
-			this.mapData(([decks, [selectedDeckstring]]) =>
+	async ngAfterContentInit() {
+		await waitForReady(this.nav, this.decks, this.prefs);
+
+		this.deck$ = combineLatest([this.decks.decks$$, this.nav.selectedDeckstring$$]).pipe(
+			this.mapData(([decks, selectedDeckstring]) =>
 				(decks ?? []).find(
 					(deck) =>
 						deck.deckstring === selectedDeckstring ||
@@ -123,7 +128,7 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreCo
 		this.selectedVersion$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.selectedVersionDeckstring)
 			.pipe(this.mapData(([deckstring]) => deckstring));
-		this.selectedDeck$ = combineLatest(this.deck$, this.selectedVersion$).pipe(
+		this.selectedDeck$ = combineLatest([this.deck$, this.selectedVersion$]).pipe(
 			this.mapData(([deck, selectedVersion]) => {
 				if (!selectedVersion) {
 					return deck;
@@ -132,7 +137,13 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreCo
 			}),
 		);
 		this.replays$ = this.deck$.pipe(this.mapData((deck) => deck?.replays ?? []));
-		this.showMatchupAsPercentages$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages);
+		this.showMatchupAsPercentages$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.desktopDeckShowMatchupAsPercentages),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ejectVersion(version: DeckSummary, deck: DeckSummary) {
