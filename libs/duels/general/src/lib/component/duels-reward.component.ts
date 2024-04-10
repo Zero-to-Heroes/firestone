@@ -43,6 +43,7 @@ export class DuelsRewardComponent {
 			case RewardType.GOLD:
 				return 'assets/svg/rewards/reward_gold.svg';
 			case RewardType.CARD:
+			case RewardType.RANDOM_CARD:
 				return 'assets/svg/rewards/reward_card.svg';
 			default:
 				return null;
@@ -58,6 +59,7 @@ export class DuelsRewardComponent {
 			case RewardType.GOLD:
 				return this.i18n.translateString('app.global.reward.gold');
 			case RewardType.CARD:
+			case RewardType.RANDOM_CARD:
 				return this.i18n.translateString('app.global.reward.card');
 			default:
 				return null;
