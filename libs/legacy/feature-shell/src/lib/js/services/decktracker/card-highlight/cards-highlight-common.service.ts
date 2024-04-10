@@ -970,6 +970,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, pirate);
 			case CardIds.HarnessTheElementsTavernBrawl:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.HarpoonGun:
+				return and(side(inputSide), inDeck, beast);
 			case CardIds.HarrowingOx_WW_356:
 				return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 			case CardIds.HealingWave:
