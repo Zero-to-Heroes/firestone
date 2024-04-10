@@ -78,6 +78,9 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async initChallenges() {
+		console.debug('[firestone-achievements] init challenges', this.achievementsStateManager.rawAchievements$$);
+		await waitForReady(this.achievementsStateManager);
+
 		this.achievementsStateManager.rawAchievements$$
 			.pipe(filter((achievements) => !!achievements?.length))
 			.subscribe((rawAchievements) => {
@@ -139,9 +142,11 @@ export class FirestoneAchievementsChallengeService {
 		const autoGrantAchievements = getAchievements(rawAchievements, achievement.linkedAchievementIds);
 		const allAchievements =
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
+		console.debug('[firestone-achievements] allAchievements', allAchievements);
 
 		for (const achv of allAchievements) {
 			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
+			console.debug('[firestone-achievements] considering', achv, existingAchievement);
 			// From now on, stop counting how many times each achievement has been unlocked
 			if (existingAchievement.numberOfCompletions >= 1) {
 				continue;
