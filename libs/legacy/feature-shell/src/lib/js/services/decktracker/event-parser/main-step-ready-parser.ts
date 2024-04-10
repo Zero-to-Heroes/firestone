@@ -23,7 +23,7 @@ export class MainStepReadyParser implements EventParser {
 		const isPlayerActive = currentState.playerDeck.isFirstPlayer;
 		const [playerTurnTimings, opponentTurnTimings] =
 			!currentState.playerDeck.turnTimings.length && !currentState.playerDeck.turnTimings.length
-				? buildTurnTimings(currentTurn, isPlayerActive, gameEvent.additionalData.timestamp, currentState)
+				? buildTurnTimings(currentTurn, isPlayerActive, false, gameEvent.additionalData.timestamp, currentState)
 				: [currentState.playerDeck.turnTimings, currentState.opponentDeck.turnTimings];
 
 		return Object.assign(new GameState(), currentState, {

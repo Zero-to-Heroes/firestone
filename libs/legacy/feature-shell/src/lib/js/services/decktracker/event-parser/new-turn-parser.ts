@@ -27,7 +27,8 @@ export class NewTurnParser implements EventParser {
 
 		const currentTurn = currentState.mulliganOver || numericTurn >= 2 ? numericTurn : 'mulligan';
 		const isPlayerActive = gameEvent.additionalData.activePlayerId === localPlayer.PlayerId;
-		// console.debug('[turn-start] currentTurn', currentTurn, currentState.mulliganOver, numericTurn);
+		const isPlayerActiveInPreviousTurn = currentState.playerDeck.isActivePlayer;
+		console.debug('[turn-start] currentTurn', currentTurn, isPlayerActive, isPlayerActiveInPreviousTurn);
 		// const isPlayerActive = currentState.playerDeck.isFirstPlayer
 		// 	? gameTurnNumber % 2 === 1
 		// 	: gameTurnNumber % 2 === 0;
@@ -46,6 +47,7 @@ export class NewTurnParser implements EventParser {
 		const [playerTurnTimings, opponentTurnTimings] = buildTurnTimings(
 			currentTurn,
 			isPlayerActive,
+			isPlayerActiveInPreviousTurn,
 			gameEvent.additionalData.timestamp,
 			currentState,
 		);
@@ -94,6 +96,7 @@ export class NewTurnParser implements EventParser {
 export const buildTurnTimings = (
 	currentTurn: number | 'mulligan',
 	isPlayerActive: boolean,
+	isPlayerActiveInPreviousTurn: boolean,
 	turnTimestamp: number,
 	currentState: GameState,
 ): [readonly TurnTiming[], readonly TurnTiming[]] => {
@@ -106,20 +109,39 @@ export const buildTurnTimings = (
 
 	const lastPlayerTurn = currentState.playerDeck.turnTimings[currentState.playerDeck.turnTimings.length - 1];
 	const lastOpponentTurn = currentState.opponentDeck.turnTimings[currentState.opponentDeck.turnTimings.length - 1];
-	if (!isPlayerActive) {
+	console.debug('[turn-start] buildTurnTimings', lastPlayerTurn, lastOpponentTurn, currentState);
+	if (!isPlayerActive || isPlayerActiveInPreviousTurn) {
 		// Close the previous turn
 		if (lastPlayerTurn) {
 			playerTurns = [...playerTurns.slice(0, -1), { ...lastPlayerTurn, endTimestamp: turnTimestamp }];
 		}
-		opponentTurns = [
-			...opponentTurns,
-			{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
-		];
+		if (!isPlayerActive) {
+			opponentTurns = [
+				...opponentTurns,
+				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
+			];
+		} else {
+			playerTurns = [
+				...playerTurns,
+				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
+			];
+		}
 	} else {
 		if (lastOpponentTurn) {
 			opponentTurns = [...opponentTurns.slice(0, -1), { ...lastOpponentTurn, endTimestamp: turnTimestamp }];
 		}
-		playerTurns = [...playerTurns, { turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined }];
+		if (!isPlayerActive) {
+			opponentTurns = [
+				...opponentTurns,
+				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
+			];
+		} else {
+			playerTurns = [
+				...playerTurns,
+				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
+			];
+		}
 	}
+	console.debug('[turn-start] built timings', playerTurns, opponentTurns);
 	return [playerTurns, opponentTurns];
 };
