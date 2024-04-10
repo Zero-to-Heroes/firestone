@@ -11,7 +11,7 @@ import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
@@ -167,7 +167,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						deckState,
 					),
 			),
-			tap((zones) => console.debug('[deck-list-by-zone] zones', zones)),
+			// tap((zones) => console.debug('[deck-list-by-zone] zones', zones)),
 			takeUntil(this.destroyed$),
 		);
 	}
