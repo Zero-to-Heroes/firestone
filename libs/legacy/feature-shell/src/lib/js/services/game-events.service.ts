@@ -985,6 +985,7 @@ export class GameEvents {
 						additionalData: {
 							// Legacy, to avoid regenerating all the tests
 							turnNumber: gameEvent.Value.Turn || gameEvent.Value,
+							activePlayerId: gameEvent.Value.ActivePlayerId,
 							timestamp: gameEvent.Value.Timestamp,
 						},
 					} as GameEvent),
