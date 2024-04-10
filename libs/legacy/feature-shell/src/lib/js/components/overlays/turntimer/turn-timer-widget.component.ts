@@ -117,9 +117,9 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 			this.gameState.gameState$$.pipe(
 				this.mapData(
 					(state) => ({
-						playerName: state?.playerDeck?.hero?.playerName,
-						turnDuration: state?.playerDeck?.turnDuration,
-						turnTimings: state?.playerDeck?.turnTimings,
+						playerName: state?.opponentDeck?.hero?.playerName,
+						turnDuration: state?.opponentDeck?.turnDuration,
+						turnTimings: state?.opponentDeck?.turnTimings,
 					}),
 					(a, b) => deepEqual(a, b),
 				),
