@@ -173,10 +173,10 @@ export const updateHandWithStonebrewInfo = (
 	ALL_HANDS_DBFIDs =
 		ALL_HANDS_DBFIDs ??
 		ALL_HANDS.map((hand) =>
-			hand.map((cardId) => allCards.getCard(cardId).deckDuplicateDbfId ?? allCards.getCard(cardId).dbfId),
+			hand.map((cardId) => allCards.getCard(cardId).counterpartCards?.[0] ?? allCards.getCard(cardId).dbfId),
 		);
 	const playedCardBaseDbfId =
-		allCards.getCard(playedCardBaseId).deckDuplicateDbfId ?? allCards.getCard(playedCardBaseId).dbfId;
+		allCards.getCard(playedCardBaseId).counterpartCards?.[0] ?? allCards.getCard(playedCardBaseId).dbfId;
 	for (const iconicHand of ALL_HANDS_DBFIDs) {
 		if (iconicHand.includes(playedCardBaseDbfId)) {
 			console.debug(

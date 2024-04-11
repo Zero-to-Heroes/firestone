@@ -101,7 +101,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 		// const processedDbfIds: number[] = [];
 		// for (const secret of allOptionsList) {
 		// 	const refCard = this.allCards.getCard(secret.cardId);
-		// 	const dbfId = refCard.deckDuplicateDbfId ?? refCard.dbfId;
+		// 	const dbfId = refCard.counterpartCards?.[0] ?? refCard.dbfId;
 		// 	if (processedDbfIds.includes(dbfId)) {
 		// 		continue;
 		// 	}
@@ -113,7 +113,8 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 		const optionsGroupedByCard = this.groupBy(
 			allOptionsList,
 			(secret: SecretOption) =>
-				this.allCards.getCard(secret.cardId).deckDuplicateDbfId ?? this.allCards.getCard(secret.cardId).dbfId,
+				this.allCards.getCard(secret.cardId).counterpartCards?.[0] ??
+				this.allCards.getCard(secret.cardId).dbfId,
 		);
 
 		const reducedOptions: readonly DeckCard[] = [...optionsGroupedByCard.values()]

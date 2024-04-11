@@ -17,7 +17,7 @@ export const getOwnedForDeckBuilding = (
 const getAllCardDuplicateIdsForDeckbuilding = (cardId: string, allCards: CardsFacadeService): readonly string[] => {
 	const allDuplicates = [cardId];
 	const card = allCards.getCard(cardId);
-	let duplicateDbfId = card.deckDuplicateDbfId;
+	let duplicateDbfId = card.counterpartCards?.[0];
 	while (!!duplicateDbfId) {
 		// console.debug('handling duplicate', duplicateDbfId, cardId);
 		const duplicateCard = allCards.getCard(duplicateDbfId);
@@ -26,7 +26,7 @@ const getAllCardDuplicateIdsForDeckbuilding = (cardId: string, allCards: CardsFa
 			break;
 		}
 		allDuplicates.push(duplicateCard.id);
-		duplicateDbfId = duplicateCard.deckDuplicateDbfId;
+		duplicateDbfId = duplicateCard.counterpartCards?.[0];
 	}
 	return allDuplicates.filter((c) => !!c);
 };

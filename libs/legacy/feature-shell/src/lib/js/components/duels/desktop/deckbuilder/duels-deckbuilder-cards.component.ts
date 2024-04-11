@@ -312,7 +312,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						if (allowed.length === 1) {
 							return allowed[0];
 						}
-						const original = allowed.filter((c) => !!c.deckDuplicateDbfId);
+						const original = allowed.filter((c) => !!c.counterpartCards?.[0]);
 						if (original.length === 1) {
 							return original[0];
 						}
@@ -362,9 +362,9 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 				const withDupeCards: readonly ReferenceCard[] = allCardIds
 					.map((cardId) => this.allCards.getCard(cardId))
 					.flatMap((card) =>
-						card.deckDuplicateDbfId
-							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
-							: [card, ...this.allCards.getCards().filter((c) => c.deckDuplicateDbfId === card.dbfId)],
+						card.counterpartCards?.[0]
+							? [card, this.allCards.getCardFromDbfId(card.counterpartCards?.[0])]
+							: [card, ...this.allCards.getCards().filter((c) => c.counterpartCards?.[0] === card.dbfId)],
 					)
 					.filter((card) => !!card);
 				const withDupes = withDupeCards.map((card) => card.id).filter((cardId) => !!cardId);
@@ -377,8 +377,8 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 					.flatMap((bucket) => bucket.bucketCardIds)
 					.map((cardId) => this.allCards.getCard(cardId))
 					.flatMap((card) =>
-						card.deckDuplicateDbfId
-							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+						card.counterpartCards?.[0]
+							? [card, this.allCards.getCardFromDbfId(card.counterpartCards?.[0])]
 							: [card],
 					)
 					.map((card) => card.id)
@@ -437,8 +437,8 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 					deckCardIds
 						?.map((cardId) => this.allCards.getCard(cardId))
 						.flatMap((card) =>
-							card.deckDuplicateDbfId
-								? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+							card.counterpartCards?.[0]
+								? [card, this.allCards.getCardFromDbfId(card.counterpartCards?.[0])]
 								: [card],
 						)
 						.map((card) => card.id) ?? [];
@@ -447,8 +447,8 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 						const cardIdsWithDuplicates = bucket.bucketCardIds
 							.map((cardId) => this.allCards.getCard(cardId))
 							.flatMap((card) =>
-								card.deckDuplicateDbfId
-									? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+								card.counterpartCards?.[0]
+									? [card, this.allCards.getCardFromDbfId(card.counterpartCards?.[0])]
 									: [card],
 							)
 							.map((card) => card.id);
@@ -662,7 +662,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreCom
 		}
 
 		if (searchFilters.bucket === 'none') {
-			const allRelatedCardIds = [card.id, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)?.id].filter(
+			const allRelatedCardIds = [card.id, this.allCards.getCardFromDbfId(card.counterpartCards?.[0])?.id].filter(
 				(cardId) => cardId,
 			);
 			return allRelatedCardIds.every((cardId) => !allCardIdsInBuckets.includes(cardId));

@@ -249,7 +249,7 @@ export class ConstructedDeckbuilderCardsComponent
 					if (allowed.length === 1) {
 						return allowed[0];
 					}
-					const original = allowed.filter((c) => !!c.deckDuplicateDbfId);
+					const original = allowed.filter((c) => !!c.counterpartCards?.[0]);
 					if (original.length === 1) {
 						return original[0];
 					}
