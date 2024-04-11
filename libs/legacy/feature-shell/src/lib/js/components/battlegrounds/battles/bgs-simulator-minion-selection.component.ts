@@ -478,7 +478,11 @@ export class BgsSimulatorMinionSelectionComponent
 							cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
 					  }))
 					: []),
-				...(this._entity?.enchantments ?? []),
+				...(this._entity?.enchantments ?? []).filter((e) =>
+					this.summonMechs
+						? e
+						: e.cardId !== CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e,
+				),
 			].filter((e) => !!e),
 		} as BoardEntity);
 	}
