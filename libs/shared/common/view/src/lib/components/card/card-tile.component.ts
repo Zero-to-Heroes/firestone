@@ -15,17 +15,18 @@ import {
 	CardsFacadeService,
 	ICardsHighlightService,
 } from '@firestone/shared/framework/core';
+import { SelectorOutput } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-common.service';
 
 @Component({
 	selector: 'card-tile',
 	styleUrls: ['./card-tile.component.scss'],
 	template: `
 		<div
-			class="deck-card {{ rarity }} {{ cardClass }} "
+			class="deck-card {{ rarity }} {{ cardClass }} {{ linkedCardHighlight }}"
 			[ngClass]="{
 				'color-mana-cost': true,
 				'color-class-cards': false,
-				'linked-card': isLinkedCardHighlight
+				'linked-card': linkedCardHighlight
 			}"
 			[cardTooltip]="_cardId"
 			[cardTooltipPosition]="'auto'"
@@ -81,7 +82,7 @@ export class CardTileComponent {
 	rarity: string;
 	cardClass: string;
 	relatedCardIds: readonly string[];
-	isLinkedCardHighlight: boolean;
+	linkedCardHighlight: boolean | string;
 
 	private _uniqueId: string;
 	private _referenceCard: ReferenceCard;
@@ -109,8 +110,8 @@ export class CardTileComponent {
 		this.cardsHighlightService?.onMouseLeave(this._cardId);
 	}
 
-	doHighlight() {
-		this.isLinkedCardHighlight = true;
+	doHighlight(highlight: SelectorOutput) {
+		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlighting', this._cardId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -118,7 +119,7 @@ export class CardTileComponent {
 	}
 
 	doUnhighlight() {
-		this.isLinkedCardHighlight = false;
+		this.linkedCardHighlight = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -138,7 +139,7 @@ export class CardTileComponent {
 				}),
 				zoneProvider: () => null,
 				side: () => 'duels',
-				highlightCallback: () => this.doHighlight(),
+				highlightCallback: (highlight: SelectorOutput) => this.doHighlight(highlight),
 				unhighlightCallback: () => this.doUnhighlight(),
 				debug: this,
 			} /*as Handler*/,

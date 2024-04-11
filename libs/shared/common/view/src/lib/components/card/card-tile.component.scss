@@ -38,6 +38,24 @@
 		.linked-card-overlay {
 			display: flex;
 		}
+
+		&.linked-card-1 {
+			.linked-card-overlay {
+				// Use the default color
+			}
+		}
+
+		&.linked-card-2 {
+			.linked-card-overlay {
+				background: rgba(72, 255, 231, 0.4);
+			}
+		}
+
+		&.linked-card-3 {
+			.linked-card-overlay {
+				background: rgba(255, 72, 157, 0.4);
+			}
+		}
 	}
 
 	.background-image {

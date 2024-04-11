@@ -343,7 +343,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	doHighlight(highlight: SelectorOutput) {
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
-		console.debug('highlighting', this._card?.cardName, highlight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
