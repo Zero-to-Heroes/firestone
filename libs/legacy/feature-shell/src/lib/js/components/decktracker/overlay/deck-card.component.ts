@@ -22,11 +22,8 @@ import { combineLatest, distinctUntilChanged, filter, map, pairwise, takeUntil }
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { AdService } from '../../../services/ad.service';
-import { Handler } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
-import {
-	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS,
-	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
-} from '../../../services/decktracker/card-highlight/merged-highlights';
+import { Handler, SelectorOutput } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
+import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES } from '../../../services/decktracker/card-highlight/merged-highlights';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -40,13 +37,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			tabindex="0"
 			[attr.aria-label]="cardName"
 			[attr.entityId]="entityId"
-			class="deck-card {{ rarity }} {{ highlight }} {{ cardClass }}"
+			class="deck-card {{ rarity }} {{ highlight }} {{ cardClass }} {{ linkedCardHighlight }}"
 			*ngIf="!isUnknownCard || _showUnknownCards"
 			[ngClass]="{
 				'color-mana-cost': _colorManaCost,
 				'color-class-cards': _colorClassCards,
 				missing: _isMissing,
-				'linked-card': isLinkedCardHighlight
+				'linked-card': linkedCardHighlight
 			}"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="'auto'"
@@ -236,7 +233,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	positionFromBottom: number;
 	positionFromTop: number;
 	highlight: string;
-	isLinkedCardHighlight: boolean;
+	linkedCardHighlight: boolean | string;
 	_colorManaCost: boolean;
 	_colorClassCards: boolean;
 	_showRelatedCards: boolean;
@@ -327,7 +324,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 				deckCardProvider: () => this._card,
 				zoneProvider: () => this._zone,
 				side: () => this._side,
-				highlightCallback: () => this.doHighlight(),
+				highlightCallback: (highlight: SelectorOutput) => this.doHighlight(highlight),
 				unhighlightCallback: () => this.doUnhighlight(),
 				debug: this,
 			} as Handler,
@@ -344,16 +341,16 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
 	}
 
-	doHighlight() {
-		this.isLinkedCardHighlight = true;
-		// console.debug('highlighting', this._card?.cardName, this.isLinkedCardHighlight, this.el.nativeElement);
+	doHighlight(highlight: SelectorOutput) {
+		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
+		console.debug('highlighting', this._card?.cardName, highlight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	doUnhighlight() {
-		this.isLinkedCardHighlight = false;
+		this.linkedCardHighlight = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -362,22 +359,26 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseEnter(event: MouseEvent) {
 		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, this._card);
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this._card);
-		if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS.includes(this.cardId as CardIds)) {
-			this.relatedCardIds = this.cardsHighlightService
-				?.getHighlightedCards(this.cardId, this._side, this._card)
-				.flatMap((info) => ({
-					cardId: info.cardId,
-					timing: info.playTiming,
-				}))
-				.sort((a, b) => a.timing - b.timing)
-				.map((info) => info.cardId);
-			if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES.includes(this.cardId as CardIds)) {
-				this.relatedCardIds = [...new Set(this.relatedCardIds)];
-			}
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+		// if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS.includes(this.cardId as CardIds)) {
+		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this._card);
+		console.debug('cardsToShow', cardsToShow);
+		if (!cardsToShow?.length) {
+			return;
 		}
+		this.relatedCardIds = cardsToShow
+			.flatMap((info) => ({
+				cardId: info.cardId,
+				timing: info.playTiming,
+			}))
+			.sort((a, b) => a.timing - b.timing)
+			.map((info) => info.cardId);
+		if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES.includes(this.cardId as CardIds)) {
+			this.relatedCardIds = [...new Set(this.relatedCardIds)];
+		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		// }
 	}
 
 	onMouseLeave(event: MouseEvent) {

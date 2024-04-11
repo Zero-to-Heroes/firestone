@@ -19,6 +19,46 @@ export const or = (...filters: Selector[]): Selector => {
 	return (input: SelectorInput) => filters.filter((f) => !!f).some((filter) => filter(input));
 };
 
+export const orWithHighlight = (...filters: Selector[]): Selector => {
+	return (input: SelectorInput) => {
+		let shouldHighlight = false;
+		for (const filter of filters.filter((f) => !!f)) {
+			const output = filter(input);
+			if (!isNaN(+output)) {
+				return output;
+			} else if (output === 'tooltip') {
+				return 'tooltip';
+			}
+			if (output) {
+				shouldHighlight = true;
+			}
+		}
+		return shouldHighlight;
+	};
+};
+
+export const tooltip = (filter: Selector): Selector => {
+	return (input: SelectorInput) => (!!filter(input) ? 'tooltip' : false);
+};
+
+export const highlightConditions = (...filters: Selector[]): Selector => {
+	return (input: SelectorInput) => {
+		const validFilters = filters.filter((f) => !!f);
+		if (!validFilters.length) {
+			return false;
+		}
+		for (let i = 0; i < validFilters.length; i++) {
+			const output = validFilters[i](input);
+			if (output === 'tooltip') {
+				return 'tooltip';
+			} else if (output) {
+				return i + 1; // Avoid returning 0 (because in JS 0 is falsy)
+			}
+		}
+		return false;
+	};
+};
+
 export const not = (filter: Selector): Selector => {
 	return (input: SelectorInput) => !filter(input);
 };
@@ -38,7 +78,7 @@ export const inPlay = (input: SelectorInput): boolean =>
 	input.deckCard.zone !== 'DISCARD' &&
 	input.deckCard.zone !== 'SETASIDE' &&
 	input.deckCard.zone !== 'TRANSFORMED_INTO_OTHER' &&
-	and(inOther, not(inGraveyard))(input);
+	!!and(inOther, not(inGraveyard))(input);
 
 export const side =
 	(side: 'player' | 'opponent' | 'duels') =>

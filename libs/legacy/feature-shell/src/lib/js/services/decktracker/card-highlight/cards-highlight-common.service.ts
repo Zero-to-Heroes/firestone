@@ -51,6 +51,7 @@ import {
 	healthBiggerThanAttack,
 	healthIs,
 	healthLessThan,
+	highlightConditions,
 	holy,
 	imp,
 	inDeck,
@@ -76,6 +77,7 @@ import {
 	notInInitialDeck,
 	opposingSide,
 	or,
+	orWithHighlight,
 	outcast,
 	overload,
 	paladin,
@@ -93,6 +95,7 @@ import {
 	spellSchoolPlayedThisMatch,
 	summonsTreant,
 	taunt,
+	tooltip,
 	totem,
 	tradeable,
 	tribeless,
@@ -178,7 +181,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			// 	),
 			// );
 			if (!!handler) {
-				handler.highlightCallback();
+				handler.highlightCallback(card.highlight);
 			}
 		}
 	}
@@ -187,7 +190,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		cardId: string,
 		side: 'player' | 'opponent' | 'duels',
 		card?: DeckCard,
-	): readonly { cardId: string; playTiming: number }[] {
+	): readonly { cardId: string; playTiming: number; highlight: SelectorOutput }[] {
 		// Happens when using the deck-list component outside of a game
 		if (!this.options?.skipGameState && !this.gameState) {
 			return;
@@ -207,6 +210,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		return cardsToHighlight.map((i) => ({
 			cardId: i.cardId,
 			playTiming: i.deckCard?.playTiming ?? 0,
+			highlight: i.highlight,
 		}));
 	}
 
@@ -241,8 +245,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const playerCard of allPlayerCards) {
 			// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card);
-			if (selector(playerCard)) {
-				// console.debug('\t', 'highlighting', playerCard.card?.name, playerCard, card);
+			const selectorOutput = selector(playerCard);
+			playerCard.highlight = selectorOutput;
+			if (selectorOutput) {
+				console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
 				result.push(playerCard);
 			}
 		}
@@ -326,7 +332,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	private buildSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
 		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide);
 		const cardContextSelector = this.buildCardContextSelector(card);
-		return or(cardIdSelector, cardContextSelector);
+		return orWithHighlight(cardIdSelector, cardContextSelector);
 	}
 
 	private buildCardContextSelector(card: DeckCard): Selector {
@@ -488,7 +494,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.BladeOfTheBurningSun:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.BlindeyeSharpshooter_WW_402:
-				return and(side(inputSide), or(inDeck, inHand), or(naga, spell));
+				return highlightConditions(
+					and(side(inputSide), or(inDeck, inHand), naga),
+					and(side(inputSide), or(inDeck, inHand), spell),
+				);
+			// return and(side(inputSide), or(inDeck, inHand), or(naga, spell));
 			case CardIds.BloodCrusader:
 				return and(side(inputSide), or(inDeck, inHand), paladin, minion);
 			case CardIds.BloodMoonTavernBrawl:
@@ -1065,6 +1075,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.JewelOfNzoth:
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.JoymancerJepetto_TOY_960:
+				return highlightConditions(
+					and(side(inputSide), or(inDeck, inHand), or(attackIs(1), healthIs(1))),
+					tooltip(and(side(inputSide), minionPlayedThisMatch, or(attackIs(1), healthIs(1)))),
+				);
 				return and(side(inputSide), minionPlayedThisMatch, or(attackIs(1), healthIs(1)));
 			case CardIds.JuicyPsychmelon:
 				return and(
@@ -1906,7 +1920,7 @@ export interface Handler {
 	readonly deckCardProvider: () => VisualDeckCard;
 	readonly zoneProvider: () => DeckZone;
 	readonly side: () => 'player' | 'opponent' | 'duels';
-	readonly highlightCallback: () => void;
+	readonly highlightCallback: (highlight?: SelectorOutput) => void;
 	readonly unhighlightCallback: () => void;
 }
 
@@ -1926,5 +1940,7 @@ export interface SelectorInput {
 	deckState: DeckState;
 	deckCard: DeckCard;
 	allCards: CardsFacadeService;
+	highlight?: SelectorOutput;
 }
-export type Selector = (info: SelectorInput) => boolean;
+export type SelectorOutput = boolean | number | 'tooltip';
+export type Selector = (info: SelectorInput) => SelectorOutput;
