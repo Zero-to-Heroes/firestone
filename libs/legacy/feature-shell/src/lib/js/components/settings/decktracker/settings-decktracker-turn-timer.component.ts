@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -80,10 +81,7 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerTurnTimerComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class SettingsDecktrackerTurnTimerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showTurnTimer$: Observable<boolean>;
 
 	sizeKnobs: readonly Knob[] = [
@@ -112,14 +110,20 @@ export class SettingsDecktrackerTurnTimerComponent
 	];
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showTurnTimer$ = this.listenForBasicPref$((prefs) => prefs.showTurnTimer);
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.showTurnTimer$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.showTurnTimer));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
