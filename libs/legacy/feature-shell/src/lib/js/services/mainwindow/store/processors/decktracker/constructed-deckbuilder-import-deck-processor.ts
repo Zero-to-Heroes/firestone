@@ -1,9 +1,9 @@
 import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { formatFormat } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ConstructedDeckbuilderImportDeckEvent } from '../../events/decktracker/constructed-deckbuilder-import-deck-event';
 
 export class ConstructedDeckbuilderImportDeckProcessor implements Processor {
@@ -22,6 +22,7 @@ export class ConstructedDeckbuilderImportDeckProcessor implements Processor {
 			console.warn('Could not decode deckstring', event.deckstring, event.deckName, e);
 			return [null, null];
 		}
+		console.debug('importing', deckDefinition, event);
 
 		return [
 			currentState.update({
@@ -34,6 +35,7 @@ export class ConstructedDeckbuilderImportDeckProcessor implements Processor {
 						currentCards: deckDefinition.cards.flatMap((card) =>
 							new Array(card[1]).fill(this.allCards.getCardFromDbfId(card[0]).id),
 						),
+						sideboards: deckDefinition.sideboards,
 					}),
 				}),
 			}),

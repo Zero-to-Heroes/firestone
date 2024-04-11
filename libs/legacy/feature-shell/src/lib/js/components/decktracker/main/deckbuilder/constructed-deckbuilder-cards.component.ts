@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DkRune } from '@components/decktracker/overlay/dk-runes.component';
-import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
+import { DeckDefinition, Sideboard, encode } from '@firestone-hs/deckstrings';
 import {
 	CardClass,
 	CardIds,
@@ -171,6 +171,7 @@ export class ConstructedDeckbuilderCardsComponent
 	deckName: string = this.i18n.translateString('decktracker.deck-name.unnamed-deck');
 
 	private currentDeckCards = new BehaviorSubject<readonly string[]>([]);
+	private sideboards$$ = new BehaviorSubject<Sideboard[]>(null);
 	private dkRunes$$ = new BehaviorSubject<readonly DkRune[]>(null);
 
 	constructor(
@@ -347,14 +348,19 @@ export class ConstructedDeckbuilderCardsComponent
 			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentCards)
 			.pipe(this.mapData(([cards]) => cards))
 			.subscribe((cards) => this.currentDeckCards.next(cards));
+		this.store
+			.listen$(([main, nav]) => main.decktracker.deckbuilder.sideboards)
+			.pipe(this.mapData(([sideboards]) => sideboards))
+			.subscribe((sideboards) => this.sideboards$$.next(sideboards));
 		this.deckstring$ = combineLatest([
 			this.currentDeckCards$,
+			this.sideboards$$,
 			this.store.listen$(
 				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
 				([main, nav]) => main.decktracker.deckbuilder.currentClass,
 			),
 		]).pipe(
-			this.mapData(([cards, [currentFormat, currentClass]]) => {
+			this.mapData(([cards, sideboards, [currentFormat, currentClass]]) => {
 				const groupedCards = groupByFunction((cardId: string) => cardId)(cards);
 				const cardDbfIds = Object.values(groupedCards).map(
 					(cards) => [this.allCards.getCard(cards[0]).dbfId, cards.length] as [number, number],
@@ -371,6 +377,7 @@ export class ConstructedDeckbuilderCardsComponent
 							: GameFormat.FT_WILD,
 					cards: cardDbfIds,
 					heroes: [heroDbfId],
+					sideboards: sideboards,
 				};
 				const deckstring = encode(deckDefinition);
 				console.debug('built deckstring', deckstring, deckDefinition, currentClass, heroDbfId);

@@ -248,7 +248,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			const selectorOutput = selector(playerCard);
 			playerCard.highlight = selectorOutput;
 			if (selectorOutput) {
-				console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
+				// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
 				result.push(playerCard);
 			}
 		}
