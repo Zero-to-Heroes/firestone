@@ -95,21 +95,6 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 			.map((secret) => secret.allPossibleOptions)
 			.reduce((a, b) => a.concat(b), []);
 
-		// Some secrets are duplicated between sets. There is a deckDuplicateDbfId field
-		// in the refCard
-		// const result: string[] = [];
-		// const processedDbfIds: number[] = [];
-		// for (const secret of allOptionsList) {
-		// 	const refCard = this.allCards.getCard(secret.cardId);
-		// 	const dbfId = refCard.counterpartCards?.[0] ?? refCard.dbfId;
-		// 	if (processedDbfIds.includes(dbfId)) {
-		// 		continue;
-		// 	}
-		// 	processedDbfIds.push(dbfId);
-		// 	console.debug('adding secret', refCard.name, dbfId, processedDbfIds);
-		// 	result.push(refCard.id);
-		// }
-
 		const optionsGroupedByCard = this.groupBy(
 			allOptionsList,
 			(secret: SecretOption) =>

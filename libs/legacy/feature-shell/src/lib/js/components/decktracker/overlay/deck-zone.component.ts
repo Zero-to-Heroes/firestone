@@ -303,15 +303,17 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		showTopCardsSeparately: boolean,
 		collection: readonly SetCard[],
 	): string {
+		const refCard = this.allCards.getCard(card.cardId);
+		const cardIdForGrouping = !!card.cardId ? refCard?.counterpartCards?.[0] ?? card.cardId : '';
 		const keyWithBonus =
 			!groupSameCardsTogether && showStatsChange
-				? card.cardId + '_' + (card.mainAttributeChange || 0)
-				: card.cardId;
+				? cardIdForGrouping + '_' + (card.mainAttributeChange || 0)
+				: cardIdForGrouping;
 		// We never want cards that are played to be grouped with cards that are not played
 		const keyWithHighlights = keyWithBonus + '-' + card.highlight;
 		const creatorsKeySuffix = !card.creatorCardIds?.length
 			? ''
-			: !!card.cardId
+			: !!cardIdForGrouping
 			? 'creators'
 			: 'creators-' + (card.creatorCardIds || []).join('-');
 		const keyWithGift =
@@ -333,6 +335,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			return keyWithRelatedCards;
 		}
 
+		// TODO: handle duplicates here
 		const quantityToAllocate = quantitiesLeftForCard[card.cardId];
 		quantitiesLeftForCard[card.cardId] = quantityToAllocate - 1;
 		if (quantityToAllocate > 0) {
