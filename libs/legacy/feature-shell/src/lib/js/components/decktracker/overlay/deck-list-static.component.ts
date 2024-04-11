@@ -184,7 +184,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 						: getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
 				const cardCost =
 					card.id === CardIds.ZilliaxDeluxe3000_TOY_330
-						? sideboard.map((c) => c.manaCost).reduce((a, b) => a + b, 0)
+						? sideboard?.map((c) => c.manaCost).reduce((a, b) => a + b, 0) ?? 0
 						: card.cost;
 				return CardWithSideboard.create({
 					cardId: card.id,
