@@ -22,6 +22,7 @@ export const CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS = [
 	CardIds.OnyxBishop_WON_057,
 	CardIds.RaDen,
 	CardIds.RevivePet,
+	CardIds.Shudderwock_GIL_820,
 	CardIds.SouleatersScythe_BoundSoulToken,
 	CardIds.StranglethornHeart,
 	CardIds.TessGreymaneCore,

@@ -767,6 +767,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), dredge);
 			case CardIds.EerieStoneTavernBrawl:
 				return and(side(inputSide), spell, shadow);
+			case CardIds.ElementalAllies:
+				return and(side(inputSide), or(inHand, inDeck), elemental);
 			case CardIds.ElementalEvocation:
 				return and(side(inputSide), or(inHand, inDeck), elemental);
 			case CardIds.ElderNadox:
@@ -1539,7 +1541,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Shudderblock_TOY_501:
 				return and(side(inputSide), or(inHand, inDeck), battlecry);
 			case CardIds.Shudderwock_GIL_820:
-				return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry);
+				// return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry);
+				return and(side(inputSide), cardsPlayedThisMatch, battlecry);
 			case CardIds.SicklyGrimewalker_YOG_512:
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SilvermoonFarstrider_RLK_826:
