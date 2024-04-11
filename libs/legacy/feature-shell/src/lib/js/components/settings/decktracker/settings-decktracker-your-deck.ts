@@ -342,10 +342,10 @@ export class SettingsDecktrackerYourDeckComponent
 		{
 			id: 'wheelOfDeath',
 			field: 'playerWheelOfDeathCounter',
-			label: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-label', {
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-tooltip', {
 				cardName: this.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
 			}),
-			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-tooltip'),
 			showLimitedOption: true,
 		},
 		{
