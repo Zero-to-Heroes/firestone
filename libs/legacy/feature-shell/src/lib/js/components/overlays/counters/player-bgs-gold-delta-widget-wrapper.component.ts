@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { getGoldFromCardId } from '@components/game-counters/definitions/bgs-delta-gold-counter';
 import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -24,13 +25,13 @@ export class PlayerBgsGoldDeltaWidgetWrapperComponent
 	implements AfterContentInit
 {
 	constructor(
-		private readonly allCards: CardsFacadeService,
 		protected readonly ow: OverwolfService,
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
@@ -38,11 +39,11 @@ export class PlayerBgsGoldDeltaWidgetWrapperComponent
 		this.onBgs = true;
 		this.prefExtractor = (prefs) => prefs.playerBgsGoldDeltaCounter;
 		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
-			// const isRecruitPhase = bgState?.currentGame?.phase === 'recruit';
-			// if (!isRecruitPhase) {
-			// 	return false;
-			// }
-			return bgState.currentGame?.extraGoldNextTurn > 0 || bgState.currentGame?.overconfidences > 0;
+			return (
+				bgState.currentGame?.extraGoldNextTurn > 0 ||
+				bgState.currentGame?.overconfidences > 0 ||
+				bgState.currentGame?.boardAndEnchantments.some((c) => getGoldFromCardId(c, state, this.allCards) > 0)
+			);
 		};
 	}
 }

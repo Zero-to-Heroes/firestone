@@ -1139,6 +1139,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN, gameEvent, {
 						extraGold: gameEvent.Value.AdditionalProps.ExtraGoldNextTurn,
 						overconfidences: gameEvent.Value.AdditionalProps.Overconfidences,
+						boardAndEnchantments: gameEvent.Value.AdditionalProps.BoardAndEnchantments,
 					}),
 				);
 				break;

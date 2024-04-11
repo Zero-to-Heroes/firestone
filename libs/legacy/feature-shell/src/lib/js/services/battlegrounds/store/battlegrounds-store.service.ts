@@ -367,6 +367,7 @@ export class BattlegroundsStoreService {
 					new BgsExtraGoldNextTurnEvent(
 						gameEvent.additionalData.extraGold,
 						gameEvent.additionalData.overconfidences,
+						gameEvent.additionalData.boardAndEnchantments,
 					),
 				);
 			} else if (
@@ -615,7 +616,7 @@ export class BattlegroundsStoreService {
 			new BgsBuddyGainedParser(this.gameEventsService, this.allCards),
 			new BgsRewardRevealedParser(this.allCards),
 			new BgsRewardGainedParser(this.allCards),
-			new BgsExtraGoldNextTurnParser(),
+			new BgsExtraGoldNextTurnParser(this.allCards),
 			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService, this.allCards),
 			new BgsTripleCreatedParser(this.allCards),
 			new BgsOpponentRevealedParser(this.allCards),

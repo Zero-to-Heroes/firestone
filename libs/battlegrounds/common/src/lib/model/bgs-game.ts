@@ -32,6 +32,7 @@ export class BgsGame {
 	readonly gameEnded: boolean;
 	readonly extraGoldNextTurn: number = 0;
 	readonly overconfidences: number = 0;
+	readonly boardAndEnchantments: readonly (string | number)[] = [];
 
 	public static create(base: Partial<NonFunctionProperties<BgsGame>>): BgsGame {
 		return Object.assign(new BgsGame(), base);
