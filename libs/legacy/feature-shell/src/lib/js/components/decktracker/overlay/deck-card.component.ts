@@ -359,9 +359,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseEnter(event: MouseEvent) {
 		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, this._card);
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this._card);
-		// if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS.includes(this.cardId as CardIds)) {
 		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this._card);
-		console.debug('cardsToShow', cardsToShow);
 		if (!cardsToShow?.length) {
 			return;
 		}
@@ -378,7 +376,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// }
 	}
 
 	onMouseLeave(event: MouseEvent) {

@@ -513,7 +513,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Bonecaller:
 				return and(side(inputSide), inGraveyard, minion, undead);
 			case CardIds.BonecrusherTavernBrawlToken:
-				return and(side(inputSide), inGraveyard, minion, deathrattle);
+				return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 			case CardIds.Boneshredder:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.BoogieDown:
@@ -611,7 +611,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ContaminatedLasher_YOG_528:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.ContrabandStash:
-				return and(side(inputSide), cardsPlayedThisMatch, not(currentClass), not(neutral));
+				return tooltip(and(side(inputSide), cardsPlayedThisMatch, not(currentClass), not(neutral)));
 			case CardIds.CookiesLadleTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), murloc);
 			case CardIds.Commencement:
@@ -707,7 +707,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Demonfuse_DarkFusionEnchantment:
 				return and(side(inputSide), or(inDeck, inHand), demon);
 			case CardIds.DefenseAttorneyNathanos:
-				return and(side(inputSide), inGraveyard, minion, deathrattle);
+				return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 			case CardIds.DesertNestmatron_WW_826:
 				return and(side(inputSide), or(inHand, inDeck), dragon);
 			case CardIds.DetonationJuggernaut_WW_329:
@@ -868,7 +868,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.GaiaTheTechtonic_TSC_029:
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
 			case CardIds.TheGalacticProjectionOrb_TOY_378:
-				return and(side(inputSide), spellPlayedThisMatch);
+				return tooltip(and(side(inputSide), spellPlayedThisMatch));
 			case CardIds.GameMasterNemsy_TOY_524:
 				return and(side(inputSide), inDeck, demon);
 			case CardIds.GatherYourParty:
@@ -918,7 +918,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.GraniteForgeborn:
 				return and(side(inputSide), or(inDeck, inHand), elemental);
 			case CardIds.GrandMagisterRommath:
-				return and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck);
+				return tooltip(and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck));
 			case CardIds.GraveDefiler:
 				return and(side(inputSide), inDeck, spell, fel);
 			case CardIds.GreedyGainsTavernBrawl:
@@ -1005,7 +1005,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.HighAbbessAlura:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.HighCultistBasaleph:
-				return and(side(inputSide), minionsDeadSinceLastTurn, undead);
+				return tooltip(and(side(inputSide), minionsDeadSinceLastTurn, undead));
 			case CardIds.HiHoSilverwing_WW_344:
 				return and(side(inputSide), or(inDeck, inHand), spell, holy);
 			case CardIds.HoldTheLineTavernBrawl:
@@ -1212,7 +1212,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.MaskedReveler:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.MassResurrection_DAL_724:
-				return and(side(inputSide), inGraveyard, minion);
+				return tooltip(and(side(inputSide), inGraveyard, minion));
 			case CardIds.MastersCall:
 				// case CardIds.MastersCall_CORE:
 				return and(side(inputSide), inDeck, minion);
@@ -1241,7 +1241,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.MimironTheMastermind:
 				return and(side(inputSide), or(inDeck, inHand), mech);
 			case CardIds.Mixtape:
-				return and(opposingSide(inputSide), cardsPlayedThisMatch);
+				return tooltip(and(opposingSide(inputSide), cardsPlayedThisMatch));
 			case CardIds.Muckmorpher:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.MulchMadnessTavernBrawl:
@@ -1272,7 +1272,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.NetherBreath_DRG_205:
 				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.NineLives:
-				return and(side(inputSide), inGraveyard, minion, deathrattle);
+				return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 			case CardIds.NorthernNavigation:
 				return and(side(inputSide), or(inHand, inDeck), spell, frost);
 			case CardIds.NostalgicInitiate_TOY_340:
@@ -1291,7 +1291,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inHand, inDeck), minion);
 			case CardIds.OnyxBishop:
 			case CardIds.OnyxBishop_WON_057:
-				return and(side(inputSide), inGraveyard);
+				return tooltip(and(side(inputSide), inGraveyard));
 			case CardIds.OnyxianWarder:
 				return and(side(inputSide), or(inDeck, inHand), dragon);
 			case CardIds.OopsAllSpellsTavernBrawl:
@@ -1385,9 +1385,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ImpKingRafaam_REV_789:
 			case CardIds.ImpKingRafaam_REV_835:
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
-				return and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp);
+				return tooltip(and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp));
 			case CardIds.RaDen:
-				return and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen)));
+				return tooltip(
+					and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen))),
+				);
 			case CardIds.RaidBossOnyxia_ONY_004:
 				return and(side(inputSide), or(inDeck, inHand), minion, whelp);
 			case CardIds.RaidingParty:
@@ -1430,9 +1432,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Resurrect_BRM_017:
 				return and(side(inputSide), inGraveyard, minion);
 			case CardIds.RevivePet:
-				return and(side(inputSide), inGraveyard, minion, beast);
+				return tooltip(and(side(inputSide), inGraveyard, minion, beast));
 			case CardIds.Rewind_ETC_532:
-				return and(side(inputSide), spellPlayedThisMatch, not(cardIs(CardIds.Rewind_ETC_532)));
+				return tooltip(and(side(inputSide), spellPlayedThisMatch, not(cardIs(CardIds.Rewind_ETC_532))));
 			case CardIds.RhoninsScryingOrbTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.RighteousReservesTavernBrawl:
@@ -1555,8 +1557,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Shudderblock_TOY_501:
 				return and(side(inputSide), or(inHand, inDeck), battlecry);
 			case CardIds.Shudderwock_GIL_820:
-				// return and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry);
-				return and(side(inputSide), cardsPlayedThisMatch, battlecry);
+				return highlightConditions(
+					and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry),
+					tooltip(and(side(inputSide), cardsPlayedThisMatch, battlecry)),
+				);
 			case CardIds.SicklyGrimewalker_YOG_512:
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SilvermoonFarstrider_RLK_826:
@@ -1592,7 +1596,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.SoulburnerVaria_YOG_520:
 				return and(side(inputSide), or(inDeck, inHand), undead);
 			case CardIds.SouleatersScythe_BoundSoulToken:
-				return and(inOther, minion, lastAffectedByCardId(CardIds.SouleatersScythe));
+				return tooltip(and(inOther, minion, lastAffectedByCardId(CardIds.SouleatersScythe)));
 			case CardIds.SowTheSeedsTavernBrawl:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.SpecialDeliveryTavernBrawl:
@@ -1679,7 +1683,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.StormpikeBattleRam:
 				return and(side(inputSide), or(inDeck, inHand), minion, beast);
 			case CardIds.StranglethornHeart:
-				return and(side(inputSide), inGraveyard, beast, effectiveCostMore(4));
+				return tooltip(and(side(inputSide), inGraveyard, beast, effectiveCostMore(4)));
 			case CardIds.SummerFlowerchild:
 				return and(side(inputSide), inDeck, effectiveCostMore(5));
 			case CardIds.SunfuryChampion:
@@ -1732,7 +1736,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 			case CardIds.TessGreymane_GIL_598:
 			case CardIds.TessGreymaneCore:
-				return and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
+				return tooltip(and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral))));
 			case CardIds.TheCountess:
 				return and(side(inputSide), inDeck, neutral);
 			case CardIds.TheCurator_KAR_061:
@@ -1819,7 +1823,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.UndyingAllies:
 				return and(side(inputSide), or(inDeck, inHand), minion, undead);
 			case CardIds.UnendingSwarm:
-				return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
+				return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(3)));
 			case CardIds.UnlockedPotential:
 				return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 			case CardIds.UnluckyPowderman_WW_367:
