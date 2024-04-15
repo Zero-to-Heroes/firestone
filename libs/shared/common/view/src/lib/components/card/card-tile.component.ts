@@ -15,7 +15,6 @@ import {
 	CardsFacadeService,
 	ICardsHighlightService,
 } from '@firestone/shared/framework/core';
-import { SelectorOutput } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-common.service';
 
 @Component({
 	selector: 'card-tile',
@@ -110,7 +109,7 @@ export class CardTileComponent {
 		this.cardsHighlightService?.onMouseLeave(this._cardId);
 	}
 
-	doHighlight(highlight: SelectorOutput) {
+	doHighlight(highlight: any /*SelectorOutput*/) {
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlighting', this._cardId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -139,7 +138,7 @@ export class CardTileComponent {
 				}),
 				zoneProvider: () => null,
 				side: () => 'duels',
-				highlightCallback: (highlight: SelectorOutput) => this.doHighlight(highlight),
+				highlightCallback: (highlight: any /*SelectorOutput*/) => this.doHighlight(highlight),
 				unhighlightCallback: () => this.doUnhighlight(),
 				debug: this,
 			} /*as Handler*/,
