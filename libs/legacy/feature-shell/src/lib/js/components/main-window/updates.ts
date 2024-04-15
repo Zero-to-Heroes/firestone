@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.10.2',
+		version: '13.10.6',
 		force: false,
 		sections: [
 			// {
@@ -75,7 +75,58 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
+								text: `Card highlights in the tracker can now highlight different conditions in different colors (like Blindeye Sharpshooter highlights Nagas and Spells differently). Let me know if you encounter cards that could benefit from that!.`,
+							},
+							{
+								type: 'feature',
 								text: `Add a Dragons Summoned counter for the opponent. It only appears when the opponent is playing Priest and has summoned at least one dragon.`,
+							},
+							{
+								type: 'feature',
+								text: `Cards in the decklist will now be grouped based on whether or not the game itself consider them to be the same card (for instance, a Core and non-Core version of a card).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Turn Timer and Attack Counter would stop working after playing an additional turn from Zarimi.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where importing a deck code in the deck builder would not properly import sideboards.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `The "gold next turn" counter now accounts for your board, including "start of next turn" effects like Accord-o-Tron.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where sometimes highlights would be off, because Tavern Spells were ignored.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue in the simulator UI where you couldn't remove the "summon mechs" enchantment once added.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the rewards would mention "Gold Cards" instead of normal cards.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where Firestone achievements could not be completed anymore.`,
 							},
 						],
 					},
