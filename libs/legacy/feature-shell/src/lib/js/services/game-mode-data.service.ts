@@ -58,6 +58,10 @@ export class GameModeDataService {
 			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
+			case GameType.GT_BATTLEGROUNDS_DUO:
+			case GameType.GT_BATTLEGROUNDS_DUO_VS_AI:
+			case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
+			case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
 				this.triggerBattlegroundsInfoRetrieve(spectating);
 				return;
 			case GameType.GT_CASUAL:

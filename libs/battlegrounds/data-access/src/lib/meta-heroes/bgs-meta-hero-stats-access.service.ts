@@ -6,6 +6,8 @@ import { BgsActiveTimeFilterType } from './bgs-active-time-filter.type';
 // const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/%mmr-folder%/bgs-%timeSuffix%.gz.json';
 const META_HERO_STATS_URL =
 	'https://static.zerotoheroes.com/api/bgs/hero-stats/%mmr-folder%/%timeSuffix%/overview-from-hourly.gz.json';
+const META_HERO_STATS_DUO_URL =
+	'https://static.zerotoheroes.com/api/bgs/duo/hero-stats/%mmr-folder%/%timeSuffix%/overview-from-hourly.gz.json';
 
 @Injectable()
 export class BgsMetaHeroStatsAccessService {
@@ -19,6 +21,17 @@ export class BgsMetaHeroStatsAccessService {
 		console.debug('[bgs-meta-hero] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
 		console.debug('[bgs-meta-hero] result', result);
+		return result;
+	}
+
+	public async loadMetaHeroStatsDuo(
+		timeFilter: BgsActiveTimeFilterType,
+		mmr: 100 | 50 | 25 | 10 | 1,
+	): Promise<BgsHeroStatsV2> {
+		const url = META_HERO_STATS_DUO_URL.replace('%mmr-folder%', `mmr-${mmr}`).replace('%timeSuffix%', timeFilter);
+		console.debug('[bgs-meta-hero-duo] url', url);
+		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
+		console.debug('[bgs-meta-hero-duo] result', result);
 		return result;
 	}
 }

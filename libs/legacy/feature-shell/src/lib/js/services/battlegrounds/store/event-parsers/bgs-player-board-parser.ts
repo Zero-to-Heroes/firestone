@@ -72,21 +72,64 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		const player: BgsPlayer = this.updatePlayer(currentState, event.playerBoard);
 		const opponent: BgsPlayer = this.updatePlayer(currentState, event.opponentBoard);
-
 		if (!player || !opponent) {
 			console.warn('[bgs-simulation] missing player or opponent, returning');
+			console.debug('[bgs-simulation] missing player or opponent', player, opponent, currentState);
 			return currentState;
 		}
 
+		let playerTeammateBoard: PlayerBoard = null;
+		let opponentTeammateBoard: PlayerBoard = null;
+		for (const duoPendingBoard of event.duoPendingBoards ?? []) {
+			if (playerTeammateBoard == null && duoPendingBoard.playerBoard.playerId !== player.playerId) {
+				playerTeammateBoard = duoPendingBoard.playerBoard;
+			}
+			if (opponentTeammateBoard == null && duoPendingBoard.opponentBoard.playerId !== opponent.playerId) {
+				opponentTeammateBoard = duoPendingBoard.opponentBoard;
+			}
+		}
+
+		console.debug(
+			'[bgs-simulation] found boards',
+			event.playerBoard,
+			playerTeammateBoard,
+			event.opponentBoard,
+			opponentTeammateBoard,
+		);
+		const playerTeammatePlayer = !!playerTeammateBoard
+			? this.updatePlayer(currentState, playerTeammateBoard)
+			: null;
+		const opponentTeammatePlayer = !!opponentTeammateBoard
+			? this.updatePlayer(currentState, opponentTeammateBoard)
+			: null;
+		console.debug(
+			'[bgs-simulation] updates players',
+			player,
+			playerTeammatePlayer,
+			opponent,
+			opponentTeammatePlayer,
+		);
+
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
 			.map((p) => (p.playerId === player.playerId ? player : p))
-			.map((p) => (p.playerId === opponent.playerId ? opponent : p));
+			.map((p) => (p.playerId === opponent.playerId ? opponent : p))
+			.map((p) =>
+				!!playerTeammatePlayer && p.playerId === playerTeammatePlayer.playerId ? playerTeammatePlayer : p,
+			)
+			.map((p) =>
+				!!opponentTeammatePlayer && p.playerId === opponentTeammatePlayer.playerId ? opponentTeammatePlayer : p,
+			);
 
 		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(player, event.playerBoard);
 		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
+		const playerTeammate: BgsBoardInfo = this.buildBgsBoardInfo(player, playerTeammateBoard);
+		const opponentTeammate: BgsBoardInfo = this.buildBgsBoardInfo(player, opponentTeammateBoard);
+
 		const battleInfo: BgsBattleInfo = {
 			playerBoard: bgsPlayer,
+			playerTeammateBoard: playerTeammate,
 			opponentBoard: bgsOpponent,
+			opponentTeammateBoard: opponentTeammate,
 			options: {
 				maxAcceptableDuration: 8000,
 				numberOfSimulations: 8000,
@@ -145,6 +188,10 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
+		if (!playerBoard) {
+			return null;
+		}
+
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board, this.allCards);
 		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets, this.allCards);
 		const hand: BoardEntity[] = player.buildBgsEntities(playerBoard.hand, this.allCards);
@@ -203,7 +250,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		if (!playerToUpdate) {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 				console.warn(
-					'Could not idenfity player for whom to update board history',
+					'[bgs-simulation] Could not idenfity player for whom to update board history',
 					currentState.currentGame.reviewId,
 					playerBoard.heroCardId,
 					playerBoard.playerId,
@@ -213,7 +260,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			return null;
 		}
 		console.debug(
-			'found player board to update',
+			'[bgs-simulation] found player board to update',
 			playerToUpdate.cardId,
 			playerToUpdate.playerId,
 			playerToUpdate.damageTaken,
@@ -234,10 +281,11 @@ export class BgsPlayerBoardParser implements EventParser {
 			boardHistory: newHistory,
 		});
 		console.debug(
-			'update board for player',
+			'[bgs-simulation] update board for player',
 			newPlayer.cardId,
 			newPlayer.playerId,
 			newPlayer.getLastKnownBoardState()?.map((entity) => entity.cardID),
+			newPlayer,
 		);
 		return newPlayer;
 	}

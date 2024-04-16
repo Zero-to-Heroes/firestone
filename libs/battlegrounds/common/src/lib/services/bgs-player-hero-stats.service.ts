@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
+import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
@@ -12,7 +13,8 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
-import { combineLatest, distinctUntilChanged, map, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, map, switchMap, tap } from 'rxjs';
+import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
 import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
 import { filterBgsMatchStats } from './hero-stats-helper';
 
@@ -21,6 +23,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 	public tiersWithPlayerData$$: SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null | undefined>;
 
 	private metaStats: BgsMetaHeroStatsService;
+	private metaStatsDuo: BgsMetaHeroStatsDuoService;
 	private prefs: PreferencesService;
 	private allCards: CardsFacadeService;
 	private gameStats: IGameStatsProviderService;
@@ -39,6 +42,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			readonly BgsMetaHeroStatTierItem[] | null | undefined
 		>(null);
 		this.metaStats = AppInjector.get(BgsMetaHeroStatsService);
+		this.metaStatsDuo = AppInjector.get(BgsMetaHeroStatsDuoService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.gameStats = AppInjector.get(GAME_STATS_PROVIDER_SERVICE_TOKEN);
@@ -47,9 +51,23 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		await waitForReady(this.patchesConfig, this.metaStats, this.prefs);
 
 		this.tiersWithPlayerData$$.onFirstSubscribe(() => {
+			const gameMode$ = this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsActiveGameMode));
+
+			// Get the correct observable based on the gameMode$
+			const heroStats$: Observable<BgsHeroStatsV2 | null> = gameMode$.pipe(
+				switchMap((gameMode) => {
+					if (gameMode === 'battlegrounds-duo') {
+						return this.metaStatsDuo.metaHeroStats$$;
+					} else {
+						return this.metaStats.metaHeroStats$$;
+					}
+				}),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+			);
+
 			const playerBgGames$ = combineLatest([
 				this.gameStats.gameStats$$,
-				this.metaStats.metaHeroStats$$.pipe(
+				heroStats$.pipe(
 					map((stats) => stats?.mmrPercentiles ?? []),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				),
@@ -78,6 +96,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 							!mmrPercentiles?.length || !rankFilter || !useMmrFilter
 								? 0
 								: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
+						// #Duos: add support for BG duos in player hero stats
 						const bgGames = (games ?? [])
 							.filter((g) => ['battlegrounds', 'battlegrounds-friendly'].includes(g.gameMode))
 							.filter(

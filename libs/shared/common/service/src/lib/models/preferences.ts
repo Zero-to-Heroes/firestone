@@ -696,6 +696,7 @@ export class Preferences implements IPreferences {
 	readonly bgsGroupQuestsByDifficulty: boolean = false;
 	readonly bgsActiveUseMmrFilterInHeroSelection: boolean = true;
 	readonly bgsActiveUseAnomalyFilterInHeroSelection: boolean = true;
+	readonly bgsActiveGameMode: 'battlegrounds' | 'battlegrounds-duo' = 'battlegrounds';
 	readonly bgsSavedUseMmrFilterInHeroSelection: boolean = false;
 	readonly bgsSavedUseAnomalyFilterInHeroSelection: boolean = false;
 	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' = 'EU';

@@ -315,9 +315,8 @@ export class GameStateService {
 			console.debug(
 				'[game-state] emitting event',
 				emittedEvent.event.name,
-				gameEvent.entityId,
-				gameEvent.cardId,
-				this.state.currentTurn,
+				this.state.playerDeck?.board?.map((e) => e.cardName),
+				this.state.playerDeck?.board,
 				gameEvent,
 				emittedEvent.state,
 			);

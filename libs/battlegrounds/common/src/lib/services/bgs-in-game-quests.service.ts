@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
-import { CardIds, GameType, SceneMode, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, SceneMode, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/constructed/common';
 import { CardOption } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -94,7 +94,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 				if (!currentOptions?.length) {
 					return false;
 				}
-				if (!gameType || ![GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(gameType)) {
+				if (!gameType || !isBattlegrounds(gameType)) {
 					return false;
 				}
 				return true;

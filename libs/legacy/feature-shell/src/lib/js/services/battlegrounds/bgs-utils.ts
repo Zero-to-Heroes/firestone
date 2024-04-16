@@ -8,6 +8,7 @@ import {
 	ReferenceCard,
 	SceneMode,
 	getTribeName,
+	isBattlegroundsDuo,
 } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -55,12 +56,16 @@ const normalizeHeroCardIdAfterSkin = (heroCardId: string, allCards: CardsFacadeS
 export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
 	hasSpells: boolean,
+	gameMode: GameType,
 	allCards: CardsFacadeService,
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
+		.filter((card) =>
+			isBattlegroundsDuo(gameMode) ? true : !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
+		)
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
@@ -459,6 +464,16 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 832;
 		case CardIds.DoctorHollidae_BG28_HERO_801:
 			return 833;
+		case CardIds.Cho_BGDUO_HERO_222:
+			return 922;
+		case CardIds.Gall_BGDUO_HERO_223:
+			return 923;
+		case CardIds.TheNamelessOne_BGDUO_HERO_100:
+			return 920;
+		case CardIds.FlobbidinousFloop_BGDUO_HERO_101:
+			return 919;
+		case CardIds.MadamGoya_BGDUO_HERO_104:
+			return 921;
 		// case CardIds.Diablo:
 		// 	return;
 		default:
@@ -826,8 +841,12 @@ export const isBattlegrounds = (gameType: GameType | StatGameModeType): boolean 
 			GameType.GT_BATTLEGROUNDS_FRIENDLY,
 			GameType.GT_BATTLEGROUNDS_AI_VS_AI,
 			GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI,
+			GameType.GT_BATTLEGROUNDS_DUO,
+			GameType.GT_BATTLEGROUNDS_DUO_VS_AI,
+			GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY,
+			GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI,
 		].includes(gameType as GameType) ||
-		['battlegrounds', 'battlegrounds-friendly'].includes(gameType as StatGameModeType)
+		['battlegrounds', 'battlegrounds-friendly', 'battlegrounds-duo'].includes(gameType as StatGameModeType)
 	);
 };
 

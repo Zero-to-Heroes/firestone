@@ -23,7 +23,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			[replay]="replayInfo"
 		></replay-info-ranked>
 		<replay-info-battlegrounds
-			*ngIf="gameMode === 'battlegrounds' || gameMode === 'battlegrounds-friendly'"
+			*ngIf="
+				gameMode === 'battlegrounds' ||
+				gameMode === 'battlegrounds-friendly' ||
+				gameMode === 'battlegrounds-duo'
+			"
 			[showStatsLabel]="showStatsLabel"
 			[showReplayLabel]="showReplayLabel"
 			[displayTime]="displayTime"
@@ -51,6 +55,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				gameMode !== 'ranked' &&
 				gameMode !== 'battlegrounds' &&
 				gameMode !== 'battlegrounds-friendly' &&
+				gameMode !== 'battlegrounds-duo' &&
 				!isMercenaries &&
 				!isDuels
 			"

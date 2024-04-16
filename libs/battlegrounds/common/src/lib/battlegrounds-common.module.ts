@@ -14,6 +14,7 @@ import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-gu
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
 import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
 import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
+import { BgsMetaHeroStatsDuoService } from './services/bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './services/bgs-meta-hero-stats.service';
 import { BattlegroundsNavigationService } from './services/bgs-navigation.service';
 import { BattlegroundsOfficialLeaderboardService } from './services/bgs-official-leaderboards.service';
@@ -47,6 +48,7 @@ const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent]
 		BgsStateFacadeService,
 		BgsPlayerHeroStatsService,
 		BgsMetaHeroStatsService,
+		BgsMetaHeroStatsDuoService,
 		BattlegroundsNavigationService,
 	],
 	declarations: components,

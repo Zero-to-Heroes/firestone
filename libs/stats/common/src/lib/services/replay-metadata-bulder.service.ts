@@ -67,7 +67,9 @@ export class ReplayMetadataBuilderService {
 				gameMode: game.gameMode,
 				gameFormat: game.gameFormat,
 				additionalResult:
-					game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly'
+					game.gameMode === 'battlegrounds' ||
+					game.gameMode === 'battlegrounds-friendly' ||
+					game.gameMode === 'battlegrounds-duo'
 						? replay.additionalResult
 						: game.additionalResult,
 				runId: game.runId,
@@ -102,7 +104,12 @@ export class ReplayMetadataBuilderService {
 		xml: string,
 		bgsRunStats: BgsComputeRunStatsInput | null,
 	): ReplayUploadMetadata['bgs'] | undefined {
-		if (!bgsRunStats || (game.gameMode !== 'battlegrounds' && game.gameMode !== 'battlegrounds-friendly')) {
+		if (
+			!bgsRunStats ||
+			(game.gameMode !== 'battlegrounds' &&
+				game.gameMode !== 'battlegrounds-friendly' &&
+				game.gameMode !== 'battlegrounds-duo')
+		) {
 			return undefined;
 		}
 

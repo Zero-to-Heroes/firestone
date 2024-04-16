@@ -164,7 +164,13 @@ export class PresenceManagerService {
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
-				console.warn('missing duels support for now');
+				return this.i18n.translateString('settings.general.discord.in-game-text.mmr', {
+					value: '???',
+				});
+			case GameType.GT_BATTLEGROUNDS_DUO:
+			case GameType.GT_BATTLEGROUNDS_DUO_VS_AI:
+			case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
+			case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
 				return this.i18n.translateString('settings.general.discord.in-game-text.mmr', {
 					value: '???',
 				});

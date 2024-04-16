@@ -1,16 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replays-list',
@@ -50,7 +48,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ReplaysListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
 	showUseClassIconsToggle$: Observable<boolean>;
 	showMercDetailsToggle$: Observable<boolean>;
@@ -61,44 +59,47 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	private opponentSearchString$$ = new BehaviorSubject<string>(undefined);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStats: GameStatsProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.prefs.isReady(), this.gameStats.isReady()]);
+		await waitForReady(this.prefs, this.gameStats);
 
-		this.showUseClassIconsToggle$ = this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter).pipe(
-			this.mapData(
-				(gameModeFilter) =>
-					!['battlegrounds'].includes(gameModeFilter) && !gameModeFilter?.startsWith('mercenaries'),
-			),
-		);
-		this.showMercDetailsToggle$ = this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter).pipe(
-			this.mapData((gameModeFilter) => gameModeFilter?.startsWith('mercenaries')),
-		);
-		this.replaysIconToggleAbsolutePosition$ = this.listenForBasicPref$(
-			(prefs) => prefs.replaysActiveGameModeFilter,
-		).pipe(
-			this.mapData(
-				(gameModeFilter) =>
-					[
-						null,
-						undefined,
-						'battlegrounds',
-						'practice',
-						'mercenaries-all',
-						'mercenaries-pve',
-						'mercenaries-pvp',
-					].includes(gameModeFilter) || gameModeFilter?.startsWith('mercenaries'),
-			),
-		);
+		this.showUseClassIconsToggle$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter))
+			.pipe(
+				this.mapData(
+					(gameModeFilter) =>
+						!['battlegrounds', 'battlegrounds-duo'].includes(gameModeFilter) &&
+						!gameModeFilter?.startsWith('mercenaries'),
+				),
+			);
+		this.showMercDetailsToggle$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter))
+			.pipe(this.mapData((gameModeFilter) => gameModeFilter?.startsWith('mercenaries')));
+		this.replaysIconToggleAbsolutePosition$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter))
+			.pipe(
+				this.mapData(
+					(gameModeFilter) =>
+						[
+							null,
+							undefined,
+							'battlegrounds',
+							'battlegrounds-duo',
+							'practice',
+							'mercenaries-all',
+							'mercenaries-pve',
+							'mercenaries-pvp',
+						].includes(gameModeFilter) || gameModeFilter?.startsWith('mercenaries'),
+				),
+			);
 		this.replays$ = combineLatest([
 			this.gameStats.gameStats$$,
 			this.prefs.preferences$$.pipe(
@@ -209,11 +210,14 @@ export class ReplaysListComponent extends AbstractSubscriptionStoreComponent imp
 	}
 
 	private bgHeroFilter(stat: GameStat, filter: string, gameModeFilter: string): boolean {
-		if (gameModeFilter !== 'battlegrounds') {
+		if (gameModeFilter !== 'battlegrounds' && gameModeFilter !== 'battlegrounds-duo') {
 			return true;
 		}
 
-		if (!isBattlegrounds(toGameTypeEnum(stat.gameMode))) {
+		if (gameModeFilter === 'battlegrounds' && !isBattlegrounds(toGameTypeEnum(stat.gameMode))) {
+			return true;
+		}
+		if (gameModeFilter === 'battlegrounds-duo' && !isBattlegroundsDuo(toGameTypeEnum(stat.gameMode))) {
 			return true;
 		}
 

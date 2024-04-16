@@ -64,7 +64,11 @@ export class GameStat {
 	}
 
 	public isBattlegrounds(): boolean {
-		return this.gameMode === 'battlegrounds' || this.gameMode === 'battlegrounds-friendly';
+		return (
+			this.gameMode === 'battlegrounds' ||
+			this.gameMode === 'battlegrounds-friendly' ||
+			this.gameMode === 'battlegrounds-duo'
+		);
 	}
 
 	public buildPlayerRankImage(i18n: ILocalizationService): {
@@ -114,7 +118,11 @@ export class GameStat {
 					format: capitalizeEachWord(this.gameFormat),
 				});
 			}
-		} else if (this.gameMode === 'battlegrounds' || this.gameMode === 'battlegrounds-friendly') {
+		} else if (
+			this.gameMode === 'battlegrounds' ||
+			this.gameMode === 'battlegrounds-friendly' ||
+			this.gameMode === 'battlegrounds-duo'
+		) {
 			rankIcon = 'battlegrounds';
 			rankIconTooltip = i18n.translateString(`global.game-mode.${this.gameMode}`);
 		} else if (this.gameMode?.startsWith('mercenaries')) {

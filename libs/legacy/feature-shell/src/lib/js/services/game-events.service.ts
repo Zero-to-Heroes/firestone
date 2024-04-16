@@ -1149,9 +1149,15 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_PLAYER_BOARD':
+			case 'BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD':
+				const eventName =
+					gameEvent.Type === 'BATTLEGROUNDS_PLAYER_BOARD'
+						? GameEvent.BATTLEGROUNDS_PLAYER_BOARD
+						: GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD;
+				console.debug('[game-events] receiving ' + gameEvent.Type, gameEvent, eventName);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
-						type: GameEvent.BATTLEGROUNDS_PLAYER_BOARD,
+						type: eventName,
 						additionalData: {
 							playerBoard: {
 								cardId: gameEvent.Value.PlayerBoard.CardId,

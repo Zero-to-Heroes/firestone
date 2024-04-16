@@ -8,9 +8,9 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const BG_USE_QUESTS = true;
+export const BG_USE_QUESTS = false;
 // Temp flag to enable the feature in the desktop app while the overlay is causing issues
-export const BG_USE_QUESTS_IN_DESKTOP = true;
+export const BG_USE_QUESTS_IN_DESKTOP = false;
 export const DAILY_FREE_USES = 2;
 
 @Injectable()

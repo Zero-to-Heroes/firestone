@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { Game } from '@firestone-hs/replay-parser';
 
 @Injectable({
@@ -13,10 +13,6 @@ export class GameConfService {
 	}
 
 	public isBattlegrounds(): boolean {
-		return (
-			this.game &&
-			(this.game.gameType === GameType.GT_BATTLEGROUNDS ||
-				this.game.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY)
-		);
+		return this.game && isBattlegrounds(this.game.gameType);
 	}
 }

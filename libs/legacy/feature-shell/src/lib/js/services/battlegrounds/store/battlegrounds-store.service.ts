@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import {
 	BattlegroundsState,
 	BgsMatchMemoryInfoService,
+	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/common';
@@ -130,6 +131,7 @@ export class BattlegroundsStoreService {
 	// private memoryInterval;
 	private battlegroundsHotkeyListener;
 	private realTimeStatsListener: (state: RealTimeStatsState) => void;
+	private duoPendingBoards: any[] = [];
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -153,6 +155,7 @@ export class BattlegroundsStoreService {
 		private readonly bugService: BugReportService,
 		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
+		private readonly metaHeroStatsDuo: BgsMetaHeroStatsDuoService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -166,7 +169,7 @@ export class BattlegroundsStoreService {
 	// initialized, and replay them. Doable, but cumbersome, and will probably lead to bugs
 
 	private async init() {
-		await waitForReady(this.metaHeroStats);
+		await waitForReady(this.metaHeroStats, this.metaHeroStatsDuo);
 
 		this.eventParsers = this.buildEventParsers();
 		this.realTimeStatsListener = (state: RealTimeStatsState) => {
@@ -268,10 +271,14 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.RECONNECT_OVER) {
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(false));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
+				// #Duos: use stats for Duos
 				const heroStats = await this.metaHeroStats.metaHeroStats$$.getValueWithInit();
+				const heroStatsDuo = await this.metaHeroStatsDuo.metaHeroStats$$.getValueWithInit();
 				// Order is important here, so that when the MMR is set the races are already populated
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
-				this.battlegroundsUpdater.next(new BgsInitMmrEvent(heroStats?.mmrPercentiles));
+				this.battlegroundsUpdater.next(
+					new BgsInitMmrEvent(heroStats?.mmrPercentiles, heroStatsDuo?.mmrPercentiles),
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(
 					new BgsHeroSelectedEvent(
@@ -398,6 +405,41 @@ export class BattlegroundsStoreService {
 						),
 					);
 				}
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD) {
+				this.duoPendingBoards.push({
+					playerBoard: {
+						heroCardId: gameEvent.additionalData.playerBoard.cardId,
+						playerId: gameEvent.additionalData.playerBoard.playerId,
+						board: gameEvent.additionalData.playerBoard.board,
+						secrets: gameEvent.additionalData.playerBoard.secrets,
+						hand: gameEvent.additionalData.playerBoard.hand,
+						hero: gameEvent.additionalData.playerBoard.hero,
+						heroPowerCardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
+						heroPowerUsed: gameEvent.additionalData.playerBoard.heroPowerUsed,
+						heroPowerInfo: gameEvent.additionalData.playerBoard.heroPowerInfo,
+						heroPowerInfo2: gameEvent.additionalData.playerBoard.heroPowerInfo2,
+						questRewards: gameEvent.additionalData.playerBoard.questRewards,
+						questRewardEntities: gameEvent.additionalData.playerBoard.questRewardEntities,
+						questEntities: gameEvent.additionalData.playerBoard.questEntities,
+						globalInfo: gameEvent.additionalData.playerBoard.globalInfo,
+					},
+					opponentBoard: {
+						heroCardId: gameEvent.additionalData.opponentBoard.cardId,
+						playerId: gameEvent.additionalData.opponentBoard.playerId,
+						board: gameEvent.additionalData.opponentBoard.board,
+						secrets: gameEvent.additionalData.opponentBoard.secrets,
+						hand: gameEvent.additionalData.opponentBoard.hand,
+						hero: gameEvent.additionalData.opponentBoard.hero,
+						heroPowerCardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
+						heroPowerUsed: gameEvent.additionalData.opponentBoard.heroPowerUsed,
+						heroPowerInfo: gameEvent.additionalData.opponentBoard.heroPowerInfo,
+						heroPowerInfo2: gameEvent.additionalData.opponentBoard.heroPowerInfo2,
+						questRewards: gameEvent.additionalData.opponentBoard.questRewards,
+						questRewardEntities: gameEvent.additionalData.opponentBoard.questRewardEntities,
+						questEntities: gameEvent.additionalData.opponentBoard.questEntities,
+						globalInfo: gameEvent.additionalData.opponentBoard.globalInfo,
+					},
+				});
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(
 					new BgsPlayerBoardEvent(
@@ -433,9 +475,11 @@ export class BattlegroundsStoreService {
 							questEntities: gameEvent.additionalData.opponentBoard.questEntities,
 							globalInfo: gameEvent.additionalData.opponentBoard.globalInfo,
 						},
+						this.duoPendingBoards,
 					),
 					GameEvent.BATTLEGROUNDS_COMBAT_START,
 				);
+				this.duoPendingBoards = [];
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				// Sometimes the battle result arrives before the simulation is completed
 				// This can typically happen in reconnection scenarios, and in this case we

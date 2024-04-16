@@ -12,6 +12,7 @@ export type StatGameModeType =
 	| 'tavern-brawl'
 	| 'battlegrounds'
 	| 'battlegrounds-friendly'
+	| 'battlegrounds-duo'
 	| 'duels'
 	| 'mercenaries-ai-vs-ai'
 	| 'mercenaries-pve'
@@ -42,6 +43,8 @@ export const toGameTypeEnum = (gameType: StatGameModeType): GameType => {
 			return GameType.GT_BATTLEGROUNDS;
 		case 'battlegrounds-friendly':
 			return GameType.GT_BATTLEGROUNDS_FRIENDLY;
+		case 'battlegrounds-duo':
+			return GameType.GT_BATTLEGROUNDS_DUO;
 		case 'mercenaries-ai-vs-ai':
 			return GameType.GT_MERCENARIES_AI_VS_AI;
 		case 'mercenaries-friendly':
@@ -93,6 +96,12 @@ export const toGameType = (gameType: GameType): StatGameModeType => {
 		case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 		case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
 			return 'battlegrounds-friendly';
+		case GameType.GT_BATTLEGROUNDS_DUO:
+		case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
+		case GameType.GT_BATTLEGROUNDS_DUO_VS_AI:
+		case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
+			return 'battlegrounds-duo';
+		// return 'battlegrounds-duo-friendly';
 		case GameType.GT_MERCENARIES_AI_VS_AI:
 			return 'mercenaries-ai-vs-ai';
 		case GameType.GT_MERCENARIES_FRIENDLY:

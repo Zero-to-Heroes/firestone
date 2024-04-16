@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { ALL_BG_RACES } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import { BG_USE_ANOMALIES, BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
@@ -49,10 +49,11 @@ export class BgsInitMmrParser implements EventParser {
 
 		const anomalies = !!currentState.currentGame.anomalies?.length ? currentState.currentGame.anomalies : [];
 
+		const percentiles = isBattlegroundsDuo(gameState.metadata.gameType)
+			? event.mmrPercentilesDuo
+			: event.mmrPercentiles;
 		const percentile = prefs.bgsActiveUseMmrFilterInHeroSelection
-			? [...(event.mmrPercentiles ?? [])]
-					.sort((a, b) => b.mmr - a.mmr)
-					.find((percentile) => percentile.mmr <= (mmr ?? 0))
+			? [...(percentiles ?? [])].sort((a, b) => b.mmr - a.mmr).find((percentile) => percentile.mmr <= (mmr ?? 0))
 			: null;
 
 		const newPrefs: Preferences = {

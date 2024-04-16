@@ -15,6 +15,7 @@ export class DiskCacheService {
 		USER_MATCH_HISTORY: 'user-match-history.json',
 		BATTLEGROUNDS_PERFECT_GAMES: 'battlegrounds-perfect-games.json',
 		BATTLEGROUNDS_META_HERO_STATS: 'battlegrounds-meta-hero-stats.json',
+		BATTLEGROUNDS_META_HERO_STATS_DUO: 'battlegrounds-meta-hero-stats-duo.json',
 		MERCENARIES_COLLECTION: 'mercenaries-memory-collection-info.json',
 		MERCENARIES_REFERENCE_DATA: 'mercenaries-reference-data.json',
 		PROFILE_ACHIEVEMENTS: 'profile-achievements.json',

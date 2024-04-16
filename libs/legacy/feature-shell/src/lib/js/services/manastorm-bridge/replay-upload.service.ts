@@ -36,7 +36,9 @@ export class ReplayUploadService {
 		const prefs = await this.prefs.getPreferences();
 		const start = Date.now();
 		const bgsRunStats =
-			game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly'
+			game.gameMode === 'battlegrounds' ||
+			game.gameMode === 'battlegrounds-friendly' ||
+			game.gameMode === 'battlegrounds-duo'
 				? this.bgsRunStatsService.buildInput(reviewId, game, game.bgGame, userId, userName)
 				: null;
 		const fullMetaData = await this.metadataBuilder.buildMetadata(

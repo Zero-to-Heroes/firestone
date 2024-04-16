@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
@@ -69,6 +69,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
 					[showTribeTiers]="showTribeTiers$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
+					[gameMode]="gameMode$ | async"
 				></battlegrounds-minions-tiers-twitch>
 			</ng-container>
 			<twitch-config-widget></twitch-config-widget>
@@ -87,6 +88,7 @@ export class DeckTrackerOverlayContainerComponent
 	showMechanicsTiers$: Observable<boolean>;
 	showTribeTiers$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
+	gameMode$: Observable<GameType>;
 
 	inGameplay: boolean;
 	gameState: GameState;
@@ -106,6 +108,7 @@ export class DeckTrackerOverlayContainerComponent
 	// private localeInit: boolean;
 
 	private baseInitDone$$ = new BehaviorSubject<boolean>(false);
+	private gameMode$$ = new BehaviorSubject<GameType>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -123,6 +126,7 @@ export class DeckTrackerOverlayContainerComponent
 
 	ngAfterContentInit(): void {
 		this.baseInitDone$ = this.baseInitDone$$.asObservable();
+		this.gameMode$ = this.gameMode$$.asObservable();
 		this.showMinionsList$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsList),
 		);
@@ -236,6 +240,7 @@ export class DeckTrackerOverlayContainerComponent
 			: this.showDecktracker
 			? 'decktracker'
 			: this.currentDisplayMode;
+		this.gameMode$$.next(this.gameState?.metadata?.gameType);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

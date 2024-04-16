@@ -10,7 +10,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import {
 	Action,
 	BaconBoardVisualStateAction,
@@ -383,10 +383,10 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			console.warn('[app] game not present, not performing operation', 'computeGameMode');
 			return undefined;
 		}
-		if (
-			this.game.gameType === GameType.GT_BATTLEGROUNDS ||
-			this.game.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
-		) {
+		// if (isBattlegroundsDuo(this.game.gameType)) {
+		// 	return 'battlegrounds-duo';
+		// }
+		if (isBattlegrounds(this.game.gameType)) {
 			return 'battlegrounds';
 		}
 		return undefined;

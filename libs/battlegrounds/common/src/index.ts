@@ -6,6 +6,7 @@ export * from './lib/services/bgs-in-game-quests-guardian.service';
 export * from './lib/services/bgs-in-game-quests.service';
 export * from './lib/services/bgs-match-memory-info.service';
 export * from './lib/services/bgs-match-players-mmr.service';
+export * from './lib/services/bgs-meta-hero-stats-duo.service';
 export * from './lib/services/bgs-meta-hero-stats.service';
 export * from './lib/services/bgs-navigation.service';
 export * from './lib/services/bgs-official-leaderboards.service';

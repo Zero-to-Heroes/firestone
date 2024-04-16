@@ -11,12 +11,12 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
-	selector: 'battlegrounds-quest-type-filter-dropdown',
+	selector: 'battlegrounds-mode-filter-dropdown',
 	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
-			class="battlegrounds-quest-type-filter-dropdown"
+			class="battlegrounds-mode-filter-dropdown"
 			[options]="options"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
@@ -26,11 +26,11 @@ import { arraysEqual } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsQuestTypeFilterDropdownComponent
+export class BattlegroundsModeFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
-	options: QuestTypeFilterOption[];
+	options: IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -49,16 +49,16 @@ export class BattlegroundsQuestTypeFilterDropdownComponent
 
 		this.options = [
 			{
-				value: 'quests',
-				label: this.i18n.translateString('app.battlegrounds.filters.quest-type.quests'),
-			} as QuestTypeFilterOption,
+				value: 'battlegrounds',
+				label: this.i18n.translateString('global.game-mode.battlegrounds'),
+			},
 			{
-				value: 'rewards',
-				label: this.i18n.translateString('app.battlegrounds.filters.quest-type.rewards'),
-			} as QuestTypeFilterOption,
+				value: 'battlegrounds-duo',
+				label: this.i18n.translateString('global.game-mode.battlegrounds-duo'),
+			},
 		];
 		this.filter$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsQuestsActiveTab)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveGameMode)),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
 			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
@@ -66,7 +66,7 @@ export class BattlegroundsQuestTypeFilterDropdownComponent
 			this.mapData(([filter, selectedCategoryId]) => ({
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,
-				visible: selectedCategoryId === 'bgs-category-meta-quests',
+				visible: selectedCategoryId === 'bgs-category-meta-heroes',
 			})),
 		);
 
@@ -75,7 +75,7 @@ export class BattlegroundsQuestTypeFilterDropdownComponent
 		}
 	}
 
-	async onSelected(option: /* QuestTypeFilterOption*/ IOption) {
+	async onSelected(option: /* IOption*/ IOption) {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
@@ -83,8 +83,4 @@ export class BattlegroundsQuestTypeFilterDropdownComponent
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}
-}
-
-interface QuestTypeFilterOption extends IOption {
-	value: BgsQuestActiveTabType;
 }

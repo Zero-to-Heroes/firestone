@@ -56,7 +56,11 @@ export class ShowReplayProcessor implements Processor {
 			];
 		}
 
-		if (selectedInfo.gameMode === 'battlegrounds' || selectedInfo.gameMode === 'battlegrounds-friendly') {
+		if (
+			selectedInfo.gameMode === 'battlegrounds' ||
+			selectedInfo.gameMode === 'battlegrounds-friendly' ||
+			selectedInfo.gameMode === 'battlegrounds-duo'
+		) {
 			this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
 		}
 

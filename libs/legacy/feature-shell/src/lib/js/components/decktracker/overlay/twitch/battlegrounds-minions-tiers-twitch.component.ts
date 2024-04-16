@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { CardIds, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { getAllCardsInGame, getBuddy } from '@services/battlegrounds/bgs-utils';
@@ -81,6 +81,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
 		this.groupMinionsIntoTheirTribeGroup$$.next(value);
 	}
+	@Input() set gameMode(value: GameType) {
+		this.gameMode$$.next(value);
+	}
 
 	private availableRaces$$ = new BehaviorSubject<readonly Race[]>([]);
 	private currentTurn$$ = new BehaviorSubject<number>(null);
@@ -92,6 +95,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTribeTiers$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
+	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -115,6 +119,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.showMechanicsTiers$$,
 			this.showTribeTiers$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
+			this.gameMode$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -127,12 +132,13 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					showMechanicsTiers,
 					showTribeTiers,
 					bgsGroupMinionsIntoTheirTribeGroup,
+					gameMode,
 				]) => {
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
-					const cardsInGame = getAllCardsInGame(races, hasSpells, this.allCards);
+					const cardsInGame = getAllCardsInGame(races, hasSpells, gameMode, this.allCards);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,

@@ -100,7 +100,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 					currentScene === SceneMode.GAMEPLAY &&
 					inGame &&
 					(GameType.GT_BATTLEGROUNDS_FRIENDLY === metadata.gameType ||
-						(GameType.GT_BATTLEGROUNDS === metadata.gameType && playerCount === 8)),
+						(isBattlegrounds(metadata.gameType) && playerCount === 8)),
 			),
 			this.handleReposition(),
 		);
