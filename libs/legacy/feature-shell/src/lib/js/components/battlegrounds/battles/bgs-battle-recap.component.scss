@@ -12,6 +12,10 @@
 	position: relative;
 	width: 100%;
 
+	&.duos {
+		height: 225px;
+	}
+
 	&.selectable:hover {
 		background: rgba(255, 255, 255, 0.12);
 	}
@@ -48,68 +52,9 @@
 	.battle-content {
 		display: flex;
 		position: relative;
-		top: 2px;
-
-		.group {
-			display: flex;
-			flex-grow: 1;
-			justify-content: flex-start;
-
-			.hero {
-				display: flex;
-				width: 62px;
-				margin-right: 10px;
-				position: relative;
-
-				bgs-hero-portrait ::ng-deep {
-					.hero-portrait-frame {
-						width: 62px;
-						height: 71px;
-					}
-
-					.health .value {
-						font-size: 18px;
-					}
-				}
-
-				.tavern {
-					position: absolute;
-					width: 25px;
-					height: 25px;
-					top: 15%;
-					right: -8%;
-					z-index: 1;
-				}
-			}
-
-			.board {
-				display: flex;
-				margin-right: 20px;
-				align-items: center;
-				width: 270px;
-				flex-shrink: 0;
-
-				.minion-container {
-					width: 34px;
-					height: 50px;
-					margin-right: 4px;
-					flex-shrink: 0;
-
-					::ng-deep board-card-stats .stat .value.value.value.value.value {
-						font-size: 14px;
-					}
-				}
-			}
-
-			&.opponent {
-				justify-content: flex-end;
-
-				.board {
-					justify-content: flex-end;
-					margin-right: 5px;
-				}
-			}
-		}
+		flex-grow: 1;
+		padding-top: 30px;
+		padding-bottom: 10px;
 
 		.results {
 			border: none;
@@ -133,6 +78,13 @@
 			}
 		}
 	}
+}
+
+.team {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: space-around;
 }
 
 @media (min-width: 1370px) {

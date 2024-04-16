@@ -497,6 +497,7 @@ import { ArenaRunComponent } from '@components/arena/desktop/arena-run.component
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
+import { BgsBattleRecapPlayerComponent } from '@components/battlegrounds/battles/bgs-battle-recap-player.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
@@ -1036,6 +1037,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
 		BgsBattleRecapComponent,
+		BgsBattleRecapPlayerComponent,
 		BgsBattleSideComponent,
 		BgsPlusButtonComponent,
 		BgsMinusButtonComponent,
@@ -1142,7 +1144,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
-		BgsBattleRecapComponent,
 		BgsBattleSideComponent,
 		BgsPlusButtonComponent,
 		BgsMinusButtonComponent,
