@@ -13,7 +13,17 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
-import { Observable, combineLatest, distinctUntilChanged, map, switchMap, tap } from 'rxjs';
+import {
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	map,
+	shareReplay,
+	switchMap,
+	tap,
+	withLatestFrom,
+} from 'rxjs';
 import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
 import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
 import { filterBgsMatchStats } from './hero-stats-helper';
@@ -55,23 +65,23 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 
 			// Get the correct observable based on the gameMode$
 			const heroStats$: Observable<BgsHeroStatsV2 | null> = gameMode$.pipe(
-				switchMap((gameMode) => {
-					if (gameMode === 'battlegrounds-duo') {
-						return this.metaStatsDuo.metaHeroStats$$;
-					} else {
-						return this.metaStats.metaHeroStats$$;
-					}
-				}),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(),
+				switchMap((gameMode) =>
+					gameMode === 'battlegrounds-duo'
+						? this.metaStatsDuo.metaHeroStats$$
+						: this.metaStats.metaHeroStats$$,
+				),
+			);
+			const tiers$: Observable<readonly BgsMetaHeroStatTierItem[] | null> = gameMode$.pipe(
+				distinctUntilChanged(),
+				switchMap((gameMode) =>
+					gameMode === 'battlegrounds-duo' ? this.metaStatsDuo.tiers$$ : this.metaStats.tiers$$,
+				),
 			);
 
-			const playerBgGames$ = combineLatest([
-				this.gameStats.gameStats$$,
-				heroStats$.pipe(
-					map((stats) => stats?.mmrPercentiles ?? []),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
-				),
-				this.patchesConfig.currentBattlegroundsMetaPatch$$,
+			// Can probably avoid marking the data as null when changing things like the tribes
+			const config$ = combineLatest([
+				gameMode$,
 				this.prefs.preferences$$.pipe(
 					map((prefs) => ({
 						rankFilter: prefs.bgsActiveRankFilter,
@@ -85,12 +95,42 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 				),
 			]).pipe(
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				map(([gameMode, config]) => ({
+					...config,
+					gameMode: gameMode,
+				})),
+				shareReplay(1),
+			);
+			config$.subscribe(() => this.tiersWithPlayerData$$.next(null));
+
+			const playerBgGames$ = combineLatest([
+				this.gameStats.gameStats$$,
+				this.patchesConfig.currentBattlegroundsMetaPatch$$,
+				config$,
+			]).pipe(
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				withLatestFrom(
+					heroStats$.pipe(
+						map((stats) => stats?.mmrPercentiles ?? []),
+						distinctUntilChanged((a, b) => deepEqual(a, b)),
+					),
+				),
 				map(
 					([
-						games,
+						[
+							games,
+							patchInfo,
+							{
+								rankFilter,
+								tribesFilter,
+								anomaliesFilter,
+								timeFilter,
+								useMmrFilter,
+								useAnomalyFilter,
+								gameMode,
+							},
+						],
 						mmrPercentiles,
-						patchInfo,
-						{ rankFilter, tribesFilter, anomaliesFilter, timeFilter, useMmrFilter, useAnomalyFilter },
 					]) => {
 						const targetRank: number =
 							!mmrPercentiles?.length || !rankFilter || !useMmrFilter
@@ -98,7 +138,11 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 								: mmrPercentiles.find((m) => m.percentile === rankFilter)?.mmr ?? 0;
 						// #Duos: add support for BG duos in player hero stats
 						const bgGames = (games ?? [])
-							.filter((g) => ['battlegrounds', 'battlegrounds-friendly'].includes(g.gameMode))
+							.filter((g) =>
+								gameMode === 'battlegrounds'
+									? ['battlegrounds', 'battlegrounds-friendly'].includes(g.gameMode)
+									: ['battlegrounds-duo'].includes(g.gameMode),
+							)
 							.filter(
 								(g) =>
 									!tribesFilter?.length ||
@@ -126,8 +170,9 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			);
 
-			combineLatest([this.metaStats.tiers$$, playerBgGames$])
+			combineLatest([tiers$, playerBgGames$])
 				.pipe(
+					debounceTime(200),
 					tap((info) => console.debug('[bgs-3] rebuilding meta hero stats 3', info)),
 					map(([stats, playerBgGames]) =>
 						stats?.map((stat) => enhanceHeroStat(stat, playerBgGames, this.allCards)),

@@ -15,7 +15,7 @@ import {
 	DiskCacheService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map, tap } from 'rxjs';
 import { BG_USE_ANOMALIES } from './bgs-meta-hero-stats.service';
 
 @Injectable()
@@ -92,6 +92,7 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 				),
 			])
 				.pipe(
+					tap((info) => console.debug('[bgs-meta-hero-duo] building tiers', info)),
 					debounceTime(200),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(
@@ -121,6 +122,7 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 							return result;
 						},
 					),
+					tap((info) => console.debug('[bgs-meta-hero-duo] built tiers', info)),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe(this.tiers$$);

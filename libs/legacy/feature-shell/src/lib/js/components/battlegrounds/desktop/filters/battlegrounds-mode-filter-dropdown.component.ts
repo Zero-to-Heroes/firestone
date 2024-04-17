@@ -3,7 +3,6 @@ import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common'
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BgsQuestActiveTabType } from '@legacy-import/src/lib/js/models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
@@ -75,11 +74,11 @@ export class BattlegroundsModeFilterDropdownComponent
 		}
 	}
 
-	async onSelected(option: /* IOption*/ IOption) {
+	async onSelected(option: IOption) {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsQuestsActiveTab: option.value as BgsQuestActiveTabType,
+			bgsActiveGameMode: option.value as 'battlegrounds' | 'battlegrounds-duo',
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}

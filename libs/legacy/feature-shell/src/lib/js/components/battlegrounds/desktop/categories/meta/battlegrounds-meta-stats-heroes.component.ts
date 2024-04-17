@@ -6,7 +6,11 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
-import { BgsMetaHeroStatsService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import {
+	BgsMetaHeroStatsDuoService,
+	BgsMetaHeroStatsService,
+	BgsPlayerHeroStatsService,
+} from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -14,7 +18,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/main-window-store-event';
-import { Observable, shareReplay, takeUntil } from 'rxjs';
+import { Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-heroes',
@@ -44,6 +48,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
+		private readonly metaHeroStatsDuo: BgsMetaHeroStatsDuoService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 	) {
@@ -51,12 +56,21 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.prefs);
+		await waitForReady(this.metaHeroStats, this.metaHeroStatsDuo, this.playerHeroStats, this.prefs);
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(this.mapData((stats) => stats));
 		this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));
-		const metaData$ = this.metaHeroStats.metaHeroStats$$.pipe(
+		const statsProvider$ = this.prefs.preferences$$.pipe(
+			switchMap((prefs) =>
+				prefs.bgsActiveGameMode === 'battlegrounds'
+					? this.metaHeroStats.metaHeroStats$$
+					: this.metaHeroStatsDuo.metaHeroStats$$,
+			),
+			takeUntil(this.destroyed$),
+		);
+		const metaData$ = statsProvider$.pipe(
+			tap((stats) => console.debug('[meta-stats] received stats', stats)),
 			this.mapData((stats) => ({
 				totalGames: stats?.dataPoints,
 				lastUpdate: stats?.lastUpdateDate,
