@@ -839,4 +839,5 @@ export const giftCreators = [
 	CardIds.ThistleTeaSet_TOY_514,
 	CardIds.WindowShopper_TOY_652,
 	CardIds.WindowShopper_WindowShopperToken_TOY_652t,
+	CardIds.MadeOfCoins,
 ];
