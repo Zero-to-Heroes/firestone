@@ -1,27 +1,29 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
-import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { TimeFilterOption } from '@firestone/battlegrounds/view';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BgsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual } from '../../../../services/utils';
+import { formatPatch } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-time-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<battlegrounds-time-filter-dropdown-view
-			class="battlegrounds-rank-filter-dropdown"
-			[timePeriods]="timePeriods"
-			[currentFilter]="currentFilter$ | async"
-			[visible]="visible$ | async"
-			(valueSelected)="onSelected($event)"
-		></battlegrounds-time-filter-dropdown-view>
+		<filter-dropdown
+			*ngIf="filter$ | async as value"
+			[options]="value.options"
+			[filter]="value.filter"
+			[placeholder]="value.placeholder"
+			[visible]="value.visible"
+			(onOptionSelected)="onSelected($event)"
+		></filter-dropdown>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,39 +31,67 @@ export class BattlegroundsTimeFilterDropdownComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
-	timePeriods: readonly BgsActiveTimeFilterType[];
-	currentFilter$: Observable<BgsActiveTimeFilterType>;
-	visible$: Observable<boolean>;
+	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly prefs: PreferencesService,
+		private readonly patchesConfig: PatchesConfigService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs, this.patchesConfig);
 
-		this.timePeriods = ['all-time', 'past-seven', 'past-three', 'last-patch'];
-		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveTimeFilter);
-		this.visible$ = combineLatest([
+		this.filter$ = combineLatest([
+			this.patchesConfig.currentBattlegroundsMetaPatch$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTimeFilter)),
 			this.nav.selectedCategoryId$$,
 			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
 		]).pipe(
-			filter(([categoryId, [currentView]]) => !!categoryId && !!currentView),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(
-				([categoryId, [currentView]]) =>
-					!['categories', 'category'].includes(currentView) &&
-					![
-						'bgs-category-personal-stats',
-						'bgs-category-perfect-games',
-						'bgs-category-simulator',
-						'bgs-category-leaderboard',
-					].includes(categoryId),
-			),
+			filter(([patch, filter, selectedCategoryId, [currentView]]) => !!filter && !!patch),
+			this.mapData(([patch, filter, selectedCategoryId, [currentView]]) => {
+				const options: TimeFilterOption[] = [
+					{
+						value: 'all-time',
+						label: this.i18n.translateString('app.battlegrounds.filters.time.past-30'),
+					} as TimeFilterOption,
+					{
+						value: 'last-patch',
+						label: this.i18n.translateString('app.global.filters.time-patch', {
+							value: patch.version,
+						}),
+						tooltip: formatPatch(patch, this.i18n),
+					} as TimeFilterOption,
+					{
+						value: 'past-seven',
+						label: this.i18n.translateString('app.battlegrounds.filters.time.past-seven'),
+					} as TimeFilterOption,
+					{
+						value: 'past-three',
+						label: this.i18n.translateString('app.battlegrounds.filters.time.past-three'),
+					} as TimeFilterOption,
+				];
+				return {
+					filter: filter,
+					options: options,
+					placeholder:
+						options.find((option) => option.value === filter)?.label ??
+						this.i18n.translateString('app.battlegrounds.filters.time.past-30'),
+					visible:
+						!['categories', 'category'].includes(currentView) &&
+						![
+							'bgs-category-personal-stats',
+							'bgs-category-perfect-games',
+							'bgs-category-simulator',
+							'bgs-category-leaderboard',
+						].includes(selectedCategoryId),
+				};
+			}),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
