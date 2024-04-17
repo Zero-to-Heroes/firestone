@@ -4,7 +4,7 @@ import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -13,7 +13,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -22,7 +22,7 @@ import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { classes } from '../../hs-utils';
 import { MainWindowStateFacadeService } from '../../mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../stats/game/game-stats-provider.service';
-import { deepEqual, groupByFunction, removeFromArray, sumOnArray } from '../../utils';
+import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
 @Injectable()
 export class DecksProviderService extends AbstractFacadeService<DecksProviderService> {
@@ -72,10 +72,10 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 						desktopDeckStatsReset: prefs.desktopDeckStatsReset,
 						desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
 					})),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				),
 			])
 				.pipe(
-					tap((event) => console.debug('[decks-provider] received event', event)),
 					filter(([stats, filters, patch]) => !!stats?.length),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(
