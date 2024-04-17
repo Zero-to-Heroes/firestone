@@ -135,9 +135,10 @@ export class EndGameUploaderService {
 				currentReviewId,
 				'memory battlegroundsInfo',
 				info.bgInfo?.Rating,
+				info.bgInfo?.DuosRating,
 				info.bgInfo?.NewRating,
 			);
-			playerRank = info.bgInfo?.Rating;
+			playerRank = game.gameMode === 'battlegrounds-duo' ? info.bgInfo?.DuosRating : info.bgInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
 			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating ?? info.bgInfo?.NewRating;
 			const racesFromGame =

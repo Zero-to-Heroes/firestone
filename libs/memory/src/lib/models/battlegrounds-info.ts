@@ -2,6 +2,7 @@ import { Race } from '@firestone-hs/reference-data';
 
 export interface BattlegroundsInfo {
 	readonly Rating: number;
+	readonly DuosRating: number;
 	readonly NewRating?: number;
 	readonly Game: MemoryBgGame;
 }

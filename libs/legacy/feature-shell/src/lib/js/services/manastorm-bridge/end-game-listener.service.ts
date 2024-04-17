@@ -389,7 +389,12 @@ export class EndGameListenerService {
 
 	private async getBattlegroundsEndGame(): Promise<BattlegroundsInfo> {
 		const result = await this.memoryInspection.getBattlegroundsEndGame();
-		console.log('[manastorm-bridge] received BG rank result', result?.Rating, result?.NewRating);
+		console.log(
+			'[manastorm-bridge] received BG rank result',
+			result?.Rating,
+			result?.DuosRating,
+			result?.NewRating,
+		);
 		return result;
 	}
 

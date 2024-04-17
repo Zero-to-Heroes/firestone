@@ -234,7 +234,7 @@ export const buildRankText = (playerRank: string | undefined, gameMode: string, 
 		}
 		return null;
 	}
-	if (!playerRank) {
+	if (playerRank == null) {
 		return null;
 	}
 	if (gameMode === 'ranked') {
@@ -251,7 +251,7 @@ export const buildRankText = (playerRank: string | undefined, gameMode: string, 
 		return `${wins}-${losses}`;
 	}
 	// Bug for old matches
-	if (gameMode === 'battlegrounds' && playerRank && parseInt(playerRank) > 100) {
+	if (gameMode === 'battlegrounds' && playerRank) {
 		return playerRank;
 	}
 	if (isMercenariesPvP(gameMode) && !isNaN(+playerRank)) {
