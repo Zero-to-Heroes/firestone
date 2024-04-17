@@ -1,3 +1,7 @@
+:host {
+	position: relative;
+}
+
 .battlegrounds-meta-stats-heroes {
 	flex-grow: 1;
 	display: flex;
@@ -5,7 +9,6 @@
 	align-content: flex-start;
 	height: 100%;
 	padding-top: 15px;
-	position: relative;
 
 	.header {
 		display: flex;
