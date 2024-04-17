@@ -93,6 +93,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	spellSchoolPlayedThisMatch,
+	spendCorpse,
 	summonsTreant,
 	taunt,
 	tooltip,
@@ -487,6 +488,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), battlecry);
 			case CardIds.BeckoningBicornTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), pirate);
+			case CardIds.BenevolentBanker_WW_384:
+				return and(inDeck, spell);
 			case CardIds.BitterColdTavernBrawl:
 				return and(side(inputSide), frost, dealsDamage);
 			case CardIds.BlackrockNRoll:
@@ -596,6 +599,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ClickClocker:
 				return and(side(inputSide), or(inDeck, inHand), minion, mech);
+			case CardIds.ClimacticNecroticExplosion:
+				return and(side(inputSide), or(inDeck, inHand), spendCorpse);
 			case CardIds.ClockworkAssistant_GILA_907:
 			case CardIds.ClockworkAssistant_ONY_005ta11:
 			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48:
@@ -780,6 +785,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					: and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.DrocomurchanicasTavernBrawlToken:
 				return and(side(inputSide), inDeck, minion, or(dragon, murloc, mech));
+			case CardIds.DryscaleDeputy_WW_383:
+				return and(side(inputSide), inDeck, spell);
 			case CardIds.DunBaldarBunker:
 				return and(side(inputSide), inDeck, secret);
 			case CardIds.EdgeOfDredgeTavernBrawl:
@@ -1181,6 +1188,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(inDeck, minion, attackLessThan(4));
 			case CardIds.LinaShopManager_TOY_531:
 				return and(side(inputSide), or(inHand, inDeck), spell);
+			case CardIds.LinedancePartner_WW_433:
+				return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(3));
 			case CardIds.LineHopper:
 				return and(side(inputSide), outcast);
 			case CardIds.LivingPrairie_WW_024:

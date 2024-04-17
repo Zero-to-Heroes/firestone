@@ -324,3 +324,6 @@ export const spellDamage = (input: SelectorInput): boolean => {
 export const damage = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]);
 };
+export const spendCorpse = (input: SelectorInput): boolean => {
+	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]);
+};
