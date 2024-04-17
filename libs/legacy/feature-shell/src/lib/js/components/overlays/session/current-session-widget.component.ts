@@ -21,18 +21,18 @@ import {
 	getTribeName,
 	isBattlegrounds,
 	isBattlegroundsDuo,
+	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { GameStateFacadeService } from '@firestone/constructed/common';
 import { BgsSceneService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
+import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { groupByFunction } from '@services/utils';
-import { Observable, combineLatest, shareReplay, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil, tap } from 'rxjs';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
@@ -107,10 +107,16 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 							<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
 								<div class="category">{{ group.categoryLabel }}</div>
 								<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
-								<ng-container [ngSwitch]="friendlyGameType$ | async">
+								<ng-container *ngIf="{ gameType: friendlyGameType$ | async } as gameType">
 									<!-- BG details -->
 									<!-- When other modes are supported, extract this to specific components -->
-									<div class="group-details" *ngSwitchCase="'battlegrounds'">
+									<div
+										class="group-details"
+										*ngIf="
+											gameType.gameType === 'battlegrounds' ||
+											gameType.gameType === 'battlegrounds-duo'
+										"
+									>
 										<div class="background" [style.opacity]="value.opacity"></div>
 										<div
 											class="group-detail battlegrounds"
@@ -229,8 +235,8 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 					state?.metadata?.gameType ??
 					(bgMode === 'duos' ? GameType.GT_BATTLEGROUNDS_DUO : GameType.GT_BATTLEGROUNDS),
 			),
+			distinctUntilChanged(),
 			shareReplay(1),
-			tap((info) => console.log('send currentGameType', info)),
 			takeUntil(this.destroyed$),
 		);
 		this.friendlyGameType$ = currentGameType$.pipe(this.mapData((gameType) => this.toFriendlyGameType(gameType)));
@@ -326,7 +332,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 		this.groups$ = combineLatest([lastGames$, currentGameType$]).pipe(
 			this.mapData(([games, currentGameType]) => {
-				return this.buildBgsGroups(games);
+				return this.buildBgsGroups(games, currentGameType);
 			}),
 		);
 		this.matches$ = combineLatest([
@@ -422,12 +428,13 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		return false;
 	}
 
-	private buildBgsGroups(games: readonly GameStat[]): readonly Group[] {
+	private buildBgsGroups(games: readonly GameStat[], gameType: GameType): readonly Group[] {
 		const gamesWithFinalPosition = games.filter(
 			(game) => game.additionalResult && !isNaN(parseInt(game.additionalResult)),
 		);
 		const groupedByPosition = groupByFunction((game: GameStat) => game.additionalResult)(gamesWithFinalPosition);
-		const allPositions: readonly number[] = [...Array(8).keys()].map((key) => key + 1);
+		const numberOfGroups = isBattlegroundsDuo(gameType) ? 4 : 8;
+		const allPositions: readonly number[] = [...Array(numberOfGroups).keys()].map((key) => key + 1);
 		const result = allPositions.map((position) => {
 			const gamesForPosition = groupedByPosition[position] ?? [];
 			return {
@@ -487,13 +494,15 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			const bgsBoard = !!game.postMatchStats?.boardHistory?.length
 				? game.postMatchStats.boardHistory[game.postMatchStats.boardHistory.length - 1]
 				: null;
-			return {
+			const result = {
 				id: game.reviewId,
 				cardId: normalizeHeroCardId(game.playerCardId, this.allCards),
 				tooltip: this.allCards.getCard(game.playerCardId).name,
 				// boardEntities: bgsBoard?.board,
 				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),
 			} as BgsDetail;
+			console.debug('built detail', result, game.playerCardId, game, bgsBoard?.board);
+			return result;
 		});
 	}
 }
