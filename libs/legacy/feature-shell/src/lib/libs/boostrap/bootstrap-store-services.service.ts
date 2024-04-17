@@ -27,7 +27,7 @@ import {
 } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { CardMousedOverService } from '@firestone/memory';
+import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
@@ -67,6 +67,7 @@ export class BootstrapStoreServicesService {
 		private readonly store: AppUiStoreService,
 		// TODO: this has a lot of dependencies, it should be refactored to limit the impact
 		// and let the store be started up as soon as possible
+		private readonly init_BgsSceneService: BgsSceneService,
 		private readonly mainWindowStore: MainWindowStoreService,
 		private readonly init_MainWindowNavigationService: MainWindowNavigationService,
 		private readonly init_MainWindowStateFacadeService: MainWindowStateFacadeService,

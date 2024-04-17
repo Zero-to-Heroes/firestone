@@ -260,6 +260,20 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	public async getBattlegroundsSelectedMode(forceReset = false): Promise<'solo' | 'duos' | null> {
+		return new Promise<'solo' | 'duos' | null>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getBattlegroundsSelectedMode(forceReset, (battlegroundsInfo) => {
+					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getBattlegroundsSelectedMode', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getMercenariesInfo(forceReset = false): Promise<MemoryMercenariesInfo | null> {
 		return new Promise<MemoryMercenariesInfo | null>(async (resolve) => {
 			const plugin = await this.get();

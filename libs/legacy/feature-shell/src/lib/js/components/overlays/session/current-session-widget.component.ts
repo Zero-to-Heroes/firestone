@@ -24,7 +24,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { GameStateFacadeService } from '@firestone/constructed/common';
-import { SceneService } from '@firestone/memory';
+import { BgsSceneService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -32,7 +32,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction } from '@services/utils';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, shareReplay, takeUntil, tap } from 'rxjs';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
@@ -211,6 +211,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly scene: SceneService,
+		private readonly bgsScene: BgsSceneService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStats: GameStatsProviderService,
 		private readonly gameState: GameStateFacadeService,
@@ -219,10 +220,19 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs, this.gameStats, this.gameState);
+		await waitForReady(this.scene, this.bgsScene, this.prefs, this.gameStats, this.gameState);
 
-		// #Duos: add a detection on whether we are on the Duos scene
-		const currentGameType$ = this.gameState.gameState$$.pipe(this.mapData((state) => state?.metadata?.gameType));
+		const currentGameType$ = combineLatest([this.gameState.gameState$$, this.bgsScene.currentMode$$]).pipe(
+			tap((info) => console.log('currentGameType', info)),
+			this.mapData(
+				([state, bgMode]) =>
+					state?.metadata?.gameType ??
+					(bgMode === 'duos' ? GameType.GT_BATTLEGROUNDS_DUO : GameType.GT_BATTLEGROUNDS),
+			),
+			shareReplay(1),
+			tap((info) => console.log('send currentGameType', info)),
+			takeUntil(this.destroyed$),
+		);
 		this.friendlyGameType$ = currentGameType$.pipe(this.mapData((gameType) => this.toFriendlyGameType(gameType)));
 		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$]).pipe(
 			this.mapData(([gameType, currentScene]) => isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)),
@@ -235,18 +245,24 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => Math.max(0.01, prefs.sessionWidgetOpacity / 100)),
 		);
-		this.gamesTooltip$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.currentSessionStartDate),
-			this.mapData((currentSessionStartDate) =>
+		this.gamesTooltip$ = combineLatest([this.prefs.preferences$$, this.friendlyGameType$]).pipe(
+			this.mapData(([prefs, gameType]) => ({
+				currentSessionStartDate: prefs.currentSessionStartDate,
+				gameType: gameType,
+			})),
+			this.mapData(({ currentSessionStartDate, gameType }) =>
 				currentSessionStartDate
 					? this.i18n.translateString('session.summary.total-games-tooltip', {
+							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
 							value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 								month: 'short',
 								day: '2-digit',
 								year: 'numeric',
 							}),
 					  })
-					: this.i18n.translateString('session.summary.total-games-tooltip-all-time'),
+					: this.i18n.translateString('session.summary.total-games-tooltip-all-time', {
+							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
+					  }),
 			),
 		);
 

@@ -30,6 +30,7 @@ import { GetArenaInfoOperation } from './mind-vision/operations/get-arena-info-o
 import { GetBattlegroundsEndGameOperation } from './mind-vision/operations/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/operations/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/operations/get-battlegrounds-match-operation';
+import { GetBattlegroundsSelectedModeOperation } from './mind-vision/operations/get-battlegrounds-selected-mode-operation';
 import { GetBattlegroundsOwnedHeroSkinDbfIdsOperation } from './mind-vision/operations/get-bgs-hero-skin-dbf-ids-operation';
 import { GetBoardOperation } from './mind-vision/operations/get-board-operation';
 import { GetBoostersInfoOperation } from './mind-vision/operations/get-boosters-info-operation';
@@ -74,6 +75,10 @@ export class MemoryInspectionService {
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVisionFacade, this.ow);
 	private getBoardOperation = new GetBoardOperation(this.mindVisionFacade, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVisionFacade, this.ow);
+	private getBattlegroundsSelectedModeOperation = new GetBattlegroundsSelectedModeOperation(
+		this.mindVisionFacade,
+		this.ow,
+	);
 	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVisionFacade, this.ow);
 	private getMercenariesCollectionInfoOperation = new GetMercenariesCollectionInfoOperation(
 		this.mindVisionFacade,
@@ -158,6 +163,10 @@ export class MemoryInspectionService {
 
 	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo | null> {
 		return this.mindVision.callMindVision(() => this.getBattlegroundsInfoOperation.call(numberOfRetries));
+	}
+
+	public async getBattlegroundsSelectedMode(): Promise<'solo' | 'duos' | null> {
+		return this.mindVision.callMindVision(() => this.getBattlegroundsSelectedModeOperation.call());
 	}
 
 	public async getMercenariesInfo(numberOfRetries?: number): Promise<MemoryMercenariesInfo | null> {
