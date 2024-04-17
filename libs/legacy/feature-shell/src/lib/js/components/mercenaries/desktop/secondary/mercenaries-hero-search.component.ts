@@ -50,7 +50,7 @@ export class MercenariesHeroSearchComponent
 
 		this.searchStringSub$$ = this.nav.heroSearchString$$
 			.pipe(this.mapData((info) => info))
-			.subscribe(([heroSearchString]) => {
+			.subscribe((heroSearchString) => {
 				this.searchString = heroSearchString;
 			});
 		this.searchFormSub$$ = this.searchForm.valueChanges
