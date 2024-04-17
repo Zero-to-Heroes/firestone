@@ -1,17 +1,24 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { MinionStat } from '@firestone/battlegrounds/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { RunStep } from '../../../models/duels/run-step';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';
 
@@ -118,7 +125,7 @@ import { extractTime } from './replay-info-ranked.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreComponent {
+export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayTime = true;
@@ -150,23 +157,28 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 	anomaliesTooltip: string;
 
 	private bgsPerfectGame: boolean;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
 	) {
-		super(store, cdr);
+		super(cdr);
+	}
+
+	ngAfterContentInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	showReplay() {
-		this.store.send(new ShowReplayEvent(this.reviewId));
+		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 
 	showStats() {
-		this.store.send(new TriggerShowMatchStatsEvent(this.reviewId));
+		this.stateUpdater.next(new TriggerShowMatchStatsEvent(this.reviewId));
 	}
 
 	capitalize(input: string): string {
@@ -178,6 +190,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreC
 			return;
 		}
 
+		console.debug('setting replay info', this.replayInfo);
 		this.gameMode = this.replayInfo.gameMode;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(this.replayInfo, true);
 

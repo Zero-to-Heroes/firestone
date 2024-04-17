@@ -2,7 +2,8 @@
 	height: 100%;
 	position: relative;
 
-	&.battlegrounds .frame {
+	&.battlegrounds .frame,
+	&.battlegrounds-duo .frame {
 		height: 105%;
 		left: -17%;
 	}

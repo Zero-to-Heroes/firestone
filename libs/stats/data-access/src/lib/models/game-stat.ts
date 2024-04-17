@@ -251,7 +251,7 @@ export const buildRankText = (playerRank: string | undefined, gameMode: string, 
 		return `${wins}-${losses}`;
 	}
 	// Bug for old matches
-	if (gameMode === 'battlegrounds' && playerRank) {
+	if ((gameMode === 'battlegrounds' || gameMode === 'battlegrounds-duo') && playerRank) {
 		return playerRank;
 	}
 	if (isMercenariesPvP(gameMode) && !isNaN(+playerRank)) {
