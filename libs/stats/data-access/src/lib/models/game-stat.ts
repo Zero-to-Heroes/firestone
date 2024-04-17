@@ -118,12 +118,11 @@ export class GameStat {
 					format: capitalizeEachWord(this.gameFormat),
 				});
 			}
-		} else if (
-			this.gameMode === 'battlegrounds' ||
-			this.gameMode === 'battlegrounds-friendly' ||
-			this.gameMode === 'battlegrounds-duo'
-		) {
+		} else if (this.gameMode === 'battlegrounds' || this.gameMode === 'battlegrounds-friendly') {
 			rankIcon = 'battlegrounds';
+			rankIconTooltip = i18n.translateString(`global.game-mode.${this.gameMode}`);
+		} else if (this.gameMode === 'battlegrounds-duo') {
+			rankIcon = 'battlegrounds-duo';
 			rankIconTooltip = i18n.translateString(`global.game-mode.${this.gameMode}`);
 		} else if (this.gameMode?.startsWith('mercenaries')) {
 			rankIcon = 'mercenaries';
