@@ -684,6 +684,6 @@ export const hasRace = (card: ReferenceCard, race: Race): boolean => {
 export const isCastWhenDrawn = (cardId: string, allCards: CardsFacadeService): boolean => {
 	return (
 		cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
-		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.TOPDECK])
+		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.CASTS_WHEN_DRAWN])
 	);
 };

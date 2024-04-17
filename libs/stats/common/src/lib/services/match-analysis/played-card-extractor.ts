@@ -55,8 +55,8 @@ const getId = (entity: Element): number => {
 
 const isEntityValid = (entity: Element): boolean => {
 	return (
-		(!entity.find(`.Tag[@tag='${GameTag.TOPDECK}']`) ||
-			entity.find(`.Tag[@tag='${GameTag.TOPDECK}']`)!.get('value') === '0') &&
+		(!entity.find(`.Tag[@tag='${GameTag.CASTS_WHEN_DRAWN}']`) ||
+			entity.find(`.Tag[@tag='${GameTag.CASTS_WHEN_DRAWN}']`)!.get('value') === '0') &&
 		(!entity.find(`.Tag[@tag='${GameTag.REVEALED}']`) ||
 			entity.find(`.Tag[@tag='${GameTag.REVEALED}']`)!.get('value') === '0') &&
 		(!entity.find(`.Tag[@tag='${GameTag.CREATOR}']`) ||
