@@ -52,6 +52,7 @@ import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the
 import { NagaGiantCounterDefinition } from './definitions/naga-giant-counter';
 import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-counter';
+import { PiratesSummonedCounterDefinition } from './definitions/pirates-summoned-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
 import { RelicCounterDefinition } from './definitions/relic-counter';
@@ -185,6 +186,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return TreantCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'dragonsSummoned':
 				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'piratesSummoned':
+				return PiratesSummonedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'spells':
 				return SpellCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':

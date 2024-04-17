@@ -126,6 +126,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-chained-guardian-widget-wrapper></player-chained-guardian-widget-wrapper>
 			<player-treant-widget-wrapper></player-treant-widget-wrapper>
 			<player-dragons-summoned-widget-wrapper></player-dragons-summoned-widget-wrapper>
+			<player-pirates-summoned-widget-wrapper></player-pirates-summoned-widget-wrapper>
 			<player-earthen-golem-widget-wrapper></player-earthen-golem-widget-wrapper>
 
 			<!-- Opponent counters -->

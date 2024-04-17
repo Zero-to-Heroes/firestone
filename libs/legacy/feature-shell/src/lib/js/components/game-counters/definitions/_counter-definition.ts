@@ -26,6 +26,7 @@ export type CounterType =
 	| 'earthenGolem'
 	| 'treant'
 	| 'dragonsSummoned'
+	| 'piratesSummoned'
 	| 'attack'
 	| 'jadeGolem'
 	| 'cthun'

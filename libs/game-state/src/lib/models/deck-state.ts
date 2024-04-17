@@ -74,6 +74,7 @@ export class DeckState {
 	readonly earthenGolemsSummoned: number = 0;
 	readonly treantsSummoned: number = 0;
 	readonly dragonsSummoned: number = 0;
+	readonly piratesSummoned: number = 0;
 	readonly fatigue: number = 0;
 	readonly overloadedCrystals: number = 0;
 	readonly corpsesSpent: number = 0;

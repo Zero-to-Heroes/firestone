@@ -224,6 +224,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'piratesSummoned',
+			field: 'playerPiratesSummonedCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'jade',
 			field: 'playerJadeGolemCounter',
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
