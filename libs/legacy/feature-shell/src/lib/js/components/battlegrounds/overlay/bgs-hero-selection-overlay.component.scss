@@ -5,9 +5,10 @@
 }
 
 .bgs-hero-selection-overlay {
-	display: flex;
 	width: 100%;
 	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
 
 	&.with-hero-tooltips {
 		bgs-hero-overview {
@@ -124,7 +125,7 @@
 				height: 60px;
 				width: 100%;
 				position: relative;
-				top: 78%;
+				top: 81%;
 
 				.achievements {
 					height: 100%;

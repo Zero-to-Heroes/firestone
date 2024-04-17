@@ -19,20 +19,18 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'bgs-hero-selection-overlay',
-	styleUrls: [
-		'../../../../css/themes/battlegrounds-theme.scss',
-		'../../../../css/component/battlegrounds/overlay/bgs-hero-selection-overlay.component.scss',
-	],
+	styleUrls: ['../../../../css/themes/battlegrounds-theme.scss', './bgs-hero-selection-overlay.component.scss'],
 	template: `
 		<div
-			class="app-container battlegrounds-theme bgs-hero-selection-overlay"
+			class="app-container battlegrounds-theme bgs-hero-selection-overlay heroes-{{ value.overviews.length }}"
 			[ngClass]="{
 				'with-hero-tooltips': heroTooltipActive$ | async,
 				'with-tier-overlay': showTierOverlay$ | async
 			}"
+			*ngIf="{ overviews: heroOverviews$ | async } as value"
 		>
 			<bgs-hero-overview
-				*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
+				*ngFor="let hero of value.overviews || []; trackBy: trackByHeroFn"
 				[hero]="hero"
 				[achievements]="hero?.achievements"
 				[hideEmptyState]="true"
