@@ -30,7 +30,7 @@
 		right: 0;
 		z-index: 1;
 		// background: rgba(0, 128, 0, 0.4);
-		background: rgba(255, 185, 72, 0.4);
+		background: var(--card-highlight-color-1);
 		// background: rgba(159, 182, 215, 0.4);
 	}
 
@@ -38,22 +38,24 @@
 		.linked-card-overlay {
 			display: flex;
 		}
-
 		&.linked-card-1 {
 			.linked-card-overlay {
-				// Use the default color
+				background: var(--card-highlight-color-1);
 			}
 		}
-
 		&.linked-card-2 {
 			.linked-card-overlay {
-				background: rgba(72, 255, 231, 0.4);
+				background: var(--card-highlight-color-2);
 			}
 		}
-
 		&.linked-card-3 {
 			.linked-card-overlay {
-				background: rgba(255, 72, 157, 0.4);
+				background: var(--card-highlight-color-3);
+			}
+		}
+		&.linked-card-4 {
+			.linked-card-overlay {
+				background: var(--card-highlight-color-4);
 			}
 		}
 	}
