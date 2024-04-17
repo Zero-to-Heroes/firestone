@@ -61,6 +61,7 @@ export class BgsBattleResultParser implements EventParser {
 			gameAfterFirstFaceOff,
 			this.bugService,
 			gameState.reconnectOngoing || gameState.hasReconnected,
+			gameState.metadata.gameType,
 		);
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,
