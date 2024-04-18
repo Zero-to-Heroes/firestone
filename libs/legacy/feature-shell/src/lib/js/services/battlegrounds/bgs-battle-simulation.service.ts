@@ -8,6 +8,7 @@ import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/sp
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { AdService } from '../ad.service';
+import { BugReportService } from '../bug/bug-report.service';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 import { normalizeHeroCardId } from './bgs-utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -26,6 +27,7 @@ export class BgsBattleSimulationService {
 		private readonly cards: CardsFacadeService,
 		private readonly executor: BgsBattleSimulationExecutorService,
 		private readonly ads: AdService,
+		private readonly bugService: BugReportService,
 		@Optional() private readonly ow: OverwolfService,
 		@Optional() private readonly prefs: PreferencesService,
 	) {
@@ -150,6 +152,18 @@ export class BgsBattleSimulationService {
 	}
 
 	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
-		return this.executor.simulateLocalBattle(battleInfo, prefs);
+		try {
+			return this.executor.simulateLocalBattle(battleInfo, prefs);
+		} catch (e) {
+			console.error('[bgs-simulation] could not simulate battle', e.message, e);
+			this.bugService.submitAutomatedReport({
+				type: 'bg-sim-crash',
+				info: JSON.stringify({
+					message: '[bgs-simulation] Simulation crashed',
+					battleInfo: battleInfo,
+				}),
+			});
+			return null;
+		}
 	}
 }
