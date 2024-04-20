@@ -265,6 +265,7 @@ export class BattlegroundsStoreService {
 			const prefs = await this.prefs.getPreferences();
 			this.eventsThisTurn.push(gameEvent.type);
 			if (gameEvent.type === GameEvent.RECONNECT_START) {
+				this.duoPendingBoards = [];
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(true));
 			} else if (gameEvent.type === GameEvent.SPECTATING) {
 				this.battlegroundsUpdater.next(new BgsSpectatingEvent(gameEvent.additionalData.spectating));
@@ -289,6 +290,7 @@ export class BattlegroundsStoreService {
 				);
 				this.startMemoryReading();
 			} else if (gameEvent.type === GameEvent.GAME_START) {
+				this.duoPendingBoards = [];
 				this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState, null, true));
 			} else if (gameEvent.type === GameEvent.GAME_SETTINGS) {
 				this.battlegroundsUpdater.next(new BgsGameSettingsEvent(gameEvent));
@@ -510,6 +512,7 @@ export class BattlegroundsStoreService {
 				gameEvent.type === GameEvent.GAME_END ||
 				(gameEvent.type === GameEvent.SPECTATING && !gameEvent.additionalData.spectating)
 			) {
+				this.duoPendingBoards = [];
 				this.matchMemoryInfo.stopMemoryReading();
 				// if (this.memoryInterval) {
 				// 	clearInterval(this.memoryInterval);
