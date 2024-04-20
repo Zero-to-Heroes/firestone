@@ -63,6 +63,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set hasSpells(value: boolean) {
 		this.hasSpells$$.next(value);
 	}
+	@Input() set hasPrizes(value: boolean) {
+		this.hasPrizes$$.next(value);
+	}
 	@Input() set anomalies(value: readonly string[]) {
 		this.anomalies$$.next(value ?? []);
 	}
@@ -89,6 +92,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private currentTurn$$ = new BehaviorSubject<number>(null);
 	private hasBuddies$$ = new BehaviorSubject<boolean>(false);
 	private hasSpells$$ = new BehaviorSubject<boolean>(false);
+	private hasPrizes$$ = new BehaviorSubject<boolean>(false);
 	private anomalies$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerCardId$$ = new BehaviorSubject<string>(null);
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
@@ -114,6 +118,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.hasBuddies$$,
 			this.hasSpells$$,
 			this.anomalies$$,
+			this.hasPrizes$$,
 			this.playerCardId$$,
 			this.allPlayerCardIds$$,
 			this.showMechanicsTiers$$,
@@ -127,6 +132,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					hasBuddies,
 					hasSpells,
 					anomalies,
+					hasPrizes,
 					playerCardId,
 					allPlayersCardIds,
 					showMechanicsTiers,
@@ -138,7 +144,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
-					const cardsInGame = getAllCardsInGame(races, hasSpells, gameMode, this.allCards);
+					const cardsInGame = getAllCardsInGame(races, hasSpells, hasPrizes, gameMode, this.allCards);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,

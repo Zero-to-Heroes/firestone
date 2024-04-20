@@ -56,6 +56,7 @@ const normalizeHeroCardIdAfterSkin = (heroCardId: string, allCards: CardsFacadeS
 export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
 	hasSpells: boolean,
+	hasDarkmoonPrizes: boolean,
 	gameMode: GameType,
 	allCards: CardsFacadeService,
 ): readonly ReferenceCard[] => {
@@ -67,6 +68,7 @@ export const getAllCardsInGame = (
 			isBattlegroundsDuo(gameMode) ? true : !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
 		)
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
+		.filter((card) => hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
 			if (card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_SPELL]) {

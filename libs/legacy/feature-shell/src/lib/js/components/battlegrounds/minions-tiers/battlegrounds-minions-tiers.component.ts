@@ -99,6 +99,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				hasBuddies: bgGameState?.currentGame?.hasBuddies,
 				hasSpells: bgGameState?.currentGame?.hasSpells,
 				anomalies: bgGameState?.currentGame?.anomalies,
+				hasPrizes: bgGameState?.currentGame?.hasPrizes,
 				playerCardId: bgGameState?.currentGame?.getMainPlayer()?.cardId,
 				allPlayersCardIds: bgGameState?.currentGame?.players?.map((p) => p.cardId),
 			})),
@@ -113,6 +114,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					hasBuddies,
 					hasSpells,
 					anomalies,
+					hasPrizes,
 					playerCardId,
 					allPlayersCardIds,
 				}) => {
@@ -121,7 +123,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
-					const cardsInGame = getAllCardsInGame(races, hasSpells, gameMode, this.allCards);
+					const cardsInGame = getAllCardsInGame(races, hasSpells, hasPrizes, gameMode, this.allCards);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,
