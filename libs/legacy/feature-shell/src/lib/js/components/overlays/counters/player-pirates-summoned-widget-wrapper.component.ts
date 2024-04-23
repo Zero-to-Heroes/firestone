@@ -35,7 +35,7 @@ export class PlayerPiratesSummonedWidgetWrapperComponent
 		this.activeCounter = 'piratesSummoned';
 		this.prefExtractor = (prefs) => prefs.playerPiratesSummonedCounter;
 		this.deckStateExtractor = (state, prefValue) =>
-			state.playerDeck?.hasRelevantCard([CardIds.Hooktusk], {
+			state.playerDeck?.hasRelevantCard([CardIds.PirateAdmiralHooktusk], {
 				onlyLimited: prefValue === 'limited',
 			});
 	}
