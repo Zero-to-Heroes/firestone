@@ -261,10 +261,10 @@ import { Knob } from '../preference-slider.component';
 					[enabled]="value.bgsFullToggle && value.bgsEnableMinionListOverlay"
 					[showCurrentValue]="false"
 					displayedValueUnit=""
-					[min]="80"
+					[min]="40"
 					[max]="135"
 					[snapSensitivity]="5"
-					[knobs]="sizeKnobs"
+					[knobs]="minionsListSizeKnobs"
 				>
 				</preference-slider>
 			</div>
@@ -375,6 +375,20 @@ export class SettingsBattlegroundsOverlayComponent
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 2500,
+		},
+	];
+	minionsListSizeKnobs: readonly Knob[] = [
+		{
+			absoluteValue: 40,
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
+		},
+		{
+			absoluteValue: 100,
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
+		},
+		{
+			absoluteValue: 135,
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
 	sizeKnobs: readonly Knob[] = [
