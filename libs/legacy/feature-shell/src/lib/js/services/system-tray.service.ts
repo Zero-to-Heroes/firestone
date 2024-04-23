@@ -44,6 +44,9 @@ export class SystemTrayService {
 		};
 
 		await this.ow.setTrayMenu(menu);
+		const onIconClick = () => this.showMainWindow();
+		this.ow.onTrayIconClicked(onIconClick);
+		this.ow.onTrayIconDoubleClicked(onIconClick);
 		this.ow.onTrayMenuClicked((event) => {
 			switch (event?.item) {
 				case 'main-window':

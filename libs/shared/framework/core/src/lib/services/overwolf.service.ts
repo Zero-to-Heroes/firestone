@@ -960,6 +960,14 @@ export class OverwolfService {
 		overwolf.os.tray.onMenuItemClicked.addListener(callback);
 	}
 
+	public onTrayIconClicked(callback: (event: overwolf.os.tray.onMenuItemClickedEvent) => void): void {
+		overwolf.os.tray.onTrayIconClicked.addListener(callback);
+	}
+
+	public onTrayIconDoubleClicked(callback: (event: overwolf.os.tray.onMenuItemClickedEvent) => void): void {
+		overwolf.os.tray.onTrayIconDoubleClicked.addListener(callback);
+	}
+
 	public async isWindowVisibleToUser(): Promise<'hidden' | 'full' | 'partial'> {
 		return new Promise<'hidden' | 'full' | 'partial'>((resolve) => {
 			overwolf.windows.isWindowVisibleToUser((result) => {
