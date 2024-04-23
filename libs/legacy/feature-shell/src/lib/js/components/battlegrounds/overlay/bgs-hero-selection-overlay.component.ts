@@ -22,7 +22,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	styleUrls: ['../../../../css/themes/battlegrounds-theme.scss', './bgs-hero-selection-overlay.component.scss'],
 	template: `
 		<div
-			class="app-container battlegrounds-theme bgs-hero-selection-overlay heroes-{{ value.overviews.length }}"
+			class="app-container battlegrounds-theme bgs-hero-selection-overlay heroes-{{ value.overviews?.length }}"
 			[ngClass]="{
 				'with-hero-tooltips': heroTooltipActive$ | async,
 				'with-tier-overlay': showTierOverlay$ | async
