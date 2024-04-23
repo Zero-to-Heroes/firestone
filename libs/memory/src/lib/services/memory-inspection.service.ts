@@ -9,6 +9,7 @@ import { Card } from '../external-models/card';
 import { CardBack } from '../external-models/card-back';
 import { MatchInfo } from '../external-models/match-info';
 import { BattlegroundsInfo } from '../models/battlegrounds-info';
+import { MemoryBgsPlayerInfo, MemoryBgsTeamInfo } from '../models/battlegrounds-player-state';
 import { CoinInfo } from '../models/coin-info';
 import { DeckInfoFromMemory } from '../models/deck-info-from-memory';
 import { AdventuresInfo, DuelsDeck, DuelsInfo, MemoryDuelsHeroPowerOption } from '../models/memory-duels';
@@ -32,6 +33,8 @@ import { GetBattlegroundsInfoOperation } from './mind-vision/operations/get-batt
 import { GetBattlegroundsMatchOperation } from './mind-vision/operations/get-battlegrounds-match-operation';
 import { GetBattlegroundsSelectedModeOperation } from './mind-vision/operations/get-battlegrounds-selected-mode-operation';
 import { GetBattlegroundsOwnedHeroSkinDbfIdsOperation } from './mind-vision/operations/get-bgs-hero-skin-dbf-ids-operation';
+import { GetBgsPlayerBoardOperation } from './mind-vision/operations/get-bgs-player-board-operation';
+import { GetBgsPlayerTeammateBoardOperation } from './mind-vision/operations/get-bgs-player-teammate-board-operation';
 import { GetBoardOperation } from './mind-vision/operations/get-board-operation';
 import { GetBoostersInfoOperation } from './mind-vision/operations/get-boosters-info-operation';
 import { GetCardBacksOperation } from './mind-vision/operations/get-card-backs-operation';
@@ -75,6 +78,8 @@ export class MemoryInspectionService {
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVisionFacade, this.ow);
 	private getBoardOperation = new GetBoardOperation(this.mindVisionFacade, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVisionFacade, this.ow);
+	private getBgsPlayerTeammateBoardOperation = new GetBgsPlayerTeammateBoardOperation(this.mindVisionFacade, this.ow);
+	private getBgsPlayerBoardOperation = new GetBgsPlayerBoardOperation(this.mindVisionFacade, this.ow);
 	private getBattlegroundsSelectedModeOperation = new GetBattlegroundsSelectedModeOperation(
 		this.mindVisionFacade,
 		this.ow,
@@ -167,6 +172,14 @@ export class MemoryInspectionService {
 
 	public async getBattlegroundsSelectedMode(): Promise<'solo' | 'duos' | null> {
 		return this.mindVision.callMindVision(() => this.getBattlegroundsSelectedModeOperation.call());
+	}
+
+	public async getBgsPlayerTeammateBoard(): Promise<MemoryBgsPlayerInfo | null> {
+		return this.mindVision.callMindVision(() => this.getBgsPlayerTeammateBoardOperation.call());
+	}
+
+	public async getBgsPlayerBoard(): Promise<MemoryBgsTeamInfo | null> {
+		return this.mindVision.callMindVision(() => this.getBgsPlayerBoardOperation.call());
 	}
 
 	public async getMercenariesInfo(numberOfRetries?: number): Promise<MemoryMercenariesInfo | null> {

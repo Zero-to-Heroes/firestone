@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Board } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../external-models/arena-info';
+import { MemoryBgsPlayerInfo } from '../../models/battlegrounds-player-state';
 import { BoostersInfo } from '../../models/boosters-info';
 import { CoinInfo } from '../../models/coin-info';
 import { DeckInfoFromMemory } from '../../models/deck-info-from-memory';
@@ -241,6 +242,34 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.warn('[mind-vision] could not parse getDuelsSignatureTreasureOptions', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getBgsPlayerTeammateBoard(): Promise<MemoryBgsPlayerInfo | null> {
+		return new Promise<MemoryBgsPlayerInfo | null>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getBgsPlayerTeammateBoard((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getBgsPlayerTeammateBoard', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getBgsPlayerBoard(): Promise<MemoryBgsPlayerInfo | null> {
+		return new Promise<MemoryBgsPlayerInfo | null>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getBgsPlayerBoard((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getBgsPlayerBoard', e);
 				resolve(null);
 			}
 		});

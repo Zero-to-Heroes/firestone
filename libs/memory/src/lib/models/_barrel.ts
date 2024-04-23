@@ -1,4 +1,5 @@
 export * from './battlegrounds-info';
+export * from './battlegrounds-player-state';
 export * from './boosters-info';
 export * from './coin-info';
 export * from './deck-info-from-memory';

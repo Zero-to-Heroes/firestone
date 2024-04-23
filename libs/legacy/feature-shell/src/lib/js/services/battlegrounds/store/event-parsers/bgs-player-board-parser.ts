@@ -5,7 +5,15 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
-import { BattlegroundsState, BgsBoard, BgsGame, BgsPlayer, PlayerBoard } from '@firestone/battlegrounds/common';
+import {
+	BattlegroundsState,
+	BgsBoard,
+	BgsGame,
+	BgsPlayer,
+	PlayerBoard,
+	PlayerBoardEntity,
+} from '@firestone/battlegrounds/common';
+import { BgsEntity, MemoryBgsPlayerInfo, MemoryInspectionService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 import { GameEvents } from '../../../game-events.service';
@@ -22,6 +30,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly logsUploader: LogsUploaderService,
 		private readonly gameEventsService: GameEvents,
 		private readonly allCards: CardsFacadeService,
+		private readonly memory: MemoryInspectionService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -36,7 +45,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			event.playerBoard?.secrets?.length,
 			event.opponentBoard?.secrets?.length,
 		);
-		console.debug('[bgs-simulation] received player boards', event);
+		console.debug('[bgs-simulation] received player boards', event, currentState.currentGame.getMainPlayer());
 
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
 			setTimeout(async () => {
@@ -80,13 +89,67 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		let playerTeammateBoard: PlayerBoard = null;
 		let opponentTeammateBoard: PlayerBoard = null;
+
+		// === Debug area
+		// const debugPlayerBoard = this.buildPlayerBoard(event.latestPlayerBoard);
+		// const debugTeammateBoard = this.buildTeammateBoard(event.teammateBoard, currentState.currentGame.players);
+		// console.debug(
+		// 	'player and teammate backup info',
+		// 	debugPlayerBoard,
+		// 	debugTeammateBoard,
+		// 	event.latestPlayerBoard,
+		// 	event.teammateBoard,
+		// 	event.teammateBoard?.Hero?.Tags?.map((t) => ({ Name: GameTag[t.Name], Value: t.Value })),
+		// 	currentState,
+		// 	event,
+		// );
+		// === End debug area
+
+		// const [playerBoardDebug, teammateBoardDebug] = await Promise.all([
+		// 	this.buildPlayerBoard(),
+		// 	this.buildTeammateBoard(),
+		// ]);
+		// console.debug('[bgs-simulation] found boards from memory', playerBoardDebug, teammateBoardDebug);
+		// The issue is that, when only one board is visible during the fight (big loss / victory), we don't get the
+		// other teammmate info sent cleanly
+		// Best case, we get a duoPendingBoard with the first player remaining board + whatever we can fit of the second player board
+		// In this case, we could try to find out the entities that belong to the second player to build an approximation of the
+		// teammate's board.
+		// For the player's teammate, we should be able to get the exact info based on memory reading at the time the figt starts
+		// so that shouldn't be too much of an issue (though we need to make sure the info reflects the state before the fight)
+		// For the opponent's teammate, I think we only have this partial info to work with, which is probably better than nothing
+		// We need to flag the sim result as "possibly inaccurate" in this case
+		// So TODO list:
+		// - identify, based on the duoPendingBoards info, which teammate info is missing
+		// - if it is the player's teammate, get the info from the memory (this might have to be move forward when receiving the "duoPendingBoards" event, or even earlier)
+		// - if the opponent's teammate is missing, this means that it will be present (at least partially) in the opponent pendingDuoBoard info
+		//    - if the board total length is <= 7, we more or less have the full info (we'll miss the hand), and can do a sim
+		//    - if the board total length is > 7, we'll have to make do with the partial info
+		//    - in both cases, we probably should flag the result with "possibly inaccurate" and not send the report to the lambda
 		for (const duoPendingBoard of event.duoPendingBoards ?? []) {
 			if (playerTeammateBoard == null && duoPendingBoard.playerBoard.playerId !== player.playerId) {
 				playerTeammateBoard = duoPendingBoard.playerBoard;
-			}
-			if (opponentTeammateBoard == null && duoPendingBoard.opponentBoard.playerId !== opponent.playerId) {
+			} else if (opponentTeammateBoard == null && duoPendingBoard.opponentBoard.playerId !== opponent.playerId) {
 				opponentTeammateBoard = duoPendingBoard.opponentBoard;
 			}
+		}
+		if (!!event.duoPendingBoards?.length && playerTeammateBoard == null) {
+			// Limitations: we missing some info about random effects, like Embrace Your Rage
+			if (player.playerId === currentState.currentGame.getMainPlayer().playerId) {
+				playerTeammateBoard = this.buildTeammateBoard(event.teammateBoard, currentState.currentGame.players);
+			} else {
+				// FIXME: this doesn't work, because if we are in a battle, and haven't found the main player,
+				// it means that the current board will be the teammate's. Since this only use the board state,
+				// it will get the teammate's board (+ maybe some stuff from the player's), but not the player's board
+				playerTeammateBoard = this.buildPlayerBoard(event.playerBoard);
+			}
+		}
+		if (!!event.duoPendingBoards?.length && opponentTeammateBoard == null) {
+			opponentTeammateBoard = this.getOpponentTeammateBoard(
+				event.duoPendingBoards[event.duoPendingBoards.length - 1]?.opponentBoard,
+				opponent,
+				currentState.currentGame.players,
+			);
 		}
 
 		console.debug(
@@ -184,6 +247,91 @@ export class BgsPlayerBoardParser implements EventParser {
 			result?.currentGame?.availableRaces ?? [],
 			result.currentGame?.currentTurn ?? 0,
 		);
+		return result;
+	}
+
+	private buildTeammateBoard(
+		teammateBoardFromMemory: MemoryBgsPlayerInfo,
+		players: readonly BgsPlayer[],
+	): PlayerBoard {
+		console.debug('[bgs-simulation] found teammate board from memory', teammateBoardFromMemory);
+
+		const result: PlayerBoard = {
+			playerId:
+				teammateBoardFromMemory.Hero?.Tags?.find((tag) => tag.Name === GameTag.PLAYER_ID)?.Value ??
+				players.find((player) => player.cardId === teammateBoardFromMemory.Hero?.CardId)?.playerId,
+			heroCardId: teammateBoardFromMemory.Hero?.CardId,
+			heroPowerCardId: teammateBoardFromMemory.HeroPower?.CardId,
+			heroPowerUsed:
+				teammateBoardFromMemory.HeroPower?.Tags?.find((t) => t.Name === GameTag.BACON_HERO_POWER_ACTIVATED)
+					?.Value === 1,
+			globalInfo: null, // We don't have this info yet
+			heroPowerInfo: -1, // We don't have this info yet
+			heroPowerInfo2: -1, // We don't have this info yet
+			board: teammateBoardFromMemory.Board?.map((entity) => this.buildEntityFromMemory(entity)),
+			hand: teammateBoardFromMemory.Hand?.map((entity) => this.buildEntityFromMemory(entity)),
+			hero: this.buildEntityFromMemory(teammateBoardFromMemory.Hero),
+			secrets: teammateBoardFromMemory.Secrets?.map((entity) => this.buildEntityFromMemory(entity)),
+			questEntities: [], // No info
+			questRewardEntities: [], // No info
+			questRewards: [], // No info
+		};
+		return result;
+	}
+
+	private buildEntityFromMemory(entity: BgsEntity): PlayerBoardEntity {
+		return {
+			Id: entity.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
+			Entity: entity.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
+			CardId: entity.CardId,
+			Tags: entity.Tags,
+			Enchantments:
+				entity.Enchantments?.map((e) => ({
+					EntityId: e.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
+					CardId: e.CardId,
+					TagScriptDataNum1: e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value,
+					TagScriptDataNum2: e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value,
+				})) ?? [],
+		};
+	}
+
+	private buildPlayerBoard(latestPlayerBoard: PlayerBoard): PlayerBoard {
+		return latestPlayerBoard;
+	}
+
+	private getOpponentTeammateBoard(
+		opponentBoard: PlayerBoard,
+		opponent: BgsPlayer,
+		allPlayers: readonly BgsPlayer[],
+	): PlayerBoard {
+		const teammateEntities = opponentBoard.board.filter((e) =>
+			e.Tags.find((t) => t.Name === GameTag.CONTROLLER && t.Value !== opponent.playerId),
+		);
+		// TODO: refactor this once we have the concept of teams
+		const opponentPosition = opponent.leaderboardPlace;
+		const teammatePosition = opponentPosition % 2 === 1 ? opponentPosition + 1 : opponentPosition - 1;
+		const teammatePlayer = allPlayers.find((player) => player.leaderboardPlace === teammatePosition);
+		const result: PlayerBoard = {
+			board: teammateEntities,
+			globalInfo: null, // No info
+			hand: [], // no info
+			heroCardId: teammatePlayer?.cardId,
+			heroPowerCardId: teammatePlayer?.heroPowerCardId,
+			heroPowerInfo: -1, // No info
+			heroPowerInfo2: -1, // No info
+			heroPowerUsed: false, // No info
+			playerId: teammatePlayer?.playerId,
+			secrets: [], // No info
+			questEntities: [], // No info
+			questRewardEntities: [], // No info
+			questRewards: [], // No info
+			hero: {
+				CardId: teammatePlayer?.cardId,
+				Entity: 0, // No info
+				Id: teammatePlayer?.playerId,
+				Tags: [], // No info
+			},
+		};
 		return result;
 	}
 
