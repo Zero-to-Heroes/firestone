@@ -1186,6 +1186,33 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.KnightOfTheWild:
 			case CardIds.KnightOfTheWild_WON_003:
 				return and(side(inputSide), or(inDeck, inHand), beast);
+			case CardIds.KoboldMiner_TheAzeriteRatToken_WW_001t26:
+				return (input: SelectorInput): SelectorOutput => {
+					if (!input.deckState.minionsDeadThisMatch?.length) {
+						return null;
+					}
+
+					const highestCost = Math.max(
+						...input.deckState.minionsDeadThisMatch.map((c) => this.allCards.getCard(c.cardId).cost ?? 0),
+					);
+					const candidates = input.deckState.minionsDeadThisMatch.filter(
+						(c) => this.allCards.getCard(c.cardId).cost === highestCost,
+					);
+					if (!candidates.length) {
+						return null;
+					}
+
+					return highlightConditions(
+						tooltip(
+							and(
+								side(inputSide),
+								inGraveyard,
+								minion,
+								cardIs(...candidates.map((c) => c.cardId as CardIds)),
+							),
+						),
+					)(input);
+				};
 			case CardIds.LadyAnacondra_WC_006:
 				return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.LadyAshvane_TSC_943:
