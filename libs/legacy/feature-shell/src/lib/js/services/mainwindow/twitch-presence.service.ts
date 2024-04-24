@@ -225,7 +225,7 @@ export class TwitchPresenceService {
 				map((prefs) => prefs.twitchAccessToken),
 				distinctUntilChanged(),
 			)
-			.subscribe(([token]) => (this.twitchAccessToken = token));
+			.subscribe((token) => (this.twitchAccessToken = token));
 		this.prefs.preferences$$
 			.pipe(
 				map((prefs) => prefs.twitchLoginName),
