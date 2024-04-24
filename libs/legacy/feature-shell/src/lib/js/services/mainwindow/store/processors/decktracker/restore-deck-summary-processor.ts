@@ -14,9 +14,15 @@ export class RestoreDeckSummaryProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
+		console.log(
+			'[restore-deck-summary-processor] removing deck from hidden decks',
+			event.deckstring,
+			currentPrefs.desktopDeckHiddenDeckCodes,
+		);
 		const newHiddenDecks = (currentPrefs.desktopDeckHiddenDeckCodes ?? []).filter(
 			(deckCode) => deckCode !== event.deckstring,
 		);
+		console.log('[restore-deck-summary-processor] new hidden decks', newHiddenDecks);
 		await this.prefs.setDesktopDeckHiddenDeckCodes(newHiddenDecks);
 		return [null, null];
 	}
