@@ -811,7 +811,23 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.EmbraceOfNature_EmbraceOfNatureToken:
 				return and(side(inputSide), inDeck, chooseOne);
 			case CardIds.Endgame_TOY_886:
-				return and(side(inputSide), inGraveyard, minion, demon);
+				return (input: SelectorInput): SelectorOutput => {
+					const deadDemons =
+						input.deckState.minionsDeadThisMatch?.filter(
+							(card) =>
+								this.allCards.getCard(card.cardId).races?.includes(Race[Race.DEMON]) ||
+								this.allCards.getCard(card.cardId).races?.includes(Race[Race.ALL]),
+						) ?? [];
+					if (!deadDemons.length) {
+						return and(side(inputSide), inGraveyard, minion, demon)(input);
+					}
+
+					const last = deadDemons[deadDemons.length - 1];
+					return highlightConditions(
+						and(side(inputSide), or(inHand, inDeck), minion, demon),
+						tooltip(and(side(inputSide), inGraveyard, minion, demon, cardIs(last.cardId as CardIds))),
+					)(input);
+				};
 			case CardIds.EnduranceTrainingTavernBrawl:
 				return and(side(inputSide), minion, taunt);
 			case CardIds.Ensmallen_TOY_805:
