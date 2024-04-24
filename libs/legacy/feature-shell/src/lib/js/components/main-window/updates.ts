@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.11.1',
+		version: '13.11.15',
 		force: false,
 		sections: [
 			// {
@@ -42,96 +42,86 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'misc',
-								text: `The app has been updated for patch 29.2, and basic support for Duos (simulator and replays) has been added. I'm still working on some improvements, so expect updates in the coming days.`,
-							},
-						],
-					},
-				],
-			},
 			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
+			// 	type: 'main',
+			// 	header: 'Main updates',
 			// 	updates: [
 			// 		{
 			// 			category: 'general',
 			// 			details: [
 			// 				{
 			// 					type: 'misc',
-			// 					text: `I'm still fixing the memory leaks of the app. It might take a week or so to address all the biggest ones, so please be patient with me :)`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Card highlights in the tracker can now highlight different conditions in different colors (like Blindeye Sharpshooter highlights Nagas and Spells differently). Let me know if you encounter cards that could benefit from that!.`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Add a Dragons Summoned counter for the opponent. It only appears when the opponent is playing Priest and has summoned at least one dragon.`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Cards in the decklist will now be grouped based on whether or not the game itself consider them to be the same card (for instance, a Core and non-Core version of a card).`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the Turn Timer and Attack Counter would stop working after playing an additional turn from Zarimi.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where importing a deck code in the deck builder would not properly import sideboards.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `The "gold next turn" counter now accounts for your board, including "start of next turn" effects like Accord-o-Tron.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where sometimes highlights would be off, because Tavern Spells were ignored.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue in the simulator UI where you couldn't remove the "summon mechs" enchantment once added.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'arena',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the rewards would mention "Gold Cards" instead of normal cards.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'achievements',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where Firestone achievements could not be completed anymore.`,
+			// 					text: `The app has been updated for patch 29.2, and basic support for Duos (simulator and replays) has been added. I'm still working on some improvements, so expect updates in the coming days.`,
 			// 				},
 			// 			],
 			// 		},
 			// 	],
 			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `The Azerite Rat will now show you all candidate minions as related cards when mousing over it in the tracker.`,
+							},
+							{
+								type: 'feature',
+								text: `Endgame will now show you the last demon that died as related cards when mousing over it in the tracker.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "pirates summoned" counter would not appear.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `The battle odds simulator should now better take into account the opponent's and player's teammates, especially when only one board of the battle was seen. This is still not perfect, and this specific case will probably not be manageable in a fully accurate way, but it should reduce the amount of times an easy win (according to the sim) would be in fact a crushing loss to a single opposing warband.`,
+							},
+							{
+								type: 'content',
+								text: `Increased the range for the minions list widget size, as sometimes even the smaller setting could still be a bit big.`,
+							},
+							{
+								type: 'bug',
+								text: `(Premium) Fix an issue where the face-offs recap table would not properly update when facing heroes with special skins.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Darkmoon Prizes would appear in the minions list.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where mousing over a portrait in Duos could sometimes give you the board of their teammate.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix many issues with the battle odds simulator. It is still not to its pre-patch level of accuracy, but it's in a decent place now.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Left-clicking on the app's icon in the system tray now brings up the app's main window.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the twitch extension could stop receiving updates upon relogging in.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
