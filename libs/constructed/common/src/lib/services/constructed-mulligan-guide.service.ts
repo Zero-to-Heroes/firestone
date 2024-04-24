@@ -33,6 +33,7 @@ import {
 	filter,
 	from,
 	map,
+	of,
 	shareReplay,
 	switchMap,
 	tap,
@@ -123,22 +124,22 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const format$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
 			switchMap(() => this.gameState.gameState$$),
-			map(
-				(gameState) =>
-					toFormatType(gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD) as GameFormatString,
-			),
+			map((gameState) => gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD),
+			shareReplay(1),
 		);
 		const playerRank$ = from(['legend-diamond'] as RankBracket[]);
 		const opponentClass$ = from(['all'] as ('all' | string)[]);
 
-		const archetype$: Observable<ArchetypeStat | null> = showWidget$.pipe(
-			filter((showWidget) => showWidget),
+		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$]).pipe(
+			filter(([showWidget, format]) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
-			switchMap(() => combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$])),
-			map(([gameState, playerRank, opponentClass]) => ({
+			switchMap(([showWidget, format]) =>
+				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format)]),
+			),
+			map(([gameState, playerRank, opponentClass, format]) => ({
 				archetypeId: gameState?.playerDeck?.archetypeId,
-				format: gameState?.metadata?.formatType,
+				format: format,
 				playerRank: playerRank,
 				opponentClass: opponentClass,
 			})),
@@ -165,14 +166,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
 			// shareReplay(1),
 		);
-		const deckDetails$: Observable<DeckStat | null> = showWidget$.pipe(
-			filter((showWidget) => showWidget),
+		const deckDetails$: Observable<DeckStat | null> = combineLatest([showWidget$, format$]).pipe(
+			filter(([showWidget, format]) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
-			switchMap(() => combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$])),
-			map(([gameState, playerRank, opponentClass]) => ({
+			switchMap(([showWidget, format]) =>
+				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format)]),
+			),
+			map(([gameState, playerRank, opponentClass, format]) => ({
 				deckString: gameState?.playerDeck?.deckstring,
-				format: gameState?.metadata?.formatType,
+				format: format,
 				playerRank: playerRank,
 				opponentClass: opponentClass,
 			})),
@@ -287,7 +290,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					sampleSize: sampleSize,
 					rankBracket: playerRank,
 					opponentClass: opponentClass,
-					format: format,
+					format: toFormatType(format) as GameFormatString,
 				};
 				return result;
 			}),
