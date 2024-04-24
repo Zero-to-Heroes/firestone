@@ -68,7 +68,7 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
 			filter((currentView) => !!currentView),
 			this.mapData(
-				([currentView]) =>
+				(currentView) =>
 					currentView !== 'bgs-category-personal-stats' &&
 					currentView !== 'bgs-category-perfect-games' &&
 					currentView !== 'bgs-category-meta-quests' &&
