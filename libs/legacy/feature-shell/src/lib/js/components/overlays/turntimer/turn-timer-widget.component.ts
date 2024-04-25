@@ -29,7 +29,7 @@ import { sumOnArray } from '../../../services/utils';
 			<div class="background" [style.opacity]="opacity$ | async"></div>
 			<div class="match-length" *ngIf="showTurnTimerMatchLength$ | async">
 				<div class="current-turn">{{ currentTurn$ | async }}</div>
-				<div class="total-length">{{ totalMatchLength$ | async | date: 'mm:ss' }}</div>
+				<div class="total-length">{{ totalMatchLength$ | async | shortDate }}</div>
 			</div>
 			<div class="players">
 				<turn-timer-player class="player" [player]="player$ | async" [showFuse]="showFuse$ | async">

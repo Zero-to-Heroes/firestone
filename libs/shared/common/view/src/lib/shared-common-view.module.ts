@@ -1,5 +1,5 @@
 import { A11yModule } from '@angular/cdk/a11y';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
@@ -27,6 +27,7 @@ import { CardTooltipComponent } from './components/tooltip/card-tooltip.componen
 import { CardTooltipDirective } from './components/tooltip/card-tooltip.directive';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
+import { ShortDatePipe } from './pipes/short-date.pipe';
 
 const components = [
 	BuffInfoComponent,
@@ -55,6 +56,8 @@ const components = [
 	ToggleViewComponent,
 
 	ScrollableDirective,
+
+	ShortDatePipe,
 ];
 
 @NgModule({
@@ -74,5 +77,6 @@ const components = [
 	],
 	declarations: components,
 	exports: components,
+	providers: [ShortDatePipe, DatePipe],
 })
 export class SharedCommonViewModule {}
