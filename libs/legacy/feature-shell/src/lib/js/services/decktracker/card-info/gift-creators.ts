@@ -721,6 +721,7 @@ export const giftCreators = [
 	CardIds.TomeOfIntellectLegacy,
 	CardIds.ToothOfNefarian,
 	CardIds.Toshley,
+	CardIds.TradePrinceGallywix_GVG_028,
 	CardIds.TrainingSession_NX2_029,
 	CardIds.TrainingSession_TrainingSessionAchieveEnchantment,
 	CardIds.TrainingSession_TrainingSessionEnchantment,
