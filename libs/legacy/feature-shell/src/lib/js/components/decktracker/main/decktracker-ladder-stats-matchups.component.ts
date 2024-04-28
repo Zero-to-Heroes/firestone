@@ -122,7 +122,7 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			this.decks.decks$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveDeckstringsFilter)),
 		]).pipe(
-			this.mapData(([decks, [deckstringsFilter]]) => {
+			this.mapData(([decks, deckstringsFilter]) => {
 				const result = (decks ?? [])
 					.filter(
 						(deck) =>
