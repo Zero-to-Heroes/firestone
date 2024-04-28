@@ -47,7 +47,7 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionComponent imp
 			this.mapData((sets) => sets),
 		);
 		this.currentSets$ = combineLatest([activeFilter$, allSets$, this.nav.selectedSetId$$]).pipe(
-			this.mapData(([activeFilter, allSets, [selectedSetId]]) => {
+			this.mapData(([activeFilter, allSets, selectedSetId]) => {
 				if (selectedSetId) {
 					return allSets.filter((set) => set.id === selectedSetId);
 				}
