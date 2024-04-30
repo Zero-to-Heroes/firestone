@@ -1913,7 +1913,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				);
 			case CardIds.TyrsTears:
 			case CardIds.TyrsTears_TyrsTearsToken:
-				return tooltip(and(side(inputSide), or(inDeck, inHand, inGraveyard), currentClass, minion));
+				return highlightConditions(
+					and(side(inputSide), or(inDeck, inHand), currentClass, minion),
+					tooltip(and(side(inputSide), inGraveyard, currentClass, minion)),
+				);
 			case CardIds.Tuskpiercer:
 				return and(side(inputSide), inDeck, deathrattle, minion);
 			case CardIds.TwilightDeceptor:
