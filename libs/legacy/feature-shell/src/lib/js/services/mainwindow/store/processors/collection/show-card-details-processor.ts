@@ -30,7 +30,7 @@ export class ShowCardDetailsProcessor implements Processor {
 		this.collectionNav.menuDisplayType$$.next('breadcrumbs');
 		this.collectionNav.searchString$$.next(null);
 		this.collectionNav.selectedSetId$$.next(selectedSet?.id);
-		this.collectionNav.selectedSetId$$.next(event.cardId);
+		this.collectionNav.selectedCardId$$.next(event.cardId);
 		this.collectionNav.selectedCardBackId$$.next(null);
 		const newCollection = navigationState.navigationCollection.update({
 			searchResults: [] as readonly string[],

@@ -10,16 +10,16 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardClass, ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'full-card',
@@ -91,7 +91,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class FullCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	// eslint-disable-next-line @angular-eslint/no-output-native
 	@Output() close = new EventEmitter();
 
@@ -115,31 +115,30 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 	private selectedCard$$ = new BehaviorSubject<SetCard | ReferenceCard>(null);
 
 	@Input() set selectedCard(selectedCard: SetCard | ReferenceCard) {
-		if (!selectedCard) {
-			return;
-		}
-
 		this.selectedCard$$.next(selectedCard);
 	}
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly cards: SetsService,
 		private readonly allCards: CardsFacadeService,
 		private readonly sanitizer: DomSanitizer,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		combineLatest(
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		combineLatest([
 			this.selectedCard$$.asObservable(),
-			this.listenForBasicPref$((prefs) => prefs.locale),
-		)
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)),
+		])
 			.pipe(this.mapData(([selectedCard, locale]) => ({ selectedCard, locale })))
 			.subscribe((info) => {
+				console.debug('selected card', info);
 				const selectedCard = info.selectedCard;
 				const locale = info.locale;
 				this.previousClips = this.audioClips || [];
@@ -203,6 +202,10 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 					this.cdr.detectChanges();
 				}
 			});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	playSound(audioClip: AudioClip) {
@@ -237,7 +240,8 @@ export class FullCardComponent extends AbstractSubscriptionStoreComponent implem
 	}
 
 	private buildAudio(inputCard: ReferenceCard | SetCard, locale: string): readonly AudioClipCategory[] {
-		const card = this.allCards.getCard(inputCard.id);
+		console.debug('building audio for card', inputCard?.id, inputCard);
+		const card = this.allCards.getCard(inputCard?.id);
 		if (!(card as ReferenceCard).audio2) {
 			return [];
 		}
