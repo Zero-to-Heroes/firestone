@@ -39,9 +39,7 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionComponent imp
 		await waitForReady(this.nav, this.prefs, this.setsManager);
 
 		this.setStatsType$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionSetStatsTypeFilter));
-		const activeFilter$ = this.prefs.preferences$$
-			.pipe(this.mapData((prefs) => prefs.collectionSelectedFormat))
-			.pipe(this.mapData(([pref]) => pref));
+		const activeFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionSelectedFormat));
 		const allSets$ = this.setsManager.sets$$.pipe(
 			debounceTime(1000),
 			this.mapData((sets) => sets),
@@ -60,7 +58,7 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionComponent imp
 						: activeFilter === 'twist'
 						? allSets.filter((set) => set.twist)
 						: allSets.filter((set) => !set.standard);
-				console.debug('visible sets', sets);
+				console.debug('visible sets', sets, activeFilter);
 				return sets;
 			}),
 		);
