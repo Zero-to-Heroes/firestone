@@ -137,7 +137,11 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
 		enchantments: buildEnchantments(logEntity.Enchantments),
 		entityId: logEntity.Entity,
-		health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value ?? 0,
+		health:
+			(logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value ?? 0) -
+			// Some entities can be reborn in the shop, and come back with 1 health. I think in this case
+			// the 1 health is a damage, so we need to take it into account so that we show the true health
+			(logEntity.Tags.find((tag) => tag.Name === GameTag.DAMAGE)?.Value ?? 0),
 		maxHealth: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
 		poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
 		venomous: logEntity.Tags.find((tag) => tag.Name === GameTag.VENOMOUS)?.Value === 1,
