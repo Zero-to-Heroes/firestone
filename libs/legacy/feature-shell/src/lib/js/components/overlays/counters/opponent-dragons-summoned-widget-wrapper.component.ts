@@ -35,6 +35,8 @@ export class OpponentDragonsSummonedWidgetWrapperComponent
 		this.activeCounter = 'dragonsSummoned';
 		this.prefExtractor = (prefs) => prefs.opponentDragonsSummonedCounter;
 		this.deckStateExtractor = (state, prefValue) =>
-			state.opponentDeck?.hero?.classes?.includes(CardClass.PRIEST) && !!state.opponentDeck?.dragonsSummoned;
+			state.opponentDeck?.hero?.classes?.some((playerClass) =>
+				[CardClass.PRIEST, CardClass.DRUID].includes(playerClass),
+			) && !!state.opponentDeck?.dragonsSummoned;
 	}
 }
