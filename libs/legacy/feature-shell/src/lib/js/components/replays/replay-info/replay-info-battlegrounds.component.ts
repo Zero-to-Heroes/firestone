@@ -202,8 +202,11 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 			this.replayInfo.gameMode === 'battlegrounds-friendly' ||
 			this.replayInfo.gameMode === 'battlegrounds-duo';
 		this.hasMatchStats = isBg;
+		const isDuo = this.replayInfo.gameMode === 'battlegrounds-duo';
 		this.visualResult = isBg
-			? this.replayInfo.bgsPerfectGame || parseInt(this.replayInfo.additionalResult) <= 4
+			? this.replayInfo.bgsPerfectGame ||
+			  (!isDuo && parseInt(this.replayInfo.additionalResult) <= 4) ||
+			  (isDuo && parseInt(this.replayInfo.additionalResult) <= 2)
 				? 'won'
 				: 'lost'
 			: this.replayInfo.result;
