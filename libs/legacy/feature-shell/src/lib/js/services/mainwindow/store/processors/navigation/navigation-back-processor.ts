@@ -24,22 +24,30 @@ export class NavigationBackProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newState =
-			(history.currentIndexInHistory > 0
-				? history.stateHistory[history.currentIndexInHistory - 1].state
-				: NavigationBackProcessor.buildParentState(
-						navigationState,
-						currentState,
-						this.setsManager,
-						this.mainNav,
-						this.collectionNav,
-				  )) ?? navigationState;
-		if (!newState?.isVisible) {
-			if (history.currentIndexInHistory !== 1) {
-				// When the first event is the store init, this behavior is normal
-				console.warn('[navigation-back] going back to an invisible state, auto-fixing the issue', newState);
-			}
-			return [null, newState.update({ ...newState, isVisible: true } as NavigationState)];
-		}
+			NavigationBackProcessor.buildParentState(
+				navigationState,
+				currentState,
+				this.setsManager,
+				this.mainNav,
+				this.collectionNav,
+			) ?? navigationState;
+
+		// 	(history.currentIndexInHistory > 0
+		// 		? history.stateHistory[history.currentIndexInHistory - 1].state
+		// 		: NavigationBackProcessor.buildParentState(
+		// 				navigationState,
+		// 				currentState,
+		// 				this.setsManager,
+		// 				this.mainNav,
+		// 				this.collectionNav,
+		// 		  )) ?? navigationState;
+		// if (!newState?.isVisible) {
+		// 	if (history.currentIndexInHistory !== 1) {
+		// 		// When the first event is the store init, this behavior is normal
+		// 		console.warn('[navigation-back] going back to an invisible state, auto-fixing the issue', newState);
+		// 	}
+		// 	return [null, newState.update({ ...newState, isVisible: true } as NavigationState)];
+		// }
 		return [null, newState];
 	}
 
@@ -54,6 +62,7 @@ export class NavigationBackProcessor implements Processor {
 			case 'achievements':
 				return NavigationBackProcessor.buildParentAchievementsState(navigationState, dataState);
 			case 'collection':
+				collectionNav.goUp();
 				return NavigationBackProcessor.buildParentCollectionState(
 					navigationState,
 					setsManager,
@@ -174,17 +183,21 @@ export class NavigationBackProcessor implements Processor {
 	): NavigationState {
 		switch (nav.currentView$$.getValue()) {
 			case 'sets':
+				// nav.selectedSetId$$.next(null);
+				mainNav.text$$.next(null);
+				mainNav.image$$.next(null);
 				return null;
 			case 'cards':
-				nav.currentView$$.next('sets');
+				// nav.currentView$$.next('sets');
 				mainNav.text$$.next(null);
-				return navigationState;
+				mainNav.image$$.next(null);
+				return null;
 			case 'card-details':
 				// We should already have initialized the sets by then
 				const selectedSet = setsManager.sets$$
 					.getValue()
 					?.find((set) => set.getCard(nav.selectedCardId$$.getValue()) != null);
-				nav.currentView$$.next('cards');
+				// nav.currentView$$.next('cards');
 				nav.selectedSetId$$.next(selectedSet?.id);
 				mainNav.text$$.next(selectedSet?.name);
 				return navigationState.update({

@@ -5,9 +5,11 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Input,
 	ViewRef,
 } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
@@ -15,8 +17,6 @@ import { filter } from 'rxjs/operators';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'global-header',
@@ -28,41 +28,39 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	],
 	template: `
 		<div class="global-header" *ngIf="text$ | async as text">
-			<i class="i-13X7 arrow back" (click)="back()" *ngIf="backArrow$ | async">
+			<i class="i-13X7 arrow back" (click)="back()" *ngIf="backArrow">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>
 			</i>
 			<img class="image" *ngIf="image$ | async as image" [src]="image" />
 			<div class="text">{{ text }}</div>
-			<i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrow$ | async">
+			<!-- <i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrow$ | async">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>
-			</i>
+			</i> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GlobalHeaderComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class GlobalHeaderComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	text$: Observable<string>;
 	image$: Observable<string>;
 	backArrow$: Observable<boolean>;
 	nextArrow$: Observable<boolean>;
 
+	@Input() backArrow: boolean;
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

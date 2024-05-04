@@ -31,7 +31,7 @@ import { MainWindowStateFacadeService } from '../../services/mainwindow/store/ma
 			<section class="main" [ngClass]="{ divider: value.currentView === 'cards' }">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content" *ngIf="menuDisplayType$ | async as menuDisplayType">
-						<global-header *ngIf="menuDisplayType === 'breadcrumbs'"> </global-header>
+						<global-header *ngIf="menuDisplayType === 'breadcrumbs'" [backArrow]="true"> </global-header>
 						<collection-menu-selection
 							class="menu-selection"
 							*ngIf="menuDisplayType === 'menu'"
