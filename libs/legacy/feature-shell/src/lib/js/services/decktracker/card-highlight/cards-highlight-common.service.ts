@@ -654,7 +654,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.CrystalsmithCultist:
 				return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 			case CardIds.Crystology:
-				return and(side(inputSide), inDeck, minion, attackLessThan(2));
+				return and(side(inputSide), inDeck, minion, attackLessThan(2), attackGreaterThan(0));
 			case CardIds.CthunsChosen:
 			case CardIds.CthunsChosen_WON_125:
 			case CardIds.AncientShieldbearer:
