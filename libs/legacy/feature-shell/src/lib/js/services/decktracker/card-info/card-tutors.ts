@@ -196,6 +196,7 @@ export const tutors = [
 	CardIds.ThriveInTheShadowsCore,
 	CardIds.TolvirWarden,
 	CardIds.TownCrier_GIL_580,
+	CardIds.TownCrier_CORE_GIL_580,
 	CardIds.TramOperator,
 	CardIds.TrenchSurveyor_Story_11_TrenchSurveyorPuzzle,
 	CardIds.TrenchSurveyor_TSC_642,
