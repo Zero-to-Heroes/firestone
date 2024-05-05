@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.11.15',
+		version: '13.11.24',
 		force: false,
 		sections: [
 			// {
@@ -66,15 +66,31 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `The Azerite Rat will now show you all candidate minions as related cards when mousing over it in the tracker.`,
-							},
-							{
-								type: 'feature',
-								text: `Endgame will now show you the last demon that died as related cards when mousing over it in the tracker.`,
+								text: `The Dragons Summoned counter now shows up for the opponent when they're playing Druid (it used to show up only for Priest).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the "pirates summoned" counter would not appear.`,
+								text: `Fix an issue where card traded back in your opponent deck would sometimes incorrectly increment their count in deck (mostly when importing a decklist for your opponent).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Secrets Helper would not show the list of secrets when created by certain cards (e.g. Desperate Measures, Oh My Yogg).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Zilliax would appear as a 0-cost card in the meta decks lists.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the mulligan helper would not show any data for Zilliax.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Whizbang decks would not be properly imported for the opponent.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where selecting multiple decks in the Constructed tab would only show stats for the first selected deck.`,
 							},
 						],
 					},
@@ -82,41 +98,42 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `The battle odds simulator should now better take into account the opponent's and player's teammates, especially when only one board of the battle was seen. This is still not perfect, and this specific case will probably not be manageable in a fully accurate way, but it should reduce the amount of times an easy win (according to the sim) would be in fact a crushing loss to a single opposing warband.`,
-							},
-							{
-								type: 'content',
-								text: `Increased the range for the minions list widget size, as sometimes even the smaller setting could still be a bit big.`,
+								type: 'bug',
+								text: `Fix (again) some issues with Duos. A previous update accidentally overwrote some of the fixes that were made for Duos, and this update should restore them.`,
 							},
 							{
 								type: 'bug',
-								text: `(Premium) Fix an issue where the face-offs recap table would not properly update when facing heroes with special skins.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Darkmoon Prizes would appear in the minions list.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where mousing over a portrait in Duos could sometimes give you the board of their teammate.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix many issues with the battle odds simulator. It is still not to its pre-patch level of accuracy, but it's in a decent place now.`,
+								text: `Fix multiple simulation issues.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'replays',
 						details: [
 							{
-								type: 'feature',
-								text: `Left-clicking on the app's icon in the system tray now brings up the app's main window.`,
+								type: 'bug',
+								text: `Top 4 now shows up as a loss in Duos.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix the behavior of the "back" button.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the twitch extension could stop receiving updates upon relogging in.`,
+								text: `Fix an issue where clicking on a card to see the details would sometimes not show anything.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where card sound effects had disappeared.`,
+							},
+							{
+								type: 'bug',
+								text: `(Premium) Fix an issue where collection stats would always show the info for the whole collection, instead of matching the selected sets (mostly Standard / Wild).`,
 							},
 						],
 					},
