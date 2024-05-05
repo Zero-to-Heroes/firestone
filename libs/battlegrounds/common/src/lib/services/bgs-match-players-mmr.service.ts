@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { BnetRegion } from '@firestone-hs/reference-data';
+import { BnetRegion, GameType, isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { PlayerMatchMmr } from '../model/in-game/bgs-player-match-mmr';
 import { BgsMatchMemoryInfoService } from './bgs-match-memory-info.service';
 import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderboards.service';
@@ -40,6 +40,21 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 		await this.gameState.isReady();
 
 		this.playersMatchMmr$$.onFirstSubscribe(async () => {
+			const gameMode$ = this.gameState.gameState$$.pipe(
+				map((gameState) => gameState?.metadata.gameType),
+				distinctUntilChanged(),
+			);
+
+			const leaderboards$ = gameMode$.pipe(
+				switchMap((gameMode) =>
+					this.leaderboards.loadLeaderboards(
+						isBattlegroundsDuo(gameMode ?? GameType.GT_BATTLEGROUNDS)
+							? 'battlegrounds-duo'
+							: 'battlegrounds',
+					),
+				),
+			);
+
 			const gameInfo$ = combineLatest([
 				this.memoryInfo.battlegroundsMemoryInfo$$,
 				this.gameState.gameState$$,
@@ -68,9 +83,9 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 				tap((info) => console.debug('[bgs-match-players-mmr] game info', info)),
 			);
 
-			combineLatest([gameInfo$, this.leaderboards.leaderboards$$])
+			combineLatest([gameInfo$, leaderboards$])
 				.pipe(
-					debounceTime(2000),
+					debounceTime(200),
 					filter(([gameInfo, leaderboards]) => !!gameInfo && !!leaderboards?.leaderboards?.length),
 					map(([gameInfo, leaderboards]) => {
 						const leaderboard = leaderboards!.leaderboards.find(

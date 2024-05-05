@@ -50,7 +50,7 @@ export class BattlegroundsOfficialLeaderboardService extends AbstractFacadeServi
 		});
 	}
 
-	private async loadLeaderboards(
+	public async loadLeaderboards(
 		gameMode: 'battlegrounds' | 'battlegrounds-duo',
 	): Promise<OfficialLeaderboardResult | null> {
 		return this.mainInstance.loadLeaderboardsInternal(gameMode);
