@@ -12,9 +12,15 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { getBaseCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	CardsFacadeService,
+	IAdsService,
+	ILocalizationService,
+} from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
 	Observable,
@@ -112,6 +118,7 @@ export class ConstructedMulliganComponent
 		private readonly i18n: ILocalizationService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(cdr);
 	}
@@ -170,7 +177,17 @@ export class ConstructedMulliganComponent
 			filter(([noData, guide]) => !!guide),
 			this.mapData(([noData, guide]) => {
 				return guide!.cardsInHand
-					.map((cardId) => guide?.allDeckCards.find((advice) => advice.cardId === cardId))
+					.map(
+						(cardId) =>
+							guide?.allDeckCards.find(
+								(advice) => getBaseCardId(advice.cardId) === getBaseCardId(cardId),
+							) ??
+							guide?.allDeckCards.find(
+								(advice) =>
+									this.allCards.getRootCardId(getBaseCardId(advice.cardId)) ===
+									this.allCards.getRootCardId(getBaseCardId(cardId)),
+							),
+					)
 					.map((advice) => ({
 						impact: noData ? null : advice?.score == null ? '-' : advice.score.toFixed(2),
 						keepRate: noData
@@ -190,7 +207,9 @@ export class ConstructedMulliganComponent
 							cardId: advice.cardId,
 							label: advice.cardId,
 							value: advice.score ?? 0,
-							selected: !!guide?.cardsInHand.includes(advice.cardId),
+							selected: !!guide?.cardsInHand
+								.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
+								.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
 						}))
 						.sort((a, b) => a.value - b.value),
 					format: guide!.format,
