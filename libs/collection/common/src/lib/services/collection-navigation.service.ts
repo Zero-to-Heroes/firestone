@@ -12,6 +12,8 @@ export class CollectionNavigationService extends AbstractFacadeService<Collectio
 	public selectedCardId$$: BehaviorSubject<string | null>;
 	public selectedCardBackId$$: BehaviorSubject<number | null>;
 
+	private viewHistory: CurrentView[] = [];
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'CollectionNavigationService', () => !!this.currentView$$);
 	}
@@ -32,6 +34,16 @@ export class CollectionNavigationService extends AbstractFacadeService<Collectio
 		this.selectedSetId$$ = new BehaviorSubject<string | null>(null);
 		this.selectedCardId$$ = new BehaviorSubject<string | null>(null);
 		this.selectedCardBackId$$ = new BehaviorSubject<number | null>(null);
+
+		this.currentView$$.subscribe((view) => {
+			if (!view) {
+				return;
+			}
+			this.viewHistory.push(view);
+			if (this.viewHistory.length > 2) {
+				this.viewHistory.shift(); // keep only the last two values
+			}
+		});
 	}
 
 	public goUp(): void {
@@ -53,7 +65,8 @@ export class CollectionNavigationService extends AbstractFacadeService<Collectio
 				this.selectedCardBackId$$.next(null);
 				break;
 			case 'card-details':
-				this.currentView$$.next('cards');
+				console.debug('[collection-navigation] going back up from card-details', this.viewHistory);
+				this.currentView$$.next(this.viewHistory[0] ?? 'cards');
 				this.searchString$$.next(null);
 				// this.selectedSetId$$.next(null);
 				this.selectedCardId$$.next(null);
