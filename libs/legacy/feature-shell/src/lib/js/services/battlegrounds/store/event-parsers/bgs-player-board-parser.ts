@@ -255,6 +255,9 @@ export class BgsPlayerBoardParser implements EventParser {
 		players: readonly BgsPlayer[],
 	): PlayerBoard {
 		console.debug('[bgs-simulation] found teammate board from memory', teammateBoardFromMemory);
+		if (!teammateBoardFromMemory) {
+			return null;
+		}
 
 		const result: PlayerBoard = {
 			playerId:
