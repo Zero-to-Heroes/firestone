@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
+import { Sideboard } from '@firestone-hs/deckstrings';
+import { ReferenceCard, getBaseCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import {
@@ -12,6 +13,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ExtendedConstructedCardData } from './constructed-meta-deck-details-view.component';
 
 @Component({
 	selector: 'constructed-meta-deck-details-card-stats',
@@ -124,7 +126,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	popularityLabel$: Observable<string>;
 	popularityLabelTooltip$: Observable<string>;
 
-	@Input() set cards(value: readonly ConstructedCardData[]) {
+	@Input() set cards(value: readonly ExtendedConstructedCardData[]) {
 		this.cardData$$.next(value);
 	}
 	@Input() set showRelativeInfo(value: boolean) {
@@ -140,7 +142,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 		this.isDeck$$.next(value);
 	}
 
-	private cardData$$ = new BehaviorSubject<readonly ConstructedCardData[]>([]);
+	private cardData$$ = new BehaviorSubject<readonly ExtendedConstructedCardData[]>([]);
 	private showRelativeInfo$$ = new BehaviorSubject<boolean>(false);
 	private deckWinrate$$ = new BehaviorSubject<number>(null);
 	private totalGames$$ = new BehaviorSubject<number>(null);
@@ -227,7 +229,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 			this.isDeck$$,
 		]).pipe(
 			this.mapData(([cardData, sortCriteria, showRelativeInfo, deckWinrate, totalGames, isDeck]) => {
-				const groupedByCardId = groupByFunction((data: ConstructedCardData) => data.cardId)(cardData);
+				const groupedByCardId = groupByFunction((data: ExtendedConstructedCardData) => data.cardId)(cardData);
 				const result = Object.keys(groupedByCardId)
 					.map((cardId) => {
 						const card = this.allCards.getCard(cardId);
@@ -293,7 +295,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 							deckCard: VisualDeckCard.create({
 								cardId: card.id,
 								cardName: card.name,
-								manaCost: card.cost,
+								manaCost: this.getManaCost(card, firstCopyData?.sideboard),
 								rarity: card.rarity,
 								totalQuantity: copies,
 								internalEntityId: internalEntityId,
@@ -368,6 +370,13 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 
 	private sortByCopy2(a: InternalCardData, b: InternalCardData, direction: SortDirection): number {
 		return direction === 'asc' ? a.copy2 - b.copy2 : b.copy2 - a.copy2;
+	}
+
+	private getManaCost(card: ReferenceCard, sideboard: Sideboard): number {
+		if (sideboard?.keyCardDbfId === this.allCards.getCard(getBaseCardId(card.id)).dbfId) {
+			return sideboard?.cards?.map((c) => this.allCards.getCard(c[0]).cost).reduce((a, b) => a + b, 0) ?? 0;
+		}
+		return card.cost;
 	}
 }
 

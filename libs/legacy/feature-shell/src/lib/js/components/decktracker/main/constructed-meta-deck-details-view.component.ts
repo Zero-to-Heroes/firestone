@@ -290,7 +290,7 @@ export interface ConstructedDeckDetails {
 	readonly games: number;
 	readonly winrate: number;
 	readonly archetypeId: number;
-	readonly cardsData: readonly ConstructedCardData[];
+	readonly cardsData: readonly ExtendedConstructedCardData[];
 	readonly matchups: readonly ConstructedMatchupInfo[];
 	readonly archetypeCoreCards: readonly string[];
 	readonly cardVariations?: {
@@ -300,4 +300,8 @@ export interface ConstructedDeckDetails {
 	readonly sideboards?: readonly Sideboard[];
 
 	readonly deckstring?: string;
+}
+
+export interface ExtendedConstructedCardData extends ConstructedCardData {
+	readonly sideboard?: Sideboard;
 }

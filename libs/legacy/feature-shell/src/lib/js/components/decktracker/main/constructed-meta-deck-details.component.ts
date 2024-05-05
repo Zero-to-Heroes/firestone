@@ -1,13 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { decode } from '@firestone-hs/deckstrings';
+import { ConstructedCardData } from '@firestone-hs/constructed-deck-stats';
+import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
 import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
+import { ConstructedDeckDetails, ExtendedConstructedCardData } from './constructed-meta-deck-details-view.component';
 
 @Component({
 	selector: 'constructed-meta-deck-details',
@@ -38,6 +41,7 @@ export class ConstructedMetaDeckDetailsComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly prefs: PreferencesService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -86,7 +90,9 @@ export class ConstructedMetaDeckDetailsComponent
 					games: stat.totalGames,
 					winrate: winrateToUse,
 					deckstring: stat.decklist,
-					cardsData: stat.cardsData.filter((c) => c.inStartingDeck > stat.totalGames / 50),
+					cardsData: stat.cardsData
+						.filter((c) => c.inStartingDeck > stat.totalGames / 50)
+						.map((c) => enrichCard(c, deckDefinition.sideboards, this.allCards)),
 					matchups: stat.matchupInfo,
 					cardVariations: stat.cardVariations,
 					archetypeCoreCards: stat.archetypeCoreCards,
@@ -101,3 +107,18 @@ export class ConstructedMetaDeckDetailsComponent
 		}
 	}
 }
+
+export const enrichCard = (
+	card: ConstructedCardData,
+	sideboards: readonly Sideboard[],
+	allCards: CardsFacadeService,
+): ExtendedConstructedCardData => {
+	if (card.cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
+		const result: ExtendedConstructedCardData = {
+			...card,
+			sideboard: sideboards?.find((sb) => sb.keyCardDbfId === allCards.getCard(getBaseCardId(card.cardId)).dbfId),
+		};
+		return result;
+	}
+	return card;
+};
