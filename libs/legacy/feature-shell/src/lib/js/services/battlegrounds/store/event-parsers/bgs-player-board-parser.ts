@@ -316,23 +316,35 @@ export class BgsPlayerBoardParser implements EventParser {
 		const teammatePlayer = allPlayers.find((player) => player.leaderboardPlace === teammatePosition);
 		const result: PlayerBoard = {
 			board: teammateEntities,
-			globalInfo: null, // No info
-			hand: [], // no info
-			heroCardId: teammatePlayer?.cardId,
-			heroPowerCardId: teammatePlayer?.heroPowerCardId,
+			hand: opponentBoard.hand,
+			heroCardId: opponentBoard.heroCardId ?? teammatePlayer?.cardId,
+			heroPowerCardId: opponentBoard.heroPowerCardId ?? teammatePlayer?.heroPowerCardId,
 			heroPowerInfo: -1, // No info
 			heroPowerInfo2: -1, // No info
 			heroPowerUsed: false, // No info
-			playerId: teammatePlayer?.playerId,
-			secrets: [], // No info
+			playerId:
+				opponentBoard.hero.Tags?.find((t) => t.Name === GameTag.PLAYER_ID)?.Value ?? teammatePlayer?.playerId,
+			secrets: opponentBoard.secrets,
 			questEntities: [], // No info
 			questRewardEntities: [], // No info
 			questRewards: [], // No info
 			hero: {
-				CardId: teammatePlayer?.cardId,
+				CardId: opponentBoard.heroCardId ?? teammatePlayer?.cardId,
 				Entity: 0, // No info
-				Id: teammatePlayer?.playerId,
-				Tags: [], // No info
+				Id:
+					opponentBoard.hero.Tags?.find((t) => t.Name === GameTag.PLAYER_ID)?.Value ??
+					teammatePlayer?.playerId,
+				Tags: opponentBoard.hero?.Tags,
+			},
+			globalInfo: {
+				EternalKnightsDeadThisGame: opponentBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
+				TavernSpellsCastThisGame: opponentBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
+				UndeadAttackBonus: opponentBoard.globalInfo?.UndeadAttackBonus ?? 0,
+				ChoralAttackBuff: opponentBoard.globalInfo?.ChoralAttackBuff ?? 0,
+				ChoralHealthBuff: opponentBoard.globalInfo?.ChoralHealthBuff ?? 0,
+				FrostlingBonus: opponentBoard.globalInfo?.FrostlingBonus ?? 0,
+				BloodGemAttackBonus: opponentBoard.globalInfo?.BloodGemAttackBonus ?? 0,
+				BloodGemHealthBonus: opponentBoard.globalInfo?.BloodGemHealthBonus ?? 0,
 			},
 		};
 		return result;
