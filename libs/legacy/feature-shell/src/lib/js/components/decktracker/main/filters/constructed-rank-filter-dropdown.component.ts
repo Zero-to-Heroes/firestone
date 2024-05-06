@@ -72,12 +72,19 @@ export class ConstructedRankFilterDropdownComponent
 					'legend-diamond',
 					'legend',
 					'top-2000-legend',
+					'competitive',
 				];
 				const options: DeckRankOption[] = brackets.map(
 					(option) =>
 						({
 							value: option,
 							label: this.i18n.translateString(`app.decktracker.filters.rank-bracket.${option}`),
+							tooltip:
+								option === 'competitive'
+									? this.i18n.translateString(
+											'app.decktracker.filters.rank-bracket.competitive-tooltip',
+									  )
+									: null,
 						} as DeckRankOption),
 				);
 				return {
