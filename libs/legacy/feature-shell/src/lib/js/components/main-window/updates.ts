@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.11.24',
+		version: '13.11.25',
 		force: false,
 		sections: [
 			// {
@@ -97,6 +97,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `You can now browse the Duos leaderboards from the Battlegrounds section. The MMR of your opponent displayed in the lobby (if activated) now use this new Duos leaderboard.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix (again) some issues with Duos. A previous update accidentally overwrote some of the fixes that were made for Duos, and this update should restore them.`,
