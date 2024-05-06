@@ -15,6 +15,8 @@ import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD, ArenaCardStatsService } from '../
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import { ArenaCardStatInfo } from './model';
 
+const MIN_STATS_THRESHOLD = 100;
+
 @Component({
 	selector: 'arena-card-stats',
 	styleUrls: [`./arena-card-stats-columns.scss`, `./arena-card-stats.component.scss`],
@@ -90,6 +92,15 @@ import { ArenaCardStatInfo } from './model';
 					>
 					</sortable-table-label>
 					<sortable-table-label
+						class="cell play-on-curve-winrate"
+						[name]="'app.arena.card-stats.header-play-on-curve-winrate' | fsTranslate"
+						[helpTooltip]="'app.arena.card-stats.header-play-on-curve-winrate-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'play-on-curve-winrate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell drawn-total"
 						[name]="'app.arena.card-stats.header-drawn-total' | fsTranslate"
 						[sort]="sort"
@@ -110,6 +121,14 @@ import { ArenaCardStatInfo } from './model';
 						[name]="'app.arena.card-stats.header-offered-total' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'offered-total'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell play-on-curve-total"
+						[name]="'app.arena.card-stats.header-play-on-curve-total' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'play-on-curve-total'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -374,18 +393,26 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		return {
 			cardId: stat.cardId,
 			drawnTotal: stat.matchStats.drawn,
-			drawWinrate: stat.matchStats.drawn > 0 ? stat.matchStats.drawnThenWin / stat.matchStats.drawn : null,
+			drawWinrate:
+				stat.matchStats.drawn > MIN_STATS_THRESHOLD
+					? stat.matchStats.drawnThenWin / stat.matchStats.drawn
+					: null,
 			mulliganWinrate:
-				stat.matchStats.inHandAfterMulligan > 0
+				stat.matchStats.inHandAfterMulligan > MIN_STATS_THRESHOLD
 					? stat.matchStats.inHandAfterMulliganThenWin / stat.matchStats.inHandAfterMulligan
+					: null,
+			playOnCurveWinrate:
+				stat.matchStats.playedOnCurve > MIN_STATS_THRESHOLD
+					? stat.matchStats.playedOnCurveThenWin / stat.matchStats.playedOnCurve
 					: null,
 			deckTotal: stat.matchStats.decksWithCard,
 			deckWinrate:
-				stat.matchStats.decksWithCard > 0
+				stat.matchStats.decksWithCard > MIN_STATS_THRESHOLD
 					? stat.matchStats.decksWithCardThenWin / stat.matchStats.decksWithCard
 					: null,
 			totalOffered: stat.draftStats?.totalOffered,
 			totalPicked: stat.draftStats?.totalPicked,
+			totalPlayOnCurve: stat.matchStats?.playedOnCurve,
 			pickRate: stat.draftStats?.pickRate,
 			totalOfferedHighWins: stat.draftStats?.totalOfferedHighWins,
 			totalPickedHighWins: stat.draftStats?.totalPickedHighWins,
@@ -415,12 +442,16 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				return this.sortByDeckWinrate(a, b, sortCriteria.direction);
 			case 'mulligan-winrate':
 				return this.sortByMulliganWinrate(a, b, sortCriteria.direction);
+			case 'play-on-curve-winrate':
+				return this.sortByPlayOnCurveWinrate(a, b, sortCriteria.direction);
 			case 'drawn-total':
 				return this.sortByDrawnTotal(a, b, sortCriteria.direction);
 			case 'deck-total':
 				return this.sortByDeckTotal(a, b, sortCriteria.direction);
 			case 'offered-total':
 				return this.sortByOfferedTotal(a, b, sortCriteria.direction);
+			case 'play-on-curve-total':
+				return this.sortByPlayOnCurveTotal(a, b, sortCriteria.direction);
 			case 'pickrate':
 				return this.sortByPickrateTotal(a, b, sortCriteria.direction);
 			case 'offered-total-high-wins':
@@ -464,6 +495,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
+	private sortByPlayOnCurveTotal(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.totalPlayOnCurve ?? 0;
+		const bData = b.totalPlayOnCurve ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
 	private sortByName(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
 		const aData = this.allCards.getCard(a.cardId)?.name;
 		const bData = this.allCards.getCard(b.cardId)?.name;
@@ -499,6 +536,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		const bData = b.mulliganWinrate ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
+
+	private sortByPlayOnCurveWinrate(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.playOnCurveWinrate ?? 0;
+		const bData = b.playOnCurveWinrate ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
 }
 
 type ColumnSortType =
@@ -508,6 +551,8 @@ type ColumnSortType =
 	| 'deck-total'
 	| 'deck-winrate'
 	| 'mulligan-winrate'
+	| 'play-on-curve-winrate'
+	| 'play-on-curve-total'
 	| 'pickrate-impact'
 	| 'offered-total'
 	| 'pickrate'
