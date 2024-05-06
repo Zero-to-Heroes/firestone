@@ -202,6 +202,11 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerMulliganScale: number = 100;
 
+	readonly arenaShowMulliganCardImpact: boolean = true;
+	readonly arenaShowMulliganDeckOverview: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly arenaMulliganScale: number = 100;
+
 	readonly hsShowQuestsWidget: boolean = true;
 	readonly hsShowQuestsWidgetOnHub: boolean = true;
 	readonly hsShowQuestsWidgetOnBg: boolean = false;

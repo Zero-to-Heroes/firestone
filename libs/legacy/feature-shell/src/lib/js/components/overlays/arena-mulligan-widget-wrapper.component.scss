@@ -1,0 +1,17 @@
+:host {
+	// z-index: -1;
+}
+
+.container {
+	height: 53vh;
+	width: 93vh;
+	top: 22vh;
+	left: 24vh;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+arena-mulligan {
+	height: 100%;
+}

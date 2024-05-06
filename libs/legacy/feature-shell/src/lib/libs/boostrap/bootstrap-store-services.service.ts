@@ -4,6 +4,8 @@ import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
 	ArenaHighWinsRunsService,
+	ArenaMulliganGuideGuardianService,
+	ArenaMulliganGuideService,
 	ArenaNavigationService,
 } from '@firestone/arena/common';
 import {
@@ -116,6 +118,8 @@ export class BootstrapStoreServicesService {
 		private readonly init_duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly init_constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly init_ConstructedMulliganGuideService: ConstructedMulliganGuideService,
+		private readonly init_ArenaMulliganGuideService: ArenaMulliganGuideService,
+		private readonly init_ArenaMulliganGuideGuardianService: ArenaMulliganGuideGuardianService,
 		private readonly init_ArenaNavigationService: ArenaNavigationService,
 		private readonly init_ArenDeckDetailsService: ArenDeckDetailsService,
 		private readonly init_ConstructedMulliganGuideGuardianService: ConstructedMulliganGuideGuardianService,

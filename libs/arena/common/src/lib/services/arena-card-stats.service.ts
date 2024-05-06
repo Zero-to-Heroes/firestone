@@ -58,40 +58,39 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 							? 'past-3'
 							: timeFilter;
 					const context = classFilter === 'all' || classFilter == null ? 'global' : classFilter;
-					const [cardPerformanceStats, cardDraftStats] = await Promise.all([
-						this.api.callGetApi<ArenaCardStats>(
-							ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod).replace(
-								'%context%',
-								context,
-							),
-						),
-						this.api.callGetApi<DraftStatsByContext>(
-							ARENA_CARD_DRAFT_STATS_URL.replace('%timePeriod%', timePeriod).replace(
-								'%context%',
-								context,
-							),
-						),
-					]);
-					if (cardPerformanceStats == null || cardDraftStats == null) {
-						console.error(
-							'[arena-card-stats] could not load arena stats',
-							cardPerformanceStats == null,
-							cardDraftStats == null,
-						);
-						return;
-					}
-
-					console.log('[arena-card-stats] loaded arena stats');
-					console.debug('[arena-card-stats] loaded arena stats', cardPerformanceStats, cardDraftStats);
-
-					const result: ArenaCombinedCardStats = {
-						context: context,
-						lastUpdated: cardPerformanceStats.lastUpdated,
-						stats: this.buildCombinedStats(cardPerformanceStats.stats, cardDraftStats.stats),
-					};
+					const result: ArenaCombinedCardStats | null = await this.buildCardStats(context, timePeriod);
 					this.cardStats$$.next(result);
 				});
 		});
+	}
+
+	public async buildCardStats(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
+		const [cardPerformanceStats, cardDraftStats] = await Promise.all([
+			this.api.callGetApi<ArenaCardStats>(
+				ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context),
+			),
+			this.api.callGetApi<DraftStatsByContext>(
+				ARENA_CARD_DRAFT_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context),
+			),
+		]);
+		if (cardPerformanceStats == null || cardDraftStats == null) {
+			console.error(
+				'[arena-card-stats] could not load arena stats',
+				cardPerformanceStats == null,
+				cardDraftStats == null,
+			);
+			return null;
+		}
+
+		console.log('[arena-card-stats] loaded arena stats');
+		console.debug('[arena-card-stats] loaded arena stats', cardPerformanceStats, cardDraftStats);
+
+		const result: ArenaCombinedCardStats = {
+			context: context,
+			lastUpdated: cardPerformanceStats.lastUpdated,
+			stats: this.buildCombinedStats(cardPerformanceStats.stats, cardDraftStats.stats),
+		};
+		return result;
 	}
 
 	public newSearchString(newText: string) {

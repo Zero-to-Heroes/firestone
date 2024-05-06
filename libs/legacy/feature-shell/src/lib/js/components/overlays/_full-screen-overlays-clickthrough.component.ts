@@ -54,6 +54,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 
 			<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
 			<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
+			<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

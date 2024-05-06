@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
@@ -18,12 +19,17 @@ import { ArenaCardSelectionComponent } from './components/overlays/arena-card-se
 import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
 import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
+import { ArenaMulliganDetailedInfoComponent } from './components/overlays/mulligan/arena-mulligan-detailed-info.component';
+import { ArenaMulliganInfoPremiumComponent } from './components/overlays/mulligan/arena-mulligan-info-premium.component';
+import { ArenaMulliganComponent } from './components/overlays/mulligan/arena-mulligan.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
 import { ArenaRunVignetteComponent } from './components/runs/arena-run-vignette.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 import { ArenDeckDetailsService } from './services/arena-deck-details.service';
 import { ArenaHighWinsRunsService } from './services/arena-high-wins-runs.service';
+import { ArenaMulliganGuideGuardianService } from './services/arena-mulligan-guide-guardian.service';
+import { ArenaMulliganGuideService } from './services/arena-mulligan-guide.service';
 import { ArenaNavigationService } from './services/arena-navigation.service';
 
 const components = [
@@ -41,6 +47,9 @@ const components = [
 	ArenaDeckDetailsComponent,
 	ArenaHighWinsRunsComponent,
 	ArenaRunVignetteComponent,
+	ArenaMulliganComponent,
+	ArenaMulliganDetailedInfoComponent,
+	ArenaMulliganInfoPremiumComponent,
 ];
 @NgModule({
 	imports: [
@@ -53,6 +62,7 @@ const components = [
 		SharedCommonViewModule,
 		DuelsGeneralModule,
 		StatsCommonModule,
+		ConstructedCommonModule,
 	],
 	providers: [
 		ArenaClassStatsService,
@@ -60,6 +70,8 @@ const components = [
 		ArenaNavigationService,
 		ArenDeckDetailsService,
 		ArenaHighWinsRunsService,
+		ArenaMulliganGuideService,
+		ArenaMulliganGuideGuardianService,
 	],
 	declarations: components,
 	exports: components,

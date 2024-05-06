@@ -46,11 +46,16 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 							: timeFilter === 'past-three'
 							? 'past-3'
 							: timeFilter;
-					const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod);
-					const result: ArenaClassStats | null = await this.api.callGetApi(url);
-					console.log('[arena-class-stats] loaded duels config');
+					const result: ArenaClassStats | null = await this.buildClassStats(timePeriod);
 					this.classStats$$.next(result);
 				});
 		});
+	}
+
+	public async buildClassStats(timePeriod: string): Promise<ArenaClassStats | null> {
+		const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod);
+		const result: ArenaClassStats | null = await this.api.callGetApi(url);
+		console.log('[arena-class-stats] loaded duels config');
+		return result;
 	}
 }

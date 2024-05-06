@@ -520,6 +520,7 @@ import { TwitchLocalizationManagerService } from '@components/decktracker/overla
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
+import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-mulligan-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { ConstructedMulliganWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
@@ -1550,6 +1551,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaDecktrackerOocWidgetWrapperComponent,
 		ArenaDecktrackerOocComponent,
 		ConstructedMulliganWidgetWrapperComponent,
+		ArenaMulliganWidgetWrapperComponent,
 
 		LotteryWidgetWrapperComponent,
 		LotteryWidgetComponent,

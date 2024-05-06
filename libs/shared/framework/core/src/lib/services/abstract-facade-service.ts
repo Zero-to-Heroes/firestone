@@ -35,6 +35,10 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 	protected abstract init(): void | Promise<void>;
 }
 
-export const waitForReady = async (...services: AbstractFacadeService<any>[]) => {
+export const waitForReady = async (...services: HasIsReady[]) => {
 	return Promise.all(services.map((service) => service.isReady()));
 };
+
+interface HasIsReady {
+	isReady(): Promise<void>;
+}
