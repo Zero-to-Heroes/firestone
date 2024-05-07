@@ -33,6 +33,6 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 			...(this.battleInfo?.playerBoard.board ?? []),
 			...(this.battleInfo?.opponentBoard.board ?? []),
 		];
-		return !allEntities?.length ? 1 : Math.max(...allEntities.map((e) => e.entityId)) + 1;
+		return !allEntities?.length ? 1 : Math.max(...allEntities.filter((e) => !!e).map((e) => e.entityId)) + 1;
 	}
 }
