@@ -42,102 +42,49 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'general',
-			// 			details: [
-			// 				{
-			// 					type: 'misc',
-			// 					text: `The app has been updated for patch 29.2, and basic support for Duos (simulator and replays) has been added. I'm still working on some improvements, so expect updates in the coming days.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
 			{
-				type: 'minor',
-				header: 'Minor updates',
+				type: 'main',
+				header: 'Main updates',
 				updates: [
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `Mulligan guide is live for Arena! Upon card selection during the mulligan, the app will show an overlay with the impact / pick rate of the cards being offered, as well as the impact of all cards in your deck. Premium users have illimited use of this features, while others can use it for up to 3 games per day.`,
+							},
+						],
+					},
 					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `The Dragons Summoned counter now shows up for the opponent when they're playing Druid (it used to show up only for Priest).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where card traded back in your opponent deck would sometimes incorrectly increment their count in deck (mostly when importing a decklist for your opponent).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Secrets Helper would not show the list of secrets when created by certain cards (e.g. Desperate Measures, Oh My Yogg).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Zilliax would appear as a 0-cost card in the meta decks lists.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the mulligan helper would not show any data for Zilliax.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Whizbang decks would not be properly imported for the opponent.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where selecting multiple decks in the Constructed tab would only show stats for the first selected deck.`,
+								text: `A new "Competitive" rank filter is available for meta stats (decks and archetypes). The idea is to limit the stats to users who are really trying to win, and so only includes Top 2000 Legend and Diamond 1-4 players. The mulligan overlay data still includes all players from Diamond to Legend to make sure the sample size is big enough, but this can be adjusted in the future.`,
 							},
 						],
 					},
+				],
+			},
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
 					{
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'bug',
+								text: `Fix some sim issues for Duos. There will still be quite a few iterations needed, but I'm finally starting to address Duos-specific sim issues :)`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
 								type: 'feature',
-								text: `You can now browse the Duos leaderboards from the Battlegrounds section. The MMR of your opponent displayed in the lobby (if activated) now use this new Duos leaderboard.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix (again) some issues with Duos. A previous update accidentally overwrote some of the fixes that were made for Duos, and this update should restore them.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix multiple simulation issues.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'bug',
-								text: `Top 4 now shows up as a loss in Duos.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix the behavior of the "back" button.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where clicking on a card to see the details would sometimes not show anything.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where card sound effects had disappeared.`,
-							},
-							{
-								type: 'bug',
-								text: `(Premium) Fix an issue where collection stats would always show the info for the whole collection, instead of matching the selected sets (mostly Standard / Wild).`,
+								text: `Add the "Played on Curve Winrate" stat to the Cards Stats tab.`,
 							},
 						],
 					},
