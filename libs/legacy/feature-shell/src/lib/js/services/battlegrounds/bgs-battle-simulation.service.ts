@@ -2,7 +2,6 @@ import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
-import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -69,30 +68,7 @@ export class BgsBattleSimulationService {
 				currentTurn: currentTurn,
 			},
 		};
-		console.debug(
-			'no-format',
-			'[bgs-simulation] battle simulation request prepared',
-			battleInfo,
-			prefs.bgsUseRemoteSimulator,
-			{
-				hp: battleInfo?.playerBoard.player.hpLeft,
-				debugHealth: (
-					battleInfo?.playerBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
-				).debugHealth,
-				debugArmor: (
-					battleInfo?.playerBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
-				).debugArmor,
-			},
-			{
-				hp: battleInfo.opponentBoard.player.hpLeft,
-				debugHealth: (
-					battleInfo.opponentBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
-				).debugHealth,
-				debugArmor: (
-					battleInfo.opponentBoard.player as BgsPlayerEntity & { debugArmor: number; debugHealth: number }
-				).debugArmor,
-			},
-		);
+		console.log('no-format', '[bgs-simulation] battle simulation request prepared', battleInfo);
 
 		const shouldUseLocalSimulator = !prefs.bgsUseRemoteSimulator || !this.isPremium;
 		console.debug(

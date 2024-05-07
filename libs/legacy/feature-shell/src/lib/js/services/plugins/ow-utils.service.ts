@@ -68,11 +68,11 @@ class OwUtilsServiceInternal {
 
 	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
-			console.log('[ow-utils] flashing window', windowName);
+			console.debug('[ow-utils] flashing window', windowName);
 			const plugin = await this.get();
 			try {
 				plugin.flashWindow(windowName, (result) => {
-					console.log('[ow-utils] flashed window', windowName, result);
+					console.debug('[ow-utils] flashed window', windowName, result);
 					resolve();
 				});
 			} catch (e) {

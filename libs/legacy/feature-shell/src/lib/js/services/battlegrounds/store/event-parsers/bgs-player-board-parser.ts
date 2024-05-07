@@ -42,8 +42,6 @@ export class BgsPlayerBoardParser implements EventParser {
 			'[bgs-simulation] received player boards',
 			event.playerBoard?.board?.length,
 			event.opponentBoard?.board?.length,
-			event.playerBoard?.secrets?.length,
-			event.opponentBoard?.secrets?.length,
 		);
 		console.debug('[bgs-simulation] received player boards', event, currentState.currentGame.getMainPlayer());
 
@@ -378,7 +376,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		return {
 			player: {
 				tavernTier: tavernTier,
-				hpLeft: health - damage,
+				hpLeft: hpLeft,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				entityId: playerBoard.hero.Entity,
 				nonGhostCardId: player.getNormalizedHeroCardId(this.allCards),
