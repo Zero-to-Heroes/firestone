@@ -103,11 +103,6 @@ export class BgsPlayerBoardParser implements EventParser {
 		// );
 		// === End debug area
 
-		// const [playerBoardDebug, teammateBoardDebug] = await Promise.all([
-		// 	this.buildPlayerBoard(),
-		// 	this.buildTeammateBoard(),
-		// ]);
-		// console.debug('[bgs-simulation] found boards from memory', playerBoardDebug, teammateBoardDebug);
 		// The issue is that, when only one board is visible during the fight (big loss / victory), we don't get the
 		// other teammmate info sent cleanly
 		// Best case, we get a duoPendingBoard with the first player remaining board + whatever we can fit of the second player board

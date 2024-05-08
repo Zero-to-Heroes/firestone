@@ -1,4 +1,5 @@
 import { BgsStatsFilterId } from '@firestone/battlegrounds/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
@@ -7,7 +8,7 @@ import { SelectMatchStatsTabEvent } from '../../events/replays/select-match-stat
 import { Processor } from '../processor';
 
 export class SelectMatchStatsTabProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
 
 	public async process(
 		event: SelectMatchStatsTabEvent,
@@ -22,10 +23,10 @@ export class SelectMatchStatsTabProcessor implements Processor {
 		const newReplays = navigationState.navigationReplays.update({
 			selectedStatsTabs: selectedStatsTabs,
 		} as NavigationReplays);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
 			} as NavigationState),

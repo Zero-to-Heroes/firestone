@@ -1,12 +1,13 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { extractDuelsClasses } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-signature-treasure-selected-parser';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export class DuelsBuildDeckParser implements Processor {
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly mainNav: MainWindowNavigationService) {}
 
 	public async process(
 		event: DuelsBuildDeckEvent,
@@ -14,6 +15,7 @@ export class DuelsBuildDeckParser implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		this.mainNav.isVisible$$.next(true);
 		return [
 			currentState.update({
 				duels: currentState.duels.update({
@@ -31,7 +33,6 @@ export class DuelsBuildDeckParser implements Processor {
 				}),
 			}),
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'duels',
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: 'duels-deckbuilder',

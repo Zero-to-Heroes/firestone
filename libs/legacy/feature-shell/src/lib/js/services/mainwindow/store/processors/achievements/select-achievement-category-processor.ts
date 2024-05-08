@@ -44,10 +44,10 @@ export class SelectAchievementCategoryProcessor implements Processor {
 		const text = hierarchy.map((cat) => cat.name).join(' › ');
 		this.nav.text$$.next(text);
 		this.nav.image$$.next(null);
+		this.nav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				navigationAchievements: newAchievements,
 			} as NavigationState),
 		];

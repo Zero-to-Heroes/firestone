@@ -81,10 +81,10 @@ export class ShowReplayProcessor implements Processor {
 			}),
 		);
 		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
 			} as NavigationState),

@@ -1,4 +1,5 @@
 import { CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
@@ -6,7 +7,7 @@ import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/
 import { Processor } from '@services/mainwindow/store/processors/processor';
 
 export class DuelsExploreDecksParser implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
 
 	public async process(
 		event: DuelsExploreDecksEvent,
@@ -23,10 +24,10 @@ export class DuelsExploreDecksParser implements Processor {
 		};
 		console.debug('newPrefs', newPrefs);
 		await this.prefs.savePreferences(newPrefs);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'duels',
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: 'duels-top-decks',

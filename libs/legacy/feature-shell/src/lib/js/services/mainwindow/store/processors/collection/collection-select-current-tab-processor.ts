@@ -1,4 +1,5 @@
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -6,7 +7,10 @@ import { CollectionSelectCurrentTabEvent } from '../../events/collection/collect
 import { Processor } from '../processor';
 
 export class CollectionSelectCurrentTabProcessor implements Processor {
-	constructor(private readonly collectionNav: CollectionNavigationService) {}
+	constructor(
+		private readonly collectionNav: CollectionNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
+	) {}
 
 	public async process(
 		event: CollectionSelectCurrentTabEvent,
@@ -22,10 +26,10 @@ export class CollectionSelectCurrentTabProcessor implements Processor {
 		const newCollection = navigationState.navigationCollection.update({
 			searchResults: [] as readonly string[],
 		} as NavigationCollection);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
 			} as NavigationState),

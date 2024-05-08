@@ -38,10 +38,10 @@ export class ShowCardDetailsProcessor implements Processor {
 
 		this.mainNav.text$$.next(referenceCard.name);
 		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
 			} as NavigationState),

@@ -12,7 +12,7 @@ import { NavigationStats } from './navigation-stats';
 import { NavigationStreams } from './navigation-streams';
 
 export class NavigationState {
-	readonly isVisible: boolean = false;
+	// readonly isVisible: boolean = false;
 	readonly currentApp: CurrentAppType;
 	readonly navigationReplays: NavigationReplays = new NavigationReplays();
 	readonly navigationCollection: NavigationCollection = new NavigationCollection();

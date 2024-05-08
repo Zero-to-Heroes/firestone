@@ -44,10 +44,10 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 			this.allCards.getCard(event.heroCardId)?.name ?? this.i18n.translateString('app.battlegrounds.menu.heroes'),
 		);
 		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			newState,
 			navigationState.update({
-				isVisible: true,
 				navigationBattlegrounds: navigationBattlegrounds,
 			} as NavigationState),
 		];

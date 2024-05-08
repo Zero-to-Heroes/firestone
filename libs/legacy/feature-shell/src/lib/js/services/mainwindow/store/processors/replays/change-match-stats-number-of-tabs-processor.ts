@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
@@ -6,7 +7,7 @@ import { ChangeMatchStatsNumberOfTabsEvent } from '../../events/replays/change-m
 import { Processor } from '../processor';
 
 export class ChangeMatchStatsNumberOfTabsProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
 
 	public async process(
 		event: ChangeMatchStatsNumberOfTabsEvent,
@@ -18,10 +19,10 @@ export class ChangeMatchStatsNumberOfTabsProcessor implements Processor {
 		const newReplays = navigationState.navigationReplays.update({
 			numberOfDisplayedTabs: event.tabsNumber,
 		} as NavigationReplays);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
 			} as NavigationState),

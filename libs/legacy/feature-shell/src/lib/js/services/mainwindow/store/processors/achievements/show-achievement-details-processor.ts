@@ -42,10 +42,10 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		const text = hierarchy.categories.map((cat) => cat.name).join(' ');
 		this.nav.text$$.next(text);
 		this.nav.image$$.next(null);
+		this.nav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'achievements',
 				navigationAchievements: newAchievements,
 			} as NavigationState),

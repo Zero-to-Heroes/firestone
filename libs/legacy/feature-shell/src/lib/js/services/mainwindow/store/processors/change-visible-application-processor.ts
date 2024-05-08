@@ -95,10 +95,10 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		await this.prefs.setMainVisibleSection(event.module === 'live' ? 'decktracker' : event.module);
 		this.mainNav.text$$.next(this.getInitialText(event.module));
 		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(event.forceApplicationVisible || this.mainNav.isVisible$$.getValue());
 		return [
 			null,
 			navigationState.update({
-				isVisible: event.forceApplicationVisible || navigationState.isVisible,
 				currentApp: event.module,
 				navigationAchievements: achievements,
 				navigationReplays: replays,

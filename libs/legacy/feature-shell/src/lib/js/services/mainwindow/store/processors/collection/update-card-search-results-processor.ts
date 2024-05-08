@@ -1,3 +1,4 @@
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -7,7 +8,11 @@ import { UpdateCardSearchResultsEvent } from '../../events/collection/update-car
 import { Processor } from '../processor';
 
 export class UpdateCardSearchResultsProcessor implements Processor {
-	constructor(private collectionManager: CollectionManager, private cards: SetsService) {}
+	constructor(
+		private collectionManager: CollectionManager,
+		private cards: SetsService,
+		private readonly mainNav: MainWindowNavigationService,
+	) {}
 
 	public async process(
 		event: UpdateCardSearchResultsEvent,
@@ -22,10 +27,10 @@ export class UpdateCardSearchResultsProcessor implements Processor {
 		const newCollection = navigationState.navigationCollection.update({
 			searchResults: searchResults,
 		} as NavigationCollection);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				navigationCollection: newCollection,
 			} as NavigationState),
 		];

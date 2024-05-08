@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 export class MainWindowNavigationService extends AbstractFacadeService<MainWindowNavigationService> {
 	public text$$: BehaviorSubject<string | null>;
 	public image$$: BehaviorSubject<string | null>;
+	public isVisible$$: BehaviorSubject<boolean | null>;
 	public backArrowEnabled$$: BehaviorSubject<boolean | null>;
 	public nextArrowEnabled$$: BehaviorSubject<boolean | null>;
 
@@ -16,6 +17,7 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 	protected override assignSubjects() {
 		this.text$$ = this.mainInstance.text$$;
 		this.image$$ = this.mainInstance.image$$;
+		this.isVisible$$ = this.mainInstance.isVisible$$;
 		this.backArrowEnabled$$ = this.mainInstance.backArrowEnabled$$;
 		this.nextArrowEnabled$$ = this.mainInstance.nextArrowEnabled$$;
 	}
@@ -23,6 +25,7 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 	protected async init() {
 		this.text$$ = new BehaviorSubject<string | null>('Categories');
 		this.image$$ = new BehaviorSubject<string | null>(null);
+		this.isVisible$$ = new BehaviorSubject<boolean | null>(null);
 		this.backArrowEnabled$$ = new BehaviorSubject<boolean | null>(null);
 		this.nextArrowEnabled$$ = new BehaviorSubject<boolean | null>(null);
 	}

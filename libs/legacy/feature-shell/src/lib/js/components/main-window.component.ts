@@ -9,8 +9,9 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
@@ -138,11 +139,14 @@ export class MainWindowComponent
 		private readonly hotkeyService: HotkeyService,
 		private readonly preferencesService: PreferencesService,
 		private readonly analytics: AnalyticsService,
+		private readonly nav: MainWindowNavigationService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
@@ -169,22 +173,24 @@ export class MainWindowComponent
 			this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),
 			startWith(true),
 		);
-		this.store
-			.listen$(([main, nav, prefs]) => nav.isVisible)
-			.pipe(this.mapData(([visible]) => visible))
-			.subscribe(async (visible) => {
-				const window = await this.ow.getCurrentWindow();
-				const currentlyVisible = window.isVisible;
-				if (visible && !currentlyVisible) {
-					await this.ow.restoreWindow(this.windowId);
-					this.ow.bringToFront(this.windowId);
-					if (this.isMaximized) {
-						await this.ow.maximizeWindow(this.windowId);
-					}
-				} else if (!visible && currentlyVisible) {
-					await this.ow.hideWindow(this.windowId);
+		this.nav.isVisible$$.pipe(this.mapData((visible) => visible)).subscribe(async (visible) => {
+			console.debug('update visible', visible);
+			const window = await this.ow.getCurrentWindow();
+			const currentlyVisible = window.isVisible;
+			if (visible && !currentlyVisible) {
+				await this.ow.restoreWindow(this.windowId);
+				this.ow.bringToFront(this.windowId);
+				if (this.isMaximized) {
+					await this.ow.maximizeWindow(this.windowId);
 				}
-			});
+			} else if (!visible && currentlyVisible) {
+				await this.ow.hideWindow(this.windowId);
+			}
+		});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

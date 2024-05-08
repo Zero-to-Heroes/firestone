@@ -35,10 +35,10 @@ export class ShowCardBackDetailsProcessor implements Processor {
 		} as NavigationCollection);
 		this.mainNav.text$$.next(selectedCardBack.name);
 		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
 			} as NavigationState),

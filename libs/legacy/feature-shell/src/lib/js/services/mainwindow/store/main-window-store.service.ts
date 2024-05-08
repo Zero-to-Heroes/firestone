@@ -548,7 +548,7 @@ export class MainWindowStoreService {
 				NavigationBackEvent.eventName(),
 				new NavigationBackProcessor(this.setsManager, this.mainNavigation, this.collectionNavigation),
 			],
-			[NavigationNextEvent.eventName(), new NavigationNextProcessor()],
+			[NavigationNextEvent.eventName(), new NavigationNextProcessor(this.mainNavigation)],
 			[
 				ChangeVisibleApplicationEvent.eventName(),
 				new ChangeVisibleApplicationProcessor(
@@ -560,8 +560,8 @@ export class MainWindowStoreService {
 					this.constructedNavigation,
 				),
 			],
-			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor()],
-			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor()],
+			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(this.mainNavigation)],
+			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(this.mainNavigation)],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
 			[LocalizationUpdateEvent.eventName(), new LocalizationUpdateProcessor(this.prefs, this.translate)],
 			[
@@ -575,7 +575,7 @@ export class MainWindowStoreService {
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
 			[
 				CollectionSelectCurrentTabEvent.eventName(),
-				new CollectionSelectCurrentTabProcessor(this.collectionNavigation),
+				new CollectionSelectCurrentTabProcessor(this.collectionNavigation, this.mainNavigation),
 			],
 			[
 				SearchCardsEvent.eventName(),
@@ -610,7 +610,7 @@ export class MainWindowStoreService {
 			],
 			[
 				UpdateCardSearchResultsEvent.eventName(),
-				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
+				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets, this.mainNavigation),
 			],
 			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionBootstrap, this.cards)],
 
@@ -704,8 +704,11 @@ export class MainWindowStoreService {
 					this.mainNavigation,
 				),
 			],
-			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs)],
-			[ChangeMatchStatsNumberOfTabsEvent.eventName(), new ChangeMatchStatsNumberOfTabsProcessor(this.prefs)],
+			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs, this.mainNavigation)],
+			[
+				ChangeMatchStatsNumberOfTabsEvent.eventName(),
+				new ChangeMatchStatsNumberOfTabsProcessor(this.prefs, this.mainNavigation),
+			],
 			// Decktracker
 			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor(this.constructedNavigation)],
 			[
@@ -798,7 +801,7 @@ export class MainWindowStoreService {
 			],
 			[
 				SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
-				new SelectBattlegroundsPersonalStatsHeroProcessor(),
+				new SelectBattlegroundsPersonalStatsHeroProcessor(this.mainNavigation),
 			],
 			[BgsCustomSimulationUpdateEvent.eventName(), new BgsCustomSimulationUpdateProcessor()],
 			[BgsCustomSimulationResetEvent.eventName(), new BgsCustomSimulationResetProcessor()],
@@ -949,8 +952,8 @@ export class MainWindowStoreService {
 				DuelsChoosingHeroEvent.eventName(),
 				new DuelsChoosingHeroParser(this.memoryReading, this.duelsMemoryCache),
 			],
-			[DuelsExploreDecksEvent.eventName(), new DuelsExploreDecksParser(this.prefs)],
-			[DuelsBuildDeckEvent.eventName(), new DuelsBuildDeckParser(this.cards)],
+			[DuelsExploreDecksEvent.eventName(), new DuelsExploreDecksParser(this.prefs, this.mainNavigation)],
+			[DuelsBuildDeckEvent.eventName(), new DuelsBuildDeckParser(this.cards, this.mainNavigation)],
 			[DuelsDeckbuilderGoBackEvent.eventName(), new DuelsDeckbuilderGoBackProcessor()],
 			[DuelsDeckbuilderHeroSelectedEvent.eventName(), new DuelsDeckbuilderHeroSelectedProcessor(this.cards)],
 			[DuelsDeckbuilderHeroPowerSelectedEvent.eventName(), new DuelsDeckbuilderHeroPowerSelectedProcessor()],

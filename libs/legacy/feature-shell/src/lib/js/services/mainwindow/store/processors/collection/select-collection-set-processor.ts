@@ -38,10 +38,10 @@ export class SelectCollectionSetProcessor implements Processor {
 		this.mainNav.image$$.next(
 			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/sets/${selectedSet.id}.png`,
 		);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
 			} as NavigationState),

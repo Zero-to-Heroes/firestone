@@ -54,10 +54,10 @@ export class SearchCardProcessor implements Processor {
 			}),
 		);
 		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({
-				isVisible: true,
 				navigationCollection: newCollection,
 			} as NavigationState),
 		];
