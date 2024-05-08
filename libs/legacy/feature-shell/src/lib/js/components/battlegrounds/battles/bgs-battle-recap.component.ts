@@ -14,6 +14,7 @@ import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 		<div
 			class="bgs-battle-recap"
 			[ngClass]="{ selectable: selectable, duos: !!playerTeammate || !!opponentTeammate }"
+			[attr.data-id]="battle?.id"
 		>
 			<div class="turn-label" *ngIf="turnNumber">
 				<div
@@ -55,32 +56,36 @@ export class BgsBattleRecapComponent {
 			? this.i18n.translateString(`battlegrounds.battle.result.${value.result}`)
 			: undefined;
 
+		const playerBattleInfo = value.battleInfo?.playerBoard;
 		this.player = {
-			heroCardId: value.playerCardId,
-			health: value.playerHpLeft ?? value.battleInfo?.playerBoard?.player?.hpLeft,
-			tavernTier: value.playerTavern ?? value.battleInfo?.playerBoard?.player?.tavernTier,
-			board: value.battleInfo?.playerBoard,
+			heroCardId: playerBattleInfo?.player?.cardId ?? value.playerCardId,
+			health: playerBattleInfo?.player?.hpLeft ?? value.playerHpLeft,
+			tavernTier: playerBattleInfo?.player?.tavernTier ?? value.playerTavern,
+			board: playerBattleInfo,
 		};
+		const opponentBattleInfo = value.battleInfo?.opponentBoard;
 		this.opponent = {
-			heroCardId: value.opponentCardId,
-			health: value.opponentHpLeft ?? value.battleInfo?.opponentBoard?.player?.hpLeft,
-			tavernTier: value.opponentTavern ?? value.battleInfo?.opponentBoard?.player?.tavernTier,
-			board: value.battleInfo?.opponentBoard,
+			heroCardId: opponentBattleInfo?.player?.cardId ?? value.opponentCardId,
+			health: opponentBattleInfo?.player?.hpLeft ?? value.opponentHpLeft,
+			tavernTier: opponentBattleInfo?.player?.tavernTier ?? value.opponentTavern,
+			board: opponentBattleInfo,
 		};
-		this.playerTeammate = !!value.battleInfo?.playerTeammateBoard?.player
+		const playerTeammateBattleInfo = value.battleInfo?.playerTeammateBoard;
+		this.playerTeammate = !!playerTeammateBattleInfo?.player
 			? {
-					heroCardId: value.battleInfo.playerTeammateBoard.player?.cardId,
-					health: value.battleInfo.playerTeammateBoard.player?.hpLeft,
-					tavernTier: value.battleInfo.playerTeammateBoard.player?.tavernTier,
-					board: value.battleInfo.playerTeammateBoard,
+					heroCardId: playerTeammateBattleInfo.player?.cardId,
+					health: playerTeammateBattleInfo.player?.hpLeft,
+					tavernTier: playerTeammateBattleInfo.player?.tavernTier,
+					board: playerTeammateBattleInfo,
 			  }
 			: null;
-		this.opponentTeammate = !!value.battleInfo?.opponentTeammateBoard?.player
+		const opponentTeammateBattleInfo = value.battleInfo?.opponentTeammateBoard;
+		this.opponentTeammate = !!opponentTeammateBattleInfo?.player
 			? {
-					heroCardId: value.battleInfo.opponentTeammateBoard.player?.cardId,
-					health: value.battleInfo.opponentTeammateBoard.player?.hpLeft,
-					tavernTier: value.battleInfo.opponentTeammateBoard.player?.tavernTier,
-					board: value.battleInfo.opponentTeammateBoard,
+					heroCardId: opponentTeammateBattleInfo.player?.cardId,
+					health: opponentTeammateBattleInfo.player?.hpLeft,
+					tavernTier: opponentTeammateBattleInfo.player?.tavernTier,
+					board: opponentTeammateBattleInfo,
 			  }
 			: null;
 		console.debug('set sides', this.player, this.opponent, this.playerTeammate, this.opponentTeammate);
