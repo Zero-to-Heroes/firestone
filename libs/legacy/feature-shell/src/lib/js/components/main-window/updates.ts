@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.11.25',
+		version: '13.12.2',
 		force: false,
 		sections: [
 			// {
@@ -77,6 +77,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix some sim issues for Duos. There will still be quite a few iterations needed, but I'm finally starting to address Duos-specific sim issues :)`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a display issue where the hero card would be incorrect in the battle recap tab if your teammate went first.`,
+							},
 						],
 					},
 					{
@@ -85,6 +89,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add the "Played on Curve Winrate" stat to the Cards Stats tab.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where you had to click twice on the Firestone system tray icon to restore the app's main window.`,
 							},
 						],
 					},
