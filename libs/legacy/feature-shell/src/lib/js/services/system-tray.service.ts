@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';
 
 @Injectable()
@@ -11,12 +12,14 @@ export class SystemTrayService {
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationService,
 		private readonly prefs: PreferencesService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.i18n.initReady();
+		await waitForReady(this.mainNav);
 
 		const menu: overwolf.os.tray.ExtensionTrayMenu = {
 			menu_items: [
@@ -101,10 +104,11 @@ export class SystemTrayService {
 	}
 
 	private async showMainWindow() {
+		this.mainNav.isVisible$$.next(true);
 		const prefs = await this.prefs.getPreferences();
 		const window = await this.ow.getCollectionWindow(prefs);
-		this.ow.restoreWindow(window.id);
-		this.ow.bringToFront(window.id);
+		await this.ow.restoreWindow(window.id);
+		await this.ow.bringToFront(window.id);
 	}
 
 	private exitApp() {
