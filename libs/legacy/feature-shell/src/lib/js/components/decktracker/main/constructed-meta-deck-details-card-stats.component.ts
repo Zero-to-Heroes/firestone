@@ -242,7 +242,11 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 							: null;
 						const relativeMulliganWinrate = buildRelative(absoluteMulliganWinrate, deckWinrate);
 						const mulliganWinrate = showRelativeInfo ? relativeMulliganWinrate : absoluteMulliganWinrate;
-						const mulliganWinrateStr = buildPercents(mulliganWinrate);
+						const mulliganWinrateStr = showRelativeInfo
+							? mulliganWinrate == null
+								? '-'
+								: (100 * mulliganWinrate).toFixed(2)
+							: buildPercents(mulliganWinrate);
 						const mulliganWinrateCss = buildCss(relativeMulliganWinrate);
 
 						const keptInMulligan = firstCopyData.drawnBeforeMulligan
@@ -261,7 +265,11 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 								: null;
 						const relativeDrawnWinrate = buildRelative(absoluteDrawnWinrate, deckWinrate);
 						const drawnWinrate = showRelativeInfo ? relativeDrawnWinrate : absoluteDrawnWinrate;
-						const drawnWinrateStr = buildPercents(drawnWinrate);
+						const drawnWinrateStr = showRelativeInfo
+							? drawnWinrate == null
+								? '-'
+								: (100 * drawnWinrate).toFixed(2)
+							: buildPercents(drawnWinrate);
 						const drawnWinrateCss = buildCss(relativeDrawnWinrate);
 
 						const copy1 = firstCopyData.inStartingDeck / totalGames;
