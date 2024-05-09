@@ -1829,6 +1829,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), minion, inGraveyard, deathrattle);
 			case CardIds.TangledWrath:
 				return and(side(inputSide), inDeck, spell);
+			case CardIds.TavishStormpike_BAR_038:
+				return and(side(inputSide), inDeck, minion, beast);
 			case CardIds.TenGallonHat_WW_811:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.TopiorTheShrubbagazzor:
