@@ -1,14 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'arena-time-filter-dropdown',
@@ -25,33 +25,30 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: ArenaNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
-		await this.prefs.isReady();
-		await this.store.initComplete();
-		await this.nav.isReady();
+		await waitForReady(this.patchesConfig, this.prefs, this.nav);
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentArenaMetaPatch$$,
+			this.patchesConfig.currentArenaSeasonPatch$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveTimeFilter)),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
-			filter(([patch, filter, selectedCategoryId]) => !!filter && !!patch),
-			this.mapData(([patch, filter, selectedCategoryId]) => {
+			filter(([patch, seasonPatch, filter, selectedCategoryId]) => !!filter && !!patch),
+			this.mapData(([patch, seasonPatch, filter, selectedCategoryId]) => {
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',
@@ -63,6 +60,11 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionStoreC
 							value: patch.version,
 						}),
 						tooltip: formatPatch(patch, this.i18n),
+					} as TimeFilterOption,
+					{
+						value: 'current-season',
+						label: this.i18n.translateString('app.arena.filters.time.current-season'),
+						tooltip: formatPatch(seasonPatch, this.i18n),
 					} as TimeFilterOption,
 					{
 						value: 'past-seven',

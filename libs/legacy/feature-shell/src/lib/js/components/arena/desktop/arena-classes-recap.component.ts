@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardClass } from '@firestone-hs/reference-data';
 import { ArenaRun } from '@firestone/arena/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
@@ -10,9 +11,7 @@ import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.typ
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual, groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'arena-classes-recap',
@@ -106,11 +105,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<StatInfo>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
@@ -118,7 +116,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 		private readonly prefs: PreferencesService,
 		private readonly gameStats: GameStatsProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -136,14 +134,15 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 				),
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
+			this.patchesConfig.currentArenaSeasonPatch$$,
 		]).pipe(
-			this.mapData(([stats, { timeFilter, heroFilter }, patch]) => {
+			this.mapData(([stats, { timeFilter, heroFilter }, patch, seasonPatch]) => {
 				const arenaMatches = stats?.filter((stat) => stat.gameMode === 'arena');
 				if (!arenaMatches.length) {
 					return null;
 				}
 
-				const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch);
+				const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch, seasonPatch);
 				const totalRuns = arenaRuns.length;
 				return {
 					totalRuns: totalRuns,
@@ -261,6 +260,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 		timeFilter: ArenaTimeFilterType,
 		heroFilter: ArenaClassFilterType,
 		patch: PatchInfo,
+		seasonPatch: PatchInfo,
 	): readonly ArenaRun[] {
 		if (!arenaMatches?.length) {
 			return [];
@@ -281,14 +281,19 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 		});
 		return runs
 			.filter((match) => this.isCorrectHero(match, heroFilter))
-			.filter((match) => this.isCorrectTime(match, timeFilter, patch));
+			.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch));
 	}
 
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
 		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
 	}
 
-	private isCorrectTime(run: ArenaRun, timeFilter: ArenaTimeFilterType, patch: PatchInfo): boolean {
+	private isCorrectTime(
+		run: ArenaRun,
+		timeFilter: ArenaTimeFilterType,
+		patch: PatchInfo,
+		seasonPatch: PatchInfo,
+	): boolean {
 		if (timeFilter === 'all-time') {
 			return true;
 		}
@@ -299,11 +304,18 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		switch (timeFilter) {
-			// See bgs-ui-helper
 			case 'last-patch':
 				return (
-					firstMatch.buildNumber >= patch.number ||
-					firstMatch.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+					!!patch &&
+					((patch.hasNewBuildNumber && firstMatch.buildNumber >= patch.number) ||
+						(!patch.hasNewBuildNumber && firstMatch.creationTimestamp > new Date(patch.date).getTime()))
+				);
+			case 'current-season':
+				return (
+					!!seasonPatch &&
+					((seasonPatch.hasNewBuildNumber && firstMatch.buildNumber >= seasonPatch.number) ||
+						(!seasonPatch.hasNewBuildNumber &&
+							firstMatch.creationTimestamp > new Date(seasonPatch.date).getTime()))
 				);
 			case 'past-three':
 				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
@@ -312,16 +324,6 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreCompone
 			default:
 				return true;
 		}
-	}
-
-	private areEqual(
-		a: [readonly GameStat[], string, string, PatchInfo],
-		b: [readonly GameStat[], string, string, PatchInfo],
-	): boolean {
-		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3]) {
-			return false;
-		}
-		return arraysEqual(a[0], b[0]);
 	}
 }
 

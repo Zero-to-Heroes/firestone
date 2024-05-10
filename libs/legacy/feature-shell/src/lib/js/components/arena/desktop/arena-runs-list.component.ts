@@ -11,6 +11,8 @@ import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { ArenaRun } from '@firestone/arena/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -19,9 +21,8 @@ import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.typ
 import { ArenaDeckStatsService } from '../../../services/arena/arena-deck-stats.service';
 import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'arena-runs-list',
@@ -50,31 +51,26 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class ArenaRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	runs$: Observable<(ArenaRun | HeaderInfo)[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly arenaRewards: ArenaRewardsService,
 		private readonly arenaDeckStats: ArenaDeckStatsService,
 		private readonly prefs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.patchesConfig.isReady();
-		await this.arenaRewards.isReady();
-		await this.arenaDeckStats.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.patchesConfig, this.arenaRewards, this.arenaDeckStats, this.prefs, this.gameStats);
 
-		// TODO perf: split this into two observables, so that we don't reocmpute the
-		// arena runs when a filter changes?
 		this.runs$ = combineLatest([
-			this.store.gameStats$(),
+			this.gameStats.gameStats$$,
 			this.arenaRewards.arenaRewards$$,
 			this.arenaDeckStats.deckStats$$,
 			this.prefs.preferences$$.pipe(
@@ -87,14 +83,15 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 				),
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
+			this.patchesConfig.currentArenaSeasonPatch$$,
 		]).pipe(
 			filter(([stats, rewards, deckStats, { timeFilter, heroFilter }]) => !!stats?.length),
-			this.mapData(([stats, rewards, deckStats, { timeFilter, heroFilter }, patch]) => {
+			this.mapData(([stats, rewards, deckStats, { timeFilter, heroFilter }, patch, seasonPatch]) => {
 				const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena').filter((stat) => !!stat.runId);
 				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
 				const filteredRuns = arenaRuns
 					.filter((match) => this.isCorrectHero(match, heroFilter))
-					.filter((match) => this.isCorrectTime(match, timeFilter, patch));
+					.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch));
 				const groupedRuns = this.groupRuns(filteredRuns);
 				const flat = groupedRuns
 					.filter((group) => group?.runs?.length)
@@ -123,7 +120,12 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
 	}
 
-	private isCorrectTime(run: ArenaRun, timeFilter: ArenaTimeFilterType, patch: PatchInfo): boolean {
+	private isCorrectTime(
+		run: ArenaRun,
+		timeFilter: ArenaTimeFilterType,
+		patch: PatchInfo,
+		seasonPatch: PatchInfo,
+	): boolean {
 		if (timeFilter === 'all-time') {
 			return true;
 		}
@@ -135,11 +137,17 @@ export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent i
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		switch (timeFilter) {
 			case 'last-patch':
-				// See bgs-ui-helper
 				return (
 					!!patch &&
-					(firstMatch.buildNumber >= patch.number ||
-						firstMatch.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000)
+					((patch.hasNewBuildNumber && firstMatch.buildNumber >= patch.number) ||
+						(!patch.hasNewBuildNumber && firstMatch.creationTimestamp > new Date(patch.date).getTime()))
+				);
+			case 'current-season':
+				return (
+					!!seasonPatch &&
+					((seasonPatch.hasNewBuildNumber && firstMatch.buildNumber >= seasonPatch.number) ||
+						(!seasonPatch.hasNewBuildNumber &&
+							firstMatch.creationTimestamp > new Date(seasonPatch.date).getTime()))
 				);
 			case 'past-three':
 				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;

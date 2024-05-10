@@ -4,6 +4,7 @@ export interface PatchesConfig {
 	readonly currentBattlegroundsMetaPatch: number;
 	readonly currentDuelsMetaPatch: number;
 	readonly currentArenaMetaPatch: number;
+	readonly currentArenaSeasonPatch: number;
 }
 
 export interface PatchInfo {
@@ -11,4 +12,5 @@ export interface PatchInfo {
 	readonly version: string;
 	readonly name: string;
 	readonly date: string;
+	readonly hasNewBuildNumber: boolean;
 }
