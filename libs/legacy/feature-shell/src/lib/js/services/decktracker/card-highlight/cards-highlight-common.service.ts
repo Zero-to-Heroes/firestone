@@ -1646,7 +1646,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inHand, inDeck), battlecry);
 			case CardIds.Shudderwock_GIL_820:
 				return highlightConditions(
-					and(side(inputSide), or(cardsPlayedThisMatch, or(inHand, inDeck)), battlecry),
+					and(side(inputSide), or(inHand, inDeck), battlecry),
 					tooltip(and(side(inputSide), cardsPlayedThisMatch, battlecry)),
 				);
 			case CardIds.SicklyGrimewalker_YOG_512:
