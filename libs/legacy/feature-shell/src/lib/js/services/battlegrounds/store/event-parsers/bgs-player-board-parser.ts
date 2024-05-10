@@ -40,8 +40,10 @@ export class BgsPlayerBoardParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
 		console.log(
 			'[bgs-simulation] received player boards',
-			event.playerBoard?.board?.length,
-			event.opponentBoard?.board?.length,
+			event.playerBoard?.board?.map((e) => e.CardId),
+			event.opponentBoard?.board?.map((e) => e.CardId),
+			event.teammateBoard?.Board?.map((e) => e.CardId),
+			event.duoPendingBoards?.map((p) => p.playerBoard?.board?.map((e) => e.CardId).join(',')),
 		);
 		console.debug('[bgs-simulation] received player boards', event, currentState.currentGame.getMainPlayer());
 
@@ -129,7 +131,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			}
 		}
 
-		// 
+		//
 		if (!!event.duoPendingBoards?.length && playerTeammateBoard == null) {
 			// Limitations: we missing some info about random effects, like Embrace Your Rage
 			if (player.playerId === currentState.currentGame.getMainPlayer().playerId) {
@@ -187,6 +189,14 @@ export class BgsPlayerBoardParser implements EventParser {
 		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
 		const playerTeammate: BgsBoardInfo = this.buildBgsBoardInfo(player, playerTeammateBoard);
 		const opponentTeammate: BgsBoardInfo = this.buildBgsBoardInfo(player, opponentTeammateBoard);
+
+		console.log(
+			'[bgs-simulation] found boards',
+			bgsPlayer?.board?.map((e) => e.cardId),
+			playerTeammate?.board?.map((e) => e.cardId),
+			bgsOpponent?.board?.map((e) => e.cardId),
+			opponentTeammate?.board?.map((e) => e.cardId),
+		);
 
 		const battleInfo: BgsBattleInfo = {
 			playerBoard: bgsPlayer,
