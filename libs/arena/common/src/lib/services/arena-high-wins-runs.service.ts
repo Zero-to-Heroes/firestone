@@ -5,7 +5,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
-const RUNS_OVERVIEW_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
+const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
 
 @Injectable()
 export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWinsRunsService> {
