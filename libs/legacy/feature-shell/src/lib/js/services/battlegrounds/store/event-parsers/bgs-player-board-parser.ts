@@ -122,19 +122,25 @@ export class BgsPlayerBoardParser implements EventParser {
 		for (const duoPendingBoard of event.duoPendingBoards ?? []) {
 			if (playerTeammateBoard == null && duoPendingBoard.playerBoard.playerId !== player.playerId) {
 				playerTeammateBoard = duoPendingBoard.playerBoard;
+				console.log('[bgs-simulation] assigned playerTeammateBoard');
 			} else if (opponentTeammateBoard == null && duoPendingBoard.opponentBoard.playerId !== opponent.playerId) {
 				opponentTeammateBoard = duoPendingBoard.opponentBoard;
+				console.log('[bgs-simulation] assigned opponentTeammateBoard');
 			}
 		}
+
+		// 
 		if (!!event.duoPendingBoards?.length && playerTeammateBoard == null) {
 			// Limitations: we missing some info about random effects, like Embrace Your Rage
 			if (player.playerId === currentState.currentGame.getMainPlayer().playerId) {
 				playerTeammateBoard = this.buildTeammateBoard(event.teammateBoard, currentState.currentGame.players);
+				console.warn('[bgs-simulation] assigned playerTeammateBoard from memory teammateBoard');
 			} else {
 				// FIXME: this doesn't work, because if we are in a battle, and haven't found the main player,
 				// it means that the current board will be the teammate's. Since this only use the board state,
 				// it will get the teammate's board (+ maybe some stuff from the player's), but not the player's board
 				playerTeammateBoard = this.buildPlayerBoard(event.playerBoard);
+				console.warn('[bgs-simulation] assigned playerTeammateBoard from base playerBoard.');
 			}
 		}
 		if (!!event.duoPendingBoards?.length && opponentTeammateBoard == null) {
@@ -143,6 +149,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				opponent,
 				currentState.currentGame.players,
 			);
+			console.warn('[bgs-simulation] assigned opponentTeammateBoard in second phase.');
 		}
 
 		console.debug(
