@@ -55,20 +55,6 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
-				[attr.aria-label]="'app.menu.duels-header' | owTranslate"
-				[ngClass]="{ selected: selectedModule === 'duels' }"
-				(click)="selectModule('duels')"
-			>
-				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
-				<div class="text">
-					<div class="text-background"></div>
-					<div class="menu-header" [owTranslate]="'app.menu.duels-header'"></div>
-				</div>
-			</button>
-			<button
-				[attr.tabindex]="tabIndex$ | async"
-				type="button"
-				class="menu-item"
 				[attr.aria-label]="'app.menu.arena-header' | owTranslate"
 				[ngClass]="{ selected: selectedModule === 'arena' }"
 				(click)="selectModule('arena')"
@@ -105,6 +91,20 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.mercenaries-header'"></div>
+				</div>
+			</button>
+			<button
+				[attr.tabindex]="tabIndex$ | async"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.duels-header' | owTranslate"
+				[ngClass]="{ selected: selectedModule === 'duels' }"
+				(click)="selectModule('duels')"
+			>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.duels-header'"></div>
 				</div>
 			</button>
 
