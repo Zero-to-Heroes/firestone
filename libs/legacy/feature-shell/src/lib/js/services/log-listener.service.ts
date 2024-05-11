@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
-import { Subject, distinctUntilChanged, filter } from 'rxjs';
+import { Subject, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 import { Events } from './events.service';
 import { LogUtilsService, getLogsDir } from './log-utils.service';
 
@@ -52,24 +52,26 @@ export class LogListenerService {
 	}
 
 	async configureLogListeners() {
-		// this.gameStatus.onGameStart(() => this.startLogRegister());
-		// this.gameStatus.onGameExit(() => this.stopLogRegister());
-		this.logUtils.logsDirRoot$$
+		// Issue: these are two different events, and we can have races between them
+		combineLatest([this.gameStatus.inGame$$, this.logUtils.logsDirRoot$$])
 			.pipe(
-				filter((dir) => !!dir),
-				distinctUntilChanged(),
+				filter(([inGame, dir]) => inGame && !!dir),
+				distinctUntilChanged(
+					([inGame, dir], [prevInGame, prevDir]) => inGame === prevInGame && dir === prevDir,
+				),
 			)
-			.subscribe(async (logsDirRoot) => {
-				console.debug('[log-listener] [' + this.logFile + '] New logs dir root', logsDirRoot);
+			.subscribe(async ([inGame, logsDirRoot]) => {
+				console.log('[log-listener] [' + this.logFile + '] New logs dir root', logsDirRoot);
 				this.stopLogRegister();
 				this.callback('truncated');
 				await sleep(100);
 				this.startLogRegister();
 			});
 		this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
-			console.debug('[log-listener] [' + this.logFile + '] Game is running?', inGame);
+			console.log('[log-listener] [' + this.logFile + '] Game is running?', inGame);
 			if (inGame) {
-				this.startLogRegister();
+				// Do nothing, this is handled in the combineLatest above
+				// this.startLogRegister();
 			} else {
 				this.stopLogRegister();
 			}
@@ -85,18 +87,22 @@ export class LogListenerService {
 			return;
 		}
 
-		console.debug('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
+		console.log('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
 		this.logsLocation = `${logsDir}\\${this.logFile}`;
-		console.debug('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
+		console.log('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
 		if (this.ow.gameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
 			this.registerLogMonitor();
 		} else {
-			console.debug('[log-listener] [' + this.logFile + '] Game is not running', gameInfo);
+			console.log('[log-listener] [' + this.logFile + '] Game is not running', gameInfo);
 		}
 	}
 
 	private async stopLogRegister() {
+		if (!this.monitoring) {
+			return;
+		}
+
 		this.ow.stopFileListener(this.logFile);
 		this.monitoring = false;
 	}
