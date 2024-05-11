@@ -1,3 +1,4 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
@@ -10,7 +11,8 @@ import { Processor } from '../processor';
 export class SelectAchievementCategoryProcessor implements Processor {
 	constructor(
 		private readonly stateManager: AchievementsStateManagerService,
-		private readonly nav: MainWindowNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
+		private readonly nav: AchievementsNavigationService,
 	) {}
 
 	public async process(
@@ -29,22 +31,20 @@ export class SelectAchievementCategoryProcessor implements Processor {
 
 		const category = hierarchy[hierarchy.length - 1];
 		const shouldDisplayAchievements = category.achievements.length > 0;
+		this.nav.currentView$$.next(shouldDisplayAchievements ? 'list' : 'categories');
+		this.nav.menuDisplayType$$.next('breadcrumbs');
+		const categoryId = hierarchy.map((c) => c.id).join('/');
+		this.nav.selectedCategoryId$$.next(categoryId);
 		const newAchievements = navigationState.navigationAchievements.update({
-			currentView: shouldDisplayAchievements ? 'list' : 'categories',
-			menuDisplayType: 'breadcrumbs',
-			selectedCategoryId: category.id,
-			// achievementsList: shouldDisplayAchievements
-			// 	? (category.achievements.map(ach => ach.id) as readonly string[])
-			// 	: [],
 			displayedAchievementsList: shouldDisplayAchievements
 				? (category.achievements.map((ach) => ach.id) as readonly string[])
 				: [],
 			selectedAchievementId: undefined,
 		} as NavigationAchievements);
 		const text = hierarchy.map((cat) => cat.name).join(' › ');
-		this.nav.text$$.next(text);
-		this.nav.image$$.next(null);
-		this.nav.isVisible$$.next(true);
+		this.mainNav.text$$.next(text);
+		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({

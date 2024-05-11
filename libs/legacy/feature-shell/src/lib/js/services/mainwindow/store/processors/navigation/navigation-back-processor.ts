@@ -1,3 +1,4 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -5,6 +6,8 @@ import { NavigationBattlegrounds } from '../../../../../models/mainwindow/naviga
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { builCategoryHierarchy } from '../../../../achievement/achievement-utils';
+import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { NavigationBackEvent } from '../../events/navigation/navigation-back-event';
 import { NavigationHistory } from '../../navigation-history';
@@ -15,6 +18,8 @@ export class NavigationBackProcessor implements Processor {
 		private readonly setsManager: SetsManagerService,
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
+		private readonly achievementsNav: AchievementsNavigationService,
+		private readonly achievementsState: AchievementsStateManagerService,
 	) {}
 
 	public async process(
@@ -30,6 +35,8 @@ export class NavigationBackProcessor implements Processor {
 				this.setsManager,
 				this.mainNav,
 				this.collectionNav,
+				this.achievementsNav,
+				this.achievementsState,
 			) ?? navigationState;
 
 		// 	(history.currentIndexInHistory > 0
@@ -57,10 +64,19 @@ export class NavigationBackProcessor implements Processor {
 		setsManager: SetsManagerService,
 		mainNav: MainWindowNavigationService,
 		collectionNav: CollectionNavigationService,
+		achievementsNav: AchievementsNavigationService,
+		achievementsState: AchievementsStateManagerService,
 	): NavigationState {
 		switch (navigationState.currentApp) {
 			case 'achievements':
-				return NavigationBackProcessor.buildParentAchievementsState(navigationState, dataState);
+				achievementsNav.goUp();
+				return NavigationBackProcessor.buildParentAchievementsState(
+					navigationState,
+					dataState,
+					achievementsState,
+					mainNav,
+					achievementsNav,
+				);
 			case 'collection':
 				collectionNav.goUp();
 				return NavigationBackProcessor.buildParentCollectionState(
@@ -89,19 +105,15 @@ export class NavigationBackProcessor implements Processor {
 	private static buildParentAchievementsState(
 		navigationState: NavigationState,
 		dataState: MainWindowState,
+		achievementsState: AchievementsStateManagerService,
+		mainNav: MainWindowNavigationService,
+		achievementsNav: AchievementsNavigationService,
 	): NavigationState {
-		if (!navigationState || !dataState) {
-			// console.warn('Missing state for processing back navigation');
-			return null;
-		}
-		switch (navigationState.navigationAchievements.currentView) {
-			case 'categories':
-				return null;
-			case 'list':
-				return null;
-			default:
-				return null;
-		}
+		const groupedAchievements = achievementsState.groupedAchievements$$.getValue();
+		const categoryId = achievementsNav.selectedCategoryId$$.getValue()?.split('/').pop();
+		const hierarchy = builCategoryHierarchy(categoryId, groupedAchievements);
+		mainNav.text$$.next(hierarchy?.categories?.map((cat) => cat.name).join(' › '));
+		return null;
 	}
 
 	private static buildParentDuelsState(

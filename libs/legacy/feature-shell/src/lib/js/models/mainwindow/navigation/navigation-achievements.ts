@@ -2,9 +2,6 @@ import { CurrentView } from '../achievement/current-view.type';
 import { SharingAchievement } from '../achievement/sharing-achievement';
 
 export class NavigationAchievements {
-	readonly currentView: CurrentView = 'categories';
-	readonly menuDisplayType: string = 'menu';
-	readonly selectedCategoryId: string;
 	readonly selectedAchievementId: string;
 	// Holds the IDs of the achievements to display
 	readonly displayedAchievementsList: readonly string[] = [];
@@ -15,9 +12,5 @@ export class NavigationAchievements {
 
 	public update(base: NavigationAchievements): NavigationAchievements {
 		return Object.assign(new NavigationAchievements(), this, base);
-	}
-
-	public getPageName(): string {
-		return this.currentView;
 	}
 }

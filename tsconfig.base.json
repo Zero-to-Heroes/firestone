@@ -18,6 +18,7 @@
 		"paths": {
 			"@components/*": ["libs/legacy/feature-shell/src/lib/js/components/*"],
 			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
+			"@firestone/achievements/common": ["libs/achievements/common/src/index.ts"],
 			"@firestone/achievements/data-access": ["libs/achievements/data-access/src/index.ts"],
 			"@firestone/achievements/view": ["libs/achievements/view/src/index.ts"],
 			"@firestone/arena/common": ["libs/arena/common/src/index.ts"],

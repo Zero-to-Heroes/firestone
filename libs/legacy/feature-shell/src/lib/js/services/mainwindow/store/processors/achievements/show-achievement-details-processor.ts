@@ -1,3 +1,4 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
@@ -10,7 +11,8 @@ import { Processor } from '../processor';
 export class ShowAchievementDetailsProcessor implements Processor {
 	constructor(
 		private readonly stateManager: AchievementsStateManagerService,
-		private readonly nav: MainWindowNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
+		private readonly nav: AchievementsNavigationService,
 	) {}
 
 	public async process(
@@ -27,22 +29,20 @@ export class ShowAchievementDetailsProcessor implements Processor {
 
 		const achievement = hierarchy.achievement.completionSteps[0].id;
 
+		this.nav.currentView$$.next('list');
+		this.nav.menuDisplayType$$.next('breadcrumbs');
+		const categoryId = hierarchy.categories.map((c) => c.id).join('/');
+		this.nav.selectedCategoryId$$.next(categoryId);
 		const newAchievements = navigationState.navigationAchievements.update({
-			currentView: 'list',
-			menuDisplayType: 'breadcrumbs',
-			selectedCategoryId: hierarchy.categories[hierarchy.categories.length - 1].id,
-			// achievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
-			// 	ach => ach.id,
-			// ) as readonly string[],
 			displayedAchievementsList: hierarchy.categories[hierarchy.categories.length - 1].achievements.map(
 				(ach) => ach.id,
 			) as readonly string[],
 			selectedAchievementId: achievement,
 		} as NavigationAchievements);
 		const text = hierarchy.categories.map((cat) => cat.name).join(' ');
-		this.nav.text$$.next(text);
-		this.nav.image$$.next(null);
-		this.nav.isVisible$$.next(true);
+		this.mainNav.text$$.next(text);
+		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(true);
 		return [
 			null,
 			navigationState.update({

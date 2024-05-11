@@ -47,8 +47,8 @@ import { NavigationNextEvent } from '../../services/mainwindow/store/events/navi
 export class GlobalHeaderComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	text$: Observable<string>;
 	image$: Observable<string>;
-	backArrow$: Observable<boolean>;
-	nextArrow$: Observable<boolean>;
+	// backArrow$: Observable<boolean>;
+	// nextArrow$: Observable<boolean>;
 
 	@Input() backArrow: boolean;
 
@@ -74,8 +74,8 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 			filter((image) => !!image),
 			this.mapData((image) => image),
 		);
-		this.backArrow$ = this.nav.backArrowEnabled$$.pipe(this.mapData((backArrowEnabled) => backArrowEnabled));
-		this.nextArrow$ = this.nav.nextArrowEnabled$$.pipe(this.mapData((nextArrowEnabled) => nextArrowEnabled));
+		// this.backArrow$ = this.nav.backArrowEnabled$$.pipe(this.mapData((backArrowEnabled) => backArrowEnabled));
+		// this.nextArrow$ = this.nav.nextArrowEnabled$$.pipe(this.mapData((nextArrowEnabled) => nextArrowEnabled));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

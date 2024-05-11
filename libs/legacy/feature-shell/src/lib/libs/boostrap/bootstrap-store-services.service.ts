@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import {
 	ArenDeckDetailsService,
 	ArenaCardStatsService,
@@ -125,6 +126,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ConstructedMulliganGuideGuardianService: ConstructedMulliganGuideGuardianService,
 		private readonly init_CardMousedOverService: CardMousedOverService,
 		private readonly init_CommunityJoinService: CommunityJoinService,
+		private readonly init_AchievementsNavigationService: AchievementsNavigationService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

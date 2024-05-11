@@ -1,11 +1,19 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { waitForReady } from '@firestone/shared/framework/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	ViewRef,
+} from '@angular/core';
+import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { AchievementsStateManagerService } from '../../services/achievement/achievements-state-manager.service';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	selector: 'achievements-categories',
@@ -28,28 +36,32 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsCategoriesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class AchievementsCategoriesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	categories$: Observable<readonly VisualAchievementCategory[]>;
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly achievements: AchievementsStateManagerService,
+		private readonly nav: AchievementsNavigationService,
+		private readonly ow: OverwolfService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.achievements);
+		await waitForReady(this.achievements, this.nav);
 
-		this.categories$ = combineLatest([
-			this.achievements.groupedAchievements$$,
-			this.store.listen$(([main, nav, prefs]) => nav.navigationAchievements.selectedCategoryId),
-		]).pipe(
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+
+		this.categories$ = combineLatest([this.achievements.groupedAchievements$$, this.nav.selectedCategoryId$$]).pipe(
 			this.mapData(
-				([categories, [selectedCategoryId]]) =>
-					categories.map((cat) => cat.findCategory(selectedCategoryId)).filter((cat) => cat)[0]?.categories ??
-					categories,
+				([categories, selectedCategoryId]) =>
+					categories?.map((cat) => cat.findCategory(selectedCategoryId)).filter((cat) => cat)[0]
+						?.categories ??
+					categories ??
+					[],
 			),
 		);
 
@@ -59,7 +71,7 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionStoreCo
 	}
 
 	selectCategory(category: VisualAchievementCategory) {
-		this.store.send(new SelectAchievementCategoryEvent(category.id));
+		this.stateUpdater.next(new SelectAchievementCategoryEvent(category.id));
 	}
 
 	trackByFn(index: number, value: VisualAchievementCategory) {

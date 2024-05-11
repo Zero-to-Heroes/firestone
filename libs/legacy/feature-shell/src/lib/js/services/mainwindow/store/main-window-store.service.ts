@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
@@ -402,6 +403,7 @@ export class MainWindowStoreService {
 		private readonly arenaNavigation: ArenaNavigationService,
 		private readonly battlegroundsNavigation: BattlegroundsNavigationService,
 		private readonly mainNavigation: MainWindowNavigationService,
+		private readonly achievementsNavigation: AchievementsNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -426,6 +428,7 @@ export class MainWindowStoreService {
 		// Don't modify the current state here, as it could make state lookup impossible
 		// (for back / forward arrows for instance)
 		try {
+			console.debug('processing nav', this.navigationState);
 			const [newState, newNavState] = await processor.process(
 				event,
 				this.state,
@@ -498,6 +501,7 @@ export class MainWindowStoreService {
 	}
 
 	private updateNavigationArrows(navigationState: NavigationState, dataState: MainWindowState): NavigationState {
+		return navigationState;
 		const backArrowEnabled =
 			// Only allow back / next within the same app (at least for now)
 			(this.navigationHistory.currentIndexInHistory > 0 &&
@@ -510,6 +514,8 @@ export class MainWindowStoreService {
 				this.setsManager,
 				this.mainNavigation,
 				this.collectionNavigation,
+				this.achievementsNavigation,
+				this.achievementsStateManager,
 			) != null;
 
 		// 	'isBackArrowEnabled?',
@@ -541,12 +547,19 @@ export class MainWindowStoreService {
 					this.collectionNavigation,
 					this.battlegroundsNavigation,
 					this.constructedNavigation,
+					this.achievementsNavigation,
 				),
 			],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
 			[
 				NavigationBackEvent.eventName(),
-				new NavigationBackProcessor(this.setsManager, this.mainNavigation, this.collectionNavigation),
+				new NavigationBackProcessor(
+					this.setsManager,
+					this.mainNavigation,
+					this.collectionNavigation,
+					this.achievementsNavigation,
+					this.achievementsStateManager,
+				),
 			],
 			[NavigationNextEvent.eventName(), new NavigationNextProcessor(this.mainNavigation)],
 			[
@@ -558,6 +571,7 @@ export class MainWindowStoreService {
 					this.collectionNavigation,
 					this.battlegroundsNavigation,
 					this.constructedNavigation,
+					this.achievementsNavigation,
 				),
 			],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(this.mainNavigation)],
@@ -621,24 +635,40 @@ export class MainWindowStoreService {
 			],
 			[
 				ChangeVisibleAchievementEvent.eventName(),
-				new ChangeVisibleAchievementProcessor(this.achievementsStateManager),
+				new ChangeVisibleAchievementProcessor(this.achievementsStateManager, this.achievementsNavigation),
 			],
 			[
 				SelectAchievementCategoryEvent.eventName(),
-				new SelectAchievementCategoryProcessor(this.achievementsStateManager, this.mainNavigation),
+				new SelectAchievementCategoryProcessor(
+					this.achievementsStateManager,
+					this.mainNavigation,
+					this.achievementsNavigation,
+				),
 			],
 			[
 				SelectAchievementCategoryEvent.eventName(),
-				new SelectAchievementCategoryProcessor(this.achievementsStateManager, this.mainNavigation),
+				new SelectAchievementCategoryProcessor(
+					this.achievementsStateManager,
+					this.mainNavigation,
+					this.achievementsNavigation,
+				),
 			],
 			[
 				ShowAchievementDetailsEvent.eventName(),
-				new ShowAchievementDetailsProcessor(this.achievementsStateManager, this.mainNavigation),
+				new ShowAchievementDetailsProcessor(
+					this.achievementsStateManager,
+					this.mainNavigation,
+					this.achievementsNavigation,
+				),
 			],
 			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistory)],
 			[
 				FilterShownAchievementsEvent.eventName(),
-				new FilterShownAchievementsProcessor(this.achievementsStateManager, this.mainNavigation),
+				new FilterShownAchievementsProcessor(
+					this.achievementsStateManager,
+					this.mainNavigation,
+					this.achievementsNavigation,
+				),
 			],
 			[
 				AchievementsRemovePinnedAchievementsEvent.eventName(),

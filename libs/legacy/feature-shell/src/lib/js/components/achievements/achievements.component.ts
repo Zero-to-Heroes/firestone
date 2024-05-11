@@ -1,8 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { CurrentView } from '../../models/mainwindow/achievement/current-view.type';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { AdService } from '../../services/ad.service';
 
 @Component({
 	selector: 'achievements',
@@ -14,13 +16,13 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		<div class="app-section achievements">
 			<section
 				class="main"
-				*ngIf="currentView$ | async as currentView"
-				[ngClass]="{ divider: currentView === 'list' }"
+				*ngIf="{ currentView: currentView$ | async, menuDisplayType: menuDisplayType$ | async } as value"
+				[ngClass]="{ divider: value.currentView === 'list' }"
 			>
 				<div class="content main-content">
-					<global-header></global-header>
-					<achievements-categories *ngIf="currentView === 'categories'"> </achievements-categories>
-					<achievements-list *ngIf="currentView === 'list'"> </achievements-list>
+					<global-header [backArrow]="value.menuDisplayType === 'breadcrumbs'"></global-header>
+					<achievements-categories *ngIf="value.currentView === 'categories'"> </achievements-categories>
+					<achievements-list *ngIf="value.currentView === 'list'"> </achievements-list>
 				</div>
 			</section>
 			<section class="secondary" *ngIf="!(showAds$ | async)">
@@ -31,18 +33,28 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class AchievementsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	currentView$: Observable<CurrentView>;
+	menuDisplayType$: Observable<string>;
 	showAds$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: AchievementsNavigationService,
+		private readonly ads: AdService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.currentView$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationAchievements.currentView)
-			.pipe(this.mapData(([currentView]) => currentView));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+	async ngAfterContentInit() {
+		await waitForReady(this.ads, this.nav);
+
+		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
+		this.menuDisplayType$ = this.nav.menuDisplayType$$.pipe(this.mapData((currentView) => currentView));
+		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

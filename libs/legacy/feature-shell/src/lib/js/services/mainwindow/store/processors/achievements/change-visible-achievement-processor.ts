@@ -1,3 +1,4 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -8,7 +9,10 @@ import { ChangeVisibleAchievementEvent } from '../../events/achievements/change-
 import { Processor } from '../processor';
 
 export class ChangeVisibleAchievementProcessor implements Processor {
-	constructor(private readonly stateManager: AchievementsStateManagerService) {}
+	constructor(
+		private readonly stateManager: AchievementsStateManagerService,
+		private readonly nav: AchievementsNavigationService,
+	) {}
 
 	public async process(
 		event: ChangeVisibleAchievementEvent,
@@ -26,10 +30,11 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 		const newSelectedAchievement: VisualAchievement = category.achievements.find((ach) =>
 			ach.completionSteps.some((step) => step.id === event.achievementId),
 		);
+		this.nav.currentView$$.next('list');
+		this.nav.menuDisplayType$$.next('breadcrumbs');
+		const categoryId = hierarchy.categories.map((c) => c.id).join('/');
+		this.nav.selectedCategoryId$$.next(categoryId);
 		const newAchievements = navigationState.navigationAchievements.update({
-			currentView: 'list',
-			menuDisplayType: 'breadcrumbs',
-			selectedCategoryId: category.id,
 			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
 			// achievementsList: category.achievements.map(ach => ach.id) as readonly string[],
 			displayedAchievementsList: category.achievements.map((ach) => ach.id) as readonly string[],

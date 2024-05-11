@@ -1,3 +1,4 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
@@ -23,6 +24,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly bgNav: BattlegroundsNavigationService,
 		private readonly constructedNav: ConstructedNavigationService,
+		private readonly achievementsNav: AchievementsNavigationService,
 	) {}
 
 	public async process(
@@ -45,13 +47,15 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			this.constructedNav.currentView$$.next('decks');
 			this.constructedNav.selectedDeckstring$$.next(null);
 		}
+		if (event.module === 'achievements') {
+			this.achievementsNav.currentView$$.next('categories');
+			this.achievementsNav.menuDisplayType$$.next('menu');
+			this.achievementsNav.selectedCategoryId$$.next(null);
+		}
 
 		const achievements =
 			event.module === 'achievements'
 				? navigationState.navigationAchievements.update({
-						currentView: 'categories',
-						menuDisplayType: 'menu',
-						selectedCategoryId: undefined,
 						selectedAchievementId: undefined,
 				  } as NavigationAchievements)
 				: navigationState.navigationAchievements;

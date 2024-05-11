@@ -1,3 +1,4 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
@@ -11,7 +12,8 @@ import { Processor } from '../processor';
 export class FilterShownAchievementsProcessor implements Processor {
 	constructor(
 		private readonly stateManager: AchievementsStateManagerService,
-		private readonly nav: MainWindowNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
+		private readonly nav: AchievementsNavigationService,
 	) {}
 
 	public async process(
@@ -27,10 +29,8 @@ export class FilterShownAchievementsProcessor implements Processor {
 		}
 
 		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
-		const selectedCategory = findCategory(
-			navigationState.navigationAchievements.selectedCategoryId,
-			groupedAchievements,
-		);
+		const selectedCategoryId = this.nav.selectedCategoryId$$.getValue()?.split('/')?.pop();
+		const selectedCategory = findCategory(selectedCategoryId, groupedAchievements);
 
 		const allAchievements: readonly VisualAchievement[] = selectedCategory
 			? selectedCategory.retrieveAllAchievements()
@@ -45,21 +45,24 @@ export class FilterShownAchievementsProcessor implements Processor {
 						)
 						.map((ach) => ach.id)
 				: (selectedCategory?.achievements ?? []).map((ach) => ach.id);
+		const currentView = this.nav.currentView$$.getValue();
+		if (searchString?.length && searchString.length > 2) {
+			this.nav.currentView$$?.next('list');
+		} else {
+			this.nav.currentView$$.next(navigationState.navigationAchievements.viewBeforeSearch ?? 'categories');
+		}
 		const newState =
 			searchString?.length && searchString.length > 2
 				? navigationState.navigationAchievements.update({
-						currentView: 'list',
 						viewBeforeSearch:
-							navigationState.navigationAchievements.currentView !== 'list'
-								? navigationState.navigationAchievements.currentView
-								: navigationState.navigationAchievements.viewBeforeSearch ??
-								  navigationState.navigationAchievements.currentView,
+							currentView !== 'list'
+								? currentView
+								: navigationState.navigationAchievements.viewBeforeSearch ?? currentView,
 						textBeforeSearch:
-							navigationState.navigationAchievements.textBeforeSearch ?? this.nav.text$$.getValue(),
+							navigationState.navigationAchievements.textBeforeSearch ?? this.mainNav.text$$.getValue(),
 						displayedAchievementsList: displayedAchievementsList,
 				  } as NavigationAchievements)
 				: navigationState.navigationAchievements.update({
-						currentView: navigationState.navigationAchievements.viewBeforeSearch ?? 'categories',
 						displayedAchievementsList: displayedAchievementsList,
 				  } as NavigationAchievements);
 		const categoryName = selectedCategory?.name ?? 'all achievements';
@@ -67,7 +70,7 @@ export class FilterShownAchievementsProcessor implements Processor {
 			searchString?.length && searchString.length > 2
 				? `Searching for "${searchString}" in ${categoryName}`
 				: navigationState.navigationAchievements.textBeforeSearch;
-		this.nav.text$$.next(text);
+		this.mainNav.text$$.next(text);
 		return [
 			null,
 			navigationState.update({

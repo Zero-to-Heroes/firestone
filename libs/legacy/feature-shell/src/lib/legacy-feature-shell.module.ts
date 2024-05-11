@@ -556,6 +556,7 @@ import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/m
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AchievementsCommonModule } from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
@@ -906,6 +907,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CollectionViewModule,
 		AchievementsViewModule,
 		AchievementsDataAccessModule,
+		AchievementsCommonModule,
 		DuelsGeneralModule,
 		ArenaCommonModule,
 		DiscordModule,

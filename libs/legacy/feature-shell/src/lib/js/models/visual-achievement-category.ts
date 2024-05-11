@@ -11,10 +11,12 @@ export class VisualAchievementCategory {
 		return Object.assign(new VisualAchievementCategory(), value);
 	}
 
-	public findCategory(categoryId: string): VisualAchievementCategory {
-		if (!categoryId) {
+	public findCategory(categoryHierarchy: string): VisualAchievementCategory {
+		if (!categoryHierarchy) {
 			return null;
 		}
+
+		const categoryId = categoryHierarchy.split('/').pop();
 		if (categoryId === this.id) {
 			return this;
 		}
@@ -22,7 +24,8 @@ export class VisualAchievementCategory {
 		return matches.length > 0 ? matches[0] : null;
 	}
 
-	public findCategoryHierarchy(categoryId: string): VisualAchievementCategory[] {
+	public findCategoryHierarchy(categoryHierarchy: string): VisualAchievementCategory[] {
+		const categoryId = categoryHierarchy?.split('/')?.pop();
 		if (this.id === categoryId) {
 			return [this];
 		}
