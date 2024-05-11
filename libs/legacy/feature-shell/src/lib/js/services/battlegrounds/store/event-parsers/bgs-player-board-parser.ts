@@ -329,15 +329,15 @@ export class BgsPlayerBoardParser implements EventParser {
 			hand: opponentBoard.hand,
 			heroCardId: opponentBoard.heroCardId ?? teammatePlayer?.cardId,
 			heroPowerCardId: opponentBoard.heroPowerCardId ?? teammatePlayer?.heroPowerCardId,
-			heroPowerInfo: -1, // No info
-			heroPowerInfo2: -1, // No info
-			heroPowerUsed: false, // No info
+			heroPowerInfo: opponentBoard.heroPowerInfo,
+			heroPowerInfo2: opponentBoard.heroPowerInfo2,
+			heroPowerUsed: opponentBoard.heroPowerUsed,
 			playerId:
 				opponentBoard.hero.Tags?.find((t) => t.Name === GameTag.PLAYER_ID)?.Value ?? teammatePlayer?.playerId,
 			secrets: opponentBoard.secrets,
-			questEntities: [], // No info
-			questRewardEntities: [], // No info
-			questRewards: [], // No info
+			questEntities: opponentBoard.questEntities,
+			questRewardEntities: opponentBoard.questRewardEntities,
+			questRewards: opponentBoard.questRewards,
 			hero: {
 				CardId: opponentBoard.heroCardId ?? teammatePlayer?.cardId,
 				Entity: 0, // No info
