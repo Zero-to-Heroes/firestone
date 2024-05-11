@@ -93,6 +93,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the "back" arrow had disappeared.`,
+							},
+						],
+					},
+					{
 						category: 'general',
 						details: [
 							{
