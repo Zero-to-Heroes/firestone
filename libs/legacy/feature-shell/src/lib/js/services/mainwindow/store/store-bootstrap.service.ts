@@ -27,7 +27,6 @@ export class StoreBootstrapService {
 					{ id: 'card-stats', name: this.i18n.translateString('app.arena.menu.card-stats') },
 					{ id: 'arena-high-wins-runs', name: this.i18n.translateString('app.arena.menu.arena-top-runs') },
 				],
-				loading: false,
 			}),
 			decktracker: DecktrackerState.create({
 				filters: {

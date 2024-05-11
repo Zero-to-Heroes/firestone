@@ -1,4 +1,5 @@
 import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
@@ -7,7 +8,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
-import { NavigationArena } from '../../../../models/mainwindow/navigation/navigation-arena';
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
@@ -25,6 +25,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		private readonly bgNav: BattlegroundsNavigationService,
 		private readonly constructedNav: ConstructedNavigationService,
 		private readonly achievementsNav: AchievementsNavigationService,
+		private readonly arenaNav: ArenaNavigationService,
 	) {}
 
 	public async process(
@@ -50,6 +51,10 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			this.achievementsNav.currentView$$.next('categories');
 			this.achievementsNav.menuDisplayType$$.next('menu');
 			this.achievementsNav.selectedCategoryId$$.next(null);
+		}
+		if (event.module === 'arena') {
+			this.arenaNav.menuDisplayType$$.next('menu');
+			this.arenaNav.expandedRunIds$$.next([]);
 		}
 
 		const achievements =
@@ -81,13 +86,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						treasureSearchString: null,
 				  } as NavigationDuels)
 				: navigationState.navigationDuels;
-		const arena =
-			event.module === 'arena'
-				? navigationState.navigationArena.update({
-						menuDisplayType: 'menu',
-						expandedRunIds: [] as readonly string[],
-				  } as NavigationArena)
-				: navigationState.navigationArena;
 		const decktracker =
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
@@ -108,7 +106,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationBattlegrounds: battlegrounds,
 				navigationDuels: duels,
 				navigationDecktracker: decktracker,
-				navigationArena: arena,
 			} as NavigationState),
 		];
 	}

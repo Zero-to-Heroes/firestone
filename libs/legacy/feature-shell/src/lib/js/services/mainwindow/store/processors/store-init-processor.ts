@@ -1,4 +1,5 @@
 import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
@@ -23,6 +24,7 @@ export class StoreInitProcessor implements Processor {
 		private readonly battlegroundsNav: BattlegroundsNavigationService,
 		private readonly constructedNav: ConstructedNavigationService,
 		private readonly achievementsNav: AchievementsNavigationService,
+		private readonly arenaNav: ArenaNavigationService,
 	) {}
 
 	public async process(
@@ -58,6 +60,7 @@ export class StoreInitProcessor implements Processor {
 				this.battlegroundsNav,
 				this.constructedNav,
 				this.achievementsNav,
+				this.arenaNav,
 			).process(new ChangeVisibleApplicationEvent(currentAppFromPrefs), currentState, navigationState);
 			return navState;
 		}

@@ -1,7 +1,6 @@
 import { NonFunctionProperties } from '../../../services/utils';
 import { CurrentAppType } from '../current-app.type';
 import { NavigationAchievements } from './navigation-achievements';
-import { NavigationArena } from './navigation-arena';
 import { NavigationBattlegrounds } from './navigation-battlegrounds';
 import { NavigationCollection } from './navigation-collection';
 import { NavigationDecktracker } from './navigation-decktracker';
@@ -21,7 +20,6 @@ export class NavigationState {
 	readonly navigationBattlegrounds: NavigationBattlegrounds = new NavigationBattlegrounds();
 	readonly navigationMercenaries: NavigationMercenaries = new NavigationMercenaries();
 	readonly navigationDuels: NavigationDuels = new NavigationDuels();
-	readonly navigationArena: NavigationArena = new NavigationArena();
 	readonly navigationStats: NavigationStats = new NavigationStats();
 	readonly navigationStreams: NavigationStreams = new NavigationStreams();
 

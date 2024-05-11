@@ -207,7 +207,6 @@ import { ChangeVisibleAchievementProcessor } from './processors/achievements/cha
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
-import { ArenaSelectCategoryEvent, ArenaSelectCategoryProcessor } from './processors/arena/arena-select-category';
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
@@ -466,6 +465,7 @@ export class MainWindowStoreService {
 					this.battlegroundsNavigation,
 					this.constructedNavigation,
 					this.achievementsNavigation,
+					this.arenaNavigation,
 				),
 			],
 			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
@@ -490,6 +490,7 @@ export class MainWindowStoreService {
 					this.battlegroundsNavigation,
 					this.constructedNavigation,
 					this.achievementsNavigation,
+					this.arenaNavigation,
 				),
 			],
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(this.mainNavigation)],
@@ -914,8 +915,6 @@ export class MainWindowStoreService {
 				new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsPersonalDecksService),
 			],
 			[DuelsDeckbuilderImportDeckEvent.eventName(), new DuelsDeckbuilderImportDeckProcessor(this.cards)],
-			// Arena
-			[ArenaSelectCategoryEvent.eventName(), new ArenaSelectCategoryProcessor(this.arenaNavigation)],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],
