@@ -39,7 +39,7 @@ export class CardsInitService {
 	private async initCards(locale: string) {
 		const fileName = this.getFileName(locale);
 		console.log('[cards-init] initializing cards db with', fileName);
-		await this.cards.initializeCardsDb(CARDS_VERSION, fileName, false);
+		await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
 	}
 
 	private getFileName(locale: string) {
