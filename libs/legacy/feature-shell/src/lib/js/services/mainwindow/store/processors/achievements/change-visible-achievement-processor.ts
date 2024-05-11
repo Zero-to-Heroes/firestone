@@ -17,7 +17,6 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 	public async process(
 		event: ChangeVisibleAchievementEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();

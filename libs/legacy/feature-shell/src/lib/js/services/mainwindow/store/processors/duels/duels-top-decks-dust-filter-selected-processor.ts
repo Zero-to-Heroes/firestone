@@ -11,8 +11,6 @@ export class DuelsTopDecksDustFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsTopDecksDustFilterSelectedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsTopDecksDustFilter(event.value);
 		return [null, null];

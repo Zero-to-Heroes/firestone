@@ -11,8 +11,6 @@ export class ChangeDeckSortProcessor implements Processor {
 	public async process(
 		event: ChangeDeckSortEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const filters = Object.assign(new DeckFilters(), currentState.decktracker.filters, {
 			sort: event.sort,

@@ -22,7 +22,6 @@ export class ShowReplayProcessor implements Processor {
 	public async process(
 		event: ShowReplayEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const gameStats = await this.gameStats.gameStats$$.getValueWithInit();

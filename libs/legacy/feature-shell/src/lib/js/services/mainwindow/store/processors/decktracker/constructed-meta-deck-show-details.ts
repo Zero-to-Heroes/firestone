@@ -30,7 +30,6 @@ export class ConstructedMetaDeckDetailsShowProcessor implements Processor {
 	public async process(
 		event: ConstructedMetaDeckDetailsShowEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.navigation.selectedConstructedMetaDeck$$.next(event.deckstring);

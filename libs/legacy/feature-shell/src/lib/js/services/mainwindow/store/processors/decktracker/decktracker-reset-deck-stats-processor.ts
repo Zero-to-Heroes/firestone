@@ -10,8 +10,6 @@ export class DecktrackerResetDeckStatsProcessor implements Processor {
 	public async process(
 		event: DecktrackerResetDeckStatsEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		const deckStatsResetDates: readonly number[] = currentPrefs.desktopDeckStatsReset[event.deckstring] ?? [];

@@ -19,7 +19,6 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 	public async process(
 		event: DuelsViewPersonalDeckDetailsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const duelsDecks = await this.duelsDecksProvider.duelsDecks$$.getValueWithInit();

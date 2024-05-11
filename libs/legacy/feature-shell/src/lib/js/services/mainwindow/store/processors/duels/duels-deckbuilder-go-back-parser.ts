@@ -7,7 +7,6 @@ export class DuelsDeckbuilderGoBackProcessor implements Processor {
 	public async process(
 		event: DuelsDeckbuilderGoBackEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newHero = event.step === 'hero' ? null : currentState.duels.deckbuilder.currentHeroCardId;

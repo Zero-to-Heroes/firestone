@@ -12,7 +12,6 @@ export class ChangeDeckFormatFilterProcessor implements Processor {
 	public async process(
 		event: ChangeDeckFormatFilterEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const filters = Object.assign(new DeckFilters(), currentState.decktracker.filters, {

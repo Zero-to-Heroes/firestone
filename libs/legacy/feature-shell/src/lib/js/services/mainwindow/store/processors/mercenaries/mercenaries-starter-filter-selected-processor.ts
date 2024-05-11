@@ -10,8 +10,6 @@ export class MercenariesStarterFilterSelectedProcessor implements Processor {
 	public async process(
 		event: MercenariesStarterFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateMercenariesStarterFilter(event.starter);
 		return [null, null];

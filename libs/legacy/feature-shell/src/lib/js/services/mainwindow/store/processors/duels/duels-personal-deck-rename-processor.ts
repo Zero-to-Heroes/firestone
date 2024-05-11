@@ -11,8 +11,6 @@ export class DuelsPersonalDeckRenameProcessor implements Processor {
 	public async process(
 		event: DuelsPersonalDeckRenameEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsDeckName(event.deckstring, event.newName);
 		return [null, null];

@@ -14,8 +14,6 @@ export class DuelsToggleShowHiddenPersonalDecksProcessor implements Processor {
 	public async process(
 		event: DuelsRestorePersonalDeckSummaryEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// const newState: DuelsState = await this.duelsStateBuilder.updateState(
 		// 	currentState.duels,

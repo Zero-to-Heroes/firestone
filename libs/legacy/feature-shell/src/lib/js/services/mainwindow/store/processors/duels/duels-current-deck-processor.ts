@@ -7,7 +7,6 @@ export class DuelsCurrentDeckProcessor implements Processor {
 	public async process(
 		event: DuelsCurrentDeckEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

@@ -11,7 +11,6 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
 	public async process(
 		event: ShareVideoOnSocialNetworkEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		switch (event.network) {

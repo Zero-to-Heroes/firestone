@@ -10,7 +10,6 @@ export class CollectionRefreshPacksProcessor implements Processor {
 	public async process(
 		event: CollectionRefreshPacksEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.packsService.refreshPackStats();

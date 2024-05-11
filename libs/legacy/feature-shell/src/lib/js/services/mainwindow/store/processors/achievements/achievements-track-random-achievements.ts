@@ -41,7 +41,6 @@ export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 	public async process(
 		event: AchievementsTrackRandomAchievementsEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentProgress = await this.achievementsManager.fetchInGameAchievementsInfo();

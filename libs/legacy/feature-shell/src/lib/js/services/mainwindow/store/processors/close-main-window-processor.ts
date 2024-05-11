@@ -10,8 +10,6 @@ export class CloseMainWindowProcessor implements Processor {
 	public async process(
 		event: CloseMainWindowEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(false);
 		return [null, null];

@@ -12,8 +12,6 @@ export class DuelsDeckbuilderImportDeckProcessor implements Processor {
 	public async process(
 		event: DuelsDeckbuilderImportDeckEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		let deckDefinition: DeckDefinition = null;
 		try {

@@ -27,7 +27,6 @@ export class ShowMatchStatsProcessor implements Processor {
 	public async process(
 		event: ShowMatchStatsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const matchStats = event.stats;

@@ -10,8 +10,6 @@ export class ShowMainWindowProcessor implements Processor {
 	public async process(
 		event: ShowMainWindowEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(true);
 		return [null, null];

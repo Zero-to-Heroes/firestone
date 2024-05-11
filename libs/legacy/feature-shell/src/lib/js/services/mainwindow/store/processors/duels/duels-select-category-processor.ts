@@ -8,7 +8,6 @@ export class DuelsSelectCategoryProcessor implements Processor {
 	public async process(
 		event: DuelsSelectCategoryEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

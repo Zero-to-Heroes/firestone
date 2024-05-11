@@ -12,7 +12,6 @@ export class ChangeMatchStatsNumberOfTabsProcessor implements Processor {
 	public async process(
 		event: ChangeMatchStatsNumberOfTabsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsNumberOfDisplayedTabs(event.tabsNumber);

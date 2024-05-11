@@ -13,8 +13,6 @@ export class DuelsDeckbuilderSignatureTreasureSelectedProcessor implements Proce
 	public async process(
 		event: DuelsDeckbuilderSignatureTreasureSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const signatureTreasureCardId = event.signatureTreasureCardId;
 		let classes = currentState.duels.deckbuilder.currentClasses;

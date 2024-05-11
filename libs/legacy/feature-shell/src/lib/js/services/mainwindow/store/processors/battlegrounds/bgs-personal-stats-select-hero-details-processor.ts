@@ -21,7 +21,6 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 	public async process(
 		event: BgsPersonalStatsSelectHeroDetailsEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		let newState = currentState;

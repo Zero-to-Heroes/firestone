@@ -8,7 +8,6 @@ export class DuelsToggleExpandedRunProcessor implements Processor {
 	public async process(
 		event: DuelsToggleExpandedRunEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const expandedRunIds: readonly string[] = navigationState.navigationDuels.expandedRunIds.includes(event.runId)

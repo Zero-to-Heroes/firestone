@@ -12,8 +12,6 @@ export class ChangeDeckRankCategoryFilterProcessor implements Processor {
 	public async process(
 		event: ChangeDeckRankCategoryFilterEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const filters = Object.assign(new DeckFilters(), currentState.decktracker.filters, {
 			rankingCategory: event.newRank,

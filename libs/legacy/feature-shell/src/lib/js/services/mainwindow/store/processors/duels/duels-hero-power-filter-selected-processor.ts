@@ -10,8 +10,6 @@ export class DuelsHeroPowerFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsHeroPowerFilterSelectedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsHeroPowerFilter(event.value);
 		return [null, null];

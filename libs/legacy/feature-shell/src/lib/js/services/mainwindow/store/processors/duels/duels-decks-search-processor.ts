@@ -7,8 +7,6 @@ export class DuelsDecksSearchProcessor implements Processor {
 	public async process(
 		event: DuelsDecksSearchEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [
 			currentState.update({

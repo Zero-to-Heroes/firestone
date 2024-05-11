@@ -10,7 +10,6 @@ export class MailboxMarkMessageReadProcessor implements Processor {
 	public async process(
 		event: MailboxMarkMessageReadEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();

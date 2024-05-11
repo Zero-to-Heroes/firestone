@@ -14,8 +14,6 @@ export class DuelsHidePersonalDeckSummaryProcessor implements Processor {
 	public async process(
 		event: DuelsHidePersonalDeckSummaryEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		const newHiddenDecks = [...currentPrefs.duelsPersonalDeckHiddenDeckCodes, event.deckstring];

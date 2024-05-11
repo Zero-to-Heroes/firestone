@@ -9,8 +9,6 @@ export class DuelsTopDeckRunDetailsLoadedProcessor implements Processor {
 	public async process(
 		event: DuelsTopDeckRunDetailsLoadedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		if (!event.deck) {
 			return [null, null];

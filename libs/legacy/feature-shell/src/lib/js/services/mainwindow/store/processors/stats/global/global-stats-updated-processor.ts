@@ -10,7 +10,6 @@ export class GlobalStatsUpdatedProcessor implements Processor {
 	public async process(
 		event: GlobalStatsUpdatedEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.events.broadcast(Events.GLOBAL_STATS_UPDATED, event.stats);

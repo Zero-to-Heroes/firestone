@@ -11,7 +11,6 @@ export class SelectBattlegroundsPersonalStatsHeroProcessor implements Processor 
 	public async process(
 		event: SelectBattlegroundsPersonalStatsHeroTabEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({

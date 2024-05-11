@@ -15,7 +15,6 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 	public async process(
 		event: SelectBattlegroundsCategoryEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.nav.selectedCategoryId$$.next(event.categoryId);

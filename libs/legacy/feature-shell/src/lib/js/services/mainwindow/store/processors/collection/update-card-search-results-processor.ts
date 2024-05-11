@@ -17,7 +17,6 @@ export class UpdateCardSearchResultsProcessor implements Processor {
 	public async process(
 		event: UpdateCardSearchResultsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const collection = (await this.collectionManager.collection$$.getValueWithInit()) ?? [];

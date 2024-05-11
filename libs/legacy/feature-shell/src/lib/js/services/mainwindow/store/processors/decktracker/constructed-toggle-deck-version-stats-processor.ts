@@ -7,7 +7,6 @@ export class ConstructedToggleDeckVersionStatsProcessor implements Processor {
 	public async process(
 		event: ConstructedToggleDeckVersionStatsEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

@@ -10,7 +10,6 @@ export class SkipFtueProcessor implements Processor {
 	public async process(
 		event: SkipFtueEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.setGlobalFtueDone();

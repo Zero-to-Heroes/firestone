@@ -7,8 +7,6 @@ export class DuelsIsOnMainScreenProcessor implements Processor {
 	public async process(
 		event: DuelsIsOnMainScreenEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [
 			currentState.update({

@@ -10,8 +10,6 @@ export class RestoreDeckSummaryProcessor implements Processor {
 	public async process(
 		event: RestoreDeckSummaryEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		console.log(

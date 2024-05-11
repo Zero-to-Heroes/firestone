@@ -10,8 +10,6 @@ export class MercenariesRoleFilterSelectedProcessor implements Processor {
 	public async process(
 		event: MercenariesRoleFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateMercenariesRoleFilter(event.role);
 		return [null, null];

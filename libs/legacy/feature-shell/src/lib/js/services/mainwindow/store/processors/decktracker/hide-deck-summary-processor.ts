@@ -10,8 +10,6 @@ export class HideDeckSummaryProcessor implements Processor {
 	public async process(
 		event: HideDeckSummaryEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		const newHiddenDecks = [...currentPrefs.desktopDeckHiddenDeckCodes, event.deckstring];

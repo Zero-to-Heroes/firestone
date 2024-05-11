@@ -8,7 +8,6 @@ export class CloseSocialShareModalProcessor implements Processor {
 	public async process(
 		event: CloseSocialShareModalEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

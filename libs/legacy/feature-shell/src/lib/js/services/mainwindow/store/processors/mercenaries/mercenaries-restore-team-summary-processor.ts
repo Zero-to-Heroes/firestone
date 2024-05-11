@@ -10,8 +10,6 @@ export class MercenariesRestoreTeamSummaryProcessor implements Processor {
 	public async process(
 		event: MercenariesRestoreTeamSummaryEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		const newHiddenTeams = (currentPrefs.mercenariesHiddenTeamIds ?? []).filter(

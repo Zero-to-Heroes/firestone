@@ -30,7 +30,6 @@ export class ArenaSelectCategoryProcessor implements Processor {
 	public async process(
 		event: ArenaSelectCategoryEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// Main issue is that using this breaks the back/next buttons

@@ -19,7 +19,6 @@ export class FilterShownAchievementsProcessor implements Processor {
 	public async process(
 		event: FilterShownAchievementsEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const searchString = (event.searchString || '').toLowerCase();

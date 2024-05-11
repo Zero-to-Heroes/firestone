@@ -10,8 +10,6 @@ export class DuelsMmrFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsMmrFilterSelectedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsMmrFilter(event.value);
 		return [null, null];

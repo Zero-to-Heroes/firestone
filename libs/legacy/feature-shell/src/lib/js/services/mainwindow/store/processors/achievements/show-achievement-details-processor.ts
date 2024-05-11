@@ -18,7 +18,6 @@ export class ShowAchievementDetailsProcessor implements Processor {
 	public async process(
 		event: ShowAchievementDetailsEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();

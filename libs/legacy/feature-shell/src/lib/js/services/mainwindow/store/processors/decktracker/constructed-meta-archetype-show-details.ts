@@ -30,7 +30,6 @@ export class ConstructedMetaArchetypeDetailsShowProcessor implements Processor {
 	public async process(
 		event: ConstructedMetaArchetypeDetailsShowEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.navigation.selectedConstructedMetaArchetype$$.next(event.id);

@@ -12,8 +12,6 @@ export class ChangeDeckRankGroupProcessor implements Processor {
 	public async process(
 		event: ChangeDeckRankGroupEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const filters = Object.assign(new DeckFilters(), currentState.decktracker.filters, {
 			rankingGroup: event.newRank,

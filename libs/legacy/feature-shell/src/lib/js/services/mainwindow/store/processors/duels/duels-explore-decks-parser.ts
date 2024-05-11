@@ -12,7 +12,6 @@ export class DuelsExploreDecksParser implements Processor {
 	public async process(
 		event: DuelsExploreDecksEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();

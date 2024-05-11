@@ -7,7 +7,6 @@ export class ConstructedDeckbuilderGoBackProcessor implements Processor {
 	public async process(
 		event: ConstructedDeckbuilderGoBackEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newFormat = event.step === 'format' ? null : currentState.decktracker.deckbuilder.currentFormat;

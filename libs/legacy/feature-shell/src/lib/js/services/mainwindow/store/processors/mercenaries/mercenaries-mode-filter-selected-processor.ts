@@ -10,8 +10,6 @@ export class MercenariesModeFilterSelectedProcessor implements Processor {
 	public async process(
 		event: MercenariesModeFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateMercenariesModeFilter(event.mode);
 		return [null, null];

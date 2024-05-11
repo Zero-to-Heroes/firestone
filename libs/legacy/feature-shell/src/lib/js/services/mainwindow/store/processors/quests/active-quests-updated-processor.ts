@@ -11,8 +11,6 @@ export class ActiveQuestsUpdatedProcessor implements Processor {
 	public async process(
 		event: ActiveQuestsUpdatedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
 		const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(

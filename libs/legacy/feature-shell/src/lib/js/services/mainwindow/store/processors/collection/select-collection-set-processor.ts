@@ -18,7 +18,6 @@ export class SelectCollectionSetProcessor implements Processor {
 	public async process(
 		event: SelectCollectionSetEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const allSets = await this.setsManager.sets$$.getValueWithInit();

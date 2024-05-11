@@ -11,8 +11,6 @@ export class DuelsHeroSortFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsHeroSortFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsHeroSortFilter(event.value);
 		return [null, null];

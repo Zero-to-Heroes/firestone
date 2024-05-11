@@ -20,7 +20,6 @@ export class ShowCardDetailsProcessor implements Processor {
 	public async process(
 		event: ShowCardDetailsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const allSets = await this.setsManager.sets$$.getValueWithInit();

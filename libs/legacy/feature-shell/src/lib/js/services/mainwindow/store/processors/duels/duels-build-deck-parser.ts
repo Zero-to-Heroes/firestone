@@ -12,7 +12,6 @@ export class DuelsBuildDeckParser implements Processor {
 	public async process(
 		event: DuelsBuildDeckEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(true);

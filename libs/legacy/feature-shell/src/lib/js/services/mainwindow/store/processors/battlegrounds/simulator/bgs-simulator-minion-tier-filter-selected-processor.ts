@@ -10,7 +10,6 @@ export class BgsSimulatorMinionTierFilterSelectedProcessor implements Processor 
 	public async process(
 		event: BgsSimulatorMinionTierFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.prefs.updateBgsActiveSimulatorMinionTierFilter(event.tier);

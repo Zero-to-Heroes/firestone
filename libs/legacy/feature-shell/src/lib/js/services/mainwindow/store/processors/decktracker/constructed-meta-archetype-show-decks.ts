@@ -34,7 +34,6 @@ export class ConstructedMetaArchetypeShowDecksProcessor implements Processor {
 	public async process(
 		event: ConstructedMetaArchetypeShowDecksEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();

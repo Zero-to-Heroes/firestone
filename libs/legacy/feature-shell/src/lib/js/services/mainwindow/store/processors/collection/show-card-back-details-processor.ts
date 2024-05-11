@@ -18,7 +18,6 @@ export class ShowCardBackDetailsProcessor implements Processor {
 	public async process(
 		event: ShowCardBackDetailsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const cardBacks = await this.collectionManager.cardBacks$$.getValueWithInit();

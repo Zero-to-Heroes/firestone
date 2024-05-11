@@ -14,8 +14,6 @@ export class MercenariesPersonalHeroesSortProcessor implements Processor {
 	public async process(
 		event: MercenariesPersonalHeroesSortEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const existingCriterion = prefs.mercenariesPersonalHeroesSortCriterion;

@@ -11,8 +11,6 @@ export class StatsXpGraphFilterSelectedProcessor implements Processor {
 	public async process(
 		event: StatsXpGraphFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateStatsXpGraphFilter(event.value);
 		return [

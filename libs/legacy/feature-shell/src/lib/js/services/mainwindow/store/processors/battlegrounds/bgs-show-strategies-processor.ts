@@ -23,7 +23,6 @@ export class BgsShowStrategiesProcessor implements Processor {
 	public async process(
 		event: BgsShowStrategiesEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(true);
@@ -42,7 +41,6 @@ export class BgsShowStrategiesProcessor implements Processor {
 		).process(
 			new BgsPersonalStatsSelectHeroDetailsEvent(normalizeHeroCardId(event.heroId, this.allCards)),
 			currentState,
-			stateHistory,
 			newNavState,
 		);
 	}

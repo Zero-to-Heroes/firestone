@@ -11,7 +11,6 @@ export class BgsCustomSimulationUpdateProcessor implements Processor {
 	public async process(
 		event: BgsCustomSimulationUpdateEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const merged = BgsFaceOffWithSimulation.create(

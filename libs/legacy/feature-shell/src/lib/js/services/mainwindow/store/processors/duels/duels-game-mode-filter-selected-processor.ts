@@ -11,8 +11,6 @@ export class DuelsGameModeFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsGameModeFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsGameModeFilter(event.value);
 		return [null, null];

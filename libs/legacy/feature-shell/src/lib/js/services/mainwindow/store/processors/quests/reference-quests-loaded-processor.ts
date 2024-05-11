@@ -7,8 +7,6 @@ export class ReferenceQuestsLoadedProcessor implements Processor {
 	public async process(
 		event: ReferenceQuestsLoadedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newState = currentState.update({
 			quests: currentState.quests.update({

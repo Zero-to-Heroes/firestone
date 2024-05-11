@@ -11,7 +11,6 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 	public async process(
 		event: ConstructedNewDeckVersionEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();

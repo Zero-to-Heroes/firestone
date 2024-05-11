@@ -8,7 +8,6 @@ export class BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor implements
 	public async process(
 		event: BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newBattlegrounds = currentState.battlegrounds.update({

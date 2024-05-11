@@ -7,7 +7,6 @@ export class CollectionPacksUpdatedProcessor implements Processor {
 	public async process(
 		event: CollectionPacksUpdatedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [null, null];

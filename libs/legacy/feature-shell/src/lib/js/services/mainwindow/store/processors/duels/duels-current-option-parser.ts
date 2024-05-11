@@ -12,7 +12,6 @@ export class DuelsCurrentOptionParser implements Processor {
 	public async process(
 		event: DuelsCurrentOptionEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const duelsInfo = await this.memory.getDuelsInfo();

@@ -11,7 +11,6 @@ export class NextFtueProcessor implements Processor {
 	public async process(
 		event: NextFtueEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		let nextStep: CurrentAppType = undefined;

@@ -10,8 +10,6 @@ export class MercenariesHeroSelectedProcessor implements Processor {
 	public async process(
 		event: MercenariesHeroSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// const nav = navigationState.update({
 		// 	navigationMercenaries: navigationState.navigationMercenaries.update({

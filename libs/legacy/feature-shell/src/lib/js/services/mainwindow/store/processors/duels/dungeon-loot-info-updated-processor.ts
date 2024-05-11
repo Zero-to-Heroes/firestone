@@ -10,8 +10,6 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	public async process(
 		event: DungeonLootInfoUpdatedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.debug('[duels-loot] handling loot', event.dungeonLootInfo);
 		const dungeonLootInfo = event.dungeonLootInfo;

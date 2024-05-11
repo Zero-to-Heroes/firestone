@@ -10,7 +10,6 @@ export class BgsHeroFilterSelectedProcessor implements Processor {
 	public async process(
 		event: BgsHeroFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsHeroFilter(event.heroFilter);

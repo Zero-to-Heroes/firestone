@@ -10,8 +10,6 @@ export class MercenariesHeroLevelFilterSelectedProcessor implements Processor {
 	public async process(
 		event: MercenariesHeroLevelFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateMercenariesHeroLevelFilter(event.level);
 		return [null, null];

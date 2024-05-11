@@ -30,7 +30,6 @@ export class AchievementsRemovePinnedAchievementsProcessor implements Processor 
 	public async process(
 		event: AchievementsRemovePinnedAchievementsEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();

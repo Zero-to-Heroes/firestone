@@ -15,7 +15,6 @@ export class BgsTribesFilterSelectedProcessor implements Processor {
 	public async process(
 		event: BgsTribesFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsTribesFilter([...event.tribes].sort());

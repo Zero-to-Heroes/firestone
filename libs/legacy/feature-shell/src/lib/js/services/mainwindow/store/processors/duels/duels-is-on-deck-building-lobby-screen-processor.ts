@@ -12,8 +12,6 @@ export class DuelsIsOnDeckBuildingLobbyScreenProcessor implements Processor {
 	public async process(
 		event: DuelsIsOnDeckBuildingLobbyScreenEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const tempDuelsDeck = event.value ? await this.memory.getDuelsDeck() : null;
 		let newDuels = currentState.duels;

@@ -18,7 +18,6 @@ export class SelectAchievementCategoryProcessor implements Processor {
 	public async process(
 		event: SelectAchievementCategoryEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();

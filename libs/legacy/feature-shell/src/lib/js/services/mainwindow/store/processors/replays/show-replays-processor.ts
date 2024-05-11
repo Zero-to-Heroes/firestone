@@ -11,7 +11,6 @@ export class ShowReplaysProcessor implements Processor {
 	public async process(
 		event: ShowReplaysEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();

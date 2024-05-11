@@ -8,7 +8,6 @@ export class DuelsTreasureSearchProcessor implements Processor {
 	public async process(
 		event: DuelsTreasureSearchEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

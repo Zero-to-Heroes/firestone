@@ -7,7 +7,6 @@ export class ConstructedDeckbuilderClassSelectedProcessor implements Processor {
 	public async process(
 		event: ConstructedDeckbuilderClassSelectedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

@@ -12,7 +12,6 @@ export class ConstructedDeckbuilderImportDeckProcessor implements Processor {
 	public async process(
 		event: ConstructedDeckbuilderImportDeckEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		let deckDefinition: DeckDefinition = null;

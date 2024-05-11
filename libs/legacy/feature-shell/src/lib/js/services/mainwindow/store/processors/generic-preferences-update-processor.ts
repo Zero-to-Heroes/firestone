@@ -10,8 +10,6 @@ export class GenericPreferencesUpdateProcessor implements Processor {
 	public async process(
 		event: GenericPreferencesUpdateEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs = await event.patcher(prefs);

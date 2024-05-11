@@ -14,8 +14,6 @@ export class DuelsHeroFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsTopDecksHeroFilterSelectedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const uniqueNormalizedHeroes: DuelsHeroFilterType = [
 			...new Set(event.value.map((hero) => normalizeDuelsHeroCardId(hero) as CardIds)),

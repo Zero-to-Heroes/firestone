@@ -10,8 +10,6 @@ export class DuelsLeaderboardGameModeFilterSelectedProcessor implements Processo
 	public async process(
 		event: DuelsLeaderboardGameModeFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsLeaderboardGameModeFilter(event.value);
 		// const duels = currentState.duels.update({

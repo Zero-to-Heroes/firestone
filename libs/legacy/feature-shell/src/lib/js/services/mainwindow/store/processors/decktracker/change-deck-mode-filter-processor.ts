@@ -7,8 +7,6 @@ export class ChangeDeckModeFilterProcessor implements Processor {
 	public async process(
 		event: ChangeDeckModeFilterEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [null, null];
 	}

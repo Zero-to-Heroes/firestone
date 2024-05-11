@@ -7,8 +7,6 @@ export class GlobalStatsLoadedProcessor implements Processor {
 	public async process(
 		event: GlobalStatsLoadedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newState = currentState.update({
 			globalStats: event.stats,

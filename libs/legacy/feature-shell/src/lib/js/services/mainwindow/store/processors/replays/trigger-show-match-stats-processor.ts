@@ -25,7 +25,6 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 	public async process(
 		event: TriggerShowMatchStatsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// Figure out if we have already loaded the stats, or if we need a refresh

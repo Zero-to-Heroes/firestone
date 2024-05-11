@@ -7,8 +7,6 @@ export class DuelsDeckbuilderHeroPowerSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsDeckbuilderHeroPowerSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const heroPowerCardId = event.heroPowerCardId;
 		return [

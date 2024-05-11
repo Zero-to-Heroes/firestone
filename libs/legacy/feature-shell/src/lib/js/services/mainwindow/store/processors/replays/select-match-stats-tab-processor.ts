@@ -13,7 +13,6 @@ export class SelectMatchStatsTabProcessor implements Processor {
 	public async process(
 		event: SelectMatchStatsTabEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const selectedStatsTabs: readonly BgsStatsFilterId[] = navigationState.navigationReplays.selectedStatsTabs.map(

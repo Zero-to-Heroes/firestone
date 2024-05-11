@@ -14,8 +14,6 @@ export class DuelsDeletePersonalDeckSummaryProcessor implements Processor {
 	public async process(
 		event: DuelsDeletePersonalDeckSummaryEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		this.duelsPersonalDecks.deleteDeck(event.deckstring);

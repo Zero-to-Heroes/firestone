@@ -10,7 +10,6 @@ export class BgsSimulatorMinionTribeFilterSelectedProcessor implements Processor
 	public async process(
 		event: BgsSimulatorMinionTribeFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.prefs.updateBgsActiveSimulatorMinionTribeFilter(event.tribe);

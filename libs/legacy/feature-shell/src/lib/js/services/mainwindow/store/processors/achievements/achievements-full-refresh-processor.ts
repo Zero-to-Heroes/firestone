@@ -10,7 +10,6 @@ export class AchievementsFullRefreshProcessor implements Processor {
 	public async process(
 		event: AchievementsFullRefreshEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.remoteAchievements.loadAchievements();

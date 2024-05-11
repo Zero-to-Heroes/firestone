@@ -15,7 +15,6 @@ export class DuelsChoosingHeroParser implements Processor {
 	public async process(
 		event: DuelsChoosingHeroEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// Wait until the hero picker is fully loaded

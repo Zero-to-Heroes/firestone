@@ -11,8 +11,6 @@ export class DuelsDeckbuilderHeroSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsDeckbuilderHeroSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const heroCardId = event.heroCardId;
 		const classes: CardClass[] = this.allCards.getCard(heroCardId)?.classes?.map((c) => CardClass[c]) ?? [];

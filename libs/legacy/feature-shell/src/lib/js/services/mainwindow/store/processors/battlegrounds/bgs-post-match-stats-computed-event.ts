@@ -10,7 +10,6 @@ export class BgsPostMatchStatsComputedProcessor implements Processor {
 	public async process(
 		event: BgsPostMatchStatsComputedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.gameStats.updateBgsPostMatchStats(event.reviewId, event.postMatchStats);

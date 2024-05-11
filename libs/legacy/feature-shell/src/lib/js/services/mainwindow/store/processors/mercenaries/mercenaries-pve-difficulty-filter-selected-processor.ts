@@ -10,8 +10,6 @@ export class MercenariesPveDifficultyFilterSelectedProcessor implements Processo
 	public async process(
 		event: MercenariesPveDifficultyFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateMercenariesPveDifficultyFilter(event.difficulty);
 		return [null, null];

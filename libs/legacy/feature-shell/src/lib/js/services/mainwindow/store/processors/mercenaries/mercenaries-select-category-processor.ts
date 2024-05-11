@@ -8,7 +8,6 @@ export class MercenariesSelectCategoryProcessor implements Processor {
 	public async process(
 		event: MercenariesSelectCategoryEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const nav = navigationState.update({

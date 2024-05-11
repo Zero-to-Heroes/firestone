@@ -17,8 +17,6 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 	public async process(
 		event: DecktrackerDeleteDeckEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[deck-delete] will delete deck', event.deckstring);
 		await this.constructedPersonalDecks.deleteDeck(event.deckstring);

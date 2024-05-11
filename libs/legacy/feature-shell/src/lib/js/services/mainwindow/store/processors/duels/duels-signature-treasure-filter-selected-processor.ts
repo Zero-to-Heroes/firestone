@@ -10,8 +10,6 @@ export class DuelsSignatureTreasureFilterSelectedProcessor implements Processor 
 	public async process(
 		event: DuelsSignatureTreasureFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsSignatureTreasureFilter(event.values);
 		return [null, null];

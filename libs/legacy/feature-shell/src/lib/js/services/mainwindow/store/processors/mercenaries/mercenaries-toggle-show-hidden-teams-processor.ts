@@ -10,8 +10,6 @@ export class MercenariesToggleShowHiddenTeamsProcessor implements Processor {
 	public async process(
 		event: ToggleShowHiddenDecksEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateMercenariesShowHiddenTeams(event.newValue);
 		return [null, null];

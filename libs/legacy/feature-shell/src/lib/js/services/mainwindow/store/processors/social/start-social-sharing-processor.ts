@@ -9,7 +9,6 @@ export class StartSocialSharingProcessor implements Processor {
 	public async process(
 		event: StartSocialSharingEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const sharingAchievement: SharingAchievement = {

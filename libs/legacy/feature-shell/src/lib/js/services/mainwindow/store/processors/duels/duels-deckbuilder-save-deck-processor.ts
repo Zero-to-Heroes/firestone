@@ -14,8 +14,6 @@ export class DuelsDeckbuilderSaveDeckProcessor implements Processor {
 	public async process(
 		event: DuelsDeckbuilderSaveDeckEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const newDeck: DuelsDeckSummary = {

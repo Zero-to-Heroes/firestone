@@ -17,7 +17,6 @@ export class SelectDeckDetailsProcessor implements Processor {
 	public async process(
 		event: SelectDeckDetailsEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const decks = await this.decksProviderService.decks$$.getValueWithInit();

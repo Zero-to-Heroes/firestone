@@ -8,7 +8,6 @@ export class BgsCustomSimulationResetProcessor implements Processor {
 	public async process(
 		event: BgsCustomSimulationResetEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newState = currentState.battlegrounds.customSimulationState.resetFaceOff();

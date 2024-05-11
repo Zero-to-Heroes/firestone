@@ -15,7 +15,6 @@ export class BgsTimeFilterSelectedProcessor implements Processor {
 	public async process(
 		event: BgsTimeFilterSelectedEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsTimeFilter(event.timeFilter);

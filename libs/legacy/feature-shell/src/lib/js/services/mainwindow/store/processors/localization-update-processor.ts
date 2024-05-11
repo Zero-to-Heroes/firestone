@@ -11,8 +11,6 @@ export class LocalizationUpdateProcessor implements Processor {
 	public async process(
 		event: LocalizationUpdateEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('updating localization', event.locale);
 		const prefs = await this.prefs.getPreferences();

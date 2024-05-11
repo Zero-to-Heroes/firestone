@@ -12,8 +12,6 @@ export class NewPackProcessor implements Processor {
 	public async process(
 		event: NewPackEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newPack: PackResult = {
 			id: 0,

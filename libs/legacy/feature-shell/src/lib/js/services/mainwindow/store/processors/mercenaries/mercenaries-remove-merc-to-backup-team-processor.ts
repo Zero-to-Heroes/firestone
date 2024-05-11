@@ -10,8 +10,6 @@ export class MercenariesRemoveMercToBackupTeamProcessor implements Processor {
 	public async process(
 		event: MercenariesRemoveMercToBackupTeamEvent,
 		currentState: MainWindowState,
-		history,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const existingBackupTeam = prefs.mercenariesBackupTeam ?? [];

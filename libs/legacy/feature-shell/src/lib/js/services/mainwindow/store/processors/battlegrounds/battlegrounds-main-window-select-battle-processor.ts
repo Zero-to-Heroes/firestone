@@ -16,7 +16,6 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 	public async process(
 		event: BattlegroundsMainWindowSelectBattleEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const updatedSim = currentState.battlegrounds.customSimulationState.update({

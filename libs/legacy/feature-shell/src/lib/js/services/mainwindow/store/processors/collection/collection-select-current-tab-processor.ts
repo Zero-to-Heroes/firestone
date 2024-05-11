@@ -15,7 +15,6 @@ export class CollectionSelectCurrentTabProcessor implements Processor {
 	public async process(
 		event: CollectionSelectCurrentTabEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.collectionNav.currentView$$.next(event.tab);

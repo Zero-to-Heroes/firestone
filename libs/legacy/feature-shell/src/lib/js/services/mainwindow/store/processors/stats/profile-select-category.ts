@@ -28,7 +28,6 @@ export class ProfileSelectCategoryProcessor implements Processor {
 	public async process(
 		event: ProfileSelectCategoryEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [

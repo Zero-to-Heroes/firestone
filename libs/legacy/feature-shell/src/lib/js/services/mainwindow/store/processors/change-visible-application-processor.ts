@@ -30,7 +30,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 	public async process(
 		event: ChangeVisibleApplicationEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// if (event.module === navigationState.currentApp) {

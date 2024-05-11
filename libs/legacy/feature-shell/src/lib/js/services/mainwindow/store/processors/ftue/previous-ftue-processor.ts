@@ -8,7 +8,6 @@ export class PreviousFtueProcessor implements Processor {
 	public async process(
 		event: PreviousFtueEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		let nextStep: CurrentAppType = undefined;

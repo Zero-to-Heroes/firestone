@@ -10,7 +10,6 @@ import { builCategoryHierarchy } from '../../../../achievement/achievement-utils
 import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { NavigationBackEvent } from '../../events/navigation/navigation-back-event';
-import { NavigationHistory } from '../../navigation-history';
 import { Processor } from '../processor';
 
 export class NavigationBackProcessor implements Processor {
@@ -25,7 +24,6 @@ export class NavigationBackProcessor implements Processor {
 	public async process(
 		event: NavigationBackEvent,
 		currentState: MainWindowState,
-		history: NavigationHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newState =

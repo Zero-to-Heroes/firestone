@@ -10,8 +10,6 @@ export class ToggleShowHiddenDecksProcessor implements Processor {
 	public async process(
 		event: ToggleShowHiddenDecksEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newPrefs = await this.prefs.getPreferences();
 		await this.prefs.savePreferences({ ...newPrefs, desktopDeckShowHiddenDecks: event.newValue });

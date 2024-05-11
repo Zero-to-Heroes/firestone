@@ -14,7 +14,6 @@ export class ConstructedDeckbuilderSaveDeckProcessor implements Processor {
 	public async process(
 		event: ConstructedDeckbuilderSaveDeckEvent,
 		currentState: MainWindowState,
-		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const newDeck: DeckSummary = {

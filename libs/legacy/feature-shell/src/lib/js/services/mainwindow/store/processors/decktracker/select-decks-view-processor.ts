@@ -11,7 +11,6 @@ export class SelectDeckViewProcessor implements Processor {
 	public async process(
 		event: SelectDecksViewEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.nav.currentView$$.next(event.newView);

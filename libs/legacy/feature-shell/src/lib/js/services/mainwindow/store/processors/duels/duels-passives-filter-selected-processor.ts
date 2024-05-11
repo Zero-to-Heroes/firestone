@@ -10,8 +10,6 @@ export class DuelsPassivesFilterSelectedProcessor implements Processor {
 	public async process(
 		event: DuelsPassivesFilterSelectedEvent,
 		currentState: MainWindowState,
-		stateHistory,
-		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActivePassiveTreasuresFilter: event.value };

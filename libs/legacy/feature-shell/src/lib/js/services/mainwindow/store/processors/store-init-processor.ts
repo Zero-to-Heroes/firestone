@@ -28,7 +28,6 @@ export class StoreInitProcessor implements Processor {
 	public async process(
 		event: StoreInitEvent,
 		currentState: MainWindowState,
-		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
@@ -59,7 +58,7 @@ export class StoreInitProcessor implements Processor {
 				this.battlegroundsNav,
 				this.constructedNav,
 				this.achievementsNav,
-			).process(new ChangeVisibleApplicationEvent(currentAppFromPrefs), currentState, null, navigationState);
+			).process(new ChangeVisibleApplicationEvent(currentAppFromPrefs), currentState, navigationState);
 			return navState;
 		}
 
