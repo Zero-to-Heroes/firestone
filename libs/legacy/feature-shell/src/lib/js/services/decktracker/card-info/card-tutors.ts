@@ -148,6 +148,7 @@ export const tutors = [
 	CardIds.RushTheStage,
 	CardIds.SalhetsPride,
 	CardIds.Sandbinder,
+	CardIds.ScaleReplica_TOY_387,
 	CardIds.ScavengersIngenuity,
 	CardIds.SeafloorGateway_Story_11_SeafloorGatewayPuzzle,
 	CardIds.SeafloorGateway_TSC_055,
