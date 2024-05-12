@@ -696,9 +696,6 @@ export class Preferences implements IPreferences {
 	readonly bgsNumberOfDisplayedTabs: number = 1;
 	readonly bgsActiveSimulatorMinionTribeFilter: 'all' | 'blank' | string = 'all';
 	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' | '7' = 'all';
-	readonly bgsSavedRankFilter: BgsRankFilterType = 100;
-	readonly bgsSavedTribesFilter: readonly Race[] = [];
-	readonly bgsSavedAnomaliesFilter: readonly string[] = [];
 	readonly bgsHeroesUseConservativeEstimate: boolean = true;
 	readonly bgsShowBuddiesInSimulatorSelection: boolean = false;
 	readonly bgsQuestsActiveTab: BgsQuestActiveTabType = 'quests';
@@ -706,8 +703,6 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveUseMmrFilterInHeroSelection: boolean = true;
 	readonly bgsActiveUseAnomalyFilterInHeroSelection: boolean = true;
 	readonly bgsActiveGameMode: 'battlegrounds' | 'battlegrounds-duo' = 'battlegrounds';
-	readonly bgsSavedUseMmrFilterInHeroSelection: boolean = false;
-	readonly bgsSavedUseAnomalyFilterInHeroSelection: boolean = false;
 	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' = 'EU';
 	readonly bgsLeaderboardPlayerSearch: string;
 

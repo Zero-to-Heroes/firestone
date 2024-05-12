@@ -98,7 +98,7 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	}
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
-	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>(null);
+	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>('tier');
 	private totalGames$$ = new BehaviorSubject<number>(null);
 	private lastUpdate$$ = new BehaviorSubject<Date>(null);
 
@@ -108,7 +108,6 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 
 	ngAfterContentInit() {
 		this.tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
-			filter(([stats, heroSort]) => !!heroSort),
 			this.mapData(([stats, heroSort]) => {
 				if (!stats) {
 					return null;

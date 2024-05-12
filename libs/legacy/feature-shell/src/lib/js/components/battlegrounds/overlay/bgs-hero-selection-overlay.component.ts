@@ -1,15 +1,18 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
 	BgsHeroSelectionOverviewPanel,
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
+	Config,
 } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, switchMap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
@@ -51,7 +54,8 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly gameState: BgsStateFacadeService,
+		private readonly bgsState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 		private readonly ads: AdService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly achievements: AchievementsStateManagerService,
@@ -60,7 +64,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.gameState, this.ads, this.playerHeroStats, this.achievements);
+		await waitForReady(this.prefs, this.bgsState, this.ads, this.playerHeroStats, this.achievements);
 
 		this.heroTooltipActive$ = combineLatest([this.ads.enablePremiumFeatures$$, this.prefs.preferences$$]).pipe(
 			this.mapData(([premium, prefs]) => premium && prefs.bgsShowHeroSelectionTooltip),
@@ -70,14 +74,40 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionTiers)),
 		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => premium && bgsShowHeroSelectionTiers));
 
-		const tiers$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
+		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
+			this.gameState.gameState$$,
+			this.bgsState.gameState$$,
+			this.prefs.preferences$$,
+		]).pipe(
+			this.mapData(
+				([gameState, bgState, prefs]) => {
+					const config: ExtendedConfig = {
+						gameMode: isBattlegroundsDuo(gameState.metadata.gameType)
+							? 'battlegrounds-duo'
+							: 'battlegrounds',
+						timeFilter: 'last-patch',
+						mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
+							? bgState.currentGame?.mmrAtStart ?? 0
+							: null,
+						rankFilter: 100,
+						tribesFilter: bgState.currentGame?.availableRaces ?? [],
+						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+					};
+					return config;
+				},
+				(a, b) => deepEqual(a, b),
+			),
+		);
+		const tiers$ = statsConfigs.pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats, this.i18n)),
 		);
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
 			this.achievements.groupedAchievements$$,
-			this.gameState.gameState$$.pipe(
+			this.bgsState.gameState$$.pipe(
 				this.mapData(
 					(main) =>
 						main.panels?.find(
@@ -151,4 +181,8 @@ interface InternalBgsHeroStat extends BgsMetaHeroStatTierItem {
 	readonly achievements: readonly VisualAchievement[];
 	readonly tooltipPosition: TooltipPositionType;
 	readonly tooltipClass: string;
+}
+
+interface ExtendedConfig extends Config {
+	mmrFilter: number;
 }

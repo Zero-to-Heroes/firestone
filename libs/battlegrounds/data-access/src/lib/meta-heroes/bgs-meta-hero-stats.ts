@@ -144,7 +144,6 @@ export const buildHeroStats = (
 	tribes: readonly Race[],
 	anomalies: readonly string[] | null,
 	useConservativeEstimate: boolean,
-	useMmrFilter: boolean,
 	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaHeroStatTierItem[] => {

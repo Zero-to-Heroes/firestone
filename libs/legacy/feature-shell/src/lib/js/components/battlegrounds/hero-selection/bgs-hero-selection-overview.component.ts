@@ -1,14 +1,17 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
 	BgsHeroSelectionOverviewPanel,
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
+	Config,
 } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { GameStateFacadeService } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, switchMap, tap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
@@ -27,23 +30,21 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div class="hero-selection-overview">
 				<div class="filters">
 					<preference-toggle
-						field="bgsSavedUseMmrFilterInHeroSelection"
+						field="bgsActiveUseMmrFilterInHeroSelection"
 						[label]="
 							'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate
 						"
 						[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
-						[toggleFunction]="toggleFilter"
 					></preference-toggle>
-					<preference-toggle
-						field="bgsSavedUseAnomalyFilterInHeroSelection"
+					<!-- <preference-toggle
+						field="bgsActiveUseAnomalyFilterInHeroSelection"
 						[label]="
 							'settings.battlegrounds.general.use-anomaly-filter-for-live-stats-label-short' | owTranslate
 						"
 						[tooltip]="
 							'settings.battlegrounds.general.use-anomaly-filter-for-live-stats-tooltip' | owTranslate
 						"
-						[toggleFunction]="toggleFilter"
-					></preference-toggle>
+					></preference-toggle> -->
 				</div>
 				<bgs-hero-overview
 					*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
@@ -68,18 +69,53 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly ads: AdService,
 		private readonly bgsState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 		private readonly achievements: AchievementsStateManagerService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.playerHeroStats, this.ads, this.bgsState, this.prefs, this.achievements);
+		await waitForReady(
+			this.playerHeroStats,
+			this.ads,
+			this.bgsState,
+			this.prefs,
+			this.achievements,
+			this.gameState,
+		);
 
-		const tiers$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
-			tap((stats) => console.debug('[bgs-hero-selection-overview] received stats', stats)),
+		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
+			this.gameState.gameState$$,
+			this.bgsState.gameState$$,
+			this.prefs.preferences$$,
+		]).pipe(
+			this.mapData(
+				([gameState, bgState, prefs]) => {
+					const config: ExtendedConfig = {
+						gameMode: isBattlegroundsDuo(gameState.metadata.gameType)
+							? 'battlegrounds-duo'
+							: 'battlegrounds',
+						timeFilter: 'last-patch',
+						mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
+							? bgState.currentGame?.mmrAtStart ?? 0
+							: null,
+						rankFilter: 100,
+						tribesFilter: bgState.currentGame?.availableRaces ?? [],
+						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+					};
+					return config;
+				},
+				(a, b) => deepEqual(a, b),
+			),
+		);
+		const tiers$ = statsConfigs.pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap((config) => console.debug('[bgs-hero-selection-overview] received config', config)),
+			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats, this.i18n)),
 		);
+
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
 
 		this.heroOverviews$ = combineLatest([
@@ -160,17 +196,21 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 	}
 
 	async toggleFilter() {
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = {
-			...prefs,
-			bgsActiveUseAnomalyFilterInHeroSelection: prefs.bgsSavedUseAnomalyFilterInHeroSelection,
-			bgsActiveUseMmrFilterInHeroSelection: prefs.bgsSavedUseMmrFilterInHeroSelection,
-		};
-		await this.prefs.savePreferences(newPrefs);
+		// const prefs = await this.prefs.getPreferences();
+		// const newPrefs: Preferences = {
+		// 	...prefs,
+		// 	bgsActiveUseAnomalyFilterInHeroSelection: prefs.bgsSavedUseAnomalyFilterInHeroSelection,
+		// 	bgsActiveUseMmrFilterInHeroSelection: prefs.bgsSavedUseMmrFilterInHeroSelection,
+		// };
+		// await this.prefs.savePreferences(newPrefs);
 	}
 }
 
 interface InternalBgsHeroStat extends BgsMetaHeroStatTierItem {
 	readonly achievements: readonly VisualAchievement[];
 	readonly notEnoughDataPoints?: boolean;
+}
+
+interface ExtendedConfig extends Config {
+	mmrFilter: number;
 }

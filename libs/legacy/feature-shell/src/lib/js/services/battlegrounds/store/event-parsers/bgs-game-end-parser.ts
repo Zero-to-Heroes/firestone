@@ -2,7 +2,6 @@ import { EventEmitter } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import {
-	BG_USE_ANOMALIES,
 	BattlegroundsState,
 	BgsBattlesPanel,
 	BgsGame,
@@ -41,19 +40,6 @@ export class BgsGameEndParser implements EventParser {
 		}
 
 		const prefs: Preferences = await this.prefs.getPreferences();
-
-		// Restore previous filter values
-		const savedPrefs: Preferences = {
-			...prefs,
-			bgsActiveRankFilter: prefs.bgsSavedRankFilter ?? prefs.bgsActiveRankFilter,
-			bgsActiveTribesFilter: prefs.bgsSavedTribesFilter ?? prefs.bgsActiveTribesFilter,
-			bgsActiveAnomaliesFilter: BG_USE_ANOMALIES
-				? (prefs.bgsSavedAnomaliesFilter ?? prefs.bgsActiveAnomaliesFilter).filter((a) => !!a)
-				: [],
-			bgsActiveUseAnomalyFilterInHeroSelection: true,
-			bgsActiveUseMmrFilterInHeroSelection: true,
-		};
-		await this.prefs.savePreferences(savedPrefs);
 
 		console.debug('will build post-match info', prefs.bgsForceShowPostMatchStats2);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
