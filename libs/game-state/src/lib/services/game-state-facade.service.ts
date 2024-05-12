@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { GameState } from '@firestone/game-state';
 import { sleep } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -8,6 +7,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { GameState } from '../models/game-state';
 
 @Injectable()
 export class GameStateFacadeService extends AbstractFacadeService<GameStateFacadeService> {

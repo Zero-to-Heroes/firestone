@@ -11,8 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/constructed/common';
-import { DeckState, GameState, StatsRecap } from '@firestone/game-state';
+import { DeckState, GameState, GameStateFacadeService, StatsRecap } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';

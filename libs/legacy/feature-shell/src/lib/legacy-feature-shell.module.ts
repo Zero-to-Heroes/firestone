@@ -571,7 +571,7 @@ import { DiscordModule } from '@firestone/discord';
 import { DuelsDataAccessModule } from '@firestone/duels/data-access';
 import { DuelsGeneralModule } from '@firestone/duels/general';
 import { DuelsViewModule } from '@firestone/duels/view';
-import { GameStateModule } from '@firestone/game-state';
+import { GameStateModule, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
 import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule } from '@firestone/mercenaries/common';
@@ -730,11 +730,8 @@ import { RawAchievementsLoaderService } from './js/services/achievement/data/raw
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
-import { ArenaDeckStatsService } from './js/services/arena/arena-deck-stats.service';
 import { ArenaDraftManagerService } from './js/services/arena/arena-draft-manager.service';
-import { ArenaInfoService } from './js/services/arena/arena-info.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
-import { ArenaRewardsService } from './js/services/arena/arena-rewards.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
 import { BgsBattlePositioningService } from './js/services/battlegrounds/bgs-battle-positioning.service';
@@ -1755,6 +1752,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
+		{ provide: REVIEW_ID_SERVICE_TOKEN, useExisting: ReviewIdService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SetsService,
@@ -1912,11 +1910,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DuelsHeroStatsService,
 		DuelsUserRunsService,
 
-		ArenaRewardsService,
-		ArenaInfoService,
 		ArenaLastMatchService,
 		ArenaDraftManagerService,
-		ArenaDeckStatsService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { GameStateFacadeService } from '@firestone/constructed/common';
+import { ArenaInfoService } from '@firestone/arena/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
@@ -19,7 +20,6 @@ import {
 } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
-import { ArenaInfoService } from '../arena/arena-info.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';

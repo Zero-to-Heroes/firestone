@@ -6,6 +6,7 @@ import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
 	ArenaCombinedCardStats,
+	ArenaDeckStatsService,
 	IArenaDraftManagerService,
 } from '@firestone/arena/common';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
@@ -20,7 +21,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, withLatestFrom } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
-import { ArenaDeckStatsService } from './arena-deck-stats.service';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
 

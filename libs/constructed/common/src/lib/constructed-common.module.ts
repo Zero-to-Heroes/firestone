@@ -16,7 +16,6 @@ import { ConstructedMulliganGuideGuardianService } from './services/constructed-
 import { ConstructedMulliganGuideService } from './services/constructed-mulligan-guide.service';
 import { ConstructedNavigationService } from './services/constructed-navigation.service';
 import { ConstructedPersonalDecksService } from './services/constructed-personal-decks.service';
-import { GameStateFacadeService } from './services/game-state-facade.service';
 
 const components = [ConstructedMulliganComponent, MulliganDetailedInfoComponent, MulliganInfoPremiumComponent];
 
@@ -36,7 +35,6 @@ const components = [ConstructedMulliganComponent, MulliganDetailedInfoComponent,
 	providers: [
 		ConstructedPersonalDecksService,
 		ConstructedArchetypeService,
-		GameStateFacadeService,
 		ConstructedNavigationService,
 		ConstructedMetaDecksStateService,
 		ConstructedMulliganGuideService,

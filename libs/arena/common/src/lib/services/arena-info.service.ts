@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { ArenaInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
+import { sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, filter } from 'rxjs';
-import { runLoop } from '../game-mode-data.service';
 
 @Injectable()
 export class ArenaInfoService {
-	public arenaInfo$$ = new BehaviorSubject<ArenaInfo>(null);
+	public arenaInfo$$ = new BehaviorSubject<ArenaInfo | null>(null);
 
 	constructor(private readonly memory: MemoryInspectionService, private readonly scene: SceneService) {
 		this.init();
@@ -35,3 +35,15 @@ export class ArenaInfoService {
 		}, 'arenaInfo');
 	}
 }
+
+const runLoop = async (coreLoop: () => Promise<boolean>, type: string) => {
+	let retriesLeft = 20;
+	while (retriesLeft > 0) {
+		if (await coreLoop()) {
+			return;
+		}
+		await sleep(3000);
+		retriesLeft--;
+	}
+	console.warn('[match-info] could not retrieve ', type);
+};

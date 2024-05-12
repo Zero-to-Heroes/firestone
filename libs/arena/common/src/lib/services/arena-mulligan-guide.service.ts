@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { COIN_IDS, CardClass, CardIds, GameType, SceneMode, getBaseCardId } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/constructed/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';

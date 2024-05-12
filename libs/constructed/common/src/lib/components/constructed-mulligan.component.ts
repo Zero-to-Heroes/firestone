@@ -13,6 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import {
@@ -33,7 +34,6 @@ import {
 } from 'rxjs';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
-import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { MulliganChartData } from './mulligan-detailed-info.component';
 
 @Component({

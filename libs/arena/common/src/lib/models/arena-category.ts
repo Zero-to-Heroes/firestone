@@ -1,5 +1,6 @@
 export type ArenaCategoryType =
 	| 'arena-runs'
+	| 'arena-stats'
 	| 'class-tier-list'
 	| 'card-stats'
 	| 'arena-deck-details'

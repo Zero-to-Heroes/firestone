@@ -7,4 +7,5 @@ export const GAME_STATS_PROVIDER_SERVICE_TOKEN = new InjectionToken<IGameStatsPr
 );
 export interface IGameStatsProviderService {
 	gameStats$$: SubscriberAwareBehaviorSubject<readonly GameStat[] | null>;
+	isReady(): Promise<void>;
 }

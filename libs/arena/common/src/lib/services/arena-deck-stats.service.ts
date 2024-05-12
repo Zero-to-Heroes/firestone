@@ -34,9 +34,9 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 
 		this.deckStats$$.onFirstSubscribe(async () => {
 			const currentUser = await this.user.getCurrentUser();
-			const existingStats: readonly DraftDeckStats[] = await this.api.callPostApi(RETRIEVE_URL, {
-				userId: currentUser.userId,
-				userName: currentUser.username,
+			const existingStats: readonly DraftDeckStats[] | null = await this.api.callPostApi(RETRIEVE_URL, {
+				userId: currentUser?.userId,
+				userName: currentUser?.username,
 			});
 			console.debug('[arena-deck-stats] retrieved deck stats', existingStats);
 			this.deckStats$$.next(existingStats);
@@ -47,12 +47,12 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		const user = await this.user.getCurrentUser();
 		const newStat: DraftDeckStats = {
 			...stat,
-			userId: user.userId,
+			userId: user?.userId ?? '',
 		};
 		console.debug('[arena-deck-stats] saving deck stats', stat);
 
 		const existingStats = await this.deckStats$$.getValueWithInit();
-		const newStats = [...existingStats, newStat];
+		const newStats = [...(existingStats ?? []), newStat];
 		this.deckStats$$.next(newStats);
 
 		const result = await this.api.callPostApi(SAVE_URL, newStat);

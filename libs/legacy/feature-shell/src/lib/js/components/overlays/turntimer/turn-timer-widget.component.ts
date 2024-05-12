@@ -9,8 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/constructed/common';
-import { TurnTiming } from '@firestone/game-state';
+import { GameStateFacadeService, TurnTiming } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';

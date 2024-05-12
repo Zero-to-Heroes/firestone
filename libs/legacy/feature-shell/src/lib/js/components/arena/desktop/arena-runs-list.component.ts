@@ -7,21 +7,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
-import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
-import { ArenaRun } from '@firestone/arena/common';
-import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaRun, ArenaRunsService } from '@firestone/arena/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { GameStat } from '@firestone/stats/data-access';
-import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
-import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
-import { ArenaDeckStatsService } from '../../../services/arena/arena-deck-stats.service';
-import { ArenaRewardsService } from '../../../services/arena/arena-rewards.service';
+import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -57,42 +47,17 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly patchesConfig: PatchesConfigService,
-		private readonly arenaRewards: ArenaRewardsService,
-		private readonly arenaDeckStats: ArenaDeckStatsService,
-		private readonly prefs: PreferencesService,
-		private readonly gameStats: GameStatsProviderService,
+		private readonly arenaRuns: ArenaRunsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig, this.arenaRewards, this.arenaDeckStats, this.prefs, this.gameStats);
+		await waitForReady(this.arenaRuns);
 
-		this.runs$ = combineLatest([
-			this.gameStats.gameStats$$,
-			this.arenaRewards.arenaRewards$$,
-			this.arenaDeckStats.deckStats$$,
-			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						timeFilter: prefs.arenaActiveTimeFilter,
-						heroFilter: prefs.arenaActiveClassFilter,
-					}),
-					(a, b) => a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter,
-				),
-			),
-			this.patchesConfig.currentArenaMetaPatch$$,
-			this.patchesConfig.currentArenaSeasonPatch$$,
-		]).pipe(
-			filter(([stats, rewards, deckStats, { timeFilter, heroFilter }]) => !!stats?.length),
-			this.mapData(([stats, rewards, deckStats, { timeFilter, heroFilter }, patch, seasonPatch]) => {
-				const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena').filter((stat) => !!stat.runId);
-				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
-				const filteredRuns = arenaRuns
-					.filter((match) => this.isCorrectHero(match, heroFilter))
-					.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch));
-				const groupedRuns = this.groupRuns(filteredRuns);
+		this.runs$ = this.arenaRuns.runs$$.pipe(
+			this.mapData((arenaRuns) => {
+				const groupedRuns = this.groupRuns(arenaRuns);
 				const flat = groupedRuns
 					.filter((group) => group?.runs?.length)
 					.flatMap((group) => {
@@ -116,81 +81,6 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 		return item.id;
 	}
 
-	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
-		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
-	}
-
-	private isCorrectTime(
-		run: ArenaRun,
-		timeFilter: ArenaTimeFilterType,
-		patch: PatchInfo,
-		seasonPatch: PatchInfo,
-	): boolean {
-		if (timeFilter === 'all-time') {
-			return true;
-		}
-		const firstMatch = run.getFirstMatch();
-		if (!firstMatch) {
-			return false;
-		}
-
-		const firstMatchTimestamp = firstMatch.creationTimestamp;
-		switch (timeFilter) {
-			case 'last-patch':
-				return (
-					!!patch &&
-					((patch.hasNewBuildNumber && firstMatch.buildNumber >= patch.number) ||
-						(!patch.hasNewBuildNumber && firstMatch.creationTimestamp > new Date(patch.date).getTime()))
-				);
-			case 'current-season':
-				return (
-					!!seasonPatch &&
-					((seasonPatch.hasNewBuildNumber && firstMatch.buildNumber >= seasonPatch.number) ||
-						(!seasonPatch.hasNewBuildNumber &&
-							firstMatch.creationTimestamp > new Date(seasonPatch.date).getTime()))
-				);
-			case 'past-three':
-				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
-			case 'past-seven':
-				return Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000;
-			default:
-				return true;
-		}
-	}
-
-	private buildArenaRuns(
-		arenaMatches: readonly GameStat[],
-		rewards: readonly ArenaRewardInfo[],
-		deckStats: readonly DraftDeckStats[],
-	): readonly ArenaRun[] {
-		const matchesGroupedByRun = !!arenaMatches?.length
-			? groupByFunction((match: GameStat) => match.runId)(arenaMatches)
-			: {};
-		const rewardsGroupedByRun = !!rewards?.length
-			? groupByFunction((reward: ArenaRewardInfo) => reward.runId)(rewards)
-			: {};
-		return Object.keys(matchesGroupedByRun).map((runId: string) => {
-			const matches: readonly GameStat[] = matchesGroupedByRun[runId];
-			const rewards = rewardsGroupedByRun[runId];
-			const draftStat = deckStats?.find((stat) => stat.runId === runId);
-			const firstMatch = matches[0];
-			const sortedMatches = [...matches].sort((a, b) => a.creationTimestamp - b.creationTimestamp);
-			const [wins, losses] = this.extractWins(sortedMatches);
-			console.debug('extracted wins', wins, losses, sortedMatches);
-			return ArenaRun.create({
-				id: firstMatch.runId,
-				creationTimestamp: firstMatch.creationTimestamp,
-				heroCardId: firstMatch.playerCardId,
-				initialDeckList: firstMatch.playerDecklist,
-				wins: wins,
-				losses: losses,
-				steps: matches,
-				rewards: rewards,
-				draftStat: draftStat,
-			} as ArenaRun);
-		});
-	}
-
 	private groupRuns(runs: readonly ArenaRun[]): readonly GroupedRun[] {
 		const groupingFunction = (run: ArenaRun) => {
 			const date = new Date(run.creationTimestamp);
@@ -206,22 +96,6 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 			header: date,
 			runs: runsByDate[date],
 		}));
-	}
-
-	private extractWins(sortedMatches: readonly GameStat[]): [number, number] {
-		if (sortedMatches.length === 0) {
-			return [null, null];
-		}
-		const lastMatch = sortedMatches[sortedMatches.length - 1];
-		if (!lastMatch.additionalResult || lastMatch.additionalResult.indexOf('-') === -1) {
-			return [
-				sortedMatches.filter((m) => m.result === 'won').length,
-				sortedMatches.filter((m) => m.result === 'lost').length,
-			];
-		}
-		const [wins, losses] = lastMatch.additionalResult.split('-').map((info) => parseInt(info));
-
-		return lastMatch.result === 'won' ? [wins + 1, losses] : [wins, losses + 1];
 	}
 }
 

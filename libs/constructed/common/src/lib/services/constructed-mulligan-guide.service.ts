@@ -11,6 +11,7 @@ import {
 	SceneMode,
 	getBaseCardId,
 } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
@@ -41,7 +42,6 @@ import {
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { MULLIGAN_GUIDE_IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
-import { GameStateFacadeService } from './game-state-facade.service';
 
 export const CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD = 20;
 

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { ArenaInfoService } from '@firestone/arena/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { filter } from 'rxjs/operators';
 import { GameEvent } from '../models/game-event';
-import { ArenaInfoService } from './arena/arena-info.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DuelsStateBuilderService } from './duels/duels-state-builder.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';

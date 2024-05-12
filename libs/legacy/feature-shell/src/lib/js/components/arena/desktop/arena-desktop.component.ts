@@ -29,6 +29,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						</ul>
 						<arena-filters *ngIf="category !== 'arena-deck-details'"> </arena-filters>
 						<arena-runs-list *ngIf="category === 'arena-runs'"> </arena-runs-list>
+						<arena-personal-stats *ngIf="category === 'arena-stats'"> </arena-personal-stats>
 						<arena-class-tier-list *ngIf="category === 'class-tier-list'"> </arena-class-tier-list>
 						<arena-card-stats *ngIf="category === 'card-stats'"> </arena-card-stats>
 						<arena-deck-details *ngIf="category === 'arena-deck-details'"> </arena-deck-details>
@@ -65,6 +66,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent impleme
 
 		this.categories = [
 			{ id: 'arena-runs', name: this.i18n.translateString('app.arena.menu.my-runs') },
+			// { id: 'arena-stats', name: this.i18n.translateString('app.arena.menu.my-stats') },
 			{ id: 'class-tier-list', name: this.i18n.translateString('app.arena.menu.class-tier-list') },
 			{ id: 'card-stats', name: this.i18n.translateString('app.arena.menu.card-stats') },
 			{ id: 'arena-high-wins-runs', name: this.i18n.translateString('app.arena.menu.arena-top-runs') },

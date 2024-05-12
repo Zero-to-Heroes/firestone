@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { IReviewIdService } from '@firestone/game-state';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { Events } from './events.service';
 import { ManastormInfo } from './manastorm-bridge/manastorm-info';
 
 @Injectable()
-export class ReviewIdService {
+export class ReviewIdService implements IReviewIdService {
 	public reviewId$ = new BehaviorSubject<string>(null);
 
 	constructor(private readonly events: Events) {

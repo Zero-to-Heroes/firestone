@@ -13,7 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/constructed/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import {

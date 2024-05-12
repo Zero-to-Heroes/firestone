@@ -22,15 +22,20 @@ import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-opt
 import { ArenaMulliganDetailedInfoComponent } from './components/overlays/mulligan/arena-mulligan-detailed-info.component';
 import { ArenaMulliganInfoPremiumComponent } from './components/overlays/mulligan/arena-mulligan-info-premium.component';
 import { ArenaMulliganComponent } from './components/overlays/mulligan/arena-mulligan.component';
+import { ArenaPersonalStatsComponent } from './components/personal-stats/arena-personal-stats.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
 import { ArenaRunVignetteComponent } from './components/runs/arena-run-vignette.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 import { ArenDeckDetailsService } from './services/arena-deck-details.service';
+import { ArenaDeckStatsService } from './services/arena-deck-stats.service';
 import { ArenaHighWinsRunsService } from './services/arena-high-wins-runs.service';
+import { ArenaInfoService } from './services/arena-info.service';
 import { ArenaMulliganGuideGuardianService } from './services/arena-mulligan-guide-guardian.service';
 import { ArenaMulliganGuideService } from './services/arena-mulligan-guide.service';
 import { ArenaNavigationService } from './services/arena-navigation.service';
+import { ArenaRewardsService } from './services/arena-rewards.service';
+import { ArenaRunsService } from './services/arena-runs.service';
 
 const components = [
 	ArenaClassTierListComponent,
@@ -50,6 +55,7 @@ const components = [
 	ArenaMulliganComponent,
 	ArenaMulliganDetailedInfoComponent,
 	ArenaMulliganInfoPremiumComponent,
+	ArenaPersonalStatsComponent,
 ];
 @NgModule({
 	imports: [
@@ -72,6 +78,10 @@ const components = [
 		ArenaHighWinsRunsService,
 		ArenaMulliganGuideService,
 		ArenaMulliganGuideGuardianService,
+		ArenaDeckStatsService,
+		ArenaRunsService,
+		ArenaInfoService,
+		ArenaRewardsService,
 	],
 	declarations: components,
 	exports: components,

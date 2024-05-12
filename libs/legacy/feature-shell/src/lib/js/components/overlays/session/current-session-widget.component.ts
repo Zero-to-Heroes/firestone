@@ -24,7 +24,7 @@ import {
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { GameStateFacadeService } from '@firestone/constructed/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { BgsSceneService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';

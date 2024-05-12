@@ -8,8 +8,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { GameStateFacadeService } from '@firestone/constructed/common';
-import { BoardSecret } from '@firestone/game-state';
+import { BoardSecret, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
