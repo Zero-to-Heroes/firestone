@@ -12,7 +12,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
-import { combineLatest, distinctUntilChanged, map, shareReplay } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { Config } from '../model/_barrel';
 import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
 import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
@@ -73,7 +73,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 					...config,
 					gameMode: gameMode,
 				})),
-				shareReplay(1),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			);
 
 			// Make sure we refresh when game stats are updated
@@ -98,6 +98,8 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		config: Config,
 		mmrFilter?: number,
 	): Promise<readonly BgsMetaHeroStatTierItem[] | undefined> {
+		// TODO: add a cache of some sort? Or add a facade based on observables that is able to properly centralize
+		// the requests of multiple widgets?
 		console.debug('[bgs-2] rebuilding meta hero stats', config, mmrFilter);
 		const heroStats =
 			config.gameMode === 'battlegrounds-duo'
