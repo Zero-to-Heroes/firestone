@@ -83,7 +83,7 @@ import { MulliganChartData } from './arena-mulligan-detailed-info.component';
 					</ng-container>
 					<ng-container *ngIf="showPremiumBanner$ | async">
 						<div class="premium-container" *ngFor="let info of cardsInHandInfo">
-							<mulligan-info-premium></mulligan-info-premium>
+							<arena-mulligan-info-premium></arena-mulligan-info-premium>
 						</div>
 					</ng-container>
 				</ul>
