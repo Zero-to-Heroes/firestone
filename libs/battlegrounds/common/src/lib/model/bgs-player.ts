@@ -170,7 +170,12 @@ const buildAdditionalCards = (
 	allCards: CardsFacadeService,
 ): readonly string[] | null => {
 	const modularTags = Tags?.filter(
-		(t) => t.Name === GameTag.MODULAR_ENTITY_PART_1 || t.Name === GameTag.MODULAR_ENTITY_PART_2,
+		(t) =>
+			t.Name === GameTag.MODULAR_ENTITY_PART_1 ||
+			t.Name === GameTag.MODULAR_ENTITY_PART_2 ||
+			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID ||
+			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID2 ||
+			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID3,
 	);
 	if (!modularTags?.length) {
 		return null;
