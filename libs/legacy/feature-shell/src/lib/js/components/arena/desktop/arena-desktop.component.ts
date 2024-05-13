@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaCategory, ArenaCategoryType, ArenaNavigationService } from '@firestone/arena/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, tap } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -62,7 +63,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	async ngAfterContentInit() {
-		await this.nav.isReady();
+		await waitForReady(this.nav, this.ads);
 
 		this.categories = [
 			{ id: 'arena-runs', name: this.i18n.translateString('app.arena.menu.my-runs') },
