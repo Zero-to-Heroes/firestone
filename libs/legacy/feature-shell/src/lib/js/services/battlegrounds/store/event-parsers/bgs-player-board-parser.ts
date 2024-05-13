@@ -251,12 +251,16 @@ export class BgsPlayerBoardParser implements EventParser {
 			currentGame: newGame,
 		} as BattlegroundsState);
 
-		this.simulation.startBgsBattleSimulation(
-			updatedFaceOff.id,
-			battleInfo,
-			result?.currentGame?.availableRaces ?? [],
-			result.currentGame?.currentTurn ?? 0,
-		);
+		try {
+			this.simulation.startBgsBattleSimulation(
+				updatedFaceOff.id,
+				battleInfo,
+				result?.currentGame?.availableRaces ?? [],
+				result.currentGame?.currentTurn ?? 0,
+			);
+		} catch (e) {
+			console.error('[bgs-player-board-parser] could not start simulation', e.message, e);
+		}
 		return result;
 	}
 

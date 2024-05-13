@@ -13,7 +13,12 @@ addEventListener('message', ({ data }) => {
 	const cardsData = new CardsData(cards, false);
 	cardsData.inititialize(battleInfo.options.validTribes);
 
-	const result: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
-
-	postMessage(JSON.stringify(result));
+	try {
+		const result: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
+		postMessage(JSON.stringify(result));
+	} catch (e) {
+		console.warn('no-format', 'battleInfo', battleInfo);
+		console.error('Exception while simulating battle', e);
+		postMessage(null);
+	}
 });
