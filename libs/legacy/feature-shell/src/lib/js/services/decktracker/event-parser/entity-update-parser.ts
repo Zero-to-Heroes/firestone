@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { publicCardCreators } from '@services/hs-utils';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 import { addAdditionalAttribues } from './receive-card-in-hand-parser';
@@ -96,6 +97,20 @@ export class EntityUpdateParser implements EventParser {
 			: deck.otherZone;
 		console.debug('[entity-update] newOther', newOther, deck.otherZone, newCardInOther);
 
+		let globalEffects = deck.globalEffects;
+		if (WHIZBANG_DECK_CARD_IDS.includes(cardId as CardIds) && !globalEffects?.some((c) => c.cardId === cardId)) {
+			const dbCard = this.allCards.getCard(cardId);
+			const globalEffectCard = DeckCard.create({
+				entityId: null,
+				cardId: cardId,
+				cardName: dbCard.name,
+				manaCost: dbCard.cost,
+				rarity: dbCard.rarity?.toLowerCase(),
+				zone: null,
+			} as DeckCard);
+			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
+		}
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			deck: newDeck,
@@ -104,6 +119,7 @@ export class EntityUpdateParser implements EventParser {
 				newCardInHand?.cardId === CardIds.SirakessCultist_AbyssalCurseToken
 					? Math.max(deck.abyssalCurseHighestValue ?? 0, gameEvent.additionalData.dataNum1 ?? 0)
 					: deck.abyssalCurseHighestValue,
+			globalEffects: globalEffects,
 		});
 
 		return Object.assign(new GameState(), currentState, {

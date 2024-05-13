@@ -7,7 +7,7 @@ import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-const WHIZBANG_DECK_CARD_IDS = [
+export const WHIZBANG_DECK_CARD_IDS = [
 	CardIds.SplendiferousWhizbang_SeptupletDeckToken_TOY_700t1,
 	CardIds.SplendiferousWhizbang_RainbowDeckToken_TOY_700t2,
 	CardIds.SplendiferousWhizbang_DeckOfTreasuresToken_TOY_700t3,
@@ -89,7 +89,10 @@ export class CardRevealedParser implements EventParser {
 				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false)
 				: this.helper.addSingleCardToZone(deck.otherZone, card);
 		let globalEffects = deck.globalEffects;
-		if (WHIZBANG_DECK_CARD_IDS.includes(card.cardId as CardIds)) {
+		if (
+			WHIZBANG_DECK_CARD_IDS.includes(card.cardId as CardIds) &&
+			!globalEffects?.some((c) => c.cardId === card.cardId)
+		) {
 			const globalEffectCard = DeckCard.create({
 				entityId: null,
 				cardId: card.cardId,
