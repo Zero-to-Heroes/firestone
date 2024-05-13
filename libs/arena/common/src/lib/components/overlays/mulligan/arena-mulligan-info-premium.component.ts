@@ -32,7 +32,7 @@ export class ArenaMulliganInfoPremiumComponent {
 
 	showPremium() {
 		console.debug('show premium');
-		this.analytics.trackEvent('subscription-click', { page: 'constructed-mulligan' });
+		this.analytics.trackEvent('subscription-click', { page: 'arena-mulligan' });
 		this.ow.openStore();
 	}
 }
