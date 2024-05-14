@@ -69,6 +69,7 @@ export class DecktrackerTimeFilterDropdownComponent
 					{
 						value: 'all-time',
 						label: this.i18n.translateString('app.decktracker.filters.time-filter.all-time'),
+						tooltip: this.i18n.translateString('app.global.filters.time.all-time-tooltip'),
 					} as TimeFilterOption,
 					{
 						value: 'season-start',
