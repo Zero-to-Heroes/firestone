@@ -3,6 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
+import { classes } from '@legacy-import/src/lib/js/services/hs-utils';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
 import { ArenaRunsService } from '../../services/arena-runs.service';
@@ -48,6 +49,17 @@ import { ArenaClassSummary } from './arena-personal-stats.model';
 					>
 					</sortable-table-label>
 				</div>
+				<div class="content" *ngIf="runSummaries$ | async as summaries">
+					<div class="row" *ngFor="let summary of summaries" [ngClass]="{ empty: !summary.totalRuns }">
+						<div class="cell class-name">
+							<img class="class-icon" [src]="summary.classIcon" />
+							<span class="class-name">{{ summary.className }}</span>
+						</div>
+						<div class="cell runs">{{ summary.totalRuns ?? '-' }}</div>
+						<div class="cell average-wins">{{ summary.averageWinsPerRun?.toFixed(2) ?? '-' }}</div>
+						<div class="cell games-played">{{ summary.gamesPlayed ?? '-' }}</div>
+					</div>
+				</div>
 			</section>
 		</with-loading>
 	`,
@@ -92,21 +104,20 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 			this.mapData((runs) => {
 				// TODO: how to handle runs that are in-progress?
 				const grouped = groupByFunction(
-					(run: ArenaRun) => this.allCards.getCard(run.heroCardId).classes?.[0] ?? 'unknown',
+					(run: ArenaRun) => this.allCards.getCard(run.heroCardId).classes?.[0]?.toLowerCase() ?? 'unknown',
 				)(runs!);
-				return Object.keys(grouped)
-					.filter((playerClass) => playerClass !== 'unknown')
-					.map((playerClass) => {
-						const runs = grouped[playerClass];
-						const summary: ArenaClassSummary = {
-							className: formatClass(playerClass, this.i18n)!,
-							classIcon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
-							totalRuns: runs.length,
-							averageWinsPerRun: runs.reduce((a, b) => a + b.wins, 0) / runs.length,
-							gamesPlayed: runs.reduce((a, b) => a + b.wins + b.losses, 0),
-						};
-						return summary;
-					});
+				return classes.map((playerClass) => {
+					const runs = grouped[playerClass];
+					const totalRuns = runs?.length;
+					const summary: ArenaClassSummary = {
+						className: formatClass(playerClass, this.i18n)!,
+						classIcon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass.toLowerCase()}.png`,
+						totalRuns: totalRuns,
+						averageWinsPerRun: !!totalRuns ? runs.reduce((a, b) => a + b.wins, 0) / totalRuns : null,
+						gamesPlayed: runs?.reduce((a, b) => a + b.wins + b.losses, 0),
+					};
+					return summary;
+				});
 			}),
 		);
 		this.runSummaries$ = combineLatest([groupedRuns$, this.sortCriteria$$]).pipe(
@@ -147,20 +158,20 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 	}
 
 	private sortByTotalGames(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
-		const aData = a.gamesPlayed;
-		const bData = b.gamesPlayed;
+		const aData = a.gamesPlayed ?? 0;
+		const bData = b.gamesPlayed ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
 	private sortByAverageWins(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
-		const aData = a.averageWinsPerRun;
-		const bData = b.averageWinsPerRun;
+		const aData = a.averageWinsPerRun ?? 0;
+		const bData = b.averageWinsPerRun ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
 	private sortByRuns(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
-		const aData = a.totalRuns;
-		const bData = b.totalRuns;
+		const aData = a.totalRuns ?? 0;
+		const bData = b.totalRuns ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 

@@ -3,7 +3,7 @@
 	flex-grow: 1;
 }
 
-.arena-card-stats {
+.arena-personal-stats {
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
@@ -22,41 +22,32 @@
 		flex-wrap: nowrap;
 	}
 
-	.cards-list {
+	.content {
 		overflow: scroll;
 		min-height: 0;
 		flex-grow: 1;
 
-		.card-info {
+		.row {
 			margin-bottom: 3px;
 			display: flex;
+			height: 40px;
 
 			&:nth-child(odd) {
 				background: rgba(255, 255, 255, 0.08);
 			}
+
+			&.empty {
+				opacity: 0.6;
+			}
+
+			.class-name {
+				padding-left: 20px;
+
+				.class-icon {
+					margin-right: 10px;
+					height: 75%;
+				}
+			}
 		}
-	}
-}
-
-.data-info {
-	display: flex;
-	margin-bottom: 20px;
-	align-items: center;
-	justify-content: flex-end;
-	padding-right: 10px;
-	font-size: 0.8em;
-
-	.label {
-		color: var(--color-2);
-		margin-right: 5px;
-	}
-
-	.value {
-		color: var(--color-1);
-	}
-
-	.separator {
-		margin: 0 5px;
-		color: var(--color-1);
 	}
 }

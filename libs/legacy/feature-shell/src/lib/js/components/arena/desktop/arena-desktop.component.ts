@@ -67,7 +67,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent impleme
 
 		this.categories = [
 			{ id: 'arena-runs', name: this.i18n.translateString('app.arena.menu.my-runs') },
-			// { id: 'arena-stats', name: this.i18n.translateString('app.arena.menu.my-stats') },
+			{ id: 'arena-stats', name: this.i18n.translateString('app.arena.menu.my-stats') },
 			{ id: 'class-tier-list', name: this.i18n.translateString('app.arena.menu.class-tier-list') },
 			{ id: 'card-stats', name: this.i18n.translateString('app.arena.menu.card-stats') },
 			{ id: 'arena-high-wins-runs', name: this.i18n.translateString('app.arena.menu.arena-top-runs') },

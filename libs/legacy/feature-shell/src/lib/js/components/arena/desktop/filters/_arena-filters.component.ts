@@ -43,7 +43,7 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 		await this.nav.isReady();
 
 		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
-			this.mapData((currentView) => ['arena-runs'].includes(currentView)),
+			this.mapData((currentView) => ['arena-runs', 'arena-stats'].includes(currentView)),
 		);
 		this.showArenaCardSearch$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['card-stats'].includes(currentView)),
