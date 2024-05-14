@@ -173,7 +173,8 @@ const buildAdditionalCards = (
 		(t) =>
 			t.Name === GameTag.MODULAR_ENTITY_PART_1 ||
 			t.Name === GameTag.MODULAR_ENTITY_PART_2 ||
-			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID ||
+			// t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID || // This is the non-golden version of the card
+			// These are the components
 			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID2 ||
 			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID3,
 	);
