@@ -1,5 +1,5 @@
 import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
@@ -169,15 +169,18 @@ const buildAdditionalCards = (
 	Tags: readonly { Name: number; Value: number }[],
 	allCards: CardsFacadeService,
 ): readonly string[] | null => {
-	const modularTags = Tags?.filter(
-		(t) =>
-			t.Name === GameTag.MODULAR_ENTITY_PART_1 ||
-			t.Name === GameTag.MODULAR_ENTITY_PART_2 ||
-			// t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID || // This is the non-golden version of the card
-			// These are the components
-			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID2 ||
-			t.Name === GameTag.BACON_TRIPLED_BASE_MINION_ID3,
-	);
+	const validModularTags = [GameTag.MODULAR_ENTITY_PART_1, GameTag.MODULAR_ENTITY_PART_2];
+	// When not dealing with Zilliax, the BACON_TRIPLED_BASE_MINION_ID is still sometimes with DEF CHANGE
+	// to also flag the base minion
+	if (cardId === CardIds.ZilliaxAssembled_BG29_100_G) {
+		// This should not be needed, because the base is already the golden one?
+		// Not sure in fact, since there is only one golden card, so keeping track of all the
+		// modules to be considered
+		validModularTags.push(GameTag.BACON_TRIPLED_BASE_MINION_ID);
+		validModularTags.push(GameTag.BACON_TRIPLED_BASE_MINION_ID2);
+		validModularTags.push(GameTag.BACON_TRIPLED_BASE_MINION_ID3);
+	}
+	const modularTags = Tags?.filter((t) => validModularTags.includes(t.Name));
 	if (!modularTags?.length) {
 		return null;
 	}
