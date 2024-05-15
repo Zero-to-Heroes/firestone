@@ -32,7 +32,7 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { GameStat } from '@firestone/stats/data-access';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
@@ -229,7 +229,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		await waitForReady(this.scene, this.bgsScene, this.prefs, this.gameStats, this.gameState);
 
 		const currentGameType$ = combineLatest([this.gameState.gameState$$, this.bgsScene.currentMode$$]).pipe(
-			tap((info) => console.log('currentGameType', info)),
 			this.mapData(
 				([state, bgMode]) =>
 					state?.metadata?.gameType ??
