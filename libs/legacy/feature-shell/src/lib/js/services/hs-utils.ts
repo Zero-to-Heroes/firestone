@@ -22,6 +22,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 // string will be used in Firestone only
 export const CARDS_VERSION = '';
 
+/** @deprecated use ALL_CLASSES */
 export const classes = [
 	'deathknight',
 	'demonhunter',

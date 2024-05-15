@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
-import { classes } from '@legacy-import/src/lib/js/services/hs-utils';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
 import { ArenaRunsService } from '../../services/arena-runs.service';
@@ -106,7 +106,7 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 				const grouped = groupByFunction(
 					(run: ArenaRun) => this.allCards.getCard(run.heroCardId).classes?.[0]?.toLowerCase() ?? 'unknown',
 				)(runs!);
-				return classes.map((playerClass) => {
+				return ALL_CLASSES.map((playerClass) => {
 					const runs = grouped[playerClass];
 					const totalRuns = runs?.length;
 					const summary: ArenaClassSummary = {

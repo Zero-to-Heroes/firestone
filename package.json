@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "13.13",
+	"version": "13.13.2",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -49,7 +49,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.135",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^2.0.33",
+		"@firestone-hs/reference-data": "^2.0.35",
 		"@firestone-hs/replay-metadata": "^0.0.62",
 		"@firestone-hs/replay-parser": "^1.2.28",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
@@ -154,7 +154,7 @@
 		"typescript": "^4.8.2"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^2.0.33",
+		"@firestone-hs/reference-data": "^2.0.35",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.135",
 		"@angular/common": "^15.0.0",
 		"@angular/core": "^15.0.0",
