@@ -82,6 +82,7 @@ export class DeckState {
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly uniqueSpellSchools: readonly string[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCardWithTurn[] = [];
+	readonly secretsTriggeredThisMatch: readonly ShortCardWithTurn[] = [];
 	readonly manaSpentOnSpellsThisMatch: number = 0;
 	readonly manaSpentOnHolySpellsThisMatch: number = 0;
 	readonly watchpostsPlayedThisMatch: number = 0;

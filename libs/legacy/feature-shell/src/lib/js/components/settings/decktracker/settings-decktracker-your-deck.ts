@@ -416,6 +416,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'holySpells',
+			field: 'playerHolySpellsCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.holy-spells-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.holy-spells-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'menagerie',
 			field: 'playerMenagerieCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-label'),

@@ -86,6 +86,7 @@ import {
 	race,
 	rush,
 	secret,
+	secretsTriggeredThisMatch,
 	shadow,
 	side,
 	spell,
@@ -478,6 +479,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					spell,
 					or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)),
 				);
+			case CardIds.BargainBin_MIS_105:
+				return highlightConditions(
+					and(side(inputSide), inDeck, minion),
+					and(side(inputSide), inDeck, spell),
+					and(side(inputSide), inDeck, weapon),
+				);
 			case CardIds.Barnes:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.BartendOBot_WW_408:
@@ -699,6 +706,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell, shadow);
 			case CardIds.DarkInquisitorXanesh:
 				return and(side(inputSide), or(inDeck, inHand), or(corrupt, corrupted));
+			case CardIds.DarkmoonMagician_MIS_303:
+				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.DaUndatakah:
 				return and(side(inputSide), inGraveyard, minion, deathrattle);
 			case CardIds.DeadRinger:
@@ -876,10 +885,15 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.FleshBehemoth_RLK_830:
 			case CardIds.FleshBehemoth_RLK_Prologue_RLK_830:
 				return and(side(inputSide), inDeck, minion, undead, not(cardIs(CardIds.FleshBehemoth_RLK_830)));
+			case CardIds.FlickeringLightbot_MIS_918:
+			case CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t:
+				return and(side(inputSide), or(inDeck, inHand), spell, holy);
 			case CardIds.Flowrider:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.FlyOffTheShelves_TOY_714:
 				return and(side(inputSide), or(inHand, inDeck), dragon);
+			case CardIds.Foamrender_MIS_101:
+				return and(side(inputSide), or(inDeck, inHand), spendCorpse);
 			case CardIds.FogsailFreebooterCore:
 				return and(side(inputSide), or(inDeck, inHand), weapon);
 			case CardIds.FossilFanatic:
@@ -1052,6 +1066,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(side(inputSide), taunt);
 			case CardIds.HolyCowboy_WW_335:
+				return and(side(inputSide), or(inDeck, inHand), spell, holy);
+			case CardIds.HolyGlowsticks_MIS_709:
 				return and(side(inputSide), or(inDeck, inHand), spell, holy);
 			case CardIds.HopeOfQuelthalas:
 				return and(side(inputSide), or(inDeck, inHand, inPlay), minion);
@@ -1267,6 +1283,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.MagistersApprentice:
 				return and(side(inputSide), inDeck, spell, arcane);
+			case CardIds.Malfunction_MIS_107:
+				return and(side(inputSide), inDeck, minion);
 			case CardIds.MalganisCore:
 			case CardIds.Malganis_GVG_021:
 				return and(side(inputSide), or(inDeck, inHand), demon);
@@ -1381,6 +1399,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), minion, effectiveCostLess(3));
 			case CardIds.OrbOfRevelationTavernBrawl:
 				return and(side(inputSide), or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
+			case CardIds.OvergrownBeanstalk_MIS_301:
+				return and(side(inputSide), or(inDeck, inHand), summonsTreant);
 			case CardIds.OverlordSaurfang_BAR_334:
 				return and(side(inputSide), minion, inGraveyard, frenzy);
 			case CardIds.OverseerFrigidaraCore_RLK_224:
@@ -1451,6 +1471,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), or(inDeck, inHand), spell);
 			case CardIds.PrivateEye:
 				return and(side(inputSide), inDeck, secret);
+			case CardIds.Product9_MIS_914:
+				return highlightConditions(
+					tooltip(and(side(inputSide), secretsTriggeredThisMatch)),
+					and(side(inputSide), or(inDeck, inHand), secret),
+				);
 			case CardIds.ProvingGrounds:
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.Psychopomp:
@@ -1515,6 +1540,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, hasMultipleCopies);
 			case CardIds.Resurrect_BRM_017:
 				return and(side(inputSide), inGraveyard, minion);
+			case CardIds.ReturnPolicy_MIS_102:
+				return and(side(inputSide), cardsPlayedThisMatch, deathrattle);
 			case CardIds.RevivePet:
 				return tooltip(and(side(inputSide), inGraveyard, minion, beast));
 			case CardIds.Rewind_ETC_532:

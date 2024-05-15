@@ -17,6 +17,7 @@ import { TriggerOnResourcesUsedSecretsParser } from './trigger-on-resources-used
 import { TriggerOnSpellPlaySecretsParser } from './trigger-on-spell-play-secrets-parser';
 import { TriggerOnTurnEndSecretsParser } from './trigger-on-turn-end-secrets-parser';
 import { TriggerOnTurnStartSecretsParser } from './trigger-on-turn-start-secrets-parser';
+import { TriggerOnWeaponPlaySecretsParser } from './trigger-on-weapon-play-secrets-parser';
 
 @Injectable()
 export class SecretsParserService {
@@ -87,6 +88,7 @@ export class SecretsParserService {
 			new TriggerOnTurnEndSecretsParser(this.helper),
 			new TriggerOnResourcesUsedSecretsParser(this.helper),
 			new TriggerOnCardPlaySecretsParser(this.helper),
+			new TriggerOnWeaponPlaySecretsParser(this.helper, this.allCards),
 		];
 	}
 }

@@ -104,6 +104,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<player-chaotic-tendril-widget-wrapper></player-chaotic-tendril-widget-wrapper>
 			<player-secrets-played-widget-wrapper></player-secrets-played-widget-wrapper>
 			<player-lightray-widget-wrapper></player-lightray-widget-wrapper>
+			<player-holy-spells-widget-wrapper></player-holy-spells-widget-wrapper>
 			<player-menagerie-widget-wrapper></player-menagerie-widget-wrapper>
 			<player-corpse-spent-widget-wrapper></player-corpse-spent-widget-wrapper>
 			<player-overdraft-widget-wrapper></player-overdraft-widget-wrapper>

@@ -13,12 +13,12 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 
 @Component({
-	selector: 'player-lightray-widget-wrapper',
+	selector: 'player-holy-spells-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: templateBase,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerLightrayWidgetWrapperComponent
+export class PlayerHolySpellsWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
 	implements AfterContentInit
 {
@@ -32,9 +32,14 @@ export class PlayerLightrayWidgetWrapperComponent
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
-		this.activeCounter = 'lightray';
-		this.prefExtractor = (prefs) => prefs.playerLightrayCounter;
+		this.activeCounter = 'holySpells';
+		this.prefExtractor = (prefs) => prefs.playerHolySpellsCounter;
 		this.deckStateExtractor = (state, prefValue) =>
-			state.playerDeck?.hasRelevantCard([CardIds.Lightray], { onlyLimited: prefValue === 'limited' });
+			state.playerDeck?.hasRelevantCard(
+				[CardIds.FlickeringLightbot_MIS_918, CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t],
+				{
+					onlyLimited: prefValue === 'limited',
+				},
+			);
 	}
 }

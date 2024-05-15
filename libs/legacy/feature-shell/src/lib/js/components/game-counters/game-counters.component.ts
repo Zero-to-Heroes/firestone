@@ -40,6 +40,7 @@ import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { GardensGraceCounterDefinition } from './definitions/gardens-grace-counter';
 import { GreySageParrotCounterDefinition } from './definitions/grey-sage-parrot-counter';
 import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damage-counter';
+import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
@@ -227,6 +228,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return SecretsPlayedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'lightray':
 				return LightrayCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'holySpells':
+				return HolySpellsCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'menagerie':
 				return MenagerieCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'corpseSpent':

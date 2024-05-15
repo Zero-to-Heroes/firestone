@@ -1,4 +1,4 @@
-import { BoardSecret, DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { BoardSecret, DeckCard, GameState, ShortCardWithTurn } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -20,10 +20,17 @@ export class SecretTriggeredParser implements EventParser {
 			.map((secret) => this.helper.removeSecretOptionFromSecret(secret, cardId));
 		const newOther: readonly DeckCard[] = this.helper.updateCardInZone(deck.otherZone, entityId, cardId, null);
 
+		const secretShortCard: ShortCardWithTurn = {
+			cardId: cardId,
+			entityId: entityId,
+			side: isPlayer ? 'player' : 'opponent',
+			turn: +currentState.currentTurn,
+		};
 		const newPlayerDeck = deck.update({
 			secrets: newSecrets,
 			otherZone: newOther,
-		} as DeckState);
+			secretsTriggeredThisMatch: [...deck.secretsTriggeredThisMatch, secretShortCard],
+		});
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

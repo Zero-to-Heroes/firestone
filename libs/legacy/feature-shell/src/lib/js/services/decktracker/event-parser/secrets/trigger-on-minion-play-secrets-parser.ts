@@ -29,6 +29,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.Objection,
 		CardIds.Zombeeees,
 		CardIds.Zombeeees_ImprovedZombeeeesToken,
+		CardIds.BargainBin_MIS_105,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -112,6 +113,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
 			secretsWeCantRuleOut.push(CardIds.Duplicate);
+			secretsWeCantRuleOut.push(CardIds.BargainBin_MIS_105);
 		}
 
 		const isDormant = gameEvent.additionalData.dormant;

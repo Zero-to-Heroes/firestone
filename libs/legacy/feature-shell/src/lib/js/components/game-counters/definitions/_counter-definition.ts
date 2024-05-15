@@ -49,6 +49,7 @@ export type CounterType =
 	| 'chaoticTendril'
 	| 'secretsPlayed'
 	| 'lightray'
+	| 'holySpells'
 	| 'menagerie'
 	| 'corpseSpent'
 	| 'overdraft'

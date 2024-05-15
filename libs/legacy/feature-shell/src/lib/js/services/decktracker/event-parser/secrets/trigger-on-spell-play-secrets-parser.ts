@@ -25,6 +25,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.OhMyYogg,
 		CardIds.DirtyTricks,
 		CardIds.StickySituation,
+		CardIds.BargainBin_MIS_105,
 	];
 
 	private secretWillTrigger: {
@@ -127,6 +128,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
 			secretsWeCantRuleOut.push(CardIds.ManaBind);
+			secretsWeCantRuleOut.push(CardIds.BargainBin_MIS_105);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnSpellPlayed.filter(

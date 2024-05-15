@@ -538,6 +538,7 @@ import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlay
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
+import { PlayerHolySpellsWidgetWrapperComponent } from '@components/overlays/counters/player-holy-spells-widget-wrapper.component';
 import { PlayerPiratesSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-pirates-summoned-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
@@ -1609,6 +1610,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerChaoticTendrilWidgetWrapperComponent,
 		PlayerSecretsPlayedWidgetWrapperComponent,
 		PlayerLightrayWidgetWrapperComponent,
+		PlayerHolySpellsWidgetWrapperComponent,
 		PlayerMenagerieCounterWidgetWrapperComponent,
 		PlayerCorpseSpentWidgetWrapperComponent,
 		PlayerOverdraftWidgetWrapperComponent,

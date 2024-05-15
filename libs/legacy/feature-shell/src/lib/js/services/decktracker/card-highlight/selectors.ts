@@ -193,6 +193,11 @@ export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
 	return result;
 };
 
+export const secretsTriggeredThisMatch = (input: SelectorInput): boolean => {
+	const result = input.deckState?.secretsTriggeredThisMatch.map((card) => card.entityId).includes(input.entityId);
+	return result;
+};
+
 export const minionPlayedThisMatch = (input: SelectorInput): boolean => {
 	const minionsPlayedThisMatch = input.deckState?.cardsPlayedThisMatch.filter(
 		(c) => input.allCards.getCard(c.cardId).type === 'Minion',
@@ -246,7 +251,7 @@ export const isSi7 = (input: SelectorInput): boolean =>
 
 const TREANT_DBF_IDS = [
 	358, 600, 678, 1803, 41432, 48911, 53302, 54541, 56371, 61465, 68188, 70071, 71310, 75686, 85655, 86213, 91248,
-	94798, 99806,
+	94798, 99806, 108618,
 ];
 export const summonsTreant = (input: SelectorInput): boolean =>
 	TREANT_DBF_IDS.some((treantDbfId) => input.card.relatedCardDbfIds?.includes(treantDbfId));
