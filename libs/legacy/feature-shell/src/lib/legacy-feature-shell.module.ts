@@ -690,7 +690,6 @@ import { DropdownComponent } from './js/components/settings/dropdown.component';
 import { NumericInputComponent } from './js/components/settings/numeric-input.component';
 import { PreferenceDropdownComponent } from './js/components/settings/preference-dropdown.component';
 import { PreferenceNumericInputComponent } from './js/components/settings/preference-numeric-input.component';
-import { PreferenceToggleComponent } from './js/components/settings/preference-toggle.component';
 import { ClipboardShareButtonComponent } from './js/components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from './js/components/sharing/reddit/reddit-share-button.component';
 import { RedditShareInfoComponent } from './js/components/sharing/reddit/reddit-share-info.component';
@@ -971,7 +970,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DoubleClickDirective,
 		OwTranslateDirective,
 
-		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
 		DropdownComponent,
 		NumericInputComponent,

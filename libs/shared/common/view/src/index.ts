@@ -11,6 +11,7 @@ export * from './lib/components/input/text-input.component';
 export * from './lib/components/misc/progress-bar.component';
 export * from './lib/components/misc/scrollable.directive';
 export * from './lib/components/table/sortable-table-label.component';
+export * from './lib/components/toggle/preference-toggle.component';
 export * from './lib/components/toggle/toggle-view.component';
 export * from './lib/components/tooltip/buff-info.component';
 export * from './lib/components/tooltip/cached-component-tooltip.directive';

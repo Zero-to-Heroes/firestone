@@ -11,9 +11,9 @@ import {
 	Self,
 	ViewContainerRef,
 } from '@angular/core';
+import { PreferenceToggleComponent } from '@firestone/shared/common/view';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
-import { PreferenceToggleComponent } from './preference-toggle.component';
 
 @Directive({
 	selector: '[premiumSetting]',

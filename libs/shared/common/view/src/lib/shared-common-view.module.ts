@@ -2,6 +2,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -20,6 +21,7 @@ import { TextInputComponent } from './components/input/text-input.component';
 import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { ScrollableDirective } from './components/misc/scrollable.directive';
 import { SortableLabelComponent } from './components/table/sortable-table-label.component';
+import { PreferenceToggleComponent } from './components/toggle/preference-toggle.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
 import { CachedComponentTooltipDirective } from './components/tooltip/cached-component-tooltip.directive';
@@ -54,6 +56,7 @@ const components = [
 	ProgressBarComponent,
 
 	ToggleViewComponent,
+	PreferenceToggleComponent,
 
 	ScrollableDirective,
 
@@ -74,6 +77,7 @@ const components = [
 
 		SharedFrameworkCommonModule,
 		SharedFrameworkCoreModule,
+		SharedCommonServiceModule,
 	],
 	declarations: components,
 	exports: components,

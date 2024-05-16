@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -16,9 +17,9 @@ import { Subscription } from 'rxjs';
 @Component({
 	selector: 'preference-toggle',
 	styleUrls: [
-		`../../../css/global/toggle.scss`,
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/preference-toggle.component.scss`,
+		`./toggle.scss`,
+		// `../../../css/component/settings/settings-common.component.scss`,
+		`./preference-toggle.component.scss`,
 	],
 	template: `
 		<div class="preference-toggle" [ngClass]="{ 'toggled-on': value, 'toggled-off': value }">
@@ -40,7 +41,7 @@ import { Subscription } from 'rxjs';
 					</i>
 				</p>
 				<b></b>
-				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | fsTranslate">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#lock" />
 					</svg>
@@ -75,7 +76,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 
 	private sub$$: Subscription;
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
 		super(cdr);
 		this.loadDefaultValues();
 		this.uniqueId = uuidShort();
@@ -97,7 +98,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
 		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
