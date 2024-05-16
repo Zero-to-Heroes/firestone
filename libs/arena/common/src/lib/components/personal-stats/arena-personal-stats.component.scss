@@ -3,7 +3,13 @@
 	flex-grow: 1;
 }
 
-.arena-personal-stats {
+with-loading {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.arena-personal-stats-by-class {
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
@@ -20,6 +26,7 @@
 		height: 35px;
 		flex-shrink: 0;
 		flex-wrap: nowrap;
+		margin-bottom: 10px;
 	}
 
 	.content {
@@ -46,8 +53,17 @@
 				.class-icon {
 					margin-right: 10px;
 					height: 75%;
+					aspect-ratio: 1;
 				}
 			}
 		}
 	}
+}
+
+.positive {
+	color: #61ff47;
+}
+
+.negative {
+	color: #ff4747;
 }

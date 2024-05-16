@@ -22,6 +22,7 @@ import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-opt
 import { ArenaMulliganDetailedInfoComponent } from './components/overlays/mulligan/arena-mulligan-detailed-info.component';
 import { ArenaMulliganInfoPremiumComponent } from './components/overlays/mulligan/arena-mulligan-info-premium.component';
 import { ArenaMulliganComponent } from './components/overlays/mulligan/arena-mulligan.component';
+import { ArenaPersonalStatsOverviewComponent } from './components/personal-stats/arena-personal-stats-overview.component';
 import { ArenaPersonalStatsComponent } from './components/personal-stats/arena-personal-stats.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
 import { ArenaRunVignetteComponent } from './components/runs/arena-run-vignette.component';
@@ -56,6 +57,7 @@ const components = [
 	ArenaMulliganDetailedInfoComponent,
 	ArenaMulliganInfoPremiumComponent,
 	ArenaPersonalStatsComponent,
+	ArenaPersonalStatsOverviewComponent,
 ];
 @NgModule({
 	imports: [

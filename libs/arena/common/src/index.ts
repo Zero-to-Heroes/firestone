@@ -14,6 +14,7 @@ export * from './lib/components/overlays/arena-option-info-premium.component';
 export * from './lib/components/overlays/mulligan/arena-mulligan-detailed-info.component';
 export * from './lib/components/overlays/mulligan/arena-mulligan-info-premium.component';
 export * from './lib/components/overlays/mulligan/arena-mulligan.component';
+export * from './lib/components/personal-stats/arena-personal-stats-overview.component';
 export * from './lib/components/personal-stats/arena-personal-stats.component';
 export * from './lib/components/runs/arena-deck-details.component';
 export * from './lib/components/runs/arena-run-vignette.component';
