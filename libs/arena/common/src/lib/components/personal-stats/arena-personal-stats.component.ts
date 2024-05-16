@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ALL_CLASSES } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
@@ -25,6 +26,13 @@ import { ArenaClassSummary } from './arena-personal-stats.model';
 		>
 			<section class="arena-personal-stats-overview" [attr.aria-label]="'Arena stats overview'">
 				<arena-personal-stats-overview [runs]="value.runs"></arena-personal-stats-overview>
+				<div class="toggle-container">
+					<preference-toggle
+						class="percentage-toggle"
+						field="desktopDeckShowMatchupAsPercentages"
+						[label]="'app.decktracker.matchup-info.show-as-percent-button-label' | fsTranslate"
+					></preference-toggle>
+				</div>
 			</section>
 			<section class="arena-personal-stats-by-class" [attr.aria-label]="'Arena stats by class'">
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
@@ -104,15 +112,46 @@ import { ArenaClassSummary } from './arena-personal-stats.model';
 							{{ summary.averageWinsPerRun?.toFixed(2) ?? '-' }}
 						</div>
 						<div class="cell games-played">{{ summary.gamesPlayed || '-' }}</div>
-						<div class="cell winrate {{ summary.winrateClass }}">
+
+						<div class="cell winrate {{ summary.winrateClass }}" *ngIf="summary.winrateStr">
 							{{ summary.winrateStr }}
 						</div>
-						<div class="cell winrate-first {{ summary.winrateFirstClass }}">
+						<div class="cell winrate details" *ngIf="summary.winrateDetails">
+							<div class="positive" *ngIf="summary.winrateDetails !== null">
+								{{ summary.winrateDetails.wins }}
+							</div>
+							<div class="separator">-</div>
+							<div class="negative" *ngIf="summary.winrateDetails.losses !== null">
+								{{ summary.winrateDetails.losses }}
+							</div>
+						</div>
+
+						<div class="cell winrate-first {{ summary.winrateFirstClass }}" *ngIf="summary.winrateFirstStr">
 							{{ summary.winrateFirstStr }}
 						</div>
-						<div class="cell winrate-coin {{ summary.winrateCoinClass }}">
+						<div class="cell winrate-first details" *ngIf="summary.winrateFirstDetails">
+							<div class="positive" *ngIf="summary.winrateFirstDetails !== null">
+								{{ summary.winrateFirstDetails.wins }}
+							</div>
+							<div class="separator">-</div>
+							<div class="negative" *ngIf="summary.winrateFirstDetails.losses !== null">
+								{{ summary.winrateFirstDetails.losses }}
+							</div>
+						</div>
+
+						<div class="cell winrate-coin {{ summary.winrateCoinClass }}" *ngIf="summary.winrateCoinStr">
 							{{ summary.winrateCoinStr }}
 						</div>
+						<div class="cell winrate-coin details" *ngIf="summary.winrateCoinDetails">
+							<div class="positive" *ngIf="summary.winrateCoinDetails !== null">
+								{{ summary.winrateCoinDetails.wins }}
+							</div>
+							<div class="separator">-</div>
+							<div class="negative" *ngIf="summary.winrateCoinDetails.losses !== null">
+								{{ summary.winrateCoinDetails.losses }}
+							</div>
+						</div>
+
 						<div class="cell time-played">
 							{{ summary.totalTimePlayedStr }}
 						</div>
@@ -127,15 +166,52 @@ import { ArenaClassSummary } from './arena-personal-stats.model';
 							{{ value.total?.averageWinsPerRun?.toFixed(2) ?? '-' }}
 						</div>
 						<div class="cell games-played">{{ value.total?.gamesPlayed ?? '-' }}</div>
-						<div class="cell winrate {{ value.total?.winrateClass }}">
+
+						<div class="cell winrate {{ value.total?.winrateClass }}" *ngIf="value.total?.winrateStr">
 							{{ value.total?.winrateStr }}
 						</div>
-						<div class="cell winrate-first {{ value.total?.winrateFirstClass }}">
+						<div class="cell winrate details" *ngIf="value.total?.winrateDetails">
+							<div class="positive" *ngIf="value.total?.winrateDetails !== null">
+								{{ value.total?.winrateDetails?.wins }}
+							</div>
+							<div class="separator">-</div>
+							<div class="negative" *ngIf="value.total?.winrateDetails?.losses !== null">
+								{{ value.total?.winrateDetails?.losses }}
+							</div>
+						</div>
+
+						<div
+							class="cell winrate-first {{ value.total?.winrateFirstClass }}"
+							*ngIf="value.total?.winrateFirstStr"
+						>
 							{{ value.total?.winrateFirstStr }}
 						</div>
-						<div class="cell winrate-coin {{ value.total?.winrateCoinClass }}">
+						<div class="cell winrate-first details" *ngIf="value.total?.winrateFirstDetails">
+							<div class="positive" *ngIf="value.total?.winrateFirstDetails !== null">
+								{{ value.total?.winrateFirstDetails?.wins }}
+							</div>
+							<div class="separator">-</div>
+							<div class="negative" *ngIf="value.total?.winrateFirstDetails?.losses !== null">
+								{{ value.total?.winrateFirstDetails?.losses }}
+							</div>
+						</div>
+
+						<div
+							class="cell winrate-coin {{ value.total?.winrateCoinClass }}"
+							*ngIf="value.total?.winrateCoinStr"
+						>
 							{{ value.total?.winrateCoinStr }}
 						</div>
+						<div class="cell winrate-coin details" *ngIf="value.total?.winrateCoinDetails">
+							<div class="positive" *ngIf="value.total?.winrateCoinDetails !== null">
+								{{ value.total?.winrateCoinDetails?.wins }}
+							</div>
+							<div class="separator">-</div>
+							<div class="negative" *ngIf="value.total?.winrateCoinDetails?.losses !== null">
+								{{ value.total?.winrateCoinDetails?.losses }}
+							</div>
+						</div>
+
 						<div class="cell time-played">
 							{{ value.total?.totalTimePlayedStr }}
 						</div>
@@ -163,12 +239,13 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly arenaRuns: ArenaRunsService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.arenaRuns);
+		await waitForReady(this.arenaRuns, this.prefs);
 
 		console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
@@ -182,9 +259,12 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 			tap((info) => console.debug('[arena-runs] received info', info)),
 			this.mapData((runs) => runs === null),
 		);
-		const groupedRuns$ = this.runs$.pipe(
-			filter((runs) => runs != null),
-			this.mapData((runs) => {
+		const groupedRuns$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.desktopDeckShowMatchupAsPercentages)),
+			this.runs$,
+		]).pipe(
+			filter(([showAsPercents, runs]) => runs != null),
+			this.mapData(([showAsPercents, runs]) => {
 				// TODO: how to handle runs that are in-progress?
 				const grouped = groupByFunction(
 					(run: ArenaRun) => this.allCards.getCard(run.heroCardId).classes?.[0]?.toLowerCase() ?? 'unknown',
@@ -204,11 +284,40 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 					const totalWinsCoin =
 						runs?.flatMap((r) => r.steps).filter((s) => s.coinPlay === 'coin' && s.result === 'won')
 							.length ?? 0;
-					const winrateStr = totalGames > 0 ? ((100 * totalWins) / totalGames).toFixed(2) + '%' : '-';
-					const winrateFirstStr =
-						totalGamesFirst > 0 ? ((100 * totalWinsFirst) / totalGamesFirst).toFixed(2) + '%' : '-';
-					const winrateCoinStr =
-						totalGamesCoin > 0 ? ((100 * totalWinsCoin) / totalGamesCoin).toFixed(2) + '%' : '-';
+
+					const winrateStr = showAsPercents
+						? totalGames > 0
+							? ((100 * totalWins) / totalGames).toFixed(2) + '%'
+							: '-'
+						: null;
+					const winrateDetails = !showAsPercents
+						? totalGames > 0
+							? { wins: totalWins, losses: totalGames - totalWins }
+							: { wins: null, losses: null }
+						: null;
+
+					const winrateFirstStr = showAsPercents
+						? totalGamesFirst > 0
+							? ((100 * totalWinsFirst) / totalGamesFirst).toFixed(2) + '%'
+							: '-'
+						: null;
+					const winrateFirstDetails = !showAsPercents
+						? totalGamesFirst > 0
+							? { wins: totalWinsFirst, losses: totalGamesFirst - totalWinsFirst }
+							: { wins: null, losses: null }
+						: null;
+
+					const winrateCoinStr = showAsPercents
+						? totalGamesCoin > 0
+							? ((100 * totalWinsCoin) / totalGamesCoin).toFixed(2) + '%'
+							: '-'
+						: null;
+					const winrateCoinDetails = !showAsPercents
+						? totalGamesCoin > 0
+							? { wins: totalWinsCoin, losses: totalGamesCoin - totalWinsCoin }
+							: { wins: null, losses: null }
+						: null;
+
 					const totalTimePlayed =
 						runs?.flatMap((r) => r.steps).reduce((a, b) => a + b.gameDurationSeconds, 0) ?? 0;
 					const summary: ArenaClassSummary = {
@@ -247,6 +356,9 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 							: null,
 						winrateStr: winrateStr,
 						winrateFirstStr: winrateFirstStr,
+						winrateDetails: winrateDetails,
+						winrateFirstDetails: winrateFirstDetails,
+						winrateCoinDetails: winrateCoinDetails,
 						winrateCoinStr: winrateCoinStr,
 						totalWins: totalWins,
 						totalGamesCoin: totalGamesCoin,
@@ -269,8 +381,11 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		this.total$ = this.runSummaries$.pipe(
-			this.mapData((summaries) => {
+		this.total$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.desktopDeckShowMatchupAsPercentages)),
+			this.runSummaries$,
+		]).pipe(
+			this.mapData(([showAsPercents, summaries]) => {
 				const totalRuns = summaries.reduce((a, b) => a + (b.totalRuns ?? 0), 0);
 				const totalWins = summaries.reduce((a, b) => a + (b.totalWins ?? 0), 0);
 				const totalGames = summaries.reduce((a, b) => a + (b.gamesPlayed ?? 0), 0);
@@ -279,6 +394,40 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 				const totalGamesFirst = summaries.reduce((a, b) => a + (b.totalGamesFirst ?? 0), 0);
 				const totalWinsFirst = summaries.reduce((a, b) => a + (b.totalWinsFirst ?? 0), 0);
 				const totalTimePlayed = summaries.reduce((a, b) => a + b.totalTimePlayed, 0);
+
+				const winrateStr = showAsPercents
+					? totalGames > 0
+						? ((100 * totalWins) / totalGames).toFixed(2) + '%'
+						: '-'
+					: null;
+				const winrateDetails = !showAsPercents
+					? totalGames > 0
+						? { wins: totalWins, losses: totalGames - totalWins }
+						: { wins: null, losses: null }
+					: null;
+
+				const winrateFirstStr = showAsPercents
+					? totalGamesFirst > 0
+						? ((100 * totalWinsFirst) / totalGamesFirst).toFixed(2) + '%'
+						: '-'
+					: null;
+				const winrateFirstDetails = !showAsPercents
+					? totalGamesFirst > 0
+						? { wins: totalWinsFirst, losses: totalGamesFirst - totalWinsFirst }
+						: { wins: null, losses: null }
+					: null;
+
+				const winrateCoinStr = showAsPercents
+					? totalGamesCoin > 0
+						? ((100 * totalWinsCoin) / totalGamesCoin).toFixed(2) + '%'
+						: '-'
+					: null;
+				const winrateCoinDetails = !showAsPercents
+					? totalGamesCoin > 0
+						? { wins: totalWinsCoin, losses: totalGamesCoin - totalWinsCoin }
+						: { wins: null, losses: null }
+					: null;
+
 				const result: ArenaClassSummary = {
 					classIcon: null,
 					className: this.i18n.translateString('app.decktracker.matchup-info.total-header')!,
@@ -304,6 +453,7 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 						: (100 * totalWins) / totalGames < 49
 						? 'negative'
 						: null,
+					winrateDetails: winrateDetails,
 					winrateFirstClass: !totalGamesFirst
 						? null
 						: (100 * totalWinsFirst) / totalGamesFirst > 51
@@ -318,11 +468,11 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 						: (100 * totalWinsCoin) / totalGamesCoin < 49
 						? 'negative'
 						: null,
-					winrateStr: totalGames > 0 ? ((100 * totalWins) / totalGames).toFixed(2) + '%' : '-',
-					winrateFirstStr:
-						totalGamesFirst > 0 ? ((100 * totalWinsFirst) / totalGamesFirst).toFixed(2) + '%' : '-',
-					winrateCoinStr:
-						totalGamesCoin > 0 ? ((100 * totalWinsCoin) / totalGamesCoin).toFixed(2) + '%' : '-',
+					winrateStr: winrateStr,
+					winrateFirstStr: winrateFirstStr,
+					winrateFirstDetails: winrateFirstDetails,
+					winrateCoinStr: winrateCoinStr,
+					winrateCoinDetails: winrateCoinDetails,
 					totalTimePlayed: totalTimePlayed,
 					totalTimePlayedStr: !totalTimePlayed ? '-' : this.toAppropriateDurationFromSeconds(totalTimePlayed),
 				};
@@ -356,6 +506,14 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 				return this.sortByAverageWins(a, b, sortCriteria.direction);
 			case 'total-games':
 				return this.sortByTotalGames(a, b, sortCriteria.direction);
+			case 'winrate':
+				return this.sortByWinrate(a, b, sortCriteria.direction);
+			case 'winrate-first':
+				return this.sortByWinrateFirst(a, b, sortCriteria.direction);
+			case 'winrate-coin':
+				return this.sortByWinrateCoin(a, b, sortCriteria.direction);
+			case 'time-played':
+				return this.sortByTimePlayed(a, b, sortCriteria.direction);
 			default:
 				return 0;
 		}
@@ -385,6 +543,30 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 		return direction === 'asc' ? aData.localeCompare(bData) : bData.localeCompare(aData);
 	}
 
+	private sortByWinrate(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
+		const aData = !a.gamesPlayed ? 0 : a.totalWins / a.gamesPlayed;
+		const bData = !b.gamesPlayed ? 0 : b.totalWins / b.gamesPlayed;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByWinrateFirst(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
+		const aData = !a.totalGamesFirst ? 0 : a.totalWinsFirst / a.totalGamesFirst;
+		const bData = !b.totalGamesFirst ? 0 : b.totalWinsFirst / b.totalGamesFirst;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByWinrateCoin(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
+		const aData = !a.totalGamesCoin ? 0 : a.totalWinsCoin / a.totalGamesCoin;
+		const bData = !b.totalGamesCoin ? 0 : b.totalWinsCoin / b.totalGamesCoin;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByTimePlayed(a: ArenaClassSummary, b: ArenaClassSummary, direction: SortDirection): number {
+		const aData = a.totalTimePlayed;
+		const bData = b.totalTimePlayed;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
 	private toAppropriateDurationFromSeconds(durationInSeconds: number): string {
 		if (durationInSeconds < 60) {
 			return this.i18n.translateString('global.duration.sec', { sec: durationInSeconds })!;
@@ -402,4 +584,12 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 	}
 }
 
-type ColumnSortType = 'name' | 'runs' | 'average-wins' | 'total-games';
+type ColumnSortType =
+	| 'name'
+	| 'runs'
+	| 'average-wins'
+	| 'total-games'
+	| 'winrate'
+	| 'winrate-first'
+	| 'winrate-coin'
+	| 'time-played';

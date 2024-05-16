@@ -56,6 +56,10 @@ with-loading {
 					aspect-ratio: 1;
 				}
 			}
+
+			.details {
+				gap: 5px;
+			}
 		}
 	}
 }
@@ -66,4 +70,25 @@ with-loading {
 
 .negative {
 	color: #ff4747;
+}
+
+.arena-personal-stats-overview {
+	position: relative;
+
+	.toggle-container {
+		position: absolute;
+		top: 0;
+		right: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+
+		::ng-deep .percentage-toggle {
+			.preference-toggle p {
+				width: auto;
+				margin-right: 10px;
+			}
+		}
+	}
 }
