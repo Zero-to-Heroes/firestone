@@ -148,6 +148,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 		this.netMmr = value.playerNetMmr;
 
 		this.tribes = value.tribeStats
+			.filter((tribe) => tribe.impactAveragePosition < 0)
 			.map((stat) => {
 				return {
 					icon: getTribeIcon(stat.tribe),
@@ -156,7 +157,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 						tribe: getTribeName(stat.tribe, this.i18n),
 						value: -stat.impactAveragePosition.toFixed(2),
 					}),
-					impactValue: Math.min(100, (100 * stat.impactAveragePosition) / 0.2),
+					impactValue: 100 * Math.abs(stat.impactAveragePosition / ((value as any).maxTribeImpact ?? 0.5)),
 				};
 			})
 			.sort((a, b) => a.value - b.value)

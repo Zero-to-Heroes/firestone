@@ -170,12 +170,17 @@ export const buildHeroStats = (
 	return result1
 		.map((stat) => {
 			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
-			const tribeStatsToUse = useTribesModifier
-				? stat.tribeStats
-						?.filter((t) => tribes.includes(t.tribe))
-						// Remove some incorrect data points
-						.filter((t) => t.dataPoints > stat.dataPoints / 20) ?? []
-				: stat.tribeStats ?? [];
+			const tribeStatsToUse = (
+				(useTribesModifier ? stat.tribeStats?.filter((t) => tribes.includes(t.tribe)) : stat.tribeStats) ?? []
+			)
+				// Remove some incorrect data points
+				.filter((t) => t.dataPoints > stat.dataPoints / 20)
+				.filter((t) => t.dataPointsOnMissingTribe > t.dataPoints / 20)
+				.map((t) => ({
+					...t,
+					impactAveragePosition: t.averagePosition - t.averagePositionWithoutTribe,
+				}));
+
 			if (useTribesModifier && !tribeStatsToUse?.length) {
 				console.debug(
 					'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
@@ -195,7 +200,6 @@ export const buildHeroStats = (
 						impact: t.impactAveragePosition,
 				  }))
 				: null;
-			// debug && console.debug('tribesModifier', tribesModifier, useTribesModifier, tribeStatsToUse, tribes, stat);
 
 			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
 			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);

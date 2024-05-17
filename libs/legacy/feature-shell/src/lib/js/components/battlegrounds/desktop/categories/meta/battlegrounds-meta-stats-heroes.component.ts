@@ -59,7 +59,17 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 		await waitForReady(this.metaHeroStats, this.metaHeroStatsDuo, this.playerHeroStats, this.prefs);
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(this.mapData((stats) => stats));
+		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
+			this.mapData((stats) => {
+				const maxTribeImpact = Math.max(
+					...stats
+						.flatMap((s) => s.tribeStats)
+						.filter((t) => t.impactAveragePosition < 0)
+						.map((t) => -t.impactAveragePosition),
+				);
+				return stats.map((s) => ({ ...s, maxTribeImpact }));
+			}),
+		);
 		this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));
 		const statsProvider$ = this.prefs.preferences$$.pipe(
 			switchMap((prefs) =>

@@ -26,11 +26,13 @@ export class CircularProgressComponent implements AfterViewInit {
 		this.setCompletionRate(this.completionRate);
 	}
 
+	// Value between 0 and 100
 	setCompletionRate(completionRate: number): void {
 		const circleProgressElement = this.circleProgressElement.nativeElement;
 		const radius = Number(circleProgressElement.getAttribute('r'));
 		const circumference = 2 * Math.PI * radius;
-		const offset = -((100 - completionRate) / 100) * circumference;
+		// offset == 0 is fully completed, offset == circumference is not started
+		const offset = ((100 - completionRate) / 100) * circumference;
 		circleProgressElement.style.strokeDasharray = `${circumference} ${circumference}`;
 		circleProgressElement.style.strokeDashoffset = `${offset}`;
 	}
