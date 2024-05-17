@@ -294,7 +294,7 @@ export class DeckManipulationHelper {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 		// Explicit search by entity id
 		if (entityId) {
-			const found = zone.find((card) => card.entityId === entityId);
+			const found = zone.find((card) => Math.abs(card.entityId) === Math.abs(entityId));
 			//console.debug('[findCardInZone] found card', found, entityId, cardId, zone);
 			if (!found) {
 				// Card hasn't been found, so we provide a default return

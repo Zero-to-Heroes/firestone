@@ -31,6 +31,39 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		// Because we have to infer a lot of info here, we have a separate process. Not sure that it's the best
+		// way though
+		if (gameEvent.additionalData.creatorCardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
+			const initialZilliax = deck.otherZone.find((c) => c.entityId === gameEvent.additionalData.creatorEntityId);
+			if (!initialZilliax) {
+				console.warn('[create-card-in-deck] could not find initial Zilliax');
+				return currentState;
+			}
+			const modules =
+				(initialZilliax.relatedCardIds?.length ? initialZilliax.relatedCardIds : null) ??
+				deck.sideboards?.find((s) => s.keyCardId === CardIds.ZilliaxDeluxe3000_TOY_330)?.cards.map((c) => c) ??
+				[];
+			const cost = modules?.map((c) => this.allCards.getCard(c)?.cost).reduce((a, b) => a + b, 0);
+			const updatedCard = initialZilliax.update({
+				entityId: entityId,
+				actualManaCost: cost,
+				manaCost: cost,
+				metaInfo: undefined,
+				creatorCardId: gameEvent.additionalData.creatorCardId,
+				zone: undefined,
+				milled: false,
+				relatedCardIds: modules,
+			});
+			const newDeck = deck.update({
+				deck: this.helper.addSingleCardToZone(deck.deck, updatedCard),
+			});
+			console.debug('[create-card-in-deck]', 'updating Zilliax', updatedCard, initialZilliax, newDeck);
+			return currentState.update({
+				[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
+			});
+		}
+
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
 		const positionFromBottom = buildPositionFromBottom(
 			deck,
@@ -100,7 +133,7 @@ export class CreateCardInDeckParser implements EventParser {
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
 		}
-		return Object.assign(new GameState(), currentState, {
+		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}

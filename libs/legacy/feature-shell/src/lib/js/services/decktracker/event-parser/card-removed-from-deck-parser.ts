@@ -31,6 +31,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
+			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
 			milled: card.createdByJoust ? false : true,
 		} as DeckCard);
 

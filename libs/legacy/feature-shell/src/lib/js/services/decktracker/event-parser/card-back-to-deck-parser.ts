@@ -37,6 +37,7 @@ export class CardBackToDeckParser implements EventParser {
 				: initialCardId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
+		// console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
@@ -55,6 +56,7 @@ export class CardBackToDeckParser implements EventParser {
 			actualManaCost: refCard?.cost ?? card?.manaCost,
 			buffCardIds: [],
 			buffingEntityCardIds: [],
+			entityId: Math.abs(card.entityId),
 			// linkedEntityIds: [],
 		});
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
