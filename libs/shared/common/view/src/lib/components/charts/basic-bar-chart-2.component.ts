@@ -1,77 +1,97 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUntil } from 'rxjs';
 import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-chart-data';
 
 @Component({
 	selector: 'basic-bar-chart-2',
 	styleUrls: [`./basic-bar-chart-2.component.scss`],
 	template: `
-		<div class="chart-container" *ngIf="barContainers?.length">
-			<div class="mid-line" [style.bottom.%]="midLineHeight"></div>
-			<div class="bar-container" *ngFor="let container of barContainers">
-				<div class="bars">
-					<div
-						*ngFor="let bar of container.bars"
-						class="bar {{ bar.class }}"
-						[style.height.%]="bar.height"
-						[helpTooltip]="bar.tooltip"
-					></div>
+		<ng-container *ngIf="{ barContainers: barContainers$ | async } as value">
+			<div class="chart-container" *ngIf="value.barContainers?.length">
+				<div class="mid-line" [style.bottom.%]="midLineHeight$ | async"></div>
+				<div class="bar-container" *ngFor="let container of value.barContainers">
+					<div class="bars">
+						<div
+							*ngFor="let bar of container.bars"
+							class="bar {{ bar.class }}"
+							[style.height.%]="bar.height"
+							[helpTooltip]="bar.tooltip"
+						></div>
+					</div>
+					<div class="label" *ngIf="showLabels">{{ container.label }}</div>
 				</div>
-				<div class="label" *ngIf="showLabels">{{ container.label }}</div>
 			</div>
-		</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BasicBarChart2Component {
+export class BasicBarChart2Component extends AbstractSubscriptionComponent implements AfterContentInit {
+	barContainers$: Observable<readonly BarContainer[]>;
+	midLineHeight$: Observable<number>;
+
 	@Input() set data(value: readonly SimpleBarChartData[]) {
-		if (!value || value === this.chartData) {
-			return;
-		}
-		this.chartData = value;
-		this.udpateStats();
+		this.chartData$$.next(value);
 	}
 
 	@Input() set tooltipTitle(value: string) {
-		this._tooltipTitle = value;
-		this.udpateStats();
+		this.tooltipTitle$$.next(value);
 	}
 
 	@Input() set dataTextFormatter(formatter: (value: string) => string) {
-		this._dataTextFormatter = formatter;
-		this.udpateStats();
+		this.dataTextFormatter$$.next(formatter);
 	}
 
 	@Input() set midLineValue(value: number) {
-		this._midLineValue = value;
-		this.udpateStats();
+		this.midLineValue$$.next(value);
 	}
 
 	@Input() set offsetValue(value: number) {
-		this._offsetValue = value;
-		this.udpateStats();
+		this.offsetValue$$.next(value);
 	}
 
 	@Input() showLabels = true;
 
-	barContainers: readonly BarContainer[] = [];
-	midLineHeight: number;
+	private chartData$$ = new BehaviorSubject<readonly SimpleBarChartData[]>(null);
+	private tooltipTitle$$ = new BehaviorSubject<string>(null);
+	private dataTextFormatter$$ = new BehaviorSubject<(value: string) => string>(null);
+	private midLineValue$$ = new BehaviorSubject<number>(null);
+	private offsetValue$$ = new BehaviorSubject<number>(0);
 
-	private chartData: readonly SimpleBarChartData[];
-	private _tooltipTitle;
-	private _dataTextFormatter: (value: string) => string;
-	private _midLineValue: number;
-	private _offsetValue = 0;
+	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
+		super(cdr);
+	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
+	ngAfterContentInit() {
+		const data$ = combineLatest([
+			this.chartData$$,
+			this.midLineValue$$,
+			this.tooltipTitle$$,
+			this.dataTextFormatter$$,
+			this.offsetValue$$,
+		]).pipe(
+			filter(([chartData, midLineValue, tooltipTitle, dataTextFormatter, offsetValue]) => !!chartData?.length),
+			this.mapData(([chartData, midLineValue, tooltipTitle, dataTextFormatter, offsetValue]) =>
+				this.buildBarContainers(chartData, midLineValue, tooltipTitle, dataTextFormatter, offsetValue),
+			),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.barContainers$ = data$.pipe(this.mapData((data) => data.barContainers));
+		this.midLineHeight$ = data$.pipe(this.mapData((data) => data.midLineValue));
+	}
 
-	udpateStats() {
-		if (!this.chartData) {
-			return;
-		}
-
-		const maxValues: readonly number[] = this.chartData
+	buildBarContainers(
+		chartData: readonly SimpleBarChartData[],
+		midLineValue: number,
+		inputTooltipTitle: string,
+		dataTextFormatter: (value: string) => string,
+		offsetValue: number,
+	): { midLineValue: number; barContainers: readonly BarContainer[] } {
+		// console.debug('updating stats', chartData[0]?.data[0]?.value);
+		const maxValues: readonly number[] = chartData
 			.map((chartData) => chartData.data)
 			.map((data) =>
 				Math.max(
@@ -80,30 +100,39 @@ export class BasicBarChart2Component {
 						.map((element: SimpleBarChartDataElement) => element.value),
 				),
 			);
-		const maxDataLength = Math.max(...this.chartData.map((chartData) => chartData.data.length));
+		const maxDataLength = Math.max(...chartData.map((chartData) => chartData.data.length));
 		const barContainers: BarContainer[] = [];
 		for (let i = 0; i < maxDataLength; i++) {
 			const barContainer: BarContainer = this.buildBarContainer(
-				this.chartData.map((data) => data.data[i]),
+				chartData.map((data) => data.data[i]),
 				maxValues,
 				i,
+				inputTooltipTitle,
+				dataTextFormatter,
+				offsetValue,
 			);
 			barContainers.push(barContainer);
 		}
-		this.barContainers = barContainers;
-		this.midLineHeight = (100 * this._midLineValue) / maxValues[0];
+		// console.debug('updated stats', chartData[0]?.data[0]?.value);
+		return {
+			midLineValue: (100 * midLineValue) / maxValues[0],
+			barContainers: barContainers,
+		};
 	}
 
 	private buildBarContainer(
 		elements: SimpleBarChartDataElement[],
 		maxValues: readonly number[],
 		xValue: number,
+		inputTooltipTitle: string,
+		dataTextFormatter: (value: string) => string,
+		offsetValue: number,
 	): BarContainer {
 		return {
 			bars: elements
 				.filter((data) => !!data)
 				.map((data, i) => {
-					const tooltipTitle = this._tooltipTitle ? `<div class="title">${this._tooltipTitle}</div>` : '';
+					const tooltipTitle = inputTooltipTitle ? `<div class="title">${inputTooltipTitle}</div>` : '';
 					const placeLabel = this.i18n.translateString('battlegrounds.hero-stats.place', {
 						value: data.label,
 					});
@@ -114,8 +143,8 @@ export class BasicBarChart2Component {
 							  })
 							: null;
 					const matchesElement = !!matchesLabel ? `<div class="raw-value">${matchesLabel}</div>` : '';
-					const dataText = this._dataTextFormatter
-						? this._dataTextFormatter((+data.value).toFixed(1))
+					const dataText = dataTextFormatter
+						? dataTextFormatter((+data.value).toFixed(1))
 						: `${(+data.value).toFixed(1)}%`;
 					return {
 						// Ensure a min height to make the graph look better
@@ -130,7 +159,7 @@ export class BasicBarChart2Component {
 							</div>`,
 					};
 				}),
-			label: '' + (xValue + this._offsetValue),
+			label: '' + (xValue + offsetValue),
 		} as BarContainer;
 	}
 }

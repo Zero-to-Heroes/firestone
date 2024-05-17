@@ -48,9 +48,18 @@
 	}
 }
 
+.top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	flex-grow: 0;
+	flex-shrink: 1;
+	height: fit-content;
+}
+
 .data-info {
 	display: flex;
-	margin-bottom: 20px;
 	align-items: center;
 	justify-content: flex-end;
 	padding-right: 10px;

@@ -5,11 +5,13 @@ export interface BgsMetaHeroStatTier {
 	readonly label: string;
 	readonly tooltip: string;
 	readonly items: readonly BgsMetaHeroStatTierItem[];
+	readonly hidden?: boolean;
 }
 
 export interface BgsMetaHeroStatTierItem {
 	readonly id: string;
 	readonly dataPoints: number;
+	readonly hidden?: boolean;
 	readonly averagePosition: number;
 	readonly averagePositionDetails: {
 		readonly baseValue: number;

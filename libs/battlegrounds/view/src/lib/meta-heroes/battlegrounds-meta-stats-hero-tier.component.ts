@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { BgsMetaHeroStatTier } from '@firestone/battlegrounds/data-access';
+import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-hero-tier',
@@ -17,7 +17,7 @@ import { BgsMetaHeroStatTier } from '@firestone/battlegrounds/data-access';
 			<div class="items">
 				<battlegrounds-meta-stats-hero-info
 					class="item-container"
-					*ngFor="let item of tier.items"
+					*ngFor="let item of tier.items; trackBy: trackByFn"
 					[stat]="item"
 					(heroStatClick)="onHeroStatsClick($event)"
 				>
@@ -34,5 +34,9 @@ export class BattlegroundsMetaStatsHeroTierComponent {
 
 	onHeroStatsClick(heroCardId: string) {
 		this.heroStatClick.next(heroCardId);
+	}
+
+	trackByFn(index: number, stat: BgsMetaHeroStatTierItem) {
+		return stat.id;
 	}
 }

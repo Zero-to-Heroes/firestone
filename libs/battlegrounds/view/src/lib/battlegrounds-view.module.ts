@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -9,6 +10,7 @@ import { BattlegroundsRankFilterDropdownViewComponent } from './filters/battlegr
 import { BattlegroundsTimeFilterDropdownViewComponent } from './filters/battlegrounds-time-filter-dropdown-view.component';
 import { BattlegroundsTribesFilterDropdownViewComponent } from './filters/battlegrounds-tribes-filter-dropdown-view.component';
 import { BattlegroundsHeroAveragePositionDetailsTooltipComponent } from './meta-heroes/battlegrounds-hero-average-position-details-tooltip.component';
+import { BattlegroundsHeroSearchComponent } from './meta-heroes/battlegrounds-hero-search.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from './meta-heroes/battlegrounds-meta-stats-hero-info.component';
 import { BattlegroundsMetaStatsHeroTierComponent } from './meta-heroes/battlegrounds-meta-stats-hero-tier.component';
 import { BattlegroundsMetaStatsHeroesViewComponent } from './meta-heroes/battlegrounds-meta-stats-heroes-view.component';
@@ -31,6 +33,7 @@ const components = [
 	BattlegroundsMetaStatsQuestRewardTierComponent,
 	BattlegroundsMetaStatsQuestRewardInfoComponent,
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
+	BattlegroundsHeroSearchComponent,
 	BgsHeroPortraitComponent,
 	CircularProgressComponent,
 
@@ -41,7 +44,14 @@ const components = [
 ];
 
 @NgModule({
-	imports: [CommonModule, SharedCommonViewModule, SharedFrameworkCoreModule, InlineSVGModule.forRoot()],
+	imports: [
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		SharedCommonViewModule,
+		SharedFrameworkCoreModule,
+		InlineSVGModule.forRoot(),
+	],
 	declarations: components,
 	exports: components,
 })

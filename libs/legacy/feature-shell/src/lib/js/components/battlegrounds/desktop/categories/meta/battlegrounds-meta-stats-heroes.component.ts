@@ -7,6 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import {
+	BattlegroundsNavigationService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
@@ -29,6 +30,7 @@ import { Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 		<battlegrounds-meta-stats-heroes-view
 			[stats]="stats$ | async"
 			[heroSort]="heroSort$ | async"
+			[searchString]="searchString$ | async"
 			[totalGames]="totalGames$ | async"
 			[lastUpdate]="lastUpdate$ | async"
 			(heroStatClick)="onHeroStatsClick($event)"
@@ -38,6 +40,7 @@ import { Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 })
 export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly BgsMetaHeroStatTierItem[]>;
+	searchString$: Observable<string>;
 	heroSort$: Observable<BgsHeroSortFilterType>;
 	totalGames$: Observable<number>;
 	lastUpdate$: Observable<Date>;
@@ -51,12 +54,13 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 		private readonly metaHeroStatsDuo: BgsMetaHeroStatsDuoService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
+		private readonly nav: BattlegroundsNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.metaHeroStats, this.metaHeroStatsDuo, this.playerHeroStats, this.prefs);
+		await waitForReady(this.metaHeroStats, this.metaHeroStatsDuo, this.playerHeroStats, this.prefs, this.nav);
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
@@ -71,6 +75,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 			}),
 		);
 		this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));
+		this.searchString$ = this.nav.heroSearchString$$;
 		const statsProvider$ = this.prefs.preferences$$.pipe(
 			switchMap((prefs) =>
 				prefs.bgsActiveGameMode === 'battlegrounds'

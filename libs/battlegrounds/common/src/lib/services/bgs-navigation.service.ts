@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class BattlegroundsNavigationService extends AbstractFacadeService<BattlegroundsNavigationService> {
 	public selectedCategoryId$$: BehaviorSubject<CategoryId | string | null>;
+	public heroSearchString$$: BehaviorSubject<string | null>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BattlegroundsNavigationService', () => !!this.selectedCategoryId$$);
@@ -12,10 +13,12 @@ export class BattlegroundsNavigationService extends AbstractFacadeService<Battle
 
 	protected override assignSubjects() {
 		this.selectedCategoryId$$ = this.mainInstance.selectedCategoryId$$;
+		this.heroSearchString$$ = this.mainInstance.heroSearchString$$;
 	}
 
 	protected async init() {
 		this.selectedCategoryId$$ = new BehaviorSubject<CategoryId | string | null>(null);
+		this.heroSearchString$$ = new BehaviorSubject<string | null>(null);
 	}
 }
 

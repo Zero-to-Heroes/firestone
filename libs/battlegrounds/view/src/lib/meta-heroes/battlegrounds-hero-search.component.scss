@@ -1,0 +1,56 @@
+:host {
+	width: 100%;
+	height: auto;
+	margin-bottom: 5px;
+	background: transparent;
+	flex-grow: 0 !important;
+}
+
+.search {
+	position: relative;
+	width: 100%;
+	top: 1px; // Align with the ng-select
+
+	label {
+		color: var(--color-2);
+		width: 100%;
+		border: 1px solid rgba(203, 159, 215, 0.5);
+		display: flex;
+
+		&:focus-within,
+		&:hover {
+			// outline: none;
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+
+	input {
+		color: var(--color-2);
+		width: 100%;
+		background: transparent;
+		border: none;
+		cursor: text;
+
+		&:focus {
+			outline: none;
+			color: var(--color-1);
+		}
+	}
+
+	label.search-active {
+		// background: rgba(255, 255, 255, 0.08);
+
+		input {
+			outline: none;
+			color: var(--color-1);
+		}
+	}
+}
+
+::selection {
+	// background-color: var(--color-2);
+}
+
+::-webkit-input-placeholder {
+	color: var(--color-2);
+}

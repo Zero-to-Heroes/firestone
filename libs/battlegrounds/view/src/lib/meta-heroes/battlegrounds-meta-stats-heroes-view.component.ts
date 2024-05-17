@@ -11,7 +11,7 @@ import {
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, takeUntil, tap } from 'rxjs';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
@@ -27,12 +27,17 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 				[attr.aria-label]="'Battlegrounds meta hero stats'"
 				*ngIf="{ tiers: tiers$ | async } as value"
 			>
-				<div class="data-info">
-					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
-					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
-					<div class="separator">-</div>
-					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
-					<div class="value">{{ totalGames$ | async }}</div>
+				<div class="top">
+					<div class="search">
+						<battlegrounds-hero-search></battlegrounds-hero-search>
+					</div>
+					<div class="data-info">
+						<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+						<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+						<div class="separator">-</div>
+						<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+						<div class="value">{{ totalGames$ | async }}</div>
+					</div>
 				</div>
 				<div class="header">
 					<div class="portrait"></div>
@@ -90,6 +95,9 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	@Input() set heroSort(value: BgsHeroSortFilterType) {
 		this.heroSort$$.next(value);
 	}
+	@Input() set searchString(value: string) {
+		this.searchString$$.next(value);
+	}
 	@Input() set totalGames(value: number) {
 		this.totalGames$$.next(value);
 	}
@@ -99,6 +107,7 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
 	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>('tier');
+	private searchString$$ = new BehaviorSubject<string | null>(null);
 	private totalGames$$ = new BehaviorSubject<number>(null);
 	private lastUpdate$$ = new BehaviorSubject<Date>(null);
 
@@ -107,7 +116,7 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
+		const tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
 			this.mapData(([stats, heroSort]) => {
 				if (!stats) {
 					return null;
@@ -133,6 +142,25 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 					default:
 						return buildTiers(stats, this.i18n);
 				}
+			}),
+			tap((tiers) => console.debug('[meta-stats] built tiers', tiers)),
+		);
+		this.tiers$ = combineLatest([tiers$, this.searchString$$]).pipe(
+			this.mapData(([tiers, searchString]) => {
+				return tiers
+					?.map((tier) => {
+						const result: BgsMetaHeroStatTier = {
+							...tier,
+							items: tier.items.filter((item) => {
+								if (!searchString) {
+									return true;
+								}
+								return item.name.toLowerCase().includes(searchString.toLowerCase());
+							}),
+						};
+						return result;
+					})
+					.filter((t) => t.items.length > 0);
 			}),
 		);
 
