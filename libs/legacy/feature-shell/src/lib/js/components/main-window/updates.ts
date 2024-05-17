@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.12.2',
+		version: '13.13.4',
 		force: false,
 		sections: [
 			// {
@@ -47,20 +47,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'arena',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Mulligan guide is live for Arena! Upon card selection during the mulligan, the app will show an overlay with the impact / pick rate of the cards being offered, as well as the impact of all cards in your deck. Premium users have illimited use of this features, while others can use it for up to 3 games per day.`,
+								text: `I am reworking how the "tribe impact" is computed, and will be trying to make it clearer what this stat actually means. It has now been renamed "strongest when in Lobby", to reflect that it shows which tribes that have the biggest effect on a hero performance. This is still a work in progress, so please let me know if you have any feedback on this.`,
 							},
 						],
 					},
 					{
-						category: 'decktracker',
+						category: 'arena',
 						details: [
 							{
 								type: 'feature',
-								text: `A new "Competitive" rank filter is available for meta stats (decks and archetypes). The idea is to limit the stats to users who are really trying to win, and so only includes Top 2000 Legend and Diamond 1-4 players. The mulligan overlay data still includes all players from Diamond to Legend to make sure the sample size is big enough, but this can be adjusted in the future.`,
+								text: `I have added a "My Stats" page that summaries stats across your Arena runs. Here as well, let me know what you think, and what you would like to see :)`,
 							},
 						],
 					},
@@ -71,42 +71,32 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where Zilliax would not be properly tracked when shuffled back into the deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Whizbang deck card summary would not appear in the Global Effects when played by the opponent.`,
+							},
+						],
+					},
+					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix some sim issues for Duos. There will still be quite a few iterations needed, but I'm finally starting to address Duos-specific sim issues :)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a display issue where the hero card would be incorrect in the battle recap tab if your teammate went first.`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
 								type: 'feature',
-								text: `Add the "Played on Curve Winrate" stat to the Cards Stats tab.`,
+								text: `Add a search bar to the Battlegrounds Heroes stats page.`,
 							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the "back" arrow had disappeared.`,
+								text: `Fix more simulation issues. The simulator for both Solos and Duos should be in a pretty good state now, but as usual, it's not perfect - so let me know if you encounter weird things.`,
 							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where you had to click twice on the Firestone system tray icon to restore the app's main window.`,
+								text: `Fix an issue where the app wouldn't retrieve the MMR for the players in the lobby anymore.`,
 							},
 						],
 					},
