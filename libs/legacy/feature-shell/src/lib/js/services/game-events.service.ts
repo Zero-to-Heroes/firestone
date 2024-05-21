@@ -730,7 +730,12 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
 				break;
 			case 'CARD_REMOVED_FROM_BOARD':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_BOARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_REMOVED_FROM_BOARD, gameEvent, {
+						removedByCardId: gameEvent.Value.AdditionalProps?.RemovedByCardId,
+						removedByEntityId: gameEvent.Value.AdditionalProps?.RemovedByEntityId,
+					}),
+				);
 				break;
 			case 'BURNED_CARD':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
