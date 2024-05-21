@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.13.4',
+		version: '13.14.0',
 		force: false,
 		sections: [
 			// {
@@ -51,57 +51,27 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `I am reworking how the "tribe impact" is computed, and will be trying to make it clearer what this stat actually means. It has now been renamed "strongest when in Lobby", to reflect that it shows which tribes that have the biggest effect on a hero performance. This is still a work in progress, so please let me know if you have any feedback on this.`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'feature',
-								text: `I have added a "My Stats" page that summaries stats across your Arena runs. Here as well, let me know what you think, and what you would like to see :)`,
+								text: `You can now customize the color of the background for some of the widgets. This is a very early step towards more customization, so don't hesitate to send me your feedback if you have any!`,
 							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where Zilliax would not be properly tracked when shuffled back into the deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Whizbang deck card summary would not appear in the Global Effects when played by the opponent.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a search bar to the Battlegrounds Heroes stats page.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix more simulation issues. The simulator for both Solos and Duos should be in a pretty good state now, but as usual, it's not perfect - so let me know if you encounter weird things.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the app wouldn't retrieve the MMR for the players in the lobby anymore.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix an issue where Zilliax would not be properly tracked when shuffled back into the deck.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
