@@ -1635,14 +1635,16 @@ export class GameEvents {
 		);
 		// If we're in a game, we want to ignore the past time restriction, as it's not a reconnect but
 		// rather the user launching the app once the game is running
+		const scene = await this.scene.currentScene$$.getValueWithInit(null, 500, 100);
 		if (
 			lastLineTimestamp &&
 			Date.now() - lastLineTimestamp > 5 * 60 * 1000 &&
-			![SceneMode.GAMEPLAY].includes(await this.scene.currentScene$$.getValueWithInit())
+			![SceneMode.GAMEPLAY].includes(scene)
 		) {
 			console.log(
 				'[game-events] [existing] last line is too old, not doing anything',
 				this.existingLogLines[this.existingLogLines.length - 1],
+				scene,
 			);
 			this.catchingUp = false;
 			this.existingLogLines = [];
