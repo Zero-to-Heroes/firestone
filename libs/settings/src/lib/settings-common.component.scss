@@ -233,3 +233,40 @@ input[type='range'] {
 	.locked {
 	}
 }
+
+button {
+	border: 1px solid #d9c3ab;
+	padding-left: 25px;
+	padding-right: 25px;
+	width: auto;
+	height: 35px;
+	display: flex;
+	align-items: center;
+	color: var(--default-text-color);
+	font-size: 14px;
+
+	i {
+		width: 18px;
+		height: 18px;
+		margin-right: 5px;
+		--icon-color: #ffb948;
+	}
+
+	div {
+		display: flex;
+	}
+
+	&:hover {
+		background: #ffb948;
+		border: none;
+		color: #2f0d0d;
+
+		span {
+			color: #2f0d0d;
+		}
+
+		i {
+			--icon-color: #2f0d0d;
+		}
+	}
+}

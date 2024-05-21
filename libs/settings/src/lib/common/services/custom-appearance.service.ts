@@ -50,17 +50,16 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 			});
 
 			this.colors$$.subscribe((colors) => {
-				if (!colors) {
-					return;
-				}
-
-				// TODO: take the default from the current style sheet, instead of hard-coding it
 				const bgsBackgroundColor = getStyle(colors, '--bgs-widget-background-color');
 				const finalStyles: FinalStyles = {
-					'--bgs-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
+					'--bgs-simulation-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg')`,
+					'--bgs-session-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg')`,
+					'--bgs-minions-list-widget-background-image': `radial-gradient(50% 50% at 50% 50%, ${bgsBackgroundColor} 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png')`,
 				};
-				console.debug('[custom-appearance] setting final styles', finalStyles);
+				// console.debug('[custom-appearance] setting final styles', finalStyles);
 				this.finalStyles$$.next(finalStyles);
 			});
 		});
@@ -80,6 +79,14 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 		});
 	}
 
+	public resetAll() {
+		this.mainInstance.resetAllInternal();
+	}
+
+	private resetAllInternal() {
+		this.colors$$.next(null);
+	}
+
 	public setColor(key: CustomStyleKey, value: string) {
 		this.mainInstance.setColorInternal(key, value);
 	}
@@ -93,6 +100,6 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 	}
 }
 
-const getStyle = (colors: CustomAppearance, key: CustomStyleKey) => {
-	return colors[key] ?? defaultStyleKeys[key];
+const getStyle = (colors: CustomAppearance | null, key: CustomStyleKey) => {
+	return colors?.[key] ?? defaultStyleKeys[key];
 };

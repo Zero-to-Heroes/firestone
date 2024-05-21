@@ -47,7 +47,7 @@
 	// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 	// background-image: var(--window-background-image);
 	background-size: 100%;
-	background-image: var(--bgs-widget-background-image);
+	background-image: var(--bgs-simulation-widget-background-image, --window-background-image);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	// background-size: contain;

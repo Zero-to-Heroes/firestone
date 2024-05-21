@@ -6,7 +6,10 @@ export type FinalStyles = {
 };
 
 export type CustomStyleKey = '--bgs-widget-background-color';
-export type FinalStyleKey = '--bgs-widget-background-image';
+export type FinalStyleKey =
+	| '--bgs-simulation-widget-background-image'
+	| '--bgs-session-widget-background-image'
+	| '--bgs-minions-list-widget-background-image';
 
 export const defaultStyleKeys: CustomAppearance = {
 	'--bgs-widget-background-color': 'rgba(94, 11, 70, 0.7)',

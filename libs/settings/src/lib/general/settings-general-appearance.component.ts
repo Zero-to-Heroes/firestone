@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { CustomStyleKey, defaultStyleKeys } from '../common/models/custom-appearance';
 import { CustomAppearanceService } from '../common/services/custom-appearance.service';
 
 @Component({
@@ -10,34 +9,22 @@ import { CustomAppearanceService } from '../common/services/custom-appearance.se
 	template: `
 		<div class="title" [fsTranslate]="'settings.general.appearance.battlegrounds.title'"></div>
 		<div class="settings-group battlegrounds">
-			<!-- 
-				Build a component to allow custom color selection for a specific field.
-				It should also allow for preset values (which would be the default values for the field)
-				as well as a "reset to default" button.
-			-->
-			<div class="color-component">
-				<div class="field-name">Widget background color</div>
-				<div class="color-bubble" [style.background]="color" (click)="showColorPicker = !showColorPicker"></div>
-				<input
-					#ignoredInput
-					[(cpToggle)]="showColorPicker"
-					[(colorPicker)]="color"
-					[cpPresetColors]="[defaultColor]"
-					[cpDisableInput]="true"
-					(colorPickerSelect)="onColorSelected()"
-					(colorPickerChange)="onColorChanged()"
-				/>
-			</div>
+			<custom-color-picker
+				[label]="'settings.general.appearance.battlegrounds.widget-background-color' | fsTranslate"
+				key="--bgs-widget-background-color"
+			></custom-color-picker>
+		</div>
+		<div class="buttons">
+			<button
+				class="reset-button"
+				[fsTranslate]="'settings.general.appearance.reset-button'"
+				(click)="resetAll()"
+			></button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsGeneralAppearanceComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	key: CustomStyleKey = '--bgs-widget-background-color';
-	defaultColor = defaultStyleKeys[this.key];
-	color = this.defaultColor;
-	showColorPicker = false;
-
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
@@ -56,13 +43,7 @@ export class SettingsGeneralAppearanceComponent extends AbstractSubscriptionComp
 		}
 	}
 
-	onColorSelected() {
-		console.debug('color selected', this.color);
-		this.appearance.setColor(this.key, this.color);
-	}
-
-	onColorChanged() {
-		console.debug('color selected', this.color);
-		this.appearance.setColor(this.key, this.color);
+	resetAll() {
+		this.appearance.resetAll();
 	}
 }
