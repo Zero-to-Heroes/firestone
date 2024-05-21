@@ -15,7 +15,7 @@ export class BgsToggleHighlightMinionOnBoardParser implements EventParser {
 		let highlightedMinions: readonly string[] = currentState.highlightedMinions;
 		for (const cardId of event.cardIds) {
 			highlightedMinions = highlightedMinions.includes(cardId)
-				? highlightedMinions.filter((cardId) => cardId !== cardId)
+				? highlightedMinions.filter((c) => c !== cardId)
 				: [...highlightedMinions, cardId];
 		}
 		console.debug(
