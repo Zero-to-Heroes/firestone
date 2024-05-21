@@ -40,6 +40,7 @@
 			"@firestone/mercenaries/common": ["libs/mercenaries/common/src/index.ts"],
 			"@firestone/profile/data-access": ["libs/profile/data-access/src/index.ts"],
 			"@firestone/replay/coliseum": ["libs/replay/coliseum/src/index.ts"],
+			"@firestone/settings": ["libs/settings/src/index.ts"],
 			"@firestone/shared/assets": ["libs/shared/assets/src/index.ts"],
 			"@firestone/shared/common/service": ["libs/shared/common/service/src/index.ts"],
 			"@firestone/shared/common/view": ["libs/shared/common/view/src/index.ts"],

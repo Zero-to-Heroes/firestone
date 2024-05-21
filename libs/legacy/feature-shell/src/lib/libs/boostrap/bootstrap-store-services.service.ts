@@ -32,6 +32,7 @@ import {
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
+import { BootstrapSettingsService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
@@ -129,6 +130,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_CardMousedOverService: CardMousedOverService,
 		private readonly init_CommunityJoinService: CommunityJoinService,
 		private readonly init_AchievementsNavigationService: AchievementsNavigationService,
+		private readonly init_BootstrapSettingsService: BootstrapSettingsService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

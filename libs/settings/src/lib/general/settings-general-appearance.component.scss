@@ -1,0 +1,23 @@
+:host {
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+.color-component {
+	display: flex;
+	align-items: center;
+
+	.field-name {
+		margin-right: 10px;
+	}
+
+	.color-bubble {
+		// margin-right: 10px;
+	}
+}
+
+.color-bubble {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+}

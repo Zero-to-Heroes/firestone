@@ -577,6 +577,7 @@ import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule } from '@firestone/mercenaries/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
+import { SettingsModule } from '@firestone/settings';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
 import {
@@ -916,6 +917,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CollectionCommonModule,
 		MercenariesCommonModule,
 		MainwindowCommonModule,
+		SettingsModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

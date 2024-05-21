@@ -7,20 +7,20 @@ import {
 	ElementRef,
 	HostListener,
 	OnDestroy,
-	Renderer2,
 	ViewChild,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CustomAppearanceService } from '@firestone/settings';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { Observable, combineLatest } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'full-screen-overlays',
@@ -171,7 +171,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class FullScreenOverlaysComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@ViewChild('container', { static: false }) container: ElementRef;
@@ -183,28 +183,27 @@ export class FullScreenOverlaysComponent
 	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly ow: OverwolfService,
-		private readonly renderer: Renderer2,
-		private readonly el: ElementRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly customStyles: CustomAppearanceService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		console.debug('full screen getting ready');
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.gameState, this.customStyles);
 		console.debug('full screen ready');
 
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,
-			this.store.listenDeckState$((deckState) => deckState.metadata?.gameType),
+			this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState?.metadata?.gameType)),
 		]).pipe(
-			this.mapData(([currentScene, nonGameplayScene, [gameType]]) => {
+			this.mapData(([currentScene, nonGameplayScene, gameType]) => {
 				if (!gameType) {
 					if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {
 						return 'battlegrounds';
@@ -225,6 +224,7 @@ export class FullScreenOverlaysComponent
 				}
 			}),
 		);
+		this.customStyles.register();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

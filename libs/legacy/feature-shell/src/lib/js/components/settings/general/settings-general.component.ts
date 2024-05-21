@@ -20,6 +20,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<settings-general-data *ngSwitchCase="'data'"></settings-general-data>
 				<settings-general-quests *ngSwitchCase="'quests'"></settings-general-quests>
 				<settings-general-mods *ngSwitchCase="'mods'"></settings-general-mods>
+				<settings-general-appearance *ngSwitchCase="'appearance'"></settings-general-appearance>
 			</ng-container>
 		</ul>
 	`,

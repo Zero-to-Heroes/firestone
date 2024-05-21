@@ -88,6 +88,7 @@
 		"ng-inline-svg-2": "^15.0.0",
 		"ng-select": "^1.0.2",
 		"ng2-charts": "^4.0.1",
+		"ngx-color-picker": "^14.0.0",
 		"ngx-scrollbar": "^10.0.1",
 		"ngx-virtual-scroller": "^4.0.3",
 		"pako": "1.0.11",

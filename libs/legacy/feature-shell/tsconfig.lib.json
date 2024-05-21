@@ -6,5 +6,9 @@
 		"declarationMap": true
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-	"include": ["**/*.ts", "../../shared/common/view/src/lib/components/toggle/preference-toggle.component.ts"]
+	"include": [
+		"**/*.ts",
+		"../../shared/common/view/src/lib/components/toggle/preference-toggle.component.ts",
+		"../../settings/src/lib/general/settings-general-appearance.component.ts"
+	]
 }
