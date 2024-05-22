@@ -36,6 +36,15 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						"
 						[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
 					></preference-toggle>
+					<preference-toggle
+						field="bgsActiveUseTribesFilterInHeroSelection"
+						[label]="
+							'settings.battlegrounds.general.use-tribes-filter-for-live-stats-label-short' | owTranslate
+						"
+						[tooltip]="
+							'settings.battlegrounds.general.use-tribes-filter-for-live-stats-tooltip' | owTranslate
+						"
+					></preference-toggle>
 					<!-- <preference-toggle
 						field="bgsActiveUseAnomalyFilterInHeroSelection"
 						[label]="
@@ -100,8 +109,10 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 						mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
 							? bgState.currentGame?.mmrAtStart ?? 0
 							: null,
-						rankFilter: 100,
-						tribesFilter: bgState.currentGame?.availableRaces ?? [],
+						rankFilter: 25,
+						tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
+							? bgState.currentGame?.availableRaces
+							: [],
 						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
 					};
 					return config;

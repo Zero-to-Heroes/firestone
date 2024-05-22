@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
+import { BgsHeroStatsV2, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import {
 	BgsMetaHeroStatTierItem,
 	BgsMetaHeroStatsAccessService,
@@ -110,6 +110,15 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 	private async getStatsInternal(config: Config): Promise<BgsHeroStatsV2 | null> {
 		const mmr = config.rankFilter || 100;
 		const stats = await this.access.loadMetaHeroStats(config.timeFilter, mmr);
+		return stats;
+	}
+
+	public async getMmrPercentiles(config: Config): Promise<readonly MmrPercentile[] | null> {
+		return this.mainInstance.getMmrPercentilesInternal(config);
+	}
+
+	private async getMmrPercentilesInternal(config: Config): Promise<readonly MmrPercentile[] | null> {
+		const stats = await this.access.loadMetaHeroMmrPercentiles(config.timeFilter);
 		return stats;
 	}
 

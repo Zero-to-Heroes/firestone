@@ -1,8 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
+import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
-import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { BgsRankFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -101,6 +102,15 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		// TODO: add a cache of some sort? Or add a facade based on observables that is able to properly centralize
 		// the requests of multiple widgets?
 		console.debug('[bgs-2] rebuilding meta hero stats', config, mmrFilter);
+		const mmrPercentiles: readonly MmrPercentile[] | null =
+			config.gameMode === 'battlegrounds-duo'
+				? await this.metaStatsDuo.getMmrPercentiles(config)
+				: await this.metaStats.getMmrPercentiles(config);
+		console.debug('[bgs-2] mmrPercentiles', mmrPercentiles);
+		const targetPercentile = extractRank(mmrPercentiles, config.rankFilter, mmrFilter);
+		const targetMmr = extractMmr(mmrPercentiles, targetPercentile, mmrFilter);
+		config.rankFilter = targetPercentile;
+
 		const heroStats =
 			config.gameMode === 'battlegrounds-duo'
 				? await this.metaStatsDuo.getStats(config)
@@ -111,7 +121,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 				: await this.metaStats.getTiers(config, heroStats);
 		const games = await this.gameStats.gameStats$$.getValueWithInit();
 		const patchInfo = await this.patchesConfig.currentBattlegroundsMetaPatch$$.getValueWithInit();
-		const mmrPercentiles = heroStats?.mmrPercentiles ?? [];
+		// const mmrPercentiles = heroStats?.mmrPercentiles ?? [];
 
 		const bgGames = (games ?? [])
 			.filter((g) =>
@@ -131,17 +141,42 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 					: true,
 			);
 
-		const targetRank: number = !mmrPercentiles?.length
-			? 0
-			: !!config.rankFilter
-			? mmrPercentiles.find((m) => m.percentile === config.rankFilter)?.mmr ?? 0
-			: !!mmrFilter
-			? mmrPercentiles.filter((m) => m.mmr >= mmrFilter).sort((a, b) => a.mmr - b.mmr)[0]?.mmr ?? 0
-			: 0;
-		const afterFilter = filterBgsMatchStats(bgGames, config.timeFilter, targetRank, patchInfo);
+		const afterFilter = filterBgsMatchStats(bgGames, config.timeFilter, targetMmr, patchInfo);
 		console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter);
 
 		const finalStats = tiers?.map((stat) => enhanceHeroStat(stat, afterFilter, this.allCards));
 		return finalStats;
 	}
 }
+
+const extractRank = (
+	mmrPercentiles: readonly MmrPercentile[] | null,
+	rankFilter: BgsRankFilterType,
+	mmrFilter?: number,
+): BgsRankFilterType => {
+	// Get the highest mmrPercentile whose mmr is lower than mmrFilter, if present
+	// If no mmrFilter is present, get the mmrPercentile corresponding to the rankFilter
+	if (!mmrPercentiles?.length) {
+		return 100;
+	}
+
+	if (!mmrFilter) {
+		return rankFilter;
+	}
+
+	const mmr = mmrPercentiles
+		.filter((m) => m.mmr <= mmrFilter)
+		.sort((a, b) => a.mmr - b.mmr)
+		.pop();
+	return mmr?.percentile ?? 100;
+};
+
+const extractMmr = (mmrPercentiles: readonly MmrPercentile[] | null, targetPercentile: number, mmrFilter?: number) => {
+	if (!mmrPercentiles?.length) {
+		return 0;
+	}
+	if (mmrFilter) {
+		return mmrFilter;
+	}
+	return mmrPercentiles.find((m) => m.percentile === targetPercentile)?.mmr ?? 0;
+};
