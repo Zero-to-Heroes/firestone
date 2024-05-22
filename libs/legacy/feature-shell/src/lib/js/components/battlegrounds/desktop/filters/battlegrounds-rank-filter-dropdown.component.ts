@@ -79,7 +79,7 @@ export class BattlegroundsRankFilterDropdownComponent
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsActiveUseMmrFilterInHeroSelection: true,
+			// bgsActiveUseMmrFilterInHeroSelection: true,
 			bgsActiveRankFilter: +option.value as BgsRankFilterType,
 		};
 		await this.prefs.savePreferences(newPrefs);

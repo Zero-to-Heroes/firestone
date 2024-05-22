@@ -12,7 +12,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
@@ -74,11 +74,13 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionTiers)),
 		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => premium && bgsShowHeroSelectionTiers));
 
+		// TODO: prevent update if BG game is not ongoing
 		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
 			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
+			debounceTime(500),
 			this.mapData(([gameState, bgState, prefs]) => {
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
@@ -93,11 +95,14 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				return config;
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap((info) => console.debug('[debug] updated config', info)),
 			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfigs.pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap((info) => console.debug('[debug] rebuilding stats overlay', info)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
+			// tap((info) => console.debug('[debug] updated tiers', info)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 

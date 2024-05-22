@@ -74,6 +74,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 			this.gameState,
 		);
 
+		// FIXME: looks like the rankFilter changes every time???
 		const statsConfig$: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
 			this.bgsState.gameState$$,
@@ -98,6 +99,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 
 		const stats$ = statsConfig$.pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap((info) => console.debug('[debug] rebuilding stats', info)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 		);
 

@@ -94,7 +94,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			this.gameState,
 		);
 
-		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
+		const statsConfig$: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
 			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
@@ -115,8 +115,10 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
 		);
-		const tiers$ = statsConfigs.pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		const tiers$ = statsConfig$.pipe(
+			distinctUntilChanged((a, b) => {
+				return deepEqual(a, b);
+			}),
 			tap((config) => console.debug('[bgs-hero-selection-overview] received config', config)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
@@ -199,16 +201,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 
 	trackByHeroFn(index, item: BgsMetaHeroStatTierItem) {
 		return item?.id;
-	}
-
-	async toggleFilter() {
-		// const prefs = await this.prefs.getPreferences();
-		// const newPrefs: Preferences = {
-		// 	...prefs,
-		// 	bgsActiveUseAnomalyFilterInHeroSelection: prefs.bgsSavedUseAnomalyFilterInHeroSelection,
-		// 	bgsActiveUseMmrFilterInHeroSelection: prefs.bgsSavedUseMmrFilterInHeroSelection,
-		// };
-		// await this.prefs.savePreferences(newPrefs);
 	}
 }
 
