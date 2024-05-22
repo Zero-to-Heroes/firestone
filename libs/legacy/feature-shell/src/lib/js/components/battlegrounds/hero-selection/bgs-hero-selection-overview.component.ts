@@ -124,7 +124,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			tap((config) => console.debug('[bgs-hero-selection-overview] received config', config)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
-			this.mapData((stats) => buildTiers(stats, this.i18n)),
+			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
@@ -222,6 +222,6 @@ interface InternalBgsHeroStat extends BgsMetaHeroStatTierItem {
 	readonly notEnoughDataPoints?: boolean;
 }
 
-interface ExtendedConfig extends Config {
+export interface ExtendedConfig extends Config {
 	mmrFilter: number;
 }

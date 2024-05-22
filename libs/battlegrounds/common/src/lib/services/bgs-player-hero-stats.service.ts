@@ -82,7 +82,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 				console.debug('[bgs-2] refreshing meta hero stats', config);
 				this.tiersWithPlayerData$$.next(null);
 				const finalStats = await this.buildFinalStats(config);
-				this.tiersWithPlayerData$$.next(finalStats);
+				this.tiersWithPlayerData$$.next(finalStats?.stats);
 			});
 		});
 	}
@@ -91,14 +91,28 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 	public async buildFinalStats(
 		config: Config,
 		mmrFilter?: number,
-	): Promise<readonly BgsMetaHeroStatTierItem[] | undefined> {
+	): Promise<
+		| {
+				stats: readonly BgsMetaHeroStatTierItem[] | undefined;
+				mmrPercentile: MmrPercentile;
+				lastUpdatedDate: Date | null;
+		  }
+		| undefined
+	> {
 		return this.mainInstance.buildFinalStatsInternal(config, mmrFilter);
 	}
 
 	private async buildFinalStatsInternal(
 		config: Config,
 		mmrFilter?: number,
-	): Promise<readonly BgsMetaHeroStatTierItem[] | undefined> {
+	): Promise<
+		| {
+				stats: readonly BgsMetaHeroStatTierItem[] | undefined;
+				mmrPercentile: MmrPercentile;
+				lastUpdatedDate: Date | null;
+		  }
+		| undefined
+	> {
 		// TODO: add a cache of some sort? Or add a facade based on observables that is able to properly centralize
 		// the requests of multiple widgets?
 		console.debug('[bgs-2] rebuilding meta hero stats', config, mmrFilter);
@@ -145,7 +159,11 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter);
 
 		const finalStats = tiers?.map((stat) => enhanceHeroStat(stat, afterFilter, this.allCards));
-		return finalStats;
+		return {
+			stats: finalStats,
+			mmrPercentile: { percentile: targetPercentile, mmr: targetMmr },
+			lastUpdatedDate: heroStats?.lastUpdateDate ? new Date(heroStats.lastUpdateDate) : null,
+		};
 	}
 }
 

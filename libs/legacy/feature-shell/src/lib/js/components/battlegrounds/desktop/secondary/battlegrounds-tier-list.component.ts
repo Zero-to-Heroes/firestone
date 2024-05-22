@@ -1,14 +1,21 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { ALL_BG_RACES, Race, getTribeName } from '@firestone-hs/reference-data';
-import { BG_USE_ANOMALIES, BgsMetaHeroStatsService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import { ExtendedConfig } from '@components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
+import { ALL_BG_RACES, Race, getTribeName, isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import {
+	BG_USE_ANOMALIES,
+	BgsMetaHeroStatsService,
+	BgsPlayerHeroStatsService,
+	BgsStateFacadeService,
+} from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
 
@@ -51,47 +58,68 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
 		private readonly prefs: PreferencesService,
+		private readonly bgsState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.mainWindowState, this.prefs);
+		await waitForReady(
+			this.metaHeroStats,
+			this.playerHeroStats,
+			this.mainWindowState,
+			this.prefs,
+			this.bgsState,
+			this.gameState,
+		);
 
-		this.stats$ = combineLatest([
-			this.playerHeroStats.tiersWithPlayerData$$,
-			this.metaHeroStats.metaHeroStats$$.pipe(
-				this.mapData(
-					(stats) => ({
-						mmrPercentiles: stats?.mmrPercentiles,
-						lastUpdateDate: stats?.lastUpdateDate,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
-			),
-			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					timeFilter: prefs.bgsActiveTimeFilter,
-					rankFilter: prefs.bgsActiveRankFilter,
-					tribesFilter: prefs.bgsActiveTribesFilter,
-					anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
-				})),
-			),
+		const statsConfig$: Observable<ExtendedConfig> = combineLatest([
+			this.gameState.gameState$$,
+			this.bgsState.gameState$$,
+			this.prefs.preferences$$,
 		]).pipe(
+			this.mapData(
+				([gameState, bgState, prefs]) => {
+					const config: ExtendedConfig = {
+						gameMode: isBattlegroundsDuo(gameState.metadata.gameType)
+							? 'battlegrounds-duo'
+							: 'battlegrounds',
+						timeFilter: 'last-patch',
+						mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
+							? bgState.currentGame?.mmrAtStart ?? 0
+							: null,
+						rankFilter: 25,
+						tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
+							? bgState.currentGame?.availableRaces
+							: [],
+						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+					};
+					return config;
+				},
+				(a, b) => deepEqual(a, b),
+			),
+		);
+
+		const stats$ = statsConfig$.pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
+		);
+
+		this.stats$ = combineLatest([stats$, statsConfig$]).pipe(
 			filter(
-				([stats, { mmrPercentiles, lastUpdateDate }, { timeFilter, rankFilter, tribesFilter }]) =>
-					!!stats?.length && !!mmrPercentiles?.length && !!lastUpdateDate,
+				([{ stats, mmrPercentile, lastUpdatedDate }, { timeFilter, rankFilter, tribesFilter }]) =>
+					!!stats?.length && !!mmrPercentile && !!lastUpdatedDate,
 			),
 			map(
 				([
-					stats,
-					{ mmrPercentiles, lastUpdateDate },
+					{ stats, mmrPercentile, lastUpdatedDate },
 					{ timeFilter, rankFilter, tribesFilter, anomaliesFilter },
 				]) => ({
 					stats: stats,
-					mmrPercentiles: mmrPercentiles,
+					mmrPercentile: mmrPercentile,
 					allTribes: ALL_BG_RACES,
-					lastUpdateDate: lastUpdateDate,
+					lastUpdateDate: lastUpdatedDate,
 					timeFilter: timeFilter,
 					rankFilter: rankFilter,
 					tribesFilter: tribesFilter,
@@ -132,12 +160,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 							<div class="title">${title}</div>
 							<ul class="filters">
 								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, this.i18n)}</li>
-								<li class="filter rank">${getBgsRankFilterLabelFor(
-									info.mmrPercentiles?.find(
-										(percentile) => percentile.percentile === info.rankFilter,
-									),
-									this.i18n,
-								)}</li>
+								<li class="filter rank">${getBgsRankFilterLabelFor(info.mmrPercentile, this.i18n)}</li>
 								<li class="filter tribesFilter">${this.buildTribesFilterText(info.tribesFilter, info.allTribes)}</li>
 								<li class="filter anomaliesFilter">${this.buildAnomaliesFilterText(info.anomaliesFilter)}</li>
 							</ul>
@@ -158,6 +181,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 	}
 
 	private buildTribesFilterText(tribesFilter: readonly Race[], allTribes: readonly Race[]): string {
+		console.debug('tribes filter', tribesFilter, allTribes);
 		if (!tribesFilter?.length || tribesFilter.length === allTribes.length) {
 			return this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes');
 		}

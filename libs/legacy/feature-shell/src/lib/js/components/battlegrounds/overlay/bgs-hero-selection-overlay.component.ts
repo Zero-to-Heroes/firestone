@@ -90,7 +90,9 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 							? bgState.currentGame?.mmrAtStart ?? 0
 							: null,
 						rankFilter: 100,
-						tribesFilter: bgState.currentGame?.availableRaces ?? [],
+						tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
+							? bgState.currentGame?.availableRaces
+							: [],
 						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
 					};
 					return config;
@@ -101,7 +103,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		const tiers$ = statsConfigs.pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
-			this.mapData((stats) => buildTiers(stats, this.i18n)),
+			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 
 		this.heroOverviews$ = combineLatest([
