@@ -15,7 +15,7 @@ import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/fram
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
 
@@ -79,26 +79,21 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
-			this.mapData(
-				([gameState, bgState, prefs]) => {
-					const config: ExtendedConfig = {
-						gameMode: isBattlegroundsDuo(gameState.metadata.gameType)
-							? 'battlegrounds-duo'
-							: 'battlegrounds',
-						timeFilter: 'last-patch',
-						mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
-							? bgState.currentGame?.mmrAtStart ?? 0
-							: null,
-						rankFilter: 25,
-						tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
-							? bgState.currentGame?.availableRaces
-							: [],
-						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
-					};
-					return config;
-				},
-				(a, b) => deepEqual(a, b),
-			),
+			this.mapData(([gameState, bgState, prefs]) => {
+				const config: ExtendedConfig = {
+					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
+					timeFilter: 'last-patch',
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame?.mmrAtStart ?? 0 : null,
+					rankFilter: 25,
+					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
+						? bgState.currentGame?.availableRaces
+						: [],
+					anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+				};
+				return config;
+			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			takeUntil(this.destroyed$),
 		);
 
 		const stats$ = statsConfig$.pipe(
@@ -111,6 +106,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 				([{ stats, mmrPercentile, lastUpdatedDate }, { timeFilter, rankFilter, tribesFilter }]) =>
 					!!stats?.length && !!mmrPercentile && !!lastUpdatedDate,
 			),
+			tap((info) => console.debug('[debug] rebuilding tier list', info)),
 			map(
 				([
 					{ stats, mmrPercentile, lastUpdatedDate },

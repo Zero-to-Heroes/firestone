@@ -12,7 +12,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, switchMap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
@@ -79,26 +79,21 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
-			this.mapData(
-				([gameState, bgState, prefs]) => {
-					const config: ExtendedConfig = {
-						gameMode: isBattlegroundsDuo(gameState.metadata.gameType)
-							? 'battlegrounds-duo'
-							: 'battlegrounds',
-						timeFilter: 'last-patch',
-						mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
-							? bgState.currentGame?.mmrAtStart ?? 0
-							: null,
-						rankFilter: 100,
-						tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
-							? bgState.currentGame?.availableRaces
-							: [],
-						anomaliesFilter: bgState.currentGame?.anomalies ?? [],
-					};
-					return config;
-				},
-				(a, b) => deepEqual(a, b),
-			),
+			this.mapData(([gameState, bgState, prefs]) => {
+				const config: ExtendedConfig = {
+					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
+					timeFilter: 'last-patch',
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame?.mmrAtStart ?? 0 : null,
+					rankFilter: 100,
+					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
+						? bgState.currentGame?.availableRaces
+						: [],
+					anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+				};
+				return config;
+			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfigs.pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
