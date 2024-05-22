@@ -146,6 +146,7 @@ export const buildHeroStats = (
 	useConservativeEstimate: boolean,
 	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
+	useDebug = false,
 ): readonly BgsMetaHeroStatTierItem[] => {
 	// mmrPercentile = useMmrFilter ? mmrPercentile : 100;
 	anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
@@ -157,18 +158,19 @@ export const buildHeroStats = (
 		// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
 		// that stat
 		// We can still have some leftover stats in the data, but that it very likely something bogus
-		const overlyDominentTribes = stat.tribeStats
-			.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints)
-			// Temporary, because since undeads where omnipresent the stats are skewed
-			.filter((t) => t.tribe !== Race.UNDEAD);
+		const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints);
+		// Temporary, because since undeads where omnipresent the stats are skewed
+		// .filter((t) => t.tribe !== Race.UNDEAD);
 		const isIn =
 			!overlyDominentTribes.length ||
 			!tribes?.length ||
 			overlyDominentTribes.every((t) => tribes.includes(t.tribe));
 		return isIn;
 	});
+	// console.debug('[bgs-2] building stats', result1);
 	return result1
 		.map((stat) => {
+			const shouldDebug = useDebug && stat.heroCardId === 'BG24_HERO_100';
 			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
 			const tribeStatsToUse = (
 				(useTribesModifier ? stat.tribeStats?.filter((t) => tribes.includes(t.tribe)) : stat.tribeStats) ?? []
@@ -178,16 +180,17 @@ export const buildHeroStats = (
 				.filter((t) => t.dataPointsOnMissingTribe > t.dataPoints / 20)
 				.map((t) => ({
 					...t,
-					impactAveragePosition: t.averagePosition - t.averagePositionWithoutTribe,
+					impactAveragePosition: t.averagePosition - (t.averagePositionWithoutTribe || t.averagePosition),
 				}));
+			shouldDebug && console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribes, stat);
 
 			if (useTribesModifier && !tribeStatsToUse?.length) {
-				console.debug(
-					'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
-					stat,
-					tribes,
-					tribeStatsToUse,
-				);
+				// console.debug(
+				// 	'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
+				// 	stat,
+				// 	tribes,
+				// 	tribeStatsToUse,
+				// );
 				return null;
 			}
 
@@ -200,6 +203,8 @@ export const buildHeroStats = (
 						impact: t.impactAveragePosition,
 				  }))
 				: null;
+			shouldDebug &&
+				console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribesAveragePositionModifierDetails);
 
 			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
 			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
@@ -207,12 +212,12 @@ export const buildHeroStats = (
 				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
 				: stat.anomalyStats ?? [];
 			if (useAnomalyModifier && !anomalyStatsToUse?.length) {
-				console.debug(
-					'[debug] [bgs-meta-stats] no anomaly stats to use, skipping',
-					stat,
-					anomalies,
-					anomalyStatsToUse,
-				);
+				// console.debug(
+				// 	'[debug] [bgs-meta-stats] no anomaly stats to use, skipping',
+				// 	stat,
+				// 	anomalies,
+				// 	anomalyStatsToUse,
+				// );
 				return null;
 			}
 
@@ -235,6 +240,13 @@ export const buildHeroStats = (
 			const averagePositionBaseValue = useConservativeEstimate
 				? stat.conservativePositionEstimate
 				: stat.averagePosition;
+			shouldDebug &&
+				console.debug(
+					'[bgs-2] averagePositionBaseValue',
+					averagePositionBaseValue,
+					useConservativeEstimate,
+					stat,
+				);
 			const dataPoints = Math.min(
 				stat.dataPoints,
 				useAnomalyModifier
@@ -276,6 +288,7 @@ export const buildHeroStats = (
 					.map((p) => p.percentage)
 					.reduce((a, b) => a + b, 0),
 			};
+			// console.debug('[bgs-2] built hero stat', result, stat);
 			return result;
 		})
 		.filter((s) => !!s)

@@ -122,13 +122,15 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 	public async getTiers(
 		config: Config,
 		inputStats?: BgsHeroStatsV2 | null,
+		useDebug = false,
 	): Promise<readonly BgsMetaHeroStatTierItem[] | null> {
-		return this.mainInstance.getTiersInternal(config, inputStats);
+		return this.mainInstance.getTiersInternal(config, inputStats, useDebug);
 	}
 
 	private async getTiersInternal(
 		config: Config,
 		inputStats?: BgsHeroStatsV2 | null,
+		useDebug = false,
 	): Promise<readonly BgsMetaHeroStatTierItem[] | null> {
 		const stats = inputStats ?? (await this.getStats(config));
 		const result: readonly BgsMetaHeroStatTierItem[] | null = !stats?.heroStats
@@ -141,6 +143,7 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 					!!config.options?.convervativeEstimate,
 					false,
 					this.allCards,
+					useDebug,
 			  );
 		return result;
 	}

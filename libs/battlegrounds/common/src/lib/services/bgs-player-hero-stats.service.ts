@@ -81,7 +81,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			combineLatest([config$, this.gameStats.gameStats$$]).subscribe(async ([config]) => {
 				console.debug('[bgs-2] refreshing meta hero stats', config);
 				this.tiersWithPlayerData$$.next(null);
-				const finalStats = await this.buildFinalStats(config);
+				const finalStats = await this.buildFinalStats(config, undefined, false);
 				this.tiersWithPlayerData$$.next(finalStats?.stats);
 			});
 		});
@@ -91,6 +91,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 	public async buildFinalStats(
 		config: Config,
 		mmrFilter?: number,
+		useDebug = true,
 	): Promise<
 		| {
 				stats: readonly BgsMetaHeroStatTierItem[] | undefined;
@@ -99,12 +100,13 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		  }
 		| undefined
 	> {
-		return this.mainInstance.buildFinalStatsInternal(config, mmrFilter);
+		return this.mainInstance.buildFinalStatsInternal(config, mmrFilter, useDebug);
 	}
 
 	private async buildFinalStatsInternal(
 		inputConfig: Config,
 		mmrFilter?: number,
+		useDebug?: boolean,
 	): Promise<
 		| {
 				stats: readonly BgsMetaHeroStatTierItem[] | undefined;
@@ -115,12 +117,12 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 	> {
 		// TODO: add a cache of some sort? Or add a facade based on observables that is able to properly centralize
 		// the requests of multiple widgets?
-		console.debug('[bgs-2] rebuilding meta hero stats', inputConfig, mmrFilter);
+		useDebug && console.debug('[bgs-2] rebuilding meta hero stats', inputConfig, mmrFilter);
 		const mmrPercentiles: readonly MmrPercentile[] | null =
 			inputConfig.gameMode === 'battlegrounds-duo'
 				? await this.metaStatsDuo.getMmrPercentiles(inputConfig)
 				: await this.metaStats.getMmrPercentiles(inputConfig);
-		console.debug('[bgs-2] mmrPercentiles', mmrPercentiles);
+		useDebug && console.debug('[bgs-2] mmrPercentiles', mmrPercentiles);
 		const targetPercentile = extractRank(mmrPercentiles, inputConfig.rankFilter, mmrFilter);
 		const targetMmr = extractMmr(mmrPercentiles, targetPercentile, mmrFilter);
 		const config: Config = {
@@ -132,10 +134,12 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			config.gameMode === 'battlegrounds-duo'
 				? await this.metaStatsDuo.getStats(config)
 				: await this.metaStats.getStats(config);
+		useDebug && console.debug('[bgs-2] retrieved hero stats', heroStats);
 		const tiers =
 			config.gameMode === 'battlegrounds-duo'
-				? await this.metaStatsDuo.getTiers(config, heroStats)
+				? await this.metaStatsDuo.getTiers(config, heroStats, useDebug)
 				: await this.metaStats.getTiers(config, heroStats);
+		useDebug && console.debug('[bgs-2] retrieved tiers', tiers);
 		const games = await this.gameStats.gameStats$$.getValueWithInit();
 		const patchInfo = await this.patchesConfig.currentBattlegroundsMetaPatch$$.getValueWithInit();
 		// const mmrPercentiles = heroStats?.mmrPercentiles ?? [];
@@ -159,7 +163,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			);
 
 		const afterFilter = filterBgsMatchStats(bgGames, config.timeFilter, targetMmr, patchInfo);
-		console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter, tiers);
+		useDebug && console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter, tiers);
 
 		const finalStats = tiers?.map((stat) => enhanceHeroStat(stat, afterFilter, this.allCards));
 		return {
