@@ -227,6 +227,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 			(deck) => deck.deckstring === this.currentlyMousedOverDeck.value,
 		);
 		const dragged: DeckSummary = event.item.data;
+		console.debug('dropping', dragged.deckstring, droppedOn.deckstring);
 		if (dragged.deckstring !== droppedOn.deckstring) {
 			this.stateUpdater.next(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
 		}

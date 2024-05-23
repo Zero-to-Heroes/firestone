@@ -15,22 +15,30 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const versionLinks = prefs.constructedDeckVersions;
-		const link: ConstructedDeckVersions = this.addVersion(
-			this.findExistingVersion(versionLinks, event.previousVersionDeckstring),
-			event.newVersionDeckstring,
-		) ??
-			this.addVersion(
-				this.findExistingVersion(versionLinks, event.newVersionDeckstring),
-				event.previousVersionDeckstring,
-			) ?? {
+		console.debug('processing new deck version', event, versionLinks);
+		const existingLinkFromPreviousVersion = this.findExistingVersion(versionLinks, event.previousVersionDeckstring);
+		const existingLinkFromNewVersion = this.findExistingVersion(versionLinks, event.newVersionDeckstring);
+		console.debug('existingLinkFromPreviousVersion', existingLinkFromPreviousVersion);
+		console.debug('existingLinkFromNewVersion', existingLinkFromNewVersion);
+		const newLinkFromPreviousVersion = this.addVersion(existingLinkFromPreviousVersion, event.newVersionDeckstring);
+		const newLinkFromNewVersion = this.addVersion(existingLinkFromNewVersion, event.previousVersionDeckstring);
+		console.debug('newLinkFromPreviousVersion', newLinkFromPreviousVersion);
+		console.debug('newLinkFromNewVersion', newLinkFromNewVersion);
+		const link: ConstructedDeckVersions = newLinkFromPreviousVersion ??
+			newLinkFromNewVersion ?? {
 				versions: [{ deckstring: event.previousVersionDeckstring }, { deckstring: event.newVersionDeckstring }],
 			};
+		console.debug('new link', link);
+		const cleanedLink: ConstructedDeckVersions = {
+			versions: [...new Set(link.versions)],
+		};
 		const newVersionLinks = [
 			...versionLinks.filter(
 				(link) => !link.versions.map((v) => v.deckstring).includes(event.previousVersionDeckstring),
 			),
-			link,
+			cleanedLink,
 		];
+		console.debug('newVersionLinks', newVersionLinks);
 
 		await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
 		return [null, null];

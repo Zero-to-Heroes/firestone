@@ -108,6 +108,23 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				)
 				.subscribe(this.decks$$);
 		});
+
+		// Keep the versions clean (remove unused deckstrings)
+		this.gameStats.gameStats$$
+			.pipe(
+				map((stats) => stats?.map((stat) => stat.playerDecklist).filter((deckstring) => !!deckstring) ?? []),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				map((deckstrings) => [...new Set(deckstrings)]),
+			)
+			.subscribe(async (deckstrings) => {
+				const prefs = await this.prefs.getPreferences();
+				const versionLinks = prefs.constructedDeckVersions;
+				const newVersionLinks = versionLinks.map((link) => ({
+					...link,
+					versions: link.versions.filter((version) => deckstrings.includes(version.deckstring)),
+				}));
+				await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
+			});
 	}
 
 	private buildState(
@@ -133,6 +150,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
 		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
 		const deckstrings = Object.keys(statsByDeck);
+		console.debug('[decks-provider] deckstrings', deckstrings);
 		const decks: readonly DeckSummary[] = deckstrings.map((deckstring) =>
 			this.buildDeckSummary(
 				deckstring,
@@ -145,6 +163,11 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				patch,
 				statsByDeck[deckstring][0],
 			),
+		);
+		console.debug(
+			'[decks-provider] decks',
+			decks.map((d) => d.deckstring),
+			decks,
 		);
 
 		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
@@ -165,8 +188,19 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 					hidden: desktopDeckHiddenDeckCodes.includes(deck.deckstring),
 				} as DeckSummary;
 			});
+		console.debug(
+			'[decks-provider] finalPersonalDecks',
+			finalPersonalDecks.map((d) => d.deckstring),
+			finalPersonalDecks,
+		);
 
 		const versionedDecks = this.consolidateDeckVersions(decks, constructedDeckVersions, desktopDeckHiddenDeckCodes);
+		console.debug(
+			'[decks-provider] versionedDecks',
+			versionedDecks.map((d) => d.deckstring),
+			versionedDecks,
+		);
+
 		return [...versionedDecks, ...finalPersonalDecks];
 	}
 
