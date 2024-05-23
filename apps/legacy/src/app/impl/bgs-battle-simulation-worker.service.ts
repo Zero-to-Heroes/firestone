@@ -3,12 +3,13 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { OutcomeSamples, SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BugReportService } from '@legacy-import/src/lib/js/services/bug/bug-report.service';
 import { BgsBattleSimulationExecutorService } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-simulation-executor.service';
 import { sumOnArray } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
 
 @Injectable()
 export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecutorService {
-	constructor(private readonly cards: CardsFacadeService) {
+	constructor(private readonly cards: CardsFacadeService, private readonly bugService: BugReportService) {
 		super();
 	}
 
@@ -22,7 +23,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 				),
 			),
 		);
-		return this.mergeSimulationResults(results);
+		return this.mergeSimulationResults(results?.filter((result) => result != null) ?? []);
 	}
 
 	private mergeSimulationResults(results: SimulationResult[]): SimulationResult {
@@ -75,6 +76,17 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
 			worker.onmessage = (ev: MessageEvent) => {
 				worker.terminate();
+				if (!ev?.data) {
+					this.bugService.submitAutomatedReport({
+						type: 'bg-sim-crash',
+						info: JSON.stringify({
+							message: '[bgs-simulation] Simulation crashed',
+							battleInfo: battleInfo,
+						}),
+					});
+					resolve(null);
+					return;
+				}
 				resolve(JSON.parse(ev.data));
 			};
 			worker.postMessage({

@@ -17,7 +17,7 @@ addEventListener('message', ({ data }) => {
 		const result: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
 		postMessage(JSON.stringify(result));
 	} catch (e) {
-		console.warn('no-format', 'battleInfo', battleInfo);
+		console.warn('no-format', 'battleInfo', JSON.stringify(battleInfo));
 		console.error('Exception while simulating battle', e);
 		postMessage(null);
 	}
