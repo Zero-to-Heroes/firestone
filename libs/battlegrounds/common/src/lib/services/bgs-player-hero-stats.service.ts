@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { ALL_BG_RACES } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, isBattlegrounds } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
@@ -13,6 +13,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
+import { toGameTypeEnum } from '@firestone/stats/data-access';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { Config } from '../model/_barrel';
 import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
@@ -55,6 +56,10 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 
 		this.tiersWithPlayerData$$.onFirstSubscribe(() => {
 			const gameMode$ = this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsActiveGameMode));
+
+			const gameStats$ = this.gameStats.gameStats$$.pipe(
+				map((stats) => stats?.filter((s) => isBattlegrounds(toGameTypeEnum(s.gameMode)))),
+			);
 			// Can probably avoid marking the data as null when changing things like the tribes
 			const config$ = combineLatest([
 				gameMode$,
@@ -80,7 +85,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			);
 
 			// Make sure we refresh when game stats are updated
-			combineLatest([config$, this.gameStats.gameStats$$]).subscribe(async ([config]) => {
+			combineLatest([config$, gameStats$]).subscribe(async ([config]) => {
 				console.debug('[bgs-2] refreshing meta hero stats', config);
 				this.tiersWithPlayerData$$.next(null);
 				const finalStats = await this.buildFinalStats(config, undefined, false);
