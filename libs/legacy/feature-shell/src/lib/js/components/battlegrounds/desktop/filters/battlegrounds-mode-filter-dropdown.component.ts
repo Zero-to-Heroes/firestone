@@ -65,7 +65,11 @@ export class BattlegroundsModeFilterDropdownComponent
 			this.mapData(([filter, selectedCategoryId]) => ({
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,
-				visible: ['bgs-category-meta-heroes', 'bgs-category-leaderboard'].includes(selectedCategoryId),
+				visible: [
+					'bgs-category-meta-heroes',
+					'bgs-category-leaderboard',
+					'bgs-category-personal-rating',
+				].includes(selectedCategoryId),
 			})),
 		);
 

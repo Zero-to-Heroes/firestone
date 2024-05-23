@@ -9,7 +9,6 @@ import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
-import { isBattlegrounds } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 
@@ -80,6 +79,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 						timeFilter: prefs.bgsActiveTimeFilter,
 						mmrFilter: prefs.bgsActiveRankFilter,
 						mmrGroupFilter: prefs.bgsActiveMmrGroupFilter,
+						mode: prefs.bgsActiveGameMode,
 					}),
 					(a, b) => deepEqual(a, b),
 				),
@@ -90,9 +90,13 @@ export class BattlegroundsPersonalStatsRatingComponent
 				([stats, { timeFilter, mmrFilter, mmrGroupFilter }, currentBattlegroundsMetaPatch]) =>
 					!!stats && !!currentBattlegroundsMetaPatch,
 			),
-			this.mapData(([stats, { timeFilter, mmrFilter, mmrGroupFilter }, currentBattlegroundsMetaPatch]) => {
+			this.mapData(([stats, { timeFilter, mmrFilter, mmrGroupFilter, mode }, currentBattlegroundsMetaPatch]) => {
 				const relevantGames = stats
-					.filter((stat) => isBattlegrounds(stat.gameMode))
+					.filter((stat) =>
+						mode === 'battlegrounds-duo'
+							? stat.gameMode === 'battlegrounds-duo'
+							: stat.gameMode === 'battlegrounds',
+					)
 					.filter((stat) => stat.playerRank);
 				return this.buildValue(
 					relevantGames,
