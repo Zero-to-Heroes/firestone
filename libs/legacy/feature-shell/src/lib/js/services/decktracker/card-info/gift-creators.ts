@@ -853,4 +853,5 @@ export const giftCreators = [
 	CardIds.DustBunny_MIS_706,
 	CardIds.StandardizedPack_MIS_705,
 	CardIds.MurlocGrowfin_MIS_307,
+	CardIds.KingTogwaggle,
 ];
