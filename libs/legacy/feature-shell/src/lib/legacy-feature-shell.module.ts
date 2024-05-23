@@ -501,6 +501,8 @@ import { BgsBattleRecapPlayerComponent } from '@components/battlegrounds/battles
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
+import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegrounds/overlay/battlegrounds-tribe-details-tooltip.component';
+import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
 import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
 import { ConstructedMetaArchetypeDetailsComponent } from '@components/decktracker/main/constructed-meta-archetype-details.component';
 import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
@@ -1139,6 +1141,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroFaceOffComponent,
 		BgsQuestRewardsComponent,
 		BgsStrategyCurveComponent,
+		BattlegroundsTribeDetailsTooltipComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
@@ -1177,6 +1180,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroTipsComponent,
 		BgsSimulationOverlayComponent,
 		BgsHeroSelectionOverlayComponent,
+		BgsHeroSelectionOverlayInfoComponent,
 		// ConstructedComponent,
 		DeckTrackerOverlayPlayerComponent,
 		DeckTrackerOverlayOpponentComponent,

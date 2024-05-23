@@ -19,6 +19,8 @@ import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
 import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
 import { filterBgsMatchStats } from './hero-stats-helper';
 
+export const DEFAULT_MMR_PERCENTILE = 25;
+
 @Injectable()
 export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHeroStatsService> {
 	public tiersWithPlayerData$$: SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null | undefined>;

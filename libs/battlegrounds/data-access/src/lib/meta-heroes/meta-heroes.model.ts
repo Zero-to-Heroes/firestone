@@ -19,6 +19,10 @@ export interface BgsMetaHeroStatTierItem {
 			tribe: Race;
 			impact: number;
 		}[];
+		readonly allTribesAveragePositionModifierDetails: readonly {
+			tribe: Race;
+			impact: number;
+		}[];
 		readonly anomalyModifiers: readonly {
 			cardId: string;
 			impact: number;

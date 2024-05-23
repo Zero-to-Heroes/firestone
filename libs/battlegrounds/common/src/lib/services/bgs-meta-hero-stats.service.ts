@@ -17,6 +17,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { Config } from '../model/_barrel';
+import { DEFAULT_MMR_PERCENTILE } from './bgs-player-hero-stats.service';
 
 export const BG_USE_ANOMALIES = false;
 
@@ -108,7 +109,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 	}
 
 	private async getStatsInternal(config: Config): Promise<BgsHeroStatsV2 | null> {
-		const mmr = config.rankFilter || 100;
+		const mmr = config.rankFilter || DEFAULT_MMR_PERCENTILE;
 		const stats = await this.access.loadMetaHeroStats(config.timeFilter, mmr);
 		return stats;
 	}

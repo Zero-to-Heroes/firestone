@@ -5,6 +5,7 @@ import {
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
 	Config,
+	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { GameStateFacadeService } from '@firestone/game-state';
@@ -12,7 +13,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
@@ -26,28 +27,19 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	template: `
 		<div
 			class="app-container battlegrounds-theme bgs-hero-selection-overlay heroes-{{ value.overviews?.length }}"
-			[ngClass]="{
-				'with-hero-tooltips': heroTooltipActive$ | async,
-				'with-tier-overlay': showTierOverlay$ | async
-			}"
 			*ngIf="{ overviews: heroOverviews$ | async } as value"
 		>
-			<bgs-hero-overview
+			<bgs-hero-selection-overlay-info
 				*ngFor="let hero of value.overviews || []; trackBy: trackByHeroFn"
 				[hero]="hero"
 				[achievements]="hero?.achievements"
-				[hideEmptyState]="true"
-				[heroTooltipPosition]="hero?.tooltipPosition"
-				[tooltipAdditionalClass]="hero?.tooltipClass"
-			></bgs-hero-overview>
+			></bgs-hero-selection-overlay-info>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
-	heroTooltipActive$: Observable<boolean>;
-	showTierOverlay$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -66,31 +58,23 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs, this.bgsState, this.ads, this.playerHeroStats, this.achievements);
 
-		this.heroTooltipActive$ = combineLatest([this.ads.enablePremiumFeatures$$, this.prefs.preferences$$]).pipe(
-			this.mapData(([premium, prefs]) => premium && prefs.bgsShowHeroSelectionTooltip),
-		);
-		this.showTierOverlay$ = combineLatest([
-			this.ads.enablePremiumFeatures$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionTiers)),
-		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => premium && bgsShowHeroSelectionTiers));
-
-		// TODO: prevent update if BG game is not ongoing
 		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
 			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
 			debounceTime(500),
+			filter(([gameState, bgState, prefs]) => !!gameState && !!bgState?.currentGame && !!prefs),
 			this.mapData(([gameState, bgState, prefs]) => {
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
-					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame?.mmrAtStart ?? 0 : null,
-					rankFilter: 100,
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame.mmrAtStart ?? 0 : null,
+					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
-						? bgState.currentGame?.availableRaces
+						? bgState.currentGame.availableRaces
 						: [],
-					anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+					anomaliesFilter: bgState.currentGame.anomalies ?? [],
 				};
 				return config;
 			}),
@@ -112,7 +96,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.bgsState.gameState$$.pipe(
 				this.mapData(
 					(main) =>
-						main.panels?.find(
+						main?.panels?.find(
 							(panel) => panel.id === 'bgs-hero-selection-overview',
 						) as BgsHeroSelectionOverviewPanel,
 				),

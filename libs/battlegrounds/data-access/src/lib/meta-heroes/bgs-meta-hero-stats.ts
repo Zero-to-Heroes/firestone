@@ -172,9 +172,7 @@ export const buildHeroStats = (
 		.map((stat) => {
 			const shouldDebug = useDebug && stat.heroCardId === 'BG24_HERO_100';
 			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
-			const tribeStatsToUse = (
-				(useTribesModifier ? stat.tribeStats?.filter((t) => tribes.includes(t.tribe)) : stat.tribeStats) ?? []
-			)
+			const modifiedTribeStats = (stat.tribeStats ?? [])
 				// Remove some incorrect data points
 				.filter((t) => t.dataPoints > stat.dataPoints / 20)
 				.filter((t) => t.dataPointsOnMissingTribe > t.dataPoints / 20)
@@ -182,6 +180,9 @@ export const buildHeroStats = (
 					...t,
 					impactAveragePosition: t.averagePosition - (t.averagePositionWithoutTribe || t.averagePosition),
 				}));
+			const tribeStatsToUse = useTribesModifier
+				? modifiedTribeStats.filter((t) => tribes.includes(t.tribe))
+				: modifiedTribeStats;
 			shouldDebug && console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribes, stat);
 
 			if (useTribesModifier && !tribeStatsToUse?.length) {
@@ -203,6 +204,10 @@ export const buildHeroStats = (
 						impact: t.impactAveragePosition,
 				  }))
 				: null;
+			const allTribesAveragePositionModifierDetails = modifiedTribeStats.map((t) => ({
+				tribe: t.tribe,
+				impact: t.impactAveragePosition,
+			}));
 			shouldDebug &&
 				console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribesAveragePositionModifierDetails);
 
@@ -261,6 +266,7 @@ export const buildHeroStats = (
 				averagePositionDetails: {
 					baseValue: averagePositionBaseValue,
 					tribesModifiers: tribesAveragePositionModifierDetails,
+					allTribesAveragePositionModifierDetails: allTribesAveragePositionModifierDetails,
 					anomalyModifiers: anomaliesAveragePositionModifierDetails,
 				},
 				tribesFilter: tribes,

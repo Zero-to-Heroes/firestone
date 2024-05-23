@@ -5,6 +5,7 @@ import {
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
 	Config,
+	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { GameStateFacadeService } from '@firestone/game-state';
@@ -104,7 +105,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
 					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame?.mmrAtStart ?? 0 : null,
-					rankFilter: 25,
+					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
 						? bgState.currentGame?.availableRaces
 						: [],
