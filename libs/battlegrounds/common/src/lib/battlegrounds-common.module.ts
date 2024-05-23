@@ -9,7 +9,9 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboards.component';
+import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
 import { BgsQuestStatsInfoPremiumComponent } from './components/bgs-quest-stats-info-premium.component';
+import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
 import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
@@ -22,7 +24,7 @@ import { BgsPlayerHeroStatsService } from './services/bgs-player-hero-stats.serv
 import { BattlegroundsQuestsService } from './services/bgs-quests.service';
 import { BgsStateFacadeService } from './services/bgs-state-facade.service';
 
-const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent];
+const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent, BgsHeroStatsInfoPremiumComponent];
 
 @NgModule({
 	imports: [
@@ -42,6 +44,7 @@ const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent]
 		BattlegroundsQuestsService,
 		BgsInGameQuestsService,
 		BgsInGameQuestsGuardianService,
+		BgsInGameHeroSelectionGuardianService,
 		BgsMatchMemoryInfoService,
 		BattlegroundsOfficialLeaderboardService,
 		BgsMatchPlayersMmrService,
@@ -50,6 +53,7 @@ const components = [BgsQuestStatsInfoPremiumComponent, BgsLeaderboardsComponent]
 		BgsMetaHeroStatsService,
 		BgsMetaHeroStatsDuoService,
 		BattlegroundsNavigationService,
+		BgsInGameHeroSelectionGuardianService,
 	],
 	declarations: components,
 	exports: components,

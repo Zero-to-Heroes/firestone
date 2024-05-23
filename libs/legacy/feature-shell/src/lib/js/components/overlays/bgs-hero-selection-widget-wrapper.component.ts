@@ -8,12 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsInGameHeroSelectionGuardianService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -50,6 +50,7 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly bgState: BgsStateFacadeService,
+		private readonly guardian: BgsInGameHeroSelectionGuardianService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
@@ -87,6 +88,19 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 			),
 			this.handleReposition(),
 		);
+
+		const displayInfo$ = combineLatest([
+			this.showWidget$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
+		]).pipe(this.mapData(([showWidget, showFromPrefs]) => showWidget && showFromPrefs));
+		displayInfo$
+			.pipe(distinctUntilChanged(), pairwise(), takeUntil(this.destroyed$))
+			.subscribe(([wasDisplayed, isDisplayed]) => {
+				console.debug('[bgs-hero] widget visibility changed', wasDisplayed, isDisplayed);
+				if (wasDisplayed && !isDisplayed) {
+					this.guardian.acknowledgeStatsSeen();
+				}
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

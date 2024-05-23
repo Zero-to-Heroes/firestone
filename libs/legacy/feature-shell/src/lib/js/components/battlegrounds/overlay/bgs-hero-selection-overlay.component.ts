@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
 	BgsHeroSelectionOverviewPanel,
+	BgsInGameHeroSelectionGuardianService,
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
 	Config,
@@ -13,7 +14,17 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	switchMap,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
@@ -33,6 +44,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				*ngFor="let hero of value.overviews || []; trackBy: trackByHeroFn"
 				[hero]="hero"
 				[achievements]="hero?.achievements"
+				[freeUsesLeft]="freeUsesLeft$ | async"
+				[showPremiumBanner]="showPremiumBanner$ | async"
 			></bgs-hero-selection-overlay-info>
 		</div>
 	`,
@@ -40,6 +53,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 })
 export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
+	showPremiumBanner$: Observable<boolean>;
+	freeUsesLeft$: Observable<number>;
+
+	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -51,13 +68,26 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		private readonly ads: AdService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly achievements: AchievementsStateManagerService,
+		private readonly guardian: BgsInGameHeroSelectionGuardianService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.bgsState, this.ads, this.playerHeroStats, this.achievements);
+		await waitForReady(this.prefs, this.bgsState, this.ads, this.playerHeroStats, this.achievements, this.guardian);
 
+		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$])
+			.pipe(
+				debounceTime(200),
+				tap((info) => console.debug('[debug] updated premium banner', info)),
+				this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
+			)
+			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
+		this.freeUsesLeft$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
+			debounceTime(200),
+			this.mapData(([hasPremiumSub, freeUsesLeft]) => (hasPremiumSub ? 0 : freeUsesLeft)),
+		);
+		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
 		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
 			this.bgsState.gameState$$,

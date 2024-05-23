@@ -1,5 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { DAILY_FREE_USES_HERO } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -18,10 +19,11 @@ import {
 	template: `
 		<div class="info-container">
 			<div class="element tiers-info scalable" *ngIf="showTierOverlay$ | async">
-				<!-- <div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
-					{{ freeUsesText }}
-				</div> -->
-				<div class="values">
+				<bgs-hero-stats-info-premium *ngIf="showPremiumBanner"></bgs-hero-stats-info-premium>
+				<div class="values" *ngIf="!showPremiumBanner">
+					<div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
+						{{ freeUsesText }}
+					</div>
 					<div class="item tier">
 						<div class="text" [fsTranslate]="'battlegrounds.hero-selection.tier'"></div>
 						<div class="value {{ tier?.toLowerCase() }}">
@@ -77,6 +79,9 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 	tribesImpact: string;
 	tribesImpactCss: string;
 	tribeDetailsTooltipInput: BgsTribesImpactDetails;
+	_freeUsesLeft: number;
+	freeUsesText: string;
+	freeUsesTooltip: string;
 
 	@Input() set hero(value: BgsMetaHeroStatTierItem) {
 		this.tier = value?.tier;
@@ -103,6 +108,24 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.achievementsToDisplay = this.buildAchievements(value);
 	}
 
+	@Input() set freeUsesLeft(value: number) {
+		this._freeUsesLeft = value;
+		this.freeUsesText = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-text', {
+			value: value,
+		});
+		this.freeUsesTooltip = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-tooltip', {
+			max: DAILY_FREE_USES_HERO,
+			left: value,
+		});
+		console.debug('set free users left', this._freeUsesLeft);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() showPremiumBanner: boolean;
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
@@ -118,7 +141,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.showTierOverlay$ = combineLatest([
 			this.ads.enablePremiumFeatures$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionTiers)),
-		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => premium && bgsShowHeroSelectionTiers));
+		]).pipe(this.mapData(([premium, bgsShowHeroSelectionTiers]) => bgsShowHeroSelectionTiers));
 		this.showAchievementsOverlay$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements),
 		);
