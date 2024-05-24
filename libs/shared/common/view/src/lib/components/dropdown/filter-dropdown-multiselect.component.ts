@@ -191,7 +191,9 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 				const result = options
 					.filter(
 						(option) =>
-							!currentSearch?.length || option.label.toLowerCase().includes(currentSearch.toLowerCase()),
+							!currentSearch?.length ||
+							option.label.toLowerCase().includes(currentSearch.toLowerCase()) ||
+							tempSelected.some((o) => o.value === option.value),
 					)
 					.map((option) => ({
 						...option,
