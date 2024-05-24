@@ -13,7 +13,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -112,6 +112,9 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		// Keep the versions clean (remove unused deckstrings)
 		this.gameStats.gameStats$$
 			.pipe(
+				filter((stats) => !!stats?.length),
+				// Only do it once, at startup
+				take(1),
 				map((stats) => stats?.map((stat) => stat.playerDecklist).filter((deckstring) => !!deckstring) ?? []),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				map((deckstrings) => [...new Set(deckstrings)]),
