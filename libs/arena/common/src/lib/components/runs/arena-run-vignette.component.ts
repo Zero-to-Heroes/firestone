@@ -1,11 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
-import { ArenaRunInfo } from '@firestone-hs/arena-high-win-runs';
-import { decode } from '@firestone-hs/deckstrings';
-import { getDefaultHeroDbfIdForClass, isSignatureTreasure } from '@firestone-hs/reference-data';
+import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
+import { ExtendedArenaRunInfo, InternalNotableCard } from '../../models/arena-high-wins-runs';
 import { ArenaRun } from '../../models/arena-run';
+import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
 @Component({
@@ -58,7 +58,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaRunVignetteComponent {
-	@Input() set stat(value: ArenaRunInfo) {
+	@Input() set stat(value: ExtendedArenaRunInfo) {
 		// console.debug('setting stat', value);
 		this.setStat(value);
 	}
@@ -91,7 +91,7 @@ export class ArenaRunVignetteComponent {
 		this.nav.selectedPersonalRun$$.next(this._run);
 	}
 
-	private setStat(value: ArenaRunInfo) {
+	private setStat(value: ExtendedArenaRunInfo) {
 		this.deckstring = value.decklist;
 		// this.steps = this._run.steps;
 
@@ -107,7 +107,7 @@ export class ArenaRunVignetteComponent {
 		this.deckScore = value.deckScore != null ? value.deckScore.toFixed(1) : null;
 		// this.deckImpact = value.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
-		this.notableCards = buildNotableCards(value.decklist, this.allCards);
+		this.notableCards = value.notabledCards ?? buildNotableCards(value.decklist, this.allCards);
 
 		this._run = ArenaRun.create({
 			id: '' + value.id,
@@ -124,21 +124,3 @@ export class ArenaRunVignetteComponent {
 		});
 	}
 }
-
-export interface InternalNotableCard {
-	image: string;
-	cardId: string;
-}
-
-export const buildNotableCards = (decklist: string, allCards: CardsFacadeService): readonly InternalNotableCard[] => {
-	const deckDefinition = decode(decklist);
-	const allDbfIds = deckDefinition.cards.flatMap((c) => c[0]);
-	const allDeckCards = allDbfIds.map((cardId) => allCards.getCard(cardId));
-	const treasures = allDeckCards.filter((c) => isSignatureTreasure(c.id));
-	const legendaries = allDeckCards.filter((c) => c?.rarity === 'Legendary');
-	const cardIds = [...new Set([...legendaries, ...treasures])].map((c) => c.id);
-	return cardIds.map((c) => ({
-		image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c}.jpg`,
-		cardId: c,
-	}));
-};

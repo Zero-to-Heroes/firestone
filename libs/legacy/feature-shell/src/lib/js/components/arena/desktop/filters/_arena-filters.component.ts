@@ -23,6 +23,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			></arena-high-win-runs-wins-filter-dropdown>
 			<!-- Do it here because for now the current view is in the store -->
 			<arena-card-search class="filter card-search" *ngIf="showArenaCardSearch$ | async"></arena-card-search>
+			<arena-high-wins-card-search
+				class="filter high-wins-card-search"
+				*ngIf="showArenaHighWinsCardSearch$ | async"
+			></arena-high-wins-card-search>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +34,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
 	showArenaCardSearch$: Observable<boolean>;
+	showArenaHighWinsCardSearch$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -47,6 +52,9 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 		);
 		this.showArenaCardSearch$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['card-stats'].includes(currentView)),
+		);
+		this.showArenaHighWinsCardSearch$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((currentView) => ['arena-high-wins-runs'].includes(currentView)),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

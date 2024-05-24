@@ -6,12 +6,12 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { ArenaRunInfo, HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
+import { ArenaRunInfo } from '@firestone-hs/arena-high-win-runs';
 import { ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { ArenaGroupedRuns } from '../../models/arena-high-wins-runs';
+import { ArenaGroupedRuns, ExtendedHighWinRunsInfo } from '../../models/arena-high-wins-runs';
 import { ArenaHighWinsRunsService } from '../../services/arena-high-wins-runs.service';
 
 @Component({
@@ -60,11 +60,11 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 	}
 
 	async ngAfterContentInit() {
-		await this.runsService.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.runsService, this.prefs);
 
 		this.runGroups$ = combineLatest([
 			this.runsService.runs$$,
+			this.runsService.cardSearch$$,
 			this.prefs.preferences$$.pipe(
 				this.mapData(
 					(prefs) => ({
@@ -74,7 +74,11 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 					(a, b) => deepEqual(a, b),
 				),
 			),
-		]).pipe(this.mapData(([runs, { playerClass, wins }]) => this.buildGroups(runs, playerClass, wins)));
+		]).pipe(
+			this.mapData(([runs, cardSearch, { playerClass, wins }]) =>
+				this.buildGroups(runs, cardSearch, playerClass, wins),
+			),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -82,7 +86,8 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 	}
 
 	private buildGroups(
-		runs: HighWinRunsInfo | null | undefined,
+		runs: ExtendedHighWinRunsInfo | null | undefined,
+		cardSearch: readonly string[] | null | undefined,
 		playerClass: ArenaClassFilterType | null,
 		wins: number | null,
 	): (ArenaRunInfo | string)[] | null {
@@ -93,7 +98,8 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 
 		const filteredRuns = runs.runs
 			.filter((run) => !wins || run.wins >= wins)
-			.filter((run) => !playerClass || playerClass === 'all' || run.playerClass === playerClass);
+			.filter((run) => !playerClass || playerClass === 'all' || run.playerClass === playerClass)
+			.filter((run) => !cardSearch?.length || run.notabledCards?.some((c) => cardSearch.includes(c.cardId)));
 		const groupingFunction = (deck: ArenaRunInfo) => {
 			const date = new Date(deck.creationDate);
 			return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {

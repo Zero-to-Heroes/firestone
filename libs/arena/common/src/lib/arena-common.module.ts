@@ -13,6 +13,7 @@ import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stat
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
 import { ArenaClassTierListTierComponent } from './components/class-info/arena-class-tier-list-tier.component';
 import { ArenaClassTierListComponent } from './components/class-info/arena-class-tier-list.component';
+import { ArenaHighWinsCardSearchComponent } from './components/filters/arena-high-wins-card-search.component';
 import { ArenaHighWinsRunsComponent } from './components/high-wins-runs/arena-high-wins-runs.component';
 import { ArenaCardOptionComponent } from './components/overlays/arena-card-option.component';
 import { ArenaCardSelectionComponent } from './components/overlays/arena-card-selection.component';
@@ -58,6 +59,7 @@ const components = [
 	ArenaMulliganInfoPremiumComponent,
 	ArenaPersonalStatsComponent,
 	ArenaPersonalStatsOverviewComponent,
+	ArenaHighWinsCardSearchComponent,
 ];
 @NgModule({
 	imports: [

@@ -1,18 +1,33 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
+import { decode } from '@firestone-hs/deckstrings';
+import { isSignatureTreasure } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
+import { ExtendedArenaRunInfo, ExtendedHighWinRunsInfo, InternalNotableCard } from '../models/arena-high-wins-runs';
 
 const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
 
 @Injectable()
 export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWinsRunsService> {
-	public runs$$: SubscriberAwareBehaviorSubject<HighWinRunsInfo | null | undefined>;
+	public runs$$: SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>;
+	public notableCards$$: SubscriberAwareBehaviorSubject<readonly string[] | null | undefined>;
+	public cardSearch$$: BehaviorSubject<readonly string[] | null | undefined>;
 
 	private api: ApiRunner;
 	private prefs: PreferencesService;
+	private cards: CardsFacadeService;
+
+	private internalSubject$$ = new SubscriberAwareBehaviorSubject<boolean>(false);
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaHighWinsRunsService', () => !!this.runs$$);
@@ -20,15 +35,35 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 
 	protected override assignSubjects() {
 		this.runs$$ = this.mainInstance.runs$$;
+		this.notableCards$$ = this.mainInstance.notableCards$$;
+		this.cardSearch$$ = this.mainInstance.cardSearch$$;
 	}
 
 	protected async init() {
 		console.debug('[arena-high-wins-runs] global init');
-		this.runs$$ = new SubscriberAwareBehaviorSubject<HighWinRunsInfo | null | undefined>(null);
+		this.runs$$ = new SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>(null);
+		this.notableCards$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null | undefined>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null | undefined>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.cards = AppInjector.get(CardsFacadeService);
+
+		this.notableCards$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
 
 		this.runs$$.onFirstSubscribe(async () => {
+			this.internalSubject$$.subscribe();
+		});
+
+		this.internalSubject$$.onFirstSubscribe(async () => {
+			this.runs$$.subscribe((runs) => {
+				console.debug('[arena-high-wins-runs] rebuilding notable cards');
+				const notableCards = this.buildNotableCards(runs?.runs?.filter((r) => !!r.decklist?.length) ?? []);
+				console.debug('[arena-high-wins-runs] rebuilding notable cards over', notableCards?.length);
+				this.notableCards$$.next(notableCards);
+			});
+
 			console.debug('[arena-high-wins-runs] runs init');
 			await this.prefs.isReady();
 
@@ -41,9 +76,53 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 				return;
 			}
 
+			const extendedRuns: ExtendedHighWinRunsInfo = {
+				...runs,
+				runs: runs.runs?.map((r) => {
+					const run: ExtendedArenaRunInfo = {
+						...r,
+						notabledCards: buildNotableCards(r.decklist, this.cards),
+					};
+					return run;
+				}),
+			};
 			console.log('[arena-high-wins-runs] loaded arena stats');
 			console.debug('[arena-high-wins-runs] loaded arena stats', runs);
-			this.runs$$.next(runs);
+			this.runs$$.next(extendedRuns);
 		});
 	}
+
+	public newCardSearch(selected: readonly string[]): void {
+		this.mainInstance.newCardSearchInternal(selected);
+	}
+
+	private newCardSearchInternal(selected: readonly string[]): void {
+		this.cardSearch$$.next(selected);
+	}
+
+	private buildNotableCards(runs: readonly ExtendedArenaRunInfo[] | null | undefined): readonly string[] {
+		if (!runs) {
+			return [];
+		}
+
+		const allCards = runs.flatMap((run) => run.notabledCards);
+		return [...new Set(allCards.map((c) => c.cardId))];
+	}
 }
+
+export const buildNotableCards = (decklist: string, allCards: CardsFacadeService): readonly InternalNotableCard[] => {
+	if (!decklist?.length) {
+		return [];
+	}
+
+	const deckDefinition = decode(decklist);
+	const allDbfIds = deckDefinition.cards.flatMap((c) => c[0]);
+	const allDeckCards = allDbfIds.map((cardId) => allCards.getCard(cardId));
+	const treasures = allDeckCards.filter((c) => isSignatureTreasure(c.id));
+	const legendaries = allDeckCards.filter((c) => c?.rarity === 'Legendary');
+	const cardIds = [...new Set([...legendaries, ...treasures])].map((c) => c.id);
+	return cardIds.map((c) => ({
+		image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c}.jpg`,
+		cardId: c,
+	}));
+};
