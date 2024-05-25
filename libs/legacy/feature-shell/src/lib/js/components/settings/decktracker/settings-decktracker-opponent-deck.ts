@@ -4,7 +4,6 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 import { CounterSetting } from './model';
@@ -424,7 +423,7 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
 			showLimitedOption: false,
 		},
-	].sort(sortByProperties((t) => [t.label]));
+	].sort((a, b) => a.label.localeCompare(b.label));
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,

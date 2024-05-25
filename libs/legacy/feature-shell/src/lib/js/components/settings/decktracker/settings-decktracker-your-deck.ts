@@ -4,7 +4,6 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 import { CounterSetting } from './model';
@@ -534,7 +533,7 @@ export class SettingsDecktrackerYourDeckComponent
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
 		},
-	].sort(sortByProperties((t) => [t.label]));
+	].sort((a, b) => a.label.localeCompare(b.label));
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
