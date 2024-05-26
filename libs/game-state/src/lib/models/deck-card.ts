@@ -26,6 +26,7 @@ export class DeckCard {
 	readonly putIntoPlay?: boolean;
 	readonly buffingEntityCardIds?: readonly string[];
 	readonly buffCardIds?: readonly string[];
+	readonly transformedInto?: string;
 	// readonly totalQuantity: number;
 	// Optional, should only be read when in the Other zone
 	readonly zone:

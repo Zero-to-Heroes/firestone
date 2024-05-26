@@ -346,3 +346,15 @@
 		transform: scale(1.1);
 	}
 }
+
+.transformed-into-card {
+	margin-left: 30px;
+	height: fit-content;
+	display: flex;
+	width: auto;
+	margin-top: 2px;
+
+	::ng-deep .deck-card {
+		flex-grow: 1;
+	}
+}

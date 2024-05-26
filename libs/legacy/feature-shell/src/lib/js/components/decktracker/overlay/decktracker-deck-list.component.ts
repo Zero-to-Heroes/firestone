@@ -47,6 +47,7 @@ import { SetCard } from '../../../models/set';
 					[deckState]="deckState$ | async"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
+					[showTransformedInto]="showTransformedInto"
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGlobalEffectsZone]="showGlobalEffectsZone"
@@ -101,6 +102,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() displayMode: string;
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
+	@Input() showTransformedInto: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGlobalEffectsZone: boolean;
 	@Input() showGiftsSeparately: boolean;

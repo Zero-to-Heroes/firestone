@@ -45,6 +45,11 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.collection.general.show-related-cards-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowTransformedInto"
+						[label]="'settings.collection.general.show-transformed-into-label' | owTranslate"
+						[tooltip]="'settings.collection.general.show-transformed-into-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="overlayShowRarityColors"
 						[label]="'settings.decktracker.global.show-rarity-color' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-rarity-color-tooltip' | owTranslate"

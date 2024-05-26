@@ -67,6 +67,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								[displayMode]="displayMode$ | async"
 								[colorManaCost]="colorManaCost$ | async"
 								[showRelatedCards]="showRelatedCards$ | async"
+								[showTransformedInto]="showTransformedInto$ | async"
 								[showUnknownCards]="showUnknownCards$ | async"
 								[showUpdatedCost]="showUpdatedCost$ | async"
 								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
@@ -131,6 +132,7 @@ export class DeckTrackerOverlayRootComponent
 	opacity$: Observable<number>;
 	colorManaCost$: Observable<boolean>;
 	showRelatedCards$: Observable<boolean>;
+	showTransformedInto$: Observable<boolean>;
 	showUnknownCards$: Observable<boolean>;
 	showUpdatedCost$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
@@ -345,6 +347,9 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.showRelatedCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => preferences.overlayShowRelatedCards),
+		);
+		this.showTransformedInto$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowTransformedInto),
 		);
 		this.showUnknownCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => preferences.overlayShowUnknownCards),

@@ -40,6 +40,7 @@ export class CardChangedOnBoardParser implements EventParser {
 		// So that we can keep track of transformed cards
 		const oldCard = card.update({
 			zone: 'TRANSFORMED_INTO_OTHER',
+			transformedInto: cardId,
 		} as DeckCard);
 		const updatedCard = card.update({
 			cardId: cardId,

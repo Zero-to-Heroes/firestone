@@ -28,6 +28,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[tooltipPosition]="_tooltipPosition"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
+					[showTransformedInto]="showTransformedInto"
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
@@ -51,6 +52,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
+	@Input() showTransformedInto: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showGiftsSeparately: boolean;

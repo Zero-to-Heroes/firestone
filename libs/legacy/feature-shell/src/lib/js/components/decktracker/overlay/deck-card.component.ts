@@ -150,8 +150,15 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
 			<div class="linked-card-overlay"></div>
 			<div class="mouse-over" [style.right.px]="mouseOverRight"></div>
-			<!-- <deck-card *ngIf="transformedInto" -->
 		</div>
+		<deck-card
+			*ngIf="transformedInto && _showTransformedInto"
+			[card]="transformedInto"
+			class="transformed-into-card"
+			[colorManaCost]="_colorManaCost"
+			[showRelatedCards]="_showRelatedCards"
+			[side]="_side"
+		></deck-card>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -193,6 +200,13 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	@Input() set showRelatedCards(value: boolean) {
 		this._showRelatedCards = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set showTransformedInto(value: boolean) {
+		this._showTransformedInto = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -243,6 +257,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	_colorManaCost: boolean;
 	_colorClassCards: boolean;
 	_showRelatedCards: boolean;
+	_showTransformedInto: boolean;
 	_isMissing: boolean;
 	cardClass: string;
 	creatorCardIds: readonly string[];
@@ -253,7 +268,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	isCountered: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
-	// transformedInto: string;
+	transformedInto: VisualDeckCard;
 	isDredged: boolean;
 	isStolen: boolean;
 	manaCostReduction: boolean;
@@ -261,6 +276,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	_showUnknownCards = true;
 	isUnknownCard: boolean;
 	_groupSameCardsTogether: boolean;
+	_side: 'player' | 'opponent' | 'duels';
 
 	private _showUpdatedCost: boolean;
 	private _showStatsChange: boolean;
@@ -268,7 +284,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
-	private _side: 'player' | 'opponent' | 'duels';
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -427,7 +442,15 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.isCountered = !this._groupSameCardsTogether && this._card.countered;
 		this.isGraveyard = !this._groupSameCardsTogether && this._card.zone === 'GRAVEYARD';
 		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
-		// this.transformedInto = this._card.transformedInto;
+		this.transformedInto = !!this._card.transformedInto
+			? VisualDeckCard.create({
+					cardId: this._card.transformedInto,
+					entityId: this._card.entityId,
+					manaCost: this.cards.getCard(this._card.transformedInto)?.cost,
+					cardName: this.cards.getCard(this._card.transformedInto)?.name,
+					rarity: this.cards.getCard(this._card.transformedInto)?.rarity?.toLowerCase(),
+			  })
+			: null;
 		this._isMissing = this._card.isMissing;
 		this.isStolen = this._card.stolenFromOpponent;
 

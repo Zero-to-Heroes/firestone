@@ -54,6 +54,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[tooltipPosition]="tooltipPosition"
 							[colorManaCost]="colorManaCost"
 							[showRelatedCards]="showRelatedCards"
+							[showTransformedInto]="showTransformedInto"
 							[showUnknownCards]="showUnknownCards && (showTotalCardsInZone$ | async)"
 							[showUpdatedCost]="showUpdatedCost$ | async"
 							[showStatsChange]="showStatsChange$ | async"
@@ -87,6 +88,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
+	@Input() showTransformedInto: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() darkenUsedCards: boolean;
 	@Input() tooltipPosition: CardTooltipPositionType;
