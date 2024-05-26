@@ -86,6 +86,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
 				</div>
 			</div>
+			<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'Stolen from opponent'">
+				<div class="inner-border">
+					<div class="svg-container" inlineSVG="assets/svg/card_stolen.svg"></div>
+				</div>
+			</div>
 			<div
 				class="icon-symbol dredged"
 				*ngIf="isDredged"
@@ -145,6 +150,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
 			<div class="linked-card-overlay"></div>
 			<div class="mouse-over" [style.right.px]="mouseOverRight"></div>
+			<!-- <deck-card *ngIf="transformedInto" -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -247,7 +253,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	isCountered: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
+	// transformedInto: string;
 	isDredged: boolean;
+	isStolen: boolean;
 	manaCostReduction: boolean;
 	mouseOverRight = 0;
 	_showUnknownCards = true;
@@ -419,7 +427,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.isCountered = !this._groupSameCardsTogether && this._card.countered;
 		this.isGraveyard = !this._groupSameCardsTogether && this._card.zone === 'GRAVEYARD';
 		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
+		// this.transformedInto = this._card.transformedInto;
 		this._isMissing = this._card.isMissing;
+		this.isStolen = this._card.stolenFromOpponent;
 
 		this.cardClass = !!this._card.classes?.length ? CardClass[this._card.classes[0]].toLowerCase() : null;
 

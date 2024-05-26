@@ -311,7 +311,9 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 				: cardIdForGrouping;
 		// We never want cards that are played to be grouped with cards that are not played
 		const keyWithHighlights = keyWithBonus + '-' + card.highlight;
-		const creatorsKeySuffix = !card.creatorCardIds?.length
+		const creatorsKeySuffix = card.stolenFromOpponent
+			? 'stolen'
+			: !card.creatorCardIds?.length
 			? ''
 			: !!cardIdForGrouping
 			? 'creators'

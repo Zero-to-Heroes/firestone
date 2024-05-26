@@ -299,7 +299,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				.filter((c) => !!c.cardId?.length)
 				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
 			...(showBoardCardsInSeparateZone ? [] : deckState.board),
-		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length : true));
+		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length && !c.stolenFromOpponent : true));
 		zones.push(
 			this.buildZone(
 				otherZone,
@@ -331,7 +331,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',
 					),
 				...(showBoardCardsInSeparateZone ? [] : deckState.board),
-			].filter((c) => !!c.creatorCardId?.length);
+			].filter((c) => !!c.creatorCardId?.length || c.stolenFromOpponent);
 			zones.push(
 				this.buildZone(
 					otherGeneratedZone,
