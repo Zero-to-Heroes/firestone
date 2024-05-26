@@ -8,9 +8,8 @@ export const filterBgsMatchStats = (
 	mmrThreshold: number,
 	currentBattlegroundsMetaPatch: PatchInfo | null,
 ): readonly GameStat[] => {
-	return bgsMatchStats
-		.filter((stat) => filterTime(stat, timeFilter, currentBattlegroundsMetaPatch))
-		.filter((stat) => filterRank(stat, mmrThreshold));
+	return bgsMatchStats.filter((stat) => filterTime(stat, timeFilter, currentBattlegroundsMetaPatch));
+	// .filter((stat) => filterRank(stat, mmrThreshold));
 };
 
 const filterTime = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: PatchInfo | null) => {

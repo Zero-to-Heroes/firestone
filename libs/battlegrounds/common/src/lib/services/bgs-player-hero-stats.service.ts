@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { ALL_BG_RACES, isBattlegrounds } from '@firestone-hs/reference-data';
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
@@ -17,7 +17,7 @@ import { toGameTypeEnum } from '@firestone/stats/data-access';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { Config } from '../model/_barrel';
 import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
-import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
+import { BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
 import { filterBgsMatchStats } from './hero-stats-helper';
 
 export const DEFAULT_MMR_PERCENTILE = 25;
@@ -151,23 +151,22 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		const patchInfo = await this.patchesConfig.currentBattlegroundsMetaPatch$$.getValueWithInit();
 		// const mmrPercentiles = heroStats?.mmrPercentiles ?? [];
 
-		const bgGames = (games ?? [])
-			.filter((g) =>
-				config.gameMode === 'battlegrounds'
-					? ['battlegrounds', 'battlegrounds-friendly'].includes(g.gameMode)
-					: ['battlegrounds-duo'].includes(g.gameMode),
-			)
-			.filter(
-				(g) =>
-					!config.tribesFilter?.length ||
-					config.tribesFilter.length === ALL_BG_RACES.length ||
-					config.tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
-			)
-			.filter((g) =>
-				BG_USE_ANOMALIES
-					? !config.anomaliesFilter?.length || config.anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a))
-					: true,
-			);
+		const bgGames = (games ?? []).filter((g) =>
+			config.gameMode === 'battlegrounds'
+				? ['battlegrounds', 'battlegrounds-friendly'].includes(g.gameMode)
+				: ['battlegrounds-duo'].includes(g.gameMode),
+		);
+		// .filter(
+		// 	(g) =>
+		// 		!config.tribesFilter?.length ||
+		// 		config.tribesFilter.length === ALL_BG_RACES.length ||
+		// 		config.tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
+		// )
+		// .filter((g) =>
+		// 	BG_USE_ANOMALIES
+		// 		? !config.anomaliesFilter?.length || config.anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a))
+		// 		: true,
+		// );
 
 		const afterFilter = filterBgsMatchStats(bgGames, config.timeFilter, targetMmr, patchInfo);
 		useDebug && console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter, tiers);
