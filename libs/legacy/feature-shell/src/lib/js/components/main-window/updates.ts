@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.14.5',
+		version: '13.14.7',
 		force: false,
 		sections: [
 			// {
@@ -96,6 +96,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'content',
 								text: `Repackaged Box now show you the contents of the Box when mousing over it in the decklist.`,
+							},
+							{
+								type: 'content',
+								text: `Add an icon for cards stolen from the opponent, and consider them as "gifts".`,
 							},
 							{
 								type: 'content',
