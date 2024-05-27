@@ -66,7 +66,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
 			this.mapData((stats) => {
 				const maxTribeImpact = Math.max(
-					...stats
+					...(stats ?? [])
 						.flatMap((s) => s.tribeStats)
 						.filter((t) => t.impactAveragePosition < 0)
 						.map((t) => -t.impactAveragePosition),

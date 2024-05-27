@@ -88,7 +88,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			combineLatest([config$, gameStats$]).subscribe(async ([config]) => {
 				console.debug('[bgs-2] refreshing meta hero stats', config);
 				this.tiersWithPlayerData$$.next(null);
-				const finalStats = await this.buildFinalStats(config, undefined, false);
+				const finalStats = await this.buildFinalStats(config, undefined, true);
 				this.tiersWithPlayerData$$.next(finalStats?.stats);
 			});
 		});
@@ -160,7 +160,20 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 
 		const afterFilter = filterBgsMatchStats(bgGames, config.timeFilter, targetMmr, patchInfo);
 		// const groupedByHero = groupByFunction((game: GameStat) => game.playerCardId)(afterFilter);
-		// useDebug && console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter, tiers);
+		// useDebug &&
+		// 	console.debug(
+		// 		'[bgs-2] rebuilt meta hero stats 2',
+		// 		config,
+		// 		bgGames,
+		// 		afterFilter,
+		// 		tiers,
+		// 		Object.keys(groupedByHero)
+		// 			.map((heroCardId) => ({
+		// 				heroCardId,
+		// 				games: groupedByHero[heroCardId].length,
+		// 			}))
+		// 			.sort((a, b) => b.games - a.games),
+		// 	);
 
 		const finalStats = tiers?.map((stat) => enhanceHeroStat(stat, afterFilter, this.allCards));
 		// useDebug &&

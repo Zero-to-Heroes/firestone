@@ -96,6 +96,11 @@ import {
 					{{ buildValue(netMmr) }}
 				</div>
 			</div>
+			<div class="player-games-played">
+				<div class="value">
+					{{ playerDataPoints ?? '-' }}
+				</div>
+			</div>
 			<!-- Doesn't look good when squeezed so small, and has a high perf cost -->
 			<!-- <div class="winrate">
 				<bgs-winrate-chart [heroStat]="winrateContainer" [showYAxis]="true"></bgs-winrate-chart>
@@ -119,7 +124,10 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});
 
-		const showPlayerData = value.tribesFilter.length === ALL_BG_RACES.length && value.anomaliesFilter?.length === 0;
+		const showPlayerData =
+			(!value.tribesFilter?.length || value.tribesFilter.length === ALL_BG_RACES.length) &&
+			value.anomaliesFilter?.length === 0;
+		// console.debug('setting stat', value, showPlayerData);
 		this.playerDataPoints =
 			// Only show the player full data when not filtering by tribes
 			!!value.playerDataPoints && showPlayerData

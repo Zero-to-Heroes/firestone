@@ -11,7 +11,7 @@ import {
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, takeUntil } from 'rxjs';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
@@ -56,6 +56,11 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 						class="net-mmr"
 						[fsTranslate]="'app.battlegrounds.tier-list.header-net-mmr'"
 						[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
+					></div>
+					<div
+						class="player-games-played"
+						[fsTranslate]="'app.battlegrounds.tier-list.header-games-played'"
+						[helpTooltip]="'app.battlegrounds.tier-list.header-games-played-tooltip' | fsTranslate"
 					></div>
 					<!-- <div class="winrate" [owTranslate]="'app.battlegrounds.tier-list.header-combat-winrate'"></div> -->
 				</div>
@@ -143,7 +148,6 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 						return buildTiers(stats, this.i18n);
 				}
 			}),
-			tap((tiers) => console.debug('[meta-stats] built tiers', tiers)),
 		);
 		this.tiers$ = combineLatest([tiers$, this.searchString$$]).pipe(
 			this.mapData(([tiers, searchString]) => {

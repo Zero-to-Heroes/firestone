@@ -40,6 +40,7 @@
 
 			.player {
 				margin-left: 5px;
+				display: flex;
 
 				.value {
 					color: var(--default-title-color);
@@ -152,6 +153,12 @@
 	// 		}
 	// 	}
 	// }
+
+	.value {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 }
 
 @media (max-width: 720px) {
