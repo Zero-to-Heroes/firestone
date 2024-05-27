@@ -129,7 +129,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			inputConfig.gameMode === 'battlegrounds-duo'
 				? await this.metaStatsDuo.getMmrPercentiles(inputConfig)
 				: await this.metaStats.getMmrPercentiles(inputConfig);
-		useDebug && console.debug('[bgs-2] mmrPercentiles', mmrPercentiles);
+		// useDebug && console.debug('[bgs-2] mmrPercentiles', mmrPercentiles);
 		const targetPercentile = extractRank(mmrPercentiles, inputConfig.rankFilter, mmrFilter);
 		const targetMmr = extractMmr(mmrPercentiles, targetPercentile, mmrFilter);
 		const config: Config = {
@@ -156,22 +156,26 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 				? ['battlegrounds', 'battlegrounds-friendly'].includes(g.gameMode)
 				: ['battlegrounds-duo'].includes(g.gameMode),
 		);
-		// .filter(
-		// 	(g) =>
-		// 		!config.tribesFilter?.length ||
-		// 		config.tribesFilter.length === ALL_BG_RACES.length ||
-		// 		config.tribesFilter.some((t) => g.bgsAvailableTribes?.includes(t)),
-		// )
-		// .filter((g) =>
-		// 	BG_USE_ANOMALIES
-		// 		? !config.anomaliesFilter?.length || config.anomaliesFilter.some((a) => g.bgsAnomalies?.includes(a))
-		// 		: true,
-		// );
+		// useDebug && console.debug('[bgs-2] player bgGames', bgGames.length, bgGames, games, config.gameMode);
 
 		const afterFilter = filterBgsMatchStats(bgGames, config.timeFilter, targetMmr, patchInfo);
-		useDebug && console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter, tiers);
+		// const groupedByHero = groupByFunction((game: GameStat) => game.playerCardId)(afterFilter);
+		// useDebug && console.debug('[bgs-2] rebuilt meta hero stats 2', config, bgGames, afterFilter, tiers);
 
 		const finalStats = tiers?.map((stat) => enhanceHeroStat(stat, afterFilter, this.allCards));
+		// useDebug &&
+		// 	console.debug(
+		// 		'[bgs-2] ordered by games played',
+		// 		finalStats
+		// 			?.map((t) => ({ name: t.name, games: t.playerDataPoints ?? 0 }))
+		// 			.sort((a, b) => b.games - a.games),
+		// 		Object.keys(groupedByHero)
+		// 			.map((heroCardId) => ({
+		// 				heroCardId,
+		// 				games: groupedByHero[heroCardId].length,
+		// 			}))
+		// 			.sort((a, b) => b.games - a.games),
+		// 	);
 		return {
 			stats: finalStats,
 			mmrPercentile: { percentile: targetPercentile, mmr: targetMmr },

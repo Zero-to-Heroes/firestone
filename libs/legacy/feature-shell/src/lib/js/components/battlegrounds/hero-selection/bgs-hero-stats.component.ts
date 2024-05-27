@@ -68,7 +68,7 @@ import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-to
 					</div>
 				</div>
 			</div>
-			<div class="strategies" *ngIf="showTurnWinrates">
+			<div class="strategies">
 				<div
 					class="title"
 					[owTranslate]="'app.battlegrounds.personal-stats.hero-details.tabs.strategies'"
