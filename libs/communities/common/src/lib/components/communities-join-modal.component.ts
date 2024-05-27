@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { CommunityJoinService } from '../services/community-join.service';
 
 @Component({
@@ -27,14 +28,15 @@ export class CommunitiesJoinModalComponent {
 	code: string;
 	form = new FormControl();
 
-	@Input() closeHandler: () => void;
+	@Input() successHandler: () => void;
 
 	constructor(private readonly communityJoinService: CommunityJoinService) {}
 
 	async joinCommunity() {
 		console.debug('joining community', this.code);
-		await this.communityJoinService.isReady();
+		await waitForReady(this.communityJoinService);
 		await this.communityJoinService.joinCommunity(this.code);
+		this.successHandler();
 	}
 
 	onMouseDown(event: Event) {

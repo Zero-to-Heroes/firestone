@@ -9,8 +9,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, from } from 'rxjs';
+import { CommunityNavigationService } from '../services/community-navigation.service';
 
 @Component({
 	selector: 'communities-desktop',
@@ -32,7 +33,14 @@ import { BehaviorSubject, Observable, from } from 'rxjs';
 								{{ cat.name }}
 							</li>
 						</nav>
-						<communities-join class="content-section" *ngIf="value.category === 'join'"></communities-join>
+						<communities-join
+							class="content-section"
+							*ngIf="value.category === 'manage'"
+						></communities-join>
+						<my-communities
+							class="content-section"
+							*ngIf="value.category === 'my-communities'"
+						></my-communities>
 					</div>
 				</with-loading>
 			</section>
@@ -43,30 +51,27 @@ import { BehaviorSubject, Observable, from } from 'rxjs';
 })
 export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
-	// menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly Category[]>;
-	category$: Observable<string>;
+	category$: Observable<string | null>;
 	showAds$: Observable<boolean>;
-
-	private category$$ = new BehaviorSubject<string>('join');
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly nav: CommunityNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.ads.isReady();
+		await waitForReady(this.ads, this.nav);
 
 		this.loading$ = from([false]);
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
-		// TODO: if part of one community, default to My Communities
-		this.category$ = this.category$$.asObservable();
+		this.category$ = this.nav.category$$.pipe(this.mapData((info) => info));
 		this.categories$ = from([
 			[
-				{ id: 'join', name: 'Join' },
+				{ id: 'manage', name: 'Manage' },
 				{ id: 'my-communities', name: 'My communities' },
 			],
 		]);
@@ -82,7 +87,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 
 	selectCategory(id: string) {
 		console.log('selecting category', id);
-		this.category$$.next(id);
+		this.nav.category$$.next(id);
 	}
 }
 

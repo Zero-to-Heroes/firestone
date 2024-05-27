@@ -11,7 +11,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CommunityNavigationService } from '../services/community-navigation.service';
 import { CommunitiesJoinModalComponent } from './communities-join-modal.component';
 
 @Component({
@@ -43,6 +45,7 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
+		private readonly nav: CommunityNavigationService,
 	) {
 		super(cdr);
 	}
@@ -51,7 +54,9 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		this.showModal$ = this.showModal$$.pipe(this.mapData((info) => info));
 	}
 
-	ngAfterViewInit(): void {
+	async ngAfterViewInit() {
+		await waitForReady(this.nav);
+
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({
 			positionStrategy: this.positionStrategy,
@@ -59,6 +64,10 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 			backdropClass: 'social-share-backdrop',
 		});
 		this.overlayRef.backdropClick().subscribe(() => this.overlayRef.detach());
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	showJoinPopup() {
@@ -66,7 +75,10 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		const portal = new ComponentPortal(CommunitiesJoinModalComponent);
 
 		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.closeHandler = () => this.overlayRef.detach();
+		modalRef.instance.successHandler = () => {
+			this.overlayRef.detach();
+			this.nav.category$$.next('my-communities');
+		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

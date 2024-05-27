@@ -2,4 +2,8 @@ export * from './lib/communities-common.module';
 export * from './lib/components/communities-desktop.component';
 export * from './lib/components/communities-join-modal.component';
 export * from './lib/components/communities-join.component';
+export * from './lib/components/my-communities.component';
+export * from './lib/services/_community-bootstrap.service';
 export * from './lib/services/community-join.service';
+export * from './lib/services/community-navigation.service';
+export * from './lib/services/personal-communities.service';

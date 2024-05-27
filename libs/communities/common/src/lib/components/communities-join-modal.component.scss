@@ -19,12 +19,53 @@
 	display: flex;
 	align-items: center;
 	margin-bottom: 15px;
-	padding: 0 10px;
 	color: var(--default-title-color);
 	font-size: 18px;
 }
 
 .text {
 	color: var(--default-text-color);
+	font-size: 14px;
+}
+
+.input {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+input {
+	background: transparent;
+	// border: none;
+	cursor: text;
+	flex-grow: 1;
 	font-size: 18px;
+	border: 1px solid var(--default-text-color);
+	padding: 10px 20px;
+
+	&::placeholder {
+		color: var(--default-text-color);
+		opacity: 0.5;
+	}
+
+	&:focus {
+		outline: none;
+		color: var(--default-text-color);
+	}
+}
+
+.button {
+	width: 100px;
+	height: 30px;
+	background: var(--color-2);
+	color: var(--color-5);
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Open Sans', sans-serif;
+
+	&:hover:not(.disabled) {
+		background: var(--color-1);
+		color: var(--on-confirmation-text-color);
+	}
 }

@@ -1,0 +1,38 @@
+:host {
+	display: flex;
+}
+
+.my-communities {
+	display: flex;
+	justify-content: space-around;
+	display: flex;
+	flex-grow: 1;
+	padding-top: 15vh;
+}
+
+.button {
+	aspect-ratio: 1;
+	height: 30vh;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3vh;
+
+	.text {
+		color: var(--default-title-color);
+		font-size: 3vh;
+		text-align: center;
+	}
+
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	&:hover:not(.disabled) {
+		background: rgba(255, 255, 255, 0.12);
+	}
+}
