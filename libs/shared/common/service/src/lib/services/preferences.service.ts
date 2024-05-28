@@ -251,6 +251,12 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateConstructedMulliganDeckWidgetPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, constructedMulliganDeckWidgetPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsOocTrackerPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsOocTrackerPosition: { left, top } };

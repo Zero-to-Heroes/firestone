@@ -32,7 +32,6 @@ import {
 	debounceTime,
 	distinctUntilChanged,
 	filter,
-	from,
 	map,
 	of,
 	shareReplay,
@@ -127,8 +126,12 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			map((gameState) => gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD),
 			shareReplay(1),
 		);
-		const playerRank$ = from(['legend-diamond'] as RankBracket[]);
-		const opponentClass$ = from(['all'] as ('all' | string)[]);
+		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganRankBracket),
+		);
+		const opponentClass$: Observable<'all' | string> = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganOpponent),
+		);
 
 		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$]).pipe(
 			filter(([showWidget, format]) => showWidget),

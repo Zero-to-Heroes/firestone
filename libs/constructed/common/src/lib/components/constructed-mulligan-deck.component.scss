@@ -1,0 +1,97 @@
+.mulligan-deck-overview {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	background: var(--color-7);
+	color: var(--color-2);
+	font-size: 14px;
+	border-radius: 15px;
+}
+
+.widget-header {
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 10px;
+
+	.title {
+		color: var(--default-title-color);
+		text-align: center;
+		font-size: 18px;
+		margin-bottom: 15px;
+	}
+
+	.sample-size {
+		margin-top: 5px;
+		font-size: 12px;
+	}
+}
+
+.filters {
+	display: flex;
+
+	& > *:not(:last-child)::after {
+		content: '-';
+		margin: 0 5px;
+	}
+
+	// .filter:hover {
+	// 	color: var(--color-1);
+	// }
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+}
+
+.deck-header {
+	display: flex;
+	margin-bottom: 10px;
+}
+
+.deck {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
+}
+
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	flex-grow: 0;
+
+	&.keep-rate {
+		width: 80px;
+	}
+
+	&.impact {
+		width: 80px;
+	}
+
+	&.card {
+		flex-grow: 1;
+		width: auto;
+		padding: 0;
+		margin: 0;
+	}
+}
+
+.deck-card {
+	display: flex;
+	height: 26px;
+	flex-grow: 0;
+	margin-bottom: 2px;
+
+	::ng-deep card-tile {
+		.deck-card {
+			height: 100%;
+			width: 100%;
+		}
+	}
+}

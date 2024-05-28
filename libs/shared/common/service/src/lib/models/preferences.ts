@@ -201,6 +201,11 @@ export class Preferences implements IPreferences {
 	readonly decktrackerShowMulliganDeckOverview: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerMulliganScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly constructedMulliganDeckWidgetPosition: { left: number; top: number };
+	readonly decktrackerMulliganRankBracket: 'competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond' =
+		'legend-diamond';
+	readonly decktrackerMulliganOpponent: 'all' | string = 'all';
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;

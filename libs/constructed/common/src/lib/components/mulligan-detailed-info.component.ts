@@ -133,6 +133,7 @@ export interface MulliganChartDataCard {
 	readonly label: string;
 	readonly value: number;
 	readonly rawValue?: number;
+	readonly keepRate?: number | null;
 	readonly selected: boolean;
 }
 

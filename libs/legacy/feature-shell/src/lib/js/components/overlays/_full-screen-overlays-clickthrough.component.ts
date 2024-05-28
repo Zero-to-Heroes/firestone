@@ -42,7 +42,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
 
 			<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
-			<constructed-mulligan-widget-wrapper></constructed-mulligan-widget-wrapper>
+			<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
 			<player-hero-power-widget-wrapper></player-hero-power-widget-wrapper>
 			<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
 

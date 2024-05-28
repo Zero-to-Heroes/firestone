@@ -524,7 +524,8 @@ import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-mulligan-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
-import { ConstructedMulliganWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-widget-wrapper.component';
+import { ConstructedMulliganDeckWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-deck-widget-wrapper.component';
+import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-hand-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
@@ -1554,7 +1555,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaCardSelectionWidgetWrapperComponent,
 		ArenaDecktrackerOocWidgetWrapperComponent,
 		ArenaDecktrackerOocComponent,
-		ConstructedMulliganWidgetWrapperComponent,
+		ConstructedMulliganHandWidgetWrapperComponent,
+		ConstructedMulliganDeckWidgetWrapperComponent,
 		ArenaMulliganWidgetWrapperComponent,
 
 		LotteryWidgetWrapperComponent,

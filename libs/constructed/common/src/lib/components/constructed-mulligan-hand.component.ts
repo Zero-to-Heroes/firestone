@@ -37,8 +37,8 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 import { MulliganChartData } from './mulligan-detailed-info.component';
 
 @Component({
-	selector: 'constructed-mulligan',
-	styleUrls: ['./constructed-mulligan.component.scss'],
+	selector: 'constructed-mulligan-hand',
+	styleUrls: ['./constructed-mulligan-hand.component.scss'],
 	template: `
 		<div class="root">
 			<ng-container *ngIf="showHandInfo$ | async">
@@ -49,6 +49,7 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 				>
 					<ng-container *ngIf="(showPremiumBanner$ | async) === false">
 						<div class="mulligan-info scalable" *ngFor="let info of cardsInHandInfo">
+							<!-- TODO: add rank compared to deck, for each -->
 							<div class="stat-container" *ngIf="info.impact !== null">
 								<div class="stat mulligan-winrate">
 									<span
@@ -87,14 +88,14 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 					</ng-container>
 				</ul>
 			</ng-container>
-			<div class="mulligan-overview scalable" *ngIf="showMulliganOverview$ | async">
+			<!-- <div class="mulligan-overview scalable" *ngIf="showMulliganOverview$ | async">
 				<mulligan-detailed-info [data]="allDeckMulliganInfo$ | async"></mulligan-detailed-info>
-			</div>
+			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMulliganComponent
+export class ConstructedMulliganHandComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
