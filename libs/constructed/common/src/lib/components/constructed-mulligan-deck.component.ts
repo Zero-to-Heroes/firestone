@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
@@ -45,10 +46,10 @@ import { MulliganChartDataCard } from './mulligan-detailed-info.component';
 			<div class="widget-header">
 				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
 				<div class="filters">
-					<div class="filter rank-bracket" (click)="cycleRanks()">
+					<div class="filter rank-bracket" (click)="cycleRanks()" [helpTooltip]="rankBracketTooltip$ | async">
 						<div class="text">{{ rankBracketLabel$ | async }}</div>
 					</div>
-					<div class="filter opponent" (click)="cycleOpponent()">
+					<div class="filter opponent" (click)="cycleOpponent()" [helpTooltip]="opponentTooltip$ | async">
 						<div class="text">{{ opponentLabel$ | async }}</div>
 					</div>
 					<div class="format">{{ formatLabel$ | async }}</div>
@@ -62,6 +63,7 @@ import { MulliganChartDataCard } from './mulligan-detailed-info.component';
 						[name]="'decktracker.overlay.mulligan.mulligan-keep-rate' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'keep-rate'"
+						[helpTooltip]="'app.decktracker.meta.details.cards.mulligan-kept-header-tooltip' | fsTranslate"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -78,6 +80,9 @@ import { MulliganChartDataCard } from './mulligan-detailed-info.component';
 						[name]="'decktracker.overlay.mulligan.mulligan-impact' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'impact'"
+						[helpTooltip]="
+							'app.decktracker.meta.details.cards.mulligan-winrate-impact-header-tooltip' | fsTranslate
+						"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -107,7 +112,9 @@ export class ConstructedMulliganDeckComponent
 	showMulliganOverview$: Observable<boolean | null>;
 
 	rankBracketLabel$: Observable<string>;
+	rankBracketTooltip$: Observable<string>;
 	opponentLabel$: Observable<string>;
+	opponentTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
 	sampleSize$: Observable<string>;
 
@@ -192,11 +199,38 @@ export class ConstructedMulliganDeckComponent
 					)!,
 			),
 		);
+		this.rankBracketTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) =>
+				prefs.decktrackerMulliganRankBracket === 'competitive'
+					? this.i18n.translateString(`app.decktracker.filters.rank-bracket.competitive-tooltip`)
+					: this.i18n.translateString(
+							`app.decktracker.filters.rank-bracket.${prefs.decktrackerMulliganRankBracket}`,
+					  ),
+			),
+			this.mapData(
+				(rankInfo) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.deck-mulligan-filter-rank-bracket-tooltip`,
+						{
+							rankBracket: rankInfo,
+						},
+					)!,
+			),
+		);
 		this.opponentLabel$ = this.prefs.preferences$$.pipe(
 			this.mapData(
 				(prefs) =>
 					this.i18n.translateString(`app.decktracker.meta.matchup-vs-tooltip`, {
 						className: this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`),
+					})!,
+			),
+		);
+		this.opponentTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`)),
+			this.mapData(
+				(opponentInfo) =>
+					this.i18n.translateString(`decktracker.overlay.mulligan.deck-mulligan-filter-opponent-tooltip`, {
+						opponent: opponentInfo,
 					})!,
 			),
 		);
