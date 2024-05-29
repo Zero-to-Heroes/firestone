@@ -34,9 +34,9 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
+import { MulliganChartDataCard } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
-import { MulliganChartDataCard } from './mulligan-detailed-info.component';
 
 @Component({
 	selector: 'constructed-mulligan-deck',

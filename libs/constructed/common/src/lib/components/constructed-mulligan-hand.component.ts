@@ -36,59 +36,22 @@ import { MulliganChartData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { buildColor } from './constructed-mulligan-deck.component';
+import { InternalMulliganAdvice } from './mulligan-hand-view.component';
 
 @Component({
 	selector: 'constructed-mulligan-hand',
 	styleUrls: ['./constructed-mulligan-hand.component.scss'],
 	template: `
 		<div class="root">
-			<ng-container *ngIf="showHandInfo$ | async">
-				<ul
-					class="mulligan-guide"
-					*ngIf="cardsInHandInfo$ | async as cardsInHandInfo"
-					[ngClass]="{ wide: cardsInHandInfo.length === 4 }"
-				>
-					<ng-container *ngIf="(showPremiumBanner$ | async) === false">
-						<div class="mulligan-info scalable" *ngFor="let info of cardsInHandInfo">
-							<!-- TODO: add rank compared to deck, for each -->
-							<div class="stat-container" *ngIf="info.impact !== null">
-								<div class="stat mulligan-keep-rate">
-									<span
-										class="label"
-										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-keep-rate'"
-										[helpTooltip]="
-											'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate
-										"
-									></span>
-									<span class="value" [style.color]="info.keptColor">{{ info.keepRate }}</span>
-								</div>
-								<div class="stat mulligan-winrate">
-									<span
-										class="label"
-										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
-										[helpTooltip]="helpTooltip$ | async"
-									></span>
-									<span class="value" [style.color]="info.impactColor">{{ info.impact }}</span>
-								</div>
-							</div>
-							<div class="stat mulligan-winrate no-data scalable" *ngIf="info.impact === null">
-								<span
-									class="label"
-									[fsTranslate]="'decktracker.overlay.mulligan.no-mulligan-data'"
-									[helpTooltip]="
-										'decktracker.overlay.mulligan.no-mulligan-data-tooltip' | fsTranslate
-									"
-								></span>
-							</div>
-						</div>
-					</ng-container>
-					<ng-container *ngIf="showPremiumBanner$ | async">
-						<div class="premium-container" *ngFor="let info of cardsInHandInfo">
-							<mulligan-info-premium></mulligan-info-premium>
-						</div>
-					</ng-container>
-				</ul>
-			</ng-container>
+			<!-- TODO: add premium info container -->
+			<mulligan-hand-view
+				[showHandInfo]="showHandInfo$ | async"
+				[showPremiumBanner]="showPremiumBanner$ | async"
+				[cardsInHandInfo]="cardsInHandInfo$ | async"
+				[impactWithFreeUsersHelpTooltip]="helpTooltip$ | async"
+			>
+				<mulligan-info-premium></mulligan-info-premium
+			></mulligan-hand-view>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -250,12 +213,4 @@ export class ConstructedMulliganHandComponent
 		}
 		return elements;
 	}
-}
-
-interface InternalMulliganAdvice {
-	readonly impact: string | null;
-	readonly keepRate: string | null;
-	// TODO: don't make that optional?
-	readonly keptColor?: string;
-	readonly impactColor?: string;
 }
