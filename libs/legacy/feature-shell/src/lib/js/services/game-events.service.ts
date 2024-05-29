@@ -105,6 +105,7 @@ export class GameEvents {
 	}
 
 	private async processLogs(eventQueue: readonly string[]): Promise<void> {
+		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
 		return new Promise<void>((resolve) => {
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve();
@@ -1568,9 +1569,20 @@ export class GameEvents {
 			console.log('[game-events] received tag=STATE value=COMPLETE log', data);
 		}
 
-		this.processingQueue.enqueue(data);
+		if (this.existingLogLines.length > 0) {
+			// Put them in a "waiting" list, to be processed once we're done catching up
+			this.pendingLogLines.push(data);
+		} else {
+			if (this.pendingLogLines.length > 0) {
+				console.log('[game-events] processing pending log lines');
+				this.processingQueue.enqueueAll(this.pendingLogLines);
+				this.pendingLogLines = [];
+			}
+			this.processingQueue.enqueue(data);
+		}
 	}
 
+	private pendingLogLines: string[] = [];
 	private existingLogLines: string[] = [];
 	private catchingUp: boolean;
 	private pluginBeingInitialized: boolean;
@@ -1655,6 +1667,7 @@ export class GameEvents {
 
 		if (this.existingLogLines.length > 0) {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
+			// console.debug('[game-events] [existing] REMOVE!!! all events enqueued', this.processingQueue);
 		}
 		this.existingLogLines = [];
 		this.catchingUp = false;
