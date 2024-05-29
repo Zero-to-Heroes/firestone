@@ -16,3 +16,23 @@ export interface MulliganCardAdvice {
 	readonly score: number | null;
 	readonly keepRate: number | null;
 }
+
+export interface MulliganChartData {
+	readonly mulliganData: readonly MulliganChartDataCard[];
+	readonly sampleSize: number;
+	readonly format: string;
+	readonly rankBracket: string;
+	readonly opponentClass: string;
+}
+
+export interface MulliganChartDataCard {
+	readonly cardId: string;
+	readonly label: string;
+	readonly value: number;
+	readonly rawValue?: number;
+	readonly keepRate?: number | null;
+	readonly selected: boolean;
+	// TODO: don't make that optional?
+	readonly keptColor?: string;
+	readonly impactColor?: string;
+}

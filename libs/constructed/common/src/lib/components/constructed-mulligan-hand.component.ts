@@ -32,10 +32,10 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
+import { MulliganChartData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { buildColor } from './constructed-mulligan-deck.component';
-import { MulliganChartData } from './mulligan-detailed-info.component';
 
 @Component({
 	selector: 'constructed-mulligan-hand',
@@ -89,9 +89,6 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 					</ng-container>
 				</ul>
 			</ng-container>
-			<!-- <div class="mulligan-overview scalable" *ngIf="showMulliganOverview$ | async">
-				<mulligan-detailed-info [data]="allDeckMulliganInfo$ | async"></mulligan-detailed-info>
-			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
