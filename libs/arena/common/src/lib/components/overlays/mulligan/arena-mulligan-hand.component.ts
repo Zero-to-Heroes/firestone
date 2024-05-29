@@ -13,6 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
+import { buildColor } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
@@ -35,74 +36,31 @@ import {
 } from 'rxjs';
 import { ArenaMulliganGuideGuardianService } from '../../../services/arena-mulligan-guide-guardian.service';
 import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guide.service';
-import { MulliganChartData } from './arena-mulligan-detailed-info.component';
 
 @Component({
-	selector: 'arena-mulligan',
-	styleUrls: ['./arena-mulligan.component.scss'],
+	selector: 'arena-mulligan-hand',
+	styleUrls: ['./arena-mulligan-hand.component.scss'],
 	template: `
 		<div class="root">
-			<ng-container *ngIf="showHandInfo$ | async">
-				<ul
-					class="mulligan-guide"
-					*ngIf="cardsInHandInfo$ | async as cardsInHandInfo"
-					[ngClass]="{ wide: cardsInHandInfo.length === 4 }"
-				>
-					<ng-container *ngIf="(showPremiumBanner$ | async) === false">
-						<div class="mulligan-info scalable" *ngFor="let info of cardsInHandInfo">
-							<div class="stat-container" *ngIf="info.impact !== null">
-								<div class="stat mulligan-winrate">
-									<span
-										class="label"
-										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
-										[helpTooltip]="helpTooltip$ | async"
-									></span>
-									<span class="value">{{ info.impact }}</span>
-								</div>
-								<div class="stat mulligan-keep-rate">
-									<span
-										class="label"
-										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-keep-rate'"
-										[helpTooltip]="
-											'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate
-										"
-									></span>
-									<span class="value">{{ info.keepRate }}</span>
-								</div>
-							</div>
-							<div class="stat mulligan-winrate no-data scalable" *ngIf="info.impact === null">
-								<span
-									class="label"
-									[fsTranslate]="'decktracker.overlay.mulligan.no-mulligan-data'"
-									[helpTooltip]="
-										'decktracker.overlay.mulligan.no-mulligan-data-tooltip' | fsTranslate
-									"
-								></span>
-							</div>
-						</div>
-					</ng-container>
-					<ng-container *ngIf="showPremiumBanner$ | async">
-						<div class="premium-container" *ngFor="let info of cardsInHandInfo">
-							<arena-mulligan-info-premium></arena-mulligan-info-premium>
-						</div>
-					</ng-container>
-				</ul>
-			</ng-container>
-			<div class="mulligan-overview scalable" *ngIf="showMulliganOverview$ | async">
-				<arena-mulligan-detailed-info [data]="allDeckMulliganInfo$ | async"></arena-mulligan-detailed-info>
-			</div>
+			<mulligan-hand-view
+				[showHandInfo]="showHandInfo$ | async"
+				[showPremiumBanner]="showPremiumBanner$ | async"
+				[cardsInHandInfo]="cardsInHandInfo$ | async"
+				[impactWithFreeUsersHelpTooltip]="helpTooltip$ | async"
+			>
+				<arena-mulligan-info-premium></arena-mulligan-info-premium>
+				></mulligan-hand-view
+			>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaMulliganComponent
+export class ArenaMulliganHandComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
-	allDeckMulliganInfo$: Observable<MulliganChartData | null>;
 	showHandInfo$: Observable<boolean | null>;
-	showMulliganOverview$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
 
@@ -148,16 +106,6 @@ export class ArenaMulliganComponent
 		this.showHandInfo$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.decktrackerShowMulliganCardImpact),
 		);
-		this.showMulliganOverview$ = combineLatest([
-			this.showPremiumBanner$$,
-			this.noData$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
-		]).pipe(
-			this.mapData(
-				([showPremiumBanner, noData, showMulliganOverview]) =>
-					!noData && !showPremiumBanner && showMulliganOverview,
-			),
-		);
 		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => {
@@ -193,26 +141,15 @@ export class ArenaMulliganComponent
 							: advice?.keepRate == null
 							? '-'
 							: `${(100 * advice.keepRate).toFixed(1)}%`,
+						keptColor: buildColor(
+							'hsl(112, 100%, 64%)',
+							'hsl(0, 100%, 64%)',
+							advice?.keepRate ?? 0,
+							0.6,
+							0.4,
+						),
+						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice?.score ?? 0, 4, -4),
 					}));
-			}),
-		);
-		this.allDeckMulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
-			filter((advice) => !!advice),
-			this.mapData((guide) => {
-				return {
-					mulliganData: guide!.allDeckCards
-						.map((advice) => ({
-							cardId: advice.cardId,
-							label: advice.cardId,
-							value: advice.score ?? 0,
-							selected: !!guide?.cardsInHand
-								.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
-								.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
-						}))
-						.sort((a, b) => a.value - b.value),
-					sampleSize: guide!.sampleSize,
-					opponentClass: guide!.opponentClass,
-				};
 			}),
 		);
 

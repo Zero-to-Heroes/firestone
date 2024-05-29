@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { COIN_IDS, CardClass, CardIds, GameType, SceneMode, getBaseCardId } from '@firestone-hs/reference-data';
+import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -28,7 +29,6 @@ import {
 	switchMap,
 	tap,
 } from 'rxjs';
-import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
 import { MULLIGAN_GUIDE_IS_ENABLED } from './arena-mulligan-guide-guardian.service';
@@ -215,6 +215,8 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					allDeckCards: allDeckCards,
 					sampleSize: classStats?.totalGames ?? 0,
 					opponentClass: opponentClass,
+					format: 'wild',
+					rankBracket: 'all',
 				};
 				return result;
 			}),

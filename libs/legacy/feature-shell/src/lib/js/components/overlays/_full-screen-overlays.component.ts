@@ -77,6 +77,7 @@ import { DebugService } from '../../services/debug.service';
 
 			<!-- Arena -->
 			<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
+			<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
 
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>

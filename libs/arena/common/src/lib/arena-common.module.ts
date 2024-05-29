@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DuelsGeneralModule } from '@firestone/duels/general';
+import { GameStateModule } from '@firestone/game-state';
+import { MemoryModule } from '@firestone/memory';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
+import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -20,9 +24,9 @@ import { ArenaCardSelectionComponent } from './components/overlays/arena-card-se
 import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
 import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
-import { ArenaMulliganDetailedInfoComponent } from './components/overlays/mulligan/arena-mulligan-detailed-info.component';
+import { ArenaMulliganDeckComponent } from './components/overlays/mulligan/arena-mulligan-deck.component';
+import { ArenaMulliganHandComponent } from './components/overlays/mulligan/arena-mulligan-hand.component';
 import { ArenaMulliganInfoPremiumComponent } from './components/overlays/mulligan/arena-mulligan-info-premium.component';
-import { ArenaMulliganComponent } from './components/overlays/mulligan/arena-mulligan.component';
 import { ArenaPersonalStatsOverviewComponent } from './components/personal-stats/arena-personal-stats-overview.component';
 import { ArenaPersonalStatsComponent } from './components/personal-stats/arena-personal-stats.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
@@ -54,8 +58,8 @@ const components = [
 	ArenaDeckDetailsComponent,
 	ArenaHighWinsRunsComponent,
 	ArenaRunVignetteComponent,
-	ArenaMulliganComponent,
-	ArenaMulliganDetailedInfoComponent,
+	ArenaMulliganDeckComponent,
+	ArenaMulliganHandComponent,
 	ArenaMulliganInfoPremiumComponent,
 	ArenaPersonalStatsComponent,
 	ArenaPersonalStatsOverviewComponent,
@@ -73,6 +77,11 @@ const components = [
 		DuelsGeneralModule,
 		StatsCommonModule,
 		ConstructedCommonModule,
+		SharedFrameworkCommonModule,
+		SharedCommonViewModule,
+		SharedCommonServiceModule,
+		MemoryModule,
+		GameStateModule,
 	],
 	providers: [
 		ArenaClassStatsService,
