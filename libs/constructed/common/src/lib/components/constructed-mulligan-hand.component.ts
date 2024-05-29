@@ -35,7 +35,7 @@ import {
 import { MulliganChartData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
-import { buildColor } from './constructed-mulligan-deck.component';
+import { buildColor } from './mulligan-deck-view.component';
 import { InternalMulliganAdvice } from './mulligan-hand-view.component';
 
 @Component({

@@ -9,6 +9,7 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ConstructedMulliganDeckComponent } from './components/constructed-mulligan-deck.component';
 import { ConstructedMulliganHandComponent } from './components/constructed-mulligan-hand.component';
+import { MulliganDeckViewComponent } from './components/mulligan-deck-view.component';
 import { MulliganHandViewComponent } from './components/mulligan-hand-view.component';
 import { MulliganInfoPremiumComponent } from './components/mulligan-info-premium.component';
 import { ConstructedArchetypeService } from './services/constructed-archetype.service';
@@ -23,6 +24,7 @@ const components = [
 	ConstructedMulliganDeckComponent,
 	MulliganInfoPremiumComponent,
 	MulliganHandViewComponent,
+	MulliganDeckViewComponent,
 ];
 
 @NgModule({

@@ -15,8 +15,7 @@ import {
 import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -31,79 +30,33 @@ import {
 	debounceTime,
 	distinctUntilChanged,
 	filter,
+	shareReplay,
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { MulliganChartDataCard } from '../models/mulligan-advice';
+import { MulliganDeckData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
+import { buildColor } from './mulligan-deck-view.component';
 
 @Component({
 	selector: 'constructed-mulligan-deck',
 	styleUrls: ['./constructed-mulligan-deck.component.scss'],
 	template: `
-		<div class="mulligan-deck-overview scalable" *ngIf="showMulliganOverview$ | async">
-			<div class="widget-header">
-				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
-				<div class="filters">
-					<div class="filter rank-bracket" (click)="cycleRanks()" [helpTooltip]="rankBracketTooltip$ | async">
-						<div class="text">{{ rankBracketLabel$ | async }}</div>
-					</div>
-					<div class="filter opponent" (click)="cycleOpponent()" [helpTooltip]="opponentTooltip$ | async">
-						<div class="text">{{ opponentLabel$ | async }}</div>
-					</div>
-					<div class="format">{{ formatLabel$ | async }}</div>
-				</div>
-				<div class="sample-size">{{ sampleSize$ | async }}</div>
-			</div>
-			<div class="content">
-				<div class="deck-header" *ngIf="sortCriteria$ | async as sort">
-					<sortable-table-label
-						class="cell keep-rate"
-						[name]="'decktracker.overlay.mulligan.mulligan-keep-rate' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'keep-rate'"
-						[helpTooltip]="'app.decktracker.meta.details.cards.mulligan-kept-header-tooltip' | fsTranslate"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell card"
-						[name]="'decktracker.overlay.mulligan.mulligan-card' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'card'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell impact"
-						[name]="'decktracker.overlay.mulligan.mulligan-impact' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'impact'"
-						[helpTooltip]="
-							'app.decktracker.meta.details.cards.mulligan-winrate-impact-header-tooltip' | fsTranslate
-						"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-				</div>
-				<div class="deck" *ngIf="allDeckMulliganInfo$ | async as allDeckMulliganInfo">
-					<div
-						class="deck-card"
-						*ngFor="let card of allDeckMulliganInfo"
-						[ngClass]="{ selected: card.selected }"
-					>
-						<div class="cell keep-rate" [style.color]="card.keptColor">
-							{{ card.keepRate?.toFixed(2) ?? '-' }}%
-						</div>
-						<card-tile class="cell card" [cardId]="card.cardId"></card-tile>
-						<div class="cell impact" [style.color]="card.impactColor">
-							{{ card.value?.toFixed(2) ?? '-' }}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<mulligan-deck-view
+			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
+			[showMulliganOverview]="showMulliganOverview$ | async"
+			[showFilters]="true"
+			[rankBracketTooltip]="rankBracketTooltip$ | async"
+			[rankBracketLabel]="rankBracketLabel$ | async"
+			[opponentTooltip]="opponentTooltip$ | async"
+			[opponentLabel]="opponentLabel$ | async"
+			[formatLabel]="formatLabel$ | async"
+			[sampleSize]="sampleSize$ | async"
+			[cycleRanks]="cycleRanks"
+			[cycleOpponent]="cycleOpponent"
+		>
+		</mulligan-deck-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -111,8 +64,7 @@ export class ConstructedMulliganDeckComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
-	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
-	allDeckMulliganInfo$: Observable<readonly MulliganChartDataCard[] | null>;
+	allDeckMulliganInfo$: Observable<MulliganDeckData>;
 	showMulliganOverview$: Observable<boolean | null>;
 
 	rankBracketLabel$: Observable<string>;
@@ -122,12 +74,6 @@ export class ConstructedMulliganDeckComponent
 	formatLabel$: Observable<string>;
 	sampleSize$: Observable<string>;
 
-	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
-
-	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
-		criteria: 'impact',
-		direction: 'desc',
-	});
 	private opponentActualClass$$ = new BehaviorSubject<string | null>(null);
 
 	constructor(
@@ -148,11 +94,6 @@ export class ConstructedMulliganDeckComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
 
-		this.sortCriteria$ = this.sortCriteria$$;
-		// const noData$ = this.mulligan.mulliganAdvice$$.pipe(
-		// 	filter((advice) => !!advice),
-		// 	this.mapData((advice) => advice?.noData ?? false),
-		// );
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
 			tap((info) => console.debug('[mulligan] showWidget', info)),
@@ -167,10 +108,10 @@ export class ConstructedMulliganDeckComponent
 			this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview),
 		);
 
-		const mulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
+		this.allDeckMulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
-				return {
+				const result: MulliganDeckData = {
 					mulliganData: guide!.allDeckCards.map((advice) => ({
 						cardId: advice.cardId,
 						label: advice.cardId,
@@ -193,13 +134,11 @@ export class ConstructedMulliganDeckComponent
 					rankBracket: guide!.rankBracket,
 					opponentClass: guide!.opponentClass,
 				};
+				return result;
 			}),
+			shareReplay(1),
 			tap((info) => console.debug('[mulligan] mulliganInfo', info)),
-		);
-		this.allDeckMulliganInfo$ = combineLatest([mulliganInfo$, this.sortCriteria$$]).pipe(
-			this.mapData(([mulliganInfo, sortCriteria]) =>
-				[...(mulliganInfo?.mulliganData ?? [])].sort((a, b) => this.sortCards(a, b, sortCriteria)),
-			),
+			takeUntil(this.destroyed$),
 		);
 
 		this.rankBracketLabel$ = this.prefs.preferences$$.pipe(
@@ -245,10 +184,10 @@ export class ConstructedMulliganDeckComponent
 					})!,
 			),
 		);
-		this.formatLabel$ = mulliganInfo$.pipe(
+		this.formatLabel$ = this.allDeckMulliganInfo$.pipe(
 			this.mapData((mulliganInfo) => this.i18n.translateString(`global.format.${mulliganInfo.format}`)!),
 		);
-		this.sampleSize$ = mulliganInfo$.pipe(
+		this.sampleSize$ = this.allDeckMulliganInfo$.pipe(
 			this.mapData(
 				(mulliganInfo) =>
 					this.i18n.translateString(`app.decktracker.filters.sample-size-filter`, {
@@ -272,19 +211,19 @@ export class ConstructedMulliganDeckComponent
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => prefs.decktrackerMulliganScale),
-				filter((pref) => !!pref),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async (scale) => {
-				const newScale = scale / 100;
-				const elements = await this.getScalableElements();
-				console.debug('[mulligan] setting scale 2', newScale, elements);
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-			});
+		// this.prefs.preferences$$
+		// 	.pipe(
+		// 		this.mapData((prefs) => prefs.decktrackerMulliganScale),
+		// 		filter((pref) => !!pref),
+		// 		distinctUntilChanged(),
+		// 		takeUntil(this.destroyed$),
+		// 	)
+		// 	.subscribe(async (scale) => {
+		// 		const newScale = scale / 100;
+		// 		const elements = await this.getScalableElements();
+		// 		console.debug('[mulligan] setting scale 2', newScale, elements);
+		// 		elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
+		// 	});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -320,94 +259,4 @@ export class ConstructedMulliganDeckComponent
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}
-
-	onSortClick(rawCriteria: string) {
-		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
-		this.sortCriteria$$.next({
-			criteria: criteria,
-			direction:
-				criteria === this.sortCriteria$$.value?.criteria
-					? invertDirection(this.sortCriteria$$.value.direction)
-					: 'desc',
-		});
-	}
-
-	private sortCards(
-		a: MulliganChartDataCard,
-		b: MulliganChartDataCard,
-		sortCriteria: SortCriteria<ColumnSortType>,
-	): number {
-		switch (sortCriteria?.criteria) {
-			case 'card':
-				return this.sortByCard(a, b, sortCriteria.direction);
-			case 'impact':
-				return this.sortByImpact(a, b, sortCriteria.direction);
-			case 'keep-rate':
-				return this.sortByKeepRate(a, b, sortCriteria.direction);
-			default:
-				return 0;
-		}
-	}
-
-	private sortByCard(a: MulliganChartDataCard, b: MulliganChartDataCard, direction: 'asc' | 'desc'): number {
-		const aData = this.allCards.getCard(a.cardId)?.cost ?? 0;
-		const bData = this.allCards.getCard(b.cardId)?.cost ?? 0;
-		return direction === 'asc' ? aData - bData : bData - aData;
-	}
-
-	private sortByImpact(a: MulliganChartDataCard, b: MulliganChartDataCard, direction: 'asc' | 'desc'): number {
-		const aData = a.value ?? 0;
-		const bData = b.value ?? 0;
-		return direction === 'asc' ? aData - bData : bData - aData;
-	}
-
-	private sortByKeepRate(a: MulliganChartDataCard, b: MulliganChartDataCard, direction: 'asc' | 'desc'): number {
-		const aData = a.keepRate ?? 0;
-		const bData = b.keepRate ?? 0;
-		return direction === 'asc' ? aData - bData : bData - aData;
-	}
-
-	private async getScalableElements(): Promise<HTMLElement[]> {
-		let elements = this.el.nativeElement.querySelectorAll('.scalable');
-		let retriesLeft = 10;
-		while (retriesLeft >= 0 && elements?.length < 3) {
-			await sleep(100);
-			elements = this.el.nativeElement.querySelectorAll('.scalable');
-			retriesLeft--;
-		}
-		return elements;
-	}
 }
-
-interface InternalMulliganAdvice {
-	impact: string | null;
-	keepRate: string | null;
-}
-
-type ColumnSortType = 'card' | 'keep-rate' | 'impact';
-
-export const buildColor = (
-	goodColor: string,
-	badColor: string,
-	value: number,
-	maxGood: number,
-	minBad: number,
-	debug?,
-): string => {
-	const percentage = Math.max(0, Math.min(1, (value - minBad) / (maxGood - minBad)));
-	const color = interpolateColors(badColor, goodColor, percentage, debug);
-	return color;
-};
-
-const interpolateColors = (color1Hsl: string, color2Hsl: string, percentage: number, debug): string => {
-	const h1 = parseInt(color1Hsl.substring(4, color1Hsl.indexOf(',')), 10);
-	const s1 = parseInt(color1Hsl.substring(color1Hsl.indexOf(',') + 1, color1Hsl.lastIndexOf(',')), 10);
-	const l1 = parseInt(color1Hsl.substring(color1Hsl.lastIndexOf(',') + 1, color1Hsl.length - 1), 10);
-	const h2 = parseInt(color2Hsl.substring(4, color2Hsl.indexOf(',')), 10);
-	const s2 = parseInt(color2Hsl.substring(color2Hsl.indexOf(',') + 1, color2Hsl.lastIndexOf(',')), 10);
-	const l2 = parseInt(color2Hsl.substring(color2Hsl.lastIndexOf(',') + 1, color2Hsl.length - 1), 10);
-	const h = h1 + Math.round((h2 - h1) * percentage);
-	const s = s1 + Math.round((s2 - s1) * percentage);
-	const l = l1 + Math.round((l2 - l1) * percentage);
-	return `hsl(${h}, ${s}%, ${l}%)`;
-};

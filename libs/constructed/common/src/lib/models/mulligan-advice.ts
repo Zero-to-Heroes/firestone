@@ -36,3 +36,11 @@ export interface MulliganChartDataCard {
 	readonly keptColor?: string;
 	readonly impactColor?: string;
 }
+
+export interface MulliganDeckData {
+	mulliganData: readonly MulliganChartDataCard[];
+	format: string;
+	sampleSize: number;
+	rankBracket: string;
+	opponentClass: string;
+}

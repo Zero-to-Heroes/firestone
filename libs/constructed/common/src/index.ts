@@ -1,5 +1,6 @@
 export * from './lib/components/constructed-mulligan-deck.component';
 export * from './lib/components/constructed-mulligan-hand.component';
+export * from './lib/components/mulligan-deck-view.component';
 export * from './lib/components/mulligan-hand-view.component';
 export * from './lib/components/mulligan-info-premium.component';
 export * from './lib/constructed-common.module';
