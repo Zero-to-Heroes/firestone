@@ -46,8 +46,8 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 					<preference-toggle
 						field="overlayShowTransformedInto"
-						[label]="'settings.collection.general.show-transformed-into-label' | owTranslate"
-						[tooltip]="'settings.collection.general.show-transformed-into-tooltip' | owTranslate"
+						[label]="'settings.decktracker.global.show-transformed-into-label' | owTranslate"
+						[tooltip]="'settings.decktracker.global.show-transformed-into-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="overlayShowRarityColors"
