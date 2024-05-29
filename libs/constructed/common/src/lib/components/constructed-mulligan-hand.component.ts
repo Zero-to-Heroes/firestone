@@ -43,7 +43,6 @@ import { InternalMulliganAdvice } from './mulligan-hand-view.component';
 	styleUrls: ['./constructed-mulligan-hand.component.scss'],
 	template: `
 		<div class="root">
-			<!-- TODO: add premium info container -->
 			<mulligan-hand-view
 				[showHandInfo]="showHandInfo$ | async"
 				[showPremiumBanner]="showPremiumBanner$ | async"
@@ -63,7 +62,6 @@ export class ConstructedMulliganHandComponent
 	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
 	allDeckMulliganInfo$: Observable<MulliganChartData | null>;
 	showHandInfo$: Observable<boolean | null>;
-	showMulliganOverview$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
 
@@ -111,16 +109,6 @@ export class ConstructedMulliganHandComponent
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
 		this.showHandInfo$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.decktrackerShowMulliganCardImpact),
-		);
-		this.showMulliganOverview$ = combineLatest([
-			this.showPremiumBanner$$,
-			this.noData$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
-		]).pipe(
-			this.mapData(
-				([showPremiumBanner, noData, showMulliganOverview]) =>
-					!noData && !showPremiumBanner && showMulliganOverview,
-			),
 		);
 		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),

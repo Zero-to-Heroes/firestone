@@ -230,7 +230,7 @@ export class ConstructedMulliganDeckComponent
 		}
 	}
 
-	async cycleRanks() {
+	cycleRanks = async () => {
 		const prefs = await this.prefs.getPreferences();
 		const currentRank = prefs.decktrackerMulliganRankBracket;
 		// Build an array based on all the possible values of the decktrackerMulliganRankBracket type
@@ -246,9 +246,9 @@ export class ConstructedMulliganDeckComponent
 			decktrackerMulliganRankBracket: nextRank,
 		};
 		await this.prefs.savePreferences(newPrefs);
-	}
+	};
 
-	async cycleOpponent() {
+	cycleOpponent = async () => {
 		const prefs = await this.prefs.getPreferences();
 		const currentOpponent = prefs.decktrackerMulliganOpponent;
 		const options = ['all', this.opponentActualClass$$.value ?? 'all'];
@@ -258,5 +258,5 @@ export class ConstructedMulliganDeckComponent
 			decktrackerMulliganOpponent: nextOpponent,
 		};
 		await this.prefs.savePreferences(newPrefs);
-	}
+	};
 }
