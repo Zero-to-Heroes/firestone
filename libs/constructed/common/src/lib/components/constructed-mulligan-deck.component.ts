@@ -97,7 +97,7 @@ import { MulliganChartDataCard } from './mulligan-detailed-info.component';
 							{{ card.keepRate?.toFixed(2) ?? '-' }}%
 						</div>
 						<card-tile class="cell card" [cardId]="card.cardId"></card-tile>
-						<div class="cell impact">
+						<div class="cell impact" [style.color]="card.impactColor">
 							{{ card.value?.toFixed(2) ?? '-' }}
 						</div>
 					</div>
@@ -171,25 +171,23 @@ export class ConstructedMulliganDeckComponent
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
 				return {
-					mulliganData: [...guide!.allDeckCards]
-						.sort((a, b) => b.keepRate! - a.keepRate!)
-						.map((advice) => ({
-							cardId: advice.cardId,
-							label: advice.cardId,
-							value: advice.score ?? 0,
-							keepRate: 100 * (advice.keepRate ?? 0),
-							selected: !!guide?.cardsInHand
-								.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
-								.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
-							keptColor: buildColor(
-								'hsl(112, 100%, 64%)',
-								'hsl(0, 100%, 64%)',
-								advice.keepRate ?? 0,
-								0.6,
-								0.4,
-								advice,
-							),
-						})),
+					mulliganData: guide!.allDeckCards.map((advice) => ({
+						cardId: advice.cardId,
+						label: advice.cardId,
+						value: advice.score ?? 0,
+						keepRate: 100 * (advice.keepRate ?? 0),
+						selected: !!guide?.cardsInHand
+							.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
+							.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
+						keptColor: buildColor(
+							'hsl(112, 100%, 64%)',
+							'hsl(0, 100%, 64%)',
+							advice.keepRate ?? 0,
+							0.6,
+							0.4,
+						),
+						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice.score ?? 0, 4, -4),
+					})),
 					format: guide!.format,
 					sampleSize: guide!.sampleSize,
 					rankBracket: guide!.rankBracket,
@@ -388,7 +386,7 @@ interface InternalMulliganAdvice {
 
 type ColumnSortType = 'card' | 'keep-rate' | 'impact';
 
-const buildColor = (
+export const buildColor = (
 	goodColor: string,
 	badColor: string,
 	value: number,
@@ -397,7 +395,6 @@ const buildColor = (
 	debug?,
 ): string => {
 	const percentage = Math.max(0, Math.min(1, (value - minBad) / (maxGood - minBad)));
-	console.debug('percentage', percentage, value, debug);
 	const color = interpolateColors(badColor, goodColor, percentage, debug);
 	return color;
 };
@@ -409,10 +406,8 @@ const interpolateColors = (color1Hsl: string, color2Hsl: string, percentage: num
 	const h2 = parseInt(color2Hsl.substring(4, color2Hsl.indexOf(',')), 10);
 	const s2 = parseInt(color2Hsl.substring(color2Hsl.indexOf(',') + 1, color2Hsl.lastIndexOf(',')), 10);
 	const l2 = parseInt(color2Hsl.substring(color2Hsl.lastIndexOf(',') + 1, color2Hsl.length - 1), 10);
-	console.debug('colors', color1Hsl, h1, s1, l1, color2Hsl, h2, s2, l2, percentage, debug);
 	const h = h1 + Math.round((h2 - h1) * percentage);
 	const s = s1 + Math.round((s2 - s1) * percentage);
 	const l = l1 + Math.round((l2 - l1) * percentage);
-	console.debug('finalColor', h, s, l, debug);
 	return `hsl(${h}, ${s}%, ${l}%)`;
 };

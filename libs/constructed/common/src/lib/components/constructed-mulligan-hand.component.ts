@@ -34,6 +34,7 @@ import {
 } from 'rxjs';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
+import { buildColor } from './constructed-mulligan-deck.component';
 import { MulliganChartData } from './mulligan-detailed-info.component';
 
 @Component({
@@ -51,14 +52,6 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 						<div class="mulligan-info scalable" *ngFor="let info of cardsInHandInfo">
 							<!-- TODO: add rank compared to deck, for each -->
 							<div class="stat-container" *ngIf="info.impact !== null">
-								<div class="stat mulligan-winrate">
-									<span
-										class="label"
-										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
-										[helpTooltip]="helpTooltip$ | async"
-									></span>
-									<span class="value">{{ info.impact }}</span>
-								</div>
 								<div class="stat mulligan-keep-rate">
 									<span
 										class="label"
@@ -67,7 +60,15 @@ import { MulliganChartData } from './mulligan-detailed-info.component';
 											'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate
 										"
 									></span>
-									<span class="value">{{ info.keepRate }}</span>
+									<span class="value" [style.color]="info.keptColor">{{ info.keepRate }}</span>
+								</div>
+								<div class="stat mulligan-winrate">
+									<span
+										class="label"
+										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-impact'"
+										[helpTooltip]="helpTooltip$ | async"
+									></span>
+									<span class="value" [style.color]="info.impactColor">{{ info.impact }}</span>
 								</div>
 							</div>
 							<div class="stat mulligan-winrate no-data scalable" *ngIf="info.impact === null">
@@ -196,28 +197,15 @@ export class ConstructedMulliganHandComponent
 							: advice?.keepRate == null
 							? '-'
 							: `${(100 * advice.keepRate).toFixed(1)}%`,
+						keptColor: buildColor(
+							'hsl(112, 100%, 64%)',
+							'hsl(0, 100%, 64%)',
+							advice?.keepRate ?? 0,
+							0.6,
+							0.4,
+						),
+						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice?.score ?? 0, 4, -4),
 					}));
-			}),
-		);
-		this.allDeckMulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
-			filter((advice) => !!advice),
-			this.mapData((guide) => {
-				return {
-					mulliganData: guide!.allDeckCards
-						.map((advice) => ({
-							cardId: advice.cardId,
-							label: advice.cardId,
-							value: advice.score ?? 0,
-							selected: !!guide?.cardsInHand
-								.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
-								.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
-						}))
-						.sort((a, b) => a.value - b.value),
-					format: guide!.format,
-					sampleSize: guide!.sampleSize,
-					rankBracket: guide!.rankBracket,
-					opponentClass: guide!.opponentClass,
-				};
 			}),
 		);
 
@@ -268,6 +256,9 @@ export class ConstructedMulliganHandComponent
 }
 
 interface InternalMulliganAdvice {
-	impact: string | null;
-	keepRate: string | null;
+	readonly impact: string | null;
+	readonly keepRate: string | null;
+	// TODO: don't make that optional?
+	readonly keptColor?: string;
+	readonly impactColor?: string;
 }
