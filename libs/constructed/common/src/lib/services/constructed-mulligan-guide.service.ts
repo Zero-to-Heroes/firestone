@@ -4,6 +4,7 @@ import { ArchetypeStat, DeckStat, GameFormat, RankBracket } from '@firestone-hs/
 import { decode } from '@firestone-hs/deckstrings';
 import {
 	COIN_IDS,
+	CardClass,
 	CardIds,
 	GameFormat as GameFormatEnum,
 	GameFormatString,
@@ -89,6 +90,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		]).pipe(
 			debounceTime(200),
 			map(([currentScene, displayFromPrefs, gameState]) => {
+				// return true;
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
@@ -124,14 +126,26 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			filter((showWidget) => showWidget),
 			switchMap(() => this.gameState.gameState$$),
 			map((gameState) => gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD),
+			distinctUntilChanged(),
 			shareReplay(1),
 		);
 		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.decktrackerMulliganRankBracket),
+			distinctUntilChanged(),
 		);
-		const opponentClass$: Observable<'all' | string> = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganOpponent),
+		const opponentActualClass$ = this.gameState.gameState$$.pipe(
+			map((gameState) =>
+				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+			),
+			distinctUntilChanged(),
 		);
+		const opponentClass$: Observable<'all' | string> = combineLatest([
+			opponentActualClass$,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.decktrackerMulliganOpponent),
+				distinctUntilChanged(),
+			),
+		]).pipe(map(([opponentActualClass, opponentPref]) => (opponentPref === 'all' ? 'all' : opponentActualClass)));
 
 		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$]).pipe(
 			filter(([showWidget, format]) => showWidget),
@@ -260,9 +274,26 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			map(({ cardsInHand, deckCards, archetype, deckDetails, format, playerRank, opponentClass }) => {
-				const archetypeWinrate = archetype?.winrate ?? deckDetails?.winrate ?? 0;
-				const cardsData = archetype?.cardsData ?? deckDetails?.cardsData ?? [];
-				const sampleSize = archetype?.totalGames ?? deckDetails?.totalGames ?? 0;
+				const archetypeMatchup =
+					opponentClass === 'all'
+						? null
+						: archetype?.matchupInfo.find((info) => info.opponentClass === opponentClass);
+				const deckMatchup =
+					opponentClass === 'all'
+						? null
+						: deckDetails?.matchupInfo.find((info) => info.opponentClass === opponentClass);
+				const archetypeWinrate =
+					opponentClass === 'all'
+						? archetype?.winrate ?? deckDetails?.winrate ?? 0
+						: archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0;
+				const cardsData =
+					opponentClass === 'all'
+						? archetype?.cardsData ?? deckDetails?.cardsData ?? []
+						: archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? [];
+				const sampleSize =
+					opponentClass === 'all'
+						? archetype?.totalGames ?? deckDetails?.totalGames ?? 0
+						: archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0;
 				const allDeckCards: readonly MulliganCardAdvice[] =
 					deckCards?.map((refCard) => {
 						const cardData =

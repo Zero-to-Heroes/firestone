@@ -11,9 +11,9 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { getBaseCardId } from '@firestone-hs/reference-data';
+import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import {
@@ -45,8 +45,12 @@ import { MulliganChartDataCard } from './mulligan-detailed-info.component';
 			<div class="widget-header">
 				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
 				<div class="filters">
-					<div class="filter rank-bracket">{{ rankBracketLabel$ | async }}</div>
-					<div class="filter opponent">{{ opponentLabel$ | async }}</div>
+					<div class="filter rank-bracket" (click)="cycleRanks()">
+						<div class="text">{{ rankBracketLabel$ | async }}</div>
+					</div>
+					<div class="filter opponent" (click)="cycleOpponent()">
+						<div class="text">{{ opponentLabel$ | async }}</div>
+					</div>
 					<div class="format">{{ formatLabel$ | async }}</div>
 				</div>
 				<div class="sample-size">{{ sampleSize$ | async }}</div>
@@ -113,6 +117,7 @@ export class ConstructedMulliganDeckComponent
 		criteria: 'impact',
 		direction: 'desc',
 	});
+	private opponentActualClass$$ = new BehaviorSubject<string | null>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -133,23 +138,22 @@ export class ConstructedMulliganDeckComponent
 		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
 
 		this.sortCriteria$ = this.sortCriteria$$;
-		const noData$ = this.mulligan.mulliganAdvice$$.pipe(
-			filter((advice) => !!advice),
-			this.mapData((advice) => advice?.noData ?? false),
-		);
-		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$, noData$]).pipe(
+		// const noData$ = this.mulligan.mulliganAdvice$$.pipe(
+		// 	filter((advice) => !!advice),
+		// 	this.mapData((advice) => advice?.noData ?? false),
+		// );
+		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
 			tap((info) => console.debug('[mulligan] showWidget', info)),
-			this.mapData(([hasPremiumSub, freeUsesLeft, noData]) => noData || hasPremiumSub || freeUsesLeft > 0),
+			this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
 			distinctUntilChanged(),
 		);
 		this.showMulliganOverview$ = combineLatest([
 			showWidget$,
-			noData$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
 		]).pipe(
 			tap((info) => console.debug('[mulligan] showMulliganOverview', info)),
-			this.mapData(([showWidget, noData, showMulliganOverview]) => !noData && showWidget && showMulliganOverview),
+			this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview),
 		);
 
 		const mulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
@@ -189,7 +193,12 @@ export class ConstructedMulliganDeckComponent
 			),
 		);
 		this.opponentLabel$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`)!),
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(`app.decktracker.meta.matchup-vs-tooltip`, {
+						className: this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`),
+					})!,
+			),
 		);
 		this.formatLabel$ = mulliganInfo$.pipe(
 			this.mapData((mulliganInfo) => this.i18n.translateString(`global.format.${mulliganInfo.format}`)!),
@@ -202,6 +211,13 @@ export class ConstructedMulliganDeckComponent
 					})!,
 			),
 		);
+		this.gameState.gameState$$
+			.pipe(
+				this.mapData((gameState) =>
+					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+				),
+			)
+			.subscribe(this.opponentActualClass$$);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -228,6 +244,36 @@ export class ConstructedMulliganDeckComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	async cycleRanks() {
+		const prefs = await this.prefs.getPreferences();
+		const currentRank = prefs.decktrackerMulliganRankBracket;
+		// Build an array based on all the possible values of the decktrackerMulliganRankBracket type
+		const ranks: ('competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond')[] = [
+			'competitive',
+			'top-2000-legend',
+			'legend',
+			'legend-diamond',
+		];
+		const nextRank = ranks[(ranks.indexOf(currentRank) + 1) % ranks.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganRankBracket: nextRank,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
+
+	async cycleOpponent() {
+		const prefs = await this.prefs.getPreferences();
+		const currentOpponent = prefs.decktrackerMulliganOpponent;
+		const options = ['all', this.opponentActualClass$$.value ?? 'all'];
+		const nextOpponent = options[(options.indexOf(currentOpponent) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganOpponent: nextOpponent,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 
 	onSortClick(rawCriteria: string) {
