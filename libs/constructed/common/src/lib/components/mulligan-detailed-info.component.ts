@@ -135,6 +135,8 @@ export interface MulliganChartDataCard {
 	readonly rawValue?: number;
 	readonly keepRate?: number | null;
 	readonly selected: boolean;
+	// TODO: don't make that optional?
+	readonly keptColor?: string;
 }
 
 interface Bar {
