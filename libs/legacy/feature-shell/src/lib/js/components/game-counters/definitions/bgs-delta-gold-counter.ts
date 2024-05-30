@@ -167,11 +167,12 @@ export const getGoldFromCardId = (id: string | number, gameState: GameState, all
 		case CardIds.RecordSmuggler_BG26_812:
 		case CardIds.RecordSmuggler_BG26_812_G:
 			const smugglerMultiplier = cardId === CardIds.RecordSmuggler_BG26_812 ? 1 : 2;
-			return (
-				smugglerMultiplier *
+			const extraGold =
 				gameState?.playerDeck.board.filter((e) => allCards.getCard(e.cardId).races?.includes(Race[Race.PIRATE]))
-					.length
-			);
+					.length >= 3
+					? 2
+					: 0;
+			return smugglerMultiplier * (2 + extraGold);
 		default:
 			return 0;
 	}
