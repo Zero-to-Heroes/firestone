@@ -14,7 +14,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -145,7 +145,22 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				map((prefs) => prefs.decktrackerMulliganOpponent),
 				distinctUntilChanged(),
 			),
-		]).pipe(map(([opponentActualClass, opponentPref]) => (opponentPref === 'all' ? 'all' : opponentActualClass)));
+		]).pipe(
+			map(([opponentActualClass, opponentPref]) => (opponentPref === 'all' ? 'all' : opponentActualClass)),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+		opponentClass$.subscribe(async (opponentClass) => {
+			const prefs = await this.prefs.getPreferences();
+			const currentOpponentClassPref = prefs.decktrackerMulliganOpponent;
+			if (currentOpponentClassPref !== opponentClass) {
+				const newPrefs: Preferences = {
+					...prefs,
+					decktrackerMulliganOpponent: opponentClass,
+				};
+				await this.prefs.savePreferences(newPrefs);
+			}
+		});
 
 		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$]).pipe(
 			filter(([showWidget, format]) => showWidget),
