@@ -31,21 +31,23 @@ export class CardRemovedFromBoardParser implements EventParser {
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
-		const newDeck = enhanceCardInDeck(
-			deck.deck,
+		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+			board: newBoard,
+			otherZone: newOtherZone,
+		} as DeckState);
+
+		const newState = currentState.update({
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+		});
+		const enhancedState = enhanceCardInDeck(
 			cardId,
 			entityId,
 			gameEvent.additionalData.removedByCardId,
 			gameEvent.additionalData.removedByEntityId,
+			newState,
 		);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			board: newBoard,
-			otherZone: newOtherZone,
-			deck: newDeck,
-		} as DeckState);
-		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
-		});
+		// console.debug('returning enhanced state', enhancedState);
+		return enhancedState;
 	}
 
 	event(): string {
@@ -54,36 +56,51 @@ export class CardRemovedFromBoardParser implements EventParser {
 }
 
 const enhanceCardInDeck = (
-	deck: readonly DeckCard[],
 	cardId: string,
 	entityId: number,
 	removedByCardId: string,
 	removedByEntityId: number,
-): readonly DeckCard[] => {
+	currentState: GameState,
+): GameState => {
+	const isRemovedByPlayer = currentState.playerDeck.otherZone.some((c) => Math.abs(c.entityId) === removedByEntityId);
+	// console.debug('removal source', isRemovedByPlayer, removedByCardId, removedByEntityId);
 	switch (removedByCardId) {
 		case CardIds.Repackage_TOY_879:
-			return enhanceCardInDeckWithRepackage(deck, cardId, entityId, removedByCardId, removedByEntityId);
+			const newDeck = enhanceCardInDeckWithRepackage(
+				// We create the card in the opponent's deck
+				isRemovedByPlayer ? currentState.opponentDeck : currentState.playerDeck,
+				cardId,
+				entityId,
+				removedByCardId,
+				removedByEntityId,
+			);
+			// console.debug('enhanced deck', newDeck);
+			return currentState.update({
+				[isRemovedByPlayer ? 'opponentDeck' : 'playerDeck']: newDeck,
+			});
 		default:
-			return deck;
+			return currentState;
 	}
 };
 
 const enhanceCardInDeckWithRepackage = (
-	deck: readonly DeckCard[],
+	deck: DeckState,
 	cardId: string,
 	entityId: number,
 	removedByCardId: string,
 	removedByEntityId: number,
-): readonly DeckCard[] => {
-	const repackageBox = deck
+): DeckState => {
+	const repackageBox = deck.deck
 		.filter((card) => card.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t)
 		.sort((a, b) => b.entityId - a.entityId)[0];
 	if (repackageBox) {
 		const updatedBox = repackageBox.update({
 			relatedCardIds: [...(repackageBox.relatedCardIds || []), cardId],
 		});
-		const newDeck = deck.map((card) => (card.entityId === repackageBox.entityId ? updatedBox : card));
-		return newDeck;
+		const newDeck = deck.deck.map((card) => (card.entityId === repackageBox.entityId ? updatedBox : card));
+		return deck.update({
+			deck: newDeck,
+		});
 	}
 	return deck;
 };
