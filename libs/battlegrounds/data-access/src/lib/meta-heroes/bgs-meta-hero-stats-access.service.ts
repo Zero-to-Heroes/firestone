@@ -10,8 +10,8 @@ const META_HERO_STATS_DUO_URL =
 	'https://static.zerotoheroes.com/api/bgs/duo/hero-stats/%mmr-folder%/%timeSuffix%/overview-from-hourly.gz.json';
 const META_HERO_MMR_PERCENTILES_URL =
 	'https://static.zerotoheroes.com/api/bgs/hero-stats/%timeSuffix%/mmr-percentiles.gz.json';
-const META_HERO_MMR_PERCENTILES_DUO_URL = '';
-('https://static.zerotoheroes.com/api/bgs/duo/hero-stats/%timeSuffix%/mmr-percentiles.gz.json');
+const META_HERO_MMR_PERCENTILES_DUO_URL =
+	'https://static.zerotoheroes.com/api/bgs/duo/hero-stats/%timeSuffix%/mmr-percentiles.gz.json';
 
 @Injectable()
 export class BgsMetaHeroStatsAccessService {
