@@ -9,6 +9,6 @@ export interface Config {
 	readonly anomaliesFilter: readonly string[];
 	readonly timeFilter: BgsActiveTimeFilterType;
 	readonly options?: {
-		convervativeEstimate?: boolean;
+		readonly convervativeEstimate?: boolean;
 	};
 }
